@@ -70,11 +70,11 @@ namespace DOM
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar* xName = (xmlChar*)o1.getStr();
+            xmlChar const * xName = reinterpret_cast<xmlChar const *>(o1.getStr());
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL)
             {
-                if( strcmp((char*)xName, (char*)cur->name) == 0)
+                if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0)
                 {
                     aNode = Reference< XNode >(
                             m_pElement->GetOwnerDocument().GetCNode(
@@ -102,7 +102,7 @@ namespace DOM
         if (pNode != NULL)
         {
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar* xName = (xmlChar*)o1.getStr();
+            xmlChar const * xName = reinterpret_cast<xmlChar const *>(o1.getStr());
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
             xmlChar const*const xNs =
                 reinterpret_cast<xmlChar const*>(o2.getStr());
@@ -110,7 +110,7 @@ namespace DOM
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL && pNs != NULL)
             {
-                if( strcmp((char*)xName, (char*)cur->name) == 0 &&
+                if( strcmp(reinterpret_cast<char const *>(xName), reinterpret_cast<char const *>(cur->name)) == 0 &&
                     cur->ns == pNs)
                 {
                     aNode = Reference< XNode >(

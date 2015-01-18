@@ -1074,7 +1074,7 @@ void addChaffWhenEncryptedStorage(const uno::Reference< io::XOutputStream > &rSt
     else
     {
         unsigned char *postcomment =
-            (unsigned char*)strchr((const char*)pBuffer, '\n');
+            reinterpret_cast<unsigned char*>(strchr(reinterpret_cast<char*>(pBuffer), '\n'));
         if (postcomment != NULL)
         {
             ++postcomment;

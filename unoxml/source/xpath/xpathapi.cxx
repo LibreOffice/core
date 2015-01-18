@@ -130,8 +130,8 @@ namespace XPath
         {
             oprefix = OUStringToOString(i->first,  RTL_TEXTENCODING_UTF8);
             ouri    = OUStringToOString(i->second, RTL_TEXTENCODING_UTF8);
-            xmlChar *p = (xmlChar*)oprefix.getStr();
-            xmlChar *u = (xmlChar*)ouri.getStr();
+            xmlChar const *p = reinterpret_cast<xmlChar const *>(oprefix.getStr());
+            xmlChar const *u = reinterpret_cast<xmlChar const *>(ouri.getStr());
             xmlXPathRegisterNs(ctx, p, u);
             ++i;
         }
@@ -151,9 +151,9 @@ namespace XPath
             xmlNsPtr curDef = pNode->nsDef;
             while (curDef != 0) {
                 const xmlChar* xHref = curDef->href;
-                OUString aURI((sal_Char*)xHref, strlen((char*)xHref), RTL_TEXTENCODING_UTF8);
+                OUString aURI(reinterpret_cast<char const *>(xHref), strlen(reinterpret_cast<char const *>(xHref)), RTL_TEXTENCODING_UTF8);
                 const xmlChar* xPre = curDef->prefix;
-                OUString aPrefix((sal_Char*)xPre, strlen((char*)xPre), RTL_TEXTENCODING_UTF8);
+                OUString aPrefix(reinterpret_cast<char const *>(xPre), strlen(reinterpret_cast<char const *>(xPre)), RTL_TEXTENCODING_UTF8);
                 // we could already have this prefix from a child node
                 if (rNamespaces.find(aPrefix) == rNamespaces.end())
                 {
@@ -372,7 +372,7 @@ namespace XPath
 
         /* run the query */
         OString o1 = OUStringToOString(expr, RTL_TEXTENCODING_UTF8);
-        xmlChar *xStr = (xmlChar*)o1.getStr();
+        xmlChar const *xStr = reinterpret_cast<xmlChar const *>(o1.getStr());
         ::boost::shared_ptr<xmlXPathObject> const xpathObj(
                 xmlXPathEval(xStr, xpathCtx.get()), xmlXPathFreeObject);
         xmlSetGenericErrorFunc(NULL, NULL);

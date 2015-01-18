@@ -85,7 +85,7 @@ namespace DOM
                 RTL_TEXTENCODING_UTF8);
 
             OSL_TRACE("Trying to add namespace %s (prefix %s)",
-                      (const char*)pHref, (const char*)pPrefix);
+                      reinterpret_cast<const char*>(pHref), reinterpret_cast<const char*>(pPrefix));
 
             Context::NamespaceMapType::iterator aIter=
                 io_rContext.maNamespaceMap.find(val);
@@ -105,7 +105,7 @@ namespace DOM
 
     sal_Int32 getToken( const Context& rContext, const sal_Char* pToken )
     {
-        const Sequence<sal_Int8> aSeq( (sal_Int8*)pToken, strlen( pToken ) );
+        const Sequence<sal_Int8> aSeq( reinterpret_cast<sal_Int8 const *>(pToken), strlen( pToken ) );
         return rContext.mxTokenHandler->getTokenFromUTF8( aSeq );
     }
 
@@ -242,14 +242,14 @@ namespace DOM
             if (cur->ns != NULL)
             {
                 xmlNsPtr ns = xmlSearchNs(cur->doc, aParent, cur->ns->prefix);
-                if (ns != NULL && ns != cur->ns && strcmp((char*)ns->href, (char*)cur->ns->href)==0)
+                if (ns != NULL && ns != cur->ns && strcmp(reinterpret_cast<char const *>(ns->href), reinterpret_cast<char const *>(cur->ns->href))==0)
                 {
                     xmlNsPtr curDef = cur->nsDef;
                     xmlNsPtr *refp = &(cur->nsDef); // insert point
                     while (curDef != NULL)
                     {
                         ns = xmlSearchNs(cur->doc, aParent, curDef->prefix);
-                        if (ns != NULL && ns != curDef && strcmp((char*)ns->href, (char*)curDef->href)==0)
+                        if (ns != NULL && ns != curDef && strcmp(reinterpret_cast<char const *>(ns->href), reinterpret_cast<char const *>(curDef->href))==0)
                         {
                             // reconnect ns pointers in sub-tree to newly found ns before
                             // removing redundant nsdecl to prevent dangling pointers.
@@ -490,7 +490,7 @@ namespace DOM
             m_aNodePtr->ns != NULL)
         {
             const xmlChar* xHref = m_aNodePtr->ns->href;
-            aURI = OUString((sal_Char*)xHref, strlen((char*)xHref), RTL_TEXTENCODING_UTF8);
+            aURI = OUString(reinterpret_cast<char const *>(xHref), strlen(reinterpret_cast<char const *>(xHref)), RTL_TEXTENCODING_UTF8);
         }
         return aURI;
     }
@@ -606,7 +606,7 @@ namespace DOM
         {
             const xmlChar* xPrefix = m_aNodePtr->ns->prefix;
             if( xPrefix != NULL )
-                aPrefix = OUString((sal_Char*)xPrefix, strlen((char*)xPrefix), RTL_TEXTENCODING_UTF8);
+                aPrefix = OUString(reinterpret_cast<char const *>(xPrefix), strlen(reinterpret_cast<char const *>(xPrefix)), RTL_TEXTENCODING_UTF8);
         }
         return aPrefix;
 
@@ -891,7 +891,7 @@ namespace DOM
                 throw e;
             }
 
-            xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
+            xmlAttrPtr pAttr = reinterpret_cast<xmlAttrPtr>(pOld);
             xmlRemoveProp( pAttr );
             pOldNode->invalidate(); // freed by xmlRemoveProp
             appendChild(xNewChild);
@@ -980,7 +980,7 @@ namespace DOM
             throw e;
         }
         OString o1 = OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
-        xmlChar *pBuf = (xmlChar*)o1.getStr();
+        xmlChar const *pBuf = reinterpret_cast<xmlChar const *>(o1.getStr());
         if (m_aNodePtr != NULL && m_aNodePtr->ns != NULL)
         {
             xmlFree(const_cast<xmlChar *>(m_aNodePtr->ns->prefix));

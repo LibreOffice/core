@@ -60,7 +60,7 @@ namespace DOM
         OUString type = "";
         // add namespace definitions to attributes
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
-            const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : (const xmlChar*)"";
+            const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : reinterpret_cast<const xmlChar*>("");
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                 strlen(reinterpret_cast<const char*>(pPrefix)),
                 RTL_TEXTENCODING_UTF8);
@@ -119,12 +119,12 @@ namespace DOM
             const xmlChar* xName = pAttr->name;
             sal_Int32 nAttributeToken=FastToken::DONTKNOW;
 
-            if( pAttr->ns && strlen((char*)pAttr->ns->prefix) )
+            if( pAttr->ns && strlen(reinterpret_cast<char const *>(pAttr->ns->prefix)) )
                 nAttributeToken = getTokenWithPrefix( i_rContext,
-                                                      (sal_Char*)pAttr->ns->prefix,
-                                                      (sal_Char*)xName );
+                                                      reinterpret_cast<char const *>(pAttr->ns->prefix),
+                                                      reinterpret_cast<char const *>(xName) );
             else
-                nAttributeToken = getToken( i_rContext, (sal_Char*)xName );
+                nAttributeToken = getToken( i_rContext, reinterpret_cast<char const *>(xName) );
 
             if( nAttributeToken != FastToken::DONTKNOW )
                 i_rContext.mxAttribList->add( nAttributeToken,
@@ -132,13 +132,13 @@ namespace DOM
                                                                 RTL_TEXTENCODING_UTF8));
         }
 
-        const xmlChar* xPrefix = m_aNodePtr->ns ? m_aNodePtr->ns->prefix : (const xmlChar*)"";
+        const xmlChar* xPrefix = m_aNodePtr->ns ? m_aNodePtr->ns->prefix : reinterpret_cast<const xmlChar*>("");
         const xmlChar* xName = m_aNodePtr->name;
         sal_Int32 nElementToken=FastToken::DONTKNOW;
-        if( strlen((char*)xPrefix) )
-            nElementToken = getTokenWithPrefix( i_rContext, (sal_Char*)xPrefix, (sal_Char*)xName );
+        if( strlen(reinterpret_cast<char const *>(xPrefix)) )
+            nElementToken = getTokenWithPrefix( i_rContext, reinterpret_cast<char const *>(xPrefix), reinterpret_cast<char const *>(xName) );
         else
-            nElementToken = getToken( i_rContext, (sal_Char*)xName );
+            nElementToken = getToken( i_rContext, reinterpret_cast<char const *>(xName) );
 
         Reference<XFastContextHandler> xParentHandler(i_rContext.mxCurrentHandler);
         try
@@ -147,8 +147,8 @@ namespace DOM
             if( nElementToken == FastToken::DONTKNOW )
             {
                 const OUString aNamespace;
-                const OUString aElementName( (sal_Char*)xPrefix,
-                                             strlen((char*)xPrefix),
+                const OUString aElementName( reinterpret_cast<char const *>(xPrefix),
+                                             strlen(reinterpret_cast<char const *>(xPrefix)),
                                              RTL_TEXTENCODING_UTF8 );
 
                 if( xParentHandler.is() )
@@ -189,8 +189,8 @@ namespace DOM
             else
             {
                 const OUString aNamespace;
-                const OUString aElementName( (sal_Char*)xPrefix,
-                                             strlen((char*)xPrefix),
+                const OUString aElementName( reinterpret_cast<char const *>(xPrefix),
+                                             strlen(reinterpret_cast<char const *>(xPrefix)),
                                              RTL_TEXTENCODING_UTF8 );
 
                 i_rContext.mxCurrentHandler->endUnknownElement( aNamespace, aElementName );
@@ -241,7 +241,7 @@ namespace DOM
         // search properties
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         ::boost::shared_ptr<xmlChar const> const pValue(
-            xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr()), xmlFree);
+            xmlGetProp(m_aNodePtr, reinterpret_cast<xmlChar const *>(o1.getStr())), xmlFree);
         OUString const ret( (pValue)
             ?   OUString(reinterpret_cast<sal_Char const*>(pValue.get()),
                         strlen(reinterpret_cast<char const*>(pValue.get())),
@@ -379,8 +379,8 @@ namespace DOM
         if (0 == m_aNodePtr) {
             return OUString();
         }
-        OUString const ret((sal_Char*)m_aNodePtr->name,
-                strlen((char*)m_aNodePtr->name), RTL_TEXTENCODING_UTF8);
+        OUString const ret(reinterpret_cast<char const *>(m_aNodePtr->name),
+                strlen(reinterpret_cast<char const *>(m_aNodePtr->name)), RTL_TEXTENCODING_UTF8);
         return ret;
     }
 
@@ -395,7 +395,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-        xmlChar *xName = (xmlChar*)o1.getStr();
+        xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
         return (m_aNodePtr != NULL && xmlHasProp(m_aNodePtr, xName) != NULL);
     }
 
@@ -410,9 +410,9 @@ namespace DOM
         ::osl::MutexGuard const g(m_rMutex);
 
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-        xmlChar *xName = (xmlChar*)o1.getStr();
+        xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
         OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-        xmlChar *xNs = (xmlChar*)o2.getStr();
+        xmlChar const *xNs = reinterpret_cast<xmlChar const *>(o2.getStr());
         return (m_aNodePtr != NULL && xmlHasNsProp(m_aNodePtr, xName, xNs) != NULL);
     }
 
@@ -488,7 +488,7 @@ namespace DOM
         if (!pCNode.is()) { throw RuntimeException(); }
 
         xmlNodePtr const pNode = pCNode->GetNodePtr();
-        xmlAttrPtr const pAttr = (xmlAttrPtr) pNode;
+        xmlAttrPtr const pAttr = reinterpret_cast<xmlAttrPtr>(pNode);
         if (!pAttr) { throw RuntimeException(); }
 
         if (pAttr->parent != m_aNodePtr)
@@ -619,9 +619,9 @@ namespace DOM
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-        xmlChar *xName = (xmlChar*)o1.getStr();
+        xmlChar const *xName = reinterpret_cast<xmlChar const *>(o1.getStr());
         OString o2 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
-        xmlChar *xValue = (xmlChar*)o2.getStr();
+        xmlChar const *xValue = reinterpret_cast<xmlChar const *>(o2.getStr());
 
         if (0 == m_aNodePtr) {
             throw RuntimeException();
@@ -667,29 +667,29 @@ namespace DOM
         ::osl::ClearableMutexGuard guard(m_rMutex);
 
         OString o1, o2, o3, o4, o5;
-        xmlChar *xPrefix = NULL;
-        xmlChar *xLName = NULL;
+        xmlChar const *xPrefix = NULL;
+        xmlChar const *xLName = NULL;
         o1 = OUStringToOString(qualifiedName, RTL_TEXTENCODING_UTF8);
-        xmlChar *xQName = (xmlChar*)o1.getStr();
+        xmlChar const *xQName = reinterpret_cast<xmlChar const *>(o1.getStr());
         sal_Int32 idx = qualifiedName.indexOf(':');
         if (idx != -1)
         {
             o2 = OUStringToOString(
                 qualifiedName.copy(0,idx),
                 RTL_TEXTENCODING_UTF8);
-            xPrefix = (xmlChar*)o2.getStr();
+            xPrefix = reinterpret_cast<xmlChar const *>(o2.getStr());
             o3 = OUStringToOString(
                 qualifiedName.copy(idx+1),
                 RTL_TEXTENCODING_UTF8);
-            xLName = (xmlChar*)o3.getStr();
+            xLName = reinterpret_cast<xmlChar const *>(o3.getStr());
         }  else {
-            xPrefix = (xmlChar*)"";
+            xPrefix = reinterpret_cast<xmlChar const *>("");
             xLName = xQName;
         }
         o4 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
         o5 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
-        xmlChar *xURI= (xmlChar*)o4.getStr();
-        xmlChar *xValue = (xmlChar*)o5.getStr();
+        xmlChar const *xURI= reinterpret_cast<xmlChar const *>(o4.getStr());
+        xmlChar const *xValue = reinterpret_cast<xmlChar const *>(o5.getStr());
 
         if (0 == m_aNodePtr) {
             throw RuntimeException();
@@ -702,7 +702,7 @@ namespace DOM
             pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
         }
 
-        if (strcmp((char*)pNs->href, (char*)xURI) != 0) {
+        if (strcmp(reinterpret_cast<char const *>(pNs->href), reinterpret_cast<char const *>(xURI)) != 0) {
             // ambiguous ns prefix
             throw RuntimeException();
         }
@@ -728,7 +728,7 @@ namespace DOM
             "DOMAttrModified"), UNO_QUERY);
         event->initMutationEvent(
             "DOMAttrModified", sal_True, sal_False,
-            Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
+            Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString(reinterpret_cast<char const *>(xLName), strlen(reinterpret_cast<char const *>(xLName)), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
             oldValue, value, qualifiedName, aChangeType);
 
         guard.clear(); // release mutex before calling event handlers
@@ -759,7 +759,7 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             const xmlChar* xName = m_aNodePtr->name;
-            aName = OUString((const sal_Char*)xName, strlen((const char*)xName), RTL_TEXTENCODING_UTF8);
+            aName = OUString(reinterpret_cast<const char*>(xName), strlen(reinterpret_cast<const char*>(xName)), RTL_TEXTENCODING_UTF8);
         }
         return aName;
     }
@@ -785,7 +785,7 @@ namespace DOM
             throw RuntimeException();
         }
         OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
-        xmlChar *xName = (xmlChar*)oName.getStr();
+        xmlChar const *xName = reinterpret_cast<xmlChar const *>(oName.getStr());
         xmlNodeSetName(m_aNodePtr, xName);
     }
 

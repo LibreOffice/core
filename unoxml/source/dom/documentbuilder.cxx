@@ -166,7 +166,7 @@ namespace DOM
         ::osl::MutexGuard const g(m_Mutex);
 
         // create a new document
-        xmlDocPtr pDocument = xmlNewDoc((const xmlChar*)"1.0");
+        xmlDocPtr pDocument = xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0"));
         Reference< XDocument > const xRet(
                 CDocument::CreateCDocument(pDocument).get());
         return xRet;
@@ -247,10 +247,10 @@ namespace DOM
         Reference< XEntityResolver > resolver = builder->getEntityResolver();
         OUString sysid;
         if (systemId != 0)
-            sysid = OUString((sal_Char*)systemId, strlen((char*)systemId), RTL_TEXTENCODING_UTF8);
+            sysid = OUString(reinterpret_cast<char const *>(systemId), strlen(reinterpret_cast<char const *>(systemId)), RTL_TEXTENCODING_UTF8);
         OUString pubid;
         if (publicId != 0)
-            pubid = OUString((sal_Char*)publicId, strlen((char*)publicId), RTL_TEXTENCODING_UTF8);
+            pubid = OUString(reinterpret_cast<char const *>(publicId), strlen(reinterpret_cast<char const *>(publicId)), RTL_TEXTENCODING_UTF8);
 
         // resolve the entity
         InputSource src = resolver->resolveEntity(pubid, sysid);

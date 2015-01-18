@@ -105,8 +105,8 @@ namespace DOM
         if ((0 == m_aNodePtr) || (0 == m_aAttrPtr)) {
             return OUString();
         }
-        OUString const aName((char*)m_aAttrPtr->name,
-                strlen((char*)m_aAttrPtr->name), RTL_TEXTENCODING_UTF8);
+        OUString const aName(reinterpret_cast<char const *>(m_aAttrPtr->name),
+                strlen(reinterpret_cast<char const *>(m_aAttrPtr->name)), RTL_TEXTENCODING_UTF8);
         return aName;
     }
 
@@ -181,7 +181,7 @@ namespace DOM
         OUString sOldValue = getValue();
 
         OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
-        xmlChar* xValue = (xmlChar*)o1.getStr();
+        xmlChar const * xValue = reinterpret_cast<xmlChar const *>(o1.getStr());
         // this does not work if the attribute was created anew
         // xmlNodePtr pNode = m_aAttrPtr->parent;
         // xmlSetProp(pNode, m_aAttrPtr->name, xValue);

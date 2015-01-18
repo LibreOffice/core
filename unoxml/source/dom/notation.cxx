@@ -62,7 +62,7 @@ namespace DOM
         if (m_aNodePtr != NULL)
         {
             const xmlChar* xName = m_aNodePtr->name;
-            aName = OUString((sal_Char*)xName, strlen((char*)xName), RTL_TEXTENCODING_UTF8);
+            aName = OUString(reinterpret_cast<char const *>(xName), strlen(reinterpret_cast<char const *>(xName)), RTL_TEXTENCODING_UTF8);
         }
         return aName;
     }

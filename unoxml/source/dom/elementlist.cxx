@@ -136,13 +136,13 @@ namespace DOM
         while (pNode != NULL )
         {
             if (pNode->type == XML_ELEMENT_NODE &&
-                (strcmp((char*)pNode->name, (char*)m_pName.get()) == 0))
+                (strcmp(reinterpret_cast<char const *>(pNode->name), reinterpret_cast<char*>(m_pName.get())) == 0))
             {
                 if (!m_pURI) {
                     m_nodevector.push_back(pNode);
                 } else {
                     if (pNode->ns != NULL && (0 ==
-                         strcmp((char*)pNode->ns->href, (char*)m_pURI.get())))
+                         strcmp(reinterpret_cast<char const *>(pNode->ns->href), reinterpret_cast<char*>(m_pURI.get()))))
                     {
                         m_nodevector.push_back(pNode);
                     }

@@ -78,7 +78,7 @@ namespace DOM
         OUString aName;
         if (m_aDtdPtr != NULL)
         {
-            aName = OUString((sal_Char*)m_aDtdPtr->name, strlen((char*)m_aDtdPtr->name), RTL_TEXTENCODING_UTF8);
+            aName = OUString(reinterpret_cast<char const *>(m_aDtdPtr->name), strlen(reinterpret_cast<char const *>(m_aDtdPtr->name)), RTL_TEXTENCODING_UTF8);
         }
         return aName;
     }
@@ -108,7 +108,7 @@ namespace DOM
         OUString aId;
         if (m_aDtdPtr != NULL)
         {
-            aId = OUString((sal_Char*)m_aDtdPtr->name, strlen((char*)m_aDtdPtr->ExternalID), RTL_TEXTENCODING_UTF8);
+            aId = OUString(reinterpret_cast<char const *>(m_aDtdPtr->name), strlen(reinterpret_cast<char const *>(m_aDtdPtr->ExternalID)), RTL_TEXTENCODING_UTF8);
         }
         return aId;
     }
@@ -123,7 +123,7 @@ namespace DOM
         OUString aId;
         if (m_aDtdPtr != NULL)
         {
-            aId = OUString((sal_Char*)m_aDtdPtr->name, strlen((char*)m_aDtdPtr->SystemID), RTL_TEXTENCODING_UTF8);
+            aId = OUString(reinterpret_cast<char const *>(m_aDtdPtr->name), strlen(reinterpret_cast<char const *>(m_aDtdPtr->SystemID)), RTL_TEXTENCODING_UTF8);
         }
         return aId;
     }

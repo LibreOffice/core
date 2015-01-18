@@ -67,9 +67,9 @@ namespace DOM
 
         if (m_aNodePtr != NULL)
         {
-            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            xmlNodeAddContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+            xmlNodeAddContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(arg, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
             guard.clear(); // release mutex before calling event handlers
             dispatchEvent_Impl(oldValue, newValue);
@@ -101,9 +101,9 @@ namespace DOM
 
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += tmp.copy(offset+count, tmp.getLength() - (offset+count));
-            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
             guard.clear(); // release mutex before calling event handlers
             dispatchEvent_Impl(oldValue, newValue);
@@ -124,7 +124,7 @@ namespace DOM
             OSL_ENSURE(m_aNodePtr->content, "character data node with NULL content, please inform lars.oppermann@sun.com!");
             if (m_aNodePtr->content != NULL)
             {
-                aData = OUString((const sal_Char*)m_aNodePtr->content, strlen((const sal_Char*)m_aNodePtr->content),  RTL_TEXTENCODING_UTF8);
+                aData = OUString(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)),  RTL_TEXTENCODING_UTF8);
             }
         }
         return aData;
@@ -141,7 +141,7 @@ namespace DOM
         sal_Int32 length = 0;
         if (m_aNodePtr != NULL)
         {
-             OUString aData((const sal_Char*)m_aNodePtr->content, strlen((const sal_Char*)m_aNodePtr->content),  RTL_TEXTENCODING_UTF8);
+             OUString aData(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)),  RTL_TEXTENCODING_UTF8);
              length = aData.getLength();
         }
         return length;
@@ -171,9 +171,9 @@ namespace DOM
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += arg;
             tmp2 += tmp.copy(offset, tmp.getLength() - offset);
-            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
             guard.clear(); // release mutex before calling event handlers
             dispatchEvent_Impl(oldValue, newValue);
@@ -208,9 +208,9 @@ namespace DOM
             OUString tmp2 = tmp.copy(0, offset);
             tmp2 += arg;
             tmp2 += tmp.copy(offset+count, tmp.getLength() - (offset+count));
-            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(tmp2, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
             guard.clear(); // release mutex before calling event handlers
             dispatchEvent_Impl(oldValue, newValue);
@@ -227,9 +227,9 @@ namespace DOM
 
         if (m_aNodePtr != NULL)
         {
-            OUString oldValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
-            xmlNodeSetContent(m_aNodePtr, (const xmlChar*)(OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr()));
-            OUString newValue((char*)m_aNodePtr->content, strlen((char*)m_aNodePtr->content), RTL_TEXTENCODING_UTF8);
+            OUString oldValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
+            xmlNodeSetContent(m_aNodePtr, reinterpret_cast<const xmlChar*>(OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr()));
+            OUString newValue(reinterpret_cast<char*>(m_aNodePtr->content), strlen(reinterpret_cast<char*>(m_aNodePtr->content)), RTL_TEXTENCODING_UTF8);
 
             guard.clear(); // release mutex before calling event handlers
             dispatchEvent_Impl(oldValue, newValue);
