@@ -2915,7 +2915,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
                     if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
                     {
                         bIsWMF = true;
-                        uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
+                        uno::Sequence<sal_Int8> aSeq(reinterpret_cast<sal_Int8 const *>(aLnk.GetData()), (sal_Int32) aLnk.GetDataSize());
                         rValue <<= aSeq;
                     }
                 }

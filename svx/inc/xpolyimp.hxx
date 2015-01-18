@@ -48,7 +48,7 @@ public:
     {
         if ( bDeleteOldPoints )
         {
-            delete[] (char*)pOldPointAry;
+            delete[] reinterpret_cast<char*>(pOldPointAry);
             bDeleteOldPoints = false;
         }
     }

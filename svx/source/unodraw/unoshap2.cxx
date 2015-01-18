@@ -1429,7 +1429,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
                 SvMemoryStream  aMemStm;
                 Graphic         aGraphic;
 
-                aMemStm.SetBuffer( (char*)pSeq->getConstArray(), pSeq->getLength(), false, pSeq->getLength() );
+                aMemStm.SetBuffer( pSeq->getArray(), pSeq->getLength(), false, pSeq->getLength() );
 
                 if( GraphicConverter::Import( aMemStm, aGraphic ) == ERRCODE_NONE )
                 {

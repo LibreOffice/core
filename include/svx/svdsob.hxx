@@ -102,13 +102,13 @@ public:
 
 inline SvStream& WriteSetOfByte(SvStream& rOut, const SetOfByte& rSet)
 {
-    rOut.Write((char*)rSet.aData,32);
+    rOut.Write(rSet.aData, 32);
     return rOut;
 }
 
 inline SvStream& ReadSetOfByte(SvStream& rIn, SetOfByte& rSet)
 {
-    rIn.Read((char*)rSet.aData,32);
+    rIn.Read(rSet.aData, 32);
     return rIn;
 }
 

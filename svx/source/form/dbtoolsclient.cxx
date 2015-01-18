@@ -123,7 +123,7 @@ namespace svxform
                 // get the symbol for the method creating the factory
                 const OUString sFactoryCreationFunc( "createDataAccessToolsFactory" );
                 //  reinterpret_cast<createDataAccessToolsFactoryFunction>
-                s_pFactoryCreationFunc = (createDataAccessToolsFactoryFunction)(
+                s_pFactoryCreationFunc = reinterpret_cast<createDataAccessToolsFactoryFunction>(
                     osl_getFunctionSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
 
                 if (NULL == s_pFactoryCreationFunc)

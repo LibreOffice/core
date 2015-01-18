@@ -76,7 +76,7 @@ protected:
     virtual void        SdrObjChanged( const SdrObject& rObj );
     virtual void        MarkListHasChanged();
 
-    SdrObjUserCall*     GetSdrUserCall() { return (SdrObjUserCall*) pUserCall; }
+    inline SdrObjUserCall* GetSdrUserCall();
 
 public:
 
@@ -133,6 +133,8 @@ public:
 
     virtual void    Changed( const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect ) SAL_OVERRIDE;
 };
+
+SdrObjUserCall* GraphCtrl::GetSdrUserCall() { return pUserCall; }
 
 class GraphCtrlView : public SdrView
 {

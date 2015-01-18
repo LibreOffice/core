@@ -69,10 +69,10 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
 
 ImpXPolygon::~ImpXPolygon()
 {
-    delete[] (char*) pPointAry;
+    delete[] reinterpret_cast<char*>(pPointAry);
     delete[] pFlagAry;
     if ( bDeleteOldPoints )
-        delete[] (char*) pOldPointAry;
+        delete[] reinterpret_cast<char*>(pOldPointAry);
 }
 
 bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
@@ -111,7 +111,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     }
     // create point array
     nSize     = nNewSize;
-    pPointAry = (Point*)new char[ nSize*sizeof( Point ) ];
+    pPointAry = reinterpret_cast<Point*>(new char[ nSize*sizeof( Point ) ]);
     memset( pPointAry, 0, nSize*sizeof( Point ) );
 
     // create flag array
@@ -135,7 +135,7 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
             if( nPoints > nSize )
                 nPoints = nSize;
         }
-        if ( bDeletePoints )    delete[] (char*) pOldPointAry;
+        if ( bDeletePoints )    delete[] reinterpret_cast<char*>(pOldPointAry);
         else                    bDeleteOldPoints = true;
         delete[] pOldFlagAry;
     }
