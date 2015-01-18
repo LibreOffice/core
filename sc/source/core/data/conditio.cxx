@@ -2208,14 +2208,7 @@ void ScConditionalFormatList::UpdateReference( sc::RefUpdateContext& rCxt )
     if (rCxt.meMode == URM_INSDEL)
     {
         // need to check which must be deleted
-        iterator itr = begin();
-        while(itr != end())
-        {
-            if(itr->GetRange().empty())
-                maConditionalFormats.erase(itr++);
-            else
-                ++itr;
-        }
+        CheckAllEntries();
     }
 }
 
