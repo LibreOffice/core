@@ -222,7 +222,7 @@ void ShareControlFile::SetUsersDataAndStore( const uno::Sequence< uno::Sequence<
     }
 
     OString aStringData( OUStringToOString( aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
-    uno::Sequence< sal_Int8 > aData( (sal_Int8*)aStringData.getStr(), aStringData.getLength() );
+    uno::Sequence< sal_Int8 > aData( reinterpret_cast<sal_Int8 const *>(aStringData.getStr()), aStringData.getLength() );
     m_xOutputStream->writeBytes( aData );
     m_aUsersData = aUsersData;
 }

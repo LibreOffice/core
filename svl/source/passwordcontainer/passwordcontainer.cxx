@@ -156,7 +156,7 @@ static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
     }
     outbuf[buf.getLength()*2] = '\0';
 
-    aResult = OUString::createFromAscii( (sal_Char*)outbuf.getArray() );
+    aResult = OUString::createFromAscii( reinterpret_cast<char*>(outbuf.getArray()) );
 
     return aResult;
 }
@@ -466,10 +466,10 @@ vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, co
 
                 ::rtl::ByteSequence resSeq( aSeq.getLength() );
 
-                result = rtl_cipher_decode ( aDecoder, (sal_uInt8*)aSeq.getArray(), aSeq.getLength(),
-                                                        (sal_uInt8*)resSeq.getArray(), resSeq.getLength() );
+                result = rtl_cipher_decode ( aDecoder, aSeq.getArray(), aSeq.getLength(),
+                                                        reinterpret_cast<sal_uInt8*>(resSeq.getArray()), resSeq.getLength() );
 
-                OUString aPasswd( ( sal_Char* )resSeq.getArray(), resSeq.getLength(), RTL_TEXTENCODING_UTF8 );
+                OUString aPasswd( reinterpret_cast<char*>(resSeq.getArray()), resSeq.getLength(), RTL_TEXTENCODING_UTF8 );
 
                 rtl_cipher_destroy (aDecoder);
 
@@ -517,8 +517,8 @@ OUString PasswordContainer::EncodePasswords( vector< OUString > lines, const OUS
             {
                 ::rtl::ByteSequence resSeq(aSeq.getLength()+1);
 
-                result = rtl_cipher_encode ( aEncoder, (sal_uInt8*)aSeq.getStr(), aSeq.getLength()+1,
-                                                        (sal_uInt8*)resSeq.getArray(), resSeq.getLength() );
+                result = rtl_cipher_encode ( aEncoder, aSeq.getStr(), aSeq.getLength()+1,
+                                                        reinterpret_cast<sal_uInt8*>(resSeq.getArray()), resSeq.getLength() );
 
 /*
                 //test
