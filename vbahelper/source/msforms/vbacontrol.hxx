@@ -101,7 +101,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getMousePointer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
-    virtual void removeResouce() throw( css::uno::RuntimeException );
+    virtual void removeResource() throw( css::uno::RuntimeException );
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setForeColor( ::sal_Int32 _forecolor ) throw (::com::sun::star::uno::RuntimeException);
     //XHelperInterface
