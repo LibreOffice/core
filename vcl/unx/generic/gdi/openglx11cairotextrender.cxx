@@ -20,23 +20,49 @@ OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(bool bPrinter, X11SalGraphics
 {
 }
 
-cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
+cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface( const ServerFontLayout& rLayout )
 {
     // static size_t id = 0;
     // OString aFileName = OString("/tmp/libo_logs/text_rendering") + OString::number(id++) + OString(".svg");
     // cairo_surface_t* surface = cairo_svg_surface_create(aFileName.getStr(), GetWidth(), GetHeight());
     cairo_surface_t* surface = NULL;
+
+    Rectangle aTextBoundRect;
+
+
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
-    if( pImpl )
+
+    if (pImpl)
     {
-        Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
-        if( aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0 )
+        if (!rLayout.GetOrientation() )
         {
-            aClipRect.setWidth( GetWidth() );
-            aClipRect.setHeight( GetHeight() );
+            rLayout.GetBoundRect(mrParent, aTextBoundRect);
+
+            Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
+            aTextBoundRect = aTextBoundRect.Intersection(aClipRect);
         }
-        surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aClipRect.GetWidth(), aClipRect.GetHeight() );
+        else
+        {
+            aTextBoundRect = pImpl->getClipRegion().GetBoundRect();
+
+            // no clipping set, this means we need the whole window!
+            if ( aTextBoundRect.IsEmpty() )
+            {
+                aTextBoundRect.setWidth(GetWidth());
+                aTextBoundRect.setHeight(GetHeight());
+            }
+        }
     }
+    else
+    {
+        SAL_WARN("vcl.opengl", "No OpenGLSalGraphicsImpl!");
+    }
+
+    const Point &aPoint = rLayout.DrawBase();
+
+    surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aTextBoundRect.GetWidth()  + aPoint.X(),
+                                                               aTextBoundRect.GetHeight() + aPoint.Y() );
+
     return surface;
 }
 
