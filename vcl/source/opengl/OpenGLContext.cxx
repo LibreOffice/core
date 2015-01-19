@@ -432,6 +432,41 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 namespace {
 
+int unxErrorHandler(Display* dpy, XErrorEvent* event)
+{
+    char errorString[256];
+    XGetErrorText(dpy, event->type, errorString, 256);
+    SAL_WARN("vcl.opengl", errorString);
+    return 0;
+}
+
+typedef int (*errorHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
+
+class TempErrorHandler
+{
+private:
+    errorHandler oldErrorHandler;
+    Display* mdpy;
+
+public:
+    TempErrorHandler(Display* dpy, errorHandler newErrorHandler):
+        mdpy(dpy)
+    {
+        XLockDisplay(dpy);
+        XSync(dpy, false);
+        oldErrorHandler = XSetErrorHandler(newErrorHandler);
+    }
+
+    ~TempErrorHandler()
+    {
+        // sync so that we possibly get an XError
+        glXWaitGL();
+        XSync(mdpy, false);
+        XSetErrorHandler(oldErrorHandler);
+        XUnlockDisplay(mdpy);
+    }
+};
+
 static bool errorTriggered;
 int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
 {
@@ -670,6 +705,7 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
 bool OpenGLContext::ImplInit()
 {
     GLXContext pSharedCtx( NULL );
+    TempErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
 
@@ -762,31 +798,19 @@ bool OpenGLContext::ImplInit()
         glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
         if( glXSwapInterval )
         {
-            int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
-
-            XLockDisplay(m_aGLWin.dpy);
-            XSync(m_aGLWin.dpy, false);
-            // replace error handler temporarily
-            oldHandler = XSetErrorHandler( oglErrorHandler );
+            TempErrorHandler(m_aGLWin.dpy, oglErrorHandler);
 
             errorTriggered = false;
 
             glXSwapInterval( 1 );
 
-            // sync so that we possibly get an XError
-            glXWaitGL();
-            XSync(m_aGLWin.dpy, false);
-
             if( errorTriggered )
                 SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
             else
                 SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
-
-            // restore the error handler
-            XSetErrorHandler( oldHandler );
-            XUnlockDisplay(m_aGLWin.dpy);
         }
     }
+
     return InitGLEW();
 }
 
@@ -1313,6 +1337,8 @@ void OpenGLContext::makeCurrent()
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
+    TempErrorHandler(m_aGLWin.dpy, unxErrorHandler);
+
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
     if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
     {
