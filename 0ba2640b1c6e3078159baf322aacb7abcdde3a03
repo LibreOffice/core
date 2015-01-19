@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_6edb9fee",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-19T08:54:36Z",
+      "side": 1,
+      "message": "better explicitly convert rUrl, rFactory with osl_getThreadTextEncoding than relying on the (intended for debug purposes) \u003c\u003c overload for OUString that always uses UTF8",
+      "revId": "0ba2640b1c6e3078159baf322aacb7abcdde3a03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
