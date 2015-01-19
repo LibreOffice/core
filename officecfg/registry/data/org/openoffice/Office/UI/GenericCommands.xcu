@@ -3813,7 +3813,7 @@
             </node>
             <node oor:name=".uno:NumberFormatDate" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Number Format : Date</value>
+                    <value xml:lang="en-US">Number Format: Date</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
