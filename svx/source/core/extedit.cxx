@@ -87,9 +87,17 @@ public:
 
 void ExternalToolEditThread::execute()
 {
-    Reference<XSystemShellExecute> xSystemShellExecute(
-        SystemShellExecute::create( ::comphelper::getProcessComponentContext() ) );
-    xSystemShellExecute->execute(m_aFileName, OUString(), SystemShellExecuteFlags::URIS_ONLY);
+    try
+    {
+        Reference<XSystemShellExecute> const xSystemShellExecute(
+            SystemShellExecute::create( ::comphelper::getProcessComponentContext()));
+        xSystemShellExecute->execute(m_aFileName, OUString(),
+                SystemShellExecuteFlags::URIS_ONLY);
+    }
+    catch (uno::Exception const& e)
+    {
+        SAL_WARN("svx", "ExternalToolEditThread: exception: " << e.Message);
+    }
 }
 
 void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
