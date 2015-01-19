@@ -88,8 +88,7 @@ public:
 
         @param nBitCount
         Bit depth of the generated virtual device. Use 0 here, to
-        indicate: take default screen depth. Only 0 and 1
-        are allowed here, with 1 denoting binary mask.
+        indicate: take default screen depth.
      */
      explicit           VirtualDevice( const OutputDevice& rCompDev,
                                        sal_uInt16 nBitCount = 0 );
