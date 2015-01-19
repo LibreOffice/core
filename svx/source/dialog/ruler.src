@@ -26,67 +26,67 @@ Menu RID_SVXMN_RULER
         MenuItem
         {
             Identifier = ID_MM ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Millimeter" ;
         };
         MenuItem
         {
             Identifier = ID_CM ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Centimeter" ;
         };
         MenuItem
         {
             Identifier = ID_M ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Meter" ;
         };
         MenuItem
         {
             Identifier = ID_KM ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Kilometer" ;
         };
         MenuItem
         {
             Identifier = ID_INCH ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Inch" ;
         };
         MenuItem
         {
             Identifier = ID_FOOT ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Foot" ;
         };
         MenuItem
         {
             Identifier = ID_MILE ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Miles" ;
         };
         MenuItem
         {
             Identifier = ID_POINT ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Point" ;
         };
         MenuItem
         {
             Identifier = ID_PICA ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text [ en-US ] = "Pica" ;
         };
         MenuItem
         {
             Identifier = ID_CHAR ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text[ en-US ] = "Char" ;
         };
         MenuItem
         {
             Identifier = ID_LINE ;
-            Checkable = TRUE ;
+            RadioCheck = TRUE ;
             Text[ en-US ] = "Line" ;
         };
     };
