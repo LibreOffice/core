@@ -53,6 +53,14 @@ GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
     return X11GlyphCache::GetInstance();
 }
 
+void X11CairoTextRender::clipGraphicsRegion( const ServerFontLayout &rLayout )
+{
+    Rectangle aClipRect;
+    rLayout.GetBoundRect(mrParent, aClipRect);
+    mrParent.SetClipRegion( vcl::Region(aClipRect), NULL);
+}
+
+
 cairo_surface_t* X11CairoTextRender::getCairoSurface()
 {
     // find a XRenderPictFormat compatible with the Drawable

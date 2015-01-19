@@ -87,6 +87,7 @@ protected:
     bool                        setFont( const FontSelectPattern *pEntry, int nFallbackLevel );
 
     virtual void                clipRegion(cairo_t* cr) = 0;
+    virtual void                clipGraphicsRegion( const ServerFontLayout& rLayout ) = 0;
 
 public:
                                 CairoTextRender(bool bPrinter);
