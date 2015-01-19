@@ -228,7 +228,7 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
 
         gpointer aCommand = g_list_nth_data( pNewCommand, 0 );
 
-        GList* pOldCommand = g_list_find_custom( pOldCommandList, aCommand, (GCompareFunc) CompareStr );
+        GList* pOldCommand = g_list_find_custom( pOldCommandList, aCommand, reinterpret_cast<GCompareFunc>(CompareStr) );
 
         if ( pOldCommand != NULL )
         {

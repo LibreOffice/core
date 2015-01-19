@@ -134,7 +134,7 @@ void SAL_CALL RunDialog::windowOpened( const ::com::sun::star::lang::EventObject
 {
     SolarMutexGuard g;
 
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
 }
 
 void SAL_CALL RunDialog::queryTermination( const ::com::sun::star::lang::EventObject& )
@@ -147,7 +147,7 @@ void SAL_CALL RunDialog::notifyTermination( const ::com::sun::star::lang::EventO
 {
     SolarMutexGuard g;
 
-    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, (GSourceFunc)canceldialog, this, NULL);
+    g_timeout_add_full(G_PRIORITY_HIGH_IDLE, 0, reinterpret_cast<GSourceFunc>(canceldialog), this, NULL);
 }
 
 void RunDialog::cancel()

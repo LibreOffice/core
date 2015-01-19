@@ -540,7 +540,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         OString aPSName( OUStringToOString( rGfx.GetFontMgr().getPSName( mnFontID ), RTL_TEXTENCODING_ISO_8859_1 ) );
         OString aBytes( OUStringToOString( OUString( pStr, nLen ), mnBaseEncoding ) );
         rGfx.PSSetFont( aPSName, mnBaseEncoding );
-        rGfx.PSShowText( (const unsigned char*)aBytes.getStr(), nLen, aBytes.getLength() );
+        rGfx.PSShowText( reinterpret_cast<const unsigned char*>(aBytes.getStr()), nLen, aBytes.getLength() );
         return;
     }
 
@@ -585,7 +585,7 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         OString aBytes( OUStringToOString( OUString( pStr, nLen ), mnBaseEncoding ) );
         rGfx.PSMoveTo( rPoint );
         rGfx.PSSetFont( aPSName, mnBaseEncoding );
-        rGfx.PSShowText( (const unsigned char*)aBytes.getStr(), nLen, aBytes.getLength(), pDeltaArray );
+        rGfx.PSShowText( reinterpret_cast<const unsigned char*>(aBytes.getStr()), nLen, aBytes.getLength(), pDeltaArray );
         return;
     }
 

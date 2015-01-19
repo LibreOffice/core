@@ -87,7 +87,7 @@ struct PredicateReturn
 extern "C" {
 Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 {
-    PredicateReturn *pPre = (PredicateReturn *)pData;
+    PredicateReturn *pPre = reinterpret_cast<PredicateReturn *>(pData);
 
     if ( pPre->bRet )
         return False;
@@ -141,7 +141,7 @@ bool X11SalInstance::AnyInput(VclInputFlags nType)
         aInput.nType    = nType;
 
         XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,
-                      (char *)&aInput );
+                      reinterpret_cast<char *>(&aInput) );
 
         bRet = aInput.bRet;
     }
@@ -316,7 +316,7 @@ void X11SalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
     osl::Module module;
     module.loadRelative( &thisModule, LIB_RECENT_FILE );
     if (module.is())
-        add_to_recently_used_file_list = (PFUNC_ADD_TO_RECENTLY_USED_LIST)module.getFunctionSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST);
+        add_to_recently_used_file_list = reinterpret_cast<PFUNC_ADD_TO_RECENTLY_USED_LIST>(module.getFunctionSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST));
     if (add_to_recently_used_file_list)
         add_to_recently_used_file_list(rFileUrl, rMimeType, rDocumentService);
 }

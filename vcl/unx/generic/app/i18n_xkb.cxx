@@ -90,12 +90,12 @@ SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
 
     // only handle state notify events for now, and only interested
     // in group details
-    sal_uInt32 nXKBType = ((XkbAnyEvent*)pEvent)->xkb_type;
+    sal_uInt32 nXKBType = reinterpret_cast<XkbAnyEvent*>(pEvent)->xkb_type;
     switch ( nXKBType )
     {
         case XkbStateNotify:
 
-            mnGroup = ((XkbStateNotifyEvent*)pEvent)->group;
+            mnGroup = reinterpret_cast<XkbStateNotifyEvent*>(pEvent)->group;
             break;
 
         default:

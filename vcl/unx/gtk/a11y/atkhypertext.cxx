@@ -36,7 +36,7 @@ typedef struct {
 static uno::Reference< accessibility::XAccessibleHyperlink >
     getHyperlink( AtkHyperlink *pHyperlink )
 {
-    HyperLink *pLink = (HyperLink *) pHyperlink;
+    HyperLink *pLink = reinterpret_cast<HyperLink *>(pHyperlink);
     return pLink->xLink;
 }
 
@@ -47,7 +47,7 @@ extern "C" {
 static void
 hyper_link_finalize (GObject *obj)
 {
-    HyperLink *hl = (HyperLink *) obj;
+    HyperLink *hl = reinterpret_cast<HyperLink *>(obj);
     hl->xLink.clear();
     hyper_parent_class->finalize (obj);
 }
@@ -164,7 +164,7 @@ hyper_link_get_type (void)
             sizeof (AtkHyperlinkClass),
             NULL,               /* base init */
             NULL,               /* base finalize */
-            (GClassInitFunc) hyper_link_class_init,
+            reinterpret_cast<GClassInitFunc>(hyper_link_class_init),
             NULL,               /* class finalize */
             NULL,               /* class data */
             sizeof (HyperLink), /* instance size */
@@ -174,7 +174,7 @@ hyper_link_get_type (void)
         };
 
         static const GInterfaceInfo atk_action_info = {
-            (GInterfaceInitFunc) actionIfaceInit,
+            reinterpret_cast<GInterfaceInitFunc>(actionIfaceInit),
             (GInterfaceFinalizeFunc) NULL,
             NULL
         };

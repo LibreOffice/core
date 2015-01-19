@@ -43,7 +43,7 @@ struct item
 static void
 g_lo_menu_struct_item_init (struct item *menu_item)
 {
-    menu_item->attributes = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) g_variant_unref);
+    menu_item->attributes = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, reinterpret_cast<GDestroyNotify>(g_variant_unref));
     menu_item->links = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 }
 
@@ -629,7 +629,7 @@ g_lo_menu_finalize (GObject *object)
     gint i;
 
     n_items = menu->items->len;
-    items = (struct item *) g_array_free (menu->items, FALSE);
+    items = reinterpret_cast<struct item *>(g_array_free (menu->items, FALSE));
     for (i = 0; i < n_items; i++)
         g_lo_menu_clear_item (&items[i]);
     g_free (items);

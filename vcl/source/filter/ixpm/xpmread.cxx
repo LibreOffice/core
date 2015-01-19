@@ -346,7 +346,7 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
                 if ( std::strlen(pRGBTable[i].name) > mnParaSize &&
                         pRGBTable[ i ].name[ mnParaSize ] == 0 )
                 {
-                    if ( ImplCompare ( (unsigned char*)pRGBTable[ i ].name,
+                    if ( ImplCompare ( reinterpret_cast<unsigned char const *>(pRGBTable[ i ].name),
                             mpPara, mnParaSize, XPMCASENONSENSITIVE ) )
                     {
                         bColStatus = true;
@@ -456,7 +456,7 @@ sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
     else return 0;
 }
 
-bool XPMReader::ImplCompare( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nSize, sal_uLong nMode )
+bool XPMReader::ImplCompare( sal_uInt8 const * pSource, sal_uInt8 const * pDest, sal_uLong nSize, sal_uLong nMode )
 {
     bool bRet = true;
 

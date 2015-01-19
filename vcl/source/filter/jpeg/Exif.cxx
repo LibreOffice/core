@@ -156,7 +156,7 @@ bool Exif::processIFD(sal_uInt8* pExifData, sal_uInt16 aLength, sal_uInt16 aOffs
 
     while (aOffset <= aLength - 12 && aNumberOfTags > 0)
     {
-        ifd = (ExifIFD*) &pExifData[aOffset];
+        ifd = reinterpret_cast<ExifIFD*>(&pExifData[aOffset]);
         sal_uInt16 tag = ifd->tag;
         if (bSwap)
         {
@@ -216,7 +216,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     // Exif detected
     mbExifPresent = true;
 
-    TiffHeader* aTiffHeader = (TiffHeader*) &aExifData[0];
+    TiffHeader* aTiffHeader = reinterpret_cast<TiffHeader*>(&aExifData[0]);
 
     bool bIntel = aTiffHeader->byteOrder == 0x4949;      //big-endian
     bool bMotorola = aTiffHeader->byteOrder == 0x4D4D;   //little-endian

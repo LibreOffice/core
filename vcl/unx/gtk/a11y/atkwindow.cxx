@@ -295,7 +295,7 @@ ooo_window_wrapper_get_type (void)
             static_cast<guint16>(type_query.class_size),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
-            (GClassInitFunc) ooo_window_wrapper_class_init,
+            reinterpret_cast<GClassInitFunc>(ooo_window_wrapper_class_init),
             (GClassFinalizeFunc) NULL,
             NULL,
             static_cast<guint16>(type_query.instance_size),

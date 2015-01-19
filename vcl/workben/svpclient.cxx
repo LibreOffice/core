@@ -197,7 +197,7 @@ OString MyWin::processCommand( const OString& rCommand )
         addr.sin_family = AF_INET;
         addr.sin_port = htons(nPort);
         addr.sin_addr.s_addr = INADDR_ANY;
-        if( connect( nSocket, (const sockaddr*)&addr, sizeof(addr) ) )
+        if( connect( nSocket, reinterpret_cast<sockaddr*>(&addr), sizeof(addr) ) )
         {
             perror( "SvpElementContainer: connect() failed" );
         }

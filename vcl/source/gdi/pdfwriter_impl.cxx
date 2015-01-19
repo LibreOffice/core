@@ -2052,7 +2052,7 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( OStringBuffer& rInString,
         //encrypt the string in a buffer, then append it
         enableStringEncryption( nInObjectNumber );
         rtl_cipher_encodeARCFOUR( m_aCipher, rInString.getStr(), nChars, m_pEncryptionBuffer, nChars );
-        appendLiteralString( (const sal_Char*)m_pEncryptionBuffer, nChars, rOutBuffer );
+        appendLiteralString( reinterpret_cast<sal_Char*>(m_pEncryptionBuffer), nChars, rOutBuffer );
     }
     else
         appendLiteralString( rInString.getStr(), nChars , rOutBuffer );
@@ -3739,7 +3739,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     ZCodec pCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
     pCodec.BeginCompression();
-    pCodec.Write( aStream, (const sal_uInt8*)aContents.getStr(), aContents.getLength() );
+    pCodec.Write( aStream, reinterpret_cast<const sal_uInt8*>(aContents.getStr()), aContents.getLength() );
     pCodec.EndCompression();
 #endif
 
@@ -6779,9 +6779,9 @@ bool PDFWriterImpl::emitTrailer()
 
             // emit the owner password, must not be encrypted
             aLineS.append( "/O(" );
-            appendLiteralString( (const sal_Char*)&m_aContext.Encryption.OValue[0], sal_Int32(m_aContext.Encryption.OValue.size()), aLineS );
+            appendLiteralString( reinterpret_cast<char*>(&m_aContext.Encryption.OValue[0]), sal_Int32(m_aContext.Encryption.OValue.size()), aLineS );
             aLineS.append( ")/U(" );
-            appendLiteralString( (const sal_Char*)&m_aContext.Encryption.UValue[0], sal_Int32(m_aContext.Encryption.UValue.size()), aLineS );
+            appendLiteralString( reinterpret_cast<char*>(&m_aContext.Encryption.UValue[0]), sal_Int32(m_aContext.Encryption.UValue.size()), aLineS );
             aLineS.append( ")/P " );// the permission set
             aLineS.append( m_nAccessPermissions );
             aLineS.append( ">>\nendobj\n\n" );

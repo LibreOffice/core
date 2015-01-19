@@ -232,7 +232,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
         rIStream.Read( pTempBuf.get(),  nLen - sizeof( nLen ) - sizeof( nSystem ) );
         if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
         {
-            ImplOldJobSetupData* pData = (ImplOldJobSetupData*)pTempBuf.get();
+            ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
             if ( rJobSetup.mpData )
             {
                 if ( rJobSetup.mpData->mnRefCount == 1 )
@@ -254,7 +254,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
-                Impl364JobSetupData* pOldJobData    = (Impl364JobSetupData*)(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
+                Impl364JobSetupData* pOldJobData    = reinterpret_cast<Impl364JobSetupData*>(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
                 sal_uInt16 nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
                 pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
                 pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
@@ -266,7 +266,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 pJobData->mnPaperHeight             = (long)SVBT32ToUInt32( pOldJobData->nPaperHeight );
                 if ( pJobData->mnDriverDataLen )
                 {
-                    sal_uInt8* pDriverData = ((sal_uInt8*)pOldJobData) + nOldJobDataSize;
+                    sal_uInt8* pDriverData = reinterpret_cast<sal_uInt8*>(pOldJobData) + nOldJobDataSize;
                     pJobData->mpDriverData = (sal_uInt8*)rtl_allocateMemory( pJobData->mnDriverDataLen );
                     memcpy( pJobData->mpDriverData, pDriverData, pJobData->mnDriverDataLen );
                 }
@@ -339,9 +339,9 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             int nPos = rOStream.Tell();
             rOStream.WriteUInt16( nLen );
             rOStream.WriteUInt16( nSystem );
-            rOStream.Write( (char*)&aOldData, sizeof( aOldData ) );
-            rOStream.Write( (char*)&aOldJobData, nOldJobDataSize );
-            rOStream.Write( (char*)pJobData->mpDriverData, pJobData->mnDriverDataLen );
+            rOStream.Write( &aOldData, sizeof( aOldData ) );
+            rOStream.Write( &aOldJobData, nOldJobDataSize );
+            rOStream.Write( pJobData->mpDriverData, pJobData->mnDriverDataLen );
             std::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
             for( it = pJobData->maValueMap.begin(); it != pJobData->maValueMap.end(); ++it )
             {

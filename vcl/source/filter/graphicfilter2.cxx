@@ -915,8 +915,8 @@ bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
     rStm.Read( &nFirstBytes, 20 );
 
     if ( ( nFirstLong == 0xC5D0D3C6 ) || aPathExt.startsWith( "eps" ) ||
-        ( ImplSearchEntry( nFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 )
-            && ImplSearchEntry( &nFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
+        ( ImplSearchEntry( nFirstBytes, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 )
+            && ImplSearchEntry( &nFirstBytes[15], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) ) )
     {
         nFormat = GFF_EPS;
         bRet = true;

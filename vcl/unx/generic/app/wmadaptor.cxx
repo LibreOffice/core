@@ -384,7 +384,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             && nItems
             )
         {
-            Atom* pAtoms = (Atom*)pProperty;
+            Atom* pAtoms = reinterpret_cast<Atom*>(pProperty);
             char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
@@ -442,7 +442,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            m_nDesktops = *(long*)pProperty;
+            m_nDesktops = *reinterpret_cast<long*>(pProperty);
             XFree( pProperty );
             pProperty = NULL;
             // get work areas
@@ -463,7 +463,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
                 )
             {
                 m_aWMWorkAreas = ::std::vector< Rectangle > ( m_nDesktops );
-                long* pValues = (long*)pProperty;
+                long* pValues = reinterpret_cast<long*>(pProperty);
                 for( int i = 0; i < m_nDesktops; i++ )
                 {
                     Point aPoint( pValues[4*i],
@@ -556,7 +556,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && nItems != 0
             )
         {
-            aWMChild = *(::Window*)pProperty;
+            aWMChild = *reinterpret_cast< ::Window* >(pProperty);
             XFree( pProperty );
             pProperty = NULL;
             ::Window aCheckWindow = None;
@@ -580,7 +580,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 {
                     GetGenericData()->ErrorTrapPush();
 
-                    aCheckWindow =  *(::Window*)pProperty;
+                    aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                     XFree( pProperty );
                     pProperty = NULL;
                     if( aCheckWindow == aWMChild )
@@ -642,7 +642,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            Atom* pAtoms = (Atom*)pProperty;
+            Atom* pAtoms = reinterpret_cast<Atom*>(pProperty);
             char** pAtomNames = (char**)alloca( sizeof(char*)*nItems );
             if( XGetAtomNames( m_pDisplay, pAtoms, nItems, pAtomNames ) )
             {
@@ -706,7 +706,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             && pProperty
             )
         {
-            m_nDesktops = *(long*)pProperty;
+            m_nDesktops = *reinterpret_cast<long*>(pProperty);
             XFree( pProperty );
             pProperty = NULL;
         }
@@ -761,7 +761,7 @@ bool WMAdaptor::getNetWmName()
             && nItems != 0
             )
         {
-            aWMChild = *(::Window*)pProperty;
+            aWMChild = *reinterpret_cast< ::Window* >(pProperty);
             XFree( pProperty );
             pProperty = NULL;
             ::Window aCheckWindow = None;
@@ -784,7 +784,7 @@ bool WMAdaptor::getNetWmName()
                     if ( ! GetGenericData()->ErrorTrapPop( false ) )
                     {
                         GetGenericData()->ErrorTrapPush();
-                        aCheckWindow =  *(::Window*)pProperty;
+                        aCheckWindow =  *reinterpret_cast< ::Window* >(pProperty);
                         XFree( pProperty );
                         pProperty = NULL;
                         if( aCheckWindow == aWMChild )
@@ -807,9 +807,9 @@ bool WMAdaptor::getNetWmName()
                                 )
                             {
                                 if (aRealType == m_aWMAtoms[ UTF8_STRING ])
-                                    m_aWMName = OUString( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                    m_aWMName = OUString( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_UTF8 );
                                 else if (aRealType == XA_STRING)
-                                    m_aWMName = OUString( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_ISO_8859_1 );
+                                    m_aWMName = OUString( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_ISO_8859_1 );
 
                                 XFree( pProperty );
                                 pProperty = NULL;
@@ -841,7 +841,7 @@ bool WMAdaptor::getNetWmName()
                                         && nItems != 0
                                         )
                                     {
-                                        OUString aMetaVersion( (sal_Char*)pProperty, nItems, RTL_TEXTENCODING_UTF8 );
+                                        OUString aMetaVersion( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_UTF8 );
                                         nVersionMajor = aMetaVersion.getToken(0, '.').toInt32();
                                         nVersionMinor = aMetaVersion.getToken(1, '.').toInt32();
                                     }
@@ -1009,7 +1009,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                                    &aProp );
     }
 
-    unsigned char* pData = aProp.nitems ? aProp.value : (unsigned char*)aTitle.getStr();
+    unsigned char const * pData = aProp.nitems ? aProp.value : reinterpret_cast<unsigned char const *>(aTitle.getStr());
     Atom nType = aProp.nitems ? aProp.encoding : XA_STRING;
     int nFormat = aProp.nitems ? aProp.format : 8;
     int nBytes = aProp.nitems ? aProp.nitems : aTitle.getLength();
@@ -1036,7 +1036,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) const
                      XA_STRING,
                      8,
                      PropModeReplace,
-                     (unsigned char*)aWMLocale.getStr(),
+                     reinterpret_cast<unsigned char const *>(aWMLocale.getStr()),
                      aWMLocale.getLength() );
     if (aProp.value != NULL)
         XFree( aProp.value );
@@ -1062,7 +1062,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
                          PropModeReplace,
-                         (unsigned char*)aTitle.getStr(),
+                         reinterpret_cast<unsigned char const *>(aTitle.getStr()),
                          aTitle.getLength() );
     if( m_aWMAtoms[ NET_WM_ICON_NAME ] )
         XChangeProperty( m_pDisplay,
@@ -1071,7 +1071,7 @@ void NetWMAdaptor::setWMName( X11SalFrame* pFrame, const OUString& rWMName ) con
                          m_aWMAtoms[ UTF8_STRING ],
                          8,
                          PropModeReplace,
-                         (unsigned char*)aTitle.getStr(),
+                         reinterpret_cast<unsigned char const *>(aTitle.getStr()),
                          aTitle.getLength() );
 }
 
@@ -1121,7 +1121,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
                              XA_ATOM,
                              32,
                              PropModeReplace,
-                             (unsigned char*)aStateAtoms,
+                             reinterpret_cast<unsigned char*>(aStateAtoms),
                              nStateAtoms
                              );
         }
@@ -1216,7 +1216,7 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                          XA_CARDINAL,
                          32,
                          PropModeReplace,
-                         (unsigned char*)&nWinWMState,
+                         reinterpret_cast<unsigned char*>(&nWinWMState),
                          1
                          );
         if( pFrame->mbMaximizedHorz
@@ -1344,7 +1344,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
                          m_aWMAtoms[ MOTIF_WM_HINTS ],
                          32,
                          PropModeReplace,
-                         (unsigned char*)&aHint,
+                         reinterpret_cast<unsigned char*>(&aHint),
                          5 );
     }
 
@@ -1429,7 +1429,7 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
                          XA_ATOM,
                          32,
                          PropModeReplace,
-                         (unsigned char*)aWindowTypes,
+                         reinterpret_cast<unsigned char*>(aWindowTypes),
                          nWindowTypes );
     }
     if( ( eType == windowType_ModalDialogue ||
@@ -1749,7 +1749,7 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
                              XA_CARDINAL,
                              32,
                              PropModeReplace,
-                             (unsigned char*)&nNewLayer,
+                             reinterpret_cast<unsigned char*>(&nNewLayer),
                              1
                              );
         }
@@ -1821,7 +1821,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
                 {
                     if( nType == XA_ATOM && nFormat == 32 && nItems > 0 )
                     {
-                        pStates = (Atom*)pData;
+                        pStates = reinterpret_cast<Atom*>(pData);
                         for( unsigned long i = 0; i < nItems; i++ )
                         {
                             if( pStates[i] == m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] )
@@ -1895,7 +1895,7 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
             {
                 if( nType == XA_CARDINAL && nFormat == 32 && nItems == 1 )
                 {
-                    sal_uInt32 nWinState = *(sal_uInt32*)pData;
+                    sal_uInt32 nWinState = *reinterpret_cast<sal_uInt32*>(pData);
                     if( nWinState & (1<<2) )
                         pFrame->mbMaximizedVert = true;
                     if( nWinState & (1<<3) )
@@ -2130,7 +2130,7 @@ int WMAdaptor::getCurrentWorkArea() const
                                 && pProperty
         )
         {
-            nCurrent = int(*(sal_Int32*)pProperty);
+            nCurrent = int(*reinterpret_cast<sal_Int32*>(pProperty));
             XFree( pProperty );
         }
         else if( pProperty )
@@ -2169,7 +2169,7 @@ int WMAdaptor::getWindowWorkArea( ::Window aWindow ) const
                                 && pProperty
         )
         {
-            nCurrent = int(*(sal_Int32*)pProperty);
+            nCurrent = int(*reinterpret_cast<sal_Int32*>(pProperty));
             XFree( pProperty );
         }
         else if( pProperty )
@@ -2281,7 +2281,7 @@ void NetWMAdaptor::setFrameStruts( X11SalFrame* pFrame,
                              XA_CARDINAL,
                              32,
                              PropModeReplace,
-                             (unsigned char*)&nData,
+                             reinterpret_cast<unsigned char*>(&nData),
                              nSetData
                              );
     }
@@ -2307,7 +2307,7 @@ void NetWMAdaptor::setUserTime( X11SalFrame* i_pFrame, long i_nUserTime ) const
                          XA_CARDINAL,
                          32,
                          PropModeReplace,
-                         (unsigned char*)&i_nUserTime,
+                         reinterpret_cast<unsigned char*>(&i_nUserTime),
                          1
                          );
     }
@@ -2327,7 +2327,7 @@ void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
                          XA_CARDINAL,
                          32,
                          PropModeReplace,
-                         (unsigned char*)&nPID,
+                         reinterpret_cast<unsigned char*>(&nPID),
                          1
                          );
     }
@@ -2339,7 +2339,7 @@ void WMAdaptor::setPID( X11SalFrame* i_pFrame ) const
 void WMAdaptor::setClientMachine( X11SalFrame* i_pFrame ) const
 {
     OString aWmClient( OUStringToOString( GetGenericData()->GetHostname(), RTL_TEXTENCODING_ASCII_US ) );
-    XTextProperty aClientProp = { (unsigned char*)aWmClient.getStr(), XA_STRING, 8, sal::static_int_cast<unsigned long>( aWmClient.getLength() ) };
+    XTextProperty aClientProp = { reinterpret_cast<unsigned char *>(const_cast<char *>(aWmClient.getStr())), XA_STRING, 8, sal::static_int_cast<unsigned long>( aWmClient.getLength() ) };
     XSetWMClientMachine( m_pDisplay, i_pFrame->GetShellWindow(), &aClientProp );
 }
 

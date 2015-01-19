@@ -3888,7 +3888,7 @@ Any Window::GetSystemDataAny() const
     const SystemEnvData* pSysData = GetSystemData();
     if( pSysData )
     {
-        Sequence< sal_Int8 > aSeq( (sal_Int8*)pSysData, pSysData->nSize );
+        Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(pSysData), pSysData->nSize );
         aRet <<= aSeq;
     }
     return aRet;

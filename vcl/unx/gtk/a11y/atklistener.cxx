@@ -97,7 +97,7 @@ void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeExcep
         // global mutex
         atk_object_wrapper_dispose( mpWrapper );
 
-        g_idle_add( (GSourceFunc) idle_defunc_state_change,
+        g_idle_add( reinterpret_cast<GSourceFunc>(idle_defunc_state_change),
                     g_object_ref( G_OBJECT( atk_obj ) ) );
 
         // Release the wrapper object so that it can vanish ..

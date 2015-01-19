@@ -136,7 +136,7 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div)
 
 SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd)
 {
-    rIStream.Read((char*)&rDtHd.Reserved[0],DtHdSize);
+    rIStream.Read(&rDtHd.Reserved[0], DtHdSize);
     return rIStream;
 }
 
@@ -154,7 +154,7 @@ PageType::PageType()
 
 SvStream& ReadPageType(SvStream& rIStream, PageType& rPage)
 {
-    rIStream.Read((char*)&rPage.Next,PageSize);
+    rIStream.Read(&rPage.Next, PageSize);
 #if defined OSL_BIGENDIAN
     SWAPPAGE(rPage);
 #endif
@@ -173,7 +173,7 @@ SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk)
     // fileposition in stream is not changed!
     sal_uLong nPos;
     nPos=rInp.Tell();
-    rInp.Read((char*)&rObjk.Last,ObjkSize);
+    rInp.Read(&rObjk.Last, ObjkSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK(rObjk);
 #endif
@@ -182,7 +182,7 @@ SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk)
 }
 SvStream& ReadStrkType(SvStream& rInp, StrkType& rStrk)
 {
-    rInp.Read((char*)&rStrk.Last,StrkSize);
+    rInp.Read(&rStrk.Last, StrkSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rStrk);
     SWAPLINE (rStrk.L);
@@ -193,7 +193,7 @@ SvStream& ReadStrkType(SvStream& rInp, StrkType& rStrk)
 }
 SvStream& ReadRectType(SvStream& rInp, RectType& rRect)
 {
-    rInp.Read((char*)&rRect.Last,RectSize);
+    rInp.Read(&rRect.Last, RectSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rRect);
     SWAPLINE (rRect.L);
@@ -208,7 +208,7 @@ SvStream& ReadRectType(SvStream& rInp, RectType& rRect)
 }
 SvStream& ReadPolyType(SvStream& rInp, PolyType& rPoly)
 {
-    rInp.Read((char*)&rPoly.Last,PolySize);
+    rInp.Read(&rPoly.Last, PolySize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rPoly);
     SWAPLINE (rPoly.L);
@@ -218,7 +218,7 @@ SvStream& ReadPolyType(SvStream& rInp, PolyType& rPoly)
 }
 SvStream& ReadSplnType(SvStream& rInp, SplnType& rSpln)
 {
-    rInp.Read((char*)&rSpln.Last,SplnSize);
+    rInp.Read(&rSpln.Last, SplnSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rSpln);
     SWAPLINE (rSpln.L);
@@ -228,7 +228,7 @@ SvStream& ReadSplnType(SvStream& rInp, SplnType& rSpln)
 }
 SvStream& ReadCircType(SvStream& rInp, CircType& rCirc)
 {
-    rInp.Read((char*)&rCirc.Last,CircSize);
+    rInp.Read(&rCirc.Last, CircSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rCirc);
     SWAPLINE (rCirc.L);
@@ -243,7 +243,7 @@ SvStream& ReadCircType(SvStream& rInp, CircType& rCirc)
 }
 SvStream& ReadTextType(SvStream& rInp, TextType& rText)
 {
-    rInp.Read((char*)&rText.Last,TextSize);
+    rInp.Read(&rText.Last, TextSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rText);
     SWAPTEXT (rText.T);
@@ -261,7 +261,7 @@ SvStream& ReadTextType(SvStream& rInp, TextType& rText)
 }
 SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
 {
-    rInp.Read((char*)&rBmap.Last,BmapSize);
+    rInp.Read(&rBmap.Last, BmapSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rBmap);
     SWAPAREA (rBmap.F);
@@ -275,7 +275,7 @@ SvStream& ReadBmapType(SvStream& rInp, BmapType& rBmap)
 }
 SvStream& ReadGrupType(SvStream& rInp, GrupType& rGrup)
 {
-    rInp.Read((char*)&rGrup.Last,GrupSize);
+    rInp.Read(&rGrup.Last, GrupSize);
 #if defined OSL_BIGENDIAN
     SWAPOBJK (rGrup);
     rGrup.SbLo     =OSL_SWAPWORD(rGrup.SbLo     );
@@ -710,7 +710,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadTextType( rInp, aText );
                     if (!rInp.GetError()) {
                         aText.Buffer=new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
-                        rInp.Read((char* )aText.Buffer,aText.BufSize);
+                        rInp.Read(aText.Buffer, aText.BufSize);
                         if (!rInp.GetError()) aText.Draw(rOut);
                         delete[] aText.Buffer;
                     }
@@ -727,7 +727,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadPolyType( rInp, aPoly );
                     if (!rInp.GetError()) {
                         aPoly.EckP=new PointType[aPoly.nPoints];
-                        rInp.Read((char*)aPoly.EckP,4*aPoly.nPoints);
+                        rInp.Read(aPoly.EckP, 4*aPoly.nPoints);
 #if defined OSL_BIGENDIAN
                         for(short i=0;i<aPoly.nPoints;i++) SWAPPOINT(aPoly.EckP[i]);
 #endif
@@ -740,7 +740,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     ReadSplnType( rInp, aSpln );
                     if (!rInp.GetError()) {
                         aSpln.EckP=new PointType[aSpln.nPoints];
-                        rInp.Read((char*)aSpln.EckP,4*aSpln.nPoints);
+                        rInp.Read(aSpln.EckP, 4*aSpln.nPoints);
 #if defined OSL_BIGENDIAN
                         for(short i=0;i<aSpln.nPoints;i++) SWAPPOINT(aSpln.EckP[i]);
 #endif

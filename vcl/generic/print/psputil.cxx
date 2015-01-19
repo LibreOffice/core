@@ -223,7 +223,7 @@ ConverterFactory::Convert (const sal_Unicode *pText, int nTextLen,
     rtl_UnicodeToTextContext   aContext   = rtl_createUnicodeToTextContext (aConverter);
 
     sal_Size nSize = rtl_convertUnicodeToText (aConverter, aContext,
-                                               pText, nTextLen, (sal_Char*)pBuffer, nBufferSize,
+                                               pText, nTextLen, reinterpret_cast<char*>(pBuffer), nBufferSize,
                                                nCvtFlags, &nCvtInfo, &nCvtChars);
 
     rtl_destroyUnicodeToTextContext (aConverter, aContext);

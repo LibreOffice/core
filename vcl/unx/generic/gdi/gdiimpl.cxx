@@ -887,7 +887,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     // an XImage needs its data top_down
     // TODO: avoid wrongly oriented images in upper layers!
     const int nImageSize = pAlphaBuffer->mnHeight * pAlphaBuffer->mnScanlineSize;
-    const char* pSrcBits = (char*)pAlphaBuffer->mpBits;
+    const char* pSrcBits = reinterpret_cast<char*>(pAlphaBuffer->mpBits);
     char* pAlphaBits = new char[ nImageSize ];
     if( BMP_SCANLINE_ADJUSTMENT( pAlphaBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
         memcpy( pAlphaBits, pSrcBits, nImageSize );
@@ -901,11 +901,11 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // the alpha values need to be inverted for XRender
     // TODO: make upper layers use standard alpha
-    long* pLDst = (long*)pAlphaBits;
+    long* pLDst = reinterpret_cast<long*>(pAlphaBits);
     for( int i = nImageSize/sizeof(long); --i >= 0; ++pLDst )
         *pLDst = ~*pLDst;
 
-    char* pCDst = (char*)pLDst;
+    char* pCDst = reinterpret_cast<char*>(pLDst);
     for( int i = nImageSize & (sizeof(long)-1); --i >= 0; ++pCDst )
         *pCDst = ~*pCDst;
 
@@ -924,7 +924,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
         rTR.mnSrcX, rTR.mnSrcY, 0, 0, rTR.mnDestWidth, rTR.mnDestHeight );
     XFreeGC( pXDisplay, aAlphaGC );
     XFree( pAlphaImg );
-    if( pAlphaBits != (char*)pAlphaBuffer->mpBits )
+    if( pAlphaBits != reinterpret_cast<char*>(pAlphaBuffer->mpBits) )
         delete[] pAlphaBits;
 
     const_cast<SalBitmap&>(rAlphaBmp).ReleaseBuffer( pAlphaBuffer, BITMAP_READ_ACCESS );

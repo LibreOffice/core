@@ -127,9 +127,9 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
             const long      nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
             long*           pColm = new long[ nWidth2 ];
             long*           pRows = new long[ nHeight2 ];
-            BitmapColor*    pColRow1 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow2 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow3 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow1 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
+            BitmapColor*    pColRow2 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
+            BitmapColor*    pColRow3 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
             BitmapColor*    pRowTmp1 = pColRow1;
             BitmapColor*    pRowTmp2 = pColRow2;
             BitmapColor*    pRowTmp3 = pColRow3;
@@ -228,9 +228,9 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
             }
 
             delete[] pKoeff;
-            delete[] (sal_uInt8*) pColRow1;
-            delete[] (sal_uInt8*) pColRow2;
-            delete[] (sal_uInt8*) pColRow3;
+            delete[] reinterpret_cast<sal_uInt8*>(pColRow1);
+            delete[] reinterpret_cast<sal_uInt8*>(pColRow2);
+            delete[] reinterpret_cast<sal_uInt8*>(pColRow3);
             delete[] pColm;
             delete[] pRows;
 
@@ -272,9 +272,9 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
             const long      nHeight = pWriteAcc->Height(), nHeight2 = nHeight + 2;
             long*           pColm = new long[ nWidth2 ];
             long*           pRows = new long[ nHeight2 ];
-            BitmapColor*    pColRow1 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow2 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
-            BitmapColor*    pColRow3 = (BitmapColor*) new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ];
+            BitmapColor*    pColRow1 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
+            BitmapColor*    pColRow2 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
+            BitmapColor*    pColRow3 = reinterpret_cast<BitmapColor*>(new sal_uInt8[ sizeof( BitmapColor ) * nWidth2 ]);
             BitmapColor*    pRowTmp1 = pColRow1;
             BitmapColor*    pRowTmp2 = pColRow2;
             BitmapColor*    pRowTmp3 = pColRow3;
@@ -357,9 +357,9 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
                 }
             }
 
-            delete[] (sal_uInt8*) pColRow1;
-            delete[] (sal_uInt8*) pColRow2;
-            delete[] (sal_uInt8*) pColRow3;
+            delete[] reinterpret_cast<sal_uInt8*>(pColRow1);
+            delete[] reinterpret_cast<sal_uInt8*>(pColRow2);
+            delete[] reinterpret_cast<sal_uInt8*>(pColRow3);
             delete[] pColm;
             delete[] pRows;
 

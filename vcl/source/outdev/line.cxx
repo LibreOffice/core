@@ -238,7 +238,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
             if(!bDone)
             {
                 const Polygon aPolygon(aCandidate);
-                mpGraphics->DrawPolyLine(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
+                mpGraphics->DrawPolyLine(aPolygon.GetSize(), reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), this);
             }
         }
     }
@@ -268,7 +268,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
                 // need to subdivide, mpGraphics->DrawPolygon ignores curves
                 aPolygon.AdaptiveSubdivide(aPolygon);
-                mpGraphics->DrawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
+                mpGraphics->DrawPolygon(aPolygon.GetSize(), reinterpret_cast<const SalPoint*>(aPolygon.GetConstPointAry()), this);
             }
         }
 

@@ -597,8 +597,9 @@ static void handle_menu_highlighted(::VclMenuEvent const * pEvent)
 
 /*****************************************************************************/
 
-long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
+sal_IntPtr WindowEventHandler(void *, void * p)
 {
+    VclSimpleEvent * pEvent = reinterpret_cast<VclSimpleEvent *>(p);
     try
     {
         switch (pEvent->GetId())
@@ -675,7 +676,7 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
     return 0;
 }
 
-static Link g_aEventListenerLink( NULL, (PSTUB) WindowEventHandler );
+static Link g_aEventListenerLink( NULL, WindowEventHandler );
 
 /*****************************************************************************/
 
@@ -743,7 +744,7 @@ ooo_atk_util_get_type (void)
             static_cast<guint16>(type_query.class_size),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
-            (GClassInitFunc) ooo_atk_util_class_init,
+            reinterpret_cast<GClassInitFunc>(ooo_atk_util_class_init),
             (GClassFinalizeFunc) NULL,
             NULL,
             static_cast<guint16>(type_query.instance_size),

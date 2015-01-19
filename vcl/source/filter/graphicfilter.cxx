@@ -164,7 +164,7 @@ static void KillDirEntry( const OUString& rMainUrl )
 
 // Helper functions
 
-sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
+sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -506,8 +506,8 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     if( !bTest || rFormatExtension.startsWith( "EPS" ) )
     {
         bSomethingTested = true;
-        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
-             ImplSearchEntry( &sFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
+        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
+             ImplSearchEntry( &sFirstBytes[15], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) ) )
         {
             rFormatExtension = "EPS";
             return true;
@@ -518,7 +518,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     if( !bTest || rFormatExtension.startsWith( "DXF" ) )
     {
         // Binary DXF File Format
-        if( strncmp( (const char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
+        if( strncmp( reinterpret_cast<char*>(sFirstBytes), "AutoCAD Binary DXF", 18 ) == 0 )
         {
             rFormatExtension = "DXF";
             return true;
@@ -540,7 +540,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             while( i<256 && sFirstBytes[i]<=32 )
                 ++i;
 
-            if (i+7<256 && (strncmp((const char*)(sFirstBytes+i),"SECTION",7)==0))
+            if (i+7<256 && (strncmp(reinterpret_cast<char*>(sFirstBytes+i),"SECTION",7)==0))
             {
                 rFormatExtension = "DXF";
                 return true;
@@ -604,7 +604,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
     if( !bTest )
     {
         bSomethingTested = true;
-        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"/* XPM */", 256, 9 ) )
+        if( ImplSearchEntry( sFirstBytes, reinterpret_cast<sal_uInt8 const *>("/* XPM */"), 256, 9 ) )
         {
             rFormatExtension = "XPM";
             return true;
@@ -624,11 +624,11 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
         rStream.Seek( nStreamPos );
         rStream.Read( pBuf.get(), nSize );
-        sal_uInt8* pPtr = ImplSearchEntry( pBuf.get(), (sal_uInt8*)"#define", nSize, 7 );
+        sal_uInt8* pPtr = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("#define"), nSize, 7 );
 
         if( pPtr )
         {
-            if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf.get() + nSize - pPtr, 6 ) )
+            if( ImplSearchEntry( pPtr, reinterpret_cast<sal_uInt8 const *>("_width"), pBuf.get() + nSize - pPtr, 6 ) )
             {
                 rFormatExtension = "XBM";
                 return true;
@@ -670,20 +670,20 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
 
         // check for Xml
         // #119176# SVG files which have no xml header at all have shown up this is optional
-        if( ImplSearchEntry(pCheckArray, (sal_uInt8*)"<?xml", nCheckSize, 5 ) // is it xml
-            && ImplSearchEntry(pCheckArray, (sal_uInt8*)"version", nCheckSize, 7 )) // does it have a version (required for xml)
+        if( ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<?xml"), nCheckSize, 5 ) // is it xml
+            && ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("version"), nCheckSize, 7 )) // does it have a version (required for xml)
         {
 
             // check for DOCTYPE svg combination
-            if( ImplSearchEntry(pCheckArray, (sal_uInt8*)"DOCTYPE", nCheckSize, 7 ) // 'DOCTYPE' is there
-                && ImplSearchEntry(pCheckArray, (sal_uInt8*)"svg", nCheckSize, 3 )) // 'svg' is there
+            if( ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("DOCTYPE"), nCheckSize, 7 ) // 'DOCTYPE' is there
+                && ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("svg"), nCheckSize, 3 )) // 'svg' is there
             {
                 bIsSvg = true;
             }
         }
 
         // check for svg element in 1st 256 bytes
-        if(!bIsSvg && ImplSearchEntry(pCheckArray, (sal_uInt8*)"<svg", nCheckSize, 4 )) // '<svg'
+        if(!bIsSvg && ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<svg"), nCheckSize, 4 )) // '<svg'
         {
             bIsSvg = true;
         }
@@ -709,7 +709,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
                 nCheckSize = rStream.Read(sExtendedOrDecompressedFirstBytes, nCheckSize);
             }
 
-            if(ImplSearchEntry(pCheckArray, (sal_uInt8*)"<svg", nCheckSize, 4)) // '<svg'
+            if(ImplSearchEntry(pCheckArray, reinterpret_cast<sal_uInt8 const *>("<svg"), nCheckSize, 4)) // '<svg'
             {
                 bIsSvg = true;
             }
@@ -984,7 +984,7 @@ PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
     if( !mpfnImport )
     {
 #ifndef DISABLE_DYNLOADING
-        mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(OUString(IMPORT_FUNCTION_NAME));
+        mpfnImport = reinterpret_cast<PFilterCall>(maLibrary.getFunctionSymbol(OUString(IMPORT_FUNCTION_NAME)));
 #else
         if( maFiltername.equalsAscii( "icd" ) )
             mpfnImport = icdGraphicImport;
@@ -2114,7 +2114,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
                 OUString aPhysicalName( ImpCreateFullFilterPath( aFilterPath.getToken(i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
-                PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(OUString(EXPORT_FUNCTION_NAME));
+                PFilterCall pFunc = reinterpret_cast<PFilterCall>(aLibrary.getFunctionSymbol(OUString(EXPORT_FUNCTION_NAME)));
                 // Execute dialog in DLL
 #else
                 PFilterCall pFunc = NULL;

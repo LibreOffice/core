@@ -105,7 +105,7 @@ void SvgData::ensureSequenceAndRange()
         maRange.reset();
 
         // create stream
-        const uno::Sequence< sal_Int8 > aPostData((sal_Int8*)maSvgDataArray.get(), mnSvgDataArrayLength);
+        const uno::Sequence< sal_Int8 > aPostData(reinterpret_cast<sal_Int8*>(maSvgDataArray.get()), mnSvgDataArrayLength);
         const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(aPostData));
 
         if(myInputStream.is())

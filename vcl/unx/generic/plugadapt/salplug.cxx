@@ -86,7 +86,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
         SAL_LOADMODULE_DEFAULT );
     if( aMod )
     {
-        salFactoryProc aProc = (salFactoryProc)osl_getAsciiFunctionSymbol( aMod, "create_SalInstance" );
+        salFactoryProc aProc = reinterpret_cast<salFactoryProc>(osl_getAsciiFunctionSymbol( aMod, "create_SalInstance" ));
         if( aProc )
         {
             pInst = aProc();
@@ -148,8 +148,8 @@ static DesktopType get_desktop_environment()
     DesktopType ret = DESKTOP_UNKNOWN;
     if( aMod )
     {
-        DesktopType (*pSym)() = (DesktopType(*)())
-            osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" );
+        DesktopType (*pSym)() = reinterpret_cast<DesktopType(*)()>(
+            osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" ));
         if( pSym )
             ret = pSym();
     }

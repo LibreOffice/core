@@ -225,7 +225,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
                     uno::Reference< java::XJavaVM >                 xJavaVM = java::JavaVirtualMachine::create(xContext);;
                     uno::Sequence< sal_Int8 >                       aProcessID( 17 );
 
-                    rtl_getGlobalProcessId( (sal_uInt8*) aProcessID.getArray() );
+                    rtl_getGlobalProcessId( reinterpret_cast<sal_uInt8*>(aProcessID.getArray()) );
                     aProcessID[ 16 ] = 0;
                     OSL_ENSURE(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *), "Pointer cannot be represented as sal_Int64");
                     sal_Int64 nPointer = reinterpret_cast< sal_Int64 >( static_cast< jvmaccess::VirtualMachine * >(0));

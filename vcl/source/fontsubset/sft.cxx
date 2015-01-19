@@ -1096,12 +1096,12 @@ typedef struct _subHeader2 {
 } subHeader2;
 
 static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize, sal_uInt32 c) {
-    sal_uInt16 *CMAP2 = (sal_uInt16 *) cmap;
+    sal_uInt16 const *CMAP2 = reinterpret_cast<sal_uInt16 const *>(cmap);
     sal_uInt8 theHighByte;
 
     sal_uInt8 theLowByte;
-    subHeader2* subHeader2s;
-    sal_uInt16* subHeader2Keys;
+    subHeader2 const * subHeader2s;
+    sal_uInt16 const * subHeader2Keys;
     sal_uInt16 firstCode;
     int k = -1;
     sal_uInt32 ToReturn;
@@ -1109,24 +1109,24 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     theHighByte = (sal_uInt8)((c >> 8) & 0x00ff);
     theLowByte = (sal_uInt8)(c & 0x00ff);
     subHeader2Keys = CMAP2 + 3;
-    subHeader2s = (subHeader2 *)(subHeader2Keys + 256);
-    if(reinterpret_cast<sal_uInt8*>(&subHeader2Keys[theHighByte]) - cmap < int(nMaxCmapSize - 2))
+    subHeader2s = reinterpret_cast<subHeader2 const *>(subHeader2Keys + 256);
+    if(reinterpret_cast<sal_uInt8 const *>(&subHeader2Keys[theHighByte]) - cmap < int(nMaxCmapSize - 2))
     {
         k = Int16FromMOTA(subHeader2Keys[theHighByte]) / 8;
         // check if the subheader record fits into available space
-        if((k >= 0) && (reinterpret_cast<sal_uInt8*>(&subHeader2s[k]) - cmap >= int(nMaxCmapSize - sizeof(subHeader2))))
+        if((k >= 0) && (reinterpret_cast<sal_uInt8 const *>(&subHeader2s[k]) - cmap >= int(nMaxCmapSize - sizeof(subHeader2))))
             k = -1;
     }
 
     if(k == 0) {
         firstCode = Int16FromMOTA(subHeader2s[0].firstCode);
         if(theLowByte >= firstCode && theLowByte < (firstCode + Int16FromMOTA(subHeader2s[k].entryCount))) {
-            sal_uInt16* const pGlyph = (&(subHeader2s[0].idRangeOffset))
+            sal_uInt16 const * pGlyph = (&(subHeader2s[0].idRangeOffset))
                      + (Int16FromMOTA(subHeader2s[0].idRangeOffset)/2)             /* + offset        */
                      + theLowByte                                                  /* + to_look       */
                      - firstCode
                      ;
-            if (reinterpret_cast<sal_uInt8*>(pGlyph) - cmap < int(nMaxCmapSize) - 4)
+            if (reinterpret_cast<sal_uInt8 const *>(pGlyph) - cmap < int(nMaxCmapSize) - 4)
                 return *pGlyph;
             else
                 return MISSING_GLYPH_INDEX;
@@ -1155,7 +1155,7 @@ static sal_uInt32 getGlyph2(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
 
 static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
     sal_uInt16 firstCode, lastCode, count;
-    sal_uInt16 *CMAP6 = (sal_uInt16 *) cmap;
+    sal_uInt16 const *CMAP6 = reinterpret_cast<sal_uInt16 const *>(cmap);
 
     firstCode = Int16FromMOTA(*(CMAP6 + 3));
     count = Int16FromMOTA(*(CMAP6 + 4));
@@ -1167,7 +1167,7 @@ static sal_uInt32 getGlyph6(const sal_uInt8 *cmap, sal_uInt32, sal_uInt32 c) {
     }
 }
 
-static sal_uInt16 GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSearch) {
+static sal_uInt16 GEbinsearch(sal_uInt16 const *ar, sal_uInt16 length, sal_uInt16 toSearch) {
     signed int low, high, lastfound = 0xffff;
     sal_uInt16 res;
     if(length == (sal_uInt16)0 || length == (sal_uInt16)0xFFFF) {
@@ -1192,13 +1192,13 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     sal_uInt16  i;
     int ToReturn;
     sal_uInt16  segCount;
-    sal_uInt16 * startCode;
-    sal_uInt16 * endCode;
-    sal_uInt16 * idDelta;
+    sal_uInt16 const * startCode;
+    sal_uInt16 const * endCode;
+    sal_uInt16 const * idDelta;
     /* sal_uInt16 * glyphIdArray; */
-    sal_uInt16 * idRangeOffset;
+    sal_uInt16 const * idRangeOffset;
     /*sal_uInt16 * glyphIndexArray;*/
-    sal_uInt16  *CMAP4 = (sal_uInt16 *) cmap;
+    sal_uInt16 const *CMAP4 = reinterpret_cast<sal_uInt16 const *>(cmap);
     /* sal_uInt16  GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSearch); */
 
     segCount = Int16FromMOTA(*(CMAP4 + 3))/2;
@@ -1210,16 +1210,16 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
     }
     startCode = endCode + segCount + 1;
 
-    if((reinterpret_cast<sal_uInt8*>(&startCode[i]) - cmap >= int(nMaxCmapSize - 2)) || Int16FromMOTA(startCode[i]) > c) {
+    if((reinterpret_cast<sal_uInt8 const *>(&startCode[i]) - cmap >= int(nMaxCmapSize - 2)) || Int16FromMOTA(startCode[i]) > c) {
         return MISSING_GLYPH_INDEX;
     }
     idDelta = startCode + segCount;
     idRangeOffset = idDelta + segCount;
     /*glyphIndexArray = idRangeOffset + segCount;*/
 
-    if((reinterpret_cast<sal_uInt8*>(&idRangeOffset[i]) - cmap < int(nMaxCmapSize - 2)) && Int16FromMOTA(idRangeOffset[i]) != 0) {
-        sal_uInt16 * pGlyphOffset = &(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])));
-        if(reinterpret_cast<sal_uInt8*>(pGlyphOffset) - cmap >= int(nMaxCmapSize - 2))
+    if((reinterpret_cast<sal_uInt8 const *>(&idRangeOffset[i]) - cmap < int(nMaxCmapSize - 2)) && Int16FromMOTA(idRangeOffset[i]) != 0) {
+        sal_uInt16 const * pGlyphOffset = &(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])));
+        if(reinterpret_cast<sal_uInt8 const *>(pGlyphOffset) - cmap >= int(nMaxCmapSize - 2))
             return MISSING_GLYPH_INDEX;
         c = Int16FromMOTA(*pGlyphOffset);
     }
@@ -1229,7 +1229,7 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, const sal_uInt32 nMaxCmapSize
 }
 
 static sal_uInt32 getGlyph12(const sal_uInt8 *pCmap, sal_uInt32, sal_uInt32 cChar) {
-    const sal_uInt32* pCMAP12 = (const sal_uInt32*)pCmap;
+    const sal_uInt32* pCMAP12 = reinterpret_cast<const sal_uInt32*>(pCmap);
     int nLength = Int32FromMOTA( pCMAP12[1] );
     int nGroups = Int32FromMOTA( pCMAP12[3] );
     int nLower = 0;
@@ -1647,7 +1647,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
                 if( nDelta )
                     for( int j = 0; j < NUM_TAGS; ++j )
                         if( t->tables[j] )
-                            *(char**)&t->tables[j] -= nDelta;
+                            *reinterpret_cast<char const **>(&t->tables[j]) -= nDelta;
                 break;
             }
         }
@@ -1747,7 +1747,7 @@ void CloseTTFont(TrueTypeFont *ttf)
 {
 #if !defined(WIN32)
     if( ttf->fname )
-        munmap((char *) ttf->ptr, ttf->fsize);
+        munmap(ttf->ptr, ttf->fsize);
 #endif
     free(ttf->fname);
     free(ttf->goffsets);
@@ -2008,7 +2008,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
            newname.slen = name[i].slen + strlen(suffix);
         */
         const sal_uInt8 ptr[] = {0,'T',0,'r',0,'u',0,'e',0,'T',0,'y',0,'p',0,'e',0,'S',0,'u',0,'b',0,'s',0,'e',0,'t'};
-        NameRecord n1 = {1, 0, 0, 6, 14, (sal_uInt8*)"TrueTypeSubset"};
+        NameRecord n1 = {1, 0, 0, 6, 14, const_cast<sal_uInt8 *>(reinterpret_cast<sal_uInt8 const *>("TrueTypeSubset"))};
         NameRecord n2 = {3, 1, 1033, 6, 28, 0};
         n2.sptr = (sal_uInt8 *) ptr;
         name = TrueTypeTableNew_name(0, 0);

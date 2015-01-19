@@ -108,7 +108,7 @@ void OutputDevice::DrawRect( const Rectangle& rRect,
 
         if ( aRoundRectPoly.GetSize() >= 2 )
         {
-            const SalPoint* pPtAry = (const SalPoint*) aRoundRectPoly.GetConstPointAry();
+            const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aRoundRectPoly.GetConstPointAry());
 
             if ( !mbFillColor )
                 mpGraphics->DrawPolyLine( aRoundRectPoly.GetSize(), pPtAry, this );

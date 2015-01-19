@@ -1685,9 +1685,9 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
                 pModule->loadRelative(&thisModule, sModule);
                 aI = m_aModuleMap.insert(sModule, pModule).first;
             }
-            customMakeWidget pFunction = (customMakeWidget)aI->second->getFunctionSymbol(sFunction);
+            customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
 #else
-            customMakeWidget pFunction = (customMakeWidget)osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData);
+            customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData));
 #endif
             if (pFunction)
                 pWindow = (*pFunction)(pParent, rMap);

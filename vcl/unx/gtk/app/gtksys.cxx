@@ -214,8 +214,8 @@ static int _get_primary_monitor (GdkScreen *pScreen)
     // Perhaps we have a newer gtk+ with this symbol:
     if (!get_fn)
     {
-        get_fn = (int(*)(GdkScreen*))osl_getAsciiFunctionSymbol(NULL,
-            "gdk_screen_get_primary_monitor");
+        get_fn = reinterpret_cast<int(*)(GdkScreen*)>(osl_getAsciiFunctionSymbol(NULL,
+            "gdk_screen_get_primary_monitor"));
     }
 #if GTK_CHECK_VERSION(2,14,0)
     if (!get_fn)

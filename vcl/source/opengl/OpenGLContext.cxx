@@ -598,11 +598,11 @@ GLXFBConfig* getFBConfig(Display* dpy, Window win, int& nBestFBC, bool bUseDoubl
 // glew needs an OpenGL context so we need to get the address manually
 void initOpenGLFunctionPointers()
 {
-    glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
-    glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
-    glXCreateContextAttribsARB = (GLXContext(*) (Display*, GLXFBConfig, GLXContext, Bool, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");;
-    glXCreatePixmap = (GLXPixmap(*) (Display*, GLXFBConfig, Pixmap, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreatePixmap");;
+    glXChooseFBConfig = reinterpret_cast<GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXChooseFBConfig")));
+    glXGetVisualFromFBConfig = reinterpret_cast<XVisualInfo*(*)(Display *dpy, GLXFBConfig config)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetVisualFromFBConfig")));    // try to find a visual for the current set of attributes
+    glXGetFBConfigAttrib = reinterpret_cast<int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value)>(glXGetProcAddressARB(reinterpret_cast<GLubyte const *>("glXGetFBConfigAttrib")));
+    glXCreateContextAttribsARB = reinterpret_cast<GLXContext(*)(Display*, GLXFBConfig, GLXContext, Bool, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreateContextAttribsARB")));
+    glXCreatePixmap = reinterpret_cast<GLXPixmap(*)(Display*, GLXFBConfig, Pixmap, const int*)>(glXGetProcAddressARB(reinterpret_cast<const GLubyte *>("glXCreatePixmap")));
 }
 
 Visual* getVisual(Display* dpy, Window win)
@@ -795,7 +795,7 @@ bool OpenGLContext::ImplInit()
     {
         // enable vsync
         typedef GLint (*glXSwapIntervalProc)(GLint);
-        glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
+        glXSwapIntervalProc glXSwapInterval = reinterpret_cast<glXSwapIntervalProc>(glXGetProcAddress( reinterpret_cast<const GLubyte*>("glXSwapIntervalSGI") ));
         if( glXSwapInterval )
         {
             TempErrorHandler(m_aGLWin.dpy, oglErrorHandler);
@@ -1224,7 +1224,7 @@ void OpenGLContext::reset()
         glXMakeCurrent(m_aGLWin.dpy, None, NULL);
         if( glGetError() != GL_NO_ERROR )
         {
-            SAL_WARN("vcl.opengl", "glError: " << (char *)gluErrorString(glGetError()));
+            SAL_WARN("vcl.opengl", "glError: " << reinterpret_cast<char const *>(gluErrorString(glGetError())));
         }
         glXDestroyContext(m_aGLWin.dpy, m_aGLWin.ctx);
 

@@ -242,7 +242,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB(
             aSrcBuf.mnHeight = nHeight;
             aSrcBuf.mnBitCount = pImage->bits_per_pixel;
             aSrcBuf.mnScanlineSize = pImage->bytes_per_line;
-            aSrcBuf.mpBits = (sal_uInt8*) pImage->data;
+            aSrcBuf.mpBits = reinterpret_cast<sal_uInt8*>(pImage->data);
 
             pImage->red_mask = pSalDisp->GetVisual( nScreen ).red_mask;
             pImage->green_mask = pSalDisp->GetVisual( nScreen ).green_mask;
@@ -534,7 +534,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
                     blankExtraSpace(pDstBuf);
 #endif
                 // set data in buffer as data member in pImage
-                pImage->data = (char*) pDstBuf->mpBits;
+                pImage->data = reinterpret_cast<char*>(pDstBuf->mpBits);
 
                 // destroy buffer; don't destroy allocated data in buffer
                 delete pDstBuf;

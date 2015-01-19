@@ -56,7 +56,7 @@ struct SourceManagerStruct {
  */
 extern "C" void init_source (j_decompress_ptr cinfo)
 {
-    SourceManagerStruct * source = (SourceManagerStruct *) cinfo->src;
+    SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
 
     /* We reset the empty-input-file flag for each image,
      * but we don't clear the input buffer.
@@ -90,7 +90,7 @@ long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
 
 extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 {
-    SourceManagerStruct * source = (SourceManagerStruct *) cinfo->src;
+    SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
     size_t nbytes;
 
     nbytes = StreamRead(source->stream, source->buffer, BUFFER_SIZE);
@@ -117,7 +117,7 @@ extern "C" boolean fill_input_buffer (j_decompress_ptr cinfo)
 
 extern "C" void skip_input_data (j_decompress_ptr cinfo, long numberOfBytes)
 {
-    SourceManagerStruct * source = (SourceManagerStruct *) cinfo->src;
+    SourceManagerStruct * source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
 
     /* Just a dumb implementation for now.  Could use fseek() except
      * it doesn't work on pipes.  Not clear that being smart is worth
@@ -160,13 +160,13 @@ void jpeg_svstream_src (j_decompress_ptr cinfo, void* input)
     if (cinfo->src == NULL)
     { /* first time for this JPEG object? */
         cinfo->src = (jpeg_source_mgr *)
-            (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT, sizeof(SourceManagerStruct));
-        source = (SourceManagerStruct *) cinfo->src;
+            (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(SourceManagerStruct));
+        source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
         source->buffer = (JOCTET *)
-            (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT, BUFFER_SIZE * sizeof(JOCTET));
+            (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, BUFFER_SIZE * sizeof(JOCTET));
     }
 
-    source = (SourceManagerStruct *) cinfo->src;
+    source = reinterpret_cast<SourceManagerStruct *>(cinfo->src);
     source->pub.init_source = init_source;
     source->pub.fill_input_buffer = fill_input_buffer;
     source->pub.skip_input_data = skip_input_data;

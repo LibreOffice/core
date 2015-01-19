@@ -137,7 +137,7 @@ namespace
         bool nHaveB = FcPatternGetString(b, FC_FAMILY, 0, &pNameB) == FcResultMatch;
 
         if (nHaveA && nHaveB)
-            return strcmp((const char*)pNameA, (const char*)pNameB);
+            return strcmp(reinterpret_cast<const char*>(pNameA), reinterpret_cast<const char*>(pNameB));
 
         return int(nHaveA) - int(nHaveB);
     }
@@ -275,7 +275,7 @@ namespace
         bool found_fallback_englishname = false;
         for( std::vector<lang_and_element>::const_iterator aIter = elements.begin(); aIter != aEnd; ++aIter )
         {
-            const char *pLang = (const char*)aIter->first;
+            const char *pLang = reinterpret_cast<const char*>(aIter->first);
             if( rtl_str_compare( pLang, sFullMatch.getStr() ) == 0)
             {
                 // both language and country match
@@ -319,12 +319,12 @@ void FontCfgWrapper::cacheLocalizedFontNames(const FcChar8 *origfontname, const 
     std::vector<lang_and_element>::const_iterator aEnd = lang_and_elements.end();
     for (std::vector<lang_and_element>::const_iterator aIter = lang_and_elements.begin(); aIter != aEnd; ++aIter)
     {
-        const char *candidate = (const char*)(aIter->second);
-        if (rtl_str_compare(candidate, (const char*)bestfontname) != 0)
-            m_aFontNameToLocalized[OString(candidate)] = OString((const char*)bestfontname);
+        const char *candidate = reinterpret_cast<const char*>(aIter->second);
+        if (rtl_str_compare(candidate, reinterpret_cast<const char*>(bestfontname)) != 0)
+            m_aFontNameToLocalized[OString(candidate)] = OString(reinterpret_cast<const char*>(bestfontname));
     }
-    if (rtl_str_compare((const char*)origfontname, (const char*)bestfontname) != 0)
-        m_aLocalizedToCanonical[OString((const char*)bestfontname)] = OString((const char*)origfontname);
+    if (rtl_str_compare(reinterpret_cast<const char*>(origfontname), reinterpret_cast<const char*>(bestfontname)) != 0)
+        m_aLocalizedToCanonical[OString(reinterpret_cast<const char*>(bestfontname))] = OString(reinterpret_cast<const char*>(origfontname));
 }
 
 FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **element,
@@ -544,7 +544,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
             // see if this font is already cached
             // update attributes
             std::list< PrintFont* > aFonts;
-            OString aDir, aBase, aOrgPath( (sal_Char*)file );
+            OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
             splitPath( aOrgPath, aDir, aBase );
 
             o_rVisitedPaths[aDir] = 1;
@@ -559,7 +559,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                 // not described by fontconfig (e.g. alias names, PSName)
                 if (eFormatRes != FcResultMatch)
                     format = NULL;
-                analyzeFontFile( nDirID, aBase, aFonts, (const char*)format );
+                analyzeFontFile( nDirID, aBase, aFonts, reinterpret_cast<char*>(format) );
 #if OSL_DEBUG_LEVEL > 1
                 if( aFonts.empty() )
                     fprintf( stderr, "Warning: file \"%s\" is unusable to psprint\n", aOrgPath.getStr() );
@@ -577,7 +577,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                 continue;
             }
 
-            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( (sal_Char*)family ), RTL_TEXTENCODING_UTF8 ), true );
+            int nFamilyName = m_pAtoms->getAtom( ATOM_FAMILYNAME, OStringToOUString( OString( reinterpret_cast<char*>(family) ), RTL_TEXTENCODING_UTF8 ), true );
             PrintFont* pUpdate = aFonts.front();
             std::list<PrintFont*>::const_iterator second_font = aFonts.begin();
             ++second_font;
@@ -630,7 +630,7 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int, OS
                     pUpdate->m_eItalic = convertSlant(slant);
                 if( eStyleRes == FcResultMatch )
                 {
-                    pUpdate->m_aStyleName = OStringToOUString( OString( (sal_Char*)style ), RTL_TEXTENCODING_UTF8 );
+                    pUpdate->m_aStyleName = OStringToOUString( OString( reinterpret_cast<char*>(style) ), RTL_TEXTENCODING_UTF8 );
                 }
 
                 // update font cache
@@ -677,7 +677,7 @@ bool PrintFontManager::addFontconfigDir( const OString& rDirName )
     if( nVersion <= 20400 )
         return false;
     const char* pDirName = (const char*)rDirName.getStr();
-    bool bDirOk = (FcConfigAppFontAddDir(FcConfigGetCurrent(), (FcChar8*)pDirName ) == FcTrue);
+    bool bDirOk = (FcConfigAppFontAddDir(FcConfigGetCurrent(), reinterpret_cast<FcChar8 const *>(pDirName) ) == FcTrue);
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bDirOk );
@@ -693,7 +693,7 @@ bool PrintFontManager::addFontconfigDir( const OString& rDirName )
     {
         fclose( pCfgFile);
         bool bCfgOk = FcConfigParseAndLoad(FcConfigGetCurrent(),
-                        (FcChar8*)aConfFileName.getStr(), FcTrue);
+                        reinterpret_cast<FcChar8 const *>(aConfFileName.getStr()), FcTrue);
         if( !bCfgOk )
             fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
     }
@@ -771,7 +771,7 @@ static void addtopattern(FcPattern *pPattern,
         }
         FcPatternAddInteger(pPattern, FC_SPACING, nSpacing);
         if (nSpacing == FC_MONO)
-            FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)"monospace");
+            FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>("monospace"));
     }
 }
 
@@ -786,13 +786,13 @@ namespace
         OString sLangAttrib;
 
         sLangAttrib = OUStringToOString(rLangTag.getBcp47(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
-        if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLangAttrib.getStr()))
+        if (FcStrSetMember(xLangSet.get(), reinterpret_cast<const FcChar8*>(sLangAttrib.getStr())))
         {
             return sLangAttrib;
         }
 
         sLangAttrib = OUStringToOString(rLangTag.getLanguageAndScript(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();
-        if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLangAttrib.getStr()))
+        if (FcStrSetMember(xLangSet.get(), reinterpret_cast<const FcChar8*>(sLangAttrib.getStr())))
         {
             return sLangAttrib;
         }
@@ -803,13 +803,13 @@ namespace
         if (!sRegion.isEmpty())
         {
             sLangAttrib = sLang + OString('-') + sRegion;
-            if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLangAttrib.getStr()))
+            if (FcStrSetMember(xLangSet.get(), reinterpret_cast<const FcChar8*>(sLangAttrib.getStr())))
             {
                 return sLangAttrib;
             }
         }
 
-        if (FcStrSetMember(xLangSet.get(), (const FcChar8*)sLang.getStr()))
+        if (FcStrSetMember(xLangSet.get(), reinterpret_cast<const FcChar8*>(sLang.getStr())))
         {
             return sLang;
         }
@@ -961,7 +961,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     FcPatternAddBool(pPattern, FC_SCALABLE, FcTrue);
 
     const OString aTargetName = OUStringToOString( rPattern.maTargetName, RTL_TEXTENCODING_UTF8 );
-    const FcChar8* pTargetNameUtf8 = (FcChar8*)aTargetName.getStr();
+    const FcChar8* pTargetNameUtf8 = reinterpret_cast<FcChar8 const *>(aTargetName.getStr());
     FcPatternAddString(pPattern, FC_FAMILY, pTargetNameUtf8);
 
     LanguageTag aLangTag(rPattern.meLanguage);
@@ -992,7 +992,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     }
 
     if (!aLangAttrib.isEmpty())
-        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
+        FcPatternAddString(pPattern, FC_LANG, reinterpret_cast<FcChar8 const *>(aLangAttrib.getStr()));
 
     addtopattern(pPattern, rPattern.GetSlant(), rPattern.GetWeight(),
         rPattern.GetWidthType(), rPattern.GetPitch());
@@ -1029,7 +1029,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 nCollectionEntry = 0;
             if( eFileRes == FcResultMatch )
             {
-                OString aDir, aBase, aOrgPath( (sal_Char*)file );
+                OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
                 splitPath( aOrgPath, aDir, aBase );
                 int nDirID = getDirectoryAtom( aDir, true );
                 fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );
@@ -1051,7 +1051,7 @@ bool PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 // get the family name
                 if( eFamilyRes == FcResultMatch )
                 {
-                    OString sFamily((sal_Char*)family);
+                    OString sFamily(reinterpret_cast<char*>(family));
                     std::unordered_map< OString, OString, OStringHash >::const_iterator aI =
                         rWrapper.m_aFontNameToLocalized.find(sFamily);
                     if (aI != rWrapper.m_aFontNameToLocalized.end())
@@ -1185,7 +1185,7 @@ ImplFontOptions* PrintFontManager::getFontOptions(
     if (aI != rWrapper.m_aLocalizedToCanonical.end())
         sFamily = aI->second;
     if( !sFamily.isEmpty() )
-        FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)sFamily.getStr());
+        FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(sFamily.getStr()));
 
     addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
     FcPatternAddDouble(pPattern, FC_PIXEL_SIZE, nSize);
@@ -1253,11 +1253,11 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
     const LanguageTag aLangTag(rLocale);
     const OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
     if (!aLangAttrib.isEmpty())
-        FcPatternAddString(pPattern, FC_LANG, (FcChar8*)aLangAttrib.getStr());
+        FcPatternAddString(pPattern, FC_LANG, reinterpret_cast<FcChar8 const *>(aLangAttrib.getStr()));
 
     OString aFamily = OUStringToOString( rInfo.m_aFamilyName, RTL_TEXTENCODING_UTF8 );
     if( !aFamily.isEmpty() )
-        FcPatternAddString(pPattern, FC_FAMILY, (FcChar8*)aFamily.getStr());
+        FcPatternAddString(pPattern, FC_FAMILY, reinterpret_cast<FcChar8 const *>(aFamily.getStr()));
 
     addtopattern(pPattern, rInfo.m_eItalic, rInfo.m_eWeight, rInfo.m_eWidth, rInfo.m_ePitch);
 
@@ -1282,7 +1282,7 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star
                 nCollectionEntry = 0;
             if( eFileRes == FcResultMatch )
             {
-                OString aDir, aBase, aOrgPath( (sal_Char*)file );
+                OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
                 splitPath( aOrgPath, aDir, aBase );
                 int nDirID = getDirectoryAtom( aDir, true );
                 fontID aFont = findFontFileID( nDirID, aBase, nCollectionEntry );

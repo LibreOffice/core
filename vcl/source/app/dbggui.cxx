@@ -460,7 +460,7 @@ void DbgDialogTest( vcl::Window* pWindow )
     if ( !pGetChild )
         return;
 
-    boost::scoped_array<Rectangle> pRectAry((Rectangle*)new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)]);
+    boost::scoped_array<Rectangle> pRectAry(reinterpret_cast<Rectangle*>(new long[(sizeof(Rectangle)*nChildCount)/sizeof(long)]));
     memset( pRectAry.get(), 0, sizeof(Rectangle)*nChildCount );
 
     if ( pWindow->IsDialog() )

@@ -191,7 +191,7 @@ void Window::Invert( const Polygon& rPoly, sal_uInt16 nFlags )
         nSalFlags |= SAL_INVERT_HIGHLIGHT;
     if ( nFlags & INVERT_50 )
         nSalFlags |= SAL_INVERT_50;
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
     mpGraphics->Invert( nPoints, pPtAry, nSalFlags, this );
 }
 
@@ -341,7 +341,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
         }
     }
 
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
     pGraphics->Invert( nPoints, pPtAry, SAL_INVERT_TRACKFRAME, this );
 }
 

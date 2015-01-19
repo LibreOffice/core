@@ -1834,7 +1834,7 @@ void Type1Emitter::emitAllCrypted( void)
     // apply t1crypt
     for( char* p = maBuffer; p < mpPtr; ++p) {
         *p ^= (mnEECryptR >> 8);
-        mnEECryptR = (*(U8*)p + mnEECryptR) * 52845 + 22719;
+        mnEECryptR = (*reinterpret_cast<U8*>(p) + mnEECryptR) * 52845 + 22719;
     }
 
     // emit the t1crypt result

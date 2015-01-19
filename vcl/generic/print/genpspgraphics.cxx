@@ -424,20 +424,20 @@ void GenPspGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 
 void GenPspGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
-    m_pPrinterGfx->DrawPolyLine (nPoints, (Point*)pPtAry);
+    m_pPrinterGfx->DrawPolyLine (nPoints, reinterpret_cast<Point const *>(pPtAry));
 }
 
 void GenPspGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
-    m_pPrinterGfx->DrawPolygon (nPoints, (Point*)pPtAry);
+    m_pPrinterGfx->DrawPolygon (nPoints, reinterpret_cast<Point const *>(pPtAry));
 }
 
 void GenPspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
                                    const sal_uInt32   *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
-    m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
+    m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, reinterpret_cast<const Point**>(pPtAry));
 }
 
 bool GenPspGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double /*fTransparency*/ )
@@ -459,13 +459,13 @@ bool GenPspGraphics::drawPolyLine(
 
 bool GenPspGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
-    m_pPrinterGfx->DrawPolyLineBezier (nPoints, (Point*)pPtAry, pFlgAry);
+    m_pPrinterGfx->DrawPolyLineBezier (nPoints, reinterpret_cast<Point const *>(pPtAry), pFlgAry);
     return true;
 }
 
 bool GenPspGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
-    m_pPrinterGfx->DrawPolygonBezier (nPoints, (Point*)pPtAry, pFlgAry);
+    m_pPrinterGfx->DrawPolygonBezier (nPoints, reinterpret_cast<Point const *>(pPtAry), pFlgAry);
     return true;
 }
 
@@ -475,7 +475,7 @@ bool GenPspGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly,
                                              const sal_uInt8* const* pFlgAry )
 {
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
-    m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, (Point**)pPtAry, (sal_uInt8**)pFlgAry);
+    m_pPrinterGfx->DrawPolyPolygonBezier (nPoly, pPoints, reinterpret_cast<Point const * const *>(pPtAry), (sal_uInt8**)pFlgAry);
     return true;
 }
 

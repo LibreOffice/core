@@ -299,7 +299,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
             nMask = OSL_SWAPDWORD( nMask );
 #endif
             for( sal_uInt32 i = 0; i < nHeight; i++, pLast4Bytes += nScanSize )
-                ( *(sal_uInt32*) pLast4Bytes ) &= nMask;
+                *reinterpret_cast<sal_uInt32*>(pLast4Bytes) &= nMask;
         }
     }
 }

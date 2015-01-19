@@ -264,8 +264,8 @@ bool psp::convertPfbToPfa( ::osl::File& rInFile, ::osl::File& rOutFile )
         {
             // this might be a pfa font already
             if( ! rInFile.read( buffer+6, 9, nRead ) && nRead == 9 &&
-                ( ! std::strncmp( (char*)buffer, "%!FontType1-", 12 ) ||
-                  ! std::strncmp( (char*)buffer, "%!PS-AdobeFont-", 15 ) ) )
+                ( ! std::strncmp( reinterpret_cast<char*>(buffer), "%!FontType1-", 12 ) ||
+                  ! std::strncmp( reinterpret_cast<char*>(buffer), "%!PS-AdobeFont-", 15 ) ) )
             {
                 sal_uInt64 nWrite = 0;
                 if( rOutFile.write( buffer, 15, nWrite ) || nWrite != 15 )

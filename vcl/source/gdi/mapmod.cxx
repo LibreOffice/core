@@ -100,9 +100,9 @@ MapMode::ImplMapMode::ImplGetStaticMapMode(MapUnit eUnit)
 
     // #i19496 check for out-of-bounds
      if( eUnit >= MAP_LASTENUMDUMMY )
-        return (ImplMapMode*)aStaticImplMapModeAry;
+        return reinterpret_cast<ImplMapMode*>(aStaticImplMapModeAry);
 
-    ImplMapMode* pImplMapMode = ((ImplMapMode*)aStaticImplMapModeAry)+eUnit;
+    ImplMapMode* pImplMapMode = reinterpret_cast<ImplMapMode*>(aStaticImplMapModeAry)+eUnit;
     if ( !pImplMapMode->mbSimple )
     {
         Fraction aDefFraction( 1, 1 );

@@ -201,7 +201,7 @@ void TrueTypeCreatorNewEmpty(sal_uInt32 tag, TrueTypeCreator **_this)
     TrueTypeCreator* ptr = (TrueTypeCreator*)smalloc(sizeof(TrueTypeCreator));
 
     ptr->tables = listNewEmpty();
-    listSetElementDtor(ptr->tables, (list_destructor)TrueTypeTableDispose);
+    listSetElementDtor(ptr->tables, reinterpret_cast<list_destructor>(TrueTypeTableDispose));
 
     ptr->tag = tag;
 
@@ -294,7 +294,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
     /* Table Directory */
     for (int i = 0; i < numTables; ++i) {
         PutUInt32(te[i].tag, ttf + 12, 16 * i, 1);
-        PutUInt32(CheckSum((sal_uInt32 *) te[i].data, te[i].length), ttf + 12, 16 * i + 4, 1);
+        PutUInt32(CheckSum(reinterpret_cast<sal_uInt32 *>(te[i].data), te[i].length), ttf + 12, 16 * i + 4, 1);
         PutUInt32(offset, ttf + 12, 16 * i + 8, 1);
         PutUInt32(te[i].length, ttf + 12, 16 * i + 12, 1);
 
@@ -309,7 +309,7 @@ int StreamToMemory(TrueTypeCreator *_this, sal_uInt8 **ptr, sal_uInt32 *length)
 
     free(te);
 
-    p = (sal_uInt32 *) ttf;
+    p = reinterpret_cast<sal_uInt32 *>(ttf);
     for (int i = 0; i < (int)s / 4; ++i) checkSumAdjustment += p[i];
     PutUInt32(0xB1B0AFBA - checkSumAdjustment, head, 8, 1);
 

@@ -402,7 +402,7 @@ void OutputDevice::ImplGetEmphasisMark( tools::PolyPolygon& rPolyPoly, bool& rPo
             else
             {
                 Polygon aPoly( sizeof( aAccentPos ) / sizeof( long ) / 2,
-                               (const Point*)aAccentPos,
+                               reinterpret_cast<const Point*>(aAccentPos),
                                aAccentPolyFlags );
                 double dScale = ((double)nDotSize)/1000.0;
                 aPoly.Scale( dScale, dScale );

@@ -157,7 +157,7 @@ void ImplPointArray::ImplSetSize( sal_uLong nSize )
         rtl_freeMemory( mpArray );
 
     mpArray = (Point*) rtl_allocateMemory( nTotal );
-    memset( (HPBYTE) mpArray, 0, nTotal );
+    memset( mpArray, 0, nTotal );
 }
 
 inline Point& ImplPointArray::operator[]( sal_uLong nPos )
@@ -646,7 +646,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         const long          nHeight = pRAcc->Height();
         const sal_uInt16        nColorCount = pRAcc->GetPaletteEntryCount();
         sal_uInt16              n;
-        ImplColorSet*       pColorSet = (ImplColorSet*) new sal_uInt8[ 256 * sizeof( ImplColorSet ) ];
+        ImplColorSet*       pColorSet = reinterpret_cast<ImplColorSet*>(new sal_uInt8[ 256 * sizeof( ImplColorSet ) ]);
 
         memset( pColorSet, 0, 256 * sizeof( ImplColorSet ) );
         rMtf.Clear();
@@ -707,7 +707,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
         }
 
-        delete[] (sal_uInt8*) pColorSet;
+        delete[] reinterpret_cast<sal_uInt8*>(pColorSet);
 
         if( rMtf.GetActionSize() )
         {

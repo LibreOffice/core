@@ -2247,7 +2247,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
             const long nHeight = pWAcc->Height();
             long nIndex = 0L;
 
-            memset( (HPBYTE) pColBuf, 0, nSize );
+            memset( pColBuf, 0, nSize );
 
             // create Buffer
             if( pRAcc->HasPalette() )

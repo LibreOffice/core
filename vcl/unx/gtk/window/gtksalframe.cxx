@@ -538,7 +538,7 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
                        GDK_WINDOW_XID (window),
                        gdk_x11_get_xatom_by_name_for_display (display, name),
                        gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-                       PropModeReplace, (guchar *)value, strlen (value));
+                       PropModeReplace, reinterpret_cast<guchar const *>(value), strlen (value));
     }
   else
     {
@@ -1139,7 +1139,7 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
     if( bGetAcceptFocusFn )
     {
         bGetAcceptFocusFn = false;
-        p_gtk_window_set_accept_focus = (setAcceptFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_window_set_accept_focus" );
+        p_gtk_window_set_accept_focus = reinterpret_cast<setAcceptFn>(osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gtk_window_set_accept_focus" ));
     }
     if( p_gtk_window_set_accept_focus && bBeforeRealize )
         p_gtk_window_set_accept_focus( pWindow, bAccept );
@@ -1206,7 +1206,7 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
     if( bGetSetUserTimeFn )
     {
         bGetSetUserTimeFn = false;
-        p_gdk_x11_window_set_user_time = (setUserTimeFn)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_x11_window_set_user_time" );
+        p_gdk_x11_window_set_user_time = reinterpret_cast<setUserTimeFn>(osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_x11_window_set_user_time" ));
     }
     bool bSet = false;
     if( p_gdk_x11_window_set_user_time )
@@ -1226,7 +1226,7 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
         {
             XChangeProperty( pDisplay, widget_get_xid(GTK_WIDGET(i_pWindow)),
                              nUserTime, XA_CARDINAL, 32,
-                             PropModeReplace, (unsigned char*)&i_nTime, 1 );
+                             PropModeReplace, reinterpret_cast<unsigned char*>(&i_nTime), 1 );
         }
     }
 #else
@@ -1604,7 +1604,7 @@ bitmapToPixbuf( SalBitmap *pSalBitmap, SalBitmap *pSalAlpha )
                                      GDK_COLORSPACE_RGB, true, 8,
                                      aSize.Width(), aSize.Height(),
                                      aSize.Width() * 4,
-                                     (GdkPixbufDestroyNotify) g_free,
+                                     reinterpret_cast<GdkPixbufDestroyNotify>(g_free),
                                      NULL );
 }
 
@@ -1679,7 +1679,7 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 
     gtk_window_set_icon_list( GTK_WINDOW(m_pWindow), pIcons );
 
-    g_list_foreach( pIcons, (GFunc) g_object_unref, NULL );
+    g_list_foreach( pIcons, reinterpret_cast<GFunc>(g_object_unref), NULL );
     g_list_free( pIcons );
 }
 
@@ -2453,7 +2453,7 @@ void GtkSalFrame::setAutoLock( bool bLock )
                      GDK_WINDOW_XID( pRootWin ),
                      nAtom, XA_INTEGER,
                      8, PropModeReplace,
-                     (unsigned char*)&nMessage,
+                     reinterpret_cast<unsigned char*>(&nMessage),
                      sizeof( nMessage ) );
 }
 
@@ -3245,7 +3245,7 @@ gboolean GtkSalFrame::signalButton( GtkWidget*, GdkEventButton* pEvent, gpointer
 gboolean GtkSalFrame::signalScroll( GtkWidget*, GdkEvent* pEvent, gpointer frame )
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
-    GdkEventScroll* pSEvent = (GdkEventScroll*)pEvent;
+    GdkEventScroll* pSEvent = reinterpret_cast<GdkEventScroll*>(pEvent);
 
     static sal_uLong        nLines = 0;
     if( ! nLines )

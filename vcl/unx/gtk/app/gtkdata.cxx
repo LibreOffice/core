@@ -795,7 +795,7 @@ extern "C" {
 
     static gboolean sal_gtk_timeout_prepare( GSource *pSource, gint *nTimeoutMS )
     {
-        SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+        SalGtkTimeoutSource *pTSource = reinterpret_cast<SalGtkTimeoutSource *>(pSource);
 
         GTimeVal aTimeNow;
         g_get_current_time( &aTimeNow );
@@ -805,7 +805,7 @@ extern "C" {
 
     static gboolean sal_gtk_timeout_check( GSource *pSource )
     {
-        SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+        SalGtkTimeoutSource *pTSource = reinterpret_cast<SalGtkTimeoutSource *>(pSource);
 
         GTimeVal aTimeNow;
         g_get_current_time( &aTimeNow );
@@ -817,7 +817,7 @@ extern "C" {
 
     static gboolean sal_gtk_timeout_dispatch( GSource *pSource, GSourceFunc, gpointer )
     {
-        SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+        SalGtkTimeoutSource *pTSource = reinterpret_cast<SalGtkTimeoutSource *>(pSource);
 
         if( !pTSource->pInstance )
             return FALSE;
@@ -848,7 +848,7 @@ static SalGtkTimeoutSource *
 create_sal_gtk_timeout( GtkSalTimer *pTimer )
 {
   GSource *pSource = g_source_new( &sal_gtk_timeout_funcs, sizeof( SalGtkTimeoutSource ) );
-  SalGtkTimeoutSource *pTSource = (SalGtkTimeoutSource *)pSource;
+  SalGtkTimeoutSource *pTSource = reinterpret_cast<SalGtkTimeoutSource *>(pSource);
   pTSource->pInstance = pTimer;
 
   // #i36226# timers should be executed with lower priority
@@ -900,8 +900,8 @@ void GtkSalTimer::Stop()
 {
     if( m_pTimeout )
     {
-        g_source_destroy( (GSource *)m_pTimeout );
-        g_source_unref( (GSource *)m_pTimeout );
+        g_source_destroy( &m_pTimeout->aParent );
+        g_source_unref( &m_pTimeout->aParent );
         m_pTimeout = NULL;
     }
 }

@@ -611,7 +611,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                     for( ; nCount--; nY += nI )
                     {
-                        if (rIStm.Read( (char*)( pTmp16 = (sal_uInt16*) pBuf.get() ), nAlignedWidth )
+                        if (rIStm.Read( ( pTmp16 = reinterpret_cast<sal_uInt16*>(pBuf.get()) ), nAlignedWidth )
                             != nAlignedWidth)
                         {
                             return false;
@@ -619,7 +619,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
-                            aMask.GetColorFor16BitLSB( aColor, (sal_uInt8*) pTmp16++ );
+                            aMask.GetColorFor16BitLSB( aColor, reinterpret_cast<sal_uInt8*>(pTmp16++) );
                             rAcc.SetPixel( nY, nX, aColor );
                         }
                     }
@@ -662,7 +662,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                         for( ; nCount--; nY += nI )
                         {
-                            if (rIStm.Read( (char*)( pTmp32 = (sal_uInt32*) pBuf.get() ), nAlignedWidth )
+                            if (rIStm.Read( ( pTmp32 = reinterpret_cast<sal_uInt32*>(pBuf.get()) ), nAlignedWidth )
                                 != nAlignedWidth)
                             {
                                 return false;
@@ -670,7 +670,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                             for( long nX = 0L; nX < nWidth; nX++ )
                             {
-                                aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, (sal_uInt8*) pTmp32++ );
+                                aMask.GetColorAndAlphaFor32Bit( aColor, aAlpha, reinterpret_cast<sal_uInt8*>(pTmp32++) );
                                 rAcc.SetPixel( nY, nX, aColor );
                                 pAccAlpha->SetPixelIndex(nY, nX, sal_uInt8(0xff) - aAlpha);
                                 rAlphaUsed |= bool(0xff != aAlpha);
@@ -681,7 +681,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
                     {
                         for( ; nCount--; nY += nI )
                         {
-                            if (rIStm.Read( (char*)( pTmp32 = (sal_uInt32*) pBuf.get() ), nAlignedWidth )
+                            if (rIStm.Read( ( pTmp32 = reinterpret_cast<sal_uInt32*>(pBuf.get()) ), nAlignedWidth )
                                 != nAlignedWidth)
                             {
                                 return false;
@@ -689,7 +689,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
 
                             for( long nX = 0L; nX < nWidth; nX++ )
                             {
-                                aMask.GetColorFor32Bit( aColor, (sal_uInt8*) pTmp32++ );
+                                aMask.GetColorFor32Bit( aColor, reinterpret_cast<sal_uInt8*>(pTmp32++) );
                                 rAcc.SetPixel( nY, nX, aColor );
                             }
                         }
@@ -793,7 +793,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
                 // set decoded bytes to memory stream,
                 // from which we will read the bitmap data
                 pIStm = pMemStm = new SvMemoryStream;
-                pMemStm->SetBuffer( (char*) pData, nUncodedSize, false, nUncodedSize );
+                pMemStm->SetBuffer( pData, nUncodedSize, false, nUncodedSize );
                 nOffset = 0;
             }
             else

@@ -169,7 +169,7 @@ bool FtFontFile::Map()
             return false;
         }
         mnFileSize = aStat.st_size;
-        mpFileMap = (const unsigned char*)
+        mpFileMap = (unsigned char*)
             mmap( NULL, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 );
         if( mpFileMap == MAP_FAILED )
             mpFileMap = NULL;
@@ -184,7 +184,7 @@ void FtFontFile::Unmap()
     if( (--mnRefCount > 0) || (mpFileMap == NULL) )
         return;
 
-    munmap( (char*)mpFileMap, mnFileSize );
+    munmap( mpFileMap, mnFileSize );
     mpFileMap = NULL;
 }
 
@@ -1058,7 +1058,7 @@ bool ServerFont::GetGlyphBitmap1( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     if( pGlyphFT->format != FT_GLYPH_FORMAT_BITMAP )
     {
         if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
-            ((FT_OutlineGlyphRec*)pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
+            reinterpret_cast<FT_OutlineGlyphRec*>(pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
         FT_Render_Mode nRenderMode = FT_RENDER_MODE_MONO;
 
         rc = FT_Glyph_To_Bitmap( &pGlyphFT, nRenderMode, NULL, true );
@@ -1176,7 +1176,7 @@ bool ServerFont::GetGlyphBitmap8( sal_GlyphId aGlyphId, RawBitmap& rRawBitmap ) 
     }
 
     if( pGlyphFT->format == FT_GLYPH_FORMAT_OUTLINE )
-        ((FT_OutlineGlyph)pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
+        reinterpret_cast<FT_OutlineGlyph>(pGlyphFT)->outline.flags |= FT_OUTLINE_HIGH_PRECISION;
 
     bool bEmbedded = (pGlyphFT->format == FT_GLYPH_FORMAT_BITMAP);
     if( !bEmbedded )

@@ -91,7 +91,7 @@ private:
     bool                ImplGetColKey( sal_uInt8 );
     void                ImplGetRGBHex( sal_uInt8*, sal_uLong );
     bool                ImplGetPara( sal_uLong numb );
-    bool                ImplCompare( sal_uInt8*, sal_uInt8*, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
+    bool                ImplCompare( sal_uInt8 const *, sal_uInt8 const *, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
     sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:

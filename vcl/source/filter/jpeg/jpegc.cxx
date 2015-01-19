@@ -45,7 +45,7 @@ struct ErrorManagerStruct
 
 extern "C" void errorExit (j_common_ptr cinfo)
 {
-    ErrorManagerStruct * error = (ErrorManagerStruct *) cinfo->err;
+    ErrorManagerStruct * error = reinterpret_cast<ErrorManagerStruct *>(cinfo->err);
     (*cinfo->err->output_message) (cinfo);
     longjmp(error->setjmp_buffer, 1);
 }

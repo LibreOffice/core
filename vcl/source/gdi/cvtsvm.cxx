@@ -457,7 +457,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     sal_Int16   nVersion;
 
     // read header
-    rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Identifier
+    rIStm.Read( aCode, sizeof( aCode ) );  // Identifier
     rIStm.ReadInt16( nSize );                                 // Size
     rIStm.ReadInt16( nVersion );                              // Version
     sal_Int32 nTmp32(0);

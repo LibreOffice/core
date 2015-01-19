@@ -636,12 +636,12 @@ atk_object_wrapper_get_type (void)
         sizeof (AtkObjectWrapperClass),
         (GBaseInitFunc) NULL,
         (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) atk_object_wrapper_class_init,
+        reinterpret_cast<GClassInitFunc>(atk_object_wrapper_class_init),
         (GClassFinalizeFunc) NULL,
         NULL,
         sizeof (AtkObjectWrapper),
         0,
-        (GInstanceInitFunc) atk_object_wrapper_init,
+        reinterpret_cast<GInstanceInitFunc>(atk_object_wrapper_init),
         NULL
       } ;
       type = g_type_register_static (ATK_TYPE_OBJECT,
@@ -678,47 +678,47 @@ const struct {
 } aTypeTable[] = {
 // re-location heaven:
     {
-        "Comp", (GInterfaceInitFunc) componentIfaceInit,
+        "Comp", reinterpret_cast<GInterfaceInitFunc>(componentIfaceInit),
         atk_component_get_type,
         cppu::UnoType<accessibility::XAccessibleComponent>::get
     },
     {
-        "Act",  (GInterfaceInitFunc) actionIfaceInit,
+        "Act",  reinterpret_cast<GInterfaceInitFunc>(actionIfaceInit),
         atk_action_get_type,
         cppu::UnoType<accessibility::XAccessibleAction>::get
     },
     {
-        "Txt",  (GInterfaceInitFunc) textIfaceInit,
+        "Txt",  reinterpret_cast<GInterfaceInitFunc>(textIfaceInit),
         atk_text_get_type,
         cppu::UnoType<accessibility::XAccessibleText>::get
     },
     {
-        "Val",  (GInterfaceInitFunc) valueIfaceInit,
+        "Val",  reinterpret_cast<GInterfaceInitFunc>(valueIfaceInit),
         atk_value_get_type,
         cppu::UnoType<accessibility::XAccessibleValue>::get
     },
     {
-        "Tab",  (GInterfaceInitFunc) tableIfaceInit,
+        "Tab",  reinterpret_cast<GInterfaceInitFunc>(tableIfaceInit),
         atk_table_get_type,
         cppu::UnoType<accessibility::XAccessibleTable>::get
     },
     {
-        "Edt",  (GInterfaceInitFunc) editableTextIfaceInit,
+        "Edt",  reinterpret_cast<GInterfaceInitFunc>(editableTextIfaceInit),
         atk_editable_text_get_type,
         cppu::UnoType<accessibility::XAccessibleEditableText>::get
     },
     {
-        "Img",  (GInterfaceInitFunc) imageIfaceInit,
+        "Img",  reinterpret_cast<GInterfaceInitFunc>(imageIfaceInit),
         atk_image_get_type,
         cppu::UnoType<accessibility::XAccessibleImage>::get
     },
     {
-        "Hyp",  (GInterfaceInitFunc) hypertextIfaceInit,
+        "Hyp",  reinterpret_cast<GInterfaceInitFunc>(hypertextIfaceInit),
         atk_hypertext_get_type,
         cppu::UnoType<accessibility::XAccessibleHypertext>::get
     },
     {
-        "Sel",  (GInterfaceInitFunc) selectionIfaceInit,
+        "Sel",  reinterpret_cast<GInterfaceInitFunc>(selectionIfaceInit),
         atk_selection_get_type,
         cppu::UnoType<accessibility::XAccessibleSelection>::get
     }

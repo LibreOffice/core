@@ -201,12 +201,12 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 static XIMCallback aStatusDoneCallback;
                 static XIMCallback aStatusDrawCallback;
 
-                aStatusStartCallback.callback    = (XIMProc)StatusStartCallback;
-                aStatusStartCallback.client_data = (XPointer)&maClientData;
-                aStatusDoneCallback.callback     = (XIMProc)StatusDoneCallback;
-                aStatusDoneCallback.client_data  = (XPointer)&maClientData;
-                aStatusDrawCallback.callback     = (XIMProc)StatusDrawCallback;
-                aStatusDrawCallback.client_data  = (XPointer)&maClientData;
+                aStatusStartCallback.callback    = reinterpret_cast<XIMProc>(StatusStartCallback);
+                aStatusStartCallback.client_data = reinterpret_cast<XPointer>(&maClientData);
+                aStatusDoneCallback.callback     = reinterpret_cast<XIMProc>(StatusDoneCallback);
+                aStatusDoneCallback.client_data  = reinterpret_cast<XPointer>(&maClientData);
+                aStatusDrawCallback.callback     = reinterpret_cast<XIMProc>(StatusDrawCallback);
+                aStatusDrawCallback.client_data  = reinterpret_cast<XPointer>(&maClientData);
 
                 mpStatusAttributes = XVaCreateNestedList (
                                                           0,
@@ -235,14 +235,14 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         {
             case XIMPreeditCallbacks:
 
-                maPreeditCaretCallback.callback = (XIMProc)PreeditCaretCallback;
-                maPreeditStartCallback.callback = (XIMProc)PreeditStartCallback;
-                maPreeditDoneCallback.callback  = (XIMProc)PreeditDoneCallback;
-                maPreeditDrawCallback.callback  = (XIMProc)PreeditDrawCallback;
-                maPreeditCaretCallback.client_data = (XPointer)&maClientData;
-                maPreeditStartCallback.client_data = (XPointer)&maClientData;
-                maPreeditDoneCallback.client_data  = (XPointer)&maClientData;
-                maPreeditDrawCallback.client_data  = (XPointer)&maClientData;
+                maPreeditCaretCallback.callback = reinterpret_cast<XIMProc>(PreeditCaretCallback);
+                maPreeditStartCallback.callback = reinterpret_cast<XIMProc>(PreeditStartCallback);
+                maPreeditDoneCallback.callback  = reinterpret_cast<XIMProc>(PreeditDoneCallback);
+                maPreeditDrawCallback.callback  = reinterpret_cast<XIMProc>(PreeditDrawCallback);
+                maPreeditCaretCallback.client_data = reinterpret_cast<XPointer>(&maClientData);
+                maPreeditStartCallback.client_data = reinterpret_cast<XPointer>(&maClientData);
+                maPreeditDoneCallback.client_data  = reinterpret_cast<XPointer>(&maClientData);
+                maPreeditDrawCallback.client_data  = reinterpret_cast<XPointer>(&maClientData);
 
                 mpPreeditAttributes = XVaCreateNestedList (
                                                            0,
@@ -357,7 +357,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     if ( maContext != NULL)
     {
         maDestroyCallback.callback    = (XIMProc)IC_IMDestroyCallback;
-        maDestroyCallback.client_data = (XPointer)this;
+        maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
         XSetICValues( maContext,
                       XNDestroyCallback,      &maDestroyCallback,
                       NULL );

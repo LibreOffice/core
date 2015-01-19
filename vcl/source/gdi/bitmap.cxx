@@ -1701,7 +1701,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
             memset( pTols, 0, nColorCount * sizeof( long ) );
         }
         else
-            pTols = (long*) _pTols;
+            pTols = reinterpret_cast<long*>(_pTols);
 
         for( i = 0UL; i < nColorCount; i++ )
         {

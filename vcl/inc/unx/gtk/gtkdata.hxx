@@ -119,10 +119,7 @@ public:
     virtual void ErrorTrapPush() SAL_OVERRIDE;
     virtual bool ErrorTrapPop( bool bIgnoreError ) SAL_OVERRIDE;
 
-    inline GtkSalDisplay *GetGtkDisplay() const
-    {
-        return (GtkSalDisplay *)GetDisplay();
-    }
+    inline GtkSalDisplay *GetGtkDisplay() const;
 };
 
 class GtkSalFrame;
@@ -191,6 +188,11 @@ inline GtkData* GetGtkSalData()
 inline GdkDisplay *GtkData::GetGdkDisplay()
 {
     return GetGtkDisplay()->GetGdkDisplay();
+}
+
+GtkSalDisplay *GtkData::GetGtkDisplay() const
+{
+    return static_cast<GtkSalDisplay *>(GetDisplay());
 }
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKDATA_HXX

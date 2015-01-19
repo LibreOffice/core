@@ -48,7 +48,7 @@ private:
                             FtFontFile( const OString& rNativeFileName );
 
     const OString    maNativeFileName;
-    const unsigned char*    mpFileMap;
+    unsigned char*   mpFileMap;
     int                     mnFileSize;
     int                     mnRefCount;
     int                     mnLangBoost;

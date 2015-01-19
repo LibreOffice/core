@@ -102,7 +102,7 @@ WMSupportsFWS (Display *display, int screen)
         return False;
     }
 
-    fwsCommWindow = *(::Window *) propData;
+    fwsCommWindow = *reinterpret_cast< ::Window * >(propData);
     #if OSL_DEBUG_LEVEL > 1
     fprintf (stderr, "Using fwsCommWindow = 0x%lx.\n", fwsCommWindow);
     #endif
@@ -129,7 +129,7 @@ WMSupportsFWS (Display *display, int screen)
 
     for (i = 0; i < propItems; ++i)
     {
-        protocol = ((Atom *) propData)[i];
+        protocol = reinterpret_cast<Atom *>(propData)[i];
         if (protocol == FWS_STACK_UNDER)
         {
             fwsStackUnder = True;
@@ -208,7 +208,7 @@ RegisterFwsWindow (Display *display, Window window)
     oldHandler = XSetErrorHandler (newHandler);
 
     XSendEvent (display, fwsCommWindow, False, NoEventMask,
-            (XEvent *) &msg);
+            reinterpret_cast<XEvent *>(&msg));
     XSync (display, False);
 
     XSetErrorHandler (oldHandler);
@@ -235,7 +235,7 @@ AddFwsProtocols (Display *display, Window window)
     fwsProtocols[ nProtos++ ] = FWS_PASS_ALL_INPUT;
     XChangeProperty (display, window, WM_PROTOCOLS,
             XA_ATOM, 32, PropModeAppend,
-            (unsigned char *) fwsProtocols, nProtos);
+            reinterpret_cast<unsigned char *>(fwsProtocols), nProtos);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

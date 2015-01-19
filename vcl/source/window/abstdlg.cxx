@@ -41,8 +41,8 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
         aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
                 SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
     {
-        fp = ( VclAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );
+        fp = reinterpret_cast<VclAbstractDialogFactory* (SAL_CALL*)()>(
+            aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") ) );
     }
 #else
     fp = CreateDialogFactory;

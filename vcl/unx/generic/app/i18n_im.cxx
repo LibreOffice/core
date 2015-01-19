@@ -368,7 +368,7 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
     #endif
 
     maDestroyCallback.callback    = (XIMProc)IM_IMDestroyCallback;
-    maDestroyCallback.client_data = (XPointer)this;
+    maDestroyCallback.client_data = reinterpret_cast<XPointer>(this);
     if (mbUseable && maMethod != NULL)
         XSetIMValues(maMethod, XNDestroyCallback, &maDestroyCallback, NULL);
 

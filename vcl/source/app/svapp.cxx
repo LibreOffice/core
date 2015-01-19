@@ -1384,7 +1384,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
         aTkLib.loadRelative(&thisModule, aLibName, SAL_LOADMODULE_DEFAULT);
         if (aTkLib.is())
         {
-            FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)aTkLib.getFunctionSymbol("CreateUnoWrapper");
+            FN_TkCreateUnoWrapper fnCreateWrapper = reinterpret_cast<FN_TkCreateUnoWrapper>(aTkLib.getFunctionSymbol("CreateUnoWrapper"));
             if ( fnCreateWrapper )
             {
                 pSVData->mpUnoWrapper = fnCreateWrapper();

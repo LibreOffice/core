@@ -471,7 +471,7 @@ inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
     if( mnCount )
     {
         const sal_uLong nSize = mnCount * sizeof( BitmapColor );
-        mpBitmapColor = (BitmapColor*) new sal_uInt8[ nSize ];
+        mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
         memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
     }
     else
@@ -484,7 +484,7 @@ inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
     if( mnCount )
     {
         const sal_uLong nSize = mnCount * sizeof( BitmapColor );
-        mpBitmapColor = (BitmapColor*) new sal_uInt8[ nSize ];
+        mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
         memset( mpBitmapColor, 0, nSize );
     }
     else
@@ -493,18 +493,18 @@ inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
 
 inline BitmapPalette::~BitmapPalette()
 {
-    delete[] (sal_uInt8*) mpBitmapColor;
+    delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
 }
 
 inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPalette )
 {
-    delete[] (sal_uInt8*) mpBitmapColor;
+    delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
     mnCount = rBitmapPalette.mnCount;
 
     if( mnCount )
     {
         const sal_uLong nSize = mnCount * sizeof( BitmapColor );
-        mpBitmapColor = (BitmapColor*) new sal_uInt8[ nSize ];
+        mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
         memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
     }
     else
@@ -553,7 +553,7 @@ inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
 {
     if( !nCount )
     {
-        delete[] (sal_uInt8*) mpBitmapColor;
+        delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
         mpBitmapColor = NULL;
         mnCount = 0;
     }
@@ -565,9 +565,9 @@ inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
 
         if ( nMinSize && mpBitmapColor )
             memcpy( pNewColor, mpBitmapColor, nMinSize );
-        delete[] (sal_uInt8*) mpBitmapColor;
+        delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
         memset( pNewColor + nMinSize, 0, nNewSize - nMinSize );
-        mpBitmapColor = (BitmapColor*) pNewColor;
+        mpBitmapColor = reinterpret_cast<BitmapColor*>(pNewColor);
         mnCount = nCount;
     }
 }

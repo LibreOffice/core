@@ -469,7 +469,7 @@ void SessionManagerClient::open(SalSession * pSession)
                              XA_STRING,
                              8,
                              PropModeReplace,
-                             (unsigned char*)m_aClientID.getStr(),
+                             reinterpret_cast<unsigned char const *>(m_aClientID.getStr()),
                              m_aClientID.getLength()
                              );
         }

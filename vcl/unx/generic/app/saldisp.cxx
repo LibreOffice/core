@@ -398,9 +398,9 @@ SalX11Display::SalX11Display( Display *display )
     pXLib_ = GetX11SalData()->GetLib();
     pXLib_->Insert( ConnectionNumber( pDisp_ ),
                     this,
-                    (YieldFunc) DisplayHasEvent,
-                    (YieldFunc) DisplayQueue,
-                    (YieldFunc) DisplayYield );
+                    reinterpret_cast<YieldFunc>(DisplayHasEvent),
+                    reinterpret_cast<YieldFunc>(DisplayQueue),
+                    reinterpret_cast<YieldFunc>(DisplayYield) );
 }
 
 SalX11Display::~SalX11Display()
@@ -477,7 +477,7 @@ SalDisplay::initScreen( SalX11Screen nXScreen ) const
                          XA_WINDOW,
                          32,
                          PropModeReplace,
-                         (unsigned char*)&pSD->m_aRefWindow,
+                         reinterpret_cast<unsigned char*>(&pSD->m_aRefWindow),
                          1
                          );
 
@@ -1398,12 +1398,12 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     {
         // XmbLookupString must not be called for KeyRelease events
         // Cannot enter space in c locale problem #89616# #88978# btraq #4478197
-        *pLen = XLookupString( pEvent, (char*)pPrintable, 1, &nKeySym, NULL );
+        *pLen = XLookupString( pEvent, reinterpret_cast<char*>(pPrintable), 1, &nKeySym, NULL );
     }
     else
     {
         *pLen = XmbLookupString( aInputContext,
-                        pEvent, (char*)pPrintable, *pLen - 1, &nKeySym, pStatusReturn );
+                        pEvent, reinterpret_cast<char*>(pPrintable), *pLen - 1, &nKeySym, pStatusReturn );
 
         // Lookup the string again, now with appropriate size
         if ( *pStatusReturn == XBufferOverflow )
@@ -2319,7 +2319,7 @@ Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
                          nAtom, nAtom, 8, PropModeReplace, &c, 1 );
         XFlush( GetDisplay() );
 
-        if( ! XIfEventWithTimeout( &aEvent, (XPointer)this, timestamp_predicate ) )
+        if( ! XIfEventWithTimeout( &aEvent, reinterpret_cast<XPointer>(const_cast<SalDisplay *>(this)), timestamp_predicate ) )
         {
             // this should not happen at all; still sometimes it happens
             aEvent.xproperty.time = CurrentTime;

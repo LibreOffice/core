@@ -77,18 +77,18 @@ struct GLWindow
          return GL_FALSE;
       }
 
-      deleteThis=lookHere=(char*)malloc(strlen((const char*)extString)+1);
+      deleteThis=lookHere=(char*)malloc(strlen(reinterpret_cast<const char*>(extString))+1);
       if (lookHere==NULL)
       {
          return GL_FALSE;
       }
 
       /* strtok() will modify string, so copy it somewhere */
-      strcpy(lookHere,(const char*)extString);
+      strcpy(lookHere, reinterpret_cast<const char*>(extString));
 
       while ((word=strtok(lookHere, " "))!=NULL)
       {
-         if (strcmp(word,(const char*)extName)==0)
+         if (strcmp(word, reinterpret_cast<const char*>(extName))==0)
          {
             flag=GL_TRUE;
             break;
@@ -119,7 +119,7 @@ struct GLWindow
     GLXContext         ctx;
     GLXPixmap           glPix;
 
-    bool HasGLXExtension( const char* name ) { return checkExtension( (const GLubyte*) name, (const GLubyte*) GLXExtensions ); }
+    bool HasGLXExtension( const char* name ) { return checkExtension( reinterpret_cast<const GLubyte*>(name), reinterpret_cast<const GLubyte*>(GLXExtensions) ); }
     const char*             GLXExtensions;
 #endif
     unsigned int            bpp;

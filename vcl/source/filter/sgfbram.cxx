@@ -35,7 +35,7 @@ SgfHeader::SgfHeader()
 
 SvStream& ReadSgfHeader(SvStream& rIStream, SgfHeader& rHead)
 {
-    rIStream.Read((char*)&rHead.Magic,SgfHeaderSize);
+    rIStream.Read(&rHead.Magic, SgfHeaderSize);
 #if defined OSL_BIGENDIAN
     rHead.Magic  =OSL_SWAPWORD(rHead.Magic  );
     rHead.Version=OSL_SWAPWORD(rHead.Version);
@@ -65,7 +65,7 @@ SgfEntry::SgfEntry()
 
 SvStream& ReadSgfEntry(SvStream& rIStream, SgfEntry& rEntr)
 {
-    rIStream.Read((char*)&rEntr.Typ,SgfEntrySize);
+    rIStream.Read(&rEntr.Typ, SgfEntrySize);
 #if defined OSL_BIGENDIAN
     rEntr.Typ  =OSL_SWAPWORD(rEntr.Typ  );
     rEntr.iFrei=OSL_SWAPWORD(rEntr.iFrei);
@@ -82,7 +82,7 @@ sal_uInt32 SgfEntry::GetOffset()
 
 SvStream& ReadSgfVector(SvStream& rIStream, SgfVector& rVect)
 {
-    rIStream.Read((char*)&rVect,sizeof(rVect));
+    rIStream.Read(&rVect, sizeof(rVect));
 #if defined OSL_BIGENDIAN
     rVect.Flag =OSL_SWAPWORD(rVect.Flag );
     rVect.x    =OSL_SWAPWORD(rVect.x    );
@@ -104,7 +104,7 @@ SvStream& WriteBmpFileHeader(SvStream& rOStream, BmpFileHeader& rHead)
     rHead.OfsLo   =OSL_SWAPWORD(rHead.OfsLo   );
     rHead.OfsHi   =OSL_SWAPWORD(rHead.OfsHi   );
 #endif
-    rOStream.Write((char*)&rHead,sizeof(rHead));
+    rOStream.Write(&rHead, sizeof(rHead));
 #if defined OSL_BIGENDIAN
     rHead.Typ     =OSL_SWAPWORD(rHead.Typ     );
     rHead.SizeLo  =OSL_SWAPWORD(rHead.SizeLo  );
@@ -149,7 +149,7 @@ SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
     rInfo.ColUsed =OSL_SWAPDWORD (rInfo.ColUsed );
     rInfo.ColMust =OSL_SWAPDWORD (rInfo.ColMust );
 #endif
-    rOStream.Write((char*)&rInfo,sizeof(rInfo));
+    rOStream.Write(&rInfo, sizeof(rInfo));
 #if defined OSL_BIGENDIAN
     rInfo.Size    =OSL_SWAPDWORD (rInfo.Size    );
     rInfo.Width   =OSL_SWAPDWORD (rInfo.Width   );
@@ -168,7 +168,7 @@ SvStream& WriteBmpInfoHeader(SvStream& rOStream, BmpInfoHeader& rInfo)
 
 SvStream& WriteRGBQuad(SvStream& rOStream, const RGBQuad& rQuad)
 {
-    rOStream.Write((char*)&rQuad,sizeof(rQuad));
+    rOStream.Write(&rQuad, sizeof(rQuad));
     return rOStream;
 }
 
@@ -190,10 +190,10 @@ sal_uInt8 PcxExpand::GetByte(SvStream& rInp)
     if (Count>0) {
         Count--;
     } else {
-        rInp.Read((char*)&Data,1);
+        rInp.Read(&Data, 1);
         if ((Data & 0xC0) == 0xC0) {
             Count=(Data & 0x3F) -1;
-            rInp.Read((char*)&Data,1);
+            rInp.Read(&Data, 1);
         }
     }
     return Data;
@@ -247,14 +247,14 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
         WriteRGBQuad( rOut, RGBQuad(0xFF,0xFF,0xFF) ); // white
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf.get(),nWdtOut);  // fill file with zeroes
+            rOut.Write(pBuf.get(), nWdtOut); // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<nWdtInp;i++) {
                 pBuf[i]=aPcx.GetByte(rInp);
             }
             for(i=nWdtInp;i<nWdtOut;i++) pBuf[i]=0;     // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write((char*)pBuf.get(),nWdtOut);
+            rOut.Write(pBuf.get(), nWdtOut);
         }
     } else if (nColors==16) {
         sal_uInt8 pl2= 0;     // planes' masks
@@ -278,7 +278,7 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf.get(),nWdtOut);  // fill file with zeroes
+            rOut.Write(pBuf.get(), nWdtOut); // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             memset(pBuf.get(),0,nWdtOut);
             for(k=0;k<4;k++) {
@@ -302,27 +302,27 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
             }
             for(i=nWdtInp*4;i<nWdtOut;i++) pBuf[i]=0;            // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write((char*)pBuf.get(),nWdtOut);
+            rOut.Write(pBuf.get(), nWdtOut);
         }
     } else if (nColors==256) {
         cRGB[3]=0;                      // fourth palette entry for BMP
         for (i=0;i<256;i++) {           // copy palette
-            rInp.Read((char*)cRGB,3);
+            rInp.Read(cRGB, 3);
             pl1=cRGB[0];                // switch red and blue
             cRGB[0]=cRGB[2];
             cRGB[2]=pl1;
-            rOut.Write((char*)cRGB,4);
+            rOut.Write(cRGB, 4);
         }
 
         nOfs=rOut.Tell();
         for (j=0;j<rHead.Ysize;j++)
-            rOut.Write((char*)pBuf.get(),nWdtOut);  // fill file with zeroes
+            rOut.Write(pBuf.get(), nWdtOut); // fill file with zeroes
         for (j=0;j<rHead.Ysize;j++) {
             for(i=0;i<rHead.Xsize;i++)
                 pBuf[i]=aPcx.GetByte(rInp);
             for(i=rHead.Xsize;i<nWdtOut;i++) pBuf[i]=0;          // up to 3 bytes
             rOut.Seek(nOfs+((sal_uLong)rHead.Ysize-j-1L)*(sal_uLong)nWdtOut); // write backwards
-            rOut.Write((char*)pBuf.get(),nWdtOut);
+            rOut.Write(pBuf.get(), nWdtOut);
         }
     }
     return true;

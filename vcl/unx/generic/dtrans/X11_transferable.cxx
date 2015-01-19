@@ -63,9 +63,9 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
     if( rFlavor.MimeType.equalsIgnoreAsciiCase( "text/plain;charset=utf-16" ) )
     {
         int nLen = aData.getLength()/2;
-        if( ((sal_Unicode*)aData.getConstArray())[nLen-1] == 0 )
+        if( reinterpret_cast<sal_Unicode const *>(aData.getConstArray())[nLen-1] == 0 )
             nLen--;
-        OUString aString( (sal_Unicode*)aData.getConstArray(), nLen );
+        OUString aString( reinterpret_cast<sal_Unicode const *>(aData.getConstArray()), nLen );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "X11Transferable::getTransferData( \"%s\" )\n -> \"%s\"\n",
              OUStringToOString( rFlavor.MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),

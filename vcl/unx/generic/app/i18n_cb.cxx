@@ -42,7 +42,7 @@
 int
 PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 {
-      preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+      preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
     if ( pPreeditData->eState == ePreeditStatusActivationRequired )
     {
         pPreeditData->eState = ePreeditStatusActive;
@@ -58,7 +58,7 @@ PreeditStartCallback ( XIC, XPointer client_data, XPointer )
 void
 PreeditDoneCallback ( XIC, XPointer client_data, XPointer )
 {
-      preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+      preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
      if (pPreeditData->eState == ePreeditStatusActive )
     {
         if( pPreeditData->pFrame )
@@ -191,7 +191,7 @@ Preedit_InsertText(preedit_text_t *pText, XIMText *pInsertText, int where)
     }
     else
     {
-          pInsertTextString = (sal_Unicode*)pMBString;
+          pInsertTextString = reinterpret_cast<sal_Unicode*>(pMBString);
     }
 
     // enlarge target text-buffer if necessary
@@ -303,7 +303,7 @@ void
 PreeditDrawCallback(XIC ic, XPointer client_data,
             XIMPreeditDrawCallbackStruct *call_data)
 {
-    preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+    preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
 
     // if there's nothing to change then change nothing
     if ( ( (call_data->text == NULL) && (call_data->chg_length == 0) )
@@ -377,7 +377,7 @@ PreeditDrawCallback(XIC ic, XPointer client_data,
     if (pPreeditData->aText.nLength == 0)
         pPreeditData->eState = ePreeditStatusStartPending;
 
-    GetPreeditSpotLocation(ic, (XPointer)pPreeditData);
+    GetPreeditSpotLocation(ic, reinterpret_cast<XPointer>(pPreeditData));
 }
 
 void
@@ -387,7 +387,7 @@ GetPreeditSpotLocation(XIC ic, XPointer client_data)
     // Send SalEventExtTextInputPos event to get spotlocation
 
     SalExtTextInputPosEvent mPosEvent;
-    preedit_data_t* pPreeditData = (preedit_data_t*)client_data;
+    preedit_data_t* pPreeditData = reinterpret_cast<preedit_data_t*>(client_data);
 
     if( pPreeditData->pFrame )
         pPreeditData->pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&mPosEvent);
@@ -522,7 +522,7 @@ StatusDrawCallback (XIC, XPointer, XIMStatusDrawCallbackStruct *call_data)
 void
 SwitchIMCallback (XIC, XPointer, XPointer call_data)
 {
-    XIMSwitchIMNotifyCallbackStruct* pCallData = (XIMSwitchIMNotifyCallbackStruct*)call_data;
+    XIMSwitchIMNotifyCallbackStruct* pCallData = reinterpret_cast<XIMSwitchIMNotifyCallbackStruct*>(call_data);
     ::vcl::I18NStatus::get().changeIM( OStringToOUString(pCallData->to->name, RTL_TEXTENCODING_UTF8) );
 }
 
@@ -531,7 +531,7 @@ SwitchIMCallback (XIC, XPointer, XPointer call_data)
 void
 IC_IMDestroyCallback (XIM, XPointer client_data, XPointer)
 {
-    SalI18N_InputContext *pContext = (SalI18N_InputContext*)client_data;
+    SalI18N_InputContext *pContext = reinterpret_cast<SalI18N_InputContext*>(client_data);
     if (pContext != NULL)
         pContext->HandleDestroyIM();
 }
@@ -539,7 +539,7 @@ IC_IMDestroyCallback (XIM, XPointer client_data, XPointer)
 void
 IM_IMDestroyCallback (XIM, XPointer client_data, XPointer)
 {
-    SalI18N_InputMethod *pMethod = (SalI18N_InputMethod*)client_data;
+    SalI18N_InputMethod *pMethod = reinterpret_cast<SalI18N_InputMethod*>(client_data);
     if (pMethod != NULL)
         pMethod->HandleDestroyIM();
 }

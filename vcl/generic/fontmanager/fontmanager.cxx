@@ -1019,7 +1019,7 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
     }
     else if( pNameRecord->platformID == 1 )
     {
-        OString aName((const sal_Char*)(pNameRecord->sptr), pNameRecord->slen);
+        OString aName(reinterpret_cast<char*>(pNameRecord->sptr), pNameRecord->slen);
         rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
         switch (pNameRecord->encodingID)
         {

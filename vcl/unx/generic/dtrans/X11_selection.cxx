@@ -538,7 +538,7 @@ OUString SelectionManager::convertFromCompound( const char* pText, int nLen )
     int nTexts = 0;
 
     XTextProperty aProp;
-    aProp.value     = (unsigned char*)pText;
+    aProp.value     = reinterpret_cast<unsigned char *>(const_cast<char *>(pText));
     aProp.encoding  = m_nCOMPOUNDAtom;
     aProp.format    = 8;
     aProp.nitems    = nLen;
@@ -575,7 +575,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
                                &aProp );
     if( aProp.value )
     {
-        aRet = (char*)aProp.value;
+        aRet = reinterpret_cast<char*>(aProp.value);
         XFree( aProp.value );
 #ifdef SOLARIS
         /*
@@ -630,7 +630,7 @@ bool SelectionManager::convertData(
             {
                 OUString aString;
                 aValue >>= aString;
-                rData = Sequence< sal_Int8 >( (sal_Int8*)aString.getStr(), aString.getLength() * sizeof( sal_Unicode ) );
+                rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aString.getStr()), aString.getLength() * sizeof( sal_Unicode ) );
                 bSuccess = true;
             }
             else if( aValue.getValueType() == getCppuType( (Sequence< sal_Int8 >*)0 ) )
@@ -657,7 +657,7 @@ bool SelectionManager::convertData(
                     OUString aString;
                     aValue >>= aString;
                     OString aByteString( bCompoundText ? convertToCompound( aString ) : OUStringToOString( aString, aEncoding ) );
-                    rData = Sequence< sal_Int8 >( (sal_Int8*)aByteString.getStr(), aByteString.getLength() * sizeof( sal_Char ) );
+                    rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aByteString.getStr()), aByteString.getLength() * sizeof( sal_Char ) );
                     bSuccess = true;
                 }
             }
@@ -1031,8 +1031,8 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                               aData )
                 )
             {
-              OUString aRet( (const sal_Char*)aData.getConstArray(), aData.getLength(), RTL_TEXTENCODING_UTF8 );
-              rData = Sequence< sal_Int8 >( (sal_Int8*)aRet.getStr(), (aRet.getLength()+1)*sizeof( sal_Unicode ) );
+              OUString aRet( reinterpret_cast<const char*>(aData.getConstArray()), aData.getLength(), RTL_TEXTENCODING_UTF8 );
+              rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aRet.getStr()), (aRet.getLength()+1)*sizeof( sal_Unicode ) );
               bSuccess = true;
             }
             else if( it->second->m_bHaveCompound &&
@@ -1041,8 +1041,8 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                               aData )
                 )
             {
-                OUString aRet( convertFromCompound( (const char*)aData.getConstArray(), aData.getLength() ) );
-                rData = Sequence< sal_Int8 >( (sal_Int8*)aRet.getStr(), (aRet.getLength()+1)*sizeof( sal_Unicode ) );
+                OUString aRet( convertFromCompound( reinterpret_cast<const char*>(aData.getConstArray()), aData.getLength() ) );
+                rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aRet.getStr()), (aRet.getLength()+1)*sizeof( sal_Unicode ) );
                 bSuccess = true;
             }
             else
@@ -1063,9 +1063,9 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                                  OUStringToOString( rType, RTL_TEXTENCODING_ISO_8859_1 ).getStr()
                                  );
 #endif
-                        OString aConvert( (sal_Char*)aData.getConstArray(), aData.getLength() );
+                        OString aConvert( reinterpret_cast<char const *>(aData.getConstArray()), aData.getLength() );
                         OUString aUTF( OStringToOUString( aConvert, aEncoding ) );
-                        rData = Sequence< sal_Int8 >( (sal_Int8*)aUTF.getStr(), (aUTF.getLength()+1)*sizeof( sal_Unicode ) );
+                        rData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8 const *>(aUTF.getStr()), (aUTF.getLength()+1)*sizeof( sal_Unicode ) );
                         bSuccess = true;
                         break;
                     }
@@ -1100,14 +1100,14 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                     XA_ATOM,
                     32,
                     PropModeReplace,
-                    (unsigned char*)pTypes,
+                    reinterpret_cast<unsigned char*>(pTypes),
                     4 );
             }
 
             // try MULTIPLE request
             if( getPasteData( selection, m_nMULTIPLEAtom, aData ) )
             {
-                Atom* pReturnedTypes = (Atom*)aData.getArray();
+                Atom* pReturnedTypes = reinterpret_cast<Atom*>(aData.getArray());
                 if( pReturnedTypes[0] == XA_PIXMAP && pReturnedTypes[1] == XA_PIXMAP )
                 {
                     osl::MutexGuard aGuard(m_aMutex);
@@ -1121,7 +1121,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                     if( pReturn )
                     {
                         if( type == XA_PIXMAP )
-                            aPixmap = *(Pixmap*)pReturn;
+                            aPixmap = *reinterpret_cast<Pixmap*>(pReturn);
                         XFree( pReturn );
                         pReturn = NULL;
                         if( pReturnedTypes[2] == XA_COLORMAP && pReturnedTypes[3] == XA_COLORMAP )
@@ -1130,7 +1130,7 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                             if( pReturn )
                             {
                                 if( type == XA_COLORMAP )
-                                    aColormap = *(Colormap*)pReturn;
+                                    aColormap = *reinterpret_cast<Colormap*>(pReturn);
                                 XFree( pReturn );
                             }
                         }
@@ -1149,9 +1149,9 @@ bool SelectionManager::getPasteData( Atom selection, const OUString& rType, Sequ
                 // perhaps two normal requests will work
                 if( getPasteData( selection, XA_PIXMAP, aData ) )
                 {
-                    aPixmap = *(Pixmap*)aData.getArray();
+                    aPixmap = *reinterpret_cast<Pixmap*>(aData.getArray());
                     if( aColormap == None && getPasteData( selection, XA_COLORMAP, aData ) )
-                        aColormap = *(Colormap*)aData.getArray();
+                        aColormap = *reinterpret_cast<Colormap*>(aData.getArray());
                 }
             }
 
@@ -1288,7 +1288,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 aAtoms.realloc( sizeof(Atom)*n );
                 for( i = 0, n = 0; i < 3; i++ )
                     if( m_aDropEnterEvent.data.l[2+i] )
-                        ((Atom*)aAtoms.getArray())[n++] = m_aDropEnterEvent.data.l[2+i];
+                        reinterpret_cast<Atom*>(aAtoms.getArray())[n++] = m_aDropEnterEvent.data.l[2+i];
             }
         }
     }
@@ -1300,7 +1300,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     if( aAtoms.getLength() )
     {
         sal_Int32 nAtoms = aAtoms.getLength() / sizeof(Atom);
-        Atom* pAtoms = (Atom*)aAtoms.getArray();
+        Atom* pAtoms = reinterpret_cast<Atom*>(aAtoms.getArray());
         rTypes.realloc( nAtoms );
         aNativeTypes.resize( nAtoms );
         DataFlavor* pFlavors = rTypes.getArray();
@@ -1459,7 +1459,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                     // the pixmap in another thread
                     pPixmap = getPixmapHolder( selection );
                     // conversion succeeded, so aData contains image/bmp now
-                    if( pPixmap->needsConversion( (const sal_uInt8*)aData.getConstArray() ) )
+                    if( pPixmap->needsConversion( reinterpret_cast<const sal_uInt8*>(aData.getConstArray()) ) )
                     {
                         SAL_INFO( "vcl", "trying bitmap conversion" );
                         int depth = pPixmap->getDepth();
@@ -1470,7 +1470,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                     // get pixmap again since clearing the guard could have invalidated
                     // the pixmap in another thread
                     pPixmap = getPixmapHolder( selection );
-                    nValue = (XID)pPixmap->setBitmapData( (const sal_uInt8*)aData.getConstArray() );
+                    nValue = (XID)pPixmap->setBitmapData( reinterpret_cast<const sal_uInt8*>(aData.getConstArray()) );
                 }
                 if( nValue == None )
                     return false;
@@ -1485,7 +1485,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                          target,
                          32,
                          PropModeReplace,
-                         (const unsigned char*)&nValue,
+                         reinterpret_cast<const unsigned char*>(&nValue),
                          1);
         return true;
     }
@@ -1540,7 +1540,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
             long nMinSize = m_nIncrementalThreshold;
             XSelectInput( m_pDisplay, requestor, PropertyChangeMask );
             XChangeProperty( m_pDisplay, requestor, property,
-                             m_nINCRAtom, 32,  PropModeReplace, (unsigned char*)&nMinSize, 1 );
+                             m_nINCRAtom, 32,  PropModeReplace, reinterpret_cast<unsigned char*>(&nMinSize), 1 );
             XFlush( m_pDisplay );
         }
         else
@@ -1552,7 +1552,7 @@ bool SelectionManager::sendData( SelectionAdaptor* pAdaptor,
                              target,
                              nFormat,
                              PropModeReplace,
-                             (const unsigned char*)aData.getConstArray(),
+                             reinterpret_cast<const unsigned char*>(aData.getConstArray()),
                              aData.getLength()/nUnitSize );
             }
     }
@@ -1609,7 +1609,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 for( i = 0, it = aConversions.begin(); i < nTypes; i++, ++it )
                     pTypes[i] = *it;
                 XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
-                                 XA_ATOM, 32, PropModeReplace, (const unsigned char*)pTypes, nTypes );
+                                 XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
                 aNotify.xselection.property = rRequest.property;
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "sending type list:\n" );
@@ -1622,7 +1622,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
         {
             long nTimeStamp = (long)m_aSelections[rRequest.selection]->m_nOrigTimestamp;
             XChangeProperty( m_pDisplay, rRequest.requestor, rRequest.property,
-                             XA_INTEGER, 32, PropModeReplace, (const unsigned char*)&nTimeStamp, 1 );
+                             XA_INTEGER, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&nTimeStamp), 1 );
             aNotify.xselection.property = rRequest.property;
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "sending timestamp: %d\n", (int)nTimeStamp );
@@ -1672,7 +1672,7 @@ bool SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
 #endif
                         bEventSuccess = true;
                         bool bResetAtoms = false;
-                        Atom* pAtoms = (Atom*)pData;
+                        Atom* pAtoms = reinterpret_cast<Atom*>(pData);
                         aGuard.clear();
                         for( unsigned int i = 0; i < nItems; i += 2 )
                         {
@@ -1856,7 +1856,7 @@ bool SelectionManager::handleReceivePropertyNotify( XPropertyEvent& rNotify )
                 it->second->m_eState == Selection::WaitingForResponse )
             {
                 // copy data
-                it->second->m_aData = Sequence< sal_Int8 >( (sal_Int8*)pData, nItems*nUnitSize );
+                it->second->m_aData = Sequence< sal_Int8 >( reinterpret_cast<sal_Int8*>(pData), nItems*nUnitSize );
                 it->second->m_eState = Selection::Inactive;
                 it->second->m_aDataArrived.set();
             }
@@ -1960,7 +1960,7 @@ bool SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
                                  rInc.m_aTarget,
                                  rInc.m_nFormat,
                                  PropModeReplace,
-                                 (const unsigned char*)rInc.m_aData.getConstArray()+rInc.m_nBufferPos,
+                                 reinterpret_cast<const unsigned char*>(rInc.m_aData.getConstArray())+rInc.m_nBufferPos,
                                  nBytes/nUnitSize );
                 rInc.m_nBufferPos += nBytes;
                 rInc.m_nTransferStartTime = nCurrentTime;
@@ -2051,7 +2051,7 @@ bool SelectionManager::handleSelectionNotify( XSelectionEvent& rNotify )
             }
             it->second->m_eState        = Selection::Inactive;
             sal_Size nUnitSize = GetTrueFormatSize(nFormat);
-            it->second->m_aData         = Sequence< sal_Int8 >((sal_Int8*)pData, nItems * nUnitSize);
+            it->second->m_aData         = Sequence< sal_Int8 >(reinterpret_cast<sal_Int8*>(pData), nItems * nUnitSize);
             it->second->m_aDataArrived.set();
             if( pData )
                 XFree( pData );
@@ -2917,7 +2917,7 @@ int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
             if( pBytes )
             {
                 if( nType == XA_WINDOW )
-                    rProxy = *(::Window*)pBytes;
+                    rProxy = *reinterpret_cast< ::Window* >(pBytes);
                 XFree( pBytes );
                 pBytes = NULL;
                 if( rProxy != None )
@@ -2927,7 +2927,7 @@ int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
                                         &nType, &nFormat, &nItems, &nBytes, &pBytes );
                     if( pBytes )
                     {
-                        if( nType == XA_WINDOW && *(::Window*)pBytes != rProxy )
+                        if( nType == XA_WINDOW && *reinterpret_cast< ::Window* >(pBytes) != rProxy )
                             rProxy = None;
                         XFree( pBytes );
                         pBytes = NULL;
@@ -2949,7 +2949,7 @@ int SelectionManager::getXdndVersion( ::Window aWindow, ::Window& rProxy )
     if( pBytes )
     {
         if( nType == XA_ATOM )
-            nVersion = *(Atom*)pBytes;
+            nVersion = *reinterpret_cast<Atom*>(pBytes);
         XFree( pBytes );
     }
 
@@ -3296,7 +3296,7 @@ void SelectionManager::startDrag(
         for( int n = 0; n < nTypes; n++, ++type_it )
             pTypes[n] = *type_it;
 
-        XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, (unsigned char*)pTypes, nTypes );
+        XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
 
         m_nSourceActions                = sourceActions | DNDConstants::ACTION_DEFAULT;
         m_nUserDragAction               = DNDConstants::ACTION_MOVE & m_nSourceActions;
@@ -3491,7 +3491,7 @@ void SelectionManager::transferablesFlavorsChanged()
     Atom* pTypes = (Atom*)alloca( sizeof(Atom)*aConversions.size() );
     for( i = 0, type_it = aConversions.begin(); type_it != aConversions.end(); ++type_it, i++ )
         pTypes[i] = *type_it;
-    XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, (unsigned char*)pTypes, nTypes );
+    XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char*>(pTypes), nTypes );
 
     if( m_aCurrentDropWindow != None && m_nCurrentProtocolVersion >= 0 )
     {
@@ -3779,7 +3779,7 @@ sal_Bool SelectionManager::handleEvent(const Any& event)
     Sequence< sal_Int8 > aSeq;
     if( (event >>= aSeq) )
     {
-        XEvent* pEvent = (XEvent*)aSeq.getArray();
+        XEvent* pEvent = reinterpret_cast<XEvent*>(aSeq.getArray());
         Time nTimestamp = CurrentTime;
         if( pEvent->type == ButtonPress || pEvent->type == ButtonRelease )
             nTimestamp = pEvent->xbutton.time;
@@ -3890,7 +3890,7 @@ void SelectionManager::registerDropTarget( ::Window aWindow, DropTarget* pTarget
         if( ! bWasError )
         {
             // set XdndAware
-            XChangeProperty( m_pDisplay, aWindow, m_nXdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&nXdndProtocolRevision, 1 );
+            XChangeProperty( m_pDisplay, aWindow, m_nXdndAware, XA_ATOM, 32, PropModeReplace, reinterpret_cast<unsigned char const *>(&nXdndProtocolRevision), 1 );
             if( ! bWasError )
             {
                 // get root window of window (in 99.999% of all cases this will be

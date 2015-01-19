@@ -208,7 +208,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     }
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
-    const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+    const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
 
     // #100127# Forward beziers to sal, if any
     if( aPoly.HasFlags() )
@@ -217,7 +217,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         if( !mpGraphics->DrawPolygonBezier( nPoints, pPtAry, pFlgAry, this ) )
         {
             aPoly = Polygon::SubdivideBezier(aPoly);
-            pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
+            pPtAry = reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry());
             mpGraphics->DrawPolygon( aPoly.GetSize(), pPtAry, this );
         }
     }
@@ -352,7 +352,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
         if ( nSize )
         {
             pPointAry[j] = nSize;
-            pPointAryAry[j] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
+            pPointAryAry[j] = reinterpret_cast<PCONSTSALPOINT>(rPoly.GetConstPointAry());
             pFlagAryAry[j] = rPoly.GetConstFlagAry();
             last = i;
 
@@ -373,7 +373,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const tools::PolyPolyg
             if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
             {
                 Polygon aPoly = Polygon::SubdivideBezier( rPolyPoly.GetObject( last ) );
-                mpGraphics->DrawPolygon( aPoly.GetSize(), (const SalPoint*)aPoly.GetConstPointAry(), this );
+                mpGraphics->DrawPolygon( aPoly.GetSize(), reinterpret_cast<const SalPoint*>(aPoly.GetConstPointAry()), this );
             }
         }
         else
@@ -419,7 +419,7 @@ void OutputDevice::ImplDrawPolygon( const Polygon& rPoly, const tools::PolyPolyg
         if ( nPoints < 2 )
             return;
 
-        const SalPoint* pPtAry = (const SalPoint*)rPoly.GetConstPointAry();
+        const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(rPoly.GetConstPointAry());
         mpGraphics->DrawPolygon( nPoints, pPtAry, this );
     }
 }
@@ -444,7 +444,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
 
         if( nSize >= 2 )
         {
-            const SalPoint* pPtAry = (const SalPoint*)rPoly.GetConstPointAry();
+            const SalPoint* pPtAry = reinterpret_cast<const SalPoint*>(rPoly.GetConstPointAry());
             mpGraphics->DrawPolygon( nSize, pPtAry, this );
         }
     }
@@ -461,7 +461,7 @@ void OutputDevice::ImplDrawPolyPolygon( const tools::PolyPolygon& rPolyPoly, con
             if ( nSize )
             {
                 pPointAry[i] = nSize;
-                pPointAryAry[i] = (PCONSTSALPOINT)rPoly.GetConstPointAry();
+                pPointAryAry[i] = reinterpret_cast<PCONSTSALPOINT>(rPoly.GetConstPointAry());
                 i++;
             }
             else

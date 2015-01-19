@@ -40,11 +40,11 @@ struct DestinationManagerStruct
 
 extern "C" void init_destination (j_compress_ptr cinfo)
 {
-    DestinationManagerStruct * destination = (DestinationManagerStruct *) cinfo->dest;
+    DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
 
     /* Allocate the output buffer -- it will be released when done with image */
     destination->buffer = (JOCTET *)
-        (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE, BUFFER_SIZE * sizeof(JOCTET));
+        (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_IMAGE, BUFFER_SIZE * sizeof(JOCTET));
 
     destination->pub.next_output_byte = destination->buffer;
     destination->pub.free_in_buffer = BUFFER_SIZE;
@@ -52,7 +52,7 @@ extern "C" void init_destination (j_compress_ptr cinfo)
 
 extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
 {
-    DestinationManagerStruct * destination = (DestinationManagerStruct *) cinfo->dest;
+    DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
 
     if (destination->stream->Write(destination->buffer, BUFFER_SIZE) != (size_t) BUFFER_SIZE)
     {
@@ -67,7 +67,7 @@ extern "C" boolean empty_output_buffer (j_compress_ptr cinfo)
 
 extern "C" void term_destination (j_compress_ptr cinfo)
 {
-    DestinationManagerStruct * destination = (DestinationManagerStruct *) cinfo->dest;
+    DestinationManagerStruct * destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
     size_t datacount = BUFFER_SIZE - destination->pub.free_in_buffer;
 
     /* Write any data remaining in the buffer */
@@ -94,10 +94,10 @@ void jpeg_svstream_dest (j_compress_ptr cinfo, void* output)
     if (cinfo->dest == NULL)
     {    /* first time for this JPEG object? */
         cinfo->dest = (jpeg_destination_mgr*)
-        (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT, sizeof(DestinationManagerStruct));
+        (*cinfo->mem->alloc_small) (reinterpret_cast<j_common_ptr>(cinfo), JPOOL_PERMANENT, sizeof(DestinationManagerStruct));
     }
 
-    destination = (DestinationManagerStruct *) cinfo->dest;
+    destination = reinterpret_cast<DestinationManagerStruct *>(cinfo->dest);
     destination->pub.init_destination = init_destination;
     destination->pub.empty_output_buffer = empty_output_buffer;
     destination->pub.term_destination = term_destination;

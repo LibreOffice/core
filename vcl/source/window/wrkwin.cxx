@@ -73,7 +73,7 @@ void WorkWindow::ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::su
     {
         ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
         aSystemWorkWindowToken >>= aSeq;
-        SystemParentData* pData = (SystemParentData*)aSeq.getArray();
+        SystemParentData* pData = reinterpret_cast<SystemParentData*>(aSeq.getArray());
         DBG_ASSERT( aSeq.getLength() == sizeof( SystemParentData ) && pData->nSize == sizeof( SystemParentData ), "WorkWindow::WorkWindow( vcl::Window*, const Any&, WinBits ) called with invalid Any" );
         // init with style 0 as does WorkWindow::WorkWindow( SystemParentData* );
         ImplInit( pParent, 0, pData );

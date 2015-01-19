@@ -40,7 +40,7 @@ void VclComplexTextTest::testArabic()
         0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
         0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
     };
-    OUString aOneTwoThree( (sal_Char *)pOneTwoThreeUTF8,
+    OUString aOneTwoThree( reinterpret_cast<char const *>(pOneTwoThreeUTF8),
                            SAL_N_ELEMENTS( pOneTwoThreeUTF8 ) - 1,
                            RTL_TEXTENCODING_UTF8 );
     vcl::Window* pWin = new WorkWindow( (vcl::Window *)NULL );

@@ -60,7 +60,7 @@ atk_noop_object_wrapper_get_type(void)
             sizeof (AtkNoOpObjectClass),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
-            (GClassInitFunc) atk_noop_object_wrapper_class_init,
+            reinterpret_cast<GClassInitFunc>(atk_noop_object_wrapper_class_init),
             (GClassFinalizeFunc) NULL,
             NULL,
             sizeof (AtkObjectWrapper),
@@ -156,7 +156,7 @@ wrapper_factory_get_type (void)
     static const GTypeInfo tinfo =
     {
       sizeof (AtkObjectFactoryClass),
-      NULL, NULL, (GClassInitFunc) wrapper_factory_class_init,
+      NULL, NULL, reinterpret_cast<GClassInitFunc>(wrapper_factory_class_init),
       NULL, NULL, sizeof (AtkObjectFactory), 0, NULL, NULL
     };
 

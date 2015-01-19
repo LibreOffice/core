@@ -1320,7 +1320,7 @@ attribute_set_map_to_property_values(
     sal_Int32 nIndex = 0;
     for( GSList * item = attribute_set; item != NULL; item = g_slist_next( item ) )
     {
-        AtkAttribute* attribute = (AtkAttribute *) item;
+        AtkAttribute* attribute = reinterpret_cast<AtkAttribute *>(item);
 
         AtkTextAttribute text_attr = atk_text_attribute_for_name( attribute->name );
         if( text_attr < g_TextAttrMapSize )

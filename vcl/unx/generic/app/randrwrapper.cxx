@@ -280,7 +280,7 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
 {
     int nRet = 0;
     #ifdef USE_RANDR
-    XConfigureEvent* pCnfEvent=(XConfigureEvent*)pEvent;
+    XConfigureEvent* pCnfEvent=reinterpret_cast<XConfigureEvent*>(pEvent);
     if( m_bUseRandRWrapper && pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
     {
         nRet = pWrapper->XRRUpdateConfiguration( pEvent );

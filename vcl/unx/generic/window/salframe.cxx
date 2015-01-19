@@ -676,7 +676,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
                              XA_WINDOW,
                              32,
                              PropModeReplace,
-                             (unsigned char*)&aClientLeader,
+                             reinterpret_cast<unsigned char*>(&aClientLeader),
                              1
                              );
         }
@@ -739,7 +739,7 @@ void X11SalFrame::Init( sal_uLong nSalFrameStyle, SalX11Screen nXScreen, SystemP
         if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
             XChangeProperty( GetXDisplay(), mhWindow,
                 GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
-                XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&netwm_icon.front(), netwm_icon.size());
+                XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&netwm_icon.front()), netwm_icon.size());
     }
 
     m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
@@ -1094,7 +1094,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
             if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
                 XChangeProperty( GetXDisplay(), mhWindow,
                     GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
-                    XA_CARDINAL, 32, PropModeReplace, (unsigned char*)&netwm_icon.front(), netwm_icon.size());
+                    XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&netwm_icon.front()), netwm_icon.size());
         }
     }
 }
@@ -1501,8 +1501,8 @@ void X11SalFrame::Center( )
                           pFrame->GetShellWindow(),
                           &aRoot,
                           &nScreenX, &nScreenY,
-                          (unsigned int*)&nScreenWidth,
-                          (unsigned int*)&nScreenHeight,
+                          reinterpret_cast<unsigned int*>(&nScreenWidth),
+                          reinterpret_cast<unsigned int*>(&nScreenHeight),
                           &bw, &depth );
         }
         else
@@ -2231,7 +2231,7 @@ IsRunningXAutoLock( Display *p_display, ::Window a_window )
     // get pid of running xautolock
     XGetWindowProperty (p_display, a_window, a_pidatom, 0L, 2L, False,
             AnyPropertyType, &a_type, &n_format, &n_items, &n_bytes_after,
-            (unsigned char**) &p_pid );
+            reinterpret_cast<unsigned char**>(&p_pid) );
     n_pid = *p_pid;
     XFree( p_pid );
 
@@ -2270,7 +2270,7 @@ MessageToXAutoLock( Display *p_display, int n_message )
 
     a_messageatom = XInternAtom( p_display, p_atomname, False );
     XChangeProperty (p_display, a_rootwindow, a_messageatom, XA_INTEGER,
-            8, PropModeReplace, (unsigned char*)&n_message, sizeof(n_message) );
+            8, PropModeReplace, reinterpret_cast<unsigned char*>(&n_message), sizeof(n_message) );
 
     return True;
 }
@@ -3306,7 +3306,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
                                 aConverter, aContext,
-                                (char*)pPrintable, nLen,
+                                reinterpret_cast<char*>(pPrintable), nLen,
                                 pBuffer, nBufferSize,
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE |
                                 RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
@@ -3320,7 +3320,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     }
     else if (nLen > 0 /* nEncoding == RTL_TEXTENCODING_UNICODE */)
     {
-        pString = (sal_Unicode*)pPrintable;
+        pString = reinterpret_cast<sal_Unicode*>(pPrintable);
           nSize = nLen;
     }
     else
@@ -3894,9 +3894,9 @@ long X11SalFrame::HandleStateEvent( XPropertyEvent *pEvent )
                 &&  2 == nitems
                 &&  0 == bytes_after, "HandleStateEvent" );
 
-    if( *(unsigned long*)prop == NormalState )
+    if( *reinterpret_cast<unsigned long*>(prop) == NormalState )
         nShowState_ = SHOWSTATE_NORMAL;
-    else if( *(unsigned long*)prop == IconicState )
+    else if( *reinterpret_cast<unsigned long*>(prop) == IconicState )
         nShowState_ = SHOWSTATE_MINIMIZED;
 
     XFree( prop );
@@ -3974,7 +3974,7 @@ Bool call_checkKeyReleaseForRepeat( Display* pDisplay, XEvent* pCheck, XPointer 
 
 Bool X11SalFrame::checkKeyReleaseForRepeat( Display*, XEvent* pCheck, XPointer pX11SalFrame )
 {
-    X11SalFrame* pThis = (X11SalFrame*)pX11SalFrame;
+    X11SalFrame* pThis = reinterpret_cast<X11SalFrame*>(pX11SalFrame);
     return
         pCheck->type            == KeyPress &&
         pCheck->xkey.state      == pThis->nKeyState_ &&
@@ -4010,7 +4010,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 {
                     nReleaseTime_ = pEvent->xkey.time;
                     XEvent aEvent;
-                    if( XCheckIfEvent( pEvent->xkey.display, &aEvent, call_checkKeyReleaseForRepeat, (XPointer)this ) )
+                    if( XCheckIfEvent( pEvent->xkey.display, &aEvent, call_checkKeyReleaseForRepeat, reinterpret_cast<XPointer>(this) ) )
                         XPutBackEvent( pEvent->xkey.display, &aEvent );
                     else
                         nRet        = HandleKeyEvent( &pEvent->xkey );

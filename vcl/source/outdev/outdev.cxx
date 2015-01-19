@@ -300,7 +300,7 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
 css::uno::Any OutputDevice::GetSystemGfxDataAny() const
 {
     const SystemGraphicsData aSysData = GetSystemGfxData();
-    css::uno::Sequence< sal_Int8 > aSeq( (sal_Int8*)&aSysData,
+    css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
                                                       aSysData.nSize );
 
     return css::uno::makeAny(aSeq);
