@@ -106,11 +106,23 @@ void ExternalToolEdit::Edit(GraphicObject const*const pGraphicObject)
     OUString aTempFileName;
 
     oslFileHandle pHandle;
-    osl::FileBase::createTempFile(0, &pHandle, &aTempFileBase);
+    osl::FileBase::RC rc =
+        osl::FileBase::createTempFile(0, &pHandle, &aTempFileBase);
+    if (osl::FileBase::E_None != rc)
+    {
+        SAL_WARN("svx", "ExternalToolEdit::Edit: cannot create temp file");
+        return;
+    }
 
     // Move it to a file name with image extension properly set
     aTempFileName = aTempFileBase + "." + OUString(fExtension);
-    osl::File::move(aTempFileBase, aTempFileName);
+    // FIXME: this is pretty stupid, need a better osl temp file API
+    rc = osl::File::move(aTempFileBase, aTempFileName);
+    if (osl::FileBase::E_None != rc)
+    {
+        SAL_WARN("svx", "ExternalToolEdit::Edit: cannot move temp file");
+        return;
+    }
 
     //Write Graphic to the Temp File
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
