@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_1e49edd0",
+        "filename": "svtools/source/brwbox/brwbox2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-19T19:26:53Z",
+      "side": 1,
+      "message": "Same as previous related changes, OSL_ENSURE() statements aren\u0027t executed in product builds. Use same change as in https://gerrit.libreoffice.org/13954 instead.",
+      "revId": "a616b1abf0790dab6112c996e3f366bd6689f1e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
