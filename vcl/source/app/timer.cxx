@@ -117,33 +117,10 @@ void Timer::ImplTimerCallbackProc( bool idle )
     sal_uLong       nDeltaTime;
     sal_uLong       nTime = tools::Time::GetSystemTicks();
 
-    if ( pSVData->mbNoCallTimer )
-        return;
-
     pSVData->mnTimerUpdate++;
     pSVData->mbNotAllTimerCalled = true;
 
-    // find timer where the timer handler needs to be called
-    pTimerData = pSVData->mpFirstTimerData;
-    while ( pTimerData )
-    {
-        // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
-        // call the handler as soon as the time is up.
-        if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
-             !pTimerData->mbDelete && !pTimerData->mbInTimeout)
-        {
-            // time has expired
-            if ( pTimerData->GetDeadline() <= nTime )
-            {
-                // set new update time
-                pTimerData->mnUpdateTime = nTime;
-
-                pTimerData->Invoke();
-            }
-        }
-
-        pTimerData = pTimerData->mpNext;
-    }
+    Timer::CheckExpiredTimer(true);
 
     // determine new time
     sal_uLong nNewTime = tools::Time::GetSystemTicks();
@@ -212,10 +189,16 @@ void Timer::ImplTimerCallbackProc( bool idle )
 
 bool Timer::TimerReady()
 {
+    return Timer::CheckExpiredTimer(false);
+}
+
+bool Timer::CheckExpiredTimer(bool bDoInvoke)
+{
 // find timer where the timer handler needs to be called
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData* pTimerData = pSVData->mpFirstTimerData;
     sal_uLong       nTime = tools::Time::GetSystemTicks();
+    bool            timerExpired = false;
     while ( pTimerData )
     {
         // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
@@ -226,13 +209,19 @@ bool Timer::TimerReady()
             // time has expired
             if ( pTimerData->GetDeadline() <= nTime )
             {
-               return true;
+                if(bDoInvoke)
+                {
+                    //Set new update Timer
+                    pTimerData->mnUpdateTime = nTime;
+                    pTimerData->Invoke();
+                }
+                timerExpired = true;
             }
         }
 
         pTimerData = pTimerData->mpNext;
     }
-    return false;
+    return timerExpired;
 }
 
 Timer::Timer():

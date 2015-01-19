@@ -185,7 +185,6 @@ void Idle::Start()
         // insert timer and start
         mpIdleData = new ImplIdleData;
         mpIdleData->mpIdle        = this;
-        mpIdleData->mbDelete       = false;
         mpIdleData->mbInIdle    = false;
 
         // insert last due to SFX!
@@ -202,14 +201,7 @@ void Idle::Start()
         else
             pSVData->mpFirstIdleData = mpIdleData;
     }
-    else if( !mpIdleData->mpIdle ) // TODO: remove when guilty found
-    {
-        OSL_FAIL( "Idle::Start() on a destroyed Idle!" );
-    }
-    else
-    {
-        mpIdleData->mbDelete        = false;
-    }
+    mpIdleData->mbDelete        = false;
 }
 
 void Idle::Stop()

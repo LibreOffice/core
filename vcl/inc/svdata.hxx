@@ -320,7 +320,6 @@ struct ImplSVData
     sal_uLong               mnTimerPeriod;                  // current timer period
     sal_uLong               mnTimerUpdate;                  // TimerCallbackProcs on stack
     bool                    mbNotAllTimerCalled;            // true: Timer must still be processed
-    bool                    mbNoCallTimer;                  // true: No Timeout calls
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
     ImplSVWinData           maWinData;                      // indepen data for Windows classes

@@ -343,11 +343,8 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     ImplSVData* pSVData = ImplGetSVData();
 
     // run timers that have timed out
-    if ( !pSVData->mbNoCallTimer )
-    {
-        while ( pSVData->mbNotAllTimerCalled )
-            Timer::ImplTimerCallbackProc();
-    }
+    while ( pSVData->mbNotAllTimerCalled )
+        Timer::ImplTimerCallbackProc();
 
     //Process all idles
     Idle::Idle::ProcessAllIdleHandlers();
@@ -368,7 +365,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
 
     // the system timer events will not necessarily come in non waiting mode
     // e.g. on OS X; need to trigger timer checks manually
-    if( pSVData->maAppData.mbNoYield && !pSVData->mbNoCallTimer )
+    if( pSVData->maAppData.mbNoYield )
     {
         do
         {
