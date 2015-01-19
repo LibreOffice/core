@@ -19,15 +19,19 @@
 
 #include "XMLChartStyleContext.hxx"
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <tools/debug.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include "XMLChartPropertyContext.hxx"
 
 using namespace com::sun::star;
+using namespace com::sun::star::xml::sax;
+using namespace xmloff;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_DATA_STYLE_NAME;
 using ::xmloff::token::XML_PERCENTAGE_DATA_STYLE_NAME;
@@ -156,11 +160,40 @@ SvXMLImportContext *XMLChartStyleContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    XMLChartStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    XMLChartStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    sal_uInt32 nFamily = 0;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_text_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_text_properties) )
+        nFamily = XML_TYPE_PROP_TEXT;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_paragraph_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_paragraph_properties) )
+        nFamily = XML_TYPE_PROP_PARAGRAPH;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_graphic_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_graphic_properties) )
+        nFamily = XML_TYPE_PROP_GRAPHIC;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_chart_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_chart_properties) )
+        nFamily = XML_CHART_PROPERTIES;
+
+    if( nFamily )
+    {
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new XMLChartPropertyContext(
+                GetImport(), Element, xAttrList, nFamily,
+                GetProperties(), xImpPrMap );
+    }
+
+    if( !pContext.is() )
+        pContext = XMLShapeStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
