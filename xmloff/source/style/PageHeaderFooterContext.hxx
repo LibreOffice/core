@@ -39,6 +39,11 @@ public:
                         const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                         sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                         const bool bHeader);
+    PageHeaderFooterContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        std::vector< XMLPropertyState >& rProperties,
+        const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
+        sal_Int32 nStartIndex, sal_Int32 nEndIndex, const bool bHeader );
 
     virtual ~PageHeaderFooterContext();
 
@@ -46,8 +51,14 @@ public:
                                      const OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

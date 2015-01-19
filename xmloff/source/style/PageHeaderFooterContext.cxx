@@ -45,6 +45,21 @@ PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
     bHeader = bTempHeader;
 }
 
+PageHeaderFooterContext::PageHeaderFooterContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& rTempProperties,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rTempMap,
+    sal_Int32 nStart, sal_Int32 nEnd, const bool bTempHeader )
+:   SvXMLImportContext( rImport ),
+    rProperties(rTempProperties),
+    nStartIndex(nStart),
+    nEndIndex(nEnd),
+    rMap(rTempMap)
+{
+    bHeader =bTempHeader;
+}
+
 PageHeaderFooterContext::~PageHeaderFooterContext()
 {
 }
@@ -74,7 +89,20 @@ SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPre
     return pContext;
 }
 
+css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    PageHeaderFooterContext::createFastChildContext( sal_Int32 /*Element*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    return css::uno::Reference< css::xml::sax::XFastContextHandler >();
+}
+
 void PageHeaderFooterContext::EndElement()
+{
+}
+
+void SAL_CALL PageHeaderFooterContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
 }
 
