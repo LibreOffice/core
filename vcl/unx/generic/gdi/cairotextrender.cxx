@@ -204,7 +204,7 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
-    cairo_surface_t *surface = getCairoSurface();
+    cairo_surface_t *surface = getCairoSurface( rLayout );
 
     DBG_ASSERT( surface!=NULL, "no cairo surface for text" );
     if( !surface )
