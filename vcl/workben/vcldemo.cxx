@@ -317,8 +317,9 @@ public:
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
-            OUString aLatinText("Click any rect to zoom!!!!");
+            OUString aText("Click any rect to zoom!!!!");
 
+            /* Arabic text
             const unsigned char pTextUTF8[] = {
                 0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
                 0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
@@ -326,27 +327,13 @@ public:
                 0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
                 0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
             };
-            OUString aArabicText( reinterpret_cast<char const *>(pTextUTF8),
+            OUString aText( reinterpret_cast<char const *>(pTextUTF8),
                             SAL_N_ELEMENTS( pTextUTF8 ) - 1,
                             RTL_TEXTENCODING_UTF8 );
-
-            OUString aText;
-            int nPrintNumCopies;
-
-            if (mbArabicText)
-            {
-                aText = aArabicText;
-                nPrintNumCopies=2;
-            }
-            else
-            {
-                aText = aLatinText;
-                nPrintNumCopies=20;
-            }
+            */
 
             std::vector<OUString> maFontNames;
             sal_uInt32 nCols[] = {
-                COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
                 COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
                 COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
             };
@@ -357,10 +344,8 @@ public:
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
                 maFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
-            if (mbClip)
-                rDev.SetClipRegion( vcl::Region(r - Point(200, 200) ) );
-
-            for (int i = 0; i < nPrintNumCopies; i++) {
+#define PRINT_N_TEXT 20
+            for (int i = 0; i < PRINT_N_TEXT; i++) {
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
                 // random font size to avoid buffering
                 vcl::Font aFont( maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
