@@ -66,15 +66,25 @@ public:
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                  ::std::vector< XMLPropertyState > &rProps,
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap );
+    SdXMLDrawingPagePropertySetContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        std::vector< XMLPropertyState >& rProps,
+        const rtl::Reference< SvXMLImportPropertyMapper >& rMap );
 
     virtual ~SdXMLDrawingPagePropertySetContext();
 
     using SvXMLPropertySetContext::CreateChildContext;
+    using SvXMLPropertySetContext::createFastChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        std::vector< XMLPropertyState >& rProperties,
+        const XMLPropertyState& rProp ) SAL_OVERRIDE;
 };
 
 TYPEINIT1( SdXMLDrawingPagePropertySetContext, SvXMLPropertySetContext );
@@ -87,6 +97,16 @@ SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap ) :
     SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList,
                              XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
+{
+}
+
+SdXMLDrawingPagePropertySetContext::SdXMLDrawingPagePropertySetContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMap )
+:   SvXMLPropertySetContext( rImport, Element, xAttrList,
+        XML_TYPE_PROP_DRAWING_PAGE, rProps, rMap )
 {
 }
 
@@ -130,6 +150,15 @@ SvXMLImportContext *SdXMLDrawingPagePropertySetContext::CreateChildContext(
                                                             rProperties, rProp );
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler >
+    SdXMLDrawingPagePropertySetContext::createFastChildContext(
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& /*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 class SdXMLDrawingPageStyleContext : public XMLPropStyleContext
