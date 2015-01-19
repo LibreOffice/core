@@ -109,10 +109,6 @@ String STR_SAVEASDOC
 {
     Text [ en-US ] = "Save ~As..." ;
 };
-String STR_SAVECOPYDOC
-{
-    Text [ en-US ] = "Save Copy ~as..." ;
-};
 String STR_SAVEACOPY
 {
     Text [ en-US ] = "Save a Copy..." ;

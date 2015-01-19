@@ -60,7 +60,7 @@
 #define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
 #define STR_UPDATEDOC                       (RID_SFX_DOC_START+ 46)
 #define STR_SAVEASDOC                       (RID_SFX_DOC_START+ 47)
-#define STR_SAVECOPYDOC                     (RID_SFX_DOC_START+ 48)
+
 #define STR_CLOSEDOC                        (RID_SFX_DOC_START+ 49)
 #define STR_CLOSEDOC_ANDRETURN              (RID_SFX_DOC_START+ 50)
 #define STR_WIZARD                          (RID_SFX_DOC_START+ 51)
