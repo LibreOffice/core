@@ -1211,18 +1211,12 @@ bool OpenGLSalGraphicsImpl::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rP
     if( UseSolid( mnFillColor, fTransparency ) )
         DrawPolyPolygon( rPolyPolygon );
 
-    if( mnLineColor != mnFillColor && UseSolidAA( mnLineColor ) )
+    if( mnLineColor != mnFillColor && UseSolid( mnLineColor, fTransparency ))
     {
-        for( sal_uInt32 i = 0; i < rPolyPolygon.count(); i++ )
-        {
-            const basegfx::B2DPolygon& polygon = rPolyPolygon.getB2DPolygon( i );
-            for( sal_uInt32 j = 0; j < polygon.count(); ++j )
-            {
-                const basegfx::B2DPoint& rPt1 = polygon.getB2DPoint( j );
-                const basegfx::B2DPoint& rPt2 = polygon.getB2DPoint(( j + 1 ) % polygon.count());
-                DrawLineAA( rPt1.getX(), rPt1.getY(), rPt2.getX(), rPt2.getY());
-            }
-        }
+        basegfx::B2DTrapezoidVector aB2DTrapVector;
+        basegfx::tools::createLineTrapezoidFromB2DPolyPolygon( aB2DTrapVector, rPolyPolygon );
+        for( size_t i = 0; i < aB2DTrapVector.size(); ++i )
+            DrawTrapezoid( aB2DTrapVector[ i ] );
     }
 
     PostDraw();
