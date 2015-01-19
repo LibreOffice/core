@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_fe1681a6",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3728,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-19T19:46:32Z",
+      "side": 1,
+      "message": "Please use ScInterpreter::ConvertStringToValue() instead that evaluates the various string conversion settings. Then bail out if nGlobalError is set.",
+      "revId": "2f8f4c30ad75cea83ae6847d97bd48faf8b809f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
