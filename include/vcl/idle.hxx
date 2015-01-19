@@ -27,6 +27,7 @@
 struct ImplIdleData;
 struct ImplSVData;
 
+// The timemarks behind the priorities is the catgorizing of timer to idle
 enum class IdlePriority {
     VCL_IDLE_PRIORITY_STARVATIONPROTECTION  = -1, // Do not use this for normal prioritizing
     VCL_IDLE_PRIORITY_HIGHEST               = 0, // -> 0ms
@@ -41,16 +42,14 @@ enum class IdlePriority {
 };
 
 
-// To port from Timer -> Idle switch class name,
-// s/Timeout/DoIdle/ etc. and select priority
 class VCL_DLLPUBLIC Idle
 {
 protected:
-    ImplIdleData*   mpIdleData;
-    IdlePriority    mePriority;
-    IdlePriority    meDefaultPriority;
-    bool            mbActive;
-    Link            maIdleHdl;
+    ImplIdleData*   mpIdleData;         // Pointer to element in idle list
+    IdlePriority    mePriority;         // Idle priority ( maybe divergent to default)
+    IdlePriority    meDefaultPriority;  // Default idle priority
+    bool            mbActive;           // Currently in the scheduler
+    Link            maIdleHdl;          // Callback Link
 
     friend struct ImplIdleData;
 
