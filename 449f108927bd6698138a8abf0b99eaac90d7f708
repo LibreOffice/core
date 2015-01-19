@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_fe2a017e",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-19T11:31:19Z",
+      "side": 1,
+      "message": "Is it guaranteed that pTextRanges always holds at least two elements? Or should the check above better be if(pTextRanges-\u003esize()\u003e\u003d2) ?",
+      "revId": "449f108927bd6698138a8abf0b99eaac90d7f708",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
