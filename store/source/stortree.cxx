@@ -49,7 +49,10 @@ OStoreBTreeNodeData::OStoreBTreeNodeData (sal_uInt16 nPageSize)
     T const          t;
 
     for (sal_uInt16 i = 1; i < n; i++)
+    {
+        // cppcheck-suppress arrayIndexOutOfBounds
         m_pData[i] = t;
+    }
 }
 
 /*
