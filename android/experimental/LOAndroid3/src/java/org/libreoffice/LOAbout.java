@@ -59,25 +59,30 @@ public abstract class LOAbout extends Activity {
         int defaultColor = textView.getTextColors().getDefaultColor();
         textView.setTextColor(defaultColor);
 
-        // Take care of placeholders in the version text view.
-        textView = (TextView)messageView.findViewById(R.id.about_version);
+        // Take care of placeholders in the version and vendor text views.
+        TextView versionView = (TextView)messageView.findViewById(R.id.about_version);
+        TextView vendorView = (TextView)messageView.findViewById(R.id.about_vendor);
         try
         {
             String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
             String[] tokens = versionName.split("/");
-            if (tokens.length == 2)
+            if (tokens.length == 3)
             {
-                String version = textView.getText().toString();
+                String version = versionView.getText().toString();
+                String vendor = vendorView.getText().toString();
                 version = version.replace("$VERSION", tokens[0]);
                 version = version.replace("$BUILDID", tokens[1]);
-                textView.setText(version);
+                vendor = vendor.replace("$VENDOR", tokens[2]);
+                versionView.setText(version);
+                vendorView.setText(vendor);
             }
             else
                 throw new NameNotFoundException();
         }
         catch (NameNotFoundException e)
         {
-            textView.setText("");
+            versionView.setText("");
+            vendorView.setText("");
         }
 
 

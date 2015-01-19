@@ -7,6 +7,7 @@
     <string name="app_version">Version: $VERSION\nBuild ID: $BUILDID</string>
     <string name="app_description">LibreOffice Viewer is a document viewer based on LibreOffice.</string>
     <string name="app_credits">http://www.libreoffice.org</string>
+    <string name="app_vendor">This release was supplied by $VENDOR.</string>
 
     <string name="about_license">Show License</string>
     <string name="about_notice">Show Notice</string>
