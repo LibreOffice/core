@@ -2128,6 +2128,14 @@ AC_ARG_WITH(vendor,
     ],
 ,)
 
+AC_ARG_WITH(android-package-name,
+    AS_HELP_STRING([--with-android-package-name],
+        [Set Android package name of the build.])
+    [
+                          Usage:     --with-android-package-name="org.libreoffice"
+    ],
+,)
+
 AC_ARG_WITH(compat-oowrappers,
     AS_HELP_STRING([--with-compat-oowrappers],
         [Install oo* wrappers in parallel with
@@ -12301,6 +12309,20 @@ else
     AC_MSG_RESULT([$OOO_VENDOR])
 fi
 AC_SUBST(OOO_VENDOR)
+
+if echo "$host_os" | grep -q linux-android ; then
+    ANDROID_PACKAGE_NAME=
+    AC_MSG_CHECKING([for Android package name])
+    if test -z "$with_android_package_name" -o "$with_android_package_name" = "no"; then
+        ANDROID_PACKAGE_NAME="org.libreoffice"
+
+        AC_MSG_RESULT([not set, using $ANDROID_PACKAGE_NAME])
+    else
+        ANDROID_PACKAGE_NAME="$with_android_package_name"
+        AC_MSG_RESULT([$ANDROID_PACKAGE_NAME])
+    fi
+    AC_SUBST(ANDROID_PACKAGE_NAME)
+fi
 
 AC_MSG_CHECKING([whether to install the compat oo* wrappers])
 if test "$with_compat_oowrappers" = "yes"; then
