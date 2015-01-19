@@ -166,10 +166,8 @@ static void slideShadow( double nTime, const Primitive& primitive, double sw, do
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_LIGHTING);
 
-    glPushMatrix();
     primitive.applyOperations( nTime, sw, sh );
     blendSlide();
-    glPopMatrix();
 
     glDisable(GL_BLEND);
     glEnable(GL_LIGHTING);
@@ -204,18 +202,10 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
     const double SlideWidthScale = SlideWidth/DispWidth;
     const double SlideHeightScale = SlideHeight/DispHeight;
 
-
     prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
-
-    glPushMatrix();
-
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
-
     displayScene( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
-
-    glPopMatrix();
-
 }
 
 void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale )
@@ -253,7 +243,7 @@ void
             primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
-        //slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
+        slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
 
         glPopMatrix();
     }
