@@ -298,7 +298,7 @@ sal_uLong TextEngine::GetTextLen( const TextSelection& rSel, LineEnd aSeparator 
 
 sal_uInt16 TextEngine::GetTextLen( sal_uLong nPara ) const
 {
-    return mpDoc->GetNodes().GetObject( nPara )->GetText().getLength();
+    return mpDoc->GetNodes()[ nPara ]->GetText().getLength();
 }
 
 void TextEngine::SetUpdateMode( bool bUpdate )
@@ -382,7 +382,7 @@ void TextEngine::ImpInitDoc()
     mpTEParaPortions = new TEParaPortions;
 
     TextNode* pNode = new TextNode( OUString() );
-    mpDoc->GetNodes().Insert( pNode, 0 );
+    mpDoc->GetNodes().insert( mpDoc->GetNodes().begin(), pNode );
 
     TEParaPortion* pIniPortion = new TEParaPortion( pNode );
     mpTEParaPortions->Insert( pIniPortion, (sal_uLong)0 );
@@ -408,7 +408,7 @@ OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) co
     const sal_Unicode* pSep = static_getLineEndText( aSeparator );
     for ( sal_uLong nNode = aSel.GetStart().GetPara(); nNode <= nEndPara; nNode++ )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nNode );
+        TextNode* pNode = mpDoc->GetNodes()[ nNode ];
 
         sal_uInt16 nStartPos = 0;
         sal_Int32 nEndPos = pNode->GetText().getLength();
@@ -475,7 +475,7 @@ void TextEngine::SetText( const OUString& rText )
 void TextEngine::CursorMoved( sal_uLong nNode )
 {
     // delete empty attribute; but only if paragraph is not empty!
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nNode );
+    TextNode* pNode = mpDoc->GetNodes()[ nNode ];
     if ( pNode && pNode->GetCharAttribs().HasEmptyAttribs() && !pNode->GetText().isEmpty() )
         pNode->GetCharAttribs().DeleteEmptyAttribs();
 }
@@ -486,7 +486,7 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
     if ( IsUndoEnabled() && !IsInUndo() )
     {
         // attributes have to be saved for UNDO before RemoveChars!
-        TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+        TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
         OUString aStr( pNode->GetText().copy( rPaM.GetIndex(), nChars ) );
 
         // check if attributes are being deleted or changed
@@ -511,8 +511,8 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight )
 {
     DBG_ASSERT( nLeft != nRight, "ImpConnectParagraphs: connect the very same paragraph ?" );
 
-    TextNode* pLeft = mpDoc->GetNodes().GetObject( nLeft );
-    TextNode* pRight = mpDoc->GetNodes().GetObject( nRight );
+    TextNode* pLeft = mpDoc->GetNodes()[ nLeft ];
+    TextNode* pRight = mpDoc->GetNodes()[ nRight ];
 
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoConnectParas( this, nLeft, pLeft->GetText().getLength() ) );
@@ -564,7 +564,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     if ( nStartNode != nEndNode )
     {
         // the remainder of StartNodes...
-        TextNode* pLeft = mpDoc->GetNodes().GetObject( nStartNode );
+        TextNode* pLeft = mpDoc->GetNodes()[ nStartNode ];
         sal_Int32 nChars = pLeft->GetText().getLength() - aStartPaM.GetIndex();
         if ( nChars )
         {
@@ -607,11 +607,11 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
 
 void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
 {
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     boost::scoped_ptr<TEParaPortion> pPortion(mpTEParaPortions->GetObject( nPara ));
 
     // the Node is handled by Undo and is deleted if appropriate
-    mpDoc->GetNodes().Remove( nPara );
+    mpDoc->GetNodes().erase( mpDoc->GetNodes().begin() + nPara );
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoDelPara( this, pNode, nPara ) );
     else
@@ -668,7 +668,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     DBG_ASSERT( c != '\r', "InsertText: NewLine!" );
 
     TextPaM aPaM( rCurSel.GetStart() );
-    TextNode* pNode = mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+    TextNode* pNode = mpDoc->GetNodes()[ aPaM.GetPara() ];
 
     bool bDoOverwrite = ( bOverwrite &&
             ( aPaM.GetIndex() < pNode->GetText().getLength() ) );
@@ -830,7 +830,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAtt
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoSplitPara( this, rPaM.GetPara(), rPaM.GetIndex() ) );
 
-    TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+    TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
     bool bFirstParaContentChanged = rPaM.GetIndex() < pNode->GetText().getLength();
 
     TextPaM aPaM( mpDoc->InsertParaBreak( rPaM, bKeepEndingAttribs ) );
@@ -839,7 +839,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAtt
     DBG_ASSERT( pPortion, "ImpInsertParaBreak: Hidden Portion" );
     pPortion->MarkInvalid( rPaM.GetIndex(), 0 );
 
-    TextNode* pNewNode = mpDoc->GetNodes().GetObject( aPaM.GetPara() );
+    TextNode* pNewNode = mpDoc->GetNodes()[ aPaM.GetPara() ];
     TEParaPortion* pNewPortion = new TEParaPortion( pNewNode );
     mpTEParaPortions->Insert( pNewPortion, aPaM.GetPara() );
     ImpParagraphInserted( aPaM.GetPara() );
@@ -1025,7 +1025,7 @@ const TextAttrib* TextEngine::FindAttrib( const TextPaM& rPaM, sal_uInt16 nWhich
 const TextCharAttrib* TextEngine::FindCharAttrib( const TextPaM& rPaM, sal_uInt16 nWhich ) const
 {
     const TextCharAttrib* pAttr = NULL;
-    TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+    TextNode* pNode = mpDoc->GetNodes()[ rPaM.GetPara() ];
     if ( pNode && ( rPaM.GetIndex() < pNode->GetText().getLength() ) )
         pAttr = pNode->GetCharAttribs().FindAttrib( nWhich, rPaM.GetIndex() );
     return pAttr;
@@ -1034,9 +1034,9 @@ const TextCharAttrib* TextEngine::FindCharAttrib( const TextPaM& rPaM, sal_uInt1
 bool TextEngine::HasAttrib( sal_uInt16 nWhich ) const
 {
     bool bAttr = false;
-    for ( sal_uLong n = mpDoc->GetNodes().Count(); --n && !bAttr; )
+    for ( sal_uLong n = mpDoc->GetNodes().size(); --n && !bAttr; )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( n );
+        TextNode* pNode = mpDoc->GetNodes()[ n ];
         bAttr = pNode->GetCharAttribs().HasAttrib( nWhich );
     }
     return bAttr;
@@ -1065,8 +1065,8 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
     }
 
     // not found - go to last visible
-    sal_uLong nLastNode = mpDoc->GetNodes().Count() - 1;
-    TextNode* pLast = mpDoc->GetNodes().GetObject( nLastNode );
+    sal_uLong nLastNode = mpDoc->GetNodes().size() - 1;
+    TextNode* pLast = mpDoc->GetNodes()[ nLastNode ];
     return TextPaM( nLastNode, pLast->GetText().getLength() );
 }
 
@@ -1215,7 +1215,7 @@ sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, 
 {
 #ifdef DBG_UTIL
     // within the text there must not be a Portion change (attribute/tab)!
-    sal_Int32 nTabPos = mpDoc->GetNodes().GetObject( nPara )->GetText().indexOf( '\t', nPortionStart );
+    sal_Int32 nTabPos = mpDoc->GetNodes()[ nPara ]->GetText().indexOf( '\t', nPortionStart );
     DBG_ASSERT( nTabPos == -1 || nTabPos >= (nPortionStart+nLen), "CalcTextWidth: Tab!" );
 #endif
 
@@ -1237,7 +1237,7 @@ sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, 
             SeekCursor( nPara, nPortionStart+1, aFont, NULL );
             mpRefDev->SetFont( aFont );
         }
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         nWidth = (sal_uLong)mpRefDev->GetTextWidth( pNode->GetText(), nPortionStart, nLen );
 
     }
@@ -1315,7 +1315,7 @@ Range TextEngine::GetInvalidYOffsets( sal_uLong nPortion )
 
 sal_uLong TextEngine::GetParagraphCount() const
 {
-    return mpDoc->GetNodes().Count();
+    return mpDoc->GetNodes().size();
 }
 
 void TextEngine::EnableUndo( bool bEnable )
@@ -1367,14 +1367,14 @@ void TextEngine::InsertContent( TextNode* pNode, sal_uLong nPara )
     DBG_ASSERT( IsInUndo(), "InsertContent: only in Undo()!" );
     TEParaPortion* pNew = new TEParaPortion( pNode );
     mpTEParaPortions->Insert( pNew, nPara );
-    mpDoc->GetNodes().Insert( pNode, nPara );
+    mpDoc->GetNodes().insert( mpDoc->GetNodes().begin() + nPara, pNode );
     ImpParagraphInserted( nPara );
 }
 
 TextPaM TextEngine::SplitContent( sal_uLong nNode, sal_uInt16 nSepPos )
 {
     #ifdef DBG_UTIL
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nNode );
+    TextNode* pNode = mpDoc->GetNodes()[ nNode ];
     DBG_ASSERT( pNode, "SplitContent: Invalid Node!" );
     DBG_ASSERT( IsInUndo(), "SplitContent: only in Undo()!" );
     DBG_ASSERT( nSepPos <= pNode->GetText().getLength(), "SplitContent: Bad index" );
@@ -1395,7 +1395,7 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, vcl::Font& rFont,
     if ( pOutDev )
         pOutDev->SetTextColor( maTextColor );
 
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     sal_uInt16 nAttribs = pNode->GetCharAttribs().Count();
     for ( sal_uInt16 nAttr = 0; nAttr < nAttribs; nAttr++ )
     {
@@ -1633,7 +1633,7 @@ void TextEngine::FormatDoc()
 
 void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
 {
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
 
     TextLine* pTmpLine = new TextLine;
@@ -1665,7 +1665,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
 
 void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*, sal_uInt16 nPortionStart, long nRemainingWidth )
 {
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
 
     // Font still should be adjusted
     sal_Int32 nMaxBreakPos = mpRefDev->GetTextBreak( pNode->GetText(), nRemainingWidth, nPortionStart );
@@ -2142,7 +2142,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
 {
     // bool: changing Height of Paragraph Yes/No - true/false
 
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
     DBG_ASSERT( pTEParaPortion->IsInvalid(), "CreateLines: Portion not invalid!" );
 
@@ -2467,10 +2467,10 @@ bool TextEngine::CreateLines( sal_uLong nPara )
 OUString TextEngine::GetWord( const TextPaM& rCursorPos, TextPaM* pStartOfWord )
 {
     OUString aWord;
-    if ( rCursorPos.GetPara() < mpDoc->GetNodes().Count() )
+    if ( rCursorPos.GetPara() < mpDoc->GetNodes().size() )
     {
         TextSelection aSel( rCursorPos );
-        TextNode* pNode = mpDoc->GetNodes().GetObject(  rCursorPos.GetPara() );
+        TextNode* pNode = mpDoc->GetNodes()[ rCursorPos.GetPara() ];
         uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rCursorPos.GetIndex(), GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, true );
         aSel.GetStart().GetIndex() = (sal_uInt16)aBoundary.startPos;
@@ -2493,8 +2493,8 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
         aSel = *pSel;
     else
     {
-        sal_uLong nParas = mpDoc->GetNodes().Count();
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nParas - 1 );
+        sal_uLong nParas = mpDoc->GetNodes().size();
+        TextNode* pNode = mpDoc->GetNodes()[ nParas - 1 ];
         aSel = TextPaM( nParas-1 , pNode->GetText().getLength() );
     }
 
@@ -2534,8 +2534,8 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
         aSel = *pSel;
     else
     {
-        sal_uLong nParas = mpDoc->GetNodes().Count();
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nParas - 1 );
+        sal_uLong nParas = mpDoc->GetNodes().size();
+        TextNode* pNode = mpDoc->GetNodes()[ nParas - 1 ];
         aSel.GetStart() = TextPaM( 0, 0 );
         aSel.GetEnd() = TextPaM( nParas-1, pNode->GetText().getLength() );
     }
@@ -2548,7 +2548,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
 
     for ( sal_uLong nPara = aSel.GetStart().GetPara(); nPara <= aSel.GetEnd().GetPara(); nPara++  )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
 
         sal_uInt16 nStartPos = 0;
         sal_Int32  nEndPos = pNode->GetText().getLength();
@@ -2617,9 +2617,9 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
 
 void TextEngine::RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate )
 {
-    if ( nPara < mpDoc->GetNodes().Count() )
+    if ( nPara < mpDoc->GetNodes().size() )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         if ( pNode->GetCharAttribs().Count() )
         {
             pNode->GetCharAttribs().Clear();
@@ -2638,9 +2638,9 @@ void TextEngine::RemoveAttribs( sal_uLong nPara, bool bIdleFormatAndUpdate )
 }
 void TextEngine::RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, bool bIdleFormatAndUpdate )
 {
-    if ( nPara < mpDoc->GetNodes().Count() )
+    if ( nPara < mpDoc->GetNodes().size() )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         if ( pNode->GetCharAttribs().Count() )
         {
             TextCharAttribList& rAttribs = pNode->GetCharAttribs();
@@ -2662,9 +2662,9 @@ void TextEngine::RemoveAttribs( sal_uLong nPara, sal_uInt16 nWhich, bool bIdleFo
 }
 void TextEngine::RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib )
 {
-    if ( nPara < mpDoc->GetNodes().Count() )
+    if ( nPara < mpDoc->GetNodes().size() )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         if ( pNode->GetCharAttribs().Count() )
         {
             TextCharAttribList& rAttribs = pNode->GetCharAttribs();
@@ -2693,9 +2693,9 @@ void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16
 
     // As TextEngine is currently intended only for TextEditors, there is no Undo for Attributes!
 
-    if ( nPara < mpDoc->GetNodes().Count() )
+    if ( nPara < mpDoc->GetNodes().size() )
     {
-        TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+        TextNode* pNode = mpDoc->GetNodes()[ nPara ];
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
 
         sal_Int32 nMax = pNode->GetText().getLength();
@@ -2733,7 +2733,7 @@ void TextEngine::ValidateSelection( TextSelection& rSel ) const
 
 void TextEngine::ValidatePaM( TextPaM& rPaM ) const
 {
-    sal_uLong nMaxPara = mpDoc->GetNodes().Count() - 1;
+    sal_uLong nMaxPara = mpDoc->GetNodes().size() - 1;
     if ( rPaM.GetPara() > nMaxPara )
     {
         rPaM.GetPara() = nMaxPara;
@@ -2779,7 +2779,7 @@ void TextEngine::ImpParagraphRemoved( sal_uLong nPara )
             TextView* pView = (*mpViews)[ --nView ];
             if ( pView != GetActiveView() )
             {
-                sal_uLong nParas = mpDoc->GetNodes().Count();
+                sal_uLong nParas = mpDoc->GetNodes().size();
                 for ( int n = 0; n <= 1; n++ )
                 {
                     TextPaM& rPaM = n ? pView->GetSelection().GetStart(): pView->GetSelection().GetEnd();
@@ -2963,7 +2963,7 @@ sal_uInt8 TextEngine::ImpGetRightToLeft( sal_uLong nPara, sal_uInt16 nPos, sal_u
 {
     sal_uInt8 nRightToLeft = 0;
 
-    TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
+    TextNode* pNode = mpDoc->GetNodes()[ nPara ];
     if ( pNode && !pNode->GetText().isEmpty() )
     {
         TEParaPortion* pParaPortion = mpTEParaPortions->GetObject( nPara );

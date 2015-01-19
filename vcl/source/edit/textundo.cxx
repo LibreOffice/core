@@ -173,20 +173,20 @@ void TextUndoDelPara::Undo()
 void TextUndoDelPara::Redo()
 {
     // pNode is not valid anymore in case an Undo joined paragraphs
-    mpNode = GetDoc()->GetNodes().GetObject( mnPara );
+    mpNode = GetDoc()->GetNodes()[ mnPara ];
 
     delete GetTEParaPortions()->GetObject( mnPara );
     GetTEParaPortions()->Remove( mnPara );
 
     // do not delete Node because of Undo!
-    GetDoc()->GetNodes().Remove( mnPara );
+    GetDoc()->GetNodes().erase( ::std::find( GetDoc()->GetNodes().begin(), GetDoc()->GetNodes().end(), mpNode ) );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
     mbDelObject = true; // belongs again to the Undo
 
-    sal_uLong nParas = GetDoc()->GetNodes().Count();
+    sal_uLong nParas = GetDoc()->GetNodes().size();
     sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
-    TextNode* pN = GetDoc()->GetNodes().GetObject( n );
+    TextNode* pN = GetDoc()->GetNodes()[ n ];
     TextPaM aPaM( n, pN->GetText().getLength() );
     SetSelection( aPaM );
 }

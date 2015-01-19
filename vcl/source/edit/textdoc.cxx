@@ -424,20 +424,20 @@ void TextDoc::Clear()
 
 void TextDoc::DestroyTextNodes()
 {
-    for ( sal_uLong nNode = 0; nNode < maTextNodes.Count(); nNode++ )
-        delete maTextNodes.GetObject( nNode );
+    for ( sal_uLong nNode = 0; nNode < maTextNodes.size(); nNode++ )
+        delete maTextNodes[ nNode ];
     maTextNodes.clear();
 }
 
 OUString TextDoc::GetText( const sal_Unicode* pSep ) const
 {
-    sal_uLong nNodes = maTextNodes.Count();
+    sal_uLong nNodes = maTextNodes.size();
 
     OUString aASCIIText;
     sal_uLong nLastNode = nNodes-1;
     for ( sal_uLong nNode = 0; nNode < nNodes; nNode++ )
     {
-        TextNode* pNode = maTextNodes.GetObject( nNode );
+        TextNode* pNode = maTextNodes[ nNode ];
         OUString aTmp( pNode->GetText() );
         aASCIIText += aTmp;
         if ( pSep && ( nNode != nLastNode ) )
@@ -451,7 +451,7 @@ OUString TextDoc::GetText( sal_uLong nPara ) const
 {
     OUString aText;
 
-    TextNode* pNode = ( nPara < maTextNodes.Count() ) ? maTextNodes.GetObject( nPara ) : 0;
+    TextNode* pNode = ( nPara < maTextNodes.size() ) ? maTextNodes[ nPara ] : 0;
     if ( pNode )
         aText = pNode->GetText();
 
@@ -461,7 +461,7 @@ OUString TextDoc::GetText( sal_uLong nPara ) const
 sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const
 {
     sal_uLong nLen = 0;
-    sal_uLong nNodes = maTextNodes.Count();
+    sal_uLong nNodes = maTextNodes.size();
     if ( nNodes )
     {
         sal_uLong nStartNode = 0;
@@ -474,7 +474,7 @@ sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSe
 
         for ( sal_uLong nNode = nStartNode; nNode <= nEndNode; nNode++ )
         {
-            TextNode* pNode = maTextNodes.GetObject( nNode );
+            TextNode* pNode = maTextNodes[ nNode ];
 
             sal_uInt16 nS = 0;
             sal_Int32 nE = pNode->GetText().getLength();
@@ -498,7 +498,7 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, sal_Unicode c )
     DBG_ASSERT( c != 0x0A, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
     DBG_ASSERT( c != 0x0D, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
 
-    TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
+    TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->InsertText( rPaM.GetIndex(), c );
 
     TextPaM aPaM( rPaM.GetPara(), rPaM.GetIndex()+1 );
@@ -510,7 +510,7 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
     DBG_ASSERT( rStr.indexOf( 0x0A ) == -1, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
     DBG_ASSERT( rStr.indexOf( 0x0D ) == -1, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
 
-    TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
+    TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->InsertText( rPaM.GetIndex(), rStr );
 
     TextPaM aPaM( rPaM.GetPara(), rPaM.GetIndex()+rStr.getLength() );
@@ -519,10 +519,10 @@ TextPaM TextDoc::InsertText( const TextPaM& rPaM, const OUString& rStr )
 
 TextPaM TextDoc::InsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAttribs )
 {
-    TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
+    TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     TextNode* pNew = pNode->Split( rPaM.GetIndex(), bKeepEndingAttribs );
 
-    maTextNodes.Insert( pNew, rPaM.GetPara()+1 );
+    maTextNodes.insert( maTextNodes.begin() + rPaM.GetPara() + 1, pNew );
 
     TextPaM aPaM( rPaM.GetPara()+1, 0 );
     return aPaM;
@@ -534,18 +534,17 @@ TextPaM TextDoc::ConnectParagraphs( TextNode* pLeft, TextNode* pRight )
     pLeft->Append( *pRight );
 
     // the paragraph on the right vanishes
-    sal_uLong nRight = maTextNodes.GetPos( pRight );
-    maTextNodes.Remove( nRight );
+    maTextNodes.erase( std::find( maTextNodes.begin(), maTextNodes.end(), pRight ) );
     delete pRight;
 
-    sal_uLong nLeft = maTextNodes.GetPos( pLeft );
+    sal_uLong nLeft = ::std::find( maTextNodes.begin(), maTextNodes.end(), pLeft ) - maTextNodes.begin();
     TextPaM aPaM( nLeft, nPrevLen );
     return aPaM;
 }
 
 TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars )
 {
-    TextNode* pNode = maTextNodes.GetObject( rPaM.GetPara() );
+    TextNode* pNode = maTextNodes[ rPaM.GetPara() ];
     pNode->RemoveText( rPaM.GetIndex(), nChars );
 
     return rPaM;
@@ -553,12 +552,12 @@ TextPaM TextDoc::RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars )
 
 bool TextDoc::IsValidPaM( const TextPaM& rPaM )
 {
-    if ( rPaM.GetPara() >= maTextNodes.Count() )
+    if ( rPaM.GetPara() >= maTextNodes.size() )
     {
         OSL_FAIL( "PaM: Para out of range" );
         return false;
     }
-    TextNode * pNode = maTextNodes.GetObject( rPaM.GetPara() );
+    TextNode * pNode = maTextNodes[ rPaM.GetPara() ];
     if ( rPaM.GetIndex() > pNode->GetText().getLength() )
     {
         OSL_FAIL( "PaM: Index out of range" );
