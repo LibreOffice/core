@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_3e1aa96f",
+        "filename": "svtools/source/brwbox/brwbox2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-19T11:26:38Z",
+      "side": 1,
+      "message": "1. OSL_ENSURE() resolves to ((void) 0) in a non-dbgutil build so the SeekRow() won\u0027t be executed.\n\n2. For new code please use SAL_WARN() and/or assert() instead of the OSL_... macros.",
+      "revId": "1d38ea042236825ce2e019ffe65c05ea56df4bb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
