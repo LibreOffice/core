@@ -35,14 +35,17 @@ elif [ $(uname) = Darwin ]; then
 
 dir=$(pwd)
 
-if [ ! -d "${dir}/instdir/LibreOffice.app" ]; then
-    echo "error: cannot find \"instdir/LibreOffice.app\" dir in \"$(pwd)\""
+# Get PRODUCTNAME from config_host.mk, LibreOffice or LibreOfficeDev
+eval `grep 'export PRODUCTNAME=' config_host.mk`
+
+if [ ! -d "${dir}/instdir/$PRODUCTNAME.app" ]; then
+    echo "error: cannot find \"instdir/$PRODUCTNAME.app\" dir in \"$(pwd)\""
     exit 1
 fi
 
 exedir="${dir}"/workdir/LinkTarget/Executable
-export URE_BOOTSTRAP=file://"${dir}"/instdir/LibreOffice.app/Contents/Resources/fundamentalrc
-export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/LibreOffice.app/Contents/Frameworks
+export URE_BOOTSTRAP=file://"${dir}"/instdir/$PRODUCTNAME.app/Contents/Resources/fundamentalrc
+export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH:+$DYLD_LIBRARY_PATH:}"${dir}"/instdir/$PRODUCTNAME.app/Contents/Frameworks
 
 echo "setting URE_BOOTSTRAP to: ${URE_BOOTSTRAP}"
 echo "setting search path to: ${DYLD_LIBRARY_PATH}"
