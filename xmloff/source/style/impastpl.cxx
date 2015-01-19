@@ -78,7 +78,7 @@ struct2string(void *data,
     result.append("{");
 
     const typelib_CompoundTypeDescription *compoundType =
-        &((const typelib_StructTypeDescription*) type)->aBase;
+        &reinterpret_cast<const typelib_StructTypeDescription*>(type)->aBase;
 
     for (int i = 0; i < compoundType->nMembers; i++)
     {
