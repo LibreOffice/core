@@ -37,6 +37,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlerror.hxx>
 
 #include <sax/tools/converter.hxx>
@@ -94,6 +95,7 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <memory>
 #include <utility>
@@ -108,6 +110,8 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
+using namespace com::sun::star::xml::sax;
+using namespace xmloff;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
@@ -210,22 +214,38 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellAttrTokenMap()
 {
     static const SvXMLTokenMapEntry aTableRowCellAttrTokenMap[] =
     {
-        { XML_NAMESPACE_TABLE,  XML_STYLE_NAME,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME              },
-        { XML_NAMESPACE_TABLE,  XML_CONTENT_VALIDATION_NAME,        XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_ROWS_SPANNED,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS            },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_SPANNED,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS            },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_COLUMNS_SPANNED,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS     },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_ROWS_SPANNED,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS     },
-        { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED                },
-        { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE              },
-        { XML_NAMESPACE_CALC_EXT, XML_VALUE_TYPE,                   XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE          },
-        { XML_NAMESPACE_OFFICE, XML_VALUE,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE                   },
-        { XML_NAMESPACE_OFFICE, XML_DATE_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE              },
-        { XML_NAMESPACE_OFFICE, XML_TIME_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE              },
-        { XML_NAMESPACE_OFFICE, XML_STRING_VALUE,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE            },
-        { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE           },
-        { XML_NAMESPACE_TABLE,  XML_FORMULA,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA                 },
-        { XML_NAMESPACE_OFFICE, XML_CURRENCY,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY                },
+        { XML_NAMESPACE_TABLE,  XML_STYLE_NAME,                     XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name) },
+        { XML_NAMESPACE_TABLE,  XML_CONTENT_VALIDATION_NAME,        XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_content_validation_name) },
+        { XML_NAMESPACE_TABLE,  XML_NUMBER_ROWS_SPANNED,            XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_rows_spanned) },
+        { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_SPANNED,         XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_spanned) },
+        { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_COLUMNS_SPANNED,  XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_matrix_columns_spanned) },
+        { XML_NAMESPACE_TABLE,  XML_NUMBER_MATRIX_ROWS_SPANNED,     XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_matrix_rows_spanned) },
+        { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_REPEATED,        XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_repeated) },
+        { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,                     XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_value_type) },
+        { XML_NAMESPACE_CALC_EXT, XML_VALUE_TYPE,                   XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_value_type) },
+        { XML_NAMESPACE_OFFICE, XML_VALUE,                          XML_TOK_TABLE_ROW_CELL_ATTR_VALUE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_value) },
+        { XML_NAMESPACE_OFFICE, XML_DATE_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_date_value) },
+        { XML_NAMESPACE_OFFICE, XML_TIME_VALUE,                     XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_time_value) },
+        { XML_NAMESPACE_OFFICE, XML_STRING_VALUE,                   XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_string_value) },
+        { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE,                  XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_boolean_value) },
+        { XML_NAMESPACE_TABLE,  XML_FORMULA,                        XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_formula) },
+        { XML_NAMESPACE_OFFICE, XML_CURRENCY,                       XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY,
+            (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_currency) },
         XML_TOKEN_MAP_END
     };
 
@@ -402,14 +422,22 @@ const SvXMLTokenMap& ScXMLImport::GetDocElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDocTokenMap[] =
         {
-            { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS           },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES              },
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES          },
-            { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES        },
-            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META                },
-            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPTS             },
-            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY                },
-            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS            },
+            { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_font_face_decls) },
+            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_styles) },
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_styles) },
+            { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_master_styles) },
+            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_meta) },
+            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPTS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_scripts) },
+            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_body) },
+            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_settings) },
             XML_TOKEN_MAP_END
         };
 
@@ -426,18 +454,30 @@ const SvXMLTokenMap& ScXMLImport::GetBodyElemTokenMap()
     {
         static const SvXMLTokenMapEntry aBodyTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES,         XML_TOK_BODY_TRACKED_CHANGES        },
-            { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_BODY_CALCULATION_SETTINGS   },
-            { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS,     XML_TOK_BODY_CONTENT_VALIDATIONS    },
-            { XML_NAMESPACE_TABLE, XML_LABEL_RANGES,            XML_TOK_BODY_LABEL_RANGES           },
-            { XML_NAMESPACE_TABLE, XML_TABLE,                   XML_TOK_BODY_TABLE                  },
-            { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS,       XML_TOK_BODY_NAMED_EXPRESSIONS      },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGES,         XML_TOK_BODY_DATABASE_RANGES        },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,          XML_TOK_BODY_DATABASE_RANGE         },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLES,       XML_TOK_BODY_DATA_PILOT_TABLES      },
-            { XML_NAMESPACE_TABLE, XML_CONSOLIDATION,           XML_TOK_BODY_CONSOLIDATION          },
-            { XML_NAMESPACE_TABLE, XML_DDE_LINKS,               XML_TOK_BODY_DDE_LINKS              },
-            { XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE,   XML_TOK_BODY_DATA_STREAM_SOURCE     },
+            { XML_NAMESPACE_TABLE, XML_TRACKED_CHANGES,         XML_TOK_BODY_TRACKED_CHANGES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_tracked_changes) },
+            { XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS,    XML_TOK_BODY_CALCULATION_SETTINGS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_calculation_settings) },
+            { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS,     XML_TOK_BODY_CONTENT_VALIDATIONS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_content_validations) },
+            { XML_NAMESPACE_TABLE, XML_LABEL_RANGES,            XML_TOK_BODY_LABEL_RANGES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_label_ranges) },
+            { XML_NAMESPACE_TABLE, XML_TABLE,                   XML_TOK_BODY_TABLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table) },
+            { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSIONS,       XML_TOK_BODY_NAMED_EXPRESSIONS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_named_expressions) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGES,         XML_TOK_BODY_DATABASE_RANGES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_ranges) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,          XML_TOK_BODY_DATABASE_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_range) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLES,       XML_TOK_BODY_DATA_PILOT_TABLES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_tables) },
+            { XML_NAMESPACE_TABLE, XML_CONSOLIDATION,           XML_TOK_BODY_CONSOLIDATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_consolidation) },
+            { XML_NAMESPACE_TABLE, XML_DDE_LINKS,               XML_TOK_BODY_DDE_LINKS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_dde_links) },
+            { XML_NAMESPACE_CALC_EXT, XML_DATA_STREAM_SOURCE,   XML_TOK_BODY_DATA_STREAM_SOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_data_stream_source) },
             XML_TOKEN_MAP_END
         };
 
@@ -453,7 +493,8 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationsElemTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationsElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION,  XML_TOK_CONTENT_VALIDATION  },
+            { XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION,  XML_TOK_CONTENT_VALIDATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_content_validation) },
             XML_TOKEN_MAP_END
         };
 
@@ -469,10 +510,14 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationElemTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,  XML_HELP_MESSAGE,    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE    },
-            { XML_NAMESPACE_TABLE,  XML_ERROR_MESSAGE,   XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE   },
-            { XML_NAMESPACE_TABLE,  XML_ERROR_MACRO,     XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO     },
-            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS },
+            { XML_NAMESPACE_TABLE,  XML_HELP_MESSAGE,    XML_TOK_CONTENT_VALIDATION_ELEM_HELP_MESSAGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_help_message) },
+            { XML_NAMESPACE_TABLE,  XML_ERROR_MESSAGE,   XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MESSAGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_error_message) },
+            { XML_NAMESPACE_TABLE,  XML_ERROR_MACRO,     XML_TOK_CONTENT_VALIDATION_ELEM_ERROR_MACRO,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_error_macro) },
+            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, XML_TOK_CONTENT_VALIDATION_ELEM_EVENT_LISTENERS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) },
             XML_TOKEN_MAP_END
         };
 
@@ -488,11 +533,16 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_CONTENT_VALIDATION_NAME                 },
-            { XML_NAMESPACE_TABLE, XML_CONDITION,           XML_TOK_CONTENT_VALIDATION_CONDITION            },
-            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS    },
-            { XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL,    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL     },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_LIST,        XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST         },
+            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_CONTENT_VALIDATION_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_CONDITION,           XML_TOK_CONTENT_VALIDATION_CONDITION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_condition) },
+            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_base_cell_address) },
+            { XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL,    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_allow_empty_cell) },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_LIST,        XML_TOK_CONTENT_VALIDATION_DISPLAY_LIST,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_list) },
             XML_TOKEN_MAP_END
         };
 
@@ -508,7 +558,8 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationMessageElemTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationMessageElemTokenMap[] =
         {
-            { XML_NAMESPACE_TEXT, XML_P,    XML_TOK_P   },
+            { XML_NAMESPACE_TEXT, XML_P,    XML_TOK_P,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_p) },
             XML_TOKEN_MAP_END
         };
 
@@ -524,8 +575,10 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationHelpMessageAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationHelpMessageAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TITLE,   XML_TOK_HELP_MESSAGE_ATTR_TITLE     },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TOK_HELP_MESSAGE_ATTR_DISPLAY   },
+            { XML_NAMESPACE_TABLE, XML_TITLE,   XML_TOK_HELP_MESSAGE_ATTR_TITLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_title) },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TOK_HELP_MESSAGE_ATTR_DISPLAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display) },
             XML_TOKEN_MAP_END
         };
 
@@ -541,9 +594,12 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMessageAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationErrorMessageAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TITLE,           XML_TOK_ERROR_MESSAGE_ATTR_TITLE        },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY,         XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY      },
-            { XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE,    XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE },
+            { XML_NAMESPACE_TABLE, XML_TITLE,           XML_TOK_ERROR_MESSAGE_ATTR_TITLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_title) },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY,         XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display) },
+            { XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE,    XML_TOK_ERROR_MESSAGE_ATTR_MESSAGE_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_message_type) },
             XML_TOKEN_MAP_END
         };
 
@@ -559,8 +615,10 @@ const SvXMLTokenMap& ScXMLImport::GetContentValidationErrorMacroAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aContentValidationErrorMacroAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,    XML_TOK_ERROR_MACRO_ATTR_NAME       },
-            { XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TOK_ERROR_MACRO_ATTR_EXECUTE    },
+            { XML_NAMESPACE_TABLE, XML_NAME,    XML_TOK_ERROR_MACRO_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TOK_ERROR_MACRO_ATTR_EXECUTE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_execute) },
             XML_TOKEN_MAP_END
         };
 
@@ -576,7 +634,8 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatsTokenMap()
     {
         static const SvXMLTokenMapEntry aCondFormatsElemTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, XML_TOK_CONDFORMATS_CONDFORMAT },
+            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMAT, XML_TOK_CONDFORMATS_CONDFORMAT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_conditional_format) },
             XML_TOKEN_MAP_END
         };
 
@@ -592,11 +651,16 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatTokenMap()
     {
         static const SvXMLTokenMapEntry aCondFormatElemTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, XML_TOK_CONDFORMAT_COLORSCALE },
-            { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, XML_TOK_CONDFORMAT_DATABAR },
-            { XML_NAMESPACE_CALC_EXT, XML_CONDITION, XML_TOK_CONDFORMAT_CONDITION },
-            { XML_NAMESPACE_CALC_EXT, XML_ICON_SET, XML_TOK_CONDFORMAT_ICONSET },
-            { XML_NAMESPACE_CALC_EXT, XML_DATE_IS, XML_TOK_CONDFORMAT_DATE },
+            { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, XML_TOK_CONDFORMAT_COLORSCALE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_color_scale) },
+            { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, XML_TOK_CONDFORMAT_DATABAR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_data_bar) },
+            { XML_NAMESPACE_CALC_EXT, XML_CONDITION, XML_TOK_CONDFORMAT_CONDITION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_condition) },
+            { XML_NAMESPACE_CALC_EXT, XML_ICON_SET, XML_TOK_CONDFORMAT_ICONSET,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_icon_set) },
+            { XML_NAMESPACE_CALC_EXT, XML_DATE_IS, XML_TOK_CONDFORMAT_DATE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_date_is) },
             XML_TOKEN_MAP_END
         };
 
@@ -612,7 +676,8 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatAttrMap()
     {
         static const SvXMLTokenMapEntry aCondFormatAttrTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, XML_TOK_CONDFORMAT_TARGET_RANGE },
+            { XML_NAMESPACE_CALC_EXT, XML_TARGET_RANGE_ADDRESS, XML_TOK_CONDFORMAT_TARGET_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_target_range_address) },
             XML_TOKEN_MAP_END
         };
 
@@ -628,8 +693,10 @@ const SvXMLTokenMap& ScXMLImport::GetCondDateAttrMap()
     {
         static const SvXMLTokenMapEntry aCondDateAttrTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_DATE, XML_TOK_COND_DATE_VALUE },
-            { XML_NAMESPACE_CALC_EXT, XML_STYLE, XML_TOK_COND_DATE_STYLE },
+            { XML_NAMESPACE_CALC_EXT, XML_DATE, XML_TOK_COND_DATE_VALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_date) },
+            { XML_NAMESPACE_CALC_EXT, XML_STYLE, XML_TOK_COND_DATE_STYLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_style) },
             XML_TOKEN_MAP_END
         };
 
@@ -645,9 +712,12 @@ const SvXMLTokenMap& ScXMLImport::GetConditionAttrMap()
     {
         static const SvXMLTokenMapEntry aConditionAttrTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_CONDITION_VALUE },
-            { XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, XML_TOK_CONDITION_APPLY_STYLE_NAME },
-            { XML_NAMESPACE_CALC_EXT, XML_BASE_CELL_ADDRESS, XML_TOK_CONDITION_BASE_CELL_ADDRESS },
+            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_CONDITION_VALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_value) },
+            { XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, XML_TOK_CONDITION_APPLY_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_apply_style_name) },
+            { XML_NAMESPACE_CALC_EXT, XML_BASE_CELL_ADDRESS, XML_TOK_CONDITION_BASE_CELL_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_base_cell_address) },
             XML_TOKEN_MAP_END
         };
 
@@ -663,7 +733,8 @@ const SvXMLTokenMap& ScXMLImport::GetColorScaleTokenMap()
     {
         static const SvXMLTokenMapEntry aColorScaleElemTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, XML_TOK_COLORSCALE_COLORSCALEENTRY },
+            { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE_ENTRY, XML_TOK_COLORSCALE_COLORSCALEENTRY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_color_scale_entry) },
             XML_TOKEN_MAP_END
         };
 
@@ -679,9 +750,12 @@ const SvXMLTokenMap& ScXMLImport::GetColorScaleEntryAttrMap()
     {
         static const SvXMLTokenMapEntry aColorScaleAttrTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_COLORSCALEENTRY_TYPE },
-            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_COLORSCALEENTRY_VALUE },
-            { XML_NAMESPACE_CALC_EXT, XML_COLOR, XML_TOK_COLORSCALEENTRY_COLOR },
+            { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_COLORSCALEENTRY_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_type) },
+            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_COLORSCALEENTRY_VALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_value) },
+            { XML_NAMESPACE_CALC_EXT, XML_COLOR, XML_TOK_COLORSCALEENTRY_COLOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_color) },
             XML_TOKEN_MAP_END
         };
 
@@ -697,8 +771,10 @@ const SvXMLTokenMap& ScXMLImport::GetFormattingTokenMap()
     {
         static const SvXMLTokenMapEntry aDataBarElemTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, XML_TOK_DATABAR_DATABARENTRY },
-            { XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, XML_TOK_FORMATTING_ENTRY },
+            { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, XML_TOK_DATABAR_DATABARENTRY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_data_bar_entry) },
+            { XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, XML_TOK_FORMATTING_ENTRY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_formatting_entry) },
             XML_TOKEN_MAP_END
         };
 
@@ -714,14 +790,22 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarAttrMap()
     {
         static const SvXMLTokenMapEntry aDataBarAttrTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, XML_TOK_DATABAR_POSITIVE_COLOR },
-            { XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, XML_TOK_DATABAR_NEGATIVE_COLOR },
-            { XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_TOK_DATABAR_GRADIENT },
-            { XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, XML_TOK_DATABAR_AXISPOSITION },
-            { XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_TOK_DATABAR_SHOWVALUE },
-            { XML_NAMESPACE_CALC_EXT, XML_AXIS_COLOR, XML_TOK_DATABAR_AXISCOLOR },
-            { XML_NAMESPACE_CALC_EXT, XML_MIN_LENGTH, XML_TOK_DATABAR_MINLENGTH },
-            { XML_NAMESPACE_CALC_EXT, XML_MAX_LENGTH, XML_TOK_DATABAR_MAXLENGTH },
+            { XML_NAMESPACE_CALC_EXT, XML_POSITIVE_COLOR, XML_TOK_DATABAR_POSITIVE_COLOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_positive_color) },
+            { XML_NAMESPACE_CALC_EXT, XML_NEGATIVE_COLOR, XML_TOK_DATABAR_NEGATIVE_COLOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_negative_color) },
+            { XML_NAMESPACE_CALC_EXT, XML_GRADIENT, XML_TOK_DATABAR_GRADIENT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_gradient) },
+            { XML_NAMESPACE_CALC_EXT, XML_AXIS_POSITION, XML_TOK_DATABAR_AXISPOSITION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_axis_position) },
+            { XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_TOK_DATABAR_SHOWVALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_show_value) },
+            { XML_NAMESPACE_CALC_EXT, XML_AXIS_COLOR, XML_TOK_DATABAR_AXISCOLOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_axis_color) },
+            { XML_NAMESPACE_CALC_EXT, XML_MIN_LENGTH, XML_TOK_DATABAR_MINLENGTH,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_min_length) },
+            { XML_NAMESPACE_CALC_EXT, XML_MAX_LENGTH, XML_TOK_DATABAR_MAXLENGTH,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_max_length) },
             XML_TOKEN_MAP_END
         };
 
@@ -737,8 +821,10 @@ const SvXMLTokenMap& ScXMLImport::GetIconSetAttrMap()
     {
         static const SvXMLTokenMapEntry aIconSetAttrTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, XML_TOK_ICONSET_TYPE },
-            { XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_TOK_ICONSET_SHOWVALUE },
+            { XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, XML_TOK_ICONSET_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_icon_set_type) },
+            { XML_NAMESPACE_CALC_EXT, XML_SHOW_VALUE, XML_TOK_ICONSET_SHOWVALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_show_value) },
             XML_TOKEN_MAP_END
         };
 
@@ -754,8 +840,10 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
     {
         static const SvXMLTokenMapEntry aDataBarAttrEntryTokenMap[] =
         {
-            { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_DATABARENTRY_TYPE },
-            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_DATABARENTRY_VALUE },
+            { XML_NAMESPACE_CALC_EXT, XML_TYPE, XML_TOK_DATABARENTRY_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_type) },
+            { XML_NAMESPACE_CALC_EXT, XML_VALUE, XML_TOK_DATABARENTRY_VALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_value) },
             XML_TOKEN_MAP_END
         };
 
@@ -771,7 +859,8 @@ const SvXMLTokenMap& ScXMLImport::GetLabelRangesElemTokenMap()
     {
         static const SvXMLTokenMapEntry aLabelRangesElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_LABEL_RANGE, XML_TOK_LABEL_RANGE_ELEM    },
+            { XML_NAMESPACE_TABLE, XML_LABEL_RANGE, XML_TOK_LABEL_RANGE_ELEM,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_label_range) },
             XML_TOKEN_MAP_END
         };
 
@@ -787,9 +876,12 @@ const SvXMLTokenMap& ScXMLImport::GetLabelRangeAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aLabelRangeAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS,    XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE    },
-            { XML_NAMESPACE_TABLE, XML_DATA_CELL_RANGE_ADDRESS,     XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE     },
-            { XML_NAMESPACE_TABLE, XML_ORIENTATION,                 XML_TOK_LABEL_RANGE_ATTR_ORIENTATION    },
+            { XML_NAMESPACE_TABLE, XML_LABEL_CELL_RANGE_ADDRESS,    XML_TOK_LABEL_RANGE_ATTR_LABEL_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_label_cell_range_address) },
+            { XML_NAMESPACE_TABLE, XML_DATA_CELL_RANGE_ADDRESS,     XML_TOK_LABEL_RANGE_ATTR_DATA_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_cell_range_address) },
+            { XML_NAMESPACE_TABLE, XML_ORIENTATION,                 XML_TOK_LABEL_RANGE_ATTR_ORIENTATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_orientation) },
             XML_TOKEN_MAP_END
         };
 
@@ -805,25 +897,44 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTableTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,  XML_NAMED_EXPRESSIONS,    XML_TOK_TABLE_NAMED_EXPRESSIONS },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN_GROUP,   XML_TOK_TABLE_COL_GROUP       },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS, XML_TOK_TABLE_HEADER_COLS },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,        XML_TOK_TABLE_COLS            },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,         XML_TOK_TABLE_COL         },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_PROTECTION,     XML_TOK_TABLE_PROTECTION    },
-            { XML_NAMESPACE_LO_EXT, XML_TABLE_PROTECTION,     XML_TOK_TABLE_PROTECTION_EXT  },
-            { XML_NAMESPACE_OFFICE_EXT, XML_TABLE_PROTECTION, XML_TOK_TABLE_PROTECTION_EXT  },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW_GROUP,      XML_TOK_TABLE_ROW_GROUP       },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,    XML_TOK_TABLE_HEADER_ROWS },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,           XML_TOK_TABLE_ROWS            },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,            XML_TOK_TABLE_ROW         },
-            { XML_NAMESPACE_TABLE,  XML_TABLE_SOURCE,         XML_TOK_TABLE_SOURCE      },
-            { XML_NAMESPACE_TABLE,  XML_SCENARIO,             XML_TOK_TABLE_SCENARIO        },
-            { XML_NAMESPACE_TABLE,  XML_SHAPES,               XML_TOK_TABLE_SHAPES      },
-            { XML_NAMESPACE_OFFICE, XML_FORMS,                XML_TOK_TABLE_FORMS           },
-            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,      XML_TOK_TABLE_EVENT_LISTENERS },
-            { XML_NAMESPACE_OFFICE_EXT, XML_EVENT_LISTENERS,  XML_TOK_TABLE_EVENT_LISTENERS_EXT },
-            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, XML_TOK_TABLE_CONDFORMATS },
+            { XML_NAMESPACE_TABLE,  XML_NAMED_EXPRESSIONS,    XML_TOK_TABLE_NAMED_EXPRESSIONS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_expression) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN_GROUP,   XML_TOK_TABLE_COL_GROUP,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column_group) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS, XML_TOK_TABLE_HEADER_COLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_columns) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,        XML_TOK_TABLE_COLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_columns) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,         XML_TOK_TABLE_COL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_column) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_PROTECTION,     XML_TOK_TABLE_PROTECTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_protection) },
+            { XML_NAMESPACE_LO_EXT, XML_TABLE_PROTECTION,     XML_TOK_TABLE_PROTECTION_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_protection) },
+            { XML_NAMESPACE_OFFICE_EXT, XML_TABLE_PROTECTION, XML_TOK_TABLE_PROTECTION_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE_EXT | XML_table_protection) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW_GROUP,      XML_TOK_TABLE_ROW_GROUP,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_row_group) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,    XML_TOK_TABLE_HEADER_ROWS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_rows) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,           XML_TOK_TABLE_ROWS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_rows) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,            XML_TOK_TABLE_ROW,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_row) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_SOURCE,         XML_TOK_TABLE_SOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_source) },
+            { XML_NAMESPACE_TABLE,  XML_SCENARIO,             XML_TOK_TABLE_SCENARIO,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_scenario) },
+            { XML_NAMESPACE_TABLE,  XML_SHAPES,               XML_TOK_TABLE_SHAPES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_shapes) },
+            { XML_NAMESPACE_OFFICE, XML_FORMS,                XML_TOK_TABLE_FORMS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_forms) },
+            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,      XML_TOK_TABLE_EVENT_LISTENERS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) },
+            { XML_NAMESPACE_OFFICE_EXT, XML_EVENT_LISTENERS,  XML_TOK_TABLE_EVENT_LISTENERS_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE_EXT | XML_event_listeners) },
+            { XML_NAMESPACE_CALC_EXT, XML_CONDITIONAL_FORMATS, XML_TOK_TABLE_CONDFORMATS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_conditional_formats) },
             XML_TOKEN_MAP_END
         };
 
@@ -839,12 +950,18 @@ const SvXMLTokenMap& ScXMLImport::GetTableProtectionAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableProtectionTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS,      XML_TOK_TABLE_SELECT_PROTECTED_CELLS    },
-            { XML_NAMESPACE_TABLE, XML_SELECT_UNPROTECTED_CELLS,    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS  },
-            { XML_NAMESPACE_OFFICE_EXT, XML_SELECT_PROTECTED_CELLS, XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT    },
-            { XML_NAMESPACE_LO_EXT, XML_SELECT_PROTECTED_CELLS, XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT    },
-            { XML_NAMESPACE_OFFICE_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT  },
-            { XML_NAMESPACE_LO_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT  },
+            { XML_NAMESPACE_TABLE, XML_SELECT_PROTECTED_CELLS,      XML_TOK_TABLE_SELECT_PROTECTED_CELLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_select_protected_cells) },
+            { XML_NAMESPACE_TABLE, XML_SELECT_UNPROTECTED_CELLS,    XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_select_unprotected_cells) },
+            { XML_NAMESPACE_OFFICE_EXT, XML_SELECT_PROTECTED_CELLS, XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE_EXT | XML_select_protected_cells) },
+            { XML_NAMESPACE_LO_EXT, XML_SELECT_PROTECTED_CELLS, XML_TOK_TABLE_SELECT_PROTECTED_CELLS_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_select_protected_cells) },
+            { XML_NAMESPACE_OFFICE_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE_EXT | XML_select_unprotected_cells) },
+            { XML_NAMESPACE_LO_EXT, XML_SELECT_UNPROTECTED_CELLS, XML_TOK_TABLE_SELECT_UNPROTECTED_CELLS_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_select_unprotected_cells) },
             XML_TOKEN_MAP_END
         };
         pTableProtectionElemTokenMap = new SvXMLTokenMap(aTableProtectionTokenMap);
@@ -859,10 +976,14 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowsElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTableRowsElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TABLE_ROW_GROUP,     XML_TOK_TABLE_ROWS_ROW_GROUP    },
-            { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,   XML_TOK_TABLE_ROWS_HEADER_ROWS  },
-            { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,          XML_TOK_TABLE_ROWS_ROWS         },
-            { XML_NAMESPACE_TABLE, XML_TABLE_ROW,           XML_TOK_TABLE_ROWS_ROW          },
+            { XML_NAMESPACE_TABLE, XML_TABLE_ROW_GROUP,     XML_TOK_TABLE_ROWS_ROW_GROUP,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_row_group) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,   XML_TOK_TABLE_ROWS_HEADER_ROWS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_rows) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,          XML_TOK_TABLE_ROWS_ROWS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_rows) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_ROW,           XML_TOK_TABLE_ROWS_ROW,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_row) },
             XML_TOKEN_MAP_END
         };
 
@@ -878,10 +999,14 @@ const SvXMLTokenMap& ScXMLImport::GetTableColsElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTableColsElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS_COL_GROUP    },
-            { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,    XML_TOK_TABLE_COLS_HEADER_COLS  },
-            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS_COLS         },
-            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COLS_COL          },
+            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS_COL_GROUP,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column_group) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,    XML_TOK_TABLE_COLS_HEADER_COLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_columns) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS_COLS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_columns) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COLS_COL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column) },
             XML_TOKEN_MAP_END
         };
 
@@ -897,15 +1022,24 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
-            { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTED         },
-            { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
-            { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM, XML_TOK_TABLE_PASSHASH      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2  },
-            { XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2  },
-            { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
+            { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name) },
+            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTED,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protected) },
+            { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_print_ranges) },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protection_key) },
+            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM, XML_TOK_TABLE_PASSHASH,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protection_key_digest_algorithm) },
+            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protection_key_digest_algorithm_2) },
+            { XML_NAMESPACE_LO_EXT, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2, XML_TOK_TABLE_PASSHASH_2,
+                (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_protection_key_digest_algorithm_2) },
+            { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_print) },
             XML_TOKEN_MAP_END
         };
 
@@ -921,15 +1055,24 @@ const SvXMLTokenMap& ScXMLImport::GetTableScenarioAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableScenarioAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER,      XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER  },
-            { XML_NAMESPACE_TABLE, XML_BORDER_COLOR,        XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR    },
-            { XML_NAMESPACE_TABLE, XML_COPY_BACK,           XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK       },
-            { XML_NAMESPACE_TABLE, XML_COPY_STYLES,         XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES     },
-            { XML_NAMESPACE_TABLE, XML_COPY_FORMULAS,       XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS   },
-            { XML_NAMESPACE_TABLE, XML_IS_ACTIVE,           XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE       },
-            { XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES,     XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES },
-            { XML_NAMESPACE_TABLE, XML_COMMENT,             XML_TOK_TABLE_SCENARIO_ATTR_COMMENT         },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,           XML_TOK_TABLE_SCENARIO_ATTR_PROTECTED       },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_BORDER,      XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_border) },
+            { XML_NAMESPACE_TABLE, XML_BORDER_COLOR,        XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_border_color) },
+            { XML_NAMESPACE_TABLE, XML_COPY_BACK,           XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_copy_back) },
+            { XML_NAMESPACE_TABLE, XML_COPY_STYLES,         XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_copy_styles) },
+            { XML_NAMESPACE_TABLE, XML_COPY_FORMULAS,       XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_copy_formulas) },
+            { XML_NAMESPACE_TABLE, XML_IS_ACTIVE,           XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_is_active) },
+            { XML_NAMESPACE_TABLE, XML_SCENARIO_RANGES,     XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_scenario_ranges) },
+            { XML_NAMESPACE_TABLE, XML_COMMENT,             XML_TOK_TABLE_SCENARIO_ATTR_COMMENT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_comment) },
+            { XML_NAMESPACE_TABLE, XML_PROTECTED,           XML_TOK_TABLE_SCENARIO_ATTR_PROTECTED,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protected) },
             XML_TOKEN_MAP_END
         };
 
@@ -945,10 +1088,14 @@ const SvXMLTokenMap& ScXMLImport::GetTableColAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableColAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_COL_ATTR_STYLE_NAME       },
-            { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,     XML_TOK_TABLE_COL_ATTR_REPEATED         },
-            { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_COL_ATTR_VISIBILITY       },
-            { XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME },
+            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_COL_ATTR_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name) },
+            { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED,     XML_TOK_TABLE_COL_ATTR_REPEATED,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_repeated) },
+            { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_COL_ATTR_VISIBILITY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_visibility) },
+            { XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_TABLE_COL_ATTR_DEFAULT_CELL_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_default_cell_style_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -964,8 +1111,10 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTableRowTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TABLE_CELL,      XML_TOK_TABLE_ROW_CELL              },
-            { XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL,  XML_TOK_TABLE_ROW_COVERED_CELL      },
+            { XML_NAMESPACE_TABLE, XML_TABLE_CELL,      XML_TOK_TABLE_ROW_CELL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_cell) },
+            { XML_NAMESPACE_TABLE, XML_COVERED_TABLE_CELL,  XML_TOK_TABLE_ROW_COVERED_CELL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_covered_table_cell) },
             XML_TOKEN_MAP_END
         };
 
@@ -981,11 +1130,16 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableRowAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_ROW_ATTR_STYLE_NAME           },
-            { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_ROW_ATTR_VISIBILITY           },
-            { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED,        XML_TOK_TABLE_ROW_ATTR_REPEATED             },
-            { XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,     XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME },
-            //  { XML_NAMESPACE_TABLE, XML_USE_OPTIMAL_HEIGHT,          XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT   },
+            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_ROW_ATTR_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name) },
+            { XML_NAMESPACE_TABLE, XML_VISIBILITY,                  XML_TOK_TABLE_ROW_ATTR_VISIBILITY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_visibility) },
+            { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED,        XML_TOK_TABLE_ROW_ATTR_REPEATED,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_rows_repeated) },
+            { XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME,     XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_default_cell_style_name) },
+            //  { XML_NAMESPACE_TABLE, XML_USE_OPTIMAL_HEIGHT,          XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT,
+            //      (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_use_optimal_height) },
             XML_TOKEN_MAP_END
         };
 
@@ -1001,11 +1155,16 @@ const SvXMLTokenMap& ScXMLImport::GetTableRowCellElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTableRowCellTokenMap[] =
         {
-            { XML_NAMESPACE_TEXT,   XML_P,                  XML_TOK_TABLE_ROW_CELL_P                    },
-            { XML_NAMESPACE_TABLE,  XML_SUB_TABLE,          XML_TOK_TABLE_ROW_CELL_TABLE                },
-            { XML_NAMESPACE_OFFICE, XML_ANNOTATION,         XML_TOK_TABLE_ROW_CELL_ANNOTATION           },
-            { XML_NAMESPACE_TABLE,  XML_DETECTIVE,          XML_TOK_TABLE_ROW_CELL_DETECTIVE            },
-            { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_SOURCE,  XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE    },
+            { XML_NAMESPACE_TEXT,   XML_P,                  XML_TOK_TABLE_ROW_CELL_P,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_p) },
+            { XML_NAMESPACE_TABLE,  XML_SUB_TABLE,          XML_TOK_TABLE_ROW_CELL_TABLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_sub_table) },
+            { XML_NAMESPACE_OFFICE, XML_ANNOTATION,         XML_TOK_TABLE_ROW_CELL_ANNOTATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_annotation) },
+            { XML_NAMESPACE_TABLE,  XML_DETECTIVE,          XML_TOK_TABLE_ROW_CELL_DETECTIVE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_detective) },
+            { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_SOURCE,  XML_TOK_TABLE_ROW_CELL_CELL_RANGE_SOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_cell_range_source) },
             XML_TOKEN_MAP_END
         };
 
@@ -1021,12 +1180,18 @@ const SvXMLTokenMap& ScXMLImport::GetTableAnnotationAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableAnnotationAttrTokenMap[] =
         {
-            { XML_NAMESPACE_OFFICE, XML_AUTHOR,                 XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR                },
-            { XML_NAMESPACE_OFFICE, XML_CREATE_DATE,            XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE           },
-            { XML_NAMESPACE_OFFICE, XML_CREATE_DATE_STRING,     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING    },
-            { XML_NAMESPACE_OFFICE, XML_DISPLAY,                XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY               },
-            { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_TABLE_ANNOTATION_ATTR_X                     },
-            { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_TABLE_ANNOTATION_ATTR_Y                     },
+            { XML_NAMESPACE_OFFICE, XML_AUTHOR,                 XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_author) },
+            { XML_NAMESPACE_OFFICE, XML_CREATE_DATE,            XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_create_date) },
+            { XML_NAMESPACE_OFFICE, XML_CREATE_DATE_STRING,     XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_create_date_string) },
+            { XML_NAMESPACE_OFFICE, XML_DISPLAY,                XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_display) },
+            { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_TABLE_ANNOTATION_ATTR_X,
+                (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_x) },
+            { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_TABLE_ANNOTATION_ATTR_Y,
+                (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_y) },
             XML_TOKEN_MAP_END
         };
 
@@ -1042,8 +1207,10 @@ const SvXMLTokenMap& ScXMLImport::GetDetectiveElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDetectiveElemTokenMap[]=
         {
-            { XML_NAMESPACE_TABLE,  XML_HIGHLIGHTED_RANGE,  XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED  },
-            { XML_NAMESPACE_TABLE,  XML_OPERATION,          XML_TOK_DETECTIVE_ELEM_OPERATION    },
+            { XML_NAMESPACE_TABLE,  XML_HIGHLIGHTED_RANGE,  XML_TOK_DETECTIVE_ELEM_HIGHLIGHTED,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_highlighted_range) },
+            { XML_NAMESPACE_TABLE,  XML_OPERATION,          XML_TOK_DETECTIVE_ELEM_OPERATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_operation) },
             XML_TOKEN_MAP_END
         };
 
@@ -1059,10 +1226,14 @@ const SvXMLTokenMap& ScXMLImport::GetDetectiveHighlightedAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDetectiveHighlightedAttrTokenMap[]=
         {
-            { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE       },
-            { XML_NAMESPACE_TABLE,  XML_DIRECTION,              XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION        },
-            { XML_NAMESPACE_TABLE,  XML_CONTAINS_ERROR,         XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR   },
-            { XML_NAMESPACE_TABLE,  XML_MARKED_INVALID,         XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_MARKED_INVALID   },
+            { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_cell_range_address) },
+            { XML_NAMESPACE_TABLE,  XML_DIRECTION,              XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_direction) },
+            { XML_NAMESPACE_TABLE,  XML_CONTAINS_ERROR,         XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_contains_error) },
+            { XML_NAMESPACE_TABLE,  XML_MARKED_INVALID,         XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_MARKED_INVALID,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_marked_invalid) },
             XML_TOKEN_MAP_END
         };
 
@@ -1078,8 +1249,10 @@ const SvXMLTokenMap& ScXMLImport::GetDetectiveOperationAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDetectiveOperationAttrTokenMap[]=
         {
-            { XML_NAMESPACE_TABLE,  XML_NAME,   XML_TOK_DETECTIVE_OPERATION_ATTR_NAME   },
-            { XML_NAMESPACE_TABLE,  XML_INDEX,  XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX  },
+            { XML_NAMESPACE_TABLE,  XML_NAME,   XML_TOK_DETECTIVE_OPERATION_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE,  XML_INDEX,  XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_index) },
             XML_TOKEN_MAP_END
         };
 
@@ -1095,13 +1268,20 @@ const SvXMLTokenMap& ScXMLImport::GetTableCellRangeSourceAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTableCellRangeSourceAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,  XML_NAME,                   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME           },
-            { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF           },
-            { XML_NAMESPACE_TABLE,  XML_FILTER_NAME,            XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME    },
-            { XML_NAMESPACE_TABLE,  XML_FILTER_OPTIONS,         XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS },
-            { XML_NAMESPACE_TABLE,  XML_LAST_COLUMN_SPANNED,    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN    },
-            { XML_NAMESPACE_TABLE,  XML_LAST_ROW_SPANNED,       XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW       },
-            { XML_NAMESPACE_TABLE,  XML_REFRESH_DELAY,          XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY  },
+            { XML_NAMESPACE_TABLE,  XML_NAME,                   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_TABLE,  XML_FILTER_NAME,            XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter_name) },
+            { XML_NAMESPACE_TABLE,  XML_FILTER_OPTIONS,         XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter_options) },
+            { XML_NAMESPACE_TABLE,  XML_LAST_COLUMN_SPANNED,    XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_last_column_spanned) },
+            { XML_NAMESPACE_TABLE,  XML_LAST_ROW_SPANNED,       XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_last_row_spanned) },
+            { XML_NAMESPACE_TABLE,  XML_REFRESH_DELAY,          XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_REFRESH_DELAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_refresh_delay) },
             XML_TOKEN_MAP_END
         };
 
@@ -1117,8 +1297,10 @@ const SvXMLTokenMap& ScXMLImport::GetNamedExpressionsElemTokenMap()
     {
         static const SvXMLTokenMapEntry aNamedExpressionsTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAMED_RANGE,             XML_TOK_NAMED_EXPRESSIONS_NAMED_RANGE           },
-            { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION,        XML_TOK_NAMED_EXPRESSIONS_NAMED_EXPRESSION  },
+            { XML_NAMESPACE_TABLE, XML_NAMED_RANGE,             XML_TOK_NAMED_EXPRESSIONS_NAMED_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_named_range) },
+            { XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION,        XML_TOK_NAMED_EXPRESSIONS_NAMED_EXPRESSION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_named_expression) },
             XML_TOKEN_MAP_END
         };
 
@@ -1134,10 +1316,14 @@ const SvXMLTokenMap& ScXMLImport::GetNamedRangeAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aNamedRangeAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_RANGE_ATTR_NAME               },
-            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS,  XML_TOK_NAMED_RANGE_ATTR_CELL_RANGE_ADDRESS },
-            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_RANGE_ATTR_BASE_CELL_ADDRESS  },
-            { XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS,     XML_TOK_NAMED_RANGE_ATTR_RANGE_USABLE_AS    },
+            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_RANGE_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS,  XML_TOK_NAMED_RANGE_ATTR_CELL_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_cell_range_address) },
+            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_RANGE_ATTR_BASE_CELL_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_base_cell_address) },
+            { XML_NAMESPACE_TABLE, XML_RANGE_USABLE_AS,     XML_TOK_NAMED_RANGE_ATTR_RANGE_USABLE_AS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_range_usable_as) },
             XML_TOKEN_MAP_END
         };
 
@@ -1153,9 +1339,12 @@ const SvXMLTokenMap& ScXMLImport::GetNamedExpressionAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aNamedExpressionAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_EXPRESSION_ATTR_NAME              },
-            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_EXPRESSION_ATTR_BASE_CELL_ADDRESS },
-            { XML_NAMESPACE_TABLE, XML_EXPRESSION,          XML_TOK_NAMED_EXPRESSION_ATTR_EXPRESSION        },
+            { XML_NAMESPACE_TABLE, XML_NAME,                XML_TOK_NAMED_EXPRESSION_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_NAMED_EXPRESSION_ATTR_BASE_CELL_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_base_cell_address) },
+            { XML_NAMESPACE_TABLE, XML_EXPRESSION,          XML_TOK_NAMED_EXPRESSION_ATTR_EXPRESSION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_expression) },
             XML_TOKEN_MAP_END
         };
 
@@ -1171,7 +1360,8 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangesElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangesTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,  XML_TOK_DATABASE_RANGE      },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_RANGE,  XML_TOK_DATABASE_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_range) },
             XML_TOKEN_MAP_END
         };
 
@@ -1187,12 +1377,18 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL,     XML_TOK_DATABASE_RANGE_SOURCE_SQL       },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATABASE_RANGE_SOURCE_TABLE     },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATABASE_RANGE_SOURCE_QUERY     },
-            { XML_NAMESPACE_TABLE, XML_FILTER,                  XML_TOK_FILTER                          },
-            { XML_NAMESPACE_TABLE, XML_SORT,                    XML_TOK_SORT                            },
-            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES,          XML_TOK_DATABASE_RANGE_SUBTOTAL_RULES   },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL,     XML_TOK_DATABASE_RANGE_SOURCE_SQL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_source_sql) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATABASE_RANGE_SOURCE_TABLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_source_table) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATABASE_RANGE_SOURCE_QUERY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_source_query) },
+            { XML_NAMESPACE_TABLE, XML_FILTER,                  XML_TOK_FILTER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter) },
+            { XML_NAMESPACE_TABLE, XML_SORT,                    XML_TOK_SORT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_sort) },
+            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES,          XML_TOK_DATABASE_RANGE_SUBTOTAL_RULES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_subtotal_rules) },
             XML_TOKEN_MAP_END
         };
 
@@ -1208,16 +1404,26 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATABASE_RANGE_ATTR_NAME                    },
-            { XML_NAMESPACE_TABLE, XML_IS_SELECTION,            XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION            },
-            { XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES,   XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_STYLES   },
-            { XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_SIZE,     XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_SIZE     },
-            { XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA,     XML_TOK_DATABASE_RANGE_ATTR_HAS_PERSISTENT_DATA     },
-            { XML_NAMESPACE_TABLE, XML_ORIENTATION,         XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION             },
-            { XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER,     XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER         },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS,  XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS  },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS    },
-            { XML_NAMESPACE_TABLE, XML_REFRESH_DELAY,           XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY           },
+            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATABASE_RANGE_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_IS_SELECTION,            XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_is_selection) },
+            { XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES,   XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_STYLES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_on_update_keep_styles) },
+            { XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_SIZE,     XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_SIZE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_on_update_keep_size) },
+            { XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA,     XML_TOK_DATABASE_RANGE_ATTR_HAS_PERSISTENT_DATA,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_has_persistent_data) },
+            { XML_NAMESPACE_TABLE, XML_ORIENTATION,         XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_orientation) },
+            { XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER,     XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_contains_header) },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS,  XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_filter_buttons) },
+            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_target_range_address) },
+            { XML_NAMESPACE_TABLE, XML_REFRESH_DELAY,           XML_TOK_DATABASE_RANGE_ATTR_REFRESH_DELAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_refresh_delay) },
             XML_TOKEN_MAP_END
         };
 
@@ -1233,11 +1439,16 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceSQLAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeSourceSQLAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_SQL_ATTR_DATABASE_NAME       },
-            { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_SQL_ATTR_HREF                },
-            { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_SQL_ATTR_CONNECTION_RESOURCE},
-            { XML_NAMESPACE_TABLE, XML_SQL_STATEMENT,           XML_TOK_SOURCE_SQL_ATTR_SQL_STATEMENT       },
-            { XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TOK_SOURCE_SQL_ATTR_PARSE_SQL_STATEMENT },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_SQL_ATTR_DATABASE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_name) },
+            { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_SQL_ATTR_HREF,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_SQL_ATTR_CONNECTION_RESOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_connection_resource) },
+            { XML_NAMESPACE_TABLE, XML_SQL_STATEMENT,           XML_TOK_SOURCE_SQL_ATTR_SQL_STATEMENT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_sql_statement) },
+            { XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TOK_SOURCE_SQL_ATTR_PARSE_SQL_STATEMENT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_parse_sql_statement) },
             XML_TOKEN_MAP_END
         };
 
@@ -1253,11 +1464,16 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceTableAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeSourceTableAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME         },
-            { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_TABLE_ATTR_HREF                  },
-            { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_TABLE_ATTR_CONNECTION_RESOURCE  },
-            { XML_NAMESPACE_TABLE, XML_TABLE_NAME,              XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME            },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_TABLE_NAME,     XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME            },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_TABLE_ATTR_DATABASE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_name) },
+            { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_TABLE_ATTR_HREF,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_TABLE_ATTR_CONNECTION_RESOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_connection_resource) },
+            { XML_NAMESPACE_TABLE, XML_TABLE_NAME,              XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_name) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_TABLE_NAME,     XML_TOK_SOURCE_TABLE_ATTR_TABLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_table_name) }
             XML_TOKEN_MAP_END
         };
 
@@ -1273,10 +1489,14 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSourceQueryAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeSourceQueryAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME         },
-            { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_QUERY_ATTR_HREF                  },
-            { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_QUERY_ATTR_CONNECTION_RESOURCE  },
-            { XML_NAMESPACE_TABLE, XML_QUERY_NAME,              XML_TOK_SOURCE_QUERY_ATTR_QUERY_NAME            },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_NAME,           XML_TOK_SOURCE_QUERY_ATTR_DATABASE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_name) },
+            { XML_NAMESPACE_XLINK, XML_HREF,                    XML_TOK_SOURCE_QUERY_ATTR_HREF,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_TABLE, XML_CONNECTION_RESOURCE,     XML_TOK_SOURCE_QUERY_ATTR_CONNECTION_RESOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_connection_resource) },
+            { XML_NAMESPACE_TABLE, XML_QUERY_NAME,              XML_TOK_SOURCE_QUERY_ATTR_QUERY_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_query_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -1292,9 +1512,12 @@ const SvXMLTokenMap& ScXMLImport::GetFilterElemTokenMap()
     {
         static const SvXMLTokenMapEntry aFilterTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FILTER_AND,          XML_TOK_FILTER_AND          },
-            { XML_NAMESPACE_TABLE, XML_FILTER_OR,           XML_TOK_FILTER_OR           },
-            { XML_NAMESPACE_TABLE, XML_FILTER_CONDITION,    XML_TOK_FILTER_CONDITION    },
+            { XML_NAMESPACE_TABLE, XML_FILTER_AND,          XML_TOK_FILTER_AND,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter_and) },
+            { XML_NAMESPACE_TABLE, XML_FILTER_OR,           XML_TOK_FILTER_OR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter_or) },
+            { XML_NAMESPACE_TABLE, XML_FILTER_CONDITION,    XML_TOK_FILTER_CONDITION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter_condition) },
             XML_TOKEN_MAP_END
         };
 
@@ -1310,10 +1533,14 @@ const SvXMLTokenMap& ScXMLImport::GetFilterAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aFilterAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,            XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS            },
-            { XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS,  XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS  },
-            { XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE,                XML_TOK_FILTER_ATTR_CONDITION_SOURCE                },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES,              XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES              },
+            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,            XML_TOK_FILTER_ATTR_TARGET_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_target_range_address) },
+            { XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS,  XML_TOK_FILTER_ATTR_CONDITION_SOURCE_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_condition_source_range_address) },
+            { XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE,                XML_TOK_FILTER_ATTR_CONDITION_SOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_condition_source) },
+            { XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES,              XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_duplicates) },
             XML_TOKEN_MAP_END
         };
 
@@ -1329,7 +1556,8 @@ const SvXMLTokenMap& ScXMLImport::GetFilterConditionElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, XML_TOK_CONDITION_FILTER_SET_ITEM },
+            { XML_NAMESPACE_TABLE, XML_FILTER_SET_ITEM, XML_TOK_CONDITION_FILTER_SET_ITEM,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter_set_item) },
             XML_TOKEN_MAP_END
         };
 
@@ -1345,11 +1573,16 @@ const SvXMLTokenMap& ScXMLImport::GetFilterConditionAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aFilterConditionAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_CONDITION_ATTR_FIELD_NUMBER     },
-            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,  XML_TOK_CONDITION_ATTR_CASE_SENSITIVE   },
-            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,       XML_TOK_CONDITION_ATTR_DATA_TYPE        },
-            { XML_NAMESPACE_TABLE, XML_VALUE,           XML_TOK_CONDITION_ATTR_VALUE            },
-            { XML_NAMESPACE_TABLE, XML_OPERATOR,        XML_TOK_CONDITION_ATTR_OPERATOR         },
+            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_CONDITION_ATTR_FIELD_NUMBER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_field_number) },
+            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,  XML_TOK_CONDITION_ATTR_CASE_SENSITIVE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_case_sensitive) },
+            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,       XML_TOK_CONDITION_ATTR_DATA_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_type) },
+            { XML_NAMESPACE_TABLE, XML_VALUE,           XML_TOK_CONDITION_ATTR_VALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_value) },
+            { XML_NAMESPACE_TABLE, XML_OPERATOR,        XML_TOK_CONDITION_ATTR_OPERATOR,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_operator) },
             XML_TOKEN_MAP_END
         };
 
@@ -1365,7 +1598,8 @@ const SvXMLTokenMap& ScXMLImport::GetFilterSetItemAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_VALUE, XML_TOK_FILTER_SET_ITEM_ATTR_VALUE },
+            { XML_NAMESPACE_TABLE, XML_VALUE, XML_TOK_FILTER_SET_ITEM_ATTR_VALUE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_value) },
             XML_TOKEN_MAP_END
         };
 
@@ -1381,7 +1615,8 @@ const SvXMLTokenMap& ScXMLImport::GetSortElemTokenMap()
     {
         static const SvXMLTokenMapEntry aSortTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_SORT_BY, XML_TOK_SORT_SORT_BY    },
+            { XML_NAMESPACE_TABLE, XML_SORT_BY, XML_TOK_SORT_SORT_BY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_sort_by) },
             XML_TOKEN_MAP_END
         };
 
@@ -1397,14 +1632,22 @@ const SvXMLTokenMap& ScXMLImport::GetSortAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aSortAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,  XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT    },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS      },
-            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,          XML_TOK_SORT_ATTR_CASE_SENSITIVE            },
-            { XML_NAMESPACE_TABLE, XML_RFC_LANGUAGE_TAG,        XML_TOK_SORT_ATTR_RFC_LANGUAGE_TAG          },
-            { XML_NAMESPACE_TABLE, XML_LANGUAGE,                XML_TOK_SORT_ATTR_LANGUAGE                  },
-            { XML_NAMESPACE_TABLE, XML_SCRIPT,                  XML_TOK_SORT_ATTR_SCRIPT                    },
-            { XML_NAMESPACE_TABLE, XML_COUNTRY,                 XML_TOK_SORT_ATTR_COUNTRY                   },
-            { XML_NAMESPACE_TABLE, XML_ALGORITHM,               XML_TOK_SORT_ATTR_ALGORITHM                 },
+            { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,  XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_bind_styles_to_content) },
+            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_target_range_address) },
+            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,          XML_TOK_SORT_ATTR_CASE_SENSITIVE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_case_sensitive) },
+            { XML_NAMESPACE_TABLE, XML_RFC_LANGUAGE_TAG,        XML_TOK_SORT_ATTR_RFC_LANGUAGE_TAG,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_rfc_language_tag) },
+            { XML_NAMESPACE_TABLE, XML_LANGUAGE,                XML_TOK_SORT_ATTR_LANGUAGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_language) },
+            { XML_NAMESPACE_TABLE, XML_SCRIPT,                  XML_TOK_SORT_ATTR_SCRIPT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_script) },
+            { XML_NAMESPACE_TABLE, XML_COUNTRY,                 XML_TOK_SORT_ATTR_COUNTRY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_country) },
+            { XML_NAMESPACE_TABLE, XML_ALGORITHM,               XML_TOK_SORT_ATTR_ALGORITHM,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_algorithm) },
             XML_TOKEN_MAP_END
         };
 
@@ -1420,9 +1663,12 @@ const SvXMLTokenMap& ScXMLImport::GetSortSortByAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aSortSortByAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SORT_BY_ATTR_FIELD_NUMBER   },
-            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,       XML_TOK_SORT_BY_ATTR_DATA_TYPE      },
-            { XML_NAMESPACE_TABLE, XML_ORDER,           XML_TOK_SORT_BY_ATTR_ORDER          },
+            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SORT_BY_ATTR_FIELD_NUMBER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_field_number) },
+            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,       XML_TOK_SORT_BY_ATTR_DATA_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_type) },
+            { XML_NAMESPACE_TABLE, XML_ORDER,           XML_TOK_SORT_BY_ATTR_ORDER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_order) },
             XML_TOKEN_MAP_END
         };
 
@@ -1438,8 +1684,10 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSubTotalRulesElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_SORT_GROUPS,     XML_TOK_SUBTOTAL_RULES_SORT_GROUPS      },
-            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE,   XML_TOK_SUBTOTAL_RULES_SUBTOTAL_RULE    },
+            { XML_NAMESPACE_TABLE, XML_SORT_GROUPS,     XML_TOK_SUBTOTAL_RULES_SORT_GROUPS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_sort_groups) },
+            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE,   XML_TOK_SUBTOTAL_RULES_SUBTOTAL_RULE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_subtotal_rule) },
             XML_TOKEN_MAP_END
         };
 
@@ -1455,9 +1703,12 @@ const SvXMLTokenMap& ScXMLImport::GetDatabaseRangeSubTotalRulesAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDatabaseRangeSubTotalRulesAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,          XML_TOK_SUBTOTAL_RULES_ATTR_BIND_STYLES_TO_CONTENT      },
-            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,                  XML_TOK_SUBTOTAL_RULES_ATTR_CASE_SENSITIVE              },
-            { XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TOK_SUBTOTAL_RULES_ATTR_PAGE_BREAKS_ON_GROUP_CHANGE },
+            { XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT,          XML_TOK_SUBTOTAL_RULES_ATTR_BIND_STYLES_TO_CONTENT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_bind_styles_to_content) },
+            { XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE,                  XML_TOK_SUBTOTAL_RULES_ATTR_CASE_SENSITIVE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_case_sensitive) },
+            { XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TOK_SUBTOTAL_RULES_ATTR_PAGE_BREAKS_ON_GROUP_CHANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_page_breaks_on_group_change) },
             XML_TOKEN_MAP_END
         };
 
@@ -1473,8 +1724,10 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSortGroupsAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aSubTotalRulesSortGroupsAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,   XML_TOK_SORT_GROUPS_ATTR_DATA_TYPE  },
-            { XML_NAMESPACE_TABLE, XML_ORDER,       XML_TOK_SORT_GROUPS_ATTR_ORDER      },
+            { XML_NAMESPACE_TABLE, XML_DATA_TYPE,   XML_TOK_SORT_GROUPS_ATTR_DATA_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_type) },
+            { XML_NAMESPACE_TABLE, XML_ORDER,       XML_TOK_SORT_GROUPS_ATTR_ORDER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_order) },
             XML_TOKEN_MAP_END
         };
 
@@ -1490,7 +1743,8 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSubTotalRuleElemTokenMap()
     {
         static const SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD,  XML_TOK_SUBTOTAL_RULE_SUBTOTAL_FIELD    },
+            { XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD,  XML_TOK_SUBTOTAL_RULE_SUBTOTAL_FIELD,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_subtotal_field) },
             XML_TOKEN_MAP_END
         };
 
@@ -1506,7 +1760,8 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRulesSubTotalRuleAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aSubTotalRulesSubTotalRuleAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER,   XML_TOK_SUBTOTAL_RULE_ATTR_GROUP_BY_FIELD_NUMBER    },
+            { XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER,   XML_TOK_SUBTOTAL_RULE_ATTR_GROUP_BY_FIELD_NUMBER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_group_by_field_number) },
             XML_TOKEN_MAP_END
         };
 
@@ -1522,8 +1777,10 @@ const SvXMLTokenMap& ScXMLImport::GetSubTotalRuleSubTotalFieldAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aSubTotalRuleSubTotalFieldAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SUBTOTAL_FIELD_ATTR_FIELD_NUMBER    },
-            { XML_NAMESPACE_TABLE, XML_FUNCTION,        XML_TOK_SUBTOTAL_FIELD_ATTR_FUNCTION        },
+            { XML_NAMESPACE_TABLE, XML_FIELD_NUMBER,    XML_TOK_SUBTOTAL_FIELD_ATTR_FIELD_NUMBER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_field_number) },
+            { XML_NAMESPACE_TABLE, XML_FUNCTION,        XML_TOK_SUBTOTAL_FIELD_ATTR_FUNCTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_function) },
             XML_TOKEN_MAP_END
         };
 
@@ -1539,7 +1796,8 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTablesElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotTablesElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLE,    XML_TOK_DATA_PILOT_TABLE    },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLE,    XML_TOK_DATA_PILOT_TABLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_table) },
             XML_TOKEN_MAP_END
         };
 
@@ -1555,16 +1813,26 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotTableAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATA_PILOT_TABLE_ATTR_NAME                  },
-            { XML_NAMESPACE_TABLE, XML_APPLICATION_DATA,        XML_TOK_DATA_PILOT_TABLE_ATTR_APPLICATION_DATA      },
-            { XML_NAMESPACE_TABLE, XML_GRAND_TOTAL,             XML_TOK_DATA_PILOT_TABLE_ATTR_GRAND_TOTAL           },
-            { XML_NAMESPACE_TABLE, XML_IGNORE_EMPTY_ROWS,       XML_TOK_DATA_PILOT_TABLE_ATTR_IGNORE_EMPTY_ROWS     },
-            { XML_NAMESPACE_TABLE, XML_IDENTIFY_CATEGORIES,     XML_TOK_DATA_PILOT_TABLE_ATTR_IDENTIFY_CATEGORIES   },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS  },
-            { XML_NAMESPACE_TABLE, XML_BUTTONS,                 XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS               },
-            { XML_NAMESPACE_TABLE, XML_SHOW_FILTER_BUTTON,      XML_TOK_DATA_PILOT_TABLE_ATTR_SHOW_FILTER_BUTTON    },
-            { XML_NAMESPACE_TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK, XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN         },
-    { XML_NAMESPACE_TABLE, XML_HEADER_GRID_LAYOUT,      XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT    },
+            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATA_PILOT_TABLE_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_APPLICATION_DATA,        XML_TOK_DATA_PILOT_TABLE_ATTR_APPLICATION_DATA,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_application_data) },
+            { XML_NAMESPACE_TABLE, XML_GRAND_TOTAL,             XML_TOK_DATA_PILOT_TABLE_ATTR_GRAND_TOTAL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_grand_total) },
+            { XML_NAMESPACE_TABLE, XML_IGNORE_EMPTY_ROWS,       XML_TOK_DATA_PILOT_TABLE_ATTR_IGNORE_EMPTY_ROWS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_ignore_empty_rows) },
+            { XML_NAMESPACE_TABLE, XML_IDENTIFY_CATEGORIES,     XML_TOK_DATA_PILOT_TABLE_ATTR_IDENTIFY_CATEGORIES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_identify_categories) },
+            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS,    XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_target_range_address) },
+            { XML_NAMESPACE_TABLE, XML_BUTTONS,                 XML_TOK_DATA_PILOT_TABLE_ATTR_BUTTONS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_buttons) },
+            { XML_NAMESPACE_TABLE, XML_SHOW_FILTER_BUTTON,      XML_TOK_DATA_PILOT_TABLE_ATTR_SHOW_FILTER_BUTTON,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_show_filter_button) },
+            { XML_NAMESPACE_TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK, XML_TOK_DATA_PILOT_TABLE_ATTR_DRILL_DOWN,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_drill_down_on_double_click) },
+            { XML_NAMESPACE_TABLE, XML_HEADER_GRID_LAYOUT,      XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_header_grid_layout) },
             XML_TOKEN_MAP_END
         };
 
@@ -1580,14 +1848,22 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotTableElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL        },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE      },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL,  XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL       },
-            { XML_NAMESPACE_TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL, XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL_EXT },
-            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY      },
-            { XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE,          XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE    },
-            { XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE,       XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD,        XML_TOK_DATA_PILOT_TABLE_ELEM_DATA_PILOT_FIELD  },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_source_sql) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_source_table) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL,  XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_grand_total) },
+            { XML_NAMESPACE_TABLE_EXT, XML_DATA_PILOT_GRAND_TOTAL, XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT | XML_data_pilot_grand_total) },
+            { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_database_source_query) },
+            { XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE,          XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_source_service) },
+            { XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE,       XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_source_cell_range) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD,        XML_TOK_DATA_PILOT_TABLE_ELEM_DATA_PILOT_FIELD,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_field) },
             XML_TOKEN_MAP_END
         };
 
@@ -1603,11 +1879,16 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceServiceAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotTableSourceServiceAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_SOURCE_SERVICE_ATTR_NAME                },
-            { XML_NAMESPACE_TABLE, XML_SOURCE_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME         },
-            { XML_NAMESPACE_TABLE, XML_OBJECT_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_OBJECT_NAME         },
-            { XML_NAMESPACE_TABLE, XML_USER_NAME,               XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME           },
-            { XML_NAMESPACE_TABLE, XML_PASSWORD,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD            },
+            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_SOURCE_SERVICE_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE, XML_SOURCE_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_source_name) },
+            { XML_NAMESPACE_TABLE, XML_OBJECT_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_OBJECT_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_object_name) },
+            { XML_NAMESPACE_TABLE, XML_USER_NAME,               XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_user_name) },
+            { XML_NAMESPACE_TABLE, XML_PASSWORD,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_password) },
             XML_TOKEN_MAP_END
         };
 
@@ -1623,10 +1904,14 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotGrandTotalAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotGrandTotalAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY          },
-            { XML_NAMESPACE_TABLE,     XML_ORIENTATION,  XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION      },
-            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME     },
-            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME_EXT },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display) },
+            { XML_NAMESPACE_TABLE,     XML_ORIENTATION,  XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_orientation) },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_name) },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT | XML_display_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -1642,8 +1927,10 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotTableSourceCellRangeAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS },
-            { XML_NAMESPACE_TABLE, XML_NAME, XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME },
+            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_cell_range_address) },
+            { XML_NAMESPACE_TABLE, XML_NAME, XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -1659,7 +1946,8 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotTableSourceCellRangeElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FILTER,      XML_TOK_SOURCE_CELL_RANGE_ELEM_FILTER},
+            { XML_NAMESPACE_TABLE, XML_FILTER,      XML_TOK_SOURCE_CELL_RANGE_ELEM_FILTER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_filter) },
             XML_TOKEN_MAP_END
         };
 
@@ -1675,15 +1963,24 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotFieldAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,     XML_SOURCE_FIELD_NAME,    XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME    },
-            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME         },
-            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME_EXT     },
-            { XML_NAMESPACE_TABLE,     XML_IS_DATA_LAYOUT_FIELD, XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD },
-            { XML_NAMESPACE_TABLE,     XML_FUNCTION,             XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION             },
-            { XML_NAMESPACE_TABLE,     XML_ORIENTATION,          XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION          },
-            { XML_NAMESPACE_TABLE,     XML_SELECTED_PAGE,        XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE        },
-            { XML_NAMESPACE_LO_EXT,    XML_IGNORE_SELECTED_PAGE, XML_TOK_DATA_PILOT_FIELD_ATTR_IGNORE_SELECTED_PAGE },
-            { XML_NAMESPACE_TABLE,     XML_USED_HIERARCHY,       XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY       },
+            { XML_NAMESPACE_TABLE,     XML_SOURCE_FIELD_NAME,    XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_source_field_name) },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_name) },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT | XML_display_name) },
+            { XML_NAMESPACE_TABLE,     XML_IS_DATA_LAYOUT_FIELD, XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_is_data_layout_field) },
+            { XML_NAMESPACE_TABLE,     XML_FUNCTION,             XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_function) },
+            { XML_NAMESPACE_TABLE,     XML_ORIENTATION,          XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_orientation) },
+            { XML_NAMESPACE_TABLE,     XML_SELECTED_PAGE,        XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_selected_page) },
+            { XML_NAMESPACE_LO_EXT,    XML_IGNORE_SELECTED_PAGE, XML_TOK_DATA_PILOT_FIELD_ATTR_IGNORE_SELECTED_PAGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_ignore_selected_page) },
+            { XML_NAMESPACE_TABLE,     XML_USED_HIERARCHY,       XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_used_hierarchy) },
             XML_TOKEN_MAP_END
         };
 
@@ -1699,9 +1996,12 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotFieldElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotFieldElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL,        XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL      },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD_REFERENCE, XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_REFERENCE },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS,       XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_GROUPS },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL,        XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_level) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_FIELD_REFERENCE, XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_REFERENCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_field_reference) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GROUPS,       XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_GROUPS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_groups) },
             XML_TOKEN_MAP_END
         };
 
@@ -1717,8 +2017,10 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotLevelAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotLevelAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_SHOW_EMPTY,              XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY            },
-            { XML_NAMESPACE_CALC_EXT, XML_REPEAT_ITEM_LABELS, XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS    },
+            { XML_NAMESPACE_TABLE, XML_SHOW_EMPTY,              XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_show_empty) },
+            { XML_NAMESPACE_CLAC_EXT, XML_REPEAT_ITEM_LABELS, XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_repeat_item_labels) },
             XML_TOKEN_MAP_END
         };
 
@@ -1734,11 +2036,16 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotLevelElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotLevelElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTALS,    XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_SUBTOTALS  },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS,      XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_MEMBERS    },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_DISPLAY_INFO, XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_DISPLAY_INFO },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SORT_INFO,    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_SORT_INFO  },
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO,  XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LAYOUT_INFO },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTALS,    XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_SUBTOTALS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_subtotals) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBERS,      XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_MEMBERS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_members) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_DISPLAY_INFO, XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_DISPLAY_INFO,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_display_info) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SORT_INFO,    XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_SORT_INFO,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_sort_info) },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_LAYOUT_INFO,  XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LAYOUT_INFO,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_layout_info) },
             XML_TOKEN_MAP_END
         };
 
@@ -1754,7 +2061,8 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotSubTotalsElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotSubTotalsElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, XML_TOK_DATA_PILOT_SUBTOTALS_ELEM_DATA_PILOT_SUBTOTAL   },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_SUBTOTAL, XML_TOK_DATA_PILOT_SUBTOTALS_ELEM_DATA_PILOT_SUBTOTAL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_subtotal) },
             XML_TOKEN_MAP_END
         };
 
@@ -1770,9 +2078,12 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotSubTotalAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotSubTotalAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,     XML_FUNCTION,     XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION         },
-            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME     },
-            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT },
+            { XML_NAMESPACE_TABLE,     XML_FUNCTION,     XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_function) },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_name) },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT | XML_display_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -1788,7 +2099,8 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMembersElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotMembersElemTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER,       XML_TOK_DATA_PILOT_MEMBERS_ELEM_DATA_PILOT_MEMBER   },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER,       XML_TOK_DATA_PILOT_MEMBERS_ELEM_DATA_PILOT_MEMBER,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_data_pilot_member) },
             XML_TOKEN_MAP_END
         };
 
@@ -1804,11 +2116,16 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,     XML_NAME,         XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME             },
-            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME     },
-            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME_EXT },
-            { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY          },
-            { XML_NAMESPACE_TABLE,     XML_SHOW_DETAILS, XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS     },
+            { XML_NAMESPACE_TABLE,     XML_NAME,         XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_name) },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display_name) },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME_EXT,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE_EXT | XML_display_name) },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_display) },
+            { XML_NAMESPACE_TABLE,     XML_SHOW_DETAILS, XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_show_details) },
             XML_TOKEN_MAP_END
         };
 
@@ -1824,11 +2141,16 @@ const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aConsolidationAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE,  XML_FUNCTION,                       XML_TOK_CONSOLIDATION_ATTR_FUNCTION         },
-            { XML_NAMESPACE_TABLE,  XML_SOURCE_CELL_RANGE_ADDRESSES,    XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES    },
-            { XML_NAMESPACE_TABLE,  XML_TARGET_CELL_ADDRESS,            XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS   },
-            { XML_NAMESPACE_TABLE,  XML_USE_LABEL,                      XML_TOK_CONSOLIDATION_ATTR_USE_LABEL        },
-            { XML_NAMESPACE_TABLE,  XML_LINK_TO_SOURCE_DATA,            XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE   },
+            { XML_NAMESPACE_TABLE,  XML_FUNCTION,                       XML_TOK_CONSOLIDATION_ATTR_FUNCTION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_function) },
+            { XML_NAMESPACE_TABLE,  XML_SOURCE_CELL_RANGE_ADDRESSES,    XML_TOK_CONSOLIDATION_ATTR_SOURCE_RANGES,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_source_cell_range_addresses) },
+            { XML_NAMESPACE_TABLE,  XML_TARGET_CELL_ADDRESS,            XML_TOK_CONSOLIDATION_ATTR_TARGET_ADDRESS,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_target_cell_address) },
+            { XML_NAMESPACE_TABLE,  XML_USE_LABEL,                      XML_TOK_CONSOLIDATION_ATTR_USE_LABEL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_use_label) },
+            { XML_NAMESPACE_TABLE,  XML_LINK_TO_SOURCE_DATA,            XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_link_to_source_data) },
             XML_TOKEN_MAP_END
         };
 
@@ -1844,12 +2166,18 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextParaElemTokenMap()
     {
         static const SvXMLTokenMapEntry aMap[] =
         {
-            { XML_NAMESPACE_TEXT, XML_S, XML_TOK_CELL_TEXT_S },
-            { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_CELL_TEXT_SPAN },
-            { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SHEET_NAME },
-            { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_DATE },
-            { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_TITLE },
-            { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_URL },
+            { XML_NAMESPACE_TEXT, XML_S, XML_TOK_CELL_TEXT_S,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_s) },
+            { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_CELL_TEXT_SPAN,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_span) },
+            { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SHEET_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sheet_name) },
+            { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_DATE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_date) },
+            { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_TITLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_title) },
+            { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_URL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_a) },
             XML_TOKEN_MAP_END
         };
 
@@ -1864,11 +2192,16 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSpanElemTokenMap()
     {
         static const SvXMLTokenMapEntry aMap[] =
         {
-            { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME },
-            { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_SPAN_ELEM_DATE },
-            { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE },
-            { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_SPAN_ELEM_URL },
-            { XML_NAMESPACE_TEXT, XML_S, XML_TOK_CELL_TEXT_SPAN_ELEM_S },
+            { XML_NAMESPACE_TEXT, XML_SHEET_NAME, XML_TOK_CELL_TEXT_SPAN_ELEM_SHEET_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sheet_name) },
+            { XML_NAMESPACE_TEXT, XML_DATE, XML_TOK_CELL_TEXT_SPAN_ELEM_DATE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_date) },
+            { XML_NAMESPACE_TEXT, XML_TITLE, XML_TOK_CELL_TEXT_SPAN_ELEM_TITLE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_title) },
+            { XML_NAMESPACE_TEXT, XML_A, XML_TOK_CELL_TEXT_SPAN_ELEM_URL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_a) },
+            { XML_NAMESPACE_TEXT, XML_S, XML_TOK_CELL_TEXT_SPAN_ELEM_S,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_s) },
             XML_TOKEN_MAP_END
         };
 
@@ -1883,7 +2216,8 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSpanAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aMap[] =
         {
-            { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME },
+            { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_CELL_TEXT_SPAN_ATTR_STYLE_NAME,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name) },
             XML_TOKEN_MAP_END
         };
 
@@ -1898,8 +2232,10 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextURLAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aMap[] =
         {
-            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_CELL_TEXT_URL_ATTR_UREF },
-            { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_CELL_TEXT_URL_ATTR_TYPE },
+            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_CELL_TEXT_URL_ATTR_UREF,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_CELL_TEXT_URL_ATTR_TYPE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
             XML_TOKEN_MAP_END
         };
 
@@ -1914,7 +2250,8 @@ const SvXMLTokenMap& ScXMLImport::GetCellTextSAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aMap[] =
         {
-            { XML_NAMESPACE_TEXT, XML_C, XML_TOK_CELL_TEXT_S_ATTR_C },
+            { XML_NAMESPACE_TEXT, XML_C, XML_TOK_CELL_TEXT_S_ATTR_C,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_c) },
             XML_TOKEN_MAP_END
         };
 
@@ -1929,10 +2266,14 @@ const SvXMLTokenMap& ScXMLImport::GetDataStreamAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aMap[] =
         {
-            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_DATA_STREAM_ATTR_URL },
-            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, XML_TOK_DATA_STREAM_ATTR_RANGE },
-            { XML_NAMESPACE_CALC_EXT, XML_EMPTY_LINE_REFRESH, XML_TOK_DATA_STREAM_ATTR_EMPTY_LINE_REFRESH },
-            { XML_NAMESPACE_CALC_EXT, XML_INSERTION_POSITION, XML_TOK_DATA_STREAM_ATTR_INSERTION_POSITION },
+            { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_DATA_STREAM_ATTR_URL,
+                (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, XML_TOK_DATA_STREAM_ATTR_RANGE,
+                (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_target_range_address) },
+            { XML_NAMESPACE_CALC_EXT, XML_EMPTY_LINE_REFRESH, XML_TOK_DATA_STREAM_ATTR_EMPTY_LINE_REFRESH,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_empty_line_refresh) },
+            { XML_NAMESPACE_CALC_EXT, XML_INSERTION_POSITION, XML_TOK_DATA_STREAM_ATTR_INSERTION_POSITION,
+                (FastToken::NAMESPACE | XML_NAMESPACE_CALC_EXT | XML_insertion_position) },
             XML_TOKEN_MAP_END
         };
         pDataStreamAttrTokenMap = new SvXMLTokenMap(aMap);
