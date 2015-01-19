@@ -1336,6 +1336,8 @@ void SwRangeRedline::MoveFromSection()
         SwDoc* pDoc = GetDoc();
         const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
         std::vector<SwPosition*> aBeforeArr, aBehindArr;
+        typedef std::map<sal_uInt16, SwRangeRedline*> IndexAndRange;
+        IndexAndRange aIndexAndRangeMap;
         sal_uInt16 nMyPos = rTbl.GetPos( this );
         OSL_ENSURE( this, "this is not in the array?" );
         bool bBreak = false;
@@ -1346,12 +1348,16 @@ void SwRangeRedline::MoveFromSection()
             bBreak = true;
             if( rTbl[ n ]->GetBound(true) == *GetPoint() )
             {
-                aBehindArr.push_back( &rTbl[ n ]->GetBound(true) );
+                SwRangeRedline* pRedl = rTbl[n];
+                aBehindArr.push_back(&pRedl->GetBound(true));
+                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
             if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
-                aBehindArr.push_back( &rTbl[ n ]->GetBound(false) );
+                SwRangeRedline* pRedl = rTbl[n];
+                aBehindArr.push_back(&pRedl->GetBound(false));
+                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
         }
@@ -1361,12 +1367,16 @@ void SwRangeRedline::MoveFromSection()
             bBreak = true;
             if( rTbl[ n ]->GetBound(true) == *GetPoint() )
             {
-                aBeforeArr.push_back( &rTbl[ n ]->GetBound(true) );
+                SwRangeRedline* pRedl = rTbl[n];
+                aBeforeArr.push_back(&pRedl->GetBound(true));
+                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
             if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
-                aBeforeArr.push_back( &rTbl[ n ]->GetBound(false) );
+                SwRangeRedline* pRedl = rTbl[n];
+                aBeforeArr.push_back(&pRedl->GetBound(false));
+                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
         }
@@ -1420,6 +1430,7 @@ void SwRangeRedline::MoveFromSection()
             if( pColl && pCNd )
                 pCNd->ChgFmtColl( pColl );
         }
+
         // #i95771#
         // Under certain conditions the previous <SwDoc::Move(..)> has already
         // removed the change tracking section of this <SwRangeRedline> instance from
@@ -1440,6 +1451,13 @@ void SwRangeRedline::MoveFromSection()
             *aBeforeArr[ n ] = *Start();
         for( n = 0; n < aBehindArr.size(); ++n )
             *aBehindArr[ n ] = *End();
+        SwRedlineTbl& rResortTbl = const_cast<SwRedlineTbl&>(rTbl);
+        for (auto& a : aIndexAndRangeMap)
+        {
+            // re-insert
+            rResortTbl.Remove(a.first);
+            rResortTbl.Insert(a.second);
+        }
     }
     else
         InvalidateRange();
