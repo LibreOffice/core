@@ -20,23 +20,55 @@ OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(bool bPrinter, X11SalGraphics
 {
 }
 
-cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
+cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface( const ServerFontLayout& rLayout )
 {
     // static size_t id = 0;
     // OString aFileName = OString("/tmp/libo_logs/text_rendering") + OString::number(id++) + OString(".svg");
     // cairo_surface_t* surface = cairo_svg_surface_create(aFileName.getStr(), GetWidth(), GetHeight());
     cairo_surface_t* surface = NULL;
+    Rectangle aTextBoundRect;
     OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
-    if( pImpl )
+
+    int nBaseX = rLayout.DrawBase().X();
+    int nBaseY = rLayout.DrawBase().Y();
+
+    if (pImpl)
     {
         Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
-        if( aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0 )
+
+        // no clipping area, we need to take the whole area
+        if ( aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0 )
         {
-            aClipRect.setWidth( GetWidth() );
-            aClipRect.setHeight( GetHeight() );
+            aClipRect.setWidth(GetWidth());
+            aClipRect.setHeight(GetHeight());
         }
-        surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aClipRect.GetWidth(), aClipRect.GetHeight() );
+
+        if (!rLayout.GetOrientation() )
+        {
+            // GetBoundRect can fail!
+            if ( rLayout.GetBoundRect(mrParent, aTextBoundRect) )
+            {
+                if ( aTextBoundRect.GetWidth() == 0 || aTextBoundRect.GetHeight() == 0 )
+                    aTextBoundRect = aClipRect;
+                else
+                    aTextBoundRect.setWidth( rLayout.GetTextWidth() );
+            }
+            else
+                aTextBoundRect = aClipRect;
+        }
+        else
+            aTextBoundRect = aClipRect;
     }
+    else
+    {
+        SAL_WARN("vcl.opengl", "No OpenGLSalGraphicsImpl!");
+        return NULL;
+    }
+
+    // add cairo surface offsets to work out surface width and height
+    surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aTextBoundRect.GetWidth() + nBaseX,
+                                                               aTextBoundRect.GetHeight() + nBaseY );
+
     return surface;
 }
 
