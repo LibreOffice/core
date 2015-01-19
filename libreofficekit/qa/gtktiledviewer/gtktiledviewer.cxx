@@ -333,7 +333,8 @@ int main( int argc, char* argv[] )
 
     pFileName = argv[2];
     int bOpened = lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
-    assert( bOpened ); (void)bOpened;
+    if (!bOpened)
+        g_error("main: lok_docview_open_document() failed with '%s'", pOffice->pClass->getError(pOffice));
     assert( LOK_DOCVIEW(pDocView)->pDocument );
 
     // GtkComboBox requires gtk 2.24 or later
