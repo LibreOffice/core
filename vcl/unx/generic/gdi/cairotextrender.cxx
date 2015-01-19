@@ -204,6 +204,9 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
+    // for now, we don't want to change anything that has rotated text
+    setTextBoundRect( rLayout, glyph_extrarotation.empty() ? false : true );
+
     cairo_surface_t *surface = getCairoSurface();
 
     DBG_ASSERT( surface!=NULL, "no cairo surface for text" );
