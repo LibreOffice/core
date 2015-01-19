@@ -37,7 +37,7 @@ published constants RenderingCapabilities
     /** The implementation is able to store the data persistent in the system
         so that it does not get lost when the source application no longer exist.
     */
-    const byte Persistant = 2;
+    const byte Persistent = 2;
 };
 
 
