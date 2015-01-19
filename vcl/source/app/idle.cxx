@@ -59,7 +59,7 @@ struct ImplIdleData
                 pMostUrgent = p;
             else
             {
-                // Find the highest priority one somehow.
+                // Find the highest priority.
                 if ( p->mpIdle->GetPriority() < pMostUrgent->mpIdle->GetPriority() )
                 {
                     IncreasePriority(pMostUrgent->mpIdle);
@@ -77,8 +77,10 @@ struct ImplIdleData
     {
         switch(pIdle->GetPriority())
         {
+            // Increase priority based on their current priority
             case IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION:
                 break;
+            // If already highest priority -> extra state for starving tasks
             case IdlePriority::VCL_IDLE_PRIORITY_HIGHEST:
                 pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION);
                 break;
@@ -142,7 +144,7 @@ void Idle::ProcessAllIdleHandlers()
     pIdleData = pSVData->mpFirstIdleData;
     while ( pIdleData )
     {
-        // Was timer destroyed in the meantime?
+        // Was Idle destroyed in the meantime?
         if ( pIdleData->mbDelete )
         {
             if ( pPrevIdleData )
@@ -166,6 +168,8 @@ void Idle::ProcessAllIdleHandlers()
 void Idle::SetPriority( IdlePriority ePriority )
 {
     mePriority = ePriority;
+    // Was a new priority set before excecution?
+    // Then take it as default priority
     if( !mbActive && meDefaultPriority == IdlePriority::VCL_IDLE_PRIORITY_DEFAULT )
         meDefaultPriority = mePriority;
 }
@@ -177,12 +181,13 @@ void Idle::DoIdle()
 
 void Idle::Start()
 {
+    // Mark timer active
     mbActive = true;
 
     ImplSVData* pSVData = ImplGetSVData();
     if ( !mpIdleData )
     {
-        // insert timer and start
+        // insert Idle
         mpIdleData = new ImplIdleData;
         mpIdleData->mpIdle        = this;
         mpIdleData->mbInIdle    = false;
