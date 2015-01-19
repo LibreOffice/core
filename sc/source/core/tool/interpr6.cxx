@@ -426,9 +426,19 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 if( eFunc == ifCOUNT )
                 {
                     OUString aStr = PopString().getString();
-                    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
-                    if ( bTextAsZero || pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
+                    if ( bTextAsZero )
                         nCount++;
+                    else
+                    {
+                        // Only check if string can be converted to number, no
+                        // error propagation.
+                        sal_uInt16 nErr = nGlobalError;
+                        nGlobalError = 0;
+                        ConvertStringToValue( aStr );
+                        if (!nGlobalError)
+                            ++nCount;
+                        nGlobalError = nErr;
+                    }
                 }
                 else
                 {
@@ -952,7 +962,6 @@ void ScInterpreter::ScCount()
     else
     {
         short nParamCount = GetByte();
-        double fVal = 0.0;
         sal_uLong nCount = 0;
         ScAddress aAdr;
         ScRange aRange;
@@ -967,9 +976,14 @@ void ScInterpreter::ScCount()
                 case svString:
                 {
                     OUString aStr = PopString().getString();
-                    sal_uInt32 nFIndex = 0;                 // damit default Land/Spr.
-                    if (pFormatter->IsNumberFormat(aStr, nFIndex, fVal))
-                        nCount++;
+                    // Only check if string can be converted to number, no
+                    // error propagation.
+                    sal_uInt16 nErr = nGlobalError;
+                    nGlobalError = 0;
+                    ConvertStringToValue( aStr );
+                    if (!nGlobalError)
+                        ++nCount;
+                    nGlobalError = nErr;
                 }
                 break;
                 case svDouble    :
