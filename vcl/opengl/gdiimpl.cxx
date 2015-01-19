@@ -1172,10 +1172,7 @@ void OpenGLSalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32*
     if( UseSolid( mnFillColor ) )
     {
         if( nPoly == 1 )
-        {
-            for( sal_uInt32 i = 0; i < nPoly; i++ )
-                DrawPolygon( pPoints[i], pPtAry[i] );
-        }
+            DrawPolygon( pPoints[ 0 ], pPtAry[ 0 ] );
         else
         {
             basegfx::B2DPolyPolygon polyPolygon;
