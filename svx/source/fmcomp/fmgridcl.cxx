@@ -533,6 +533,12 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         else
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
 
+        // jetzt einfuegen
+        Any aElement;
+        aElement <<= xCol;
+
+        xCols->insertByIndex(nPos, aElement);
+
         FormControlFactory aControlFactory;
         aControlFactory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
         aControlFactory.initializeFieldDependentProperties( xField, xCol, xNumberFormats );
@@ -566,11 +572,6 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         }
         else
             xCol->setPropertyValue(FM_PROP_NAME, makeAny(sFieldName));
-
-        // jetzt einfuegen
-        Any aElement;
-        aElement <<= xCol;
-        xCols->insertByIndex(nPos, aElement);
 
         if (bDateNTimeCol)
         {
