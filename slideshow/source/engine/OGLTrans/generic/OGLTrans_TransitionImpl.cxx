@@ -44,6 +44,20 @@ using std::max;
 using std::min;
 using std::vector;
 
+double EyePos(10.0);
+double RealF(1.0);
+double RealN(-1.0);
+double RealL(-1.0);
+double RealR(1.0);
+double RealB(-1.0);
+double RealT(1.0);
+double ClipN(EyePos+5.0*RealN);
+double ClipF(EyePos+15.0*RealF);
+double ClipL(RealL*8.0);
+double ClipR(RealR*8.0);
+double ClipB(RealB*8.0);
+double ClipT(RealT*8.0);
+
 TransitionScene::TransitionScene(TransitionScene const& rOther)
     : maLeavingSlidePrimitives(rOther.maLeavingSlidePrimitives)
     , maEnteringSlidePrimitives(rOther.maEnteringSlidePrimitives)
@@ -161,18 +175,31 @@ static void blendSlide()
 static void slideShadow( double nTime, const Primitive& primitive, double sw, double sh )
 {
 
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_LIGHTING);
 
-    glPushMatrix();
     primitive.applyOperations( nTime, sw, sh );
     blendSlide();
-    glPopMatrix();
 
     glDisable(GL_BLEND);
     glEnable(GL_LIGHTING);
+
+}
+
+static void resetMatrix()
+{
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    //This scaling is to take the plane with BottomLeftCorner(-1,-1,0) and TopRightCorner(1,1,0) and map it to the screen after the perspective division.
+    glScaled( 1.0 / ( ( ( RealR * 2.0 * ClipN ) / ( EyePos * ( ClipR - ClipL ) ) ) - ( ( ClipR + ClipL ) / ( ClipR - ClipL ) ) ),
+              1.0 / ( ( ( RealT * 2.0 * ClipN ) / ( EyePos * ( ClipT - ClipB ) ) ) - ( ( ClipT + ClipB ) / ( ClipT - ClipB ) ) ),
+              1.0 );
+    glFrustum(ClipL,ClipR,ClipB,ClipT,ClipN,ClipF);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslated(0,0,-EyePos);
 
 }
 
@@ -204,18 +231,10 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
     const double SlideWidthScale = SlideWidth/DispWidth;
     const double SlideHeightScale = SlideHeight/DispHeight;
 
-
     prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
-
-    glPushMatrix();
-
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
-
     displayScene( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
-
-    glPopMatrix();
-
 }
 
 void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale )
@@ -243,8 +262,6 @@ void
         double surfaceLevel = -0.04;
 
         /* reflected slides */
-        glPushMatrix();
-
         glScaled( 1, -1, 1 );
         glTranslated( 0, 2 - surfaceLevel, 0 );
 
@@ -253,9 +270,9 @@ void
             primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
-        //slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
+        slideShadow( nTime, primitives[0], SlideWidthScale, SlideHeightScale );
 
-        glPopMatrix();
+        resetMatrix();
     }
 
     for(size_t i(0); i < primitives.size(); ++i)
@@ -275,9 +292,7 @@ void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double Sl
 
 void Primitive::display(double nTime, double WidthScale, double HeightScale) const
 {
-
     glPushMatrix();
-
 
     applyOperations( nTime, WidthScale, HeightScale );
 
@@ -302,7 +317,6 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
 
     glPopMatrix();
-
 }
 
 void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale) const
@@ -320,16 +334,13 @@ void SceneObject::display(double nTime, double /* SlideWidth */, double /* Slide
     for(size_t i(0); i < maPrimitives.size(); ++i) {
         // fixme: allow various model spaces, now we make it so that
         // it is regular -1,-1 to 1,1, where the whole display fits in
-
-        glPushMatrix();
-
         if (DispHeight > DispWidth)
             glScaled(DispHeight/DispWidth, 1, 1);
         else
             glScaled(1, DispWidth/DispHeight, 1);
         maPrimitives[i].display(nTime, 1, 1);
 
-        glPopMatrix();
+        resetMatrix();
 
     }
 
