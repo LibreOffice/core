@@ -25,10 +25,12 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/maptype.hxx>
 
@@ -38,6 +40,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
+using namespace com::sun::star::xml::sax;
+using namespace xmloff;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_TEXT_PROPERTIES;
 using ::xmloff::token::XML_GRAPHIC_PROPERTIES;
@@ -133,11 +137,37 @@ SvXMLImportContext *XMLShapeStyleContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    XMLShapeStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    XMLShapeStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    sal_uInt32 nFamily = 0;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_text_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_text_properties) )
+        nFamily = XML_TYPE_PROP_TEXT;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_paragraph_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_paragraph_properties) )
+        nFamily = XML_TYPE_PROP_PARAGRAPH;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_graphic_properties) ||
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_graphic_properties) )
+        nFamily = XML_TYPE_PROP_GRAPHIC;
+
+    if( nFamily )
+    {
+        rtl::Reference < SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new XMLShapePropertySetContext(
+                    GetImport(), Element, xAttrList,
+                     nFamily, GetProperties(), xImpPrMap );
+    }
+
+    if( !pContext.is() )
+        pContext = XMLPropStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet > & rPropSet )
