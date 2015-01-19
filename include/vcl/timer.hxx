@@ -64,6 +64,7 @@ public:
     static void ImplDeInitTimer();
     static void ImplTimerCallbackProc();
     static bool TimerReady();
+    static bool CheckExpiredTimer(const bool bDoInvoke);
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
