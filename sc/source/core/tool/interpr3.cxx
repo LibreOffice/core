@@ -3719,6 +3719,19 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     for (SCSIZE i = 0; i < nCount; ++i)
                         if (!pMat->IsString(i))
                             rArray.push_back( pMat->GetDouble(i));
+                        else
+                        {
+                            // fdo 88547 in case of date, convert string to datevalue
+                            OUString aStr = pMat->GetString( i ).getString();
+                            sal_uInt32 nFIndex = 0;                 // default
+                            double fVal;
+                            if ( pFormatter->IsNumberFormat( aStr, nFIndex, fVal ) )
+                            {
+                                short eType = pFormatter->GetType( nFIndex );
+                                if ( eType == NUMBERFORMAT_DATE || eType == NUMBERFORMAT_DATETIME )
+                                    rArray.push_back( ::rtl::math::approxFloor( fVal ) );
+                            }
+                        }
                 }
             }
             break;
@@ -3739,7 +3752,6 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
 void ScInterpreter::GetSortArray( sal_uInt8 nParamCount, vector<double>& rSortArray, vector<long>* pIndexOrder )
 {
     GetNumberSequenceArray( nParamCount, rSortArray);
-
     if (rSortArray.size() > MAX_ANZ_DOUBLE_FOR_SORT)
         SetError( errStackOverflow);
     else if (rSortArray.empty())
