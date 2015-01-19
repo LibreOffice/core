@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a41bdd9_0ecc5334",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 557,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-19T08:52:39Z",
+      "side": 1,
+      "message": "no need for getStr(), given that there\u0027s an overload of \u003c\u003c for OString",
+      "revId": "4e09a55f3626732964c2041516ed4e4d8519ed47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a41bdd9_aed0c7ca",
+        "filename": "desktop/source/app/dispatchwatcher.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-19T08:52:39Z",
+      "side": 1,
+      "message": "better be consistent about endl vs \u0027\\n\u0027  (there\u0027s maybe some argument for preferring endl with cerr, but I don\u0027t think there\u0027s any for preferring it for cout)",
+      "revId": "4e09a55f3626732964c2041516ed4e4d8519ed47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
