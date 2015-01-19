@@ -631,8 +631,7 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                         OString aTargetURL8 = OUStringToOString(aTempName, osl_getThreadTextEncoding() );
 
                         std::cout << "print " << aSource8 << " -> " << aTargetURL8;
-                        std::cout << " using " << aPrinterName.isEmpty() ?
-                                                       "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() );
+                        std::cout << " using " << (aPrinterName.isEmpty() ? "<default_printer>" : OUStringToOString( aPrinterName, osl_getThreadTextEncoding() ));
                         std::cout << std::endl;
 
                         // create the custom printer, if given
