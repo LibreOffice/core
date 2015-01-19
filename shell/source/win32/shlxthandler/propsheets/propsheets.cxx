@@ -172,6 +172,10 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    bool bIsVistaOrLater = IsWindowsVistaOrGreater() ? true : false;
+#else
     // Get OS version (we don't need the summary page on Windows Vista or later)
     OSVERSIONINFO sInfoOS;
 
@@ -179,6 +183,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     sInfoOS.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
     GetVersionEx( &sInfoOS );
     bool bIsVistaOrLater = (sInfoOS.dwMajorVersion >= 6);
+#endif
 
     std::wstring proppage_header;
 

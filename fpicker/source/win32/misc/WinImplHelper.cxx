@@ -63,6 +63,10 @@ const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 bool SAL_CALL IsWindowsVistaOrNewer()
 {
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    return IsWindowsVistaOrGreater() ? true : false;
+#else
     OSVERSIONINFO osvi;
     osvi.dwOSVersionInfoSize = sizeof(osvi);
 
@@ -77,6 +81,7 @@ bool SAL_CALL IsWindowsVistaOrNewer()
          sal::static_int_cast< unsigned int >(0));
 
     return bRet;
+#endif
 }
 
 

@@ -68,6 +68,10 @@ namespace internal
 
     bool IsWindowsXP()
     {
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+        return IsWindowsXPOrGreater() ? true : false;
+#else
         OSVERSIONINFO osvi;
         ZeroMemory(&osvi, sizeof(osvi));
         osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -75,6 +79,7 @@ namespace internal
 
         return ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
                 ((osvi.dwMajorVersion >= 5) && (osvi.dwMinorVersion >= 1)));
+#endif
     }
 
     /* Calculate where to position the signet image.

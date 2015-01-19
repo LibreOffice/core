@@ -68,12 +68,17 @@ LRESULT CALLBACK MediaPlayerWndProc_2( HWND hWnd,UINT nMsg, WPARAM nPar1, LPARAM
 
 bool isWindowsVistaOrHigher()
 {
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    return IsWindowsVistaOrGreater() ? true : false;
+#else
     // POST: return true if we are at least on Windows Vista
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx(&osvi);
     return  osvi.dwMajorVersion >= 6;
+#endif
 }
 
 
