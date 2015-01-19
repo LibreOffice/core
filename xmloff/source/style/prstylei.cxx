@@ -22,6 +22,7 @@
 #include <set>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XAutoStyleFamily.hpp>
@@ -30,6 +31,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/attrlist.hxx>
@@ -48,6 +50,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 //UUUU
 using namespace com::sun::star::drawing;
@@ -223,11 +226,61 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
 }
 
 Reference< XFastContextHandler > SAL_CALL
-    XMLPropStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    XMLPropStyleContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    return Reference< XFastContextHandler >();
+    Reference< XFastContextHandler > pContext;
+
+    sal_uInt32 nFamily = 0;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_graphic_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_graphic_properties) )
+        nFamily = XML_TYPE_PROP_GRAPHIC;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_drawing_page_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_drawing_page_properties) )
+        nFamily = XML_TYPE_PROP_DRAWING_PAGE;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_text_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_text_properties) )
+        nFamily = XML_TYPE_PROP_TEXT;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_paragraph_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_paragraph_properties) )
+        nFamily = XML_TYPE_PROP_PARAGRAPH;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_ruby_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_ruby_properties) )
+        nFamily = XML_TYPE_PROP_RUBY;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_section_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_section_properties) )
+        nFamily = XML_TYPE_PROP_SECTION;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_properties) )
+        nFamily = XML_TYPE_PROP_TABLE;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_column_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_column_properties) )
+        nFamily = XML_TYPE_PROP_TABLE_COLUMN;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_row_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_row_properties) )
+        nFamily = XML_TYPE_PROP_TABLE_ROW;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_cell_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_cell_properties) )
+        nFamily = XML_TYPE_PROP_TABLE_CELL;
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_chart_properties)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_chart_properties) )
+        nFamily = XML_TYPE_PROP_CHART;
+
+    if( nFamily )
+    {
+        rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+            static_cast<SvXMLStylesContext *>(&mxStyles)
+            ->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new SvXMLPropertySetContext( GetImport(), Element,
+                xAttrList, nFamily, maProperties, xImpPrMap );
+    }
+
+    if( !pContext.is() )
+        pContext = SvXMLStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void XMLPropStyleContext::FillPropertySet(
