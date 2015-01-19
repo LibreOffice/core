@@ -206,6 +206,10 @@ bool isEmptyString( const OUString& rStr )
 
 /** Convert string content to numeric value.
 
+    Depending on the string conversion configuration different approaches are
+    taken. For ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS if the string is not
+    empty the following conversion rules are applied:
+
     Converted are only integer numbers including exponent, and ISO 8601 dates
     and times in their extended formats with separators. Anything else,
     especially fractional numeric values with decimal separators or dates other
