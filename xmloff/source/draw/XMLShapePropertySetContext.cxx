@@ -43,19 +43,50 @@ XMLShapePropertySetContext::XMLShapePropertySetContext(
 {
 }
 
+XMLShapePropertySetContext::XMLShapePropertySetContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt32 nFam, std::vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >&rMap )
+:   SvXMLPropertySetContext( rImport, Element, xAttrList, nFam, rProps, rMap ),
+    mnBulletIndex(-1)
+{
+}
+
 XMLShapePropertySetContext::~XMLShapePropertySetContext()
 {
 }
 
 void XMLShapePropertySetContext::EndElement()
 {
+Reference< container::XIndexReplace > xNumRule;
+if( mxBulletStyle.Is() )
+{
+    SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
+    xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
+    if( xNumRule.is() )
+        pBulletStyle->FillUnoNumRule(xNumRule);
+}
+
+Any aAny;
+aAny <<= xNumRule;
+
+XMLPropertyState aPropState( mnBulletIndex, aAny );
+mrProperties.push_back( aPropState );
+
+SvXMLPropertySetContext::EndElement();
+}
+
+void SAL_CALL XMLShapePropertySetContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
     Reference< container::XIndexReplace > xNumRule;
     if( mxBulletStyle.Is() )
     {
-        SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
-        xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
-        if( xNumRule.is() )
-            pBulletStyle->FillUnoNumRule(xNumRule);
+    SvxXMLListStyleContext* pBulletStyle = static_cast<SvxXMLListStyleContext*>(&mxBulletStyle);
+    xNumRule = SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() );
+    if( xNumRule.is() )
+        pBulletStyle->FillUnoNumRule(xNumRule);
     }
 
     Any aAny;
@@ -64,7 +95,7 @@ void XMLShapePropertySetContext::EndElement()
     XMLPropertyState aPropState( mnBulletIndex, aAny );
     mrProperties.push_back( aPropState );
 
-    SvXMLPropertySetContext::EndElement();
+    SvXMLPropertySetContext::endFastElement( Element );
 }
 
 SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
@@ -95,6 +126,15 @@ SvXMLImportContext *XMLShapePropertySetContext::CreateChildContext(
                                                             rProperties, rProp );
 
     return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler >
+    XMLShapePropertySetContext::createFastChildContext(
+    sal_Int32 /*Element*/, const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& /*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
+{
+    return Reference< XFastContextHandler >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
