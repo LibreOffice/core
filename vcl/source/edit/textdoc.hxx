@@ -90,7 +90,7 @@ public:
 class TextDoc
 {
 private:
-    ToolsList<TextNode*> maTextNodes;
+    std::vector<TextNode*>  maTextNodes;
     sal_uInt16              mnLeftMargin;
 
 protected:
@@ -102,8 +102,8 @@ public:
 
     void                Clear();
 
-    ToolsList<TextNode*>&       GetNodes()              { return maTextNodes; }
-    const ToolsList<TextNode*>& GetNodes() const        { return maTextNodes; }
+    std::vector<TextNode*>&       GetNodes()              { return maTextNodes; }
+    const std::vector<TextNode*>& GetNodes() const        { return maTextNodes; }
 
     TextPaM             RemoveChars( const TextPaM& rPaM, sal_uInt16 nChars );
     TextPaM             InsertText( const TextPaM& rPaM, sal_Unicode c );
