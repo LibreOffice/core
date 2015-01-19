@@ -728,8 +728,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( nId == SID_SAVEASDOC  && nErrorCode == ERRCODE_NONE )
             {
-                GetFrame()->RemoveInfoBar("readonly");
-                SetReadOnlyUI(false);
+                SfxBoolItem const * saveTo = static_cast<SfxBoolItem const *>(
+                    rReq.GetArg(SID_SAVETO, false, TYPE(SfxBoolItem)));
+                if (saveTo == nullptr || !saveTo->GetValue())
+                {
+                    GetFrame()->RemoveInfoBar("readonly");
+                    SetReadOnlyUI(false);
+                }
             }
 
             rReq.SetReturnValue( SfxBoolItem(0, nErrorCode == ERRCODE_NONE ) );
