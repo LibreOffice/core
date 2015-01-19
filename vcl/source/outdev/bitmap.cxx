@@ -717,7 +717,9 @@ private:
         if (bMirror)
             nMirrorOffset = (nDstLocation << 1) + nSrcDimension - 1L;
 
-        double fReverseScale = (nSrcDimension - 1L) / double(nOutDimention - 1L);
+        const double fReverseScale = (nOutDimention > 1L) ? (nSrcDimension - 1L) / double(nOutDimention - 1L) : 0.0;
+
+        long nSampleRange = std::max(0L, nSrcDimension - 2L);
 
         for (long i = 0L; i < nDstDimension; i++)
         {
@@ -725,7 +727,7 @@ private:
             if (bMirror)
                 fTemp = nMirrorOffset - fTemp - 1L;
 
-            pMap[i] = MinMax(nDstLocation + long(fTemp), 0, nSrcDimension - 2L);
+            pMap[i] = MinMax(nDstLocation + long(fTemp), 0, nSampleRange);
             pMapOffset[i] = (long) ((fTemp - pMap[i]) * 128.0);
         }
     }
