@@ -20,6 +20,7 @@
 #include "PageMasterImportContext.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include "PageMasterPropHdl.hxx"
 #include "PagePropertySetContext.hxx"
 #include "PageHeaderFooterContext.hxx"
@@ -27,6 +28,7 @@
 #include "PageMasterImportPropMapper.hxx"
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
 
 //UUUU
@@ -38,6 +40,8 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace com::sun::star::xml::sax;
+using namespace xmloff;
 
 //UUUU
 using namespace ::com::sun::star::beans;
@@ -169,11 +173,86 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    PageStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    PageStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+   if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_header_style)
+    || Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_footer_style) )
+   {
+       bool bHeader = (XML_header_style == (Element & XML_header_style));
+       rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+           GetStyles()->GetImportPropertyMapper( GetFamily() );
+       if( xImpPrMap.is() )
+       {
+           const rtl::Reference< XMLPropertySetMapper >& rMapper =
+               xImpPrMap->getPropertySetMapper();
+           sal_Int32 nFlag;
+           if( bHeader )
+               nFlag = CTF_PM_HEADERFLAG;
+           else
+               nFlag = CTF_PM_FOOTERFLAG;
+           sal_Int32 nStartIndex(-1);
+           sal_Int32 nEndIndex(-1);
+           bool bFirst(false);
+           bool bEnd(false);
+           sal_Int32 nIndex = 0;
+           while( nIndex < rMapper->GetEntryCount() && !bEnd )
+           {
+               if( (rMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK) == nFlag )
+               {
+                   if( !bFirst )
+                   {
+                       bFirst = true;
+                       nStartIndex = nIndex;
+                   }
+               }
+               else if( bFirst )
+               {
+                   bEnd = true;
+                   nEndIndex = nIndex;
+               }
+               nIndex++;
+           }
+           if( !bEnd )
+               nEndIndex = nIndex;
+           return new PageHeaderFooterContext( GetImport(), Element, xAttrList,
+                GetProperties(), xImpPrMap, nStartIndex, nEndIndex, bHeader);
+       }
+   }
+
+   if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_properties) )
+   {
+        rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+           GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+        {
+           const rtl::Reference< XMLPropertySetMapper >& rMapper =
+               xImpPrMap->getPropertySetMapper();
+           sal_Int32 nEndIndex(-1);
+           bool bEnd(false);
+           sal_Int32 nIndex = 0;
+           sal_Int16 nContextID;
+           while( nIndex < rMapper->GetEntryCount() && !bEnd )
+           {
+               nContextID = rMapper->GetEntryContextId( nIndex );
+               if( nContextID && ((nContextID & CTF_PM_FLAGMASK) != XML_PM_CTF_START) )
+               {
+                    nEndIndex = nIndex;
+                    bEnd = true;
+               }
+               nIndex++;
+           }
+           if( !bEnd )
+               nEndIndex = nIndex;
+           PageContextType aType = Page;
+           return new PagePropertySetContext( GetImport(), Element,
+                xAttrList, XML_TYPE_PROP_PAGE_LAYOUT, GetProperties(),
+                xImpPrMap, 0, nEndIndex, aType );
+        }
+    }
+
+    return XMLPropStyleContext::createFastChildContext( Element, xAttrList );
 }
 
 void PageStyleContext::FillPropertySet(const uno::Reference<beans::XPropertySet > & rPropSet)
