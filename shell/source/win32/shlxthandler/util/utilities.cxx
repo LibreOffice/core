@@ -104,6 +104,10 @@ std::wstring GetResString(int ResId)
 */
 bool is_windows_xp_or_above()
 {
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    return IsWindowsXPOrGreater() ? true : false;
+#else
     OSVERSIONINFO osvi;
     ZeroMemory(&osvi, sizeof(osvi));
     osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -116,6 +120,7 @@ bool is_windows_xp_or_above()
         return true;
     }
     return false;
+#endif
 }
 
 

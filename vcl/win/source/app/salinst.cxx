@@ -451,6 +451,11 @@ SalInstance* CreateSalInstance()
     aSalShlData.mbW7         = 0;
     memset( &aSalShlData.maVersionInfo, 0, sizeof(aSalShlData.maVersionInfo) );
     aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    aSalShlData.mbWXP = IsWindowsXPOrGreater() ? 1 : 0;
+    aSalShlData.mbW7 = IsWindows7OrGreater() ? 1 : 0;
+#else
     if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
     {
         // Windows XP ?
@@ -462,6 +467,7 @@ SalInstance* CreateSalInstance()
        ( aSalShlData.maVersionInfo.dwMajorVersion == 6 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
         aSalShlData.mbW7 = 1;
     }
+#endif
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
 

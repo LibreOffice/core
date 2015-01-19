@@ -67,11 +67,17 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
     std::_tstring sDesktopFile = sOfficeMenuFolder + TEXT("Desktop.ini");
     std::_tstring   sIconFile = GetMsiProperty( handle, TEXT("INSTALLLOCATION") ) + TEXT("program\\soffice.exe");
 
+// the Win32 SDK 8.1 deprecates GetVersionEx()
+#ifdef _WIN32_WINNT_WINBLUE
+    bool const bIsVistaOrLater = IsWindowsVistaOrGreater() ? true : false;
+#else
     OSVERSIONINFO   osverinfo;
     osverinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx( &osverinfo );
+    bool const bIsVistaOrLater = (osverinfo.dwMajorVersion >= 6);
+#endif
 
-    if (osverinfo.dwMajorVersion < 6 /* && osverinfo.dwMinorVersion  */ )
+    if (!bIsVistaOrLater)
     {
         WritePrivateProfileString(
             TEXT(".ShellClassInfo"),
