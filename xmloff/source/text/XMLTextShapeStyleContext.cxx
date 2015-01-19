@@ -269,11 +269,48 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
 }
 
 Reference< XFastContextHandler > SAL_CALL
-    XMLTextShapeStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    XMLTextShapeStyleContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    return Reference< XFastContextHandler >();
+    SvXMLImportContext *pContext = 0;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) )
+    {
+        // create and remember events import context
+        // (for delayed processing of events)
+        pContext = new XMLEventsImportContext( GetImport() );
+        xEventContext = pContext;
+    }
+    else
+    {
+        sal_uInt32 nFamily = 0;
+        if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_text_properties) ||
+            Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_text_properties) )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_paragraph_properties) ||
+            Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_paragraph_properties) )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_graphic_properties) ||
+            Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_graphic_properties) )
+            nFamily = XML_TYPE_PROP_GRAPHIC;
+
+        if( nFamily )
+        {
+            rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+                GetStyles()->GetImportPropertyMapper( GetFamily() );
+            if( xImpPrMap.is() )
+            {
+                pContext = new XMLTextShapePropertySetContext_Impl(
+                    GetImport(), Element, xAttrList, nFamily, GetProperties(), xImpPrMap );
+            }
+        }
+    }
+
+    if( !pContext )
+        return XMLShapeStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void XMLTextShapeStyleContext::CreateAndInsert( bool bOverwrite )
