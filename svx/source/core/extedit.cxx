@@ -94,7 +94,7 @@ void ExternalToolEditThread::execute()
         xSystemShellExecute->execute(m_aFileName, OUString(),
                 SystemShellExecuteFlags::URIS_ONLY);
     }
-    catch (uno::Exception const& e)
+    catch (Exception const& e)
     {
         SAL_WARN("svx", "ExternalToolEditThread: exception: " << e.Message);
     }
