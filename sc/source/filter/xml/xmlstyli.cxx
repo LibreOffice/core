@@ -561,11 +561,33 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
 }
 
 uno::Reference< XFastContextHandler > SAL_CALL
-    XMLTableStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< XFastAttributeList >& /*xAttrList*/ )
+    XMLTableStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< XFastContextHandler >();
+    uno::Reference< XFastContextHandler > pContext;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_map) )
+    {
+        if(!mpCondFormat)
+            mpCondFormat = new ScConditionalFormat( 0, GetScImport().GetDocument() );
+        ScXMLMapContext* pMapContext = new ScXMLMapContext( GetImport(), Element, xAttrList );
+        pContext = pMapContext;
+        mpCondFormat->AddEntry(pMapContext->CreateConditionEntry());
+    }
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_table_cell_properties) )
+    {
+        rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+            static_cast< SvXMLStylesContext *>(GetStyles())->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new XMLTableCellPropsContext( GetImport(),
+                Element, xAttrList, XML_TYPE_PROP_TABLE_CELL, GetProperties(), xImpPrMap );
+    }
+
+    if( !pContext.is() )
+        pContext = XMLPropStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void XMLTableStyleContext::ApplyCondFormat( const uno::Sequence<table::CellRangeAddress>& xCellRanges )
