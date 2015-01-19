@@ -34,4 +34,12 @@
         android:textColor="@android:color/secondary_text_light"
         android:textSize="18dip"/>
 
+    <TextView
+        android:id="@+id/about_vendor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true"
+        android:text="@string/app_vendor"
+        android:textColor="@android:color/secondary_text_light"
+        android:textSize="18sp"/>
 </LinearLayout>
