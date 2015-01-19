@@ -248,11 +248,25 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SdXMLDrawingPageStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SdXMLDrawingPageStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_drawing_page_properties) )
+    {
+        rtl::Reference< SvXMLImportPropertyMapper > xImpPrMap =
+            GetStyles()->GetImportPropertyMapper( GetFamily() );
+        if( xImpPrMap.is() )
+            pContext = new SdXMLDrawingPagePropertySetContext(
+                GetImport(), Element, xAttrList, GetProperties(), xImpPrMap );
+    }
+
+    if( !pContext.is() )
+        pContext = XMLPropStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
