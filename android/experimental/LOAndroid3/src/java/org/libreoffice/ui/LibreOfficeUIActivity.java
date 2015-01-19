@@ -570,9 +570,9 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
                 case FileUtilities.DOC:
                     imageView.setImageResource(R.drawable.writer);
                     break;
-                /*case FileUtilities.CALC:
+                case FileUtilities.CALC:
                     imageView.setImageResource(R.drawable.calc);
-                    break;*/
+                    break;
                 case FileUtilities.DRAWING:
                     imageView.setImageResource(R.drawable.draw);
                     break;

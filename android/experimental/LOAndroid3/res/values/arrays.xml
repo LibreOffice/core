@@ -35,7 +35,7 @@
     <string-array name="file_view_modes">
         <item >EVERYTHING</item>
         <item >DOCUMENTS</item>
-        <!-- <item>SPREADSHEETS</item> -->
+        <item>SPREADSHEETS</item>
         <item >PRESENTATIONS</item>
         <item>DRAWINGS</item>
     </string-array>
