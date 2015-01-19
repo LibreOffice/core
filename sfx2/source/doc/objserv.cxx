@@ -728,6 +728,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             if ( nId == SID_SAVEASDOC  && nErrorCode == ERRCODE_NONE )
             {
+                GetFrame()->RemoveInfoBar("readonly");
                 SetReadOnlyUI(false);
             }
 
