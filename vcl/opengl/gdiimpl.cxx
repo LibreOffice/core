@@ -406,6 +406,8 @@ bool OpenGLSalGraphicsImpl::UseSolid( SalColor nColor )
 // Like UseSolid(), but sets up for AA drawing, which uses gradients to create the AA.
 bool OpenGLSalGraphicsImpl::UseSolidAA( SalColor nColor, double fTransparency )
 {
+    if( nColor == SALCOLOR_NONE )
+        return false;
     if( !mrParent.getAntiAliasB2DDraw())
         return UseSolid( nColor );
     if( !UseProgram( "textureVertexShader", "linearGradientFragmentShader" ) )
