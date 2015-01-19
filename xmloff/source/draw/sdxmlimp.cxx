@@ -29,6 +29,7 @@
 #include "ximpstyl.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <com/sun/star/form/XFormsSupplier.hpp>
@@ -42,6 +43,7 @@
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/settingsstore.hxx>
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <xmloff/XMLFontStylesContext.hxx>
 
@@ -49,7 +51,9 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 class SdXMLBodyContext_Impl : public SvXMLImportContext
 {
@@ -439,14 +443,22 @@ const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDocElemTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS       },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES          },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES      },
-    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
-    { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META            },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT          },
-    { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY            },
-    { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS        },
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_font_face_decls) },
+    { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_styles) },
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_styles) },
+    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_master_styles) },
+    { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_meta) },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_scripts) },
+    { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_body) },
+    { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_settings) },
     XML_TOKEN_MAP_END
 };
 
@@ -462,11 +474,16 @@ const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
     {
         static const SvXMLTokenMapEntry aBodyElemTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,   XML_PAGE,               XML_TOK_BODY_PAGE   },
-    { XML_NAMESPACE_PRESENTATION, XML_SETTINGS,     XML_TOK_BODY_SETTINGS   },
-    { XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL,  XML_TOK_BODY_HEADER_DECL    },
-    { XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL,  XML_TOK_BODY_FOOTER_DECL    },
-    { XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL,XML_TOK_BODY_DATE_TIME_DECL    },
+    { XML_NAMESPACE_DRAW,   XML_PAGE,               XML_TOK_BODY_PAGE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_page) },
+    { XML_NAMESPACE_PRESENTATION, XML_SETTINGS,     XML_TOK_BODY_SETTINGS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_settings) },
+    { XML_NAMESPACE_PRESENTATION, XML_HEADER_DECL,  XML_TOK_BODY_HEADER_DECL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_header_decl) },
+    { XML_NAMESPACE_PRESENTATION, XML_FOOTER_DECL,  XML_TOK_BODY_FOOTER_DECL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_footer_decl) },
+    { XML_NAMESPACE_PRESENTATION, XML_DATE_TIME_DECL,XML_TOK_BODY_DATE_TIME_DECL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_date_time_decl) },
 
     XML_TOKEN_MAP_END
 };
@@ -483,9 +500,12 @@ const SvXMLTokenMap& SdXMLImport::GetStylesElemTokenMap()
     {
         static const SvXMLTokenMapEntry aStylesElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,                XML_TOK_STYLES_PAGE_MASTER              },
-    { XML_NAMESPACE_STYLE,  XML_PRESENTATION_PAGE_LAYOUT,   XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
-    { XML_NAMESPACE_STYLE,  XML_STYLE,                      XML_TOK_STYLES_STYLE    },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,                XML_TOK_STYLES_PAGE_MASTER,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout) },
+    { XML_NAMESPACE_STYLE,  XML_PRESENTATION_PAGE_LAYOUT,   XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_presentation_page_layout) },
+    { XML_NAMESPACE_STYLE,  XML_STYLE,                      XML_TOK_STYLES_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_style) },
     XML_TOKEN_MAP_END
 };
 
@@ -501,8 +521,10 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
     {
         static const SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,          XML_STYLE,      XML_TOK_MASTERPAGE_STYLE    },
-    { XML_NAMESPACE_PRESENTATION,   XML_NOTES,      XML_TOK_MASTERPAGE_NOTES    },
+    { XML_NAMESPACE_STYLE,          XML_STYLE,      XML_TOK_MASTERPAGE_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_style) },
+    { XML_NAMESPACE_PRESENTATION,   XML_NOTES,      XML_TOK_MASTERPAGE_NOTES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_notes) },
     XML_TOKEN_MAP_END
 };
 
@@ -518,14 +540,22 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME },
-    { XML_NAMESPACE_STYLE,  XML_DISPLAY_NAME,               XML_TOK_MASTERPAGE_DISPLAY_NAME },
-    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
-    { XML_NAMESPACE_DRAW,   XML_STYLE_NAME,                 XML_TOK_MASTERPAGE_STYLE_NAME       },
-    { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
-    { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_MASTERPAGE_USE_HEADER_NAME  },
-    { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_MASTERPAGE_USE_FOOTER_NAME  },
-    { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME   },
+    { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name) },
+    { XML_NAMESPACE_STYLE,  XML_DISPLAY_NAME,               XML_TOK_MASTERPAGE_DISPLAY_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_display_name) },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_name) },
+    { XML_NAMESPACE_DRAW,   XML_STYLE_NAME,                 XML_TOK_MASTERPAGE_STYLE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_presentation_page_layout_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_MASTERPAGE_USE_HEADER_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_use_header_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_MASTERPAGE_USE_FOOTER_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_use_footer_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_MASTERPAGE_USE_DATE_TIME_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_use_date_time_name) },
     XML_TOKEN_MAP_END
 };
 
@@ -541,7 +571,8 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,          XML_NAME,               XML_TOK_PAGEMASTER_NAME                 },
+    { XML_NAMESPACE_STYLE,          XML_NAME,               XML_TOK_PAGEMASTER_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name) },
     XML_TOKEN_MAP_END
 };
 
@@ -557,13 +588,20 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_FO,             XML_MARGIN_TOP,         XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP          },
-    { XML_NAMESPACE_FO,             XML_MARGIN_BOTTOM,      XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM       },
-    { XML_NAMESPACE_FO,             XML_MARGIN_LEFT,        XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT         },
-    { XML_NAMESPACE_FO,             XML_MARGIN_RIGHT,       XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT        },
-    { XML_NAMESPACE_FO,             XML_PAGE_WIDTH,         XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH          },
-    { XML_NAMESPACE_FO,             XML_PAGE_HEIGHT,        XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT         },
-    { XML_NAMESPACE_STYLE,          XML_PRINT_ORIENTATION,  XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION    },
+    { XML_NAMESPACE_FO,             XML_MARGIN_TOP,         XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP,
+        (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_margin_top) },
+    { XML_NAMESPACE_FO,             XML_MARGIN_BOTTOM,      XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM,
+        (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_margin_bottom) },
+    { XML_NAMESPACE_FO,             XML_MARGIN_LEFT,        XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_margin_left) },
+    { XML_NAMESPACE_FO,             XML_MARGIN_RIGHT,       XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_margin_right) },
+    { XML_NAMESPACE_FO,             XML_PAGE_WIDTH,         XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH,
+        (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_page_width) },
+    { XML_NAMESPACE_FO,             XML_PAGE_HEIGHT,        XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_page_height) },
+    { XML_NAMESPACE_STYLE,          XML_PRINT_ORIENTATION,  XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION,
+        (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_print_orientation) },
     XML_TOKEN_MAP_END
 };
 
@@ -579,16 +617,26 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_NAME,                           XML_TOK_DRAWPAGE_NAME               },
-    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,                     XML_TOK_DRAWPAGE_STYLE_NAME         },
-    { XML_NAMESPACE_DRAW,           XML_MASTER_PAGE_NAME,               XML_TOK_DRAWPAGE_MASTER_PAGE_NAME   },
-    { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME   },
-    { XML_NAMESPACE_DRAW,           XML_ID,                             XML_TOK_DRAWPAGE_DRAWID                 },
-    { XML_NAMESPACE_XML,            XML_ID,                             XML_TOK_DRAWPAGE_XMLID                  },
-    { XML_NAMESPACE_XLINK,          XML_HREF,                           XML_TOK_DRAWPAGE_HREF               },
-    { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_DRAWPAGE_USE_HEADER_NAME    },
-    { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_DRAWPAGE_USE_FOOTER_NAME    },
-    { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_DRAWPAGE_USE_DATE_TIME_NAME },
+    { XML_NAMESPACE_DRAW,           XML_NAME,                           XML_TOK_DRAWPAGE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,                     XML_TOK_DRAWPAGE_STYLE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style_name) },
+    { XML_NAMESPACE_DRAW,           XML_MASTER_PAGE_NAME,               XML_TOK_DRAWPAGE_MASTER_PAGE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_master_page_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_DRAWPAGE_PAGE_LAYOUT_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_presentation_page_layout_name) },
+    { XML_NAMESPACE_DRAW,           XML_ID,                             XML_TOK_DRAWPAGE_DRAWID,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_id) },
+    { XML_NAMESPACE_XML,            XML_ID,                             XML_TOK_DRAWPAGE_XMLID,
+        (FastToken::NAMESPACE | XML_NAMESPACE_XML | XML_id) },
+    { XML_NAMESPACE_XLINK,          XML_HREF,                           XML_TOK_DRAWPAGE_HREF,
+        (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_HEADER_NAME,                XML_TOK_DRAWPAGE_USE_HEADER_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_use_header_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_FOOTER_NAME,                XML_TOK_DRAWPAGE_USE_FOOTER_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_use_footer_name) },
+    { XML_NAMESPACE_PRESENTATION,   XML_USE_DATE_TIME_NAME,             XML_TOK_DRAWPAGE_USE_DATE_TIME_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_use_date_time_name) },
 
     XML_TOKEN_MAP_END
 };
@@ -605,9 +653,12 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
 {
-    { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES      },
-    { XML_NAMESPACE_ANIMATION,      XML_PAR,                XML_TOK_DRAWPAGE_PAR        },
-    { XML_NAMESPACE_ANIMATION,      XML_SEQ,                XML_TOK_DRAWPAGE_SEQ        },
+    { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_notes) },
+    { XML_NAMESPACE_ANIMATION,      XML_PAR,                XML_TOK_DRAWPAGE_PAR,
+        (FastToken::NAMESPACE | XML_NAMESPACE_ANIMATION | XML_par) },
+    { XML_NAMESPACE_ANIMATION,      XML_SEQ,                XML_TOK_DRAWPAGE_SEQ,
+        (FastToken::NAMESPACE | XML_NAMESPACE_ANIMATION | XML_seq) },
     XML_TOKEN_MAP_END
 };
 
@@ -623,11 +674,16 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
 {
-    { XML_NAMESPACE_PRESENTATION,   XML_OBJECT,     XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME  },
-    { XML_NAMESPACE_SVG,            XML_X,          XML_TOK_PRESENTATIONPLACEHOLDER_X           },
-    { XML_NAMESPACE_SVG,            XML_Y,          XML_TOK_PRESENTATIONPLACEHOLDER_Y           },
-    { XML_NAMESPACE_SVG,            XML_WIDTH,      XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH       },
-    { XML_NAMESPACE_SVG,            XML_HEIGHT,     XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT      },
+    { XML_NAMESPACE_PRESENTATION,   XML_OBJECT,     XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_object) },
+    { XML_NAMESPACE_SVG,            XML_X,          XML_TOK_PRESENTATIONPLACEHOLDER_X,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_x) },
+    { XML_NAMESPACE_SVG,            XML_Y,          XML_TOK_PRESENTATIONPLACEHOLDER_Y,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_y) },
+    { XML_NAMESPACE_SVG,            XML_WIDTH,      XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_width) },
+    { XML_NAMESPACE_SVG,            XML_HEIGHT,     XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_height) },
     XML_TOKEN_MAP_END
 };
 
