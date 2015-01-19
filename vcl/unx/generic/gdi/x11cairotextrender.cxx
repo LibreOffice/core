@@ -53,6 +53,31 @@ GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
     return X11GlyphCache::GetInstance();
 }
 
+
+void X11CairoTextRender::setTextBoundRect( const ServerFontLayout &rLayout, bool bGlyphsRotated )
+{
+    if (!rLayout.GetOrientation() || !bGlyphsRotated)
+    {
+        rLayout.GetBoundRect(mrParent, maTextBoundRect);
+
+        const Point &aPoint = rLayout.DrawBase();
+
+        maTextBoundRect.Right() += aPoint.X();
+        maTextBoundRect.Bottom() += aPoint.Y();
+    }
+    else
+    {
+        XRectangle *pXBoundRect = new XRectangle();
+        XClipBox( mrParent.mpClipRegion, pXBoundRect );
+
+        maTextBoundRect.Left() = pXBoundRect->x;
+        maTextBoundRect.Top() = pXBoundRect->y;
+        maTextBoundRect.Right() = pXBoundRect->x + pXBoundRect->width;
+        maTextBoundRect.Bottom() = pXBoundRect->y + pXBoundRect->height;
+    }
+}
+
+
 cairo_surface_t* X11CairoTextRender::getCairoSurface()
 {
     // find a XRenderPictFormat compatible with the Drawable

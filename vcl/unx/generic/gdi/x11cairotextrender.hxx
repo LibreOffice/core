@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX value
 
 #include "cairotextrender.hxx"
+#include "generic/glyphcache.hxx"
 
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
@@ -44,6 +45,8 @@ public:
     virtual void getSurfaceOffset(double& nDX, double& nDY) SAL_OVERRIDE;
     virtual void clipRegion(cairo_t* cr) SAL_OVERRIDE;
     virtual void drawSurface(cairo_t* cr) SAL_OVERRIDE;
+
+    virtual void setTextBoundRect( const ServerFontLayout& rLayout, bool bGlyphsRotated ) SAL_OVERRIDE;
 };
 
 #endif

@@ -20,23 +20,41 @@ OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(bool bPrinter, X11SalGraphics
 {
 }
 
+void OpenGLX11CairoTextRender::setTextBoundRect( const ServerFontLayout &rLayout, bool bGlyphsRotated )
+{
+    if (!rLayout.GetOrientation() || !bGlyphsRotated)
+    {
+        rLayout.GetBoundRect(mrParent, maTextBoundRect);
+
+        const Point &aPoint = rLayout.DrawBase();
+
+        maTextBoundRect.Right() += aPoint.X();
+        maTextBoundRect.Bottom() += aPoint.Y();
+    }
+    else
+    {
+        OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
+
+        if( pImpl )
+            maTextBoundRect = pImpl->getClipRegion().GetBoundRect();
+    }
+}
+
+
 cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
 {
     // static size_t id = 0;
     // OString aFileName = OString("/tmp/libo_logs/text_rendering") + OString::number(id++) + OString(".svg");
     // cairo_surface_t* surface = cairo_svg_surface_create(aFileName.getStr(), GetWidth(), GetHeight());
     cairo_surface_t* surface = NULL;
-    OpenGLSalGraphicsImpl *pImpl = dynamic_cast< OpenGLSalGraphicsImpl* >(mrParent.GetImpl());
-    if( pImpl )
+
+    if( maTextBoundRect.GetWidth() == 0 || maTextBoundRect.GetHeight() == 0 )
     {
-        Rectangle aClipRect = pImpl->getClipRegion().GetBoundRect();
-        if( aClipRect.GetWidth() == 0 || aClipRect.GetHeight() == 0 )
-        {
-            aClipRect.setWidth( GetWidth() );
-            aClipRect.setHeight( GetHeight() );
-        }
-        surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aClipRect.GetWidth(), aClipRect.GetHeight() );
+        maTextBoundRect.setWidth( GetWidth() );
+        maTextBoundRect.setHeight( GetHeight() );
     }
+    surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, maTextBoundRect.GetWidth(), maTextBoundRect.GetHeight() );
+
     return surface;
 }
 
