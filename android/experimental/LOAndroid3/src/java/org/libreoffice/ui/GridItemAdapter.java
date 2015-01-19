@@ -127,9 +127,9 @@ public class GridItemAdapter extends BaseAdapter {
                     }
                     imageView.setImageResource(R.drawable.writer);
                     break;
-                /*case FileUtilities.CALC:
+                case FileUtilities.CALC:
                     imageView.setImageResource(R.drawable.calc);
-                    break;*/
+                    break;
                 case FileUtilities.DRAWING: // FIXME: only for now ...
                 case FileUtilities.IMPRESS:
                     imageView.setImageResource(R.drawable.impress);

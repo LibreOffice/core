@@ -24,9 +24,9 @@ public class FileUtilities {
 
     // These have to be in sync with the file_view_modes resource.
     static final int DOC = 0;
-    // static final int CALC = 1;
-    static final int IMPRESS = 1;
-    static final int DRAWING = 2;
+    static final int CALC = 1;
+    static final int IMPRESS = 2;
+    static final int DRAWING = 3;
 
     static final int UNKNOWN = 10;
 
@@ -49,7 +49,7 @@ public class FileUtilities {
         mExtnMap.put(".odt", DOC);
         mExtnMap.put(".odg", DRAWING);
         mExtnMap.put(".odp",  IMPRESS);
-        // mExtnMap.put(".ods",  CALC);
+        mExtnMap.put(".ods",  CALC);
         mExtnMap.put(".fodt", DOC);
         mExtnMap.put(".fodg", DRAWING);
         mExtnMap.put(".fodp",  IMPRESS);
@@ -59,7 +59,7 @@ public class FileUtilities {
         mExtnMap.put(".ott", DOC);
         mExtnMap.put(".otg", DRAWING);
         mExtnMap.put(".otp",  IMPRESS);
-        // mExtnMap.put(".ots",  CALC);
+        mExtnMap.put(".ots",  CALC);
 
         // MS
         mExtnMap.put(".rtf",  DOC);
@@ -69,26 +69,26 @@ public class FileUtilities {
         mExtnMap.put(".pub", DRAWING);
         mExtnMap.put(".ppt",  IMPRESS);
         // mExtnMap.put(".pps",  IMPRESS);
-        // mExtnMap.put(".xls",  CALC);
+        mExtnMap.put(".xls",  CALC);
 
         // MS templates
         mExtnMap.put(".dot",  DOC);
         mExtnMap.put(".pot",  IMPRESS);
-        // mExtnMap.put(".xlt",  CALC);
+        mExtnMap.put(".xlt",  CALC);
 
         // OOXML
         mExtnMap.put(".docx", DOC);
         mExtnMap.put(".pptx", IMPRESS);
         // mExtnMap.put(".ppsx", IMPRESS);
-        // mExtnMap.put(".xlsx", CALC);
+        mExtnMap.put(".xlsx", CALC);
 
         // OOXML templates
         mExtnMap.put(".dotx", DOC);
         mExtnMap.put(".potx", IMPRESS);
-        // mExtnMap.put(".xltx", CALC);
+        mExtnMap.put(".xltx", CALC);
 
         // Other
-        //mExtnMap.put(".csv",  CALC);
+        mExtnMap.put(".csv",  CALC);
         mExtnMap.put(".wps",  DOC);
         mExtnMap.put(".key",  IMPRESS);
         mExtnMap.put(".abw",  DOC);
