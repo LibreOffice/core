@@ -559,8 +559,8 @@ namespace svx
         m_pSuggestions->set_height_request( m_pSuggestions->GetTextHeight() * 5 );
         m_pSuggestions->set_width_request( m_pSuggestions->approximate_char_width() * 48 );
 
-        const OUString sHangul = "Hangul";
-        const OUString sHanja = "Hanja";
+        const OUString sHangul(CUI_RESSTR(RID_SVXSTR_HANGUL));
+        const OUString sHanja(CUI_RESSTR(RID_SVXSTR_HANJA));
         m_pHanjaAbove->init( sHangul, sHanja, PseudoRubyText::eAbove );
         m_pHanjaBelow->init( sHangul, sHanja, PseudoRubyText::eBelow );
         m_pHangulAbove->init( sHanja, sHangul, PseudoRubyText::eAbove );

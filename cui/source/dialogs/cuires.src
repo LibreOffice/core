@@ -122,4 +122,14 @@ String RID_SVXSTR_EDITHINT
     Text [ en-US ] = "[Enter text here]";
 };
 
+String RID_SVXSTR_HANGUL
+{
+    Text [ en-US ] = "Hangul";
+};
+
+String RID_SVXSTR_HANJA
+{
+    Text [ en-US ] = "Hanja";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

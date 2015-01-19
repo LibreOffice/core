@@ -419,6 +419,10 @@
 
 #define RID_SVXSTR_EDITHINT                                 (RID_SVX_START + 1266)
 
+// Hangul/Hanja Dialog
+#define RID_SVXSTR_HANGUL                                   (RID_SVX_START + 1270)
+#define RID_SVXSTR_HANJA                                    (RID_SVX_START + 1271)
+
 // Search Persona Dialog
 #define RID_SVXSTR_SEARCHTERM                               (RID_SVX_START + 1277)
 #define RID_SVXSTR_SELECTEDPERSONA                          (RID_SVX_START + 1278)
