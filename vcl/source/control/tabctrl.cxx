@@ -1448,7 +1448,7 @@ void TabControl::Command( const CommandEvent& rCEvt )
             for( std::vector< ImplTabItem >::iterator it = mpTabCtrlData->maItemList.begin();
                  it != mpTabCtrlData->maItemList.end(); ++it )
             {
-                aMenu.InsertItem( it->mnId, it->maText, MenuItemBits::CHECKABLE );
+                aMenu.InsertItem( it->mnId, it->maText, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK );
                 if ( it->mnId == mnCurPageId )
                     aMenu.CheckItem( it->mnId );
                 aMenu.SetHelpId( it->mnId, it->maHelpId );
