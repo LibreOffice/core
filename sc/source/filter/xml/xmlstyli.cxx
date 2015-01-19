@@ -281,6 +281,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
 class XMLTableCellPropsContext : public SvXMLPropertySetContext
 {
     using SvXMLPropertySetContext::CreateChildContext;
+    using SvXMLPropertySetContext::createFastChildContext;
     public:
         XMLTableCellPropsContext(
              SvXMLImport& rImport, sal_uInt16 nPrfx,
@@ -289,12 +290,21 @@ class XMLTableCellPropsContext : public SvXMLPropertySetContext
              sal_uInt32 nFamily,
              ::std::vector< XMLPropertyState > &rProps,
              const rtl::Reference < SvXMLImportPropertyMapper > &rMap);
+        XMLTableCellPropsContext( SvXMLImport& rImport, sal_Int32 Element,
+            const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+            sal_uInt32 nFamily, std::vector< XMLPropertyState >& rProps,
+            const rtl::Reference< SvXMLImportPropertyMapper >& rMap );
 
         virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const uno::Reference< xml::sax::XAttributeList >& xAttrList,
            ::std::vector< XMLPropertyState > &rProperties,
            const XMLPropertyState& rProp ) SAL_OVERRIDE;
+        virtual uno::Reference< xml::sax::XFastContextHandler >
+            createFastChildContext( sal_Int32 Element,
+            const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+            std::vector< XMLPropertyState >& rProperties,
+            const XMLPropertyState& rProp ) SAL_OVERRIDE;
 };
 
 XMLTableCellPropsContext::XMLTableCellPropsContext(
@@ -306,6 +316,15 @@ XMLTableCellPropsContext::XMLTableCellPropsContext(
              const rtl::Reference < SvXMLImportPropertyMapper > &rMap)
           : SvXMLPropertySetContext( rImport, nPrfx, rLName, xAttrList, nFamily,
                rProps, rMap )
+{
+}
+
+XMLTableCellPropsContext::XMLTableCellPropsContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt32 nFamily, std::vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMap )
+:   SvXMLPropertySetContext( rImport, Element, xAttrList, nFamily, rProps, rMap )
 {
 }
 
@@ -345,6 +364,15 @@ SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPr
         }
     }
     return SvXMLPropertySetContext::CreateChildContext( nPrefix, rLocalName, xAttrList, rProperties, rProp );
+}
+
+uno::Reference< xml::sax::XFastContextHandler >
+    XMLTableCellPropsContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& /*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 class ScXMLMapContext : public SvXMLImportContext
