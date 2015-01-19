@@ -39,6 +39,15 @@ XMLChartPropertyContext::XMLChartPropertyContext(
 {
 }
 
+XMLChartPropertyContext::XMLChartPropertyContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt32 nFamily, std::vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMapper )
+:   SvXMLPropertySetContext( rImport, Element, xAttrList, nFamily, rProps, rMapper )
+{
+}
+
 XMLChartPropertyContext::~XMLChartPropertyContext()
 {}
 
@@ -69,6 +78,15 @@ SvXMLImportContext* XMLChartPropertyContext::CreateChildContext(
     }
 
     return pContext;
+}
+
+uno::Reference< xml::sax::XFastContextHandler >
+    XMLChartPropertyContext::createFastChildContext(
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& /*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
