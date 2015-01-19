@@ -43,6 +43,18 @@ PagePropertySetContext::PagePropertySetContext(
     aType = aTempType;
 }
 
+PagePropertySetContext::PagePropertySetContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt32 nFam, std::vector< XMLPropertyState >& rProps,
+    const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
+    sal_Int32 nStartIndex, sal_Int32 nEndIndex,
+    const PageContextType aTempType )
+:   SvXMLPropertySetContext( rImport, Element, xAttrList, nFam, rProps, rMap, nStartIndex, nEndIndex )
+{
+    aType = aTempType;
+}
+
 PagePropertySetContext::~PagePropertySetContext()
 {
 }
@@ -120,5 +132,13 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
     return pContext;
 }
 
+Reference< xml::sax::XFastContextHandler >
+    PagePropertySetContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    std::vector< XMLPropertyState >& /*rProperties*/,
+    const XMLPropertyState& /*rProp*/ )
+{
+    return Reference< xml::sax::XFastContextHandler >();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

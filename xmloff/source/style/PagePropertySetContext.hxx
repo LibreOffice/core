@@ -43,15 +43,28 @@ public:
                  const rtl::Reference < SvXMLImportPropertyMapper > &rMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
                  const PageContextType aType );
+    PagePropertySetContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        sal_uInt32 nFam,
+        std::vector< XMLPropertyState >& rProps,
+        const rtl::Reference< SvXMLImportPropertyMapper >& rMap,
+        sal_Int32 nStartIndex, sal_Int32 nEndIndex,
+        const PageContextType aType );
 
     virtual ~PagePropertySetContext();
 
     using SvXMLPropertySetContext::CreateChildContext;
+    using SvXMLPropertySetContext::createFastChildContext;
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                                    ::std::vector< XMLPropertyState > &rProperties,
                                    const XMLPropertyState& rProp) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        std::vector< XMLPropertyState >& rProperties,
+        const XMLPropertyState& rProp ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_STYLE_PAGEPROPERTYSETCONTEXT_HXX
