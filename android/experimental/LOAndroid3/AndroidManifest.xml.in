@@ -34,15 +34,17 @@
                 <data android:mimeType="application/vnd.oasis.opendocument.text" />
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics" />
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation" />
-                <!-- Calc. <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet"/> -->
+                <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet"/>
                 <data android:mimeType="application/vnd.oasis.opendocument.text-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-flat-xml" />
-                <!-- Calc. <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-flat-xml" /> -->
+                <!-- TODO: opening FODS documents crashes currently  
+                <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-flat-xml" />
+                -->
 
                 <!-- ODF templates -->
                 <data android:mimeType="application/vnd.oasis.opendocument.text-template"/>
-                <!-- Calc. <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-template"/> -->
+                <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-template"/>
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics-template"/>
                 <!-- Seems at least Anroid 5.0 does not recognize this as the mime type of .otp files. -->
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-template"/>
@@ -52,24 +54,24 @@
                 <data android:mimeType="text/rtf" />
                 <data android:mimeType="application/msword" />
                 <data android:mimeType="application/vnd.ms-powerpoint" />
-                <!-- Calc. <data android:mimeType="application/vnd.ms-excel"/> -->
+                <data android:mimeType="application/vnd.ms-excel"/>
                 <data android:mimeType="application/vnd.visio" />
                 <data android:mimeType="application/vnd.visio.xml" />
                 <data android:mimeType="application/x-mspublisher" />
 
                 <!-- OOXML -->
-                <!-- Calc. <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" /> -->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" />
                 <!-- Currently crashes. <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.slideshow"/> -->
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
 
                 <!-- OOXML templates -->
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.template"/>
-                <!-- Calc. <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.template"/> -->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.template"/>
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.template"/>
 
                 <!-- OTHER -->
-                <!-- Calc. <data android:mimeType="text/csv"/>-->
+                <data android:mimeType="text/csv"/>
                 <data android:mimeType="application/vnd.ms-works" />
                 <data android:mimeType="application/vnd.apple.keynote" />
                 <data android:mimeType="application/x-abiword" />
