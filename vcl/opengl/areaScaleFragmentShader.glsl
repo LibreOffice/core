@@ -48,8 +48,8 @@ void main(void)
     float fsx1 = dx * xscale;
     float fsx2 = fsx1 + xscale;
     // To whole pixel coordinates.
-    int sx1 = ceil( fsx1 );
-    int sx2 = floor( fsx2 );
+    int sx1 = int( ceil( fsx1 ) );
+    int sx2 = int( floor( fsx2 ) );
     // Range checking.
     sx2 = min( sx2, swidth - 1 );
     sx1 = min( sx1, sx2 );
@@ -79,8 +79,8 @@ void main(void)
     // The same for Y.
     float fsy1 = dy * yscale;
     float fsy2 = fsy1 + yscale;
-    int sy1 = ceil( fsy1 );
-    int sy2 = floor( fsy2 );
+    int sy1 = int( ceil( fsy1 ) );
+    int sy2 = int( floor( fsy2 ) );
     sy2 = min( sy2, sheight - 1 );
     sy1 = min( sy1, sy2 );
 
