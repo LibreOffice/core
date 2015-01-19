@@ -79,6 +79,8 @@ class CairoTextRender : public TextRenderImpl
     bool            bDisableGraphite_;
 
 protected:
+    Rectangle       maTextBoundRect;
+
     virtual GlyphCache&         getPlatformGlyphCache() = 0;
     virtual cairo_surface_t*    getCairoSurface() = 0;
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
@@ -87,6 +89,7 @@ protected:
     bool                        setFont( const FontSelectPattern *pEntry, int nFallbackLevel );
 
     virtual void                clipRegion(cairo_t* cr) = 0;
+    virtual void                setTextBoundRect( const ServerFontLayout& rLayout, bool bGlyphsRotated ) = 0;
 
 public:
                                 CairoTextRender(bool bPrinter);
