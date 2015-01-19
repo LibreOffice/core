@@ -36,7 +36,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
 
         OString onumeral = OUStringToOString( numeral , RTL_TEXTENCODING_ASCII_US ) ;
 
-        chNumeral = xmlStrndup( ( const xmlChar* )onumeral.getStr(), ( int )onumeral.getLength() ) ;
+        chNumeral = xmlStrndup( reinterpret_cast<const xmlChar*>(onumeral.getStr()), ( int )onumeral.getLength() ) ;
 
         if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
             xmlFree( chNumeral ) ;
@@ -87,7 +87,7 @@ OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
         if( xmlSecBnInitialize( &bn, 0 ) < 0 )
             return aRet ;
 
-        if( xmlSecBnSetData( &bn, ( const unsigned char* )&integer[0], integer.getLength() ) < 0 ) {
+        if( xmlSecBnSetData( &bn, reinterpret_cast<const unsigned char*>(integer.getConstArray()), integer.getLength() ) < 0 ) {
             xmlSecBnFinalize( &bn ) ;
             return aRet ;
         }
@@ -98,7 +98,7 @@ OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
             return aRet ;
         }
 
-        aRet = OUString::createFromAscii( ( const char* )chNumeral ) ;
+        aRet = OUString::createFromAscii( reinterpret_cast<char*>(chNumeral) ) ;
 
         xmlSecBnFinalize( &bn ) ;
         xmlFree( chNumeral ) ;

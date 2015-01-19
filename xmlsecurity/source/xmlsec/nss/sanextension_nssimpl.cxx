@@ -89,7 +89,7 @@ namespace {
         SECItem item;
 
         item.type = siDERCertBuffer;
-        item.data = (unsigned char*) m_xExtnValue.getArray();
+        item.data = reinterpret_cast<unsigned char*>(m_xExtnValue.getArray());
         item.len = m_xExtnValue.getLength();
 
         PRArenaPool *arena;
@@ -123,11 +123,11 @@ namespace {
                                     }
                 case certRFC822Name:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_RFC822_NAME;
-                    arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
+                    arrCertAltNameEntry[i].Value <<= OUString(reinterpret_cast<char*>(current->name.other.data), current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certDNSName:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_DNS_NAME;
-                    arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
+                    arrCertAltNameEntry[i].Value <<= OUString(reinterpret_cast<char*>(current->name.other.data), current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certX400Address: {
                     // unsupported
@@ -146,7 +146,7 @@ namespace {
                                         }
                 case certURI:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_URL;
-                    arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
+                    arrCertAltNameEntry[i].Value <<= OUString(reinterpret_cast<char*>(current->name.other.data), current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certIPAddress: {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_IP_ADDRESS;

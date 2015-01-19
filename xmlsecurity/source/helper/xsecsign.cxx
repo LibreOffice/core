@@ -44,7 +44,7 @@ namespace cssxs = com::sun::star::xml::sax;
 OUString XSecController::createId()
 {
     cssu::Sequence< sal_Int8 > aSeq( 16 );
-    rtl_createUuid ((sal_uInt8 *)aSeq.getArray(), 0, sal_True);
+    rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aSeq.getArray()), 0, sal_True);
 
     char str[68]="ID_";
     int length = 3;

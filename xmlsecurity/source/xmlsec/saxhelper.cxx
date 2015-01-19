@@ -38,7 +38,7 @@ namespace cssxcsax = com::sun::star::xml::csax;
 xmlChar* ous_to_xmlstr( const OUString& oustr )
 {
     OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
-    return xmlStrndup( ( xmlChar* )ostr.getStr(), ( int )ostr.getLength() ) ;
+    return xmlStrndup( reinterpret_cast<xmlChar const *>(ostr.getStr()), ( int )ostr.getLength() ) ;
 }
 
 /**
@@ -50,7 +50,7 @@ xmlChar* ous_to_nxmlstr( const OUString& oustr, int& length )
     OString ostr = OUStringToOString( oustr , RTL_TEXTENCODING_UTF8 ) ;
     length = ostr.getLength();
 
-    return xmlStrndup( ( xmlChar* )ostr.getStr(), length ) ;
+    return xmlStrndup( reinterpret_cast<xmlChar const *>(ostr.getStr()), length ) ;
 }
 
 /**

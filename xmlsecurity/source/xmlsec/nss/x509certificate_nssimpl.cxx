@@ -197,7 +197,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
                 objID = oidString;
 
             if ( objID.equals("2.5.29.17") )
-                pExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
+                pExtn = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
             else
                 pExtn = new CertificateExtension_XmlSecImpl() ;
 
@@ -205,7 +205,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
                 crit = false ;
             else
                 crit = ( (*extns)->critical.data[0] == 0xFF ) ? sal_True : sal_False ;
-            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (unsigned char*)objID.getStr(), objID.getLength(), crit ) ;
+            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, reinterpret_cast<unsigned char *>(const_cast<char *>(objID.getStr())), objID.getLength(), crit ) ;
 
             xExtns[len] = pExtn ;
         }
@@ -223,7 +223,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
         SECItem idItem ;
         bool crit ;
 
-        idItem.data = ( unsigned char* )&oid[0] ;
+        idItem.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(oid.getConstArray()));
         idItem.len = oid.getLength() ;
 
         pExtn = NULL ;
@@ -232,7 +232,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
                 const SECItem id = (*extns)->id;
                 OString objId(CERT_GetOidString(&id));
                 if ( objId.equals("OID.2.5.29.17") )
-                    pExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
+                    pExtn = reinterpret_cast<CertificateExtension_XmlSecImpl*>(new SanExtensionImpl());
                 else
                     pExtn = new CertificateExtension_XmlSecImpl() ;
                 if( (*extns)->critical.data == NULL )
@@ -288,7 +288,7 @@ void X509Certificate_NssImpl :: setRawCert( const Sequence< sal_Int8 >& rawCert 
     CERTCertificate* cert ;
     SECItem certItem ;
 
-    certItem.data = ( unsigned char* )&rawCert[0] ;
+    certItem.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(rawCert.getConstArray()));
     certItem.len = rawCert.getLength() ;
 
     cert = CERT_DecodeDERCertificate( &certItem, PR_TRUE, NULL ) ;

@@ -228,15 +228,15 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
         {
             pAttributeList->AddAttribute(
                 OUString(C2U( STRXMLNS )),
-                OUString(C2U( (sal_Char*)pNsHref )));
+                OUString(C2U( reinterpret_cast<char const *>(pNsHref) )));
         }
         else
         {
             pAttributeList->AddAttribute(
                 OUString(C2U( STRXMLNS ))
                 +OUString(C2U( ":" ))
-                +OUString(C2U( (sal_Char*)pNsPrefix )),
-                OUString(C2U( (sal_Char*)pNsHref )));
+                +OUString(C2U( reinterpret_cast<char const *>(pNsPrefix) )),
+                OUString(C2U( reinterpret_cast<char const *>(pNsHref) )));
         }
 
         pNsDef = pNsDef->next;
@@ -252,17 +252,17 @@ void XMLDocumentWrapper_XmlSecImpl::sendStartElement(
         OUString ouAttrName;
         if (pAttrNs == NULL)
         {
-            ouAttrName = OUString(C2U( (sal_Char*)pAttrName ));
+            ouAttrName = OUString(C2U( reinterpret_cast<char const *>(pAttrName) ));
         }
         else
         {
-            ouAttrName = OUString(C2U( (sal_Char*)pAttrNs->prefix))
-                + ":" + OUString(C2U( (sal_Char*)pAttrName ));
+            ouAttrName = OUString(C2U( reinterpret_cast<char const *>(pAttrNs->prefix)))
+                + ":" + OUString(C2U( reinterpret_cast<char const *>(pAttrName) ));
         }
 
         pAttributeList->AddAttribute(
             ouAttrName,
-            OUString(C2U( (sal_Char*)(pAttr->children->content))));
+            OUString(C2U( reinterpret_cast<char*>(pAttr->children->content))));
         pAttr = pAttr->next;
     }
 
@@ -368,23 +368,23 @@ void XMLDocumentWrapper_XmlSecImpl::sendNode(
     {
         if (xHandler.is())
         {
-            xHandler->characters(OUString(C2U ( ((sal_Char*)(pNode->content)) )));
+            xHandler->characters(OUString(C2U ( reinterpret_cast<char*>(pNode->content) )));
         }
 
-        xHandler2->characters(OUString(C2U ( ((sal_Char*)(pNode->content)) )));
+        xHandler2->characters(OUString(C2U ( reinterpret_cast<char*>(pNode->content) )));
     }
     else if (type == XML_PI_NODE)
     {
         if (xHandler.is())
         {
             xHandler->processingInstruction(
-                OUString(C2U ( ((sal_Char*)(pNode->name)) )),
-                OUString(C2U ( ((sal_Char*)(pNode->content)) )));
+                OUString(C2U ( reinterpret_cast<char const *>(pNode->name) )),
+                OUString(C2U ( reinterpret_cast<char const *>(pNode->content) )));
         }
 
         xHandler2->processingInstruction(
-            OUString(C2U ( ((sal_Char*)(pNode->name)) )),
-            OUString(C2U ( ((sal_Char*)(pNode->content)) )));
+            OUString(C2U ( reinterpret_cast<char const *>(pNode->name) )),
+            OUString(C2U ( reinterpret_cast<char*>(pNode->content) )));
     }
 }
 
@@ -411,14 +411,14 @@ OString XMLDocumentWrapper_XmlSecImpl::getNodeQName(const xmlNodePtr pNode) cons
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    OString sNodeName((const sal_Char*)pNode->name);
+    OString sNodeName(reinterpret_cast<const char*>(pNode->name));
     if (pNode->ns != NULL)
     {
         xmlNsPtr pNs = pNode->ns;
 
         if (pNs->prefix != NULL)
         {
-            OString sPrefix((const sal_Char*)pNs->prefix);
+            OString sPrefix(reinterpret_cast<const char*>(pNs->prefix));
             sNodeName = sPrefix+OString(":")+sNodeName;
         }
     }
@@ -636,7 +636,7 @@ void XMLDocumentWrapper_XmlSecImpl::removeNode(const xmlNodePtr pNode) const
 
     while (pAttr != NULL)
     {
-        if (!stricmp((sal_Char*)pAttr->name,"id"))
+        if (!stricmp(reinterpret_cast<char const *>(pAttr->name), "id"))
         {
             xmlRemoveID(m_pDocument, pAttr);
         }
@@ -671,10 +671,10 @@ void XMLDocumentWrapper_XmlSecImpl::buildIDAttr(xmlNodePtr pNode) const
  *  Email: michael.mi@sun.com
  ******************************************************************************/
 {
-    xmlAttrPtr idAttr = xmlHasProp( pNode, (const unsigned char *)"id" );
+    xmlAttrPtr idAttr = xmlHasProp( pNode, reinterpret_cast<const unsigned char *>("id") );
     if (idAttr == NULL)
     {
-        idAttr = xmlHasProp( pNode, (const unsigned char *)"Id" );
+        idAttr = xmlHasProp( pNode, reinterpret_cast<const unsigned char *>("Id") );
     }
 
     if (idAttr != NULL)
@@ -751,7 +751,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::removeCurrentElement(  )
     saxHelper.endElement(
         OUString(
             C2U (
-                (sal_Char*)(pOldCurrentElement->name)
+                reinterpret_cast<char const *>(pOldCurrentElement->name)
             )));
     m_pCurrentElement = saxHelper.getCurrentNode();
 
@@ -785,7 +785,7 @@ OUString SAL_CALL XMLDocumentWrapper_XmlSecImpl::getNodeName( const cssu::Refere
     throw (cssu::RuntimeException, std::exception)
 {
     xmlNodePtr pNode = checkElement(node);
-    return OUString(C2U ( (sal_Char*)pNode->name ));
+    return OUString(C2U ( reinterpret_cast<char const *>(pNode->name) ));
 }
 
 void SAL_CALL XMLDocumentWrapper_XmlSecImpl::clearUselessData(

@@ -557,7 +557,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         issuerAndSN.derIssuer.data = derIssuer->data ;
         issuerAndSN.derIssuer.len = derIssuer->len ;
 
-        issuerAndSN.serialNumber.data = ( unsigned char* )&serialNumber[0] ;
+        issuerAndSN.serialNumber.data = reinterpret_cast<unsigned char *>(const_cast<sal_Int8 *>(serialNumber.getConstArray()));
         issuerAndSN.serialNumber.len = serialNumber.getLength() ;
 
         cert = CERT_FindCertByIssuerAndSN( m_pHandler, &issuerAndSN ) ;
@@ -659,7 +659,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRa
 Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromAscii( const OUString& asciiCertificate ) throw( SecurityException , RuntimeException, std::exception )
 {
     OString oscert = OUStringToOString( asciiCertificate , RTL_TEXTENCODING_ASCII_US ) ;
-    xmlChar* chCert = xmlStrndup( ( const xmlChar* )oscert.getStr(), ( int )oscert.getLength() ) ;
+    xmlChar* chCert = xmlStrndup( reinterpret_cast<const xmlChar*>(oscert.getStr()), ( int )oscert.getLength() ) ;
     int certSize = xmlSecBase64Decode( chCert, ( xmlSecByte* )chCert, xmlStrlen( chCert ) ) ;
     if (certSize > 0)
     {
@@ -714,7 +714,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             Sequence<sal_Int8> der = intermediateCerts[i]->getEncoded();
             SECItem item;
             item.type = siBuffer;
-            item.data = (unsigned char*)der.getArray();
+            item.data = reinterpret_cast<unsigned char*>(der.getArray());
             item.len = der.getLength();
 
             CERTCertificate* certTmp = CERT_NewTempCertificate(certDb, &item,
