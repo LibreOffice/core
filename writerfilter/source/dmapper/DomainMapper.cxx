@@ -2822,7 +2822,7 @@ void DomainMapper::lcl_endCharacterGroup()
 void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
-    OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
+    OUString sText( reinterpret_cast<const char*>(data_), len, RTL_TEXTENCODING_MS_1252 );
 #ifdef DEBUG_WRITERFILTER
     dmapper_logger->startElement("text");
     dmapper_logger->chars(sText);
@@ -2945,7 +2945,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 {
     OUString sText;
     OUStringBuffer aBuffer = OUStringBuffer(len);
-    aBuffer.append( (const sal_Unicode *) data_, len);
+    aBuffer.append( reinterpret_cast<const sal_Unicode *>(data_), len);
     sText = aBuffer.makeStringAndClear();
 
     if (m_pImpl->isSdtEndDeferred())

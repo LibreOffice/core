@@ -167,7 +167,7 @@ void LoggedStream::text(const sal_uInt8 * data, size_t len)
 #ifdef DEBUG_WRITERFILTER
     mHelper.startElement("text");
 
-    OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
+    OUString sText( reinterpret_cast<const char*>(data), len, RTL_TEXTENCODING_MS_1252 );
 
     mHelper.startElement("data");
     mHelper.chars(sText);
@@ -189,7 +189,7 @@ void LoggedStream::utext(const sal_uInt8 * data, size_t len)
 
     OUString sText;
     OUStringBuffer aBuffer = OUStringBuffer(len);
-    aBuffer.append( (const sal_Unicode *) data, len);
+    aBuffer.append( reinterpret_cast<const sal_Unicode *>(data), len);
     sText = aBuffer.makeStringAndClear();
 
     mHelper.chars(sText);

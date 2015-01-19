@@ -2377,7 +2377,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     case RTF_CHFTNSEP:
     {
         static const sal_Unicode uFtnEdnSep = 0x3;
-        Mapper().utext((const sal_uInt8*)&uFtnEdnSep, 1);
+        Mapper().utext(reinterpret_cast<const sal_uInt8*>(&uFtnEdnSep), 1);
     }
     break;
     default:
