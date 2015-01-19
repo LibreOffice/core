@@ -360,6 +360,8 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    ScXMLMapContext( SvXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList );
     virtual ~ScXMLMapContext();
 
     ScCondFormatEntry* CreateConditionEntry();
@@ -387,6 +389,24 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
             else if ( IsXMLToken(aLocalName, XML_BASE_CELL_ADDRESS ) )
                 msBaseCell = rValue;
         }
+    }
+}
+
+ScXMLMapContext::ScXMLMapContext( SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLImportContext( rImport )
+{
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_condition ) )
+            msCondition = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_condition );
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_apply_style_name ) )
+        {
+            const OUString& rValue( xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_apply_style_name ) );
+            msApplyStyle = GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TABLE_CELL, rValue );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_base_cell_address ) )
+            msBaseCell = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_base_cell_address );
     }
 }
 
