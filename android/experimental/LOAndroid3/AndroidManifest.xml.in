@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="@ANDROID_PACKAGE_NAME@"
+    package="org.libreoffice"
     @ANDROID_INSTALL_LOCATION@
     android:versionCode="1"
     android:versionName="@ANDROID_VERSION@">
@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
         <!-- Viewer Activity -->
         <activity
-            android:name="org.libreoffice.LibreOfficeMainActivity"
+            android:name=".LibreOfficeMainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|uiMode|screenSize|smallestScreenSize">
             <intent-filter>
@@ -38,7 +38,7 @@
                 <data android:mimeType="application/vnd.oasis.opendocument.text-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-flat-xml" />
-                <!-- TODO: opening FODS documents crashes currently  
+                <!-- TODO: opening FODS documents crashes currently
                 <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-flat-xml" />
                 -->
 
