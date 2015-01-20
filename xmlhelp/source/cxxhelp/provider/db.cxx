@@ -85,7 +85,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
         sal_Int32 nSize = m_xSFA->getSize( m_aFileURL );
         sal_Int32 nRead = xIn->readBytes( aData, nSize );
 
-        const char* pData = (const char*)aData.getConstArray();
+        const char* pData = reinterpret_cast<const char*>(aData.getConstArray());
         int iPos = 0;
         while( iPos < nRead )
         {
@@ -173,7 +173,7 @@ bool Hdf::getValueForKey( const OString& rKey, HDFData& rValue )
                     sal_Int32 nRead = xIn->readBytes( aData, nValueLen );
                     if( nRead == nValueLen )
                     {
-                        const char* pData = (const sal_Char*)aData.getConstArray();
+                        const char* pData = reinterpret_cast<const sal_Char*>(aData.getConstArray());
                         rValue.copyToBuffer( pData, nValueLen );
                         bSuccess = true;
                     }
@@ -218,7 +218,7 @@ bool Hdf::startIteration( void )
         if( m_nItRead == nSize )
         {
             bSuccess = true;
-            m_pItData = (const char*)m_aItData.getConstArray();
+            m_pItData = reinterpret_cast<const char*>(m_aItData.getConstArray());
             m_iItPos = 0;
         }
         else

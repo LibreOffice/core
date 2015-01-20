@@ -370,7 +370,7 @@ public:
 
     void addToBuffer( const char* buffer,int len );
 
-    sal_Int8* getData() const { return (sal_Int8*) buffer; }
+    sal_Int8 const * getData() const { return reinterpret_cast<sal_Int8 const *>(buffer); }
 
     sal_Int32 getLen() const { return sal_Int32( len ); }
 
@@ -986,7 +986,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
 
         xsltStylesheetPtr cur =
-            xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());
+            xsltParseStylesheetFile(reinterpret_cast<const xmlChar *>(xslURLascii.getStr()));
 
         xmlDocPtr doc = xmlParseFile("vnd.sun.star.zip:/");
 
@@ -996,7 +996,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
             xmlChar *doc_txt_ptr=0;
             int doc_txt_len;
             xsltSaveResultToString(&doc_txt_ptr, &doc_txt_len, res, cur);
-            addToBuffer((const char*)doc_txt_ptr, doc_txt_len);
+            addToBuffer(reinterpret_cast<char*>(doc_txt_ptr), doc_txt_len);
             xmlFree(doc_txt_ptr);
         }
         xmlPopInputCallbacks(); //filePatch
