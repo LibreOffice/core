@@ -250,7 +250,7 @@ int main( int argc, char* argv[] )
     gtk_init( &argc, &argv );
 
     GtkWidget *pWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    gtk_window_set_title( GTK_WINDOW(pWindow), "LibreOffice GTK Tiled Viewer" );
+    gtk_window_set_title( GTK_WINDOW(pWindow), "LibreOfficeKit GTK Tiled Viewer" );
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 800, 600);
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
 
