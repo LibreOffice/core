@@ -22,7 +22,7 @@
 
 #include "xltable.hxx"
 
-#include <deque>
+#include <vector>
 #include <tools/mempool.hxx>
 #include "xladdress.hxx"
 #include "xerecord.hxx"
@@ -529,7 +529,7 @@ private:
     virtual void        WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol ) = 0;
 
 private:
-    typedef ::std::deque< XclExpMultiXFId > XclExpMultiXFIdDeq;
+    typedef ::std::vector< XclExpMultiXFId > XclExpMultiXFIdDeq;
 
     sal_uInt16          mnMulRecId;     /// Record ID for multiple record variant.
     sal_Size            mnContSize;     /// Data size of contents for one cell
