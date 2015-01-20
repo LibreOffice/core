@@ -493,8 +493,7 @@ XMLDashStyleContext::XMLDashStyleContext(
 {
     // start import
     XMLDashStyleImport aDashStyle( GetImport() );
-
-    // something missing
+    aDashStyle.importXML( xAttrList, maAny, maStrName );
 }
 
 XMLDashStyleContext::~XMLDashStyleContext()

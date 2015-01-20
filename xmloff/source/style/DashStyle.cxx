@@ -19,6 +19,8 @@
 
 #include <com/sun/star/drawing/DashStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <com/sun/star/xml/FastAttribute.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -28,6 +30,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -36,8 +39,10 @@
 #include <xmloff/xmltkmap.hxx>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 enum SvXMLTokenMapAttrs
 {
@@ -54,14 +59,22 @@ enum SvXMLTokenMapAttrs
 
 static SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,     XML_TOK_DASH_DISPLAY_NAME },
-    { XML_NAMESPACE_DRAW, XML_STYLE,            XML_TOK_DASH_STYLE },
-    { XML_NAMESPACE_DRAW, XML_DOTS1,            XML_TOK_DASH_DOTS1 },
-    { XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH,     XML_TOK_DASH_DOTS1LEN },
-    { XML_NAMESPACE_DRAW, XML_DOTS2,            XML_TOK_DASH_DOTS2 },
-    { XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH,     XML_TOK_DASH_DOTS2LEN },
-    { XML_NAMESPACE_DRAW, XML_DISTANCE,         XML_TOK_DASH_DISTANCE },
+    { XML_NAMESPACE_DRAW, XML_NAME,             XML_TOK_DASH_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,     XML_TOK_DASH_DISPLAY_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+    { XML_NAMESPACE_DRAW, XML_STYLE,            XML_TOK_DASH_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style) },
+    { XML_NAMESPACE_DRAW, XML_DOTS1,            XML_TOK_DASH_DOTS1,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_dots1) },
+    { XML_NAMESPACE_DRAW, XML_DOTS1_LENGTH,     XML_TOK_DASH_DOTS1LEN,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_dots1_length) },
+    { XML_NAMESPACE_DRAW, XML_DOTS2,            XML_TOK_DASH_DOTS2,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_dots2) },
+    { XML_NAMESPACE_DRAW, XML_DOTS2_LENGTH,     XML_TOK_DASH_DOTS2LEN,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_dots2_length) },
+    { XML_NAMESPACE_DRAW, XML_DISTANCE,         XML_TOK_DASH_DISTANCE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_distance) },
     XML_TOKEN_MAP_END
 };
 
@@ -71,7 +84,7 @@ SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
     { XML_ROUND,        drawing::DashStyle_ROUND },
     { XML_RECT,         drawing::DashStyle_RECTRELATIVE },
     { XML_ROUND,        drawing::DashStyle_ROUNDRELATIVE },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 // Import
@@ -201,6 +214,100 @@ void XMLDashStyleImport::importXML(
     {
         rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
                                      rStrName, aDisplayName );
+        rStrName = aDisplayName;
+    }
+}
+
+void XMLDashStyleImport::importXML(
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName )
+{
+    drawing::LineDash aLineDash;
+    aLineDash.Style = drawing::DashStyle_RECT;
+    aLineDash.Dots = 0;
+    aLineDash.DotLen = 0;
+    aLineDash.Dashes = 0;
+    aLineDash.DashLen = 0;
+    aLineDash.Distance = 20;
+    OUString aDisplayName;
+
+    bool bIsRel = false;
+
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+    SvXMLTokenMap aTokenMap( aDashStyleAttrTokenMap );
+
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        switch( aTokenMap.Get( attr->Token ) )
+        {
+        case XML_TOK_DASH_NAME:
+        {
+            rStrName = attr->Value;
+        }
+        break;
+        case XML_TOK_DASH_DISPLAY_NAME:
+        {
+            aDisplayName = attr->Value;
+        }
+        break;
+        case XML_TOK_DASH_STYLE:
+        {
+            sal_uInt16 eValue;
+            if( SvXMLUnitConverter::convertEnum( eValue, attr->Value, pXML_DashStyle_Enum ) )
+            {
+                aLineDash.Style = (drawing::DashStyle) eValue;
+            }
+        }
+        break;
+        case XML_TOK_DASH_DOTS1:
+            aLineDash.Dots = (sal_Int16)attr->Value.toInt32();
+        break;
+        case XML_TOK_DASH_DOTS1LEN:
+        {
+            if( attr->Value.indexOf( '%' ) != -1 ) // it's a percentage
+            {
+                bIsRel = true;
+                sax::Converter::convertPercent(aLineDash.DotLen, attr->Value);
+            }
+            else
+            {
+                rUnitConverter.convertMeasureToCore( aLineDash.DotLen, attr->Value );
+            }
+        }
+        break;
+        case XML_TOK_DASH_DOTS2:
+            aLineDash.Dashes = (sal_Int16)attr->Value.toInt32();
+        break;
+        case XML_TOK_DASH_DOTS2LEN:
+        {
+            if( attr->Value.indexOf( '%' ) != -1 ) // it's a percentage
+            {
+                bIsRel = true;
+                sax::Converter::convertPercent(aLineDash.Distance, attr->Value);
+            }
+            else
+            {
+                rUnitConverter.convertMeasureToCore( aLineDash.Distance, attr->Value );
+            }
+        }
+        break;
+        default:
+            DBG_WARNING( "Unknown token at import gradient style" );
+        }
+    }
+
+    if( bIsRel )
+        aLineDash.Style = aLineDash.Style == drawing::DashStyle_RECT ?
+            drawing::DashStyle_RECTRELATIVE : drawing::DashStyle_ROUNDRELATIVE;
+
+    rValue <<= aLineDash;
+
+    if( !aDisplayName.isEmpty() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_STROKE_DASH_ID,
+                rStrName, aDisplayName );
         rStrName = aDisplayName;
     }
 }
