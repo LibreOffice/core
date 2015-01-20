@@ -160,14 +160,6 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
         pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYINPUT, nCode);
 }
 
-/// Receives a button press event.
-static void signalButton(GtkWidget* /*pWidget*/, GdkEvent* /*pEvent*/, gpointer /*pData*/)
-{
-    LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
-
-    lok_docview_set_edit(pLOKDocView, TRUE);
-}
-
 // GtkComboBox requires gtk 2.24 or later
 #if ( GTK_MAJOR_VERSION == 2 && GTK_MINOR_VERSION >= 24 ) || GTK_MAJOR_VERSION > 2
 void populatePartSelector()
@@ -325,7 +317,6 @@ int main( int argc, char* argv[] )
     // Input handling.
     g_signal_connect(pWindow, "key-press-event", G_CALLBACK(signalKey), NULL);
     g_signal_connect(pWindow, "key-release-event", G_CALLBACK(signalKey), NULL);
-    g_signal_connect(pDocView, "button-press-event", G_CALLBACK(signalButton), NULL);
 
     gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
 
