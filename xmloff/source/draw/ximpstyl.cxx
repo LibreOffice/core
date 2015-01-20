@@ -637,6 +637,14 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
 :   SvXMLStyleContext(rImport, Element, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
     mnTypeId( 20 ) //AUTOLAYOUT_NONE
 {
+    // set family to something special at SvXMLStyleContext
+    // for differences in search-methods
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name)
+        && xAttrList.is() && xAttrList->hasAttribute( Element ) )
+    {
+        msName = xAttrList->getValue( Element );
+    }
 }
 
 SdXMLPresentationPageLayoutContext::~SdXMLPresentationPageLayoutContext()
@@ -669,16 +677,244 @@ SvXMLImportContext *SdXMLPresentationPageLayoutContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SdXMLPresentationPageLayoutContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SdXMLPresentationPageLayoutContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_placeholder) )
+    {
+        // presentation:placeholder inside style:presentation-page-layout-context
+        pContext = new SdXMLPresentationPlaceholderContext(
+            GetSdImport(), Element, xAttrList);
+
+        // remember SdXMLPresentationPlaceholderContext for later evaluation
+        if( pContext.is() )
+        {
+            static_cast< SvXMLStyleContext* >(pContext.get())->AddFirstRef();
+            maList.push_back( static_cast<SdXMLPresentationPlaceholderContext*>(pContext.get()) );
+        }
+    }
+
+    // call base class
+    if( !pContext.is() )
+        pContext = SvXMLStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 void SAL_CALL SdXMLPresentationPageLayoutContext::endFastElement( sal_Int32 /*Element*/ )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
+    // build presentation page layout type here
+    // calc mnTypeId due to content of maList
+    // at the moment only use number of types used there
+    if( !maList.empty() )
+    {
+        SdXMLPresentationPlaceholderContext* pObj0 = maList[ 0 ];
+        if( pObj0->GetName() == "handout" )
+        {
+            switch( maList.size() )
+            {
+            case 1:
+                mnTypeId = 22; // AUTOLAYOUT_HANDOUT1
+                break;
+            case 2:
+                mnTypeId = 23; // AUTOLAYOUT_HANDOUT2
+                break;
+            case 3:
+                mnTypeId = 24; // AUTOLAYOUT_HANDOUT3
+                break;
+            case 4:
+                mnTypeId = 25; // AUTOLAYOUT_HANDOUT4
+                break;
+            case 9:
+                mnTypeId = 31; // AUTOLAYOUT_HANDOUT9
+                break;
+            default:
+                mnTypeId = 26; // AUTOLAYOUT_HANDOUT6
+            }
+        }
+        else
+        {
+            switch( maList.size() )
+            {
+            case 1:
+            {
+                if( pObj0->GetName() == "title" )
+                {
+                    mnTypeId = 19; // AUTOLAYOUT_ONLY_TITLE
+                }
+                else
+                {
+                    mnTypeId = 32; // AUTOLAYOUT_ONLY_TEXT
+                }
+                break;
+            }
+            case 2:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+
+                if( pObj1->GetName() == "subtitle" )
+                {
+                    mnTypeId = 0; // AUTOLAYOUT_TITLE
+                }
+                else if( pObj1->GetName() == "outline" )
+                {
+                    mnTypeId = 1; // AUTOLAYOUT_ENUM
+                }
+                else if( pObj1->GetName() == "chart" )
+                {
+                    mnTypeId = 2; // AUTOLAYOUT_CHART
+                }
+                else if( pObj1->GetName() == "table" )
+                {
+                    mnTypeId = 8; // AUTOLAYOUT_TAB
+                }
+                else if( pObj1->GetName() == "object" )
+                {
+                    mnTypeId = 11; // AUTOLAYOUT_OBJ
+                }
+                else if( pObj1->GetName() == "vertical_outline" )
+                {
+                    if( pObj0->GetName() == "vertical_title" )
+                    {
+                        // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+                        mnTypeId = 28;
+                    }
+                    else
+                    {
+                        // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
+                        mnTypeId = 29;
+                    }
+                }
+                else
+                {
+                    mnTypeId = 21; // AUTOLAYOUT_NOTES
+                }
+                break;
+            }
+            case 3:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+                SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
+
+                if( pObj1->GetName() == "outline" )
+                {
+                    if( pObj2->GetName() == "outline" )
+                    {
+                        mnTypeId = 3; // AUTOLAYOUT_2TEXT
+                    }
+                    else if( pObj2->GetName() == "chart" )
+                    {
+                        mnTypeId = 4; // AUTOLAYOUT_TEXTCHART
+                    }
+                    else if( pObj2->GetName() == "graphic" )
+                    {
+                        mnTypeId = 6; // AUTOLAYOUT_TEXTCLIP
+                    }
+                    else
+                    {
+                        if(pObj1->GetX() < pObj2->GetX())
+                        {
+                            mnTypeId = 10; // AUTOLAYOUT_TEXTOBJ -> outline left, object right
+                        }
+                        else
+                        {
+                            mnTypeId = 17; // AUTOLAYOUT_TEXTOVEROBJ -> outline top, object right
+                        }
+                    }
+                }
+                else if( pObj1->GetName() == "chart" )
+                {
+                    mnTypeId = 7; // AUTOLAYOUT_CHARTTEXT
+                }
+                else if( pObj1->GetName() == "graphic" )
+                {
+                    if( pObj2->GetName() == "vertical_outline" )
+                    {
+                        // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
+                        mnTypeId = 30;
+                    }
+                    else
+                    {
+                        mnTypeId = 9; // AUTOLAYOUT_CLIPTEXT
+                    }
+                }
+                else if( pObj1->GetName() == "vertical_outline" )
+                {
+                    // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
+                    mnTypeId = 27;
+                }
+                else
+                {
+                    if(pObj1->GetX() < pObj2->GetX())
+                    {
+                        mnTypeId = 13; // AUTOLAYOUT_OBJTEXT -> left, right
+                    }
+                    else
+                    {
+                        mnTypeId = 14; // AUTOLAYOUT_OBJOVERTEXT -> top, bottom
+                    }
+                }
+                break;
+            }
+            case 4:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+                SdXMLPresentationPlaceholderContext* pObj2 = maList[ 2 ];
+
+                if( pObj1->GetName() == "object" )
+                {
+                    if(pObj1->GetX() < pObj2->GetX())
+                    {
+                        mnTypeId = 16; // AUTOLAYOUT_2OBJOVERTEXT
+                    }
+                    else
+                    {
+                        mnTypeId = 15; // AUTOLAYOUT_2OBJTEXT
+                    }
+                }
+                else
+                {
+                    mnTypeId = 12; // AUTOLAYOUT_TEXT2OBJ
+                }
+                break;
+            }
+            case 5:
+            {
+                SdXMLPresentationPlaceholderContext* pObj1 = maList[ 1 ];
+
+                if( pObj1->GetName() == "object" )
+                {
+                    mnTypeId = 18; // AUTOLAYOUT_4OBJ
+                }
+                else
+                {
+                    mnTypeId = 33; // AUTOLAYOUT_4CLIPART
+                }
+                 break;
+
+            }
+            case 7:
+            {
+                mnTypeId = 33; // AUTOLAYOUT_6CLIPART
+                break;
+            }
+            default:
+            {
+                mnTypeId = 20; // AUTOLAYOUT_NONE
+                break;
+            }
+        }
+    }
+
+    // release remembered contexts, they are no longer needed
+    for ( size_t i = maList.size(); i > 0; )
+        maList[ --i ]->ReleaseRef();
+    maList.clear();
+    }
 }
 
 void SdXMLPresentationPageLayoutContext::EndElement()
