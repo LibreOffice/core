@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_c12ac42c",
+        "filename": "offapi/com/sun/star/datatransfer/clipboard/RenderingCapabilities.idl",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-20T16:07:07Z",
+      "side": 1,
+      "message": "this is a published UNO API, so the wrongly spelled constant cannot be removed.\n\nhowever adding a second correctly spelled constant with the same value is possible.",
+      "revId": "aec6353a936477d1bfc3c35e8a4f6a8077472079",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
