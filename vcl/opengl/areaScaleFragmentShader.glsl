@@ -27,6 +27,12 @@ uniform float ydestconvert;
 
 varying vec2 tex_coord;
 
+// This mode makes the scaling work like maskedTextureFragmentShader.glsl
+// (instead of like plain textureVertexShader.glsl).
+#ifdef MASKED
+uniform sampler2D mask;
+#endif
+
 void main(void)
 {
     // Convert to pixel coordinates again.
@@ -126,7 +132,14 @@ void main(void)
         for( int x = xstart; x <= xend; ++x, ++xpos )
         {
             vec2 offset = vec2( x * xsrcconvert, y * ysrcconvert );
+#ifndef MASKED
             tmp += texture2D( sampler, offset ) * xratio[ xpos ];
+#else
+            vec4 texel;
+            texel = texture2D( sampler, offset );
+            texel.a = 1.0 - texture2D( mask, offset ).r;
+            tmp += texel * xratio[ xpos ];
+#endif
         }
         sum += tmp * yratio[ ypos ];
     }

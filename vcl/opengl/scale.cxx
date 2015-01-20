@@ -225,6 +225,7 @@ bool OpenGLSalBitmap::ImplScaleArea( double rScaleX, double rScaleY )
     OpenGLTexture aScratchTex = OpenGLTexture( nNewWidth, nNewHeight );
     OpenGLFramebuffer* pFramebuffer = mpContext->AcquireFramebuffer( aScratchTex );
 
+    // NOTE: This setup is also done in OpenGLSalGraphicsImpl::DrawTransformedTexture().
     if( fast )
     {
         pProgram->SetUniform1i( "xscale", ixscale );

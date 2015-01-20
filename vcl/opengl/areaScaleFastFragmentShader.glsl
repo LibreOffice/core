@@ -18,6 +18,12 @@ uniform float ratio; // = 1.0/(xscale*yscale)
 
 varying vec2 tex_coord;
 
+// This mode makes the scaling work like maskedTextureFragmentShader.glsl
+// (instead of like plain textureVertexShader.glsl).
+#ifdef MASKED
+uniform sampler2D mask;
+#endif
+
 /*
  Just make the resulting color the average of all the source pixels
  (which is an area (xscale)x(yscale) ).
@@ -30,7 +36,14 @@ void main(void)
     {
         for( int x = 0; x < xscale; ++x )
         {
+#ifndef MASKED
             sum += texture2D( sampler, tex_coord.st + offset );
+#else
+            vec4 texel;
+            texel = texture2D( sampler, tex_coord.st + offset );
+            texel.a = 1.0 - texture2D( mask, tex_coord.st + offset ).r;
+            sum += texel;
+#endif
             offset.x += xstep;
         }
         offset.y += ystep;
