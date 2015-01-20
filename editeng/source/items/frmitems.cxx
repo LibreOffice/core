@@ -1589,6 +1589,17 @@ void SvxShadowItem::SetEnumValue( sal_uInt16 nVal )
     SetLocation( (const SvxShadowLocation)nVal );
 }
 
+void SvxShadowItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("svxShadowItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aShadowColor"), BAD_CAST(aShadowColor.AsRGBHexString().toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nWidth"), BAD_CAST(OString::number(nWidth).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("eLocation"), BAD_CAST(OString::number(eLocation).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(EE_RESSTR(RID_SVXITEMS_SHADOW_BEGIN + eLocation).toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 // class SvxBoxItem ------------------------------------------------------
 
 SvxBoxItem::SvxBoxItem( const SvxBoxItem& rCpy ) :

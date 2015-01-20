@@ -496,6 +496,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_UL_SPACE:
                 static_cast<const SvxULSpaceItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_SHADOW:
+                static_cast<const SvxShadowItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -510,9 +513,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_SHADOW:
-                pWhich = "shadow";
-                break;
             case RES_PAGEDESC:
             {
                 pWhich = "page description";
