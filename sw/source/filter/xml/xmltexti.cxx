@@ -188,7 +188,7 @@ bool SwXMLTextImportHelper::IsInHeaderFooter() const
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
+    SAL_WARN_IF(!pTxtCrsr, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = pTxtCrsr ? pTxtCrsr->GetDoc() : NULL;
 
     return pDoc && pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
