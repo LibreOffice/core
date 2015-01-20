@@ -117,11 +117,15 @@ void messageCallback(int nType, const char* pPayload, void* pData)
         bIsAttached = true;
     }
 
+    jstring sPayload = pEnv->NewStringUTF(pPayload);
+
     jvalue aParameter[2];
     aParameter[0].i = nType;
-    aParameter[1].l = pEnv->NewStringUTF(pPayload);
+    aParameter[1].l = sPayload;
 
     pEnv->CallVoidMethodA(pCallbackData->aObject, pCallbackData->aJavaCallbackMethod, aParameter);
+
+    pEnv->DeleteLocalRef(sPayload);
 
     if (bIsAttached)
     {
