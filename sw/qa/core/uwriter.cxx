@@ -51,6 +51,8 @@
 #include "swtypes.hxx"
 #include "fmtftn.hxx"
 #include "fmtrfmrk.hxx"
+#include <fmtinfmt.hxx>
+#include <fchrfmt.hxx>
 #include "fmtfld.hxx"
 #include "redline.hxx"
 #include "docary.hxx"
@@ -98,6 +100,7 @@ public:
     void testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2();
     void testSwScanner();
     void testUserPerceivedCharCount();
+    void testMergePortionsDeleteNotSorted();
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
@@ -127,6 +130,7 @@ public:
     CPPUNIT_TEST(testModelToViewHelperExpandFieldsExpandFootnoteReplaceMode2);
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
+    CPPUNIT_TEST(testMergePortionsDeleteNotSorted);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
     CPPUNIT_TEST(testIntrusiveRing);
@@ -902,6 +906,34 @@ void SwDocTest::testSwScanner()
                        aDocStat.nChar == 17);
         aDocStat.Reset();
     }
+}
+
+void SwDocTest::testMergePortionsDeleteNotSorted()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("  AABBCC"));
+
+    SwCharFmt *const pCharFmt(m_pDoc->MakeCharFmt("foo", 0));
+    SwFmtCharFmt const charFmt(pCharFmt);
+
+    SwFmtINetFmt const inetFmt("http://example.com", "");
+
+    IDocumentContentOperations & rIDCO(m_pDoc->getIDocumentContentOperations());
+    aPaM.SetMark();
+    aPaM.GetPoint()->nContent = 2;
+    aPaM.GetMark()->nContent = 4;
+    rIDCO.InsertPoolItem(aPaM, charFmt, IDocumentContentOperations::INS_DEFAULT);
+    aPaM.GetPoint()->nContent = 2;
+    aPaM.GetMark()->nContent = 5;
+    rIDCO.InsertPoolItem(aPaM, inetFmt, IDocumentContentOperations::INS_DEFAULT);
+    aPaM.GetPoint()->nContent = 6;
+    aPaM.GetMark()->nContent = 8;
+    rIDCO.InsertPoolItem(aPaM, charFmt, IDocumentContentOperations::INS_DEFAULT);
+    aPaM.GetPoint()->nContent = 4;
+    aPaM.GetMark()->nContent = 6;
+    // this triggered an STL assert in SwpHints::MergePortions()
+    rIDCO.InsertPoolItem(aPaM, charFmt, IDocumentContentOperations::INS_DEFAULT);
 }
 
 //See https://bugs.libreoffice.org/show_bug.cgi?id=40599
