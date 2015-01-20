@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_415f940e",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-20T13:07:40Z",
+      "side": 1,
+      "message": "I\u0027m not convinced this is a good idea. It overwrites the BIFF4 mapping for ocCeil (we don\u0027t distinguish different newer BIFF versions) and only Excel2013 knows CEILING.MATH, older versions would err. Maybe best to omit this and keep the old handling of dropping the 3rd parameter. If necessary we could come up with something later.",
+      "revId": "e74c10753e27b176909f52d6f5b779b490a9c24a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
