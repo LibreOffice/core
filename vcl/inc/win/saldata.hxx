@@ -137,8 +137,8 @@ struct SalShlData
     UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     BOOL                    mbWXP;                  // Windows XP
+    BOOL                    mbWVista;               // Windows Vista
     BOOL                    mbW7;                   // Windows 7
-    OSVERSIONINFO           maVersionInfo;
 };
 
 extern SalShlData aSalShlData;
