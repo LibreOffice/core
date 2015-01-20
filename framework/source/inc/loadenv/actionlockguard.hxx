@@ -91,7 +91,7 @@ class ActionLockGuard
             @return sal_True, if new resource could be set and locked.
                     sal_False otherwise.
          */
-        virtual bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
+        bool setResource(const css::uno::Reference< css::document::XActionLockable >& xLock)
         {
             osl::MutexGuard g(m_mutex);
 
@@ -116,7 +116,7 @@ class ActionLockGuard
             @return sal_True, if new resource could be set and locked.
                     sal_False otherwise.
          */
-        virtual void freeResource()
+        void freeResource()
         {
             // SAFE -> ..........................
             osl::ClearableMutexGuard aMutexLock(m_mutex);
@@ -135,7 +135,7 @@ class ActionLockGuard
         }
 
         /** @short  lock the internal wrapped resource, if its not already done. */
-        virtual void lock()
+        void lock()
         {
             osl::MutexGuard g(m_mutex);
             if (!m_bActionLocked && m_xActionLock.is())
@@ -146,7 +146,7 @@ class ActionLockGuard
         }
 
         /** @short  unlock the internal wrapped resource, if its not already done. */
-        virtual void unlock()
+        void unlock()
         {
             osl::MutexGuard g(m_mutex);
             if (m_bActionLocked && m_xActionLock.is())

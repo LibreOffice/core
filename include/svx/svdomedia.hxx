@@ -76,7 +76,7 @@ public:
 
 protected:
 
-        virtual void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+        void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
         virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
 private:

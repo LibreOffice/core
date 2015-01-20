@@ -153,12 +153,6 @@ public:
         return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );
     }
 
-    // XElementAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
-    {
-        ::osl::MutexGuard aGuard( m_aMutex );
-        return IdToOleNameHash.size();
-    }
     // XNameContainer
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) SAL_OVERRIDE
     {

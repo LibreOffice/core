@@ -144,7 +144,7 @@ namespace connectivity
             void         analyseSQL();
             void         setOrderbyColumn( connectivity::OSQLParseNode* pColumnRef,
                                            connectivity::OSQLParseNode* pAscendingDescending);
-            virtual void createTable(  ) throw (
+            void createTable(  ) throw (
                         ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
 
         public:

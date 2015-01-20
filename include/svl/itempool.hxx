@@ -151,7 +151,7 @@ public:
 
     virtual const SfxPoolItem&      Put( const SfxPoolItem&, sal_uInt16 nWhich = 0 );
     virtual void                    Remove( const SfxPoolItem& );
-    virtual const SfxPoolItem&      GetDefaultItem( sal_uInt16 nWhich ) const;
+    const SfxPoolItem&      GetDefaultItem( sal_uInt16 nWhich ) const;
 
     const SfxPoolItem*              LoadItem( SvStream &rStream,
                                               bool bDirect = false,
@@ -170,7 +170,7 @@ public:
     bool                            StoreSurrogate(SvStream& rStream,
                                             const SfxPoolItem *pItem ) const;
 
-    virtual SvStream &              Load(SvStream &);
+    SvStream &              Load(SvStream &);
     virtual SvStream &              Store(SvStream &) const;
     bool                            HasPersistentRefCounts() const;
     void                            LoadCompleted();

@@ -71,7 +71,7 @@ protected:
 
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
-    virtual void SAL_CALL AttachImpl(
+    void SAL_CALL AttachImpl(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange > & xTextRange,
             const sal_uInt16 nWhich)

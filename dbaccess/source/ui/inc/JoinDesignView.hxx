@@ -51,7 +51,7 @@ namespace dbaui
         virtual void initialize() SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rEvt ) SAL_OVERRIDE;
 
-        virtual void SaveTabWinUIConfig(OTableWindow* pWin);
+        void SaveTabWinUIConfig(OTableWindow* pWin);
         OJoinController& getController() const { return m_rController; }
         // called when fields are deleted
 

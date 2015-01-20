@@ -141,7 +141,7 @@ class BasicScriptListener_Impl : public WeakImplHelper1< XScriptListener >
     StarBASICRef maBasicRef;
         Reference< frame::XModel > m_xModel;
 
-    virtual void firing_impl(const ScriptEvent& aScriptEvent, Any* pRet);
+    void firing_impl(const ScriptEvent& aScriptEvent, Any* pRet);
 
 public:
     BasicScriptListener_Impl( StarBASIC* pBasic, const Reference< frame::XModel >& xModel )

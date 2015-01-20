@@ -89,8 +89,8 @@ public:
 class SVL_DLLPUBLIC DdeTransaction
 {
 public:
-    virtual void    Data( const DdeData* );
-    virtual void    Done( bool bDataValid );
+    void    Data( const DdeData* );
+    void    Done( bool bDataValid );
 protected:
     DdeConnection&  rDde;
     DdeData         aDdeData;
@@ -146,7 +146,7 @@ public:
 
     void            SetNotifyHdl( const Link& rLink ) { aNotify = rLink; }
     const Link&     GetNotifyHdl() const { return aNotify; }
-    virtual void    Notify();
+    void    Notify();
 };
 
 
@@ -288,18 +288,18 @@ class SVL_DLLPUBLIC DdeTopic
     SVL_DLLPRIVATE void _Disconnect( sal_IntPtr );
 
 public:
-    virtual void    Connect( sal_IntPtr );
-    virtual void    Disconnect( sal_IntPtr );
-    virtual DdeData* Get( sal_uLong );
-    virtual bool    Put( const DdeData* );
-    virtual bool    Execute( const OUString* );
+    void    Connect( sal_IntPtr );
+    void    Disconnect( sal_IntPtr );
+    DdeData* Get( sal_uLong );
+    bool    Put( const DdeData* );
+    bool    Execute( const OUString* );
     // Eventually create a new item. return 0 -> Item creation failed
-    virtual bool    MakeItem( const OUString& rItem );
+    bool    MakeItem( const OUString& rItem );
 
 
     // A Warm-/Hot-Link is created. Return true if successful
-    virtual bool    StartAdviseLoop();
-    virtual bool    StopAdviseLoop();
+    bool    StartAdviseLoop();
+    bool    StopAdviseLoop();
 
 private:
     friend class    DdeInternal;
@@ -357,18 +357,18 @@ class SVL_DLLPUBLIC DdeService
     friend class    DdeInternal;
 
 public:
-    virtual bool    IsBusy();
-    virtual OUString GetHelp();
+    bool    IsBusy();
+    OUString GetHelp();
     // Eventually creating a new item. return 0 -> Topic creation failed
-    virtual bool    MakeTopic( const OUString& rItem );
+    bool    MakeTopic( const OUString& rItem );
 
 protected:
-    virtual OUString Topics();
-    virtual OUString Formats();
-    virtual OUString SysItems();
-    virtual OUString Status();
-    virtual OUString SysTopicGet( const OUString& );
-    virtual bool    SysTopicExecute( const OUString* );
+    OUString Topics();
+    OUString Formats();
+    OUString SysItems();
+    OUString Status();
+    OUString SysTopicGet( const OUString& );
+    bool    SysTopicExecute( const OUString* );
 
     const DdeTopic* GetSysTopic() const { return pSysTopic; }
 private:

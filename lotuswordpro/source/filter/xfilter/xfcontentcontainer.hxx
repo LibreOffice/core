@@ -89,14 +89,14 @@ public:
      */
     virtual void    Add(XFContent *pContent);
 
-    virtual void    InsertAtBegin(XFContent *pContent);
-    virtual void    RemoveAt(sal_uInt32 nPos);
-    virtual rtl::Reference<XFContent> GetLastContent();
-    virtual void    RemoveLastContent();
+    void    InsertAtBegin(XFContent *pContent);
+    void    RemoveAt(sal_uInt32 nPos);
+    rtl::Reference<XFContent> GetLastContent();
+    void    RemoveLastContent();
     /**
      * @descr   convience function for add text content.
      */
-    virtual void    Add(const OUString& text);
+    void    Add(const OUString& text);
 
     /**
      * @descr   return the number of contents in the container.

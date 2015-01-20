@@ -163,7 +163,7 @@ public:
     virtual SdrObjList* GetSubList() const SAL_OVERRIDE;
 
     // Insert 3D object into the group; transfer to other owner!
-    virtual void Insert3DObj(E3dObject* p3DObj);
+    void Insert3DObj(E3dObject* p3DObj);
     void Remove3DObj(E3dObject* p3DObj);
 
     E3dObject* GetParentObj() const;

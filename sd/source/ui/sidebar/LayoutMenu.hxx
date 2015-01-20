@@ -74,7 +74,7 @@ public:
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu (void);
 
-    virtual void Dispose (void);
+    void Dispose (void);
 
     /** Return a numerical value representing the currently selected
         layout.

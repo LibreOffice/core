@@ -197,10 +197,10 @@ protected:
 
     ScDocShell*             pDocShell;
     /** called from the XActionLockable interface methods on initial locking */
-    virtual void            lock();
+    void            lock();
 
     /** called from the XActionLockable interface methods on final unlock */
-    virtual void            unlock();
+    void            unlock();
 
 public:
                             ScNamedRangesObj(ScDocShell* pDocSh);

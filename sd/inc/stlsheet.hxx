@@ -138,7 +138,7 @@ protected:
 
     void throwIfDisposed() throw (::com::sun::star::uno::RuntimeException);
 
-    virtual void disposing();
+    void disposing();
 
     OUString   msApiName;
     rtl::Reference< SfxStyleSheetBasePool > mxPool;

@@ -158,7 +158,7 @@ public:
     virtual std::string DumpOpName() const SAL_OVERRIDE;
     virtual void DumpInlineFun( std::set<std::string>&, std::set<std::string>& ) const SAL_OVERRIDE;
     const std::string& GetName() const;
-    virtual cl_mem GetCLBuffer() const;
+    cl_mem GetCLBuffer() const;
     virtual bool NeedParallelReduction() const SAL_OVERRIDE;
 
 protected:
@@ -177,7 +177,7 @@ public:
     virtual std::string GetBottom() { return "";};
     virtual std::string Gen2( const std::string&/*lhs*/,
         const std::string&/*rhs*/ ) const { return "";}
-    virtual std::string Gen( ArgVector& /*argVector*/ ) { return "";};
+    std::string Gen( ArgVector& /*argVector*/ ) { return "";};
     virtual std::string BinFuncName() const { return "";};
     virtual void BinInlineFun( std::set<std::string>&,
         std::set<std::string>& ) { }

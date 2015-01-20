@@ -59,7 +59,7 @@ namespace accessibility
 
         // own overridables
         /// will be called for any VclWindowEvent events broadcasted by our VCL window
-        virtual void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
+        void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
 
         /** will be called when our window broadcasts the VCLEVENT_OBJECT_DYING event
 

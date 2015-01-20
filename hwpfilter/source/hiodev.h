@@ -58,9 +58,9 @@ class DLLEXPORT HIODev
         virtual int readBlock( void *ptr, int size ) = 0;
         virtual int skipBlock( int size ) = 0;
 
-        virtual int read1b( void *ptr, int nmemb );
-        virtual int read2b( void *ptr, int nmemb );
-        virtual int read4b( void *ptr, int nmemb );
+        int read1b( void *ptr, int nmemb );
+        int read2b( void *ptr, int nmemb );
+        int read4b( void *ptr, int nmemb );
 };
 
 struct gz_stream;

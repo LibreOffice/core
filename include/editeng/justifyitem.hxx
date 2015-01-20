@@ -45,7 +45,7 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
-    virtual OUString        GetValueText( sal_uInt16 nVal ) const;
+    OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
 
@@ -78,7 +78,7 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
-    virtual OUString        GetValueText( sal_uInt16 nVal ) const;
+    OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
 
@@ -107,7 +107,7 @@ public:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
-    virtual OUString        GetValueText( sal_uInt16 nVal ) const;
+    OUString        GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
 

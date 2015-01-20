@@ -111,43 +111,43 @@ public:
     virtual bool IsAutoGrowDown(){ return false;}
     virtual bool IsAutoGrowLeft(){ return false;}
     virtual bool IsAutoGrowRight(){ return false;}
-    virtual bool IsFitGraphic();
-    virtual bool IsAutoGrowWidth();
-    virtual bool IsInlineToMargin();
+    bool IsFitGraphic();
+    bool IsAutoGrowWidth();
+    bool IsInlineToMargin();
     virtual sal_uInt8 GetContentOrientation(){ return TEXT_ORIENT_LRTB;}
     virtual bool HonorProtection();
     virtual bool IsProtected();
-    virtual bool HasProtection();
-    virtual OUString GetStyleName(){ return m_StyleName;}
-    virtual bool IsComplex();
+    bool HasProtection();
+    OUString GetStyleName(){ return m_StyleName;}
+    bool IsComplex();
     virtual bool IsAnchorPage(){ return false;}
     virtual bool IsAnchorFrame(){ return false;}
     virtual bool IsAnchorCell(){ return false;}
-    virtual bool IsPage();
-    virtual bool IsHeader();
-    virtual bool IsFooter();
-    virtual bool IsFrame();
-    virtual bool IsCell();
-    virtual bool IsSuperTable();
-    virtual bool IsGroupHead();
+    bool IsPage();
+    bool IsHeader();
+    bool IsFooter();
+    bool IsFrame();
+    bool IsCell();
+    bool IsSuperTable();
+    bool IsGroupHead();
     virtual sal_uInt8 GetRelativeType();
-    virtual bool IsRelativeAnchored();
-    virtual LwpUseWhen* GetUseWhen();
+    bool IsRelativeAnchored();
+    LwpUseWhen* GetUseWhen();
     virtual LwpUseWhen* VirtualGetUseWhen(){ return NULL;}
     virtual bool IsUseOnAllPages(){ return false;}
     virtual bool IsUseOnAllEvenPages(){ return false;}
     virtual bool IsUseOnAllOddPages(){ return false;}
     virtual bool IsUseOnPage(){ return false;}
     virtual sal_Int32 GetPageNumber(sal_uInt16 /*nLayoutNumber*/ = 0){ return -1;}
-    virtual bool IsMinimumHeight();
+    bool IsMinimumHeight();
     virtual bool IsForWaterMark(){ return false;}
     virtual LwpPara* GetLastParaOfPreviousStory() { return NULL; }
-    virtual LwpVirtualLayout* GetParentLayout();
+    LwpVirtualLayout* GetParentLayout();
     virtual LwpVirtualLayout* GetContainerLayout(){ return NULL;}
-    virtual void RegisterChildStyle();
-    virtual bool NoContentReference();
-    virtual bool IsStyleLayout();
-    virtual enumXFAlignType GetVerticalAlignmentType()
+    void RegisterChildStyle();
+    bool NoContentReference();
+    bool IsStyleLayout();
+    enumXFAlignType GetVerticalAlignmentType()
     {
         if (m_nAttributes & STYLE_CENTEREDVERTICALLY)
         {
@@ -159,7 +159,7 @@ public:
         }
         return enumXFAlignTop;
     };
-    virtual void SetStyleName(const OUString & str){ m_StyleName = str;}
+    void SetStyleName(const OUString & str){ m_StyleName = str;}
     virtual double GetWidth(){return -1;}
 
     //Check whether there are contents in the layout
@@ -219,7 +219,7 @@ protected:
     enum    {SHIFT_UP = 0, SHIFT_DOWN = 4, SHIFT_LEFT = 8, SHIFT_RIGHT =12};
 public:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_VIRTUAL_LAYOUT;}
-    virtual LwpVirtualLayout* FindChildByType(LWP_LAYOUT_TYPE eType);
+    LwpVirtualLayout* FindChildByType(LWP_LAYOUT_TYPE eType);
 };
 
 class LwpAssociatedLayouts
@@ -298,9 +298,9 @@ public:
     virtual sal_uInt8 GetContentOrientation() SAL_OVERRIDE;
     virtual bool HonorProtection() SAL_OVERRIDE;
     virtual bool IsProtected() SAL_OVERRIDE;
-    virtual LwpVirtualLayout* GetWaterMarkLayout();
+    LwpVirtualLayout* GetWaterMarkLayout();
     XFBGImage* GetXFBGImage();
-    virtual bool GetUsePrinterSettings();
+    bool GetUsePrinterSettings();
 
     LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj().get());}
         sal_uInt16 GetScaleMode(void);
@@ -312,12 +312,12 @@ public:
 
     bool CanSizeRight(void);
     virtual double GetWidth() SAL_OVERRIDE;
-    virtual sal_Int32 GetMinimumWidth();
+    sal_Int32 GetMinimumWidth();
     bool IsSizeRightToContent(void);
     bool IsSizeRightToContainer(void);
     sal_Int32 DetermineWidth();
     virtual double GetHeight();
-    virtual LwpPoint GetOrigin();
+    LwpPoint GetOrigin();
 
     bool IsPatternFill();
     XFBGImage* GetFillPattern();
@@ -377,7 +377,7 @@ public:
     virtual sal_uInt16 GetNumCols() SAL_OVERRIDE;
     virtual double GetColWidth(sal_uInt16 nIndex) SAL_OVERRIDE;
     virtual double GetColGap(sal_uInt16 nIndex) SAL_OVERRIDE;
-    virtual sal_uInt16 GetUsePage();
+    sal_uInt16 GetUsePage();
 public:
     enum UseWhenType
     {
@@ -388,7 +388,7 @@ public:
         StartOnEvenPage
     };
 public:
-    virtual UseWhenType GetUseWhenType();
+    UseWhenType GetUseWhenType();
     virtual bool IsUseOnAllPages() SAL_OVERRIDE;
     virtual bool IsUseOnAllEvenPages() SAL_OVERRIDE;
     virtual bool IsUseOnAllOddPages() SAL_OVERRIDE;
@@ -402,10 +402,10 @@ class LwpPlacableLayout : public LwpLayout
 public:
     LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm );
     virtual ~LwpPlacableLayout();
-    virtual sal_uInt8 GetWrapType();
-    virtual LwpLayoutRelativity* GetRelativityPiece();
+    sal_uInt8 GetWrapType();
+    LwpLayoutRelativity* GetRelativityPiece();
     virtual sal_uInt8 GetRelativeType() SAL_OVERRIDE;
-    virtual sal_Int32 GetBaseLineOffset();
+    sal_Int32 GetBaseLineOffset();
     virtual bool IsAnchorPage() SAL_OVERRIDE;
     virtual bool IsAnchorFrame() SAL_OVERRIDE;
     virtual bool IsAnchorCell() SAL_OVERRIDE;

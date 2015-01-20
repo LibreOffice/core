@@ -172,9 +172,9 @@ public:
 
     virtual ErrCode             DoVerb(long nVerb);
 
-    virtual void                OutplaceActivated( bool bActive, SfxInPlaceClient* pClient );
-    virtual void                InplaceActivating( SfxInPlaceClient* pClient );
-    virtual void                InplaceDeactivated( SfxInPlaceClient* pClient );
+    void                OutplaceActivated( bool bActive, SfxInPlaceClient* pClient );
+    void                InplaceActivating( SfxInPlaceClient* pClient );
+    void                InplaceDeactivated( SfxInPlaceClient* pClient );
     virtual void                UIActivating( SfxInPlaceClient* pClient );
     virtual void                UIDeactivated( SfxInPlaceClient* pClient );
 
@@ -188,7 +188,7 @@ public:
      * has been set.  By the time this is called the document has been fully
      * imported.
      */
-    virtual void                Initialize();
+    void                Initialize();
     virtual bool                PrepareClose( bool bUI = true );
     virtual OUString            GetSelectionText( bool bCompleteWords = false );
     virtual bool                HasSelection( bool bText = true ) const;
@@ -223,7 +223,7 @@ public:
     virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual bool                HasPrintOptionsPage() const;
     virtual SfxTabPage*         CreatePrintOptionsPage( vcl::Window *pParent, const SfxItemSet &rOptions );
-    virtual JobSetup            GetJobSetup() const;
+    JobSetup            GetJobSetup() const;
     Printer*                    GetActivePrinter() const;
 
     // Working set
@@ -256,7 +256,7 @@ public:
     const Size&                 GetMargin() const;
     void                        SetMargin( const Size& );
     void                        DisconnectAllClients();
-    virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
+    SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
     bool                        NewWindowAllowed() const            { return !bNoNewWindow; }
     void                        SetNewWindowAllowed( bool bSet )    { bNoNewWindow = !bSet; }
 

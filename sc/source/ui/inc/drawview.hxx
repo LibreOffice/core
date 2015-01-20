@@ -161,7 +161,7 @@ public:
         const OUString& rFilter);
 
     static void CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle );
-    virtual void SyncForGrid( SdrObject* pObj );
+    void SyncForGrid( SdrObject* pObj );
 };
 
 #endif

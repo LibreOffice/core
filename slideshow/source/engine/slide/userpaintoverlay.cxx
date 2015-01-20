@@ -86,7 +86,7 @@ namespace slideshow
                 drawPolygons();
             }
 
-            virtual void dispose()
+            void dispose()
             {
                 maViews.clear();
             }

@@ -128,8 +128,8 @@ public:
 
 #ifndef IOS
     // If enabled we can get damage notifications for regions immediately rendered to ...
-    virtual void                enableDamageTracker( bool bOn = true );
-    virtual void                damaged( const basegfx::B2IBox& /* rDamageRect */) {}
+    void                enableDamageTracker( bool bOn = true );
+    void                damaged( const basegfx::B2IBox& /* rDamageRect */) {}
 #endif
 
     /*TODO: functional implementation */

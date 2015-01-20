@@ -63,7 +63,7 @@ public:
     void       GetLineRange( sal_uInt16&, sal_uInt16& );
 
     // Interface to execute a method from the applications
-    virtual ErrCode Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );
+    ErrCode Call( SbxValue* pRet = NULL,  SbxVariable* pCaller = NULL );
     virtual void    Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;
 };
 

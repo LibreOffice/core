@@ -77,9 +77,9 @@ public:
     sal_uLong GetText( const OUString& rShort, OUString& );
 
     virtual bool IsOnlyTextBlock( const OUString& rShort ) const SAL_OVERRIDE;
-    virtual bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
-    virtual void SetIsTextOnly( const OUString& rShort, bool bNewValue );
-    virtual void SetIsTextOnly( sal_uInt16 nIdx, bool bNewValue );
+    bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
+    void SetIsTextOnly( const OUString& rShort, bool bNewValue );
+    void SetIsTextOnly( sal_uInt16 nIdx, bool bNewValue );
 
     virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTbl,
                                  bool bFileAlreadyOpen = false ) SAL_OVERRIDE;

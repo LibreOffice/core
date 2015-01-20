@@ -387,7 +387,7 @@ public:
 
         SfxShell::Activate()
         */
-    virtual void                ParentActivate();
+    void                ParentActivate();
 
     /**
         The active parent of the <SfxDispatcher> on which the SfxShell is located,
@@ -399,7 +399,7 @@ public:
 
         SfxShell::Deactivate()
         */
-    virtual void                ParentDeactivate();
+    void                ParentDeactivate();
 
     /**
         This method returns a pointer to the <SfxDispatcher>, when the SfxShell

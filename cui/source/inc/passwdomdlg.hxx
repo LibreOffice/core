@@ -43,9 +43,9 @@ public:
     virtual ~PasswordToOpenModifyDialog();
 
     // AbstractPasswordToOpenModifyDialog
-    virtual OUString  GetPasswordToOpen() const;
-    virtual OUString  GetPasswordToModify() const;
-    virtual bool    IsRecommendToOpenReadonly() const;
+    OUString  GetPasswordToOpen() const;
+    OUString  GetPasswordToModify() const;
+    bool    IsRecommendToOpenReadonly() const;
 };
 
 

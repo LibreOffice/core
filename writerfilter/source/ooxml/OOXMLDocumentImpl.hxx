@@ -65,10 +65,10 @@ class OOXMLDocumentImpl : public OOXMLDocument
     sal_Int32 mnProgressEndPos;
 
 protected:
-    virtual void resolveFastSubStream(Stream & rStream,
+    void resolveFastSubStream(Stream & rStream,
                                       OOXMLStream::StreamType_t nType);
 
-    virtual void resolveFastSubStreamWithId(Stream & rStream,
+    void resolveFastSubStreamWithId(Stream & rStream,
                                       writerfilter::Reference<Stream>::Pointer_t pStream,
                       sal_uInt32 nId);
 
@@ -110,7 +110,7 @@ public:
 
     virtual void resolveComment(Stream & rStream, const sal_Int32 nId) SAL_OVERRIDE;
 
-    virtual OOXMLPropertySet * getPicturePropSet
+    OOXMLPropertySet * getPicturePropSet
     (const OUString & rId);
     virtual void resolvePicture(Stream & rStream, const OUString & rId) SAL_OVERRIDE;
 

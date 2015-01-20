@@ -118,7 +118,7 @@ protected:
     void RegisterDefaultCell();
     virtual LwpCellBorderType GetCellBorderType(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
     LwpCellLayout * GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol, LwpTableLayout * pTableLayout);
-    virtual sal_uInt16 GetLeftColID(sal_uInt16 nCol){return nCol - 1; };
+    sal_uInt16 GetLeftColID(sal_uInt16 nCol){return nCol - 1; };
     virtual sal_uInt16 GetBelowRowID(sal_uInt16 nRow){return nRow + 1; };
 
     sal_uInt16 crowid;

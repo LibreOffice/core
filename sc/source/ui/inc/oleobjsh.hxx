@@ -43,7 +43,7 @@ public:
     ScOleObjectShell(ScViewData* pData);
     virtual ~ScOleObjectShell();
 
-    virtual void HandleSelectionChange();
+    void HandleSelectionChange();
 };
 
 #endif

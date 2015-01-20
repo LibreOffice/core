@@ -283,7 +283,7 @@ public:
         virtual void    Commit() SAL_OVERRIDE;
 
     private:
-        virtual void            clearFieldAssignment(const OUString& _rLogicalName);
+        void            clearFieldAssignment(const OUString& _rLogicalName);
     };
 
 

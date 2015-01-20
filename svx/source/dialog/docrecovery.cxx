@@ -87,9 +87,9 @@ css::uno::Reference< css::uno::XComponentContext > RecoveryCore::getComponentCon
 }
 
 
-TURLList* RecoveryCore::getURLListAccess()
+TURLList& RecoveryCore::getURLListAccess()
 {
-    return &m_lURLs;
+    return m_lURLs;
 }
 
 
@@ -648,11 +648,11 @@ SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
     // fill listbox with current open documents
     m_pFileListLB->Clear();
 
-    TURLList*                pURLs = m_pCore->getURLListAccess();
+    TURLList&                pURLs = m_pCore->getURLListAccess();
     TURLList::const_iterator pIt;
 
-    for (  pIt  = pURLs->begin();
-           pIt != pURLs->end()  ;
+    for (  pIt  = pURLs.begin();
+           pIt != pURLs.end()  ;
          ++pIt                  )
     {
         const TURLInfo& rInfo = *pIt;
@@ -878,10 +878,10 @@ RecoveryDialog::RecoveryDialog(vcl::Window* pParent, RecoveryCore* pCore)
     m_pCancelBtn->SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
 
     // fill list box first time
-    TURLList*                pURLList = m_pCore->getURLListAccess();
+    TURLList&                pURLList = m_pCore->getURLListAccess();
     TURLList::const_iterator pIt;
-    for (  pIt  = pURLList->begin();
-           pIt != pURLList->end()  ;
+    for (  pIt  = pURLList.begin();
+           pIt != pURLList.end()  ;
          ++pIt                     )
     {
         const TURLInfo& rInfo = *pIt;
@@ -1240,10 +1240,10 @@ BrokenRecoveryDialog::~BrokenRecoveryDialog()
 void BrokenRecoveryDialog::impl_refresh()
 {
                              m_bExecutionNeeded = false;
-    TURLList*                pURLList           = m_pCore->getURLListAccess();
+    TURLList&                pURLList           = m_pCore->getURLListAccess();
     TURLList::const_iterator pIt;
-    for (  pIt  = pURLList->begin();
-           pIt != pURLList->end()  ;
+    for (  pIt  = pURLList.begin();
+           pIt != pURLList.end()  ;
          ++pIt                     )
     {
         const TURLInfo& rInfo = *pIt;

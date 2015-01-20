@@ -114,7 +114,7 @@ protected:
     virtual void    MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    Click() SAL_OVERRIDE;
 
-    virtual void    StartPopup();
+    void    StartPopup();
 
 public:
 

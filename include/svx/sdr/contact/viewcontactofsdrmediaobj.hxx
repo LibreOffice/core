@@ -59,7 +59,7 @@ protected:
     virtual ViewObjectContact& CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact) SAL_OVERRIDE;
 
     // get notified if some properties have changed
-    virtual void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+    void mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
 
 protected:
     // This method is responsible for creating the graphical visualisation data

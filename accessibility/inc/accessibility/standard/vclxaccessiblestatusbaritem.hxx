@@ -66,7 +66,7 @@ protected:
     OUString                GetItemText();
     sal_uInt16              GetItemId() const { return m_nItemId; }
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleComponent
     virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

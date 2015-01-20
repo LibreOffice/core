@@ -63,9 +63,9 @@ public:
     SvNumberFormatter*          GetNumberFormatter() const;
 
                                 // override to adapt attributes in the document
-    virtual void                NumberFormatDeleted(sal_uInt32 nKey);
+    void                NumberFormatDeleted(sal_uInt32 nKey);
                                 // override to possibly format something anew
-    virtual void                SettingsChanged();
+    void                SettingsChanged();
 
                                 // XNumberFormatsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL

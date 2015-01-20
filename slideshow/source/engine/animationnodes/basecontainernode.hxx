@@ -51,7 +51,7 @@ protected:
 
 private:
     virtual bool init_st() SAL_OVERRIDE;
-    virtual bool init_children();
+    bool init_children();
     virtual void deactivate_st( NodeState eDestState ) SAL_OVERRIDE;
     virtual bool hasPendingAnimation() const SAL_OVERRIDE;
     // force to be implemented by derived class:

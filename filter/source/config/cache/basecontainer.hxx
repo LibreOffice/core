@@ -155,7 +155,7 @@ class BaseContainer : public BaseLock
                     specify, which sub container of the used filter cache
                     must be wrapped by this container interface.
          */
-        virtual void init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext          ,
+        void init(const css::uno::Reference< css::uno::XComponentContext >&     rxContext          ,
                           const OUString&                                        sImplementationName,
                           const css::uno::Sequence< OUString >&                  lServiceNames      ,
                                 FilterCache::EItemType                                  eType              );

@@ -87,7 +87,7 @@ protected:
     /** A derived specialisation class can override this method to do
         additional work.
     */
-    virtual void CreateContainerAndControl (void);
+    void CreateContainerAndControl (void);
 
 private:
     vcl::Window* mpParent;

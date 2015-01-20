@@ -93,7 +93,7 @@ namespace svt
 
     protected:
         /// called when an item has been selected by any means
-        virtual void    Select();
+        void    Select();
 
     private:
         DECL_LINK(ImplClickHdl, HyperLabel*);

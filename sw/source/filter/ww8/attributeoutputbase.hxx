@@ -214,7 +214,7 @@ public:
 
     virtual void OnTOXEnding() {}
 
-    virtual void TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAttr );
+    void TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAttr );
 
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline ) = 0;
@@ -487,7 +487,7 @@ protected:
     void TextField( const SwFmtFld& );
 
     /// Sfx item RES_TXTATR_FLYCNT
-    virtual void TextFlyContent( const SwFmtFlyCnt& );
+    void TextFlyContent( const SwFmtFlyCnt& );
 
     /// Sfx item RES_TXTATR_FTN
     ///
@@ -653,7 +653,7 @@ public:
     virtual void BulletDefinition(int /*nId*/, const Graphic& /*rGraphic*/, Size /*aSize*/) {}
 
     // Returns whether or not the 'SwTxtNode' has a paragraph marker inserted \ deleted (using 'track changes')
-    virtual const SwRedlineData* GetParagraphMarkerRedline( const SwTxtNode& rNode, RedlineType_t aRedlineType );
+    const SwRedlineData* GetParagraphMarkerRedline( const SwTxtNode& rNode, RedlineType_t aRedlineType );
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_ATTRIBUTEOUTPUTBASE_HXX

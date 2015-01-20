@@ -248,7 +248,7 @@ class LwpLayoutGutters : public LwpVirtualPiece
 public:
     LwpLayoutGutters(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    inline virtual LwpBorderStuff* GetBorderStuff(){return &m_BorderBuffer;}
+    inline LwpBorderStuff& GetBorderStuff() { return m_BorderBuffer; }
 protected:
     virtual void Read() SAL_OVERRIDE;
 protected:

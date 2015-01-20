@@ -103,7 +103,7 @@ namespace dlgprov
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > createDialogModelForBasic() throw ( ::com::sun::star::uno::Exception );
 
         // XDialogProvider / XDialogProvider2 impl method
-        virtual ::com::sun::star::uno::Reference < ::com::sun::star::awt::XControl > SAL_CALL createDialogImpl(
+        ::com::sun::star::uno::Reference < ::com::sun::star::awt::XControl > SAL_CALL createDialogImpl(
             const OUString& URL,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xHandler,
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,

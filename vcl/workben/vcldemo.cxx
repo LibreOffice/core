@@ -1275,7 +1275,7 @@ public:
             TestAndQuit();
     }
 
-    virtual void TestAndQuit()
+    void TestAndQuit()
     {
         if (underTesting) return;
         underTesting=true;

@@ -83,8 +83,8 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void    Slide();
-    virtual void    EndSlide();
+    void    Slide();
+    void    EndSlide();
 
     void            EnableDrag( bool bEnable = true )
                         { mbFullDrag = bEnable; }

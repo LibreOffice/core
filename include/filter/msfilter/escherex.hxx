@@ -1189,7 +1189,7 @@ class MSFILTER_DLLPUBLIC EscherEx : public EscherPersistTable
         OUString                    mEditAs;
 
 
-        virtual bool DoSeek( sal_uInt32 nKey );
+        bool DoSeek( sal_uInt32 nKey );
 
 public:
     explicit            EscherEx( const EscherExGlobalRef& rxGlobal, SvStream* pOutStrm, bool bOOXML = false );
@@ -1214,7 +1214,7 @@ public:
                 /// If pPicStreamMergeBSE is known, the BLIPs from this stream are being
                 /// merged into the MsofbtBSE Records of the EscherStream like it's
                 /// required for Excel (and maybe Word?)
-        virtual void Flush( SvStream* pPicStreamMergeBSE = NULL );
+        void Flush( SvStream* pPicStreamMergeBSE = NULL );
 
     /** Inserts the passed number of bytes at the current position of the
         output stream.
@@ -1240,7 +1240,7 @@ public:
     void            ReplacePersistOffset( sal_uInt32 nKey, sal_uInt32 nOffset );
     sal_uInt32      GetPersistOffset( sal_uInt32 nKey );
     bool            SeekToPersistOffset( sal_uInt32 nKey );
-    virtual bool    InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
+    bool    InsertAtPersistOffset( sal_uInt32 nKey, sal_uInt32 nValue );   // nValue is being inserted into the Stream where it's appropriate (overwrite modus), without that the
                                                                                     // current StreamPosition changes
     void            SetEditAs( const OUString& rEditAs );
     rtl::OUString   GetEditAs() { return mEditAs; }
@@ -1257,17 +1257,17 @@ public:
     virtual void OpenContainer( sal_uInt16 nEscherContainer, int nRecInstance = 0 );
     virtual void CloseContainer();
 
-    virtual void BeginAtom();
-    virtual void EndAtom( sal_uInt16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-    virtual void AddAtom( sal_uInt32 nAtomSitze, sal_uInt16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
-    virtual void AddChildAnchor( const Rectangle& rRectangle );
-    virtual void AddClientAnchor( const Rectangle& rRectangle );
+    void BeginAtom();
+    void EndAtom( sal_uInt16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
+    void AddAtom( sal_uInt32 nAtomSitze, sal_uInt16 nRecType, int nRecVersion = 0, int nRecInstance = 0 );
+    void AddChildAnchor( const Rectangle& rRectangle );
+    void AddClientAnchor( const Rectangle& rRectangle );
 
     virtual sal_uInt32 EnterGroup( const OUString& rShapeName, const Rectangle* pBoundRect = 0 );
     sal_uInt32  EnterGroup( const Rectangle* pBoundRect = NULL );
     sal_uInt32  GetGroupLevel() const { return mnGroupLevel; };
-    virtual bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
-    virtual bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
+    bool SetGroupSnapRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
+    bool SetGroupLogicRect( sal_uInt32 nGroupLevel, const Rectangle& rRect );
     virtual void LeaveGroup();
 
                 // a ESCHER_Sp is being written ( a ESCHER_DgContainer has to be opened for this purpose!)

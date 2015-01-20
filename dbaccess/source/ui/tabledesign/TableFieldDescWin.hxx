@@ -56,7 +56,7 @@ namespace dbaui
         OTableFieldDescWin( vcl::Window* pParent);
         virtual ~OTableFieldDescWin();
 
-        virtual void Init();
+        void Init();
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );

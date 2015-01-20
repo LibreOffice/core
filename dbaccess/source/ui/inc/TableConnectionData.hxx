@@ -95,7 +95,7 @@ namespace dbaui
 
         OUString GetConnName() const { return m_aConnName; }
 
-        virtual void SetConnName( const OUString& rConnName ){ m_aConnName = rConnName; }
+        void SetConnName( const OUString& rConnName ){ m_aConnName = rConnName; }
         /** Update create a new connection
 
             @return true if successful

@@ -91,7 +91,7 @@ protected:
     virtual bool    Close() SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Resizing( Size& rSize ) SAL_OVERRIDE;
-    virtual void    SetSize();
+    void    SetSize();
     virtual void    ToggleFloatingMode() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 

@@ -404,7 +404,7 @@ public:
 
                                 // set own index & return new index
                                 // could override to use more indexes per action
-    virtual void                SetIndex( sal_uInt32& rIndex );
+    void                SetIndex( sal_uInt32& rIndex );
 
     virtual void                Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual sal_Size            GetLen() const SAL_OVERRIDE;

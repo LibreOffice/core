@@ -41,7 +41,7 @@ namespace dbaui
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(bool _bReadOnly);
+        void SetSpecialReadOnly(bool _bReadOnly);
 
     };
 
@@ -59,7 +59,7 @@ namespace dbaui
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(bool _bReadOnly);
+        void SetSpecialReadOnly(bool _bReadOnly);
     };
 
     class OPropNumericEditCtrl : public NumericField
@@ -75,7 +75,7 @@ namespace dbaui
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(bool _bReadOnly);
+        void SetSpecialReadOnly(bool _bReadOnly);
 
     };
 
@@ -92,7 +92,7 @@ namespace dbaui
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
 
-        virtual void SetSpecialReadOnly(bool _bReadOnly);
+        void SetSpecialReadOnly(bool _bReadOnly);
 
     };
 

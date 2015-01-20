@@ -171,10 +171,10 @@ protected:
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The count of used rows. */
-    virtual sal_Int32 implGetRowCount() const;
+    sal_Int32 implGetRowCount() const;
     /** @attention  This method requires locked mutex's and a living object.
         @return  The count of used columns. */
-    virtual sal_Int32 implGetColumnCount() const;
+    sal_Int32 implGetColumnCount() const;
 
     // internal helper methods ------------------------------------------------
 

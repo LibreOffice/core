@@ -163,7 +163,7 @@ private:
     // ShapeCursorEventHandler interface
 
 
-    virtual bool cursorChanged( const ::com::sun::star::uno::Reference<
+    bool cursorChanged( const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::drawing::XShape>&   xShape,
                                 sal_Int16                                nCursor );
 

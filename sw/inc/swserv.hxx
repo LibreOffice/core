@@ -67,8 +67,8 @@ public:
     bool SetData( const OUString & rMimeType,
                     const ::com::sun::star::uno::Any& rData );
 
-    virtual void SendDataChanged( const SwPosition& rPos );
-    virtual void SendDataChanged( const SwPaM& rRange );
+    void SendDataChanged( const SwPosition& rPos );
+    void SendDataChanged( const SwPaM& rRange );
 
     bool IsLinkInServer( const SwBaseLink* ) const;
 

@@ -93,11 +93,11 @@ public:
 
     /** import/export
         This methods calls the respective im/export-method of the respective PropertyHandler. */
-    virtual bool exportXML(
+    bool exportXML(
         OUString& rStrExpValue, const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter ) const;
 
-    virtual bool importXML(
+    bool importXML(
         const OUString& rStrImpValue, XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter ) const;
 

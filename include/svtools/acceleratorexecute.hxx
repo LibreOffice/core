@@ -166,7 +166,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                     is used only. Further the global Desktop instance is
                     used for dispatch.
          */
-        virtual void init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+        void init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                           const css::uno::Reference< css::frame::XFrame >&              xEnv );
 
 

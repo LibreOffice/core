@@ -86,7 +86,7 @@ public:
      */
     virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) SAL_OVERRIDE {}
-    virtual void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > xHandler)
+    void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > xHandler)
     {
         m_rxDocumentHandler = xHandler;
     }

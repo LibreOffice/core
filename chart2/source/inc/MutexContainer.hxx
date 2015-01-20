@@ -33,7 +33,7 @@ public:
 protected:
     mutable ::osl::Mutex m_aMutex;
 
-    virtual ::osl::Mutex & GetMutex() const;
+    ::osl::Mutex & GetMutex() const;
 };
 
 } //  namespace chart

@@ -45,12 +45,12 @@ public:
     SfxTemplatePanelControl (SfxBindings* pBindings, vcl::Window* pParentWindow);
     virtual ~SfxTemplatePanelControl();
 
-    virtual void                Update();
+    void                Update();
     virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
     virtual void                Resize() SAL_OVERRIDE;
-    virtual SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
+    SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
     virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
-    virtual void                FreeResource (void);
+    void                FreeResource (void);
 
 private:
     SfxTemplateDialog_Impl*     pImpl;

@@ -51,7 +51,7 @@ public:
 
     virtual ~ViewFilter_Application () {}
 
-    virtual bool operator () (const ThumbnailViewItem *pItem);
+    bool operator () (const ThumbnailViewItem *pItem);
 
     static bool isFilteredExtension(FILTER_APPLICATION filter, const OUString &rExt);
     bool isValid (const OUString& rPath) const;

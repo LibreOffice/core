@@ -96,7 +96,7 @@ namespace unotools
         }
 
         /// Called whenever internal polypolygon gets modified
-        virtual void modifying() const {}
+        void modifying() const {}
 
     private:
         B2DPolyPolygon                        maPolyPoly;

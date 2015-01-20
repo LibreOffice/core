@@ -87,7 +87,7 @@ public:
     virtual SalGraphicsImpl*    GetImpl() const = 0;
 
     /// Check that our mpImpl is OpenGL and return the context, otherwise NULL.
-    virtual OpenGLContext*      GetOpenGLContext() const;
+    OpenGLContext*      GetOpenGLContext() const;
 
     void                        setAntiAliasB2DDraw(bool bNew) { m_bAntiAliasB2DDraw = bNew; }
     bool                        getAntiAliasB2DDraw() const { return m_bAntiAliasB2DDraw; }

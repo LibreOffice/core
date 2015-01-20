@@ -108,7 +108,7 @@ public:
     bool isAnimated() const { return (0 != mpPrimitiveAnimation); }
 
     // Take some action when new objects are inserted
-    virtual void ActionChildInserted(ViewContact& rChild);
+    void ActionChildInserted(ViewContact& rChild);
 
     // access to the local primitive. This will ensure that the local primitive is
     // current in comparing the local one with a fresh created incarnation

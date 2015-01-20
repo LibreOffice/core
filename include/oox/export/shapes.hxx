@@ -83,29 +83,29 @@ public:
 
     static bool     NonEmptyText( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface );
 
-    virtual ShapeExport&
+    ShapeExport&
                         WriteBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, bool bClosed );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteClosedBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteConnectorShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteCustomShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteEllipseShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteGraphicObjectShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteGroupShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteLineShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteNonVisualDrawingProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape, const char* sName );
     virtual ShapeExport&
                         WriteNonVisualProperties( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteOpenBezierShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteRectangleShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     /**
@@ -145,15 +145,15 @@ public:
      * @param xShape    The shape to export as DrawingML.
      * @return   <tt>*this</tt>
      */
-    virtual ShapeExport&
+    ShapeExport&
                         WriteShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
         WriteTextBox( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xIface, sal_Int32 nXmlNamespace );
     virtual ShapeExport&
                         WriteTextShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteTableShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
-    virtual ShapeExport&
+    ShapeExport&
                         WriteOLE2Shape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual ShapeExport&
                         WriteUnknownShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );

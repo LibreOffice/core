@@ -72,9 +72,9 @@ public:
 
     virtual ~ScVbaWorksheet();
 
-    virtual css::uno::Reference< css::frame::XModel > getModel()
+    css::uno::Reference< css::frame::XModel > getModel()
     { return mxModel; }
-    virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
+    css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
     css::uno::Reference< ov::excel::XWorksheet > createSheetCopyInNewDoc( const OUString& );

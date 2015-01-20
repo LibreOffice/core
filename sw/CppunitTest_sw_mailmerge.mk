@@ -18,6 +18,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_mailmerge, \
     cppu \
     cppuhelper \
     sal \
+    sfx \
     sw \
     test \
     unotest \

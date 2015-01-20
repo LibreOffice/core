@@ -86,10 +86,7 @@ namespace sfx2
                 <li>1 if the tool panel described by i_rLHS should succeed the one described by i_rRHS</li>
 
         */
-        virtual short compareToolPanelsURLs(
-                        const OUString& i_rLHS,
-                        const OUString& i_rRHS
-                    ) const = 0;
+        ;
 
     protected:
         ~IToolPanelCompare() {}

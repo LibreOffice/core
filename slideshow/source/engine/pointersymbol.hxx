@@ -55,7 +55,7 @@ public:
     /** Use this method to update the pointer's position
     */
     void setVisible( const bool bVisible );
-    virtual void viewsChanged(const ::com::sun::star::geometry::RealPoint2D pos);
+    void viewsChanged(const ::com::sun::star::geometry::RealPoint2D pos);
 
 private:
     PointerSymbol( const ::com::sun::star::uno::Reference<

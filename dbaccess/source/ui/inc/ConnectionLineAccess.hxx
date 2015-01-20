@@ -44,7 +44,7 @@ namespace dbaui
         /** isEditable returns the current editable state
             @return true if it is editable otherwise false
         */
-        virtual bool isEditable() const;
+        bool isEditable() const;
     public:
         OConnectionLineAccess(OTableConnection* _pLine);
 
@@ -79,15 +79,15 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XAccessibleComponent
-        virtual bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
-        virtual bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+        bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleRelationSet
         virtual sal_Int32 SAL_CALL getRelationCount(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

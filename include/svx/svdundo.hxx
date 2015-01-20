@@ -751,7 +751,7 @@ public:
     virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
     // Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
-    virtual SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
+    SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
                                                     const OUString& sOldStr,
                                                     const OUString& sNewStr );

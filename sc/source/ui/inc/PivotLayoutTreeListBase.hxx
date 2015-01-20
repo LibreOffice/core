@@ -60,7 +60,7 @@ public:
 
     void RemoveEntryForItem(ScItemValue* pItemValue);
 
-    virtual bool HasEntry(SvTreeListEntry* pEntry);
+    bool HasEntry(SvTreeListEntry* pEntry);
 
 protected:
     virtual void InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* pTarget);

@@ -80,11 +80,11 @@ namespace connectivity
 
             SQLRETURN       OpenConnection(const OUString& aConnectStr,sal_Int32 nTimeOut, bool bSilent);
 
-            virtual OConnection*    cloneConnection(); // creates a new connection
+            OConnection*    cloneConnection(); // creates a new connection
 
         public:
             oslGenericFunction  getOdbcFunction(sal_Int32 _nIndex)  const;
-            virtual SQLRETURN       Construct( const OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
+            SQLRETURN       Construct( const OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
 
             OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);
             //  OConnection(const SQLHANDLE _pConnectionHandle);

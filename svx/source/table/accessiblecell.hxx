@@ -54,9 +54,9 @@ public:
     AccessibleCell( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo);
     virtual ~AccessibleCell (void);
 
-    virtual void Init (void);
+    void Init (void);
 
-    virtual bool operator== (const AccessibleCell& rAccessibleCell);
+    bool operator== (const AccessibleCell& rAccessibleCell);
 
     virtual bool SetState (sal_Int16 aState) SAL_OVERRIDE;
     virtual bool ResetState (sal_Int16 aState) SAL_OVERRIDE;

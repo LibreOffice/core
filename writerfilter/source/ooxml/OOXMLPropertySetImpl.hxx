@@ -291,7 +291,7 @@ public:
     virtual ~OOXMLTableImpl();
 
     virtual void resolve(Table & rTable) SAL_OVERRIDE;
-    virtual void add(ValuePointer_t pPropertySet);
+    void add(ValuePointer_t pPropertySet);
     virtual OOXMLTable * clone() const SAL_OVERRIDE;
 };
 

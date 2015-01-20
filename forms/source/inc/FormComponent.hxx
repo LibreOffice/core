@@ -315,7 +315,7 @@ public:
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes() SAL_OVERRIDE;
     // implement the lock setting
-    virtual void         _setLock(bool _bLock);
+    void         _setLock(bool _bLock);
 };
 
 
@@ -922,14 +922,14 @@ protected:
     virtual void            onConnectedExternalValue( );
     /** called whenever a connection to an external supplier of values (XValueBinding) has been suspended
     */
-    virtual void            onDisconnectedExternalValue();
+    void            onDisconnectedExternalValue();
 
     /** called whenever an external validator has been registered
     */
-    virtual void            onConnectedValidator( );
+    void            onConnectedValidator( );
     /** called whenever an external validator has been revoked
     */
-    virtual void            onDisconnectedValidator( );
+    void            onDisconnectedValidator( );
 
     /** nFieldType is the type of the field, on which the model will be linked.
         The linking happens when sal_True is returned.

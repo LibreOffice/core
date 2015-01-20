@@ -215,7 +215,7 @@ public:
 
     // call with true to clear graphics (setting None as drawable)
     // call with false to setup graphics with window (GetWindow())
-    virtual void                updateGraphics( bool bClear );
+    void                updateGraphics( bool bClear );
 
     virtual bool                PostEvent( void* pData ) SAL_OVERRIDE;
 

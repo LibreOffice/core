@@ -162,20 +162,20 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle,
+        void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle,
                                        sal_Int16 nWidth, bool bVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteToolBoxSpace() throw
+        void WriteToolBoxSpace() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteToolBoxBreak() throw
+        void WriteToolBoxBreak() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteToolBoxSeparator() throw
+        void WriteToolBoxSeparator() throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 

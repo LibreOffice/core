@@ -414,15 +414,15 @@ namespace dbaui
 
         // if xListener is NULL the change will be forwarded to all listeners to the given ::com::sun::star::util::URL
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        virtual void InvalidateFeature(const OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
+        void InvalidateFeature(const OUString& rURLPath, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
         // if there is an ::com::sun::star::util::URL translation for the id ('handle') the preceding InvalidateFeature is used.
         // if there is a toolbar slot with the given id it is updated (the new state is determined via GetState)
         // if _bForceBroadcast is sal_True, the current feature state is broadcasted no matter if it is the same as the cached state
-        virtual void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
+        void InvalidateFeature(sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xListener = NULL, bool _bForceBroadcast = false);
 
         /** InvalidateAll invalidates all features currently known
         */
-        virtual void InvalidateAll();
+        void InvalidateAll();
         // late construction
         virtual bool Construct(vcl::Window* pParent);
 
@@ -448,7 +448,7 @@ namespace dbaui
         virtual bool interceptUserInput( const NotifyEvent& _rEvent ) SAL_OVERRIDE;
 
         // misc
-        virtual bool isCommandChecked(sal_uInt16 _nCommandId) const;
+        bool isCommandChecked(sal_uInt16 _nCommandId) const;
 
         // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

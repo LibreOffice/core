@@ -187,7 +187,7 @@ public:
     sal_Int32           GetChartID( );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel(){ return mxChartModel; }
 
-    virtual ChartExport& WriteChartObj( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, sal_Int32 nChartCount );
+    ChartExport& WriteChartObj( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, sal_Int32 nChartCount );
 
     void ExportContent();
     void InitRangeSegmentationProperties(
