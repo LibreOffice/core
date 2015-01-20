@@ -41,6 +41,7 @@ $(eval $(call gb_Library_set_componentfile,for,formula/util/for))
 $(eval $(call gb_Library_add_exception_objects,for,\
     formula/source/core/api/FormulaCompiler \
     formula/source/core/api/FormulaOpCodeMapperObj \
+    formula/source/core/api/random \
     formula/source/core/api/services \
     formula/source/core/api/token \
     formula/source/core/api/vectortoken \
