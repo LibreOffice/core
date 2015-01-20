@@ -108,7 +108,7 @@ namespace dbaui
 
         virtual bool IsTabAllowed(bool bForward) const SAL_OVERRIDE;
 
-        virtual void Init(const TTableConnectionData::value_type& _pConnData);
+        void Init(const TTableConnectionData::value_type& _pConnData);
         virtual void Init() SAL_OVERRIDE { ORelationControl_Base::Init(); }
         virtual void InitController( ::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;
         virtual ::svt::CellController* GetController( long nRow, sal_uInt16 nCol ) SAL_OVERRIDE;

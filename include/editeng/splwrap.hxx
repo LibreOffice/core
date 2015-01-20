@@ -125,8 +125,8 @@ protected:
     virtual bool SpellContinue();     // Check Areas
                                           // Result available through GetLast
     virtual void ReplaceAll( const OUString &rNewText, sal_Int16 nLanguage ); //Replace word from the replace list
-    virtual void StartThesaurus( const OUString &rWord, sal_uInt16 nLang );
-    virtual ::com::sun::star::uno::Reference<
+    void StartThesaurus( const OUString &rWord, sal_uInt16 nLang );
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >
                  GetAllRightDic() const;
     virtual void SpellEnd();                        // Finish area
@@ -135,7 +135,7 @@ protected:
     virtual void ChangeWord( const OUString& rNewWord, const sal_uInt16 nLang );
     // Wort via Thesaurus ersetzen
     virtual void ChangeThesWord( const OUString& rNewWord );
-    virtual void SetLanguage( const sal_uInt16 nLang ); // Change Language
+    void SetLanguage( const sal_uInt16 nLang ); // Change Language
     virtual void AutoCorrect( const OUString& rAktStr, const OUString& rNewStr );
     virtual void InsertHyphen( const sal_uInt16 nPos ); // Insert hyphen
 

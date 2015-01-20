@@ -76,8 +76,8 @@ namespace dbaui
         virtual bool IsInsertNewAllowed( long nRow )    = 0;
         virtual bool IsDeleteAllowed( long nRow )       = 0;
 
-        virtual bool IsUpdatable() const {return m_bUpdatable;}
-        virtual void SetUpdatable( bool bUpdate=true );
+        bool IsUpdatable() const {return m_bUpdatable;}
+        void SetUpdatable( bool bUpdate=true );
 
         virtual RowStatus GetRowStatus(long nRow) const SAL_OVERRIDE;
         virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;

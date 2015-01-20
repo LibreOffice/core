@@ -2061,8 +2061,6 @@ void ToolBox::ImplUpdateImageList()
             ImageListType eType = vcl::HIGHCONTRAST_NO;
             if (eType != mpData->meImageListType)
             {
-                vcl::IImageListProvider* pImageListProvider = mpData->mpImageListProvider;
-                SetImageList( pImageListProvider->getImageList(eType) );
                 mpData->meImageListType = eType;
             }
         }

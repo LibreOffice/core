@@ -110,7 +110,7 @@ class VCL_DLLPUBLIC Idle : public Timer
     void            Start() { Timer::Start(); }
     void            Stop()  { Timer::Stop();  }
 
-    virtual void    DoIdle();
+    void    DoIdle();
 
     virtual void    Timeout() SAL_OVERRIDE { DoIdle(); }
 };

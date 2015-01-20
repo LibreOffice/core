@@ -42,8 +42,8 @@ public:
     void                SetSize(const Size& rSize);
     void                CopyBackground( const DialControlBmp& rSrc );
     void                DrawBackground( const Size& rSize, bool bEnabled );
-    virtual void        DrawBackground();
-    virtual void        DrawElements( const OUString& rText, sal_Int32 nAngle );
+    void        DrawBackground();
+    void        DrawElements( const OUString& rText, sal_Int32 nAngle );
 
 protected:
     Rectangle           maRect;
@@ -150,7 +150,7 @@ protected:
     std::unique_ptr< DialControl_Impl > mpImpl;
 
     virtual void        HandleMouseEvent( const Point& rPos, bool bInitial );
-    virtual void        HandleEscapeEvent();
+    void        HandleEscapeEvent();
 
     void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
 

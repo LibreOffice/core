@@ -39,7 +39,7 @@ namespace vcl
     /* abstract */ class IImageListProvider
     {
     public:
-        virtual ImageList getImageList(ImageListType) = 0;
+        ;
 
     protected:
         ~IImageListProvider() {}

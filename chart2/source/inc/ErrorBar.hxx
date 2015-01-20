@@ -158,9 +158,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XChild ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setParent(
+    void SAL_CALL setParent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent )
         throw (::com::sun::star::lang::NoSupportException,
                ::com::sun::star::uno::RuntimeException);

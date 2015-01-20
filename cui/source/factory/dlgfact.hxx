@@ -511,7 +511,7 @@ class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 public:
     virtual VclAbstractDialog*          CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
     virtual VclAbstractDialog*          CreateSfxDialog( vcl::Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE;
-    virtual SfxAbstractDialog*          CreateSfxDialog( sal_uInt32 nResId,
+    SfxAbstractDialog*          CreateSfxDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             const SfxItemSet* pAttrSet=0 );

@@ -85,7 +85,7 @@ private:
     DECL_LINK( CheckFileHdl, void * );
 
     void                    UpdateTree();
-    virtual void            OpenFileDialog();
+    void            OpenFileDialog();
     ::com::sun::star::presentation::ClickAction     GetActualClickAction();
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );

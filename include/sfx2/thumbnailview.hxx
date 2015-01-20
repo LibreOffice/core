@@ -274,7 +274,7 @@ protected:
 
     // Drawing item related functions, override them to make your own custom ones.
 
-    virtual void DrawItem (ThumbnailViewItem *pItem);
+    void DrawItem (ThumbnailViewItem *pItem);
 
     virtual void OnItemDblClicked (ThumbnailViewItem *pItem);
 

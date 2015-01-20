@@ -186,7 +186,7 @@ public:
 protected:
     // helper
     virtual void SAL_CALL disposing();
-    virtual void removeElementsNoEvents(sal_Int32 nIndex);
+    void removeElementsNoEvents(sal_Int32 nIndex);
 
     /** to be overridden if elements which are to be inserted into the container shall be checked
 

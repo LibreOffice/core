@@ -213,11 +213,11 @@ protected:
 public:
     virtual             ~Menu();
 
-    virtual void        Activate();
-    virtual void        Deactivate();
+    void        Activate();
+    void        Deactivate();
     virtual void        Highlight();
     virtual void        Select();
-    virtual void        RequestHelp( const HelpEvent& rHEvt );
+    void        RequestHelp( const HelpEvent& rHEvt );
 
     void                InsertItem( sal_uInt16 nItemId, const OUString& rStr,
                                     MenuItemBits nItemBits = MenuItemBits::NONE,

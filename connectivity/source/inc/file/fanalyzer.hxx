@@ -71,8 +71,8 @@ namespace connectivity
 
             void dispose();
             void start(OSQLParseNode* pSQLParseNode);
-            virtual bool hasRestriction() const;
-            virtual bool hasFunctions() const;
+            bool hasRestriction() const;
+            bool hasFunctions() const;
             inline bool evaluateRestriction()   { return m_aInterpreter->start(); }
             void setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const OFileColumns& rCols);

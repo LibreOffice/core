@@ -42,7 +42,7 @@ namespace dbaui
 
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void LoseFocus() SAL_OVERRIDE;
-        virtual void Init();
+        void Init();
 
         void DisplayData( OFieldDescription* pFieldDescr );
         void SaveData( OFieldDescription* pFieldDescr );

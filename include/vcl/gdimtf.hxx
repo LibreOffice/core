@@ -118,8 +118,8 @@ private:
 
 protected:
 
-    virtual void                        Linker( OutputDevice* pOut, bool bLink );
-    virtual long                        Hook();
+    void                        Linker( OutputDevice* pOut, bool bLink );
+    long                        Hook();
 
 public:
                     GDIMetaFile();

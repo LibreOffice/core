@@ -64,9 +64,9 @@ public:
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    virtual void LostFocus();
+    void LostFocus();
 
-    virtual void GotFocus();
+    void GotFocus();
 ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

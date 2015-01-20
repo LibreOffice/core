@@ -73,11 +73,11 @@ public:
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
-    virtual void Paint(const Rectangle&, vcl::Window*) {}
+    void Paint(const Rectangle&, vcl::Window*) {}
 
-    virtual void DoCut();
-    virtual void DoCopy();
-    virtual void DoPaste();
+    void DoCut();
+    void DoCopy();
+    void DoPaste();
 
     // Mouse- & Key-Events; return value=TRUE: Event was processed
     virtual bool KeyInput(const KeyEvent& rKEvt);

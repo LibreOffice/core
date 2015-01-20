@@ -77,7 +77,7 @@ class OLEHandler : public LoggedProperties
     virtual void lcl_sprm(Sprm & sprm) SAL_OVERRIDE;
 
     // Interoperability
-    virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const& xTextDocument,
+    void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const& xTextDocument,
                                         const OUString& sObjectName, const OUString& sOldObjectName = OUString() );
 
 public:

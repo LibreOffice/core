@@ -141,9 +141,9 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
     virtual void ModelHasChanged() SAL_OVERRIDE; // Is called by the PaintView
     virtual void SetMarkHandles();                                           // aHdl - fill (List of handles)
-    virtual void SetMarkRects();                                             // Rects at the PageViews
-    virtual void CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
-    virtual void AddDragModeHdl(SdrDragMode eMode);
+    void SetMarkRects();                                             // Rects at the PageViews
+    void CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
+    void AddDragModeHdl(SdrDragMode eMode);
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     // add custom handles (used by other apps, e.g. AnchorPos)
@@ -154,8 +154,8 @@ protected:
 
     //HMHvoid ImpShowMarkHdl(bool bNoRefHdl);
     virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay) const;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
-    virtual SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const;
+    SdrObject* CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const;
     bool ImpIsFrameHandles() const;
     void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, OUString& rStr, sal_uInt16 nVal=0, sal_uInt16 nOpt=0) const;
 

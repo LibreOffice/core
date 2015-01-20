@@ -240,9 +240,9 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
         RTF_CharTypeDef eType, SfxItemSet& rSet, SfxPoolItem& rItem );
 
 protected:
-    virtual void EnterEnvironment();
-    virtual void LeaveEnvironment();
-    virtual void ResetPard();
+    void EnterEnvironment();
+    void LeaveEnvironment();
+    void ResetPard();
     virtual void InsertPara() = 0;
 
 
@@ -263,7 +263,7 @@ protected:
     // Read Document-Info
     ::com::sun::star::util::DateTime GetDateTimeStamp( );
     OUString& GetTextToEndGroup( OUString& rStr );
-    virtual void ReadInfo( const sal_Char* pChkForVerNo = 0 );
+    void ReadInfo( const sal_Char* pChkForVerNo = 0 );
 
     inline SfxItemSet& GetAttrSet();
     // no text yet inserted? (SttPos from the top stack entry!)
@@ -341,7 +341,7 @@ public:
     // get RTF default ItemSets. Must be used by pard/plain tokens or in
     // reset of Style-Items
     const SfxItemSet& GetRTFDefaults();
-    virtual bool UncompressableStackEntry(const SvxRTFItemStackType &rSet) const;
+    bool UncompressableStackEntry(const SvxRTFItemStackType &rSet) const;
 };
 
 // The stack for the attributes:

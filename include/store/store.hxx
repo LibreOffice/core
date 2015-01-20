@@ -316,42 +316,6 @@ public:
         return store_findNext (m_hImpl, &it);
     }
 
-    /** Directory traversal helper.
-        @see travel()
-     */
-    class traveller
-    {
-    public:
-        /** Directory traversal callback.
-            @param  it [in] current directory entry.
-            @return sal_True to continue iteration, sal_False to stop.
-         */
-        virtual bool visit (const iterator& it) = 0;
-
-    protected:
-        ~traveller() {}
-    };
-
-    /** Directory traversal.
-        @see store_findFirst()
-        @see store_findNext()
-
-        @param  rTraveller [in] the traversal callback.
-        @return store_E_NoMoreFiles upon end of iteration.
-     */
-    inline storeError travel (traveller & rTraveller) const
-    {
-        storeError eErrCode = store_E_InvalidHandle;
-        if (m_hImpl)
-        {
-            iterator it;
-            eErrCode = store_findFirst (m_hImpl, &it);
-            while ((eErrCode == store_E_None) && rTraveller.visit(it))
-                eErrCode = store_findNext (m_hImpl, &it);
-        }
-        return eErrCode;
-    }
-
 private:
     /** Representation.
      */

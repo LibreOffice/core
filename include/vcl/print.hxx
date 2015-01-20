@@ -304,7 +304,7 @@ public:
     static const QueueInfo*     GetQueueInfo( const OUString& rPrinterName, bool bStatusUpdate );
     static OUString             GetDefaultPrinterName();
 
-    virtual void                Error();
+    void                Error();
 
     const OUString&             GetName() const             { return maPrinterName; }
     const OUString&             GetDriverName() const       { return maDriver; }

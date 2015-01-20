@@ -105,8 +105,8 @@ public:
     double  GetMaxValue() const         { return m_dMaxValue; }
 
     // Current value
-    virtual void    SetValue(double dVal);
-    virtual double  GetValue();
+    void    SetValue(double dVal);
+    double  GetValue();
     // The default implementation uses a formatter, if available
 
     void    GetColor() const;
@@ -243,12 +243,12 @@ protected:
     void ImplSetFormatKey(sal_uLong nFormatKey);
         // SetFormatKey without FormatChanged notification
 
-    virtual SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
+    SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
     SvNumberFormatter*  ImplGetFormatter() const { return m_pFormatter ? m_pFormatter : ((FormattedField*)this)->CreateFormatter(); }
 
     bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
-    virtual void ReFormat();
+    void ReFormat();
 };
 
 

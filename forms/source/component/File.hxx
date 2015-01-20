@@ -78,7 +78,7 @@ public:
     using OControlModel::getFastPropertyValue;
 
 protected:
-    virtual void _reset();
+    void _reset();
 
     virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };

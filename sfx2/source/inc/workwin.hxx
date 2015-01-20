@@ -242,10 +242,10 @@ protected:
     void                    RemoveChildWin_Impl(SfxChildWin_Impl*);
     void                    Sort_Impl();
     SfxChild_Impl*          FindChild_Impl( const vcl::Window& rWindow ) const;
-    virtual bool            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
+    bool            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
     virtual Rectangle       GetTopRect_Impl();
     SvBorder                Arrange_Impl();
-    virtual void            SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
+    void            SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
     static bool         IsPluginMode( SfxObjectShell* pObjShell );
 
 public:
@@ -308,13 +308,13 @@ public:
     void                    ShowChildWindow_Impl(sal_uInt16, bool bVisible, bool bSetFocus);
     void                    SetChildWindow_Impl(sal_uInt16, bool bOn, bool bSetFocus);
     SfxChildWindow*         GetChildWindow_Impl(sal_uInt16);
-    virtual void            InitializeChild_Impl(SfxChildWin_Impl*);
+    void            InitializeChild_Impl(SfxChildWin_Impl*);
     SfxSplitWindow*         GetSplitWindow_Impl(SfxChildAlignment);
 
     bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
     bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( vcl::Window *pChild );
-    virtual bool            ActivateNextChild_Impl( bool bForward = true );
+    bool            ActivateNextChild_Impl( bool bForward = true );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
     // Methods for StatusBar

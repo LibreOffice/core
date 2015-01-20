@@ -102,10 +102,7 @@ public:
     virtual void startCell(const Handle_t & start, TablePropertyMapPtr pProps) SAL_OVERRIDE;
     virtual void endCell(const Handle_t & end) SAL_OVERRIDE;
 
-    virtual Handle_t* getTable( )
-    {
-        return &m_xTableRange;
-    };
+    Handle_t& getTable() { return m_xTableRange; };
 };
 
 }}

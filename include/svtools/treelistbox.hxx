@@ -285,9 +285,9 @@ protected:
 
     // Put View-specific data into the Dragserver
     // Is called at the SourceView (in BeginDrag Handler)
-    virtual void WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
+    void WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
     // Is called at the TargetView (in Drop Handler)
-    virtual void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
+    void ReadDragServerInfo( const Point&,SvLBoxDDInfo* );
 
     // Invalidate children on enable/disable
     virtual void StateChanged( StateChangedType eType ) SAL_OVERRIDE;
@@ -312,7 +312,7 @@ protected:
     // Calls InitViewData for all Items
     void            RecalcViewData();
     // Callback of RecalcViewData
-    virtual void    ViewDataInitialized( SvTreeListEntry* );
+    void    ViewDataInitialized( SvTreeListEntry* );
 
     // Handler and methods for Drag - finished handler. This link can be set
     // to the TransferDataContainer. The AddBox/RemoveBox methods must be
@@ -465,7 +465,7 @@ public:
 
     SvTreeListBox*         GetSourceView() const;
 
-    virtual void    NotifyRemoving( SvTreeListEntry* );
+    void    NotifyRemoving( SvTreeListEntry* );
     virtual SvTreeListEntry* CloneEntry( SvTreeListEntry* pSource );
     virtual SvTreeListEntry* CreateEntry() const; // To create new Entries
 
@@ -490,16 +490,16 @@ public:
         ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     /** Fills the StateSet with all states (except DEFUNC, done by the accessible object). */
-    virtual void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const;
+    void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const;
 
     /** Fills the StateSet of one entry. */
-    virtual void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const;
+    void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const;
 
     /** Calculate and return the bounding rectangle of an entry.
         @param pEntry
             The entry.
         @return  The bounding rectangle of an entry. */
-    virtual Rectangle   GetBoundingRect( SvTreeListEntry* pEntry );
+    Rectangle   GetBoundingRect( SvTreeListEntry* pEntry );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
     void EnableCellFocus();
@@ -561,10 +561,10 @@ protected:
 
     virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
-    virtual void    NotifyBeginScroll();
+    void    NotifyBeginScroll();
     virtual void    NotifyEndScroll();
     // nLines == 0 => horizontal Scrolling
-    virtual void    NotifyScrolling( long nLines );
+    void    NotifyScrolling( long nLines );
     virtual void    NotifyScrolled();
     void            SetScrolledHdl( const Link& rLink ) { aScrolledHdl = rLink; }
     const Link&     GetScrolledHdl() const { return aScrolledHdl; }
@@ -572,12 +572,12 @@ protected:
 
     // Is called _before_ Areas in the Control are invalidated.
     // This can be used to hide Elements which are painted from outside into the Control
-    virtual void    NotifyInvalidating();
+    void    NotifyInvalidating();
 
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void    CursorMoved( SvTreeListEntry* pNewCursor );
+    void    CursorMoved( SvTreeListEntry* pNewCursor );
     virtual void    PreparePaint( SvTreeListEntry* );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

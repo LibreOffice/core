@@ -188,7 +188,7 @@ public:
 
         if bExtendedInfo == true the file header is used to derive
         as many properties as possible (size, color, etc.) */
-    virtual bool    Detect( bool bExtendedInfo = false );
+    bool    Detect( bool bExtendedInfo = false );
 
     /** @return the file format, GFF_NOT if no format was recognized */
     sal_uInt16          GetFileFormat() const { return nFormat; }

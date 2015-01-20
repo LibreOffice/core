@@ -137,7 +137,7 @@ namespace dbaui
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         // hide all TabWins (does NOT delete them; they are put in an UNDO action)
-        virtual void HideTabWins();
+        void HideTabWins();
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) = 0;
 
@@ -225,7 +225,7 @@ namespace dbaui
         virtual bool PreNotify(NotifyEvent& rNEvt) SAL_OVERRIDE;
 
         // DnD stuff
-        virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
+        void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
         virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
         virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 
@@ -242,9 +242,9 @@ namespace dbaui
             @note The standard implementation just passes the new data to the
                   Wins
          */
-        virtual void TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition);
+        void TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition);
 
-        virtual void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
+        void TabWinSized(OTableWindow* ptWhich, const Point& ptOldPosition, const Size& szOldSize);
 
         void modified();
 
@@ -259,7 +259,7 @@ namespace dbaui
         Size getRealOutputSize() const { return m_aOutputSize; }
 
         virtual void EnsureVisible(const OTableWindow* _pWin);
-        virtual void EnsureVisible(const Point& _rPoint,const Size& _rSize);
+        void EnsureVisible(const Point& _rPoint,const Size& _rSize);
 
         TTableWindowData::value_type createTableWindowData(const OUString& _rComposedName
                                             ,const OUString& _sTableName
@@ -271,7 +271,7 @@ namespace dbaui
         virtual void Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
         virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
-        virtual void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
+        void SetDefaultTabWinPosSize( OTableWindow* pTabWin );
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
         virtual void Resize() SAL_OVERRIDE;

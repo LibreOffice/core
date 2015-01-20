@@ -199,7 +199,7 @@ public:
     virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
 
     virtual bool    Select( SvTreeListEntry* pEntry, bool bSelect=true ) SAL_OVERRIDE;
-    virtual sal_Int32  GetEntryRealChildrenNum( SvTreeListEntry* pEntry ) const;
+    sal_Int32  GetEntryRealChildrenNum( SvTreeListEntry* pEntry ) const;
 
     using Control::Notify; // FIXME why do we have 2 of these
     virtual void Notify(SfxBroadcaster& rBC, SfxHint const& rHint) SAL_OVERRIDE;

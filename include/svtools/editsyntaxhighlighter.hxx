@@ -33,7 +33,7 @@ class SVT_DLLPUBLIC MultiLineEditSyntaxHighlight : public MultiLineEdit
         svtools::ColorConfig m_aColorConfig;
 
     private:
-        virtual void DoBracketHilight(sal_uInt16 aKey);
+        void DoBracketHilight(sal_uInt16 aKey);
 
     protected:
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

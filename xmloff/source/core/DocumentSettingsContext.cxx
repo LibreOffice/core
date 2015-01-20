@@ -162,7 +162,7 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    virtual void ManipulateConfigItem();
+    void ManipulateConfigItem();
 };
 
 class XMLConfigItemSetContext : public XMLConfigBaseContext

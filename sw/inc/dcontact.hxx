@@ -277,7 +277,7 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const SAL_OVERRIDE;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const SAL_OVERRIDE;
         virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const SAL_OVERRIDE;
-        virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const;
+        SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const;
         virtual void NbcMove(const Size& rSiz) SAL_OVERRIDE;
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
         virtual void NbcRotate(const Point& rRef, long nAngle, double sn, double cs) SAL_OVERRIDE;

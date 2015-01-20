@@ -127,7 +127,7 @@ private:
     DECL_LINK( UpdateFocusHdl, void* );
 
 protected:
-    virtual bool        DoClose( sal_uInt16 nId );
+    bool        DoClose( sal_uInt16 nId );
 
     void                SetDispatcherLock( bool bLock );
 

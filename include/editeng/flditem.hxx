@@ -59,7 +59,7 @@ public:
     virtual bool            operator==( const SvxFieldData& ) const;
 
     virtual MetaAction* createBeginComment() const;
-    virtual MetaAction* createEndComment() const;
+    MetaAction* createEndComment() const;
 };
 
 /**

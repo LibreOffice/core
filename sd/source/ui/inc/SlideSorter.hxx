@@ -194,25 +194,25 @@ protected:
         calls the CreateModel(), CreateView(), and CreateController()
         methods in this order.
     */
-    virtual void CreateModelViewController (void);
+    void CreateModelViewController (void);
 
     /** Create the model for the view shell.  When called from the default
         implementation of CreateModelViewController() then neither view nor
         controller do exist.  Test their pointers when in doubt.
     */
-    virtual model::SlideSorterModel* CreateModel (void);
+    model::SlideSorterModel* CreateModel (void);
 
     /** Create the view for the view shell.  When called from the default
         implementation of CreateModelViewController() then the model but not
         the controller does exist.  Test their pointers when in doubt.
     */
-    virtual view::SlideSorterView* CreateView (void);
+    view::SlideSorterView* CreateView (void);
 
     /** Create the controller for the view shell.  When called from the default
         implementation of CreateModelViewController() then both the view and
         the controller do exist.  Test their pointers when in doubt.
     */
-    virtual controller::SlideSorterController* CreateController (void);
+    controller::SlideSorterController* CreateController (void);
 
 private:
     bool mbIsValid;

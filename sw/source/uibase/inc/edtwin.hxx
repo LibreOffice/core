@@ -295,7 +295,7 @@ public:
 
     SwEditWin(vcl::Window *pParent, SwView &);
     virtual ~SwEditWin();
-    virtual void SwitchView();
+    void SwitchView();
     /**
      * Notification about some region of the output device got invalidated.
      *

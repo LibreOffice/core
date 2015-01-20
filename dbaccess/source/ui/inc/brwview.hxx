@@ -64,7 +64,7 @@ namespace dbaui
         virtual ~UnoDataBrowserView();
 
         /// late construction
-        virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
+        void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
 
         /** as columns may be hidden there is a difference between a columns model pos and its view pos
             so we you may use these translation function

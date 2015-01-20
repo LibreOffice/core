@@ -173,7 +173,7 @@ public:
     void            SetFloatStyle( WinBits nWinStyle );
     WinBits         GetFloatStyle() const { return mnFloatBits;}
 
-    virtual void    setPosSizePixel( long nX, long nY,
+    void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
                                      sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
     void            SetPosSizePixel( const Point& rNewPos,
@@ -311,10 +311,10 @@ public:
     virtual bool    PrepareToggleFloatingMode();
     virtual void    ToggleFloatingMode();
 
-    virtual void    TitleButtonClick( sal_uInt16 nButton );
-    virtual void    Pin();
-    virtual void    Roll();
-    virtual void    PopupModeEnd();
+    void    TitleButtonClick( sal_uInt16 nButton );
+    void    Pin();
+    void    Roll();
+    void    PopupModeEnd();
     virtual void    Resizing( Size& rSize );
     virtual bool    Close();
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;

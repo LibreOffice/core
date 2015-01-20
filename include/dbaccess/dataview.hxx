@@ -61,7 +61,7 @@ namespace dbaui
 
         /** will be called when the controls need to be resized.
         */
-        virtual void resizeControls(const Size& /*_rDiff*/) { Resize(); }
+        void resizeControls(const Size& /*_rDiff*/) { Resize(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() { return m_xContext;}
 

@@ -376,7 +376,7 @@ public:
     // EndCompleteRedraw does the necessary refreshes, evtl. paints text edit and overlay and evtl destroys the
     // SdrPaintWindow again. This means: the SdrPaintWindow is no longer safe after this closing call.
     virtual SdrPaintWindow* BeginCompleteRedraw(OutputDevice* pOut);
-    virtual void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
+    void DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector = 0);
     virtual void EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer);
 
 
@@ -532,7 +532,7 @@ public:
 
     const svtools::ColorConfig& getColorConfig() const { return maColorConfig;}
 
-    virtual void onChangeColorConfig();
+    void onChangeColorConfig();
 
     // #103834# Set background color for svx at SdrPageViews
     void SetApplicationBackgroundColor(Color aBackgroundColor);

@@ -40,7 +40,7 @@ public:
     /** Handle the drop of a drag-and-drop action where the transferable
         contains a set of pages.
     */
-    virtual void HandlePageDrop (const SdTransferable& rTransferable);
+    void HandlePageDrop (const SdTransferable& rTransferable);
 
 protected:
     ::sd::View& mrView;
@@ -54,7 +54,7 @@ protected:
     /** Assign the (first) master page of the given transferable to the
         (...) slide.
     */
-    virtual void AssignMasterPage (
+    void AssignMasterPage (
         const SdTransferable& rTransferable,
         SdPage* pMasterPage);
 

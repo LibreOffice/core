@@ -104,15 +104,15 @@ public:
     GtkData( SalInstance *pInstance );
     virtual ~GtkData();
 
-    virtual void Init();
+    void Init();
     virtual void Dispose() SAL_OVERRIDE;
 
-    virtual void initNWF();
-    virtual void deInitNWF();
+    void initNWF();
+    void deInitNWF();
 
     static gboolean userEventFn( gpointer data );
 
-    virtual void PostUserEvent();
+    void PostUserEvent();
     void Yield( bool bWait, bool bHandleAllCurrentEvents );
     inline GdkDisplay *GetGdkDisplay();
 

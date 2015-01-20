@@ -78,7 +78,7 @@ protected:
 
     OUString                GetModelStringProperty( const sal_Char* pPropertyName );
 
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleComponent
     virtual ::com::sun::star::awt::Rectangle implGetBounds() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

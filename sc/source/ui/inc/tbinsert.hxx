@@ -27,7 +27,7 @@ class ScTbxInsertCtrl : public SfxToolBoxControl
     sal_uInt16                  nLastSlotId;
 
     using SfxToolBoxControl::Select;
-    virtual void            Select( bool bMod1 = false );
+    void            Select( bool bMod1 = false );
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

@@ -98,13 +98,13 @@ public:
     virtual bool            SetAttributes(const SfxItemSet& rSet, bool bReplaceAll = false);
     virtual void            MarkListHasChanged() SAL_OVERRIDE;
     virtual void            ModelHasChanged() SAL_OVERRIDE;
-    virtual void            SelectAll();
-    virtual void            DoCut(vcl::Window* pWindow=NULL);
-    virtual void            DoCopy(vcl::Window* pWindow=NULL);
-    virtual void            DoPaste(vcl::Window* pWindow=NULL);
+    void            SelectAll();
+    void            DoCut(vcl::Window* pWindow=NULL);
+    void            DoCopy(vcl::Window* pWindow=NULL);
+    void            DoPaste(vcl::Window* pWindow=NULL);
     virtual void            DoConnect(SdrOle2Obj* pOleObj) SAL_OVERRIDE;
     virtual bool            SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr = false);
-    virtual void            StartDrag( const Point& rStartPos, vcl::Window* pWindow );
+    void            StartDrag( const Point& rStartPos, vcl::Window* pWindow );
     virtual void            DragFinished( sal_Int8 nDropAction );
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,

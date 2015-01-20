@@ -105,7 +105,7 @@ class AnnotationWindow : public FloatingWindow
 
         void StartEdit();
 
-        virtual SvxLanguageItem GetLanguage(void);
+        SvxLanguageItem GetLanguage(void);
 
         void setAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, bool bGrabFocus = false );
         const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& getAnnotation() const { return mxAnnotation; }

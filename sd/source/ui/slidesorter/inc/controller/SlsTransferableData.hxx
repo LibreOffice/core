@@ -69,7 +69,7 @@ public:
         const ::std::vector<TransferableData::Representative>& rRepresentatives);
     virtual ~TransferableData (void);
 
-    virtual void DragFinished (sal_Int8 nDropAction);
+    void DragFinished (sal_Int8 nDropAction);
 
     const ::std::vector<Representative>& GetRepresentatives (void) const { return maRepresentatives;}
 

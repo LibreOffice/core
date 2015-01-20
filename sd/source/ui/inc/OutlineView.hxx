@@ -92,8 +92,8 @@ public:
     /** selects the paragraph for the given page at the outliner view*/
     void            SetActualPage( SdPage* pActual );
 
-    virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
-    virtual void AdjustPosSizePixel(
+    void Paint (const Rectangle& rRect, ::sd::Window* pWin);
+    void AdjustPosSizePixel(
         const Point &rPos,
         const Size &rSize,
         ::sd::Window* pWindow);

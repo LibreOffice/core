@@ -65,9 +65,9 @@ public:
     explicit            Splitter( vcl::Window* pParent, WinBits nStyle = WB_VSCROLL );
     virtual             ~Splitter();
 
-    virtual void        StartSplit();
-    virtual void        EndSplit();
-    virtual void        Split();
+    void        StartSplit();
+    void        EndSplit();
+    void        Split();
     virtual void        Splitting( Point& rSplitPos );
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -89,7 +89,7 @@ public:
     const Rectangle&    GetDragRectPixel() const { return maDragRect; }
     vcl::Window*             GetDragWindow() const { return mpRefWin; }
 
-    virtual void        SetSplitPosPixel( long nPos );
+    void        SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }
 
     bool            IsHorizontal() const { return mbHorzSplit; }

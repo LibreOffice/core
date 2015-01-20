@@ -452,7 +452,7 @@ public:
     WW8PLCFx_PCD(ww::WordVersion eVersion, WW8PLCFpcd* pPLCFpcd,
         WW8_CP nStartCp, bool bVer67P);
     virtual ~WW8PLCFx_PCD();
-    virtual sal_uLong GetIMax() const;
+    sal_uLong GetIMax() const;
     virtual sal_uInt32 GetIdx() const SAL_OVERRIDE;
     virtual void SetIdx( sal_uLong nI ) SAL_OVERRIDE;
     virtual bool SeekPos(WW8_CP nCpPos) SAL_OVERRIDE;

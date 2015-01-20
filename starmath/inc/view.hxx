@@ -260,7 +260,7 @@ protected:
                   const OUString& rText,
                   sal_uInt16        MaxWidth);
 
-    virtual sal_uInt16 Print(SfxProgress &rProgress, bool bIsAPI);
+    sal_uInt16 Print(SfxProgress &rProgress, bool bIsAPI);
     virtual SfxPrinter *GetPrinter(bool bCreate = false) SAL_OVERRIDE;
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;
@@ -308,8 +308,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-    virtual void Execute( SfxRequest& rReq );
-    virtual void GetState(SfxItemSet &);
+    void Execute( SfxRequest& rReq );
+    void GetState(SfxItemSet &);
 
     void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
             Rectangle aOutRect, Point aZeroPoint );

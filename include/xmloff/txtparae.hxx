@@ -597,7 +597,7 @@ public:
         bool bIsProgress = false );
 
     // This method exports all automatic styles that have been collected.
-    virtual void exportTextAutoStyles();
+    void exportTextAutoStyles();
 
     void exportEvents( const ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > & rPropSet );
 

@@ -82,7 +82,7 @@ public:
                         : m_bActive( true )
                     {}
 
-    virtual void    Handle( LoadHandlerItem nWhich, UcbLockBytesRef xLockBytes ) = 0;
+    ;
     void            Activate( bool bActivate = true ) { m_bActive = bActivate; }
     bool            IsActive() const { return m_bActive; }
 };

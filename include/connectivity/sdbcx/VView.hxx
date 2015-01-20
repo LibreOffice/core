@@ -79,7 +79,7 @@ namespace connectivity
             virtual void construct() SAL_OVERRIDE;
 
             // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
+            void SAL_CALL disposing(void);
 
             // XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -47,7 +47,7 @@ public:
 
     void            SetMode( sal_Int16 eMode );
 
-    virtual short   Execute();
+    short   Execute();
 
 private:
     vcl::Window*    mpParent;

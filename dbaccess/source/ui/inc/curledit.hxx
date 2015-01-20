@@ -56,9 +56,9 @@ public:
     */
     void ShowPrefix(bool _bShowPrefix);
     /// get the currently set text, excluding the prefix indicating the type
-    virtual OUString GetTextNoPrefix() const;
+    OUString GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged
-    virtual void     SetTextNoPrefix(const OUString& _rText);
+    void     SetTextNoPrefix(const OUString& _rText);
 
     inline void      SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
     inline OUString  GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }

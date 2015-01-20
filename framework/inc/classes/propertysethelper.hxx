@@ -108,7 +108,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *          The owner of this class has to be sure, that every new property does
          *          not clash with any existing one.
          */
-        virtual void SAL_CALL impl_addPropertyInfo(const css::beans::Property& aProperty)
+        void SAL_CALL impl_addPropertyInfo(const css::beans::Property& aProperty)
             throw(css::beans::PropertyExistException,
                   css::uno::Exception               );
 
@@ -120,7 +120,7 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *  @throw  [com::sun::star::beans::UnknownPropertyException]
          *          if no property with the specified name exists.
          */
-        virtual void SAL_CALL impl_removePropertyInfo(const OUString& sProperty)
+        void SAL_CALL impl_removePropertyInfo(const OUString& sProperty)
             throw(css::beans::UnknownPropertyException,
                   css::uno::Exception                 );
 
@@ -130,8 +130,8 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *  There is no chance to reactive a "dead" object by calling impl_enablePropertySet()
          *  again!
          */
-        virtual void SAL_CALL impl_enablePropertySet();
-        virtual void SAL_CALL impl_disablePropertySet();
+        void SAL_CALL impl_enablePropertySet();
+        void SAL_CALL impl_disablePropertySet();
 
         /**
          */

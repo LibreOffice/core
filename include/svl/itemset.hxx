@@ -83,7 +83,7 @@ public:
     sal_uInt16                      Count() const { return _nCount; }
     sal_uInt16                      TotalCount() const;
 
-    virtual const SfxPoolItem&  Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
+    const SfxPoolItem&  Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
     const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true,
                                          TypeId aItemType = 0 ) const;
 
@@ -97,10 +97,10 @@ public:
 
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = NULL) const;
 
-    virtual void                DisableItem(sal_uInt16 nWhich);
-    virtual void                InvalidateItem( sal_uInt16 nWhich );
-    virtual sal_uInt16          ClearItem( sal_uInt16 nWhich = 0);
-    virtual void                ClearInvalidItems( bool bHardDefault = false );
+    void                DisableItem(sal_uInt16 nWhich);
+    void                InvalidateItem( sal_uInt16 nWhich );
+    sal_uInt16          ClearItem( sal_uInt16 nWhich = 0);
+    void                ClearInvalidItems( bool bHardDefault = false );
             void                InvalidateAllItems(); // HACK(via nWhich = 0) ???
             void                InvalidateDefaultItems();
 
@@ -116,12 +116,12 @@ public:
                                              SfxItemState eDontCareAs = SfxItemState::UNKNOWN,
                                              SfxItemState eDefaultAs = SfxItemState::UNKNOWN );
 
-    virtual bool                Set( const SfxItemSet&, bool bDeep = true );
+    bool                Set( const SfxItemSet&, bool bDeep = true );
 
-    virtual void                Intersect( const SfxItemSet& rSet );
-    virtual void                MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
-    virtual void                Differentiate( const SfxItemSet& rSet );
-    virtual void                MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
+    void                Intersect( const SfxItemSet& rSet );
+    void                MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
+    void                Differentiate( const SfxItemSet& rSet );
+    void                MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
     SfxItemPool*                GetPool() const { return _pPool; }
     const sal_uInt16*               GetRanges() const { return _pWhichRanges; }
@@ -129,9 +129,9 @@ public:
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
-    virtual SvStream &          Load( SvStream &, bool bDirect = false,
+    SvStream &          Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
-    virtual SvStream &          Store( SvStream &, bool bDirect = false ) const;
+    SvStream &          Store( SvStream &, bool bDirect = false ) const;
 
     bool                        operator==(const SfxItemSet &) const;
     sal_Int32                   getHash() const;

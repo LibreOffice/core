@@ -118,17 +118,17 @@ public:
     bool IsOffscreen() const { return mpProvider ? mpProvider->IsOffScreen() : true; }
 
     // operations to do before painting
-    virtual void PreDraw();
+    void PreDraw();
 
     // operations to do after painting
-    virtual void PostDraw();
+    void PostDraw();
 
 protected:
     bool AcquireContext();
     bool ReleaseContext();
 
     // retrieve the default context for offscreen rendering
-    virtual OpenGLContext* GetDefaultContext();
+    OpenGLContext* GetDefaultContext();
 
     // create a new context for window rendering
     virtual OpenGLContext* CreateWinContext() = 0;
@@ -146,7 +146,7 @@ public:
 
     virtual void freeResources() SAL_OVERRIDE;
 
-    virtual const vcl::Region& getClipRegion() const;
+    const vcl::Region& getClipRegion() const;
     virtual bool setClipRegion( const vcl::Region& ) SAL_OVERRIDE;
 
     //

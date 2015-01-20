@@ -127,7 +127,7 @@ public:
     /** tell the container to free all resources. After that it's in a state like after the construction, i.e.
         you may call <code>initialize</code> again (maybe with another configuration node).
     */
-    virtual void    dispose();
+    void    dispose();
 
 protected:
     /** checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and

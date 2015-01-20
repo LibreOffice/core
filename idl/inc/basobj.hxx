@@ -82,7 +82,7 @@ class SvMetaName : public SvMetaObject
     SvString      aDescription;
 
 protected:
-    virtual bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    bool ReadNameSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
             void DoReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm,
                                      char c = '\0' );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );

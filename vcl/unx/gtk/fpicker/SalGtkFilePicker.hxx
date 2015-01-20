@@ -167,7 +167,7 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         // XEventListener
 
         using cppu::WeakComponentImplHelperBase::disposing;
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
+        void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);
 
         // FilePicker Event functions

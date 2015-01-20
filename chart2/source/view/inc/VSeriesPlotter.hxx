@@ -153,7 +153,7 @@ public:
     )
     */
 
-    virtual void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
+    void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (::com::sun::star::uno::RuntimeException);
 
     // MinimumAndMaximumSupplier
@@ -210,7 +210,7 @@ public:
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
-    virtual std::vector< ViewLegendEntry > createLegendEntriesForSeries(
+    std::vector< ViewLegendEntry > createLegendEntriesForSeries(
             const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             const VDataSeries& rSeries,
             const ::com::sun::star::uno::Reference<
@@ -330,7 +330,7 @@ protected:
         @param bVertical
             for y-error bars this is true, for x-error-bars it is false.
      */
-    virtual void createErrorBar(
+    void createErrorBar(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
         , const ::com::sun::star::drawing::Position3D & rPos
@@ -342,26 +342,26 @@ protected:
         , double* pfScaledLogicX
         );
 
-    virtual void createErrorBar_X( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
+    void createErrorBar_X( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
         , double* pfScaledLogicX=0 );
 
-    virtual void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
+    void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
         , double* pfScaledLogicX=0 );
 
-    virtual void createRegressionCurvesShapes( VDataSeries& rVDataSeries
+    void createRegressionCurvesShapes( VDataSeries& rVDataSeries
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xEquationTarget
         , bool bMaySkipPointsInRegressionCalculation );
 
-    virtual void createRegressionCurveEquationShapes( const OUString & rEquationCID
+    void createRegressionCurveEquationShapes( const OUString & rEquationCID
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xEquationProperties
         , const ::com::sun::star::uno::Reference<
@@ -370,7 +370,7 @@ protected:
             ::com::sun::star::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
         , ::com::sun::star::awt::Point aDefaultPos );
 
-    virtual void setMappedProperties(
+    void setMappedProperties(
           const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape >& xTarget
         , const ::com::sun::star::uno::Reference<

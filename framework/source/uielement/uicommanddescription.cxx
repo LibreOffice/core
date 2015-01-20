@@ -112,7 +112,7 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        virtual ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
+        ::com::sun::star::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
 
         struct CmdToInfoMap
         {

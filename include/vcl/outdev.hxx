@@ -498,8 +498,8 @@ public:
                                     sal_uInt16 nFlags = 0 );
 
     // Call before and after a paint operation to reduce flushing
-    virtual void                BeginPaint();
-    virtual void                EndPaint();
+    void                BeginPaint();
+    void                EndPaint();
 
 protected:
 
@@ -1560,9 +1560,9 @@ public:
     void                        EnableMapMode( bool bEnable = true );
     bool                        IsMapModeEnabled() const { return mbMap; }
 
-    virtual void                SetMapMode();
+    void                SetMapMode();
     virtual void                SetMapMode( const MapMode& rNewMapMode );
-    virtual void                SetRelativeMapMode( const MapMode& rNewMapMode );
+    void                SetRelativeMapMode( const MapMode& rNewMapMode );
     const MapMode&              GetMapMode() const { return maMapMode; }
 
      // #i75163#

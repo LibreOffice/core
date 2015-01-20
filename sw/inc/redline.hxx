@@ -45,7 +45,7 @@ public:
     virtual ~SwRedlineExtraData();
     virtual SwRedlineExtraData* CreateNew() const = 0;
 
-    virtual void Accept( SwPaM& rPam ) const;
+    void Accept( SwPaM& rPam ) const;
     virtual void Reject( SwPaM& rPam ) const;
     virtual bool operator == ( const SwRedlineExtraData& ) const;
 };

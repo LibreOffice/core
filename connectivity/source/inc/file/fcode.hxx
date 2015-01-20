@@ -75,7 +75,7 @@ namespace connectivity
             virtual const ORowSetValue& getValue() const = 0;
             virtual void setValue(const ORowSetValue& _rVal) = 0;
 
-            virtual sal_Int32 getDBType() const {return m_eDBType;}
+            sal_Int32 getDBType() const {return m_eDBType;}
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             inline bool isValid() const;
 

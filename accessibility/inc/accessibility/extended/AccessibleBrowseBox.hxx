@@ -161,7 +161,7 @@ protected:
     /** This method creates (once) and returns the accessible data table child.
         @attention  This method requires locked mutex's and a living object.
         @return  The XAccessible interface of the data table. */
-    virtual ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > implGetTable();
 
     /** This method creates (once) and returns the specified header bar.

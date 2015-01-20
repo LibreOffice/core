@@ -300,7 +300,7 @@ public:
     /** Writes the OBJ record and the entire chart substream. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
-    virtual void        WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm );
+    void        WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExpXmlStream& rStrm );
     void WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
     const css::uno::Reference<css::chart::XChartDocument>& GetChartDoc() const;

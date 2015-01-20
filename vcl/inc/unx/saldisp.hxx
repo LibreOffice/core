@@ -165,20 +165,20 @@ protected:
 public:
     SalXLib();
     virtual         ~SalXLib();
-    virtual void    Init();
+    void    Init();
 
-    virtual void    Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual void    Wakeup();
-    virtual void    PostUserEvent();
+    void    Yield( bool bWait, bool bHandleAllCurrentEvents );
+    void    Wakeup();
+    void    PostUserEvent();
 
-    virtual void    Insert( int fd, void* data,
+    void    Insert( int fd, void* data,
                             YieldFunc   pending,
                             YieldFunc   queued,
                             YieldFunc   handle );
-    virtual void    Remove( int fd );
+    void    Remove( int fd );
 
-    virtual void    StartTimer( sal_uLong nMS );
-    virtual void    StopTimer();
+    void    StartTimer( sal_uLong nMS );
+    void    StopTimer();
 
     bool            CheckTimeout( bool bExecuteTimers = true );
 };
@@ -395,7 +395,7 @@ public:
     virtual ~SalX11Display();
 
     virtual bool        Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
-    virtual void        Yield();
+    void        Yield();
     virtual void        PostUserEvent() SAL_OVERRIDE;
 
     bool            IsEvent();

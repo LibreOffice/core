@@ -63,16 +63,16 @@ public:
     virtual ~DomVisitor() {}
     virtual void element( const Reference<XElement>& ) {}
     virtual void character( const Reference<XCharacterData>& ) {}
-    virtual void attribute( const Reference<XAttr>& ) {}
-    virtual void cdata( const Reference<XCDATASection>& ) {}
-    virtual void comment( const Reference<XComment>& ) {}
-    virtual void documentFragment( const Reference<XDocumentFragment>& ) {}
-    virtual void document( const Reference<XDocument>& ) {}
-    virtual void documentType( const Reference<XDocumentType>& ) {}
-    virtual void entity( const Reference<XEntity>& ) {}
-    virtual void entityReference( const Reference<XEntityReference>& ) {}
-    virtual void notation( const Reference<XNotation>& ) {}
-    virtual void processingInstruction( const Reference<XProcessingInstruction>& ) {}
+    void attribute( const Reference<XAttr>& ) {}
+    void cdata( const Reference<XCDATASection>& ) {}
+    void comment( const Reference<XComment>& ) {}
+    void documentFragment( const Reference<XDocumentFragment>& ) {}
+    void document( const Reference<XDocument>& ) {}
+    void documentType( const Reference<XDocumentType>& ) {}
+    void entity( const Reference<XEntity>& ) {}
+    void entityReference( const Reference<XEntityReference>& ) {}
+    void notation( const Reference<XNotation>& ) {}
+    void processingInstruction( const Reference<XProcessingInstruction>& ) {}
     virtual void endElement( const Reference<XElement>& ) {}
 };
 

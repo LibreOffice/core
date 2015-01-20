@@ -56,7 +56,7 @@ public:
     virtual void                SetCellData( ScMyCell& rMyCell ) = 0;
     virtual void                Sort() = 0;
 
-    virtual void                UpdateAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+    void                UpdateAddress( ::com::sun::star::table::CellAddress& rCellAddress );
 };
 
 struct ScMyShape

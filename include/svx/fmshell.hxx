@@ -110,8 +110,8 @@ public:
     FmFormShell(SfxViewShell* pParent, FmFormView* pView = NULL);
     virtual ~FmFormShell();
 
-    virtual void Execute( SfxRequest& );
-    virtual void GetState( SfxItemSet& );
+    void Execute( SfxRequest& );
+    void GetState( SfxItemSet& );
     virtual bool HasUIFeature( sal_uInt32 nFeature ) SAL_OVERRIDE;
 
     void ExecuteTextAttribute( SfxRequest& );
