@@ -1077,6 +1077,8 @@ glue-points
 glyph-orientation-vertical
 gouraud
 gradient
+gradient-angle
+gradient-border
 gradient-step-count
 gradient-style
 gradientTransform

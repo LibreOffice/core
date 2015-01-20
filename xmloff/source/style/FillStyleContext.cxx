@@ -338,8 +338,7 @@ XMLTransGradientStyleContext::XMLTransGradientStyleContext(
 {
     // start import
     XMLTransGradientStyleImport aTransGradientStyle( GetImport() );
-
-    // something missing
+    aTransGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
 XMLTransGradientStyleContext::~XMLTransGradientStyleContext()

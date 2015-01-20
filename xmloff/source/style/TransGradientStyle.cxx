@@ -20,6 +20,7 @@
 #include "TransGradientStyle.hxx"
 
 #include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <sax/tools/converter.hxx>
 
@@ -34,10 +35,13 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/token/tokens.hxx>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 enum SvXMLTokenMapAttrs
 {
@@ -61,7 +65,7 @@ SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
     { XML_GRADIENTSTYLE_ELLIPSOID,      awt::GradientStyle_ELLIPTICAL },
     { XML_GRADIENTSTYLE_SQUARE,         awt::GradientStyle_SQUARE },
     { XML_GRADIENTSTYLE_RECTANGULAR,    awt::GradientStyle_RECT },
-    { XML_TOKEN_INVALID,                0 }
+    { xmloff::token::XML_TOKEN_INVALID,                0 }
 };
 
 // Import
@@ -96,15 +100,24 @@ bool XMLTransGradientStyleImport::importXML(
     {
         static const SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },
-    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE },
-    { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX },
-    { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY },
-    { XML_NAMESPACE_DRAW, XML_START, XML_TOK_GRADIENT_START },
-    { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END },
-    { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE },
-    { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER },
+    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style) },
+    { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_cx) },
+    { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_cy) },
+    { XML_NAMESPACE_DRAW, XML_START, XML_TOK_GRADIENT_START,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_start) },
+    { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_end) },
+    { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_angle) },
+    { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_border) },
     XML_TOKEN_MAP_END
 };
 
@@ -208,6 +221,140 @@ bool XMLTransGradientStyleImport::importXML(
 
     return bRet;
 }
+
+bool XMLTransGradientStyleImport::importXML(
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName )
+{
+    bool bRet           = false;
+    bool bHasName       = false;
+    bool bHasStyle      = false;
+    OUString aDisplayName;
+
+    awt::Gradient aGradient;
+    aGradient.XOffset = 0;
+    aGradient.YOffset = 0;
+    aGradient.StartIntensity = 100;
+    aGradient.EndIntensity = 100;
+    aGradient.Angle = 0;
+    aGradient.Border = 0;
+
+    {
+        static const SvXMLTokenMapEntry aTrGradientAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+    { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_GRADIENT_STYLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style) },
+    { XML_NAMESPACE_DRAW, XML_CX, XML_TOK_GRADIENT_CX,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_cx) },
+    { XML_NAMESPACE_DRAW, XML_CY, XML_TOK_GRADIENT_CY,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_cy) },
+    { XML_NAMESPACE_DRAW, XML_START, XML_TOK_GRADIENT_START,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_start) },
+    { XML_NAMESPACE_DRAW, XML_END, XML_TOK_GRADIENT_END,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_end) },
+    { XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, XML_TOK_GRADIENT_ANGLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_angle) },
+    { XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, XML_TOK_GRADIENT_BORDER,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_gradient_border) },
+    XML_TOKEN_MAP_END
+};
+
+    SvXMLTokenMap aTokenMap( aTrGradientAttrTokenMap );
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        sal_Int32 nTmpValue;
+
+        switch( aTokenMap.Get( attr->Token ) )
+        {
+        case XML_TOK_GRADIENT_NAME:
+        {
+            rStrName = attr->Value;
+            bHasName = true;
+        }
+        break;
+        case XML_TOK_GRADIENT_DISPLAY_NAME:
+        {
+            aDisplayName = attr->Value;
+        }
+        break;
+        case XML_TOK_GRADIENT_STYLE:
+        {
+            sal_uInt16 eValue;
+            if( SvXMLUnitConverter::convertEnum( eValue, attr->Value, pXML_GradientStyle_Enum ) )
+            {
+                aGradient.Style = (awt::GradientStyle) eValue;
+                bHasStyle = true;
+            }
+        }
+        break;
+        case XML_TOK_GRADIENT_CX:
+            sax::Converter::convertPercent( nTmpValue , attr->Value );
+            aGradient.XOffset = sal::static_int_cast< sal_Int16 >(nTmpValue);
+        break;
+        case XML_TOK_GRADIENT_CY:
+            sax::Converter::convertPercent( nTmpValue, attr->Value );
+            aGradient.YOffset = sal::static_int_cast< sal_Int16 >(nTmpValue);
+        break;
+        case XML_TOK_GRADIENT_START:
+        {
+            sal_Int32 aStartTransparency;
+            sax::Converter::convertPercent( aStartTransparency, attr->Value );
+            sal_uInt8 n = sal::static_int_cast< sal_uInt8 >(
+                ( (100 - aStartTransparency) * 255 ) / 100 );
+
+            Color aColor( n, n, n );
+            aGradient.StartColor = (sal_Int32)( aColor.GetColor() );
+        }
+        break;
+        case XML_TOK_GRADIENT_END:
+        {
+            sal_Int32 aEndTransparency;
+            sax::Converter::convertPercent( aEndTransparency, attr->Value );
+            sal_uInt8 n = sal::static_int_cast< sal_uInt8 >(
+                ( (100 - aEndTransparency) * 255 ) / 100 );
+
+            Color aColor( n, n, n );
+            aGradient.EndColor = sal_Int32( aColor.GetColor() );
+        }
+        break;
+        case XML_TOK_GRADIENT_ANGLE:
+        {
+            sal_Int32 nValue;
+            sax::Converter::convertNumber( nValue, attr->Value, 0, 3600 );
+            aGradient.Angle = sal_Int16( nValue );
+        }
+        break;
+        case XML_TOK_GRADIENT_BORDER:
+            sax::Converter::convertPercent( nTmpValue, attr->Value );
+            aGradient.Border = sal::static_int_cast< sal_Int16 >( nTmpValue );
+        break;
+        default:
+            DBG_WARNING( "Unknown token at import transparency gradient style" );
+        }
+    }
+
+    rValue <<= aGradient;
+
+    if( !aDisplayName.isEmpty() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_GRADIENT_ID,
+            rStrName, aDisplayName );
+        rStrName = aDisplayName;
+    }
+
+    bRet = bHasName && bHasStyle;
+
+    }
+
+    return bRet;
+}
+
 
 // Export
 
