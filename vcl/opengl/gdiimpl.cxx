@@ -894,9 +894,34 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
         (float) rTexture.GetWidth(), 0, (float) rTexture.GetWidth(), (float) rTexture.GetHeight() };
     GLfloat aTexCoord[8];
 
+    // If downscaling at a higher scale ratio, use the area scaling algorithm rather
+    // than plain OpenGL's scaling, for better results.
+    // See OpenGLSalBitmap::ImplScaleArea().
+    double ixscale = rTexture.GetWidth() / fabs( rX.getX() - rNull.getX());
+    double iyscale = rTexture.GetHeight() / fabs( rY.getY() - rNull.getY());
+    bool areaScaling = false;
+    bool fastAreaScaling = false;
+    OUString textureFragmentShader;
+    if( ixscale >= 2 && iyscale >= 2 ) // Downscaling to 50% or less? (inverted scale ratios)
+    {
+        areaScaling = true;
+        fastAreaScaling = ( ixscale == int( ixscale ) && iyscale == int( iyscale ));
+        // The generic case has arrays only up to 100 ratio downscaling, which is hopefully enough
+        // in practice, but protect against buffer overflows in case such an extreme case happens
+        // (and in such case the precision of the generic algorithm probably doesn't matter anyway).
+        if( ixscale > 100 || iyscale > 100 )
+            fastAreaScaling = true;
+        if( fastAreaScaling )
+            textureFragmentShader = "areaScaleFastFragmentShader";
+        else
+            textureFragmentShader = "areaScaleFragmentShader";
+    }
+
     if( rMask )
     {
-        if( !UseProgram( "transformedTextureVertexShader", "maskedTextureFragmentShader" ) )
+        if( !UseProgram( "transformedTextureVertexShader",
+                textureFragmentShader.isEmpty() ? "maskedTextureFragmentShader" : textureFragmentShader,
+                "#define MASKED" ) )
             return;
         mpProgram->SetTexture( "mask", rMask );
         rMask.SetFilter( GL_LINEAR );
@@ -904,8 +929,38 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
     }
     else
     {
-        if( !UseProgram( "transformedTextureVertexShader", "textureFragmentShader" ) )
+        if( !UseProgram( "transformedTextureVertexShader",
+                textureFragmentShader.isEmpty() ? "textureFragmentShader" : textureFragmentShader ) )
             return;
+    }
+
+    if( areaScaling )
+    {
+        // From OpenGLSalBitmap::ImplScaleArea().
+        if( fastAreaScaling )
+        {
+            int mnWidth = rTexture.GetWidth();
+            int mnHeight = rTexture.GetHeight();
+            mpProgram->SetUniform1i( "xscale", ixscale );
+            mpProgram->SetUniform1i( "yscale", iyscale );
+            mpProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
+            mpProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
+            mpProgram->SetUniform1f( "ratio", 1.0 / ( ixscale * iyscale ));
+        }
+        else
+        {
+            int mnWidth = rTexture.GetWidth();
+            int mnHeight = rTexture.GetHeight();
+            mpProgram->SetUniform1f( "xscale", ixscale );
+            mpProgram->SetUniform1f( "yscale", iyscale );
+            mpProgram->SetUniform1i( "swidth", mnWidth );
+            mpProgram->SetUniform1i( "sheight", mnHeight );
+            // For converting between <0,mnWidth-1> and <0.0,1.0> coordinate systems.
+            mpProgram->SetUniform1f( "xsrcconvert", 1.0 / ( mnWidth - 1 ));
+            mpProgram->SetUniform1f( "ysrcconvert", 1.0 / ( mnHeight - 1 ));
+            mpProgram->SetUniform1f( "xdestconvert", 1.0 * (( mnWidth / ixscale ) - 1 ));
+            mpProgram->SetUniform1f( "ydestconvert", 1.0 * (( mnHeight / iyscale ) - 1 ));
+        }
     }
 
     mpProgram->SetUniform2f( "viewport", GetWidth(), GetHeight() );
