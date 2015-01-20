@@ -4160,7 +4160,11 @@ void ScCompiler::CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken*
         {
             vector<OUString> aTabNames;
             pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
-            assert(!aTabNames.empty()); // something is seriously wrong, but continue
+            // No sheet names is a valid case if external sheets were not
+            // cached in this document and external document is not reachable,
+            // else not and worth to be investigated.
+            SAL_WARN_IF( aTabNames.empty(), "sc.core", "wrecked cache of external document? '" <<
+                    *pFileName << "' '" << t->GetString().getString() << "'");
 
             pConv->makeExternalRefStr(
                 rBuffer, GetPos(), nFileId, *pFileName, aTabNames, t->GetString().getString(),
