@@ -1,0 +1,59 @@
+diff -u a/poppler/Gfx.cc b/poppler/Gfx.cc
+--- a/poppler/Gfx.cc	2015-01-20 07:54:51.255889300 +0200
++++ b/poppler/Gfx.cc	2015-01-20 08:19:38.734968200 +0200
+@@ -4031,27 +4031,41 @@
+       n = font->getNextChar(p, len, &code,
+ 			    &u, &uLen,
+ 			    &dx, &dy, &originX, &originY);
++	  dx2 = dx;
++	  dy2 = dy;
+       if (wMode) {
+ 	dx *= state->getFontSize();
++	dx2 *= state->getFontSize();
+ 	dy = dy * state->getFontSize() + state->getCharSpace();
++	dy2 = dy2 * state->getFontSize();
+ 	if (n == 1 && *p == ' ') {
+ 	  dy += state->getWordSpace();
++	  dy2 += state->getWordSpace();
+ 	}
+       } else {
+ 	dx = dx * state->getFontSize() + state->getCharSpace();
++	dx2 = dx2 * state->getFontSize();
+ 	if (n == 1 && *p == ' ') {
+ 	  dx += state->getWordSpace();
++	  dx2 += state->getWordSpace();
+ 	}
+ 	dx *= state->getHorizScaling();
++	dx2 *= state->getHorizScaling();
+ 	dy *= state->getFontSize();
++	dy2 *= state->getFontSize();
+       }
+       state->textTransformDelta(dx, dy, &tdx, &tdy);
++      state->textTransformDelta(dx2, dy2, &ddx, &ddy);
+       originX *= state->getFontSize();
+       originY *= state->getFontSize();
+       state->textTransformDelta(originX, originY, &tOriginX, &tOriginY);
+       if (ocState)
++      {
++        out->drawChar2(state, state->getCurX() + riseX, state->getCurY() + riseY,
++		      ddx, ddy, tOriginX, tOriginY, code, n, u, uLen);
+         out->drawChar(state, state->getCurX() + riseX, state->getCurY() + riseY,
+ 		      tdx, tdy, tOriginX, tOriginY, code, n, u, uLen);
++      }
+       state->shift(tdx, tdy);
+       p += n;
+       len -= n;
+diff -u a/poppler/OutputDev.h b/poppler/OutputDev.h
+--- a/poppler/OutputDev.h	2014-04-26 18:37:22.000000000 +0300
++++ b/poppler/OutputDev.h	2015-01-20 08:20:22.321461200 +0200
+@@ -244,6 +244,10 @@
+ 			double /*dx*/, double /*dy*/,
+ 			double /*originX*/, double /*originY*/,
+ 			CharCode /*code*/, int /*nBytes*/, Unicode * /*u*/, int /*uLen*/) {}
++  virtual void drawChar2(GfxState * /*state*/, double /*x*/, double /*y*/,
++			double /*dx*/, double /*dy*/,
++			double /*originX*/, double /*originY*/,
++			CharCode /*code*/, int /*nBytes*/, Unicode * /*u*/, int /*uLen*/) {}
+   virtual void drawString(GfxState * /*state*/, GooString * /*s*/) {}
+   virtual GBool beginType3Char(GfxState * /*state*/, double /*x*/, double /*y*/,
+ 			       double /*dx*/, double /*dy*/,
