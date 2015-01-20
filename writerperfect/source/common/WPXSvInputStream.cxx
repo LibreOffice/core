@@ -494,7 +494,7 @@ const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned
     if (numBytesRead == 0)
         return 0;
 
-    return (const unsigned char *)maData.getConstArray();
+    return reinterpret_cast<const unsigned char *>(maData.getConstArray());
 }
 
 long WPXSvInputStreamImpl::tell()
