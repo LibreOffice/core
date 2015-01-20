@@ -69,6 +69,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     get( mpBtnShortCutPasteValuesOnly, "paste_values_only");
     get( mpBtnShortCutPasteValuesFormats, "paste_values_formats");
     get( mpBtnShortCutPasteTranspose, "paste_transpose");
+    get( mpBtnOK, "ok");
 
     if ( pStrTitle )
         SetText( *pStrTitle );
@@ -124,6 +125,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     mpBtnShortCutPasteValuesOnly->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );;
     mpBtnShortCutPasteValuesFormats->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );;
     mpBtnShortCutPasteTranspose->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
+    mpBtnOK->GrabFocus();
 }
 
 InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const

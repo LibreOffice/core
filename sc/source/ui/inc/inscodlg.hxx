@@ -74,6 +74,7 @@ private:
     PushButton*      mpBtnShortCutPasteValuesOnly;
     PushButton*      mpBtnShortCutPasteValuesFormats;
     PushButton*      mpBtnShortCutPasteTranspose;
+    PushButton*      mpBtnOK;
 
     bool              bOtherDoc;
     bool              bFillMode;
