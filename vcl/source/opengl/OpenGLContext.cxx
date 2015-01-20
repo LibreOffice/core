@@ -709,7 +709,9 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
 bool OpenGLContext::ImplInit()
 {
     GLXContext pSharedCtx( NULL );
+#ifdef DBG_UTIL
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
+#endif
 
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
 
@@ -1341,7 +1343,9 @@ void OpenGLContext::makeCurrent()
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
+#ifdef DBG_UTIL
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
+#endif
 
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
     if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
