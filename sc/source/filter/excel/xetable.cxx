@@ -1226,7 +1226,7 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
     if( !maXFIds.empty() && (maXFIds.front().mnXFIndex == EXC_XF_NOTFOUND) )
     {
         SetXclCol( GetXclCol() + maXFIds.front().mnCount );
-        maXFIds.pop_front();
+        maXFIds.erase(maXFIds.begin(), maXFIds.begin() + 1);
     }
     if( !maXFIds.empty() && (maXFIds.back().mnXFIndex == EXC_XF_NOTFOUND) )
         maXFIds.pop_back();
