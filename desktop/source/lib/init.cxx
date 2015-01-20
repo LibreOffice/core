@@ -253,6 +253,7 @@ static int                     lo_initialize    (LibreOfficeKit* pThis, const ch
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
 static void                    lo_postKeyEvent  (LibreOfficeKit* pThis, int nType, int nCode);
+static void                    lo_postMouseEvent (LibreOfficeKit* pThis, int nType, int nX, int nY);
 
 
 struct LibLibreOffice_Impl : public _LibreOfficeKit
@@ -272,6 +273,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->postKeyEvent = lo_postKeyEvent;
+            m_pOfficeClass->postMouseEvent = lo_postMouseEvent;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -664,6 +666,28 @@ static void lo_postKeyEvent(LibreOfficeKit* /*pThis*/, int nType, int nCode)
             break;
         case LOK_KEYEVENT_KEYUP:
             Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
+            break;
+        }
+    }
+#endif
+}
+
+static void lo_postMouseEvent(LibreOfficeKit* /*pThis*/, int nType, int nX, int nY)
+{
+#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
+    if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
+    {
+        MouseEvent aEvent = MouseEvent(Point(nX, nY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+        switch (nType)
+        {
+        case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+            Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONDOWN, pFocus->GetWindow(), &aEvent);
+            break;
+        case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+            Application::PostMouseEvent(VCLEVENT_WINDOW_MOUSEBUTTONUP, pFocus->GetWindow(), &aEvent);
+            break;
+        default:
+            assert(false);
             break;
         }
     }

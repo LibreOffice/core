@@ -73,6 +73,17 @@ typedef enum
 }
 LibreOfficeKitKeyEventType;
 
+typedef enum
+{
+    /// A pressed gesture has started.
+    LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+    /// A pressed gesture has finished.
+    LOK_MOUSEEVENT_MOUSEBUTTONUP,
+    /// A change has happened during a press gesture.
+    LOK_MOUSEEVENT_MOUSEMOVE
+}
+LibreOfficeKitMouseEventType;
+
 typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
 #endif // LOK_USE_UNSTABLE_API
 
@@ -89,6 +100,7 @@ struct _LibreOfficeKitClass
   LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit* pThis, const char* pURL);
   char*                   (*getError)      (LibreOfficeKit* pThis);
   void                    (*postKeyEvent)  (LibreOfficeKit* pThis, int nType, int nCode);
+  void                    (*postMouseEvent)(LibreOfficeKit* pThis, int nType, int nX, int nY);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
