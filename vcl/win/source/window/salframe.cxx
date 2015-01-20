@@ -5215,7 +5215,7 @@ static boolean ImplHandleAppCommand( HWND hWnd, LPARAM lParam, LRESULT & nRet )
         const Point aPoint;
         CommandMediaData aMediaData(nCommand);
         CommandEvent aCEvt( aPoint, COMMAND_MEDIA, FALSE, &aMediaData );
-        NotifyEvent aNCmdEvt( VENT_COMMAND, pWindow, &aCEvt );
+        NotifyEvent aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
