@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "cppuhelper/implementationentry.hxx"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
 #include "comphelper/servicedecl.hxx"
 
 
@@ -43,12 +41,11 @@ extern sdecl::ServiceDecl const serviceDecl;
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL msforms_component_getFactory(
-        const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
+        const sal_Char * pImplName, void *, void *)
     {
         SAL_INFO("vbahelper", "In component_getFactory for " << pImplName );
     void* pRet =  component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, controlprovider::serviceDecl, userform::serviceDecl );
+            pImplName, controlprovider::serviceDecl, userform::serviceDecl );
     SAL_INFO("vbahelper", "Ret is 0x" << std::hex << pRet);
     return pRet;
     }

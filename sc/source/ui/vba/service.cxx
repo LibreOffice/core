@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/implementationentry.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <comphelper/servicedecl.hxx>
 
 // component exports
@@ -57,11 +55,10 @@ extern sdecl::ServiceDecl const serviceDecl;
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaobj_component_getFactory(
-        const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
+        const sal_Char * pImplName, void *, void *)
     {
     void* pRet =  component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
+            pImplName, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, window::serviceDecl, hyperlink::serviceDecl, application::serviceDecl );
     return pRet;
     }
 }

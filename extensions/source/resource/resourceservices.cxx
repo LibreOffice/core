@@ -30,11 +30,9 @@ const sdecl::ServiceDecl OpenOfficeResourceLoaderDecl(
     "com.sun.star.resource.OfficeResourceLoader");
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL res_component_getFactory(
-    sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
+    sal_Char const* pImplName, void*, void*)
 {
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey,
+    return component_getFactoryHelper( pImplName,
             ResourceIndexAccessDecl, OpenOfficeResourceLoaderDecl );
 }
 

@@ -330,12 +330,10 @@ sdecl::ServiceDecl const updateDecl(
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL deploymentgui_component_getFactory(
-    sal_Char const * pImplName,
-    void * pServiceManager,
-    void * pRegistryKey )
+    sal_Char const * pImplName, void *, void *)
 {
     return component_getFactoryHelper(
-        pImplName, static_cast<css::lang::XMultiServiceFactory *>(pServiceManager), static_cast<css::registry::XRegistryKey *>(pRegistryKey), dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
+        pImplName, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
 }
 
 } // extern "C"

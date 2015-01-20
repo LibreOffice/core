@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cppuhelper/implementationentry.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <osl/diagnose.h>
 #include <comphelper/servicedecl.hxx>
 
@@ -52,12 +50,9 @@ extern sdecl::ServiceDecl const serviceDecl;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaswobj_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager,
-    void * pRegistryKey )
+    const sal_Char * pImplName, void *, void *)
 {
     void* pRet = component_getFactoryHelper(pImplName,
-            static_cast<css::lang::XMultiServiceFactory *>(pServiceManager),
-            static_cast<css::registry::XRegistryKey *>(pRegistryKey),
             globals::serviceDecl, ::document::serviceDecl,
             wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
     OSL_TRACE("Ret is 0x%p", pRet);

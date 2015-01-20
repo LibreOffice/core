@@ -38,17 +38,15 @@ const comphelper::service_decl::ServiceDecl graphicExportDialog(
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL graphicfilter_component_getFactory(
-    sal_Char const* pImplementationName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
+    sal_Char const* pImplementationName, void*, void*)
 {
     if ( rtl_str_compare (pImplementationName, GRAPHIC_EXPORT_FILTER_SERVICE) == 0 )
     {
-        return component_getFactoryHelper( pImplementationName, pServiceManager, pRegistryKey, graphicExportFilter );
+        return component_getFactoryHelper( pImplementationName, graphicExportFilter );
     }
     else if ( rtl_str_compare (pImplementationName, GRAPHIC_EXPORT_DIALOG_SERVICE) == 0 )
     {
-        return component_getFactoryHelper( pImplementationName, pServiceManager, pRegistryKey, graphicExportDialog );
+        return component_getFactoryHelper( pImplementationName, graphicExportDialog );
     }
     return NULL;
 }

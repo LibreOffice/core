@@ -23,8 +23,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <uno/environment.h>
 #include <boost/utility.hpp>
 #include <boost/function.hpp>
@@ -313,8 +311,6 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
     <pre>
         inline void * component_getFactoryHelper(
             sal_Char const* pImplName,
-            ::com::sun::star::lang::XMultiServiceFactory *,
-            ::com::sun::star::registry::XRegistryKey * xRegistryKey,
             ServiceDecl const& s0, ServiceDecl const& s1, ... );
     </pre>
 
@@ -326,8 +322,6 @@ struct class_ : public serviceimpl_base< detail::ServiceImpl<ImplT_>, WithArgsT 
 #define COMPHELPER_SERVICEDECL_make(z_, n_, unused_) \
 inline void * component_getFactoryHelper( \
     sal_Char const* pImplName, \
-    ::com::sun::star::lang::XMultiServiceFactory *, \
-    ::com::sun::star::registry::XRegistryKey *, \
     BOOST_PP_ENUM_PARAMS(n_, ServiceDecl const& s) ) \
 { \
     void * pRet = 0; \
@@ -379,11 +373,9 @@ BOOST_PP_REPEAT_FROM_TO(1, COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS,
 extern "C" \
 { \
     SAL_DLLPUBLIC_EXPORT void* SAL_CALL compName##_component_getFactory( sal_Char const* pImplName, \
-                                         void*   pServiceManager, \
-                                         void*       pRegistryKey ) \
+                                         void*, void* ) \
     { \
-        return component_getFactoryHelper( pImplName, static_cast<css::lang::XMultiServiceFactory *>(pServiceManager), \
-                                           static_cast<css::registry::XRegistryKey *>(pRegistryKey), \
+        return component_getFactoryHelper( pImplName, \
                                            BOOST_PP_SEQ_ENUM(varargs_) ); \
     } \
 }
