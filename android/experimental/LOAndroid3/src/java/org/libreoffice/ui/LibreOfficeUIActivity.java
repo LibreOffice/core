@@ -9,6 +9,7 @@
 
 package org.libreoffice.ui;
 
+import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.LOAbout;
 import org.libreoffice.android.Bootstrap;
@@ -252,9 +253,9 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     public void open(IFile document) {
         File file = document.getDocument();
         Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
-        i.setComponent(new ComponentName(
-                    "org.libreoffice",
-                    "org.libreoffice.LibreOfficeMainActivity"));
+        String packageName = getApplicationContext().getPackageName();
+        ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
+        i.setComponent(componentName);
         startActivity(i);
     }
 
