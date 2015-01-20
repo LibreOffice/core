@@ -27,18 +27,20 @@
 struct ImplIdleData;
 struct ImplSVData;
 
-// The timemarks behind the priorities is the catgorizing of timer to idle
+// The timemarks behind the priorities are need to change timer to idle. It is to convert
+// timeout values to priorities.
 enum class IdlePriority {
-    VCL_IDLE_PRIORITY_STARVATIONPROTECTION  = -1, // Do not use this for normal prioritizing
-    VCL_IDLE_PRIORITY_HIGHEST               = 0, // -> 0ms
-    VCL_IDLE_PRIORITY_HIGH                  = 1,    // -> 1ms
-    VCL_IDLE_PRIORITY_DEFAULT               = 1,    // -> 1ms
-    VCL_IDLE_PRIORITY_REPAINT               = 2, // -> 30ms
+    VCL_IDLE_PRIORITY_STARVATIONPROTECTION  = -1, // Do not use this for normal prioritizing!
+
+    VCL_IDLE_PRIORITY_HIGHEST               = 0,  // -> 0ms
+    VCL_IDLE_PRIORITY_HIGH                  = 1,  // -> 1ms
+    VCL_IDLE_PRIORITY_DEFAULT               = 1,  // -> 1ms
+    VCL_IDLE_PRIORITY_REPAINT               = 2,  // -> 30ms
     VCL_IDLE_PRIORITY_RESIZE                = 3,  // -> 50ms
     VCL_IDLE_PRIORITY_MEDIUM                = 3,  // -> 50ms
-    VCL_IDLE_PRIORITY_LOW                   = 5,     // -> 100ms
-    VCL_IDLE_PRIORITY_LOWER                 = 6,   // -> 200ms
-    VCL_IDLE_PRIORITY_LOWEST                = 7   // -> 400ms
+    VCL_IDLE_PRIORITY_LOW                   = 4,  // -> 100ms
+    VCL_IDLE_PRIORITY_LOWER                 = 5,  // -> 200ms
+    VCL_IDLE_PRIORITY_LOWEST                = 6   // -> 400ms
 };
 
 
@@ -65,8 +67,9 @@ public:
     /// Make it possible to associate a callback with this idle handler
     /// of course, you can also sub-class and override 'DoIdle'
     void            SetIdleHdl( const Link& rLink ) { maIdleHdl = rLink; }
-    const Link&     GetIdleHdl() const              { return maIdleHdl; }
+    const Link&     GetIdleHdl() const { return maIdleHdl; }
 
+    // Call idle handler
     virtual void    DoIdle();
 
     void            Start();

@@ -26,9 +26,9 @@
 
 struct ImplIdleData
 {
-    ImplIdleData*   mpNext;         // Pointer to the next Instance
-    Idle*           mpIdle;        // Pointer to VCL Idle instance
-    bool            mbDelete;       // Was Idle deleted during Update()?
+    ImplIdleData*   mpNext;      // Pointer to the next Instance
+    Idle*           mpIdle;      // Pointer to VCL Idle instance
+    bool            mbDelete;    // Was Idle deleted during Update()?
     bool            mbInIdle;    // Are we in a idle handler?
 
     void Invoke()
@@ -60,6 +60,9 @@ struct ImplIdleData
             else
             {
                 // Find the highest priority.
+                // If the priority of the current idle is higher (numerical value is lower) than
+                // the priority of the most urgent, the priority of most urgent is increased and
+                // the current is the new most urgent. So starving is impossible.
                 if ( p->mpIdle->GetPriority() < pMostUrgent->mpIdle->GetPriority() )
                 {
                     IncreasePriority(pMostUrgent->mpIdle);
@@ -77,7 +80,8 @@ struct ImplIdleData
     {
         switch(pIdle->GetPriority())
         {
-            // Increase priority based on their current priority
+            // Increase priority based on their current priority;
+            // (so don't use VCL_IDLE_PRIORITY_STARVATIONPROTECTION for default-priority!)
             case IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION:
                 break;
             // If already highest priority -> extra state for starving tasks
@@ -132,10 +136,11 @@ void Idle::ImplDeInitIdle()
 
 void Idle::ProcessAllIdleHandlers()
 {
-    // process all pending Idle
+    // process all pending idle
     ImplIdleData* pIdleData = NULL;
     ImplIdleData* pPrevIdleData = NULL;
     ImplSVData*     pSVData = ImplGetSVData();
+    // timer can interrupt idle
     while (!Timer::TimerReady() && (pIdleData = ImplIdleData::GetFirstIdle()))
     {
         pIdleData->Invoke();
@@ -144,7 +149,7 @@ void Idle::ProcessAllIdleHandlers()
     pIdleData = pSVData->mpFirstIdleData;
     while ( pIdleData )
     {
-        // Was Idle destroyed in the meantime?
+        // Was idle destroyed in the meantime?
         if ( pIdleData->mbDelete )
         {
             if ( pPrevIdleData )
@@ -188,8 +193,8 @@ void Idle::Start()
     if ( !mpIdleData )
     {
         // insert Idle
-        mpIdleData = new ImplIdleData;
-        mpIdleData->mpIdle        = this;
+        mpIdleData              = new ImplIdleData;
+        mpIdleData->mpIdle      = this;
         mpIdleData->mbInIdle    = false;
 
         // insert last due to SFX!
@@ -222,10 +227,10 @@ Idle& Idle::operator=( const Idle& rIdle )
     if ( IsActive() )
         Stop();
 
-    mbActive        = false;
-    mePriority       = rIdle.mePriority;
+    mbActive          = false;
+    mePriority        = rIdle.mePriority;
     meDefaultPriority = rIdle.meDefaultPriority;
-    maIdleHdl    = rIdle.maIdleHdl;
+    maIdleHdl         = rIdle.maIdleHdl;
 
     if ( rIdle.IsActive() )
         Start();
