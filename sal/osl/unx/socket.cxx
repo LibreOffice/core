@@ -961,7 +961,10 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
             return ((oslHostAddr)NULL);
 
-        he= gethostbyaddr(&sin->sin_addr,
+        char const * addr = reinterpret_cast<char const *>(&sin->sin_addr);
+            // at least some Androids apparently have a gethostbyaddr with char*
+            // instead of void* argument
+        he= gethostbyaddr(addr,
                           sizeof (sin->sin_addr),
                           sin->sin_family);
         return _osl_hostentToHostAddr (he);
