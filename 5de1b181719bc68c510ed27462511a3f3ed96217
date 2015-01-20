@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7a46c9f1_2155a8c5",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-01-20T14:41:11Z",
+      "side": 1,
+      "message": "i want \"match\" when start with .uno:OpenFrom and the other is .uno:Open, In this case skip the migration.\nWith this i can solved the other application the right command is .uno:OpenFromWriter, .uno:OpenFromCalc...\nand the match start from index 0.\n\nThe function OUString::startsWith using the match-function too and give the rest back, i not need that.",
+      "parentUuid": "7a46c9f1_a1a45808",
+      "revId": "5de1b181719bc68c510ed27462511a3f3ed96217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7a46c9f1_c1a964e1",
         "filename": "desktop/source/migration/migration_impl.hxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2015-01-20T13:18:57Z",
       "side": 1,
       "message": "why use ^?  what you want is equal || match",
+      "revId": "5de1b181719bc68c510ed27462511a3f3ed96217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a46c9f1_81483c2f",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-01-20T14:41:11Z",
+      "side": 1,
+      "message": "you right i change",
+      "parentUuid": "7a46c9f1_c1a964e1",
       "revId": "5de1b181719bc68c510ed27462511a3f3ed96217",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
