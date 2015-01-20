@@ -21,6 +21,7 @@
 
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/diagnose.h>
@@ -31,6 +32,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include "ximpstyl.hxx"
 #include "ximpshap.hxx"
 #include "sdpropls.hxx"
@@ -45,7 +47,9 @@
 
 using namespace ::std;
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 struct ltint32
 {
@@ -235,30 +239,50 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
     {
         static const SvXMLTokenMapEntry aGroupShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_G,              XML_TOK_GROUP_GROUP         },
-    { XML_NAMESPACE_DRAW,           XML_RECT,           XML_TOK_GROUP_RECT          },
-    { XML_NAMESPACE_DRAW,           XML_LINE,           XML_TOK_GROUP_LINE          },
-    { XML_NAMESPACE_DRAW,           XML_CIRCLE,         XML_TOK_GROUP_CIRCLE        },
-    { XML_NAMESPACE_DRAW,           XML_ELLIPSE,        XML_TOK_GROUP_ELLIPSE       },
-    { XML_NAMESPACE_DRAW,           XML_POLYGON,        XML_TOK_GROUP_POLYGON       },
-    { XML_NAMESPACE_DRAW,           XML_POLYLINE,       XML_TOK_GROUP_POLYLINE      },
-    { XML_NAMESPACE_DRAW,           XML_PATH,           XML_TOK_GROUP_PATH          },
+    { XML_NAMESPACE_DRAW,           XML_G,              XML_TOK_GROUP_GROUP,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_g) },
+    { XML_NAMESPACE_DRAW,           XML_RECT,           XML_TOK_GROUP_RECT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_rect) },
+    { XML_NAMESPACE_DRAW,           XML_LINE,           XML_TOK_GROUP_LINE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_line) },
+    { XML_NAMESPACE_DRAW,           XML_CIRCLE,         XML_TOK_GROUP_CIRCLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_circle) },
+    { XML_NAMESPACE_DRAW,           XML_ELLIPSE,        XML_TOK_GROUP_ELLIPSE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_ellipse) },
+    { XML_NAMESPACE_DRAW,           XML_POLYGON,        XML_TOK_GROUP_POLYGON,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_polygon) },
+    { XML_NAMESPACE_DRAW,           XML_POLYLINE,       XML_TOK_GROUP_POLYLINE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_polyline) },
+    { XML_NAMESPACE_DRAW,           XML_PATH,           XML_TOK_GROUP_PATH,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_path) },
 
-    { XML_NAMESPACE_DRAW,           XML_CONTROL,        XML_TOK_GROUP_CONTROL       },
-    { XML_NAMESPACE_DRAW,           XML_CONNECTOR,      XML_TOK_GROUP_CONNECTOR     },
-    { XML_NAMESPACE_DRAW,           XML_MEASURE,        XML_TOK_GROUP_MEASURE       },
-    { XML_NAMESPACE_DRAW,           XML_PAGE_THUMBNAIL, XML_TOK_GROUP_PAGE          },
-    { XML_NAMESPACE_DRAW,           XML_CAPTION,        XML_TOK_GROUP_CAPTION       },
+    { XML_NAMESPACE_DRAW,           XML_CONTROL,        XML_TOK_GROUP_CONTROL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_control) },
+    { XML_NAMESPACE_DRAW,           XML_CONNECTOR,      XML_TOK_GROUP_CONNECTOR,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_connector) },
+    { XML_NAMESPACE_DRAW,           XML_MEASURE,        XML_TOK_GROUP_MEASURE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_measure) },
+    { XML_NAMESPACE_DRAW,           XML_PAGE_THUMBNAIL, XML_TOK_GROUP_PAGE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_page_thumbnail) },
+    { XML_NAMESPACE_DRAW,           XML_CAPTION,        XML_TOK_GROUP_CAPTION,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_caption) },
 
-    { XML_NAMESPACE_CHART,          XML_CHART,          XML_TOK_GROUP_CHART         },
-    { XML_NAMESPACE_DR3D,           XML_SCENE,          XML_TOK_GROUP_3DSCENE       },
+    { XML_NAMESPACE_CHART,          XML_CHART,          XML_TOK_GROUP_CHART,
+        (FastToken::NAMESPACE | XML_NAMESPACE_CHART | XML_chart) },
+    { XML_NAMESPACE_DR3D,           XML_SCENE,          XML_TOK_GROUP_3DSCENE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_scene) },
 
-    { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME         },
-    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
+    { XML_NAMESPACE_DRAW,           XML_FRAME,          XML_TOK_GROUP_FRAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_frame) },
+    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_custom_shape) },
 
-    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE  },
-    { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION    },
-    { XML_NAMESPACE_DRAW,           XML_A,              XML_TOK_GROUP_A             },
+    { XML_NAMESPACE_DRAW,           XML_CUSTOM_SHAPE,   XML_TOK_GROUP_CUSTOM_SHAPE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_custom_shape) },
+    { XML_NAMESPACE_OFFICE,         XML_ANNOTATION,     XML_TOK_GROUP_ANNOTATION,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_annotation) },
+    { XML_NAMESPACE_DRAW,           XML_A,              XML_TOK_GROUP_A,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_a) },
 
     XML_TOKEN_MAP_END
 };
@@ -275,14 +299,22 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetFrameShapeElemTokenMap()
     {
         static const SvXMLTokenMapEntry aFrameShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_TEXT_BOX,       XML_TOK_FRAME_TEXT_BOX      },
-    { XML_NAMESPACE_DRAW,           XML_IMAGE,          XML_TOK_FRAME_IMAGE         },
-    { XML_NAMESPACE_DRAW,           XML_OBJECT,         XML_TOK_FRAME_OBJECT        },
-    { XML_NAMESPACE_DRAW,           XML_OBJECT_OLE,     XML_TOK_FRAME_OBJECT_OLE    },
-    { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_FRAME_PLUGIN        },
-    { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME},
-    { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_FRAME_APPLET        },
-    { XML_NAMESPACE_TABLE,          XML_TABLE,          XML_TOK_FRAME_TABLE         },
+    { XML_NAMESPACE_DRAW,           XML_TEXT_BOX,       XML_TOK_FRAME_TEXT_BOX,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_text_box) },
+    { XML_NAMESPACE_DRAW,           XML_IMAGE,          XML_TOK_FRAME_IMAGE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_image) },
+    { XML_NAMESPACE_DRAW,           XML_OBJECT,         XML_TOK_FRAME_OBJECT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_object) },
+    { XML_NAMESPACE_DRAW,           XML_OBJECT_OLE,     XML_TOK_FRAME_OBJECT_OLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_object_ole) },
+    { XML_NAMESPACE_DRAW,           XML_PLUGIN,         XML_TOK_FRAME_PLUGIN,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_plugin) },
+    { XML_NAMESPACE_DRAW,           XML_FLOATING_FRAME, XML_TOK_FRAME_FLOATING_FRAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_floating_frame) },
+    { XML_NAMESPACE_DRAW,           XML_APPLET,         XML_TOK_FRAME_APPLET,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_applet) },
+    { XML_NAMESPACE_TABLE,          XML_TABLE,          XML_TOK_FRAME_TABLE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table) },
     XML_TOKEN_MAP_END
 };
 
@@ -298,11 +330,16 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSceneShapeElemTokenMap()
     {
         static const SvXMLTokenMapEntry a3DSceneShapeElemTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           XML_SCENE,      XML_TOK_3DSCENE_3DSCENE     },
-    { XML_NAMESPACE_DR3D,           XML_CUBE,       XML_TOK_3DSCENE_3DCUBE      },
-    { XML_NAMESPACE_DR3D,           XML_SPHERE,     XML_TOK_3DSCENE_3DSPHERE    },
-    { XML_NAMESPACE_DR3D,           XML_ROTATE,     XML_TOK_3DSCENE_3DLATHE     },
-    { XML_NAMESPACE_DR3D,           XML_EXTRUDE,    XML_TOK_3DSCENE_3DEXTRUDE   },
+    { XML_NAMESPACE_DR3D,           XML_SCENE,      XML_TOK_3DSCENE_3DSCENE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_scene) },
+    { XML_NAMESPACE_DR3D,           XML_CUBE,       XML_TOK_3DSCENE_3DCUBE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_cube) },
+    { XML_NAMESPACE_DR3D,           XML_SPHERE,     XML_TOK_3DSCENE_3DSPHERE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_sphere) },
+    { XML_NAMESPACE_DR3D,           XML_ROTATE,     XML_TOK_3DSCENE_3DLATHE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_rotate) },
+    { XML_NAMESPACE_DR3D,           XML_EXTRUDE,    XML_TOK_3DSCENE_3DEXTRUDE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_extrude) },
     XML_TOKEN_MAP_END
 };
 
@@ -318,8 +355,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DObjectAttrTokenMap()
     {
         static const SvXMLTokenMapEntry a3DObjectAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,         XML_TOK_3DOBJECT_DRAWSTYLE_NAME     },
-    { XML_NAMESPACE_DR3D,           XML_TRANSFORM,          XML_TOK_3DOBJECT_TRANSFORM          },
+    { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,         XML_TOK_3DOBJECT_DRAWSTYLE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style_name) },
+    { XML_NAMESPACE_DR3D,           XML_TRANSFORM,          XML_TOK_3DOBJECT_TRANSFORM,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_transform) },
     XML_TOKEN_MAP_END
 };
 
@@ -335,8 +374,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DPolygonBasedAttrTokenMap()
     {
         static const SvXMLTokenMapEntry a3DPolygonBasedAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,            XML_VIEWBOX,            XML_TOK_3DPOLYGONBASED_VIEWBOX      },
-    { XML_NAMESPACE_SVG,            XML_D,                  XML_TOK_3DPOLYGONBASED_D            },
+    { XML_NAMESPACE_SVG,            XML_VIEWBOX,            XML_TOK_3DPOLYGONBASED_VIEWBOX,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_viewBox) },
+    { XML_NAMESPACE_SVG,            XML_D,                  XML_TOK_3DPOLYGONBASED_D,
+        (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_d) },
     XML_TOKEN_MAP_END
 };
 
@@ -352,8 +393,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DCubeObjectAttrTokenMap()
     {
         static const SvXMLTokenMapEntry a3DCubeObjectAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           XML_MIN_EDGE,           XML_TOK_3DCUBEOBJ_MINEDGE   },
-    { XML_NAMESPACE_DR3D,           XML_MAX_EDGE,           XML_TOK_3DCUBEOBJ_MAXEDGE   },
+    { XML_NAMESPACE_DR3D,           XML_MIN_EDGE,           XML_TOK_3DCUBEOBJ_MINEDGE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_min_edge) },
+    { XML_NAMESPACE_DR3D,           XML_MAX_EDGE,           XML_TOK_3DCUBEOBJ_MAXEDGE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_max_edge) },
     XML_TOKEN_MAP_END
 };
 
@@ -369,8 +412,10 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DSphereObjectAttrTokenMap()
     {
         static const SvXMLTokenMapEntry a3DSphereObjectAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,           XML_CENTER,             XML_TOK_3DSPHEREOBJ_CENTER  },
-    { XML_NAMESPACE_DR3D,           XML_SIZE,               XML_TOK_3DSPHEREOBJ_SIZE    },
+    { XML_NAMESPACE_DR3D,           XML_CENTER,             XML_TOK_3DSPHEREOBJ_CENTER,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_center) },
+    { XML_NAMESPACE_DR3D,           XML_SIZE,               XML_TOK_3DSPHEREOBJ_SIZE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_size) },
     XML_TOKEN_MAP_END
 };
 
@@ -386,10 +431,14 @@ const SvXMLTokenMap& XMLShapeImportHelper::Get3DLightAttrTokenMap()
     {
         static const SvXMLTokenMapEntry a3DLightAttrTokenMap[] =
 {
-    { XML_NAMESPACE_DR3D,   XML_DIFFUSE_COLOR,      XML_TOK_3DLIGHT_DIFFUSE_COLOR       },
-    { XML_NAMESPACE_DR3D,   XML_DIRECTION,          XML_TOK_3DLIGHT_DIRECTION           },
-    { XML_NAMESPACE_DR3D,   XML_ENABLED,            XML_TOK_3DLIGHT_ENABLED             },
-    { XML_NAMESPACE_DR3D,   XML_SPECULAR,           XML_TOK_3DLIGHT_SPECULAR            },
+    { XML_NAMESPACE_DR3D,   XML_DIFFUSE_COLOR,      XML_TOK_3DLIGHT_DIFFUSE_COLOR,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_diffuse_color) },
+    { XML_NAMESPACE_DR3D,   XML_DIRECTION,          XML_TOK_3DLIGHT_DIRECTION,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_direction) },
+    { XML_NAMESPACE_DR3D,   XML_ENABLED,            XML_TOK_3DLIGHT_ENABLED,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_enabled) },
+    { XML_NAMESPACE_DR3D,   XML_SPECULAR,           XML_TOK_3DLIGHT_SPECULAR,
+        (FastToken::NAMESPACE | XML_NAMESPACE_DR3D | XML_specular) },
     XML_TOKEN_MAP_END
 };
 
