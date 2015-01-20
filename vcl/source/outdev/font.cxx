@@ -154,6 +154,7 @@ bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFo
     if( mpAlphaVDev )
         mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
 
+    ImplClearFontData(true);
     mpFontCache->Invalidate();
     return true;
 }
@@ -568,7 +569,7 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
     ImplRefreshFontData( bNewFontLists );
 }
 
-void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
+void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
 {
     ImplSVData* pSVData = ImplGetSVData();
 
@@ -591,8 +592,17 @@ void OutputDevice::ImplUpdateAllFontData( bool bNewFontLists )
             }
         }
     }
+}
 
+void OutputDevice::ImplRefreshAllFontData(bool bNewFontLists)
+{
     ImplUpdateFontDataForAllFrames( &OutputDevice::ImplRefreshFontData, bNewFontLists );
+}
+
+void OutputDevice::ImplUpdateAllFontData(bool bNewFontLists)
+{
+    OutputDevice::ImplClearAllFontData(bNewFontLists);
+    OutputDevice::ImplRefreshAllFontData(bNewFontLists);
 }
 
 void OutputDevice::ImplUpdateFontDataForAllFrames( const FontUpdateHandler_t pHdl, const bool bNewFontLists )
@@ -1364,11 +1374,11 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
 {
     static const int FONTCACHE_MAX = 50;
 
-    DBG_ASSERT( (pEntry->mnRefCount > 0), "ImplFontCache::Release() - font refcount underflow" );
+    assert(pEntry->mnRefCount > 0 && "ImplFontCache::Release() - font refcount underflow");
     if( --pEntry->mnRefCount > 0 )
         return;
 
-    if( ++mnRef0Count < FONTCACHE_MAX )
+    if (++mnRef0Count < FONTCACHE_MAX)
         return;
 
     // remove unused entries from font instance cache
@@ -1383,17 +1393,34 @@ void ImplFontCache::Release( ImplFontEntry* pEntry )
         maFontInstanceList.erase( it );
         delete pFontEntry;
         --mnRef0Count;
-        DBG_ASSERT( (mnRef0Count>=0), "ImplFontCache::Release() - refcount0 underflow" );
+        assert(mnRef0Count>=0 && "ImplFontCache::Release() - refcount0 underflow");
 
         if( mpFirstEntry == pFontEntry )
             mpFirstEntry = NULL;
     }
 
-    DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Release() - refcount0 mismatch" );
+    assert(mnRef0Count==0 && "ImplFontCache::Release() - refcount0 mismatch");
+}
+
+int ImplFontCache::CountUnreferencedEntries() const
+{
+    size_t nCount = 0;
+    // count unreferenced entries
+    for (FontInstanceList::const_iterator it = maFontInstanceList.begin();
+         it != maFontInstanceList.end(); ++it)
+    {
+        const ImplFontEntry* pFontEntry = it->second;
+        if (pFontEntry->mnRefCount > 0)
+            continue;
+        ++nCount;
+    }
+    return nCount;
 }
 
 void ImplFontCache::Invalidate()
 {
+    assert(CountUnreferencedEntries() == mnRef0Count);
+
     // delete unreferenced entries
     FontInstanceList::iterator it = maFontInstanceList.begin();
     for(; it != maFontInstanceList.end(); ++it )
@@ -1410,7 +1437,7 @@ void ImplFontCache::Invalidate()
     mpFirstEntry = NULL;
     maFontInstanceList.clear();
 
-    DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Invalidate() - mnRef0Count non-zero" );
+    assert(mnRef0Count==0 && "ImplFontCache::Invalidate() - mnRef0Count non-zero");
 }
 
 void OutputDevice::ImplInitFontList() const
