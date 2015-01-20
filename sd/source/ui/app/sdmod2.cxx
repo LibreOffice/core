@@ -561,7 +561,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Layout
     const SdOptionsLayoutItem* pLayoutItem = NULL;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_LAYOUT,
-                            false, (const SfxPoolItem**) &pLayoutItem ))
+                            false, reinterpret_cast<const SfxPoolItem**>(&pLayoutItem) ))
     {
         pLayoutItem->SetOptions( pOptions );
     }
@@ -605,7 +605,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Contents
     const SdOptionsContentsItem* pContentsItem = NULL;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_CONTENTS,
-                            false, (const SfxPoolItem**) &pContentsItem ))
+                            false, reinterpret_cast<const SfxPoolItem**>(&pContentsItem) ))
     {
         pContentsItem->SetOptions( pOptions );
     }
@@ -613,7 +613,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Misc
     const SdOptionsMiscItem* pMiscItem = NULL;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
-                            false, (const SfxPoolItem**) &pMiscItem ))
+                            false, reinterpret_cast<const SfxPoolItem**>(&pMiscItem) ))
     {
         pMiscItem->SetOptions( pOptions );
         bMiscOptions = true;
@@ -622,7 +622,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Snap
     const SdOptionsSnapItem* pSnapItem = NULL;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
-                            false, (const SfxPoolItem**) &pSnapItem ))
+                            false, reinterpret_cast<const SfxPoolItem**>(&pSnapItem) ))
     {
         pSnapItem->SetOptions( pOptions );
     }
@@ -636,7 +636,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     // Print
     const SdOptionsPrintItem* pPrintItem = NULL;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
-                            false, (const SfxPoolItem**) &pPrintItem ))
+                            false, reinterpret_cast<const SfxPoolItem**>(&pPrintItem) ))
     {
         pPrintItem->SetOptions( pOptions );
 

@@ -602,7 +602,7 @@ void SdPageObjsTLB::AddShapeList (
         SdNavigatorWin* pSdNavigatorWin=NULL;
         sd::DrawDocShell* pSdDrawDocShell = NULL;
         if(pEntry)
-            pWindow=(vcl::Window*)GetParent(pEntry);
+            pWindow=reinterpret_cast<vcl::Window*>(GetParent(pEntry));
         if(pWindow)
             pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
         if( pSdNavigatorWin )
@@ -645,7 +645,7 @@ void SdPageObjsTLB::AddShapeList (
                     SdNavigatorWin* pSdNavigatorWin=NULL;
                     sd::DrawDocShell* pSdDrawDocShell = NULL;
                     if(pNewEntry)
-                        pWindow=(vcl::Window*)GetParent(pNewEntry);
+                        pWindow=reinterpret_cast<vcl::Window*>(GetParent(pNewEntry));
                     if(pWindow)
                         pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
@@ -679,7 +679,7 @@ void SdPageObjsTLB::AddShapeList (
                     SdNavigatorWin* pSdNavigatorWin=NULL;
                     sd::DrawDocShell* pSdDrawDocShell = NULL;
                     if(pNewEntry)
-                        pWindow=(vcl::Window*)GetParent(pNewEntry);
+                        pWindow=reinterpret_cast<vcl::Window*>(GetParent(pNewEntry));
                     if(pWindow)
                         pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
@@ -728,7 +728,7 @@ void SdPageObjsTLB::AddShapeList (
                     SdNavigatorWin* pSdNavigatorWin=NULL;
                     sd::DrawDocShell* pSdDrawDocShell = NULL;
                     if(pNewEntry)
-                        pWindow=(vcl::Window*)GetParent(pNewEntry);
+                        pWindow=reinterpret_cast<vcl::Window*>(GetParent(pNewEntry));
                     if(pWindow)
                         pSdNavigatorWin = static_cast<SdNavigatorWin*>(pWindow);
                     if( pSdNavigatorWin )
@@ -1094,7 +1094,7 @@ void SdPageObjsTLB::KeyInput( const KeyEvent& rKEvt )
             if (!pParentEntry)
                 return;
             OUString  aStr(GetSelectEntry());
-            SdNavigatorWin* pSdNavigatorWin = (SdNavigatorWin*)pParentEntry;
+            SdNavigatorWin* pSdNavigatorWin = reinterpret_cast<SdNavigatorWin*>(pParentEntry);
             sd::DrawDocShell* pSdDrawDocShell = pSdNavigatorWin->GetDrawDocShell(mpDoc);
             if (pSdDrawDocShell)
             {
@@ -1200,7 +1200,7 @@ void SdPageObjsTLB::DoDrag()
         aDDInfo.pSource = this;
         //            aDDInfo.pDDStartEntry = pEntry;
         ::com::sun::star::uno::Sequence<sal_Int8> aSequence (sizeof(SvLBoxDDInfo));
-        memcpy(aSequence.getArray(), (sal_Char*)&aDDInfo, sizeof(SvLBoxDDInfo));
+        memcpy(aSequence.getArray(), &aDDInfo, sizeof(SvLBoxDDInfo));
         ::com::sun::star::uno::Any aTreeListBoxData (aSequence);
 
         // object is destroyed by internal reference mechanism

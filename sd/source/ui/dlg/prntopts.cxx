@@ -131,7 +131,7 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
 {
     const SdOptionsPrintItem* pPrintOpts = NULL;
     if( SfxItemState::SET == rAttrs->GetItemState( ATTR_OPTIONS_PRINT, false,
-                            (const SfxPoolItem**) &pPrintOpts ) )
+                            reinterpret_cast<const SfxPoolItem**>(&pPrintOpts) ) )
     {
         m_pCbxDraw->Check(              pPrintOpts->GetOptionsPrint().IsDraw() );
         m_pCbxNotes->Check(             pPrintOpts->GetOptionsPrint().IsNotes() );

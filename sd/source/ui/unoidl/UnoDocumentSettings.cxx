@@ -417,8 +417,8 @@ throw (UnknownPropertyException, PropertyVetoException,
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
-        SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, (const SfxPoolItem**) &pPrinterOptions) == SfxItemState::SET)
+        SdOptionsPrintItem const * pPrinterOptions = NULL;
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, reinterpret_cast<const SfxPoolItem**>(&pPrinterOptions)) == SfxItemState::SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else
@@ -997,8 +997,8 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::
     SfxPrinter* pPrinter = pDocSh->GetPrinter( false );
     if( pPrinter )
     {
-        SdOptionsPrintItem* pPrinterOptions = NULL;
-        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, (const SfxPoolItem**) &pPrinterOptions) == SfxItemState::SET)
+        SdOptionsPrintItem const * pPrinterOptions = NULL;
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, false, reinterpret_cast<const SfxPoolItem**>(&pPrinterOptions)) == SfxItemState::SET)
             aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
     }
     else

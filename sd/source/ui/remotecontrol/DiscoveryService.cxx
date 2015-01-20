@@ -112,7 +112,7 @@ void DiscoveryService::setupSockets()
     aAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     aAddr.sin_port = htons( PORT_DISCOVERY );
 
-    int rc = bind( mSocket, (sockaddr*) &aAddr, sizeof(sockaddr_in) );
+    int rc = bind( mSocket, reinterpret_cast<sockaddr*>(&aAddr), sizeof(sockaddr_in) );
 
     if (rc)
     {
@@ -151,7 +151,7 @@ void SAL_CALL DiscoveryService::run()
         memset( aBuffer, 0, sizeof(char) * BUFFER_SIZE );
         sockaddr_in aAddr;
         socklen_t aLen = sizeof( aAddr );
-        if(recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, (sockaddr*) &aAddr, &aLen ) > 0)
+        if(recvfrom( mSocket, aBuffer, BUFFER_SIZE, 0, reinterpret_cast<sockaddr*>(&aAddr), &aLen ) > 0)
         {
             OString aString( aBuffer, strlen( "LOREMOTE_SEARCH" ) );
             if ( aString == "LOREMOTE_SEARCH" )
@@ -161,7 +161,7 @@ void SAL_CALL DiscoveryService::run()
                                               osl::SocketAddr::getLocalHostname(), RTL_TEXTENCODING_UTF8 ) )
                     .append( "\n\n" );
                 if ( sendto( mSocket, aStringBuffer.getStr(),
-                             aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
+                             aStringBuffer.getLength(), 0, reinterpret_cast<sockaddr*>(&aAddr),
                              sizeof(aAddr) ) <= 0 )
                 {
                     // Write error or closed socket -- we are done.

@@ -395,7 +395,7 @@ bluezCreateAttachListeningSocket( GMainContext *pContext, GPollFD *pSocketFD )
     aAddr.rc_channel = 5;
 
     int a;
-    if ( ( a = bind( nSocket, (sockaddr*) &aAddr, sizeof(aAddr) ) ) < 0 ) {
+    if ( ( a = bind( nSocket, reinterpret_cast<sockaddr*>(&aAddr), sizeof(aAddr) ) ) < 0 ) {
         SAL_WARN( "sdremote.bluetooth", "bind failed with error" << a );
         close( nSocket );
         return;
@@ -1297,7 +1297,7 @@ void SAL_CALL BluetoothServer::run()
 
             int nClient;
             SAL_INFO( "sdremote.bluetooth", "performing accept" );
-            if ( ( nClient = accept( aSocketFD.fd, (sockaddr*) &aRemoteAddr, &aRemoteAddrLen)) < 0 &&
+            if ( ( nClient = accept( aSocketFD.fd, reinterpret_cast<sockaddr*>(&aRemoteAddr), &aRemoteAddrLen)) < 0 &&
                  errno != EAGAIN )
             {
                 SAL_WARN( "sdremote.bluetooth", "accept failed with errno " << errno );

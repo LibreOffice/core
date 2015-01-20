@@ -154,7 +154,7 @@ void SdDocPreviewWin::Paint( const Rectangle& rRect )
             ? ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR );
 
-        ImpPaint( pMetaFile, (VirtualDevice*)this );
+        ImpPaint( pMetaFile, this );
     }
     else
     {

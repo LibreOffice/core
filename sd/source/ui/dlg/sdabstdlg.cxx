@@ -44,8 +44,8 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
     static ::osl::Module aDialogLibrary;
     static const OUString sLibName(SDUI_DLL_NAME);
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
-        fp = ( SdAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" );
+        fp = reinterpret_cast<SdAbstractDialogFactory* (SAL_CALL*)()>(
+            aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" ));
 #else
     fp = SdCreateDialogFactory();
 #endif

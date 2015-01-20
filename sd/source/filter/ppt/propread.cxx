@@ -103,7 +103,7 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                         nItemSize >>= 1;
                         if ( nItemSize > 1 )
                         {
-                            sal_Unicode* pWString = (sal_Unicode*)pString;
+                            sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
                             for ( i = 0; i < nItemSize; i++ )
                                 ReadUInt16( pWString[ i ] );
                             rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
@@ -263,7 +263,7 @@ bool Section::GetDictionary( Dictionary& rDict )
     if ( iter != maEntries.end() )
     {
         sal_uInt32 nDictCount, nId, nSize, nPos;
-        SvMemoryStream aStream( (sal_Int8*)iter->mpBuf, iter->mnSize, StreamMode::READ );
+        SvMemoryStream aStream( iter->mpBuf, iter->mnSize, StreamMode::READ );
         aStream.Seek( STREAM_SEEK_TO_BEGIN );
         aStream.ReadUInt32( nDictCount );
         for ( sal_uInt32 i = 0; i < nDictCount; i++ )
@@ -281,7 +281,7 @@ bool Section::GetDictionary( Dictionary& rDict )
                     {
                         nSize >>= 1;
                         aStream.Seek( nPos );
-                        sal_Unicode* pWString = (sal_Unicode*)pString;
+                        sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
                         for ( i = 0; i < nSize; i++ )
                             aStream.ReadUInt16( pWString[ i ] );
                         aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));

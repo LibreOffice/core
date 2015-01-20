@@ -580,7 +580,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
         }
     }
 
-    uno::Reference< text::XText >  xFound;
+    uno::Reference< text::XTextRange >  xFound;
     ESelection aSel;
 
     uno::Reference< text::XTextRange > xRangeRef( xText, uno::UNO_QUERY );
@@ -608,7 +608,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
             if(pParent)
             {
                 pRange = new SvxUnoTextRange( *pParent );
-                xFound = (text::XText*)pRange;
+                xFound = pRange;
                 pRange->SetSelection(aSelection);
 
             }
@@ -622,7 +622,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     delete[] pConvertPos;
     delete[] pConvertPara;
 
-    return uno::Reference< text::XTextRange > ( xFound, uno::UNO_QUERY );
+    return xFound;
 }
 
 bool SdUnoSearchReplaceShape::Search( const OUString& rText, sal_Int32& nStartPos, sal_Int32& nEndPos, SdUnoSearchReplaceDescriptor* pDescr ) throw()
