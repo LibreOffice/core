@@ -69,14 +69,6 @@ void OpenGLX11CairoTextRender::drawSurface(cairo_t* cr)
 
     SalTwoRect aRect(0, 0, nWidth, nHeight,
             aClipRect.Left(), aClipRect.Top(), nWidth, nHeight);
-    aRect.mnSrcX = 0;
-    aRect.mnSrcY = 0;
-    aRect.mnSrcWidth = nWidth;
-    aRect.mnSrcHeight = nHeight;
-    aRect.mnDestX = aClipRect.Left();
-    aRect.mnDestY = aClipRect.Top();
-    aRect.mnDestWidth = nWidth;
-    aRect.mnDestHeight = nHeight;
 
     // Cairo surface data is ARGB with premultiplied alpha and is Y-inverted
     OpenGLTexture aTexture( nWidth, nHeight, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, pSrc );
