@@ -278,7 +278,7 @@ protected:
         behaviour.
         @attention  This method requires locked mutex's and a living object.
         @return  <TRUE/>, if the object is really showing. */
-    virtual bool implIsShowing();
+    bool implIsShowing();
 
     /** Derived classes return the bounding box relative to the parent window.
         @attention  This method requires locked mutex's and a living object.

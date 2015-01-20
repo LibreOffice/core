@@ -126,7 +126,7 @@ public:
 
     void HandleDrawModeChange (void);
 
-    virtual void Resize (void);
+    void Resize (void);
     virtual void CompleteRedraw (
         OutputDevice* pDevice,
         const ::vcl::Region& rPaintArea,

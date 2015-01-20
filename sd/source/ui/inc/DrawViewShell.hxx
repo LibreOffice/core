@@ -140,8 +140,8 @@ public:
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
-    virtual void    AddWindow(::sd::Window* pWin);
-    virtual void    RemoveWindow(::sd::Window* pWin);
+    void    AddWindow(::sd::Window* pWin);
+    void    RemoveWindow(::sd::Window* pWin);
 
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
@@ -161,8 +161,8 @@ public:
     virtual void    Deactivate(bool IsMDIActivate) SAL_OVERRIDE;
     virtual void    UIActivating( SfxInPlaceClient* ) SAL_OVERRIDE;
     virtual void    UIDeactivated( SfxInPlaceClient* ) SAL_OVERRIDE;
-    virtual OUString GetSelectionText( bool bCompleteWords = false );
-    virtual bool    HasSelection( bool bText = true ) const;
+    OUString GetSelectionText( bool bCompleteWords = false );
+    bool    HasSelection( bool bText = true ) const;
 
     //If we are editing an PRESOBJ_OUTLINE return the Outliner and fill rSel
     //with the current selection
@@ -325,7 +325,7 @@ public:
             returned value is independent of whether the layer modus is
             currently active and the tab control is visible.
     */
-    virtual int GetTabLayerCount (void) const;
+    int GetTabLayerCount (void) const;
 
     /** Return the numerical id of the currently active layer as seen by the
         layer tab control.
@@ -334,7 +334,7 @@ public:
             number of layers as returned by the
             <member>GetTabLayerCount</member> method (exclusive).
     */
-    virtual int GetActiveTabLayerIndex (void) const;
+    int GetActiveTabLayerIndex (void) const;
 
     /** Set the active layer at the layer tab control and update the control
         accordingly to reflect the change on screen.
@@ -344,7 +344,7 @@ public:
             <member>GetTabLayerCount</member> method (exclusive).  Note that
             Invalid values are ignored.  No excpetion is thrown in that case.
     */
-    virtual void SetActiveTabLayerIndex (int nId);
+    void SetActiveTabLayerIndex (int nId);
 
     /** Return a pointer to the tab control for pages.
     */

@@ -174,7 +174,7 @@ namespace connectivity
             Connection(FirebirdDriver* _pDriver);
             virtual ~Connection();
 
-            virtual void construct( const ::rtl::OUString& url,
+            void construct( const ::rtl::OUString& url,
                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info)
             throw(css::sdbc::SQLException,
                   css::uno::RuntimeException,
@@ -211,7 +211,7 @@ namespace connectivity
              * Create and/or connect to the sdbcx Catalog. This is completely
              * unrelated to the SQL "Catalog".
              */
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
                 createCatalog();
 
             // OComponentHelper

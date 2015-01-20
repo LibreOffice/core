@@ -111,9 +111,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XAccessibleComponent
-    virtual bool SAL_CALL contains (const ::com::sun::star::awt::Point& aPoint)
+    bool SAL_CALL contains (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleAt (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -138,7 +138,7 @@ public:
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     bool    IsInDropDown();
     void        HandleDropOpen();
-    virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent, bool b_IsDropDownList);
+    void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent, bool b_IsDropDownList);
     void UpdateSelection_Acc (const ::rtl::OUString& sTextOfSelectedItem, bool b_IsDropDownList);
     void UpdateSelection_Impl_Acc (bool b_IsDropDownList);
 
@@ -179,7 +179,7 @@ protected:
     /** Create the specified child and insert it into the list of children.
         Sets the child's states.
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
         CreateChild (sal_Int32 i);
 
     /** Call this method when the item list has been changed, i.e. items
@@ -191,7 +191,7 @@ protected:
             Index of the new or removed item.  A value of -1 indicates that
             the whole list has been cleared.
     */
-    virtual void HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex);
+    void HandleChangedItemList (bool bItemInserted, sal_Int32 nIndex);
 
     // VCLXAccessibleComponent
     virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

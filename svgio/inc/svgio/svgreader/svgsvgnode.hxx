@@ -60,8 +60,8 @@ namespace svgio
 
             /// Seeks width and height of viewport, which is current before the new viewport is set.
             // needed for percentage unit in x, y, width or height
-            virtual void seekReferenceWidth(double& fWidth, bool& bHasFound) const;
-            virtual void seekReferenceHeight(double& fHeight, bool& bHasFound) const;
+            void seekReferenceWidth(double& fWidth, bool& bHasFound) const;
+            void seekReferenceHeight(double& fHeight, bool& bHasFound) const;
 
             /// InfoProvider support for % values in children
             // The returned 'CurrentViewPort' is the viewport as it is set by this svg element

@@ -80,11 +80,11 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
-    virtual sal_Int16 GetMin() const;
+    sal_Int16 GetMin() const;
 
-    virtual sal_Int16 GetMax() const;
+    sal_Int16 GetMax() const;
 
-    virtual SfxFieldUnit GetUnit() const;
+    SfxFieldUnit GetUnit() const;
 
     sal_Int16 GetValue() const { return m_nValue; }
 

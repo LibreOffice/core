@@ -237,9 +237,6 @@ namespace dbaccess
         virtual void SAL_CALL saveObject(  ) throw (ObjectSaveVetoException, Exception, RuntimeException, std::exception) SAL_OVERRIDE
         {
         }
-        virtual void SAL_CALL onShowWindow( bool /*bVisible*/ ) throw (RuntimeException)
-        {
-        }
         // XComponentSupplier
         virtual Reference< util::XCloseable > SAL_CALL getComponent(  ) throw (RuntimeException, std::exception) SAL_OVERRIDE
         {

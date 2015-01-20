@@ -93,7 +93,7 @@ public:
         @param  _rCode  the keycode
         @return <TRUE/> if the keycode is handled otherwise <FALSE/>
     */
-    virtual bool    handleKeyEvent(const KeyEvent& _rEvent);
+    bool    handleKeyEvent(const KeyEvent& _rEvent);
 
     /** returns <TRUE/> if the mouse event is over an existing object
     *

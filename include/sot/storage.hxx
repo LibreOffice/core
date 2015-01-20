@@ -75,8 +75,8 @@ public:
     virtual void        SetSize( sal_uInt64 nNewSize ) SAL_OVERRIDE;
     sal_uInt32              GetSize() const;
     bool                CopyTo( SotStorageStream * pDestStm );
-    virtual bool        Commit();
-    virtual bool        Revert();
+    bool        Commit();
+    bool        Revert();
     bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
     virtual sal_uInt64 remainingSize() SAL_OVERRIDE;
 };
@@ -137,9 +137,9 @@ public:
     static bool         IsStorageFile( const OUString & rFileName );
     static bool         IsStorageFile( SvStream* pStream );
 
-    virtual const OUString& GetName() const;
+    const OUString& GetName() const;
 
-    virtual bool        Validate();
+    bool        Validate();
 
     const OString&      GetKey() const { return m_aKey;}
 
@@ -159,29 +159,29 @@ public:
                             if( m_nError == SVSTREAM_OK )
                                 m_nError = nErrorCode;
                         }
-    virtual void        ResetError();
+    void        ResetError();
 
     bool                IsRoot() const              { return m_bIsRoot; }
     void                SignAsRoot( bool b = true ) { m_bIsRoot = b; }
     void                SetDeleteStream( bool bDelete ) { m_bDelStm = bDelete; }
 
                         // own data sector
-    virtual void        SetClass( const SvGlobalName & rClass,
+    void        SetClass( const SvGlobalName & rClass,
                                   sal_uLong bOriginalClipFormat,
                                   const OUString & rUserTypeName );
-    virtual void        SetConvertClass( const SvGlobalName & rConvertClass,
+    void        SetConvertClass( const SvGlobalName & rConvertClass,
                                          sal_uLong bOriginalClipFormat,
                                          const OUString & rUserTypeName );
-    virtual SvGlobalName GetClassName(); // type of data in the storage
-    virtual sal_uLong   GetFormat();
-    virtual OUString    GetUserName();
-    virtual bool        ShouldConvert();
+    SvGlobalName GetClassName(); // type of data in the storage
+    sal_uLong   GetFormat();
+    OUString    GetUserName();
+    bool        ShouldConvert();
 
                         // list of all elements
-    virtual void        FillInfoList( SvStorageInfoList * ) const;
-    virtual bool        CopyTo( SotStorage * pDestStg );
-    virtual bool        Commit();
-    virtual bool        Revert();
+    void        FillInfoList( SvStorageInfoList * ) const;
+    bool        CopyTo( SotStorage * pDestStg );
+    bool        Commit();
+    bool        Revert();
 
                         // create stream with connection to Storage,
                         // more or less a Parent-Child relationship
@@ -192,17 +192,17 @@ public:
                                         StreamMode = STREAM_STD_READWRITE,
                                         bool transacted = true );
                         // query whether Storage or Stream
-    virtual bool        IsStream( const OUString & rEleName ) const;
-    virtual bool        IsStorage( const OUString & rEleName ) const;
-    virtual bool        IsContained( const OUString & rEleName ) const;
+    bool        IsStream( const OUString & rEleName ) const;
+    bool        IsStorage( const OUString & rEleName ) const;
+    bool        IsContained( const OUString & rEleName ) const;
                         // remove element
-    virtual bool        Remove( const OUString & rEleName );
+    bool        Remove( const OUString & rEleName );
                         // change element's name
-    virtual bool        Rename( const OUString & rEleName,
+    bool        Rename( const OUString & rEleName,
                                 const OUString & rNewName );
-    virtual bool        CopyTo( const OUString & rEleName, SotStorage * pDest,
+    bool        CopyTo( const OUString & rEleName, SotStorage * pDest,
                                 const OUString & rNewName );
-    virtual bool        MoveTo( const OUString & rEleName, SotStorage * pDest,
+    bool        MoveTo( const OUString & rEleName, SotStorage * pDest,
                                 const OUString & rNewName );
 
     bool                IsOLEStorage() const;

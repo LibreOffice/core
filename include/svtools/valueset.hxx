@@ -303,7 +303,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     virtual void    Select();
-    virtual void    DoubleClick();
+    void    DoubleClick();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     void            InsertItem( sal_uInt16 nItemId, const Image& rImage,

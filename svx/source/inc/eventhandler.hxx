@@ -81,7 +81,7 @@ namespace sdr
             virtual ~EventHandler();
 
             // Trigger and consume the events
-            virtual void ExecuteEvents();
+            void ExecuteEvents();
 
             bool IsEmpty() const;
         };

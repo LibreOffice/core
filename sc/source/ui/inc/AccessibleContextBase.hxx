@@ -79,7 +79,7 @@ protected:
     virtual ~ScAccessibleContextBase(void);
 public:
 
-    virtual bool SAL_CALL isShowing(  )
+    bool SAL_CALL isShowing(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual bool SAL_CALL isVisible()
@@ -292,7 +292,7 @@ protected:
 
     bool IsDefunc() const { return rBHelper.bDisposed; }
 
-    virtual void IsObjectValid() const
+    void IsObjectValid() const
         throw (::com::sun::star::lang::DisposedException);
 
     /// Use this method to set initial Name without notification

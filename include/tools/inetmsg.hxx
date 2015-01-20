@@ -423,7 +423,7 @@ public:
 
     bool HeaderParsed() const { return bHeaderParsed; }
 
-    virtual INetMIMEMessage* CreateMessage (
+    INetMIMEMessage* CreateMessage (
         const INetMIMEMessage& rMsg) const;
 
     using INetRFC822Message::SetHeaderField;

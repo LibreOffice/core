@@ -963,8 +963,8 @@ protected:
                             const OUString& rSysFileName );
 
     virtual bool        implIsValid() const SAL_OVERRIDE;
-    virtual const OUString* implGetOption( const OUString& rKey ) const;
-    virtual NameListRef implGetNameList( const OUString& rListName ) const;
+    const OUString* implGetOption( const OUString& rKey ) const;
+    NameListRef implGetNameList( const OUString& rListName ) const;
 
 private:
     typedef ::boost::shared_ptr< SharedConfigData > SharedConfigDataRef;
@@ -1734,7 +1734,7 @@ public:
 
 protected:
     virtual void        implDumpText( TextInputStream& rTextStrm ) SAL_OVERRIDE;
-    virtual void        implDumpLine( const OUString& rLine, sal_uInt32 nLine );
+    void        implDumpLine( const OUString& rLine, sal_uInt32 nLine );
 };
 
 

@@ -229,10 +229,10 @@ protected:
     virtual XMLTextParagraphExport* CreateTextParagraphExport();
     virtual XMLShapeExport* CreateShapeExport();
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
-    virtual SchXMLExportHelper* CreateChartExport();
+    SchXMLExportHelper* CreateChartExport();
     virtual XMLPageExport* CreatePageExport();
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
-    virtual xmloff::OFormLayerXMLExport* CreateFormExport();
+    xmloff::OFormLayerXMLExport* CreateFormExport();
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 

@@ -91,7 +91,7 @@ class QueryTokenizer : public std::unordered_map< OUString                    ,
         /** @short  can be used to check if analyzing of given query
                     was successfully or not.
          */
-        virtual bool valid() const;
+        bool valid() const;
 };
 
     } // namespace config

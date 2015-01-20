@@ -3894,7 +3894,7 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 // solely transmits several events to an general AllListener
 class BasicAllListener_Impl : public BasicAllListenerHelper
 {
-    virtual void firing_impl(const AllEventObject& Event, Any* pRet);
+    void firing_impl(const AllEventObject& Event, Any* pRet);
 
 public:
     SbxObjectRef    xSbxObj;

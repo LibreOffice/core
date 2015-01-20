@@ -787,10 +787,10 @@ protected:
     virtual void ExportDocument_Impl() = 0;
 
     /// Get the next position in the text node to output
-    virtual sal_Int32 GetNextPos( SwWW8AttrIter* pAttrIter, const SwTxtNode& rNode, sal_Int32 nAktPos );
+    sal_Int32 GetNextPos( SwWW8AttrIter* pAttrIter, const SwTxtNode& rNode, sal_Int32 nAktPos );
 
     /// Update the information for GetNextPos().
-    virtual void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos, sal_Int32 nEnd );
+    void UpdatePosition( SwWW8AttrIter* pAttrIter, sal_Int32 nAktPos, sal_Int32 nEnd );
 
     /// Output SwTxtNode
     virtual void OutputTextNode( const SwTxtNode& );
@@ -819,7 +819,7 @@ protected:
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt) = 0;
 
     /// Output SwStartNode
-    virtual void OutputStartNode( const SwStartNode& );
+    void OutputStartNode( const SwStartNode& );
 
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& );
@@ -833,7 +833,7 @@ protected:
     virtual void OutputLinkedOLE( const OUString& ) = 0;
 
     /// Output SwSectionNode
-    virtual void OutputSectionNode( const SwSectionNode& );
+    void OutputSectionNode( const SwSectionNode& );
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum ) = 0;
 

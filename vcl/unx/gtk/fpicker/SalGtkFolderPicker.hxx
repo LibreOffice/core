@@ -66,7 +66,7 @@ class SalGtkFolderPicker :
 
         // XEventListener
 
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
+        void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);
 
     private:

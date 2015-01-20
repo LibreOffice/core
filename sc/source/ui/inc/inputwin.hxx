@@ -253,7 +253,7 @@ public:
 
     void            SetFormulaMode( bool bSet );
 
-    virtual bool            IsInputActive();
+    bool            IsInputActive();
     EditView*       GetEditView();
 
     void            TextGrabFocus();

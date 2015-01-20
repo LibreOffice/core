@@ -740,8 +740,8 @@ public:
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
 
-    virtual XPropertyListRef GetPropertyList( XPropertyListType t );
-    virtual void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
+    XPropertyListRef GetPropertyList( XPropertyListType t );
+    void             SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
 
     void    SetColorList( XColorListRef pColList );
     XColorListRef GetColorList() { return pColorList; }
@@ -757,22 +757,22 @@ public:
 
     virtual void FillUserData() SAL_OVERRIDE;
 
-    virtual bool IsModified()
+    bool IsModified()
     {
         return *pnColorListState & CT_MODIFIED;
     }
-    virtual void SetModified(bool bIsModified)
+    void SetModified(bool bIsModified)
     {
         if (bIsModified)
             *pnColorListState |= CT_MODIFIED;
         else
             *pnColorListState &= ~CT_MODIFIED;
     }
-    virtual void AddState(ChangeType nState)
+    void AddState(ChangeType nState)
     {
         *pnColorListState |= nState;
     }
-    virtual void Update(bool bLoaded);
+    void Update(bool bLoaded);
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_CUITABAREA_HXX

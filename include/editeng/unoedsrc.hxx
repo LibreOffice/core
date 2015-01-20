@@ -210,7 +210,7 @@ public:
      */
     virtual EBulletInfo     GetBulletInfo( sal_Int32 nPara ) const = 0;
 
-    virtual OUString        GetNumStr(sal_uInt16) const { return OUString(); }
+    OUString        GetNumStr(sal_uInt16) const { return OUString(); }
     virtual void            SetUpdateModeForAcc(bool) {}
     virtual bool            GetUpdateModeForAcc() const { return true; }
 
@@ -536,9 +536,9 @@ public:
      */
     virtual bool Paste() = 0;
 
-    virtual bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return false; };
-    virtual bool IsShapeParaFocusable( ) { return true; };
-    virtual bool BreakParaWrongList(sal_Int32, sal_Int32&, sal_Int32&, sal_Int32){ return false; };
+    bool IsWrongSpelledWordAtPos( sal_Int32, sal_Int32 ) { return false; };
+    bool IsShapeParaFocusable( ) { return true; };
+    bool BreakParaWrongList(sal_Int32, sal_Int32&, sal_Int32&, sal_Int32){ return false; };
 };
 
 #endif

@@ -178,10 +178,10 @@ public:
 
     // primarily used internally
     // returns the printer queue names
-    virtual const std::list< SystemPrintQueue >& getSystemPrintQueues();
+    const std::list< SystemPrintQueue >& getSystemPrintQueues();
 
     // similar but returnse whole commandlines
-    virtual void getSystemPrintCommands( std::list< OUString >& rCommands );
+    void getSystemPrintCommands( std::list< OUString >& rCommands );
 
     // abstract print command
     // returns a stdio FILE* that a postscript file may be written to

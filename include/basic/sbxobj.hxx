@@ -67,18 +67,18 @@ public:
     // Execution of DDE-Commands
     SbxVariable* Execute( const OUString& );
     // Manage elements
-    virtual bool GetAll( SbxClassType ) { return true; }
+    bool GetAll( SbxClassType ) { return true; }
     SbxVariable* Make( const OUString&, SbxClassType, SbxDataType, bool bIsRuntimeFunction = false );
-    virtual SbxObject* MakeObject( const OUString&, const OUString& );
+    SbxObject* MakeObject( const OUString&, const OUString& );
     virtual void Insert( SbxVariable* );
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
     // without Broadcasts, only used in SO2/auto.cxx
     void QuickInsert( SbxVariable* );
-    virtual void Remove( const OUString&, SbxClassType );
+    void Remove( const OUString&, SbxClassType );
     virtual void Remove( SbxVariable* );
 
     // Macro-Recording
-    virtual OUString GenerateSource( const OUString &rLinePrefix,
+    OUString GenerateSource( const OUString &rLinePrefix,
                                      const SbxObject *pRelativeTo );
     // Direct access on arrays
     SbxArray* GetMethods()      { return pMethods;  }

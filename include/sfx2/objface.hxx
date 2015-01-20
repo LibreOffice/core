@@ -58,7 +58,7 @@ public:
 
     const SfxSlot*          GetRealSlot( const SfxSlot * ) const;
     const SfxSlot*          GetRealSlot( sal_uInt16 nSlotId ) const;
-    virtual const SfxSlot*  GetSlot( sal_uInt16 nSlotId ) const;
+    const SfxSlot*  GetSlot( sal_uInt16 nSlotId ) const;
     const SfxSlot*          GetSlot( const OUString& rCommand ) const;
 
     const char*             GetClassName() const { return pName; }

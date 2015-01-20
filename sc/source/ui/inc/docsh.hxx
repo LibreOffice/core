@@ -183,8 +183,8 @@ public:
 #if ENABLE_TELEPATHY
     SAL_DLLPRIVATE ScCollaboration* GetCollaboration();
 #endif
-    virtual void    Activate();
-    virtual void    Deactivate();
+    void    Activate();
+    void    Deactivate();
 
     virtual ::svl::IUndoManager*
                     GetUndoManager() SAL_OVERRIDE;

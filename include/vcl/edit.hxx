@@ -223,8 +223,8 @@ public:
     virtual void        SetText( const OUString& rStr, const Selection& rNewSelection );
     virtual OUString    GetText() const SAL_OVERRIDE;
 
-    virtual void        SetPlaceholderText( const OUString& rStr );
-    virtual OUString    GetPlaceholderText() const;
+    void        SetPlaceholderText( const OUString& rStr );
+    OUString    GetPlaceholderText() const;
 
     void                SaveValue() { maSaveValue = GetText(); }
     const OUString&     GetSavedValue() const { return maSaveValue; }
@@ -244,7 +244,7 @@ public:
     virtual Size        CalcMinimumSizeForText(const OUString &rString) const;
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
     virtual Size        CalcSize(sal_Int32 nChars) const;
-    virtual sal_Int32   GetMaxVisChars() const;
+    sal_Int32   GetMaxVisChars() const;
 
     sal_Int32           GetCharPos( const Point& rWindowPos ) const;
 

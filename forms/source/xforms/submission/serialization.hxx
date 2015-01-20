@@ -49,7 +49,7 @@ public:
     /**
     sets the XObject that is to serialized
     */
-    virtual void setSource(const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
+    void setSource(const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     {
         m_aFragment = aFragment;
     }

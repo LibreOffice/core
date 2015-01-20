@@ -231,7 +231,7 @@ protected:
         @throws                         NoSuchElementException if there is no object with the given name.
         @see    createObject
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
                 implGetByName(const OUString& _rName, bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.

@@ -78,7 +78,7 @@ protected:
 public:
 
     virtual ~DXFBasicEntity();
-    virtual void Read(DXFGroupReader & rDGR);
+    void Read(DXFGroupReader & rDGR);
         // Reads a parameter till the next 0-group
 
 protected:

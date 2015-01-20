@@ -223,7 +223,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
                         renderDiagramToGraphic( ::oox::core::XmlFilterBase& rFilterBase );
 
-    virtual OUString finalizeServiceName(
+    OUString finalizeServiceName(
                             ::oox::core::XmlFilterBase& rFilter,
                             const OUString& rServiceName,
                             const ::com::sun::star::awt::Rectangle& rShapeRect );

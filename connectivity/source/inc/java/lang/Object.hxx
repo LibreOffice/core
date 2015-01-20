@@ -97,7 +97,7 @@ namespace connectivity
         void clearObject(JNIEnv& rEnv);
         void clearObject();
 
-        virtual OUString toString() const;
+        OUString toString() const;
 
         static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
         static void ThrowLoggedSQLException(

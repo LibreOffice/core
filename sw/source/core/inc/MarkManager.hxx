@@ -68,7 +68,7 @@ namespace sw {
             virtual const_iterator_t getAllMarksEnd() const SAL_OVERRIDE;
             virtual sal_Int32 getAllMarksCount() const SAL_OVERRIDE;
             virtual const_iterator_t findMark(const OUString& rName) const SAL_OVERRIDE;
-            virtual bool hasMark(const OUString& rName) const;
+            bool hasMark(const OUString& rName) const;
 
             // bookmarks
             virtual const_iterator_t getBookmarksBegin() const SAL_OVERRIDE;

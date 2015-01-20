@@ -49,13 +49,13 @@ class SalGtkPicker
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pDialog;
     protected:
-        virtual void SAL_CALL implsetTitle( const OUString& aTitle )
+        void SAL_CALL implsetTitle( const OUString& aTitle )
             throw( ::com::sun::star::uno::RuntimeException );
 
-        virtual void SAL_CALL implsetDisplayDirectory( const OUString& rDirectory )
+        void SAL_CALL implsetDisplayDirectory( const OUString& rDirectory )
             throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::uno::RuntimeException );
 
-        virtual OUString SAL_CALL implgetDisplayDirectory(  )
+        OUString SAL_CALL implgetDisplayDirectory(  )
             throw( com::sun::star::uno::RuntimeException );
         OUString uritounicode(const gchar *pIn);
         OString unicodetouri(const OUString &rURL);

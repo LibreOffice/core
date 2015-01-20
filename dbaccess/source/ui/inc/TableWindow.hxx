@@ -82,7 +82,7 @@ namespace dbaui
         virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
         virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        virtual OTableWindowListBox*    CreateListBox();
+        OTableWindowListBox*    CreateListBox();
             // called at FIRST Init
         bool FillListBox();
             // called at EACH Init

@@ -248,7 +248,6 @@ public:
     virtual ~SdPathHdl();
     virtual void CreateB2dIAObject() SAL_OVERRIDE;
     virtual bool IsFocusHdl() const SAL_OVERRIDE;
-    virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const SAL_OVERRIDE;
 
 private:
@@ -313,27 +312,6 @@ bool SdPathHdl::IsFocusHdl() const
 bool SdPathHdl::isMarkable() const
 {
     return false;
-}
-
-Pointer SdPathHdl::GetSdrDragPointer() const
-{
-    PointerStyle eStyle = POINTER_NOTALLOWED;
-    if( mxTag.is() )
-    {
-        if( mxTag->isSelected() )
-        {
-            if( !mxTag->getView().IsFrameDragSingles() && mxTag->getView().IsInsObjPointMode() )
-                eStyle = POINTER_CROSS;
-            else
-                eStyle = POINTER_MOVE;
-        }
-        else
-        {
-            eStyle = POINTER_ARROW;
-
-        }
-    }
-    return Pointer( eStyle );
 }
 
 MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, const CustomAnimationEffectPtr& pEffect )

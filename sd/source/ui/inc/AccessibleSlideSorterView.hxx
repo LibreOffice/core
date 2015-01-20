@@ -285,7 +285,7 @@ public:
         getSupportedServiceNames (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SwitchViewActivated (void);
+    void SwitchViewActivated (void);
 private:
     class Implementation;
     ::std::unique_ptr<Implementation> mpImpl;

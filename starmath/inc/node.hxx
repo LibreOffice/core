@@ -147,7 +147,7 @@ public:
             void SetSize(const Fraction &rScale);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
-    virtual void PrepareAttributes();
+    void PrepareAttributes();
 
     sal_uInt16 FindIndex() const;
 
@@ -161,7 +161,7 @@ public:
     const SmRect & GetRect() const { return *this; }
           SmRect & GetRect()       { return *this; }
 
-    virtual void Move(const Point &rPosition);
+    void Move(const Point &rPosition);
     void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(OUString &rText);

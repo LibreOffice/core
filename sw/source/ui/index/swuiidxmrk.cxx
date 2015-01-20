@@ -566,12 +566,8 @@ class SwNewUserIdxDlg : public ModalDialog
                 m_pNameED->GrabFocus();
             }
 
-    virtual void    Apply();
     OUString  GetName(){return m_pNameED->GetText();}
 };
-void SwNewUserIdxDlg::Apply()
-{
-}
 
 IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 {

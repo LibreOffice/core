@@ -51,7 +51,7 @@ public:
     static VCoordinateSystem* createCoordinateSystem( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
 
-    virtual void initPlottingTargets(
+    void initPlottingTargets(
                   const ::com::sun::star::uno::Reference<
                         ::com::sun::star::drawing::XShapes >& xLogicTarget
                 , const ::com::sun::star::uno::Reference<
@@ -64,7 +64,7 @@ public:
 
     void setParticle( const OUString& rCooSysParticle );
 
-    virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
+    void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
     ::com::sun::star::drawing::HomogenMatrix getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
 
     //better performance for big data
@@ -109,18 +109,18 @@ public:
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();
 
-    virtual void createMaximumAxesLabels();
-    virtual void createAxesLabels();
-    virtual void updatePositions();
-    virtual void createAxesShapes();
+    void createMaximumAxesLabels();
+    void createAxesLabels();
+    void updatePositions();
+    void createAxesShapes();
 
     virtual void createGridShapes();
 
-    virtual bool getPropertySwapXAndYAxis() const;
+    bool getPropertySwapXAndYAxis() const;
 
     sal_Int32 getMaximumAxisIndexByDimension( sal_Int32 nDimensionIndex ) const;
 
-    virtual bool needSeriesNamesForAxis() const;
+    bool needSeriesNamesForAxis() const;
     void setSeriesNamesForAxis( const ::com::sun::star::uno::Sequence< OUString >& rSeriesNames );
 
 protected: //methods

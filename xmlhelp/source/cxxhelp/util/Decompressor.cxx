@@ -26,22 +26,11 @@ using namespace xmlsearch::util;
 const sal_Int32 Decompressor::BitsInByte = 8;
 const sal_Int32 Decompressor::NBits = 32;
 
-inline sal_Int32 getInteger_( const sal_Int8* v )
-{
-    return (((((( (v[0]&0xFF) ) << 8 )
-                | (v[1]&0xFF) ) << 8 )
-                | (v[2]&0xFF) ) << 8 )
-                | (v[3]&0xFF);
-}
-
 sal_Int32 StreamDecompressor::getNextByte()
 {
   sal_Int8 a[4];
   a[0] = a[1] = a[2] = 0;
-  if( in_->readBytes( &a[3],1 ) != -1 )
-    return getInteger_( a );
-  else
-    return -1;
+  return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

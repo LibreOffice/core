@@ -39,7 +39,7 @@ private:
     sal_uInt16          m_nBorderPageId;
 
 protected:
-    virtual void Apply();
+    void Apply();
 
 public:
     SvxFormatCellsDialog( vcl::Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel );

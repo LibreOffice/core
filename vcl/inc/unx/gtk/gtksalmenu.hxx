@@ -65,7 +65,7 @@ public:
     virtual void                RemoveItem( unsigned nPos ) SAL_OVERRIDE;
     virtual void                SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) SAL_OVERRIDE;
     virtual void                SetFrame( const SalFrame* pFrame ) SAL_OVERRIDE;
-    virtual const GtkSalFrame*  GetFrame() const;
+    const GtkSalFrame*  GetFrame() const;
     virtual void                CheckItem( unsigned nPos, bool bCheck ) SAL_OVERRIDE;
     virtual void                EnableItem( unsigned nPos, bool bEnable ) SAL_OVERRIDE;
     virtual void                ShowItem( unsigned nPos, bool bShow ) SAL_OVERRIDE;
@@ -74,16 +74,16 @@ public:
     virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
     virtual void                GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
 
-    virtual void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
-    virtual Menu*               GetMenu() { return mpVCLMenu; }
-    virtual GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
-    virtual void                SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
-    virtual GMenuModel*         GetMenuModel() { return mpMenuModel; }
-    virtual unsigned            GetItemCount() { return maItems.size(); }
-    virtual GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
-    virtual void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
-    virtual GActionGroup*       GetActionGroup() { return mpActionGroup; }
-    virtual bool            IsItemVisible( unsigned nPos );
+    void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
+    Menu*               GetMenu() { return mpVCLMenu; }
+    GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
+    void                SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
+    GMenuModel*         GetMenuModel() { return mpMenuModel; }
+    unsigned            GetItemCount() { return maItems.size(); }
+    GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
+    void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
+    GActionGroup*       GetActionGroup() { return mpActionGroup; }
+    bool            IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection,

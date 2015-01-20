@@ -155,7 +155,7 @@ public:
     OUString             GetAlias( sal_uInt16 );
     void                 PutAlias( const OUString&, sal_uInt16 );
     SbxVariable*         FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    SbxVariable* Find( const OUString&, SbxClassType );
 
     // Additional methods for 32-bit indices
     sal_uInt32           Count32() const;
@@ -225,7 +225,7 @@ protected:
                              const SfxHint& rHint, const TypeId& rHintType ) SAL_OVERRIDE;
     // Overridable methods (why not pure virtual?):
     virtual void CollAdd( SbxArray* pPar );
-    virtual void CollItem( SbxArray* pPar );
+    void CollItem( SbxArray* pPar );
     virtual void CollRemove( SbxArray* pPar );
 
 public:

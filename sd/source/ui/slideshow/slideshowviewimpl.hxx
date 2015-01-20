@@ -187,7 +187,7 @@ public:
     /// Disposing our broadcaster
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL paint( const ::com::sun::star::awt::PaintEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL paint( const ::com::sun::star::awt::PaintEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 
     // XSlideShowView methods
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSpriteCanvas > SAL_CALL getCanvas(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

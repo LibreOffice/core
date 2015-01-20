@@ -101,9 +101,9 @@ private:
 
 protected:
 
-        virtual void    SliderMoved();
-        virtual void    ArgumentModified();
-        virtual void    FxClick();
+        void    SliderMoved();
+        void    ArgumentModified();
+        void    FxClick();
 
         void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
                                         ArgEdit& rEdArg, RefButton& rRefBtn);

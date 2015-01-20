@@ -69,7 +69,7 @@ private:
 
 protected:
 
-    virtual bool exportStyle(
+    bool exportStyle(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::style::XStyle > & rStyle,
         const OUString& rXMLFamily,
@@ -103,7 +103,7 @@ public:
 //      bool bUsed, sal_uInt16 nFamily = 0,
 //      const OUString* pPrefix = 0L);
 
-    virtual bool exportDefaultStyle(
+    bool exportDefaultStyle(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > & xPropSet,
         const OUString& rXMLFamily,

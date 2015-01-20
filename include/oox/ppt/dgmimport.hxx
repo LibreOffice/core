@@ -44,7 +44,7 @@ public:
     virtual bool exportDocument() throw() SAL_OVERRIDE;
 
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
-    virtual sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
+    sal_Int32 getSchemeClr( sal_Int32 nColorSchemeToken ) const;
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE;
 
     virtual oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE;

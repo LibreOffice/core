@@ -135,7 +135,7 @@ namespace svt { namespace table
         }
 
         SVT_DLLPRIVATE virtual void Resize() SAL_OVERRIDE;
-        virtual void    Select();
+        void    Select();
 
         /**after removing a row, updates the vector which contains the selected rows
             if the row, which should be removed, is selected, it will be erased from the vector

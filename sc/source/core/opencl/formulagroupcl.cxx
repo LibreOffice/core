@@ -310,7 +310,6 @@ public:
             throw OpenCLError(err, __FILE__, __LINE__);
         return 1;
     }
-    virtual cl_mem GetCLBuffer() const { return NULL; }
 };
 
 class DynamicKernelPiArgument : public DynamicKernelArgument

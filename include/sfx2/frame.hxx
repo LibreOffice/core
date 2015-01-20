@@ -236,7 +236,7 @@ public:
                             SfxFrameItem( sal_uInt16 nWhich, SfxFrame *p );
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual OUString        GetValueText() const;
+    OUString        GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;

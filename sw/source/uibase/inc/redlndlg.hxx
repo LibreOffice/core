@@ -129,7 +129,7 @@ public:
     void            Initialize(const OUString &rExtraData);
     void            FillInfo(OUString &rExtraData) const;
 
-    virtual void    Activate();
+    void    Activate();
 };
 
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog

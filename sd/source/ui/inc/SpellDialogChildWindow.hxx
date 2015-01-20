@@ -44,7 +44,7 @@ public:
     /** This method makes the one from the base class public so that
         it can be called from the view shell when one is created.
     */
-    virtual void InvalidateSpellDialog (void);
+    void InvalidateSpellDialog (void);
 
     SFX_DECL_CHILDWINDOW_WITHID(SpellDialogChildWindow);
 

@@ -33,8 +33,8 @@ namespace cppcanvas
     class Text : public virtual CanvasGraphic
     {
     public:
-        virtual void setFont( const FontSharedPtr& ) = 0;
-        virtual FontSharedPtr getFont() = 0;
+        ;
+        ;
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::Text > TextSharedPtr;

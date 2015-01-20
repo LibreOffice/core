@@ -70,7 +70,7 @@ public:
     /** Late initialization. Call this method once a new new object has been
         created.
     */
-    virtual void Init (void);
+    void Init (void);
 
     virtual ~SlideSorterController (void);
 
@@ -170,7 +170,7 @@ public:
 
     /** This factory method creates a selection function.
     */
-    virtual rtl::Reference<FuPoor> CreateSelectionFunction (SfxRequest& rRequest);
+    rtl::Reference<FuPoor> CreateSelectionFunction (SfxRequest& rRequest);
 
     /** When the current function of the view shell is the slide sorter
         selection function then return a reference to it.  Otherwise return

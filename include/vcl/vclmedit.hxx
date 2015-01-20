@@ -89,7 +89,7 @@ public:
     virtual void        ReplaceSelected( const OUString& rStr ) SAL_OVERRIDE;
     virtual void        DeleteSelected() SAL_OVERRIDE;
     virtual OUString    GetSelected() const SAL_OVERRIDE;
-    virtual OUString    GetSelected( LineEnd aSeparator ) const;
+    OUString    GetSelected( LineEnd aSeparator ) const;
 
     virtual void    Cut() SAL_OVERRIDE;
     virtual void    Copy() SAL_OVERRIDE;

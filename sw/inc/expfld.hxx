@@ -341,11 +341,11 @@ public:
     virtual OUString   GetPar2() const SAL_OVERRIDE;
     virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
 
-    virtual OUString        GetHelp() const;
-    virtual void            SetHelp(const OUString & rStr);
+    OUString        GetHelp() const;
+    void            SetHelp(const OUString & rStr);
 
-    virtual OUString        GetToolTip() const;
-    virtual void            SetToolTip(const OUString & rStr);
+    OUString        GetToolTip() const;
+    void            SetToolTip(const OUString & rStr);
 
     virtual sal_uInt16      GetSubType() const SAL_OVERRIDE;
     virtual void            SetSubType(sal_uInt16 nSub) SAL_OVERRIDE;

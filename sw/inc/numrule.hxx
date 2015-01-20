@@ -76,7 +76,7 @@ public:
     SwCharFmt* GetCharFmt() const { return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn())); }
     void SetCharFmt( SwCharFmt* );
 
-    virtual void            SetCharFmtName(const OUString& rSet);
+    void            SetCharFmtName(const OUString& rSet);
     virtual OUString        GetCharFmtName()const SAL_OVERRIDE;
 
     //For i120928,access the cp info of graphic within bullet

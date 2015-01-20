@@ -87,7 +87,7 @@ public:
                                     bool bActive );
     virtual             ~IMapObject() {};
 
-    virtual sal_uInt16      GetVersion() const;
+    sal_uInt16      GetVersion() const;
     virtual sal_uInt16      GetType() const = 0;
     virtual bool            IsHit( const Point& rPoint ) const = 0;
 

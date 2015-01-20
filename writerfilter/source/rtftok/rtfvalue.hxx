@@ -51,8 +51,8 @@ public:
 #ifdef DEBUG_WRITERFILTER
     virtual std::string toString() const SAL_OVERRIDE;
 #endif
-    virtual RTFValue* Clone();
-    virtual RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);
+    RTFValue* Clone();
+    RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);
     RTFSprms& getAttributes();
     RTFSprms& getSprms();
     RTFShape& getShape() const;

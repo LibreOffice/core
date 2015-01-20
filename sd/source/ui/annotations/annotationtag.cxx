@@ -158,7 +158,6 @@ public:
     virtual ~AnnotationHdl();
     virtual void CreateB2dIAObject() SAL_OVERRIDE;
     virtual bool IsFocusHdl() const SAL_OVERRIDE;
-    virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const SAL_OVERRIDE;
 
 private:
@@ -247,24 +246,6 @@ bool AnnotationHdl::IsFocusHdl() const
 bool AnnotationHdl::isMarkable() const
 {
     return false;
-}
-
-Pointer AnnotationHdl::GetSdrDragPointer() const
-{
-    PointerStyle eStyle = POINTER_NOTALLOWED;
-    if( mxTag.is() )
-    {
-        if( mxTag->isSelected() )
-        {
-            eStyle = POINTER_MOVE;
-        }
-        else
-        {
-            eStyle = POINTER_ARROW;
-
-        }
-    }
-    return Pointer( eStyle );
 }
 
 AnnotationTag::AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const Reference< XAnnotation >& xAnnotation, Color& rColor, int nIndex, const vcl::Font& rFont )

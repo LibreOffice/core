@@ -172,7 +172,7 @@ public:
 
     void printProperties();
 #ifdef DEBUG_WRITERFILTER
-    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
+    void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
     static com::sun::star::table::ShadowFormat getShadowFromBorder(com::sun::star::table::BorderLine2 aBorder);
 

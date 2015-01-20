@@ -36,7 +36,7 @@ public:
     SvxNewTableDialog( vcl::Window* pWindow );
 
     virtual short Execute(void) SAL_OVERRIDE;
-    virtual void Apply(void);
+    void Apply(void);
 
     virtual sal_Int32 getRows() const SAL_OVERRIDE;
     virtual sal_Int32 getColumns() const SAL_OVERRIDE;

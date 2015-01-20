@@ -138,9 +138,9 @@ public:
     void FireAccessibleEvent (short nEventId, const ::com::sun::star::uno::Any& rOld, const ::com::sun::star::uno::Any& rNew);
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
-    virtual Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive( void ) const;
@@ -238,7 +238,7 @@ public:
     /// select child
     void SelectChild( Point pos );
     void SelectChild( long nIndex);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
          CreateChild (long nIndex, Point mPoint);
 
 

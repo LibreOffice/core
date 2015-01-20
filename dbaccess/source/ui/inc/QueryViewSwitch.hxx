@@ -41,25 +41,25 @@ namespace dbaui
         OQueryViewSwitch(OQueryContainerWindow* pParent, OQueryController& _rController,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
         virtual ~OQueryViewSwitch();
 
-        virtual bool isCutAllowed();
-        virtual bool isPasteAllowed();
-        virtual bool isCopyAllowed();
-        virtual void copy();
-        virtual void cut();
-        virtual void paste();
+        bool isCutAllowed();
+        bool isPasteAllowed();
+        bool isCopyAllowed();
+        void copy();
+        void cut();
+        void paste();
         // clears the whole query
-        virtual void clear();
+        void clear();
         // set the view readonly or not
-        virtual void setReadOnly(bool _bReadOnly);
+        void setReadOnly(bool _bReadOnly);
         // check if the statement is correct when not returning false
-        virtual bool checkStatement();
+        bool checkStatement();
         // set the statement for representation
-        virtual void setStatement(const OUString& _rsStatement);
+        void setStatement(const OUString& _rsStatement);
         // returns the current sql statement
-        virtual OUString getStatement();
+        OUString getStatement();
         /// late construction
-        virtual void Construct();
-        virtual void initialize();
+        void Construct();
+        void initialize();
         /** show the text or the design view
             @return
                 <TRUE/> if and only if the view could be successfully, switched, <FALSE/> otherwise
@@ -85,7 +85,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getORB() const;
     protected:
         // return the Rectangle where I can paint myself
-        virtual void resizeDocumentView(Rectangle& rRect);
+        void resizeDocumentView(Rectangle& rRect);
 
     private:
         void    impl_forceSQLView();

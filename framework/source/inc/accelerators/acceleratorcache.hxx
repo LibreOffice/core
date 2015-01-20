@@ -94,7 +94,7 @@ class AcceleratorCache
                     the (changed!) copy, which should be written
                     back to this original container.
           */
-        virtual void takeOver(const AcceleratorCache& rCopy);
+        void takeOver(const AcceleratorCache& rCopy);
 
         /** TODO document me */
         AcceleratorCache& operator=(const AcceleratorCache& rCopy);
@@ -107,11 +107,11 @@ class AcceleratorCache
             @return [bool]
                     sal_True if the speicfied key exists inside this container.
          */
-        virtual bool hasKey(const css::awt::KeyEvent& aKey) const;
-        virtual bool hasCommand(const OUString& sCommand) const;
+        bool hasKey(const css::awt::KeyEvent& aKey) const;
+        bool hasCommand(const OUString& sCommand) const;
 
         /** TODO document me */
-        virtual TKeyList getAllKeys() const;
+        TKeyList getAllKeys() const;
 
         /** @short  add a new or change an existing key-command pair
                     of this container.
@@ -122,7 +122,7 @@ class AcceleratorCache
             @param  sCommand
                     describe the command.
           */
-        virtual void setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
+        void setKeyCommandPair(const css::awt::KeyEvent& aKey    ,
                                        const OUString&    sCommand);
 
         /** @short  returns the list of keys, which are registered
@@ -134,14 +134,14 @@ class AcceleratorCache
             @return [TKeyList]
                     the list of registered keys. Can be empty!
           */
-        virtual TKeyList getKeysByCommand(const OUString& sCommand) const;
+        TKeyList getKeysByCommand(const OUString& sCommand) const;
 
         /** TODO */
-        virtual OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
+        OUString getCommandByKey(const css::awt::KeyEvent& aKey) const;
 
         /** TODO */
-        virtual void removeKey(const css::awt::KeyEvent& aKey);
-        virtual void removeCommand(const OUString& sCommand);
+        void removeKey(const css::awt::KeyEvent& aKey);
+        void removeCommand(const OUString& sCommand);
 };
 
 } // namespace framework

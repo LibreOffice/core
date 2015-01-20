@@ -45,11 +45,11 @@ namespace dbaccess
         virtual ::rtl::Reference< SettingsImport >  nextState(
             const OUString& i_rElementName
         ) = 0;
-        virtual void startElement(
+        void startElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& i_rAttributes
         );
         virtual void endElement();
-        virtual void characters( const OUString& i_rCharacters );
+        void characters( const OUString& i_rCharacters );
 
     protected:
         virtual ~SettingsImport();

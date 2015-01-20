@@ -31,7 +31,7 @@ public:
     virtual ~CryptoEngine()
     {}
 
-    virtual std::vector<sal_uInt8>& getKey()
+    std::vector<sal_uInt8>& getKey()
     {
         return mKey;
     }

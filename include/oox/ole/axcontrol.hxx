@@ -406,8 +406,8 @@ public:
 
 protected:
     virtual void        importControlData( BinaryInputStream& rInStrm ) = 0;
-    virtual void        importCommonExtraData( BinaryInputStream& rInStrm );
-    virtual void        importCommonTrailingData( BinaryInputStream& rInStrm );
+    void        importCommonExtraData( BinaryInputStream& rInStrm );
+    void        importCommonTrailingData( BinaryInputStream& rInStrm );
 
 private:
     /** Returns the data part identifier according to the model version. */
@@ -886,7 +886,7 @@ public:
     explicit            AxMultiPageModel();
 
     virtual ApiControlType getControlType() const SAL_OVERRIDE;
-    virtual bool        importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
+    bool        importPageAndMultiPageProperties( BinaryInputStream& rInStrm, sal_Int32 nPages );
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const SAL_OVERRIDE;
     std::vector<sal_uInt32> mnIDs;
     sal_uInt32          mnActiveTab;

@@ -76,7 +76,7 @@ public:
 
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 
-    virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
+    void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
 };
 typedef tools::SvRef<SvMetaModule> SvMetaModuleRef;
 

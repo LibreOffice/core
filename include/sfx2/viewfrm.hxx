@@ -119,7 +119,7 @@ public:
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
     vcl::Window&                 GetWindow() const;
-    virtual void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
+    void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
 
@@ -136,19 +136,19 @@ public:
     bool                    IsVisible() const;
     void                    ToTop();
     void                    Enable( bool bEnable );
-    virtual bool            Close();
+    bool            Close();
     virtual void            Activate( bool bUI ) SAL_OVERRIDE;
     virtual void            Deactivate( bool bUI ) SAL_OVERRIDE;
 
     // DDE-Interface
-    virtual long            DdeExecute( const OUString& rCmd );
-    virtual bool            DdeGetData( const OUString& rItem,
+    long            DdeExecute( const OUString& rCmd );
+    bool            DdeGetData( const OUString& rItem,
                                         const OUString& rMimeType,
                                         ::com::sun::star::uno::Any & rValue );
-    virtual bool            DdeSetData( const OUString& rItem,
+    bool            DdeSetData( const OUString& rItem,
                                         const OUString& rMimeType,
                                         const ::com::sun::star::uno::Any & rValue );
-    virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
+    ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
 
     void                    UpdateTitle();
 
@@ -306,7 +306,7 @@ public:
                             {}
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual OUString        GetValueText() const;
+    OUString        GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     SfxViewFrame*           GetFrame() const

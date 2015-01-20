@@ -116,7 +116,7 @@ class ScVbaRange : public ScVbaRange_BASE
 
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException ) SAL_OVERRIDE;
-    virtual SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
+    SfxItemSet* getCurrentDataSet( )  throw ( css::uno::RuntimeException );
 public:
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
@@ -228,7 +228,7 @@ public:
     virtual css::uno::Reference< ov::excel::XFont > SAL_CALL Font() throw ( css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) throw ( css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE ;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL Range( const css::uno::Any &Cell1, const css::uno::Any &Cell2 ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual css::uno::Reference< ov::excel::XRange > Range( const css::uno::Any &Cell1, const css::uno::Any &Cell2, bool bForceUseInpuRangeTab ) throw (css::uno::RuntimeException);
+    css::uno::Reference< ov::excel::XRange > Range( const css::uno::Any &Cell1, const css::uno::Any &Cell2, bool bForceUseInpuRangeTab ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getCellRange(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     static css::uno::Any getCellRange( const css::uno::Reference< ov::excel::XRange >& rxRange ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL PasteSpecial( const css::uno::Any& Paste, const css::uno::Any& Operation, const css::uno::Any& SkipBlanks, const css::uno::Any& Transpose ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

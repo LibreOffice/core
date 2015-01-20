@@ -99,9 +99,9 @@ namespace connectivity
             void setEscapeProcessing( const bool _bEscapeProc );
             template < typename T, SQLINTEGER BufferLength > SQLRETURN setStmtOption (SQLINTEGER fOption, T value) const;
 
-            virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
-            virtual void setResultSetType(sal_Int32 _par0)          ;
-            virtual void setUsingBookmarks(bool _bUseBookmark)  ;
+            void setResultSetConcurrency(sal_Int32 _par0)   ;
+            void setResultSetType(sal_Int32 _par0)          ;
+            void setUsingBookmarks(bool _bUseBookmark)  ;
 
             void reset() throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void clearMyResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException);

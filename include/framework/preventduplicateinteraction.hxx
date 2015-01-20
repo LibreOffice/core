@@ -181,7 +181,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
             @param      xHandler
                         the new interaction handler
          */
-        virtual void setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler);
+        void setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler);
 
 
         /**
@@ -190,7 +190,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
             @note       This overwrites the settings of e.g. setHandler()!
          */
-        virtual void useDefaultUUIHandler();
+        void useDefaultUUIHandler();
 
 
         /**
@@ -208,7 +208,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
             @threadsafe yes
         */
-        virtual void addInteractionRule(const PreventDuplicateInteraction::InteractionInfo& aInteractionInfo);
+        void addInteractionRule(const PreventDuplicateInteraction::InteractionInfo& aInteractionInfo);
 
 
         /**
@@ -229,7 +229,7 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
 
             @threadsafe yes
         */
-        virtual bool getInteractionInfo(const css::uno::Type&                               aInteraction,
+        bool getInteractionInfo(const css::uno::Type&                               aInteraction,
                                                   PreventDuplicateInteraction::InteractionInfo* pReturn     ) const;
 };
 

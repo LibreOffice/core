@@ -70,9 +70,9 @@ public:
         FrameView* pFrameView);
     virtual ~ToolPanelViewShell (void);
 
-    virtual void GetFocus (void);
-    virtual void LoseFocus (void);
-    virtual void KeyInput (const KeyEvent& rEvent);
+    void GetFocus (void);
+    void LoseFocus (void);
+    void KeyInput (const KeyEvent& rEvent);
     using sd::ViewShell::KeyInput;
 
     virtual SdPage* GetActualPage (void) SAL_OVERRIDE;

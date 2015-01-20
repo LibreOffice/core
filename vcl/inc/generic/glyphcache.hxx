@@ -195,7 +195,7 @@ public:
                             { return GetGlyphData( aGlyphId ).GetMetric(); }
 
 #if ENABLE_GRAPHITE
-    virtual GraphiteFaceWrapper* GetGraphiteFace() const;
+    GraphiteFaceWrapper* GetGraphiteFace() const;
 #endif
 
     sal_GlyphId             GetGlyphIndex( sal_UCS4 ) const;

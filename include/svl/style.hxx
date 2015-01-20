@@ -114,10 +114,10 @@ public:
 
     /** returns the display name of this style, it is used at the user interface.
         If the display name is empty, this method returns the internal name. */
-    virtual OUString GetDisplayName() const;
+    OUString GetDisplayName() const;
 
     // sets the display name of this style
-    virtual void SetDisplayName( const OUString& );
+    void SetDisplayName( const OUString& );
 
     virtual const OUString& GetParent() const;
     virtual bool SetParent( const OUString& );
@@ -146,7 +146,7 @@ public:
     virtual void   SetHelpId( const OUString& r, sal_uLong nId );
 
     virtual SfxItemSet& GetItemSet();
-    virtual sal_uInt16 GetVersion() const;
+    sal_uInt16 GetVersion() const;
 };
 
 /* Class to iterate and search on a SfxStyleSheetBasePool */
@@ -158,8 +158,8 @@ public:
      */
     SfxStyleSheetIterator(SfxStyleSheetBasePool *pBase,
                           SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
-    virtual sal_uInt16 GetSearchMask() const;
-    virtual SfxStyleFamily GetSearchFamily() const;
+    sal_uInt16 GetSearchMask() const;
+    SfxStyleFamily GetSearchFamily() const;
     virtual sal_uInt16 Count();
     virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
     virtual SfxStyleSheetBase* First();
@@ -232,8 +232,8 @@ public:
     const SfxItemPool&          GetPool() const { return rPool;}
 
     virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
-    virtual sal_uInt16              Count();
-    virtual SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
+    sal_uInt16              Count();
+    SfxStyleSheetBase*  operator[](sal_uInt16 nIdx);
 
     virtual SfxStyleSheetBase&  Make(const OUString&,
                                      SfxStyleFamily eFam,
@@ -243,17 +243,17 @@ public:
         SfxStyleSheetBase& rSource, SfxStyleSheetBase& rTarget );
 
     virtual void                Remove( SfxStyleSheetBase* );
-    virtual void                Insert( SfxStyleSheetBase* );
+    void                Insert( SfxStyleSheetBase* );
 
-    virtual void                Clear();
+    void                Clear();
 
     SfxStyleSheetBasePool&      operator=( const SfxStyleSheetBasePool& );
     SfxStyleSheetBasePool&      operator+=( const SfxStyleSheetBasePool& );
 
     unsigned                    GetNumberOfStyles();
 
-    virtual SfxStyleSheetBase*  First();
-    virtual SfxStyleSheetBase*  Next();
+    SfxStyleSheetBase*  First();
+    SfxStyleSheetBase*  Next();
     virtual SfxStyleSheetBase*  Find( const OUString&, SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
 
     virtual bool                SetParent(SfxStyleFamily eFam,
@@ -304,7 +304,7 @@ class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 protected:
     using SfxStyleSheetBasePool::Create;
     virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, sal_uInt16 mask) SAL_OVERRIDE;
-    virtual SfxStyleSheetBase* Create(const SfxStyleSheet &);
+    SfxStyleSheetBase* Create(const SfxStyleSheet &);
 
 public:
     SfxStyleSheetPool( SfxItemPool const& );

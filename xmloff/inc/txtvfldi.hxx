@@ -87,11 +87,11 @@ public:
     virtual ~XMLValueImportHelper();
 
     /// process attribute values
-    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+    void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
 
     /// prepare XTextField for insertion into document
-    virtual void PrepareField(
+    void PrepareField(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 

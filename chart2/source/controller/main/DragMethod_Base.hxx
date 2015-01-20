@@ -35,7 +35,7 @@ public:
         , ActionDescriptionProvider::ActionType eActionType = ActionDescriptionProvider::MOVE );
     virtual ~DragMethod_Base();
 
-    virtual OUString getUndoDescription() const;
+    OUString getUndoDescription() const;
 
     virtual void TakeSdrDragComment(OUString& rStr) const SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;

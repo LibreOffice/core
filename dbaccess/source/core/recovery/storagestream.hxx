@@ -73,7 +73,7 @@ namespace dbaccess
 
         /** simply calls closeInput on our input stream, override to extend/modify this behavior
         */
-        virtual void close();
+        void close();
 
     protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&

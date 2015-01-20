@@ -84,7 +84,7 @@ public:
     /** This method is part of the object construction.  It HAS to be called
         after the constructor has created a new object.
     */
-    virtual void LateInit (const OUString& rsDefaultView);
+    void LateInit (const OUString& rsDefaultView);
 
     ::boost::shared_ptr<ViewShellManager> GetViewShellManager (void) const;
 
@@ -114,7 +114,7 @@ public:
         slots.  This is the companion of Execute() and handles the slots
         concerned with showing the pane docking windows.
     */
-    virtual void GetState (SfxItemSet& rSet);
+    void GetState (SfxItemSet& rSet);
 
     /* override these from SfxViewShell */
     virtual OUString GetSelectionText(bool) SAL_OVERRIDE;

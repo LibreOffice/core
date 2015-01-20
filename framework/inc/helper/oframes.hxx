@@ -178,7 +178,7 @@ class OFrames   :   public ::cppu::WeakImplHelper1< ::com::sun::star::frame::XFr
             @seealso    method dispose() (if it exist!)
             @seealso    destructor ~TaskEnumeration()
         *//*-*****************************************************************************************************/
-        virtual void impl_resetObject();
+        void impl_resetObject();
 
     private:
 

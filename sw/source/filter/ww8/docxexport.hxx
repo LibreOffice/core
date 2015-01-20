@@ -111,7 +111,7 @@ public:
     virtual AttributeOutputBase& AttrOutput() const SAL_OVERRIDE;
 
     /// Access to the derived attribute output class.
-    virtual DocxAttributeOutput& DocxAttrOutput() const;
+    DocxAttributeOutput& DocxAttrOutput() const;
 
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const SAL_OVERRIDE;
@@ -186,13 +186,13 @@ protected:
     virtual void ExportDocument_Impl() SAL_OVERRIDE;
 
     /// Output page/section breaks
-    virtual void OutputPageSectionBreaks( const SwTxtNode& );
+    void OutputPageSectionBreaks( const SwTxtNode& );
 
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& ) SAL_OVERRIDE;
 
     /// Output SwTableNode
-    virtual void OutputTableNode( const SwTableNode& );
+    void OutputTableNode( const SwTableNode& );
 
     /// Output SwGrfNode
     virtual void OutputGrfNode( const SwGrfNode& ) SAL_OVERRIDE;

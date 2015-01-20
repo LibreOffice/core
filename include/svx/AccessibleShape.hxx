@@ -167,7 +167,7 @@ public:
         @return
             Returns true if both shapes are the same object.
     */
-    virtual bool operator== (const AccessibleShape& rShape);
+    bool operator== (const AccessibleShape& rShape);
 
     /** Set the specified state.  If the state is <const>FOCUSED</const>
         then, additionally to the inherited functionality, the focus
@@ -448,7 +448,7 @@ protected:
     virtual OUString
         CreateAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
-    virtual OUString
+    OUString
        GetFullAccessibleName(AccessibleShape *shape)
        throw (::com::sun::star::uno::RuntimeException);
     virtual OUString GetStyle();
@@ -456,7 +456,7 @@ protected:
         ::com::sun::star::accessibility::XAccessibleStateSet > &xStateSet);
     /** Update the <const>OPAQUE</const> and <const>SELECTED</const> state.
     */
-    virtual void UpdateStates (void);
+    void UpdateStates (void);
 
 private:
     /** Don't use the default constructor.  Use the public constructor that

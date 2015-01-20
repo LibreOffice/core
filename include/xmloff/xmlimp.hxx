@@ -180,8 +180,8 @@ protected:
     inline bool HasShapeImport() const { return mxShapeImport.is(); }
     inline void ClearShapeImport() { mxShapeImport = 0; }
 
-    virtual SchXMLImportHelper* CreateChartImport();
-    virtual ::xmloff::OFormLayerXMLImport* CreateFormImport();
+    SchXMLImportHelper* CreateChartImport();
+    ::xmloff::OFormLayerXMLImport* CreateFormImport();
 
     void SetFontDecls( XMLFontStylesContext *pFontDecls );
     void SetStyles( SvXMLStylesContext *pStyles );

@@ -62,7 +62,7 @@ protected:
     virtual void DoubleClick(const BrowserMouseEvent&) SAL_OVERRIDE;
     virtual void KeyInput(const KeyEvent& rEvt) SAL_OVERRIDE;
     virtual void Select() SAL_OVERRIDE;
-    virtual void SetDirty(); // is called for example in mode switches
+    void SetDirty(); // is called for example in mode switches
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) SAL_OVERRIDE;
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) SAL_OVERRIDE;
 public:
@@ -72,9 +72,9 @@ public:
     void SetAttributes(const SfxItemSet* pAttr, const SfxItemSet* p2ndSet=NULL);
     sal_uIntPtr GetCurrentPos() const;
     sal_uInt16 GetCurrentWhich() const;
-    virtual bool BegChangeEntry(sal_uIntPtr nPos);
-    virtual bool EndChangeEntry();
-    virtual void     BrkChangeEntry();
+    bool BegChangeEntry(sal_uIntPtr nPos);
+    bool EndChangeEntry();
+    void     BrkChangeEntry();
 
     /** GetCellText returns the text at the given position
         @param  _nRow

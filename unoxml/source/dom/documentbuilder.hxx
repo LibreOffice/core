@@ -133,7 +133,7 @@ namespace DOM
         virtual void SAL_CALL setEntityResolver(const css::uno::Reference< css::xml::sax::XEntityResolver >& er)
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual css::uno::Reference< css::xml::sax::XEntityResolver > SAL_CALL getEntityResolver()
+        css::uno::Reference< css::xml::sax::XEntityResolver > SAL_CALL getEntityResolver()
             throw (css::uno::RuntimeException);
 
 

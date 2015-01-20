@@ -420,7 +420,7 @@ public:
 
     virtual void SetupFilterOptions(SfxMedium& rMedium);
 
-    virtual void SetVersion( const OUString&, long );
+    void SetVersion( const OUString&, long );
     virtual bool IsStgWriter() const;
 
     void SetShowProgress( bool bFlag = false )  { bShowProgress = bFlag; }

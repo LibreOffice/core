@@ -153,7 +153,7 @@ public:
     virtual bool next(OUString * argument) SAL_OVERRIDE { return next(argument, true); }
 
 private:
-    virtual bool next(OUString * argument, bool prefix) {
+    bool next(OUString * argument, bool prefix) {
         OSL_ASSERT(argument != NULL);
         if (m_index < m_input.getLength()) {
             if (prefix) {

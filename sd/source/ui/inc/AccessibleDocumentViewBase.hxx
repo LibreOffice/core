@@ -360,7 +360,7 @@ protected:
             If this is an empty reference then the currently active
             accessible OLE object (if there is one) is removed.
     */
-    virtual void SetAccessibleOLEObject (
+    void SetAccessibleOLEObject (
         const ::com::sun::star::uno::Reference <
         ::com::sun::star::accessibility::XAccessible>& xOLEObject);
     //=====  XAccessibleGetAccFromXShape  ============================================
@@ -369,7 +369,7 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 public:
-    virtual void SwitchViewActivated (void) { Activated(); }
+    void SwitchViewActivated (void) { Activated(); }
      virtual sal_Int32 SAL_CALL getForeground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

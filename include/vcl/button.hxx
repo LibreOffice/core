@@ -168,9 +168,9 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    void    UserDraw( const UserDrawEvent& rUDEvt );
 
-    virtual void    Toggle();
+    void    Toggle();
 
     void            SetSymbol( SymbolType eSymbol );
     SymbolType      GetSymbol() const { return meSymbol; }
@@ -358,7 +358,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual void    Toggle();
+    void    Toggle();
 
     bool            IsStateChanged() const { return mbStateChanged; }
 
@@ -474,7 +474,7 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual void    Toggle();
+    void    Toggle();
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }

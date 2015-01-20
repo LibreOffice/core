@@ -34,7 +34,7 @@ namespace writerfilter
     {
     public:
         typedef std::shared_ptr<IdToString> Pointer_t;
-        virtual std::string toString(const Id & id) const = 0;
+        ;
 
     protected:
         ~IdToString() {}

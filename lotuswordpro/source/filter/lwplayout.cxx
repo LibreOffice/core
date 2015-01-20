@@ -1644,26 +1644,21 @@ XFColumnSep* LwpLayout::GetColumnSep()
         return NULL;
     }
 
-    LwpBorderStuff* pBorderStuff = pLayoutGutters->GetBorderStuff();
+    LwpBorderStuff& pBorderStuff = pLayoutGutters->GetBorderStuff();
 
-    if(pBorderStuff)
-    {
-        LwpBorderStuff::BorderType eType = LwpBorderStuff::LEFT;
-        LwpColor    aColor = pBorderStuff->GetSideColor(eType);
-        double  fWidth = pBorderStuff->GetSideWidth(eType);
-        //sal_uInt16    nType = pBorderStuff->GetSideType(eType);
+    LwpBorderStuff::BorderType eType = LwpBorderStuff::LEFT;
+    LwpColor    aColor = pBorderStuff.GetSideColor(eType);
+    double  fWidth = pBorderStuff.GetSideWidth(eType);
+    //sal_uInt16    nType = pBorderStuff->GetSideType(eType);
 
-        XFColumnSep* pColumnSep = new XFColumnSep();
-        XFColor aXFColor(aColor.To24Color());
-        pColumnSep->SetColor(aXFColor);
-        pColumnSep->SetWidth(fWidth);
-        pColumnSep->SetRelHeight(100);
-        pColumnSep->SetVerticalAlign(enumXFAlignTop);
+    XFColumnSep* pColumnSep = new XFColumnSep();
+    XFColor aXFColor(aColor.To24Color());
+    pColumnSep->SetColor(aXFColor);
+    pColumnSep->SetWidth(fWidth);
+    pColumnSep->SetRelHeight(100);
+    pColumnSep->SetVerticalAlign(enumXFAlignTop);
 
-        return pColumnSep;
-    }
-    return NULL;
-
+    return pColumnSep;
 }
 
 /**

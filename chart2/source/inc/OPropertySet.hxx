@@ -151,7 +151,7 @@ protected:
     virtual void firePropertyChangeEvent();
 
     /// call this when a derived component is disposed
-    virtual void disposePropertySet();
+    void disposePropertySet();
 
     // Interfaces
 

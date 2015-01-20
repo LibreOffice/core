@@ -50,7 +50,7 @@ private:
 
     cppu::OBroadcastHelper mrBHelper;
 
-    virtual void disposing() throw();
+    void disposing() throw();
 
 public:
     SvxShapeCollection() throw();

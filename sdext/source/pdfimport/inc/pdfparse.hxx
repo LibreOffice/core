@@ -162,8 +162,8 @@ struct PDFContainer : public PDFEntry
     // entries that can contain sub elements besides comments
     PDFContainer() : PDFEntry(), m_nOffset( 0 ) {}
     virtual ~PDFContainer();
-    virtual bool emitSubElements( EmitContext& rWriteContext ) const;
-    virtual void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
+    bool emitSubElements( EmitContext& rWriteContext ) const;
+    void cloneSubElements( std::vector<PDFEntry*>& rNewSubElements ) const;
 
     PDFObject* findObject( unsigned int nNumber, unsigned int nGeneration ) const;
     PDFObject* findObject( PDFObjectRef* pRef ) const

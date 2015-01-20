@@ -116,7 +116,7 @@ protected:
 
     DECL_LINK( MenuEventListener, VclSimpleEvent* );
 
-    virtual void            ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
+    void            ProcessMenuEvent( const VclMenuEvent& rVclMenuEvent );
 
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) = 0;
 

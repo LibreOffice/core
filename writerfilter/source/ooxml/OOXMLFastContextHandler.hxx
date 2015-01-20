@@ -84,7 +84,7 @@ public:
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8> & rId) throw (css::uno::RuntimeException);
+    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8> & rId) throw (css::uno::RuntimeException);
 
     // local
 
@@ -183,12 +183,12 @@ public:
     void positivePercentage(const OUString& rText);
     void startTxbxContent();
     void endTxbxContent();
-    virtual void propagateCharacterProperties();
-    virtual void propagateCharacterPropertiesAsSet(const Id & rId);
-    virtual void propagateTableProperties();
-    virtual void propagateRowProperties();
-    virtual void propagateCellProperties();
-    virtual bool propagatesProperties() const;
+    void propagateCharacterProperties();
+    void propagateCharacterPropertiesAsSet(const Id & rId);
+    void propagateTableProperties();
+    void propagateRowProperties();
+    void propagateCellProperties();
+    bool propagatesProperties() const;
     void sendPropertiesWithId(const Id & rId);
     void sendPropertiesToParent();
     void sendCellProperties();
@@ -235,7 +235,7 @@ protected:
     void startAction(Token_t Element);
     void endAction(Token_t Element);
 
-    virtual OOXMLPropertySet * getPicturePropSet
+    OOXMLPropertySet * getPicturePropSet
     (const OUString & rId);
     virtual void resolvePropertySetAttrs();
 
@@ -269,7 +269,7 @@ public:
     OOXMLPropertySet::Pointer_t getPropertySetAttrs() const { return mpPropertySetAttrs;}
 
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal) SAL_OVERRIDE;
-    virtual void sendProperty(Id nId);
+    void sendProperty(Id nId);
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const SAL_OVERRIDE;
 
     void handleHyperlink();
@@ -338,7 +338,7 @@ public:
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerValue();
 
-    virtual void setValue(OOXMLValue::Pointer_t pValue);
+    void setValue(OOXMLValue::Pointer_t pValue);
     virtual OOXMLValue::Pointer_t getValue() const SAL_OVERRIDE;
 
     virtual void lcl_endFastElement(Token_t Element)
@@ -365,7 +365,7 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    virtual void newPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
+    void newPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
 protected:
     OOXMLTableImpl mTable;
 

@@ -29,7 +29,7 @@ class Command
 {
 public:
     virtual ~Command (void) {};
-    virtual void operator() (void) = 0;
+    ;
 };
 
 } } } // end of namespace sd::slidesorter::controller

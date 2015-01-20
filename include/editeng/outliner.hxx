@@ -646,7 +646,7 @@ protected:
     void            ParagraphDeleted( sal_Int32 nParagraph );
     void            ParaAttribsChanged( sal_Int32 nParagraph );
 
-    virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
+    void    StyleSheetChanged( SfxStyleSheet* pStyle );
 
     void            InvalidateBullet(sal_Int32 nPara);
     void            PaintBullet( sal_Int32 nPara, const Point& rStartPos,
@@ -655,7 +655,7 @@ protected:
 
     // used by OutlinerEditEng. Allows Outliner objects to provide
     // bullet access to the EditEngine.
-    virtual const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const;
+    const SvxNumberFormat*  GetNumberFormat( sal_Int32 nPara ) const;
 
 public:
 
@@ -744,28 +744,28 @@ public:
     Paragraph*      GetHdlParagraph() const { return pHdlParagraph; }
     bool            IsExpanding() const { return bIsExpanding; }
 
-    virtual void    ExpandHdl();
+    void    ExpandHdl();
     void            SetExpandHdl( const Link& rLink ) { aExpandHdl = rLink; }
     Link            GetExpandHdl() const { return aExpandHdl; }
 
-    virtual void    ParagraphInsertedHdl();
+    void    ParagraphInsertedHdl();
     void            SetParaInsertedHdl(const Link& rLink){aParaInsertedHdl=rLink;}
     Link            GetParaInsertedHdl() const { return aParaInsertedHdl; }
 
-    virtual void    ParagraphRemovingHdl();
+    void    ParagraphRemovingHdl();
     void            SetParaRemovingHdl(const Link& rLink){aParaRemovingHdl=rLink;}
     Link            GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
-    virtual void    DepthChangedHdl();
+    void    DepthChangedHdl();
     void            SetDepthChangedHdl(const Link& rLink){aDepthChangedHdl=rLink;}
     Link            GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
     sal_uInt16      GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
-    virtual long    RemovingPagesHdl( OutlinerView* );
+    long    RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
     Link            GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
-    virtual long    IndentingPagesHdl( OutlinerView* );
+    long    IndentingPagesHdl( OutlinerView* );
     void            SetIndentingPagesHdl(const Link& rLink){aIndentingPagesHdl=rLink;}
     Link            GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
     // valid only in the two upper handlers
@@ -834,7 +834,7 @@ public:
 
     void            StripPortions();
 
-    virtual void DrawingText( const Point& rStartPos, const OUString& rText,
+    void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
                               const long* pDXArray, const SvxFont& rFont,
                               sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
@@ -847,7 +847,7 @@ public:
                               const Color& rOverlineColor,
                               const Color& rTextLineColor);
 
-    virtual void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
+    void DrawingTab( const Point& rStartPos, long nWidth, const OUString& rChar,
                              const SvxFont& rFont, sal_Int32 nPara, sal_Int32 nIndex, sal_uInt8 nRightToLeft,
                              bool bEndOfLine,
                              bool bEndOfParagraph,
@@ -910,8 +910,8 @@ public:
     bool            UpdateFields();
     void            RemoveFields( bool bKeepFieldText, TypeId aType = NULL );
 
-    virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
@@ -986,11 +986,11 @@ public:
     void            SetEndPasteOrDropHdl( const Link& rLink );
     Link            GetEndPasteOrDropHdl() const { return maEndPasteOrDropHdl; }
 
-    virtual sal_Int16 GetNumberingStartValue( sal_Int32 nPara );
-    virtual void SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue );
+    sal_Int16 GetNumberingStartValue( sal_Int32 nPara );
+    void SetNumberingStartValue( sal_Int32 nPara, sal_Int16 nNumberingStartValue );
 
-    virtual bool IsParaIsNumberingRestart( sal_Int32 nPara );
-    virtual void SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart );
+    bool IsParaIsNumberingRestart( sal_Int32 nPara );
+    void SetParaIsNumberingRestart( sal_Int32 nPara, bool bParaIsNumberingRestart );
 
     /** determine the bullets/numbering status of the given paragraphs
 

@@ -100,7 +100,7 @@ friend class SdrEditView;
     bool    bObjOrdNumsDirty;
     bool    bRectsDirty;
 protected:
-    virtual void RecalcRects();
+    void RecalcRects();
 
     SdrObjList();
     void lateInit(const SdrObjList& rSrcList);
@@ -128,9 +128,9 @@ public:
     void           SetUpList(SdrObjList* pNewUpList)    { pUpList=pNewUpList; }
     SdrObject*     GetOwnerObj() const                  { return pOwnerObj; }
     void           SetOwnerObj(SdrObject* pNewOwner)    { pOwnerObj=pNewOwner; }
-    virtual SdrPage* GetPage() const;
-    virtual void     SetPage(SdrPage* pNewPage);
-    virtual SdrModel* GetModel() const;
+    SdrPage* GetPage() const;
+    void     SetPage(SdrPage* pNewPage);
+    SdrModel* GetModel() const;
     virtual void      SetModel(SdrModel* pNewModel);
     /// recalculate order numbers / ZIndex
     void     RecalcObjOrdNums();
@@ -150,7 +150,7 @@ public:
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum);
     /// Modify ZOrder of an SdrObject
-    virtual SdrObject* NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
+    SdrObject* NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
     void SetRectsDirty();
@@ -184,7 +184,7 @@ public:
         list, extracts the content, inserts it flat to the list and
         removes the group object afterwards.
      */
-    virtual void FlattenGroups();
+    void FlattenGroups();
     /** Ungroup the object at the given index
 
         This method ungroups the content of the group object at the
@@ -194,7 +194,7 @@ public:
         operation is performed recursively, such that the content of
         the given object contains no groups afterwards.
      */
-    virtual void UnGroupObj( size_t nObjNum );
+    void UnGroupObj( size_t nObjNum );
 
     /** Return whether there is an explicit, user defined, object navigation
         order.  When there is one this method returns <TRUE/> and the
@@ -430,7 +430,7 @@ public:
 private:
     sdr::contact::ViewContact*                                      mpViewContact;
 protected:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;
 
@@ -499,7 +499,7 @@ public:
     bool IsMasterPage() const       { return mbMaster; }
     void SetInserted(bool bNew = true);
     bool IsInserted() const         { return mbInserted; }
-    virtual void SetChanged();
+    void SetChanged();
 
     // #i68775# React on PageNum changes (from Model in most cases)
     void SetPageNum(sal_uInt16 nNew);
@@ -511,20 +511,20 @@ public:
     bool getPageBorderOnlyLeftRight() const { return mbPageBorderOnlyLeftRight; }
 
     virtual void SetSize(const Size& aSiz);
-    virtual Size GetSize() const;
+    Size GetSize() const;
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    virtual sal_Int32 GetWdt() const;
-    virtual sal_Int32 GetHgt() const;
+    sal_Int32 GetWdt() const;
+    sal_Int32 GetHgt() const;
     virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
     virtual void  SetLftBorder(sal_Int32 nBorder);
     virtual void  SetUppBorder(sal_Int32 nBorder);
     virtual void  SetRgtBorder(sal_Int32 nBorder);
     virtual void  SetLwrBorder(sal_Int32 nBorder);
-    virtual sal_Int32 GetLftBorder() const;
-    virtual sal_Int32 GetUppBorder() const;
-    virtual sal_Int32 GetRgtBorder() const;
-    virtual sal_Int32 GetLwrBorder() const;
+    sal_Int32 GetLftBorder() const;
+    sal_Int32 GetUppBorder() const;
+    sal_Int32 GetRgtBorder() const;
+    sal_Int32 GetLwrBorder() const;
 
     virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 

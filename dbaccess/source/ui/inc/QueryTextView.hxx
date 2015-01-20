@@ -35,21 +35,21 @@ namespace dbaui
 
         virtual void GetFocus() SAL_OVERRIDE;
 
-        virtual bool isCutAllowed();
-        virtual bool isPasteAllowed();
-        virtual bool isCopyAllowed();
-        virtual void copy();
-        virtual void cut();
-        virtual void paste();
+        bool isCutAllowed();
+        bool isPasteAllowed();
+        bool isCopyAllowed();
+        void copy();
+        void cut();
+        void paste();
         // clears the whole query
-        virtual void clear();
+        void clear();
         // set the view readonly or not
-        virtual void setReadOnly(bool _bReadOnly);
+        void setReadOnly(bool _bReadOnly);
         // check if the statement is correct when not returning false
-        virtual bool checkStatement();
+        bool checkStatement();
         // set the statement for representation
-        virtual void setStatement(const OUString& _rsStatement);
-        virtual OUString getStatement();
+        void setStatement(const OUString& _rsStatement);
+        OUString getStatement();
         // allow access to our edit
         OSqlEdit* getSqlEdit() const { return m_pEdit; }
 

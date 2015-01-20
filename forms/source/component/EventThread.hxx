@@ -65,7 +65,7 @@ protected:
     // XThread
     virtual void SAL_CALL run() SAL_OVERRIDE;
 
-    virtual void SAL_CALL kill();
+    void SAL_CALL kill();
     virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
     // The following method is called to duplicate the Event while respecting it's type.

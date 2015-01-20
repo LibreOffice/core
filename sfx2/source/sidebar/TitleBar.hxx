@@ -58,7 +58,7 @@ protected:
 
     virtual Rectangle GetTitleArea (const Rectangle& rTitleBarBox) = 0;
     virtual void PaintDecoration (const Rectangle& rTitleBarBox) = 0;
-    virtual void PaintFocus (const Rectangle& rFocusBox);
+    void PaintFocus (const Rectangle& rFocusBox);
     virtual sidebar::Paint GetBackgroundPaint (void) = 0;
     virtual Color GetTextColor (void) = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);

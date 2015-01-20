@@ -330,7 +330,7 @@ public:
 
         @return false, default implementation
     */
-    virtual bool IsShadowTransparent() const;
+    bool IsShadowTransparent() const;
 
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;

@@ -71,7 +71,7 @@ class SwSelPaintRects : public SwRects
 
     const SwCrsrShell* pCShell;
 
-    virtual void Paint( const Rectangle& rRect );
+    void Paint( const Rectangle& rRect );
 
 #if HAVE_FEATURE_DESKTOP
     sdr::overlay::OverlayObject*    mpCursorOverlay;

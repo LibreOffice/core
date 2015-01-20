@@ -543,7 +543,7 @@ namespace dbaui
 
         /** disconnects from our XConnection, and cleans up this connection
         */
-        virtual void        disconnect();
+        void        disconnect();
 
         // late construction
         virtual bool        Construct(vcl::Window* pParent) SAL_OVERRIDE;

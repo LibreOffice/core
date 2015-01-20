@@ -82,19 +82,19 @@ namespace dbtools
 
         virtual ~FormattedColumnValue();
 
-        virtual void clear();
+        void clear();
 
         // access to the details of the formatting we determined
-        virtual sal_Int32   getFormatKey() const;
-        virtual sal_Int32   getFieldType() const;
-        virtual sal_Int16   getKeyType() const;
-        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >&
+        sal_Int32   getFormatKey() const;
+        sal_Int32   getFieldType() const;
+        sal_Int16   getKeyType() const;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >&
                             getColumn() const;
-        virtual const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >&
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumnUpdate >&
                             getColumnUpdate() const;
 
-        virtual bool            setFormattedValue( const OUString& _rFormattedStringValue ) const;
-        virtual OUString getFormattedValue() const;
+        bool            setFormattedValue( const OUString& _rFormattedStringValue ) const;
+        OUString getFormattedValue() const;
 
     private:
         ::std::unique_ptr< FormattedColumnValue_Data >    m_pData;

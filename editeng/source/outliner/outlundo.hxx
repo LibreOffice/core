@@ -88,7 +88,7 @@ public:
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
-    virtual void    Repeat();
+    void    Repeat();
 };
 
 // Help-Undo: If it does not exist an OutlinerUndoAction for a certain action
@@ -105,7 +105,7 @@ public:
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
-    virtual void    Repeat();
+    void    Repeat();
 };
 
 
@@ -122,7 +122,7 @@ public:
     virtual ~OLUndoExpand();
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE;
-    virtual void Repeat();
+    void Repeat();
 
     sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;

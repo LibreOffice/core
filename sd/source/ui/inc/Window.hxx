@@ -134,7 +134,7 @@ public:
     double  GetScrlLineHeight();
     double  GetScrlPageWidth();
     double  GetScrlPageHeight();
-    virtual void GrabFocus();
+    void GrabFocus();
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // DropTargetHelper
@@ -189,7 +189,7 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void) SAL_OVERRIDE;
-    virtual void SwitchView();
+    void SwitchView();
 
     OUString GetSurroundingText() const SAL_OVERRIDE;
     Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
