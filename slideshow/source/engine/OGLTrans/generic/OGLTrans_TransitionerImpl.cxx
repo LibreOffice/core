@@ -337,7 +337,7 @@ void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
         const GLubyte* vendor = glGetString( GL_VENDOR );
 
         /* TODO: check for version once the bug in fglrx driver is fixed */
-        mbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
+        mbBrokenTexturesATI = (vendor && strcmp( reinterpret_cast<const char *>(vendor), "ATI Technologies Inc." ) == 0 );
     }
     CHECK_GL_ERROR();
 }
