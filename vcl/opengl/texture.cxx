@@ -35,6 +35,9 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, bool bAllocate ) 
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST )
 {
+    SAL_WARN_IF( nWidth > GL_MAX_TEXTURE_SIZE || nHeight > GL_MAX_TEXTURE_SIZE,
+                 "vcl.opengl", "Either width (" << nWidth << ") or height (" << nHeight << " are greater than GL_MAX_TEXTURE_SIZE");
+
     glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -61,6 +64,9 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nX, int nY, int nWidth, int nHeight ) 
     // FIXME We need the window height here
     // nY = GetHeight() - nHeight - nY;
 
+    SAL_WARN_IF( nWidth > GL_MAX_TEXTURE_SIZE || nHeight > GL_MAX_TEXTURE_SIZE,
+                 "vcl.opengl", "Either width (" << nWidth << ") or height (" << nHeight << " are greater than GL_MAX_TEXTURE_SIZE");
+
     glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
@@ -84,6 +90,9 @@ ImplOpenGLTexture::ImplOpenGLTexture( int nWidth, int nHeight, int nFormat, int 
     mnHeight( nHeight ),
     mnFilter( GL_NEAREST )
 {
+    SAL_WARN_IF( nWidth > GL_MAX_TEXTURE_SIZE || nHeight > GL_MAX_TEXTURE_SIZE,
+                 "vcl.opengl", "Either width (" << nWidth << ") or height (" << nHeight << " are greater than GL_MAX_TEXTURE_SIZE");
+
     if( !mnTexture )
         glGenTextures( 1, &mnTexture );
     glBindTexture( GL_TEXTURE_2D, mnTexture );
