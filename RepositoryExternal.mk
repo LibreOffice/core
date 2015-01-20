@@ -2628,6 +2628,10 @@ endif # ENABLE_VALGRIND
 ifneq ($(SYSTEM_POPPLER),)
 
 define gb_LinkTarget__use_poppler
+$(call gb_LinkTarget_add_defs,$(1),\
+    -DSYSTEM_POPPLER_HEADERS \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
 	$(POPPLER_CFLAGS) \
 	$$(INCLUDE) \

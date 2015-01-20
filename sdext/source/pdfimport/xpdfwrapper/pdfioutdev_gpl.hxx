@@ -220,10 +220,17 @@ namespace pdfi
         virtual void eoClip(GfxState *state) SAL_OVERRIDE;
 
         //----- text drawing
+#ifdef SYSTEM_POPPLER_HEADERS
+        virtual void drawChar(GfxState *state, double x, double y,
+                              double dx, double dy,
+                              double originX, double originY,
+                              CharCode code, int nBytes, Unicode *u, int uLen) SAL_OVERRIDE;
+#else
         virtual void drawChar2(GfxState *state, double x, double y,
                               double dx, double dy,
                               double originX, double originY,
                               CharCode code, int nBytes, Unicode *u, int uLen) SAL_OVERRIDE;
+#endif
         virtual void drawString(GfxState *state, GooString *s) SAL_OVERRIDE;
         virtual void endTextObject(GfxState *state) SAL_OVERRIDE;
 

@@ -834,10 +834,17 @@ void PDFOutDev::eoClip(GfxState *state)
     local offset of character (zero for horizontal writing mode). not
     taken into account for output pos updates. Used for vertical writing.
  */
+#ifdef SYSTEM_POPPLER_HEADERS
+void PDFOutDev::drawChar(GfxState *state, double x, double y,
+                         double dx, double dy,
+                         double originX, double originY,
+                         CharCode, int /*nBytes*/, Unicode *u, int uLen)
+#else
 void PDFOutDev::drawChar2(GfxState *state, double x, double y,
                          double dx, double dy,
                          double originX, double originY,
                          CharCode, int /*nBytes*/, Unicode *u, int uLen)
+#endif
 {
     assert(state);
 
