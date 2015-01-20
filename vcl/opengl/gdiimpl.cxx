@@ -373,11 +373,11 @@ bool OpenGLSalGraphicsImpl::CheckOffscreenTexture()
     return true;
 }
 
-bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
+bool OpenGLSalGraphicsImpl::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
     if( mpProgram != NULL )
         mpProgram->Clean();
-    mpProgram = mpContext->UseProgram( rVertexShader, rFragmentShader );
+    mpProgram = mpContext->UseProgram( rVertexShader, rFragmentShader, preamble );
 #ifdef DBG_UTIL
     mProgramIsSolidColor = false; // UseSolid() will set to true if needed
 #endif

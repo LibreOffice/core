@@ -161,8 +161,6 @@ struct GLWindow
     ~GLWindow();
 };
 
-typedef std::pair<OUString, OUString> ProgramKey;
-
 class VCLOPENGL_DLLPUBLIC OpenGLContext
 {
 public:
@@ -203,8 +201,8 @@ public:
     void               ReleaseFramebuffers();
 
     // retrieve a program from the cache or compile/link it
-    OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
-    OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
+    OpenGLProgram*      GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
+    OpenGLProgram*      UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
 
     bool isCurrent();
     static void clearCurrent();
@@ -266,6 +264,14 @@ private:
     OpenGLFramebuffer* mpFirstFramebuffer;
     OpenGLFramebuffer* mpLastFramebuffer;
 
+    struct ProgramKey
+    {
+        ProgramKey( const OUString& vertexShader, const OUString& fragmentShader, const OString& preamble );
+        bool operator< ( const ProgramKey& other ) const;
+        OUString vertexShader;
+        OUString fragmentShader;
+        OString preamble;
+    };
     boost::ptr_map<ProgramKey, OpenGLProgram> maPrograms;
     OpenGLProgram* mpCurrentProgram;
 #ifdef DBG_UTIL

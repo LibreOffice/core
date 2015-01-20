@@ -73,7 +73,7 @@ protected:
     bool CheckOffscreenTexture();
 
 public:
-    bool UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader );
+    bool UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
     bool UseSolid( SalColor nColor, sal_uInt8 nTransparency );
     bool UseSolid( SalColor nColor, double fTransparency );
     bool UseSolid( SalColor nColor );

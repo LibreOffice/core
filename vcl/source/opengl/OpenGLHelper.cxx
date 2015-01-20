@@ -97,7 +97,7 @@ namespace {
     }
 }
 
-GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName)
+GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName, const OString& preamble)
 {
     // Create the shaders
     GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
@@ -107,6 +107,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 
     // Compile Vertex Shader
     OString aVertexShaderSource = loadShader(rVertexShaderName);
+    if( !preamble.isEmpty())
+        aVertexShaderSource = preamble + "\n" + aVertexShaderSource;
     char const * VertexSourcePointer = aVertexShaderSource.getStr();
     glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
     glCompileShader(VertexShaderID);
@@ -119,6 +121,8 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
 
     // Compile Fragment Shader
     OString aFragmentShaderSource = loadShader(rFragmentShaderName);
+    if( !preamble.isEmpty())
+        aFragmentShaderSource = preamble + "\n" + aFragmentShaderSource;
     char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
     glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
     glCompileShader(FragmentShaderID);

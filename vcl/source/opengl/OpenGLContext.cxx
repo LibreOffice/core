@@ -1582,9 +1582,9 @@ void OpenGLContext::ReleaseFramebuffers()
     }
 }
 
-OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
+OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
-    ProgramKey aKey( rVertexShader, rFragmentShader );
+    ProgramKey aKey( rVertexShader, rFragmentShader, preamble );
 
     boost::ptr_map<ProgramKey, OpenGLProgram>::iterator
         it = maPrograms.find( aKey );
@@ -1592,7 +1592,7 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
         return it->second;
 
     OpenGLProgram* pProgram = new OpenGLProgram;
-    if( !pProgram->Load( rVertexShader, rFragmentShader ) )
+    if( !pProgram->Load( rVertexShader, rFragmentShader, preamble ) )
     {
         delete pProgram;
         return NULL;
@@ -1602,9 +1602,9 @@ OpenGLProgram* OpenGLContext::GetProgram( const OUString& rVertexShader, const O
     return pProgram;
 }
 
-OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader )
+OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
-    OpenGLProgram* pProgram = GetProgram( rVertexShader, rFragmentShader );
+    OpenGLProgram* pProgram = GetProgram( rVertexShader, rFragmentShader, preamble );
 
     if( pProgram == mpCurrentProgram )
         return pProgram;
@@ -1613,6 +1613,22 @@ OpenGLProgram* OpenGLContext::UseProgram( const OUString& rVertexShader, const O
     mpCurrentProgram->Use();
 
     return mpCurrentProgram;
+}
+
+inline
+OpenGLContext::ProgramKey::ProgramKey( const OUString& v, const OUString& f, const OString& p )
+: vertexShader( v ), fragmentShader( f ), preamble( p )
+{
+}
+
+inline
+bool OpenGLContext::ProgramKey::operator< ( const ProgramKey& other ) const
+{
+    if( vertexShader != other.vertexShader )
+        return vertexShader < other.vertexShader;
+    if( fragmentShader != other.fragmentShader )
+        return fragmentShader < other.fragmentShader;
+    return preamble < other.preamble;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
