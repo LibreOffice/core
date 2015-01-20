@@ -231,13 +231,7 @@ public:
     }
 protected:
     /** Sets parent on children of this node */
-    void ClaimPaternity(){
-        SmNode* pNode;
-        sal_uInt16  nSize = GetNumSubNodes();
-        for (sal_uInt16 i = 0;  i < nSize;  i++)
-            if (NULL != (pNode = GetSubNode(i)))
-                pNode->SetParent((SmStructureNode*)this); //Cast is valid if we have children
-    }
+    inline void ClaimPaternity();
 private:
     SmStructureNode* aParentNode;
     void DumpAsDot(std::ostream &out, OUString* label, int number, int& id, int parent) const;
@@ -352,8 +346,13 @@ public:
     }
 };
 
-
-
+inline void SmNode::ClaimPaternity() {
+    SmNode* pNode;
+    sal_uInt16  nSize = GetNumSubNodes();
+    for (sal_uInt16 i = 0;  i < nSize;  i++)
+        if (NULL != (pNode = GetSubNode(i)))
+            pNode->SetParent(static_cast<SmStructureNode*>(this)); //Cast is valid if we have children
+}
 
 /** Abstract base class for all visible node
  *
