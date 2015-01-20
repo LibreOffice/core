@@ -23,19 +23,23 @@
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlnumi.hxx>
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
+using namespace com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::xml::sax::XAttributeList;
@@ -112,28 +116,32 @@ void XMLLineNumberingImportContext::StartElement(
 {
     static const SvXMLTokenMapEntry aLineNumberingTokenMap[] =
     {
-        { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_LINENUMBERING_STYLE_NAME },
-        { XML_NAMESPACE_TEXT, XML_NUMBER_LINES,
-              XML_TOK_LINENUMBERING_NUMBER_LINES },
-        { XML_NAMESPACE_TEXT, XML_COUNT_EMPTY_LINES,
-              XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES },
-        { XML_NAMESPACE_TEXT, XML_COUNT_IN_TEXT_BOXES,
-              XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES },
-        { XML_NAMESPACE_TEXT, XML_RESTART_ON_PAGE,
-              XML_TOK_LINENUMBERING_RESTART_NUMBERING },
-        { XML_NAMESPACE_TEXT, XML_OFFSET, XML_TOK_LINENUMBERING_OFFSET },
-        { XML_NAMESPACE_STYLE, XML_NUM_FORMAT, XML_TOK_LINENUMBERING_NUM_FORMAT },
-        { XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC,
-              XML_TOK_LINENUMBERING_NUM_LETTER_SYNC },
-        { XML_NAMESPACE_TEXT, XML_NUMBER_POSITION,
-              XML_TOK_LINENUMBERING_NUMBER_POSITION },
-        { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT },
-    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_CONFIGURATION,
-    //        XML_TOK_LINENUMBERING_LINENUMBERING_CONFIGURATION },
-    //  { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT },
-    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_SEPARATOR,
-    //        XML_TOK_LINENUMBERING_LINENUMBERING_SEPARATOR },
-
+        { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_LINENUMBERING_STYLE_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name) },
+        { XML_NAMESPACE_TEXT, XML_NUMBER_LINES, XML_TOK_LINENUMBERING_NUMBER_LINES,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_number_lines) },
+        { XML_NAMESPACE_TEXT, XML_COUNT_EMPTY_LINES, XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_count_empty_lines) },
+        { XML_NAMESPACE_TEXT, XML_COUNT_IN_TEXT_BOXES, XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_count_in_text_boxes) },
+        { XML_NAMESPACE_TEXT, XML_RESTART_ON_PAGE, XML_TOK_LINENUMBERING_RESTART_NUMBERING,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_restart_on_page) },
+        { XML_NAMESPACE_TEXT, XML_OFFSET, XML_TOK_LINENUMBERING_OFFSET,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_offset) },
+        { XML_NAMESPACE_STYLE, XML_NUM_FORMAT, XML_TOK_LINENUMBERING_NUM_FORMAT,
+            (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_num_format) },
+        { XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC, XML_TOK_LINENUMBERING_NUM_LETTER_SYNC,
+            (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_num_letter_sync) },
+        { XML_NAMESPACE_TEXT, XML_NUMBER_POSITION, XML_TOK_LINENUMBERING_NUMBER_POSITION,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_number_position) },
+        { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_increment) },
+    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_CONFIGURATION, XML_TOK_LINENUMBERING_LINENUMBERING_CONFIGURATION
+    //      (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_linenumbering_configuration) },
+    //  { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT,
+    //      (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_increment) },
+    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_SEPARATOR, XML_TOK_LINENUMBERING_LINENUMBERING_SEPARATOR
+    //      (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_linenumbering_separator) },
         XML_TOKEN_MAP_END
     };
 
@@ -154,9 +162,50 @@ void XMLLineNumberingImportContext::StartElement(
 }
 
 void SAL_CALL XMLLineNumberingImportContext::startFastElement(
-    sal_Int32 /*Element*/, const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 /*Element*/, const Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
+    static const SvXMLTokenMapEntry aLineNumberingTokenMap[] =
+    {
+        { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_LINENUMBERING_STYLE_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name) },
+        { XML_NAMESPACE_TEXT, XML_NUMBER_LINES, XML_TOK_LINENUMBERING_NUMBER_LINES,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_number_lines) },
+        { XML_NAMESPACE_TEXT, XML_COUNT_EMPTY_LINES, XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_count_empty_lines) },
+        { XML_NAMESPACE_TEXT, XML_COUNT_IN_TEXT_BOXES, XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_count_in_text_boxes) },
+        { XML_NAMESPACE_TEXT, XML_RESTART_ON_PAGE, XML_TOK_LINENUMBERING_RESTART_NUMBERING,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_restart_on_page) },
+        { XML_NAMESPACE_TEXT, XML_OFFSET, XML_TOK_LINENUMBERING_OFFSET,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_offset) },
+        { XML_NAMESPACE_STYLE, XML_NUM_FORMAT, XML_TOK_LINENUMBERING_NUM_FORMAT,
+            (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_num_format) },
+        { XML_NAMESPACE_STYLE, XML_NUM_LETTER_SYNC, XML_TOK_LINENUMBERING_NUM_LETTER_SYNC,
+            (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_num_letter_sync) },
+        { XML_NAMESPACE_TEXT, XML_NUMBER_POSITION, XML_TOK_LINENUMBERING_NUMBER_POSITION,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_number_position) },
+        { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT,
+            (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_increment) },
+    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_CONFIGURATION, XML_TOK_LINENUMBERING_LINENUMBERING_CONFIGURATION
+    //      (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_linenumbering_configuration) },
+    //  { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT,
+    //      (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_increment) },
+    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_SEPARATOR, XML_TOK_LINENUMBERING_LINENUMBERING_SEPARATOR
+    //      (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_linenumbering_separator) },
+        XML_TOKEN_MAP_END
+    };
+
+    SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
+
+    // process attributes
+    Sequence< css::xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for(css::xml::FastAttribute* attr = attributes.begin();
+            attr != attributes.end(); attr++ )
+    {
+        ProcessAttribute(
+            (enum LineNumberingToken)aTokenMap.Get(attr->Token), attr->Value);
+    }
 }
 
 void XMLLineNumberingImportContext::ProcessAttribute(
@@ -224,7 +273,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
                 { XML_RIGHT,    style::LineNumberPosition::RIGHT },
                 { XML_INSIDE,   style::LineNumberPosition::INSIDE },
                 { XML_OUTSIDE,  style::LineNumberPosition::OUTSIDE },
-                { XML_TOKEN_INVALID, 0 }
+                { xmloff::token::XML_TOKEN_INVALID, 0 }
             };
 
             sal_uInt16 nTmp16;
@@ -334,11 +383,20 @@ SvXMLImportContext* XMLLineNumberingImportContext::CreateChildContext(
 }
 
 Reference< xml::sax::XFastContextHandler > SAL_CALL
-    XMLLineNumberingImportContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    XMLLineNumberingImportContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return Reference< xml::sax::XFastContextHandler >();
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_linenumbering_separator) )
+    {
+        return new XMLLineNumberingSeparatorImportContext(
+            GetImport(), Element, *this );
+    }
+    else
+    {
+        // unknown element: default context
+        return SvXMLImportContext::createFastChildContext( Element, xAttrList );
+    }
 }
 
 void XMLLineNumberingImportContext::SetSeparatorText(
