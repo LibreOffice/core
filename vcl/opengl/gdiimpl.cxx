@@ -96,7 +96,11 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
     if( pContext )
         pContext->AddRef();
     else
+    {
         pContext = mbOffscreen ? GetDefaultContext() : CreateWinContext();
+        if (pContext)
+            pContext->AddRef();
+    }
 
     mpContext = pContext;
     return (mpContext != NULL);
