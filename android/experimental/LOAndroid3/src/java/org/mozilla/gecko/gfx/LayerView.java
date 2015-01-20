@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.R;
 
 import java.lang.reflect.Method;
 import java.nio.IntBuffer;
@@ -261,7 +262,8 @@ public class LayerView extends FrameLayout {
     public Bitmap getDrawable(String name) {
         Context context = getContext();
         Resources resources = context.getResources();
-        int resourceID = resources.getIdentifier(name, "drawable", context.getPackageName());
+        String packageName = resources.getResourcePackageName(R.id.dummy_id_for_package_name_resolution);
+        int resourceID = resources.getIdentifier(name, "drawable", packageName);
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inScaled = false;
         return BitmapFactory.decodeResource(context.getResources(), resourceID, options);
