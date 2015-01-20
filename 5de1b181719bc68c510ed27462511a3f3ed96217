@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_a1a45808",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-20T13:18:57Z",
+      "side": 1,
+      "message": "* asymmetric \u003d\u003d looks scary; what you want to check is that if either equals \".uno:Open\" whether the other starts with \".uno:OpenFrom\"\n\n* use explicit OUString::startsWith instead of OUString::match with zero fromIndex",
+      "revId": "5de1b181719bc68c510ed27462511a3f3ed96217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a46c9f1_c1a964e1",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-20T13:18:57Z",
+      "side": 1,
+      "message": "why use ^?  what you want is equal || match",
+      "revId": "5de1b181719bc68c510ed27462511a3f3ed96217",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
