@@ -26,13 +26,17 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::com::sun::star::uno;
+using namespace com::sun::star::xml::sax;
 
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_INCREMENT;
+using xmloff::XML_increment;
 
 TYPEINIT1( XMLLineNumberingSeparatorImportContext, SvXMLImportContext );
 
@@ -43,6 +47,14 @@ XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
     XMLLineNumberingImportContext& rLineNumbering) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         rLineNumberingContext(rLineNumbering)
+{
+}
+
+XMLLineNumberingSeparatorImportContext::XMLLineNumberingSeparatorImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    XMLLineNumberingImportContext& rLineNumbering )
+:   SvXMLImportContext( rImport ),
+    rLineNumberingContext(rLineNumbering)
 {
 }
 
@@ -75,13 +87,45 @@ void XMLLineNumberingSeparatorImportContext::StartElement(
     }
 }
 
+void SAL_CALL XMLLineNumberingSeparatorImportContext::startFastElement(
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_increment)
+        && xAttrList.is() && xAttrList->hasAttribute( Element ) )
+    {
+        sal_Int32 nTmp;
+        if( sax::Converter::convertNumber( nTmp,
+            xAttrList->getValue( Element ), 0 ) )
+        {
+            rLineNumberingContext.SetSeparatorIncrement((sal_Int16)nTmp);
+        }
+        // else: invalid number -> ignore
+    }
+    // else: unknown attribute -> ignore
+}
+
 void XMLLineNumberingSeparatorImportContext::Characters(
     const OUString& rChars )
 {
     sSeparatorBuf.append(rChars);
 }
 
+void SAL_CALL XMLLineNumberingSeparatorImportContext::characters(
+    const OUString& rChars )
+    throw( RuntimeException, SAXException, std::exception )
+{
+    sSeparatorBuf.append(rChars);
+}
+
 void XMLLineNumberingSeparatorImportContext::EndElement()
+{
+    rLineNumberingContext.SetSeparatorText(sSeparatorBuf.makeStringAndClear());
+}
+
+void SAL_CALL XMLLineNumberingSeparatorImportContext::endFastElement(
+    sal_Int32 /*Element*/ )
+    throw( RuntimeException, SAXException, std::exception)
 {
     rLineNumberingContext.SetSeparatorText(sSeparatorBuf.makeStringAndClear());
 }
