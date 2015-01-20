@@ -12,7 +12,6 @@ package org.libreoffice.ui;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.LOAbout;
-import org.libreoffice.android.Bootstrap;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
@@ -116,12 +115,6 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         documentProvider = documentProviderFactory.getDefaultProvider();
         homeDirectory = documentProvider.getRootDirectory();
         currentDirectory = homeDirectory;
-        //Load default settings
-
-        Bootstrap.setup(this);
-
-        Bootstrap.putenv("SAL_LOG=yes");
-
     }
 
     public void createUI(){
