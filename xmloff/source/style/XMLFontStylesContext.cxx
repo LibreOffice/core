@@ -259,6 +259,14 @@ XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc( SvXMLImport& rIm
 {
 }
 
+XMLFontStyleContextFontFaceSrc::XMLFontStyleContextFontFaceSrc(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const XMLFontStyleContextFontFace& _font )
+:   SvXMLImportContext( rImport ),
+    font( _font )
+{
+}
+
 SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -267,6 +275,16 @@ SvXMLImportContext * XMLFontStyleContextFontFaceSrc::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_SVG && IsXMLToken( rLocalName, XML_FONT_FACE_URI ))
         return new XMLFontStyleContextFontFaceUri( GetImport(), nPrefix, rLocalName, xAttrList, font );
     return SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+}
+
+css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+    XMLFontStyleContextFontFaceSrc::createFastChildContext( sal_Int32 Element,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_font_face_uri) )
+        return new XMLFontStyleContextFontFaceUri( GetImport(), Element, xAttrList, font );
+    return SvXMLImportContext::createFastChildContext( Element, xAttrList );
 }
 
 
