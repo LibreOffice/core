@@ -182,6 +182,25 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
     }
 
+    private void refreshView() {
+        // enable home icon as "up" if required
+        if (!currentDirectory.equals(homeDirectory)) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+        // refresh view
+        if (viewMode == GRID_VIEW) {
+            gv.setAdapter(new GridItemAdapter(getApplicationContext(),
+                    currentDirectory, filePaths));
+        } else {
+            lv.setAdapter(new ListItemAdapter(getApplicationContext(),
+                    filePaths));
+        }
+        // close drawer if it was open
+        drawerLayout.closeDrawer(drawerList);
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
             ContextMenuInfo menuInfo) {
@@ -224,49 +243,32 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
             @Override
             protected void onPostExecute(Void result) {
-                // enable home icon as "up" if required
-                if (!currentDirectory.equals(homeDirectory)) {
-                    getActionBar().setDisplayHomeAsUpEnabled(true);
-                }
-                // refresh view
-                if (viewMode == GRID_VIEW) {
-                    gv.setAdapter(new GridItemAdapter(getApplicationContext(),
-                            currentDirectory, filePaths));
-                } else {
-                    lv.setAdapter(new ListItemAdapter(getApplicationContext(),
-                            filePaths));
-                }
-                // close drawer
-                drawerLayout.closeDrawer(drawerList);
+                refreshView();
             }
         }.execute(provider);
     }
 
     public void openDirectory(IFile dir) {
-        currentDirectory = dir;
-        if( !currentDirectory.equals( homeDirectory )){
-            ActionBar actionBar = getActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }else{
-            ActionBar actionBar = getActionBar();
-            actionBar.setDisplayHomeAsUpEnabled( false );
-        }
-        filePaths = currentDirectory.listFiles(FileUtilities.getFileFilter(filterMode));
-        // FileUtilities.sortFiles( filePaths, sortMode );
-        /*
-           for( int i = 0; i < fileNames.length; i++){
-           fileNames[ i ] = filePaths[ i ].getName();
-           if( !FileUtilities.hasThumbnail( filePaths[ i ] ) )
-           {
-           new ThumbnailGenerator( filePaths[ i ] );
-           }
-           }
-           */
-        if( viewMode == GRID_VIEW){
-            gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
-        }else{
-            lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
-        }
+        if (dir == null)
+            return;
+
+        new AsyncTask<IFile, Void, Void>() {
+            @Override
+            protected Void doInBackground(IFile... dir) {
+                // get list of files:
+                // this operation may imply network access and must be run in
+                // a different thread
+                currentDirectory = dir[0];
+                filePaths = currentDirectory.listFiles(FileUtilities
+                        .getFileFilter(filterMode));
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                refreshView();
+            }
+        }.execute(dir);
     }
 
     public void open(IFile document) {
