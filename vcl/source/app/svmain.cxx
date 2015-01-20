@@ -453,7 +453,13 @@ void DeInitVCL()
     {
         OpenGLContext* pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
         if( pContext )
+        {
+#ifdef DBG_UTIL
+            pContext->DeRef(NULL);
+#else
             pContext->DeRef();
+#endif
+        }
         delete pSVData->mpDefaultWin;
         pSVData->mpDefaultWin = NULL;
     }
