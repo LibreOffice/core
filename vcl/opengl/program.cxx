@@ -31,9 +31,9 @@ OpenGLProgram::~OpenGLProgram()
         glDeleteProgram( mnId );
 }
 
-bool OpenGLProgram::Load( const OUString& rVertexShader, const OUString& rFragmentShader )
+bool OpenGLProgram::Load( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble )
 {
-    mnId = OpenGLHelper::LoadShaders( rVertexShader, rFragmentShader );
+    mnId = OpenGLHelper::LoadShaders( rVertexShader, rFragmentShader, preamble );
     return ( mnId != 0 );
 }
 

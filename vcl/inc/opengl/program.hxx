@@ -43,7 +43,7 @@ public:
     OpenGLProgram();
     ~OpenGLProgram();
 
-    bool Load( const OUString& rVertexShader, const OUString& rFragmentShader );
+    bool Load( const OUString& rVertexShader, const OUString& rFragmentShader, const OString& preamble = "" );
     bool Use();
     bool Clean();
 

@@ -25,7 +25,7 @@
 class VCLOPENGL_DLLPUBLIC OpenGLHelper
 {
 public:
-    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName);
+    static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OString& preamble = "" );
 
     /**
      * The caller is responsible for allocate the memory for the RGBA buffer, before call
