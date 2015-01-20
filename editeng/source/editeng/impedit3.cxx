@@ -841,7 +841,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 // Use the widest range ...
                 // The widest range could be a bit confusing, so normally it
                 // is the first one. Best with gaps.
-                if ( pTextRanges->size() )
+                assert(pTextRanges->size() % 2 == 0 && "textranges are always in pairs");
+                if (!pTextRanges->empty())
                 {
                     long nA = pTextRanges->at(0);
                     long nB = pTextRanges->at(1);
