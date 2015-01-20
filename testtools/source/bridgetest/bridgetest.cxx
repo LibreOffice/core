@@ -1037,7 +1037,7 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
     td.makeComplete();
     typelib_TypeDescription* pTdRaw = td.get();
     typelib_IndirectTypeDescription* pIndirectTd =
-        (typelib_IndirectTypeDescription*) pTdRaw;
+        reinterpret_cast<typelib_IndirectTypeDescription*>(pTdRaw);
 
     typelib_TypeDescription* pTdElem = pIndirectTd->pType->pType;
     sal_Int8* buf = new sal_Int8[pTdElem->nSize * val->nElements];
@@ -1051,12 +1051,12 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
         Type _tElem(pTdElem->pWeakRef);
         for (int i = 0; i < val->nElements; i++)
         {
-            sal_Int8 *pValBuf = (sal_Int8 *)(&val->elements + i * pTdElem->nSize);
+            sal_Int8 const *pValBuf = reinterpret_cast<sal_Int8 const *>(&val->elements + i * pTdElem->nSize);
 
             uno_Sequence* seq = cloneSequence(
-                *(uno_Sequence**) (pValBuf),
+                reinterpret_cast<uno_Sequence const *>(pValBuf),
                 _tElem);
-            *((uno_Sequence**) pBufCur) = seq;
+            *reinterpret_cast<uno_Sequence**>(pBufCur) = seq;
             pBufCur += pTdElem->nSize;
         }
         break;
