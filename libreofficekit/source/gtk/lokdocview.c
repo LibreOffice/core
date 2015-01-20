@@ -22,6 +22,7 @@
 
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
+static float pixelToTwip(float nInput);
 
 // We specifically need to destroy the document when closing in order to ensure
 // that lock files etc. are cleaned up.
@@ -36,6 +37,7 @@ void lcl_onDestroy( LOKDocView* pDocView, gpointer pData )
 /// Receives a button press event.
 void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
+    g_info("lcl_signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x), (int)pixelToTwip(pEvent->y));
     (void) pEventBox;
 
     lok_docview_set_edit(pDocView, TRUE);
@@ -43,10 +45,10 @@ void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* 
     switch (pEvent->type)
     {
     case GDK_BUTTON_PRESS:
-        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pEvent->x, pEvent->y);
+        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
         break;
     case GDK_BUTTON_RELEASE:
-        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONUP, pEvent->x, pEvent->y);
+        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
         break;
     default:
         break;
