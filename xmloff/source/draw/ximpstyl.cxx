@@ -383,6 +383,62 @@ SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
     mnHeight( 0L ),
     meOrientation(GetSdImport().IsDraw() ? view::PaperOrientation_PORTRAIT : view::PaperOrientation_LANDSCAPE)
 {
+    // set family to something special at SvXMLStyleContext
+    // for differences in search-methods
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetPageMasterAttrTokenMap();
+
+        switch(rAttrTokenMap.Get( attr->Token ))
+        {
+        case XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnBorderTop, attr->Value);
+            break;
+        }
+        case XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnBorderBottom, attr->Value);
+            break;
+        }
+        case XML_TOK_PAGEMASTERSTYLE_MARGIN_LEFT:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnBorderLeft, attr->Value);
+            break;
+        }
+        case XML_TOK_PAGEMASTERSTYLE_MARGIN_RIGHT:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnBorderRight, attr->Value);
+            break;
+        }
+        case XML_TOK_PAGEMASTERSTYLE_PAGE_WIDTH:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnWidth, attr->Value);
+            break;
+        }
+        case XML_TOK_PAGEMASTERSTYLE_PAGE_HEIGHT:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnHeight, attr->Value);
+            break;
+        }
+        case XML_TOK_PAGEMASTERSTYLE_PAGE_ORIENTATION:
+        {
+            if( XML_portrait == (attr->Token & XML_portrait) )
+                meOrientation = view::PaperOrientation_PORTRAIT;
+            else
+                meOrientation = view::PaperOrientation_LANDSCAPE;
+            break;
+        }
+        }
+    }
 }
 
 SdXMLPageMasterStyleContext::SdXMLPageMasterStyleContext(
