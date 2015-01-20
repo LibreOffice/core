@@ -166,7 +166,7 @@ namespace dbaui
         DBSubComponentController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxORB);
         virtual ~DBSubComponentController();
 
-        virtual void        disconnect();
+        void        disconnect();
         virtual void        reconnect( bool _bUI );
                 bool        ensureConnected( bool _bUI )    { if ( !isConnected() ) reconnect( _bUI ); return isConnected(); }
 

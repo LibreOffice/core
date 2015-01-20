@@ -56,8 +56,8 @@ public:
     TYPEINFO_OVERRIDE();
     SdrVirtObj(SdrObject& rNewObj);
     virtual ~SdrVirtObj();
-    virtual SdrObject& ReferencedObj();
-    virtual const SdrObject& GetReferencedObj() const;
+    SdrObject& ReferencedObj();
+    const SdrObject& GetReferencedObj() const;
     virtual void NbcSetAnchorPos(const Point& rAnchorPos) SAL_OVERRIDE;
     virtual void SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
 

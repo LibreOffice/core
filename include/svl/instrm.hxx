@@ -61,9 +61,9 @@ public:
 
     virtual ~SvInputStream();
 
-    virtual void AddMark(sal_uLong nPos);
+    void AddMark(sal_uLong nPos);
 
-    virtual void RemoveMark(sal_uLong nPos);
+    void RemoveMark(sal_uLong nPos);
 };
 
 #endif // INCLUDED_SVL_INSTRM_HXX

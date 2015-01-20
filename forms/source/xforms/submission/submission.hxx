@@ -138,13 +138,13 @@ public:
 
     virtual ~CSubmission() {}
 
-    virtual void setEncoding(const OUString& aEncoding)
+    void setEncoding(const OUString& aEncoding)
     {
         m_aEncoding = aEncoding;
     }
     virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& ) = 0;
 
-    virtual SubmissionResult replace(const OUString&, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
+    SubmissionResult replace(const OUString&, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
 
 };
 

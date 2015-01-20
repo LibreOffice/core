@@ -28,7 +28,7 @@ class SW_DLLPUBLIC NumEditAction: public NumericField
     Link aActionLink;
 
 protected:
-    virtual void Action();
+    void Action();
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 public:
     NumEditAction( vcl::Window* pParent, const ResId& rResId ) :

@@ -207,7 +207,7 @@ public:
        @retval true     pNode is first child of this node
        @retval false    else
      */
-    virtual bool IsFirst(const SwNumberTreeNode * pNode) const;
+    bool IsFirst(const SwNumberTreeNode * pNode) const;
 
     /**
        Return if this node if the first non-phantom node in the tree.
@@ -215,7 +215,7 @@ public:
        @retval true     this node is the first non-phantom node in the tree
        @retval false    else
      */
-    virtual bool IsFirst() const;
+    bool IsFirst() const;
 
     /**
        Return if this node is a phantom.

@@ -183,7 +183,7 @@ protected:
 
      bool IsEditableState();
 
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL
+    ::com::sun::star::awt::Rectangle SAL_CALL
         getBoundsImpl(bool bRelative)
         throw (css::uno::RuntimeException, std::exception);
 
@@ -297,7 +297,7 @@ public:
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding()
+    ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding()
         throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

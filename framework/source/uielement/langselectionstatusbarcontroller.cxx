@@ -81,27 +81,6 @@ class LangSelectionStatusbarController:
 public:
     explicit LangSelectionStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
-    {
-        return OUString("com.sun.star.comp.framework.LangSelectionStatusbarController");
-    }
-
-    virtual bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
-    {
-        return ServiceName == "com.sun.star.frame.StatusbarController";
-    }
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException)
-    {
-        css::uno::Sequence< OUString > aSeq(1);
-        aSeq[0] = "com.sun.star.frame.StatusbarController";
-        return aSeq;
-    }
-
     // XInitialization
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 

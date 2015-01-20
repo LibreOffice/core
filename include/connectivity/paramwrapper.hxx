@@ -105,7 +105,7 @@ namespace param
         virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
 
         // pseudo-XComponent
-        virtual void SAL_CALL dispose();
+        void SAL_CALL dispose();
 
     protected:
         virtual ~ParameterWrapper();

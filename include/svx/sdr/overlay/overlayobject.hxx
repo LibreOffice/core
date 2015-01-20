@@ -111,7 +111,7 @@ namespace sdr
             // set changed flag. Call after change, since the old range is invalidated
             // and then the new one is calculated and invalidated, too. This will only
             // work after the change.
-            virtual void objectChange();
+            void objectChange();
 
             // write access to AntiAliase flag. This is protected since
             // only implementations are allowed to change this, preferably in their

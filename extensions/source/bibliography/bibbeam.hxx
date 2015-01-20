@@ -67,7 +67,7 @@ namespace bib
                     getControlContainer() SAL_OVERRIDE;
         public:
             // #100312# -------------------
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception >
                     getDispatchProviderInterception();
 
             BibBeamer(vcl::Window* pParent,BibDataManager* pDatMan, WinBits nStyle = WB_3DLOOK );

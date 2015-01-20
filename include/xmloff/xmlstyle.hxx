@@ -249,7 +249,7 @@ public:
         GetStylesContainer( sal_uInt16 nFamily ) const;
     virtual OUString GetServiceName( sal_uInt16 nFamily ) const;
 
-       virtual ::com::sun::star::uno::Reference < ::com::sun::star::style::XAutoStyleFamily >
+       ::com::sun::star::uno::Reference < ::com::sun::star::style::XAutoStyleFamily >
         GetAutoStyles( sal_uInt16 nFamily ) const;
     void CopyAutoStylesToDoc();
     void CopyStylesToDoc( bool bOverwrite, bool bFinish = true );

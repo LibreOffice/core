@@ -105,7 +105,7 @@ public:
     virtual void    LoseFocus() SAL_OVERRIDE;
 
     using Window::Scroll;
-    virtual void    Scroll();
+    void    Scroll();
     virtual void    EndScroll();
 
     long            DoScroll( long nNewPos );

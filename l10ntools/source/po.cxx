@@ -52,41 +52,36 @@ public:
     virtual             ~GenPoEntry();
                         // Default copy constructor and copy operator work well
 
-    virtual OString     getExtractCom() const   { return m_sExtractCom; }
-    virtual OString     getReference() const    { return m_sReference; }
-    virtual OString     getMsgCtxt() const      { return m_sMsgCtxt; }
-    virtual OString     getMsgId() const        { return m_sMsgId; }
-    virtual OString     getMsgStr() const       { return m_sMsgStr; }
-    virtual bool        isFuzzy() const         { return m_bFuzzy; }
-    virtual bool        isNull() const          { return m_bNull; }
+    OString     getReference() const    { return m_sReference; }
+    OString     getMsgCtxt() const      { return m_sMsgCtxt; }
+    OString     getMsgId() const        { return m_sMsgId; }
+    OString     getMsgStr() const       { return m_sMsgStr; }
+    bool        isFuzzy() const         { return m_bFuzzy; }
+    bool        isNull() const          { return m_bNull; }
 
-    virtual void        setExtractCom(const OString& rExtractCom)
+    void        setExtractCom(const OString& rExtractCom)
                         {
                             m_sExtractCom = rExtractCom;
                         }
-    virtual void        setReference(const OString& rReference)
+    void        setReference(const OString& rReference)
                         {
                             m_sReference = rReference;
                         }
-    virtual void        setMsgCtxt(const OString& rMsgCtxt)
+    void        setMsgCtxt(const OString& rMsgCtxt)
                         {
                             m_sMsgCtxt = rMsgCtxt;
                         }
-    virtual void        setMsgId(const OString& rMsgId)
+    void        setMsgId(const OString& rMsgId)
                         {
                             m_sMsgId = rMsgId;
                         }
-    virtual void        setMsgStr(const OString& rMsgStr)
+    void        setMsgStr(const OString& rMsgStr)
                         {
                             m_sMsgStr = rMsgStr;
                         }
-    virtual void        setFuzzy(const bool bFuzzy)
-                        {
-                            m_bFuzzy = bFuzzy;
-                        }
 
-    virtual void        writeToFile(std::ofstream& rOFStream) const;
-    virtual void        readFromFile(std::ifstream& rIFStream);
+    void        writeToFile(std::ofstream& rOFStream) const;
+    void        readFromFile(std::ifstream& rIFStream);
 };
 
 namespace

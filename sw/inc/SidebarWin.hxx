@@ -76,7 +76,7 @@ class SwSidebarWin : public vcl::Window
                                   const long PageBorder);
         void SetPosAndSize();
         void TranslateTopPosition(const long aAmount);
-        virtual void CheckMetaText();
+        void CheckMetaText();
 
         inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
         SwEditWin* EditWin();
@@ -92,7 +92,7 @@ class SwSidebarWin : public vcl::Window
         long            GetPostItTextHeight();
 
         void            SwitchToPostIt(sal_uInt16 aDirection);
-        virtual void    SwitchToFieldPos();
+        void    SwitchToFieldPos();
 
         virtual sal_uInt32 MoveCaret() = 0;
 
@@ -155,8 +155,8 @@ class SwSidebarWin : public vcl::Window
 
         void    ToggleInsMode();
 
-        virtual void    ActivatePostIt();
-        virtual void    DeactivatePostIt();
+        void    ActivatePostIt();
+        void    DeactivatePostIt();
 
         void SetChangeTracking( const SwPostItHelper::SwLayoutStatus aStatus,
                                 const Color& aColor);

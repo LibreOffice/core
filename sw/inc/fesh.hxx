@@ -770,7 +770,7 @@ public:
     bool IsVerticalModeAtNdAndPos( const SwTxtNode& _rTxtNode,
                                    const Point& _rDocPos ) const;
 
-    virtual void ToggleHeaderFooterEdit( );
+    void ToggleHeaderFooterEdit( );
 };
 
 void ClearFEShellTabCols();

@@ -164,7 +164,7 @@ public:
     virtual void    AdjustLayout( ImplLayoutArgs& );    // adjusting after fallback etc.
     virtual void    InitFont() const {}
     virtual void    DrawText( SalGraphics& ) const = 0;
-    virtual bool    DrawTextSpecial( SalGraphics& /* rGraphics */, sal_uInt32 /* flags */ ) const { return false; }
+    bool    DrawTextSpecial( SalGraphics& /* rGraphics */, sal_uInt32 /* flags */ ) const { return false; }
 #define DRAWTEXT_F_OUTLINE ((sal_uInt32)(1<<0))
 
     int             GetUnitsPerPixel() const                { return mnUnitsPerPixel; }
@@ -175,16 +175,16 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
-    virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
+    bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
                                    DeviceCoordinate* pGlyphAdvAry = NULL, int* pCharPosAry = NULL,
                                    const PhysicalFontFace** pFallbackFonts = NULL ) const = 0;
     virtual bool    GetOutline( SalGraphics&, ::basegfx::B2DPolyPolygonVector& ) const;
-    virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
+    bool    GetBoundRect( SalGraphics&, Rectangle& ) const;
 
-    virtual bool    IsSpacingGlyph( sal_GlyphId ) const;
+    bool    IsSpacingGlyph( sal_GlyphId ) const;
 
     // reference counting
     void            Release() const;
@@ -193,7 +193,7 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
-    virtual void    DisableGlyphInjection( bool /*bDisable*/ ) {}
+    void    DisableGlyphInjection( bool /*bDisable*/ ) {}
 
 protected:
     // used by layout engines
@@ -240,7 +240,7 @@ public:
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
                                     const PhysicalFontFace* pBaseFont = NULL );
-    virtual bool    AddFallback( SalLayout& rFallbackLayout,
+    bool    AddFallback( SalLayout& rFallbackLayout,
                                  ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
@@ -322,8 +322,8 @@ public:
     void            AppendGlyph( const GlyphItem& );
     void            Reserve(int size) { m_GlyphItems.reserve(size + 1); }
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;
-    virtual void    ApplyDXArray( ImplLayoutArgs& );
-    virtual void    Justify( DeviceCoordinate nNewWidth );
+    void    ApplyDXArray( ImplLayoutArgs& );
+    void    Justify( DeviceCoordinate nNewWidth );
     void            KashidaJustify( long nIndex, int nWidth );
     void            ApplyAsianKerning( const sal_Unicode*, int nLength );
     void            SortGlyphItems();

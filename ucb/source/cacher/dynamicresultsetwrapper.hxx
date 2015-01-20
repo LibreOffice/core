@@ -168,7 +168,7 @@ public:
     impl_disposing( const com::sun::star::lang::EventObject& Source )
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL
+    void SAL_CALL
     impl_notify( const ::com::sun::star::ucb::ListEvent& Changes )
         throw( com::sun::star::uno::RuntimeException );
 };

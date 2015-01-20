@@ -233,34 +233,34 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
 
         /** @short  TODO */
-        virtual css::uno::Reference< css::uno::XComponentContext > getComponentContext();
+        css::uno::Reference< css::uno::XComponentContext > getComponentContext();
 
 
         /** @short  TODO */
-        virtual TURLList* getURLListAccess();
+        TURLList& getURLListAccess();
 
 
         /** @short  TODO */
         static bool isBrokenTempEntry(const TURLInfo& rInfo);
-        virtual void saveBrokenTempEntries(const OUString& sSaveDir);
-        virtual void saveAllTempEntries(const OUString& sSaveDir);
-        virtual void forgetBrokenTempEntries();
-        virtual void forgetAllRecoveryEntries();
+        void saveBrokenTempEntries(const OUString& sSaveDir);
+        void saveAllTempEntries(const OUString& sSaveDir);
+        void forgetBrokenTempEntries();
+        void forgetAllRecoveryEntries();
         void forgetBrokenRecoveryEntries();
 
 
         /** @short  TODO */
-        virtual void setProgressHandler(const css::uno::Reference< css::task::XStatusIndicator >& xProgress);
+        void setProgressHandler(const css::uno::Reference< css::task::XStatusIndicator >& xProgress);
 
 
         /** @short  TODO */
-        virtual void setUpdateListener(IRecoveryUpdateListener* pListener);
+        void setUpdateListener(IRecoveryUpdateListener* pListener);
 
 
         /** @short  TODO */
-        virtual void doEmergencySavePrepare();
-        virtual void doEmergencySave();
-        virtual void doRecovery();
+        void doEmergencySavePrepare();
+        void doEmergencySave();
+        void doRecovery();
 
 
         /** @short  TODO */
@@ -583,11 +583,11 @@ class BrokenRecoveryDialog : public ModalDialog
 
 
         /** @short TODO */
-        virtual bool isExecutionNeeded();
+        bool isExecutionNeeded();
 
 
         /** @short TODO */
-        virtual OUString getSaveDirURL();
+        OUString getSaveDirURL();
 
 
     // helper

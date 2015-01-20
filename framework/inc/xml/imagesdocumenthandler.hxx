@@ -150,19 +150,19 @@ class OWriteImagesDocumentHandler
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteImageList( const ImageListItemDescriptor* ) throw
+        void WriteImageList( const ImageListItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteExternalImageList( const ExternalImageItemListDescriptor* ) throw
+        void WriteExternalImageList( const ExternalImageItemListDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteImage( const ImageItemDescriptor* ) throw
+        void WriteImage( const ImageItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteExternalImage( const ExternalImageItemDescriptor* ) throw
+        void WriteExternalImage( const ExternalImageItemDescriptor* ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 

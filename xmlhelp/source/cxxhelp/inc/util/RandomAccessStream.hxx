@@ -33,11 +33,11 @@ namespace xmlsearch {
             virtual ~RandomAccessStream() { };
 
             // The calle is responsible for allocating the buffer
-            virtual void seek( sal_Int32 ) = 0;
-            virtual sal_Int32 readBytes( sal_Int8*,sal_Int32 ) = 0;
-            virtual void writeBytes( sal_Int8*, sal_Int32 ) = 0;
-            virtual sal_Int32 length() = 0;
-            virtual void close() = 0;
+            ;
+            ;
+            ;
+            ;
+            ;
 
 
         protected:

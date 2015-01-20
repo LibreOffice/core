@@ -155,7 +155,7 @@ public:
     virtual ~XMLFile();
 
     void Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
-    virtual void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
+    void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
     void Extract( XMLFile *pCur = NULL );
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings; }
@@ -248,7 +248,7 @@ public:
     void SetPos             ( int nPos )                    { m_nPos = nPos; }
     void SetOldRef          ( OString const & sOldRef )     { m_sOldRef = sOldRef; }
 
-    virtual int GetPos()            { return m_nPos;         }
+    int GetPos()            { return m_nPos;         }
     OString GetProject() const      { return m_sProject;      }
     OString GetFileName() const     { return m_sFilename;     }
     OString GetId() const           { return m_sId;           }

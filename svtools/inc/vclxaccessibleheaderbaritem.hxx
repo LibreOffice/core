@@ -58,8 +58,8 @@ private:
 
 protected:
 
-    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-    virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleComponent
     virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

@@ -70,7 +70,7 @@ class SW_DLLPUBLIC SwCursor : public SwPaM
     using SwPaM::Find;
 
 protected:
-    virtual _SwCursor_SavePos* CreateNewSavePos() const;
+    _SwCursor_SavePos* CreateNewSavePos() const;
     void SaveState();
     void RestoreState();
 
@@ -189,7 +189,7 @@ public:
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
-    virtual bool IsInProtectTable( bool bMove = false,
+    bool IsInProtectTable( bool bMove = false,
                                    bool bChgCrsr = true );
     bool IsNoCntnt() const;
 

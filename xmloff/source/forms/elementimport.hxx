@@ -257,13 +257,13 @@ namespace xmloff
         virtual void doRegisterCellValueBinding( const OUString& _rBoundCellAddress );
 
         /** register the given XForms binding */
-        virtual void doRegisterXFormsValueBinding( const OUString& );
+        void doRegisterXFormsValueBinding( const OUString& );
 
         /** register the given XForms list binding */
-        virtual void doRegisterXFormsListBinding( const OUString& );
+        void doRegisterXFormsListBinding( const OUString& );
 
         /** register the given XForms submission */
-        virtual void doRegisterXFormsSubmission( const OUString& );
+        void doRegisterXFormsSubmission( const OUString& );
 
     protected:
 

@@ -54,8 +54,8 @@ public:
     // font instance specific data
     virtual ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const = 0;
 
-    virtual int             GetHeight() const           { return mnHeight; }
-    virtual int             GetWidth() const            { return mnWidth; }
+    int             GetHeight() const           { return mnHeight; }
+    int             GetWidth() const            { return mnWidth; }
     virtual sal_IntPtr      GetFontId() const = 0;
     int                     GetFontMagic() const        { return mnMagic; }
     bool                    IsScalable() const          { return (mnHeight == 0); }

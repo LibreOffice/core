@@ -112,7 +112,7 @@ protected:
 public:
     Tcg255SubStruct( bool bReadId );
     virtual ~Tcg255SubStruct(){}
-    virtual sal_uInt8 id() const { return ch; }
+    sal_uInt8 id() const { return ch; }
     bool Read(SvStream &rS) SAL_OVERRIDE;
 };
 

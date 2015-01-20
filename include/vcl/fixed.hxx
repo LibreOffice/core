@@ -185,7 +185,7 @@ public:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    void    UserDraw( const UserDrawEvent& rUDEvt );
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     void            SetImage( const Image& rImage );

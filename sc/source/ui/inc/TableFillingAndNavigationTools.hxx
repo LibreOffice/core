@@ -103,10 +103,10 @@ public:
     DataCellIterator(ScRange aInputRange, bool aByColumn);
     virtual ~DataCellIterator();
 
-    virtual bool hasNext();
-    virtual ScAddress get();
-    virtual void next();
-    virtual ScAddress getRelative(int aDelta);
+    bool hasNext();
+    ScAddress get();
+    void next();
+    ScAddress getRelative(int aDelta);
 };
 
 class DataRangeIterator
@@ -123,7 +123,7 @@ public:
     virtual ScRange get() = 0;
     virtual void next() = 0;
     virtual void reset() = 0;
-    virtual sal_Int32 index();
+    sal_Int32 index();
 
     virtual DataCellIterator iterateCells() = 0;
 };

@@ -421,10 +421,10 @@ public:
 
     // Masterpages
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
-    virtual void     DeleteMasterPage(sal_uInt16 nPgNum);
+    void     DeleteMasterPage(sal_uInt16 nPgNum);
     // Remove means transferring ownership to the caller (opposite of Insert)
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
-    virtual void     MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
+    void     MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage* GetMasterPage(sal_uInt16 nPgNum) const;
     SdrPage* GetMasterPage(sal_uInt16 nPgNum);
     sal_uInt16 GetMasterPageCount() const;
@@ -496,7 +496,7 @@ public:
     // of the files, i.e. true or false. (Method is called multiple
     // times, so use one flag only!)
     virtual bool IsReadOnly() const;
-    virtual void     SetReadOnly(bool bYes);
+    void     SetReadOnly(bool bYes);
 
     // Mixing two SdrModels. Mind that rSourceModel is not const.
     // The pages will not be copied but moved, when inserted.

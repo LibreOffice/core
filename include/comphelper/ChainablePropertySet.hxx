@@ -95,16 +95,16 @@ namespace comphelper
         virtual void _postGetValues ()
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) = 0;
 
-        virtual void _preGetPropertyState ()
+        void _preGetPropertyState ()
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
-        virtual void _getPropertyState( const comphelper::PropertyInfo& rInfo, ::com::sun::star::beans::PropertyState& rState )
+        void _getPropertyState( const comphelper::PropertyInfo& rInfo, ::com::sun::star::beans::PropertyState& rState )
             throw(::com::sun::star::beans::UnknownPropertyException );
-        virtual void _postGetPropertyState ()
+        void _postGetPropertyState ()
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException );
 
-        virtual void _setPropertyToDefault( const comphelper::PropertyInfo& rEntry )
+        void _setPropertyToDefault( const comphelper::PropertyInfo& rEntry )
             throw(::com::sun::star::beans::UnknownPropertyException );
-        virtual ::com::sun::star::uno::Any _getPropertyDefault( const comphelper::PropertyInfo& rEntry )
+        ::com::sun::star::uno::Any _getPropertyDefault( const comphelper::PropertyInfo& rEntry )
             throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
     public:

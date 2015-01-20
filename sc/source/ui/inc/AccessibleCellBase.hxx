@@ -137,14 +137,14 @@ private:
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:
-    virtual OUString SAL_CALL GetNote(void)
+    OUString SAL_CALL GetNote(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual OUString SAL_CALL GetAllDisplayNote(void)
+    OUString SAL_CALL GetAllDisplayNote(void)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getShadowAttrs(void)
+    OUString SAL_CALL getShadowAttrs(void)
         throw (::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getBorderAttrs(void)
+    OUString SAL_CALL getBorderAttrs(void)
         throw (::com::sun::star::uno::RuntimeException);
 public:
     const ScAddress& GetCellAddress() const { return maCellAddress; }

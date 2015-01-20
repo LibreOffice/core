@@ -228,7 +228,7 @@ public:
          ColorLB( vcl::Window* pParent, ResId Id ) : ColorListBox( pParent, Id ) {}
          ColorLB( vcl::Window* pParent, WinBits aWB ) : ColorListBox( pParent, aWB ) {}
 
-    virtual void Fill( const XColorListRef &pTab );
+    void Fill( const XColorListRef &pTab );
 
     void Append( const XColorEntry& rEntry );
     void Modify( const XColorEntry& rEntry, sal_Int32 nPos );
@@ -242,7 +242,7 @@ class SVX_DLLPUBLIC HatchingLB : public ListBox
 public:
     explicit HatchingLB(vcl::Window* pParent, WinBits aWB);
 
-    virtual void Fill( const XHatchListRef &pList );
+    void Fill( const XHatchListRef &pList );
 
     void    Append( const XHatchEntry& rEntry, const Bitmap& rBitmap );
     void    Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
@@ -256,7 +256,7 @@ class SVX_DLLPUBLIC GradientLB : public ListBox
 public:
     explicit GradientLB(vcl::Window* pParent, WinBits aWB);
 
-    virtual void Fill( const XGradientListRef &pList );
+    void Fill( const XGradientListRef &pList );
 
     void    Append( const XGradientEntry& rEntry, const Bitmap& rBitmap );
     void    Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap );
@@ -271,7 +271,7 @@ class SVX_DLLPUBLIC BitmapLB : public ListBox
 public:
     explicit BitmapLB(vcl::Window* pParent, WinBits aWB);
 
-    virtual void Fill(const XBitmapListRef &pList);
+    void Fill(const XBitmapListRef &pList);
 
     void Append(const Size& rSize, const XBitmapEntry& rEntry);
     void Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos);
@@ -293,10 +293,10 @@ private:
 public:
     FillAttrLB( vcl::Window* pParent, WinBits aWB );
 
-    virtual void Fill( const XColorListRef    &pList );
-    virtual void Fill( const XHatchListRef    &pList );
-    virtual void Fill( const XGradientListRef &pList );
-    virtual void Fill( const XBitmapListRef   &pList );
+    void Fill( const XColorListRef    &pList );
+    void Fill( const XHatchListRef    &pList );
+    void Fill( const XGradientListRef &pList );
+    void Fill( const XBitmapListRef   &pList );
 };
 
 /************************************************************************/
@@ -308,7 +308,7 @@ public:
          FillTypeLB( vcl::Window* pParent, ResId Id ) : ListBox( pParent, Id ) {}
          FillTypeLB( vcl::Window* pParent, WinBits aWB ) : ListBox( pParent, aWB ) {}
 
-    virtual void Fill();
+    void Fill();
 };
 
 /************************************************************************/
@@ -324,7 +324,7 @@ public:
     LineLB(vcl::Window* pParent, WinBits aWB);
     virtual ~LineLB();
 
-    virtual void Fill(const XDashListRef &pList);
+    void Fill(const XDashListRef &pList);
     bool getAddStandardFields() const { return mbAddStandardFields; }
     void setAddStandardFields(bool bNew);
 
@@ -343,7 +343,7 @@ public:
     LineEndLB( vcl::Window* pParent, WinBits aWB );
     virtual ~LineEndLB (void);
 
-    virtual void Fill( const XLineEndListRef &pList, bool bStart = true );
+    void Fill( const XLineEndListRef &pList, bool bStart = true );
 
     void    Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart = true );
     void    Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart = true );

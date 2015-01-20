@@ -45,7 +45,7 @@ public:
     virtual bool MouseButtonDown( const MouseEvent& rMEvt );
     virtual bool MouseButtonUp( const MouseEvent& rMEvt );
     virtual bool MouseMove( const MouseEvent& rMEvt );
-    virtual bool KeyInput( const KeyEvent& rKEvt );
+    bool KeyInput( const KeyEvent& rKEvt );
 };
 
 

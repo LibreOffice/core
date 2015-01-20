@@ -123,7 +123,7 @@ public:
 
     virtual void            SetTitle( const OUString& rTitle ) = 0;
     virtual void            SetIcon( sal_uInt16 nIcon ) = 0;
-    virtual void            SetRepresentedURL( const OUString& );
+    void            SetRepresentedURL( const OUString& );
     virtual void            SetMenu( SalMenu *pSalMenu ) = 0;
     virtual void            DrawMenuBar() = 0;
 
@@ -165,7 +165,7 @@ public:
 
     // flush output buffer
     virtual void            Flush( void) = 0;
-    virtual void            Flush( const Rectangle& );
+    void            Flush( const Rectangle& );
     // flush output buffer, wait till outstanding operations are done
     virtual void            Sync() = 0;
 

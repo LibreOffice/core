@@ -77,8 +77,8 @@ public:
     virtual long VirtHScrollHdl(ScrollBar* pHScroll) SAL_OVERRIDE;
     virtual long VirtVScrollHdl(ScrollBar* pVHScroll) SAL_OVERRIDE;
 
-    virtual void AddWindow(::sd::Window* pWin);
-    virtual void RemoveWindow(::sd::Window* pWin);
+    void AddWindow(::sd::Window* pWin);
+    void RemoveWindow(::sd::Window* pWin);
 
     virtual void Activate( bool IsMDIActivate ) SAL_OVERRIDE;
     virtual void Deactivate( bool IsMDIActivate ) SAL_OVERRIDE;
@@ -105,8 +105,8 @@ public:
 
     virtual void SetZoom(long nZoom) SAL_OVERRIDE;
     virtual void SetZoomRect(const Rectangle& rZoomRect) SAL_OVERRIDE;
-    virtual OUString GetSelectionText( bool bCompleteWords = false );
-    virtual bool     HasSelection( bool bText = true ) const;
+    OUString GetSelectionText( bool bCompleteWords = false );
+    bool     HasSelection( bool bText = true ) const;
 
     void Execute(SfxRequest& rReq);
 

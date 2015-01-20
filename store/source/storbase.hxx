@@ -814,8 +814,8 @@ protected:
     PageHolder m_xPage;
     bool       m_bDirty;
 
-    virtual storeError guard  (sal_uInt32 nAddr) = 0;
-    virtual storeError verify (sal_uInt32 nAddr) const = 0;
+    ;
+    ;
 };
 #endif /* EXP */
 

@@ -209,12 +209,12 @@ public:
     sal_uInt32 GetInventor() const { return nInventor;}
     sal_uInt16 GetId() const { return nIdentifier;}
 
-    virtual bool HasMacro (const SdrObject* pObj) const;
-    virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    virtual Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    virtual void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
-    virtual bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
-    virtual OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    bool HasMacro (const SdrObject* pObj) const;
+    SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    Pointer GetMacroPointer (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    void PaintMacro (OutputDevice& rOut, const Rectangle& rDirtyRect, const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
+    bool DoMacro (const SdrObjMacroHitRec& rRec, SdrObject* pObj);
+    OUString GetMacroPopupComment(const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
 };
 
 // all geometrical data of an arbitrary object for use in undo/redo
@@ -401,7 +401,7 @@ public:
 protected:
 
     // override if the class inherits from SdrObjPlusData:
-    virtual SdrObjPlusData* NewPlusData() const;
+    SdrObjPlusData* NewPlusData() const;
 
 protected:
     /// A derived class must override these 3 methods if it has own geometric
@@ -441,8 +441,8 @@ public:
     void RemoveListener(SfxListener& rListener);
     const SfxBroadcaster* GetBroadcaster() const;
 
-    virtual void AddReference(SdrVirtObj& rVrtObj);
-    virtual void DelReference(SdrVirtObj& rVrtObj);
+    void AddReference(SdrVirtObj& rVrtObj);
+    void DelReference(SdrVirtObj& rVrtObj);
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
@@ -452,7 +452,7 @@ public:
     virtual void NbcSetLayer(SdrLayerID nLayer);
     virtual void SetLayer(SdrLayerID nLayer);
     // renaming GetLayerSet -> getMergedHierarchyLayerSet to make clear what happens here. rSet needs to be empty.
-    virtual void getMergedHierarchyLayerSet(SetOfByte& rSet) const;
+    void getMergedHierarchyLayerSet(SetOfByte& rSet) const;
 
     // UserCall interface
     void SetUserCall(SdrObjUserCall* pUser);
@@ -745,7 +745,7 @@ public:
 
     // keep text in outliner's format
     // SetOutlinerParaObject: transfer ownership of *pTextObject!
-    virtual void SetOutlinerParaObject(OutlinerParaObject* pTextObject);
+    void SetOutlinerParaObject(OutlinerParaObject* pTextObject);
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
     virtual OutlinerParaObject* GetOutlinerParaObject() const;
     virtual void NbcReformatText();

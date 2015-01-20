@@ -224,7 +224,7 @@ protected:
 
     // calculation of boundary values for object borders
     // values refer to the page
-    virtual bool    CalcLimits(long &nMax1, long &nMax2, bool bFirst) const;
+    bool    CalcLimits(long &nMax1, long &nMax2, bool bFirst) const;
     bool IsActLastColumn(
                 bool bForceDontConsiderHidden = false,
                 sal_uInt16 nAct=USHRT_MAX) const;

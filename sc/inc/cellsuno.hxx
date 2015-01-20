@@ -219,7 +219,7 @@ protected:
 
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap& GetItemPropertyMap();
-    virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
+    ::com::sun::star::beans::PropertyState GetOnePropertyState(
                                 sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
     virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
@@ -674,7 +674,7 @@ public:
     virtual void            RefChanged() SAL_OVERRIDE;
 
                             // via getImplementation()
-    virtual void            SetArrayFormulaWithGrammar( const OUString& rFormula,
+    void            SetArrayFormulaWithGrammar( const OUString& rFormula,
                                     const OUString& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar )
                                 throw (css::uno::RuntimeException,

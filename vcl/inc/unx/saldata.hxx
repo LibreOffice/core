@@ -63,11 +63,11 @@ public:
              X11SalData( SalGenericDataType t, SalInstance *pInstance );
     virtual ~X11SalData();
 
-    virtual void            Init();
+    void            Init();
     virtual void            Dispose() SAL_OVERRIDE;
 
-    virtual void            initNWF();
-    virtual void            deInitNWF();
+    void            initNWF();
+    void            deInitNWF();
 
     SalDisplay*             GetX11Display() const
     { return vcl_sal::getSalDisplay(this); }

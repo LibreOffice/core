@@ -219,14 +219,14 @@ public:
     /*
      * set NET_WM_PID
      */
-    virtual void setPID( X11SalFrame* pFrame ) const;
+    void setPID( X11SalFrame* pFrame ) const;
 
     /*
      * set WM_CLIENT_MACHINE
      */
-    virtual void setClientMachine( X11SalFrame* pFrame ) const;
+    void setClientMachine( X11SalFrame* pFrame ) const;
 
-    virtual void answerPing( X11SalFrame*, XClientMessageEvent* ) const;
+    void answerPing( X11SalFrame*, XClientMessageEvent* ) const;
 
     /*
      *  maximizes frame

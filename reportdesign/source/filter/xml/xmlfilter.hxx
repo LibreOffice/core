@@ -168,10 +168,10 @@ public:
     void removeFunction(const OUString& _sFunctionName);
     inline const TGroupFunctionMap& getFunctions() const { return m_aFunctions; }
 
-    virtual SvXMLImport&                getGlobalContext();
+    SvXMLImport&                getGlobalContext();
 
-    virtual void                        enterEventContext();
-    virtual void                        leaveEventContext();
+    void                        enterEventContext();
+    void                        leaveEventContext();
 
     bool                            isOldFormat() const;
 };

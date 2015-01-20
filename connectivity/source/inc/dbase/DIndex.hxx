@@ -105,7 +105,7 @@ namespace connectivity
 
             const ODbaseTable* getTable() const { return m_pTable; }
             const NDXHeader& getHeader() const { return m_aHeader; }
-            virtual OIndexIterator* createIterator(OBoolOperator_BASE* pOp,
+            OIndexIterator* createIterator(OBoolOperator_BASE* pOp,
                                                          const OOperand_BASE* pOperand = NULL);
 
             void SetRootPos(sal_uInt32 nPos)        {m_nRootPage = nPos;}
@@ -117,10 +117,10 @@ namespace connectivity
             bool IsText() const                 {return m_aHeader.db_keytype == 0;}
             sal_uInt16 GetMaxNodes() const          {return m_aHeader.db_maxkeys;}
 
-            virtual bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
-            virtual bool Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
-            virtual bool Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
-            virtual bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
+            bool Insert(sal_uInt32 nRec, const ORowSetValue& rValue);
+            bool Update(sal_uInt32 nRec, const ORowSetValue&, const ORowSetValue&);
+            bool Delete(sal_uInt32 nRec, const ORowSetValue& rValue);
+            bool Find(sal_uInt32 nRec, const ORowSetValue& rValue);
 
             void createINFEntry();
             bool CreateImpl();

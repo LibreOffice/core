@@ -38,8 +38,8 @@ namespace xmlsearch {
             static const sal_Int32 END;
 
             virtual ~NonnegativeIntegerGenerator() { };
-            virtual sal_Int32 first() throw( xmlsearch::excep::XmlSearchException ) = 0;
-            virtual sal_Int32 next() throw( xmlsearch::excep::XmlSearchException ) = 0;
+            ;
+            ;
         };
 
 

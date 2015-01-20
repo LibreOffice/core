@@ -228,10 +228,10 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    virtual bool        EditedEntry( SvxIconChoiceCtrlEntry*, const OUString& rNewText, bool bCancelled );
-    virtual void        DocumentRectChanged();
-    virtual void        VisibleRectChanged();
-    virtual bool        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
+    bool        EditedEntry( SvxIconChoiceCtrlEntry*, const OUString& rNewText, bool bCancelled );
+    void        DocumentRectChanged();
+    void        VisibleRectChanged();
+    bool        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -240,11 +240,11 @@ protected:
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        GetFocus() SAL_OVERRIDE;
     virtual void        LoseFocus() SAL_OVERRIDE;
-    virtual void        ClickIcon();
+    void        ClickIcon();
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    virtual void        DrawEntryImage(
+    void        DrawEntryImage(
                             SvxIconChoiceCtrlEntry* pEntry,
                             const Point& rPos,
                             OutputDevice& rDev );
@@ -320,10 +320,10 @@ public:
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
 #endif
 
-    virtual bool        HasBackground() const;
-    virtual bool        HasFont() const;
-    virtual bool        HasFontTextColor() const;
-    virtual bool        HasFontFillColor() const;
+    bool        HasBackground() const;
+    bool        HasFont() const;
+    bool        HasFontTextColor() const;
+    bool        HasFontFillColor() const;
 
     void                SetFontColorToBackground ( bool bDo = true ) { _bAutoFontColor = bDo; }
     bool                AutoFontColor () { return _bAutoFontColor; }

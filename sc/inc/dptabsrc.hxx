@@ -306,8 +306,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual long            getCount() const;
-    virtual ScDPDimension*  getByIndex(long nIndex) const;
+    long            getCount() const;
+    ScDPDimension*  getByIndex(long nIndex) const;
 };
 
 class ScDPDimension : boost::noncopyable, public cppu::WeakImplHelper5<
@@ -460,8 +460,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual long            getCount() const;
-    virtual ScDPHierarchy*  getByIndex(long nIndex) const;
+    long            getCount() const;
+    ScDPHierarchy*  getByIndex(long nIndex) const;
 };
 
 class ScDPHierarchy : public cppu::WeakImplHelper3<
@@ -537,8 +537,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual long            getCount() const;
-    virtual ScDPLevel*      getByIndex(long nIndex) const;
+    long            getCount() const;
+    ScDPLevel*      getByIndex(long nIndex) const;
 };
 
 class ScDPLevel : public cppu::WeakImplHelper5<

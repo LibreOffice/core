@@ -294,12 +294,12 @@ namespace fileaccess {
         getCommandInfo()
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo(
             sal_Int32 nMyCommandIdentifier )
             throw( com::sun::star::uno::RuntimeException );
 
-        virtual com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
+        com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > SAL_CALL
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,
             const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& PropertySet )

@@ -158,7 +158,7 @@ namespace svgio
             virtual ~SvgCharacterNode();
 
             virtual const SvgStyleAttributes* getSvgStyleAttributes() const SAL_OVERRIDE;
-            virtual void decomposeText(drawinglayer::primitive2d::Primitive2DSequence& rTarget, SvgTextPosition& rSvgTextPosition) const;
+            void decomposeText(drawinglayer::primitive2d::Primitive2DSequence& rTarget, SvgTextPosition& rSvgTextPosition) const;
             void whiteSpaceHandling();
             void addGap();
             void concatenate(const OUString& rText);

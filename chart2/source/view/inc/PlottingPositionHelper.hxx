@@ -45,7 +45,7 @@ public:
     virtual ~PlottingPositionHelper();
 
     virtual PlottingPositionHelper* clone() const;
-    virtual PlottingPositionHelper* createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale );
+    PlottingPositionHelper* createSecondaryPosHelper( const ExplicitScaleData& rSecondaryScale );
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix);
 

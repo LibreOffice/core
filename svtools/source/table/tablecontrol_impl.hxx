@@ -276,8 +276,8 @@ namespace svt { namespace table
         virtual long                pixelWidthToAppFont( long const i_pixels ) const SAL_OVERRIDE;
         virtual void                hideTracking() SAL_OVERRIDE;
         virtual void                showTracking( Rectangle const & i_location, sal_uInt16 const i_flags ) SAL_OVERRIDE;
-        virtual RowPos              getRowAtPoint( const Point& rPoint ) const;
-        virtual ColPos              getColAtPoint( const Point& rPoint ) const;
+        RowPos              getRowAtPoint( const Point& rPoint ) const;
+        ColPos              getColAtPoint( const Point& rPoint ) const;
         virtual TableCell           hitTest( const Point& rPoint ) const SAL_OVERRIDE;
         virtual ColumnMetrics       getColumnMetrics( ColPos const i_column ) const SAL_OVERRIDE;
         virtual bool                isRowSelected( RowPos i_row ) const SAL_OVERRIDE;

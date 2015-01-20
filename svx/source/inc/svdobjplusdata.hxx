@@ -37,7 +37,7 @@ public:
     TYPEINFO();
     SdrObjPlusData();
     virtual ~SdrObjPlusData();
-    virtual SdrObjPlusData* Clone(SdrObject* pObj1) const;
+    SdrObjPlusData* Clone(SdrObject* pObj1) const;
 
     void SetGluePoints(const SdrGluePointList& rPts);
 };

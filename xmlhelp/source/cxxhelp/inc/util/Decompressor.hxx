@@ -41,7 +41,7 @@ namespace xmlsearch {
 
             virtual sal_Int32 getNextByte() = 0;
 
-            virtual void initReading()
+            void initReading()
             {
                 toRead_ = 0;
             }
@@ -62,8 +62,7 @@ namespace xmlsearch {
         {
         public:
 
-            StreamDecompressor( RandomAccessStream* in )
-                : in_( in )
+            StreamDecompressor( RandomAccessStream* )
             {
             }
 
@@ -71,11 +70,6 @@ namespace xmlsearch {
 
 
             virtual sal_Int32 getNextByte() SAL_OVERRIDE;
-
-        private:
-
-            RandomAccessStream* in_;
-
         };
 
 

@@ -44,12 +44,12 @@ public:
     // overwritten to release the statuslistner.
 
     // XComponent
-    virtual void SAL_CALL
+    void SAL_CALL
     addEventListener(
         const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
         throw( com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL
+    void SAL_CALL
     removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
         throw( com::sun::star::uno::RuntimeException );
 

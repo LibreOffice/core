@@ -58,7 +58,7 @@ public:
     virtual MSWordSections& Sections() const SAL_OVERRIDE;
 
     /// Access to the Rtf Sdr exporter.
-    virtual RtfSdrExport& SdrExporter() const;
+    RtfSdrExport& SdrExporter() const;
 
     /// Determines if the format is expected to support unicode.
     virtual bool SupportsUnicode() const SAL_OVERRIDE
@@ -105,7 +105,7 @@ public:
     virtual void WriteNumbering() SAL_OVERRIDE;
 
     /// Write the revision table.
-    virtual void WriteRevTab();
+    void WriteRevTab();
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters(sal_uInt8 nHeadFootFlags,

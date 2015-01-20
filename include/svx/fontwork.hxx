@@ -164,7 +164,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void ApplyImageList();
 
  protected:
-    virtual void    Zoom();
+    void    Zoom();
     virtual SfxChildAlignment CheckAlignment( SfxChildAlignment eActAlign,
                                               SfxChildAlignment eAlign ) SAL_OVERRIDE;
 

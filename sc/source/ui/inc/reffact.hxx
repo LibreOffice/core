@@ -145,7 +145,7 @@ class ScAcceptChgDlgWrapper: public SfxChildWindow
 
         SFX_DECL_CHILDWINDOW_WITHID(Class);
 
-        virtual void ReInitDlg();
+        void ReInitDlg();
 };
 
 class ScSimpleRefDlgWrapper: public SfxChildWindow

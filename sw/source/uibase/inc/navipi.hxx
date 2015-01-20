@@ -115,7 +115,7 @@ class SwNavigationPI : public vcl::Window,
 
     void MakeVisible();
     void InitImageList();
-    virtual SfxChildAlignment
+    SfxChildAlignment
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
     void SetPopupWindow( SfxPopupWindow* );
 
@@ -124,7 +124,7 @@ class SwNavigationPI : public vcl::Window,
 
 protected:
 
-    virtual         bool Close();
+            bool Close();
     virtual         void Resize() SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

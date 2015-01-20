@@ -195,7 +195,7 @@ public:
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
 
-    virtual long                OK();
+    long                OK();
     virtual short               Execute() SAL_OVERRIDE;
     virtual void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
 

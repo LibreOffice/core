@@ -285,8 +285,8 @@ namespace dbaui
         virtual void onColumnChange() SAL_OVERRIDE;
 
         // my own overridables
-        virtual void BeforeDrop();
-        virtual void AfterDrop();
+        void BeforeDrop();
+        void AfterDrop();
 
         // get a fields property set from a model pos
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  getField(sal_uInt16 nModelPos);
@@ -295,9 +295,9 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  getDataSource() const;
 
         // drag events
-        virtual void DoColumnDrag(sal_uInt16 nColumnPos);
-        virtual void DoRowDrag(sal_Int16 nRowPos);
-        virtual void DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos);
+        void DoColumnDrag(sal_uInt16 nColumnPos);
+        void DoRowDrag(sal_Int16 nRowPos);
+        void DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos);
 
         void SetBrowserAttrs();
         void SetColWidth(sal_uInt16 nColId);

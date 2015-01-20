@@ -98,7 +98,7 @@ namespace dbaui
         virtual void paste() SAL_OVERRIDE;
 
         // set the view readonly or not
-        virtual void setReadOnly(bool _bReadOnly);
+        void setReadOnly(bool _bReadOnly);
 
         virtual void initialize() SAL_OVERRIDE;
         void reSync(); // resync window data with realdata

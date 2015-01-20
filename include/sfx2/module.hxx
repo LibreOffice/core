@@ -75,7 +75,7 @@ public:
                                     SfxObjectFactory* pFactoryP, ... );
                                 virtual ~SfxModule();
 
-    virtual ResMgr*             GetResMgr();
+    ResMgr*             GetResMgr();
     SfxSlotPool*                GetSlotPool() const;
 
     void                        RegisterToolBoxControl(SfxTbxCtrlFactory*);

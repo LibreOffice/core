@@ -39,7 +39,7 @@ public:
     SwVbaApplication( css::uno::Reference< css::uno::XComponentContext >& m_xContext );
     virtual ~SwVbaApplication();
 
-    virtual SfxObjectShell* GetDocShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    SfxObjectShell* GetDocShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 
     // XApplication
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

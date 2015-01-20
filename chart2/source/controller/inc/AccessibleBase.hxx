@@ -133,7 +133,7 @@ protected:
         @return If an object is the addressee of the event it should return
                 true, false otherwise.
      */
-    virtual bool     NotifyEvent( EventType eType, const AccessibleUniqueId & rId );
+    bool     NotifyEvent( EventType eType, const AccessibleUniqueId & rId );
 
     /** Adds a state to the set.
     */
@@ -200,7 +200,7 @@ protected:
         This method cares about mutex locking, and thus should be called without
         the mutex locked.
      */
-    virtual void KillAllChildren();
+    void KillAllChildren();
 
     /** Is called from getAccessibleChild(). Before this method is called, an
         update of children is done if necessary.

@@ -362,9 +362,9 @@ protected:
             nRow starts at 0
     */
     virtual bool    SeekRow( long nRow ) = 0;
-    virtual void    DrawCursor();
-    virtual void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
-    virtual void    PaintData( vcl::Window& rWin, const Rectangle& rRect );
+    void    DrawCursor();
+    void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
+    void    PaintData( vcl::Window& rWin, const Rectangle& rRect );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
@@ -450,9 +450,9 @@ public:
 
     // neue Handler
     virtual void    MouseButtonDown( const BrowserMouseEvent& rEvt );
-    virtual void    MouseMove( const BrowserMouseEvent& rEvt );
+    void    MouseMove( const BrowserMouseEvent& rEvt );
     virtual void    MouseButtonUp( const BrowserMouseEvent& rEvt );
-    virtual void    StartScroll();
+    void    StartScroll();
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
@@ -460,7 +460,7 @@ public:
     virtual void    CursorMoved();
     virtual void    ColumnMoved( sal_uInt16 nColId );
     virtual void    ColumnResized( sal_uInt16 nColId );
-    virtual long    QueryColumnResize( sal_uInt16 nColId, long nWidth );
+    long    QueryColumnResize( sal_uInt16 nColId, long nWidth );
     /// called when the row height has been changed interactively
     virtual void    RowHeightChanged();
     virtual long    QueryMinimumRowHeight();
@@ -498,7 +498,7 @@ public:
     long            GetDataRowHeight() const;
     void            SetTitleLines( sal_uInt16 nLines );
     sal_uInt16          GetTitleLines() const { return nTitleLines; }
-    virtual long    GetTitleHeight() const;
+    long    GetTitleHeight() const;
 
     // access to dynamic values of cursor row
     OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;

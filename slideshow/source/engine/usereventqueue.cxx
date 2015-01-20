@@ -111,11 +111,6 @@ public:
         maEvents()
     {}
 
-    void clearContainer()
-    {
-        maEvents = ImpEventQueue();
-    }
-
     void addEvent( const EventSharedPtr& rEvent )
     {
         maEvents.push( rEvent );
@@ -134,11 +129,6 @@ public:
         mrEventQueue( rEventQueue ),
         maAnimationEventMap()
     {}
-
-    virtual void dispose()
-    {
-        maAnimationEventMap.clear();
-    }
 
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode ) SAL_OVERRIDE
     {
@@ -206,10 +196,6 @@ public:
     }
 
 private:
-    virtual void dispose()
-    {
-        clearContainer();
-    }
 
     // triggered by API calls, e.g. space bar
     virtual bool handleEvent() SAL_OVERRIDE
@@ -308,11 +294,6 @@ public:
         : EventContainer(), mrEventQueue(rEventQueue) {}
 
 private:
-    virtual void dispose()
-    {
-        clearContainer();
-    }
-
     virtual bool handleMouseReleased( awt::MouseEvent const& evt ) SAL_OVERRIDE
     {
         if(evt.Buttons != awt::MouseButton::RIGHT)
@@ -338,13 +319,6 @@ public:
         mrEventQueue( rEventQueue ),
         maShapeEventMap()
     {}
-
-    virtual void dispose()
-    {
-        // TODO(Q1): Check whether plain vector with swap idiom is
-        // okay here
-        maShapeEventMap = ImpShapeEventMap();
-    }
 
     void addEvent( const EventSharedPtr& rEvent,
                    const ShapeSharedPtr& rShape )

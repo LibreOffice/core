@@ -714,7 +714,7 @@ protected:
 
         @return  The length of pOctets (without the terminating null).
      */
-    virtual sal_Size writeSequence(const sal_Char * pSequence);
+    sal_Size writeSequence(const sal_Char * pSequence);
 
     /** Write a sequence of octets.
 
@@ -726,7 +726,7 @@ protected:
 
         @param pEnd  Points past the end of the sequence, must be >= pBegin.
      */
-    virtual void writeSequence(const sal_uInt32 * pBegin,
+    void writeSequence(const sal_uInt32 * pBegin,
                                const sal_uInt32 * pEnd);
 
     /** Write a sequence of octets.
@@ -739,7 +739,7 @@ protected:
 
         @param pEnd  Points past the end of the sequence, must be >= pBegin.
      */
-    virtual void writeSequence(const sal_Unicode * pBegin,
+    void writeSequence(const sal_Unicode * pBegin,
                                const sal_Unicode * pEnd);
 
 public:

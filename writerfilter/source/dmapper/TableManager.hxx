@@ -504,7 +504,7 @@ public:
 
        @param rHandle     the handle
      */
-    virtual void handle(const css::uno::Reference<css::text::XTextRange>& rHandle);
+    void handle(const css::uno::Reference<css::text::XTextRange>& rHandle);
 
     /**
        Start a new table level.
@@ -537,12 +537,12 @@ public:
     /**
        Handle the start of a paragraph group.
      */
-    virtual void startParagraphGroup();
+    void startParagraphGroup();
 
     /**
        Handle the end of a paragraph group.
     */
-    virtual void endParagraphGroup();
+    void endParagraphGroup();
 
     /**
        Handle an SPRM at curent handle.
@@ -556,12 +556,12 @@ public:
 
        @param pProps   the properites
      */
-    virtual void props(TablePropertyMapPtr pProps);
+    void props(TablePropertyMapPtr pProps);
 
     /**
        Handle occurrence of character 0x7.
      */
-    virtual void handle0x7();
+    void handle0x7();
 
     /**
        Handle 8 bit text at current handle.
@@ -569,7 +569,7 @@ public:
        @param data    array of characters
        @param len     number of characters to handle
      */
-    virtual void text(const sal_uInt8 * data, size_t len);
+    void text(const sal_uInt8 * data, size_t len);
 
     /**
        Handle 16 bit text at current handle.
@@ -577,7 +577,7 @@ public:
        @param data    array of characters
        @param len     number of characters to handle
      */
-    virtual void utext(const sal_uInt8 * data, size_t len);
+    void utext(const sal_uInt8 * data, size_t len);
 
     /**
        Handle properties of the current cell.
@@ -614,7 +614,7 @@ public:
        If this function returns true the current paragraph contains
        only control information, e.g. end of row.
      */
-    virtual bool isIgnore() const;
+    bool isIgnore() const;
 
 
 #ifdef DEBUG_WRITERFILTER

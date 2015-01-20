@@ -72,16 +72,16 @@ protected:
     void EndListening(bool bRemoveListener = true);
     bool    isListening() const { return bIsListening; }
 
-    virtual bool TransformSdrToControlCoordinates(
+    bool TransformSdrToControlCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-    virtual bool TransformSdrToFormCoordinates(
+    bool TransformSdrToFormCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-    virtual bool TransformControlToSdrCoordinates(
+    bool TransformControlToSdrCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
-    virtual bool TransformFormToSdrCoordinates(
+    bool TransformFormToSdrCoordinates(
         sal_Int32 nXIn, sal_Int32 nYIn, sal_Int32 nWidthIn, sal_Int32 nHeightIn,
         sal_Int32& nXOut, sal_Int32& nYOut, sal_Int32& nWidthOut, sal_Int32& nHeightOut );
 
@@ -91,42 +91,42 @@ public:
     virtual ~DlgEdObj();
     virtual void SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
 
-    virtual void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
-    virtual DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
+    void SetDlgEdForm( DlgEdForm* pForm ) { pDlgEdForm = pForm; }
+    DlgEdForm* GetDlgEdForm() const { return pDlgEdForm; }
 
     virtual sal_uInt32 GetObjInventor() const SAL_OVERRIDE;
     virtual sal_uInt16 GetObjIdentifier() const SAL_OVERRIDE;
 
     virtual DlgEdObj*   Clone() const SAL_OVERRIDE;                                          // not working yet
-    virtual void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
+    void clonedFrom(const DlgEdObj* _pSource);                          // not working yet
 
     // FullDrag support
     virtual SdrObject* getFullDragClone() const SAL_OVERRIDE;
 
     bool supportsService( OUString const & serviceName ) const;
-    virtual OUString GetDefaultName() const;
-    virtual OUString GetUniqueName() const;
+    OUString GetDefaultName() const;
+    OUString GetUniqueName() const;
 
-    virtual sal_Int32   GetStep() const;
+    sal_Int32   GetStep() const;
     virtual void        UpdateStep();
 
-    virtual void SetDefaults();
+    void SetDefaults();
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > GetControl() const;
 
     virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt );
-    virtual void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
-    virtual void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
+    void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
     // PropertyChangeListener
-    virtual void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception);
 
     // ContainerListener
-    virtual void SAL_CALL _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer) SAL_OVERRIDE;
     bool MakeDataAware( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
@@ -161,11 +161,11 @@ public:
 
     virtual ~DlgEdForm();
 
-    virtual DlgEditor& GetDlgEditor () const { return rDlgEditor; }
+    DlgEditor& GetDlgEditor () const { return rDlgEditor; }
 
-    virtual void AddChild( DlgEdObj* pDlgEdObj );
-    virtual void RemoveChild( DlgEdObj* pDlgEdObj );
-    virtual std::vector<DlgEdObj*> const& GetChildren() const { return pChildren; }
+    void AddChild( DlgEdObj* pDlgEdObj );
+    void RemoveChild( DlgEdObj* pDlgEdObj );
+    std::vector<DlgEdObj*> const& GetChildren() const { return pChildren; }
 
     virtual void UpdateStep() SAL_OVERRIDE;
 
@@ -174,10 +174,10 @@ public:
 
     virtual void PositionAndSizeChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) SAL_OVERRIDE;
 
-    virtual void UpdateTabIndices();
-    virtual void UpdateTabOrder();
-    virtual void UpdateGroups();
-    virtual void UpdateTabOrderAndGroups();
+    void UpdateTabIndices();
+    void UpdateTabOrder();
+    void UpdateGroups();
+    void UpdateTabOrderAndGroups();
 
     ::com::sun::star::awt::DeviceInfo getDeviceInfo() const;
 

@@ -79,12 +79,12 @@ public:
         SdPage* pMasterPage,
         sal_uInt16 nInsertionIndex);
 
-    virtual Size GetPreferredSize (void);
-    virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
-    virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-    virtual bool IsResizable (void);
-    virtual vcl::Window* GetWindow (void);
-    virtual sal_Int32 GetMinimumWidth (void);
+    Size GetPreferredSize (void);
+    sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
+    sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
+    bool IsResizable (void);
+    vcl::Window* GetWindow (void);
+    sal_Int32 GetMinimumWidth (void);
 
     /** Update the selection of previews according to whatever
         influences them apart from mouse and keyboard.  If, for
@@ -142,7 +142,7 @@ protected:
     */
     ::std::queue<sal_uInt16> maPreviewUpdateQueue;
 
-    virtual SdPage* GetSelectedMasterPage (void);
+    SdPage* GetSelectedMasterPage (void);
 
     /** Assign the given master page to all slides of the document.
         @param pMasterPage
@@ -168,7 +168,7 @@ protected:
     UserData* GetUserData (int nIndex) const;
     void SetUserData (int nIndex, UserData* pData);
 
-    virtual sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
+    sal_Int32 GetIndexForToken (MasterPageContainer::Token aToken) const;
     typedef ::std::vector<MasterPageContainer::Token> ItemList;
     void UpdateItemList (::std::unique_ptr<ItemList> && pList);
     void Clear (void);

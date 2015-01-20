@@ -58,7 +58,7 @@ public:
                         const OUString & rClassName, CreateInstanceType );
 
     void                PutSuperClass( const SotFactory * );
-    virtual void *      CreateInstance( SotObject ** ppObj = NULL ) const;
+    void *      CreateInstance( SotObject ** ppObj = NULL ) const;
 
     bool                Is( const SotFactory * pSuperClass ) const;
     const SotFactory *  GetSuper( sal_uInt16 nPos ) const

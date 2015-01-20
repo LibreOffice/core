@@ -162,7 +162,7 @@ namespace DOM
         /**
         sets the element name
         */
-        virtual void SAL_CALL setElementName(const OUString& elementName)
+        void SAL_CALL setElementName(const OUString& elementName)
             throw (css::uno::RuntimeException, css::xml::dom::DOMException);
 
         // overrides for XNode base
