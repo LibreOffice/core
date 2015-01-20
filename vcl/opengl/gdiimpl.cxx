@@ -80,7 +80,11 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
     {
         if( mpContext->isInitialized() )
             return true;
+#ifdef DBG_UTIL
+        mpContext->DeRef(this);
+#else
         mpContext->DeRef();
+#endif
     }
 
 
@@ -94,7 +98,13 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
     }
 
     if( pContext )
+    {
+#ifdef DBG_UTIL
+        pContext->AddRef(this);
+#else
         pContext->AddRef();
+#endif
+    }
     else
         pContext = mbOffscreen ? GetDefaultContext() : CreateWinContext();
 
@@ -105,7 +115,13 @@ bool OpenGLSalGraphicsImpl::AcquireContext( )
 bool OpenGLSalGraphicsImpl::ReleaseContext()
 {
     if( mpContext )
+    {
+#ifdef DBG_UTIL
+        mpContext->DeRef(this);
+#else
         mpContext->DeRef();
+#endif
+    }
     mpContext = NULL;
     return true;
 }

@@ -56,9 +56,12 @@ class NSOpenGLView;
 #include <tools/gen.hxx>
 #include <vcl/syschild.hxx>
 
+#include <set>
+
 class OpenGLFramebuffer;
 class OpenGLProgram;
 class OpenGLTexture;
+class SalGraphicsImpl;
 
 /// Holds the information of our new child window
 struct GLWindow
@@ -189,8 +192,13 @@ public:
     bool               AcquireDefaultFramebuffer();
     OpenGLFramebuffer* AcquireFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffer( OpenGLFramebuffer* pFramebuffer );
+#ifdef DBG_UTIL
+    void AddRef(SalGraphicsImpl*);
+    void DeRef(SalGraphicsImpl*);
+#else
     void AddRef();
     void DeRef();
+#endif
     void               ReleaseFramebuffer( const OpenGLTexture& rTexture );
     void               ReleaseFramebuffers();
 
@@ -260,6 +268,9 @@ private:
 
     boost::ptr_map<ProgramKey, OpenGLProgram> maPrograms;
     OpenGLProgram* mpCurrentProgram;
+#ifdef DBG_UTIL
+    std::set<SalGraphicsImpl*> maParents;
+#endif
 
 public:
     vcl::Region maClipRegion;

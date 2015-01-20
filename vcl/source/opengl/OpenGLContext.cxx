@@ -103,6 +103,26 @@ OpenGLContext::~OpenGLContext()
         pSVData->maGDIData.mpLastContext = mpPrevContext;
 }
 
+#ifdef DBG_UTIL
+void OpenGLContext::AddRef(SalGraphicsImpl* pImpl)
+{
+    assert(mnRefCount > 0);
+    mnRefCount++;
+
+    maParents.insert(pImpl);
+}
+
+void OpenGLContext::DeRef(SalGraphicsImpl* pImpl)
+{
+    assert(mnRefCount > 0);
+    if( --mnRefCount == 0 )
+        delete this;
+
+    auto it = maParents.find(pImpl);
+    if(it != maParents.end())
+        maParents.erase(it);
+}
+#else
 void OpenGLContext::AddRef()
 {
     assert(mnRefCount > 0);
@@ -115,6 +135,7 @@ void OpenGLContext::DeRef()
     if( --mnRefCount == 0 )
         delete this;
 }
+#endif
 
 void OpenGLContext::requestLegacyContext()
 {
