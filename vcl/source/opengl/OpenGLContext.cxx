@@ -730,6 +730,11 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
 
 bool OpenGLContext::ImplInit()
 {
+    if (!m_aGLWin.dpy)
+    {
+        return false;
+    }
+
     GLXContext pSharedCtx( NULL );
 #ifdef DBG_UTIL
     TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
@@ -767,10 +772,10 @@ bool OpenGLContext::ImplInit()
 
     if (!m_aGLWin.ctx)
     {
-        if (!m_aGLWin.dpy || !m_aGLWin.vi)
+        if (!m_aGLWin.vi)
            return false;
 
-        m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
+        m_aGLWin.ctx = glXCreateContext(m_aGLWin.dpy,
                 m_aGLWin.vi,
                 pSharedCtx,
                 GL_TRUE);
