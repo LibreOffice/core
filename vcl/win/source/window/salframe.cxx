@@ -699,7 +699,7 @@ static UINT ImplSalGetWheelScrollChars()
     {
         // Depending on Windows version, use proper default or 1 (when
         // driver emulates hscroll)
-        if( aSalShlData.maVersionInfo.dwMajorVersion < 6 )
+        if (!aSalShlData.mbWVista)
         {
             // Windows 2000 & WinXP : emulating driver, use step size
             // of 1

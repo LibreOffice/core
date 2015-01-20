@@ -448,24 +448,30 @@ SalInstance* CreateSalInstance()
 
     // determine the windows version
     aSalShlData.mbWXP        = 0;
+    aSalShlData.mbWVista     = 0;
     aSalShlData.mbW7         = 0;
-    memset( &aSalShlData.maVersionInfo, 0, sizeof(aSalShlData.maVersionInfo) );
-    aSalShlData.maVersionInfo.dwOSVersionInfoSize = sizeof( aSalShlData.maVersionInfo );
 // the Win32 SDK 8.1 deprecates GetVersionEx()
 #ifdef _WIN32_WINNT_WINBLUE
     aSalShlData.mbWXP = IsWindowsXPOrGreater() ? 1 : 0;
+    aSalShlData.mbWVista = IsWindowsVistaOrGreater() ? 1 : 0;
     aSalShlData.mbW7 = IsWindows7OrGreater() ? 1 : 0;
 #else
-    if ( GetVersionEx( &aSalShlData.maVersionInfo ) )
+    OSVERSIONINFO aVersionInfo;
+    memset( &aVersionInfo, 0, sizeof(aVersionInfo) );
+    aVersionInfo.dwOSVersionInfoSize = sizeof( aVersionInfo );
+    if (GetVersionEx( &aVersionInfo ))
     {
         // Windows XP ?
-        if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
-           ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
+        if (aVersionInfo.dwMajorVersion > 5 ||
+           (aVersionInfo.dwMajorVersion == 5 && aVersionInfo.dwMinorVersion >= 1))
             aSalShlData.mbWXP = 1;
-    // Windows 7 ?
-    if ( aSalShlData.maVersionInfo.dwMajorVersion > 6 ||
-       ( aSalShlData.maVersionInfo.dwMajorVersion == 6 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
-        aSalShlData.mbW7 = 1;
+        // Windows Vista ?
+        if (aVersionInfo.dwMajorVersion >= 6)
+            aSalShlData.mbWVista = 1;
+        // Windows 7 ?
+        if (aVersionInfo.dwMajorVersion > 6 ||
+           (aVersionInfo.dwMajorVersion == 6 && aVersionInfo.dwMinorVersion >= 1))
+            aSalShlData.mbW7 = 1;
     }
 #endif
 

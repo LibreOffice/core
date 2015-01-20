@@ -1538,7 +1538,7 @@ void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )
     // in Aero theme (and similar ?) the menu text color does not change
     // for selected items; also on WinXP and earlier menus are not themed
     // FIXME get the color directly from the theme, not from the settings
-    if( aSalShlData.maVersionInfo.dwMajorVersion >= 6 )
+    if (aSalShlData.mbWVista)
     {
         Color aMenuBarTextColor = aStyleSettings.GetPersonaMenuBarTextColor().get_value_or( aStyleSettings.GetMenuTextColor() );
         // in aero menuitem highlight text is drawn in the same color as normal
