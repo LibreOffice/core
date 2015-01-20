@@ -1133,6 +1133,15 @@ public:
 
     SAL_DLLPRIVATE void         ImplInitFontList() const;
     SAL_DLLPRIVATE void         ImplUpdateFontData( bool bNewFontLists );
+
+    //drop font data for all outputdevices.
+    //If bNewFontLists is true then empty lists of system fonts
+    SAL_DLLPRIVATE static void  ImplClearAllFontData( bool bNewFontLists );
+    //fetch font data for all outputdevices
+    //If bNewFontLists is true then fetch lists of system fonts
+    SAL_DLLPRIVATE static void  ImplRefreshAllFontData( bool bNewFontLists );
+    //drop and fetch font data for all outputdevices
+    //If bNewFontLists is true then drop and refetch lists of system fonts
     SAL_DLLPRIVATE static void  ImplUpdateAllFontData( bool bNewFontLists );
 
 protected:
