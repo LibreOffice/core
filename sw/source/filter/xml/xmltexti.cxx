@@ -232,7 +232,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
-    OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
+    SAL_WARN_IF(!pTxtCrsr, "sw.uno", "SwXTextCursor missing");
     SwDoc *pDoc = SwImport::GetDocFromXMLImport( rImport );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
@@ -286,12 +286,16 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
-                pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
-                                        ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
-                                        &aItemSet,
-                                        NULL,
-                                        NULL );
-                pOLENd = lcl_GetOLENode( pFrmFmt );
+                if( pTxtCrsr )
+                {
+                    pFrmFmt = pDoc->getIDocumentContentOperations().Insert( *pTxtCrsr->GetPaM(),
+                                            ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ),
+                                            &aItemSet,
+                                            NULL,
+                                            NULL );
+                    pOLENd = lcl_GetOLENode( pFrmFmt );
+                }
+
                 if( pOLENd )
                     aObjName = pOLENd->GetOLEObj().GetCurrentPersistName();
             }
