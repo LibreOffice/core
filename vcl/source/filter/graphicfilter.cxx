@@ -255,9 +255,8 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
 
 static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension, bool bTest )
 {
-    sal_uInt16  i;
     sal_uInt8   sFirstBytes[ 256 ];
-    sal_uLong   nFirstLong,nSecondLong;
+    sal_uLong   nFirstLong(0), nSecondLong(0);
     sal_uLong   nStreamPos = rStream.Tell();
 
     rStream.Seek( STREAM_SEEK_TO_END );
@@ -274,28 +273,33 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         nStreamLen = rStream.Tell() - nStreamPos;
         rStream.Seek( nStreamPos );
     }
+
     if (!nStreamLen)
     {
         return false; // this prevents at least a STL assertion
     }
     else if (nStreamLen >= 256)
-    {   // load first 256 bytes into a buffer
-        rStream.Read( sFirstBytes, 256 );
+    {
+        // load first 256 bytes into a buffer
+        sal_uLong nRead = rStream.Read(sFirstBytes, 256);
+        if (nRead < 256)
+            nStreamLen = nRead;
     }
     else
     {
-        rStream.Read( sFirstBytes, nStreamLen );
-
-        for( i = (sal_uInt16) nStreamLen; i < 256; i++ )
-            sFirstBytes[ i ]=0;
+        nStreamLen = rStream.Read(sFirstBytes, nStreamLen);
     }
 
-    if( rStream.GetError() )
+
+    if (rStream.GetError())
         return false;
+
+    for (sal_uLong i = nStreamLen; i < 256; ++i)
+        sFirstBytes[i] = 0;
 
     // Accommodate the first 8 bytes in nFirstLong, nSecondLong
     // Big-Endian:
-    for( i = 0, nFirstLong = 0L, nSecondLong = 0L; i < 4; i++ )
+    for (int i = 0; i < 4; ++i)
     {
         nFirstLong=(nFirstLong<<8)|(sal_uLong)sFirstBytes[i];
         nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
@@ -324,7 +328,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             sal_uInt8 nMagic;
             bool bOK=true;
             rStream.ReadUInt16( nFieldSize ).ReadUChar( nMagic );
-            for (i=0; i<3; i++) {
+            for (int i=0; i<3; i++) {
                 if (nFieldSize<6) { bOK=false; break; }
                 if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=false; break; }
                 rStream.SeekRel(nFieldSize-3);
@@ -525,7 +529,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
         }
 
         // ASCII DXF File Format
-        i=0;
+        int i=0;
         while (i<256 && sFirstBytes[i]<=32)
             ++i;
 
