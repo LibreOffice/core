@@ -163,20 +163,20 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt ) SAL_OVERRIDE;
 
     using ListBox::InsertEntry;
-    virtual sal_Int32   InsertEntry( const OUString& rStr,
+    sal_Int32   InsertEntry( const OUString& rStr,
                                  sal_Int32  nPos = LISTBOX_APPEND );
-    virtual sal_Int32   InsertEntry( const Color& rColor, const OUString& rStr,
+    sal_Int32   InsertEntry( const Color& rColor, const OUString& rStr,
                                  sal_Int32  nPos = LISTBOX_APPEND );
     void            InsertAutomaticEntryColor(const Color &rAutoColorValue);
     bool            IsAutomaticSelected() { return !GetSelectEntryPos(); }
     using ListBox::RemoveEntry;
-    virtual void    RemoveEntry( sal_Int32  nPos );
-    virtual void    Clear();
+    void    RemoveEntry( sal_Int32  nPos );
+    void    Clear();
     void            CopyEntries( const ColorListBox& rBox );
 
     using ListBox::GetEntryPos;
-    virtual sal_Int32   GetEntryPos( const Color& rColor ) const;
-    virtual Color   GetEntryColor( sal_Int32  nPos ) const;
+    sal_Int32   GetEntryPos( const Color& rColor ) const;
+    Color   GetEntryColor( sal_Int32  nPos ) const;
     Size            GetImageSize() const { return aImageSize; }
 
     void            SelectEntry( const OUString& rStr, bool bSelect = true )
@@ -311,7 +311,7 @@ public:
     void            SetNone( const OUString& sNone );
 
     using ListBox::InsertEntry;
-    virtual sal_Int32   InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
+    sal_Int32   InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry( BorderWidthImpl aWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
@@ -320,11 +320,11 @@ public:
                         ColorDistFunc pColorDistFn = &sameDistColor );
 
     using ListBox::RemoveEntry;
-    virtual void    RemoveEntry( sal_Int32  nPos );
-    virtual void    Clear();
+    void    RemoveEntry( sal_Int32  nPos );
+    void    Clear();
 
     using ListBox::GetEntryPos;
-    virtual sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
+    sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
     sal_uInt16          GetEntryStyle( sal_Int32  nPos ) const;
 
     void            SelectEntry( const OUString& rStr, bool bSelect = true ) { ListBox::SelectEntry( rStr, bSelect ); }

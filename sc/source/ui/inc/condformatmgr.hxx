@@ -55,7 +55,7 @@ public:
 
     bool CondFormatsChanged() { return mbModified;}
 
-    virtual bool IsInRefMode() const;
+    bool IsInRefMode() const;
 
 private:
     PushButton *m_pBtnAdd;

@@ -38,7 +38,7 @@ public:
     virtual void        SetActive() SAL_OVERRIDE;
 
 protected:
-    virtual void CalculateInputAndWriteToOutput();
+    void CalculateInputAndWriteToOutput();
 
     virtual ScRange ApplyOutput(ScDocShell* pDocShell) = 0;
     virtual sal_Int16 GetUndoNameId() = 0;

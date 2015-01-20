@@ -36,8 +36,8 @@ public:
             , sal_Int32 nMinDepth=0, sal_Int32 nMaxDepth=-1 );
     virtual ~EquidistantTickIter();
 
-    virtual double*     firstValue();
-    virtual double*     nextValue();
+    double*     firstValue();
+    double*     nextValue();
 
     virtual TickInfo*   firstInfo() SAL_OVERRIDE;
     virtual TickInfo*   nextInfo() SAL_OVERRIDE;

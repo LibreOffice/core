@@ -244,19 +244,19 @@ namespace dbaui
 
         virtual bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
             // you most probably don't want to override this behaviuor
 
         // the default implementation of disposing distributes the events to the following disposingXXX functions
-        virtual void disposingGridControl(const ::com::sun::star::lang::EventObject& Source);   // calls removeControlListeners
-        virtual void disposingGridModel(const ::com::sun::star::lang::EventObject& Source);     // calls removeModelListeners
-        virtual void disposingFormModel(const ::com::sun::star::lang::EventObject& Source);
-        virtual void disposingColumnModel(const ::com::sun::star::lang::EventObject& Source);
+        void disposingGridControl(const ::com::sun::star::lang::EventObject& Source);   // calls removeControlListeners
+        void disposingGridModel(const ::com::sun::star::lang::EventObject& Source);     // calls removeModelListeners
+        void disposingFormModel(const ::com::sun::star::lang::EventObject& Source);
+        void disposingColumnModel(const ::com::sun::star::lang::EventObject& Source);
 
         // want to be a listener to the grid control ? use this !
-        virtual void addControlListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & _xGridControl);
-        virtual void removeControlListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & _xGridControl);
+        void addControlListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & _xGridControl);
+        void removeControlListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & _xGridControl);
 
         // want to be a listener to the grid model ? use this !
         virtual void addModelListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
@@ -286,9 +286,9 @@ namespace dbaui
             // whole process (_both_ XLoadable::reload calls _together_) form the "reload operation"
 
             // empty the frame where our view resides
-        virtual bool CommitCurrent();
+        bool CommitCurrent();
             // commit the current column (i.e. cell)
-        virtual bool SaveModified(bool bAskFor = true);
+        bool SaveModified(bool bAskFor = true);
             // save the modified record
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;
@@ -302,7 +302,7 @@ namespace dbaui
         void initFormatter();
 
         /// loads or reloads the form
-        virtual bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
+        bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
 
         virtual bool    preReloadForm(){ return false; }
         virtual void        postReloadForm(){}

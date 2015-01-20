@@ -75,7 +75,7 @@ public:
     virtual ~PropertGetSetHelper() {}
     virtual uno::Any getPropertyValue( const OUString& rPropName ) = 0;
     virtual void setPropertyValue( const OUString& rPropName, const uno::Any& aValue ) = 0;
-    virtual uno::Reference< beans::XPropertySet > getUserDefinedProperties() {
+    uno::Reference< beans::XPropertySet > getUserDefinedProperties() {
         return uno::Reference<beans::XPropertySet>(
                 m_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
     }

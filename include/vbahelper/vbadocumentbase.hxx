@@ -31,7 +31,7 @@ protected:
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::uno::XInterface > mxVBProject;
 protected:
-    virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
+    css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
 public:
     VbaDocumentBase(    const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
             css::uno::Reference< css::frame::XModel > xModel );

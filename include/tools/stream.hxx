@@ -127,10 +127,10 @@ public:
 
     virtual ~SvLockBytes() { close(); }
 
-    virtual const SvStream * GetStream() const { return m_pStream; }
+    const SvStream * GetStream() const { return m_pStream; }
 
     virtual void    SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
-    virtual bool    IsSynchronMode() const { return m_bSync; }
+    bool    IsSynchronMode() const { return m_bSync; }
 
     virtual ErrCode ReadAt(sal_uInt64 nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
@@ -462,10 +462,10 @@ public:
     friend SvStream& operator<<( SvStream& rStr, SvStrPtr f ); // for Manips
 
     /// end of input seen during previous i/o operation
-    virtual bool eof() const { return bIsEof; }
+    bool eof() const { return bIsEof; }
 
     /// stream is broken
-    virtual bool bad() const { return GetError() != 0; }
+    bool bad() const { return GetError() != 0; }
 
     /** Get state
 
@@ -698,7 +698,7 @@ protected:
 
     /// AllocateMemory must update pBuf accordingly
     /// - pBuf: Address of new block
-    virtual bool    AllocateMemory( sal_Size nSize );
+    bool    AllocateMemory( sal_Size nSize );
 
     /// ReAllocateMemory must update the following variables:
     /// - pBuf: Address of new block
@@ -706,11 +706,11 @@ protected:
     ///               Set to 0 , if new block size is 0 bytes
     /// - nSize: New block size
     /// - nPos: Set to 0 if position outside of block
-    virtual bool    ReAllocateMemory( long nDiff );
+    bool    ReAllocateMemory( long nDiff );
 
     /// Is called when this stream allocated the buffer or the buffer is
     /// resized. FreeMemory may need to NULLify handles in derived classes.
-    virtual void    FreeMemory();
+    void    FreeMemory();
 
                     SvMemoryStream(void*) { } // for sub-classes
 

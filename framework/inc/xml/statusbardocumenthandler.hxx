@@ -137,7 +137,7 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteStatusBarItem(
+        void WriteStatusBarItem(
             const OUString& rCommandURL,
             const OUString& rHelpURL,
             sal_Int16            nOffset,

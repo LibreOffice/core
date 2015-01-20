@@ -501,8 +501,8 @@ public:
     {
     }
 
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    void UndoImpl( ::sw::UndoRedoContext & );
+    void RedoImpl( ::sw::UndoRedoContext & );
 
     void SetEnd(SwPaM const& rPam);
 

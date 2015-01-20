@@ -92,13 +92,13 @@ class CacheUpdateListener : public BaseLock // must be the first one to guarante
 
         /** @short  starts listening.
          */
-        virtual void startListening();
+        void startListening();
 
 
 
         /** @short  stop listening.
          */
-        virtual void stopListening();
+        void stopListening();
 
 
     // uno interface

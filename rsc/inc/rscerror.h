@@ -134,14 +134,14 @@ public:
     void            SetListFile( FILE * fList ){ fListing = fList; }
     FILE *          GetListFile(){ return fListing; }
     RscVerbosity    GetVerbosity() const { return m_verbosity; }
-    virtual void    StdOut( const char *, const RscVerbosity _verbosityLevel = RscVerbosityNormal );
-    virtual void    StdErr( const char * );
-    virtual void    LstOut( const char * );
-    virtual void    Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
+    void    StdOut( const char *, const RscVerbosity _verbosityLevel = RscVerbosityNormal );
+    void    StdErr( const char * );
+    void    LstOut( const char * );
+    void    Error( const ERRTYPE& rError, RscTop* pClass, const RscId &aId,
                            const char * pMessage = NULL );
     // Dieser Fehler sollte nur im Compilermodus auftreten,
     // das Programm wird mit exit() verlassen
-    virtual void    FatalError( const ERRTYPE& rError, const RscId &aId,
+    void    FatalError( const ERRTYPE& rError, const RscId &aId,
                                 const char * pMessage = NULL );
 };
 

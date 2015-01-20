@@ -63,7 +63,7 @@ public:
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
 
-    virtual void                ScriptChanged();
+    void                ScriptChanged();
     virtual void                PageCreated (const SfxAllItemSet& aSet) SAL_OVERRIDE;
     using TabPage::ActivatePage; // FIXME WTF is this nonsense?
     virtual void                ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;

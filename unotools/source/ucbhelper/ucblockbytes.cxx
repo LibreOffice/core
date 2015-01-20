@@ -843,8 +843,7 @@ static bool _UCBOpenContentSync(
     const Command& rArg,
     Reference < XInterface > xSink,
     Reference < XInteractionHandler > xInteract,
-    Reference < XProgressHandler > xProgress,
-    UcbLockBytesHandlerRef xHandler );
+    Reference < XProgressHandler > xProgress );
 
 static bool UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
@@ -852,8 +851,7 @@ static bool UCBOpenContentSync(
     const Command& rArg,
     Reference < XInterface > xSink,
     Reference < XInteractionHandler > xInteract,
-    Reference < XProgressHandler > xProgress,
-    UcbLockBytesHandlerRef xHandler )
+    Reference < XProgressHandler > xProgress )
 {
     // http protocol must be handled in a special way:
     //        during the opening process the input stream may change
@@ -873,7 +871,7 @@ static bool UCBOpenContentSync(
         ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdav") &&
         ! aScheme.equalsIgnoreAsciiCase("ftp"))
         return _UCBOpenContentSync(
-            xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
+            xLockBytes,xContent,rArg,xSink,xInteract,xProgress);
 
     if ( !aScheme.equalsIgnoreAsciiCase( "http" ) &&
          !aScheme.equalsIgnoreAsciiCase( "https" ) )
@@ -1067,9 +1065,6 @@ static bool UCBOpenContentSync(
 
     if ( bAborted || bException )
     {
-        if( xHandler.Is() )
-            xHandler->Handle( UcbLockBytesHandler::CANCEL, xLockBytes );
-
         Reference < XActiveDataSink > xActiveSink( xSink, UNO_QUERY );
         if ( xActiveSink.is() )
             xActiveSink->setInputStream( Reference < XInputStream >() );
@@ -1100,8 +1095,7 @@ static bool _UCBOpenContentSync(
     const Command& rArg,
     Reference < XInterface > xSink,
     Reference < XInteractionHandler > xInteract,
-    Reference < XProgressHandler > xProgress,
-    UcbLockBytesHandlerRef xHandler )
+    Reference < XProgressHandler > xProgress )
 {
     ::ucbhelper::Content aContent(
         xContent, new UcbTaskEnvironment( xInteract, xProgress ),
@@ -1162,9 +1156,6 @@ static bool _UCBOpenContentSync(
 
     if ( bAborted || bException )
     {
-        if( xHandler.Is() )
-            xHandler->Handle( UcbLockBytesHandler::CANCEL, xLockBytes );
-
         Reference < XActiveDataSink > xActiveSink( xSink, UNO_QUERY );
         if ( xActiveSink.is() )
             xActiveSink->setInputStream( Reference < XInputStream >() );
@@ -1313,9 +1304,6 @@ void UcbLockBytes::terminate_Impl()
         OSL_FAIL("No InputStream, but no error set!" );
         SetError( ERRCODE_IO_NOTEXISTS );
     }
-
-    if ( m_xHandler.Is() )
-        m_xHandler->Handle( UcbLockBytesHandler::DONE, this );
 }
 
 void UcbLockBytes::SetSynchronMode (bool bSynchron)
@@ -1519,9 +1507,6 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 
 IMPL_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {
-    if ( hasInputStream_Impl() && m_xHandler.Is() )
-        m_xHandler->Handle( UcbLockBytesHandler::DATA_AVAILABLE, this );
-
     return 0;
 }
 
@@ -1588,8 +1573,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
                                       aCommand,
                                       xSink,
                                       xInteractionHandler,
-                                      xProgressHdl,
-                                      pHandler );
+                                      xProgressHdl );
 
     if ( xLockBytes->GetError() == ERRCODE_NONE && ( bError || !xLockBytes->getInputStream().is() ) )
     {

@@ -61,7 +61,7 @@ namespace dbaui
             @attention
                 Must be called after a FreeResource() call.
         */
-        virtual void    setToolBox(ToolBox* _pTB);
+        void    setToolBox(ToolBox* _pTB);
 
         inline ToolBox* getToolBox() const  { return m_pToolBox; }
 

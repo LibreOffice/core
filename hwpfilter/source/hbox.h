@@ -52,7 +52,7 @@ struct HBox
 /**
  * @returns The Size of HBox object
  */
-        virtual int   WSize();
+        int   WSize();
 /**
  * @returns The Height of HBox object as hunit value.
  */
@@ -383,12 +383,12 @@ struct TxtBox: public FBox
 /**
  * @returns Count of cell.
  */
-    virtual int NCell()   { return nCell; }
+    int NCell()   { return nCell; }
 /**
  * This is one of table, text-box, equalizer and button
  * @returns Type of this object.
  */
-    virtual int Type()    { return type;  }
+    int Type()    { return type;  }
 
     virtual bool Read(HWPFile &hwpf) SAL_OVERRIDE;
 
@@ -660,7 +660,7 @@ struct Picture: public FBox
     Picture();
     virtual ~Picture();
 
-    virtual int   Type    ();
+    int   Type    ();
     virtual bool Read    (HWPFile &hwpf) SAL_OVERRIDE;
 
     virtual hunit  Height (CharShape *sty) SAL_OVERRIDE;

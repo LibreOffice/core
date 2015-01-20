@@ -208,8 +208,8 @@ protected:
     virtual void        CheckItem( sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true ) {}
     virtual bool        IsCheckedItem( sal_uInt16 /*nMesId*/ ) { return true; }
     virtual void        LoadedFamilies() {}
-    virtual void        Update() { UpdateStyles_Impl(UPDATE_FAMILY_LIST); }
-    virtual void        InvalidateBindings();
+    void        Update() { UpdateStyles_Impl(UPDATE_FAMILY_LIST); }
+    void        InvalidateBindings();
     virtual void        InsertFamilyItem( sal_uInt16 nId, const SfxStyleFamilyItem* pIten ) = 0;
     virtual void        EnableFamilyItem( sal_uInt16 nId, bool bEnabled = true ) = 0;
     virtual void        ClearFamilyList() = 0;
@@ -267,10 +267,10 @@ public:
     DECL_LINK( MenuSelectHdl, Menu * );
 
     virtual void        EnableEdit( bool b = true ) { bCanEdit = b; }
-    virtual void        EnableDel( bool b = true )  { bCanDel = b; }
-    virtual void        EnableNew( bool b = true )  { bCanNew = b; }
-    virtual void        EnableHide( bool b = true )  { bCanHide = b; }
-    virtual void        EnableShow( bool b = true )  { bCanShow = b; }
+    void        EnableDel( bool b = true )  { bCanDel = b; }
+    void        EnableNew( bool b = true )  { bCanNew = b; }
+    void        EnableHide( bool b = true )  { bCanHide = b; }
+    void        EnableShow( bool b = true )  { bCanShow = b; }
 
     vcl::Window*             GetWindow() { return pWindow; }
 
@@ -281,7 +281,7 @@ public:
     OUString            GetSelectedEntry() const;
     SfxObjectShell*     GetObjectShell() const { return pCurObjShell; }
 
-    virtual void        PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen
+    void        PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen
 
     inline bool         CanEdit( void ) const   { return bCanEdit; }
     inline bool         CanDel( void ) const    { return bCanDel; }
@@ -290,7 +290,7 @@ public:
     inline bool         CanShow( void ) const    { return bCanShow; }
 
     // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
-    virtual PopupMenu*  CreateContextMenu( void );
+    PopupMenu*  CreateContextMenu( void );
 };
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper
@@ -323,7 +323,7 @@ private:
     DECL_LINK( MenuSelectHdl, Menu* );
 
 protected:
-    virtual void    Command( const CommandEvent& rMEvt );
+    void    Command( const CommandEvent& rMEvt );
     virtual void    EnableEdit( bool = true ) SAL_OVERRIDE;
     virtual void    EnableItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;
     virtual void    CheckItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;

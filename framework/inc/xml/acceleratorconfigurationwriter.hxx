@@ -74,7 +74,7 @@ class AcceleratorConfigurationWriter
         virtual ~AcceleratorConfigurationWriter();
 
         /** @short  TODO */
-        virtual void flush();
+        void flush();
 
     // helper
 

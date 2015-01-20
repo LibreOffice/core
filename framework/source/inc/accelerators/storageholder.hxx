@@ -84,59 +84,59 @@ class StorageHolder
 
         /** @short  TODO
          */
-        virtual void forgetCachedStorages();
+        void forgetCachedStorages();
 
         /** @short  TODO
          */
-        virtual void setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot);
+        void setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot);
 
         /** @short  TODO
          */
-        virtual css::uno::Reference< css::embed::XStorage > getRootStorage() const;
+        css::uno::Reference< css::embed::XStorage > getRootStorage() const;
 
         /** @short  TODO
                     open or get!
          */
-        virtual css::uno::Reference< css::embed::XStorage > openPath(const OUString& sPath    ,
+        css::uno::Reference< css::embed::XStorage > openPath(const OUString& sPath    ,
                                                                            sal_Int32        nOpenMode);
 
         /** @short  TODO
          */
-        virtual StorageHolder::TStorageList getAllPathStorages(const OUString& sPath);
+        StorageHolder::TStorageList getAllPathStorages(const OUString& sPath);
 
         /** @short  TODO
          */
-        virtual void commitPath(const OUString& sPath);
+        void commitPath(const OUString& sPath);
 
         /** @short  TODO
          */
-        virtual void closePath(const OUString& sPath);
+        void closePath(const OUString& sPath);
 
         /** @short  TODO
          */
-        virtual void notifyPath(const OUString& sPath);
+        void notifyPath(const OUString& sPath);
 
         /** @short  TODO
          */
-        virtual void addStorageListener(      IStorageListener* pListener,
+        void addStorageListener(      IStorageListener* pListener,
                                         const OUString&  sPath    );
 
         /** @short  TODO
          */
-        virtual void removeStorageListener(      IStorageListener* pListener,
+        void removeStorageListener(      IStorageListener* pListener,
                                            const OUString&  sPath    );
 
         /** @short  TODO
          */
-        virtual OUString getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage);
+        OUString getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage);
 
         /** @short  TODO
          */
-        virtual css::uno::Reference< css::embed::XStorage > getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild);
+        css::uno::Reference< css::embed::XStorage > getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild);
 
         /** @short  TODO
          */
-        virtual css::uno::Reference< css::embed::XStorage > getParentStorage(const OUString& sChildPath);
+        css::uno::Reference< css::embed::XStorage > getParentStorage(const OUString& sChildPath);
 
         /** @short  TODO
          */

@@ -44,7 +44,7 @@ public:
     virtual void        Resize() SAL_OVERRIDE;
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
 
-    virtual void        Click();
+    void        Click();
 
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
     const Size&         GetPageSizePixel() const { return maPageSize; }

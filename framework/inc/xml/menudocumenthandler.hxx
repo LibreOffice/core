@@ -260,11 +260,11 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler
         void WriteMenuDocument() throw
             ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
     protected:
-        virtual void WriteMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rSubMenuContainer ) throw
+        void WriteMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rSubMenuContainer ) throw
             ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle = 0 );
-        virtual void WriteMenuSeparator();
+        void WriteMenuItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, sal_Int16 nStyle = 0 );
+        void WriteMenuSeparator();
 
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > m_xMenuBarContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > m_xWriteDocumentHandler;

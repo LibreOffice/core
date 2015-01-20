@@ -38,7 +38,7 @@ private:
 
 protected:
     void                    Forward(SfxBroadcaster& rBC, const SfxHint& rHint);
-    virtual void            ListenersGone();
+    void            ListenersGone();
 
 public:
                             TYPEINFO();

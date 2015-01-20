@@ -60,7 +60,7 @@ private:
     void AddViewObjectContact(ViewObjectContact& rVOContact);
 
     // A ViewObjectContact was deleted and shall be forgotten.
-    virtual void RemoveViewObjectContact(ViewObjectContact& rVOContact);
+    void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
     // the primitiveAnimator which is used if this View and/or the contained primitives
     // support animatedSwitchPrimitives

@@ -269,9 +269,9 @@ public:
     virtual OUString GetLayoutName() const SAL_OVERRIDE       { return maLayoutName; }
 
     void            SetFileName(const OUString& aName) { maFileName = aName; }
-    virtual OUString GetFileName() const       { return maFileName; }
+    OUString GetFileName() const       { return maFileName; }
     void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
-    virtual OUString GetBookmarkName() const       { return maBookmarkName; }
+    OUString GetBookmarkName() const       { return maBookmarkName; }
     SdPageLink*     GetLink() { return mpPageLink; }
 
     void            ConnectLink();
@@ -327,7 +327,7 @@ public:
 
     /** Set the name of the page and broadcast a model change.
     */
-    virtual void SetName (const OUString& rName);
+    void SetName (const OUString& rName);
 
     const sd::HeaderFooterSettings& getHeaderFooterSettings() const;
     void setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettings );

@@ -48,8 +48,8 @@ public:
 
     void preparePlaybin( const OUString& rURL, GstElement *pSink );
     bool create( const OUString& rURL );
-    virtual void processMessage( GstMessage *message );
-    virtual GstBusSyncReply processSyncMessage( GstMessage *message );
+    void processMessage( GstMessage *message );
+    GstBusSyncReply processSyncMessage( GstMessage *message );
 
     // XPlayer
     virtual void SAL_CALL start(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -483,14 +483,14 @@ protected :
                 const Rectangle& rVisArea );
 
 // the following methods need to be overridden for Excel imports
-    virtual bool ProcessClientAnchor( SvStream& rStData,
+    bool ProcessClientAnchor( SvStream& rStData,
                                           sal_uInt32 nDatLen,
                                           char*& rpBuff,
                                           sal_uInt32& rBuffLen ) const;
     virtual void ProcessClientAnchor2( SvStream& rStData,
                                        DffRecordHeader& rHd,
                                        void* pData, DffObjData& );
-    virtual bool ProcessClientData( SvStream& rStData,
+    bool ProcessClientData( SvStream& rStData,
                                         sal_uInt32 nDatLen,
                                         char*& rpBuff,
                                         sal_uInt32& rBuffLen ) const;

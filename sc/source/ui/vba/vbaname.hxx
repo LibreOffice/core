@@ -37,8 +37,8 @@ class ScVbaName : public NameImpl_BASE
     OUString getContent( const formula::FormulaGrammar::Grammar eGrammar, bool prependEquals = true );
     void setContent( const OUString& sContent, const formula::FormulaGrammar::Grammar eGrammar, bool removeEquals = true );
 protected:
-    virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
-    virtual css::uno::Reference< ov::excel::XWorksheet > getWorkSheet() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
+    css::uno::Reference< ov::excel::XWorksheet > getWorkSheet() throw (css::uno::RuntimeException);
 
 public:
     ScVbaName( const css::uno::Reference< ov::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XNamedRange >& xName , const css::uno::Reference< css::sheet::XNamedRanges >& xNames , const css::uno::Reference< css::frame::XModel >& xModel );
@@ -62,7 +62,7 @@ public:
     virtual OUString SAL_CALL getRefersToR1C1Local() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setRefersToR1C1Local( const OUString &rRefersTo ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRefersToRange() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setRefersToRange( const css::uno::Reference< ov::excel::XRange > xRange ) throw (css::uno::RuntimeException);
+    void SAL_CALL setRefersToRange( const css::uno::Reference< ov::excel::XRange > xRange ) throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

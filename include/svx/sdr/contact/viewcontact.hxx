@@ -89,8 +89,8 @@ protected:
     // Methods to react on start getting viewed or stop getting
     // viewed. This info is derived from the count of members of
     // registered ViewObjectContacts. Default does nothing.
-    virtual void StartGettingViewed();
-    virtual void StopGettingViewed();
+    void StartGettingViewed();
+    void StopGettingViewed();
 
 public:
     // basic destructor with needed cleanups

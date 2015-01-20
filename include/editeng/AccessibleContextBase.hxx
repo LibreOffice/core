@@ -164,7 +164,7 @@ public:
         @param rRelationSet
             The new relation set that replaces the old one.
     */
-    virtual void SetRelationSet (
+    void SetRelationSet (
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleRelationSet>& rxRelationSet)
         throw (::com::sun::star::uno::RuntimeException);

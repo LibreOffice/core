@@ -69,12 +69,12 @@ public:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDEvt ) SAL_OVERRIDE;
 
-    virtual void    StartScroll();
-    virtual void    EndScroll( long nDeltaX, long nDeltaY );
+    void    StartScroll();
+    void    EndScroll( long nDeltaX, long nDeltaY );
 
     using OutputDevice::SetMapMode;
     virtual void    SetMapMode( const MapMode& rNewMapMode ) SAL_OVERRIDE;
-    virtual MapMode GetMapMode() const;
+    MapMode GetMapMode() const;
 
     void            SetTotalSize( const Size& rNewSize );
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }

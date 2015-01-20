@@ -102,7 +102,7 @@ public:
 
     virtual void setEditTitle (bool edit, bool bChangeFocus = true);
     void updateTitleEditSize ();
-    virtual void setTitle (const OUString& rTitle);
+    void setTitle (const OUString& rTitle);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
                         GetAccessible( bool bIsTransientChildrenDisabled );

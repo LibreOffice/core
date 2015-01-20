@@ -101,7 +101,7 @@ public:
     virtual sal_uInt16 GetType() const SAL_OVERRIDE;
     virtual void    InitViewData(SvTreeListBox*, SvTreeListEntry*, SvViewDataItem*) SAL_OVERRIDE;
     OUString   GetText() const { return maText; }
-    virtual OUString GetExtendText() const { return OUString(); }
+    OUString GetExtendText() const { return OUString(); }
     void            SetText( const OUString& rText ) { maText = rText; }
 
     virtual void Paint(
@@ -153,7 +153,7 @@ public:
     virtual         ~SvLBoxButton();
     virtual void    InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
     virtual sal_uInt16 GetType() const SAL_OVERRIDE;
-    virtual bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
+    bool    ClickHdl(SvTreeListBox* pView, SvTreeListEntry* );
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
     virtual SvLBoxItem* Create() const SAL_OVERRIDE;

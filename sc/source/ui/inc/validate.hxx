@@ -201,7 +201,7 @@ public:
     bool    SetupRefDlg();
     bool    RemoveRefDlg( bool bRestoreModal = true );
 
-    virtual void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
+    void            SetModal( bool bModal ){ ScValidationDlgBase::SetModalInputMode( bModal ); }
 
     virtual void            SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE
     {

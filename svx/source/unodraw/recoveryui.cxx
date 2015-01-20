@@ -105,20 +105,6 @@ class RecoveryUI : public ::cppu::WeakImplHelper2< css::lang::XServiceInfo      
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
-        // css.frame.XDispatch
-
-        virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
-                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-            throw(css::uno::RuntimeException);
-
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL&                                     aURL     )
-            throw(css::uno::RuntimeException);
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                   const css::util::URL&                                     aURL     )
-            throw(css::uno::RuntimeException);
-
-
     // helper
     private:
 
@@ -196,28 +182,6 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
 }
 
 
-void SAL_CALL RecoveryUI::dispatch(const css::util::URL&                                  aURL      ,
-                                   const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-    throw(css::uno::RuntimeException)
-{
-    // recycle this method :-)
-    dispatchWithReturnValue(aURL, lArguments);
-}
-
-
-void SAL_CALL RecoveryUI::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& ) throw(css::uno::RuntimeException)
-{
-    // TODO
-    OSL_FAIL("RecoveryUI::addStatusListener()\nNot implemented yet!");
-}
-
-
-void SAL_CALL RecoveryUI::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL& )
-    throw(css::uno::RuntimeException)
-{
-    // TODO
-    OSL_FAIL("RecoveryUI::removeStatusListener()\nNot implemented yet!");
-}
 
 static OUString GetCrashConfigDir()
 {

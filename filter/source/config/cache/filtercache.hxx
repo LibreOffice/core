@@ -300,13 +300,13 @@ class FilterCache : public BaseLock
             @note   The cloned instance is created on the heap. The user of this instance
                     has to remove it later.
          */
-        virtual FilterCache* clone() const;
+        FilterCache* clone() const;
 
 
 
         /** @short  copy the cache content or rClone back to this instance.
          */
-        virtual void takeOver(const FilterCache& rClone);
+        void takeOver(const FilterCache& rClone);
 
 
 
@@ -325,7 +325,7 @@ class FilterCache : public BaseLock
                         at all if this method does nothing inside, because the cache
                         is already full filled!
          */
-        virtual void load(EFillState eRequired)
+        void load(EFillState eRequired)
             throw(css::uno::Exception);
 
 
@@ -341,7 +341,7 @@ class FilterCache : public BaseLock
             @return     sal_True if the required fill state exists for this cache; FALSE
                         otherwise.
          */
-        virtual bool isFillState(EFillState eRequired) const
+        bool isFillState(EFillState eRequired) const
             throw(css::uno::Exception);
 
 
@@ -377,7 +377,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual OUStringList getMatchingItemsByProps(      EItemType  eType                ,
+        OUStringList getMatchingItemsByProps(      EItemType  eType                ,
                                                      const CacheItem& lIProps              ,
                                                      const CacheItem& lEProps = CacheItem()) const
             throw(css::uno::Exception);
@@ -405,7 +405,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual bool hasItems(EItemType eType) const
+        bool hasItems(EItemType eType) const
             throw(css::uno::Exception);
 
 
@@ -430,7 +430,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual OUStringList getItemNames(EItemType eType) const
+        OUStringList getItemNames(EItemType eType) const
             throw(css::uno::Exception);
 
 
@@ -454,7 +454,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual bool hasItem(      EItemType        eType,
+        bool hasItem(      EItemType        eType,
                                  const OUString& sItem)
             throw(css::uno::Exception);
 
@@ -484,7 +484,7 @@ class FilterCache : public BaseLock
                         if some input parameter are wrong or the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual CacheItem getItem(      EItemType        eType,
+        CacheItem getItem(      EItemType        eType,
                                   const OUString& sItem)
             throw(css::uno::Exception);
 
@@ -492,7 +492,7 @@ class FilterCache : public BaseLock
 
         /** TODO document me ...
          */
-        virtual void removeItem(      EItemType        eType,
+        void removeItem(      EItemType        eType,
                                 const OUString& sItem)
             throw(css::uno::Exception);
 
@@ -500,7 +500,7 @@ class FilterCache : public BaseLock
 
         /** TODO document me ...
          */
-        virtual void setItem(      EItemType        eType ,
+        void setItem(      EItemType        eType ,
                              const OUString& sItem ,
                              const CacheItem&       aValue)
             throw(css::uno::Exception, std::exception);
@@ -509,7 +509,7 @@ class FilterCache : public BaseLock
 
         /** TODO document me ...
          */
-        virtual void refreshItem(      EItemType        eType,
+        void refreshItem(      EItemType        eType,
                                  const OUString& sItem)
             throw(css::uno::Exception);
 
@@ -550,7 +550,7 @@ class FilterCache : public BaseLock
                         was not migrated to the new one. So we can't provide write access
                         to such items ...
          */
-        virtual void addStatePropsToItem(      EItemType        eType,
+        void addStatePropsToItem(      EItemType        eType,
                                          const OUString& sItem,
                                                CacheItem&       rItem)
             throw(css::uno::Exception);
@@ -559,7 +559,7 @@ class FilterCache : public BaseLock
 
         /** TODO document me
          */
-        virtual void removeStatePropsFromItem(CacheItem& aValue)
+        void removeStatePropsFromItem(CacheItem& aValue)
             throw(css::uno::Exception);
 
 
@@ -573,7 +573,7 @@ class FilterCache : public BaseLock
                         if the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual void flush()
+        void flush()
             throw(css::uno::Exception);
 
 
@@ -604,7 +604,7 @@ class FilterCache : public BaseLock
                         if the cache itself is not valid
                         any longer, because any operation before damage it.
          */
-        virtual void detectFlatForURL(const css::util::URL& aURL      ,
+        void detectFlatForURL(const css::util::URL& aURL      ,
                                             FlatDetection&  rFlatTypes) const
             throw(css::uno::Exception);
 

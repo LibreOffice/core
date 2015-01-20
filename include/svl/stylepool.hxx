@@ -44,7 +44,7 @@ public:
 
         @return a shared pointer to the SfxItemSet
     */
-    virtual SfxItemSet_Pointer_t insertItemSet( const SfxItemSet& rSet );
+    SfxItemSet_Pointer_t insertItemSet( const SfxItemSet& rSet );
 
     /** Create an iterator
 
@@ -64,12 +64,12 @@ public:
         @postcond the iterator "points before the first" SfxItemSet of the pool.
         The first StylePoolIterator::getNext() call will deliver the first SfxItemSet.
     */
-    virtual IStylePoolIteratorAccess* createIterator( const bool bSkipUnusedItemSets = false,
+    IStylePoolIteratorAccess* createIterator( const bool bSkipUnusedItemSets = false,
                                                       const bool bSkipIgnorableItems = false );
 
     /** Returns the number of styles
     */
-    virtual sal_Int32 getCount() const;
+    sal_Int32 getCount() const;
 
     virtual ~StylePool();
 

@@ -116,7 +116,7 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL applyStyles(
+    void SAL_CALL applyStyles(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -224,7 +224,7 @@ protected:
         represents one of the dimensions of the coordinate systems. If there are series
         requesting asecondary axes a secondary y axes is added</p>
      */
-    virtual void createAxes(
+    void createAxes(
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );

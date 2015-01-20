@@ -583,7 +583,7 @@ public:
     const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
-    virtual void    MBDown();
+    void    MBDown();
 
     boost::signals2::signal< void ( ImplWin* ) > buttonDownSignal;
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
@@ -610,7 +610,7 @@ public:
                     virtual ~ImplBtn() {};
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    MBDown();
+    void    MBDown();
 
     boost::signals2::signal< void ( ImplBtn* ) > buttonDownSignal;
 };

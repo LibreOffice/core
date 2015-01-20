@@ -88,7 +88,7 @@ namespace dbaui
         // set the view readonly or not
         virtual void setReadOnly(bool _bReadOnly) SAL_OVERRIDE;
         // check if the statement is correct when not returning false
-        virtual bool checkStatement();
+        bool checkStatement();
         // set the statement for representation
         virtual void setStatement(const OUString& _rsStatement) SAL_OVERRIDE;
         // returns the current sql statement

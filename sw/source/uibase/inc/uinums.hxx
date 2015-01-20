@@ -79,7 +79,7 @@ public:
     void GetNumFmt(size_t, SwNumFmt const*&, OUString const*&) const;
 };
 
-class SwChapterNumRules
+class SW_DLLPUBLIC SwChapterNumRules
 {
 public:
     enum { nMaxRules = MAX_NUM_RULES };         // currently 9 defined forms
@@ -95,7 +95,7 @@ public:
 
     inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
     void CreateEmptyNumRule(sal_uInt16 nIdx); // for import
-    virtual void                        ApplyNumRules(
+    void                        ApplyNumRules(
                                                 const SwNumRulesWithName &rCopy,
                                                 sal_uInt16 nIdx);
 

@@ -105,7 +105,7 @@ public:
     /** On some occasions it is necessary to trigger the painting of a
         scrollbar from the outside.
     */
-    virtual void Paint (
+    void Paint (
         const css::awt::Rectangle& rUpdateBox,
         bool bNoClip = false);
 
@@ -188,7 +188,7 @@ protected:
     SharedBitmapDescriptor mpThumbEndDescriptor;
     bool maEnabledState[__AreaCount__];
 
-    virtual css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
+    css::geometry::RealRectangle2D GetRectangle (const Area eArea) const;
     virtual double GetDragDistance (const sal_Int32 nX, const sal_Int32 nY) const = 0;
     virtual void UpdateDragAnchor (const double nDragDistance) = 0;
     virtual css::geometry::RealPoint2D GetPoint (const double nMajor, const double nMinor) const = 0;

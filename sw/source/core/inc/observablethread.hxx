@@ -78,7 +78,7 @@ class ObservableThread : public osl::Thread,
         */
         virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
 
-        virtual void threadFinished();
+        void threadFinished();
 
     private:
 

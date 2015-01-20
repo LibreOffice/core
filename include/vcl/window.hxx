@@ -704,7 +704,7 @@ public:
     virtual void                        Erase() SAL_OVERRIDE;
     virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
 
-    virtual void                        PostPaint();
+    void                        PostPaint();
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void                        Move();
     virtual void                        Resize();
@@ -797,7 +797,7 @@ public:
 
     using                               ::OutputDevice::SetSettings;
     virtual void                        SetSettings( const AllSettings& rSettings ) SAL_OVERRIDE;
-    virtual void                        SetSettings( const AllSettings& rSettings, bool bChild );
+    void                        SetSettings( const AllSettings& rSettings, bool bChild );
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
@@ -959,10 +959,10 @@ public:
     // window extents of the client window, coordinates to be used in SetPosPixel
     Rectangle                           GetClientWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
 
-    virtual bool                        IsScrollable() const;
+    bool                        IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,
                                                 sal_uInt16 nFlags = 0 );
-    virtual void                        Scroll( long nHorzScroll, long nVertScroll,
+    void                        Scroll( long nHorzScroll, long nVertScroll,
                                                 const Rectangle& rRect, sal_uInt16 nFlags = 0 );
     virtual void                        Invalidate( sal_uInt16 nFlags = 0 );
     virtual void                        Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
@@ -1105,7 +1105,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
                                         GetComponentInterface( bool bCreate = true );
 
-    virtual void                        SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace );
+    void                        SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace );
 
     /** @name Accessibility
      */
@@ -1224,13 +1224,13 @@ public:
     void                                SetCreatedWithToolkit( bool b );
 
     // Drag and Drop interfaces
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > GetDropTarget();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > GetDragSource();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > GetDragGestureRecognizer();
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > GetDropTarget();
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > GetDragSource();
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > GetDragGestureRecognizer();
 
     // Clipboard/Selection interfaces
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
 
     /*
      * Widgets call this to inform their owner container that the widget wants

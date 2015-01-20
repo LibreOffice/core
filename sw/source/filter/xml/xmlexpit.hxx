@@ -86,7 +86,7 @@ public:
 
     /** this method is called for every item that has the
         MID_SW_FLAG_NO_ITEM_EXPORT flag set */
-    virtual void handleNoItem( SvXMLAttributeList& rAttrList,
+    void handleNoItem( SvXMLAttributeList& rAttrList,
                                const SvXMLItemMapEntry& rEntry,
                                const SvXMLUnitConverter& rUnitConverter,
                                const SvXMLNamespaceMap& rNamespaceMap,

@@ -311,8 +311,8 @@ private:
     void SVT_DLLPRIVATE     ImplAfterDataChange();
 protected:
 
-    virtual void            GraphicManagerDestroyed();
-    virtual SvStream*       GetSwapStream() const;
+    void            GraphicManagerDestroyed();
+    SvStream*       GetSwapStream() const;
     void                    SetSwapState();
 
     virtual void            Load( SvStream& ) SAL_OVERRIDE;

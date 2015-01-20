@@ -198,7 +198,7 @@ protected:
     const ScTokenArray*     ErrorToFormula( bool bErrOrVal, sal_uInt8 nError,
                                 double& rVal );
 
-    virtual void            AdjustRowHeight();
+    void            AdjustRowHeight();
     virtual void            PostDocLoad( void );
 
 public:

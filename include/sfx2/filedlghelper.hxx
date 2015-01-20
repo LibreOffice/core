@@ -198,14 +198,14 @@ public:
     ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > GetFilePicker() const;
 
     // XFilePickerListener methods
-    virtual void SAL_CALL   FileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
-    virtual void SAL_CALL   DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+    void SAL_CALL   FileSelectionChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+    void SAL_CALL   DirectoryChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
     virtual void SAL_CALL   ControlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
-    virtual void SAL_CALL   DialogSizeChanged();
-    virtual OUString SAL_CALL    HelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
+    void SAL_CALL   DialogSizeChanged();
+    OUString SAL_CALL    HelpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent );
 
     // XDialogClosedListener methods
-    virtual void SAL_CALL   DialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& _rEvent );
+    void SAL_CALL   DialogClosed( const ::com::sun::star::ui::dialogs::DialogClosedEvent& _rEvent );
 
     /** sets help ids for the controls in the dialog
         @param _pControlId

@@ -51,7 +51,7 @@ public:
     virtual SvxTextForwarder* GetTextForwarder() = 0;
     virtual SvxViewForwarder* GetViewForwarder() = 0;
     virtual SvxEditViewForwarder* GetEditViewForwarder( bool bCreate ) = 0;
-    virtual SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
+    SfxBroadcaster& GetBroadcaster() const { return maBroadcaster; }
 
     virtual void                UpdateData() = 0;
     virtual void                SetDoUpdate(bool bValue) = 0;

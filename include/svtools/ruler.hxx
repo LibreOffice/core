@@ -744,7 +744,7 @@ public:
     virtual void    Drag();
     virtual void    EndDrag();
     virtual void    Click();
-    virtual void    DoubleClick();
+    void    DoubleClick();
     virtual void    ExtraDown();
 
     void            Activate() SAL_OVERRIDE;

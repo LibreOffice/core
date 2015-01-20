@@ -955,7 +955,7 @@ class Dim2ArrayValueGetter : public ArrayVisitor
 protected:
     uno::Any maValue;
     ValueGetter& mValueGetter;
-    virtual void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue )
+    void processValue( sal_Int32 x, sal_Int32 y, const uno::Any& aValue )
     {
         uno::Sequence< uno::Sequence< uno::Any > >& aMatrix = *( uno::Sequence< uno::Sequence< uno::Any > >* )( maValue.getValue() );
         aMatrix[x][y] = aValue;

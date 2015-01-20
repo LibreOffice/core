@@ -81,9 +81,9 @@ public:
     /** Sends a caret changed event to all listeners. */
     virtual void SendCaretEvent();
     /** Sends a visible area changed event to all listeners. */
-    virtual void SendVisibleEvent();
+    void SendVisibleEvent();
     /** Sends a selection changed event to all listeners. */
-    virtual void SendSelectionEvent();
+    void SendSelectionEvent();
     /** Sends a table model changed event for changed cell contents to all listeners. */
     virtual void SendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn, bool bAllRows );
     /** Sends a table model changed event for an inserted column to all listeners. */

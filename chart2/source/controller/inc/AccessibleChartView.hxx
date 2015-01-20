@@ -110,7 +110,7 @@ private: // methods
                 a decoration.  Thus you have an offset of (currently) (2,2)
                 which isn't taken into account.
      */
-    virtual ::com::sun::star::awt::Rectangle GetWindowPosSize() const;
+    ::com::sun::star::awt::Rectangle GetWindowPosSize() const;
 
     ExplicitValueProvider* getExplicitValueProvider();
 

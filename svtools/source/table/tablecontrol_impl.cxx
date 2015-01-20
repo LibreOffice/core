@@ -136,10 +136,6 @@ namespace svt { namespace table
         {
             return 5 * 100;
         }
-        virtual void setRowHeight(TableMetrics _nRowHeight)
-        {
-            (void)_nRowHeight;
-        }
         virtual TableMetrics        getColumnHeaderHeight() const SAL_OVERRIDE
         {
             return 0;

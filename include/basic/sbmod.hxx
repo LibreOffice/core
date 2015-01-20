@@ -102,21 +102,21 @@ public:
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
-    virtual const OUString& GetSource() const;
+    const OUString& GetSource() const;
     const OUString&  GetSource32() const { return aOUSource;}
     const OUString&  GetComment() const { return aComment; }
-    virtual void     SetSource( const OUString& r );
+    void     SetSource( const OUString& r );
     void             SetSource32( const OUString& r );
 
-    virtual bool Compile();
-    virtual bool IsCompiled() const;
+    bool Compile();
+    bool IsCompiled() const;
     const SbxObject* FindType( const OUString& aTypeName ) const;
 
-    virtual bool IsBreakable( sal_uInt16 nLine ) const;
-    virtual bool IsBP( sal_uInt16 nLine ) const;
-    virtual bool SetBP( sal_uInt16 nLine );
-    virtual bool ClearBP( sal_uInt16 nLine );
-    virtual void     ClearAllBP();
+    bool IsBreakable( sal_uInt16 nLine ) const;
+    bool IsBP( sal_uInt16 nLine ) const;
+    bool SetBP( sal_uInt16 nLine );
+    bool ClearBP( sal_uInt16 nLine );
+    void     ClearAllBP();
 
     // Store only image, no source (needed for new password protection)
     bool StoreBinaryData( SvStream& );

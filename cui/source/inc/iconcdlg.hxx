@@ -112,8 +112,8 @@ public :
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     void                SetUserData(const OUString& rString)  { aUserString = rString; }
     OUString            GetUserData() { return aUserString; }
-    virtual void        FillUserData();
-    virtual bool        IsReadOnly() const;
+    void        FillUserData();
+    bool        IsReadOnly() const;
     virtual bool    QueryClose();
 
     void                StateChanged( StateChangedType nType ) SAL_OVERRIDE;
@@ -166,7 +166,7 @@ protected :
     void                    HidePageImpl ( IconChoicePageData* pData );
 
     virtual void            PageCreated( sal_uInt16 nId, IconChoicePage& rPage );
-    virtual SfxItemSet*     CreateInputItemSet( sal_uInt16 nId );
+    SfxItemSet*     CreateInputItemSet( sal_uInt16 nId );
     inline SfxItemSet*      GetInputSetImpl() { return (SfxItemSet*)pSet; }
     inline IconChoicePage*  GetTabPage( sal_uInt16 nPageId )
                                 { return ( GetPageData (nPageId)->pPage?GetPageData (nPageId)->pPage:NULL); }

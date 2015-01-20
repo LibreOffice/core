@@ -110,12 +110,6 @@ public:
     virtual ~SlideImpl();
 
 
-    // Disposable interface
-
-
-    virtual void dispose();
-
-
     // Slide interface
 
 
@@ -426,30 +420,6 @@ SlideImpl::~SlideImpl()
         // as reference member.
         mpLayerManager.reset();
     }
-}
-
-void SlideImpl::dispose()
-{
-    maSlideBitmaps.clear();
-    mpPaintOverlay.reset();
-    maAnimations.dispose();
-    maContext.dispose();
-
-    if( mpShapeManager )
-    {
-        maContext.mrScreenUpdater.removeViewUpdate(mpShapeManager);
-        mpShapeManager->dispose();
-    }
-
-    // TODO(Q3): Make sure LayerManager (and thus Shapes) dies first,
-    // because SlideShowContext has SubsettableShapeManager as
-    // reference member.
-    mpLayerManager.reset();
-    mpSubsettableShapeManager.reset();
-    mpShapeManager.reset();
-    mxRootNode.clear();
-    mxDrawPage.clear();
-    mxDrawPagesSupplier.clear();
 }
 
 bool SlideImpl::prefetch()

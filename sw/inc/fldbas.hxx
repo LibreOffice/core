@@ -350,7 +350,7 @@ public:
 
     virtual OUString    GetFormula() const;
 
-    virtual void        ChangeFormat(sal_uInt32 n);
+    void        ChangeFormat(sal_uInt32 n);
     virtual void        SetPar1(const OUString& rStr);
     virtual void        SetPar2(const OUString& rStr);
 

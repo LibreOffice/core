@@ -98,11 +98,11 @@ protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Click();
-    virtual void    DoubleClick();
+    void    DoubleClick();
     virtual void    Command( const CommandEvent& rCEvt );
     virtual bool    MouseButtonDown( const MouseEvent & );
     virtual bool    MouseMove( const MouseEvent & );
-    virtual bool    MouseButtonUp( const MouseEvent & );
+    bool    MouseButtonUp( const MouseEvent & );
     virtual void    Paint( const UserDrawEvent &rUDEvt );
 
     static sal_uInt16   convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons );

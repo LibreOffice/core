@@ -140,9 +140,9 @@ public:
     SbxDataType GetFullType() const { return aData.eType;}
     bool SetType( SbxDataType );
 
-    virtual bool Get( SbxValues& ) const;
+    bool Get( SbxValues& ) const;
     const SbxValues& GetValues_Impl() const { return aData; }
-    virtual bool Put( const SbxValues& );
+    bool Put( const SbxValues& );
 
     inline SbxValues& data() { return aData; }
 
@@ -196,9 +196,9 @@ public:
 
     bool PutObject( SbxBase* );
 
-    virtual bool Convert( SbxDataType );
-    virtual bool Compute( SbxOperator, const SbxValue& );
-    virtual bool Compare( SbxOperator, const SbxValue& ) const;
+    bool Convert( SbxDataType );
+    bool Compute( SbxOperator, const SbxValue& );
+    bool Compare( SbxOperator, const SbxValue& ) const;
     bool Scan( const OUString&, sal_uInt16* = NULL );
     void Format( OUString&, const OUString* = NULL ) const;
 
@@ -312,8 +312,8 @@ public:
 
     void Dump( SvStream&, bool bDumpAll=false );
 
-    virtual void SetName( const OUString& );
-    virtual const OUString& GetName( SbxNameType = SbxNAME_NONE ) const;
+    void SetName( const OUString& );
+    const OUString& GetName( SbxNameType = SbxNAME_NONE ) const;
     sal_uInt16 GetHashCode() const          { return nHash; }
 
     virtual void SetModified( bool ) SAL_OVERRIDE;

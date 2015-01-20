@@ -56,7 +56,7 @@ public:
                 ScMergeAttr( const ScMergeAttr& );
                 virtual ~ScMergeAttr();
 
-    virtual OUString        GetValueText() const;
+    OUString        GetValueText() const;
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -110,7 +110,7 @@ public:
                             ScProtectionAttr( const ScProtectionAttr& );
                             virtual ~ScProtectionAttr();
 
-    virtual OUString            GetValueText() const;
+    OUString            GetValueText() const;
     virtual bool GetPresentation(
                                     SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -251,7 +251,7 @@ public:
                 ScPageHFItem( const ScPageHFItem& rItem );
                 virtual ~ScPageHFItem();
 
-    virtual OUString        GetValueText() const;
+    OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -284,7 +284,7 @@ public:
                 virtual ~ScViewObjectModeItem();
 
     virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE;
-    virtual OUString            GetValueText( sal_uInt16 nVal ) const;
+    OUString            GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
     virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
@@ -303,7 +303,7 @@ public:
                 ScDoubleItem( const ScDoubleItem& rItem );
                 virtual ~ScDoubleItem();
 
-    virtual OUString        GetValueText() const;
+    OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 

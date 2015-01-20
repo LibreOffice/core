@@ -63,7 +63,7 @@ class CGMOutAct
     public:
                                 CGMOutAct( CGM& rCGM );
     virtual                     ~CGMOutAct();
-    virtual void                FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
+    void                FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
     virtual void                InsertPage() { mnCurrentPage++; } ;
     virtual void                BeginGroup() {} ;
     virtual void                EndGroup() {};

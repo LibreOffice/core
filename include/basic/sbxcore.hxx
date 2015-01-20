@@ -90,7 +90,7 @@ public:
     static void     Skip( SvStream& );
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
-    virtual bool    StoreCompleted();
+    bool    StoreCompleted();
 
     static SbxError GetError();
     static void SetError( SbxError );

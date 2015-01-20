@@ -59,8 +59,8 @@ namespace svt { namespace table
         virtual void        MouseButtonDown( const MouseEvent& rMEvt) SAL_OVERRIDE;
         virtual void        MouseButtonUp( const MouseEvent& rMEvt) SAL_OVERRIDE;
         virtual bool        Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-        virtual void        SetControlBackground(const Color& rColor);
-        virtual void        SetControlBackground();
+        void        SetControlBackground(const Color& rColor);
+        void        SetControlBackground();
         virtual void        RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
         void                SetBackground(const Wallpaper& rColor);

@@ -121,7 +121,7 @@ namespace accessibility
             should only be called from the main office thread.
 
         */
-        virtual const SvxEditSource& GetEditSource() const;
+        const SvxEditSource& GetEditSource() const;
 
         /** Set the current edit source
 
@@ -150,7 +150,7 @@ namespace accessibility
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
-        virtual void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
         /** Set the event source
 
@@ -162,14 +162,14 @@ namespace accessibility
             The interface that should be set as the source for
             accessibility events sent by this object.
          */
-        virtual void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
+        void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
 
         /** Get the event source
 
             @return the interface that is set as the source for
             accessibility events sent by this object.
          */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
 
         /** Set offset of EditEngine from parent
 
@@ -184,13 +184,13 @@ namespace accessibility
             @param rPoint
             The offset in screen coordinates (i.e. pixel)
         */
-        virtual void SetOffset( const Point& rPoint );
+        void SetOffset( const Point& rPoint );
 
         /** Query offset of EditEngine from parent
 
             @return the offset in screen coordinates (i.e. pixel)
         */
-        virtual Point GetOffset() const;
+        Point GetOffset() const;
 
         /** Update the visible children
 
@@ -208,7 +208,7 @@ namespace accessibility
             internally. Normally, there should not be a need to call
             this method.
         */
-        virtual void UpdateChildren();
+        void UpdateChildren();
 
         /** Drop all references and enter disposed state
 
@@ -218,7 +218,7 @@ namespace accessibility
             return default values or throw a uno::DisposedException
             exception).
          */
-        virtual void Dispose();
+        void Dispose();
 
         // XAccessibleText interface implementation
         virtual sal_Int32 SAL_CALL getCaretPosition() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

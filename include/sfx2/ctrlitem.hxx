@@ -69,7 +69,7 @@ public:
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    virtual void        DeleteFloatingWindow();
+    void        DeleteFloatingWindow();
 
     SfxMapUnit          GetCoreMetric() const;
 

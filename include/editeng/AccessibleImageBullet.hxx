@@ -94,7 +94,7 @@ namespace accessibility
         virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
+        OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
 
         /** Set the current index in the accessibility parent
 
@@ -148,7 +148,7 @@ namespace accessibility
         sal_Int32 GetParagraphIndex() const { return mnParagraphIndex; }
 
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
-        virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
+        void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
     private:
 

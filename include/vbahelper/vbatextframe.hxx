@@ -33,7 +33,7 @@ protected:
 protected:
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
-    virtual void setAsMSObehavior();
+    void setAsMSObehavior();
     sal_Int32 getMargin( const OUString& sMarginType );
     void setMargin( const OUString& sMarginType, float fMargin );
 public:

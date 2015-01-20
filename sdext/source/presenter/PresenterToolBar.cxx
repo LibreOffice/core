@@ -141,9 +141,9 @@ namespace {
             const SharedElementMode& rpMouseOverMode,
             const SharedElementMode& rpSelectedMode,
             const SharedElementMode& rpDisabledMode);
-        virtual void CurrentSlideHasChanged (void);
-        virtual void SetLocation (const awt::Point& rLocation);
-        virtual void SetSize (const geometry::RealSize2D& rSize);
+        void CurrentSlideHasChanged (void);
+        void SetLocation (const awt::Point& rLocation);
+        void SetSize (const geometry::RealSize2D& rSize);
         virtual void Paint (
             const Reference<rendering::XCanvas>& rxCanvas,
             const rendering::ViewState& rViewState) = 0;
@@ -151,8 +151,8 @@ namespace {
             const Reference<rendering::XCanvas>& rxCanvas);
         awt::Rectangle GetBoundingBox (void) const;
         virtual bool SetState (const bool bIsOver, const bool bIsPressed);
-        virtual void Invalidate (const bool bSynchronous = true);
-        virtual bool IsOutside (const awt::Rectangle& rBox);
+        void Invalidate (const bool bSynchronous = true);
+        bool IsOutside (const awt::Rectangle& rBox);
         virtual bool IsFilling (void) const;
         void UpdateState (void);
 

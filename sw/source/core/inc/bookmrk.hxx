@@ -80,7 +80,7 @@ namespace sw {
             virtual bool IsExpanded() const SAL_OVERRIDE
                 { return static_cast< bool >(m_pPos2); }
 
-            virtual void SetName(const OUString& rName)
+            void SetName(const OUString& rName)
                 { m_aName = rName; }
             virtual void SetMarkPos(const SwPosition& rNewPos);
             virtual void SetOtherMarkPos(const SwPosition& rNewPos);
@@ -89,7 +89,7 @@ namespace sw {
 
             virtual OUString ToString( ) const SAL_OVERRIDE;
 
-            virtual void Swap()
+            void Swap()
             {
                 if(m_pPos2)
                     m_pPos1.swap(m_pPos2);
@@ -252,7 +252,7 @@ namespace sw {
             bool IsChecked() const SAL_OVERRIDE;
             void SetChecked(bool checked) SAL_OVERRIDE;
 
-            virtual OUString toString( ) const;
+            OUString toString( ) const;
         };
     }
 }

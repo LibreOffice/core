@@ -139,7 +139,7 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
             @seealso    destructor ~TaskEnumeration()
         *//*-*****************************************************************************************************/
 
-        virtual void impl_resetObject();
+        void impl_resetObject();
 
 
     private:

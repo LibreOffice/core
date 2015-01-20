@@ -53,11 +53,11 @@ namespace connectivity
         inline static void SAL_CALL operator delete( void *,void* )
             {  }
 
-        virtual sal_Int32 SQLyygetc(void);
-        virtual void SQLyyerror(char const *fmt);
-        virtual void output(sal_Int32) { OSL_FAIL("Internal error in sdblex.l: output not possible"); }
-        virtual void ECHO(void) { OSL_FAIL("Internal error in sdblex.l: ECHO not possible"); }
-        virtual IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
+        sal_Int32 SQLyygetc(void);
+        void SQLyyerror(char const *fmt);
+        void output(sal_Int32) { OSL_FAIL("Internal error in sdblex.l: output not possible"); }
+        void ECHO(void) { OSL_FAIL("Internal error in sdblex.l: ECHO not possible"); }
+        IParseContext::InternationalKeyCode getInternationalTokenID(const char* sToken) const;
 
         // setting the new information before scanning
         void prepareScan(const OUString & rNewStatement, const IParseContext* pContext, bool bInternational);

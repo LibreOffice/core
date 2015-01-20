@@ -60,7 +60,7 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
     bool mbInit;
 
 //protected:
-    virtual void InitObject();
+    void InitObject();
 public:
     TYPEINFO_OVERRIDE();
     SbUserFormModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );

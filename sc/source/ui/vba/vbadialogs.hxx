@@ -38,7 +38,7 @@ public:
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XDialogs
-    virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);
+    void SAL_CALL Dummy() throw (css::uno::RuntimeException);
     // XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;

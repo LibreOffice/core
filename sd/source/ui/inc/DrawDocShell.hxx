@@ -227,10 +227,10 @@ protected:
     void                    Construct(bool bClipboard);
     virtual void            InPlaceActivate( bool bActive ) SAL_OVERRIDE;
 public:
-    virtual void setDocAccTitle( const OUString& rTitle );
-    virtual const OUString getDocAccTitle() const;
-    virtual void setDocReadOnly( bool bReadOnly);
-    virtual bool getDocReadOnly() const;
+    void setDocAccTitle( const OUString& rTitle );
+    const OUString getDocAccTitle() const;
+    void setDocReadOnly( bool bReadOnly);
+    bool getDocReadOnly() const;
 private:
     void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
 };

@@ -46,7 +46,7 @@ namespace dbaui
         /** isEditable returns the current editable state
             @return true if it is editable otherwise false
         */
-        virtual bool isEditable() const;
+        bool isEditable() const;
 
         virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) SAL_OVERRIDE;
     public:

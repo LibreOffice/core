@@ -552,7 +552,7 @@ public:
     // #103836# iterates over the paragraphs of a given SdrObject and removes all
     //          hard set character attributes with the which ids contained in the
     //          given vector
-    virtual void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
+    void RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& rCharWhichIds );
 
     // #111096#
     // Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a

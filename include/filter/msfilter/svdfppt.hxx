@@ -1320,7 +1320,7 @@ public :
         mpPPTImporter           ( pPPTImporter ),
         mxInStrm                ( rxInStrm )
     {};
-    virtual bool ReadOCXStream( SotStorageRef& rSrc1,
+    bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,
         bool bFloatingCtrl=false );

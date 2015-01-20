@@ -54,10 +54,10 @@ class ScPrivatSplit : public Control
         ScPrivatSplit( vcl::Window* pWindow, const ResId& rResId,
                         SC_SPLIT_DIRECTION eScSplit);
 
-        virtual short   GetDeltaX();
-        virtual short   GetDeltaY();
+        short   GetDeltaX();
+        short   GetDeltaY();
 
-        virtual void    CtrModified();
+        void    CtrModified();
 
         void            SetYRange(Range cRgeY);
 

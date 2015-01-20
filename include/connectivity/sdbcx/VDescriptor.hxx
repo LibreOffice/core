@@ -63,7 +63,7 @@ namespace connectivity
 
             bool isNew()  const         { return m_bNew;    }
             bool getNew() const         { return m_bNew;    }
-            virtual void     setNew(bool _bNew);
+            void     setNew(bool _bNew);
 
             bool isCaseSensitive() const { return m_aCase.isCaseSensitive(); }
 

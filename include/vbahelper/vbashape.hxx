@@ -44,9 +44,9 @@ protected:
     sal_Int32 m_nType;
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Any m_aRange;
-    virtual void addListeners();
-    virtual void removeShapeListener() throw( css::uno::RuntimeException );
-    virtual void removeShapesListener() throw( css::uno::RuntimeException );
+    void addListeners();
+    void removeShapeListener() throw( css::uno::RuntimeException );
+    void removeShapesListener() throw( css::uno::RuntimeException );
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 public:

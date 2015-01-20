@@ -125,8 +125,8 @@ public:
     virtual void        StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void        Click();
-    virtual void        DoubleClick();
+    void        Click();
+    void        DoubleClick();
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
     void                InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,

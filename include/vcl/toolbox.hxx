@@ -290,13 +290,13 @@ public:
                         virtual ~ToolBox();
 
     virtual void        Click();
-    virtual void        DoubleClick();
+    void        DoubleClick();
     virtual void        Activate() SAL_OVERRIDE;
     virtual void        Deactivate() SAL_OVERRIDE;
-    virtual void        Highlight();
+    void        Highlight();
     virtual void        Select();
-    virtual void        Customize( const ToolBoxCustomizeEvent& rCEvt );
-    virtual void        UserDraw( const UserDrawEvent& rUDEvt );
+    void        Customize( const ToolBoxCustomizeEvent& rCEvt );
+    void        UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;

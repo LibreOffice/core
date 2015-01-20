@@ -191,7 +191,7 @@ protected:
                                 SfxObjectShell( const sal_uInt64 i_nCreationFlags );    // see sfxmodelfactory.hxx
     virtual                     ~SfxObjectShell();
 
-    virtual void                ModifyChanged();
+    void                ModifyChanged();
     virtual bool                Close() SAL_OVERRIDE;
 
     /** declares the document to have capabilities to contain basic/dialog libraries
@@ -247,7 +247,7 @@ public:
     void                        UpdateDocInfoForSave(  );
     void                        FlushDocInfo();
     bool                        HasName() const { return bHasName; }
-    virtual OUString            GetAPIName() const;
+    OUString            GetAPIName() const;
     void                        SetReadOnly();
     bool                        IsReadOnly() const;
     bool                        IsReadOnlyMedium() const;
@@ -257,7 +257,7 @@ public:
     void                        SetNoName();
     bool                        IsInModalMode() const;
     bool                        IsInPrepareClose() const;
-    virtual bool                AcceptStateUpdate() const;
+    bool                AcceptStateUpdate() const;
     bool                        IsHelpDocument() const;
 
     bool                        IsDocShared() const;
@@ -296,7 +296,7 @@ public:
     // TODO/LATER: currently only overridden in Calc, should be made non-virtual
     virtual bool                DoSaveCompleted( SfxMedium* pNewStor=0 );
 
-    virtual bool                LoadOwnFormat( SfxMedium& pMedium );
+    bool                LoadOwnFormat( SfxMedium& pMedium );
     virtual bool                SaveAsOwnFormat( SfxMedium& pMedium );
     virtual bool                ConvertFrom( SfxMedium &rMedium );
     virtual bool                ConvertTo( SfxMedium &rMedium );
@@ -306,7 +306,7 @@ public:
     virtual bool                Save();
     virtual bool                SaveAs( SfxMedium &rMedium  );
     virtual bool                SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    virtual bool                SwitchPersistance(
+    bool                SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
     virtual bool                LoadExternal( SfxMedium& rMedium );
@@ -402,19 +402,19 @@ public:
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
-    virtual void                ViewAssigned();
+    void                ViewAssigned();
     virtual bool                PrepareClose(bool bUI = true);
     virtual bool                IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
-    virtual bool                HasSecurityOptOpenReadOnly() const;
+    bool                HasSecurityOptOpenReadOnly() const;
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
 
     virtual Size                GetFirstPageSize();
-    virtual bool                DoClose();
+    bool                DoClose();
     virtual void                PrepareReload();
-    virtual ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
+    ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
     virtual void                CancelTransfers();
 
     bool                        GenerateAndStoreThumbnail(
@@ -453,7 +453,7 @@ public:
     void                        InvalidateName();  // Re-set to unnamed
 
     // DDE-Interface
-    virtual long                DdeExecute( const OUString& rCmd );
+    long                DdeExecute( const OUString& rCmd );
     virtual bool                DdeGetData( const OUString& rItem,
                                             const OUString& rMimeType,
                                             ::com::sun::star::uno::Any & rValue );
@@ -473,7 +473,7 @@ public:
     // Determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
     sal_uInt16                  GetAutoStyleFilterIndex();
-    virtual bool                HasBasic() const;
+    bool                HasBasic() const;
     BasicManager*               GetBasicManager() const;
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
@@ -497,7 +497,7 @@ public:
 
     virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
 
-    virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
+    SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetModel() const;
@@ -518,7 +518,7 @@ public:
     bool                        IsInPlaceActive();
     bool                        IsUIActive();
     virtual void                InPlaceActivate( bool );
-    virtual void                UIActivate( bool );
+    void                UIActivate( bool );
 
     static bool                 CopyStoragesOfUnknownMediaType(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,
@@ -800,7 +800,7 @@ public:
                             {}
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual OUString        GetValueText() const;
+    OUString        GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;

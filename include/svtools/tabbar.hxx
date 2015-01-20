@@ -403,7 +403,7 @@ public:
 
     virtual void    Select();
     virtual void    DoubleClick();
-    virtual void    Split();
+    void    Split();
     virtual void    ActivatePage();
     virtual bool    DeactivatePage();
     virtual bool    StartRenaming();

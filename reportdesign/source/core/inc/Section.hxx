@@ -187,8 +187,8 @@ namespace reportdesign
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup > SAL_CALL getGroup() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > SAL_CALL getReportDefinition() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > SAL_CALL createReportComponent( const OUString& _sReportComponentSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::lang::IllegalArgumentException,::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableReportComponentNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > SAL_CALL createReportComponent( const OUString& _sReportComponentSpecifier ) throw (::com::sun::star::uno::Exception, ::com::sun::star::lang::IllegalArgumentException,::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAvailableReportComponentNames(  ) throw (::com::sun::star::uno::RuntimeException);
         // XChild
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

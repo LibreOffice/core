@@ -72,24 +72,24 @@ public:
     */
     static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
 
-    virtual void GetFocus (void);
-    virtual void LoseFocus (void);
+    void GetFocus (void);
+    void LoseFocus (void);
     virtual SdPage* GetActualPage (void) SAL_OVERRIDE;
 
     /// inherited from sd::ViewShell
     virtual SdPage* getCurrentPage() const SAL_OVERRIDE;
 
     void ExecCtrl (SfxRequest& rRequest);
-    virtual void GetCtrlState (SfxItemSet &rSet);
-    virtual void FuSupport (SfxRequest& rRequest);
-    virtual void FuTemporary (SfxRequest& rRequest);
-    virtual void GetStatusBarState (SfxItemSet& rSet);
-    virtual void FuPermanent (SfxRequest& rRequest);
+    void GetCtrlState (SfxItemSet &rSet);
+    void FuSupport (SfxRequest& rRequest);
+    void FuTemporary (SfxRequest& rRequest);
+    void GetStatusBarState (SfxItemSet& rSet);
+    void FuPermanent (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
     void ExecStatusBar (SfxRequest& rRequest);
     virtual void Command (const CommandEvent& rEvent, ::sd::Window* pWindow) SAL_OVERRIDE;
-    virtual void GetMenuState (SfxItemSet &rSet);
-    virtual void GetClipboardState (SfxItemSet &rSet);
+    void GetMenuState (SfxItemSet &rSet);
+    void GetClipboardState (SfxItemSet &rSet);
 
     virtual void ReadFrameViewData (FrameView* pView) SAL_OVERRIDE;
     virtual void WriteFrameViewData (void) SAL_OVERRIDE;
@@ -119,10 +119,10 @@ public:
 
     //===== Drag and Drop =====================================================
 
-    virtual void StartDrag (
+    void StartDrag (
         const Point& rDragPt,
         ::vcl::Window* pWindow );
-    virtual void DragFinished (
+    void DragFinished (
         sal_Int8 nDropAction);
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
@@ -186,7 +186,7 @@ public:
 
 protected:
 
-    virtual SvBorder GetBorder (bool bOuterResize);
+    SvBorder GetBorder (bool bOuterResize);
 
     /** Override this method to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.

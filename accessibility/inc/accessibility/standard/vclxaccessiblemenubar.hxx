@@ -40,7 +40,7 @@ protected:
 
     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
-    virtual void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
     // XComponent
     virtual void SAL_CALL   disposing() SAL_OVERRIDE;

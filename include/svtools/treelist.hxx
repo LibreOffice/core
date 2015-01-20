@@ -224,8 +224,8 @@ public:
     const Link&         GetCloneLink() const
     { return aCloneLink; }
 
-    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
-    virtual SvTreeListEntry*    CreateEntry() const; // To create Entries
+    SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
+    SvTreeListEntry*    CreateEntry() const; // To create Entries
 
     sal_uInt16          GetRefCount() const { return nRefCount; }
     void                SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }

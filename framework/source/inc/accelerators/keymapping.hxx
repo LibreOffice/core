@@ -93,7 +93,7 @@ class KeyMapping
                     if the given identifier does not describe
                     a well known key code.
          */
-        virtual sal_uInt16 mapIdentifierToCode(const OUString& sIdentifier)
+        sal_uInt16 mapIdentifierToCode(const OUString& sIdentifier)
             throw(css::lang::IllegalArgumentException);
 
         /** @short  return a suitable key identifier
@@ -104,7 +104,7 @@ class KeyMapping
 
             @return The corresponding string identifier.
          */
-        virtual OUString mapCodeToIdentifier(sal_uInt16 nCode);
+        OUString mapCodeToIdentifier(sal_uInt16 nCode);
 
     // helper
 

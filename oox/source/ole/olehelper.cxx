@@ -353,7 +353,7 @@ class OleFormCtrlExportHelper
 public:
     OleFormCtrlExportHelper( const Reference< XComponentContext >& rxCtx, const Reference< XModel >& xDocModel, const Reference< XControlModel >& xModel );
     virtual ~OleFormCtrlExportHelper() { }
-    virtual OUString getGUID()
+    OUString getGUID()
     {
         OUString sResult;
         if ( maGUID.getLength() > 2 )

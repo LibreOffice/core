@@ -274,11 +274,11 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual void    SelectionChanging();
-    virtual void    DateRangeChanged();
-    virtual void    RequestDateInfo();
-    virtual void    DoubleClick();
-    virtual void    Select();
+    void    SelectionChanging();
+    void    DateRangeChanged();
+    void    RequestDateInfo();
+    void    DoubleClick();
+    void    Select();
 
     const CalendarWrapper& GetCalendarWrapper() const { return maCalendarWrapper; }
 
@@ -418,10 +418,10 @@ public:
                         CalendarField( vcl::Window* pParent, WinBits nWinStyle );
                         virtual ~CalendarField();
 
-    virtual void        Select();
+    void        Select();
 
     virtual bool        ShowDropDown( bool bShow ) SAL_OVERRIDE;
-    virtual Calendar*   CreateCalendar( vcl::Window* pParent );
+    Calendar*   CreateCalendar( vcl::Window* pParent );
     Calendar*           GetCalendar();
 
     void                SetDefaultDate( const Date& rDate ) { maDefaultDate = rDate; }

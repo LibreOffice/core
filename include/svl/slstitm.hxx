@@ -47,8 +47,8 @@ public:
     const std::vector<OUString>& GetList() const;
 
     // String-Separator: \n
-    virtual void            SetString( const OUString& );
-    virtual OUString        GetString();
+    void            SetString( const OUString& );
+    OUString        GetString();
 
     void                    SetStringList( const com::sun::star::uno::Sequence< OUString >& rList );
     void                    GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const;

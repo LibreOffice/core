@@ -70,7 +70,7 @@ namespace accessibility
 
         sal_uInt16              GetPageId() const { return m_nPageId; }
 
-        virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+        void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
         // OCommonAccessibleComponent
         virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

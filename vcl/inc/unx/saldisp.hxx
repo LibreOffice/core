@@ -395,7 +395,7 @@ public:
     virtual ~SalX11Display();
 
     virtual bool        Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
-    virtual void        Yield();
+    void        Yield();
     virtual void        PostUserEvent() SAL_OVERRIDE;
 
     bool            IsEvent();

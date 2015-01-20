@@ -229,18 +229,18 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper4<
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // similar (XStatusIndicator)
-        virtual void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                            const OUString&                                    sText ,
                                  sal_Int32                                           nRange);
 
-        virtual void SAL_CALL reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+        void SAL_CALL reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
 
-        virtual void SAL_CALL end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
+        void SAL_CALL end(const css::uno::Reference< css::task::XStatusIndicator >& xChild);
 
-        virtual void SAL_CALL setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void SAL_CALL setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                       const OUString&                                    sText );
 
-        virtual void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
+        void SAL_CALL setValue(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                              sal_Int32                                           nValue);
 
     // specials

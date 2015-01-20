@@ -138,7 +138,7 @@ public:
         view shell is still a valid object and can safely call methods that
         rely on that.
     */
-    virtual void Exit (void);
+    void Exit (void);
 
     void Cancel();
 
@@ -183,15 +183,15 @@ public:
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
-    virtual bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
-    virtual bool Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
+    bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
+    bool Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
-    virtual bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
+    bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
-    virtual void Draw(OutputDevice &rDev, const ::vcl::Region &rReg);
+    void Draw(OutputDevice &rDev, const ::vcl::Region &rReg);
 
     virtual void SetUIUnit(FieldUnit eUnit);
-    virtual void SetDefTabHRuler( sal_uInt16 nDefTab );
+    void SetDefTabHRuler( sal_uInt16 nDefTab );
 
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
 
@@ -231,8 +231,8 @@ public:
     void SetFrameView (FrameView* pFrameView);
     virtual void  ReadFrameViewData(FrameView* pView);
     virtual void  WriteFrameViewData();
-    virtual void  WriteUserData(OUString& rString);
-    virtual void  ReadUserData(const OUString& rString);
+    void  WriteUserData(OUString& rString);
+    void  ReadUserData(const OUString& rString);
 
     virtual bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
@@ -301,7 +301,7 @@ public:
         CreateAccessibleDocumentView (::sd::Window* pWindow);
 
     virtual void SwitchViewFireFocus( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc );
-    virtual void SwitchActiveViewFireFocus( );
+    void SwitchActiveViewFireFocus( );
     // Move these two methods from DrawViewShell to enable slide show view
     void    NotifyAccUpdate();
     void    fireSwitchCurrentPage(sal_Int32 pageIndex);
@@ -389,7 +389,7 @@ public:
 
     /** Return the type of the shell.
     */
-    virtual ShellType GetShellType (void) const;
+    ShellType GetShellType (void) const;
 
     /** This method is more or less an alias to Deactivate().  It is called
         before an object of this class is taken from the stack of view

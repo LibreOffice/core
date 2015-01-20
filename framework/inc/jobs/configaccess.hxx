@@ -80,11 +80,11 @@ class FWI_DLLPUBLIC ConfigAccess
                                const OUString&                                    sRoot );
         virtual ~ConfigAccess();
 
-        virtual void      open   ( EOpenMode eMode );
-        virtual void      close  (                 );
-        virtual EOpenMode getMode(                 ) const;
+        void      open   ( EOpenMode eMode );
+        void      close  (                 );
+        EOpenMode getMode(                 ) const;
 
-        virtual const css::uno::Reference< css::uno::XInterface >& cfg();
+        const css::uno::Reference< css::uno::XInterface >& cfg();
 };
 
 } // namespace framework

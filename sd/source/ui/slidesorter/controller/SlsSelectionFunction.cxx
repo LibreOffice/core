@@ -263,8 +263,8 @@ private:
     sal_Int32 mnAnchorIndex;
     sal_Int32 mnSecondIndex;
 
-    virtual void UpdateModelPosition (const Point& rMouseModelPosition);
-    virtual void UpdateSelection (void);
+    void UpdateModelPosition (const Point& rMouseModelPosition);
+    void UpdateSelection (void);
 
     /** Update the rectangle selection so that the given position becomes
         the new second point of the selection rectangle.

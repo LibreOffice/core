@@ -40,7 +40,7 @@ public:
     ChangingResource();
     virtual ~ChangingResource();
 
-    virtual void setChangeListener( ResourceChangeListener* pListener );
+    void setChangeListener( ResourceChangeListener* pListener );
 
 protected:
     ResourceChangeListener* m_pChangeListener;

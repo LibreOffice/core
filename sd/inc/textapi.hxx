@@ -42,7 +42,7 @@ public:
 
     virtual             ~TextApiObject() throw();
 
-    virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     OutlinerParaObject* CreateText();
     void                SetText( OutlinerParaObject& rText );

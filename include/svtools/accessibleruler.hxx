@@ -68,21 +68,21 @@ public:
 protected:
     virtual ~SvtRulerAccessible();
 public:
-    virtual bool SAL_CALL
+    bool SAL_CALL
         isShowing() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual bool SAL_CALL
+    bool SAL_CALL
         isVisible() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual bool SAL_CALL
+    bool SAL_CALL
         isFocusTraversable() throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL
+    void SAL_CALL
         addFocusListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
             throw( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL
+    void SAL_CALL
         removeFocusListener(
             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
             throw( ::com::sun::star::uno::RuntimeException );
@@ -115,7 +115,7 @@ public:
     virtual void SAL_CALL
         grabFocus() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    virtual ::com::sun::star::uno::Any SAL_CALL
+    ::com::sun::star::uno::Any SAL_CALL
         getAccessibleKeyBinding() throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Int32 SAL_CALL
         getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -183,10 +183,10 @@ public:
 protected:
 
     /// @Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBoxOnScreen( void ) throw( ::com::sun::star::uno::RuntimeException );
 
     /// @Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
+    Rectangle GetBoundingBox( void ) throw( ::com::sun::star::uno::RuntimeException );
 
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;

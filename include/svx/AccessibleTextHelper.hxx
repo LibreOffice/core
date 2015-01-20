@@ -144,7 +144,7 @@ namespace accessibility
             should only be called from the main office thread.
 
          */
-        virtual const SvxEditSource& GetEditSource() const;
+        const SvxEditSource& GetEditSource() const;
 
         /** Set the current edit source
 
@@ -186,7 +186,7 @@ namespace accessibility
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
-        virtual void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
+        void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
         /** Set the event source
 
@@ -204,14 +204,14 @@ namespace accessibility
             The interface that should be set as the source for
             accessibility events sent by this object.
          */
-        virtual void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
+        void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
 
         /** Get the event source
 
             @return the interface that is set as the source for
             accessibility events sent by this object.
          */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
 
         /** Set offset of EditEngine/Outliner from parent
 
@@ -227,13 +227,13 @@ namespace accessibility
             @param rPoint
             The offset in screen coordinates (i.e. pixel)
         */
-        virtual void SetOffset( const Point& rPoint );
+        void SetOffset( const Point& rPoint );
 
         /** Query offset of EditEngine/Outliner from parent
 
             @return the offset in screen coordinates (i.e. pixel)
         */
-        virtual Point GetOffset() const;
+        Point GetOffset() const;
 
         /** Set offset the object adds to all children's indices
 
@@ -252,13 +252,13 @@ namespace accessibility
             @param nOffset
             The offset to add to every children's index.
         */
-        virtual void SetStartIndex( sal_Int32 nOffset );
+        void SetStartIndex( sal_Int32 nOffset );
 
         /** Query offset the object adds to all children's indices
 
             @return the offset to add to every children's index.
         */
-        virtual sal_Int32 GetStartIndex() const;
+        sal_Int32 GetStartIndex() const;
 
         /** Sets a vector of additional accessible states.
 
@@ -285,7 +285,7 @@ namespace accessibility
             (e.g. via TEXT_HINT_VIEWSCROLLED). Normally, there should
             not be a need to call this method.
         */
-        virtual void UpdateChildren();
+        void UpdateChildren();
 
         /** Drop all references and enter disposed state
 
@@ -295,7 +295,7 @@ namespace accessibility
             return default values or throw a uno::DisposedException
             exception).
          */
-        virtual void Dispose();
+        void Dispose();
 
         /** Set the focus state of the accessibility object
 
@@ -320,7 +320,7 @@ namespace accessibility
 
             @see HaveFocus()
          */
-        virtual void SetFocus( bool bHaveFocus = true );
+        void SetFocus( bool bHaveFocus = true );
 
         /** Query the focus state of the surrounding object
 
@@ -332,7 +332,7 @@ namespace accessibility
 
             @return the state of the focus ownership
          */
-        virtual bool HaveFocus();
+        bool HaveFocus();
 
         /** Call this method to invoke all event listeners with the given event
 
@@ -347,7 +347,7 @@ namespace accessibility
             @param rOldValue
             The old value before the change
         */
-        virtual void FireEvent( const sal_Int16 nEventId,
+        void FireEvent( const sal_Int16 nEventId,
                                 const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
                                 const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
@@ -369,7 +369,7 @@ namespace accessibility
 
             @return sal_True, if the text or parts of it are currently selected
         */
-        virtual bool IsSelected() const;
+        bool IsSelected() const;
 
         // XAccessibleContext child handling methods
 
@@ -378,13 +378,13 @@ namespace accessibility
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        virtual sal_Int32 GetChildCount();
+        sal_Int32 GetChildCount();
         /** Implements getAccessibleChild
 
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acuires it anyway.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetChild( sal_Int32 i );
 
         // XAccessibleEventBroadcaster child related methods
 
@@ -392,12 +392,12 @@ namespace accessibility
 
             @attention Don't call with locked mutexes
         */
-        virtual void AddEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener );
+        void AddEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener );
         /** Implements removeEventListener
 
             @attention Don't call with locked mutexes
         */
-        virtual void RemoveEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener );
+        void RemoveEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& xListener );
 
         // XAccessibleComponent child related methods
 
@@ -406,7 +406,7 @@ namespace accessibility
             @attention Don't call with locked mutexes. You may hold
             the solar mutex, but this method acquires it anyway.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL GetAt( const ::com::sun::star::awt::Point& aPoint );
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL GetAt( const ::com::sun::star::awt::Point& aPoint );
 
     private:
 

@@ -100,7 +100,7 @@ namespace comphelper
 
             The default implementation returns <NULL/>.
         */
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 getComponent() const;
 
     private:

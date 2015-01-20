@@ -147,7 +147,7 @@ public:
         getProperties( const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv ) SAL_OVERRIDE;
 
-    virtual libcmis::ObjectPtr updateProperties(
+    libcmis::ObjectPtr updateProperties(
             const com::sun::star::uno::Any& iCmisProps,
             const com::sun::star::uno::Reference<
             com::sun::star::ucb::XCommandEnvironment > & xEnv);

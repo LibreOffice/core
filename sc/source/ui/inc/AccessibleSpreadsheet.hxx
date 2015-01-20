@@ -89,8 +89,8 @@ public:
 
     void CompleteSelectionChanged(bool bNewState);
 
-    virtual void LostFocus();
-    virtual void GotFocus();
+    void LostFocus();
+    void GotFocus();
 
     void BoundingBoxChanged();
     void VisAreaChanged();

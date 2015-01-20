@@ -47,13 +47,13 @@ public:
     virtual ~SdrText();
 
     virtual void SetModel(SdrModel* pNewModel);
-    virtual void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
+    void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
 
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
-    virtual OutlinerParaObject* GetOutlinerParaObject() const;
+    OutlinerParaObject* GetOutlinerParaObject() const;
 
-    virtual void CheckPortionInfo( SdrOutliner& rOutliner );
-    virtual void ReformatText();
+    void CheckPortionInfo( SdrOutliner& rOutliner );
+    void ReformatText();
 
     // default uses GetObjectItemSet, but may be overridden to
     // return a text-specific ItemSet

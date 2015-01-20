@@ -141,7 +141,7 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
                     CreateAccessible() SAL_OVERRIDE;
-    virtual void SwitchView();
+    void SwitchView();
 };
 
 /**
@@ -236,7 +236,7 @@ public:
     void            DocSzChgd(const Size& rNewSize);
     const Size&     GetDocSz() const { return aDocSz; }
 
-    virtual void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
+    void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
 
     inline void     AdjustEditWin();
 

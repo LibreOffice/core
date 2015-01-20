@@ -95,7 +95,7 @@ namespace dlgprov
         OUString m_sScriptType;
         OUString m_sScriptCode;
 
-        virtual void firing_impl( const ::com::sun::star::script::AllEventObject& Event, ::com::sun::star::uno::Any* pRet );
+        void firing_impl( const ::com::sun::star::script::AllEventObject& Event, ::com::sun::star::uno::Any* pRet );
 
     public:
         DialogAllListenerImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& rxListener,

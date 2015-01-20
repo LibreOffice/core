@@ -90,12 +90,12 @@ protected:
     SvxHlinkDlgMarkWnd* mpMarkWnd;
 
     void InitStdControls ();
-    virtual void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
+    void FillStandardDlgFields ( const SvxHyperlinkItem* pHyperlinkItem );
     virtual void FillDlgFields(const OUString& rStrURL) = 0;
     virtual void GetCurentItemData     ( OUString& rStrURL, OUString& aStrName,
                                          OUString& aStrIntName, OUString& aStrFrame,
                                          SvxLinkInsertMode& eMode ) = 0;
-    virtual OUString CreateUiNameFromURL( const OUString& aStrURL );
+    OUString CreateUiNameFromURL( const OUString& aStrURL );
 
     void         GetDataFromCommonFields( OUString& aStrName,
                                           OUString& aStrIntName, OUString& aStrFrame,

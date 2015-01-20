@@ -38,7 +38,7 @@ private:
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    virtual void    SelectionChanged();
+    void    SelectionChanged();
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
 
@@ -106,12 +106,12 @@ private:
 
 protected:
 
-    virtual void    FxClick();
-    virtual void    RefClick();
-    virtual void    FxFocus();
-    virtual void    RefFocus();
-    virtual void    EdFocus();
-    virtual void    EdModify();
+    void    FxClick();
+    void    RefClick();
+    void    FxFocus();
+    void    RefFocus();
+    void    EdFocus();
+    void    EdModify();
 
 public:
 

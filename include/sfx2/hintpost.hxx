@@ -50,7 +50,7 @@ private:
 
 protected:
     virtual         ~SfxHintPoster();
-    virtual void    Event( SfxHint* pPostedHint );
+    void    Event( SfxHint* pPostedHint );
 
 public:
                     SfxHintPoster( const GenLink& rLink );

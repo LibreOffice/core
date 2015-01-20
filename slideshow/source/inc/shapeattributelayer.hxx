@@ -64,7 +64,7 @@ namespace slideshow
 
                 @return an abstract, numerical state ID.
              */
-            virtual StateId getStateId() const = 0;
+            ;
         };
 
         typedef ::boost::shared_ptr< State > StateSharedPtr;

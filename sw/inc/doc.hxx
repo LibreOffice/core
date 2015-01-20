@@ -492,10 +492,10 @@ public:
     IDocumentSettingAccess & getIDocumentSettingAccess();
     ::sw::DocumentSettingManager      & GetDocumentSettingManager(); //The implementation of the interface with some additional methods
     ::sw::DocumentSettingManager const& GetDocumentSettingManager() const;
-    virtual sal_uInt32 getRsid() const;
-    virtual void setRsid( sal_uInt32 nVal );
-    virtual sal_uInt32 getRsidRoot() const;
-    virtual void setRsidRoot( sal_uInt32 nVal );
+    sal_uInt32 getRsid() const;
+    void setRsid( sal_uInt32 nVal );
+    sal_uInt32 getRsidRoot() const;
+    void setRsidRoot( sal_uInt32 nVal );
 
     // IDocumentDeviceAccess
     IDocumentDeviceAccess const & getIDocumentDeviceAccess() const;
@@ -535,17 +535,17 @@ public:
     ::sw::DocumentContentOperationsManager const & GetDocumentContentOperationsManager() const;
     ::sw::DocumentContentOperationsManager & GetDocumentContentOperationsManager();
 
-    virtual void SetModified(SwPaM &rPaM);
-    virtual bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
-    virtual bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
+    void SetModified(SwPaM &rPaM);
+    bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
+    bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
 
     // IDocumentStylePoolAccess
     IDocumentStylePoolAccess const & getIDocumentStylePoolAccess() const;
     IDocumentStylePoolAccess & getIDocumentStylePoolAccess();
 
     // SwLineNumberInfo
-    virtual const SwLineNumberInfo& GetLineNumberInfo() const;
-    virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo);
+    const SwLineNumberInfo& GetLineNumberInfo() const;
+    void SetLineNumberInfo(const SwLineNumberInfo& rInfo);
 
     // IDocumentStatistics
     IDocumentStatistics const & getIDocumentStatistics() const;
@@ -600,10 +600,10 @@ public:
 
     //End of Interfaces
 
-    virtual void setDocReadOnly( bool b) { mbReadOnly = b; }
-    virtual bool getDocReadOnly() const { return mbReadOnly; }
-    virtual void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
-    virtual const OUString getDocAccTitle() const { return msDocAccTitle; }
+    void setDocReadOnly( bool b) { mbReadOnly = b; }
+    bool getDocReadOnly() const { return mbReadOnly; }
+    void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
+    const OUString getDocAccTitle() const { return msDocAccTitle; }
 
     // INextInterface here
     DECL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem *);

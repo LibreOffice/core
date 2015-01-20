@@ -158,8 +158,8 @@ public:
     virtual ~RegisteredDb() {};
 
 
-    virtual void addEntry(OUString const & url);
-    virtual bool getEntry(OUString const & url);
+    void addEntry(OUString const & url);
+    bool getEntry(OUString const & url);
 
 };
 

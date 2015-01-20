@@ -114,9 +114,6 @@ public:
 
     virtual ~SvxXMLXTextImportComponent() throw ();
 
-protected:
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
-
 private:
     const uno::Reference< XText > mxText;
 };
@@ -212,20 +209,6 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     catch( const uno::Exception& )
     {
     }
-}
-
-SvXMLImportContext *SvxXMLXTextImportComponent::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList )
-{
-    SvXMLImportContext* pContext;
-    if(XML_NAMESPACE_OFFICE == nPrefix && ( IsXMLToken( rLocalName, XML_DOCUMENT ) || IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ) )
-    {
-         pContext = new SvxXMLTextImportContext(*this, nPrefix, rLocalName, xAttrList, mxText );
-    }
-    else
-    {
-        pContext = SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
-    }
-    return pContext;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

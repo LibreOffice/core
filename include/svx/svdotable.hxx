@@ -182,9 +182,9 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
+    void TakeTextRect( const sdr::table::CellPos& rPos, SdrOutliner& rOutliner, ::Rectangle& rTextRect, bool bNoEditText = false, ::Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const;
     virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText = false, Rectangle* pAnchorRect=NULL, bool bLineWidth = true ) const SAL_OVERRIDE;
-    virtual void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
+    void TakeTextAnchorRect(const sdr::table::CellPos& rPos, ::Rectangle& rAnchorRect ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const SAL_OVERRIDE;
 
     virtual bool IsAutoGrowHeight() const SAL_OVERRIDE;
@@ -246,7 +246,7 @@ public:
     virtual bool BegTextEdit(SdrOutliner& rOutl) SAL_OVERRIDE;
     virtual void EndTextEdit(SdrOutliner& rOutl) SAL_OVERRIDE;
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const SAL_OVERRIDE;
-    virtual void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
+    void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const SAL_OVERRIDE;
 
     virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) SAL_OVERRIDE;

@@ -187,8 +187,8 @@ public:
     bool                HasEqualDataSource( const ScDPObject& rDPObj ) const;
 
     /** Writes related records into Workbook stream and creates the pivot cache storage stream. */
-    virtual void        Save( XclExpStream& rStrm );
-    virtual void        SaveXml( XclExpXmlStream& rStrm );
+    void        Save( XclExpStream& rStrm );
+    void        SaveXml( XclExpXmlStream& rStrm );
 
 private:
     /** Returns read/write access to a pivot cache field. */

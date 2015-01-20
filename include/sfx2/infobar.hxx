@@ -54,7 +54,7 @@ class SfxInfoBarWindow : public vcl::Window
         SfxInfoBarWindow(vcl::Window* parent, const OUString& sId, const OUString& sMessage);
         virtual ~SfxInfoBarWindow( );
 
-        virtual const OUString& getId() const { return m_sId; }
+        const OUString& getId() const { return m_sId; }
         virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
         virtual void Resize( ) SAL_OVERRIDE;
 

@@ -33,7 +33,7 @@ class SwHelpToolBox: public ToolBox, public DropTargetHelper
 
 protected:
     virtual void MouseButtonDown(const MouseEvent &rEvt) SAL_OVERRIDE;
-    virtual long DoubleClick(ToolBox *);
+    long DoubleClick(ToolBox *);
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt ) SAL_OVERRIDE;
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt ) SAL_OVERRIDE;
 

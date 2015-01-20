@@ -475,7 +475,7 @@ public:
 
     void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return m_aDocSz; }
-    virtual void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
+    void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
             void    SetVisArea( const Point&, bool bUpdateScrollbar = true);
             void    CheckVisArea();
 

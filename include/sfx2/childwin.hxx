@@ -127,7 +127,7 @@ public:
     FloatingWindow*     GetFloatingWindow() const;
 
     virtual void        Resizing( Size& rSize );
-    virtual bool        Close();
+    bool        Close();
     static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
 };
 
@@ -199,7 +199,7 @@ public:
     bool                WantsFocus() const;
 
     virtual bool        QueryClose();
-    virtual com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >           GetFrame();
+    com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >           GetFrame();
     void                SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & );
 
     SAL_DLLPRIVATE static void InitializeChildWinFactory_Impl(sal_uInt16, SfxChildWinInfo&);

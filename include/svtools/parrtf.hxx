@@ -55,7 +55,7 @@ protected:
     // scanne das naechste Token,
     virtual int _GetNextToken() SAL_OVERRIDE;
 
-    virtual void ReadUnknownData();
+    void ReadUnknownData();
     virtual void ReadBitmapData();
     virtual void ReadOLEData();
 
