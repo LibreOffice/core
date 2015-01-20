@@ -16,7 +16,7 @@
 #include "tokenarray.hxx"
 #include "compiler.hxx"
 #include "interpre.hxx"
-#include <comphelper/random.hxx>
+#include <formula/random.hxx>
 #include <formula/vectortoken.hxx>
 #include "scmatrix.hxx"
 
@@ -703,7 +703,7 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal( cl_kernel k, int argno, int, cl_program ) SAL_OVERRIDE
     {
-        cl_int seed = comphelper::rng::uniform_int_distribution(0, SAL_MAX_INT32);
+        cl_int seed = formula::rng::nRandom(0, SAL_MAX_INT32);
         // Pass the scalar result back to the rest of the formula kernel
         SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_int: " << seed);
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_int), (void*)&seed);

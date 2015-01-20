@@ -22,8 +22,8 @@
 #include "bessel.hxx"
 #include <cppuhelper/factory.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <formula/random.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
@@ -703,7 +703,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw(
     if( fMin > fMax )
         throw lang::IllegalArgumentException();
 
-    double fRet = floor(comphelper::rng::uniform_real_distribution(fMin, nextafter(fMax+1, -DBL_MAX)));
+    double fRet = floor(formula::rng::fRandom(fMin, nextafter(fMax+1, -DBL_MAX)));
     RETURN_FINITE( fRet );
 }
 

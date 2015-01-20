@@ -22,6 +22,7 @@
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <formula/random.hxx>
 #include <osl/thread.h>
 #include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
@@ -1662,7 +1663,7 @@ void ScInterpreter::ScPi()
 
 void ScInterpreter::ScRandom()
 {
-    PushDouble(::comphelper::rng::uniform_real_distribution());
+    PushDouble(formula::rng::fRandom(0, 1));
 }
 
 void ScInterpreter::ScTrue()
