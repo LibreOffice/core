@@ -416,8 +416,7 @@ XMLMarkerStyleContext::XMLMarkerStyleContext(
 {
     // start import
     XMLMarkerStyleImport aMarkerStyle( GetImport() );
-
-    // something missing
+    aMarkerStyle.importXML( xAttrList, maAny, maStrName );
 }
 
 XMLMarkerStyleContext::~XMLMarkerStyleContext()

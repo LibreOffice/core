@@ -24,18 +24,22 @@
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 // Import
 
@@ -137,6 +141,90 @@ bool XMLMarkerStyleImport::importXML(
     }
 
     delete pViewBox;
+
+    return bHasViewBox && bHasPathData;
+}
+
+bool XMLMarkerStyleImport::importXML(
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName )
+{
+    bool bHasViewBox = false;
+    bool bHasPathData = false;
+    OUString aDisplayName;
+
+    SdXMLImExViewBox* pViewBox = NULL;
+
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+    OUString strPathData;
+
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        if( XML_name == (attr->Token & XML_name) )
+        {
+            rStrName = attr->Value;
+        }
+        else if( XML_display_name == (attr->Token & XML_display_name) )
+        {
+            aDisplayName = attr->Value;
+        }
+        else if( XML_viewBox == (attr->Token & XML_viewBox) )
+        {
+            pViewBox = new SdXMLImExViewBox( attr->Value, rUnitConverter );
+            bHasViewBox = true;
+        }
+        else if( XML_d == (attr->Token & XML_d ) )
+        {
+            strPathData = attr->Value;
+            bHasPathData = true;
+        }
+    }
+
+    if( bHasViewBox && bHasPathData )
+    {
+        basegfx::B2DPolyPolygon aPolyPolygon;
+
+        if(basegfx::tools::importFromSvgD(aPolyPolygon, strPathData, rImport.needFixPositionAfterZ(), 0))
+        {
+            if(aPolyPolygon.count())
+            {
+                // ViewBox probably not used, but stay with former processing inside of
+                // SdXMLImExSvgDElement
+                const basegfx::B2DRange aSourceRange(
+                    pViewBox->GetX(), pViewBox->GetY(),
+                    pViewBox->GetX() + pViewBox->GetWidth(),
+                    pViewBox->GetY() + pViewBox->GetHeight() );
+                const basegfx::B2DRange aTargetRange( 0.0, 0.0,
+                    pViewBox->GetWidth(), pViewBox->GetHeight() );
+
+                if(!aSourceRange.equal(aTargetRange))
+                {
+                    aPolyPolygon.transform(
+                        basegfx::tools::createSourceRangeTargetRangeTransform(
+                            aSourceRange, aTargetRange ));
+                }
+
+                // always use PolyPolygonBezierCoords here
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+
+                basegfx::tools::B2DPolyPolygonToUnoPolyPolygonBezierCoords(
+                    aPolyPolygon, aSourcePolyPolygon );
+                rValue <<= aSourcePolyPolygon;
+            }
+        }
+
+        if( !aDisplayName.isEmpty() )
+        {
+            rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_MARKER_ID,
+                rStrName, aDisplayName );
+            rStrName = aDisplayName;
+        }
+    }
+
+    if( pViewBox )
+        delete pViewBox;
 
     return bHasViewBox && bHasPathData;
 }
