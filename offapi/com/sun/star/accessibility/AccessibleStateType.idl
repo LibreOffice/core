@@ -189,7 +189,10 @@ constants AccessibleStateType
     */
     const short SINGLE_LINE = 26;
 
-    /** ???
+    /** Object information is stale and might not be up to date
+
+        <p>Indicates that the information that is returned from this object
+        might be out of sync with with the application.</p>
     */
     const short STALE = 27;
 
@@ -225,10 +228,14 @@ constants AccessibleStateType
 
     // OFFSCREEN only exists in MSAA/IA2, but not in ATK/JAA/NSAccessibility.
     // MT: Shouldn't this be the same like !SHOWING in UAA/ATK?
+    /** Indicates the object is outside of the screen area
+    */
     const short OFFSCREEN = 33;
 
     // COLLAPSED exists in MSAA/IA2, and now also in JAA, but not in ATK/NSAccessibility. In NSAccessibility, there is a notification for collapse.
     // In opposite to MSAA, UAA has EXPANDABLE, so EXPANDABLE && !EXPANDED should be the same like COLLAPSED.
+    /** Indicates that the object is collapsed
+    */
     const short COLLAPSE = 34;
 
 };
