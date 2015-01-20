@@ -1723,8 +1723,11 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             Size aOutSize( 2000, nBulletHeight );
 
             const float fImageHeight = ((float)aOutSize.Height() * (float)4) / (float)7;
-            const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
-            aImageSize.Width() = (long)( fImageRatio * fImageHeight );
+            if (aImageSize.Width() != 0)
+            {
+                const float fImageRatio  = (float)aImageSize.Height() / (float)aImageSize.Width();
+                aImageSize.Width() = (long)( fImageRatio * fImageHeight );
+            }
             aImageSize.Height() = (long)( fImageHeight );
 
             Point aImagePos( pInfo->mrStartPos );
