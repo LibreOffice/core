@@ -185,7 +185,7 @@ bool SwXMLTextImportHelper::IsInHeaderFooter() const
 {
     uno::Reference<XUnoTunnel> xCrsrTunnel(
             ((SwXMLTextImportHelper *)this)->GetCursor(), UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -229,7 +229,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         return xPropSet;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -539,7 +539,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     uno::Reference < XPropertySet > xPropSet;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -627,7 +627,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
 
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -674,7 +674,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
 {
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
             sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -757,7 +757,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
 
     uno::Reference < XPropertySet > xPropSet;
     uno::Reference<XUnoTunnel> xCrsrTunnel( GetCursor(), UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
     OTextCursorHelper *pTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
     OSL_ENSURE( pTxtCrsr, "SwXTextCursor missing" );
@@ -909,7 +909,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     SolarMutexGuard aGuard;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    assert(xCrsrTunnel.is() && "missing XUnoTunnel for embedded");
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
     OSL_ENSURE( pFrame, "SwXFrame missing" );
