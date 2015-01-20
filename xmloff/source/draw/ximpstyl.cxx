@@ -948,6 +948,56 @@ SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
     }
 }
 
+SdXMLPresentationPlaceholderContext::SdXMLPresentationPlaceholderContext(
+    SdXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLImportContext( rImport ),
+    mnX(0L),
+    mnY(0L),
+    mnWidth(1L),
+    mnHeight(1L)
+{
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    const SvXMLTokenMap& rAttrTokenMap = GetSdImport().GetPresentationPlaceholderAttrTokenMap();
+
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++)
+    {
+        switch(rAttrTokenMap.Get( attr->Token ))
+        {
+        case XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME:
+        {
+            msName = attr->Value;
+            break;
+        }
+        case XML_TOK_PRESENTATIONPLACEHOLDER_X:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnX, attr->Value );
+            break;
+        }
+        case XML_TOK_PRESENTATIONPLACEHOLDER_Y:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnY, attr->Value );
+            break;
+        }
+        case XML_TOK_PRESENTATIONPLACEHOLDER_WIDTH:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnWidth, attr->Value );
+            break;
+        }
+        case XML_TOK_PRESENTATIONPLACEHOLDER_HEIGHT:
+        {
+            GetSdImport().GetMM100UnitConverter().convertMeasureToCore(
+                    mnHeight, attr->Value );
+            break;
+        }
+        }
+    }
+}
+
 SdXMLPresentationPlaceholderContext::~SdXMLPresentationPlaceholderContext()
 {
 }
