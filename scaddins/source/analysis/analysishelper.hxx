@@ -448,6 +448,7 @@ enum ConvertDataClass
 
 class ConvertDataList;
 
+namespace analysis {
 
 class ConvertData
 {
@@ -484,6 +485,9 @@ public:
     inline bool         IsPrefixSupport( void ) const;
 };
 
+} // namespace analysis
+
+using namespace ::analysis;
 
 class ConvertDataLinear : public ConvertData
 {
