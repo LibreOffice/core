@@ -121,8 +121,6 @@ struct MigrationItem
             aMigrationItem.m_sCommandURL     == m_sCommandURL      &&
             aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
     }
-
-    OUString GetPrevSibling() const { return m_sPrevSibling; }
 };
 
 typedef std::unordered_map< OUString, std::vector< MigrationItem >,
@@ -185,7 +183,6 @@ private:
     install_info         m_aInfo;                // info about the version being migrated
     strings_vr           m_vrFileList;           // final list of files to be copied
      MigrationHashMap     m_aOldVersionItemsHashMap;
-     MigrationHashMap     m_aNewVersionItemsHashMap;
      OUString      m_sModuleIdentifier;
 
     // functions to control the migration process
