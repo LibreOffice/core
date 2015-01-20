@@ -143,6 +143,8 @@ private:
     typedef ::boost::unordered_map<FontSelectPattern,ImplFontEntry*,IFSD_Hash,IFSD_Equal > FontInstanceList;
     FontInstanceList    maFontInstanceList;
 
+    int                 CountUnreferencedEntries() const;
+
 public:
                         ImplFontCache();
                         ~ImplFontCache();
