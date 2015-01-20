@@ -33,6 +33,26 @@ void lcl_onDestroy( LOKDocView* pDocView, gpointer pData )
     pDocView->pDocument = NULL;
 }
 
+/// Receives a button press event.
+void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
+{
+    (void) pEventBox;
+
+    lok_docview_set_edit(pDocView, TRUE);
+
+    switch (pEvent->type)
+    {
+    case GDK_BUTTON_PRESS:
+        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pEvent->x, pEvent->y);
+        break;
+    case GDK_BUTTON_RELEASE:
+        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONUP, pEvent->x, pEvent->y);
+        break;
+    default:
+        break;
+    }
+}
+
 SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
 {
     static guint lok_docview_type = 0;
@@ -73,8 +93,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
                                            pDocView->pEventBox );
 
-    // Allow reacting to button press events.
-    gtk_widget_set_events(pDocView->pEventBox, GDK_BUTTON_PRESS_MASK);
+    gtk_signal_connect(GTK_OBJECT(pDocView->pEventBox), "button-press-event", GTK_SIGNAL_FUNC(lcl_signalButton), pDocView);
+    gtk_signal_connect(GTK_OBJECT(pDocView->pEventBox), "button-release-event", GTK_SIGNAL_FUNC(lcl_signalButton), pDocView);
 
     gtk_widget_show( pDocView->pEventBox );
 
