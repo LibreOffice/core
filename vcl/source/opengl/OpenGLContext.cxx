@@ -434,9 +434,13 @@ namespace {
 
 int unxErrorHandler(Display* dpy, XErrorEvent* event)
 {
-    char errorString[256];
-    XGetErrorText(dpy, event->type, errorString, 256);
-    SAL_WARN("vcl.opengl", errorString);
+    char err[256];
+    char req[256];
+    char minor[256];
+    XGetErrorText(dpy, event->error_code, err, 256);
+    XGetErrorText(dpy, event->request_code, req, 256);
+    XGetErrorText(dpy, event->minor_code, minor, 256);
+    SAL_WARN("vcl.opengl", "Error: " << err << ", Req: " << req << ", Minor: " << minor);
     return 0;
 }
 
@@ -705,7 +709,7 @@ bool OpenGLContext::init(Display* dpy, Pixmap pix, unsigned int width, unsigned 
 bool OpenGLContext::ImplInit()
 {
     GLXContext pSharedCtx( NULL );
-    TempErrorHandler(m_aGLWin.dpy, unxErrorHandler);
+    TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 
     SAL_INFO("vcl.opengl", "OpenGLContext::ImplInit----start");
 
@@ -798,7 +802,7 @@ bool OpenGLContext::ImplInit()
         glXSwapIntervalProc glXSwapInterval = reinterpret_cast<glXSwapIntervalProc>(glXGetProcAddress( reinterpret_cast<const GLubyte*>("glXSwapIntervalSGI") ));
         if( glXSwapInterval )
         {
-            TempErrorHandler(m_aGLWin.dpy, oglErrorHandler);
+            TempErrorHandler aLocalErrorHandler(m_aGLWin.dpy, oglErrorHandler);
 
             errorTriggered = false;
 
@@ -1337,7 +1341,7 @@ void OpenGLContext::makeCurrent()
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
-    TempErrorHandler(m_aGLWin.dpy, unxErrorHandler);
+    TempErrorHandler aErrorHandler(m_aGLWin.dpy, unxErrorHandler);
 
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
     if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
