@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a46c9f1_a108d829",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3731,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-20T12:08:52Z",
+      "side": 1,
+      "message": "Why the PopError() here? It is unnecessary and may even be wrong if the current argument was the last on the stack. There\u0027s a break for the outer while loop below if(nGLobalError) and the following while (nParam-- \u003e 0) PopError(); will take care of it.",
+      "revId": "d711ac11a8db9bc43e8f878ee52d198317863250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a46c9f1_c10de438",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3732,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-20T12:08:52Z",
+      "side": 1,
+      "message": "This is unnecessary, SetError() will only set the error if nGlobalError is not set.\n\nInstead, just break the for() loop.",
+      "revId": "d711ac11a8db9bc43e8f878ee52d198317863250",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
