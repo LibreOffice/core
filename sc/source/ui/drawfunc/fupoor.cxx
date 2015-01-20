@@ -339,12 +339,12 @@ bool FuPoor::doConstructOrthogonal() const
     }
 
     // Detect image and resize proportionally, but don't constrain movement by default
-    if (pView->AreObjectsMarked())
+    if (!bIsMoveMode && pView->AreObjectsMarked())
     {
         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if (rMarkList.GetMarkCount() == 1)
         {
-            if (rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF && !bIsMoveMode)
+            if (rMarkList.GetMark(0)->GetMarkedSdrObj()->GetObjIdentifier() == OBJ_GRAF)
             {
                 return true;
             }
