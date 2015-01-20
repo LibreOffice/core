@@ -146,6 +146,18 @@ public:
     {
         mpThis->pClass->postKeyEvent(mpThis, nType, nCode);
     }
+
+    /**
+     * Posts a mouse event to the focused frame.
+     *
+     * @param nType Event type, like down, move or up.
+     * @param nX horizontal position
+     * @param nY vertical position
+     */
+    inline void postMouseEvent(int nType, int nX, int nY)
+    {
+        mpThis->pClass->postMouseEvent(mpThis, nType, nX, nY);
+    }
 };
 
 inline Office* lok_cpp_init(const char* pInstallPath)
