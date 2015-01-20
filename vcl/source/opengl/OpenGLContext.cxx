@@ -114,13 +114,14 @@ void OpenGLContext::AddRef(SalGraphicsImpl* pImpl)
 
 void OpenGLContext::DeRef(SalGraphicsImpl* pImpl)
 {
-    assert(mnRefCount > 0);
-    if( --mnRefCount == 0 )
-        delete this;
 
     auto it = maParents.find(pImpl);
     if(it != maParents.end())
         maParents.erase(it);
+
+    assert(mnRefCount > 0);
+    if( --mnRefCount == 0 )
+        delete this;
 }
 #else
 void OpenGLContext::AddRef()
