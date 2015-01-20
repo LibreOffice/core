@@ -340,7 +340,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfChar )( const IMPL_RTL_STRCODE* pStr
     if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
-        wchar_t* p = wcschr(reinterpret_cast<wchar_t const *>(pStr), (wchar_t)c);
+        wchar_t const * p = wcschr(reinterpret_cast<wchar_t const *>(pStr), (wchar_t)c);
         return p ? p - reinterpret_cast<wchar_t const *>(pStr) : -1;
     }
     else
@@ -399,7 +399,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( lastIndexOfChar )( const IMPL_RTL_STRCODE* 
     if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
-        wchar_t* p = wcsrchr(reinterpret_cast<wchar_t const *>(pStr), (wchar_t)c);
+        wchar_t const * p = wcsrchr(reinterpret_cast<wchar_t const *>(pStr), (wchar_t)c);
         return p ? p - reinterpret_cast<wchar_t const *>(pStr) : -1;
     }
     else
@@ -443,7 +443,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( indexOfStr )( const IMPL_RTL_STRCODE* pStr,
     if (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
-        wchar_t* p = wcsstr(reinterpret_cast<wchar_t const *>(pStr), reinterpret_cast<wchar_t const *>(pSubStr));
+        wchar_t const * p = wcsstr(reinterpret_cast<wchar_t const *>(pStr), reinterpret_cast<wchar_t const *>(pSubStr));
         return p ? p - reinterpret_cast<wchar_t const *>(pStr) : -1;
     }
     else
