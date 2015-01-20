@@ -12,7 +12,6 @@ package org.libreoffice.ui;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.LOAbout;
-import org.libreoffice.android.Bootstrap;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -95,12 +94,6 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         //Set the "home" - top level - directory.
         homeDirectory  = Environment.getExternalStorageDirectory();
         currentDirectory = homeDirectory;
-        //Load default settings
-
-        Bootstrap.setup(this);
-
-        Bootstrap.putenv("SAL_LOG=yes");
-
     }
 
     public void createUI(){
