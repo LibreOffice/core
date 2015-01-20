@@ -821,12 +821,10 @@ void PDFOutDev::eoClip(GfxState *state)
 
 
     @param dx
-    horizontal skip for character (already scaled with font size) +
-    inter-char space: cursor is shifted by this amount for next char
+    horizontal skip for character
 
     @param dy
-    vertical skip for character (zero for horizontal writing mode):
-    cursor is shifted by this amount for next char
+    vertical skip for character
 
     @param originX
     local offset of character (zero for horizontal writing mode). not
@@ -836,7 +834,7 @@ void PDFOutDev::eoClip(GfxState *state)
     local offset of character (zero for horizontal writing mode). not
     taken into account for output pos updates. Used for vertical writing.
  */
-void PDFOutDev::drawChar(GfxState *state, double x, double y,
+void PDFOutDev::drawChar2(GfxState *state, double x, double y,
                          double dx, double dy,
                          double originX, double originY,
                          CharCode, int /*nBytes*/, Unicode *u, int uLen)

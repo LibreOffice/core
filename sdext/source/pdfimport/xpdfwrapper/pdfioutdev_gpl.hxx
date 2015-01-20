@@ -220,7 +220,7 @@ namespace pdfi
         virtual void eoClip(GfxState *state) SAL_OVERRIDE;
 
         //----- text drawing
-        virtual void drawChar(GfxState *state, double x, double y,
+        virtual void drawChar2(GfxState *state, double x, double y,
                               double dx, double dy,
                               double originX, double originY,
                               CharCode code, int nBytes, Unicode *u, int uLen) SAL_OVERRIDE;

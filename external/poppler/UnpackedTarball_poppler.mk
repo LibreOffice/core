@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,poppler,\
 	external/poppler/poppler-nochecknew.patch.1 \
 	external/poppler/poppler-vs2013.patch.1 \
 	external/poppler/poppler-0.26.4-std-max.patch.1 \
+	external/poppler/poppler-new-drawchar.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
