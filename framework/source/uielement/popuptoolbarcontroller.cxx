@@ -438,6 +438,7 @@ throw ( css::uno::RuntimeException, std::exception )
         SolarMutexGuard aSolarMutexGuard;
         PopupMenu* pVCLPopupMenu = pTkPopupMenu ?
             dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() ) : NULL;
+
         if ( pVCLPopupMenu )
             pMenuAttributes = reinterpret_cast< MenuConfiguration::Attributes* >(
                 pVCLPopupMenu->GetUserValue( pVCLPopupMenu->GetCurItemId() ) );

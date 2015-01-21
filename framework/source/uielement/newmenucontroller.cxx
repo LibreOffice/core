@@ -85,7 +85,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 
                 AddInfoForId::const_iterator pInfo = m_aAddInfoForItem.find( nItemId );
                 if ( pInfo != m_aAddInfoForItem.end() )
-                    aImageId = pInfo->second.aImageId; // Retrieve image id for menu item
+                    aImageId = pInfo->second->aImageId; // Retrieve image id for menu item
 
                 if ( !aImageId.isEmpty() )
                 {
@@ -336,7 +336,6 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         *pVCLPopupMenu = *pSubMenu;
 
         Image           aImage;
-        AddInfo         aAddInfo;
 
         // retrieve additional parameters from bookmark menu and
         // store it in a unordered_map.
@@ -349,10 +348,10 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
                 MenuConfiguration::Attributes* pBmkAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pSubMenu->GetUserValue( nItemId ));
                 if ( pBmkAttributes != 0 )
                 {
-                    aAddInfo.aTargetFrame = pBmkAttributes->aTargetFrame;
-                    aAddInfo.aImageId     = pBmkAttributes->aImageId;
-
-                    m_aAddInfoForItem.insert( AddInfoForId::value_type( nItemId, aAddInfo ));
+                    auto result = m_aAddInfoForItem.insert(
+                        std::make_pair(nItemId, std::unique_ptr<AddInfo>(new AddInfo(*pBmkAttributes))));
+                    MenuConfiguration::Attributes *pNewInfo = result.first->second.get();
+                    pVCLPopupMenu->SetUserValue(nItemId, reinterpret_cast<sal_uIntPtr>(pNewInfo));
                 }
             }
         }
@@ -420,7 +419,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
             OUString aTargetFrame( m_aTargetFrame );
             AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );
             if ( pItem != m_aAddInfoForItem.end() )
-                aTargetFrame = pItem->second.aTargetFrame;
+                aTargetFrame = pItem->second->aTargetFrame;
 
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTargetFrame, 0 );
         }

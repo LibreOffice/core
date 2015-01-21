@@ -37,6 +37,7 @@
 
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <framework/menuconfiguration.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/accel.hxx>
@@ -80,13 +81,9 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() SAL_OVERRIDE;
-            struct AddInfo
-            {
-                OUString aTargetFrame;
-                OUString aImageId;
-            };
+            typedef MenuConfiguration::Attributes AddInfo;
 
-            typedef std::unordered_map< int, AddInfo > AddInfoForId;
+            typedef std::unordered_map< int, std::unique_ptr<AddInfo> > AddInfoForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
