@@ -228,6 +228,15 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     bPosition(false),
     bIsEndnote(false)
 {
+    if( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_note_class ) )
+    {
+        const OUString& rValue = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_note_class );
+        if( rValue.equals( "endnote" ) )
+        {
+            bIsEndnote = true;
+            SetFamily( XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG );
+        }
+    }
 }
 
 XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
@@ -370,9 +379,61 @@ void XMLFootnoteConfigurationImportContext::StartElement(
 }
 
 void SAL_CALL XMLFootnoteConfigurationImportContext::startFastElement(
-    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        switch( GetFtnConfigAttrTokenMap().Get( attr->Token ) )
+        {
+        case XML_TOK_FTNCONFIG_CITATION_STYLENAME:
+            sCitationStyle = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_ANCHOR_STYLENAME:
+            sAnchorStyle = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_DEFAULT_STYLENAME:
+            sDefaultStyle = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_PAGE_STYLENAME:
+            sPageStyle = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_OFFSET:
+        {
+            sal_Int32 nTmp;
+            if( sax::Converter::convertNumber(nTmp, attr->Value) )
+            {
+                nOffset = (sal_uInt16)nTmp;
+            }
+            break;
+        }
+        case XML_TOK_FTNCONFIG_NUM_PREFIX:
+            sPrefix = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_NUM_SUFFIX:
+            sSuffix = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_NUM_FORMAT:
+            sNumFormat = attr->Value;
+            break;
+        case XML_TOK_FTNCONFIG_START_AT:
+        {
+            sal_uInt16 nTmp;
+            if( SvXMLUnitConverter::convertEnum( nTmp, attr->Value, aFootnoteNumberingMap ) )
+            {
+                nNumbering = nTmp;
+            }
+            break;
+        }
+        case XML_TOK_FTNCONFIG_POSITION:
+            bPosition = attr->Value.equals( "document" );
+            break;
+        default:
+            ; // ignore
+        }
+    }
 }
 
 SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
@@ -419,10 +480,28 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
 
 Reference< XFastContextHandler > SAL_CALL
     XMLFootnoteConfigurationImportContext::createFastChildContext(
-    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    return Reference< XFastContextHandler >();
+    Reference< XFastContextHandler > pContext;
+
+    if( !bIsEndnote )
+    {
+        if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT
+                    | XML_FOOTNOTE_CONTINUATION_NOTICE_FORWARD) )
+            pContext = new XMLFootnoteConfigHelper( GetImport(), Element, *this, false );
+        else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT
+                    | XML_FOOTNOTE_CONTINUATION_NOTICE_BACKWARD) )
+            pContext = new XMLFootnoteConfigHelper( GetImport(), Element, *this, true );
+        // else: default context
+    }
+    // else: endnote -> default context
+
+    if( !pContext.is() )
+        //default: delagate to super class
+        pContext = SvXMLStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 // Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
