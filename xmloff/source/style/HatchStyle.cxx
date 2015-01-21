@@ -33,10 +33,14 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 enum SvXMLTokenMapAttrs
 {
@@ -54,7 +58,7 @@ SvXMLEnumMapEntry const pXML_HatchStyle_Enum[] =
     { XML_HATCHSTYLE_SINGLE,    drawing::HatchStyle_SINGLE },
     { XML_HATCHSTYLE_DOUBLE,    drawing::HatchStyle_DOUBLE },
     { XML_HATCHSTYLE_TRIPLE,    drawing::HatchStyle_TRIPLE },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 // Import
@@ -75,12 +79,18 @@ bool XMLHatchStyleImport::importXML(
 {
     static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
     {
-        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME },
-        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME },
-        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE },
-        { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR },
-        { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE },
-        { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION },
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style) },
+        { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_color) },
+        { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_hatch_distance) },
+        { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_rotation) },
         XML_TOKEN_MAP_END
     };
 
@@ -162,6 +172,98 @@ bool XMLHatchStyleImport::importXML(
     bool bRet = bHasName && bHasStyle && bHasColor && bHasDist;
 
     return bRet;
+}
+
+bool XMLHatchStyleImport::importXML(
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName )
+{
+    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+    {
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_HATCH_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_HATCH_DISPLAY_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+        { XML_NAMESPACE_DRAW, XML_STYLE, XML_TOK_HATCH_STYLE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_style) },
+        { XML_NAMESPACE_DRAW, XML_COLOR, XML_TOK_HATCH_COLOR,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_color) },
+        { XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, XML_TOK_HATCH_DISTANCE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_hatch_distance) },
+        { XML_NAMESPACE_DRAW, XML_ROTATION, XML_TOK_HATCH_ROTATION,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_rotation) },
+        XML_TOKEN_MAP_END
+    };
+
+    bool bHasName  = false;
+    bool bHasStyle = false;
+    bool bHasColor = false;
+    bool bHasDist  = false;
+    OUString aDisplayName;
+
+    drawing::Hatch aHatch;
+    aHatch.Style = drawing::HatchStyle_SINGLE;
+    aHatch.Color = 0;
+    aHatch.Distance = 0;
+    aHatch.Angle = 0;
+
+    SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
+    SvXMLUnitConverter& rUnitConverter = rImport.GetMM100UnitConverter();
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        switch( aTokenMap.Get( attr->Token ) )
+        {
+            case XML_TOK_HATCH_NAME:
+            {
+                rStrName = attr->Value;
+                bHasName = true;
+            }
+            break;
+            case XML_TOK_HATCH_DISPLAY_NAME:
+                aDisplayName = attr->Value;
+            break;
+            case XML_TOK_HATCH_STYLE:
+            {
+                sal_uInt16 eValue;
+                bHasStyle = SvXMLUnitConverter::convertEnum( eValue, attr->Value, pXML_HatchStyle_Enum );
+                if( bHasStyle )
+                    aHatch.Style = (drawing::HatchStyle) eValue;
+            }
+            break;
+            case XML_TOK_HATCH_COLOR:
+            {
+                bHasColor = sax::Converter::convertColor( aHatch.Color, attr->Value );
+            }
+            break;
+            case XML_TOK_HATCH_DISTANCE:
+                bHasDist = rUnitConverter.convertMeasureToCore(
+                    (sal_Int32&)aHatch.Distance, attr->Value );
+            break;
+            case XML_TOK_HATCH_ROTATION:
+            {
+                sal_Int32 nValue;
+                sax::Converter::convertNumber( nValue, attr->Value, 0, 3600 );
+                aHatch.Angle = sal_Int16( nValue );
+            }
+            break;
+            default:
+                DBG_WARNING( "Unknown token at import hatch style" );
+        }
+    }
+
+    rValue <<= aHatch;
+
+    if( !aDisplayName.isEmpty() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_HATCH_ID,
+                rStrName, aDisplayName );
+        rStrName = aDisplayName;
+    }
+
+    return bHasName && bHasStyle && bHasColor && bHasDist;
 }
 
 // Export

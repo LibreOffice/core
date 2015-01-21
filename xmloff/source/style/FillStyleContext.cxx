@@ -133,8 +133,7 @@ XMLHatchStyleContext::XMLHatchStyleContext(
 {
     // start import
     XMLHatchStyleImport aHatchStyle( GetImport() );
-
-    //something missing
+    aHatchStyle.importXML( xAttrList, maAny, maStrName );
 }
 
 XMLHatchStyleContext::~XMLHatchStyleContext()

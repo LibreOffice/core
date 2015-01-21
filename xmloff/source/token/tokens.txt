@@ -1128,6 +1128,7 @@ has-persistent-data
 hasfill
 hasstroke
 hatch
+hatch-distance
 header
 header-decl
 header-first
