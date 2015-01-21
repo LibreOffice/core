@@ -147,9 +147,15 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 createThumbnail(event.mTask);
                 break;
             case LOEvent.TOUCH:
+                if (!LOKitShell.isEditingEnabled()) {
+                    return;
+                }
                 touch(event.mTouchType, event.mMotionEvent);
                 break;
             case LOEvent.KEY_PRESS:
+                if (!LOKitShell.isEditingEnabled()) {
+                    return;
+                }
                 mTileProvider.keyPress(event.mKeyEvent);
                 break;
         }
@@ -174,6 +180,10 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     @Override
     public void invalidate(RectF rect) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
+
         Log.i(LOGTAG, "Invalidate request: " + rect);
 
         mLayerClient = mApplication.getLayerClient();
