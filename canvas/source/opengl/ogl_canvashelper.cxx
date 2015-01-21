@@ -659,10 +659,22 @@ namespace oglcanvas
                         unoCapeFromCap(strokeAttributes.StartCapType)
                         ));
                 }
-                rAct.maPolyPolys.push_back(aStrokedPolyPoly);
-                rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+                // Note: the generated stroke poly-polygon is NOT free of
+                // self-intersections. Therefore, if we would render it
+                // via OutDev::DrawPolyPolygon(), on/off fill would
+                // generate off areas on those self-intersections.
 
-                rAct.maFunction = &lcl_fillPolyPolygon;
+                for(sal_uInt32 i=0;i<nSize; ++i)
+                {
+                    ::basegfx::B2DPolyPolygon tempStrokedPoly;
+                    tempStrokedPoly.append(aStrokedPolyPoly.getB2DPolygon(i));
+
+                    rAct.maPolyPolys.push_back(tempStrokedPoly);
+                    rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
+
+                    rAct.maFunction = &lcl_fillPolyPolygon;
+
+                }
             }
         }
 
