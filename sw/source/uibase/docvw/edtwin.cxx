@@ -2816,6 +2816,7 @@ void SwEditWin::MoveCursor( SwWrtShell &rSh, const Point aDocPos,
 void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
+    bool bTiledRendering = rSh.isTiledRendering();
     const SwField *pCrsrFld = rSh.CrsrInsideInputFld() ? rSh.GetCurFld( true ) : NULL;
 
     // We have to check if a context menu is shown and we have an UI
@@ -2832,7 +2833,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     MouseEvent rMEvt(_rMEvt);
 
-    if (m_rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
+    if (!bTiledRendering && m_rView.GetPostItMgr()->IsHit(rMEvt.GetPosPixel()))
         return;
 
     m_rView.GetPostItMgr()->SetActiveSidebarWin(0);
@@ -2851,7 +2852,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     m_bWasShdwCrsr = 0 != m_pShadCrsr;
     delete m_pShadCrsr, m_pShadCrsr = 0;
 
-    const Point aDocPos( PixelToLogic( rMEvt.GetPosPixel() ) );
+    Point aDocPos;
+    if (bTiledRendering)
+        aDocPos = rMEvt.GetPosPixel();
+    else
+        aDocPos = PixelToLogic( rMEvt.GetPosPixel() );
 
     // How many clicks do we need to select a fly frame?
     FrameControlType eControl;
@@ -2973,7 +2978,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     SET_CURR_SHELL( &rSh );
 
     SdrView *pSdrView = rSh.GetDrawView();
-    if ( pSdrView )
+    if ( pSdrView && !bTiledRendering)
     {
         if (pSdrView->MouseButtonDown( rMEvt, this ) )
         {
@@ -3022,7 +3027,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
             m_rView.InvalidateRulerPos();
             SfxBindings& rBind = m_rView.GetViewFrame()->GetBindings();
             rBind.Update();
-            if ( RulerColumnDrag( rMEvt,
+            if ( !bTiledRendering && RulerColumnDrag( rMEvt,
                     (SwTab::COL_VERT == nMouseTabCol || SwTab::ROW_HORI == nMouseTabCol)) )
             {
                 m_rView.SetTabColFromDoc( false );
@@ -3046,7 +3051,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         SfxBindings& rBind = m_rView.GetViewFrame()->GetBindings();
         rBind.Update();
 
-        if ( RulerMarginDrag( rMEvt,
+        if ( !bTiledRendering && RulerMarginDrag( rMEvt,
                         rSh.IsVerticalModeAtNdAndPos( *pNodeAtPos, aDocPos ) ) )
         {
             m_rView.SetNumRuleNodeFromDoc( NULL );
@@ -3101,7 +3106,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         return;
                     }
                 }
-                if ( EnterDrawMode( rMEvt, aDocPos ) )
+                if ( !bTiledRendering && EnterDrawMode( rMEvt, aDocPos ) )
                 {
                     bNoInterrupt = false;
                     return;
@@ -3176,7 +3181,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     SwEditWin::m_nDDStartPosX = aDocPos.X();
 
                     // hit an URL in DrawText object?
-                    if (bExecHyperlinks && pSdrView)
+                    if (bExecHyperlinks && pSdrView && !bTiledRendering)
                     {
                         SdrViewEvent aVEvt;
                         pSdrView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -3743,7 +3748,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-    if (bCallBase)
+    if (bCallBase && !bTiledRendering)
         Window::MouseButtonDown(rMEvt);
 }
 
@@ -6254,12 +6259,17 @@ void SwEditWin::LogicMouseMove(const MouseEvent& /*rMouseEvent*/)
 {
 }
 
-void SwEditWin::LogicMouseButtonDown(const MouseEvent& /*rMouseEvent*/)
+void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
 {
+    // When we're not doing tiled rendering, then positions must be passed as pixels.
+    assert(m_rView.GetWrtShell().isTiledRendering());
+    MouseButtonDown(rMouseEvent);
 }
 
-void SwEditWin::LogicMouseButtonUp(const MouseEvent& /*rMouseEvent*/)
+void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
 {
+    assert(m_rView.GetWrtShell().isTiledRendering());
+    MouseButtonUp(rMouseEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
