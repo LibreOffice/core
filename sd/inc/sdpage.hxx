@@ -265,29 +265,29 @@ public:
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
                          const Rectangle& rOldBoundRect) SAL_OVERRIDE;
 
-    void            SetLayoutName(const OUString& aName);
+    void             SetLayoutName(const OUString& aName);
     virtual OUString GetLayoutName() const SAL_OVERRIDE       { return maLayoutName; }
 
     void            SetFileName(const OUString& aName) { maFileName = aName; }
-    OUString GetFileName() const       { return maFileName; }
+    OUString        GetFileName() const       { return maFileName; }
     void            SetBookmarkName(const OUString& aName) { maBookmarkName = aName; }
-    OUString GetBookmarkName() const       { return maBookmarkName; }
+    OUString        GetBookmarkName() const       { return maBookmarkName; }
     SdPageLink*     GetLink() { return mpPageLink; }
 
     void            ConnectLink();
     void            DisconnectLink();
 
-    void    ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
+    void            ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect,
                          bool bScaleAllObj);
 
-    const OUString&   GetName() const;
-    OUString          GetRealName() const { return FmFormPage::GetName(); };
+    const OUString& GetName() const;
+    OUString        GetRealName() const { return FmFormPage::GetName(); };
 
-    void    SetPresentationLayout(const OUString& rLayoutName,
+    void            SetPresentationLayout(const OUString& rLayoutName,
                                   bool bReplaceStyleSheets = true,
                                   bool bSetMasterPage = true,
                                   bool bReverseOrder = false);
-    void    EndListenOutlineText();
+    void            EndListenOutlineText();
 
     void    SetBackgroundFullSize( bool bIn );
     bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }

@@ -80,15 +80,15 @@ public:
     virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = 0) const;
 
     // Get number of items
-    sal_uInt16                      Count() const { return _nCount; }
-    sal_uInt16                      TotalCount() const;
+    sal_uInt16                  Count() const { return _nCount; }
+    sal_uInt16                  TotalCount() const;
 
-    const SfxPoolItem&  Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
+    const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
     const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true,
                                          TypeId aItemType = 0 ) const;
 
     // Get Which-value of the item at position nPos
-    sal_uInt16                      GetWhichByPos(sal_uInt16 nPos) const;
+    sal_uInt16                  GetWhichByPos(sal_uInt16 nPos) const;
 
     // Get item-status
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
@@ -97,12 +97,12 @@ public:
 
     bool                        HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem = NULL) const;
 
-    void                DisableItem(sal_uInt16 nWhich);
-    void                InvalidateItem( sal_uInt16 nWhich );
-    sal_uInt16          ClearItem( sal_uInt16 nWhich = 0);
-    void                ClearInvalidItems( bool bHardDefault = false );
-            void                InvalidateAllItems(); // HACK(via nWhich = 0) ???
-            void                InvalidateDefaultItems();
+    void                        DisableItem(sal_uInt16 nWhich);
+    void                        InvalidateItem( sal_uInt16 nWhich );
+    sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
+    void                        ClearInvalidItems( bool bHardDefault = false );
+    void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
+    void                        InvalidateDefaultItems();
 
     inline void                 SetParent( const SfxItemSet* pNew );
 
@@ -116,22 +116,22 @@ public:
                                              SfxItemState eDontCareAs = SfxItemState::UNKNOWN,
                                              SfxItemState eDefaultAs = SfxItemState::UNKNOWN );
 
-    bool                Set( const SfxItemSet&, bool bDeep = true );
+    bool                        Set( const SfxItemSet&, bool bDeep = true );
 
-    void                Intersect( const SfxItemSet& rSet );
-    void                MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
-    void                Differentiate( const SfxItemSet& rSet );
-    void                MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
+    void                        Intersect( const SfxItemSet& rSet );
+    void                        MergeValues( const SfxItemSet& rSet, bool bOverwriteDefaults = false );
+    void                        Differentiate( const SfxItemSet& rSet );
+    void                        MergeValue( const SfxPoolItem& rItem, bool bOverwriteDefaults = false  );
 
     SfxItemPool*                GetPool() const { return _pPool; }
-    const sal_uInt16*               GetRanges() const { return _pWhichRanges; }
+    const sal_uInt16*           GetRanges() const { return _pWhichRanges; }
     void                        SetRanges( const sal_uInt16 *pRanges );
     void                        MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo );
     const SfxItemSet*           GetParent() const { return _pParent; }
 
-    SvStream &          Load( SvStream &, bool bDirect = false,
+    SvStream &                  Load( SvStream &, bool bDirect = false,
                                       const SfxItemPool *pRefPool = 0 );
-    SvStream &          Store( SvStream &, bool bDirect = false ) const;
+    SvStream &                  Store( SvStream &, bool bDirect = false ) const;
 
     bool                        operator==(const SfxItemSet &) const;
     sal_Int32                   getHash() const;

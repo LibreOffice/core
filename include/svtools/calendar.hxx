@@ -274,11 +274,11 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    void    SelectionChanging();
-    void    DateRangeChanged();
-    void    RequestDateInfo();
-    void    DoubleClick();
-    void    Select();
+    void            SelectionChanging();
+    void            DateRangeChanged();
+    void            RequestDateInfo();
+    void            DoubleClick();
+    void            Select();
 
     const CalendarWrapper& GetCalendarWrapper() const { return maCalendarWrapper; }
 

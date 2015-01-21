@@ -88,7 +88,7 @@ public:
     bool                IsFrozen() const { return _bFrozen; }
     void                Freeze( bool bFreeze = true ) { _bFrozen = bFreeze; }
 
-    void        Draw( BrowseBox& rBox, OutputDevice& rDev,
+    void                Draw( BrowseBox& rBox, OutputDevice& rDev,
                               const Point& rPos, bool bCurs  );
 
     void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);

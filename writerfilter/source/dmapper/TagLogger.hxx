@@ -29,17 +29,6 @@
 
 namespace writerfilter
 {
-#ifdef DEBUG_WRITERFILTER
-    class IdToString
-    {
-    public:
-        typedef std::shared_ptr<IdToString> Pointer_t;
-        ;
-
-    protected:
-        ~IdToString() {}
-    };
-#endif
 
     class TagLogger
     {

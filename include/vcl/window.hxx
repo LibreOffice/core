@@ -704,7 +704,7 @@ public:
     virtual void                        Erase() SAL_OVERRIDE;
     virtual void                        Erase( const Rectangle& rRect ) SAL_OVERRIDE { ::OutputDevice::Erase( rRect ); }
 
-    void                        PostPaint();
+    void                                PostPaint();
     virtual void                        Draw( ::OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void                        Move();
     virtual void                        Resize();
@@ -797,7 +797,7 @@ public:
 
     using                               ::OutputDevice::SetSettings;
     virtual void                        SetSettings( const AllSettings& rSettings ) SAL_OVERRIDE;
-    void                        SetSettings( const AllSettings& rSettings, bool bChild );
+    void                                SetSettings( const AllSettings& rSettings, bool bChild );
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
@@ -959,10 +959,10 @@ public:
     // window extents of the client window, coordinates to be used in SetPosPixel
     Rectangle                           GetClientWindowExtentsRelative( vcl::Window *pRelativeWindow ) const;
 
-    bool                        IsScrollable() const;
+    bool                                IsScrollable() const;
     virtual void                        Scroll( long nHorzScroll, long nVertScroll,
                                                 sal_uInt16 nFlags = 0 );
-    void                        Scroll( long nHorzScroll, long nVertScroll,
+    void                                Scroll( long nHorzScroll, long nVertScroll,
                                                 const Rectangle& rRect, sal_uInt16 nFlags = 0 );
     virtual void                        Invalidate( sal_uInt16 nFlags = 0 );
     virtual void                        Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );

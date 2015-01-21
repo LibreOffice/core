@@ -35,7 +35,6 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 
-#include <cppcanvas/text.hxx>
 #include <canvasgraphichelper.hxx>
 
 #include "implpolypolygon.hxx"

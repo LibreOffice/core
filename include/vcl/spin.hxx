@@ -59,8 +59,8 @@ public:
     explicit        SpinButton( vcl::Window* pParent, WinBits nStyle = 0 );
     virtual         ~SpinButton();
 
-    void    Up();
-    void    Down();
+    void            Up();
+    void            Down();
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

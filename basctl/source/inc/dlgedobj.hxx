@@ -69,7 +69,7 @@ protected:
     using SfxListener::StartListening;
     void StartListening();
     using SfxListener::EndListening;
-    void EndListening(bool bRemoveListener = true);
+    void    EndListening(bool bRemoveListener = true);
     bool    isListening() const { return bIsListening; }
 
     bool TransformSdrToControlCoordinates(
@@ -107,8 +107,8 @@ public:
     OUString GetDefaultName() const;
     OUString GetUniqueName() const;
 
-    sal_Int32   GetStep() const;
-    virtual void        UpdateStep();
+    sal_Int32     GetStep() const;
+    virtual void  UpdateStep();
 
     void SetDefaults();
     virtual void SetRectFromProps();

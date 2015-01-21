@@ -101,9 +101,9 @@ private:
 
 protected:
 
-        void    SliderMoved();
-        void    ArgumentModified();
-        void    FxClick();
+        void            SliderMoved();
+        void            ArgumentModified();
+        void            FxClick();
 
         void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
                                         ArgEdit& rEdArg, RefButton& rRefBtn);
@@ -135,7 +135,7 @@ public:
         bool            IsRefMode() {return bRefMode;}
         void            SetRefMode(bool bFlag) {bRefMode=bFlag;}
 
-        sal_uInt16          GetActiveLine() { return nActiveLine;}
+        sal_uInt16      GetActiveLine() { return nActiveLine;}
         void            SetActiveLine(sal_uInt16 no);
         RefEdit*        GetActiveEdit();
         OUString        GetActiveArgName();
@@ -145,7 +145,7 @@ public:
         void            SetArgumentFonts(const vcl::Font& aBoldFont,const vcl::Font& aLightFont);
 
         void            SetEdFocus(sal_uInt16 nEditLine); //Sichtbare Editzeilen
-        sal_uInt16          GetSliderPos();
+        sal_uInt16      GetSliderPos();
         void            SetSliderPos(sal_uInt16 nSliderPos);
 
         void            SetScrollHdl( const Link& rLink ) { aScrollLink = rLink; }

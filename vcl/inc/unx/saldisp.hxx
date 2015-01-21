@@ -259,7 +259,7 @@ protected:
     Cursor          aPointerCache_[POINTER_COUNT];
 
     // Keyboard
-    bool        bNumLockFromXS_;    // Num Lock handled by X Server
+    bool            bNumLockFromXS_;    // Num Lock handled by X Server
     int             nNumLockIndex_;     // modifier index in modmap
     int             nNumLockMask_;      // keyevent state mask for
     KeySym          nShiftKeySym_;      // first shift modifier
@@ -306,9 +306,9 @@ public:
     void            ModifierMapping();
     void            SimulateKeyPress( sal_uInt16 nKeyCode );
     KeyIndicatorState  GetIndicatorState() const;
-    OUString          GetKeyNameFromKeySym( KeySym keysym ) const;
-    OUString       GetKeyName( sal_uInt16 nKeyCode ) const;
-    sal_uInt16          GetKeyCode( KeySym keysym, char*pcPrintable ) const;
+    OUString        GetKeyNameFromKeySym( KeySym keysym ) const;
+    OUString        GetKeyName( sal_uInt16 nKeyCode ) const;
+    sal_uInt16      GetKeyCode( KeySym keysym, char*pcPrintable ) const;
     KeySym          GetKeySym( XKeyEvent      *pEvent,
                                unsigned char  *pPrintable,
                                int            *pLen,
@@ -336,7 +336,7 @@ public:
     const Size&     GetScreenSize( SalX11Screen nXScreen ) const { return getDataForScreen( nXScreen ).m_aSize; }
     srv_vendor_t    GetServerVendor() const { return meServerVendor; }
     void            SetServerVendor() { meServerVendor = sal_GetServerVendor(pDisp_); }
-    bool        IsDisplay() const { return !!pXLib_; }
+    bool            IsDisplay() const { return !!pXLib_; }
     GC              GetMonoGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aMonoGC; }
     GC              GetCopyGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aCopyGC; }
     GC              GetAndInvertedGC( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aAndInvertedGC; }
@@ -395,10 +395,10 @@ public:
     virtual ~SalX11Display();
 
     virtual bool        Dispatch( XEvent *pEvent ) SAL_OVERRIDE;
-    void        Yield();
+    void                Yield();
     virtual void        PostUserEvent() SAL_OVERRIDE;
 
-    bool            IsEvent();
+    bool                IsEvent();
     void                SetupInput( SalI18N_InputMethod *pInputMethod );
 };
 

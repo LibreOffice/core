@@ -87,9 +87,9 @@ public:
                                     bool bActive );
     virtual             ~IMapObject() {};
 
-    sal_uInt16      GetVersion() const;
-    virtual sal_uInt16      GetType() const = 0;
-    virtual bool            IsHit( const Point& rPoint ) const = 0;
+    sal_uInt16          GetVersion() const;
+    virtual sal_uInt16  GetType() const = 0;
+    virtual bool        IsHit( const Point& rPoint ) const = 0;
 
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;
     void                Read( SvStream& rIStm, const OUString& rBaseURL );

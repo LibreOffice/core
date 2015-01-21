@@ -236,7 +236,7 @@ public:
     void            DocSzChgd(const Size& rNewSize);
     const Size&     GetDocSz() const { return aDocSz; }
 
-    void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
+    void            SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
 
     inline void     AdjustEditWin();
 

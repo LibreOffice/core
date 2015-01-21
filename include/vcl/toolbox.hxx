@@ -36,11 +36,6 @@ struct ImplToolBoxPrivateData;
 class  ImplTrackRect;
 class  PopupMenu;
 
-namespace vcl
-{
-    class IImageListProvider;
-}
-
 #define TOOLBOX_CUSTOMIZE_RESIZE        ((sal_uInt16)0xFFFE)
 
 class VCL_DLLPUBLIC ToolBoxCustomizeEvent
@@ -249,7 +244,6 @@ private:
     SAL_DLLPRIVATE                 ToolBox (const ToolBox &);
     SAL_DLLPRIVATE        ToolBox& operator= (const ToolBox &);
 
-    SAL_DLLPRIVATE void            ImplUpdateImageList(); // called if StateChanged
 public:
     SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = NULL );
     SAL_DLLPRIVATE void            ImplDisableFlatButtons();
@@ -290,13 +284,13 @@ public:
                         virtual ~ToolBox();
 
     virtual void        Click();
-    void        DoubleClick();
+    void                DoubleClick();
     virtual void        Activate() SAL_OVERRIDE;
     virtual void        Deactivate() SAL_OVERRIDE;
-    void        Highlight();
+    void                Highlight();
     virtual void        Select();
-    void        Customize( const ToolBoxCustomizeEvent& rCEvt );
-    void        UserDraw( const UserDrawEvent& rUDEvt );
+    void                Customize( const ToolBoxCustomizeEvent& rCEvt );
+    void                UserDraw( const UserDrawEvent& rUDEvt );
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void        MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -368,19 +362,19 @@ public:
     bool                IsHorizontal() const { return mbHorz; }
 
     void                SetLineCount( sal_uInt16 nNewLines );
-    sal_uInt16              GetLineCount() const { return mnLines; }
-    sal_uInt16              GetCurLine() const { return mnCurLine; }
+    sal_uInt16          GetLineCount() const { return mnLines; }
+    sal_uInt16          GetCurLine() const { return mnCurLine; }
     void                ShowLine( bool bNext );
 
     // Used to enable/disable scrolling one page at a time for toolbar
     void                SetPageScroll( bool b );
 
-    sal_uInt16              GetItemCount() const;
+    sal_uInt16          GetItemCount() const;
     ToolBoxItemType     GetItemType( sal_uInt16 nPos ) const;
-    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
-    sal_uInt16              GetItemPos( const Point& rPos ) const;
-    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
-    sal_uInt16              GetItemId( const Point& rPos ) const;
+    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
+    sal_uInt16          GetItemPos( const Point& rPos ) const;
+    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16          GetItemId( const Point& rPos ) const;
     /// Map the command name (like .uno:Save) back to item id.
     sal_uInt16          GetItemId( const OUString& rCommand ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
@@ -393,11 +387,11 @@ public:
     Point               GetItemPopupPosition( sal_uInt16 nItemId, const Size& rSize ) const;
 
     Rectangle           GetScrollRect() const;
-    sal_uInt16              GetCurItemId() const { return mnCurItemId; }
-    sal_uInt16              GetDownItemId() const { return mnDownItemId; }
-    sal_uInt16              GetClicks() const { return mnMouseClicks; }
-    sal_uInt16              GetModifier() const { return mnMouseModifier; }
-    sal_uInt16              GetKeyModifier() const { return mnKeyModifier; }
+    sal_uInt16          GetCurItemId() const { return mnCurItemId; }
+    sal_uInt16          GetDownItemId() const { return mnDownItemId; }
+    sal_uInt16          GetClicks() const { return mnMouseClicks; }
+    sal_uInt16          GetModifier() const { return mnMouseModifier; }
+    sal_uInt16          GetKeyModifier() const { return mnKeyModifier; }
 
     void                SetItemBits( sal_uInt16 nItemId, ToolBoxItemBits nBits );
     ToolBoxItemBits     GetItemBits( sal_uInt16 nItemId ) const;
@@ -413,8 +407,8 @@ public:
     void                SetItemText( sal_uInt16 nItemId, const OUString& rText );
     const OUString&     GetItemText( sal_uInt16 nItemId ) const;
     void                SetItemWindow( sal_uInt16 nItemId, vcl::Window* pNewWindow );
-    vcl::Window*             GetItemWindow( sal_uInt16 nItemId ) const;
-    sal_uInt16              GetHighlightItemId() const { return mnHighItemId; }
+    vcl::Window*        GetItemWindow( sal_uInt16 nItemId ) const;
+    sal_uInt16          GetHighlightItemId() const { return mnHighItemId; }
 
     void                StartSelection();
     void                EndSelection();
@@ -478,7 +472,7 @@ public:
     void                SetDockingRects( const Rectangle& rOutRect,
                                          const Rectangle& rInRect );
     void                SetFloatingLines( sal_uInt16 nFloatLines );
-    sal_uInt16              GetFloatingLines() const;
+    sal_uInt16          GetFloatingLines() const;
 
     void                SetStyle( WinBits nNewStyle );
     WinBits             GetStyle() const { return mnWinStyle; }
@@ -493,7 +487,7 @@ public:
     bool                IsMenuStringsEnabled() const { return mbMenuStrings; }
 
     void                SetOutStyle( sal_uInt16 nNewStyle );
-    sal_uInt16              GetOutStyle() const { return mnOutStyle; }
+    sal_uInt16          GetOutStyle() const { return mnOutStyle; }
 
     void                EnableCustomize( bool bEnable = true );
     bool                IsCustomize() { return mbCustomize; }
@@ -538,7 +532,7 @@ public:
     // to allow for customization of the menu the coresponding handler is called
     // when the menu button was clicked and before the menu is executed
     void                SetMenuType( sal_uInt16 aType = TOOLBOX_MENUTYPE_CUSTOMIZE );
-    sal_uInt16              GetMenuType() const;
+    sal_uInt16          GetMenuType() const;
     bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
     void                UpdateCustomMenu();

@@ -106,7 +106,7 @@ class SVL_DLLPUBLIC SfxItemPropertySet
     SfxItemPropertyMap                                                              m_aMap;
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
 protected:
-    bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, bool bGetProperty) const;
+    bool FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, bool bGetProperty) const;
 
 public:
                             SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :
@@ -127,12 +127,12 @@ public:
                                             const SfxItemSet& rSet ) const
                                             throw(::com::sun::star::uno::RuntimeException,
                                                     ::com::sun::star::beans::UnknownPropertyException);
-    void                    setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
+    void                setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
                                           const com::sun::star::uno::Any& aVal,
                                           SfxItemSet& rSet ) const
                                           throw(::com::sun::star::uno::RuntimeException,
                                                   com::sun::star::lang::IllegalArgumentException);
-    void                    setPropertyValue( const OUString& rPropertyName,
+    void                  setPropertyValue( const OUString& rPropertyName,
                                             const com::sun::star::uno::Any& aVal,
                                             SfxItemSet& rSet ) const
                                             throw(::com::sun::star::uno::RuntimeException,

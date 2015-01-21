@@ -338,7 +338,7 @@ public:
     virtual void            SetPar1(const OUString& rStr) SAL_OVERRIDE;
 
     /// aPromptText
-    virtual OUString   GetPar2() const SAL_OVERRIDE;
+    virtual OUString        GetPar2() const SAL_OVERRIDE;
     virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
 
     OUString        GetHelp() const;

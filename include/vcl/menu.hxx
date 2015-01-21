@@ -213,11 +213,11 @@ protected:
 public:
     virtual             ~Menu();
 
-    void        Activate();
-    void        Deactivate();
+    void                Activate();
+    void                Deactivate();
     virtual void        Highlight();
     virtual void        Select();
-    void        RequestHelp( const HelpEvent& rHEvt );
+    void                RequestHelp( const HelpEvent& rHEvt );
 
     void                InsertItem( sal_uInt16 nItemId, const OUString& rStr,
                                     MenuItemBits nItemBits = MenuItemBits::NONE,
@@ -243,9 +243,9 @@ public:
     void                CreateAutoMnemonics();
 
     void                SetMenuFlags( sal_uInt16 nFlags ) { nMenuFlags = nFlags; }
-    sal_uInt16              GetMenuFlags() const { return nMenuFlags; }
+    sal_uInt16          GetMenuFlags() const { return nMenuFlags; }
 
-    sal_uInt16              GetItemCount() const;
+    sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemId(sal_uInt16 nPos) const;
     sal_uInt16          GetItemId(const OString &rIdent) const;
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
@@ -280,17 +280,17 @@ public:
     {
         EnableItem(GetItemId(rIdent), bEnable);
     }
-    bool            IsItemEnabled( sal_uInt16 nItemId ) const;
+    bool                IsItemEnabled( sal_uInt16 nItemId ) const;
 
     void                ShowItem( sal_uInt16 nItemId, bool bVisible = true );
     void                HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, false ); }
 
-    bool            IsItemPosVisible( sal_uInt16 nItemPos ) const;
-    bool            IsMenuVisible() const;
+    bool                IsItemPosVisible( sal_uInt16 nItemPos ) const;
+    bool                IsMenuVisible() const;
     virtual bool        IsMenuBar() const = 0;
 
     void                RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
-    bool            HasValidEntries( bool bCheckPopups = true );
+    bool                HasValidEntries( bool bCheckPopups = true );
 
     void                SetItemText( sal_uInt16 nItemId, const OUString& rStr );
     OUString            GetItemText( sal_uInt16 nItemId ) const;
@@ -359,15 +359,15 @@ public:
     void SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
 
     // gets the activation key of the specified item
-    KeyEvent GetActivationKey( sal_uInt16 nItemId ) const;
+    KeyEvent            GetActivationKey( sal_uInt16 nItemId ) const;
 
-    vcl::Window*             GetWindow() const { return pWindow; }
+    vcl::Window*        GetWindow() const { return pWindow; }
 
     void                SetAccessibleName( sal_uInt16 nItemId, const OUString& rStr );
     OUString            GetAccessibleName( sal_uInt16 nItemId ) const;
 
     // returns whether the item a position nItemPos is highlighted or not.
-    bool  IsHighlighted( sal_uInt16 nItemPos ) const;
+    bool                IsHighlighted( sal_uInt16 nItemPos ) const;
 
     void                HighlightItem( sal_uInt16 nItemPos );
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID

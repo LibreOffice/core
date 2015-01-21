@@ -38,7 +38,6 @@ private:
 
 protected:
     void                    Forward(SfxBroadcaster& rBC, const SfxHint& rHint);
-    void            ListenersGone();
 
 public:
                             TYPEINFO();

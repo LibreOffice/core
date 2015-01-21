@@ -130,7 +130,7 @@ public:
     const SvStream * GetStream() const { return m_pStream; }
 
     virtual void    SetSynchronMode(bool bTheSync = true) { m_bSync = bTheSync; }
-    bool    IsSynchronMode() const { return m_bSync; }
+    bool            IsSynchronMode() const { return m_bSync; }
 
     virtual ErrCode ReadAt(sal_uInt64 nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
@@ -247,7 +247,7 @@ private:
 
 protected:
     sal_uInt64      m_nBufFilePos; ///< File position of pBuf[0]
-    StreamMode   eStreamMode;
+    StreamMode      eStreamMode;
     bool            bIsWritable;
 
     virtual sal_Size GetData( void* pData, sal_Size nSize );
@@ -385,7 +385,7 @@ public:
     bool            WriteByteStringLine( const OUString& rStr, rtl_TextEncoding eDestCharSet );
 
     /// Switch to no endian swapping and write 0xfeff
-    bool        StartWritingUnicodeText();
+    bool            StartWritingUnicodeText();
 
     /** If eReadBomCharSet==RTL_TEXTENCODING_DONTKNOW: read 16bit, if 0xfeff do
         nothing (UTF-16), if 0xfffe switch endian swapping (UTF-16), if 0xefbb
@@ -396,7 +396,7 @@ public:
 
         If eReadBomCharSet!=RTL_TEXTENCODING_DONTKNOW: only read a BOM of that
         encoding and switch endian swapping if UTF-16 and 0xfffe. */
-    bool        StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
+    bool            StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet );
 
     /** Read a line of Unicode.
 
@@ -404,7 +404,7 @@ public:
                    Maximum of codepoints (UCS-2 or UTF-16 pairs, not bytes) to
                    read, if line is longer it will be truncated.
     */
-    bool        ReadUniStringLine(OUString& rStr, sal_Int32 nMaxCodepointsToRead);
+    bool            ReadUniStringLine(OUString& rStr, sal_Int32 nMaxCodepointsToRead);
     /** Read a 32bit length prefixed sequence of utf-16 if
         eSrcCharSet==RTL_TEXTENCODING_UNICODE, otherwise read a 16bit length
         prefixed sequence of bytes and convert from eSrcCharSet */

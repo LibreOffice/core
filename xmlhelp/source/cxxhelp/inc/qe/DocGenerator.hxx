@@ -22,25 +22,12 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <excep/XmlSearchExceptions.hxx>
-#include <util/CompressorIterator.hxx>
 #include <util/Decompressor.hxx>
 
 
 namespace xmlsearch {
 
     namespace qe {
-
-
-        class NonnegativeIntegerGenerator
-        {
-        public:
-
-            static const sal_Int32 END;
-
-            virtual ~NonnegativeIntegerGenerator() { };
-            ;
-            ;
-        };
 
 
         class RoleFiller

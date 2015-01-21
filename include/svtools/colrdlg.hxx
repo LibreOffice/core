@@ -47,12 +47,12 @@ public:
 
     void            SetMode( sal_Int16 eMode );
 
-    short   Execute();
+    short           Execute();
 
 private:
     vcl::Window*    mpParent;
-    Color    maColor;
-    sal_Int16 meMode;
+    Color           maColor;
+    sal_Int16       meMode;
 };
 
 #endif // INCLUDED_SVTOOLS_COLRDLG_HXX

@@ -110,13 +110,6 @@ void SfxBroadcaster::AddListener( SfxListener& rListener )
 }
 
 
-// called, if no more listeners exists
-
-void SfxBroadcaster::ListenersGone()
-{
-}
-
-
 // forward a notification to all registered listeners
 
 void SfxBroadcaster::Forward(SfxBroadcaster& rBC, const SfxHint& rHint)
@@ -143,9 +136,6 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
     *aIter = 0;
     size_t positionOfRemovedElement = std::distance(mpImpl->m_Listeners.begin(), aIter);
     mpImpl->m_RemovedPositions.push_back(positionOfRemovedElement);
-
-    if ( !HasListeners() )
-        ListenersGone();
 }
 
 bool SfxBroadcaster::HasListeners() const

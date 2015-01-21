@@ -40,8 +40,6 @@
 
 #include <dbaccess/ToolBoxHelper.hxx>
 
-#include <vcl/ImageListProvider.hxx>
-
 namespace comphelper
 {
     class OPropertyChangeMultiplexer;

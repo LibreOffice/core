@@ -115,11 +115,11 @@ public:
     SfxViewFrame*           GetParentViewFrame() const;
 
     using SfxShell::GetDispatcher;
-        SfxDispatcher*          GetDispatcher() { return pDispatcher; }
+    SfxDispatcher*          GetDispatcher() { return pDispatcher; }
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
-    vcl::Window&                 GetWindow() const;
-    void            SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
+    vcl::Window&            GetWindow() const;
+    void                    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
 
@@ -136,19 +136,19 @@ public:
     bool                    IsVisible() const;
     void                    ToTop();
     void                    Enable( bool bEnable );
-    bool            Close();
+    bool                    Close();
     virtual void            Activate( bool bUI ) SAL_OVERRIDE;
     virtual void            Deactivate( bool bUI ) SAL_OVERRIDE;
 
     // DDE-Interface
-    long            DdeExecute( const OUString& rCmd );
-    bool            DdeGetData( const OUString& rItem,
+    long                    DdeExecute( const OUString& rCmd );
+    bool                    DdeGetData( const OUString& rItem,
                                         const OUString& rMimeType,
                                         ::com::sun::star::uno::Any & rValue );
-    bool            DdeSetData( const OUString& rItem,
+    bool                    DdeSetData( const OUString& rItem,
                                         const OUString& rMimeType,
                                         const ::com::sun::star::uno::Any & rValue );
-    ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
+    ::sfx2::SvLinkSource*   DdeCreateLinkSource( const OUString& rItem );
 
     void                    UpdateTitle();
 
@@ -160,12 +160,12 @@ public:
     SAL_DLLPRIVATE virtual void InvalidateBorderImpl( const SfxViewShell *pSh );
 
     virtual SfxObjectShell* GetObjectShell() SAL_OVERRIDE;
-    sal_uInt16                  GetCurViewId() const;
+    sal_uInt16              GetCurViewId() const;
     SfxFrame&               GetFrame() const;
     SfxViewFrame*           GetTopViewFrame() const;
 
     bool                    DoClose();
-    sal_uIntPtr                 GetFrameType() const
+    sal_uIntPtr             GetFrameType() const
                             { return GetFrame().GetFrameType(); }
     SfxFrame&               GetTopFrame() const
                             { return GetFrame().GetTopFrame(); }
@@ -178,14 +178,14 @@ public:
     bool                    IsInModalMode() const;
     void                    Resize(bool bForce=false);
 
-    void                        SetChildWindow(sal_uInt16 nId, bool bVisible, bool bSetFocus=true);
-    void                        ToggleChildWindow(sal_uInt16);
-    bool                        HasChildWindow(sal_uInt16);
-    bool                        KnowsChildWindow(sal_uInt16);
-    void                        ShowChildWindow(sal_uInt16,bool bVisible=true);
-    SfxChildWindow*             GetChildWindow(sal_uInt16);
-    void                        ChildWindowExecute(SfxRequest&);
-    void                        ChildWindowState(SfxItemSet&);
+    void                    SetChildWindow(sal_uInt16 nId, bool bVisible, bool bSetFocus=true);
+    void                    ToggleChildWindow(sal_uInt16);
+    bool                    HasChildWindow(sal_uInt16);
+    bool                    KnowsChildWindow(sal_uInt16);
+    void                    ShowChildWindow(sal_uInt16,bool bVisible=true);
+    SfxChildWindow*         GetChildWindow(sal_uInt16);
+    void                    ChildWindowExecute(SfxRequest&);
+    void                    ChildWindowState(SfxItemSet&);
 
     /** Append a new InfoBar (see https://wiki.documentfoundation.org/Design/Whiteboards/Infobar).
 

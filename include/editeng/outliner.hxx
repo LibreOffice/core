@@ -638,7 +638,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
     bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_Int32 nFirstPage, sal_Int32 nPages );
 
-    sal_uInt16      ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    sal_uInt16  ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
     void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 
 protected:
@@ -646,7 +646,7 @@ protected:
     void            ParagraphDeleted( sal_Int32 nParagraph );
     void            ParaAttribsChanged( sal_Int32 nParagraph );
 
-    void    StyleSheetChanged( SfxStyleSheet* pStyle );
+    void            StyleSheetChanged( SfxStyleSheet* pStyle );
 
     void            InvalidateBullet(sal_Int32 nPara);
     void            PaintBullet( sal_Int32 nPara, const Point& rStartPos,
@@ -663,7 +663,7 @@ public:
     virtual         ~Outliner();
 
     void            Init( sal_uInt16 nOutlinerMode );
-    sal_uInt16          GetMode() const { return nOutlinerMode; }
+    sal_uInt16      GetMode() const { return nOutlinerMode; }
 
     void            SetVertical( bool bVertical );
     bool            IsVertical() const;
@@ -744,28 +744,28 @@ public:
     Paragraph*      GetHdlParagraph() const { return pHdlParagraph; }
     bool            IsExpanding() const { return bIsExpanding; }
 
-    void    ExpandHdl();
+    void            ExpandHdl();
     void            SetExpandHdl( const Link& rLink ) { aExpandHdl = rLink; }
     Link            GetExpandHdl() const { return aExpandHdl; }
 
-    void    ParagraphInsertedHdl();
+    void            ParagraphInsertedHdl();
     void            SetParaInsertedHdl(const Link& rLink){aParaInsertedHdl=rLink;}
     Link            GetParaInsertedHdl() const { return aParaInsertedHdl; }
 
-    void    ParagraphRemovingHdl();
+    void            ParagraphRemovingHdl();
     void            SetParaRemovingHdl(const Link& rLink){aParaRemovingHdl=rLink;}
     Link            GetParaRemovingHdl() const { return aParaRemovingHdl; }
 
-    void    DepthChangedHdl();
+    void            DepthChangedHdl();
     void            SetDepthChangedHdl(const Link& rLink){aDepthChangedHdl=rLink;}
     Link            GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
     sal_uInt16      GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
-    long    RemovingPagesHdl( OutlinerView* );
+    long            RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
     Link            GetRemovingPagesHdl() const { return aRemovingPagesHdl; }
-    long    IndentingPagesHdl( OutlinerView* );
+    long            IndentingPagesHdl( OutlinerView* );
     void            SetIndentingPagesHdl(const Link& rLink){aIndentingPagesHdl=rLink;}
     Link            GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
     // valid only in the two upper handlers
@@ -806,9 +806,9 @@ public:
     void            SetFirstPageNumber( sal_Int32 n )  { nFirstPage = n; }
     sal_Int32       GetFirstPageNumber() const      { return nFirstPage; }
 
-    void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
-    void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
-    void                ClearPolygon();
+    void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
+    void            SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
+    void            ClearPolygon();
 
     const Size&     GetMinAutoPaperSize() const;
     void            SetMinAutoPaperSize( const Size& rSz );
@@ -828,9 +828,9 @@ public:
 
     EBulletInfo     GetBulletInfo( sal_Int32 nPara );
 
-    void        SetWordDelimiters( const OUString& rDelimiters );
-    OUString    GetWordDelimiters() const;
-    OUString    GetWord( sal_Int32 nPara, sal_Int32 nIndex );
+    void            SetWordDelimiters( const OUString& rDelimiters );
+    OUString        GetWordDelimiters() const;
+    OUString        GetWord( sal_Int32 nPara, sal_Int32 nIndex );
 
     void            StripPortions();
 
@@ -910,8 +910,8 @@ public:
     bool            UpdateFields();
     void            RemoveFields( bool bKeepFieldText, TypeId aType = NULL );
 
-    void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
-    void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    void            FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
+    void            FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual OUString CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( ::com::sun::star::uno::Reference<

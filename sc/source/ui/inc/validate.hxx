@@ -94,8 +94,8 @@ public:
 private:
     void                        Init();
 
-    OUString                      GetFirstFormula() const;
-    OUString                      GetSecondFormula() const;
+    OUString                    GetFirstFormula() const;
+    OUString                    GetSecondFormula() const;
 
     void                        SetFirstFormula( const OUString& rFmlaStr );
     void                        SetSecondFormula( const OUString& rFmlaStr );

@@ -56,7 +56,7 @@ public:
                 ScMergeAttr( const ScMergeAttr& );
                 virtual ~ScMergeAttr();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -110,7 +110,7 @@ public:
                             ScProtectionAttr( const ScProtectionAttr& );
                             virtual ~ScProtectionAttr();
 
-    OUString            GetValueText() const;
+    OUString     GetValueText() const;
     virtual bool GetPresentation(
                                     SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -283,11 +283,11 @@ public:
                 ScViewObjectModeItem( sal_uInt16 nWhich, ScVObjMode eMode );
                 virtual ~ScViewObjectModeItem();
 
-    virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE;
-    OUString            GetValueText( sal_uInt16 nVal ) const;
+    virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
+    OUString                    GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,
@@ -303,7 +303,7 @@ public:
                 ScDoubleItem( const ScDoubleItem& rItem );
                 virtual ~ScDoubleItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -311,7 +311,7 @@ public:
 
     double GetValue() const     { return nValue; }
 
-    void SetValue( const double nVal ) { nValue = nVal;}
+    void   SetValue( const double nVal ) { nValue = nVal;}
 
 private:
     double  nValue;

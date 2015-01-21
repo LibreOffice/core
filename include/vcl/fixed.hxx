@@ -185,15 +185,15 @@ public:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    void    UserDraw( const UserDrawEvent& rUDEvt );
+    void            UserDraw( const UserDrawEvent& rUDEvt );
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
-    bool        SetModeImage( const Image& rImage );
+    bool            SetModeImage( const Image& rImage );
     const Image&    GetModeImage( ) const { return maImage;}
-    virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+    virtual bool    set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
     static Image loadThemeImage(const OString &rFileName);
 };

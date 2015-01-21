@@ -362,9 +362,9 @@ protected:
             nRow starts at 0
     */
     virtual bool    SeekRow( long nRow ) = 0;
-    void    DrawCursor();
-    void    PaintRow( OutputDevice &rDev, const Rectangle &rRect );
-    void    PaintData( vcl::Window& rWin, const Rectangle& rRect );
+    void            DrawCursor();
+    void            PaintRow( OutputDevice &rDev, const Rectangle &rRect );
+    void            PaintData( vcl::Window& rWin, const Rectangle& rRect );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const = 0;
     // Advice for the subclass: the visible scope of rows has changed.
@@ -384,10 +384,10 @@ protected:
     virtual void    VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
 
     // number of visible rows in the window (incl. "truncated" rows)
-    sal_uInt16          GetVisibleRows()
+    sal_uInt16      GetVisibleRows()
                         { return (sal_uInt16)((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1); }
     long            GetTopRow() { return nTopRow; }
-    sal_uInt16          GetFirstVisibleColNumber() const { return nFirstCol; }
+    sal_uInt16      GetFirstVisibleColNumber() const { return nFirstCol; }
 
     // Focus-Rect enable / disable
     void            DoShowCursor( const char *pWhoLog );
@@ -450,9 +450,9 @@ public:
 
     // neue Handler
     virtual void    MouseButtonDown( const BrowserMouseEvent& rEvt );
-    void    MouseMove( const BrowserMouseEvent& rEvt );
+    void            MouseMove( const BrowserMouseEvent& rEvt );
     virtual void    MouseButtonUp( const BrowserMouseEvent& rEvt );
-    void    StartScroll();
+    void            StartScroll();
     virtual void    EndScroll();
     virtual void    Select();
     virtual void    DoubleClick( const BrowserMouseEvent& rEvt );
@@ -460,7 +460,7 @@ public:
     virtual void    CursorMoved();
     virtual void    ColumnMoved( sal_uInt16 nColId );
     virtual void    ColumnResized( sal_uInt16 nColId );
-    long    QueryColumnResize( sal_uInt16 nColId, long nWidth );
+    long            QueryColumnResize( sal_uInt16 nColId, long nWidth );
     /// called when the row height has been changed interactively
     virtual void    RowHeightChanged();
     virtual long    QueryMinimumRowHeight();
@@ -497,8 +497,8 @@ public:
     void            SetDataRowHeight( long nPixel );
     long            GetDataRowHeight() const;
     void            SetTitleLines( sal_uInt16 nLines );
-    sal_uInt16          GetTitleLines() const { return nTitleLines; }
-    long    GetTitleHeight() const;
+    sal_uInt16      GetTitleLines() const { return nTitleLines; }
+    long            GetTitleHeight() const;
 
     // access to dynamic values of cursor row
     OUString        GetColumnTitle( sal_uInt16 nColumnId ) const;
@@ -554,7 +554,7 @@ public:
                                     bool bComplete = false ) const;
     long            GetRowAtYPosPixel( long nY,
                                         bool bRelToBrowser = true  ) const;
-    sal_uInt16          GetColumnAtXPosPixel( long nX,
+    sal_uInt16      GetColumnAtXPosPixel( long nX,
                                           bool bRelToBrowser = true  ) const;
 
     // invalidations
@@ -816,8 +816,8 @@ public:
     virtual Rectangle               GetWindowExtentsRelative( vcl::Window *pRelativeWindow ) const SAL_OVERRIDE;
     virtual void                    GrabFocus() SAL_OVERRIDE;
     virtual css::uno::Reference< css::accessibility::XAccessible > GetAccessible( bool bCreate = true ) SAL_OVERRIDE;
-    virtual vcl::Window*                 GetAccessibleParentWindow() const SAL_OVERRIDE;
-    virtual vcl::Window*                 GetWindowInstance() SAL_OVERRIDE;
+    virtual vcl::Window*            GetAccessibleParentWindow() const SAL_OVERRIDE;
+    virtual vcl::Window*            GetWindowInstance() SAL_OVERRIDE;
 
 private:
     // the following declares some Window/OutputDevice methods private. This happened in the course

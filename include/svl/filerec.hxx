@@ -473,7 +473,7 @@ public:
 
     void                NewContent();
 
-    sal_uInt32  Close( bool bSeekToEndOfRec = true );
+    sal_uInt32          Close( bool bSeekToEndOfRec = true );
 };
 
 /** write record with multiple content items with identical size

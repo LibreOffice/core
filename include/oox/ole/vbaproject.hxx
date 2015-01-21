@@ -152,7 +152,7 @@ protected:
     /** Called when the import process of the VBA project has been started. */
     virtual void        prepareImport();
     /** Called when the import process of the VBA project is finished. */
-    void        finalizeImport();
+    void                finalizeImport();
 
 private:
                         VbaProject( const VbaProject& );

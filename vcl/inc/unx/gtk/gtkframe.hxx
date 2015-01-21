@@ -360,7 +360,7 @@ public:
     virtual void                SetTitle( const OUString& rTitle ) SAL_OVERRIDE;
     virtual void                SetIcon( sal_uInt16 nIcon ) SAL_OVERRIDE;
     virtual void                SetMenu( SalMenu *pSalMenu ) SAL_OVERRIDE;
-    SalMenu*            GetMenu( void );
+    SalMenu*                    GetMenu( void );
     virtual void                DrawMenuBar() SAL_OVERRIDE;
     void                        EnsureAppMenuWatch();
 
@@ -377,7 +377,7 @@ public:
     virtual void                GetWorkArea( Rectangle& rRect ) SAL_OVERRIDE;
     virtual SalFrame*           GetParent() const SAL_OVERRIDE;
     virtual void                SetWindowState( const SalFrameState* pState ) SAL_OVERRIDE;
-    virtual bool            GetWindowState( SalFrameState* pState ) SAL_OVERRIDE;
+    virtual bool                GetWindowState( SalFrameState* pState ) SAL_OVERRIDE;
     virtual void                ShowFullScreen( bool bFullScreen, sal_Int32 nDisplay ) SAL_OVERRIDE;
     // Enable/Disable ScreenSaver, SystemAgents, ...
     virtual void                StartPresentation( bool bStart ) SAL_OVERRIDE;
@@ -402,8 +402,8 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext ) SAL_OVERRIDE;
     virtual void                EndExtTextInput( sal_uInt16 nFlags ) SAL_OVERRIDE;
 
-    virtual OUString              GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
-    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) SAL_OVERRIDE;
+    virtual OUString            GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) SAL_OVERRIDE;
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -435,19 +435,19 @@ public:
 
     // shaped system windows
     // set clip region to none (-> rectangular windows, normal state)
-    virtual void                    ResetClipRegion() SAL_OVERRIDE;
+    virtual void                ResetClipRegion() SAL_OVERRIDE;
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
+    virtual void                BeginSetClipRegion( sal_uLong nRects ) SAL_OVERRIDE;
     // add a rectangle to the clip region
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
     // done setting up the clipregion
-    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
+    virtual void                EndSetClipRegion() SAL_OVERRIDE;
 
-    static GtkSalFrame             *getFromWindow( GtkWindow *pWindow );
+    static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
 
-    void                    damaged (const basegfx::B2IBox& rDamageRect);
+    void                        damaged (const basegfx::B2IBox& rDamageRect);
 
-    virtual Window GetX11Window() SAL_OVERRIDE;
+    virtual Window              GetX11Window() SAL_OVERRIDE;
 };
 
 #define OOO_TYPE_FIXED ooo_fixed_get_type()

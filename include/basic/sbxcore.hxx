@@ -84,13 +84,13 @@ public:
     virtual SbxDataType GetType()  const;
     virtual SbxClassType GetClass() const;
 
-    virtual void Clear();
+    virtual void    Clear();
 
     static SbxBase* Load( SvStream& );
     static void     Skip( SvStream& );
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
-    bool    StoreCompleted();
+    bool            StoreCompleted();
 
     static SbxError GetError();
     static void SetError( SbxError );

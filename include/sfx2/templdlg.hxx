@@ -46,10 +46,10 @@ public:
     virtual ~SfxTemplatePanelControl();
 
     void                Update();
-    virtual void                DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
-    virtual void                Resize() SAL_OVERRIDE;
+    virtual void        DataChanged( const DataChangedEvent& _rDCEvt ) SAL_OVERRIDE;
+    virtual void        Resize() SAL_OVERRIDE;
     SfxChildAlignment   CheckAlignment( SfxChildAlignment, SfxChildAlignment );
-    virtual void                StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
+    virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     void                FreeResource (void);
 
 private:

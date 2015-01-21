@@ -45,7 +45,7 @@ class CGM;
 class CGMBitmapDescriptor;
 class CGMOutAct
 {
-    protected:
+protected:
         sal_uInt16                  mnCurrentPage;          // defaulted to zero
 
         sal_uInt32                  mnGroupActCount;        // grouping
@@ -54,16 +54,16 @@ class CGMOutAct
 
         sal_uInt16                  mnIndex;                // figure
         sal_uInt8*                  mpFlags;
-        Point*                  mpPoints;
-        tools::PolyPolygon             maPolyPolygon;
-        ::com::sun::star::awt::Gradient*            mpGradient;
+        Point*                      mpPoints;
+        tools::PolyPolygon          maPolyPolygon;
+        css::awt::Gradient*         mpGradient;
 
-        CGM*                    mpCGM;
+        CGM*                        mpCGM;
 
-    public:
+public:
                                 CGMOutAct( CGM& rCGM );
     virtual                     ~CGMOutAct();
-    void                FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
+    void                        FirstOutPut() { mpCGM->mbFirstOutPut = false; } ;
     virtual void                InsertPage() { mnCurrentPage++; } ;
     virtual void                BeginGroup() {} ;
     virtual void                EndGroup() {};

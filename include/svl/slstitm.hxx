@@ -47,14 +47,14 @@ public:
     const std::vector<OUString>& GetList() const;
 
     // String-Separator: \n
-    void            SetString( const OUString& );
-    OUString        GetString();
+    void                    SetString( const OUString& );
+    OUString                GetString();
 
     void                    SetStringList( const com::sun::star::uno::Sequence< OUString >& rList );
     void                    GetStringList( com::sun::star::uno::Sequence< OUString >& rList ) const;
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool            GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     OUString &rText,

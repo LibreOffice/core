@@ -63,7 +63,7 @@ public:
                             ScInputStatusItem( const ScInputStatusItem& rItem );
                             virtual ~ScInputStatusItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
@@ -154,7 +154,7 @@ public:
                             ScSortItem( const ScSortItem& rItem );
                             virtual ~ScSortItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const SAL_OVERRIDE;
@@ -179,7 +179,7 @@ public:
                             ScQueryItem( const ScQueryItem& rItem );
                             virtual ~ScQueryItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -208,7 +208,7 @@ public:
                 ScSubTotalItem( const ScSubTotalItem&   rItem );
                 virtual ~ScSubTotalItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberUd ) const SAL_OVERRIDE;
@@ -229,7 +229,7 @@ public:
                 ScUserListItem( const ScUserListItem& rItem );
                 virtual ~ScUserListItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -249,7 +249,7 @@ public:
                 ScConsolidateItem( const ScConsolidateItem& rItem );
                 virtual ~ScConsolidateItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -268,7 +268,7 @@ public:
                 ScPivotItem( const ScPivotItem& rItem );
                 virtual ~ScPivotItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -291,7 +291,7 @@ public:
                 ScSolveItem( const ScSolveItem& rItem );
                 virtual ~ScSolveItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -310,7 +310,7 @@ public:
                 ScTabOpItem( const ScTabOpItem& rItem );
                 virtual ~ScTabOpItem();
 
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 

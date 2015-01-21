@@ -52,7 +52,7 @@ struct HBox
 /**
  * @returns The Size of HBox object
  */
-        int   WSize();
+        int           WSize();
 /**
  * @returns The Height of HBox object as hunit value.
  */

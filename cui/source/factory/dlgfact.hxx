@@ -511,7 +511,7 @@ class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 public:
     virtual VclAbstractDialog*          CreateVclDialog( vcl::Window* pParent, sal_uInt32 nResId ) SAL_OVERRIDE;
     virtual VclAbstractDialog*          CreateSfxDialog( vcl::Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) SAL_OVERRIDE;
-    SfxAbstractDialog*          CreateSfxDialog( sal_uInt32 nResId,
+    SfxAbstractDialog*                  CreateSfxDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xViewFrame,
                                             const SfxItemSet* pAttrSet=0 );
@@ -519,12 +519,14 @@ public:
                                             const SfxItemSet& rAttr,
                                             const SdrView* pView,
                                             sal_uInt32 nResId ) SAL_OVERRIDE;
-    virtual SfxAbstractDialog*              CreateSfxDialog( vcl::Window* pParent,
+    virtual SfxAbstractDialog*          CreateSfxDialog( vcl::Window* pParent,
                                                              const SfxItemSet& rAttr,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
-                                                                        sal_uInt32 nResId
-                                                                        ) SAL_OVERRIDE;
-    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rxFrame, sal_uInt32 nResId, const OUString& rParameter ) SAL_OVERRIDE;
+                                                             const css::uno::Reference< css::frame::XFrame >& _rxFrame,
+                                                             sal_uInt32 nResId ) SAL_OVERRIDE;
+    virtual VclAbstractDialog*          CreateFrameDialog( vcl::Window* pParent,
+                                                           const css::uno::Reference< css::frame::XFrame >& rxFrame,
+                                                           sal_uInt32 nResId,
+                                                           const OUString& rParameter ) SAL_OVERRIDE;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             vcl::Window* pParent,
                                             const SfxItemSet* pAttrSet,

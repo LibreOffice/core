@@ -51,11 +51,8 @@ public:
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    Show( bool bVisible ) = 0;
-    void                    Enable( bool /* nEnable */ ) {}
+    void                            Enable( bool /* nEnable */ ) {}
     virtual void                    GrabFocus() {}
-
-    void                    SetBackground() {}
-    void                    SetBackground( SalColor /* nSalColor */ ) {}
 
     virtual void                    SetForwardKey( bool /* bEnable */ ) {}
 
