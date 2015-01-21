@@ -103,6 +103,25 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     }
 }
 
+XMLTextHeaderFooterContext::XMLTextHeaderFooterContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    const Reference < XPropertySet > & rPageStylePropSet,
+    bool bFooter, bool bLft, bool bFrst )
+:   SvXMLImportContext( rImport ),
+    xPropSet( rPageStylePropSet ),
+    sOn( bFooter ? OUString("FooterIsOn") : OUString("HeaderIsOn") ),
+    sShareContent( bFooter ? OUString("FooterIsShared") : OUString("HeaderIsShared") ),
+    sShareContentFirst( "FirstIsShared" ),
+    sText( bFooter ? OUString("FooterText") : OUString("HeaderText") ),
+    sTextFirst(bFooter ? OUString("FooterTextFirst") : OUString("HeaderTextFirst")),
+    sTextLeft( bFooter ?  OUString("FooterTextLeft") : OUString("HeaderTextLeft") ),
+    bInsertContent( true ),
+    bLeft( bLft ),
+    bFirst( bFrst )
+{
+}
+
 XMLTextHeaderFooterContext::~XMLTextHeaderFooterContext()
 {
 }
@@ -193,6 +212,14 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLTextHeaderFooterContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
+}
+
 void XMLTextHeaderFooterContext::EndElement()
 {
     if( xOldTextCursor.is() )
@@ -209,6 +236,11 @@ void XMLTextHeaderFooterContext::EndElement()
         aAny.setValue( &bOn, cppu::UnoType<bool>::get() );
         xPropSet->setPropertyValue( sOn, aAny );
     }
+}
+
+void SAL_CALL XMLTextHeaderFooterContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
