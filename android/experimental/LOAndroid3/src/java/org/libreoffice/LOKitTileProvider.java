@@ -241,7 +241,8 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         Log.w(LOGTAG, "Thumbnail size: " + getPageWidth() + " " + getPageHeight() + " " + widthPixel + " " + heightPixel);
 
         ByteBuffer buffer = ByteBuffer.allocateDirect(widthPixel * heightPixel * 4);
-        mDocument.paintTile(buffer, widthPixel, heightPixel, 0, 0, (int) mWidthTwip, (int) mHeightTwip);
+        if (mDocument != null)
+            mDocument.paintTile(buffer, widthPixel, heightPixel, 0, 0, (int) mWidthTwip, (int) mHeightTwip);
 
         Bitmap bitmap = Bitmap.createBitmap(widthPixel, heightPixel, Bitmap.Config.ARGB_8888);
         bitmap.copyPixelsFromBuffer(buffer);
@@ -287,12 +288,18 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
     @Override
     public void changePart(int partIndex) {
+        if (mDocument == null)
+            return;
+
         mDocument.setPart(partIndex);
         resetDocumentSize();
     }
 
     @Override
     public int getCurrentPartNumber() {
+        if (mDocument == null)
+            return 0;
+
         return mDocument.getPart();
     }
 
