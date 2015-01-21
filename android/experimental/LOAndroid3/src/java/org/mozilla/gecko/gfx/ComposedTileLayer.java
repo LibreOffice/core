@@ -184,7 +184,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     private void markTiles() {
         for (SubTile tile : tiles.values()) {
             if (FloatUtils.fuzzyEquals(tile.id.zoom, currentZoom)) {
-                RectF tileRect = tile.id.getRect();
+                RectF tileRect = tile.id.getRectF();
                 if (!RectF.intersects(currentViewport, tileRect)) {
                     tile.markForRemoval();
                 }
@@ -206,16 +206,17 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     public boolean isStillValid(TileIdentifier tileId) {
-        return RectF.intersects(currentViewport, tileId.getRect()) || currentViewport.contains(tileId.getRect());
+        return RectF.intersects(currentViewport, tileId.getRectF()) || currentViewport.contains(tileId.getRectF());
     }
 
     /**
      * Invalidate tiles which intersect the input rect
      */
-    public void invalidateTiles(RectF rect) {
-        RectF zoomedRect = RectUtils.scale(rect, currentZoom);
+    public void invalidateTiles(RectF cssRect) {
+        RectF zoomedRect = RectUtils.scale(cssRect, currentZoom);
+
         for (SubTile tile : tiles.values()) {
-            if (RectF.intersects(zoomedRect, tile.id.getRect())) {
+            if (RectF.intersects(zoomedRect, tile.id.getRectF())) {
                 LOKitShell.sendEvent(LOEventFactory.tileRerender(this, tile));
             }
         }
