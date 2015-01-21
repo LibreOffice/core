@@ -65,30 +65,6 @@ namespace sdr
         {
         }
 
-        void OverlayTriangle::setSecondPosition(const basegfx::B2DPoint& rNew)
-        {
-            if(rNew != maSecondPosition)
-            {
-                // remember new value
-                maSecondPosition = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
-        void OverlayTriangle::setThirdPosition(const basegfx::B2DPoint& rNew)
-        {
-            if(rNew != maThirdPosition)
-            {
-                // remember new value
-                maThirdPosition = rNew;
-
-                // register change (after change)
-                objectChange();
-            }
-        }
-
     } // end of namespace overlay
 } // end of namespace sdr
 

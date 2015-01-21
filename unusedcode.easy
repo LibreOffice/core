@@ -1,5 +1,4 @@
 BigInt::BigInt(unsigned int)
-CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 FontCharMap::GetDefaultMap(bool)
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()

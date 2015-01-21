@@ -110,48 +110,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
 
-#if HAVE_FEATURE_OPENCL
-
-void ScCalcOptionsDialog::fillOpenCLList()
-{
-    mpOpenclInfoList->SetUpdateMode(false);
-    mpOpenclInfoList->Clear();
-    SvTreeListEntry* pSoftwareEntry = mpOpenclInfoList->InsertEntry(maSoftware);
-
-    OUString aStoredDevice = maConfig.maOpenCLDevice;
-
-    SvTreeListEntry* pSelectedEntry = NULL;
-
-    sc::FormulaGroupInterpreter::fillOpenCLInfo(maPlatformInfo);
-    for(std::vector<OpenCLPlatformInfo>::iterator it = maPlatformInfo.begin(),
-            itEnd = maPlatformInfo.end(); it != itEnd; ++it)
-    {
-        for(std::vector<OpenCLDeviceInfo>::iterator
-                itr = it->maDevices.begin(), itrEnd = it->maDevices.end(); itr != itrEnd; ++itr)
-        {
-            OUString aDeviceId = it->maVendor + " " + itr->maName + " " + itr->maDriver;
-            SvTreeListEntry* pEntry = mpOpenclInfoList->InsertEntry(aDeviceId);
-            if(aDeviceId == aStoredDevice)
-            {
-                pSelectedEntry = pEntry;
-            }
-            pEntry->SetUserData(&(*itr));
-        }
-    }
-
-    mpOpenclInfoList->SetUpdateMode(true);
-    mpOpenclInfoList->GetModel()->GetView(0)->SelectAll(false, false);
-
-    if (pSelectedEntry)
-        mpOpenclInfoList->Select(pSelectedEntry);
-    else if (aStoredDevice == OPENCL_SOFTWARE_DEVICE_CONFIG_NAME)
-        mpOpenclInfoList->Select(pSoftwareEntry);
-
-    SelectedDeviceChanged();
-}
-
-#endif
-
 void ScCalcOptionsDialog::OpenCLAutomaticSelectionChanged()
 {
     bool bValue = mpBtnAutomaticSelectionTrue->IsChecked();

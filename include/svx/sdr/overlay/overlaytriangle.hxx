@@ -44,13 +44,11 @@ namespace sdr
                 Color aTriangleColor);
             virtual ~OverlayTriangle();
 
-            // change second position
+            // get second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
-            void setSecondPosition(const basegfx::B2DPoint& rNew);
 
-            // change third position
+            // get third position
             const basegfx::B2DPoint& getThirdPosition() const { return maThirdPosition; }
-            void setThirdPosition(const basegfx::B2DPoint& rNew);
         };
     } // end of namespace overlay
 } // end of namespace sdr
