@@ -16,6 +16,24 @@
       "revId": "70962ac92794cbbd495647f8098bd574d9e8614b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_fdd44748",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-01-21T10:40:22Z",
+      "side": 1,
+      "message": "I have debugt and that was the case.\nThe funktionally-test i have made before all this change and that have worked",
+      "parentUuid": "5a43c5e1_3de4ef39",
+      "revId": "70962ac92794cbbd495647f8098bd574d9e8614b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
