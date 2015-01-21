@@ -7,6 +7,7 @@ endif
 all: build-ant
 
 # The package of this app
+# The setting from configure (ANDROID_PACKAGE_NAME) is applied in later stages.
 APP_PACKAGE=org.libreoffice
 
 DISABLE_UI=TRUE
@@ -33,7 +34,7 @@ build-ant: android_version_setup copy-stuff link-so properties
 	    $(call COPYJAR,$(INSTDIR)/$(LIBO_SHARE_JAVA_FOLDER)/$${F}.jar); \
 	done
 #
-	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) debug
+	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) $(if $(ENABLE_DEBUG),debug,release)
 
 run:
 	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt
