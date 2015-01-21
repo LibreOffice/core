@@ -184,7 +184,6 @@ private:
     PushButton*                 m_pChangePassBtn;
 
     SelectableFixedText*        m_pShowTypeFT;
-    CheckBox*                   m_pReadOnlyCB;
     FixedText*                  m_pFileValFt;
     SelectableFixedText*        m_pShowSizeFT;
 

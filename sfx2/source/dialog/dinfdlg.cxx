@@ -751,11 +751,9 @@ SfxDocumentPage::SfxDocumentPage(vcl::Window* pParent, const SfxItemSet& rItemSe
 {
     get(m_pBmp, "icon");
     get(m_pNameED, "nameed");
-//FIXME    m_pNameED->SetAccessibleName( SfxResId( EDIT_FILE_NAME ).toString() );
     get(m_pChangePassBtn, "changepass");
 
     get(m_pShowTypeFT, "showtype");
-    get(m_pReadOnlyCB, "readonlycb");
     get(m_pFileValFt, "showlocation");
     get(m_pShowSizeFT, "showsize");
     m_aUnknownSize = m_pShowSizeFT->GetText();
@@ -910,16 +908,12 @@ SfxTabPage* SfxDocumentPage::Create( vcl::Window* pParent, const SfxItemSet* rIt
      return new SfxDocumentPage( pParent, *rItemSet );
 }
 
-
-
 void SfxDocumentPage::EnableUseUserData()
 {
     bEnableUseUserData = true;
     m_pUseUserDataCB->Show();
     m_pDeleteBtn->Show();
 }
-
-
 
 bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 {
@@ -963,22 +957,8 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
         }
     }
 
-    if ( m_pNameED->IsModified() && !m_pNameED->GetText().isEmpty() )
-    {
-        rSet->Put( SfxStringItem( ID_FILETP_TITLE, m_pNameED->GetText() ) );
-        bRet = true;
-    }
-
-    if ( /* m_pReadOnlyCB->IsModified() */ true )
-    {
-        rSet->Put( SfxBoolItem( ID_FILETP_READONLY, m_pReadOnlyCB->IsChecked() ) );
-        bRet = true;
-    }
-
     return bRet;
 }
-
-
 
 void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 {
@@ -1006,33 +986,13 @@ void SfxDocumentPage::Reset( const SfxItemSet* rSet )
     }
 
     // determine name
-    OUString aName;
-    const SfxPoolItem* pItem = 0;
-    if ( SfxItemState::SET != rSet->GetItemState( ID_FILETP_TITLE, false, &pItem ) )
-    {
-        INetURLObject aURL(aFile);
-        aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
-        if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIVATE )
-            aName = SfxResId( STR_NONAME ).toString();
-        m_pNameED->SetReadOnly( true );
-    }
-    else
-    {
-        DBG_ASSERT( pItem->IsA( TYPE( SfxStringItem ) ), "SfxDocumentPage:<SfxStringItem> expected" );
-        aName = static_cast<const SfxStringItem*>( pItem )->GetValue();
-    }
+    INetURLObject aURL(aFile);
+    OUString aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
+    if ( aName.isEmpty() || aURL.GetProtocol() == INET_PROT_PRIVATE )
+        aName = SfxResId( STR_NONAME ).toString();
     m_pNameED->SetText( aName );
-    m_pNameED->ClearModifyFlag();
-
-    // determine RO-Flag
-    if ( SfxItemState::UNKNOWN == rSet->GetItemState( ID_FILETP_READONLY, false, &pItem )
-         || !pItem )
-        m_pReadOnlyCB->Hide();
-    else
-        m_pReadOnlyCB->Check( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
 
     // determine context symbol
-    INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
     const OUString& rMainURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
