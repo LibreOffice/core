@@ -21,10 +21,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include "XMLTextHeaderFooterContext.hxx"
 #include <xmloff/xmlimp.hxx>
@@ -41,6 +43,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 Reference < XStyle > XMLTextMasterPageContext::Create()
 {
@@ -172,7 +175,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 XMLTextMasterPageContext::XMLTextMasterPageContext(
     SvXMLImport& rImport, sal_Int32 Element,
     const Reference< XFastAttributeList > & xAttrList,
-    bool /*bOverwrite*/ )
+    bool bOverwrite )
 :   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_MASTER_PAGE ),
     sIsPhysical( "IsPhysical" ),
     sFollowStyle( "FollowStyle" ),
@@ -189,6 +192,84 @@ XMLTextMasterPageContext::XMLTextMasterPageContext(
     bHeaderFirstInserted( false ),
     bFooterFirstInserted( false )
 {
+    if( !xAttrList.is() )
+        return;
+
+    OUString sName, sDisplayName;
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name ) )
+    {
+        sName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name );
+    }
+    else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_display_name ) )
+    {
+        sDisplayName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_display_name );
+    }
+    else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_next_style_name ) )
+    {
+        sFollow = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_next_style_name );
+    }
+    else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_name ) )
+    {
+        sPageMasterName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_name );
+    }
+
+    if( !sDisplayName.isEmpty() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sName, sDisplayName );
+    }
+    else
+    {
+        sDisplayName = sName;
+    }
+
+    if( sDisplayName.isEmpty() )
+        return;
+
+    Reference< XNameContainer > xPageStyles =
+        GetImport().GetTextImport()->GetPageStyles();
+    if( xPageStyles.is() )
+        return;
+
+    Any aAny;
+    bool bNew = false;
+    if( xPageStyles->hasByName( sDisplayName ) )
+    {
+        aAny = xPageStyles->getByName( sDisplayName );
+        aAny >>= xStyle;
+    }
+    else
+    {
+        xStyle = Create();
+        if( !xStyle.is() )
+            return;
+
+        aAny <<= xStyle;
+        xPageStyles->insertByName( sDisplayName, aAny );
+        bNew = true;
+    }
+
+    Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    Reference< XPropertySetInfo > xPropSetInfo =
+        xPropSet->getPropertySetInfo();
+    if( !bNew && xPropSetInfo->hasPropertyByName( sIsPhysical ) )
+    {
+        aAny = xPropSet->getPropertyValue( sIsPhysical );
+        bNew = !*(sal_Bool *)aAny.getValue();
+    }
+    SetNew( bNew );
+
+    if( bOverwrite || bNew )
+    {
+        Reference< XMultiPropertyStates > xMultiStates( xPropSet, UNO_QUERY );
+        OSL_ENSURE( xMultiStates.is(),
+                "text page style does not support multi property set" );
+        if( xMultiStates.is() )
+            xMultiStates->setAllPropertiesToDefault();
+
+        bInsertHeader = bInsertFooter = true;
+        bInsertHeaderLeft = bInsertFooterLeft = true;
+        bInsertHeaderFirst = bInsertFooterFirst = true;
+    }
 }
 
 XMLTextMasterPageContext::~XMLTextMasterPageContext()
@@ -257,10 +338,60 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateChildContext(
 
 Reference< XFastContextHandler > SAL_CALL
     XMLTextMasterPageContext::createFastChildContext(
-    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    return Reference< XFastContextHandler >();
+    Reference< XFastContextHandler > pContext;
+
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextMasterPageElemTokenMap();
+
+    bool bInsert = false, bFooter = false, bLeft = false, bFirst = false;
+    switch( rTokenMap.Get( Element ) )
+    {
+    case XML_TOK_TEXT_MP_HEADER:
+        if( bInsertHeader && !bHeaderInserted )
+        {
+            bInsert = true;
+            bHeaderInserted = true;
+        }
+        break;
+    case XML_TOK_TEXT_MP_FOOTER:
+        if( bInsertFooter && !bFooterInserted )
+        {
+            bInsert = bFooter = true;
+            bFooterInserted = true;
+        }
+        break;
+    case XML_TOK_TEXT_MP_HEADER_LEFT:
+        if( bInsertHeaderLeft && bHeaderInserted && !bHeaderLeftInserted )
+            bInsert = bLeft = true;
+        break;
+    case XML_TOK_TEXT_MP_FOOTER_LEFT:
+        if( bInsertFooterLeft && bFooterInserted && !bFooterLeftInserted )
+            bInsert = bFooter = bLeft = true;
+        break;
+    case XML_TOK_TEXT_MP_HEADER_FIRST:
+        if( bInsertHeaderFirst && bHeaderInserted && !bHeaderFirstInserted )
+            bInsert = bFirst = true;
+        break;
+    case XML_TOK_TEXT_MP_FOOTER_FIRST:
+        if( bInsertFooterFirst && bFooterInserted && !bFooterFirstInserted )
+            bInsert = bFooter = bFirst = true;
+        break;
+    }
+
+    if( bInsert && xStyle.is() )
+    {
+        pContext = CreateHeaderFooterContext( Element, xAttrList,
+                bFooter, bLeft, bFirst );
+    }
+    else
+    {
+        pContext = SvXMLStyleContext::createFastChildContext( Element, xAttrList );
+    }
+
+    return pContext;
 }
 
 SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
@@ -277,6 +408,15 @@ SvXMLImportContext *XMLTextMasterPageContext::CreateHeaderFooterContext(
                                                 xAttrList,
                                                 xPropSet,
                                                 bFooter, bLeft, bFirst );
+}
+
+Reference< XFastContextHandler > XMLTextMasterPageContext::CreateHeaderFooterContext(
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList,
+    const bool bFooter, const bool bLeft, const bool bFirst )
+{
+    Reference< XPropertySet > xPropSet( xStyle, UNO_QUERY );
+    return new XMLTextHeaderFooterContext( GetImport(), Element, xAttrList,
+            xPropSet, bFooter, bLeft, bFirst );
 }
 
 void XMLTextMasterPageContext::Finish( bool bOverwrite )

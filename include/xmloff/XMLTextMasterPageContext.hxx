@@ -86,6 +86,10 @@ public:
             const bool bFooter,
             const bool bLeft,
             const bool bFirst );
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler >
+        CreateHeaderFooterContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const bool bFooter, const bool bLeft, const bool bFirst );
 
     virtual void Finish( bool bOverwrite ) SAL_OVERRIDE;
 };
