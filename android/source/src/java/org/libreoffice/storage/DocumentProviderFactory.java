@@ -11,6 +11,7 @@ package org.libreoffice.storage;
 
 import org.libreoffice.storage.local.LocalDocumentsDirectoryProvider;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
+import org.libreoffice.storage.owncloud.OwnCloudProvider;
 
 import android.content.Context;
 
@@ -30,8 +31,7 @@ public final class DocumentProviderFactory {
      */
     private static DocumentProviderFactory instance = null;
 
-    private IDocumentProvider[] providers = {
-            new LocalDocumentsDirectoryProvider(), new LocalDocumentsProvider() };
+    private IDocumentProvider[] providers;
 
     private String[] providerNames;
 
@@ -52,6 +52,12 @@ public final class DocumentProviderFactory {
             instance = new DocumentProviderFactory();
 
             // initialize document providers list
+            instance.providers = new IDocumentProvider[3];
+            instance.providers[0] = new LocalDocumentsDirectoryProvider();
+            instance.providers[1] = new LocalDocumentsProvider();
+            instance.providers[2] = new OwnCloudProvider(context);
+
+            // initialize document provider names list
             instance.providerNames = new String[instance.providers.length];
             for (int i = 0; i < instance.providers.length; i++) {
                 instance.providerNames[i] = context.getString(instance
