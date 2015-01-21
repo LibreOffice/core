@@ -2065,7 +2065,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
 
     GetProgressBar().ActivateFinalRowsSegment();
 
-#if 0
+#if 1
     // This is staggeringly slow, and each element operates only
     // on its own data.
     const size_t nRows = maRowMap.size();
