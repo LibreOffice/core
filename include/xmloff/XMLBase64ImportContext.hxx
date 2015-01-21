@@ -43,12 +43,19 @@ public:
             ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::io::XOutputStream >& rOut );
+    XMLBase64ImportContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const css::uno::Reference< css::io::XOutputStream >& rOut );
 
     virtual ~XMLBase64ImportContext();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 };
 

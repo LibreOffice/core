@@ -39,11 +39,26 @@ XMLBase64ImportContext::XMLBase64ImportContext(
 {
 }
 
+XMLBase64ImportContext::XMLBase64ImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >&,
+    const Reference< XOutputStream >& rOut )
+:   SvXMLImportContext( rImport ),
+    xOut( rOut )
+{
+}
+
 XMLBase64ImportContext::~XMLBase64ImportContext()
 {
 }
 
 void XMLBase64ImportContext::EndElement()
+{
+    xOut->closeOutput();
+}
+
+void SAL_CALL XMLBase64ImportContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, SAXException, std::exception)
 {
     xOut->closeOutput();
 }
@@ -67,6 +82,31 @@ void XMLBase64ImportContext::Characters( const OUString& rChars )
         Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
 		sal_Int32 const nCharsDecoded =
 				::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
+        xOut->writeBytes( aBuffer );
+        if( nCharsDecoded != sChars.getLength() )
+            sBase64CharsLeft = sChars.copy( nCharsDecoded );
+    }
+}
+
+void SAL_CALL XMLBase64ImportContext::characters( const OUString& rChars )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    OUString sTrimmedChars( rChars.trim() );
+    if( !sTrimmedChars.isEmpty() )
+    {
+        OUString sChars;
+        if( !sBase64CharsLeft.isEmpty() )
+        {
+            sChars = sBase64CharsLeft;
+            sChars += sTrimmedChars;
+            sBase64CharsLeft.clear();
+        }
+        else
+        {
+            sChars = sTrimmedChars;
+        }
+        Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
+        sal_Int32 const nCharsDecoded = sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
         xOut->writeBytes( aBuffer );
         if( nCharsDecoded != sChars.getLength() )
             sBase64CharsLeft = sChars.copy( nCharsDecoded );
