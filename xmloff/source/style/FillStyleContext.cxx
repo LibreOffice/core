@@ -30,8 +30,11 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 TYPEINIT1( XMLGradientStyleContext, SvXMLStyleContext );
 
@@ -208,8 +211,7 @@ XMLBitmapStyleContext::XMLBitmapStyleContext(
 {
     // start import
     XMLImageStyle aBitmapStyle;
-
-    // something missing
+    aBitmapStyle.importXML( xAttrList, maAny, maStrName, rImport );
 }
 
 XMLBitmapStyleContext::~XMLBitmapStyleContext()
@@ -241,11 +243,29 @@ SvXMLImportContext* XMLBitmapStyleContext::CreateChildContext( sal_uInt16 nPrefi
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    XMLBitmapStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    XMLBitmapStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | xmloff::XML_binary_data) )
+    {
+        OUString sURL;
+        maAny >>= sURL;
+        if( sURL.isEmpty() && !mxBase64Stream.is() )
+        {
+            mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( mxBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(),
+                        Element, xAttrList, mxBase64Stream );
+        }
+    }
+    if( !pContext.is() )
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    return pContext;
 }
 
 void XMLBitmapStyleContext::EndElement()
