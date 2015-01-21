@@ -25,9 +25,6 @@ using namespace xmlsearch;
 using namespace xmlsearch::qe;
 
 
-const sal_Int32 NonnegativeIntegerGenerator::END = -1;
-
-
 RoleFiller RoleFiller::roleFiller_;
 
 

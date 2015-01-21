@@ -74,14 +74,14 @@ public:
     bool operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
     SwCharFmt* GetCharFmt() const { return const_cast<SwCharFmt*>(static_cast<const SwCharFmt*>(GetRegisteredIn())); }
-    void SetCharFmt( SwCharFmt* );
+    void       SetCharFmt( SwCharFmt* );
 
-    void            SetCharFmtName(const OUString& rSet);
-    virtual OUString        GetCharFmtName()const SAL_OVERRIDE;
+    void                    SetCharFmtName(const OUString& rSet);
+    virtual OUString        GetCharFmtName() const SAL_OVERRIDE;
 
     //For i120928,access the cp info of graphic within bullet
     void            SetGrfBulletCP(sal_Unicode cP){cGrfBulletCP = cP;}
-    sal_Unicode     GetGrfBulletCP()const {return cGrfBulletCP;}
+    sal_Unicode     GetGrfBulletCP() const {return cGrfBulletCP;}
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const sal_Int16* pOrient = 0) SAL_OVERRIDE;
 

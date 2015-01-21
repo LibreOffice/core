@@ -114,12 +114,12 @@ public:
     bool                isSubType( const OUString& rServiceName );
     ChartTypeParameter  getChartTypeParameterForService( const OUString& rServiceName, const ::com::sun::star::uno::Reference<
                                                                 ::com::sun::star::beans::XPropertySet >& xTemplateProps );
-    virtual void                adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter );//if you have different counts of subtypes you may need to adjust the index
-    virtual void                adjustParameterToSubType( ChartTypeParameter& rParameter );
-    virtual void                adjustParameterToMainType( ChartTypeParameter& rParameter );
-    OUString       getServiceNameForParameter( const ChartTypeParameter& rParameter ) const;
+    virtual void        adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter );//if you have different counts of subtypes you may need to adjust the index
+    virtual void        adjustParameterToSubType( ChartTypeParameter& rParameter );
+    virtual void        adjustParameterToMainType( ChartTypeParameter& rParameter );
+    OUString            getServiceNameForParameter( const ChartTypeParameter& rParameter ) const;
     bool                commitToModel( const ChartTypeParameter& rParameter
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel );
+                                     , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartModel );
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate( const ChartTypeParameter& rParameter
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xTemplateManager ) const;

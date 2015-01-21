@@ -175,7 +175,7 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( NULL ); }
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
-    bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
+    bool            IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdAry, Point& rPos, int&,
@@ -193,7 +193,7 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
-    void    DisableGlyphInjection( bool /*bDisable*/ ) {}
+    void            DisableGlyphInjection( bool /*bDisable*/ ) {}
 
 protected:
     // used by layout engines
@@ -240,7 +240,7 @@ public:
     // used only by OutputDevice::ImplLayout, TODO: make friend
     explicit        MultiSalLayout( SalLayout& rBaseLayout,
                                     const PhysicalFontFace* pBaseFont = NULL );
-    bool    AddFallback( SalLayout& rFallbackLayout,
+    bool            AddFallback( SalLayout& rFallbackLayout,
                                  ImplLayoutRuns&, const PhysicalFontFace* pFallbackFont );
     virtual bool    LayoutText( ImplLayoutArgs& ) SAL_OVERRIDE;
     virtual void    AdjustLayout( ImplLayoutArgs& ) SAL_OVERRIDE;

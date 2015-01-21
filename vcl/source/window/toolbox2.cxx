@@ -30,7 +30,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/ImageListProvider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/IconThemeInfo.hxx>
 
@@ -52,9 +51,7 @@ using namespace com::sun::star;
 #define TB_SEP_SIZE             8
 
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() :
-        m_pLayoutData( NULL ),
-        mpImageListProvider( NULL ),
-        meImageListType( vcl::IMAGELISTTYPE_UNKNOWN )
+        m_pLayoutData( NULL )
 {
     meButtonSize = TOOLBOX_BUTTONSIZE_DONTCARE;
     mpMenu = new PopupMenu();
@@ -2050,22 +2047,6 @@ bool ToolBox::WillUsePopupMode() const
 void ToolBox::WillUsePopupMode( bool b )
 {
     mpData->mbWillUsePopupMode = b;
-}
-
-void ToolBox::ImplUpdateImageList()
-{
-    if (mpData->mpImageListProvider != NULL)
-    {
-        try
-        {
-            ImageListType eType = vcl::HIGHCONTRAST_NO;
-            if (eType != mpData->meImageListType)
-            {
-                mpData->meImageListType = eType;
-            }
-        }
-        catch (com::sun::star::lang::IllegalArgumentException &) {}
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

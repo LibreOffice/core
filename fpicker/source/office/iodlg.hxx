@@ -195,7 +195,7 @@ public:
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
 
-    long                OK();
+    long                        OK();
     virtual short               Execute() SAL_OVERRIDE;
     virtual void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
 
@@ -205,7 +205,7 @@ public:
     void                        SetBlackList( const ::com::sun::star::uno::Sequence< OUString >& rBlackList );
     const ::com::sun::star::uno::Sequence< OUString >& GetBlackList() const;
     void                        SetStandardDir( const OUString& rStdDir );
-    const OUString&            GetStandardDir() const;
+    const OUString&             GetStandardDir() const;
     std::vector<OUString>       GetPathList() const;        // for MultiSelection
 
             void                AddFilter( const OUString& rFilter,
@@ -239,9 +239,9 @@ public:
     sal_Int32                   getAvailableWidth();
     sal_Int32                   getAvailableHeight();
     void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
-    bool                    setShowState( bool bShowState );
-    bool                    getShowState();
-    bool                    isAutoExtensionEnabled();
+    bool                        setShowState( bool bShowState );
+    bool                        getShowState();
+    bool                        isAutoExtensionEnabled();
 
     OUString                    getCurrentFileText( ) const;
     void                        setCurrentFileText( const OUString& _rText, bool _bSelectAll = false );
@@ -269,10 +269,10 @@ public:
 
     inline Image                GetButtonImage( sal_uInt16 _nButtonId ) const { return m_aImages.GetImage( _nButtonId ); }
 
-    bool                    ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
-    bool                    ContentHasParentFolder( const OUString& rURL );
-    bool                    ContentCanMakeFolder( const OUString& rURL );
-    bool                    ContentGetTitle( const OUString& rURL, OUString& rTitle );
+    bool                        ContentIsFolder( const OUString& rURL ) { return m_aContent.isFolder( rURL ) && m_aContent.isValid(); }
+    bool                        ContentHasParentFolder( const OUString& rURL );
+    bool                        ContentCanMakeFolder( const OUString& rURL );
+    bool                        ContentGetTitle( const OUString& rURL, OUString& rTitle );
 
 private:
     SvtFileDialogFilter_Impl*   implAddFilter( const OUString& _rFilter, const OUString& _rType );
@@ -291,7 +291,7 @@ private:
             </p>
         @return <TRUE/> if the new filter is "*.*"
     */
-    bool                    createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt );
+    bool                        createNewUserFilter( const OUString& _rNewFilter, bool _bAllowUserDefExt );
 
     sal_uInt16                  adjustFilter( const OUString& _rFilter );
 

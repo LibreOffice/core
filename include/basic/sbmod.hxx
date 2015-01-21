@@ -102,10 +102,10 @@ public:
 
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
-    const OUString& GetSource() const;
+    const OUString&  GetSource() const;
     const OUString&  GetSource32() const { return aOUSource;}
     const OUString&  GetComment() const { return aComment; }
-    void     SetSource( const OUString& r );
+    void             SetSource( const OUString& r );
     void             SetSource32( const OUString& r );
 
     bool Compile();
@@ -116,14 +116,14 @@ public:
     bool IsBP( sal_uInt16 nLine ) const;
     bool SetBP( sal_uInt16 nLine );
     bool ClearBP( sal_uInt16 nLine );
-    void     ClearAllBP();
+    void ClearAllBP();
 
     // Store only image, no source (needed for new password protection)
-    bool StoreBinaryData( SvStream& );
-    bool StoreBinaryData( SvStream&, sal_uInt16 nVer );
-    bool LoadBinaryData( SvStream&, sal_uInt16 nVer );
-    bool LoadBinaryData( SvStream& );
-    bool ExceedsLegacyModuleSize();
+    bool     StoreBinaryData( SvStream& );
+    bool     StoreBinaryData( SvStream&, sal_uInt16 nVer );
+    bool     LoadBinaryData( SvStream&, sal_uInt16 nVer );
+    bool     LoadBinaryData( SvStream& );
+    bool     ExceedsLegacyModuleSize();
     void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
     bool     HasExeCode();
     bool     IsVBACompat() const { return mbVBACompat;}
@@ -134,8 +134,8 @@ public:
     void     AddVarName( const OUString& aName );
     void     RemoveVars();
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
-    bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
-    void GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
+    bool     createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
+    void     GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
     SbxArrayRef GetMethods() { return pMethods;}
     OUString GetKeywordCase( const OUString& sKeyword ) const;
 };

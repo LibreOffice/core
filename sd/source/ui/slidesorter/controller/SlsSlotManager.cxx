@@ -35,7 +35,6 @@
 #include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsSelectionObserver.hxx"
-#include "SlsCommand.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"

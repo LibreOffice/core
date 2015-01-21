@@ -168,16 +168,16 @@ public:
     virtual void    StateChanged( StateChangedType nType ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void    UserDraw( const UserDrawEvent& rUDEvt );
+    void            UserDraw( const UserDrawEvent& rUDEvt );
 
-    void    Toggle();
+    void            Toggle();
 
     void            SetSymbol( SymbolType eSymbol );
     SymbolType      GetSymbol() const { return meSymbol; }
     void            SetSymbolAlign( SymbolAlign eAlign );
 
     void            SetDropDown( sal_uInt16 nStyle );
-    sal_uInt16          GetDropDown() const { return mnDDStyle; }
+    sal_uInt16      GetDropDown() const { return mnDDStyle; }
 
     void            SetState( TriState eState );
     TriState        GetState() const { return meState; }

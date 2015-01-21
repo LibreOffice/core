@@ -963,8 +963,8 @@ protected:
                             const OUString& rSysFileName );
 
     virtual bool        implIsValid() const SAL_OVERRIDE;
-    const OUString* implGetOption( const OUString& rKey ) const;
-    NameListRef implGetNameList( const OUString& rListName ) const;
+    const OUString*     implGetOption( const OUString& rKey ) const;
+    NameListRef         implGetNameList( const OUString& rListName ) const;
 
 private:
     typedef ::boost::shared_ptr< SharedConfigData > SharedConfigDataRef;

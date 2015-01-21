@@ -922,14 +922,14 @@ protected:
     virtual void            onConnectedExternalValue( );
     /** called whenever a connection to an external supplier of values (XValueBinding) has been suspended
     */
-    void            onDisconnectedExternalValue();
+    void                    onDisconnectedExternalValue();
 
     /** called whenever an external validator has been registered
     */
-    void            onConnectedValidator( );
+    void                    onConnectedValidator( );
     /** called whenever an external validator has been revoked
     */
-    void            onDisconnectedValidator( );
+    void                    onDisconnectedValidator( );
 
     /** nFieldType is the type of the field, on which the model will be linked.
         The linking happens when sal_True is returned.

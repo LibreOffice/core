@@ -68,9 +68,9 @@ public:
                             Accelerator( const ResId& rResId );
     virtual                 ~Accelerator();
 
-    void            Activate();
-    void            Deactivate();
-    void            Select();
+    void                    Activate();
+    void                    Deactivate();
+    void                    Select();
 
     void                    InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
     void                    InsertItem( const ResId& rResId );

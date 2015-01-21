@@ -50,8 +50,8 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-    virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
-    OUString        GetValueText( sal_uInt16 nVal ) const;
+    virtual sal_uInt16      GetValueCount() const SAL_OVERRIDE;
+    OUString                GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
 

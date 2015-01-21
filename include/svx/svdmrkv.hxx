@@ -141,9 +141,9 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) SAL_OVERRIDE;
     virtual void ModelHasChanged() SAL_OVERRIDE; // Is called by the PaintView
     virtual void SetMarkHandles();                                           // aHdl - fill (List of handles)
-    void SetMarkRects();                                             // Rects at the PageViews
-    void CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
-    void AddDragModeHdl(SdrDragMode eMode);
+    void         SetMarkRects();                                             // Rects at the PageViews
+    void         CheckMarked();                                              // Scan MarkList after Del and Lock Layer ...
+    void         AddDragModeHdl(SdrDragMode eMode);
     virtual bool MouseMove(const MouseEvent& rMEvt, vcl::Window* pWin) SAL_OVERRIDE;
 
     // add custom handles (used by other apps, e.g. AnchorPos)

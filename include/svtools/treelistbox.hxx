@@ -564,7 +564,7 @@ protected:
     void    NotifyBeginScroll();
     virtual void    NotifyEndScroll();
     // nLines == 0 => horizontal Scrolling
-    void    NotifyScrolling( long nLines );
+    void            NotifyScrolling( long nLines );
     virtual void    NotifyScrolled();
     void            SetScrolledHdl( const Link& rLink ) { aScrolledHdl = rLink; }
     const Link&     GetScrolledHdl() const { return aScrolledHdl; }
@@ -577,7 +577,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    void    CursorMoved( SvTreeListEntry* pNewCursor );
+    void            CursorMoved( SvTreeListEntry* pNewCursor );
     virtual void    PreparePaint( SvTreeListEntry* );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
@@ -595,7 +595,7 @@ protected:
     void            AdjustEntryHeightAndRecalc( const vcl::Font& rFont );
 public:
 
-    void                SetExtendedWinBits( ExtendedWinBits _nBits );
+    void            SetExtendedWinBits( ExtendedWinBits _nBits );
 
     void            DisconnectFromModel();
 

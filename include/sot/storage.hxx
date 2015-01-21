@@ -65,18 +65,18 @@ private:
     static SotFactory **       GetFactoryAdress()
                               { return &(SOTDATA()->pSotStorageStreamFactory); }
 public:
-    static void *             CreateInstance( SotObject ** = NULL );
+    static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
     virtual const SotFactory * GetSvFactory() const SAL_OVERRIDE;
-    virtual void *            Cast( const SotFactory * ) SAL_OVERRIDE;
+    virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
 
     virtual void        ResetError() SAL_OVERRIDE;
 
     virtual void        SetSize( sal_uInt64 nNewSize ) SAL_OVERRIDE;
-    sal_uInt32              GetSize() const;
+    sal_uInt32          GetSize() const;
     bool                CopyTo( SotStorageStream * pDestStm );
-    bool        Commit();
-    bool        Revert();
+    bool                Commit();
+    bool                Revert();
     bool                SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue );
     virtual sal_uInt64 remainingSize() SAL_OVERRIDE;
 };
@@ -127,19 +127,19 @@ private:
     static SotFactory **       GetFactoryAdress()
                               { return &(SOTDATA()->pSotStorageFactory); }
 public:
-    static void *             CreateInstance( SotObject ** = NULL );
+    static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
     virtual const SotFactory * GetSvFactory() const SAL_OVERRIDE;
-    virtual void *            Cast( const SotFactory * ) SAL_OVERRIDE;
+    virtual void *             Cast( const SotFactory * ) SAL_OVERRIDE;
 
     SvMemoryStream *    CreateMemoryStream();
 
     static bool         IsStorageFile( const OUString & rFileName );
     static bool         IsStorageFile( SvStream* pStream );
 
-    const OUString& GetName() const;
+    const OUString&     GetName() const;
 
-    bool        Validate();
+    bool                Validate();
 
     const OString&      GetKey() const { return m_aKey;}
 
@@ -152,36 +152,36 @@ public:
                             return m_nVersion;
                         }
 
-    sal_uLong               GetErrorCode() const { return m_nError; }
-    sal_uLong               GetError() const { return ERRCODE_TOERROR(m_nError); }
+    sal_uLong           GetErrorCode() const { return m_nError; }
+    sal_uLong           GetError() const { return ERRCODE_TOERROR(m_nError); }
     void                SetError( sal_uLong nErrorCode )
                         {
                             if( m_nError == SVSTREAM_OK )
                                 m_nError = nErrorCode;
                         }
-    void        ResetError();
+    void                ResetError();
 
     bool                IsRoot() const              { return m_bIsRoot; }
     void                SignAsRoot( bool b = true ) { m_bIsRoot = b; }
     void                SetDeleteStream( bool bDelete ) { m_bDelStm = bDelete; }
 
                         // own data sector
-    void        SetClass( const SvGlobalName & rClass,
+    void                SetClass( const SvGlobalName & rClass,
                                   sal_uLong bOriginalClipFormat,
                                   const OUString & rUserTypeName );
-    void        SetConvertClass( const SvGlobalName & rConvertClass,
+    void                SetConvertClass( const SvGlobalName & rConvertClass,
                                          sal_uLong bOriginalClipFormat,
                                          const OUString & rUserTypeName );
-    SvGlobalName GetClassName(); // type of data in the storage
-    sal_uLong   GetFormat();
-    OUString    GetUserName();
-    bool        ShouldConvert();
+    SvGlobalName        GetClassName(); // type of data in the storage
+    sal_uLong           GetFormat();
+    OUString            GetUserName();
+    bool                ShouldConvert();
 
                         // list of all elements
-    void        FillInfoList( SvStorageInfoList * ) const;
-    bool        CopyTo( SotStorage * pDestStg );
-    bool        Commit();
-    bool        Revert();
+    void                FillInfoList( SvStorageInfoList * ) const;
+    bool                CopyTo( SotStorage * pDestStg );
+    bool                Commit();
+    bool                Revert();
 
                         // create stream with connection to Storage,
                         // more or less a Parent-Child relationship
@@ -192,17 +192,17 @@ public:
                                         StreamMode = STREAM_STD_READWRITE,
                                         bool transacted = true );
                         // query whether Storage or Stream
-    bool        IsStream( const OUString & rEleName ) const;
-    bool        IsStorage( const OUString & rEleName ) const;
-    bool        IsContained( const OUString & rEleName ) const;
+    bool                IsStream( const OUString & rEleName ) const;
+    bool                IsStorage( const OUString & rEleName ) const;
+    bool                IsContained( const OUString & rEleName ) const;
                         // remove element
-    bool        Remove( const OUString & rEleName );
+    bool                Remove( const OUString & rEleName );
                         // change element's name
-    bool        Rename( const OUString & rEleName,
+    bool                Rename( const OUString & rEleName,
                                 const OUString & rNewName );
-    bool        CopyTo( const OUString & rEleName, SotStorage * pDest,
+    bool                CopyTo( const OUString & rEleName, SotStorage * pDest,
                                 const OUString & rNewName );
-    bool        MoveTo( const OUString & rEleName, SotStorage * pDest,
+    bool                MoveTo( const OUString & rEleName, SotStorage * pDest,
                                 const OUString & rNewName );
 
     bool                IsOLEStorage() const;

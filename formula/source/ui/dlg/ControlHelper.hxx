@@ -33,12 +33,13 @@ private:
     Link            aSelChangedLink;
     Selection       aOldSel;
     bool            bMouseFlag;
-                    DECL_LINK(ChangedHdl, void *);
+
+    DECL_LINK(ChangedHdl, void *);
 
 protected:
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-    void    SelectionChanged();
+    void            SelectionChanged();
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
 

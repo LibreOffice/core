@@ -583,7 +583,7 @@ public:
     const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
-    void    MBDown();
+    void            MBDown();
 
     boost::signals2::signal< void ( ImplWin* ) > buttonDownSignal;
     boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;

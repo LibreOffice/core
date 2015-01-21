@@ -43,11 +43,11 @@ public:
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
                 virtual ~SvxRotateModeItem();
 
-    virtual sal_uInt16              GetValueCount() const SAL_OVERRIDE;
-    OUString            GetValueText( sal_uInt16 nVal ) const;
+    virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
+    OUString                    GetValueText( sal_uInt16 nVal ) const;
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*        Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
-    virtual sal_uInt16              GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const SAL_OVERRIDE;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                                  SfxMapUnit eCoreMetric,
                                                  SfxMapUnit ePresMetric,

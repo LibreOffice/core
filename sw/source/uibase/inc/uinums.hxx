@@ -86,7 +86,7 @@ public:
 protected:
     SwNumRulesWithName   *pNumRules[ MAX_NUM_RULES ];
 
-    void                Init();
+    void Init();
     void Save();
 
 public:
@@ -95,9 +95,8 @@ public:
 
     inline const SwNumRulesWithName*    GetRules(sal_uInt16 nIdx) const;
     void CreateEmptyNumRule(sal_uInt16 nIdx); // for import
-    void                        ApplyNumRules(
-                                                const SwNumRulesWithName &rCopy,
-                                                sal_uInt16 nIdx);
+    void ApplyNumRules( const SwNumRulesWithName &rCopy,
+                        sal_uInt16 nIdx);
 
 };
 

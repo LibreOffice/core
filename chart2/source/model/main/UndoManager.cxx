@@ -76,8 +76,8 @@ namespace chart
             {
             }
 
+            ::osl::Mutex&                       getMutex();
             // IUndoManagerImplementation
-            ::osl::Mutex&               getMutex();
             virtual ::svl::IUndoManager&        getImplUndoManager() SAL_OVERRIDE;
             virtual Reference< XUndoManager >   getThis() SAL_OVERRIDE;
 

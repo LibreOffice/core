@@ -250,7 +250,7 @@ public:
                                         const SalBitmap& rSourceBitmap,
                                         const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
 
-    bool                    drawAlphaBitmap(
+    bool                            drawAlphaBitmap(
                                         const SalTwoRect&,
                                         const SalBitmap& rBitmap );
 

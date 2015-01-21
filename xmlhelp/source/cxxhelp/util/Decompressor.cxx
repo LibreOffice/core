@@ -18,7 +18,6 @@
  */
 
 #include <util/Decompressor.hxx>
-#include <util/CompressorIterator.hxx>
 
 using namespace xmlsearch;
 using namespace xmlsearch::util;

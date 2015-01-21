@@ -73,26 +73,6 @@ namespace sfx2
     };
 
 
-    //= IToolPanelCompare
-
-    class SFX2_DLLPUBLIC SAL_NO_VTABLE IToolPanelCompare
-    {
-    public:
-        /** compares to tool panel URLs
-            @return
-                <ul>
-                <li>-1 if the tool panel described by i_rLHS should precede the one described by i_rRHS</li>
-                <li>0 if the two panels have no particular relative order</li>
-                <li>1 if the tool panel described by i_rLHS should succeed the one described by i_rRHS</li>
-
-        */
-        ;
-
-    protected:
-        ~IToolPanelCompare() {}
-    };
-
-
     //= ModuleTaskPane
 
     class ModuleTaskPane_Impl;

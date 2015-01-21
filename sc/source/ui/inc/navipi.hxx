@@ -302,7 +302,7 @@ private:
 protected:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    void    Resizing( Size& rSize );
+    void            Resizing( Size& rSize );
 
 public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl::Window* pParent,

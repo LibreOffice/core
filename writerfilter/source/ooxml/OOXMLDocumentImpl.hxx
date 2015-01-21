@@ -110,8 +110,7 @@ public:
 
     virtual void resolveComment(Stream & rStream, const sal_Int32 nId) SAL_OVERRIDE;
 
-    OOXMLPropertySet * getPicturePropSet
-    (const OUString & rId);
+    OOXMLPropertySet * getPicturePropSet(const OUString & rId);
     virtual void resolvePicture(Stream & rStream, const OUString & rId) SAL_OVERRIDE;
 
     virtual OUString getTargetForId(const OUString & rId) SAL_OVERRIDE;

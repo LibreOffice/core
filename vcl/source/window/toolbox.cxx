@@ -1487,8 +1487,6 @@ void ToolBox::ImplInitSettings( bool bFont,
                 SetBackground( aColor );
                 SetPaintTransparent( false );
                 SetParentClipMode( 0 );
-
-                ImplUpdateImageList();
             }
         }
     }

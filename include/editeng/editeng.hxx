@@ -297,7 +297,7 @@ public:
 
     void            SetText(sal_Int32 nPara, const OUString& rText);
 
-    virtual void                SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
+    virtual void        SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet );
     const SfxItemSet&   GetParaAttribs( sal_Int32 nPara ) const;
 
     void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
@@ -464,7 +464,7 @@ public:
     virtual void    ParagraphConnected( sal_Int32 nLeftParagraph, sal_Int32 nRightParagraph );
     virtual void    ParaAttribsChanged( sal_Int32 nParagraph );
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
-    void    ParagraphHeightChanged( sal_Int32 nPara );
+    void            ParagraphHeightChanged( sal_Int32 nPara );
 
     virtual void DrawingText( const Point& rStartPos, const OUString& rText,
                               sal_Int32 nTextStart, sal_Int32 nTextLen,
@@ -508,7 +508,6 @@ public:
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );
-    SdrObject* GetCurTextObj() { return NULL; }
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void            SetBeginDropHdl( const Link& rLink );
     Link            GetBeginDropHdl() const;

@@ -120,9 +120,9 @@ private:
 protected:
     virtual void            PopupModeEnd() SAL_OVERRIDE;
     virtual bool            Close() SAL_OVERRIDE;
-    void            DeleteFloatingWindow();
+    void                    DeleteFloatingWindow();
 
-    sal_uInt16                  GetId() const { return m_nId; }
+    sal_uInt16              GetId() const { return m_nId; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& GetFrame() const { return m_xFrame; }
 
     void                    BindListener();

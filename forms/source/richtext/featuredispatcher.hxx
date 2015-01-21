@@ -65,8 +65,8 @@ namespace frm
         void    invalidate();
 
     protected:
+        void            newStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener );
         // overridables
-        void    newStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener );
         virtual void    disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify );
         virtual void    invalidateFeatureState_Broadcast();
 

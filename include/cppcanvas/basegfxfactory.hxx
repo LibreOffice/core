@@ -26,7 +26,6 @@
 #include <cppcanvas/polypolygon.hxx>
 #include <cppcanvas/bitmap.hxx>
 #include <cppcanvas/renderer.hxx>
-#include <cppcanvas/text.hxx>
 #include <cppcanvas/sprite.hxx>
 #include <basegfx/vector/b2isize.hxx>
 

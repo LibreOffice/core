@@ -191,7 +191,7 @@ protected:
                                 SfxObjectShell( const sal_uInt64 i_nCreationFlags );    // see sfxmodelfactory.hxx
     virtual                     ~SfxObjectShell();
 
-    void                ModifyChanged();
+    void                        ModifyChanged();
     virtual bool                Close() SAL_OVERRIDE;
 
     /** declares the document to have capabilities to contain basic/dialog libraries
@@ -247,7 +247,7 @@ public:
     void                        UpdateDocInfoForSave(  );
     void                        FlushDocInfo();
     bool                        HasName() const { return bHasName; }
-    OUString            GetAPIName() const;
+    OUString                    GetAPIName() const;
     void                        SetReadOnly();
     bool                        IsReadOnly() const;
     bool                        IsReadOnlyMedium() const;
@@ -257,7 +257,7 @@ public:
     void                        SetNoName();
     bool                        IsInModalMode() const;
     bool                        IsInPrepareClose() const;
-    bool                AcceptStateUpdate() const;
+    bool                        AcceptStateUpdate() const;
     bool                        IsHelpDocument() const;
 
     bool                        IsDocShared() const;
@@ -296,7 +296,7 @@ public:
     // TODO/LATER: currently only overridden in Calc, should be made non-virtual
     virtual bool                DoSaveCompleted( SfxMedium* pNewStor=0 );
 
-    bool                LoadOwnFormat( SfxMedium& pMedium );
+    bool                        LoadOwnFormat( SfxMedium& pMedium );
     virtual bool                SaveAsOwnFormat( SfxMedium& pMedium );
     virtual bool                ConvertFrom( SfxMedium &rMedium );
     virtual bool                ConvertTo( SfxMedium &rMedium );
@@ -306,7 +306,7 @@ public:
     virtual bool                Save();
     virtual bool                SaveAs( SfxMedium &rMedium  );
     virtual bool                SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-    bool                SwitchPersistance(
+    bool                        SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
     virtual bool                LoadExternal( SfxMedium& rMedium );
@@ -402,17 +402,17 @@ public:
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
-    void                ViewAssigned();
+    void                        ViewAssigned();
     virtual bool                PrepareClose(bool bUI = true);
     virtual bool                IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
-    bool                HasSecurityOptOpenReadOnly() const;
+    bool                        HasSecurityOptOpenReadOnly() const;
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
 
     virtual Size                GetFirstPageSize();
-    bool                DoClose();
+    bool                        DoClose();
     virtual void                PrepareReload();
     ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
     virtual void                CancelTransfers();
@@ -453,7 +453,7 @@ public:
     void                        InvalidateName();  // Re-set to unnamed
 
     // DDE-Interface
-    long                DdeExecute( const OUString& rCmd );
+    long                        DdeExecute( const OUString& rCmd );
     virtual bool                DdeGetData( const OUString& rItem,
                                             const OUString& rMimeType,
                                             ::com::sun::star::uno::Any & rValue );
@@ -473,7 +473,7 @@ public:
     // Determine the position of the "Automatic" filter in the stylist
     void                        SetAutoStyleFilterIndex(sal_uInt16 nSet);
     sal_uInt16                  GetAutoStyleFilterIndex();
-    bool                HasBasic() const;
+    bool                        HasBasic() const;
     BasicManager*               GetBasicManager() const;
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
@@ -497,7 +497,7 @@ public:
 
     virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
 
-    SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
+    SfxFrame*                   GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetModel() const;
@@ -508,7 +508,7 @@ public:
 
     virtual ::com::sun::star::uno::Sequence< OUString > GetEventNames();
 
-    vcl::Window*                     GetDialogParent( SfxMedium* pMedium=0 );
+    vcl::Window*                GetDialogParent( SfxMedium* pMedium=0 );
     static SfxObjectShell*      CreateObject( const OUString& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const OUString& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
@@ -518,7 +518,7 @@ public:
     bool                        IsInPlaceActive();
     bool                        IsUIActive();
     virtual void                InPlaceActivate( bool );
-    void                UIActivate( bool );
+    void                        UIActivate( bool );
 
     static bool                 CopyStoragesOfUnknownMediaType(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,
@@ -560,12 +560,12 @@ public:
 
     // The functions from SvEmbeddedObject
     virtual Printer *       GetDocumentPrinter();
-    virtual OutputDevice*    GetDocumentRefDev();
+    virtual OutputDevice*   GetDocumentRefDev();
     virtual void            OnDocumentPrinterChanged( Printer * pNewPrinter );
     virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
-    virtual void    SetVisArea( const Rectangle & rVisArea );
+    virtual void      SetVisArea( const Rectangle & rVisArea );
     const Rectangle & GetVisArea() const;
-    void            SetVisAreaSize( const Size & rVisSize );
+    void              SetVisAreaSize( const Size & rVisSize );
     virtual sal_uIntPtr GetMiscStatus() const;
 
     MapUnit         GetMapUnit() const;
@@ -800,7 +800,7 @@ public:
                             {}
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    OUString        GetValueText() const;
+    OUString                GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;

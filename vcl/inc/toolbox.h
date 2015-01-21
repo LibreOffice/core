@@ -25,7 +25,6 @@
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/controllayout.hxx>
-#include <vcl/ImageListProvider.hxx>
 
 #include <vector>
 
@@ -149,10 +148,6 @@ struct ImplToolBoxPrivateData
     long           mnMenuButtonWidth;
 
     Wallpaper   maDisplayBackground;
-
-    // support for highcontrast
-    vcl::IImageListProvider* mpImageListProvider;
-    vcl::ImageListType       meImageListType;
 
     bool    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
             mbAssumeDocked:1,       // only used during calculations to override current floating/popup mode

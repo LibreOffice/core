@@ -173,7 +173,7 @@ public:
     void                        enterEventContext();
     void                        leaveEventContext();
 
-    bool                            isOldFormat() const;
+    bool                        isOldFormat() const;
 };
 
 /** Imports only settings

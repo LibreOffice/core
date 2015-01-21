@@ -88,7 +88,7 @@ public:
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
-    void    Repeat();
+    void            Repeat();
 };
 
 // Help-Undo: If it does not exist an OutlinerUndoAction for a certain action
@@ -105,7 +105,7 @@ public:
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
-    void    Repeat();
+    void            Repeat();
 };
 
 

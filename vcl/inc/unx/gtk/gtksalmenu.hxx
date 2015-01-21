@@ -58,14 +58,14 @@ public:
     GtkSalMenu( bool bMenuBar );
     virtual ~GtkSalMenu();
 
-    virtual bool            VisibleMenuBar() SAL_OVERRIDE;   // must return TRUE to actually DISPLAY native menu bars
+    virtual bool                VisibleMenuBar() SAL_OVERRIDE;   // must return TRUE to actually DISPLAY native menu bars
                                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void                InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) SAL_OVERRIDE;
     virtual void                RemoveItem( unsigned nPos ) SAL_OVERRIDE;
     virtual void                SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) SAL_OVERRIDE;
     virtual void                SetFrame( const SalFrame* pFrame ) SAL_OVERRIDE;
-    const GtkSalFrame*  GetFrame() const;
+    const GtkSalFrame*          GetFrame() const;
     virtual void                CheckItem( unsigned nPos, bool bCheck ) SAL_OVERRIDE;
     virtual void                EnableItem( unsigned nPos, bool bEnable ) SAL_OVERRIDE;
     virtual void                ShowItem( unsigned nPos, bool bShow ) SAL_OVERRIDE;
@@ -74,16 +74,16 @@ public:
     virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
     virtual void                GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
 
-    void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
-    Menu*               GetMenu() { return mpVCLMenu; }
-    GtkSalMenu*         GetParentSalMenu() { return mpParentSalMenu; }
-    void                SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
-    GMenuModel*         GetMenuModel() { return mpMenuModel; }
-    unsigned            GetItemCount() { return maItems.size(); }
-    GtkSalMenuItem*     GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
-    void                SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
-    GActionGroup*       GetActionGroup() { return mpActionGroup; }
-    bool            IsItemVisible( unsigned nPos );
+    void                        SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
+    Menu*                       GetMenu() { return mpVCLMenu; }
+    GtkSalMenu*                 GetParentSalMenu() { return mpParentSalMenu; }
+    void                        SetMenuModel( GMenuModel* pMenuModel ) { mpMenuModel = pMenuModel; }
+    GMenuModel*                 GetMenuModel() { return mpMenuModel; }
+    unsigned                    GetItemCount() { return maItems.size(); }
+    GtkSalMenuItem*             GetItemAtPos( unsigned nPos ) { return maItems[ nPos ]; }
+    void                        SetActionGroup( GActionGroup* pActionGroup ) { mpActionGroup = pActionGroup; }
+    GActionGroup*               GetActionGroup() { return mpActionGroup; }
+    bool                        IsItemVisible( unsigned nPos );
 
     void                        NativeSetItemText( unsigned nSection, unsigned nItemPos, const OUString& rText );
     void                        NativeSetItemCommand( unsigned nSection,
@@ -114,7 +114,7 @@ public:
 
     sal_uInt16          mnId;               // Item ID
     MenuItemType        mnType;             // Item type
-    bool            mbVisible;          // Item visibility.
+    bool                mbVisible;          // Item visibility.
     Menu*               mpVCLMenu;          // VCL Menu into which this menu item is inserted
     GtkSalMenu*         mpParentMenu;       // The menu into which this menu item is inserted
     GtkSalMenu*         mpSubMenu;          // Submenu of this item (if defined)

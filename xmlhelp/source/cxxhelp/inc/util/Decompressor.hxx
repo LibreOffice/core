@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <excep/XmlSearchExceptions.hxx>
-#include <util/RandomAccessStream.hxx>
 
 namespace xmlsearch {
 
@@ -62,9 +61,7 @@ namespace xmlsearch {
         {
         public:
 
-            StreamDecompressor( RandomAccessStream* )
-            {
-            }
+            StreamDecompressor() {}
 
             virtual ~StreamDecompressor() { }
 

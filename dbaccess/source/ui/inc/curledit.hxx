@@ -54,7 +54,7 @@ public:
         @param  _bShowPrefix
             If <TRUE/> than the prefix will be visible, otherwise not.
     */
-    void ShowPrefix(bool _bShowPrefix);
+    void     ShowPrefix(bool _bShowPrefix);
     /// get the currently set text, excluding the prefix indicating the type
     OUString GetTextNoPrefix() const;
     /// set a new text, leave the current prefix unchanged

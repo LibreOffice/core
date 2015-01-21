@@ -71,18 +71,10 @@ class UcbLockBytesHandler : public SvRefBase
 {
     bool            m_bActive;
 public:
-    enum LoadHandlerItem
-    {
-        DATA_AVAILABLE,
-        DONE,
-        CANCEL
-    };
-
                     UcbLockBytesHandler()
                         : m_bActive( true )
                     {}
 
-    ;
     void            Activate( bool bActivate = true ) { m_bActive = bActivate; }
     bool            IsActive() const { return m_bActive; }
 };

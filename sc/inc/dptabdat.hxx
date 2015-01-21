@@ -114,7 +114,7 @@ public:
     virtual bool                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual bool                    IsDateDimension(long nDim) = 0;
     virtual sal_uLong               GetNumberFormat(long nDim);
-    sal_uInt32              GetNumberFormatByIdx( NfIndexTableOffset );
+    sal_uInt32                      GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
     virtual void                    SetEmptyFlags( bool bIgnoreEmptyRows, bool bRepeatIfEmpty ) = 0;
 

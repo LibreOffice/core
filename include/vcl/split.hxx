@@ -65,9 +65,9 @@ public:
     explicit            Splitter( vcl::Window* pParent, WinBits nStyle = WB_VSCROLL );
     virtual             ~Splitter();
 
-    void        StartSplit();
-    void        EndSplit();
-    void        Split();
+    void                StartSplit();
+    void                EndSplit();
+    void                Split();
     virtual void        Splitting( Point& rSplitPos );
 
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -87,12 +87,12 @@ public:
     void                SetDragRectPixel( const Rectangle& rDragRect,
                                           vcl::Window* pRefWin = NULL );
     const Rectangle&    GetDragRectPixel() const { return maDragRect; }
-    vcl::Window*             GetDragWindow() const { return mpRefWin; }
+    vcl::Window*        GetDragWindow() const { return mpRefWin; }
 
-    void        SetSplitPosPixel( long nPos );
+    void                SetSplitPosPixel( long nPos );
     long                GetSplitPosPixel() const { return mnSplitPos; }
 
-    bool            IsHorizontal() const { return mbHorzSplit; }
+    bool                 IsHorizontal() const { return mbHorzSplit; }
     void                SetHorizontal(bool bNew);
 
     // set the stepsize of the splitter for cursor movement

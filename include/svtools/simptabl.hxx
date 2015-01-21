@@ -77,10 +77,10 @@ protected:
     virtual void            Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     virtual void            HBarClick();
-    void            HBarDblClick();
-    void            HBarStartDrag();
-    void            HBarDrag();
-    void            HBarEndDrag();
+    void                    HBarDblClick();
+    void                    HBarStartDrag();
+    void                    HBarDrag();
+    void                    HBarEndDrag();
 
     virtual void            Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 

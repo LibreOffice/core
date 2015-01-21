@@ -20,7 +20,6 @@
 #include "controller/SlsSelectionManager.hxx"
 
 #include "SlideSorter.hxx"
-#include "SlsCommand.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsAnimator.hxx"
 #include "controller/SlsAnimationFunction.hxx"

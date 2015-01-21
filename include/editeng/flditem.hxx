@@ -58,8 +58,8 @@ public:
     virtual SvxFieldData*   Clone() const;
     virtual bool            operator==( const SvxFieldData& ) const;
 
-    virtual MetaAction* createBeginComment() const;
-    MetaAction* createEndComment() const;
+    virtual MetaAction*     createBeginComment() const;
+    MetaAction*             createEndComment() const;
 };
 
 /**

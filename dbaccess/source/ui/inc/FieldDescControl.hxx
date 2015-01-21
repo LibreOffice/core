@@ -194,7 +194,7 @@ namespace dbaui
         void                copy();
         void                paste();
 
-        void        Init();
+        void                Init();
         virtual void        GetFocus() SAL_OVERRIDE;
         virtual void        LoseFocus() SAL_OVERRIDE;
         virtual void        Resize() SAL_OVERRIDE;

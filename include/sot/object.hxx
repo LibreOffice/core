@@ -110,13 +110,13 @@ private:
     static SotFactory **       GetFactoryAdress()
                               { return &(SOTDATA()->pSotObjectFactory); }
 public:
-    static void *             CreateInstance( SotObject ** = NULL );
+    static void *              CreateInstance( SotObject ** = NULL );
     static SotFactory *        ClassFactory();
     virtual const SotFactory * GetSvFactory() const;
-    virtual void *            Cast( const SotFactory * );
+    virtual void *             Cast( const SotFactory * );
 
                         // only for the macros in So3 not to get out of hand
-    IUnknown *  GetInterface( const SvGlobalName & );
+    IUnknown *          GetInterface( const SvGlobalName & );
 
     bool                Owner() const { return bOwner; }
 

@@ -65,11 +65,11 @@ public:
     SfxControllerItem*  ChangeItemLink( SfxControllerItem* pNewLink );
 
     void                SetId( sal_uInt16 nItemId );
-    sal_uInt16              GetId() const { return nId; }
+    sal_uInt16          GetId() const { return nId; }
 
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
-    void        DeleteFloatingWindow();
+    void                DeleteFloatingWindow();
 
     SfxMapUnit          GetCoreMetric() const;
 

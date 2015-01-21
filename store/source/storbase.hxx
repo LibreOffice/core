@@ -776,48 +776,6 @@ public:
     }
 };
 
-/*========================================================================
- *
- * PageObject.
- *
- *======================================================================*/
-#if 1  /* EXP */
-class PageObject
-{
-public:
-    explicit PageObject (PageHolder const & rxPage = PageHolder())
-        : m_xPage (rxPage), m_bDirty (false)
-    {}
-
-    virtual ~PageObject()
-    {}
-
-    PageHolder & get() { return m_xPage; }
-    PageHolder const & get() const { return m_xPage; }
-
-    void clean() { m_bDirty = false; }
-    void touch() { m_bDirty = true; }
-
-    sal_uInt32 location() const
-    {
-        PageData const * pagedata = m_xPage.get();
-        return (pagedata != 0) ? pagedata->location() : STORE_PAGE_NULL;
-    }
-    void location (sal_uInt32 nAddr)
-    {
-        PageData * pagedata = m_xPage.get();
-        if (pagedata != 0)
-            pagedata->location (nAddr);
-    }
-
-protected:
-    PageHolder m_xPage;
-    bool       m_bDirty;
-
-    ;
-    ;
-};
-#endif /* EXP */
 
 class OStorePageBIOS;
 
