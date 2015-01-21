@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a43c5e1_3de4ef39",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-21T10:25:27Z",
+      "side": 1,
+      "message": "still not symmetric; are you really sure that operator\u003d\u003d will always be called so that this corresponds to a new-cmd and aMigrationItem corresponds to an old-cmd?",
+      "revId": "70962ac92794cbbd495647f8098bd574d9e8614b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
