@@ -1,0 +1,76 @@
+package org.libreoffice.storage.owncloud;
+
+import java.net.URI;
+
+import org.libreoffice.R;
+import org.libreoffice.storage.IDocumentProvider;
+import org.libreoffice.storage.IFile;
+
+import android.content.Context;
+import android.net.Uri;
+
+import com.owncloud.android.lib.common.OwnCloudClient;
+import com.owncloud.android.lib.common.OwnCloudClientFactory;
+import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.FileUtils;
+import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
+import com.owncloud.android.lib.resources.files.RemoteFile;
+
+/**
+ * Implementation of IDocumentProvider for ownCloud servers.
+ */
+public class OwnCloudProvider implements IDocumentProvider {
+
+    private OwnCloudClient client;
+
+    // TODO: these must be configurable
+    final private String serverUrl = "http://10.0.2.2/owncloud"; //emulator host machine
+    final private String userName = "admin";
+    final private String password = "admin";
+
+    public OwnCloudProvider(Context context) {
+        Uri serverUri = Uri.parse(serverUrl);
+        client = OwnCloudClientFactory.createOwnCloudClient(serverUri,
+                context, true);
+        client.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
+                userName, password));
+
+    }
+
+    @Override
+    public IFile getRootDirectory() {
+        return createFromUri(URI.create(FileUtils.PATH_SEPARATOR));
+    }
+
+    @Override
+    public IFile createFromUri(URI uri) {
+        ReadRemoteFileOperation refreshOperation = new ReadRemoteFileOperation(
+                uri.getPath());
+        RemoteOperationResult result = refreshOperation.execute(client);
+        if (!result.isSuccess()) {
+            throw new RuntimeException(result.getLogMessage(),
+                    result.getException());
+        }
+        if (result.getData().size() > 0) {
+            return new OwnCloudFile(this, (RemoteFile) result.getData().get(0));
+        }
+        return null;
+    }
+
+    @Override
+    public int getNameResource() {
+        return R.string.owncloud;
+    }
+
+    /**
+     * Used by OwnCloudFiles to get a configured client to run their own
+     * operations.
+     *
+     * @return configured OwnCloudClient.
+     */
+    protected OwnCloudClient getClient() {
+        return client;
+    }
+
+}
