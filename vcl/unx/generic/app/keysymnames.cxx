@@ -136,6 +136,7 @@ namespace vcl_sal {
         { XK_Down, "Bas" },
         { XK_BackSpace, "Ret. Arr" },
         { XK_Return, "Retour" },
+        { XK_space, "Espace" },
         { XK_KP_Enter, "Entr\303\251e" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Encore" },
