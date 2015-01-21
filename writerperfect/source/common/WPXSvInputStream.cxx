@@ -236,7 +236,7 @@ void OLEStorageImpl::traverse(const SotStorageRef &rStorage, const rtl::OUString
         }
         else
         {
-            assert(false);
+            SAL_WARN("writerperfect", "OLEStorageImpl::traverse: invalid storage entry, neither stream nor file");
         }
     }
 }
