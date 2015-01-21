@@ -130,11 +130,11 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics, DisplayPortMetrics mDisplayPort) {
-        RectF newCurrentViewPort = getViewPort(viewportMetrics);
+        RectF newViewPort = getViewPort(viewportMetrics);
         float newZoom = getZoom(viewportMetrics);
 
-        if (!currentViewport.equals(newCurrentViewPort) || currentZoom != newZoom) {
-            currentViewport = newCurrentViewPort;
+        if (!currentViewport.equals(newViewPort) || currentZoom != newZoom) {
+            currentViewport = newViewPort;
             currentZoom = newZoom;
             RectF pageRect = viewportMetrics.getPageRect();
 
@@ -232,12 +232,10 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
 
     @Override
     public void onTrimMemory(int level) {
-        Log.i(LOGTAG, "Trimming memory " + level);
-        if (level >= 10 /*TRIM_MEMORY_RUNNING_LOW*/) {
-            Log.i(LOGTAG, "Trimming memory - TRIM_MEMORY_RUNNING_LOW");
-        } else if (level >= 15 /*TRIM_MEMORY_RUNNING_CRITICAL*/) {
+        if (level >= 15 /*TRIM_MEMORY_RUNNING_CRITICAL*/) {
             Log.i(LOGTAG, "Trimming memory - TRIM_MEMORY_RUNNING_CRITICAL");
-            //clearAndReset();
+        } else if (level >= 10 /*TRIM_MEMORY_RUNNING_LOW*/) {
+            Log.i(LOGTAG, "Trimming memory - TRIM_MEMORY_RUNNING_LOW");
         }
     }
 
