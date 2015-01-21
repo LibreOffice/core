@@ -302,8 +302,11 @@ public:
      * @param pRegion If 0, that means the whole area, otherwise the area in logic coordinates.
      */
     void LogicInvalidate(const vcl::Region* pRegion) SAL_OVERRIDE;
+    /// Same as MouseMove(), but coordinates are in logic unit.
     void LogicMouseMove(const MouseEvent& rMouseEvent);
+    /// Same as MouseButtonDown(), but coordinates are in logic unit.
     void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
+    /// Same as MouseButtonUp(), but coordinates are in logic unit.
     void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
 };
 

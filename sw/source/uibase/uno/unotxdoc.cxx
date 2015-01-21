@@ -129,6 +129,7 @@
 #include <swatrset.hxx>
 #include <view.hxx>
 #include <srcview.hxx>
+#include <edtwin.hxx>
 
 #include <svtools/langtab.hxx>
 #include <map>
@@ -3170,6 +3171,25 @@ void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* p
     SwDoc* pDoc = pDocShell->GetDoc();
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     pViewShell->registerLibreOfficeKitCallback(pCallback, pData);
+}
+
+void SwXTextDocument::postMouseEvent(int nType, int nX, int nY)
+{
+    SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
+    MouseEvent aEvent(Point(nX, nY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+
+    switch (nType)
+    {
+    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        rEditWin.LogicMouseButtonDown(aEvent);
+        break;
+    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        rEditWin.LogicMouseButtonUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
 }
 
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
