@@ -499,6 +499,9 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_SHADOW:
                 static_cast<const SvxShadowItem*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_PAGEDESC:
+                static_cast<const SwFmtPageDesc*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -513,14 +516,6 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
         boost::optional<OString> oValue;
         switch (pItem->Which())
         {
-            case RES_PAGEDESC:
-            {
-                pWhich = "page description";
-                const SwFmtPageDesc* pFmt = static_cast<const SwFmtPageDesc*>(pItem);
-                if (pFmt->GetPageDesc())
-                    oValue = "name: " + OUStringToOString(pFmt->GetPageDesc()->GetName(), RTL_TEXTENCODING_UTF8);
-                break;
-            }
             case RES_FRMATR_STYLE_NAME:
             {
                 pWhich = "frame style name";

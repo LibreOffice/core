@@ -769,6 +769,20 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
+void SwFmtPageDesc::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtPageDesc"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    if (oNumOffset)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST(OString::number(*oNumOffset).getStr()));
+    else
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("oNumOffset"), BAD_CAST("none"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("pPageDesc"), "%p", GetPageDesc());
+    if (const SwPageDesc* pPageDesc = GetPageDesc())
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("presentation"), BAD_CAST(pPageDesc->GetName().toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 //  class SwFmtCol
 //  Partially implemented inline in hxx
 
