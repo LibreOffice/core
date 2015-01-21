@@ -124,7 +124,6 @@ ScInsertContentsDlg::ScInsertContentsDlg( vcl::Window*       pParent,
     mpBtnShortCutPasteValuesOnly->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );;
     mpBtnShortCutPasteValuesFormats->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );;
     mpBtnShortCutPasteTranspose->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
-    mpBtnInsAll->GrabFocus();
 }
 
 InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const

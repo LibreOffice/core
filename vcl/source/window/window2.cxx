@@ -1666,6 +1666,11 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
         //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
         SAL_WARN_IF(toBool(rValue), "vcl.layout", "Use pango attributes instead of mark-up");
     }
+    else if (rKey == "has-focus")
+    {
+        if (toBool(rValue))
+            GrabFocus();
+    }
     else
     {
         SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
