@@ -328,11 +328,21 @@ SvXMLImportContext * XMLFontStyleContextFontFaceUri::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    XMLFontStyleContextFontFaceUri::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    XMLFontStyleContextFontFaceUri::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_font_face_format) )
+        return new XMLFontStyleContextFontFaceFormat( GetImport(),
+            Element, xAttrList, *this );
+    if( linkPath.isEmpty() && (
+        Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_binary_data) ) )
+    {
+        mxBase64Stream.set( new comphelper::OSequenceOutputStream( maFontData ) );
+        if( mxBase64Stream.is() )
+            return new XMLBase64ImportContext( GetImport(), Element, xAttrList, mxBase64Stream );
+    }
+    return SvXMLImportContext::createFastChildContext( Element, xAttrList );
 }
 
 void XMLFontStyleContextFontFaceUri::SetAttribute( sal_uInt16 nPrefixKey, const OUString& rLocalName,
