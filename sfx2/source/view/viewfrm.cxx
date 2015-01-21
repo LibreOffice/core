@@ -1380,10 +1380,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 else
                 {
                     SfxInfoBarWindow* pInfoBar = AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT));
-
-                    PushButton* pBtn = new PushButton( &GetWindow(), SfxResId(BT_READONLY_EDIT));
-                    pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
-                    pInfoBar->addButton(pBtn);
+                    if (pInfoBar)
+                    {
+                        PushButton* pBtn = new PushButton( &GetWindow(), SfxResId(BT_READONLY_EDIT));
+                        pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
+                        pInfoBar->addButton(pBtn);
+                    }
                 }
 
                 break;
