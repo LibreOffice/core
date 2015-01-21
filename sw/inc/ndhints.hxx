@@ -100,42 +100,56 @@ public:
     void Insert( const SwTxtAttr *pHt );
     void DeleteAtPos( const size_t nPosInStart );
     void Resort();
-    SwTxtAttr * Cut( const size_t nPosInStart );
-
-    inline const SwTxtAttr * GetStart( const size_t nPos ) const
+    SwTxtAttr * Cut( const size_t nPosInStart )
+    {
+        SwTxtAttr *pHt = GetTextHint(nPosInStart);
+        DeleteAtPos( nPosInStart );
+        return pHt;
+    }
+    const SwTxtAttr * GetStart( const size_t nPos ) const
     {
         assert(nPos < m_HintStarts.size());
         return m_HintStarts[nPos];
     }
-    inline const SwTxtAttr * GetEnd( const size_t nPos ) const
+    const SwTxtAttr * GetEnd( const size_t nPos ) const
     {
         assert(nPos < m_HintEnds.size());
         return m_HintEnds[nPos];
     }
-    inline       SwTxtAttr * GetStart( const size_t nPos )
+    SwTxtAttr * GetStart( const size_t nPos )
     {
         assert(nPos < m_HintStarts.size());
         return m_HintStarts[nPos];
     }
-    inline       SwTxtAttr * GetEnd( const size_t nPos )
+    SwTxtAttr * GetEnd( const size_t nPos )
     {
         assert(nPos < m_HintStarts.size());
         return m_HintEnds[nPos];
     }
 
-    inline size_t GetEndCount()   const { return m_HintEnds.size(); }
-    inline size_t GetStartCount() const { return m_HintStarts.size(); }
+    size_t GetEndCount()   const { return m_HintEnds.size(); }
+    size_t GetStartCount() const { return m_HintStarts.size(); }
 
-    inline size_t GetStartOf( const SwTxtAttr *pHt ) const;
+    size_t GetStartOf( const SwTxtAttr *pHt ) const
+    {
+        SwpHtStart::const_iterator const it =
+            m_HintStarts.find(const_cast<SwTxtAttr*>(pHt));
+        if ( it == m_HintStarts.end() )
+        {
+            return SAL_MAX_SIZE;
+        }
+        return it - m_HintStarts.begin();
+    }
+
     bool Contains( const SwTxtAttr *pHt ) const;
 
-    inline const SwTxtAttr * GetTextHint( const size_t nIdx ) const
+    const SwTxtAttr * GetTextHint( const size_t nIdx ) const
         { return GetStart(nIdx); }
-    inline       SwTxtAttr * GetTextHint( const size_t nIdx )
+    SwTxtAttr * GetTextHint( const size_t nIdx )
         { return GetStart(nIdx); }
-    inline const SwTxtAttr * operator[]( const size_t nIdx ) const
+    const SwTxtAttr * operator[]( const size_t nIdx ) const
         { return GetStart(nIdx); }
-    inline size_t Count() const { return GetStartCount(); }
+    size_t Count() const { return GetStartCount(); }
 
 #ifdef DBG_UTIL
     bool Check(bool) const;
@@ -172,11 +186,10 @@ private:
     /// Delete the given Hint. The Hint must actually be in the array!
     void Delete( SwTxtAttr* pTxtHt );
 
-    inline void SetInSplitNode(bool bInSplit) { m_bInSplitNode = bInSplit; }
-    inline void SetCalcHiddenParaField() { m_bCalcHiddenParaField = true; }
-    inline void SetHiddenParaField( const bool bNew )
-        { m_bHasHiddenParaField = bNew; }
-    inline bool HasHiddenParaField() const
+    void SetInSplitNode(bool bInSplit) { m_bInSplitNode = bInSplit; }
+    void SetCalcHiddenParaField() { m_bCalcHiddenParaField = true; }
+    void SetHiddenParaField( const bool bNew ) { m_bHasHiddenParaField = bNew; }
+    bool HasHiddenParaField() const
     {
         if ( m_bCalcHiddenParaField )
         {
@@ -194,7 +207,7 @@ private:
 public:
     SwpHints();
 
-    inline bool CanBeDeleted() const    { return !Count(); }
+    bool CanBeDeleted() const    { return !Count(); }
 
     /// register a History, which receives all attribute changes (for Undo)
     void Register( SwRegHistory* pHist ) { m_pHistory = pHist; }
@@ -207,34 +220,14 @@ public:
     bool TryInsertHint( SwTxtAttr * const pHint, SwTxtNode & rNode,
             const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
 
-    inline bool HasFtn() const          { return m_bFootnote; }
-    inline bool IsInSplitNode() const   { return m_bInSplitNode; }
+    bool HasFtn() const          { return m_bFootnote; }
+    bool IsInSplitNode() const   { return m_bInSplitNode; }
 
     /// calc current value of m_bHasHiddenParaField, returns true iff changed
     bool CalcHiddenParaField();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
-
-/// Inline Implementations
-
-inline size_t SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
-{
-    SwpHtStart::const_iterator const it =
-        m_HintStarts.find(const_cast<SwTxtAttr*>(pHt));
-    if ( it == m_HintStarts.end() )
-    {
-        return SAL_MAX_SIZE;
-    }
-    return it - m_HintStarts.begin();
-}
-
-inline SwTxtAttr *SwpHintsArray::Cut( const size_t nPosInStart )
-{
-    SwTxtAttr *pHt = GetTextHint(nPosInStart);
-    DeleteAtPos( nPosInStart );
-    return pHt;
-}
 
 #endif
 
