@@ -821,10 +821,12 @@ void PDFOutDev::eoClip(GfxState *state)
 
 
     @param dx
-    horizontal skip for character
+    horizontal skip for character (already scaled with font size) +
+    inter-char space: cursor is shifted by this amount for next char
 
     @param dy
-    vertical skip for character
+    vertical skip for character (zero for horizontal writing mode):
+    cursor is shifted by this amount for next char
 
     @param originX
     local offset of character (zero for horizontal writing mode). not
@@ -834,22 +836,26 @@ void PDFOutDev::eoClip(GfxState *state)
     local offset of character (zero for horizontal writing mode). not
     taken into account for output pos updates. Used for vertical writing.
  */
-#ifdef SYSTEM_POPPLER_HEADERS
 void PDFOutDev::drawChar(GfxState *state, double x, double y,
                          double dx, double dy,
                          double originX, double originY,
                          CharCode, int /*nBytes*/, Unicode *u, int uLen)
-#else
-void PDFOutDev::drawChar2(GfxState *state, double x, double y,
-                         double dx, double dy,
-                         double originX, double originY,
-                         CharCode, int /*nBytes*/, Unicode *u, int uLen)
-#endif
 {
     assert(state);
 
     if( u == NULL )
         return;
+
+    double csdx = 0.0;
+    double csdy = 0.0;
+    if (state->getFont()->getWMode())
+        csdy = state->getCharSpace();
+    else
+        csdx = state->getCharSpace() * state->getHorizScaling();
+
+    double cstdx = 0.0;
+    double cstdy = 0.0;
+    state->textTransformDelta(csdx, csdy, &cstdx, &cstdy);
 
     const double fontSize = state->getFontSize();
 
@@ -860,8 +866,8 @@ void PDFOutDev::drawChar2(GfxState *state, double x, double y,
     printf( "drawChar %f %f %f %f %f %f %f %f %f ",
             normalize(aPositionX),
             normalize(aPositionY),
-            normalize(aPositionX + dx),
-            normalize(aPositionY + dy),
+            normalize(aPositionX + dx - cstdx),
+            normalize(aPositionY + dy - cstdy),
             normalize(pTextMat[0]),
             normalize(pTextMat[2]),
             normalize(pTextMat[1]),
