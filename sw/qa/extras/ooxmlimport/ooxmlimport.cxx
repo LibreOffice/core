@@ -2588,7 +2588,7 @@ DECLARE_OOXMLIMPORT_TEST(testFdo87488, "fdo87488.docx")
     {
         uno::Reference<beans::XPropertySet> props(group->getByIndex(0), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(props->getPropertyValue("RotateAngle"),
-                             uno::makeAny(270 * 100));
+                             uno::makeAny<sal_Int32>(270 * 100));
         comphelper::SequenceAsHashMap geom(props->getPropertyValue("CustomShapeGeometry"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(90), geom["TextPreRotateAngle"].get<sal_Int32>());
     }
