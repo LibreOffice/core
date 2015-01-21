@@ -26,17 +26,17 @@
 
 struct ImplIdleData
 {
-    ImplIdleData*   mpNext;      // Pointer to the next Instance
+    ImplIdleData*   mpNext;      // Pointer to the next element in list
     Idle*           mpIdle;      // Pointer to VCL Idle instance
-    bool            mbDelete;    // Was Idle deleted during Update()?
-    bool            mbInIdle;    // Are we in a idle handler?
+    bool            mbDelete;    // Destroy this idle?
+    bool            mbInIdle;    // Idle handler currently processed?
 
     void Invoke()
     {
         if (mbDelete || mbInIdle )
             return;
 
-        mpIdle->SetPriority(mpIdle->GetDefaultPriority());
+        mpIdle->SetSchedulingPriority(convertToInt(mpIdle->GetDefaultPriority()));
         mbDelete = true;
         mpIdle->mbActive = false;
 
@@ -65,48 +65,15 @@ struct ImplIdleData
                 // the current is the new most urgent. So starving is impossible.
                 if ( p->mpIdle->GetPriority() < pMostUrgent->mpIdle->GetPriority() )
                 {
-                    IncreasePriority(pMostUrgent->mpIdle);
+                    pMostUrgent->mpIdle->SetSchedulingPriority( pMostUrgent->mpIdle->GetPriority() - 1);
                     pMostUrgent = p;
                 }
                 else
-                    IncreasePriority(p->mpIdle);
+                    p->mpIdle->SetSchedulingPriority( p->mpIdle->GetPriority() - 1);
             }
         }
 
         return pMostUrgent;
-    }
-
-    static void IncreasePriority( Idle *pIdle )
-    {
-        switch(pIdle->GetPriority())
-        {
-            // Increase priority based on their current priority;
-            // (so don't use VCL_IDLE_PRIORITY_STARVATIONPROTECTION for default-priority!)
-            case IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION:
-                break;
-            // If already highest priority -> extra state for starving tasks
-            case IdlePriority::VCL_IDLE_PRIORITY_HIGHEST:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_STARVATIONPROTECTION);
-                break;
-            case IdlePriority::VCL_IDLE_PRIORITY_HIGH:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGHEST);
-                break;
-            case IdlePriority::VCL_IDLE_PRIORITY_REPAINT:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH);
-                break;
-            case IdlePriority::VCL_IDLE_PRIORITY_MEDIUM:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_REPAINT);
-                break;
-            case IdlePriority::VCL_IDLE_PRIORITY_LOW:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_MEDIUM);
-                break;
-            case IdlePriority::VCL_IDLE_PRIORITY_LOWER:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOW);
-                break;
-            case IdlePriority::VCL_IDLE_PRIORITY_LOWEST:
-                pIdle->SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWER);
-                break;
-        }
     }
 };
 
@@ -149,7 +116,7 @@ void Idle::ProcessAllIdleHandlers()
     pIdleData = pSVData->mpFirstIdleData;
     while ( pIdleData )
     {
-        // Was idle destroyed in the meantime?
+        // Should idle be released from scheduling?
         if ( pIdleData->mbDelete )
         {
             if ( pPrevIdleData )
@@ -172,11 +139,12 @@ void Idle::ProcessAllIdleHandlers()
 
 void Idle::SetPriority( IdlePriority ePriority )
 {
-    mePriority = ePriority;
-    // Was a new priority set before excecution?
-    // Then take it as default priority
-    if( !mbActive && meDefaultPriority == IdlePriority::VCL_IDLE_PRIORITY_DEFAULT )
-        meDefaultPriority = mePriority;
+    meDefaultPriority = ePriority;
+}
+
+void Idle::SetSchedulingPriority( sal_Int32 iPriority )
+{
+    miPriority = iPriority;
 }
 
 void Idle::DoIdle()
@@ -228,7 +196,7 @@ Idle& Idle::operator=( const Idle& rIdle )
         Stop();
 
     mbActive          = false;
-    mePriority        = rIdle.mePriority;
+    miPriority        = rIdle.miPriority;
     meDefaultPriority = rIdle.meDefaultPriority;
     maIdleHdl         = rIdle.maIdleHdl;
 
@@ -240,15 +208,15 @@ Idle& Idle::operator=( const Idle& rIdle )
 
 Idle::Idle():
     mpIdleData(NULL),
-    mePriority(IdlePriority::VCL_IDLE_PRIORITY_DEFAULT),
-    meDefaultPriority(IdlePriority::VCL_IDLE_PRIORITY_DEFAULT),
+    miPriority(convertToInt(IdlePriority::VCL_IDLE_PRIORITY_HIGH)),
+    meDefaultPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH),
     mbActive(false)
 {
 }
 
 Idle::Idle( const Idle& rIdle ):
     mpIdleData(NULL),
-    mePriority(rIdle.mePriority),
+    miPriority(rIdle.miPriority),
     meDefaultPriority(rIdle.meDefaultPriority),
     mbActive(false),
     maIdleHdl(rIdle.maIdleHdl)
