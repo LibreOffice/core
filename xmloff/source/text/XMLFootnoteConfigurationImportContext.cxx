@@ -42,13 +42,14 @@
 #include <com/sun/star/style/NumberingType.hpp>
 
 
-
+using namespace com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 
 //  XMLFootnoteConfigHelper
@@ -70,10 +71,17 @@ public:
         const OUString& rLName,
         XMLFootnoteConfigurationImportContext& rConfigImport,
         bool bBegin);
+    XMLFootnoteConfigHelper( SvXMLImport& rImport, sal_Int32 Element,
+        XMLFootnoteConfigurationImportContext& rConfigImport,
+        bool bBegin );
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLFootnoteConfigHelper, SvXMLImportContext );
@@ -91,6 +99,17 @@ XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
 {
 }
 
+XMLFootnoteConfigHelper::XMLFootnoteConfigHelper(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    XMLFootnoteConfigurationImportContext& rConfigImport,
+    bool bBegin )
+:   SvXMLImportContext( rImport ),
+    sBuffer(),
+    rConfig(rConfigImport),
+    bIsBegin(bBegin)
+{
+}
+
 void XMLFootnoteConfigHelper::EndElement()
 {
     if (bIsBegin)
@@ -104,11 +123,29 @@ void XMLFootnoteConfigHelper::EndElement()
 //  rConfig = NULL; // import contexts are ref-counted
 }
 
+void SAL_CALL XMLFootnoteConfigHelper::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    if( bIsBegin )
+    {
+        rConfig.SetBeginNotice(sBuffer.makeStringAndClear());
+    }
+    else
+    {
+        rConfig.SetEndNotice(sBuffer.makeStringAndClear());
+    }
+}
+
 void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 {
     sBuffer.append(rChars);
 }
 
+void SAL_CALL XMLFootnoteConfigHelper::characters( const OUString& rChars )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    sBuffer.append(rChars);
+}
 
 
 // XMLFootnoteConfigurationImportContext
@@ -248,7 +285,7 @@ static SvXMLEnumMapEntry const aFootnoteNumberingMap[] =
     { XML_PAGE,             FootnoteNumbering::PER_PAGE },
     { XML_CHAPTER,          FootnoteNumbering::PER_CHAPTER },
     { XML_DOCUMENT,         FootnoteNumbering::PER_DOCUMENT },
-    { XML_TOKEN_INVALID,    0 },
+    { xmloff::token::XML_TOKEN_INVALID,    0 },
 };
 
 void XMLFootnoteConfigurationImportContext::StartElement(
