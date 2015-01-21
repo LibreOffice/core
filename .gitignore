@@ -99,6 +99,7 @@ xcuserdata
 *.sdf
 *.sln
 *.v11*
+*.v12*
 *.vcxproj*
 *.opensdf
 
