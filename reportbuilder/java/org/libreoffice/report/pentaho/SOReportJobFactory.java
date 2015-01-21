@@ -216,12 +216,12 @@ public class SOReportJobFactory
             catch (java.lang.Exception e)
             {
                 LOGGER.error("ReportProcessing failed", e);
-                throw new com.sun.star.lang.WrappedTargetException(e.getMessage(), this, e);
+                throw new com.sun.star.lang.WrappedTargetException(e, e.getMessage(), this, null);
             }
             catch (java.lang.IncompatibleClassChangeError e2)
             {
                 LOGGER.error("Detected an IncompatibleClassChangeError");
-                throw new com.sun.star.lang.WrappedTargetException("caught a " + e2.getClass().getName(), this, e2);
+                throw new com.sun.star.lang.WrappedTargetException(e2, "caught a " + e2.getClass().getName(), this, new com.sun.star.uno.Exception(e2.getLocalizedMessage()));
             }
             Thread.currentThread().setContextClassLoader(cl);
 
