@@ -490,7 +490,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_DOCUMENT_INDEX:
         {
-            const SwTOXBase* pBase = rPam.GetDoc()->GetCurTOX(
+            SwTOXBase* pBase = rPam.GetDoc()->GetCurTOX(
                                                     *rPam.Start() );
             if( pBase )
             {
@@ -498,7 +498,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     const uno::Reference< text::XDocumentIndex > xRef =
                         SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
-                            static_cast<SwTOXBaseSection const*>(pBase));
+                            static_cast<SwTOXBaseSection *>(pBase));
                     (*pAny) <<= xRef;
                 }
             }

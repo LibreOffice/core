@@ -991,14 +991,14 @@ public:
                                 SwTOXSearch eDir, bool bInReadOnly );
 
     // Insert/Renew table/indes
-    const SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
+    SwTOXBaseSection* InsertTableOf( const SwPosition& rPos,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0,
                                             bool bExpand = false );
     const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0 );
-    const SwTOXBase* GetCurTOX( const SwPosition& rPos ) const;
+    SwTOXBase* GetCurTOX( const SwPosition& rPos );
     const SwAttrSet& GetTOXBaseAttrSet(const SwTOXBase& rTOX) const;
 
     bool DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes = false );

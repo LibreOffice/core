@@ -1152,7 +1152,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
                 SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
                 if(pSectionNode)
                 {
-                    const SwSection& rSect = pSectionNode->GetSection();
+                    SwSection& rSect = pSectionNode->GetSection();
                     uno::Reference< text::XTextSection >  xSect =
                                     SwXTextSections::GetObject( *rSect.GetFmt() );
                     aRet <<= xSect;
@@ -3545,7 +3545,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
                     if(pSectionNode)
                     {
-                        const SwSection& rSect = pSectionNode->GetSection();
+                        SwSection& rSect = pSectionNode->GetSection();
                         uno::Reference< text::XTextSection >  xSect =
                                         SwXTextSections::GetObject( *rSect.GetFmt() );
                         aRet <<= xSect;

@@ -326,7 +326,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     return *pNew;
 }
 
-const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
+SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SwTOXBase& rTOX,
                                                 const SfxItemSet* pSet,
                                                 bool bExpand )
@@ -417,10 +417,10 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
 }
 
 /// Get current table of contents
-const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
+SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos )
 {
-    const SwNode& rNd = rPos.nNode.GetNode();
-    const SwSectionNode* pSectNd = rNd.FindSectionNode();
+    SwNode& rNd = rPos.nNode.GetNode();
+    SwSectionNode* pSectNd = rNd.FindSectionNode();
     while( pSectNd )
     {
         SectionType eT = pSectNd->GetSection().GetType();
@@ -428,7 +428,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
         {
             OSL_ENSURE( pSectNd->GetSection().ISA( SwTOXBaseSection ),
                     "no TOXBaseSection!" );
-            const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(
+            SwTOXBaseSection& rTOXSect = static_cast<SwTOXBaseSection&>(
                                                 pSectNd->GetSection());
             return &rTOXSect;
         }
@@ -441,7 +441,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
 {
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
-    SwSectionFmt* pFmt = rTOXSect.GetFmt();
+    SwSectionFmt const * pFmt = rTOXSect.GetFmt();
     OSL_ENSURE( pFmt, "invalid TOXBaseSection!" );
     return pFmt->GetAttrSet();
 }
@@ -501,15 +501,15 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
     OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
-    SwSectionFmt* pFmt = rTOXSect.GetFmt();
+    SwSectionFmt const * pFmt = rTOXSect.GetFmt();
     if( pFmt )
     {
         GetIDocumentUndoRedo().StartUndo( UNDO_CLEARTOXRANGE, NULL );
 
         /* Save the start node of the TOX' section. */
-        SwSectionNode * pMyNode = pFmt->GetSectionNode();
+        SwSectionNode const * pMyNode = pFmt->GetSectionNode();
         /* Save start node of section's surrounding. */
-        SwNode * pStartNd = pMyNode->StartOfSectionNode();
+        SwNode const * pStartNd = pMyNode->StartOfSectionNode();
 
         /* Look for the point where to move the cursors in the area to
            delete to. This is done by first searching forward from the
@@ -572,7 +572,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
             }
         }
 
-        DelSectionFmt( pFmt, bDelNodes );
+        DelSectionFmt( const_cast<SwSectionFmt *>(pFmt), bDelNodes );
 
         GetIDocumentUndoRedo().EndUndo( UNDO_CLEARTOXRANGE, NULL );
         bRet = true;
@@ -2015,7 +2015,7 @@ const SfxItemSet* SwTOXBase::GetAttrSet() const
 
 void SwTOXBase::SetAttrSet( const SfxItemSet& rSet )
 {
-    const SwTOXBaseSection *pSect = dynamic_cast<const SwTOXBaseSection*>(this);
+    SwTOXBaseSection *pSect = dynamic_cast<SwTOXBaseSection*>(this);
     if( pSect && pSect->GetFmt() )
         pSect->GetFmt()->SetFmtAttr( rSet );
 }

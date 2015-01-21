@@ -2596,7 +2596,7 @@ void SwFEShell::SetChainMarker()
     }
 }
 
-long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
+long SwFEShell::GetSectionWidth( SwFmt const & rFmt ) const
 {
     SwFrm *pFrm = GetCurrFrm();
     // Is the cursor at this moment in a SectionFrm?

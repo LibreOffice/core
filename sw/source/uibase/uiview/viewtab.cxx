@@ -862,7 +862,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                     SfxItemSet aSet( GetPool(), RES_COL, RES_COL );
                     if(bSect)
                     {
-                        const SwSection *pSect = rSh.GetAnySection();
+                        SwSection *pSect = rSh.GetAnySection();
                         OSL_ENSURE( pSect, "Which section?");
                         pSectFmt = pSect->GetFmt();
                     }
@@ -1561,7 +1561,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     OSL_ENSURE( pSect, "Which section?");
                     if( pSect )
                     {
-                        SwSectionFmt *pFmt = pSect->GetFmt();
+                        SwSectionFmt const *pFmt = pSect->GetFmt();
                         const SwFmtCol& rCol = pFmt->GetCol();
                         if(rSh.IsInRightToLeftText())
                             nNum = rCol.GetColumns().size() - nNum;

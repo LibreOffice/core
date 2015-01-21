@@ -175,7 +175,7 @@ public:
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
     SwSectionFmt* GetFmt()          { return (SwSectionFmt*)GetRegisteredIn(); }
-    SwSectionFmt* GetFmt() const    { return (SwSectionFmt*)GetRegisteredIn(); }
+    SwSectionFmt const * GetFmt() const    { return (SwSectionFmt const *)GetRegisteredIn(); }
 
     // Set hidden/protected -> update the whole tree!
     // (Attributes/flags are set/get.)
@@ -348,7 +348,7 @@ public:
 
 inline SwSection* SwSection::GetParent() const
 {
-    SwSectionFmt* pFmt = GetFmt();
+    SwSectionFmt const * pFmt = GetFmt();
     SwSection* pRet = 0;
     if( pFmt )
         pRet = pFmt->GetParentSection();

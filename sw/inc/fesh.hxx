@@ -726,7 +726,7 @@ public:
     bool IsLastCellInRow() const;
 
     /// Width of current range for column-dialog.
-    long GetSectionWidth( SwFmt& rFmt ) const;
+    long GetSectionWidth( SwFmt const & rFmt ) const;
 
     void GetConnectableFrmFmts
     (SwFrmFmt & rFmt, const OUString & rReference, bool bSuccessors,

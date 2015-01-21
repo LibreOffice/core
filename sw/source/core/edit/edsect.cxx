@@ -80,7 +80,7 @@ const SwSection* SwEditShell::GetCurrSection() const
  *
  * In footnotes it may not be the area within the footnote.
  */
-const SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt ) const
+SwSection* SwEditShell::GetAnySection( bool bOutOfTab, const Point* pPt )
 {
     SwFrm *pFrm;
     if ( pPt )
@@ -189,7 +189,7 @@ void SwEditShell::SetSectionAttr( const SfxItemSet& rSet,
             const SwPosition* pStt = rPaM.Start(),
                             * pEnd = rPaM.End();
 
-            const SwSectionNode* pSttSectNd = pStt->nNode.GetNode().FindSectionNode(),
+            SwSectionNode* pSttSectNd = pStt->nNode.GetNode().FindSectionNode(),
                                * pEndSectNd = pEnd->nNode.GetNode().FindSectionNode();
 
             if( pSttSectNd || pEndSectNd )

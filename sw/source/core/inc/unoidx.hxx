@@ -64,7 +64,7 @@ private:
 
     virtual ~SwXDocumentIndex();
 
-    SwXDocumentIndex(SwTOXBaseSection const&, SwDoc &);
+    SwXDocumentIndex(SwTOXBaseSection &, SwDoc &);
 
     /// descriptor
     SwXDocumentIndex(const TOXTypes eToxType, SwDoc& rDoc);
@@ -73,7 +73,7 @@ public:
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XDocumentIndex>
-        CreateXDocumentIndex(SwDoc & rDoc, SwTOXBaseSection const* pSection,
+        CreateXDocumentIndex(SwDoc & rDoc, SwTOXBaseSection * pSection,
                 TOXTypes eTypes = TOX_INDEX);
 
     // MetadatableMixin

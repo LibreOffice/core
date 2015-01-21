@@ -818,7 +818,7 @@ public:
      a footnote the reference of which is in a columned range.
      If bOutOfTab is set, the range comprising the table is searched
      and not an inner one. */
-    const SwSection* GetAnySection( bool bOutOfTab = false, const Point* pPt = 0 ) const;
+    SwSection* GetAnySection( bool bOutOfTab = false, const Point* pPt = 0 );
 
     sal_uInt16 GetSectionFmtCount() const;
     sal_uInt16 GetSectionFmtPos( const SwSectionFmt& ) const;

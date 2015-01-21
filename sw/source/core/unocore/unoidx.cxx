@@ -332,7 +332,7 @@ public:
 
     Impl(   SwDoc & rDoc,
             const TOXTypes eType,
-            SwTOXBaseSection const*const pBaseSection)
+            SwTOXBaseSection *const pBaseSection)
         : SwClient((pBaseSection) ? pBaseSection->GetFmt() : 0)
         , m_Listeners(m_Mutex)
         , m_rPropSet(
@@ -398,7 +398,7 @@ void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *
 }
 
 SwXDocumentIndex::SwXDocumentIndex(
-        SwTOXBaseSection const& rBaseSection, SwDoc & rDoc)
+        SwTOXBaseSection & rBaseSection, SwDoc & rDoc)
     : m_pImpl( new SwXDocumentIndex::Impl(
                 rDoc, rBaseSection.SwTOXBase::GetType(), & rBaseSection) )
 {
@@ -415,14 +415,14 @@ SwXDocumentIndex::~SwXDocumentIndex()
 
 uno::Reference<text::XDocumentIndex>
 SwXDocumentIndex::CreateXDocumentIndex(
-        SwDoc & rDoc, SwTOXBaseSection const* pSection, TOXTypes const eTypes)
+        SwDoc & rDoc, SwTOXBaseSection * pSection, TOXTypes const eTypes)
 {
     // re-use existing SwXDocumentIndex
     // #i105557#: do not iterate over the registered clients: race condition
     uno::Reference<text::XDocumentIndex> xIndex;
     if (pSection)
     {
-        SwSectionFmt *const pFmt = pSection->GetFmt();
+        SwSectionFmt const *const pFmt = pSection->GetFmt();
         xIndex.set(pFmt->GetXObject(), uno::UNO_QUERY);
     }
     if (!xIndex.is())
@@ -1374,7 +1374,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         lcl_ReAssignTOXType(pDoc, rTOXBase, m_pImpl->m_pProps->GetTypeName());
     }
     //TODO: apply Section attributes (columns and background)
-    SwTOXBaseSection const*const pTOX =
+    SwTOXBaseSection *const pTOX =
         pDoc->InsertTableOf( *aPam.GetPoint(), rTOXBase, 0, false );
 
     pDoc->SetTOXBaseName(*pTOX, m_pImpl->m_pProps->GetTOXBase().GetTOXName());
@@ -2502,14 +2502,14 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( size_t n = 0; n < rFmts.size(); ++n )
     {
-        const SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() &&
             nIdx++ == nIndex )
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
-                   *GetDoc(), static_cast<SwTOXBaseSection const*>(pSect));
+                   *GetDoc(), static_cast<SwTOXBaseSection *>(pSect));
            uno::Any aRet;
            aRet <<= xTmp;
            return aRet;
@@ -2532,7 +2532,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( size_t n = 0; n < rFmts.size(); ++n )
     {
-        const SwSection* pSect = rFmts[ n ]->GetSection();
+        SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() &&
             (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
@@ -2540,7 +2540,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
-                   *GetDoc(), static_cast<SwTOXBaseSection const*>(pSect));
+                   *GetDoc(), static_cast<SwTOXBaseSection *>(pSect));
            uno::Any aRet;
            aRet <<= xTmp;
            return aRet;

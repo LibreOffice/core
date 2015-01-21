@@ -352,7 +352,7 @@ bool SwSection::CalcHiddenFlag() const
 
 bool SwSection::IsProtect() const
 {
-    SwSectionFmt *const pFmt( GetFmt() );
+    SwSectionFmt const *const pFmt( GetFmt() );
     OSL_ENSURE(pFmt, "SwSection::IsProtect: no format?");
     return (pFmt)
         ?   pFmt->GetProtect().IsCntntProtected()
@@ -362,7 +362,7 @@ bool SwSection::IsProtect() const
 // edit in readonly sections
 bool SwSection::IsEditInReadonly() const
 {
-    SwSectionFmt *const pFmt( GetFmt() );
+    SwSectionFmt const *const pFmt( GetFmt() );
     OSL_ENSURE(pFmt, "SwSection::IsEditInReadonly: no format?");
     return (pFmt)
         ?   pFmt->GetEditInReadonly().GetValue()
