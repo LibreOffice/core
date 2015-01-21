@@ -56,8 +56,7 @@ XMLGradientStyleContext::XMLGradientStyleContext(
 {
     // start import
     XMLGradientStyleImport aGradientStyle( GetImport() );
-
-    //something missing
+    aGradientStyle.importXML( xAttrList, maAny, maStrName );
 }
 
 XMLGradientStyleContext::~XMLGradientStyleContext()
