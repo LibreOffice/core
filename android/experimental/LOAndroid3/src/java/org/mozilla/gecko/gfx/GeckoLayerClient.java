@@ -277,8 +277,8 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
             try {
                 mNewGeckoViewport = viewportMetrics;
                 updateViewport();
-                mLowResLayer.invalidate();
-                mRootLayer.invalidate();
+                //mLowResLayer.invalidate();
+                //mRootLayer.invalidate();
             } finally {
                 mLowResLayer.endTransaction();
                 mRootLayer.endTransaction();
