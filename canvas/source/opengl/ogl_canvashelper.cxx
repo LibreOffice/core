@@ -249,10 +249,6 @@ namespace oglcanvas
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
             pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
-            glm::vec4 color  = glm::vec4( (float) rendering::ARGBColor().Red,
-                                (float) rendering::ARGBColor().Green,
-                                (float) rendering::ARGBColor().Blue,
-                                (float) rendering::ARGBColor().Alpha);
 
             // convert to weird canvas textur coordinate system (not
             // [0,1]^2, but path coordinate system)
@@ -334,7 +330,7 @@ namespace oglcanvas
                                 const ::basegfx::B2DHomMatrix&   rTransform,
                                 GLenum                           eSrcBlend,
                                 GLenum                           eDstBlend,
-                                const rendering::ARGBColor&      rColor,
+                                const rendering::ARGBColor&      /*rColor*/,
                                 const CanvasBitmap&              rBitmap )
         {
             RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
