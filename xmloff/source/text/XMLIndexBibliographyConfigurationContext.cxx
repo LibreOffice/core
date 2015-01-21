@@ -25,15 +25,19 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
+using namespace com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
+using namespace xmloff;
 using namespace ::com::sun::star::xml::sax;
 
 using ::com::sun::star::beans::PropertyValue;
@@ -118,9 +122,58 @@ void XMLIndexBibliographyConfigurationContext::StartElement(
 }
 
 void SAL_CALL XMLIndexBibliographyConfigurationContext::startFastElement(
-    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++)
+    {
+        if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_prefix) )
+        {
+            sPrefix = attr->Value;
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_suffix ) )
+        {
+            sSuffix = attr->Value;
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_numbered_entries) )
+        {
+            bool bTmp(false);
+            if( sax::Converter::convertBool(bTmp, attr->Value) )
+            {
+                bNumberedEntries = bTmp;
+            }
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sort_by_position) )
+        {
+            bool bTmp(false);
+            if( sax::Converter::convertBool(bTmp, attr->Value) )
+            {
+                bSortByPosition = bTmp;
+            }
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sort_algorithm) )
+        {
+            sAlgorithm = attr->Value;
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_language) )
+        {
+            maLanguageTagODF.maLanguage = attr->Value;
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_script) )
+        {
+            maLanguageTagODF.maScript = attr->Value;
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_FO | XML_country) )
+        {
+            maLanguageTagODF.maCountry = attr->Value;
+        }
+        else if( attr->Token == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_rfc_language_tag) )
+        {
+            maLanguageTagODF.maRfcLanguageTag = attr->Value;
+        }
+    }
 }
 
 void XMLIndexBibliographyConfigurationContext::ProcessAttribute(
@@ -253,10 +306,53 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
 Reference< XFastContextHandler > SAL_CALL
     XMLIndexBibliographyConfigurationContext::createFastChildContext(
-    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*xAttrList*/ )
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    return Reference< XFastContextHandler >();
+    OUString sKey;
+    sal_Bool bSort(sal_True);
+
+    // process children here and use default context!
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sort_key)
+        && xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_key ) )
+        {
+            sKey = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_key );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sort_ascending ) )
+        {
+            bool bTmp(false);
+            if( sax::Converter::convertBool( bTmp,
+                xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_sort_ascending ) ) )
+            {
+                bSort = bTmp;
+            }
+        }
+
+        // valid data?
+        sal_uInt16 nKey;
+        if( SvXMLUnitConverter::convertEnum( nKey, sKey, aBibliographyDataFieldMap ) )
+        {
+            Any aAny;
+            Sequence<PropertyValue> aKey(2);
+
+            PropertyValue aNameValue;
+            aNameValue.Name = sSortKey;
+            aAny <<= (sal_Int16)nKey;
+            aKey[0] = aNameValue;
+
+            PropertyValue aSortValue;
+            aSortValue.Name = sIsSortAscending;
+            aAny.setValue(&bSort, ::getBooleanCppuType());
+            aSortValue.Value = aAny;
+            aKey[1] = aSortValue;
+
+            aSortKeys.push_back(aKey);
+        }
+    }
+
+    return SvXMLImportContext::createFastChildContext( Element, xAttrList );
 }
 
 void XMLIndexBibliographyConfigurationContext::CreateAndInsert(bool)
