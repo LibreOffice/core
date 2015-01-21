@@ -14,18 +14,14 @@ import org.libreoffice.LOKitShell;
 import org.libreoffice.TileIdentifier;
 import org.mozilla.gecko.util.FloatUtils;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class ComposedTileLayer extends Layer implements ComponentCallbacks2 {
     private static final String LOGTAG = ComposedTileLayer.class.getSimpleName();
 
-    protected final ConcurrentMap<TileIdentifier, SubTile> tiles = new ConcurrentHashMap<TileIdentifier, SubTile>();
-    protected final Set<TileIdentifier> newTileIds = Collections.newSetFromMap(new ConcurrentHashMap<TileIdentifier, Boolean>());
+    protected final List<SubTile> tiles = new CopyOnWriteArrayList<SubTile>();
 
     protected final IntSize tileSize;
     protected RectF currentViewport = new RectF();
@@ -37,7 +33,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     public void invalidate() {
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             tile.invalidate();
         }
     }
@@ -45,14 +41,14 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     @Override
     public void beginTransaction() {
         super.beginTransaction();
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             tile.beginTransaction();
         }
     }
 
     @Override
     public void endTransaction() {
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             tile.endTransaction();
         }
         super.endTransaction();
@@ -60,7 +56,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
 
     @Override
     public void draw(RenderContext context) {
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             if (RectF.intersects(tile.getBounds(context), context.viewport)) {
                 tile.draw(context);
             }
@@ -71,7 +67,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     protected void performUpdates(RenderContext context) {
         super.performUpdates(context);
 
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             tile.beginTransaction();
             tile.refreshTileMetrics();
             tile.endTransaction();
@@ -82,7 +78,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     @Override
     public Region getValidRegion(RenderContext context) {
         Region validRegion = new Region();
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             validRegion.op(tile.getValidRegion(context), Region.Op.UNION);
         }
 
@@ -92,7 +88,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     @Override
     public void setResolution(float newResolution) {
         super.setResolution(newResolution);
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             tile.setResolution(newResolution);
         }
     }
@@ -159,9 +155,14 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
                 if (x > pageRect.width()) {
                     continue;
                 }
-                TileIdentifier tileId = new TileIdentifier((int) x, (int) y, currentZoom, tileSize);
-                if (!tiles.containsKey(tileId) && !newTileIds.contains(tileId)) {
-                    newTileIds.add(tileId);
+                boolean contains = false;
+                for (SubTile tile : tiles) {
+                    if (tile.id.x == x && tile.id.y == y && tile.id.zoom == currentZoom) {
+                        contains = true;
+                    }
+                }
+                if (!contains) {
+                    TileIdentifier tileId = new TileIdentifier((int) x, (int) y, currentZoom, tileSize);
                     LOEvent event = LOEventFactory.tileRequest(this, tileId, true);
                     event.mPriority = getTilePriority();
                     LOKitShell.sendEvent(event);
@@ -171,18 +172,18 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     private void clearMarkedTiles() {
-        Iterator<Map.Entry<TileIdentifier, SubTile>> iterator;
-        for (iterator = tiles.entrySet().iterator(); iterator.hasNext();) {
-            SubTile tile = iterator.next().getValue();
+        List<SubTile> tilesToRemove = new ArrayList<SubTile>();
+        for (SubTile tile : tiles) {
             if (tile.markedForRemoval) {
                 tile.destroy();
-                iterator.remove();
+                tilesToRemove.add(tile);
             }
         }
+        tiles.removeAll(tilesToRemove);
     }
 
     private void markTiles() {
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             if (FloatUtils.fuzzyEquals(tile.id.zoom, currentZoom)) {
                 RectF tileRect = tile.id.getRectF();
                 if (!RectF.intersects(currentViewport, tileRect)) {
@@ -201,8 +202,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
 
     public void addTile(SubTile tile) {
         tile.beginTransaction();
-        tiles.put(tile.id, tile);
-        newTileIds.remove(tile.id);
+        tiles.add(tile);
     }
 
     public boolean isStillValid(TileIdentifier tileId) {
@@ -215,7 +215,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     public void invalidateTiles(RectF cssRect) {
         RectF zoomedRect = RectUtils.scale(cssRect, currentZoom);
 
-        for (SubTile tile : tiles.values()) {
+        for (SubTile tile : tiles) {
             if (RectF.intersects(zoomedRect, tile.id.getRectF())) {
                 LOKitShell.sendEvent(LOEventFactory.tileRerender(this, tile));
             }
@@ -241,6 +241,5 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     public void cleanupInvalidTile(TileIdentifier tileId) {
-        newTileIds.remove(tileId);
     }
 }
