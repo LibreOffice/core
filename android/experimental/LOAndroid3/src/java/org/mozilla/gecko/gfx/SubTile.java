@@ -19,13 +19,7 @@ public class SubTile extends SingleTileLayer {
     }
 
     public void refreshTileMetrics() {
-        Rect position = getPosition();
-        float positionX = id.x / id.zoom;
-        float positionY = id.y / id.zoom;
-        float tileSizeWidth = id.size.width / id.zoom;
-        float tileSizeHeight = id.size.height / id.zoom;
-        position.set((int) positionX, (int) positionY, (int) (positionX + tileSizeWidth), (int) (positionY + tileSizeHeight));
-        setPosition(position);
+        setPosition(id.getCSSRect());
     }
 
     public void markForRemoval() {
