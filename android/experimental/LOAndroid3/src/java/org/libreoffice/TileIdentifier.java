@@ -1,5 +1,6 @@
 package org.libreoffice;
 
+import android.graphics.Rect;
 import android.graphics.RectF;
 
 import org.mozilla.gecko.gfx.IntSize;
@@ -17,14 +18,27 @@ public class TileIdentifier {
         this.size = size;
     }
 
-    public RectF getRect() {
+    public RectF getRectF() {
         return new RectF(x, y, x + size.width, y + size.height);
     }
 
-    public RectF getCSSRect() {
-        float cssX = x * zoom;
-        float cssY = y * zoom;
-        return new RectF(cssX, cssY, cssX + (size.width * zoom), cssY + (size.height * zoom));
+    public RectF getCSSRectF() {
+        float cssX = x / zoom;
+        float cssY = y / zoom;
+        float cssSizeW = size.width / zoom;
+        float cssSizeH = size.height / zoom;
+        return new RectF(cssX, cssY, cssX + cssSizeW, cssY + cssSizeH);
+    }
+
+    public Rect getCSSRect() {
+        float cssX = x / zoom;
+        float cssY = y / zoom;
+        float sizeW = size.width / zoom;
+        float sizeH = size.height / zoom;
+        return new Rect(
+                (int) cssX, (int) cssY,
+                (int) (cssX + sizeW),
+                (int) (cssY + sizeH) );
     }
 
     @Override
