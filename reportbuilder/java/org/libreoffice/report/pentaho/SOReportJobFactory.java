@@ -61,6 +61,10 @@ import com.sun.star.uno.XComponentContext;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.io.Writer;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -216,12 +220,18 @@ public class SOReportJobFactory
             catch (java.lang.Exception e)
             {
                 LOGGER.error("ReportProcessing failed", e);
-                throw new com.sun.star.lang.WrappedTargetException(e, e.getMessage(), this, null);
+                Writer result = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(result);
+                e.printStackTrace(printWriter);
+                throw new com.sun.star.lang.WrappedTargetException(e.toString() + '\n' + result.toString(), this, null);
             }
-            catch (java.lang.IncompatibleClassChangeError e2)
+            catch (java.lang.IncompatibleClassChangeError e)
             {
                 LOGGER.error("Detected an IncompatibleClassChangeError");
-                throw new com.sun.star.lang.WrappedTargetException(e2, "caught a " + e2.getClass().getName(), this, new com.sun.star.uno.Exception(e2.getLocalizedMessage()));
+                Writer result = new StringWriter();
+                PrintWriter printWriter = new PrintWriter(result);
+                e.printStackTrace(printWriter);
+                throw new com.sun.star.lang.WrappedTargetException(e.toString() + '\n' + result.toString(), this, null);
             }
             Thread.currentThread().setContextClassLoader(cl);
 

@@ -45,7 +45,7 @@ public class SOImageService implements ImageService
     {
         if (xCompContext == null)
         {
-            throw new ReportExecutionException();
+            throw new ReportExecutionException("SOImageService constructed with null Component Context");
         }
 
 
@@ -55,7 +55,7 @@ public class SOImageService implements ImageService
 
         if (m_xGraphicProvider == null)
         {
-            throw new ReportExecutionException("There is no graphic-provider available.");
+            throw new ReportExecutionException("There is no graphic-provider available for SOImageService.");
         }
     }
 
