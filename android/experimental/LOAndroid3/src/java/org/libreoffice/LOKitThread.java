@@ -30,12 +30,11 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId, boolean forceRedraw) {
         if (composedTileLayer.isStillValid(tileId)) {
             CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
-            mViewportMetrics = mLayerClient.getViewportMetrics();
-            mLayerClient.beginDrawing();
-            SubTile tile = new SubTile(image, tileId);
-            composedTileLayer.addTile(tile);
-            mLayerClient.endDrawing(mViewportMetrics);
-            if (forceRedraw) {
+            if (image != null) {
+                mLayerClient.beginDrawing();
+                SubTile tile = new SubTile(image, tileId);
+                composedTileLayer.addTile(tile);
+                mLayerClient.endDrawing(mViewportMetrics);
                 mLayerClient.forceRender();
             }
         } else {
