@@ -16,6 +16,24 @@
       "revId": "50797838389deb510cc1467c0381979bcd3bdaaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_fded2726",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2015-01-21T09:51:06Z",
+      "side": 1,
+      "message": "Yes, my first mind was i make generic (without m_sCommandURL.startsWith(\".uno:OpenFrom\"))\nBut then i want be sure to hit the right point.\nI want change",
+      "parentUuid": "5a43c5e1_1d901395",
+      "revId": "50797838389deb510cc1467c0381979bcd3bdaaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
