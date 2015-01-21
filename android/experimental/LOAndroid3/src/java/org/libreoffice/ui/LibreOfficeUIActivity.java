@@ -289,6 +289,22 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         }
     }
 
+    private void openParentDirectory() {
+        new AsyncTask<Void, Void, IFile>() {
+            @Override
+            protected IFile doInBackground(Void... dir) {
+                // this operation may imply network access and must be run in
+                // a different thread
+                return currentDirectory.getParent();
+            }
+
+            @Override
+            protected void onPostExecute(IFile result) {
+                openDirectory(result);
+            }
+        }.execute();
+    }
+
     private void share(int position) {
         File file = filePaths.get(position).getDocument();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -323,7 +339,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         switch (item.getItemId()) {
             case android.R.id.home:
                 if( !currentDirectory.equals( homeDirectory ) ){
-                    openDirectory(currentDirectory.getParent());
+                    openParentDirectory();
                 }
                 break;
             case R.id.menu_view_toggle:
