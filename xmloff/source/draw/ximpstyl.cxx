@@ -560,6 +560,11 @@ SdXMLPageMasterContext::SdXMLPageMasterContext(
 :   SvXMLStyleContext( rImport, Element, xAttrList, XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID ),
     mpPageMasterStyle( 0L )
 {
+    // set family to something special at SvXMLStyleContext
+    // for differences in search-methods
+
+    if( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name ) )
+        msName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_name );
 }
 
 SdXMLPageMasterContext::~SdXMLPageMasterContext()
@@ -597,11 +602,28 @@ SvXMLImportContext *SdXMLPageMasterContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SdXMLPageMasterContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SdXMLPageMasterContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_page_layout_properties) )
+    {
+        // remember SdXMLPresentationPlaceholderContext for later evaluation
+        if( pContext.is() )
+        {
+            static_cast<SvXMLImportContext*>(pContext.get())->AddFirstRef();
+            DBG_ASSERT(!mpPageMasterStyle, "PageMasterStyle is set, there seem to be two of them (!)");
+            mpPageMasterStyle = static_cast<SdXMLPageMasterStyleContext*>(pContext.get());
+        }
+    }
+
+    // call base class
+    if( !pContext.is() )
+        pContext = SvXMLStyleContext::createFastChildContext( Element, xAttrList );
+
+    return pContext;
 }
 
 TYPEINIT1( SdXMLPresentationPageLayoutContext, SvXMLStyleContext );
