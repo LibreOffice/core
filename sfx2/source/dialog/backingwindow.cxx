@@ -67,7 +67,7 @@ const char IMPRESS_WIZARD_URL[] = "private:factory/simpress?slot=6686";
 const char DRAW_URL[] =           "private:factory/sdraw";
 const char BASE_URL[] =           "private:factory/sdatabase?Interactive";
 const char MATH_URL[] =           "private:factory/smath";
-const char TEMPLATE_URL[] =       "slot:5500";
+const char TEMPLATE_URL[] =       ".uno:NewDoc";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 

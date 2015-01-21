@@ -342,7 +342,7 @@
       </node>
       <node oor:name="m14" oor:op="replace">
         <prop oor:name="URL" oor:type="xs:string">
-          <value>slot:5500</value>
+          <value>.uno:NewDoc</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">Templates</value>

@@ -2413,7 +2413,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             else if ( !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
             {
                 // ... but the VCL splash is broken, and it needs this
-                // (for ./soffice slot:5500)
+                // (for ./soffice .uno:NewDoc)
                 pSVData->mpIntroWindow->Hide();
             }
 

@@ -286,7 +286,7 @@ void ShutdownIcon::FromTemplate()
             xFrame = ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
 
         URL aTargetURL;
-        aTargetURL.Complete = "slot:5500";
+        aTargetURL.Complete = ".uno:NewDoc";
         ::com::sun::star::uno::Reference< util::XURLTransformer > xTrans( util::URLTransformer::create( ::comphelper::getProcessComponentContext() ) );
         xTrans->parseStrict( aTargetURL );
 
@@ -294,10 +294,7 @@ void ShutdownIcon::FromTemplate()
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp;
         if ( xProv.is() )
         {
-            if (aTargetURL.Protocol == "slot:")
-                xDisp = xProv->queryDispatch( aTargetURL, OUString(), 0 );
-            else
-                xDisp = xProv->queryDispatch( aTargetURL, OUString("_blank"), 0 );
+            xDisp = xProv->queryDispatch( aTargetURL, OUString("_self"), 0 );
         }
         if ( xDisp.is() )
         {
