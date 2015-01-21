@@ -157,7 +157,7 @@ int macxp_resolveAlias(char *path, int buflen)
   (void) buflen;
   return 0;
 #else
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1080
   FSRef aFSRef;
   OSStatus nErr;
   Boolean bFolder;
@@ -181,7 +181,7 @@ int macxp_resolveAlias(char *path, int buflen)
       if ( unprocessedPath )
           *unprocessedPath = '\0';
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1080
       nErr = noErr;
       bFolder = FALSE;
       bAliased = FALSE;

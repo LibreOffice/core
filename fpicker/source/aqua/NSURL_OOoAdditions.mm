@@ -83,7 +83,7 @@ NSString* resolveAlias( NSString* i_pSystemPath )
                                                    kCFURLPOSIXPathStyle, false);
     if( rUrl != NULL )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1080
         FSRef rFS;
         if( CFURLGetFSRef( rUrl, &rFS ) )
         {
