@@ -37,6 +37,8 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             if (forceRedraw) {
                 mLayerClient.forceRender();
             }
+        } else {
+            composedTileLayer.cleanupInvalidTile(tileId);
         }
     }
 

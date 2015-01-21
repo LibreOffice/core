@@ -240,4 +240,8 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
             //clearAndReset();
         }
     }
+
+    public void cleanupInvalidTile(TileIdentifier tileId) {
+        newTileIds.remove(tileId);
+    }
 }
