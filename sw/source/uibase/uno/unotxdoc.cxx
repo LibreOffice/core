@@ -3175,6 +3175,8 @@ void SwXTextDocument::registerCallback(LibreOfficeKitCallback pCallback, void* p
 
 void SwXTextDocument::postMouseEvent(int nType, int nX, int nY)
 {
+    SolarMutexGuard aGuard;
+
     SwEditWin& rEditWin = pDocShell->GetView()->GetEditWin();
     MouseEvent aEvent(Point(nX, nY), 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
 
