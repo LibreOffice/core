@@ -1520,6 +1520,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:SearchLabel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">[placeholder for message]</value>
+        </prop>
+      </node>
       <node oor:name="vnd.sun.star.findbar:FocusToFindbar" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Find...</value>
