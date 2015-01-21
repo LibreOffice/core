@@ -39,9 +39,9 @@ public abstract class LOAbout extends Activity {
     private void loadFromAbout(String input) {
         if (mNewActivity) {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(input)));
-            i.setComponent(new ComponentName(
-                        "org.libreoffice",
-                        "org.libreoffice.LibreOfficeMainActivity"));
+            String packageName = getApplicationContext().getPackageName();
+            ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
+            i.setComponent(componentName);
             startActivity(i);
         } else {
             LOKitShell.sendEvent(LOEventFactory.close());
