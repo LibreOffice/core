@@ -24,6 +24,7 @@
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 class SvXMLNamespaceMap;
 class SvXMLAttributeList;
@@ -39,6 +40,8 @@ public:
 
     void exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport );
     bool importXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList, ::com::sun::star::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
+    bool importXML( const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
 
 private:
 
@@ -47,6 +50,9 @@ private:
     SAL_DLLPRIVATE bool ImpImportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
                            ::com::sun::star::uno::Any& rValue, OUString& rStrName,
                            SvXMLImport& rImport );
+    SAL_DLLPRIVATE bool ImpImportXML(
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        css::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport );
 };
 
 #endif // INCLUDED_XMLOFF_IMAGESTYLE_HXX

@@ -30,10 +30,14 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 enum SvXMLTokenMapAttrs
 {
@@ -104,18 +108,30 @@ bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >&
     return ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
+bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
+{
+    return ImpImportXML( xAttrList, rValue, rStrName, rImport );
+}
+
 bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
                                       uno::Any& rValue, OUString& rStrName,
                                       SvXMLImport& rImport )
 {
     static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
     {
-        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
-        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
-        { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-        { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
-        { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
-        { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+        { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+        { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
+        { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_show) },
+        { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_actuate) },
         XML_TOKEN_MAP_END
     };
 
@@ -179,6 +195,77 @@ bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList
     bool bRet = bHasName && bHasHRef;
 
     return bRet;
+}
+
+bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
+{
+    static const SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+    {
+        { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_name) },
+        { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME,
+            (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_display_name) },
+        { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+        { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
+        { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_show) },
+        { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE,
+            (FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_actuate) },
+        XML_TOKEN_MAP_END
+    };
+
+    bool bHasHRef = false;
+    bool bHasName = false;
+    OUString aStrURL;
+    OUString aDisplayName;
+
+    SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++ )
+    {
+        switch( aTokenMap.Get( attr->Token ) )
+        {
+            case XML_TOK_IMAGE_NAME:
+            {
+                rStrName = attr->Value;
+                bHasName = true;
+            }
+            break;
+            case XML_TOK_IMAGE_DISPLAY_NAME:
+            {
+                aDisplayName = attr->Value;
+            }
+            break;
+            case XML_TOK_IMAGE_URL:
+            {
+                aStrURL = rImport.ResolveGraphicObjectURL( attr->Value, false );
+                bHasHRef = true;
+            }
+            break;
+            case XML_TOK_IMAGE_TYPE:
+            case XML_TOK_IMAGE_SHOW:
+            case XML_TOK_IMAGE_ACTUATE:
+                // ignore
+                break;
+            default:
+                DBG_WARNING( "Unknown token at import fill bitmap style" );
+        }
+    }
+
+    rValue <<= aStrURL;
+
+    if( !aDisplayName.isEmpty() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_FILL_IMAGE_ID,
+                rStrName, aDisplayName );
+        rStrName = aDisplayName;
+    }
+
+    return bHasName && bHasHRef;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
