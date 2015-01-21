@@ -178,7 +178,7 @@ void Writer::Impl_addShapeRecordChange( BitStream& rBits, sal_Int16 dx, sal_Int1
     rBits.writeUB( 0, 1 );          // StateNewStyles
     rBits.writeUB( sal_uInt32(!bFilled), 1 ); // StateLineStyle
     rBits.writeUB( 0, 1 );          // StateFillStyle0
-    rBits.writeUB( bFilled ? 0 : 1, 1 );        // StateFillStyle1
+    rBits.writeUB( bFilled ? 1 : 0, 1 );        // StateFillStyle1
     rBits.writeUB( 1, 1 );          // StateMoveTo
 
     sal_uInt16 nMoveBits = max( getMaxBitsSigned( dx ), getMaxBitsSigned( dy ) );
