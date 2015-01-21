@@ -529,6 +529,7 @@ void SwTxtNode::RstTxtAttr(
                 }
                 else    // Case: 3
                 {
+                    bChanged = true;
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
                     pHt->GetStart() = nEnd;
@@ -539,13 +540,19 @@ void SwTxtNode::RstTxtAttr(
                         SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nEnd );
                         InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+
+                        // skip the ++i because InsertHint will re-sort
+                        // so now an unrelated hint (previous i+1) may be at i!
+                        // (but pHt and pNew can only move to indexes >= i)
+#if OSL_DEBUG_LEVEL > 0
+                        for (size_t j = 0; j < i; ++j)
+                        {
+                            assert(m_pSwpHints->GetTextHint(j) != pHt);
+                            assert(m_pSwpHints->GetTextHint(j) != pNew);
+                        }
+#endif
+                        continue;
                     }
-
-                    // this case appears to rely on InsertHint not re-sorting
-                    // and pNew being inserted behind pHt
-                    assert(pHt == m_pSwpHints->GetTextHint(i));
-
-                    bChanged = true;
                 }
             }
         }
