@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a43c5e1_1d901395",
+        "filename": "desktop/source/migration/migration_impl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-21T09:34:50Z",
+      "side": 1,
+      "message": "but still, \"asymmetric \u003d\u003d looks scary; what you want to check is that if either equals \u0027.uno:Open\u0027 whether the other starts with \u0027.uno:OpenFrom\u0027\"   or do I miss something?",
+      "revId": "50797838389deb510cc1467c0381979bcd3bdaaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
