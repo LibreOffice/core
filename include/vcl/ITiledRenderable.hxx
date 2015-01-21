@@ -96,6 +96,13 @@ public:
      * @param pData is private data of the client that will be sent back when the callback is invoked
      */
     virtual void registerCallback(LibreOfficeKitCallback /*pCallback*/, void* /*pData*/) { }
+
+    /**
+     * Posts a mouse event on the document.
+     *
+     * @see lok::Document::postMouseEvent().
+     */
+    virtual void postMouseEvent(int /*nType*/, int /*nX*/, int /*nY*/) { }
 };
 
 } // namespace vcl

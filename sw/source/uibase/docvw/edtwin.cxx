@@ -6250,4 +6250,16 @@ void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
     m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
+void SwEditWin::LogicMouseMove(const MouseEvent& rMouseEvent)
+{
+}
+
+void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
+{
+}
+
+void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
+{
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
