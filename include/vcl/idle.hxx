@@ -27,28 +27,47 @@
 struct ImplIdleData;
 struct ImplSVData;
 
-// The timemarks behind the priorities are need to change timer to idle. It is to convert
-// timeout values to priorities.
 enum class IdlePriority {
-    VCL_IDLE_PRIORITY_STARVATIONPROTECTION  = -1, // Do not use this for normal prioritizing!
-
-    VCL_IDLE_PRIORITY_HIGHEST               = 0,  // -> 0ms
-    VCL_IDLE_PRIORITY_HIGH                  = 1,  // -> 1ms
-    VCL_IDLE_PRIORITY_DEFAULT               = 1,  // -> 1ms
-    VCL_IDLE_PRIORITY_REPAINT               = 2,  // -> 30ms
-    VCL_IDLE_PRIORITY_RESIZE                = 3,  // -> 50ms
-    VCL_IDLE_PRIORITY_MEDIUM                = 3,  // -> 50ms
-    VCL_IDLE_PRIORITY_LOW                   = 4,  // -> 100ms
-    VCL_IDLE_PRIORITY_LOWER                 = 5,  // -> 200ms
-    VCL_IDLE_PRIORITY_LOWEST                = 6   // -> 400ms
+    VCL_IDLE_PRIORITY_HIGHEST,
+    VCL_IDLE_PRIORITY_HIGH,
+    VCL_IDLE_PRIORITY_REPAINT,
+    VCL_IDLE_PRIORITY_RESIZE,
+    VCL_IDLE_PRIORITY_MEDIUM,
+    VCL_IDLE_PRIORITY_LOW,
+    VCL_IDLE_PRIORITY_LOWER,
+    VCL_IDLE_PRIORITY_LOWEST
 };
 
+inline sal_Int32 convertToInt( IdlePriority ePriority )
+{
+    switch (ePriority)
+    {
+        case IdlePriority::VCL_IDLE_PRIORITY_HIGHEST:
+            return 0;
+        case IdlePriority::VCL_IDLE_PRIORITY_HIGH:
+            return 1;
+        case IdlePriority::VCL_IDLE_PRIORITY_REPAINT:
+            return 2;
+        case IdlePriority::VCL_IDLE_PRIORITY_RESIZE:
+            return 3;
+        case IdlePriority::VCL_IDLE_PRIORITY_MEDIUM:
+            return 3;
+        case IdlePriority::VCL_IDLE_PRIORITY_LOW:
+            return 4;
+        case IdlePriority::VCL_IDLE_PRIORITY_LOWER:
+            return 5;
+        case IdlePriority::VCL_IDLE_PRIORITY_LOWEST:
+            return 6;
+    }
+
+    return 42; // Should not happen
+}
 
 class VCL_DLLPUBLIC Idle
 {
 protected:
     ImplIdleData*   mpIdleData;         // Pointer to element in idle list
-    IdlePriority    mePriority;         // Idle priority ( maybe divergent to default)
+    sal_Int32       miPriority;         // Idle priority ( maybe divergent to default)
     IdlePriority    meDefaultPriority;  // Default idle priority
     bool            mbActive;           // Currently in the scheduler
     Link            maIdleHdl;          // Callback Link
@@ -61,7 +80,8 @@ public:
     virtual ~Idle();
 
     void SetPriority( IdlePriority ePriority );
-    IdlePriority GetPriority() const { return mePriority; }
+    void SetSchedulingPriority( sal_Int32 iPriority );
+    sal_Int32    GetPriority() const { return miPriority; }
     IdlePriority GetDefaultPriority() const { return meDefaultPriority; }
 
     /// Make it possible to associate a callback with this idle handler
@@ -79,7 +99,6 @@ public:
 
     Idle&          operator=( const Idle& rIdle );
     static void ImplDeInitIdle();
-    static void ImplIdleCallbackProc();
 
     /// Process all pending idle tasks ahead of time in priority order.
     static void ProcessAllIdleHandlers();
