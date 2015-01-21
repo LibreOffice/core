@@ -104,6 +104,18 @@ public:
     {
         mpDoc->pClass->registerCallback(mpDoc, pCallback, pData);
     }
+
+    /**
+     * Posts a mouse event to the document.
+     *
+     * @param nType Event type, like down, move or up.
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    inline void postMouseEvent(int nType, int nX, int nY)
+    {
+        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 
@@ -145,18 +157,6 @@ public:
     inline void postKeyEvent(int nType, int nCode)
     {
         mpThis->pClass->postKeyEvent(mpThis, nType, nCode);
-    }
-
-    /**
-     * Posts a mouse event to the focused frame.
-     *
-     * @param nType Event type, like down, move or up.
-     * @param nX horizontal position
-     * @param nY vertical position
-     */
-    inline void postMouseEvent(int nType, int nX, int nY)
-    {
-        mpThis->pClass->postMouseEvent(mpThis, nType, nX, nY);
     }
 };
 

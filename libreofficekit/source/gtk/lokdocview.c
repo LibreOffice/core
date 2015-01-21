@@ -45,10 +45,10 @@ void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* 
     switch (pEvent->type)
     {
     case GDK_BUTTON_PRESS:
-        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
         break;
     case GDK_BUTTON_RELEASE:
-        pDocView->pOffice->pClass->postMouseEvent(pDocView->pOffice, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
         break;
     default:
         break;
