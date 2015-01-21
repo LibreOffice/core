@@ -180,7 +180,7 @@ class SfxDocumentPage : public SfxTabPage
 {
 private:
     FixedImage*                 m_pBmp;
-    Edit*                       m_pNameED;
+    SelectableFixedText*        m_pNameED;
     PushButton*                 m_pChangePassBtn;
 
     SelectableFixedText*        m_pShowTypeFT;

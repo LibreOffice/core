@@ -412,13 +412,14 @@
           </packing>
         </child>
         <child>
-          <object class="GtkEntry" id="nameed">
+          <object class="GtkLabel" id="nameed">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="valign">center</property>
+            <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="editable">False</property>
-            <property name="invisible_char">•</property>
+            <property name="xalign">0</property>
+            <property name="selectable">True</property>
+            <property name="single_line_mode">True</property>
+            <property name="max_width_chars">56</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
