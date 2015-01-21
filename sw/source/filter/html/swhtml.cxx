@@ -3074,7 +3074,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                         rText, pAttr->GetSttCnt() );
         sal_Int32 nScriptEnd = g_pBreakIt->GetBreakIter()
                     ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
-        while( nScriptEnd < nEndCnt )
+        while (nScriptEnd < nEndCnt && nScriptEnd != -1)
         {
             if( nScriptItem == nScriptTxt )
             {
