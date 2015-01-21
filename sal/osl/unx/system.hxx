@@ -309,9 +309,12 @@ int macxp_resolveAlias(char *path, int buflen);
 #   define  INIT_GROUPS(name, gid)  ((setgid((gid)) == 0) && (initgroups((name), (gid)) == 0))
 #endif
 
-#ifndef PTHREAD_VALUE
-#   define PTHREAD_VALUE(t)             (t)
+#if defined MACOSX
+#define PTHREAD_VALUE(t) reinterpret_cast<unsigned long>(t)
+#else
+#define PTHREAD_VALUE(t) (t)
 #endif
+
 #ifndef PTHREAD_NONE
 #   define PTHREAD_NONE                 _pthread_none_
 #   ifndef PTHREAD_NONE_INIT
