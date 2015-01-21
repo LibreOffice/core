@@ -410,10 +410,10 @@ void SwTxtNode::RstTxtAttr(
     sal_Int32 nMax = nStt;
     const bool bNoLen = nMin == 0;
 
-    // We have to remember the "new" attributes, that have
-    // been introduced by splitting surrounding attributes (case 4).
-    // They may not be forgotten inside the "Forget" function
-    //std::vector< const SwTxtAttr* > aNewAttributes;
+    // We have to remember the "new" attributes that have
+    // been introduced by splitting surrounding attributes (case 2,3,4).
+    std::vector<SwTxtAttr *> newAttributes;
+    std::vector<SwTxtAttr *> delAttributes;
 
     // iterate over attribute array until start of attribute is behind deletion range
     size_t i = 0;
@@ -506,26 +506,14 @@ void SwTxtNode::RstTxtAttr(
                 bChanged = bChanged || nEnd > nAttrStart || bNoLen;
                 if (nAttrEnd <= nEnd)   // Case: 1
                 {
-                    m_pSwpHints->DeleteAtPos(i);
-                    DestroyAttr( pHt );
+                    delAttributes.push_back(pHt);
 
                     if ( pStyleHandle.get() )
                     {
                         SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nAttrEnd );
-                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        newAttributes.push_back(pNew);
                     }
-
-                    // if the last attribute is a Field, the HintsArray is deleted!
-                    if ( !m_pSwpHints )
-                        break;
-
-                    //JP 26.11.96:
-                    // DeleteAtPos does a Resort!  Via Case 3 or 4 hints could
-                    // have been moved around so i is wrong now.
-                    // So we have to start over at 0 again.
-                    i = 0;
-                    continue;
                 }
                 else    // Case: 3
                 {
@@ -539,19 +527,7 @@ void SwTxtNode::RstTxtAttr(
                     {
                         SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
                                 *pStyleHandle, nAttrStart, nEnd );
-                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
-
-                        // skip the ++i because InsertHint will re-sort
-                        // so now an unrelated hint (previous i+1) may be at i!
-                        // (but pHt and pNew can only move to indexes >= i)
-#if OSL_DEBUG_LEVEL > 0
-                        for (size_t j = 0; j < i; ++j)
-                        {
-                            assert(m_pSwpHints->GetTextHint(j) != pHt);
-                            assert(m_pSwpHints->GetTextHint(j) != pNew);
-                        }
-#endif
-                        continue;
+                        newAttributes.push_back(pNew);
                     }
                 }
             }
@@ -579,12 +555,8 @@ void SwTxtNode::RstTxtAttr(
                     {
                         SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
                             *pStyleHandle, nStt, nAttrEnd );
-                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        newAttributes.push_back(pNew);
                     }
-
-                    // this case appears to rely on InsertHint not re-sorting
-                    // and pNew being inserted behind pHt
-                    assert(pHt == m_pSwpHints->GetTextHint(i));
                 }
                 else if (nLen)  // Case: 4
                 {
@@ -605,7 +577,7 @@ void SwTxtNode::RstTxtAttr(
                     {
                         SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
                             *pStyleHandle, nStt, nEnd );
-                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        newAttributes.push_back(pNew);
                     }
 
                     if( nEnd < nTmpEnd )
@@ -618,18 +590,31 @@ void SwTxtNode::RstTxtAttr(
                             if ( pCharFmt )
                                 static_txtattr_cast<SwTxtCharFmt*>(pNew)->SetSortNumber(pCharFmt->GetSortNumber());
 
-                            InsertHint( pNew,
-                                nsSetAttrMode::SETATTR_NOHINTADJUST );
+                            newAttributes.push_back(pNew);
                         }
                     }
-
-                    // this case appears to rely on InsertHint not re-sorting
-                    // and pNew being inserted behind pHt
-                    assert(pHt == m_pSwpHints->GetTextHint(i));
                 }
             }
         }
         ++i;
+    }
+
+    if (bChanged && !delAttributes.empty())
+    {   // Delete() calls GetStartOf() - requires sorted hints!
+        m_pSwpHints->Resort();
+    }
+
+    // delay deleting the hints because it re-sorts the hints array
+    for (SwTxtAttr *const pDel : delAttributes)
+    {
+        m_pSwpHints->Delete(pDel);
+        DestroyAttr(pDel);
+    }
+
+    // delay inserting the hints because it re-sorts the hints array
+    for (SwTxtAttr *const pNew : newAttributes)
+    {
+        InsertHint(pNew, nsSetAttrMode::SETATTR_NOHINTADJUST);
     }
 
     TryDeleteSwpHints();
