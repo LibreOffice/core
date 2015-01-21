@@ -21,6 +21,12 @@ public class TileIdentifier {
         return new RectF(x, y, x + size.width, y + size.height);
     }
 
+    public RectF getCSSRect() {
+        float cssX = x * zoom;
+        float cssY = y * zoom;
+        return new RectF(cssX, cssY, cssX + (size.width * zoom), cssY + (size.height * zoom));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
