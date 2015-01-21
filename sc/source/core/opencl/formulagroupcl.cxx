@@ -1009,14 +1009,14 @@ public:
                     }
                     ss << temp2.str();
                 }
-                ss << "} // to scope the int i declaration\n";
+                ss << "}\n";
                 needBody = false;
                 return nCurWindowSize;
             }
             // (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
             else
             {
-                ss << "//else situation \n\t";
+                ss << "\n\t";
                 ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
                 ss << "{int i;\n\t";
                 std::stringstream temp1, temp2;
@@ -1049,7 +1049,7 @@ public:
                     }
                     ss << temp2.str();
                 }
-                ss << "} // to scope the int i declaration\n";
+                ss << "}\n";
                 needBody = false;
                 return nCurWindowSize;
             }
