@@ -2239,6 +2239,16 @@ SdXMLHeaderFooterDeclContext::SdXMLHeaderFooterDeclContext(
 :   SvXMLStyleContext( rImport, Element, xAttrList ),
     mbFixed( false )
 {
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_name ) )
+            maStrName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_name );
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_source ) )
+            mbFixed = OUString("fixed").equals(
+                    xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_source ) );
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_data_style_name ) )
+            maStrDateTimeFormat = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_data_style_name );
+    }
 }
 
 bool SdXMLHeaderFooterDeclContext::IsTransient() const
@@ -2266,6 +2276,13 @@ void SdXMLHeaderFooterDeclContext::EndElement()
 void SAL_CALL SdXMLHeaderFooterDeclContext::endFastElement( sal_Int32 /*Element*/ )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
+    SdXMLImport& rImport = dynamic_cast<SdXMLImport&>(GetImport());
+    if( maStrName.equals( "header_decl" ) )
+        rImport.AddHeaderDecl( maStrName, maStrText );
+    else if( maStrName.equals( "footer_decl" ) )
+        rImport.AddFooterDecl( maStrName, maStrText );
+    else if( maStrName.equals( "date_time_decl" ) )
+        rImport.AddDateTimeDecl( maStrName, maStrText, mbFixed, maStrDateTimeFormat );
 }
 
 void SdXMLHeaderFooterDeclContext::Characters( const OUString& rChars )
