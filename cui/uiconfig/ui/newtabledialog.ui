@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkAdjustment" id="columns_value">
     <property name="lower">1</property>
     <property name="upper">75</property>
     <property name="value">5</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="rows_value">
+    <property name="lower">1</property>
+    <property name="upper">75</property>
+    <property name="value">2</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
@@ -120,7 +128,6 @@
               <object class="GtkSpinButton" id="columns">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="has_focus">True</property>
                 <property name="invisible_char">•</property>
                 <property name="activates_default">True</property>
                 <property name="adjustment">columns_value</property>
@@ -165,12 +172,5 @@
       <action-widget response="0">ok</action-widget>
       <action-widget response="0">cancel</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkAdjustment" id="rows_value">
-    <property name="lower">1</property>
-    <property name="upper">75</property>
-    <property name="value">2</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
 </interface>
