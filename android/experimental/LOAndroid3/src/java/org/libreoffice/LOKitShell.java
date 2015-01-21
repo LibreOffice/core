@@ -82,4 +82,8 @@ public class LOKitShell {
     public static void sendKeyPressEvent(KeyEvent event) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_PRESS, event));
     }
+
+    public static boolean isEditingEnabled() {
+        return false;
+    }
 }
