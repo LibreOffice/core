@@ -19,6 +19,7 @@
         <do-only-if-not-library elseText="Library project: do not package resources..." >
             <aapt executable="${aapt}"
                     command="package"
+                    manifestpackage="@ANDROID_PACKAGE_NAME@"
                     versioncode="${version.code}"
                     versionname="${version.name}"
                     debug="${build.is.packaging.debug}"

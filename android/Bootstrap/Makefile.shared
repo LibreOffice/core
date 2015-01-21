@@ -38,10 +38,10 @@ endef
 #
 # Horrors below:
 #
-$(BOOTSTRAPDIR)/no-resource-compress.xml : $(ANDROID_SDK_HOME)/tools/ant/build.xml
+$(BOOTSTRAPDIR)/no-resource-compress.xml : $(ANDROID_SDK_HOME)/tools/ant/build.xml $(BOOTSTRAPDIR)/no-resource-compress-*.xml
 	( \
 	android_sdk_ver=`grep 'Pkg.Revision' $(ANDROID_SDK_HOME)/tools/source.properties | sed 's/^.*=//' | sed 's/\..*//'` ; \
-	cp $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml $(BOOTSTRAPDIR)/no-resource-compress.xml ; \
+	sed 's/@ANDROID_PACKAGE_NAME@/$(ANDROID_PACKAGE_NAME)/' < $(BOOTSTRAPDIR)/no-resource-compress-$$android_sdk_ver.xml > $@ ; \
 	if ! test -f $(BOOTSTRAPDIR)/no-resource-compress.xml; then \
 	   echo "Unknown Android SDK version: $$android_sdk_ver"; \
 	   exit 1; \
