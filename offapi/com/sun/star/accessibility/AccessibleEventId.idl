@@ -373,13 +373,65 @@ constants AccessibleEventId
     */
     const short LISTBOX_ENTRY_COLLAPSED = 33;
 
+    /** Constant used to determine when the active descendant of a component
+        has been removed but unlike ACTIVE_DECENDANT_CHANGED the decendant
+        that is to be removed does not have focus. The active descendant
+        is used in objects with transient children.
+
+        <p>AccessibleEventObject::OldValue contains the item to be removed.</p>
+        <p>AccessibleEventObject::NewValue is empty.</p>
+
+        @since LibreOffice 4.3
+    */
     const short ACTIVE_DESCENDANT_CHANGED_NOFOCUS = 34;
-    const short SELECTION_CHANGED_ADD =35;
-    const short SELECTION_CHANGED_REMOVE =36;
-    const short SELECTION_CHANGED_WITHIN =37;
-    const short PAGE_CHANGED =38;
-    const short SECTION_CHANGED =39;
-    const short COLUMN_CHANGED =40;
+
+    /** An item in a container has been added to a already present selection
+
+        Example: a second list item has been selected in a listbox.
+
+        <p>AccessibleEventObject::OldValue is empty.</p>
+        <p>AccessibleEventObject::NewValue contains the item to be added.</p>
+
+        @since LibreOffice 4.3
+    */
+    const short SELECTION_CHANGED_ADD = 35;
+
+    /** An item in a container has been removed from the selection.
+
+        <p>AccessibleEventObject::OldValue contains the item to be removed.</p>
+        <p>AccessibleEventObject::NewValue is empty.</p>
+
+        @since LibreOffice 4.3
+    */
+    const short SELECTION_CHANGED_REMOVE = 36;
+
+    /** Multiple items in a container object have been added or removed
+        from the selection.
+
+        <p>AccessibleEventObject::OldValue and
+        AccessibleEventObject::NewValue is empty.</p>
+
+        @since LibreOffice 4.3
+    */
+    const short SELECTION_CHANGED_WITHIN = 37;
+
+    /** A change of page or slide.
+
+        @since LibreOffice 4.3
+    */
+    const short PAGE_CHANGED = 38;
+
+    /** The cursor has moved to/from a section
+
+        @since LibreOffice 4.3
+    */
+    const short SECTION_CHANGED = 39;
+
+    /** The cursor has moved to/from a section
+
+        @since LibreOffice 4.3
+    */
+    const short COLUMN_CHANGED = 40;
 
     /** Constant used to indicate that the role of an accessible object has
         changed.
