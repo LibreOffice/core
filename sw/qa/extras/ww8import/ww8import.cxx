@@ -519,7 +519,7 @@ DECLARE_WW8IMPORT_TEST(testLayoutHanging, "fdo68967.doc")
 DECLARE_WW8IMPORT_TEST(testfdo68963, "fdo68963.doc")
 {
     // The problem was that the text was not displayed.
-    CPPUNIT_ASSERT ( OUString("") != parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText") );
+    CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText").isEmpty() );
     CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText") );
 }
 
