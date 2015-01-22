@@ -194,13 +194,13 @@ sal_Bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW
                     else if (bDoBack)
                     {
                         xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                        bRepeat = ((sal_Bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd)));
+                        bRepeat = ((sal_Bool)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult)));
                         // change results to definition before 614:
                         --nEnd;
                     }
                     else
                     {
-                        bRepeat = ((sal_Bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd)));
+                        bRepeat = ((sal_Bool)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult)));
                         // change results to definition before 614:
                         --nEnd;
                     }
