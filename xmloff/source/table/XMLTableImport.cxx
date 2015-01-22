@@ -25,6 +25,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <xmloff/table/XMLTableImport.hxx>
 #include <xmloff/xmltkmap.hxx>
@@ -35,6 +36,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include <xmloff/prstylei.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <xmloff/xmlnmspe.hxx>
 #include "table.hxx"
@@ -44,6 +46,7 @@
 #include <memory>
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::table;
@@ -727,9 +730,14 @@ void XMLTableTemplateContext::StartElement( const Reference< XAttributeList >& x
 }
 
 void SAL_CALL XMLTableTemplateContext::startFastElement( sal_Int32 /*Element*/,
-    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) )
+    {
+        msTemplateStyleName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name );
+    }
 }
 
 void XMLTableTemplateContext::EndElement()
@@ -752,10 +760,10 @@ SvXMLImportContext * XMLTableTemplateContext::CreateChildContext( sal_uInt16 nPr
     if( nPrefix == XML_NAMESPACE_TABLE )
     {
         const TableStyleElement* pElements = getTableStyleMap();
-        while( (pElements->meElement != XML_TOKEN_END) && !IsXMLToken( rLocalName, pElements->meElement ) )
+        while( (pElements->meElement != xmloff::token::XML_TOKEN_END) && !IsXMLToken( rLocalName, pElements->meElement ) )
             pElements++;
 
-        if( pElements->meElement != XML_TOKEN_END )
+        if( pElements->meElement != xmloff::token::XML_TOKEN_END )
         {
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
             for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -780,6 +788,7 @@ Reference< XFastContextHandler > SAL_CALL
     const Reference< XFastAttributeList >& /*xAttrList*/ )
     throw(RuntimeException, SAXException, std::exception)
 {
+    // TODO
     return Reference< XFastContextHandler >();
 }
 
