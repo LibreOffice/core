@@ -176,14 +176,16 @@ SwRead GetReader( const OUString& rFltName )
 {
     SwRead pRead = 0;
     for( sal_uInt16 n = 0; n < MAXFILTER; ++n )
+    {
         if ( aFilterDetect[n].IsFilter( rFltName ) )
         {
             pRead = aReaderWriter[n].GetReader();
             // add special treatment for some readers
             if ( pRead )
-                    pRead->SetFltName( rFltName );
+                pRead->SetFltName( rFltName );
             break;
         }
+    }
     return pRead;
 }
 
@@ -246,33 +248,35 @@ bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOption
 
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                 sal_uInt32* pValues )
-        : ConfigItem( FILTER_OPTION_ROOT )
+    : ConfigItem( FILTER_OPTION_ROOT )
 {
-        GetValues( nCnt, ppNames, pValues );
+    GetValues( nCnt, ppNames, pValues );
 }
 
 void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                         sal_uInt32* pValues )
 {
-        Sequence<OUString> aNames( nCnt );
-        OUString* pNames = aNames.getArray();
-        sal_uInt16 n;
+    Sequence<OUString> aNames( nCnt );
+    OUString* pNames = aNames.getArray();
+    sal_uInt16 n;
 
+    for( n = 0; n < nCnt; ++n )
+        pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
+    Sequence<Any> aValues = GetProperties( aNames );
+
+    if( nCnt == aValues.getLength() )
+    {
+        const Any* pAnyValues = aValues.getConstArray();
         for( n = 0; n < nCnt; ++n )
-                pNames[ n ] = OUString::createFromAscii( ppNames[ n ] );
-        Sequence<Any> aValues = GetProperties( aNames );
-
-        if( nCnt == aValues.getLength() )
-        {
-                const Any* pAnyValues = aValues.getConstArray();
-                for( n = 0; n < nCnt; ++n )
-                        pValues[ n ] = pAnyValues[ n ].hasValue()
-                                                        ? *(sal_uInt32*)pAnyValues[ n ].getValue()
-                                                        : 0;
-        }
-        else
-                for( n = 0; n < nCnt; ++n )
-                        pValues[ n ] = 0;
+            pValues[ n ] = pAnyValues[ n ].hasValue()
+                                            ? *(sal_uInt32*)pAnyValues[ n ].getValue()
+                                            : 0;
+    }
+    else
+    {
+        for( n = 0; n < nCnt; ++n )
+            pValues[ n ] = 0;
+    }
 }
 
 void SwFilterOptions::Commit() {}
@@ -280,137 +284,136 @@ void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< OUString >&
 
 void StgReader::SetFltName( const OUString& rFltNm )
 {
-        if( SW_STORAGE_READER & GetReaderType() )
-                aFltName = rFltNm;
+    if( SW_STORAGE_READER & GetReaderType() )
+        aFltName = rFltNm;
 }
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, bool bNDoc )
 {
-        pNumRuleTbl = new SwNumRuleTbl();
-        pNumRuleTbl->reserve(8);
-        if( !bNDoc )
-                pNumRuleTbl->insert( pNumRuleTbl->begin(),
-                    rDoc.GetNumRuleTbl().begin(), rDoc.GetNumRuleTbl().end() );
+    pNumRuleTbl = new SwNumRuleTbl();
+    pNumRuleTbl->reserve(8);
+    if( !bNDoc )
+        pNumRuleTbl->insert( pNumRuleTbl->begin(),
+            rDoc.GetNumRuleTbl().begin(), rDoc.GetNumRuleTbl().end() );
 }
 
 SwRelNumRuleSpaces::~SwRelNumRuleSpaces()
 {
-        if( pNumRuleTbl )
-        {
-                pNumRuleTbl->clear();
-                delete pNumRuleTbl;
-        }
+    if( pNumRuleTbl )
+    {
+        pNumRuleTbl->clear();
+        delete pNumRuleTbl;
+    }
 }
 
 void CalculateFlySize(SfxItemSet& rFlySet, const SwNodeIndex& rAnchor,
         SwTwips nPageWidth)
 {
-        const SfxPoolItem* pItem = 0;
-        if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
-                MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetWidth() )
+    const SfxPoolItem* pItem = 0;
+    if( SfxItemState::SET != rFlySet.GetItemState( RES_FRM_SIZE, true, &pItem ) ||
+            MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetWidth() )
+    {
+        SwFmtFrmSize aSz(static_cast<const SwFmtFrmSize&>(rFlySet.Get(RES_FRM_SIZE, true)));
+        if (pItem)
+            aSz = static_cast<const SwFmtFrmSize&>(*pItem);
+
+        SwTwips nWidth;
+        // determine the width; if there is a table use the width of the table;
+        // otherwise use the width of the page
+        const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
+        if( pTblNd )
+            nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
+        else
+            nWidth = nPageWidth;
+
+        const SwNodeIndex* pSttNd = static_cast<const SwFmtCntnt&>(rFlySet.Get( RES_CNTNT )).
+                                                                GetCntntIdx();
+        if( pSttNd )
         {
-                SwFmtFrmSize aSz(static_cast<const SwFmtFrmSize&>(rFlySet.Get(RES_FRM_SIZE, true)));
-                if (pItem)
-                        aSz = static_cast<const SwFmtFrmSize&>(*pItem);
-
-                SwTwips nWidth;
-                // determine the width; if there is a table use the width of the table;
-                // otherwise use the width of the page
-                const SwTableNode* pTblNd = rAnchor.GetNode().FindTableNode();
-                if( pTblNd )
-                        nWidth = pTblNd->GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
-                else
-                        nWidth = nPageWidth;
-
-                const SwNodeIndex* pSttNd = static_cast<const SwFmtCntnt&>(rFlySet.Get( RES_CNTNT )).
-                                                                        GetCntntIdx();
-                if( pSttNd )
+            bool bOnlyOneNode = true;
+            sal_uLong nMinFrm = 0;
+            sal_uLong nMaxFrm = 0;
+            SwTxtNode* pFirstTxtNd = 0;
+            SwNodeIndex aIdx( *pSttNd, 1 );
+            SwNodeIndex aEnd( *pSttNd->GetNode().EndOfSectionNode() );
+            while( aIdx < aEnd )
+            {
+                SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
+                if( pTxtNd )
                 {
-                        bool bOnlyOneNode = true;
-                        sal_uLong nMinFrm = 0;
-                        sal_uLong nMaxFrm = 0;
-                        SwTxtNode* pFirstTxtNd = 0;
-                        SwNodeIndex aIdx( *pSttNd, 1 );
-                        SwNodeIndex aEnd( *pSttNd->GetNode().EndOfSectionNode() );
-                        while( aIdx < aEnd )
-                        {
-                                SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-                                if( pTxtNd )
-                                {
-                                        if( !pFirstTxtNd )
-                                                pFirstTxtNd = pTxtNd;
-                                        else if( pFirstTxtNd != pTxtNd )
-                                        {
-                                                // forget it
-                                                bOnlyOneNode = false;
-                                                break;
-                                        }
+                    if( !pFirstTxtNd )
+                        pFirstTxtNd = pTxtNd;
+                    else if( pFirstTxtNd != pTxtNd )
+                    {
+                        // forget it
+                        bOnlyOneNode = false;
+                        break;
+                    }
 
-                                        sal_uLong nAbsMinCnts;
-                                        pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm,
-                                                                                        nMaxFrm, nAbsMinCnts );
-                                }
-                                ++aIdx;
-                        }
+                    sal_uLong nAbsMinCnts;
+                    pTxtNd->GetMinMaxSize( aIdx.GetIndex(), nMinFrm, nMaxFrm, nAbsMinCnts );
+                }
+                ++aIdx;
+            }
 
-                        if( bOnlyOneNode )
-                        {
-                                if( nMinFrm < MINLAY && pFirstTxtNd )
-                                {
-                                        // if the first node dont contained any content, then
-                                        // insert one char in it calc again and delete once again
-                                        SwIndex aNdIdx( pFirstTxtNd );
-                                        pFirstTxtNd->InsertText(OUString("MM"), aNdIdx);
-                                        sal_uLong nAbsMinCnts;
-                                        pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
-                                                                                        nMinFrm, nMaxFrm, nAbsMinCnts );
-                                        aNdIdx -= 2;
+            if( bOnlyOneNode )
+            {
+                if( nMinFrm < MINLAY && pFirstTxtNd )
+                {
+                    // if the first node dont contained any content, then
+                    // insert one char in it calc again and delete once again
+                    SwIndex aNdIdx( pFirstTxtNd );
+                    pFirstTxtNd->InsertText(OUString("MM"), aNdIdx);
+                    sal_uLong nAbsMinCnts;
+                    pFirstTxtNd->GetMinMaxSize( pFirstTxtNd->GetIndex(),
+                                                                    nMinFrm, nMaxFrm, nAbsMinCnts );
+                    aNdIdx -= 2;
                     pFirstTxtNd->EraseText( aNdIdx, 2 );
                 }
 
-                                // consider border and distance to content
-                                const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rFlySet.Get( RES_BOX ));
-                                sal_uInt16 nLine = BOX_LINE_LEFT;
-                                for( int i = 0; i < 2; ++i )
-                                {
-                                        const editeng::SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
-                                        if( pLn )
-                                        {
-                                                sal_uInt16 nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();
+                // consider border and distance to content
+                const SvxBoxItem& rBoxItem = static_cast<const SvxBoxItem&>(rFlySet.Get( RES_BOX ));
+                sal_uInt16 nLine = BOX_LINE_LEFT;
+                for( int i = 0; i < 2; ++i )
+                {
+                    const editeng::SvxBorderLine* pLn = rBoxItem.GetLine( nLine );
+                    if( pLn )
+                    {
+                        sal_uInt16 nWidthTmp = pLn->GetOutWidth() + pLn->GetInWidth();
                         nWidthTmp = nWidthTmp + rBoxItem.GetDistance( nLine );
-                                                nMinFrm += nWidthTmp;
-                                                nMaxFrm += nWidthTmp;
-                                        }
-                                        nLine = BOX_LINE_RIGHT;
-                                }
-
-                                // enforce minimum width for contents
-                                if( nMinFrm < MINLAY )
-                                        nMinFrm = MINLAY;
-                                if( nMaxFrm < MINLAY )
-                                        nMaxFrm = MINLAY;
-
-                                if( nWidth > (sal_uInt16)nMaxFrm )
-                                        nWidth = nMaxFrm;
-                                else if( nWidth > (sal_uInt16)nMinFrm )
-                                        nWidth = nMinFrm;
-                        }
+                        nMinFrm += nWidthTmp;
+                        nMaxFrm += nWidthTmp;
+                    }
+                    nLine = BOX_LINE_RIGHT;
                 }
 
-                if( MINFLY > nWidth )
-                        nWidth = MINFLY;
+                // enforce minimum width for contents
+                if( nMinFrm < MINLAY )
+                    nMinFrm = MINLAY;
+                if( nMaxFrm < MINLAY )
+                    nMaxFrm = MINLAY;
 
-                aSz.SetWidth( nWidth );
-                if( MINFLY > aSz.GetHeight() )
-                        aSz.SetHeight( MINFLY );
-                rFlySet.Put( aSz );
+                if( nWidth > (sal_uInt16)nMaxFrm )
+                    nWidth = nMaxFrm;
+                else if( nWidth > (sal_uInt16)nMinFrm )
+                    nWidth = nMinFrm;
+            }
         }
-        else if( MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetHeight() )
-        {
-                SwFmtFrmSize aSz( *static_cast<const SwFmtFrmSize*>(pItem) );
-                aSz.SetHeight( MINFLY );
-                rFlySet.Put( aSz );
-        }
+
+        if( MINFLY > nWidth )
+            nWidth = MINFLY;
+
+        aSz.SetWidth( nWidth );
+        if( MINFLY > aSz.GetHeight() )
+            aSz.SetHeight( MINFLY );
+        rFlySet.Put( aSz );
+    }
+    else if( MINFLY > static_cast<const SwFmtFrmSize*>(pItem)->GetHeight() )
+    {
+        SwFmtFrmSize aSz( *static_cast<const SwFmtFrmSize*>(pItem) );
+        aSz.SetHeight( MINFLY );
+        rFlySet.Put( aSz );
+    }
 }
 
 namespace
