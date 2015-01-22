@@ -1585,12 +1585,20 @@ bool SwFEShell::ImpEndCreate()
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
 
         // do not set in ReadnOnly-content
-        if( aPos.nNode.GetNode().IsProtect() )
+        if (aPos.nNode.GetNode().IsProtect())
+        {
             // then only page bound. Or should we
             // search the next not-readonly position?
             bAtPage = true;
+        }
 
-        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, false );
+        SwCntntNode* pCNode = aPos.nNode.GetNode().GetCntntNode();
+        pAnch = pCNode ? pCNode->getLayoutFrm( GetLayout(), &aPoint, 0, false ) : NULL;
+        if (!pAnch)
+        {
+            // Hidden content. Anchor to the page instead
+            bAtPage = true;
+        }
 
         if( !bAtPage )
         {
@@ -1636,7 +1644,7 @@ bool SwFEShell::ImpEndCreate()
 
         if( bAtPage )
         {
-            pPage = pAnch->FindPageFrm();
+            pPage = pAnch ? pAnch->FindPageFrm() : GetLayout()->GetPageAtPos(aPoint);
 
             aAnch.SetType( FLY_AT_PAGE );
             aAnch.SetPageNum( pPage->GetPhyPageNum() );
