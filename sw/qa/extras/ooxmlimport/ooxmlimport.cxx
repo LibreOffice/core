@@ -89,6 +89,46 @@ public:
     }
 };
 
+class FailTest : public Test
+{
+public:
+    // UGLY: hacky manual override of MacrosTest::loadFromDesktop
+    void executeImportTest(const char* filename)
+    {
+        header();
+        preTest(filename);
+        {
+            if (mxComponent.is())
+                mxComponent->dispose();
+            std::cout << filename << ",";
+            mnStartTime = osl_getGlobalTimer();
+            {
+                OUString aURL(getURLFromSrc(mpTestDocumentPath) + OUString::createFromAscii(filename));
+                CPPUNIT_ASSERT_MESSAGE("no desktop", mxDesktop.is());
+                uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(mxDesktop, uno::UNO_QUERY);
+                CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
+                uno::Sequence<beans::PropertyValue> args(1);
+                args[0].Name = "DocumentService";
+                args[0].Handle = -1;
+                args[0].Value <<= OUString("com.sun.star.text.TextDocument");
+                args[0].State = beans::PropertyState_DIRECT_VALUE;
+
+                uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(aURL, OUString("_default"), 0, args);
+                OUString sMessage = "loading succeeded: " + aURL;
+                CPPUNIT_ASSERT_MESSAGE(OUStringToOString(sMessage, RTL_TEXTENCODING_UTF8).getStr(), !xComponent.is());
+            }
+        }
+        postTest(filename);
+        verify();
+        finish();
+    }
+};
+
+DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
+{
+    CPPUNIT_ASSERT(!mxComponent.is());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testN751054, "n751054.docx")
 {
     text::TextContentAnchorType eValue = getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType");

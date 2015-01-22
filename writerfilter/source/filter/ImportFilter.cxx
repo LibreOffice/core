@@ -23,6 +23,9 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <oox/core/filterdetect.hxx>
@@ -37,9 +40,48 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/helper/graphichelper.hxx>
+
 using namespace ::com::sun::star;
 
 
+static OUString lcl_GetExceptionMessageRec(xml::sax::SAXException const& e);
+
+static OUString lcl_GetExceptionMessage(xml::sax::SAXException const& e)
+{
+    OUString const thisMessage("SAXParseException: "
+        "\"" + e.Message + "\"");
+    OUString const restMessage(lcl_GetExceptionMessageRec(e));
+    return restMessage + "\n" + thisMessage;
+}
+static OUString lcl_GetExceptionMessage(xml::sax::SAXParseException const& e)
+{
+    OUString const thisMessage("SAXParseException: "
+        "\"" + e.Message + "\" "
+        + "stream \"" + e.SystemId + "\""
+        + ", Line " + OUString::number(e.LineNumber)
+        + ", Column " + OUString::number(e.ColumnNumber));
+    OUString const restMessage(lcl_GetExceptionMessageRec(e));
+    return restMessage + "\n" + thisMessage;
+}
+static OUString lcl_GetExceptionMessageRec(xml::sax::SAXException const& e)
+{
+    xml::sax::SAXParseException saxpe;
+    if (e.WrappedException >>= saxpe)
+    {
+        return lcl_GetExceptionMessage(saxpe);
+    }
+    xml::sax::SAXException saxe;
+    if (e.WrappedException >>= saxe)
+    {
+        return lcl_GetExceptionMessage(saxe);
+    }
+    uno::Exception ue;
+    if (e.WrappedException >>= ue)
+    {
+        return ue.Message;
+    }
+    return OUString();
+}
 
 sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
    throw (uno::RuntimeException, std::exception)
@@ -93,7 +135,35 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             (xDrawings->getDrawPage(), uno::UNO_SET_THROW);
         pDocument->setDrawPage(xDrawPage);
 
-        pDocument->resolve(*pStream);
+        try
+        {
+            pDocument->resolve(*pStream);
+        }
+        catch (xml::sax::SAXParseException const& e)
+        {
+            // note: SfxObjectShell checks for WrongFormatException
+            io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
+            throw lang::WrappedTargetRuntimeException("",
+                    static_cast<OWeakObject*>(this), uno::makeAny(wfe));
+        }
+        catch (xml::sax::SAXException const& e)
+        {
+            // note: SfxObjectShell checks for WrongFormatException
+            io::WrongFormatException wfe(lcl_GetExceptionMessage(e));
+            throw lang::WrappedTargetRuntimeException("",
+                    static_cast<OWeakObject*>(this), uno::makeAny(wfe));
+        }
+        catch (uno::RuntimeException const& e)
+        {
+            throw;
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("writerfilter", "WriterFilter::filter(): "
+                    "failed with exception " << e.Message);
+            throw lang::WrappedTargetRuntimeException("",
+                    static_cast<OWeakObject*>(this), uno::makeAny(e));
+        }
 
         // Adding some properties to the document's grab bag for interoperability purposes:
         comphelper::SequenceAsHashMap aGrabBagProperties;

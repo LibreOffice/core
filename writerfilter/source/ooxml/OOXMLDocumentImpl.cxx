@@ -21,6 +21,7 @@
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
@@ -500,7 +501,28 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         {
             xParser->parseStream(aParserInput);
         }
-        catch (...) {
+        catch (xml::sax::SAXException const&)
+        {
+            // don't swallow these - handlers may not have been executed,
+            // and the domain mapper is likely in an inconsistent state
+            throw;
+        }
+        catch (uno::RuntimeException const& e)
+        {
+            throw;
+        }
+        // note: cannot throw anything other than SAXException out of here?
+        catch (uno::Exception const& e)
+        {
+            SAL_WARN("writerfilter.ooxml",
+                "OOXMLDocumentImpl::resolve(): exception: " << e.Message);
+            throw lang::WrappedTargetRuntimeException("", nullptr,
+                    uno::makeAny(e));
+        }
+        catch (...)
+        {
+            SAL_WARN("writerfilter.ooxml",
+                "OOXMLDocumentImpl::resolve(): non-UNO exception");
         }
     }
 

@@ -266,11 +266,6 @@ DECLARE_OOXMLEXPORT_TEST(testMathLim, "math-lim.docx")
     CHECK_FORMULA( "lim from {x \xe2\x86\x92 1} {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx")
-{
-    CPPUNIT_ASSERT_EQUAL( 0, getLength());
-}
-
 DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
 {
     CHECK_FORMULA( "left [matrix {1 # 2 ## 3 # 4} right ]", getFormula( getRun( getParagraph( 1 ), 1 )));
