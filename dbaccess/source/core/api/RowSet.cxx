@@ -1019,7 +1019,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException, std::
 
     // this call position the cache indirect
     Any aBookmarkToDelete( m_aBookmark );
-    positionCache( MOVE_NONE_REFRESH_ONLY );
+    positionCache( MOVE_NONE );
     sal_Int32 nDeletePosition = m_pCache->getRow();
 
     notifyRowSetAndClonesRowDelete( aBookmarkToDelete );
@@ -1066,7 +1066,7 @@ void ORowSet::implCancelRowUpdates( bool _bNotifyModified )
     if ( m_bNew || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
         throwFunctionSequenceException(*this);
 
-    positionCache( MOVE_NONE_REFRESH_ONLY );
+    positionCache( MOVE_NONE );
 
     ORowSetRow aOldValues;
     if ( !m_bModified && _bNotifyModified && !m_aCurrentRow.isNull() )
@@ -1194,7 +1194,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException,
             setCurrentRow( true, false, aOldValues, aGuard);
         }
         else
-            positionCache( MOVE_NONE_REFRESH_ONLY );
+            positionCache( MOVE_NONE );
 
         // check before because the resultset could be empty
         if  (   !m_bBeforeFirst
@@ -1283,7 +1283,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 
     if ( notifyAllListenersCursorBeforeMove( aGuard ) )
     {
-        positionCache( MOVE_NONE_REFRESH_ONLY );
+        positionCache( MOVE_NONE_REFRESH );
 
         ORowSetNotifier aNotifier( this );
 

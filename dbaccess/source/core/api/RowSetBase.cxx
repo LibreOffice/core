@@ -221,7 +221,7 @@ const ORowSetValue& ORowSetBase::impl_getValue(sal_Int32 columnIndex)
     if ( !bValidCurrentRow )
     {
         // currentrow is null when the clone moves the window
-        positionCache( MOVE_NONE_REFRESH_ONLY );
+        positionCache( MOVE_NONE );
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         m_bIsInsertRow  = false;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getValue: we don't stand on a valid row! Row is null.");
@@ -348,7 +348,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->is() );
     if ( !bValidCurrentRow )
     {
-        positionCache( MOVE_NONE_REFRESH_ONLY );
+        positionCache( MOVE_NONE );
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         m_bIsInsertRow  = false;
         OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is null.");
@@ -657,6 +657,7 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException,
     if ( impl_rowDeleted() )
         return ( m_nDeletedPosition == 1 );
 
+    positionCache( MOVE_NONE );
     bool bIsFirst = m_pCache->isFirst();
 
     SAL_INFO("dbaccess", "ORowSetBase::isFirst() = " << bIsFirst << " Clone = " << m_bClone);
@@ -686,6 +687,7 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException, 
             return ( m_nDeletedPosition == impl_getRowCount() );
     }
 
+    positionCache( MOVE_NONE );
     bool bIsLast = m_pCache->isLast();
 
     SAL_INFO("dbaccess", "ORowSetBase::isLast() = " << bIsLast << " Clone = " << m_bClone);
@@ -857,13 +859,7 @@ sal_Int32 ORowSetBase::impl_getRow()
         nPos = 0;
     else
     {
-        if  (   m_pCache->isAfterLast()
-            ||  m_pCache->isBeforeFirst()
-            ||  ( m_pCache->compareBookmarks( m_aBookmark, m_pCache->getBookmark() ) != CompareBookmark::EQUAL )
-            )
-        {
-            positionCache( MOVE_NONE_REFRESH_ONLY );
-        }
+        positionCache( MOVE_NONE );
         nPos = m_pCache->getRow();
     }
     SAL_INFO("dbaccess", "ORowSetBase::impl_getRow() = " << nPos << " Clone = " << m_bClone);
@@ -1103,7 +1099,7 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException, 
     {
         bool bWasNew = m_pCache->m_bNew || impl_rowDeleted();
         ORowSetRow aOldValues = getOldRow(bWasNew);
-        positionCache( MOVE_NONE_REFRESH_ONLY );
+        positionCache( MOVE_NONE );
         m_pCache->refreshRow();
         firePropertyChange(aOldValues);
     }
@@ -1237,7 +1233,7 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
     bool bSuccess = false;
     if ( m_aBookmark.hasValue() )
     {
-        if ( _ePrepareForDirection == MOVE_NONE_REFRESH_ONLY ||
+        if (_ePrepareForDirection == MOVE_NONE_REFRESH ||
              m_pCache->compareBookmarks( m_aBookmark, m_pCache->getBookmark() ) != CompareBookmark::EQUAL )
             bSuccess = m_pCache->moveToBookmark( m_aBookmark );
         else
@@ -1278,7 +1274,8 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
                     bSuccess = m_pCache->absolute( m_nDeletedPosition );
                 break;
 
-            case MOVE_NONE_REFRESH_ONLY:
+            case MOVE_NONE:
+            case MOVE_NONE_REFRESH:
                 bSuccess = false;   // will be asserted below
                 break;
             }
@@ -1334,7 +1331,7 @@ void ORowSetBase::onDeleteRow( const Any& _rBookmark )
     //OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::onDeleteRow: Bookmark isn't valid!" );
     if ( compareBookmarks( _rBookmark, m_aBookmark ) == 0 )
     {
-        positionCache( MOVE_NONE_REFRESH_ONLY );
+        positionCache( MOVE_NONE );
         m_nDeletedPosition = m_pCache->getRow();
     }
 }

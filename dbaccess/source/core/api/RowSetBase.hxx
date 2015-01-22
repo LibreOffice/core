@@ -155,8 +155,10 @@ namespace dbaccess
             MOVE_FORWARD,
             /// denotes a cursor  move backwards
             MOVE_BACKWARD,
-            /// denotes no cursor move at all, used when the current row is to be refreshed only
-            MOVE_NONE_REFRESH_ONLY
+            /// denotes no cursor move at all, but move cache to current row (if it is not there already)
+            MOVE_NONE,
+            /// denotes no cursor move at all, but force the cache to move to current row (and refresh the row)
+            MOVE_NONE_REFRESH
         };
         /** positions the cache in preparation of a cursor move
 
@@ -170,7 +172,7 @@ namespace dbaccess
                 m_aBookmark.</br>
                 If, however, we're currently on a deleted row, this is used to properly position the cache
                 using <member>m_nDeletedPosition</member>.<br/>
-                In this case, MOVE_NONE_REFRESH_ONLY is not supported. This is because the deleted row
+                In this case, MOVE_NONE(_REFRESH) is not supported. This is because the deleted row
                 (to which the RowSet currently points to) is not present in the cache. So, you cannot move the
                 cache to this row.
         */
