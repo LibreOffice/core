@@ -25,6 +25,9 @@
 #include "internal/config.hxx"
 #include "internal/utilities.hxx"
 
+#ifdef _WIN32_WINNT_WINBLUE
+#include <VersionHelpers.h>
+#endif
 
 // constants
 
