@@ -1043,14 +1043,6 @@ void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow
         ORowSetRow rRow = (*m_aCurrentRow);
         OSL_ENSURE(rRow.is() ,"Invalid size of vector!");
 #endif
-        // the cache could repositioned so we need to adjust the cache
-        if ( _bMoved && m_aCurrentRow.isNull() )
-        {
-            positionCache( MOVE_NONE_REFRESH_ONLY );
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-            m_bIsInsertRow  = false;
-            OSL_ENSURE(!m_aCurrentRow.isNull(),"CurrentRow is nul after positionCache!");
-        }
     }
     else
     {
