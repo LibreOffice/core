@@ -427,11 +427,12 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
-        if ( nAnchorId != FLY_AT_CHAR
-             || !PosInsideInputFld( aPos ) )
+        if (aPos.nNode != GetDoc()->GetNodes().GetEndOfExtras().GetIndex()
+            && (nAnchorId != FLY_AT_CHAR || !PosInsideInputFld(aPos)))
         {
             SwCntntNode* pCNode = aPos.nNode.GetNode().GetCntntNode();
-            pTxtFrm = pCNode ? pCNode->getLayoutFrm(GetLayout(), 0, &aPos, false) : NULL;
+            assert(pCNode);
+            pTxtFrm = pCNode->getLayoutFrm(GetLayout(), 0, &aPos, false);
         }
     }
     const SwFrm *pNewAnch = NULL;
