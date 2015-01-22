@@ -19,7 +19,7 @@
 
 #include <svl/stritem.hxx>
 #include <stringio.hxx>
-
+#include <libxml/xmlwriter.h>
 
 //  class SfxStringItem
 
@@ -51,6 +51,14 @@ SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
 SfxPoolItem * SfxStringItem::Clone(SfxItemPool *) const
 {
     return new SfxStringItem(*this);
+}
+
+void SfxStringItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxStringItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetValue().toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

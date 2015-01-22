@@ -502,6 +502,10 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_PAGEDESC:
                 static_cast<const SwFmtPageDesc*>(pItem)->dumpAsXml(writer);
                 break;
+            case RES_FRMATR_CONDITIONAL_STYLE_NAME:
+            case RES_FRMATR_STYLE_NAME:
+                static_cast<const SfxStringItem*>(pItem)->dumpAsXml(writer);
+                break;
             default: bDone = false; break;
         }
         if (bDone)
@@ -512,31 +516,8 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
 
         writer.startElement("item");
         writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
-        const char* pWhich = 0;
-        boost::optional<OString> oValue;
-        switch (pItem->Which())
-        {
-            case RES_FRMATR_STYLE_NAME:
-            {
-                pWhich = "frame style name";
-                const SfxStringItem* pStringItem = static_cast<const SfxStringItem*>(pItem);
-                oValue = "name: " + OUStringToOString(pStringItem->GetValue(), RTL_TEXTENCODING_UTF8);
-                break;
-            }
-            case RES_FRMATR_CONDITIONAL_STYLE_NAME:
-            {
-                pWhich = "frame conditional style name";
-                const SfxStringItem* pStringItem = static_cast<const SfxStringItem*>(pItem);
-                oValue = "name: " + OUStringToOString(pStringItem->GetValue(), RTL_TEXTENCODING_UTF8);
-                break;
-            }
-        }
-        if (pWhich)
-            writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
-        if (oValue)
-            writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
-        pItem = aIter.NextItem();
         writer.endElement();
+        pItem = aIter.NextItem();
     }
 }
 

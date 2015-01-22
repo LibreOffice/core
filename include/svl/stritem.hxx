@@ -41,6 +41,8 @@ public:
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 #endif // INCLUDED_SVL_STRITEM_HXX
