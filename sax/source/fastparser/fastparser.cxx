@@ -546,7 +546,7 @@ OUString lclGetErrorMessage( xmlParserCtxtPtr ctxt, const OUString& sSystemId, s
         pMessage = error->message;
     else
         pMessage = "unknown error";
-    OUStringBuffer aBuffer( '[' );
+    OUStringBuffer aBuffer( "[" );
     aBuffer.append( sSystemId );
     aBuffer.append( " line " );
     aBuffer.append( nLine );
