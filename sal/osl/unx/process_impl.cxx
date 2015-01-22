@@ -50,9 +50,9 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
     oslProcessError result = osl_Process_E_NotFound;
 
     char   buffer[PATH_MAX];
-    size_t buflen = sizeof(buffer);
+    uint32_t buflen = sizeof(buffer);
 
-    if (_NSGetExecutablePath (buffer, (uint32_t*)&buflen) == 0)
+    if (_NSGetExecutablePath (buffer, &buflen) == 0)
     {
         /* Determine absolute path. */
         char abspath[PATH_MAX];

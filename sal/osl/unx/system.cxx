@@ -97,7 +97,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
               result->h_name = buffer;
             buffer += nname;
 
-            parray = (char**)buffer;
+            parray = reinterpret_cast<char**>(buffer);
             result->h_aliases = parray;
             data = buffer + (naliases+1)*sizeof(char*);
             for ( p = res->h_aliases; *p != NULL; p++) {
@@ -108,7 +108,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
             }
             *parray = NULL;
             buffer = data;
-            parray = (char**)buffer;
+            parray = reinterpret_cast<char**>(buffer);
             result->h_addr_list = parray;
             data = buffer + (naddr_list+1)*sizeof(char*);
             for ( p = res->h_addr_list; *p != NULL; p++) {
