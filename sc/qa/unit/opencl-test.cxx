@@ -727,14 +727,13 @@ void ScOpenCLTest::testSharedFormulaXLS()
     ScDocShellRef xDocShRes = loadDoc("sum_ex.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
-    // AMLOEXT-5
     for (SCROW i = 0; i < 5; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
-    // AMLOEXT-6
+
     for (SCROW i = 6; i < 14; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -742,7 +741,6 @@ void ScOpenCLTest::testSharedFormulaXLS()
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
-    // AMLOEXT-8
     for (SCROW i = 15; i < 18; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -750,7 +748,6 @@ void ScOpenCLTest::testSharedFormulaXLS()
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
-    // AMLOEXT-10
     for (SCROW i = 19; i < 22; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -758,7 +755,6 @@ void ScOpenCLTest::testSharedFormulaXLS()
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
-    // AMLOEXT-9
     for (SCROW i = 23; i < 25; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -767,25 +763,24 @@ void ScOpenCLTest::testSharedFormulaXLS()
         ASSERT_DOUBLES_EQUAL(/*fExcel*/ 60.0, fLibre);
     }
 
-    // AMLOEXT-9
     for (SCROW i = 25; i < 27; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
-    // AMLOEXT-11
+
     for (SCROW i = 28; i < 35; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
-    // AMLOEXT-11; workaround for a Calc beta bug
+
+    // workaround for a Calc beta bug
     ASSERT_DOUBLES_EQUAL(25.0, rDoc.GetValue(ScAddress(2, 35, 0)));
     ASSERT_DOUBLES_EQUAL(24.0, rDoc.GetValue(ScAddress(2, 36, 0)));
 
-    // AMLOEXT-12
     for (SCROW i = 38; i < 43; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -793,7 +788,6 @@ void ScOpenCLTest::testSharedFormulaXLS()
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
-    // AMLOEXT-14
     for (SCROW i = 5; i < 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 1));
@@ -801,7 +795,6 @@ void ScOpenCLTest::testSharedFormulaXLS()
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
 
-    // AMLOEXT-15, AMLOEXT-16, and AMLOEXT-17
     for (SCROW i = 5; i < 10; ++i)
     {
         for (SCCOL j = 6; j < 11; ++j)
@@ -815,7 +808,7 @@ void ScOpenCLTest::testSharedFormulaXLS()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-76]
+
 void ScOpenCLTest::testMathFormulaCos()
 {
     if (!detectOpenCLDevice())
@@ -836,7 +829,7 @@ void ScOpenCLTest::testMathFormulaCos()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-116]
+
 void ScOpenCLTest::testMathFormulaSinh()
 {
     if (!detectOpenCLDevice())
@@ -857,7 +850,7 @@ void ScOpenCLTest::testMathFormulaSinh()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-196]
+
 void ScOpenCLTest::testMathFormulaPi()
 {
     if (!detectOpenCLDevice())
@@ -878,7 +871,7 @@ void ScOpenCLTest::testMathFormulaPi()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-197]
+
 void ScOpenCLTest::testMathFormulaRandom()
 {
     if (!detectOpenCLDevice())
@@ -922,133 +915,133 @@ void ScOpenCLTest::testFinacialFormula()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    // AMLOEXT-22
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,1));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,1));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-        //[AMLOEXT-23]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,2));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,2));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-24]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,3));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,3));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-25]
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,4));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,4));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-26]
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,5));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,5));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-	//[AMLOEXT-27]
+
 	for (SCROW i = 0; i < 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5,i,6));
         double fExcel = rDocRes.GetValue(ScAddress(5,i,6));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-28]
+
     for (SCROW i = 1; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,7));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,7));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-29]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,8));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,8));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-        //[AMLOEXT-30]
+
     for (SCROW i = 1; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,9));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,9));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-31]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,10));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,10));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-32]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7,i,11));
         double fExcel = rDocRes.GetValue(ScAddress(7,i,11));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-33]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5,i,12));
         double fExcel = rDocRes.GetValue(ScAddress(5,i,12));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-34]
+
     for (SCROW i = 0; i <= 12; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,13));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,13));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-35]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,14));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,14));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-36]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,15));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,15));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-37]
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,16));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,16));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-38]
+
     for (SCROW i = 1; i <= 5; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,17));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,17));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-39]
+
     for (SCROW i = 0; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,18));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,18));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    //[AMLOEXT-42]
+
     for (SCROW i = 0; i <= 18; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,19));
@@ -1058,7 +1051,7 @@ void ScOpenCLTest::testFinacialFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-20]
+
 void ScOpenCLTest::testStatisticalFormulaCorrel()
 {
     if (!detectOpenCLDevice())
@@ -1106,7 +1099,7 @@ void ScOpenCLTest::testStatisticalFormulaFisher()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-44]
+
 void ScOpenCLTest::testStatisticalFormulaFisherInv()
 {
     if (!detectOpenCLDevice())
@@ -1129,7 +1122,7 @@ void ScOpenCLTest::testStatisticalFormulaFisherInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-45]
+
 void ScOpenCLTest::testStatisticalFormulaGamma()
 {
     if (!detectOpenCLDevice())
@@ -1152,7 +1145,7 @@ void ScOpenCLTest::testStatisticalFormulaGamma()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-46]
+
 void ScOpenCLTest::testFinacialFvscheduleFormula()
 {
     if (!detectOpenCLDevice())
@@ -1172,7 +1165,7 @@ void ScOpenCLTest::testFinacialFvscheduleFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-47]
+
 void ScOpenCLTest::testMathFormulaAbs()
 {
     if (!detectOpenCLDevice())
@@ -1194,7 +1187,7 @@ void ScOpenCLTest::testMathFormulaAbs()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-69]
+
 void ScOpenCLTest::testFinacialSYDFormula()
 {
     if (!detectOpenCLDevice())
@@ -1238,7 +1231,6 @@ void ScOpenCLTest::testFinacialIRRFormula()
 }
 #endif
 
-//[AMLOEXT-49]
 void ScOpenCLTest::testStatisticalFormulaGammaLn()
 {
     if (!detectOpenCLDevice())
@@ -1260,7 +1252,7 @@ void ScOpenCLTest::testStatisticalFormulaGammaLn()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-50]
+
 void ScOpenCLTest::testStatisticalFormulaGauss()
 {
     if (!detectOpenCLDevice())
@@ -1281,7 +1273,7 @@ void ScOpenCLTest::testStatisticalFormulaGauss()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-52]
+
 void ScOpenCLTest::testStatisticalFormulaGeoMean()
 {
     if (!detectOpenCLDevice())
@@ -1303,7 +1295,7 @@ void ScOpenCLTest::testStatisticalFormulaGeoMean()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-51]
+
 void ScOpenCLTest::testStatisticalFormulaHarMean()
 {
     if (!detectOpenCLDevice())
@@ -1325,7 +1317,7 @@ void ScOpenCLTest::testStatisticalFormulaHarMean()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-53]
+
 void ScOpenCLTest::testFinacialSLNFormula()
 {
     if (!detectOpenCLDevice())
@@ -1366,7 +1358,6 @@ void ScOpenCLTest::testFinacialMIRRFormula()
     xDocShRes->DoClose();
 }
 
-// [AMLOEXT-55]
 void ScOpenCLTest::testFinancialCoupdaybsFormula()
 {
     if (!detectOpenCLDevice())
@@ -1386,7 +1377,7 @@ void ScOpenCLTest::testFinancialCoupdaybsFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-56]
+
 void ScOpenCLTest::testFinacialDollardeFormula()
 {
     if (!detectOpenCLDevice())
@@ -1406,7 +1397,7 @@ void ScOpenCLTest::testFinacialDollardeFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-70]
+
 void ScOpenCLTest::testFinancialCoupdaysFormula()
 {
     if (!detectOpenCLDevice())
@@ -1426,7 +1417,7 @@ void ScOpenCLTest::testFinancialCoupdaysFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-72]
+
 void ScOpenCLTest::testFinancialCoupdaysncFormula()
 {
     if (!detectOpenCLDevice())
@@ -1465,7 +1456,7 @@ void ScOpenCLTest::testFinacialRateFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-54]
+
 void ScOpenCLTest::testFinancialAccrintmFormula()
 {
     if (!detectOpenCLDevice())
@@ -1485,7 +1476,7 @@ void ScOpenCLTest::testFinancialAccrintmFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-74]
+
 void ScOpenCLTest::testFinancialCoupnumFormula()
 {
    if (!detectOpenCLDevice())
@@ -1506,7 +1497,6 @@ void ScOpenCLTest::testFinancialCoupnumFormula()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-57]
 void ScOpenCLTest::testStatisticalFormulaNegbinomdist()
 {
     if (!detectOpenCLDevice())
@@ -1527,7 +1517,7 @@ void ScOpenCLTest::testStatisticalFormulaNegbinomdist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-58]
+
 void ScOpenCLTest::testMathFormulaSin()
 {
     if (!detectOpenCLDevice())
@@ -1547,7 +1537,7 @@ void ScOpenCLTest::testMathFormulaSin()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-59]
+
 void ScOpenCLTest::testMathFormulaSumSQ()
 {
     if (!detectOpenCLDevice())
@@ -1567,7 +1557,7 @@ void ScOpenCLTest::testMathFormulaSumSQ()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-60]
+
 void ScOpenCLTest::testMathFormulaTan()
 {
     if (!detectOpenCLDevice())
@@ -1587,7 +1577,7 @@ void ScOpenCLTest::testMathFormulaTan()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-61]
+
 void ScOpenCLTest::testMathFormulaTanH()
 {
     if (!detectOpenCLDevice())
@@ -1607,7 +1597,7 @@ void ScOpenCLTest::testMathFormulaTanH()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-62]
+
 void ScOpenCLTest::testMathFormulaSqrt()
 {
     if (!detectOpenCLDevice())
@@ -1627,7 +1617,7 @@ void ScOpenCLTest::testMathFormulaSqrt()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-63]
+
 void ScOpenCLTest::testFinacialPriceFormula()
 {
     if (!detectOpenCLDevice())
@@ -1647,7 +1637,7 @@ void ScOpenCLTest::testFinacialPriceFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-64]
+
 void ScOpenCLTest::testFinacialDollarfrFormula()
 {
     if (!detectOpenCLDevice())
@@ -1667,7 +1657,7 @@ void ScOpenCLTest::testFinacialDollarfrFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-65]
+
 void ScOpenCLTest::testFinacialPriceDiscFormula()
 {
     if (!detectOpenCLDevice())
@@ -1687,7 +1677,7 @@ void ScOpenCLTest::testFinacialPriceDiscFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-67]
+
 void ScOpenCLTest::testFinacialODDLPRICEFormula()
 {
     if (!detectOpenCLDevice())
@@ -1707,7 +1697,7 @@ void ScOpenCLTest::testFinacialODDLPRICEFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-68]
+
 void ScOpenCLTest:: testFinacialOddlyieldFormula()
 {
     if (!detectOpenCLDevice())
@@ -1727,7 +1717,7 @@ void ScOpenCLTest:: testFinacialOddlyieldFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-71]
+
 void ScOpenCLTest::testFinacialDISCFormula()
 {
     if (!detectOpenCLDevice())
@@ -1747,7 +1737,7 @@ void ScOpenCLTest::testFinacialDISCFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-73]
+
 void ScOpenCLTest:: testFinacialPVFormula()
 {
     if (!detectOpenCLDevice())
@@ -1767,7 +1757,7 @@ void ScOpenCLTest:: testFinacialPVFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-75]
+
 void ScOpenCLTest::testFinacialINTRATEFormula()
 {
     if (!detectOpenCLDevice())
@@ -1787,7 +1777,7 @@ void ScOpenCLTest::testFinacialINTRATEFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-77]
+
 void ScOpenCLTest::testStatisticalFormulaStandard()
 {
     if (!detectOpenCLDevice())
@@ -1810,7 +1800,7 @@ void ScOpenCLTest::testStatisticalFormulaStandard()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-78]
+
 void ScOpenCLTest::testStatisticalFormulaWeibull()
 {
     if (!detectOpenCLDevice())
@@ -1834,7 +1824,7 @@ void ScOpenCLTest::testStatisticalFormulaWeibull()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-79]
+
 void ScOpenCLTest::testStatisticalFormulaVar()
 {
     if (!detectOpenCLDevice())
@@ -1857,7 +1847,7 @@ void ScOpenCLTest::testStatisticalFormulaVar()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-80]
+
 void ScOpenCLTest::testStatisticalFormulaSkew()
 {
     if (!detectOpenCLDevice())
@@ -1880,7 +1870,7 @@ void ScOpenCLTest::testStatisticalFormulaSkew()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-81]
+
 void ScOpenCLTest::testStatisticalFormulaSkewp()
 {
     if (!detectOpenCLDevice())
@@ -1903,7 +1893,7 @@ void ScOpenCLTest::testStatisticalFormulaSkewp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-82]
+
 void ScOpenCLTest::testStatisticalFormulaPearson()
 {
     if (!detectOpenCLDevice())
@@ -1924,7 +1914,7 @@ void ScOpenCLTest::testStatisticalFormulaPearson()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-83]
+
 void ScOpenCLTest::testStatisticalFormulaRsq()
 {
     if (!detectOpenCLDevice())
@@ -1945,7 +1935,7 @@ void ScOpenCLTest::testStatisticalFormulaRsq()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-84]
+
 void ScOpenCLTest::testMathFormulaTrunc()
 {
     if (!detectOpenCLDevice())
@@ -1965,7 +1955,7 @@ void ScOpenCLTest::testMathFormulaTrunc()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-85]
+
 void ScOpenCLTest::testMathFormulaCosh()
 {
     if (!detectOpenCLDevice())
@@ -2009,7 +1999,6 @@ void ScOpenCLTest::testStatisticalFormulaCovar()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-87]
 void ScOpenCLTest::testStatisticalFormulaKurt()
 {
     if (!detectOpenCLDevice())
@@ -2030,7 +2019,7 @@ void ScOpenCLTest::testStatisticalFormulaKurt()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-88]
+
 void ScOpenCLTest::testMathFormulaCot()
 {
     if (!detectOpenCLDevice())
@@ -2051,7 +2040,7 @@ void ScOpenCLTest::testMathFormulaCot()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-89]
+
 void ScOpenCLTest::testStatisticalFormulaDevSq()
 {
     if (!detectOpenCLDevice())
@@ -2074,7 +2063,7 @@ void ScOpenCLTest::testStatisticalFormulaDevSq()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-90]
+
 void ScOpenCLTest::testMathFormulaCsc()
 {
     if (!detectOpenCLDevice())
@@ -2094,7 +2083,7 @@ void ScOpenCLTest::testMathFormulaCsc()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-91]
+
 void ScOpenCLTest::testMathFormulaCoth()
 {
     if (!detectOpenCLDevice())
@@ -2115,7 +2104,7 @@ void ScOpenCLTest::testMathFormulaCoth()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-92]
+
 void ScOpenCLTest::testFinacialXNPVFormula()
 {
     if (!detectOpenCLDevice())
@@ -2142,7 +2131,7 @@ void ScOpenCLTest::testFinacialXNPVFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-93]
+
 void ScOpenCLTest::testStatisticalFormulaIntercept()
 {
     if (!detectOpenCLDevice())
@@ -2163,7 +2152,7 @@ void ScOpenCLTest::testStatisticalFormulaIntercept()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-98]
+
 void ScOpenCLTest::testFinancialAmordegrcFormula()
 {
    if (!detectOpenCLDevice())
@@ -2183,7 +2172,7 @@ void ScOpenCLTest::testFinancialAmordegrcFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-99]
+
 void ScOpenCLTest:: testFinancialISPMTFormula()
 {
     if (!detectOpenCLDevice())
@@ -2203,7 +2192,7 @@ void ScOpenCLTest:: testFinancialISPMTFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-100]
+
 void ScOpenCLTest::testStatisticalFormulaMedian()
 {
     if (!detectOpenCLDevice())
@@ -2224,7 +2213,7 @@ void ScOpenCLTest::testStatisticalFormulaMedian()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-101]
+
 void ScOpenCLTest::testStatisticalFormulaNormdist()
 {
     if (!detectOpenCLDevice())
@@ -2245,7 +2234,7 @@ void ScOpenCLTest::testStatisticalFormulaNormdist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-102]
+
 void ScOpenCLTest::testStatisticalFormulaNormsdist()
 {
     if (!detectOpenCLDevice())
@@ -2266,7 +2255,7 @@ void ScOpenCLTest::testStatisticalFormulaNormsdist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-103]
+
 void ScOpenCLTest::testStatisticalFormulaPermut()
 {
     if (!detectOpenCLDevice())
@@ -2287,7 +2276,7 @@ void ScOpenCLTest::testStatisticalFormulaPermut()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-104]
+
 void ScOpenCLTest::testStatisticalFormulaPermutation()
 {
     if (!detectOpenCLDevice())
@@ -2308,7 +2297,7 @@ void ScOpenCLTest::testStatisticalFormulaPermutation()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-105]
+
 void ScOpenCLTest::testStatisticalFormulaPhi()
 {
     if (!detectOpenCLDevice())
@@ -2329,7 +2318,7 @@ void ScOpenCLTest::testStatisticalFormulaPhi()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-106]
+
 void ScOpenCLTest::testMathFormulaCscH()
 {
     if (!detectOpenCLDevice())
@@ -2349,7 +2338,7 @@ void ScOpenCLTest::testMathFormulaCscH()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-107]
+
 void ScOpenCLTest::testStatisticalFormulaLogInv()
 {
     if (!detectOpenCLDevice())
@@ -2371,7 +2360,7 @@ void ScOpenCLTest::testStatisticalFormulaLogInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-108]
+
 void ScOpenCLTest::testFinacialNPERFormula()
 {
     if (!detectOpenCLDevice())
@@ -2391,7 +2380,7 @@ void ScOpenCLTest::testFinacialNPERFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-109]
+
 void ScOpenCLTest::testStatisticalFormulaForecast()
 {
     if (!detectOpenCLDevice())
@@ -2413,7 +2402,7 @@ void ScOpenCLTest::testStatisticalFormulaForecast()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-110]
+
 void ScOpenCLTest::testFinancialAmorlincFormula()
 {
     if (!detectOpenCLDevice())
@@ -2433,7 +2422,7 @@ void ScOpenCLTest::testFinancialAmorlincFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-124]
+
 void ScOpenCLTest::testFinancialDDBFormula()
 {
    if (!detectOpenCLDevice())
@@ -2725,7 +2714,7 @@ void ScOpenCLTest:: testFinacialPMTFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-111]
+
 void ScOpenCLTest:: testFinancialDurationFormula()
 {
     if (!detectOpenCLDevice())
@@ -2745,7 +2734,7 @@ void ScOpenCLTest:: testFinancialDurationFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-112]
+
 void ScOpenCLTest::testStatisticalFormulaLogNormDist()
 {
     if (!detectOpenCLDevice())
@@ -2768,7 +2757,7 @@ void ScOpenCLTest::testStatisticalFormulaLogNormDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-113]
+
 void ScOpenCLTest::testMathFormulaArcCos()
 {
     if (!detectOpenCLDevice())
@@ -2789,7 +2778,7 @@ void ScOpenCLTest::testMathFormulaArcCos()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-117]
+
 void ScOpenCLTest::testMathFormulaPower()
 {
     if (!detectOpenCLDevice())
@@ -2809,7 +2798,7 @@ void ScOpenCLTest::testMathFormulaPower()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-119]
+
 void ScOpenCLTest:: testFinacialPPMTFormula()
 {
     if (!detectOpenCLDevice())
@@ -2829,7 +2818,7 @@ void ScOpenCLTest:: testFinacialPPMTFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-120]
+
 void ScOpenCLTest:: testFinacialNPVFormula()
 {
     if (!detectOpenCLDevice())
@@ -2849,7 +2838,7 @@ void ScOpenCLTest:: testFinacialNPVFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-121]
+
 void ScOpenCLTest:: testFinancialDuration_ADDFormula()
 {
     if (!detectOpenCLDevice())
@@ -2869,7 +2858,7 @@ void ScOpenCLTest:: testFinancialDuration_ADDFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-122]
+
 void ScOpenCLTest::testStatisticalFormulaNorminv()
 {
     if (!detectOpenCLDevice())
@@ -2890,7 +2879,7 @@ void ScOpenCLTest::testStatisticalFormulaNorminv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-123]
+
 void ScOpenCLTest::testStatisticalFormulaNormsinv()
 {
      if (!detectOpenCLDevice())
@@ -2911,7 +2900,7 @@ void ScOpenCLTest::testStatisticalFormulaNormsinv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-125]
+
 void ScOpenCLTest::testMathFormulaArcCosHyp()
 {
     if (!detectOpenCLDevice())
@@ -2932,7 +2921,7 @@ void ScOpenCLTest::testMathFormulaArcCosHyp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-126]
+
 void ScOpenCLTest:: testFinancialMDurationFormula()
 {
     if (!detectOpenCLDevice())
@@ -2952,7 +2941,7 @@ void ScOpenCLTest:: testFinancialMDurationFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-127]
+
 void ScOpenCLTest::testMathFormulaArcCot()
 {
     if (!detectOpenCLDevice())
@@ -2973,7 +2962,7 @@ void ScOpenCLTest::testMathFormulaArcCot()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-131]
+
 void ScOpenCLTest:: testFinancialFVFormula()
 {
     if (!detectOpenCLDevice())
@@ -2993,7 +2982,7 @@ void ScOpenCLTest:: testFinancialFVFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-132]
+
 void ScOpenCLTest::testFinancialDBFormula()
 {
    if (!detectOpenCLDevice())
@@ -3013,7 +3002,7 @@ void ScOpenCLTest::testFinancialDBFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-135]
+
 void ScOpenCLTest::testFinancialCouppcdFormula()
 {
     if (!detectOpenCLDevice())
@@ -3033,7 +3022,7 @@ void ScOpenCLTest::testFinancialCouppcdFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-128]
+
 void ScOpenCLTest::testMathSumIfsFormula()
 {
     if (!detectOpenCLDevice())
@@ -3071,7 +3060,7 @@ void ScOpenCLTest::testMathSumIfsFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-129]
+
 void ScOpenCLTest::testMathFormulaArcCotHyp()
 {
     if (!detectOpenCLDevice())
@@ -3092,7 +3081,7 @@ void ScOpenCLTest::testMathFormulaArcCotHyp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-130]
+
 void ScOpenCLTest::testMathFormulaArcSin()
 {
     if (!detectOpenCLDevice())
@@ -3113,7 +3102,7 @@ void ScOpenCLTest::testMathFormulaArcSin()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
- //[AMLOEXT-133]
+
 void ScOpenCLTest:: testFinancialVDBFormula()
 {
     if (!detectOpenCLDevice())
@@ -3145,7 +3134,7 @@ void ScOpenCLTest:: testFinancialVDBFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-134]
+
 void ScOpenCLTest:: testFinancialIPMTFormula()
 {
     if (!detectOpenCLDevice())
@@ -3165,7 +3154,7 @@ void ScOpenCLTest:: testFinancialIPMTFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-  //[AMLOEXT-137]
+
 void ScOpenCLTest:: testFinancialXirrFormula()
 {
     if (!detectOpenCLDevice())
@@ -3192,7 +3181,7 @@ void ScOpenCLTest:: testFinancialXirrFormula()
 
     xDocSh->DoClose();
 }
-//[AMLOEXT-139]
+
 void ScOpenCLTest::testStatisticalFormulaChiSqDist()
 {
     if (!detectOpenCLDevice())
@@ -3219,7 +3208,7 @@ void ScOpenCLTest::testStatisticalFormulaChiSqDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-140]
+
 void ScOpenCLTest::testStatisticalFormulaConfidence()
 {
     if (!detectOpenCLDevice())
@@ -3242,7 +3231,7 @@ void ScOpenCLTest::testStatisticalFormulaConfidence()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-141]
+
 void ScOpenCLTest::testStatisticalFormulaFDist()
 {
     if (!detectOpenCLDevice())
@@ -3263,7 +3252,7 @@ void ScOpenCLTest::testStatisticalFormulaFDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-136]
+
 void ScOpenCLTest::testFinancialCoupncdFormula()
 {
     if (!detectOpenCLDevice())
@@ -3283,7 +3272,7 @@ void ScOpenCLTest::testFinancialCoupncdFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-138]
+
 void ScOpenCLTest::testFinancialAccrintFormula()
 {
     if (!detectOpenCLDevice())
@@ -3303,7 +3292,7 @@ void ScOpenCLTest::testFinancialAccrintFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-142]
+
 void ScOpenCLTest::testStatisticalFormulaCritBinom()
 {
     if (!detectOpenCLDevice())
@@ -3326,7 +3315,7 @@ void ScOpenCLTest::testStatisticalFormulaCritBinom()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-143]
+
 void ScOpenCLTest::testMathFormulaArcSinHyp()
 {
     if (!detectOpenCLDevice())
@@ -3347,7 +3336,7 @@ void ScOpenCLTest::testMathFormulaArcSinHyp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-144]
+
 void ScOpenCLTest::testMathFormulaArcTan()
 {
     if (!detectOpenCLDevice())
@@ -3368,7 +3357,7 @@ void ScOpenCLTest::testMathFormulaArcTan()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-145]
+
 void ScOpenCLTest::testMathFormulaArcTanHyp()
 {
     if (!detectOpenCLDevice())
@@ -3389,7 +3378,7 @@ void ScOpenCLTest::testMathFormulaArcTanHyp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-146]
+
 void ScOpenCLTest:: testFinacialNPER1Formula()
 {
     if (!detectOpenCLDevice())
@@ -3409,7 +3398,7 @@ void ScOpenCLTest:: testFinacialNPER1Formula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-147]
+
 void ScOpenCLTest::testMathFormulaArcTan2()
 {
     if (!detectOpenCLDevice())
@@ -3431,7 +3420,6 @@ void ScOpenCLTest::testMathFormulaArcTan2()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-148]
 void ScOpenCLTest::testStatisticalFormulaChiSqInv()
 {
     if (!detectOpenCLDevice())
@@ -3452,7 +3440,7 @@ void ScOpenCLTest::testStatisticalFormulaChiSqInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-149]
+
 void ScOpenCLTest::testMathFormulaBitAnd()
 {
     if (!detectOpenCLDevice())
@@ -3473,7 +3461,7 @@ void ScOpenCLTest::testMathFormulaBitAnd()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-150]
+
 void ScOpenCLTest::testStatisticalFormulaPoisson()
 {
     if (!detectOpenCLDevice())
@@ -3494,7 +3482,7 @@ void ScOpenCLTest::testStatisticalFormulaPoisson()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-151]
+
 void ScOpenCLTest::testStatisticalFormulaExpondist()
 {
     if (!detectOpenCLDevice())
@@ -3515,7 +3503,7 @@ void ScOpenCLTest::testStatisticalFormulaExpondist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-152]
+
 void ScOpenCLTest::testMathFormulaBitOr()
 {
     if (!detectOpenCLDevice())
@@ -3537,7 +3525,6 @@ void ScOpenCLTest::testMathFormulaBitOr()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-153]
 void ScOpenCLTest::testMathFormulaOdd()
 {
     if (!detectOpenCLDevice())
@@ -3557,7 +3544,7 @@ void ScOpenCLTest::testMathFormulaOdd()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-154]
+
 void ScOpenCLTest::testMathFormulaLN()
 {
     if (!detectOpenCLDevice())
@@ -3578,7 +3565,7 @@ void ScOpenCLTest::testMathFormulaLN()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-155
+
 void ScOpenCLTest::testMathFormulaMod()
 {
     if (!detectOpenCLDevice())
@@ -3602,7 +3589,7 @@ void ScOpenCLTest::testMathFormulaMod()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-156]
+
 void ScOpenCLTest::testMathFormulaRound()
 {
     if (!detectOpenCLDevice())
@@ -3629,7 +3616,7 @@ void ScOpenCLTest::testMathFormulaRound()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-157]
+
 void ScOpenCLTest::testStatisticalFormulaGammaDist()
 {
     if (!detectOpenCLDevice())
@@ -3651,7 +3638,7 @@ void ScOpenCLTest::testStatisticalFormulaGammaDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-158]
+
 void ScOpenCLTest::testStatisticalFormulaGammaInv()
 {
     if (!detectOpenCLDevice())
@@ -3676,7 +3663,7 @@ void ScOpenCLTest::testStatisticalFormulaGammaInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-159]
+
 void ScOpenCLTest::testStatisticalFormulaFInv()
 {
     if (!detectOpenCLDevice())
@@ -3701,7 +3688,7 @@ void ScOpenCLTest::testStatisticalFormulaFInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-160]
+
 void ScOpenCLTest::testStatisticalFormulaFTest()
 {
     if (!detectOpenCLDevice())
@@ -3723,7 +3710,7 @@ void ScOpenCLTest::testStatisticalFormulaFTest()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-161]
+
 void ScOpenCLTest::testStatisticalFormulaB()
 {
     if (!detectOpenCLDevice())
@@ -3747,7 +3734,7 @@ void ScOpenCLTest::testStatisticalFormulaB()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-162]
+
 void ScOpenCLTest::testStatisticalFormulaBetaDist()
 {
     if (!detectOpenCLDevice())
@@ -3771,7 +3758,7 @@ void ScOpenCLTest::testStatisticalFormulaBetaDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-164
+
 void ScOpenCLTest::testMathFormulaEven()
 {
     if (!detectOpenCLDevice())
@@ -3793,7 +3780,6 @@ void ScOpenCLTest::testMathFormulaEven()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-165]
 void ScOpenCLTest::testMathFormulaExp()
 {
     if (!detectOpenCLDevice())
@@ -3813,7 +3799,7 @@ void ScOpenCLTest::testMathFormulaExp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-166]
+
 void ScOpenCLTest::testStatisticalFormulaChiDist()
 {
     if (!detectOpenCLDevice())
@@ -3834,7 +3820,7 @@ void ScOpenCLTest::testStatisticalFormulaChiDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-167]
+
 void ScOpenCLTest::testMathFormulaBitLshift()
 {
     if (!detectOpenCLDevice())
@@ -3855,7 +3841,7 @@ void ScOpenCLTest::testMathFormulaBitLshift()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-168]
+
 void ScOpenCLTest::testMathFormulaBitRshift()
 {
     if (!detectOpenCLDevice())
@@ -3876,7 +3862,7 @@ void ScOpenCLTest::testMathFormulaBitRshift()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-169]
+
 void ScOpenCLTest::testMathFormulaFloor()
 {
     if (!detectOpenCLDevice())
@@ -3896,7 +3882,7 @@ void ScOpenCLTest::testMathFormulaFloor()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-170]
+
 void ScOpenCLTest::testMathFormulaLog()
 {
     if (!detectOpenCLDevice())
@@ -3917,7 +3903,7 @@ void ScOpenCLTest::testMathFormulaLog()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-171]
+
 void ScOpenCLTest::testSpreadSheetFormulaVLookup()
 {
     if (!detectOpenCLDevice())
@@ -3944,7 +3930,7 @@ void ScOpenCLTest::testSpreadSheetFormulaVLookup()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-173]
+
 void ScOpenCLTest::testStatisticalFormulaChiInv()
 {
     if (!detectOpenCLDevice())
@@ -3965,7 +3951,7 @@ void ScOpenCLTest::testStatisticalFormulaChiInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-175]
+
 void ScOpenCLTest::testMathFormulaConvert()
 {
     if (!detectOpenCLDevice())
@@ -3985,7 +3971,7 @@ void ScOpenCLTest::testMathFormulaConvert()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-176 ]
+
 void ScOpenCLTest::testMathCountIfsFormula()
 {
     if (!detectOpenCLDevice())
@@ -4005,7 +3991,7 @@ void ScOpenCLTest::testMathCountIfsFormula()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-178]
+
 void ScOpenCLTest::testMathFormulaBitXor()
 {
     if (!detectOpenCLDevice())
@@ -4026,7 +4012,7 @@ void ScOpenCLTest::testMathFormulaBitXor()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-179]
+
 void ScOpenCLTest::testMathAverageIfsFormula()
 {
     if (!detectOpenCLDevice())
@@ -4047,7 +4033,6 @@ void ScOpenCLTest::testMathAverageIfsFormula()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-180]
 void ScOpenCLTest::testMathFormulaLog10()
 {
     if (!detectOpenCLDevice())
@@ -4067,7 +4052,7 @@ void ScOpenCLTest::testMathFormulaLog10()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-174]
+
 void ScOpenCLTest::testMathFormulaCombina()
 {
     if (!detectOpenCLDevice())
@@ -4088,7 +4073,7 @@ void ScOpenCLTest::testMathFormulaCombina()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-181]
+
 void ScOpenCLTest::testMathFormulaCeil()
 {
     if (!detectOpenCLDevice())
@@ -4109,7 +4094,7 @@ void ScOpenCLTest::testMathFormulaCeil()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-182]
+
 void ScOpenCLTest::testMathFormulaSqrtPi()
 {
     if (!detectOpenCLDevice())
@@ -4129,7 +4114,7 @@ void ScOpenCLTest::testMathFormulaSqrtPi()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-183]
+
 void ScOpenCLTest::testStatisticalFormulaVarP()
 {
     if (!detectOpenCLDevice())
@@ -4152,7 +4137,7 @@ void ScOpenCLTest::testStatisticalFormulaVarP()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-184]
+
 void ScOpenCLTest::testStatisticalFormulaStDev()
 {
     if (!detectOpenCLDevice())
@@ -4175,7 +4160,7 @@ void ScOpenCLTest::testStatisticalFormulaStDev()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-185]
+
 void ScOpenCLTest::testStatisticalFormulaStDevP()
 {
     if (!detectOpenCLDevice())
@@ -4198,7 +4183,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevP()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-186]
+
 void ScOpenCLTest::testStatisticalFormulaSlope()
 {
     if (!detectOpenCLDevice())
@@ -4221,7 +4206,7 @@ void ScOpenCLTest::testStatisticalFormulaSlope()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-187]
+
 void ScOpenCLTest::testStatisticalFormulaSTEYX()
 {
     if (!detectOpenCLDevice())
@@ -4244,7 +4229,7 @@ void ScOpenCLTest::testStatisticalFormulaSTEYX()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-188]
+
 void ScOpenCLTest::testStatisticalFormulaZTest()
 {
     if (!detectOpenCLDevice())
@@ -4267,7 +4252,7 @@ void ScOpenCLTest::testStatisticalFormulaZTest()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-189]
+
 void ScOpenCLTest::testStatisticalFormulaTTest()
 {
     if (!detectOpenCLDevice())
@@ -4290,7 +4275,7 @@ void ScOpenCLTest::testStatisticalFormulaTTest()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-190]
+
 void ScOpenCLTest::testStatisticalFormulaTDist()
 {
     if (!detectOpenCLDevice())
@@ -4313,7 +4298,7 @@ void ScOpenCLTest::testStatisticalFormulaTDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-191]
+
 void ScOpenCLTest::testStatisticalFormulaTInv()
 {
     if (!detectOpenCLDevice())
@@ -4336,7 +4321,7 @@ void ScOpenCLTest::testStatisticalFormulaTInv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-192]
+
 void ScOpenCLTest::testStatisticalFormulaBinomDist()
 {
     if (!detectOpenCLDevice())
@@ -4357,7 +4342,7 @@ void ScOpenCLTest::testStatisticalFormulaBinomDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-193]
+
 void ScOpenCLTest::testMathFormulaProduct()
 {
     if (!detectOpenCLDevice())
@@ -4377,7 +4362,7 @@ void ScOpenCLTest::testMathFormulaProduct()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-194]
+
 #if 0 //Disabled temporarily
 void ScOpenCLTest::testMathFormulaKombin()
 {
@@ -4400,7 +4385,7 @@ void ScOpenCLTest::testMathFormulaKombin()
     xDocShRes->DoClose();
 }
 #endif
-//[AMLOEXT-198]
+
 void ScOpenCLTest:: testArrayFormulaSumX2MY2()
 {
     if (!detectOpenCLDevice())
@@ -4426,7 +4411,7 @@ void ScOpenCLTest:: testArrayFormulaSumX2MY2()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-199]
+
 void ScOpenCLTest::testStatisticalFormulaHypGeomDist()
 {
     if (!detectOpenCLDevice())
@@ -4447,7 +4432,7 @@ void ScOpenCLTest::testStatisticalFormulaHypGeomDist()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-200]
+
 void ScOpenCLTest:: testArrayFormulaSumX2PY2()
 {
     if (!detectOpenCLDevice())
@@ -4473,7 +4458,7 @@ void ScOpenCLTest:: testArrayFormulaSumX2PY2()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-201]
+
 void ScOpenCLTest::testStatisticalFormulaBetainv()
 {
     if (!detectOpenCLDevice())
@@ -4494,7 +4479,7 @@ void ScOpenCLTest::testStatisticalFormulaBetainv()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-202]
+
 void ScOpenCLTest::testStatisticalFormulaMina()
 {
     if (!detectOpenCLDevice())
@@ -4514,7 +4499,7 @@ void ScOpenCLTest::testStatisticalFormulaMina()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[  AMLOEXT-204]
+
 void ScOpenCLTest:: testArrayFormulaSumXMY2()
 {
     if (!detectOpenCLDevice())
@@ -4540,7 +4525,7 @@ void ScOpenCLTest:: testArrayFormulaSumXMY2()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-208
+
 void ScOpenCLTest::testStatisticalFormulaCountA()
 {
     if (!detectOpenCLDevice())
@@ -4561,7 +4546,6 @@ void ScOpenCLTest::testStatisticalFormulaCountA()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-213]
 void ScOpenCLTest::testStatisticalFormulaMaxa()
 {
     if (!detectOpenCLDevice())
@@ -4582,7 +4566,6 @@ void ScOpenCLTest::testStatisticalFormulaMaxa()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-214]
 void ScOpenCLTest::testMathFormulaSumProduct()
 {
     if (!detectOpenCLDevice())
@@ -4616,7 +4599,7 @@ void ScOpenCLTest::testMathFormulaSumProduct()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-215]
+
 void ScOpenCLTest::testMathFormulaAverageIf()
 {
     if (!detectOpenCLDevice())
@@ -4636,7 +4619,7 @@ void ScOpenCLTest::testMathFormulaAverageIf()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-216]
+
 void ScOpenCLTest::testStatisticalFormulaAverageA()
 {
     if (!detectOpenCLDevice())
@@ -4656,7 +4639,7 @@ void ScOpenCLTest::testStatisticalFormulaAverageA()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-217]
+
 void ScOpenCLTest:: testLogicalFormulaAnd()
 {
     if (!detectOpenCLDevice())
@@ -4682,7 +4665,7 @@ void ScOpenCLTest:: testLogicalFormulaAnd()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-218]
+
 void ScOpenCLTest::testStatisticalFormulaVarA()
 {
     if (!detectOpenCLDevice())
@@ -4705,7 +4688,7 @@ void ScOpenCLTest::testStatisticalFormulaVarA()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-219]
+
 void ScOpenCLTest::testStatisticalFormulaVarPA()
 {
     if (!detectOpenCLDevice())
@@ -4728,7 +4711,7 @@ void ScOpenCLTest::testStatisticalFormulaVarPA()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-220]
+
 void ScOpenCLTest::testStatisticalFormulaStDevA()
 {
     if (!detectOpenCLDevice())
@@ -4751,7 +4734,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevA()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-221]
+
 void ScOpenCLTest::testStatisticalFormulaStDevPA()
 {
     if (!detectOpenCLDevice())
@@ -4774,7 +4757,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevPA()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-223]
+
 void ScOpenCLTest:: testFinancialMDurationFormula1()
 {
     if (!detectOpenCLDevice())
@@ -4794,7 +4777,7 @@ void ScOpenCLTest:: testFinancialMDurationFormula1()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-245]
+
 void ScOpenCLTest::testMathFormulaSumProduct2()
 {
     if (!detectOpenCLDevice())
@@ -4816,7 +4799,6 @@ void ScOpenCLTest::testMathFormulaSumProduct2()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-243]
 void ScOpenCLTest:: testStatisticalParallelCountBug()
 {
     if (!detectOpenCLDevice())
@@ -4838,7 +4820,7 @@ void ScOpenCLTest:: testStatisticalParallelCountBug()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-264]
+
 void ScOpenCLTest:: testLogicalFormulaOr()
 {
     if (!detectOpenCLDevice())
@@ -4858,7 +4840,7 @@ void ScOpenCLTest:: testLogicalFormulaOr()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-267]
+
 void ScOpenCLTest:: testLogicalFormulaNot()
 {
     if (!detectOpenCLDevice())
@@ -4878,7 +4860,7 @@ void ScOpenCLTest:: testLogicalFormulaNot()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-272]
+
 void ScOpenCLTest:: testLogicalFormulaXor()
 {
     if (!detectOpenCLDevice())
@@ -4898,7 +4880,7 @@ void ScOpenCLTest:: testLogicalFormulaXor()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-333]
+
 void ScOpenCLTest::testDatabaseFormulaDcount()
 {
     if (!detectOpenCLDevice())
@@ -4919,7 +4901,7 @@ void ScOpenCLTest::testDatabaseFormulaDcount()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-334]
+
 void ScOpenCLTest::testDatabaseFormulaDcountA()
 {
     if (!detectOpenCLDevice())
@@ -4940,7 +4922,7 @@ void ScOpenCLTest::testDatabaseFormulaDcountA()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-335]
+
 void ScOpenCLTest::testDatabaseFormulaDmax()
 {
     if (!detectOpenCLDevice())
@@ -4962,7 +4944,6 @@ void ScOpenCLTest::testDatabaseFormulaDmax()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-336]
 void ScOpenCLTest::testDatabaseFormulaDmin()
 {
     if (!detectOpenCLDevice())
@@ -4984,7 +4965,6 @@ void ScOpenCLTest::testDatabaseFormulaDmin()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-337]
 void ScOpenCLTest::testDatabaseFormulaDproduct()
 {
     if (!detectOpenCLDevice())
@@ -5006,7 +4986,6 @@ void ScOpenCLTest::testDatabaseFormulaDproduct()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-338]
 void ScOpenCLTest::testDatabaseFormulaDaverage()
 {
     if (!detectOpenCLDevice())
@@ -5029,7 +5008,6 @@ void ScOpenCLTest::testDatabaseFormulaDaverage()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-339]
 void ScOpenCLTest::testDatabaseFormulaDstdev()
 {
     if (!detectOpenCLDevice())
@@ -5052,7 +5030,6 @@ void ScOpenCLTest::testDatabaseFormulaDstdev()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-340]
 void ScOpenCLTest::testDatabaseFormulaDstdevp()
 {
     if (!detectOpenCLDevice())
@@ -5075,7 +5052,6 @@ void ScOpenCLTest::testDatabaseFormulaDstdevp()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-341]
 void ScOpenCLTest::testDatabaseFormulaDsum()
 {
     if (!detectOpenCLDevice())
@@ -5098,7 +5074,6 @@ void ScOpenCLTest::testDatabaseFormulaDsum()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-342]
 void ScOpenCLTest::testDatabaseFormulaDvar()
 {
     if (!detectOpenCLDevice())
@@ -5121,7 +5096,6 @@ void ScOpenCLTest::testDatabaseFormulaDvar()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-343]
 void ScOpenCLTest::testDatabaseFormulaDvarp()
 {
     if (!detectOpenCLDevice())
@@ -5142,7 +5116,7 @@ void ScOpenCLTest::testDatabaseFormulaDvarp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-351]
+
 void ScOpenCLTest::testMathFormulaRoundUp()
 {
     if (!detectOpenCLDevice())
@@ -5163,7 +5137,7 @@ void ScOpenCLTest::testMathFormulaRoundUp()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-352]
+
 void ScOpenCLTest::testMathFormulaRoundDown()
 {
     if (!detectOpenCLDevice())
@@ -5184,7 +5158,7 @@ void ScOpenCLTest::testMathFormulaRoundDown()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-353]
+
 void ScOpenCLTest::testMathFormulaInt()
 {
     if (!detectOpenCLDevice())
@@ -5205,7 +5179,7 @@ void ScOpenCLTest::testMathFormulaInt()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-354]
+
 void ScOpenCLTest::testMathFormulaRadians()
 {
     if (!detectOpenCLDevice())
@@ -5226,7 +5200,7 @@ void ScOpenCLTest::testMathFormulaRadians()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-356
+
 void ScOpenCLTest::testMathFormulaDegrees()
 {
     if (!detectOpenCLDevice())
@@ -5246,7 +5220,7 @@ void ScOpenCLTest::testMathFormulaDegrees()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-357]
+
 void ScOpenCLTest::testMathFormulaIsEven()
 {
     if (!detectOpenCLDevice())
@@ -5267,7 +5241,7 @@ void ScOpenCLTest::testMathFormulaIsEven()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-360]
+
 void ScOpenCLTest::testMathFormulaCountIf()
 {
     if (!detectOpenCLDevice())
@@ -5287,7 +5261,7 @@ void ScOpenCLTest::testMathFormulaCountIf()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[ AMLOEXT-361]
+
 void ScOpenCLTest::testMathFormulaIsOdd()
 {
     if (!detectOpenCLDevice())
@@ -5308,7 +5282,7 @@ void ScOpenCLTest::testMathFormulaIsOdd()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-362]
+
 void ScOpenCLTest::testMathFormulaFact()
 {
     if (!detectOpenCLDevice())
@@ -5328,7 +5302,7 @@ void ScOpenCLTest::testMathFormulaFact()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-367
+
 void ScOpenCLTest::testMathFormulaSEC()
 {
     if (!detectOpenCLDevice())
@@ -5349,7 +5323,7 @@ void ScOpenCLTest::testMathFormulaSEC()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-368
+
 void ScOpenCLTest::testMathFormulaSECH()
 {
     if (!detectOpenCLDevice())
@@ -5370,7 +5344,7 @@ void ScOpenCLTest::testMathFormulaSECH()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-369
+
 void ScOpenCLTest::testMathFormulaMROUND()
 {
     if (!detectOpenCLDevice())
@@ -5391,7 +5365,7 @@ void ScOpenCLTest::testMathFormulaMROUND()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-372]
+
 void ScOpenCLTest::testMathFormulaQuotient()
 {
     if (!detectOpenCLDevice())
@@ -5412,7 +5386,7 @@ void ScOpenCLTest::testMathFormulaQuotient()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-373]
+
 void ScOpenCLTest::testMathFormulaSeriesSum()
 {
     if (!detectOpenCLDevice())
@@ -5432,7 +5406,7 @@ void ScOpenCLTest::testMathFormulaSeriesSum()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-377]
+
 void ScOpenCLTest::testMathFormulaSumIf()
 {
     if (!detectOpenCLDevice())
@@ -5452,7 +5426,7 @@ void ScOpenCLTest::testMathFormulaSumIf()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-378]
+
 void ScOpenCLTest::testAddInFormulaBesseLJ()
 {
     if (!detectOpenCLDevice())
@@ -5475,7 +5449,7 @@ void ScOpenCLTest::testAddInFormulaBesseLJ()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//AMLOEXT-379
+
 void ScOpenCLTest::testStatisticalFormulaAvedev()
 {
     if (!detectOpenCLDevice())
@@ -5498,7 +5472,6 @@ void ScOpenCLTest::testStatisticalFormulaAvedev()
     xDocShRes->DoClose();
 }
 
-//[AMLOEXT-383]
 void ScOpenCLTest::testNegSub()
 {
     if (!detectOpenCLDevice())
@@ -5521,7 +5494,7 @@ void ScOpenCLTest::testNegSub()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-386]
+
 void ScOpenCLTest::testMathFormulaAverageIf_Mix()
 {
     if (!detectOpenCLDevice())
@@ -5541,7 +5514,7 @@ void ScOpenCLTest::testMathFormulaAverageIf_Mix()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-387]
+
 void ScOpenCLTest::testStatisticalFormulaKurt1()
 {
     if (!detectOpenCLDevice())
@@ -5562,7 +5535,7 @@ void ScOpenCLTest::testStatisticalFormulaKurt1()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-401]
+
 void ScOpenCLTest::testStatisticalFormulaHarMean1()
 {
     if (!detectOpenCLDevice())
@@ -5583,7 +5556,7 @@ void ScOpenCLTest::testStatisticalFormulaHarMean1()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-402]
+
 void ScOpenCLTest::testStatisticalFormulaVarA1()
 {
     if (!detectOpenCLDevice())
@@ -5606,7 +5579,7 @@ void ScOpenCLTest::testStatisticalFormulaVarA1()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-403]
+
 void ScOpenCLTest::testStatisticalFormulaVarPA1()
 {
     if (!detectOpenCLDevice())
@@ -5629,7 +5602,7 @@ void ScOpenCLTest::testStatisticalFormulaVarPA1()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-404]
+
 void ScOpenCLTest::testStatisticalFormulaStDevA1()
 {
     if (!detectOpenCLDevice())
@@ -5652,7 +5625,7 @@ void ScOpenCLTest::testStatisticalFormulaStDevA1()
     xDocSh->DoClose();
     xDocShRes->DoClose();
 }
-//[AMLOEXT-405]
+
 void ScOpenCLTest::testStatisticalFormulaStDevPA1()
 {
     if (!detectOpenCLDevice())
