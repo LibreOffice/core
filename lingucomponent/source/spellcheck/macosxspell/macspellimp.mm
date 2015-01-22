@@ -360,7 +360,7 @@ Reference< XSpellAlternatives >
                {
                   // if needed add: if (suglst[ii] == NULL) continue;
                   NSString* guess = [guesses objectAtIndex:ii];
-                  OUString cvtwrd((const sal_Unicode*)[guess cStringUsingEncoding:NSUnicodeStringEncoding], (sal_Int32)[guess length]);
+                  OUString cvtwrd(reinterpret_cast<const sal_Unicode*>([guess cStringUsingEncoding:NSUnicodeStringEncoding]), (sal_Int32)[guess length]);
                   pStr[ii] = cvtwrd;
                }
         }
