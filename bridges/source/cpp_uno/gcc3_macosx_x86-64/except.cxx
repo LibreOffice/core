@@ -173,7 +173,7 @@ std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 {
     std::type_info * rtti;
 
-    OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
+    OUString const & unoName = OUString::unacquired(&pTypeDescr->aBase.pTypeName);
 
     MutexGuard guard( m_mutex );
     t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
@@ -311,7 +311,7 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
 #endif
         }
     }
-    rtti = s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
+    rtti = s_rtti->getRTTI( reinterpret_cast<typelib_CompoundTypeDescription *>(pTypeDescr) );
     TYPELIB_DANGER_RELEASE( pTypeDescr );
     assert(rtti && "### no rtti for throwing exception!");
     if (! rtti)
