@@ -919,6 +919,8 @@ void DbCellControl::Init( vcl::Window& rParent, const Reference< XRowSet >& _rxC
         }
     }
     m_xCursor = _rxCursor;
+    if ( m_rColumn.getModel().is() )
+        updateFromModel( m_rColumn.getModel() );
 }
 
 
