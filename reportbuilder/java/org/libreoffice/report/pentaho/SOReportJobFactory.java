@@ -223,7 +223,7 @@ public class SOReportJobFactory
                 Writer result = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(result);
                 e.printStackTrace(printWriter);
-                throw new com.sun.star.lang.WrappedTargetException(e.toString() + '\n' + result.toString(), this, null);
+                throw new com.sun.star.lang.WrappedTargetException(e, e.toString() + '\n' + result.toString(), this, null);
             }
             catch (java.lang.IncompatibleClassChangeError e)
             {
@@ -231,7 +231,7 @@ public class SOReportJobFactory
                 Writer result = new StringWriter();
                 PrintWriter printWriter = new PrintWriter(result);
                 e.printStackTrace(printWriter);
-                throw new com.sun.star.lang.WrappedTargetException(e.toString() + '\n' + result.toString(), this, null);
+                throw new com.sun.star.lang.WrappedTargetException(e, e.toString() + '\n' + result.toString(), this, null);
             }
             Thread.currentThread().setContextClassLoader(cl);
 
