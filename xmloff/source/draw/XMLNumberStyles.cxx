@@ -498,17 +498,32 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
         SdXMLNumberFormatImportContext* pParent,
         SvXMLImportContext* pSlaveContext );
+    SdXMLNumberFormatMemberImportContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        SdXMLNumberFormatImportContext* pParent,
+        css::uno::Reference< css::xml::sax::XFastContextHandler > pSlaveContext );
     virtual ~SdXMLNumberFormatMemberImportContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void characters( const OUString& rChars )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( SdXMLNumberFormatMemberImportContext, SvXMLImportContext );
@@ -550,6 +565,19 @@ SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext( SvXM
 
 }
 
+SdXMLNumberFormatMemberImportContext::SdXMLNumberFormatMemberImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    SdXMLNumberFormatImportContext* pParent,
+    uno::Reference< xml::sax::XFastContextHandler > /*pSlaveContext*/ )
+:   SvXMLImportContext( rImport ),
+    mpParent( pParent ),
+    maNumberStyle( "" ),
+    mpSlaveContext( 0 )
+{
+    // Member variables are wrong
+}
+
 SdXMLNumberFormatMemberImportContext::~SdXMLNumberFormatMemberImportContext()
 {
 }
@@ -561,9 +589,26 @@ SvXMLImportContext *SdXMLNumberFormatMemberImportContext::CreateChildContext( sa
     return mpSlaveContext->CreateChildContext( nPrefix, rLocalName, xAttrList );
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SdXMLNumberFormatMemberImportContext::createFastChildContext(
+    sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return mpSlaveContext->createFastChildContext( Element, xAttrList );
+}
+
 void SdXMLNumberFormatMemberImportContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
 {
     mpSlaveContext->StartElement( xAttrList );
+}
+
+void SAL_CALL SdXMLNumberFormatMemberImportContext::startFastElement(
+    sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    mpSlaveContext->startFastElement( Element, xAttrList );
 }
 
 void SdXMLNumberFormatMemberImportContext::EndElement()
@@ -574,9 +619,27 @@ void SdXMLNumberFormatMemberImportContext::EndElement()
         mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
 }
 
+void SAL_CALL SdXMLNumberFormatMemberImportContext::endFastElement(
+    sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    mpSlaveContext->endFastElement( Element );
+
+    if( mpParent )
+        mpParent->add( maNumberStyle, mbLong, mbTextual, mbDecimal02, maText );
+}
+
 void SdXMLNumberFormatMemberImportContext::Characters( const OUString& rChars )
 {
     mpSlaveContext->Characters( rChars );
+    maText += rChars;
+}
+
+void SAL_CALL SdXMLNumberFormatMemberImportContext::characters(
+    const OUString& rChars )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    mpSlaveContext->characters( rChars );
     maText += rChars;
 }
 
