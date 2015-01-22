@@ -87,7 +87,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
 
     // Hack: RefInput-Kontrolle
     pIdle = new Idle;
-    pIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM ); // 50ms warten
+    pIdle->SetPriority( IdlePriority::MEDIUM ); // 50ms warten
     pIdle->SetIdleHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pIdle->Start();
 

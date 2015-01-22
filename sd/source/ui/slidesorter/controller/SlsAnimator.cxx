@@ -68,7 +68,7 @@ Animator::Animator (SlideSorter& rSlideSorter)
       mpDrawLock(),
       mnNextAnimationId(0)
 {
-    maIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_REPAINT);
+    maIdle.SetPriority(IdlePriority::REPAINT);
     maIdle.SetIdleHdl(LINK(this,Animator,TimeoutHandler));
 }
 

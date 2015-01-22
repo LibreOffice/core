@@ -984,7 +984,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasPreview = true;
 
                 // aPreviewTimer
-                maPreviewIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
+                maPreviewIdle.SetPriority( IdlePriority::LOWEST );
                 maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
@@ -1001,7 +1001,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 nTemplateDescription = TemplateDescription::FILEOPEN_LINK_PREVIEW;
                 mbHasPreview = true;
                 // aPreviewTimer
-                maPreviewIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
+                maPreviewIdle.SetPriority( IdlePriority::LOWEST );
                 maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 

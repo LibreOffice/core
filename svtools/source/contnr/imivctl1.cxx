@@ -136,16 +136,16 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nHorSBarHeight = aHorSBar.GetSizePixel().Height();
     nVerSBarWidth = aVerSBar.GetSizePixel().Width();
 
-    aEditIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
+    aEditIdle.SetPriority( IdlePriority::LOWEST );
     aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
-    aAutoArrangeIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOW );
+    aAutoArrangeIdle.SetPriority( IdlePriority::LOW );
     aAutoArrangeIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
-    aCallSelectHdlIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
+    aCallSelectHdlIdle.SetPriority( IdlePriority::LOWEST );
     aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
 
-    aDocRectChangedIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM );
+    aDocRectChangedIdle.SetPriority( IdlePriority::MEDIUM );
     aDocRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
-    aVisRectChangedIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM );
+    aVisRectChangedIdle.SetPriority( IdlePriority::MEDIUM );
     aVisRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( true );
@@ -3394,7 +3394,7 @@ bool IcnViewEdit_Impl::PreNotify( NotifyEvent& rNEvt )
             ((!Application::GetFocusWindow()) || !IsChild(Application::GetFocusWindow())))
         {
             bCanceled = false;
-            aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_REPAINT);
+            aIdle.SetPriority(IdlePriority::REPAINT);
             aIdle.SetIdleHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
             aIdle.Start();
         }

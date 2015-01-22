@@ -55,7 +55,7 @@ bAllowDoubles
             if( !_pIdle )
             {
                 _pIdle = new Idle;
-                _pIdle->SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGHEST );
+                _pIdle->SetPriority( IdlePriority::HIGHEST );
                 _pIdle->SetIdleHdl( STATIC_LINK(
                     this, AsynchronLink, HandleCall) );
             }

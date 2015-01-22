@@ -429,7 +429,7 @@ namespace sdr
             mbRefreshWithPreRendering(bRefreshWithPreRendering)
         {
             // Init timer
-            maBufferIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_HIGH );
+            maBufferIdle.SetPriority( IdlePriority::HIGH );
             maBufferIdle.SetIdleHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
         }
 

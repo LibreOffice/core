@@ -93,7 +93,7 @@ struct SwSendMailDialog_Impl
         nCurrentDescriptor(0),
         nDocumentCount(0)
              {
-                aRemoveIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
+                aRemoveIdle.SetPriority(IdlePriority::LOWEST);
              }
 
     ~SwSendMailDialog_Impl()

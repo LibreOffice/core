@@ -1773,7 +1773,7 @@ OUString FormulaDlg::GetMeText() const
 void FormulaDlg::Update()
 {
     m_pImpl->Update();
-    m_pImpl->aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWER);
+    m_pImpl->aIdle.SetPriority(IdlePriority::LOWER);
     m_pImpl->aIdle.SetIdleHdl(LINK( this, FormulaDlg, UpdateFocusHdl));
     m_pImpl->aIdle.Start();
 }

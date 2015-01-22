@@ -709,7 +709,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager)
 
     m_pUpdateBtn->Enable(false);
 
-    m_aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
+    m_aIdle.SetPriority(IdlePriority::LOWEST);
     m_aIdle.SetIdleHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
@@ -1191,7 +1191,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pUpdateBtn->Enable( false );
     m_pCloseBtn->GrabFocus();
 
-    m_aIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_MEDIUM );
+    m_aIdle.SetPriority( IdlePriority::MEDIUM );
     m_aIdle.SetIdleHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 

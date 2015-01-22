@@ -322,7 +322,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
     // when it shows the context menu or the insert symbol dialog
     if ( !HasFocus() && HasChildPathFocus( true ) )
     {
-        maLoseFocusIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_REPAINT );
+        maLoseFocusIdle.SetPriority( IdlePriority::REPAINT );
         maLoseFocusIdle.SetIdleHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
         maLoseFocusIdle.Start();
     }

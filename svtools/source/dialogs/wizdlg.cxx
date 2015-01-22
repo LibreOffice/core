@@ -61,7 +61,7 @@ void WizardDialog::ImplInitData()
     mbEmptyViewMargin =  false;
     mnLeftAlignCount = 0;
 
-    maWizardLayoutIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_RESIZE);
+    maWizardLayoutIdle.SetPriority(IdlePriority::RESIZE);
     maWizardLayoutIdle.SetIdleHdl( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
 }
 

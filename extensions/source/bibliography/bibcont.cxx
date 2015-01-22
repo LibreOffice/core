@@ -127,7 +127,7 @@ BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
 {
     pBibMod = OpenBibModul();
     aIdle.SetIdleHdl(LINK( this, BibBookContainer, SplitHdl));
-    aIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWEST);
+    aIdle.SetPriority(IdlePriority::LOWEST);
 }
 
 BibBookContainer::~BibBookContainer()
