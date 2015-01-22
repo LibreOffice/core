@@ -278,7 +278,19 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
     @Override
     public void keyPress(KeyEvent keyEvent) {
-        int code = keyEvent.getUnicodeChar();
+        int code = 0;
+        switch (keyEvent.getKeyCode())
+        {
+        case KeyEvent.KEYCODE_DEL:
+            code = com.sun.star.awt.Key.BACKSPACE;
+            break;
+        case KeyEvent.KEYCODE_ENTER:
+            code = com.sun.star.awt.Key.RETURN;
+            break;
+        default:
+            code = keyEvent.getUnicodeChar();
+            break;
+        }
         mOffice.postKeyEvent(Office.KEY_PRESS, code);
     }
 
