@@ -430,7 +430,8 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
         if ( nAnchorId != FLY_AT_CHAR
              || !PosInsideInputFld( aPos ) )
         {
-            pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), 0, &aPos, false );
+            SwCntntNode* pCNode = aPos.nNode.GetNode().GetCntntNode();
+            pTxtFrm = pCNode ? pCNode->getLayoutFrm(GetLayout(), 0, &aPos, false) : NULL;
         }
     }
     const SwFrm *pNewAnch = NULL;
