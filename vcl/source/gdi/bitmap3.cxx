@@ -2593,7 +2593,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
     return bRet;
 }
 
-bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, const int nNewSize, BitmapReadAccess* pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount)
+bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, BitmapReadAccess* pReadAcc, int aNumberOfContributions, double* pWeights, int* pPixels, int* pCount)
 {
     BitmapWriteAccess* pWriteAcc = aNewBitmap.AcquireWriteAccess();
 
@@ -2601,25 +2601,28 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, const int nNewSize, BitmapR
         return false;
 
     const int nHeight = GetSizePixel().Height();
+    assert(GetSizePixel().Height() == aNewBitmap.GetSizePixel().Width());
+    const int nWidth = GetSizePixel().Width();
+    assert(GetSizePixel().Width() == aNewBitmap.GetSizePixel().Height());
 
     BitmapColor aColor;
     double aValueRed, aValueGreen, aValueBlue;
     double aSum, aWeight;
     int aBaseIndex, aIndex;
 
-    for ( int y = 0; y < nHeight; y++ )
+    for (int nSourceY = 0; nSourceY < nHeight; ++nSourceY)
     {
-        for ( int x = 0; x < nNewSize; x++ )
+        for (int nSourceX = 0; nSourceX < nWidth; ++nSourceX)
         {
-            aBaseIndex = x * aNumberOfContributions;
+            aBaseIndex = nSourceX * aNumberOfContributions;
             aSum = aValueRed = aValueGreen = aValueBlue = 0.0;
 
-            for ( int j=0; j < pCount[x]; j++ )
+            for (int j = 0; j < pCount[nSourceX]; ++j)
             {
                 aIndex = aBaseIndex + j;
                 aSum += aWeight = pWeights[ aIndex ];
 
-                aColor = pReadAcc->GetColor( y, pPixels[ aIndex ] );
+                aColor = pReadAcc->GetColor(nSourceY, pPixels[aIndex]);
 
                 aValueRed += aWeight * aColor.GetRed();
                 aValueGreen += aWeight * aColor.GetGreen();
@@ -2630,7 +2633,11 @@ bool Bitmap::ImplConvolutionPass(Bitmap& aNewBitmap, const int nNewSize, BitmapR
                 (sal_uInt8) MinMax( aValueRed / aSum, 0, 255 ),
                 (sal_uInt8) MinMax( aValueGreen / aSum, 0, 255 ),
                 (sal_uInt8) MinMax( aValueBlue / aSum, 0, 255 ) );
-            pWriteAcc->SetPixel( y, x, aResultColor );
+
+            int nDestX = nSourceY;
+            int nDestY = nSourceX;
+
+            pWriteAcc->SetPixel(nDestY, nDestX, aResultColor);
         }
     }
     aNewBitmap.ReleaseAccess( pWriteAcc );
