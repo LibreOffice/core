@@ -591,12 +591,24 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException, st
         bRet = m_pCache->next();
         doCancelModification( );
 
+        // if we were afterLast before next() then we still are,
+        // i.e. bAfterLast implies m_pCache->isAfterLast()
+        if (bAfterLast)
+            assert(m_pCache->isAfterLast());
+        // so the only way bAfterLast != m_pCache->isAfterLast()
+        // would be that we just arrived there,
+        if (bAfterLast != m_pCache->isAfterLast())
+        {
+            assert(!bAfterLast);
+            assert(m_pCache->isAfterLast());
+        }
+        // in which case we *did* move the cursor
         if ( bRet || bAfterLast != m_pCache->isAfterLast() )
         {
             // notification order
             // - column values
             // - cursorMoved
-            setCurrentRow( bRet, true, aOldValues, aGuard );
+            setCurrentRow( true, true, aOldValues, aGuard );
             OSL_ENSURE(!m_bBeforeFirst,"BeforeFirst is true. I don't know why?");
         }
         else
