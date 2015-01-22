@@ -124,12 +124,13 @@ struct MigrationItem
 
     bool operator==(const MigrationItem& aMigrationItem)
     {
-        return ((aMigrationItem.m_sCommandURL == m_sCommandURL
-            || (areBothOpenFrom(aMigrationItem.m_sCommandURL, m_sCommandURL)
-            ||  areBothOpenFrom(m_sCommandURL, aMigrationItem.m_sCommandURL)))
+        return
+            (aMigrationItem.m_sCommandURL == m_sCommandURL
+             || areBothOpenFrom(aMigrationItem.m_sCommandURL, m_sCommandURL)
+             || areBothOpenFrom(m_sCommandURL, aMigrationItem.m_sCommandURL))
             && aMigrationItem.m_sParentNodeName == m_sParentNodeName
             && aMigrationItem.m_sPrevSibling    == m_sPrevSibling
-            && aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is() );
+            && aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is();
     }
 };
 
