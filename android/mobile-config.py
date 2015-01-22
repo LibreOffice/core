@@ -76,6 +76,7 @@ if __name__ == '__main__':
     # Don't do pointless Word -> Writer and similar conversions when we have no UI.
     nsDict = {
         "component-schema": "{http://openoffice.org/2001/registry}component-schema",
+        "component-data": "{http://openoffice.org/2001/registry}component-data",
         "name": "{http://openoffice.org/2001/registry}name",
     }
     microsoftImport = '%(component-schema)s[@%(name)s="Common"]/component/group[@%(name)s="Filter"]/group[@%(name)s="Microsoft"]/group[@%(name)s="Import"]/prop' % nsDict
@@ -90,6 +91,11 @@ if __name__ == '__main__':
 
     # Disable Table -> Table Boundaries
     for prop in root.findall('%(component-schema)s[@%(name)s="UI"]/templates/group[@%(name)s="ColorScheme"]/group[@%(name)s="TableBoundaries"]/prop' % nsDict):
+        for value in prop.findall("value"):
+            value.text = "false"
+
+    # Disable Impress View -> Slide Pane
+    for prop in root.findall('%(component-data)s[@%(name)s="Impress"]/node[@%(name)s="MultiPaneGUI"]/node[@%(name)s="SlideSorterBar"]/node[@%(name)s="Visible"]/prop[@%(name)s="ImpressView"]' % nsDict):
         for value in prop.findall("value"):
             value.text = "false"
 
