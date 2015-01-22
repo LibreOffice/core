@@ -98,6 +98,25 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     xPropSet->getPropertyValue( sCont ) >>= xHeaderFooterContent;
 }
 
+XMLTableHeaderFooterContext::XMLTableHeaderFooterContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
+    const uno::Reference< beans::XPropertySet >& rPageStylePropSet,
+    bool bFooter, bool bLft )
+:   SvXMLImportContext( rImport ),
+    xPropSet( rPageStylePropSet ),
+    sOn( bFooter ? OUString(SC_UNO_PAGE_FTRON) : OUString(SC_UNO_PAGE_HDRON) ),
+    sShareContent( bFooter ? OUString(SC_UNO_PAGE_FTRSHARED) : OUString(SC_UNO_PAGE_HDRSHARED) ),
+    sContent( bFooter ? OUString(SC_UNO_PAGE_RIGHTFTRCON) : OUString(SC_UNO_PAGE_RIGHTHDRCON) ),
+    sContentLeft( bFooter ? OUString(SC_UNO_PAGE_LEFTFTRCONT) : OUString(SC_UNO_PAGE_LEFTHDRCONT) ),
+    bDisplay( true ),
+    bLeft( bLft ),
+    bContainsLeft(false),
+    bContainsRight(false),
+    bContainsCenter(false)
+{
+}
+
 XMLTableHeaderFooterContext::~XMLTableHeaderFooterContext()
 {
 }
@@ -168,6 +187,14 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLTableHeaderFooterContext::createFastChildContext( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return uno::Reference< xml::sax::XFastContextHandler >();
+}
+
 void XMLTableHeaderFooterContext::EndElement()
 {
     if( GetImport().GetTextImport()->GetCursor().is() )
@@ -194,6 +221,11 @@ void XMLTableHeaderFooterContext::EndElement()
 
         xPropSet->setPropertyValue( sCont, uno::makeAny(xHeaderFooterContent) );
     }
+}
+
+void SAL_CALL XMLTableHeaderFooterContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
 }
 
 TYPEINIT1( XMLHeaderFooterRegionContext, SvXMLImportContext );

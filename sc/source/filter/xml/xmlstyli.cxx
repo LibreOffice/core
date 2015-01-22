@@ -1250,6 +1250,24 @@ SvXMLImportContext *ScMasterPageContext::CreateHeaderFooterContext(
                                                 bFooter, bLeft );
 }
 
+uno::Reference< xml::sax::XFastContextHandler >
+    ScMasterPageContext::CreateHeaderFooterContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const bool bFooter, const bool bLeft, const bool /*bFirst*/ )
+{
+    if( !bLeft )
+    {
+        if( bFooter )
+            bContainsRightFooter = true;
+        else
+            bContainsRightHeader = true;
+    }
+    if( !xPropSet.is() )
+        xPropSet.set(GetStyle(), UNO_QUERY );
+    return new XMLTableHeaderFooterContext( GetImport(), Element,
+            xAttrList, xPropSet, bFooter, bLeft );
+}
+
 void ScMasterPageContext::ClearContent(const OUString& rContent)
 {
     if (!xPropSet.is())
