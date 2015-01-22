@@ -96,7 +96,7 @@ public class LibreOfficeMainActivity extends LOAbout {
         LayoutInflater.from(this).setFactory(ViewFactory.getInstance());
 
         if (getIntent().getData() != null) {
-            mInputFile = getIntent().getData().getEncodedPath();
+            mInputFile = getIntent().getData().getPath();
         } else {
             mInputFile = DEFAULT_DOC_PATH;
         }
