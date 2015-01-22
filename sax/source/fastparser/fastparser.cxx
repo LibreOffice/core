@@ -456,7 +456,7 @@ void Entity::startElement( Event *pEvent )
         maContextStack.top().mxContext.set( static_cast<XFastContextHandler *>( xContext.get() ) );
         xContext.set( NULL, UNO_REF_NO_ACQUIRE );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
         saveException( ::cppu::getCaughtException() );
     }
@@ -475,7 +475,7 @@ void Entity::characters( const OUString& sChars )
     {
         xContext->characters( sChars );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
         saveException( ::cppu::getCaughtException() );
     }
@@ -499,7 +499,7 @@ void Entity::endElement()
         else
             xContext->endUnknownElement( aContext.maNamespace, aContext.maElementName );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
         saveException( ::cppu::getCaughtException() );
     }
