@@ -34,7 +34,7 @@ build-ant: android_version_setup copy-stuff link-so properties
 	    $(call COPYJAR,$(INSTDIR)/$(LIBO_SHARE_JAVA_FOLDER)/$${F}.jar); \
 	done
 #
-	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) $(if $(ENABLE_DEBUG),debug,release)
+	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) $(if $(ENABLE_RELEASE_BUILD),release,debug)
 
 run:
 	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt
