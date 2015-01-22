@@ -585,7 +585,6 @@ protected:
         // calls AdjustRows or AdjustDataSource, synchron if the caller is running in the solar thread, else asynchron
 
 protected:
-    virtual void InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol) SAL_OVERRIDE;
     void Construct();
     void ImplInitWindow( const InitWindowFacet _eInitWhat );
     DECL_LINK(OnDelete, void*);

@@ -2872,14 +2872,6 @@ CellController* DbGridControl::GetController(long /*nRow*/, sal_uInt16 nColumnId
     return pReturn;
 }
 
-void DbGridControl::InitController(CellControllerRef& /*rController*/, long /*nRow*/, sal_uInt16 nColumnId)
-{
-    size_t Location = GetModelColumnPos(nColumnId);
-    DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : NULL;
-    if (pColumn)
-        pColumn->UpdateFromField(m_xCurrentRow, m_xFormatter);
-}
-
 void DbGridControl::CellModified()
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::CellModified");
