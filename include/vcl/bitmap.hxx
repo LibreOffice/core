@@ -808,7 +808,6 @@ public:
 
     SAL_DLLPRIVATE bool     ImplConvolutionPass(
                                 Bitmap& aNewBitmap,
-                                const int nNewSize,
                                 BitmapReadAccess* pReadAcc,
                                 int aNumberOfContributions,
                                 double* pWeights,
