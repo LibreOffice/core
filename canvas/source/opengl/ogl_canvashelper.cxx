@@ -664,12 +664,14 @@ namespace oglcanvas
                 // via OutDev::DrawPolyPolygon(), on/off fill would
                 // generate off areas on those self-intersections.
 
+                const sal_uInt16 nSize( aStrokedPolyPoly.count() );
+
                 for(sal_uInt32 i=0;i<nSize; ++i)
                 {
-                    ::basegfx::B2DPolyPolygon tempStrokedPoly;
-                    tempStrokedPoly.append(aStrokedPolyPoly.getB2DPolygon(i));
+                    ::basegfx::B2DPolyPolygon aSingleStrokedPoly;
+                    aSingleStrokedPoly.append(aStrokedPolyPoly.getB2DPolygon(i));
 
-                    rAct.maPolyPolys.push_back(tempStrokedPoly);
+                    rAct.maPolyPolys.push_back(aSingleStrokedPoly);
                     rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
 
                     rAct.maFunction = &lcl_fillPolyPolygon;
