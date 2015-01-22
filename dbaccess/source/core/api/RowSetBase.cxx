@@ -657,6 +657,7 @@ sal_Bool SAL_CALL ORowSetBase::isFirst(  ) throw(SQLException, RuntimeException,
     if ( impl_rowDeleted() )
         return ( m_nDeletedPosition == 1 );
 
+    positionCache( MOVE_NONE_REFRESH_ONLY );
     bool bIsFirst = m_pCache->isFirst();
 
     SAL_INFO("dbaccess", "ORowSetBase::isFirst() = " << bIsFirst << " Clone = " << m_bClone);
@@ -686,6 +687,7 @@ sal_Bool SAL_CALL ORowSetBase::isLast(  ) throw(SQLException, RuntimeException, 
             return ( m_nDeletedPosition == impl_getRowCount() );
     }
 
+    positionCache( MOVE_NONE_REFRESH_ONLY );
     bool bIsLast = m_pCache->isLast();
 
     SAL_INFO("dbaccess", "ORowSetBase::isLast() = " << bIsLast << " Clone = " << m_bClone);
