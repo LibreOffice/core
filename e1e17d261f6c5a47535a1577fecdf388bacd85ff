@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a43c5e1_002bc883",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-22T13:52:41Z",
+      "side": 1,
+      "message": "well gcc complains that a call with sal_uInt32 (\u003d unsigned int) is ambiguous\n\n... but now i see there\u0027s another call with size_t (unsigned long int) that is still ambiguous even with this one in place...",
+      "parentUuid": "5a43c5e1_401a3070",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a43c5e1_c00de038",
         "filename": "include/rtl/strbuf.hxx",
         "patchSetId": 1
@@ -47,6 +65,24 @@
       "writtenOn": "2015-01-22T13:47:17Z",
       "side": 1,
       "message": "is an overload for sal_Unicode really necessary for OStringBuffer?",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_a01f745a",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-01-22T13:52:41Z",
+      "side": 1,
+      "message": "dunno, somebody might define a local variable sal_Unicode x\u003d\u0027X\u0027 then use that?\nwouldnt that convert implicitly to int?",
+      "parentUuid": "5a43c5e1_6013ac5d",
       "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
