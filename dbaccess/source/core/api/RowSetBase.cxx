@@ -1329,7 +1329,7 @@ void ORowSetBase::onDeleteRow( const Any& _rBookmark )
 
     ::osl::MutexGuard aGuard( *m_pMutex );
     //OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::onDeleteRow: Bookmark isn't valid!" );
-    if ( compareBookmarks( _rBookmark, m_aBookmark ) == 0 )
+    if ( compareBookmarks( _rBookmark, m_aBookmark ) == CompareBookmark::EQUAL )
     {
         positionCache( MOVE_NONE );
         m_nDeletedPosition = m_pCache->getRow();
@@ -1349,7 +1349,7 @@ void ORowSetBase::onDeletedRow( const Any& _rBookmark, sal_Int32 _nPos )
     }
 
     ::osl::MutexGuard aGuard( *m_pMutex );
-    if ( compareBookmarks( _rBookmark, m_aBookmark ) == 0 )
+    if ( compareBookmarks( _rBookmark, m_aBookmark ) == CompareBookmark::EQUAL )
     {
         m_aOldRow->clearRow();
         m_aCurrentRow   = m_pCache->getEnd();
