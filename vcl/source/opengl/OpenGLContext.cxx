@@ -33,6 +33,8 @@
 #include <opengl/program.hxx>
 #include <opengl/texture.hxx>
 
+#include "openglgdiimpl.hxx"
+
 using namespace com::sun::star;
 
 #define MAX_FRAMEBUFFER_COUNT 30
@@ -104,7 +106,7 @@ OpenGLContext::~OpenGLContext()
 }
 
 #ifdef DBG_UTIL
-void OpenGLContext::AddRef(SalGraphicsImpl* pImpl)
+void OpenGLContext::AddRef(OpenGLSalGraphicsImpl* pImpl)
 {
     assert(mnRefCount > 0);
     mnRefCount++;
@@ -112,7 +114,7 @@ void OpenGLContext::AddRef(SalGraphicsImpl* pImpl)
     maParents.insert(pImpl);
 }
 
-void OpenGLContext::DeRef(SalGraphicsImpl* pImpl)
+void OpenGLContext::DeRef(OpenGLSalGraphicsImpl* pImpl)
 {
 
     auto it = maParents.find(pImpl);
