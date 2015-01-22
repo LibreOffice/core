@@ -494,6 +494,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         xParser->setTokenHandler( xTokenHandler );
 
         xml::sax::InputSource aParserInput;
+        aParserInput.sSystemId = mpStream->getTarget();
         aParserInput.aInputStream = mpStream->getDocumentStream();
         try
         {
