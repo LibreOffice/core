@@ -1669,6 +1669,107 @@ SvXMLNumFormatContext::SvXMLNumFormatContext(
     eDateSecs( XML_DEA_NONE ),
     bDateNoDefault( false )
 {
+    LanguageTagODF aLanguageTagODF;
+    OUString sNatNumAttrScript, sNatNumAttrRfcLanguageTag;
+    css::i18n::NativeNumberXmlAttributes aNatNumAttr;
+    bool bAttrBool(false);
+    sal_uInt16 nAttrEnum;
+
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute* attr = attributes.begin();
+         attr != attributes.end(); attr++)
+    {
+        const SvXMLTokenMap& rTokenMap = pData->GetStyleAttrTokenMap();
+        switch( rTokenMap.Get( attr->Token ) )
+        {
+        case XML_TOK_STYLE_ATTR_NAME:
+            break;
+        case XML_TOK_STYLE_ATTR_RFC_LANGUAGE_TAG:
+            aLanguageTagODF.maRfcLanguageTag = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_LANGUAGE:
+            aLanguageTagODF.maLanguage = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_SCRIPT:
+            aLanguageTagODF.maScript = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_COUNTRY:
+            aLanguageTagODF.maCountry = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_TITLE:
+            sFormatTitle = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_AUTOMATIC_ORDER:
+            if( sax::Converter::convertBool( bAttrBool, attr->Value ) )
+                bAutoOrder = bAttrBool;
+            break;
+        case XML_TOK_STYLE_ATTR_FORMAT_SOURCE:
+            if( SvXMLUnitConverter::convertEnum( nAttrEnum, attr->Value, aFormatSourceMap ) )
+                bFromSystem = (bool) nAttrEnum;
+            break;
+        case XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW:
+            if( sax::Converter::convertBool( bAttrBool, attr->Value ) )
+                bTruncate = bAttrBool;
+            break;
+        case XML_TOK_STYLE_ATTR_VOLATILE:
+            // volatile formats can be removed after importing
+            // if not used in other styles
+            if( sax::Converter::convertBool( bAttrBool, attr->Value ))
+                bRemoveAfterUse = bAttrBool;
+            break;
+        case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
+            aNatNumAttr.Format = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG:
+            sNatNumAttrRfcLanguageTag = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE:
+            aNatNumAttr.Locale.Language = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_TRANSL_SCRIPT:
+            sNatNumAttrScript = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_TRANSL_COUNTRY:
+            aNatNumAttr.Locale.Country = attr->Value;
+            break;
+        case XML_TOK_STYLE_ATTR_TRANSL_STYLE:
+            aNatNumAttr.Style = attr->Value;
+            break;
+        }
+    }
+
+    if( !aLanguageTagODF.isEmpty() )
+    {
+        nFormatLang = aLanguageTagODF.getLanguageTag().getLanguageType( false );
+        if( nFormatLang == LANGUAGE_DONTKNOW )
+            nFormatLang = LANGUAGE_SYSTEM; //! error handling for unknown locales?
+    }
+
+    if( !aNatNumAttr.Format.isEmpty() )
+    {
+        SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
+        if( pFormatter )
+        {
+            LanguageTag aLanguageTag( sNatNumAttrRfcLanguageTag, aNatNumAttr.Locale.Language,
+                    sNatNumAttrScript, aNatNumAttr.Locale.Country );
+            aNatNumAttr.Locale = aLanguageTag.getLocale( false );
+
+            sal_Int32 nNatNum = pFormatter->GetNatNum()->convertFromXmlAttributes( aNatNumAttr );
+            aFormatCode.append( "[NatNum" );
+            aFormatCode.append( nNatNum, 10 );
+
+            LanguageType eLang = aLanguageTag.getLanguageType( false );
+            if( eLang == LANGUAGE_DONTKNOW )
+                eLang = LANGUAGE_SYSTEM; //! error handling for unknown locales?
+            if( eLang != nFormatLang && eLang != LANGUAGE_SYSTEM )
+            {
+                aFormatCode.append( "][$-" );
+                // language code in upper hex:
+                aFormatCode.append(OUString::number(eLang, 16).toAsciiUpperCase());
+            }
+            aFormatCode.append( ']' );
+        }
+    }
 }
 
 SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
@@ -1735,6 +1836,7 @@ SvXMLNumFormatContext::SvXMLNumFormatContext(
     eDateSecs( XML_DEA_NONE ),
     bDateNoDefault( false )
 {
+    // TODO
 }
 
 SvXMLNumFormatContext::~SvXMLNumFormatContext()
@@ -1794,13 +1896,55 @@ SvXMLImportContext* SvXMLNumFormatContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SvXMLNumFormatContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SvXMLNumFormatContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
-}
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
 
+    const SvXMLTokenMap& rTokenMap = pData->GetStyleElemTokenMap();
+    switch( rTokenMap.Get( Element ) )
+    {
+        case XML_TOK_STYLE_TEXT:
+        case XML_TOK_STYLE_FILL_CHARACTER:
+        case XML_TOK_STYLE_NUMBER:
+        case XML_TOK_STYLE_SCIENTIFIC_NUMBER:
+        case XML_TOK_STYLE_FRACTION:
+        case XML_TOK_STYLE_CURRENCY_SYMBOL:
+        case XML_TOK_STYLE_DAY:
+        case XML_TOK_STYLE_MONTH:
+        case XML_TOK_STYLE_YEAR:
+        case XML_TOK_STYLE_ERA:
+        case XML_TOK_STYLE_DAY_OF_WEEK:
+        case XML_TOK_STYLE_WEEK_OF_YEAR:
+        case XML_TOK_STYLE_QUARTER:
+        case XML_TOK_STYLE_HOURS:
+        case XML_TOK_STYLE_AM_PM:
+        case XML_TOK_STYLE_MINUTES:
+        case XML_TOK_STYLE_SECONDS:
+        case XML_TOK_STYLE_BOOLEAN:
+        case XML_TOK_STYLE_TEXT_CONTENT:
+            pContext = new SvXMLNumFmtElementContext( GetImport(), Element,
+                    *this, Element, xAttrList );
+            break;
+        case XML_TOK_STYLE_PROPERTIES:
+            pContext = new SvXMLNumFmtPropContext( GetImport(), Element,
+                    *this, xAttrList );
+            break;
+        case XML_TOK_STYLE_MAP:
+        {
+            // SvXMLNumFmtMapContext::endFastElement adds to aMyConditions,
+            // so there's no need for an extra flag
+            pContext = new SvXMLNumFmtMapContext( GetImport(), Element,
+                    *this, xAttrList );
+        }
+        break;
+    }
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
+    return pContext;
+}
 
 sal_Int32 SvXMLNumFormatContext::GetKey()
 {
