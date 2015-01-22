@@ -36,7 +36,7 @@ struct ImplIdleData
         if (mbDelete || mbInIdle )
             return;
 
-        mpIdle->SetSchedulingPriority(convertToInt(mpIdle->GetDefaultPriority()));
+        mpIdle->SetSchedulingPriority(static_cast<sal_Int32>(mpIdle->GetDefaultPriority()));
         mbDelete = true;
         mpIdle->mbActive = false;
 
@@ -208,7 +208,7 @@ Idle& Idle::operator=( const Idle& rIdle )
 
 Idle::Idle():
     mpIdleData(NULL),
-    miPriority(convertToInt(IdlePriority::VCL_IDLE_PRIORITY_HIGH)),
+    miPriority(static_cast<sal_Int32>(IdlePriority::VCL_IDLE_PRIORITY_HIGH)),
     meDefaultPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH),
     mbActive(false)
 {

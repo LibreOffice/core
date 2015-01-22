@@ -28,40 +28,15 @@ struct ImplIdleData;
 struct ImplSVData;
 
 enum class IdlePriority {
-    VCL_IDLE_PRIORITY_HIGHEST,
-    VCL_IDLE_PRIORITY_HIGH,
-    VCL_IDLE_PRIORITY_REPAINT,
-    VCL_IDLE_PRIORITY_RESIZE,
-    VCL_IDLE_PRIORITY_MEDIUM,
-    VCL_IDLE_PRIORITY_LOW,
-    VCL_IDLE_PRIORITY_LOWER,
-    VCL_IDLE_PRIORITY_LOWEST
+    VCL_IDLE_PRIORITY_HIGHEST   = 0,
+    VCL_IDLE_PRIORITY_HIGH      = 1,
+    VCL_IDLE_PRIORITY_REPAINT   = 2,
+    VCL_IDLE_PRIORITY_RESIZE    = 3,
+    VCL_IDLE_PRIORITY_MEDIUM    = 3,
+    VCL_IDLE_PRIORITY_LOW       = 4,
+    VCL_IDLE_PRIORITY_LOWER     = 5,
+    VCL_IDLE_PRIORITY_LOWEST    = 6
 };
-
-inline sal_Int32 convertToInt( IdlePriority ePriority )
-{
-    switch (ePriority)
-    {
-        case IdlePriority::VCL_IDLE_PRIORITY_HIGHEST:
-            return 0;
-        case IdlePriority::VCL_IDLE_PRIORITY_HIGH:
-            return 1;
-        case IdlePriority::VCL_IDLE_PRIORITY_REPAINT:
-            return 2;
-        case IdlePriority::VCL_IDLE_PRIORITY_RESIZE:
-            return 3;
-        case IdlePriority::VCL_IDLE_PRIORITY_MEDIUM:
-            return 3;
-        case IdlePriority::VCL_IDLE_PRIORITY_LOW:
-            return 4;
-        case IdlePriority::VCL_IDLE_PRIORITY_LOWER:
-            return 5;
-        case IdlePriority::VCL_IDLE_PRIORITY_LOWEST:
-            return 6;
-    }
-
-    return 42; // Should not happen
-}
 
 class VCL_DLLPUBLIC Idle
 {
