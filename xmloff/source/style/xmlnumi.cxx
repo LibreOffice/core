@@ -233,11 +233,17 @@ public:
             SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList );
+    SvxXMLListLevelStyleContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList );
     virtual ~SvxXMLListLevelStyleContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     sal_Int32 GetLevel() const { return nLevel; }
     Sequence<beans::PropertyValue> GetProperties();
@@ -379,6 +385,41 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     }
 }
 
+SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+:   SvXMLImportContext( rImport )
+,   sStarBats( "StarBats"  )
+,   sStarMath( "StarMath"  )
+,   sNumFormat( OUString("1") )
+,   nLevel( -1L )
+,   nSpaceBefore( 0L )
+,   nMinLabelWidth( 0L )
+,   nMinLabelDist( 0L )
+,   nImageWidth( 0L )
+,   nImageHeight( 0L )
+,   nNumStartValue( 1 )
+,   nNumDisplayLevels( 1 )
+,   eAdjust( HoriOrientation::LEFT )
+,   eBulletFontFamily( FAMILY_DONTKNOW )
+,   eBulletFontPitch( PITCH_DONTKNOW )
+,   eBulletFontEncoding( RTL_TEXTENCODING_DONTKNOW )
+,   eImageVertOrient(0)
+,   cBullet( 0 )
+,   nRelSize(0)
+,   m_nColor(0)
+,   ePosAndSpaceMode( PositionAndSpaceMode::LABEL_WIDTH_AND_POSITION )
+,   eLabelFollowedBy( LabelFollow::LISTTAB )
+,   nListtabStopPosition( 0 )
+,   nFirstLineIndent( 0 )
+,   nIndentAt( 0 )
+,   bBullet( false )
+,   bImage( false )
+,   bNum( false )
+,   bHasColor( false )
+{
+}
+
 SvxXMLListLevelStyleContext_Impl::~SvxXMLListLevelStyleContext_Impl()
 {
 }
@@ -416,6 +457,14 @@ SvXMLImportContext *SvxXMLListLevelStyleContext_Impl::CreateChildContext(
     }
 
     return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SvxXMLListLevelStyleContext_Impl::createFastChildContext(
+    sal_Int32 /*Element*/, const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return Reference< xml::sax::XFastContextHandler >();
 }
 
 Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties()
