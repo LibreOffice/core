@@ -38,7 +38,11 @@ void ScPivotLayoutTreeList::Setup(ScPivotLayoutDialog* pParent, SvPivotTreeListT
 
 bool ScPivotLayoutTreeList::DoubleClickHdl()
 {
-    ScItemValue* pCurrentItemValue = (ScItemValue*) GetCurEntry()->GetUserData();
+    SvTreeListEntry* pEntry = GetCurEntry();
+    if (!pEntry)
+        return false;
+
+    ScItemValue* pCurrentItemValue = (ScItemValue*) pEntry->GetUserData();
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     if (mpParent->IsDataElement(rCurrentFunctionData.mnCol))
@@ -105,11 +109,12 @@ void ScPivotLayoutTreeList::KeyInput(const KeyEvent& rKeyEvent)
     vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
-    switch (nCode)
+    if (nCode == KEY_DELETE)
     {
-        case KEY_DELETE:
-            GetModel()->Remove(GetCurEntry());
-            return;
+        const SvTreeListEntry* pEntry = GetCurEntry();
+        if (pEntry)
+            GetModel()->Remove(pEntry);
+        return;
     }
     SvTreeListBox::KeyInput(rKeyEvent);
 }
