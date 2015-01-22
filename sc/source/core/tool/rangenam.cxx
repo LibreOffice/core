@@ -461,7 +461,7 @@ void ScRangeData::MakeValidName( OUString& rName )
         {
             // Range Parse is partially valid also with invalid sheet name,
             // Address Parse dito, during compile name would generate a #REF!
-            if ( rName.indexOf( '.' ) == -1 )
+            if ( rName.indexOf( '.' ) != -1 )
                 rName = rName.replaceFirst( ".", "_" );
             else
                 rName = "_" + rName;
