@@ -3029,7 +3029,7 @@ void ScOpenCLTest::testMathSumIfsFormula()
         return;
     ScDocShellRef xDocSh = loadDoc("opencl/math/sumifs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    enableOpenCL();
     xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("opencl/math/sumifs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -3978,7 +3978,7 @@ void ScOpenCLTest::testMathCountIfsFormula()
         return;
     ScDocShellRef xDocSh = loadDoc("opencl/math/countifs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    enableOpenCL();
     xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("opencl/math/countifs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
@@ -4019,7 +4019,7 @@ void ScOpenCLTest::testMathAverageIfsFormula()
         return;
     ScDocShellRef xDocSh = loadDoc("opencl/math/averageifs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    enableOpenCL();
     xDocSh->DoHardRecalc(true);
     ScDocShellRef xDocShRes = loadDoc("opencl/math/averageifs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
