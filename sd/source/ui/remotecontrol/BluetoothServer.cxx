@@ -467,7 +467,7 @@ sal_Int32 OSXBluetoothWrapper::readLine( OString& aLine )
             std::ostringstream s;
             if (mBuffer.size() > 0)
             {
-                for (unsigned char *p = (unsigned char *) &mBuffer.front(); p != (unsigned char *) &mBuffer.front() + mBuffer.size(); p++)
+                for (unsigned char *p = reinterpret_cast<unsigned char *>(&mBuffer.front()); p != reinterpret_cast<unsigned char *>(&mBuffer.front()) + mBuffer.size(); p++)
                 {
                     if (*p == '\n')
                         s << "\\n";
