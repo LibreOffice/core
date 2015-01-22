@@ -171,7 +171,7 @@ struct TokenHandler
 {
     virtual ::sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence< ::sal_Int8 >& Identifier ) throw (uno::RuntimeException) SAL_OVERRIDE
     {
-        OSL_TRACE("getTokenFromUTF8() %s", (const char*)Identifier.getConstArray());
+        OSL_TRACE("getTokenFromUTF8() %s", reinterpret_cast<const char*>(Identifier.getConstArray()));
         return Identifier.getLength() ? Identifier[0] : 0;
     }
 
@@ -199,10 +199,10 @@ struct BasicTest : public test::BootstrapFixture
         mxErrHandler.set( new ErrorHandler() );
         uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(OUString("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
-        mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>((sal_Int8*)validTestFile, SAL_N_ELEMENTS(validTestFile))) );
-        mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>((sal_Int8*)warningTestFile, SAL_N_ELEMENTS(warningTestFile))) );
-        mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>((sal_Int8*)errorTestFile, SAL_N_ELEMENTS(errorTestFile))) );
-        mxFatalInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>((sal_Int8*)fatalTestFile, SAL_N_ELEMENTS(fatalTestFile))) );
+        mxValidInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
+        mxWarningInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(warningTestFile), SAL_N_ELEMENTS(warningTestFile))) );
+        mxErrorInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(errorTestFile), SAL_N_ELEMENTS(errorTestFile))) );
+        mxFatalInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(fatalTestFile), SAL_N_ELEMENTS(fatalTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
     }
 
@@ -273,7 +273,7 @@ struct SerializerTest : public test::BootstrapFixture
         mxErrHandler.set( new ErrorHandler() );
         uno::Reference<XDocumentBuilder> xDB( getMultiServiceFactory()->createInstance(OUString("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
         mxDomBuilder.set( xDB );
-        mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>((sal_Int8*)validTestFile, SAL_N_ELEMENTS(validTestFile))) );
+        mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
         mxHandler.set( new DocumentHandler() );
         mxTokHandler.set( new TokenHandler() );
