@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a43c5e1_401a3070",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-22T13:47:17Z",
+      "side": 1,
+      "message": "is an additional overload for unsigned really needed, given the above one is int (rather than sal_Int32) since d91d98a53612a972de368186415aa48698e074d9?",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_c00de038",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-22T13:47:17Z",
+      "side": 1,
+      "message": "we already have SAL_DELETED_FUNCTION; no need for #if here",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_6013ac5d",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-22T13:47:17Z",
+      "side": 1,
+      "message": "is an overload for sal_Unicode really necessary for OStringBuffer?",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
