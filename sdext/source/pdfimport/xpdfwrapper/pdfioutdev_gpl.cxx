@@ -849,9 +849,18 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     double csdx = 0.0;
     double csdy = 0.0;
     if (state->getFont()->getWMode())
+    {
         csdy = state->getCharSpace();
+        if (*u == ' ')
+            csdy += state->getWordSpace();
+    }
     else
-        csdx = state->getCharSpace() * state->getHorizScaling();
+    {
+        csdx = state->getCharSpace();
+        if (*u == ' ')
+            csdx += state->getWordSpace();
+        csdx *= state->getHorizScaling();
+    }
 
     double cstdx = 0.0;
     double cstdy = 0.0;
