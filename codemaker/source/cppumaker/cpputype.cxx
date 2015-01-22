@@ -1072,7 +1072,7 @@ InterfaceType::InterfaceType(
 }
 
 void InterfaceType::dumpDeclaration(FileStream & out) {
-    out << "\nclass SAL_NO_VTABLE " << id_;
+    out << "\nclass SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI " << id_;
     for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity_->getDirectMandatoryBases().begin());
          i != entity_->getDirectMandatoryBases().end(); ++i)
@@ -1812,7 +1812,7 @@ private:
 
 void PlainStructType::dumpDeclaration(FileStream & out) {
     out << "\n#ifdef SAL_W32\n#   pragma pack(push, 8)\n#endif\n\n" << indent()
-        << "struct " << id_;
+        << "struct SAL_DLLPUBLIC_RTTI " << id_;
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
         out << ": public " << codemaker::cpp::scopedCppName(u2b(base));
@@ -2198,7 +2198,7 @@ private:
 void PolyStructType::dumpDeclaration(FileStream & out) {
     out << "\n#ifdef SAL_W32\n#   pragma pack(push, 8)\n#endif\n\n" << indent();
     dumpTemplateHead(out);
-    out << "struct " << id_ << " {\n";
+    out << "struct SAL_DLLPUBLIC_RTTI " << id_ << " {\n";
     inc();
     out << indent() << "inline " << id_ << "();\n";
     if (!entity_->getMembers().empty()) {
@@ -3127,7 +3127,7 @@ void EnumType::addComprehensiveGetCppuTypeIncludes(
 
 void EnumType::dumpDeclaration(FileStream& o)
 {
-    o << "\nenum " << id_ << "\n{\n";
+    o << "\nenum SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
     inc();
 
     for (std::vector< unoidl::EnumTypeEntity::Member >::const_iterator i(

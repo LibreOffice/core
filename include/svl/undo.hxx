@@ -188,7 +188,7 @@ protected:
 
 namespace svl
 {
-    class SAL_NO_VTABLE IUndoManager
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI IUndoManager
     {
     public:
         static bool const CurrentLevel = true;

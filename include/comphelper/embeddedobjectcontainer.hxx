@@ -36,7 +36,7 @@ namespace comphelper
     class EmbeddedObjectContainer;
     /** Helper interface to give access to some common object which replace the SfxObjectShell
     */
-    class SAL_NO_VTABLE IEmbeddedHelper
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI IEmbeddedHelper
     {
     public:
         virtual EmbeddedObjectContainer& getEmbeddedObjectContainer() const = 0;

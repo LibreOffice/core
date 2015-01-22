@@ -249,6 +249,7 @@ typedef void *                   sal_Handle;
 #endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
 #   define SAL_DLLPUBLIC_TEMPLATE
+#   define SAL_DLLPUBLIC_RTTI
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
 #elif defined SAL_UNX
@@ -259,12 +260,18 @@ typedef void *                   sal_Handle;
 #       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("hidden")))
 #       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
 #       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("hidden")))
+#       define SAL_DLLPUBLIC_RTTI
 #     else
 #       define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
 #       define SAL_JNI_EXPORT        __attribute__ ((visibility("default")))
 #       define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
 #       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
 #       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
+#       if defined __clang__
+#         define SAL_DLLPUBLIC_RTTI  __attribute__ ((visibility("default")))
+#       else
+#         define SAL_DLLPUBLIC_RTTI
+#       endif
 #     endif
 #   else
 #     define SAL_DLLPUBLIC_EXPORT
@@ -272,6 +279,7 @@ typedef void *                   sal_Handle;
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE
 #     define SAL_DLLPUBLIC_TEMPLATE
+#     define SAL_DLLPUBLIC_RTTI
 #   endif
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
