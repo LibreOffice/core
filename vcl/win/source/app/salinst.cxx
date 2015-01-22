@@ -70,6 +70,10 @@
 #include <gdipluscolor.h>
 #include <shlobj.h>
 
+#ifdef _WIN32_WINNT_WINBLUE
+#include <VersionHelpers.h>
+#endif
+
 #ifdef __MINGW32__
 #ifdef GetObject
 #undef GetObject

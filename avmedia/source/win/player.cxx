@@ -26,6 +26,9 @@
 #include <control.h>
 #include <uuids.h>
 #include <evcode.h>
+#ifdef _WIN32_WINNT_WINBLUE
+#include <VersionHelpers.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif

@@ -29,6 +29,9 @@
 #pragma warning(push, 1)
 #endif
 #include <shellapi.h>
+#ifdef _WIN32_WINNT_WINBLUE
+#include <VersionHelpers.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
