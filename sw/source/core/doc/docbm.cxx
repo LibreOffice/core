@@ -510,7 +510,7 @@ namespace sw { namespace mark
 
     sw::mark::IMark* MarkManager::makeAnnotationMark(
         const SwPaM& rPaM,
-        const ::rtl::OUString& rName )
+        const OUString& rName )
     {
         return makeMark( rPaM, rName, IDocumentMarkAccess::ANNOTATIONMARK );
     }
@@ -1064,7 +1064,7 @@ namespace sw { namespace mark
         return m_vAnnotationMarks.size();
     }
 
-    IDocumentMarkAccess::const_iterator_t MarkManager::findAnnotationMark( const ::rtl::OUString& rName ) const
+    IDocumentMarkAccess::const_iterator_t MarkManager::findAnnotationMark( const OUString& rName ) const
     {
         return lcl_FindMarkByName( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
     }

@@ -32,7 +32,7 @@ namespace sw { namespace mark
     public:
         AnnotationMark(
             const SwPaM& rPaM,
-            const ::rtl::OUString& rName );
+            const OUString& rName );
 
         virtual ~AnnotationMark();
 

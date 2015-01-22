@@ -95,17 +95,16 @@ using namespace sw::mark;
 using namespace std; // #i24377#
 using namespace nsSwDocInfoSubType;
 
-//              Bookmarks
-
+// Bookmarks
 namespace
 {
     // #120879# - helper method to identify a bookmark name to match the internal TOC bookmark naming convention
-    bool IsTOCBookmarkName( const ::rtl::OUString& rName )
+    bool IsTOCBookmarkName(const OUString& rName)
     {
         return rName.startsWith("_Toc") || rName.startsWith(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
     }
 
-    ::rtl::OUString EnsureTOCBookmarkName( const ::rtl::OUString& rName )
+    OUString EnsureTOCBookmarkName(const OUString& rName)
     {
         OUString sTmp = rName;
         if ( IsTOCBookmarkName ( rName ) )

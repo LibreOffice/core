@@ -506,7 +506,7 @@ void SwNavigationPI::MakeMark()
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
 
     // collect and sort navigator reminder names
-    ::std::vector< ::rtl::OUString > vNavMarkNames;
+    ::std::vector< OUString > vNavMarkNames;
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
         ppMark != pMarkAccess->getAllMarksEnd();
         ++ppMark)

@@ -1468,7 +1468,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         {
             strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
             const sal_uInt16 nWhich = pField->GetTyp()->Which();
-            rtl::OUString sEntry;
+            OUString sEntry;
             sal_Int32 subType = 0;
             switch (nWhich)
             {

@@ -88,7 +88,7 @@ class IDocumentMarkAccess
 
         virtual sw::mark::IMark* makeAnnotationMark(
             const SwPaM& rPaM,
-            const ::rtl::OUString& rName ) = 0;
+            const OUString& rName ) = 0;
 
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
@@ -255,7 +255,7 @@ class IDocumentMarkAccess
         virtual const_iterator_t getAnnotationMarksBegin() const = 0;
         virtual const_iterator_t getAnnotationMarksEnd() const = 0;
         virtual sal_Int32 getAnnotationMarksCount() const = 0;
-        virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const = 0;
+        virtual const_iterator_t findAnnotationMark( const OUString& rName ) const = 0;
         virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPosition) const = 0;
 
         /** Returns the MarkType used to create the mark

@@ -22,7 +22,7 @@
 #include "SwGrammarMarkUp.hxx"
 #include <osl/diagnose.h>
 
-SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
+SwWrongArea::SwWrongArea( const OUString& rType, WrongListType listType,
         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen)
@@ -32,7 +32,7 @@ SwWrongArea::SwWrongArea( const rtl::OUString& rType, WrongListType listType,
     mLineType = getWrongAreaLineType(listType, xPropertyBag);
 }
 
-SwWrongArea::SwWrongArea( const rtl::OUString& rType,
+SwWrongArea::SwWrongArea( const OUString& rType,
         com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
         sal_Int32 nPos,
         sal_Int32 nLen,

@@ -36,7 +36,7 @@ namespace sw { namespace mark
 {
     AnnotationMark::AnnotationMark(
         const SwPaM& rPaM,
-        const ::rtl::OUString& rName )
+        const OUString& rName )
         : MarkBase( rPaM, rName )
     {
         if ( rName.getLength() == 0 )
@@ -67,7 +67,7 @@ namespace sw { namespace mark
                 // - the annotation field has an empty annotation name or
                 // - the annotation mark's name differs (on mark creation a name clash had been detected)
                 if ( pPostItField->GetName().isEmpty()
-                    || rtl::OUString( pPostItField->GetName() ) != GetName() )
+                    || OUString( pPostItField->GetName() ) != GetName() )
                 {
                     const_cast<SwPostItField*>(pPostItField)->SetName( GetName() );
                 }
@@ -99,8 +99,7 @@ namespace sw { namespace mark
             if ( pFmtFld->IsFldInDoc() )
             {
                 const SwPostItField* pPostItField = dynamic_cast< const SwPostItField* >(pFmtFld->GetField());
-                if ( pPostItField != NULL
-                     && rtl::OUString( pPostItField->GetName() ) == GetName() )
+                if (pPostItField != NULL && pPostItField->GetName() == GetName())
                 {
                     pAnnotationFmtFld = pFmtFld;
                     break;

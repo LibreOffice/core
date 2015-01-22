@@ -634,7 +634,7 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
                     m_pSerializer->singleElement( aChildren[i].Token,
                                                   FSNS(XML_w, XML_val),
-                                                  rtl::OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                                  OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                   FSEND );
             }
 
@@ -4479,11 +4479,11 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 
                 m_pSerializer->singleElementNS(XML_w, XML_dateFormat,
                                                FSNS(XML_w, XML_val),
-                                               rtl::OUStringToOString( sDateFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                               OUStringToOString( sDateFormat, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                FSEND);
                 m_pSerializer->singleElementNS(XML_w, XML_lid,
                                                FSNS(XML_w, XML_val),
-                                               rtl::OUStringToOString( sLocale, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                               OUStringToOString( sLocale, RTL_TEXTENCODING_UTF8 ).getStr(),
                                                FSEND);
                 m_pSerializer->singleElementNS(XML_w, XML_storeMappedDataAs,
                                                FSNS(XML_w, XML_val), "dateTime",
@@ -4529,9 +4529,9 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
                 {
                     m_pSerializer->singleElementNS(XML_w, XML_listItem,
                                                    FSNS(XML_w, XML_displayText),
-                                                   rtl::OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                                   OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
                                                    FSNS(XML_w, XML_value),
-                                                   rtl::OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
+                                                   OUStringToOString( aItems[i], RTL_TEXTENCODING_UTF8 ).getStr(),
                                                    FSEND);
                 }
 
@@ -7546,7 +7546,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     else if ( !m_rExport.bOutPageDescs )
     {
         // compare fill color with the original fill color
-        OString sOriginalFill = rtl::OUStringToOString(
+        OString sOriginalFill = OUStringToOString(
                 m_sOriginalBackgroundColor, RTL_TEXTENCODING_UTF8 );
 
         if( !m_pBackgroundAttrList )
@@ -7996,11 +7996,11 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                         if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartGallery")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w, XML_docPartGallery ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartCategory")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w, XML_docPartCategory ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtDocPart_docPartUnique")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren, FSNS( XML_w, XML_docPartUnique ), "" );
                     }
@@ -8025,15 +8025,15 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                         if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_prefixMappings ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_xpath ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
                             AddToAttrList( m_pParagraphSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_storeItemID ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_alias" && m_aParagraphSdtPrAlias.isEmpty())
@@ -8053,15 +8053,15 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                         if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checked ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checkedState ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
                             AddToAttrList( m_pParagraphSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_uncheckedState ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_id")
@@ -8239,15 +8239,15 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                         if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checked")
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checked ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_checkedState")
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_checkedState ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_SdtCheckbox_uncheckedState")
                             AddToAttrList( m_pRunSdtPrTokenChildren,
                                            FSNS( XML_w14, XML_uncheckedState ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && m_pRunSdtPrDataBindingAttrs == NULL)
@@ -8260,15 +8260,15 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                         if (aGrabBag[j].Name == "ooxml:CT_DataBinding_prefixMappings")
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_prefixMappings ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_xpath")
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_xpath ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                         else if (aGrabBag[j].Name == "ooxml:CT_DataBinding_storeItemID")
                             AddToAttrList( m_pRunSdtPrDataBindingAttrs,
                                            FSNS( XML_w, XML_storeItemID ),
-                                           rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
+                                           OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_alias" && m_aRunSdtPrAlias.isEmpty())

@@ -120,7 +120,7 @@ void SwWrtShell::Insert(SwField &rFld)
         if ( GetDoc() != NULL )
         {
             IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
-            pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, ::rtl::OUString() );
+            pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, OUString() );
         }
         pAnnotationTextRange.reset();
     }

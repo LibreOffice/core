@@ -48,7 +48,7 @@ namespace sw {
 
             virtual sw::mark::IMark* makeAnnotationMark(
                 const SwPaM& rPaM,
-                const ::rtl::OUString& rName ) SAL_OVERRIDE;
+                const OUString& rName ) SAL_OVERRIDE;
 
             virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM) SAL_OVERRIDE;
             virtual bool renameMark(::sw::mark::IMark* io_pMark, const OUString& rNewName) SAL_OVERRIDE;
@@ -90,7 +90,7 @@ namespace sw {
             virtual const_iterator_t getAnnotationMarksBegin() const SAL_OVERRIDE;
             virtual const_iterator_t getAnnotationMarksEnd() const SAL_OVERRIDE;
             virtual sal_Int32 getAnnotationMarksCount() const SAL_OVERRIDE;
-            virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const SAL_OVERRIDE;
+            virtual const_iterator_t findAnnotationMark( const OUString& rName ) const SAL_OVERRIDE;
             virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPos) const SAL_OVERRIDE;
 
             virtual void assureSortedMarkContainers() const SAL_OVERRIDE;

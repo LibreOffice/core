@@ -1912,7 +1912,7 @@ bool SwView::JumpToSwMark( const OUString& rMark )
 
         if( !sCmp.isEmpty() )
         {
-            rtl::OUString sName( sMark.copy( 0, nPos ) );
+            OUString sName( sMark.copy( 0, nPos ) );
             sCmp = sCmp.toAsciiLowerCase();
             FlyCntType eFlyType = FLYCNTTYPE_ALL;
 

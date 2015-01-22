@@ -342,11 +342,11 @@ SwGlossaries::SwGlossaries()
 }
 
 // set new path and recreate internal array
-rtl::OUString lcl_makePath(const std::vector<rtl::OUString>& rPaths)
+OUString lcl_makePath(const std::vector<OUString>& rPaths)
 {
-    std::vector<rtl::OUString>::const_iterator aIt(rPaths.begin());
-    const std::vector<rtl::OUString>::const_iterator aEnd(rPaths.end());
-    rtl::OUStringBuffer aPath(*aIt);
+    std::vector<OUString>::const_iterator aIt(rPaths.begin());
+    const std::vector<OUString>::const_iterator aEnd(rPaths.end());
+    OUStringBuffer aPath(*aIt);
     for (++aIt; aIt != aEnd; ++aIt)
     {
         aPath.append(SVT_SEARCHPATH_DELIMITER);
@@ -368,7 +368,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
         m_PathArr.clear();
 
         std::vector<OUString> aDirArr;
-        std::vector<rtl::OUString> aInvalidPaths;
+        std::vector<OUString> aInvalidPaths;
         if (!m_aPath.isEmpty())
         {
             sal_Int32 nIndex = 0;

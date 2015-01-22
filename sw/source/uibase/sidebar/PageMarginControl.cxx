@@ -418,7 +418,7 @@ bool PageMarginControl::GetUserCustomValues()
     if ( aWinOpt.Exists() )
     {
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
@@ -430,7 +430,7 @@ bool PageMarginControl::GetUserCustomValues()
     if ( aWinOpt2.Exists() )
     {
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt2.GetUserData();
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
@@ -442,7 +442,7 @@ bool PageMarginControl::GetUserCustomValues()
     if ( aWinOpt3.Exists() )
     {
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt3.GetUserData();
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
@@ -454,7 +454,7 @@ bool PageMarginControl::GetUserCustomValues()
     if ( aWinOpt4.Exists() )
     {
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt4.GetUserData();
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
@@ -466,7 +466,7 @@ bool PageMarginControl::GetUserCustomValues()
     if ( aWinOpt5.Exists() )
     {
         ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt5.GetUserData();
-        ::rtl::OUString aTmp;
+        OUString aTmp;
         if ( aSeq.getLength())
             aSeq[0].Value >>= aTmp;
         OUString aWinData( aTmp );
@@ -488,27 +488,27 @@ void PageMarginControl::StoreUserCustomValues()
     SvtViewOptions aWinOpt( E_WINDOW, SWPAGE_LEFT_GVALUE );
 
     aSeq[0].Name = "mnPageLeftMargin";
-    aSeq[0].Value <<= ::rtl::OUString::number( mnPageLeftMargin );
+    aSeq[0].Value <<= OUString::number( mnPageLeftMargin );
     aWinOpt.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt2( E_WINDOW, SWPAGE_RIGHT_GVALUE );
     aSeq[0].Name = "mnPageRightMargin";
-    aSeq[0].Value <<= ::rtl::OUString::number( mnPageRightMargin );
+    aSeq[0].Value <<= OUString::number( mnPageRightMargin );
     aWinOpt2.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt3( E_WINDOW, SWPAGE_TOP_GVALUE );
     aSeq[0].Name = "mnPageTopMargin";
-    aSeq[0].Value <<= ::rtl::OUString::number( mnPageTopMargin );
+    aSeq[0].Value <<= OUString::number( mnPageTopMargin );
     aWinOpt3.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt4( E_WINDOW, SWPAGE_DOWN_GVALUE );
     aSeq[0].Name = "mnPageBottomMargin";
-    aSeq[0].Value <<= ::rtl::OUString::number( mnPageBottomMargin );
+    aSeq[0].Value <<= OUString::number( mnPageBottomMargin );
     aWinOpt4.SetUserData( aSeq );
 
     SvtViewOptions aWinOpt5( E_WINDOW, SWPAGE_MIRROR_GVALUE );
     aSeq[0].Name = "mbMirrored";
-    aSeq[0].Value <<= ::rtl::OUString::number( (mbMirrored ? 1 : 0) );
+    aSeq[0].Value <<= OUString::number( (mbMirrored ? 1 : 0) );
     aWinOpt5.SetUserData( aSeq );
 }
 

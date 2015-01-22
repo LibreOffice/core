@@ -60,7 +60,7 @@ uno::Reference< container::XStringKeyMap > SAL_CALL SwXTextMarkup::getMarkupInfo
     return xProp;
 }
 
-void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const ::rtl::OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,
+void SAL_CALL SwXTextMarkup::commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,
                                                    const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer) throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
