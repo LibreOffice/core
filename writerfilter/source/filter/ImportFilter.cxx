@@ -153,7 +153,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             throw lang::WrappedTargetRuntimeException("",
                     static_cast<OWeakObject*>(this), uno::makeAny(wfe));
         }
-        catch (uno::RuntimeException const& e)
+        catch (uno::RuntimeException const&)
         {
             throw;
         }
