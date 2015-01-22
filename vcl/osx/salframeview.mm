@@ -1726,7 +1726,8 @@ private:
 }
 
 -(id)parentAttribute {
-    return (NSView*) mpFrame->getNSWindow();
+    return reinterpret_cast<NSView*>(mpFrame->getNSWindow());
+        //TODO: odd cast really needed for fdo#74121?
 }
 
 -(::com::sun::star::accessibility::XAccessibleContext *)accessibleContext

@@ -43,8 +43,12 @@ getWindow(const ::VclSimpleEvent *pEvent)
 
 // callback function for Application::addEventListener
 
-long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracker, ::VclSimpleEvent const *pEvent)
+sal_IntPtr AquaA11yFocusTracker::WindowEventHandler(
+    void * pThis, void * pCaller)
 {
+    AquaA11yFocusTracker *pFocusTracker = static_cast<AquaA11yFocusTracker *>(
+        pThis);
+    VclSimpleEvent const *pEvent = static_cast<VclSimpleEvent const *>(pCaller);
     switch (pEvent->GetId())
     {
     case VCLEVENT_WINDOW_PAINT:
@@ -89,7 +93,7 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
 }
 
 AquaA11yFocusTracker::AquaA11yFocusTracker() :
-    m_aWindowEventLink(this, (PSTUB) WindowEventHandler),
+    m_aWindowEventLink(this, WindowEventHandler),
     m_xDocumentFocusListener(new DocumentFocusListener(*this))
 {
     Application::AddEventListener(m_aWindowEventLink);

@@ -400,7 +400,7 @@ public:
 
     virtual void StartLine( sal_uInt8* pLine ) SAL_OVERRIDE
     {
-        pData16 = (sal_uInt16*)pLine;
+        pData16 = reinterpret_cast<sal_uInt16*>(pLine);
     }
     virtual void SkipPixel( sal_uInt32 nPixel ) SAL_OVERRIDE
     {
