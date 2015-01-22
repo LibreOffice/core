@@ -507,7 +507,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             // and the domain mapper is likely in an inconsistent state
             throw;
         }
-        catch (uno::RuntimeException const& e)
+        catch (uno::RuntimeException const&)
         {
             throw;
         }
