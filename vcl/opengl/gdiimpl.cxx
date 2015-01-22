@@ -187,6 +187,10 @@ void OpenGLSalGraphicsImpl::PostDraw()
         mProgramIsSolidColor = false;
 #endif
     }
+    if (mbOffscreen)
+    {
+        ReleaseContext();
+    }
 
     CHECK_GL_ERROR();
 }
