@@ -28,14 +28,14 @@ struct ImplIdleData;
 struct ImplSVData;
 
 enum class IdlePriority {
-    VCL_IDLE_PRIORITY_HIGHEST   = 0,
-    VCL_IDLE_PRIORITY_HIGH      = 1,
-    VCL_IDLE_PRIORITY_REPAINT   = 2,
-    VCL_IDLE_PRIORITY_RESIZE    = 3,
-    VCL_IDLE_PRIORITY_MEDIUM    = 3,
-    VCL_IDLE_PRIORITY_LOW       = 4,
-    VCL_IDLE_PRIORITY_LOWER     = 5,
-    VCL_IDLE_PRIORITY_LOWEST    = 6
+    HIGHEST   = 0,
+    HIGH      = 1,
+    REPAINT   = 2,
+    RESIZE    = 3,
+    MEDIUM    = 3,
+    LOW       = 4,
+    LOWER     = 5,
+    LOWEST    = 6
 };
 
 class VCL_DLLPUBLIC Idle

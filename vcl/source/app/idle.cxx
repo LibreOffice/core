@@ -208,8 +208,8 @@ Idle& Idle::operator=( const Idle& rIdle )
 
 Idle::Idle():
     mpIdleData(NULL),
-    miPriority(static_cast<sal_Int32>(IdlePriority::VCL_IDLE_PRIORITY_HIGH)),
-    meDefaultPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH),
+    miPriority(static_cast<sal_Int32>(IdlePriority::HIGH)),
+    meDefaultPriority(IdlePriority::HIGH),
     mbActive(false)
 {
 }

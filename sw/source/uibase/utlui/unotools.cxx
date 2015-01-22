@@ -83,7 +83,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
 
     // the controller is asynchronously set
     aLoadedIdle.SetIdleHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
-    aLoadedIdle.SetPriority(IdlePriority::VCL_IDLE_PRIORITY_LOWER);
+    aLoadedIdle.SetPriority(IdlePriority::LOWER);
 
     CreateControl();
 

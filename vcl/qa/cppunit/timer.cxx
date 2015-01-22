@@ -89,7 +89,7 @@ public:
     IdleBool( bool &rBool ) :
         Idle(), mrBool( rBool )
     {
-        SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
+        SetPriority( IdlePriority::LOWEST );
         Start();
         mrBool = false;
     }

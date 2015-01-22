@@ -125,7 +125,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateIdle.SetIdleHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
-    aUpdateIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_LOWEST );
+    aUpdateIdle.SetPriority( IdlePriority::LOWEST );
 
     m_pPbOpenSource->Hide();
 

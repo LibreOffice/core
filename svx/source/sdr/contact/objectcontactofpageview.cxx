@@ -59,7 +59,7 @@ namespace sdr
             setPreviewRenderer(((SdrPaintView&)rPageWindow.GetPageView().GetView()).IsPreviewRenderer());
 
             // init timer
-            SetPriority(IdlePriority::VCL_IDLE_PRIORITY_HIGH);
+            SetPriority(IdlePriority::HIGH);
             Stop();
         }
 

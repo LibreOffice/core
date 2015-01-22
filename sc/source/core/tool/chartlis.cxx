@@ -589,7 +589,7 @@ void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartData
 
 void ScChartListenerCollection::StartTimer()
 {
-    aIdle.SetPriority( IdlePriority::VCL_IDLE_PRIORITY_REPAINT );
+    aIdle.SetPriority( IdlePriority::REPAINT );
     aIdle.Start();
 }
 
