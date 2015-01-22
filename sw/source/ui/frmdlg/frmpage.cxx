@@ -2649,25 +2649,25 @@ void BmpWindow::Paint( const Rectangle& )
             aPntPos.X() += nWidth - aPntSz.Width() ;
     }
 
-    if ( bHorz )
-    {
-        aPntPos.Y()     += aPntSz.Height();
-        aPntPos.Y() --;
-        aPntSz.Height() *= -1;
-    }
-    if ( bVert )
-    {
-        aPntPos.X()     += aPntSz.Width();
-        aPntPos.X()--;
-        aPntSz.Width()  *= -1;
-    }
-
     // #i119307# clear window background, the graphic might have transparency
     DrawRect(Rectangle(aPntPos, aPntSz));
 
-    if ( bGraphic )
+    if (bHorz || bVert)
+    {
+        BitmapEx aTmpBmp(bGraphic ? aGraphic.GetBitmapEx() : aBmp);
+        sal_uLong nMirrorFlags(BMP_MIRROR_NONE);
+        if (bHorz)
+            nMirrorFlags |= BMP_MIRROR_VERT;
+        if (bVert)
+            nMirrorFlags |= BMP_MIRROR_HORZ;
+        aTmpBmp.Mirror(nMirrorFlags);
+        DrawBitmapEx( aPntPos, aPntSz, aTmpBmp );
+    }
+    else if (bGraphic)  //draw unmirrored preview graphic
+    {
         aGraphic.Draw( this, aPntPos, aPntSz );
-    else
+    }
+    else    //draw unmirrored stock sample image
     {
         DrawBitmapEx( aPntPos, aPntSz, aBmp );
     }
