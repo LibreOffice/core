@@ -25,12 +25,16 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include "sdxmlexp_impl.hxx"
 #include "sdxmlimp_impl.hxx"
 
 using namespace ::xmloff::token;
+using namespace xmloff;
 using namespace com::sun::star;
+using namespace com::sun::star::xml::sax;
 
 struct SdXMLDataStyleNumber
 {
@@ -61,7 +65,7 @@ struct SdXMLDataStyleNumber
     { XML_AM_PM,        false,      false,      false,      NULL },
     { XML_SECONDS,      false,      false,      false,      NULL },
     { XML_SECONDS,      false,      false,      true,       NULL },
-    { XML_TOKEN_INVALID,        false,              false,             false,       NULL  }
+    { xmloff::token::XML_TOKEN_INVALID,        false,              false,             false,       NULL  }
 };
 
 // date
@@ -681,6 +685,10 @@ SdXMLNumberFormatImportContext::SdXMLNumberFormatImportContext(
     mnIndex(0),
     mnKey( -1 )
 {
+    mbTimeStyle = (XML_time_style == (Element & XML_time_style));
+
+    if( xAttrList.is() && xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_NUMBER | XML_automatic_order ) )
+        mbAutomatic = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_NUMBER | XML_automatic_order ).equals( "true" );
 }
 
 SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
@@ -696,7 +704,7 @@ void SdXMLNumberFormatImportContext::add( OUString& rNumberStyle, bool bLong, bo
     }
 
     const SdXMLDataStyleNumber* pStyleMember = aSdXMLDataStyleNumbers;
-    for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
+    for( sal_uInt8 nIndex = 0; pStyleMember->meNumberStyle != xmloff::token::XML_TOKEN_INVALID; nIndex++, pStyleMember++ )
     {
         if( (IsXMLToken(rNumberStyle, pStyleMember->meNumberStyle) &&
             (pStyleMember->mbLong == bLong) &&
@@ -863,11 +871,13 @@ SvXMLImportContext * SdXMLNumberFormatImportContext::CreateChildContext( sal_uIn
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SdXMLNumberFormatImportContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SdXMLNumberFormatImportContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    return new SdXMLNumberFormatMemberImportContext( GetImport(), Element,
+        xAttrList, this, SvXMLNumFormatContext::createFastChildContext(
+        Element, xAttrList ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
