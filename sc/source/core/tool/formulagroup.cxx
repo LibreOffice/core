@@ -554,8 +554,16 @@ void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely,
     batch->commit();
 
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
-    aConfig.mbOpenCLSubsetOnly = !bEnableCompletely;
-    aConfig.maOpenCLSubsetOpCodes = rSubsetToEnable;
+
+    if (!bEnable)
+        aConfig.setOpenCLConfigToDefault();
+    else
+    {
+        aConfig.mbOpenCLSubsetOnly = !bEnableCompletely;
+        aConfig.maOpenCLSubsetOpCodes = rSubsetToEnable;
+        if (bEnableCompletely)
+            aConfig.mnOpenCLMinimumFormulaGroupSize = 2;
+    }
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
