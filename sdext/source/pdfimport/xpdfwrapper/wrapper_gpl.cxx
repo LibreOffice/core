@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
-
 #include "pdfioutdev_gpl.hxx"
 #ifdef WNT
 # include <io.h>
@@ -117,53 +115,29 @@ int main(int argc, char **argv)
                  pOwnerPasswordStr,
                  pUserPasswordStr );
 
+    // Check various permissions for aDoc.
+    PDFDoc &rDoc = aDoc.isOk()? aDoc: aErrDoc;
 
-   // Check various permissions.
-   if ( !aDoc.isOk() )
-   {
-        pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aErrDoc) );
+    pdfi::PDFOutDev aOutDev(&rDoc);
 
-        const int nPages = aErrDoc.isOk() ? aErrDoc.getNumPages() : 0;
+    // tell the receiver early - needed for proper progress calculation
+    const int nPages = rDoc.isOk()? rDoc.getNumPages(): 0;
+    aOutDev.setPageNum(nPages);
 
-        // tell receiver early - needed for proper progress calculation
-        pOutDev->setPageNum( nPages );
+    // virtual resolution of the PDF OutputDev in dpi
+    static const int PDFI_OUTDEV_RESOLUTION = 7200;
 
-        // virtual resolution of the PDF OutputDev in dpi
-        static const int PDFI_OUTDEV_RESOLUTION=7200;
+    // do the conversion
+    for (int i = 1; i <= nPages; ++i)
+    {
+        rDoc.displayPage(&aOutDev,
+                i,
+                PDFI_OUTDEV_RESOLUTION,
+                PDFI_OUTDEV_RESOLUTION,
+                0, gTrue, gTrue, gTrue);
+        rDoc.processLinks(&aOutDev, i);
+    }
 
-       // do the conversion
-       for( int i=1; i<=nPages; ++i )
-       {
-          aErrDoc.displayPage( pOutDev,
-                            i,
-                            PDFI_OUTDEV_RESOLUTION,
-                            PDFI_OUTDEV_RESOLUTION,
-                            0, gTrue, gTrue, gTrue );
-          aErrDoc.processLinks( pOutDev, i );
-       }
-   }
-   else
-   {
-      boost::scoped_ptr<pdfi::PDFOutDev> pOutDev( new pdfi::PDFOutDev(&aDoc) );
-
-      // tell receiver early - needed for proper progress calculation
-      pOutDev->setPageNum( aDoc.getNumPages() );
-
-      // virtual resolution of the PDF OutputDev in dpi
-      static const int PDFI_OUTDEV_RESOLUTION=7200;
-
-      // do the conversion
-      const int nPages = aDoc.getNumPages();
-      for( int i=1; i<=nPages; ++i )
-      {
-        aDoc.displayPage( pOutDev.get(),
-                          i,
-                          PDFI_OUTDEV_RESOLUTION,
-                          PDFI_OUTDEV_RESOLUTION,
-                          0, gTrue, gTrue, gTrue );
-        aDoc.processLinks( pOutDev.get(), i );
-      }
-   }
     return 0;
 }
 
