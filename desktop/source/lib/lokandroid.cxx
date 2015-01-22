@@ -277,6 +277,13 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs
     return result;
 }
 
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMouseEvent
+    (JNIEnv* pEnv, jobject aObject, jint type, jint x, jint y)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->postMouseEvent(pDocument, type, x, y);
+}
+
 /* DirectBufferAllocator */
 
 extern "C" SAL_JNI_EXPORT jobject JNICALL Java_org_libreoffice_kit_DirectBufferAllocator_allocateDirectBufferNative

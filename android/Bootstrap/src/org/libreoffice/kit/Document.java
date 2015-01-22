@@ -26,6 +26,10 @@ public class Document {
     public static final int DOCTYPE_DRAWING = 3;
     public static final int DOCTYPE_OTHER = 4;
 
+    public static final int MOUSE_BUTTON_DOWN = 0;
+    public static final int MOUSE_BUTTON_UP = 1;
+    public static final int MOUSE_MOVE = 2;
+
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
 
@@ -84,6 +88,14 @@ public class Document {
     }
 
     public native void initializeForRendering();
+
+    /**
+     * Post a mouse event to LOK
+     * @param type - mouse event type
+     * @param x - x coordinate
+     * @param y - y coordinate
+     */
+    public native void postMouseEvent(int type, int x, int y);
 
     /**
      * Callback to retrieve messages from LOK
