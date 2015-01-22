@@ -49,6 +49,8 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
 
         mInputFile = input;
+
+        Log.i(LOGTAG, "====> Loading file '" + input + "'");
         mDocument = mOffice.documentLoad(input);
 
         if (mDocument == null) {
