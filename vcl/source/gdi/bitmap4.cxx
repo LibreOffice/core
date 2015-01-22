@@ -1099,7 +1099,7 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     // switch coordinates as convolution pass transposes result
     Bitmap aNewBitmap( Size( nHeight, nWidth ), 24 );
 
-    bool bResult = ImplConvolutionPass( aNewBitmap, nWidth, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+    bool bResult = ImplConvolutionPass( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
 
     // Cleanup
     ReleaseAccess( pReadAcc );
@@ -1121,7 +1121,7 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
 
     pReadAcc = AcquireReadAccess();
     aNewBitmap = Bitmap( Size( nWidth, nHeight ), 24 );
-    bResult = ImplConvolutionPass( aNewBitmap, nHeight, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
+    bResult = ImplConvolutionPass( aNewBitmap, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
 
     // Cleanup
     ReleaseAccess( pReadAcc );
