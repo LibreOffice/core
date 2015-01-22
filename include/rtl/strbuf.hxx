@@ -96,6 +96,15 @@ public:
     {
         rtl_string_new_WithLength( &pData, length );
     }
+#if __cplusplus >= 201103L
+    explicit OStringBuffer(unsigned int length)
+        : OStringBuffer(static_cast<int>(length))
+    {
+    }
+    // avoid obvious bugs
+    explicit OStringBuffer(char) = delete;
+    explicit OStringBuffer(sal_Unicode) = delete;
+#endif
 
     /**
         Constructs a string buffer so that it represents the same
