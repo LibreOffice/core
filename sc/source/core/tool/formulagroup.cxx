@@ -547,23 +547,17 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
     rPlatformId = aPlatformId;
 }
 
-void FormulaGroupInterpreter::enableOpenCL(bool bEnable, bool bEnableCompletely, const std::set<OpCode>& rSubsetToEnable)
+void FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
 {
     boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-    officecfg::Office::Common::Misc::UseOpenCL::set(bEnable, batch);
+    officecfg::Office::Common::Misc::UseOpenCL::set(true, batch);
     batch->commit();
 
     ScCalcConfig aConfig = ScInterpreter::GetGlobalConfig();
 
-    if (!bEnable)
-        aConfig.setOpenCLConfigToDefault();
-    else
-    {
-        aConfig.mbOpenCLSubsetOnly = !bEnableCompletely;
-        aConfig.maOpenCLSubsetOpCodes = rSubsetToEnable;
-        if (bEnableCompletely)
-            aConfig.mnOpenCLMinimumFormulaGroupSize = 2;
-    }
+    aConfig.mbOpenCLSubsetOnly = false;
+    aConfig.mnOpenCLMinimumFormulaGroupSize = 2;
+
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 

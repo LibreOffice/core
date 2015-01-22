@@ -547,13 +547,13 @@ bool ScOpenCLTest::load(const OUString &rFilter, const OUString &rURL,
 
 bool ScOpenCLTest::detectOpenCLDevice()
 {
-    sc::FormulaGroupInterpreter::enableOpenCL(true);
+    sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly();
     return sc::FormulaGroupInterpreter::switchOpenCLDevice(OUString(),true);
 }
 
 void ScOpenCLTest::enableOpenCL()
 {
-    sc::FormulaGroupInterpreter::enableOpenCL(true, true);
+    sc::FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly();
 }
 
 void ScOpenCLTest::testCompilerHorizontal()

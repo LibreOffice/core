@@ -129,7 +129,8 @@ class SC_DLLPUBLIC FormulaGroupInterpreter
 #if HAVE_FEATURE_OPENCL
     static void fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms);
     static bool switchOpenCLDevice(const OUString& rDeviceId, bool bAutoSelect, bool bForceEvaluation = false);
-    static void enableOpenCL(bool bEnable, bool bEnableCompletely = false, const std::set<OpCode>& rSubsetToEnable = std::set<OpCode>());
+    // This is intended to be called from opencl-test.cxx only
+    static void enableOpenCL_UnitTestsOnly();
     static void getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int32& rPlatformId);
 #endif
     virtual ScMatrixRef inverseMatrix(const ScMatrix& rMat) = 0;
