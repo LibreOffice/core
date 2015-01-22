@@ -29,6 +29,7 @@
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
@@ -169,7 +170,7 @@ struct Entity : public ParserData
     // resource leaks), therefore any exception thrown by a UNO callback
     // must be saved somewhere until the C-XmlParser is stopped.
     ::com::sun::star::uno::Any maSavedException;
-    void saveException( const Exception &e );
+    void saveException( const Any & e );
     void throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumentLocator,
                          bool mbDuringParse );
 
@@ -457,7 +458,7 @@ void Entity::startElement( Event *pEvent )
     }
     catch (const Exception& e)
     {
-        saveException( e );
+        saveException( ::cppu::getCaughtException() );
     }
 }
 
@@ -476,7 +477,7 @@ void Entity::characters( const OUString& sChars )
     }
     catch (const Exception& e)
     {
-        saveException( e );
+        saveException( ::cppu::getCaughtException() );
     }
 }
 
@@ -500,7 +501,7 @@ void Entity::endElement()
     }
     catch (const Exception& e)
     {
-        saveException( e );
+        saveException( ::cppu::getCaughtException() );
     }
     maContextStack.pop();
 }
@@ -591,13 +592,14 @@ void Entity::throwException( const ::rtl::Reference< FastLocatorImpl > &xDocumen
 // If multi-threaded, we need to push an EXCEPTION event, at
 // which point we transfer ownership of maSavedException to
 // the consuming thread.
-void Entity::saveException( const Exception &e )
+void Entity::saveException( const Any & e )
 {
     // fdo#81214 - allow the parser to run on after an exception,
     // unexpectedly some 'startElements' produce an UNO_QUERY_THROW
     // for XComponent; and yet expect to continue parsing.
-    SAL_WARN("sax", "Unexpected exception from XML parser " << e.Message);
-    maSavedException <<= e;
+    SAL_WARN("sax", "Unexpected exception from XML parser "
+            << e.get<Exception>().Message);
+    maSavedException = e;
 }
 
 } // namespace
@@ -1134,9 +1136,9 @@ void FastSaxParserImpl::callbackStartElement(const xmlChar *localName , const xm
         else
             rEntity.startElement( &rEvent );
     }
-    catch (const Exception& e)
+    catch (const Exception&)
     {
-        rEntity.saveException( e );
+        rEntity.saveException( ::cppu::getCaughtException() );
     }
 }
 
