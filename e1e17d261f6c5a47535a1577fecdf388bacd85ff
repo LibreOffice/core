@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5a43c5e1_603acccf",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-22T14:08:34Z",
+      "side": 1,
+      "message": "any calls that use expressions more complex than integer literals and of (integral) types with value ranges not entirely covered by the int range need to do some checking anyway, so can just as well static_cast\u003cint\u003e the demonstratedly good value\n\nor just remove micro-optimizations that call the explicit-length O[U]StringBuffer ctor...",
+      "parentUuid": "5a43c5e1_002bc883",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a43c5e1_c00de038",
         "filename": "include/rtl/strbuf.hxx",
         "patchSetId": 1
@@ -83,6 +101,24 @@
       "side": 1,
       "message": "dunno, somebody might define a local variable sal_Unicode x\u003d\u0027X\u0027 then use that?\nwouldnt that convert implicitly to int?",
       "parentUuid": "5a43c5e1_6013ac5d",
+      "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_8037d8e2",
+        "filename": "include/rtl/strbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-01-22T14:08:34Z",
+      "side": 1,
+      "message": "yeah, just wondered how likely that would be in combination with OStringBuffer?",
+      "parentUuid": "5a43c5e1_a01f745a",
       "revId": "e1e17d261f6c5a47535a1577fecdf388bacd85ff",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
