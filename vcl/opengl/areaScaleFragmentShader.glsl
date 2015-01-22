@@ -7,6 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#version 120
+#if __VERSION__ < 130
+int min( int a, int b ) { return a < b ? a : b; }
+float min( float a, float b ) { return a < b ? a : b; }
+#endif
+
 /* TODO Use textureOffset for newest version of GLSL */
 
 uniform sampler2D sampler;
