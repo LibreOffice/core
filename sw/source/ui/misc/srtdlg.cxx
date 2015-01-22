@@ -382,9 +382,9 @@ IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
     return 0;
 }
 
-IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
+IMPL_LINK( SwSortDlg, CheckHdl, void *, pControl )
 {
-    if( pCheck == ( CheckBox* ) m_pRowRB)
+    if( pControl == m_pRowRB)
     {
         m_pColLbl->SetText(aColTxt);
         m_pColEdt1->SetMax(nY);
@@ -395,7 +395,7 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
         m_pColEdt2->SetAccessibleName(aColTxt);
         m_pColEdt3->SetAccessibleName(aColTxt);
     }
-    else if( pCheck == ( CheckBox* ) m_pColumnRB)
+    else if( pControl == m_pColumnRB)
     {
         m_pColLbl->SetText(aRowTxt);
         m_pColEdt1->SetMax(nX);
@@ -409,7 +409,7 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
     else if(!m_pKeyCB1->IsChecked() &&
                 !m_pKeyCB2->IsChecked() &&
                     !m_pKeyCB3->IsChecked())
-        pCheck->Check(true);
+        static_cast<CheckBox *>(pControl)->Check(true);
     return 0;
 }
 

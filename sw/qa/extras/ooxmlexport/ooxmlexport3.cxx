@@ -534,7 +534,7 @@ DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
     sal_Int32 length = xmlXPathNodeSetGetLength(pXmlNodes);
     for(sal_Int32 index = 0; index < length; index++){
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[index];
-        OUString attrVal = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST("name")));
+        OUString attrVal = OUString::createFromAscii(reinterpret_cast<char*>(xmlGetProp(pXmlNode, BAD_CAST("name"))));
          if (attrVal.isEmpty()){
             CPPUNIT_FAIL("Font name is empty.");
         }

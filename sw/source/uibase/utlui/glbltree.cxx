@@ -1203,6 +1203,11 @@ IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl)
     return 0;
 }
 
+SwNavigationPI* SwGlobalTree::GetParentWindow()
+{
+    return static_cast<SwNavigationPI*>(Window::GetParent());
+}
+
 IMPL_STATIC_LINK_NOINSTANCE(SwGlobalTree, ShowFrameHdl, SwGlobalTree*, EMPTYARG)
 {
     const SfxObjectShell* pShell = SwGlobalTree::GetShowShell();

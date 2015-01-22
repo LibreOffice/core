@@ -44,8 +44,8 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     static const OUString sLibName(SWUI_DLL_NAME);
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName,
                                                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
-        fp = ( SwAbstractDialogFactory* (SAL_CALL*)() )
-            aDialogLibrary.getFunctionSymbol( OUString("SwCreateDialogFactory"));
+        fp = reinterpret_cast<SwAbstractDialogFactory* (SAL_CALL*)()>(
+            aDialogLibrary.getFunctionSymbol( OUString("SwCreateDialogFactory")));
 #else
     fp = SwCreateDialogFactory();
 #endif

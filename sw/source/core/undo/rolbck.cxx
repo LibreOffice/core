@@ -1090,7 +1090,7 @@ void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
 
         const SwFmtChain* pChainItem;
         if( SfxItemState::SET == rFmt.GetItemState( RES_CHAIN, false,
-            (const SfxPoolItem**)&pChainItem ))
+            reinterpret_cast<const SfxPoolItem**>(&pChainItem) ))
         {
             if( pChainItem->GetNext() || pChainItem->GetPrev() )
             {

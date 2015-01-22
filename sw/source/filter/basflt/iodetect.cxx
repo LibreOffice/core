@@ -302,7 +302,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
             if (bLE != bNativeLE)
             {
                 bSwap = true;
-                sal_Char* pF = (sal_Char*)pNewBuf;
+                sal_Char* pF = reinterpret_cast<char*>(pNewBuf);
                 sal_Char* pN = pF+1;
                 for(sal_uLong n = 0; n < nNewLen; ++n, pF+=2, pN+=2 )
                 {

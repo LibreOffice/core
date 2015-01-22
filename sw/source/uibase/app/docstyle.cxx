@@ -1335,7 +1335,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
 
             const SwCondCollItem* pCondItem;
             if( SfxItemState::SET != rSet.GetItemState( FN_COND_COLL, false,
-                (const SfxPoolItem**)&pCondItem ))
+                reinterpret_cast<const SfxPoolItem**>(&pCondItem) ))
                 pCondItem = 0;
 
             if( RES_CONDTXTFMTCOLL == pColl->Which() && pCondItem )

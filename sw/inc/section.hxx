@@ -174,8 +174,8 @@ public:
     SectionType GetType() const             { return m_Data.GetType(); }
     void SetType(SectionType const eType)   { return m_Data.SetType(eType); }
 
-    SwSectionFmt* GetFmt()          { return (SwSectionFmt*)GetRegisteredIn(); }
-    SwSectionFmt const * GetFmt() const    { return (SwSectionFmt const *)GetRegisteredIn(); }
+    inline SwSectionFmt* GetFmt();
+    inline SwSectionFmt const * GetFmt() const;
 
     // Set hidden/protected -> update the whole tree!
     // (Attributes/flags are set/get.)
@@ -345,6 +345,16 @@ public:
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
 
 };
+
+SwSectionFmt* SwSection::GetFmt()
+{
+    return static_cast<SwSectionFmt*>(GetRegisteredIn());
+}
+
+SwSectionFmt const * SwSection::GetFmt() const
+{
+    return static_cast<SwSectionFmt const *>(GetRegisteredIn());
+}
 
 inline SwSection* SwSection::GetParent() const
 {

@@ -185,7 +185,7 @@ _CalcOp* FindOperator( const OUString& rSrch )
                               OperatorCompare );
 }
 
-SwHash* Find( const OUString& rStr, SwHash** ppTable,
+SwHash* Find( const OUString& rStr, SwHash* const * ppTable,
               sal_uInt16 nTblSize, sal_uInt16* pPos )
 {
     sal_uLong ii = 0;
@@ -458,7 +458,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, bool bIns )
     if( !pFnd )
     {
         // then check doc
-        SwHash** ppDocTbl = rDoc.getIDocumentFieldsAccess().GetUpdtFlds().GetFldTypeTable();
+        SwHash* const * ppDocTbl = rDoc.getIDocumentFieldsAccess().GetUpdtFlds().GetFldTypeTable();
         for( SwHash* pEntry = *(ppDocTbl+ii); pEntry; pEntry = pEntry->pNext )
         {
             if( aStr == pEntry->aStr )

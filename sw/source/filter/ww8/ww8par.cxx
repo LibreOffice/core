@@ -1711,7 +1711,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         nDel = 0;
     }
 
-    WW8_TBD* pTyp = (WW8_TBD*)(pData + 2*nDel + 2*nIns + 2); // Type Array
+    WW8_TBD const * pTyp = reinterpret_cast<WW8_TBD const *>(pData + 2*nDel + 2*nIns + 2); // Type Array
 
     SvxTabStopItem aAttr(0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
 
@@ -2198,7 +2198,7 @@ long SwWW8ImplReader::Read_And(WW8PLCFManResult* pRes)
     {
         sal_uLong nIndex = pSD->GetIdx() & 0xFFFF; // Index is (stupidly) multiplexed for WW8PLCFx_SubDocs
         if (pWwFib->lcbAtrdExtra/18 > nIndex)
-            nDateTime = SVBT32ToUInt32(*(SVBT32*)(pExtended+(nIndex*18)));
+            nDateTime = SVBT32ToUInt32(*reinterpret_cast<SVBT32*>(pExtended+(nIndex*18)));
     }
 
     DateTime aDate = msfilter::util::DTTM2DateTime(nDateTime);
@@ -4967,7 +4967,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     for (size_t i=0; i < aLinkStrings.size() && i < aStringIds.size(); ++i)
     {
         ww::bytes stringId = aStringIds[i];
-        WW8_STRINGID *stringIdStruct = (WW8_STRINGID*)(&stringId[0]);
+        WW8_STRINGID *stringIdStruct = reinterpret_cast<WW8_STRINGID*>(&stringId[0]);
         aLinkStringMap[SVBT16ToShort(stringIdStruct->nStringId)] =
             aLinkStrings[i];
     }

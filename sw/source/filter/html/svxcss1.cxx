@@ -751,7 +751,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_
     aItemIds.nDirection = rPool.GetTrueWhich( SID_ATTR_FRAMEDIRECTION, false );
 
     aWhichMap.insert( aWhichMap.begin(), 0 );
-    SvParser::BuildWhichTbl( aWhichMap, (sal_uInt16 *)&aItemIds,
+    SvParser::BuildWhichTbl( aWhichMap, reinterpret_cast<sal_uInt16 *>(&aItemIds),
                              sizeof(aItemIds) / sizeof(sal_uInt16) );
     if( pWhichIds && nWhichIds )
         SvParser::BuildWhichTbl( aWhichMap, pWhichIds, nWhichIds );
@@ -3183,7 +3183,7 @@ void SvxCSS1Parser::ParseProperty( const OUString& rProperty,
     aSrch.pFunc = 0;
 
     void* pFound;
-    if( 0 != ( pFound = bsearch( (char *) &aSrch,
+    if( 0 != ( pFound = bsearch( &aSrch,
                         (void*) aCSS1PropFnTab,
                         sizeof( aCSS1PropFnTab ) / sizeof( CSS1PropEntry ),
                         sizeof( CSS1PropEntry ),

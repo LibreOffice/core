@@ -180,7 +180,7 @@ public:
         }
     }
 
-    SwHash** GetFldTypeTable() const { return (SwHash**)aFldTypeTable; }
+    SwHash* const * GetFldTypeTable() const { return reinterpret_cast<SwHash* const *>(aFldTypeTable); }
 };
 
 #endif

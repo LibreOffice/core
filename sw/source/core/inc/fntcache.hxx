@@ -43,9 +43,8 @@ public:
 #endif
     ) {}
 
-    inline SwFntObj *First( ) { return (SwFntObj *)SwCache::First(); }
-    inline SwFntObj *Next( SwFntObj *pFntObj)
-        { return (SwFntObj *)SwCache::Next( (SwCacheObj *)pFntObj ); }
+    inline SwFntObj *First( );
+    inline SwFntObj *Next( SwFntObj *pFntObj);
     void Flush();
 };
 
@@ -119,6 +118,16 @@ public:
     void CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut );
     void CreatePrtFont( const OutputDevice& rOut );
 };
+
+SwFntObj *SwFntCache::First( )
+{
+    return static_cast<SwFntObj *>(SwCache::First());
+}
+
+SwFntObj *SwFntCache::Next( SwFntObj *pFntObj)
+{
+    return static_cast<SwFntObj *>(SwCache::Next( pFntObj ));
+}
 
 class SwFntAccess : public SwCacheAccess
 {

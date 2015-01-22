@@ -513,7 +513,7 @@ SwNumRule::~SwNumRule()
     if( !--mnRefCount )          // the last one closes the door (?)
     {
             // Numbering:
-            SwNumFmt** ppFmts = (SwNumFmt**)SwNumRule::maBaseFmts;
+            SwNumFmt** ppFmts = &SwNumRule::maBaseFmts[0][0];
             int n;
 
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
@@ -523,7 +523,7 @@ SwNumRule::~SwNumRule()
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
 
-            ppFmts = (SwNumFmt**)SwNumRule::maLabelAlignmentBaseFmts;
+            ppFmts = &SwNumRule::maLabelAlignmentBaseFmts[0][0];
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )
                 delete *ppFmts, *ppFmts = 0;
             for( n = 0; n < MAXLEVEL; ++n, ++ppFmts )

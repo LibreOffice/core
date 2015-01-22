@@ -1892,7 +1892,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 
             // need the SaveSections!
             rDoc.GetIDocumentUndoRedo().DoUndo( true );
-            SwUndoTblNdsChg* pUndo = 0;
+            SwUndo* pUndo = 0;
 
             switch( nSetColType & 0xff )
             {
@@ -1901,20 +1901,20 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
             case nsTblChgWidthHeightType::WH_CELL_LEFT:
             case nsTblChgWidthHeightType::WH_CELL_RIGHT:
                  rTbl.SetColWidth( *pBox, nSetColType, nAbsDiff,
-                                    nRelDiff, (SwUndo**)&pUndo );
+                                    nRelDiff, &pUndo );
                 break;
             case nsTblChgWidthHeightType::WH_ROW_TOP:
             case nsTblChgWidthHeightType::WH_ROW_BOTTOM:
             case nsTblChgWidthHeightType::WH_CELL_TOP:
             case nsTblChgWidthHeightType::WH_CELL_BOTTOM:
                 rTbl.SetRowHeight( *pBox, nSetColType, nAbsDiff,
-                                    nRelDiff, (SwUndo**)&pUndo );
+                                    nRelDiff, &pUndo );
                 break;
             }
 
             if( pUndo )
             {
-                pDelSects->transfer( pDelSects->begin(), *pUndo->pDelSects.get() );
+                pDelSects->transfer( pDelSects->begin(), *static_cast<SwUndoTblNdsChg *>(pUndo)->pDelSects.get() );
                 delete pUndo;
             }
             rDoc.GetIDocumentUndoRedo().DoUndo( false );

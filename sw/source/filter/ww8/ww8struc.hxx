@@ -41,13 +41,13 @@ inline void Set_UInt8( sal_uInt8 *& p, sal_uInt8 n )
 
 inline void Set_UInt16( sal_uInt8 *& p, sal_uInt16 n )
 {
-    ShortToSVBT16( n, *(SVBT16*)p );
+    ShortToSVBT16( n, *reinterpret_cast<SVBT16*>(p) );
     p+= 2;
 }
 
 inline void Set_UInt32( sal_uInt8 *& p, sal_uInt32 n )
 {
-    UInt32ToSVBT32( n, *(SVBT32*)p );
+    UInt32ToSVBT32( n, *reinterpret_cast<SVBT32*>(p) );
     p+= 4;
 }
 
@@ -601,7 +601,7 @@ public:
     sal_uInt16 GetValue() const { return maBits; }
 
     void SetValue(sal_uInt16 nVal) { maBits = nVal; }
-    void SetWWValue(SVBT16 nVal) { maBits = SVBT16ToShort(nVal); }
+    void SetWWValue(SVBT16 const nVal) { maBits = SVBT16ToShort(nVal); }
 
     void SetFore(sal_uInt8 nVal)
     {

@@ -3546,7 +3546,7 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
 // Interfaces for Selection
 void SwTransferable::CreateSelection( SwWrtShell& rSh,
-                                      const SwViewShell * _pCreatorView )
+                                      const SwFrameShell * _pCreatorView )
 {
     SwModule *pMod = SW_MOD();
     SwTransferable* pNew = new SwTransferable( rSh );
@@ -3559,7 +3559,7 @@ void SwTransferable::CreateSelection( SwWrtShell& rSh,
 }
 
 void SwTransferable::ClearSelection( SwWrtShell& rSh,
-                                     const SwViewShell * _pCreatorView)
+                                     const SwFrameShell * _pCreatorView)
 {
     SwModule *pMod = SW_MOD();
     if( pMod->pXSelection &&

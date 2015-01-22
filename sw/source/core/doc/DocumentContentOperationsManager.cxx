@@ -1197,7 +1197,7 @@ namespace //local functions originally from docfmt.cxx
             SwTableNode* pTblNd;
             const SwFmtPageDesc* pDesc;
             if( SfxItemState::SET == pOtherSet->GetItemState( RES_PAGEDESC,
-                            false, (const SfxPoolItem**)&pDesc ))
+                            false, reinterpret_cast<const SfxPoolItem**>(&pDesc) ))
             {
                 if( pNode )
                 {
@@ -1244,7 +1244,7 @@ namespace //local functions originally from docfmt.cxx
             if( pNode && 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
                 0 != (pTblNd = pNode->FindTableNode() ) &&
                 SfxItemState::SET == pOtherSet->GetItemState( RES_BREAK,
-                            false, (const SfxPoolItem**)&pBreak ) )
+                            false, reinterpret_cast<const SfxPoolItem**>(&pBreak) ) )
             {
                 SwTableNode* pCurTblNd = pTblNd;
                 while ( 0 != ( pCurTblNd = pCurTblNd->StartOfSectionNode()->FindTableNode() ) )
@@ -1275,7 +1275,7 @@ namespace //local functions originally from docfmt.cxx
                 const SwNumRuleItem* pRule;
                 sal_uInt16 nPoolId=0;
                 if( SfxItemState::SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
-                                    false, (const SfxPoolItem**)&pRule ) &&
+                                    false, reinterpret_cast<const SfxPoolItem**>(&pRule) ) &&
                     !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
                                     nsSwGetPoolIdFromName::GET_POOLID_NUMRULE )) )
@@ -2674,7 +2674,7 @@ SwDrawFrmFmt* DocumentContentOperationsManager::InsertDrawObj(
     SwDrawFrmFmt* pFmt = m_rDoc.MakeDrawFrmFmt( OUString(), m_rDoc.GetDfltFrmFmt() );
 
     const SwFmtAnchor* pAnchor = 0;
-    rFlyAttrSet.GetItemState( RES_ANCHOR, false, (const SfxPoolItem**) &pAnchor );
+    rFlyAttrSet.GetItemState( RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
     pFmt->SetFmtAttr( rFlyAttrSet );
 
     // Didn't set the Anchor yet?

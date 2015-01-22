@@ -166,7 +166,8 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 nRet = static_cast<const SwSetExpField*>( pFld )->GetValue();
                 break;
             case RES_USERFLD:
-                nRet = ( (SwUserFieldType*) pFld )->GetValue();
+                nRet = reinterpret_cast<SwUserFieldType const *>(pFld)->GetValue();
+                    //TODO: is that reinterpret_cast sound?
                 break;
             case RES_TABLEFLD:
                 {

@@ -631,7 +631,7 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
                             *pFmt, (sal_uInt8)j );
     }
 
-    pO->insert( pO->end(), (sal_uInt8*)&aOlst, (sal_uInt8*)&aOlst+sizeof( aOlst ) );
+    pO->insert( pO->end(), reinterpret_cast<sal_uInt8*>(&aOlst), reinterpret_cast<sal_uInt8*>(&aOlst)+sizeof( aOlst ) );
 }
 
 void WW8Export::Out_WwNumLvl( sal_uInt8 nWwLevel )
@@ -858,7 +858,7 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
     sal_uInt8 aSprmAnld[54];
 
     memcpy( aSprmAnld, aSprmAnldDefault, sizeof( aSprmAnld ) );
-    WW8_ANLD* pA = (WW8_ANLD*)(aSprmAnld + 2);  // handy pointer
+    WW8_ANLD* pA = reinterpret_cast<WW8_ANLD*>(aSprmAnld + 2);  // handy pointer
 
     sal_uInt8* pChars = (sal_uInt8*)(pA->rgchAnld);
     sal_uInt16 nCharLen = 31;
@@ -869,7 +869,7 @@ void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
         BuildAnlvBase( pA->eAnlv, pChars, nCharLen, rRul, rFmt, nSwLevel );
 
     // ... spit it out
-    OutSprmBytes( (sal_uInt8*)&aSprmAnld, sizeof( aSprmAnld ) );
+    OutSprmBytes( reinterpret_cast<sal_uInt8*>(&aSprmAnld), sizeof( aSprmAnld ) );
 }
 
 // Return: is it an outline?

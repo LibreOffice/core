@@ -71,7 +71,7 @@ class SwFormatTablePage : public SfxTabPage
     void        Init();
     void        ModifyHdl(const Edit* pEdit);
 
-    DECL_LINK( AutoClickHdl, CheckBox * );
+    DECL_LINK( AutoClickHdl, void * );
     DECL_LINK( RelWidthClickHdl, CheckBox * );
     void RightModify();
     DECL_LINK( UpDownLoseFocusHdl, MetricField * );
@@ -115,7 +115,7 @@ class SwTableColumnPage : public SfxTabPage
     bool            bPercentMode:1;
 
     void        Init(bool bWeb);
-    DECL_LINK( AutoClickHdl, CheckBox * );
+    DECL_LINK( AutoClickHdl, void * );
     void        ModifyHdl( MetricField* pEdit );
     DECL_LINK( UpHdl, MetricField * );
     DECL_LINK( DownHdl, MetricField * );

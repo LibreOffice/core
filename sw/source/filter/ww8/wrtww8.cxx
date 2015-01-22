@@ -143,12 +143,12 @@ public:
     void Write( SvStream& rStrm, SwWW8WrGrf& rGrf );
 
     bool IsEqualPos(WW8_FC nEndFc) const
-    {   return !bCombined && nIMax && nEndFc == ((sal_Int32*)pFkp)[nIMax]; }
+    {   return !bCombined && nIMax && nEndFc == reinterpret_cast<sal_Int32*>(pFkp)[nIMax]; }
     void MergeToNew( short& rVarLen, sal_uInt8 *& pNewSprms );
     bool IsEmptySprm() const
     {   return !bCombined && nIMax && !nOldVarLen;  }
     void SetNewEnd( WW8_FC nEnd )
-    {   ((sal_Int32*)pFkp)[nIMax] = nEnd; }
+    {   reinterpret_cast<sal_Int32*>(pFkp)[nIMax] = nEnd; }
 
     WW8_FC GetStartFc() const;
     WW8_FC GetEndFc() const;
@@ -983,17 +983,17 @@ WW8_WrFkp::WW8_WrFkp(ePLCFT ePl, WW8_FC nStartFc, bool bWrtWW8)
     nItemSize( ( CHP == ePl ) ? 1 : ( bWrtWW8 ? 13 : 7 )),
     nIMax(0), nOldVarLen(0), bCombined(false)
 {
-    pFkp = (sal_uInt8*)new sal_Int32[128];           // 512 Byte
-    pOfs = (sal_uInt8*)new sal_Int32[128];           // 512 Byte
+    pFkp = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
+    pOfs = reinterpret_cast<sal_uInt8*>(new sal_Int32[128]);           // 512 Byte
     memset( pFkp, 0, 4 * 128 );
     memset( pOfs, 0, 4 * 128 );
-    ( (sal_Int32*)pFkp )[0] = nStartFc;         // 0th entry FC at nStartFc
+    reinterpret_cast<sal_Int32*>(pFkp)[0] = nStartFc;         // 0th entry FC at nStartFc
 }
 
 WW8_WrFkp::~WW8_WrFkp()
 {
-    delete[] (sal_Int32 *)pFkp;
-    delete[] (sal_Int32 *)pOfs;
+    delete[] reinterpret_cast<sal_Int32 *>(pFkp);
+    delete[] reinterpret_cast<sal_Int32 *>(pOfs);
 }
 
 sal_uInt8 WW8_WrFkp::SearchSameSprm( sal_uInt16 nVarLen, const sal_uInt8* pSprms )
@@ -1064,7 +1064,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
         OSL_ENSURE( false, "Fkp::Append: Fkp is already combined" );
         return false;
     }
-    sal_Int32 n = ((sal_Int32*)pFkp)[nIMax];        // last entry
+    sal_Int32 n = reinterpret_cast<sal_Int32*>(pFkp)[nIMax];        // last entry
     if( nEndFc <= n )
     {
         OSL_ENSURE( nEndFc >= n, "+Fkp: FC backwards" );
@@ -1095,7 +1095,7 @@ bool WW8_WrFkp::Append( WW8_FC nEndFc, sal_uInt16 nVarLen, const sal_uInt8* pSpr
                                             // does it fits behind the CPs and offsets?
         return false;                       // no
 
-    ((sal_Int32*)pFkp)[nIMax + 1] = nEndFc;     // insert FC
+    reinterpret_cast<sal_Int32*>(pFkp)[nIMax + 1] = nEndFc;     // insert FC
 
     nOldVarLen = (sal_uInt8)nVarLen;
     if( nVarLen && !nOldP )
@@ -1215,14 +1215,14 @@ WW8_FC WW8_WrFkp::GetStartFc() const
 // zurueckgedreht werden.
     if( bCombined )
         return SVBT32ToUInt32( pFkp );        // 0. Element
-    return ((sal_Int32*)pFkp)[0];
+    return reinterpret_cast<sal_Int32*>(pFkp)[0];
 }
 
 WW8_FC WW8_WrFkp::GetEndFc() const
 {
     if( bCombined )
         return SVBT32ToUInt32( &(pFkp[nIMax*4]) );    // nIMax-tes SVBT32-Element
-    return ((sal_Int32*)pFkp)[nIMax];
+    return reinterpret_cast<sal_Int32*>(pFkp)[nIMax];
 }
 
 // Method for managing the piece table
@@ -3911,7 +3911,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
         {
             m_rWW8Export.WriteCR(pTmpNodeInfoInner);
 
-            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
+            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nStyle, nStyle+2 );     // Style #
             TableInfoCell(pTmpNodeInfoInner);
             m_rWW8Export.pPapPlc->AppendFkpEntry
                 ( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
@@ -3926,7 +3926,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
 
         m_rWW8Export.WriteCR(pNodeInfoInner);
 
-        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
+        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nStyle, nStyle+2 );     // Style #
         TableInfoCell(pNodeInfoInner);
         m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 
@@ -3946,7 +3946,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
         {
             m_rWW8Export.WriteCR(pTmpNodeInfoInner);
 
-            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
+            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nStyle, nStyle+2 );     // Style #
             TableInfoCell(pTmpNodeInfoInner);
             m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 
@@ -3961,7 +3961,7 @@ void WW8AttributeOutput::TableNodeInfoInner( ww8::WW8TableNodeInfoInner::Pointer
         TableRowEnd(pNodeInfoInner->getDepth());
 
         ShortToSVBT16(0, nStyle);
-        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nStyle, (sal_uInt8*)&nStyle+2 );     // Style #
+        m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nStyle, nStyle+2 );     // Style #
         TableInfoRow(pNodeInfoInner);
         m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
 

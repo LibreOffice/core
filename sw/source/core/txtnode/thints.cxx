@@ -1288,7 +1288,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // erfolgen (Fehleranfaellig !)
                     const SwFmtAnchor* pAnchor = 0;
                     pFmt->GetItemState( RES_ANCHOR, false,
-                        (const SfxPoolItem**)&pAnchor );
+                        reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
 
                     SwIndex aIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTxtAttr(*pAttr));

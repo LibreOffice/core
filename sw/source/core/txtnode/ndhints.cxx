@@ -193,7 +193,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
 
         // 2a) gueltiger Pointer? vgl. DELETEFF
         const SwTxtAttr *pHt = m_HintStarts[i];
-        CHECK_ERR( 0xFF != *(unsigned char*)pHt, "HintsCheck: start ptr was deleted" );
+        CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHt), "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
         sal_Int32 nIdx = pHt->GetStart();
@@ -210,7 +210,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
 
         // 2b) gueltiger Pointer? vgl. DELETEFF
         const SwTxtAttr *pHtEnd = m_HintEnds[i];
-        CHECK_ERR( 0xFF != *(unsigned char*)pHtEnd, "HintsCheck: end ptr was deleted" );
+        CHECK_ERR( 0xFF != *reinterpret_cast<unsigned char const *>(pHtEnd), "HintsCheck: end ptr was deleted" );
 
         // 3b) Stimmt die End-Sortierung?
         nIdx = *pHtEnd->GetAnyEnd();

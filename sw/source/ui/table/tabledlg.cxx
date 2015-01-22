@@ -177,14 +177,14 @@ IMPL_LINK( SwFormatTablePage, RelWidthClickHdl, CheckBox *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
+IMPL_LINK( SwFormatTablePage, AutoClickHdl, void *, pControl )
 {
     bool bRestore = true,
          bLeftEnable = false,
          bRightEnable= false,
          bWidthEnable= false,
          bOthers = true;
-    if ((RadioButton *)pBox == m_pFullBtn)
+    if (pControl == m_pFullBtn)
     {
         m_aLeftMF.SetPrcntValue(0);
         m_aRightMF.SetPrcntValue(0);
@@ -193,26 +193,26 @@ IMPL_LINK( SwFormatTablePage, AutoClickHdl, CheckBox *, pBox )
         bFull = true;
         bRestore = false;
     }
-    else if ((RadioButton *)pBox == m_pLeftBtn)
+    else if (pControl == m_pLeftBtn)
     {
         bRightEnable = bWidthEnable = true;
         m_aLeftMF.SetPrcntValue(0);
     }
-    else if ((RadioButton *) pBox == m_pFromLeftBtn)
+    else if (pControl == m_pFromLeftBtn)
     {
         bLeftEnable = bWidthEnable = true;
         m_aRightMF.SetPrcntValue(0);
     }
-    else if ((RadioButton *) pBox == m_pRightBtn)
+    else if (pControl == m_pRightBtn)
     {
         bLeftEnable = bWidthEnable = true;
         m_aRightMF.SetPrcntValue(0);
     }
-    else if ((RadioButton *) pBox == m_pCenterBtn)
+    else if (pControl == m_pCenterBtn)
     {
         bLeftEnable = bWidthEnable = true;
     }
-    else if ((RadioButton *) pBox == m_pFreeBtn)
+    else if (pControl == m_pFreeBtn)
     {
         RightModify();
         bLeftEnable = true;
@@ -829,10 +829,10 @@ void  SwTableColumnPage::Init(bool bWeb)
     m_pProportionalCB->SetClickHdl( aLk );
 }
 
-IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
+IMPL_LINK( SwTableColumnPage, AutoClickHdl, void *, pControl )
 {
     //move display window
-    if(pBox == (CheckBox *)m_pDownBtn)
+    if(pControl == m_pDownBtn)
     {
         if(aValueTbl[0] > 0)
         {
@@ -840,7 +840,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
                 aValueTbl[i] -= 1;
         }
     }
-    if (pBox == (CheckBox *)m_pUpBtn)
+    if (pControl == m_pUpBtn)
     {
         if( aValueTbl[ MET_FIELDS -1 ] < nNoOfVisibleCols -1  )
         {

@@ -289,7 +289,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
 
     if ( name != NULL )
     {
-        xmlTextWriterStartElement( writer, ( const xmlChar * ) name );
+        xmlTextWriterStartElement( writer, reinterpret_cast<const xmlChar *>(name) );
 
         dumpAsXmlAttributes( writer );
 
@@ -343,7 +343,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
             OString aTxt8 =OUStringToOString( aTxt,
                                                           RTL_TEXTENCODING_UTF8 );
             xmlTextWriterWriteString( writer,
-                                      ( const xmlChar * ) aTxt8.getStr(  ) );
+                                      reinterpret_cast<const xmlChar *>(aTxt8.getStr(  )) );
             XmlPortionDumper pdumper( writer );
             pTxtFrm->VisitPortions( pdumper );
 

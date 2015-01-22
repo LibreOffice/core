@@ -387,7 +387,7 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if( RES_ATTRSET_CHG == nWhich )
     {
         if (pOld && pNew && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-            RES_FRM_SIZE, false, (const SfxPoolItem**)&pNewSize))
+            RES_FRM_SIZE, false, reinterpret_cast<const SfxPoolItem**>(&pNewSize)))
         {
             pOldSize = &static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->GetFrmSize();
         }
@@ -2187,13 +2187,13 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             {
                 const SfxItemSet& rSet = *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
                 if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT,
-                                    false, (const SfxPoolItem**)&pNewFmt ) )
+                                    false, reinterpret_cast<const SfxPoolItem**>(&pNewFmt) ) )
                     nOldFmt = static_cast<const SwTblBoxNumFormat&>(static_cast<const SwAttrSetChg*>(pOld)->
                             GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
                 rSet.GetItemState( RES_BOXATR_FORMULA, false,
-                                    (const SfxPoolItem**)&pNewFml );
+                                    reinterpret_cast<const SfxPoolItem**>(&pNewFml) );
                 rSet.GetItemState( RES_BOXATR_VALUE, false,
-                                    (const SfxPoolItem**)&pNewVal );
+                                    reinterpret_cast<const SfxPoolItem**>(&pNewVal) );
                 break;
             }
             case RES_BOXATR_FORMAT:
@@ -2237,7 +2237,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     {
                         // fetch the current Item
                         GetItemState( RES_BOXATR_FORMAT, false,
-                                            (const SfxPoolItem**)&pNewFmt );
+                                            reinterpret_cast<const SfxPoolItem**>(&pNewFmt) );
                         nOldFmt = GetTblBoxNumFmt().GetValue();
                         nNewFmt = pNewFmt ? pNewFmt->GetValue() : nOldFmt;
                     }
@@ -2275,7 +2275,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         bool bChgTxt = true;
                         double fVal = 0;
                         if( !pNewVal && SfxItemState::SET != GetItemState(
-                            RES_BOXATR_VALUE, false, (const SfxPoolItem**)&pNewVal ))
+                            RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewVal) ))
                         {
                             // so far, no value has been set, so try to evaluate the content
                             sal_uLong nNdPos = pBox->IsValidNumTxtNd( true );
@@ -2423,10 +2423,10 @@ bool SwTableBox::IsNumberChanged() const
         const SwTblBoxValue *pValue;
 
         if( SfxItemState::SET != GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false,
-            (const SfxPoolItem**)&pValue ))
+            reinterpret_cast<const SfxPoolItem**>(&pValue) ))
             pValue = 0;
         if( SfxItemState::SET != GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, false,
-            (const SfxPoolItem**)&pNumFmt ))
+            reinterpret_cast<const SfxPoolItem**>(&pNumFmt) ))
             pNumFmt = 0;
 
         sal_uLong nNdPos;

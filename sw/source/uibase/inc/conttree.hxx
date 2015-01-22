@@ -105,8 +105,7 @@ protected:
     virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    SwNavigationPI* GetParentWindow(){return
-                        (SwNavigationPI*)Window::GetParent();}
+    SwNavigationPI* GetParentWindow();
 
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel ) SAL_OVERRIDE;
     virtual void    DragFinished( sal_Int8 ) SAL_OVERRIDE;
@@ -299,8 +298,7 @@ protected:
     DECL_LINK(      DoubleClickHdl, void* );
 
     bool            IsInternalDrag() const {return bIsInternalDrag;}
-    SwNavigationPI* GetParentWindow()
-                        { return (SwNavigationPI*)Window::GetParent(); }
+    SwNavigationPI* GetParentWindow();
 
     void            OpenDoc(const SwGlblDocContent*);
     void            GotoContent(const SwGlblDocContent*);

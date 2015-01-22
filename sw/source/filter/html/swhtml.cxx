@@ -2142,7 +2142,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     const sal_Int32 nEndCnt = aOldPos.nContent.GetIndex();
     const SwPosition& rPos = *pPam->GetPoint();
 
-    _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
+    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
     for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
          nCnt--; ++pTbl )
     {
@@ -3233,8 +3233,8 @@ void SwHTMLParser::SaveAttrTab( _HTMLAttrTable& rNewAttrTab )
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
-    _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
-    _HTMLAttr** pSaveTbl = (_HTMLAttr**)&rNewAttrTab;
+    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pSaveTbl = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
 
     for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
          nCnt--; (++pTbl, ++pSaveTbl) )
@@ -3267,8 +3267,8 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
 
     // alle noch offenen Attribute beenden und hinter der Tabelle
     // neu aufspannen
-    _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
-    _HTMLAttr** pSaveTbl = (_HTMLAttr**)&rNewAttrTab;
+    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pSaveTbl = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
     bool bSetAttr = true;
     const sal_Int32 nSttCnt = pPam->GetPoint()->nContent.GetIndex();
     sal_Int32 nEndCnt = nSttCnt;
@@ -3359,7 +3359,7 @@ void SwHTMLParser::SplitAttrTab( _HTMLAttrTable& rNewAttrTab,
     }
 }
 
-void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
+void SwHTMLParser::RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
                                    bool bSetNewStart )
 {
     // preliminary paragraph attributes are not allowed here, they could
@@ -3369,8 +3369,8 @@ void SwHTMLParser::RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
     if( !aParaAttrs.empty() )
         aParaAttrs.clear();
 
-    _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
-    _HTMLAttr** pSaveTbl = (_HTMLAttr**)&rNewAttrTab;
+    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
+    _HTMLAttr** pSaveTbl = reinterpret_cast<_HTMLAttr**>(&rNewAttrTab);
 
     for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
         nCnt--; (++pTbl, ++pSaveTbl) )

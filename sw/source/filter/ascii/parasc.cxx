@@ -343,8 +343,8 @@ sal_uLong SwASCIIParser::ReadChars()
             }
             else
             {
-                pStt = pLastStt = (sal_Unicode*)pArr;
-                pEnd = (sal_Unicode*)(pArr + lGCount);
+                pStt = pLastStt = reinterpret_cast<sal_Unicode*>(pArr);
+                pEnd = reinterpret_cast<sal_Unicode*>(pArr + lGCount);
 
                 if( bSwapUnicode )
                 {

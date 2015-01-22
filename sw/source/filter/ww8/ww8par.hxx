@@ -1570,9 +1570,9 @@ private:
 // verwaltet werden: rglst, hpllfo und hsttbListNames
 // die Strukturen hierfuer sind: LSTF, LVLF, LFO LFOLVL
 
-    void SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV, const sal_uInt8* pTxt,
+    void SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV, const sal_uInt8* pTxt,
         bool bOutline);
-    void SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLevel, bool bOutLine);
+    void SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 nSwLevel, bool bOutLine);
     void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLevel );
     SwNumRule* GetStyRule();
 

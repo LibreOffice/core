@@ -58,7 +58,7 @@ namespace TxtFmtCollFunc
         {
             if ( !pNewNumRuleItem )
             {
-                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false, (const SfxPoolItem**)&pNewNumRuleItem );
+                pTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem) );
             }
             if ( pNewNumRuleItem )
             {
@@ -78,7 +78,7 @@ namespace TxtFmtCollFunc
         SwNumRule* pNumRule( 0 );
 
         const SwNumRuleItem* pNumRuleItem( 0 );
-        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, false, (const SfxPoolItem**)&pNumRuleItem );
+        rTxtFmtColl.GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem) );
         if ( pNumRuleItem )
         {
             const OUString sNumRuleName = pNumRuleItem->GetValue();
@@ -135,22 +135,22 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         pNewChgSet = static_cast<const SwAttrSetChg*>(pNew);
         pOldChgSet = static_cast<const SwAttrSetChg*>(pOld);
         pNewChgSet->GetChgSet()->GetItemState(
-            RES_LR_SPACE, false, (const SfxPoolItem**)&pNewLRSpace );
+            RES_LR_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pNewLRSpace) );
         pNewChgSet->GetChgSet()->GetItemState(
-            RES_UL_SPACE, false, (const SfxPoolItem**)&pNewULSpace );
+            RES_UL_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pNewULSpace) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_FONTSIZE,
-                        false, (const SfxPoolItem**)&(aFontSizeArr[0]) );
+                        false, reinterpret_cast<const SfxPoolItem**>(&(aFontSizeArr[0])) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CJK_FONTSIZE,
-                        false, (const SfxPoolItem**)&(aFontSizeArr[1]) );
+                        false, reinterpret_cast<const SfxPoolItem**>(&(aFontSizeArr[1])) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
-                        false, (const SfxPoolItem**)&(aFontSizeArr[2]) );
+                        false, reinterpret_cast<const SfxPoolItem**>(&(aFontSizeArr[2])) );
         // #i70223#, #i84745#
         // check, if attribute set is applied to this paragraph style
         if ( bAssignedToListLevelOfOutlineStyle &&
              pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
         {
             pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, false,
-                                                   (const SfxPoolItem**)&pNewNumRuleItem );
+                                                   reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem) );
         }
 
         break;
@@ -206,7 +206,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     // Check against the own attributes
     if( pNewLRSpace && SfxItemState::SET == GetItemState( RES_LR_SPACE, false,
-                                        (const SfxPoolItem**)&pOldLRSpace ))
+                                        reinterpret_cast<const SfxPoolItem**>(&pOldLRSpace) ))
     {
         if( pOldLRSpace != pNewLRSpace )    // Avoid recursion (SetAttr!)
         {
@@ -247,7 +247,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 
     if( pNewULSpace && SfxItemState::SET == GetItemState(
-            RES_UL_SPACE, false, (const SfxPoolItem**)&pOldULSpace ) &&
+            RES_UL_SPACE, false, reinterpret_cast<const SfxPoolItem**>(&pOldULSpace) ) &&
         pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
     {
         SvxULSpaceItem aNew( *pOldULSpace );
@@ -282,7 +282,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         const SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
         if( pFSize && SfxItemState::SET == GetItemState(
-            pFSize->Which(), false, (const SfxPoolItem**)&pOldFSize ) &&
+            pFSize->Which(), false, reinterpret_cast<const SfxPoolItem**>(&pOldFSize) ) &&
             // Avoid recursion (SetAttr!)
             pFSize != pOldFSize )
         {

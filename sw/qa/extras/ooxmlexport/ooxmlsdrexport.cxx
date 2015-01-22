@@ -1566,7 +1566,7 @@ DECLARE_OOXMLEXPORT_TEST(testAbsolutePositionOffsetValue,"fdo78432.docx")
     {
         CPPUNIT_ASSERT(pXmlObjs[index]->nodesetval != 0);
         xmlNodePtr pXmlNode = pXmlObjs[index]->nodesetval->nodeTab[0];
-        OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+        OUString contents = OUString::createFromAscii(reinterpret_cast<const char*>((pXmlNode->children[0]).content));
         CPPUNIT_ASSERT( contents.toInt64() <= IntMax );
         xmlXPathFreeObject(pXmlObjs[index]);
     }

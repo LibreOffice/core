@@ -192,7 +192,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( pFlySet )
     {
         pFlySet->GetItemState( RES_ANCHOR, false,
-                                (const SfxPoolItem**)&pAnchor );
+                                reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
         if( SfxItemState::SET == pFlySet->GetItemState( RES_CNTNT, false ))
         {
             SfxItemSet aTmpSet( *pFlySet );
@@ -308,9 +308,9 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
     {
         const SwFmtAnchor* pAnch;
         if( (pFlySet && SfxItemState::SET == pFlySet->GetItemState(
-                RES_ANCHOR, false, (const SfxPoolItem**)&pAnch )) ||
+                RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnch) )) ||
             ( pFrmFmt && SfxItemState::SET == pFrmFmt->GetItemState(
-                RES_ANCHOR, true, (const SfxPoolItem**)&pAnch )) )
+                RES_ANCHOR, true, reinterpret_cast<const SfxPoolItem**>(&pAnch) )) )
         {
             if ( (FLY_AT_PAGE != pAnch->GetAnchorId()) )
             {

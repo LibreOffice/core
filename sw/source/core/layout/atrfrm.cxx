@@ -2547,17 +2547,17 @@ bool SwFrmFmt::supportsFullDrawingLayerFillAttributeSet() const
 
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    SwFmtHeader *pH = 0;
-    SwFmtFooter *pF = 0;
+    SwFmtHeader const *pH = 0;
+    SwFmtFooter const *pF = 0;
 
     const sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
     if( RES_ATTRSET_CHG == nWhich )
     {
         static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-            RES_HEADER, false, (const SfxPoolItem**)&pH );
+            RES_HEADER, false, reinterpret_cast<const SfxPoolItem**>(&pH) );
         static_cast<const SwAttrSetChg*>(pNew)->GetChgSet()->GetItemState(
-            RES_FOOTER, false, (const SfxPoolItem**)&pF );
+            RES_FOOTER, false, reinterpret_cast<const SfxPoolItem**>(&pF) );
 
         //UUUU reset fill information
         if (maFillAttributes.get() && supportsFullDrawingLayerFillAttributeSet())
@@ -2592,13 +2592,13 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( pH && pH->IsActive() && !pH->GetHeaderFmt() )
     {   //If he doesn't have one, I'll add one
         SwFrmFmt *pFmt = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_HEADER, 0 );
-        pH->RegisterToFormat( *pFmt );
+        const_cast<SwFmtHeader *>(pH)->RegisterToFormat( *pFmt );
     }
 
     if( pF && pF->IsActive() && !pF->GetFooterFmt() )
     {   //If he doesn't have one, I'll add one
         SwFrmFmt *pFmt = GetDoc()->getIDocumentLayoutAccess().MakeLayoutFmt( RND_STD_FOOTER, 0 );
-        pF->RegisterToFormat( *pFmt );
+        const_cast<SwFmtFooter *>(pF)->RegisterToFormat( *pFmt );
     }
 
     SwFmt::Modify( pOld, pNew );

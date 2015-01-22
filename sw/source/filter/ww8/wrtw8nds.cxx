@@ -1657,7 +1657,7 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
-    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nSty, (sal_uInt8*)&nSty+2 );     // Style #
+    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // Style #
 
     if ( m_rWW8Export.bWrtWW8 )
     {
@@ -2764,7 +2764,7 @@ void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeIn
         {
             TableRowEnd( pInner->getDepth() );
 
-            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), (sal_uInt8*)&nSty, (sal_uInt8*)&nSty+2);     // Style #
+            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2);     // Style #
             TableInfoRow( pInner );
             m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data());
             m_rWW8Export.pO->clear();

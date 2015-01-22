@@ -432,7 +432,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // die Attribute der Umgebung am Draw-Objekt setzen
-    _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
+    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
     for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
          nCnt--; ++pTbl )
     {

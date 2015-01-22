@@ -575,7 +575,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
 
         // The Flags in the BoxInfo Item decide whether a BorderLine is valid!
         if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_BORDER_INNER, false,
-            (const SfxPoolItem**)&pSetBoxInfo) )
+            reinterpret_cast<const SfxPoolItem**>(&pSetBoxInfo)) )
         {
             pHori = pSetBoxInfo->GetHori();
             pVert = pSetBoxInfo->GetVert();
@@ -591,7 +591,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
         }
 
         if( SfxItemState::SET == rSet.GetItemState( RES_BOX, false,
-            (const SfxPoolItem**)&pSetBox) )
+            reinterpret_cast<const SfxPoolItem**>(&pSetBox)) )
         {
             pLeft = pSetBox->GetLeft();
             pRight = pSetBox->GetRight();

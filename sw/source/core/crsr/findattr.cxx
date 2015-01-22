@@ -239,14 +239,14 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
     char* pFndChar  = new char[ nArrLen * sizeof(_SwSrchChrAttr) ];
     char* pStackChar = new char[ nArrLen * sizeof(_SwSrchChrAttr) ];
 
-    pFndArr = (_SwSrchChrAttr*)pFndChar;
-    pStackArr = (_SwSrchChrAttr*)pStackChar;
+    pFndArr = reinterpret_cast<_SwSrchChrAttr*>(pFndChar);
+    pStackArr = reinterpret_cast<_SwSrchChrAttr*>(pStackChar);
 }
 
 SwAttrCheckArr::~SwAttrCheckArr()
 {
-    delete[] (char*)pFndArr;
-    delete[] (char*)pStackArr;
+    delete[] reinterpret_cast<char*>(pFndArr);
+    delete[] reinterpret_cast<char*>(pStackArr);
 }
 
 void SwAttrCheckArr::SetNewSet( const SwTxtNode& rTxtNd, const SwPaM& rPam )

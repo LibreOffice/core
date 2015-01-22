@@ -95,7 +95,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, bool bWeb )
 
     const SwAddPrinterItem* pAddPrinterAttr;
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, false,
-        (const SfxPoolItem**)&pAddPrinterAttr ) )
+        reinterpret_cast<const SfxPoolItem**>(&pAddPrinterAttr) ) )
     {
         if( pIDDA )
             pIDDA->setPrintData( *pAddPrinterAttr );

@@ -976,9 +976,9 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
     {
         aSet.Put( *m_pCurTxtNd->GetpSwAttrSet() );
         // take HeaderLine/TextBody only if centered or right aligned, otherwise only justification
-        SvxAdjustItem* pAdj;
+        SvxAdjustItem const * pAdj;
         if( SfxItemState::SET == aSet.GetItemState( RES_PARATR_ADJUST,
-                        false, (const SfxPoolItem**)&pAdj ))
+                        false, reinterpret_cast<const SfxPoolItem**>(&pAdj) ))
         {
             SvxAdjust eAdj = pAdj->GetAdjust();
             if( bHdLineOrText ? (SVX_ADJUST_RIGHT != eAdj &&
@@ -2236,10 +2236,10 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     RES_POOLCOLL_STANDARD == nPoolId )
                 {
                     short nSz;
-                    SvxLRSpaceItem* pLRSpace;
+                    SvxLRSpaceItem const * pLRSpace;
                     if( SfxItemState::SET == m_pCurTxtNd->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, true,
-                                        (const SfxPoolItem**)&pLRSpace ) &&
+                                        reinterpret_cast<const SfxPoolItem**>(&pLRSpace) ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
                             0 != pLRSpace->GetTxtLeft() ) )
                     {
@@ -2473,11 +2473,11 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 if( m_pCurTxtNd->HasSwAttrSet() )
                 {
                     short nSz;
-                    SvxLRSpaceItem* pLRSpace;
+                    SvxLRSpaceItem const * pLRSpace;
                     if( bReplaceStyles &&
                         SfxItemState::SET == m_pCurTxtNd->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, false,
-                                        (const SfxPoolItem**)&pLRSpace ) &&
+                                        reinterpret_cast<const SfxPoolItem**>(&pLRSpace) ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
                             0 != pLRSpace->GetTxtLeft() ) )
                     {

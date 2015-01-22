@@ -77,7 +77,7 @@ class SwSortDlg : public SvxStandardDialog
     virtual void        Apply() SAL_OVERRIDE;
     sal_Unicode         GetDelimChar() const;
 
-    DECL_LINK( CheckHdl, CheckBox * );
+    DECL_LINK( CheckHdl, void * );
     DECL_LINK( DelimHdl, RadioButton* );
     DECL_LINK( LanguageHdl, ListBox* );
     DECL_LINK(DelimCharHdl, void *);

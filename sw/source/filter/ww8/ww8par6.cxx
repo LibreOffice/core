@@ -1223,11 +1223,11 @@ static bool _SetWW8_BRC(int nBrcVer, WW8_BRCVer9& rVar, const sal_uInt8* pS)
     if( pS )
     {
         if ( nBrcVer == 9 )
-            rVar = *(const WW8_BRCVer9*)pS;
+            rVar = *reinterpret_cast<const WW8_BRCVer9*>(pS);
         else if( nBrcVer == 8 )
-            rVar = *(const WW8_BRC*)pS;
+            rVar = *reinterpret_cast<const WW8_BRC*>(pS);
         else // nBrcVer == 6
-            rVar = WW8_BRC(*(const WW8_BRCVer6*)pS);
+            rVar = WW8_BRC(*reinterpret_cast<const WW8_BRCVer6*>(pS));
     }
 
     return 0 != pS;
@@ -3801,7 +3801,7 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
     else
     {
         WW8_SHD aSHD;
-        aSHD.SetWWValue( *(SVBT16*)pData );
+        aSHD.SetWWValue( *reinterpret_cast<SVBT16 const *>(pData) );
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr( SvxBrushItem( aSh.aColor, RES_CHRATR_BACKGROUND ));
@@ -4635,7 +4635,7 @@ void SwWW8ImplReader::Read_Shade( sal_uInt16, const sal_uInt8* pData, short nLen
     else
     {
         WW8_SHD aSHD;
-        aSHD.SetWWValue( *(SVBT16*)pData );
+        aSHD.SetWWValue( *reinterpret_cast<SVBT16 const *>(pData) );
         SwWW8Shade aSh( bVer67, aSHD );
 
         NewAttr(SvxBrushItem(aSh.aColor, RES_BACKGROUND));

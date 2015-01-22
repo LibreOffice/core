@@ -850,7 +850,7 @@ inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
 
 inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
 {
-    const sal_uInt16 n = SVBT16ToShort( *(SVBT16*)p );
+    const sal_uInt16 n = SVBT16ToShort( *reinterpret_cast<SVBT16*>(p) );
     p += 2;
     return n;
 }
@@ -862,7 +862,7 @@ inline short Get_Short( sal_uInt8 *& p )
 
 inline sal_uLong Get_ULong( sal_uInt8 *& p )
 {
-    sal_uLong n = SVBT32ToUInt32( *(SVBT32*)p );
+    sal_uLong n = SVBT32ToUInt32( *reinterpret_cast<SVBT32*>(p) );
     p += 4;
     return n;
 }
@@ -1998,7 +1998,7 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     nIdx = 0;
 #endif // OSL_BIGENDIAN
     if( nStruct ) // Pointer to content array
-        pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+        pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
     else
         pPLCF_Contents = 0;                         // no content
 
@@ -2148,7 +2148,7 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
         nIdx = 0;
 #endif // OSL_BIGENDIAN
         // Pointer to content array
-        pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+        pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
     }
 
     OSL_ENSURE(bValid, "Document has corrupt PLCF, ignoring it");
@@ -2165,7 +2165,7 @@ void WW8PLCF::MakeFailedPLCF()
     delete[] pPLCF_PosArray;
     pPLCF_PosArray = new sal_Int32[2];
     pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
-    pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+    pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
 }
 
 void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
@@ -2227,7 +2227,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
     if (!failure)
     {
         // Pointer to content array
-        pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+        pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
         sal_uInt8* p = pPLCF_Contents;
 
         for (sal_Int32 i = 0; i < ncpN; ++i)         // construct PNs
@@ -2327,7 +2327,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 #endif // OSL_BIGENDIAN
 
     // Pointer to content array
-    pPLCF_Contents = (sal_uInt8*)&pPLCF_PosArray[nIMax + 1];
+    pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
 
     pSt->Seek( nOldPos );
 }
@@ -6468,7 +6468,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
         if( eVersion <= ww::eWW2 )
         {
-            WW8_FFN_BASE* pVer2 = (WW8_FFN_BASE*)pA;
+            WW8_FFN_BASE* pVer2 = reinterpret_cast<WW8_FFN_BASE*>(pA);
             for(sal_uInt16 i=0; i<nMax; ++i, ++p)
             {
                 p->cbFfnM1   = pVer2->cbFfnM1;
@@ -6477,8 +6477,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->fTrueType = 0;
                 p->ff        = 0;
 
-                p->wWeight   = ( *(((sal_uInt8*)pVer2) + 1) );
-                p->chs   = ( *(((sal_uInt8*)pVer2) + 2) );
+                p->wWeight   = ( *(reinterpret_cast<sal_uInt8*>(pVer2) + 1) );
+                p->chs   = ( *(reinterpret_cast<sal_uInt8*>(pVer2) + 2) );
                 /*
                  #i8726# 7- seems to encode the name in the same encoding as
                  the font, e.g load the doc in 97 and save to see the unicode
@@ -6488,25 +6488,25 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
 
-                p->sFontname = OUString ( (((const sal_Char*)pVer2) + 1 + 2), strlen((((const sal_Char*)pVer2) + 1 + 2)), eEnc);
-                pVer2 = (WW8_FFN_BASE*)( ((sal_uInt8*)pVer2) + pVer2->cbFfnM1 + 1 );
+                p->sFontname = OUString ( (reinterpret_cast<char*>(pVer2) + 1 + 2), strlen((reinterpret_cast<char*>(pVer2) + 1 + 2)), eEnc);
+                pVer2 = reinterpret_cast<WW8_FFN_BASE*>( reinterpret_cast<sal_uInt8*>(pVer2) + pVer2->cbFfnM1 + 1 );
             }
         }
         else if( eVersion < ww::eWW8 )
         {
-            WW8_FFN_Ver6* pVer6 = (WW8_FFN_Ver6*)pA;
+            WW8_FFN_Ver6* pVer6 = reinterpret_cast<WW8_FFN_Ver6*>(pA);
             sal_uInt8 c2;
             for(sal_uInt16 i=0; i<nMax; ++i, ++p)
             {
                 p->cbFfnM1   = pVer6->cbFfnM1;
-                c2           = *(((sal_uInt8*)pVer6) + 1);
+                c2           = *(reinterpret_cast<sal_uInt8*>(pVer6) + 1);
 
                 p->prg       =  c2 & 0x02;
                 p->fTrueType = (c2 & 0x04) >> 2;
                 // ein Reserve-Bit ueberspringen
                 p->ff        = (c2 & 0x70) >> 4;
 
-                p->wWeight   = SVBT16ToShort( *(SVBT16*)&pVer6->wWeight );
+                p->wWeight   = SVBT16ToShort( *reinterpret_cast<SVBT16*>(&pVer6->wWeight) );
                 p->chs       = pVer6->chs;
                 p->ibszAlt   = pVer6->ibszAlt;
                 /*
@@ -6535,7 +6535,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                         p->sFontname += ";Symbol";
                     }
                 }
-                pVer6 = (WW8_FFN_Ver6*)( ((sal_uInt8*)pVer6) + pVer6->cbFfnM1 + 1 );
+                pVer6 = reinterpret_cast<WW8_FFN_Ver6*>( reinterpret_cast<sal_uInt8*>(pVer6) + pVer6->cbFfnM1 + 1 );
             }
         }
         else
@@ -6570,7 +6570,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 // ein Reserve-Bit ueberspringen
                 p->ff = (c2 & 0x70) >> 4;
 
-                p->wWeight = SVBT16ToShort(*(SVBT16*)pVer8);
+                p->wWeight = SVBT16ToShort(*reinterpret_cast<SVBT16*>(pVer8));
                 pVer8+=2;
                 cbFfnM1-=2;
 

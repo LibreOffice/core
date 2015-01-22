@@ -3301,7 +3301,7 @@ void _CellSaveStruct::InsertCell( SwHTMLParser& rParser,
 
     if( rParser.nContextStAttrMin == GetContextStAttrMin() )
     {
-        _HTMLAttr** pTbl = (_HTMLAttr**)&rParser.aAttrTab;
+        _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&rParser.aAttrTab);
 
         for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
             nCnt--; ++pTbl )
@@ -3401,7 +3401,7 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
     const SwNodeIndex& rSttPara = pPam->GetPoint()->nNode;
     sal_Int32 nSttCnt = pPam->GetPoint()->nContent.GetIndex();
 
-    _HTMLAttr** pTbl = (_HTMLAttr**)&aAttrTab;
+    _HTMLAttr** pTbl = reinterpret_cast<_HTMLAttr**>(&aAttrTab);
     for( sal_uInt16 nCnt = sizeof( _HTMLAttrTable ) / sizeof( _HTMLAttr* );
         nCnt--; ++pTbl )
     {

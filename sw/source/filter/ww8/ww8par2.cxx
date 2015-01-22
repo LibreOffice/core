@@ -557,7 +557,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 
 // helper methods for outline, numbering and bullets
 
-static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
+static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLevel )
 {
     static const SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
@@ -624,7 +624,7 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
     }
 }
 
-void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
+void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV const &rAV,
     const sal_uInt8* pTxt, bool bOutline)
 {
     bool bInsert = false;                       // Default
@@ -636,13 +636,13 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     OUString sTxt;
     if (bVer67)
     {
-        sTxt = OUString((sal_Char*)pTxt, rAV.cbTextBefore + rAV.cbTextAfter, eCharSet);
+        sTxt = OUString(reinterpret_cast<char const *>(pTxt), rAV.cbTextBefore + rAV.cbTextAfter, eCharSet);
     }
     else
     {
         for(sal_Int32 i = 0; i < rAV.cbTextBefore + rAV.cbTextAfter; ++i, pTxt += 2)
         {
-            sTxt += OUString(SVBT16ToShort(*(SVBT16*)pTxt));
+            sTxt += OUString(SVBT16ToShort(*reinterpret_cast<SVBT16 const *>(pTxt)));
         }
     }
 
@@ -716,14 +716,14 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
 // SetAnld gets a WW-ANLD-Descriptor and a Level and modifies the NumRules
 // which are provided by pNumR. This is used for everything beside
 // outline inside the text.
-void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLevel,
+void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD const * pAD, sal_uInt8 nSwLevel,
     bool bOutLine)
 {
     SwNumFmt aNF;
     if (pAD)
     {                                                       // there is a Anld-Sprm
         bAktAND_fNumberAcross = 0 != pAD->fNumberAcross;
-        WW8_ANLV &rAV = pAD->eAnlv;
+        WW8_ANLV const &rAV = pAD->eAnlv;
         SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
         SetAnlvStrings(aNF, rAV, pAD->rgchAnld, bOutLine ); // set the rest
     }
@@ -821,13 +821,13 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
                        OUTLINE_RULE );
         aNR = *rDoc.GetOutlineNumRule();
 
-        SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);
+        SetAnld(&aNR, reinterpret_cast<WW8_ANLD const *>(pData), nSwNumLevel, true);
 
         // Missing Levels need not be replenished
         rDoc.SetOutlineNumRule( aNR );
     }else if( pStyles->nWwNumLevel == 10 || pStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
-        SetAnld(pNR, (WW8_ANLD*)pData, 0, false);
+        SetAnld(pNR, reinterpret_cast<WW8_ANLD const *>(pData), 0, false);
         pAktColl->SetFmtAttr( SwNumRuleItem( pNR->GetName() ) );
 
         pStyInf = GetStyle(nAktColl);
@@ -874,7 +874,7 @@ void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen 
     pNumOlst = new WW8_OLST;
     if( nLen < sal::static_int_cast< sal_Int32 >(sizeof( WW8_OLST )) )   // fill if to short
         memset( pNumOlst, 0, sizeof( *pNumOlst ) );
-    *pNumOlst = *(WW8_OLST*)pData;
+    *pNumOlst = *reinterpret_cast<WW8_OLST const *>(pData);
 }
 
 WW8LvlType GetNumType(sal_uInt8 nWwLevelNo)
@@ -933,7 +933,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             {
                 // this is ROW numbering ?
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
-                if (pS12 && 0 != ((WW8_ANLD*)pS12)->fNumberAcross)
+                if (pS12 && 0 != reinterpret_cast<WW8_ANLD const *>(pS12)->fNumberAcross)
                     sNumRule.clear();
             }
         }
@@ -961,7 +961,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         {
             if (!pS12)
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
-            if (!pS12 || !((WW8_ANLD*)pS12)->fNumberAcross)
+            if (!pS12 || !reinterpret_cast<WW8_ANLD const *>(pS12)->fNumberAcross)
                 pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
     }
@@ -997,7 +997,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
             // not defined yet
             // sprmAnld o. 0
             const sal_uInt8* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
-            SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+            SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(pS12), nSwNumLevel, false);
         }
     }
     else if( *pSprm13 > 0 && *pSprm13 <= MAXLEVEL )          // range WW:1..9 -> SW:0..8
@@ -1021,7 +1021,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
             {
                 // sprmAnld
                 const sal_uInt8* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
-                SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+                SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(pS12), nSwNumLevel, false);
             }
         }
     }
@@ -1152,7 +1152,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
         WW8_TCell* pAktTC  = pTCs;
         if( bVer67 )
         {
-            WW8_TCellVer6* pTc = (WW8_TCellVer6*)pT;
+            WW8_TCellVer6 const * pTc = reinterpret_cast<WW8_TCellVer6 const *>(pT);
             for(i=0; i<nColsToRead; i++, ++pAktTC,++pTc)
             {
                 if( i < nColsToRead )
@@ -1184,7 +1184,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
         }
         else
         {
-            WW8_TCellVer8* pTc = (WW8_TCellVer8*)pT;
+            WW8_TCellVer8 const * pTc = reinterpret_cast<WW8_TCellVer8 const *>(pT);
             for (int k = 0; k < nColsToRead; ++k, ++pAktTC, ++pTc )
             {
                 sal_uInt16 aBits1 = SVBT16ToShort( pTc->aBits1Ver8 );
@@ -1247,11 +1247,11 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(int nBrcVer, const sal_uInt8* pParamsTSe
         WW8_TCell* pAktTC  = pTCs + nitcFirst;
         WW8_BRCVer9 brcVer9;
         if( nBrcVer == 6 )
-            brcVer9 = WW8_BRC(*(WW8_BRCVer6*)(pParamsTSetBRC+3));
+            brcVer9 = WW8_BRC(*reinterpret_cast<WW8_BRCVer6 const *>(pParamsTSetBRC+3));
         else if( nBrcVer == 8 )
-            brcVer9 = *(WW8_BRC*)(pParamsTSetBRC+3);
+            brcVer9 = *reinterpret_cast<WW8_BRC const *>(pParamsTSetBRC+3);
         else
-            brcVer9 = *(WW8_BRCVer9*)(pParamsTSetBRC+3);
+            brcVer9 = *reinterpret_cast<WW8_BRCVer9 const *>(pParamsTSetBRC+3);
 
         for( int i = nitcFirst; i < nitcLim; ++i, ++pAktTC )
         {
@@ -1272,7 +1272,7 @@ void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pPar
     // sprmTTableBorders
     if( nBrcVer == 6 )
     {
-        WW8_BRCVer6 *pVer6 = (WW8_BRCVer6*)pParams;
+        WW8_BRCVer6 const *pVer6 = reinterpret_cast<WW8_BRCVer6 const *>(pParams);
         for (int i = 0; i < 6; ++i)
             aDefBrcs[i] = WW8_BRC(pVer6[i]);
     }
@@ -1534,9 +1534,9 @@ void WW8TabBandDesc::ReadShd(const sal_uInt8* pS )
     if (nAnz > nWwCols)
         nAnz = nWwCols;
 
-    SVBT16* pShd;
+    SVBT16 const * pShd;
     int i;
-    for(i=0, pShd = (SVBT16*)pS; i<nAnz; i++, pShd++ )
+    for(i=0, pShd = reinterpret_cast<SVBT16 const *>(pS); i<nAnz; i++, pShd++ )
         pSHDs[i].SetWWValue( *pShd );
 }
 

@@ -43,8 +43,9 @@
 // boxes and lines of a table
 struct _MapTblFrmFmt
 {
-    const SwFrmFmt *pOld, *pNew;
-    _MapTblFrmFmt( const SwFrmFmt *pOldFmt, const SwFrmFmt*pNewFmt )
+    const SwFrmFmt *pOld;
+    SwFrmFmt *pNew;
+    _MapTblFrmFmt( const SwFrmFmt *pOldFmt, SwFrmFmt*pNewFmt )
         : pOld( pOldFmt ), pNew( pNewFmt )
     {}
 };
@@ -109,7 +110,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     return pTxtNd;
 }
 
-static bool lcl_SrchNew( const _MapTblFrmFmt& rMap, const SwFrmFmt** pPara )
+static bool lcl_SrchNew( const _MapTblFrmFmt& rMap, SwFrmFmt** pPara )
 {
     if( rMap.pOld != *pPara )
         return true;
@@ -138,9 +139,9 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT );
 
 static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 {
-    SwTableBoxFmt* pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
+    SwTableBoxFmt * pBoxFmt = static_cast<SwTableBoxFmt*>(pBox->GetFrmFmt());
     for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
-        if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pBoxFmt ) )
+        if ( !lcl_SrchNew( *it, reinterpret_cast<SwFrmFmt**>(&pBoxFmt) ) )
             break;
     if( pBoxFmt == pBox->GetFrmFmt() ) // Create a new one?
     {
@@ -200,9 +201,9 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
 
 static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
 {
-    SwTableLineFmt* pLineFmt = static_cast<SwTableLineFmt*>(pLine->GetFrmFmt());
+    SwTableLineFmt * pLineFmt = static_cast<SwTableLineFmt*>(pLine->GetFrmFmt());
     for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
-        if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pLineFmt ) )
+        if ( !lcl_SrchNew( *it, reinterpret_cast<SwFrmFmt**>(&pLineFmt) ) )
             break;
     if( pLineFmt == pLine->GetFrmFmt() ) // Create a new one?
     {

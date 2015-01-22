@@ -140,7 +140,7 @@ struct SwCalcExp : public SwHash
                 const SwFieldType* pFldType = 0 );
 };
 
-SwHash* Find( const OUString& rSrch, SwHash** ppTable,
+SwHash* Find( const OUString& rSrch, SwHash* const * ppTable,
                 sal_uInt16 nTblSize, sal_uInt16* pPos = 0 );
 
 void DeleteHashTable( SwHash** ppTable, sal_uInt16 nTblSize );

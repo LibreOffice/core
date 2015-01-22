@@ -55,7 +55,7 @@ namespace
 
             // Don't output the terminating \0 to the xml or the file will be invalid
             uno::Sequence< sal_Int8 > seq( nLen );
-            strncpy( ( char * ) seq.getArray() , sBuffer, nLen );
+            strncpy( reinterpret_cast<char *>(seq.getArray()), sBuffer, nLen );
             xOut->writeBytes( seq );
         }
         catch (const uno::Exception&)

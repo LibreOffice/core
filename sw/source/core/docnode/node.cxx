@@ -855,7 +855,7 @@ SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
         pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
-    pEndOfSection = (SwEndNode*)this;
+    pEndOfSection = reinterpret_cast<SwEndNode*>(this);
 }
 
 SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
@@ -867,7 +867,7 @@ SwStartNode::SwStartNode( SwNodes& rNodes, sal_uLong nPos )
         pStartOfSection = this;
     }
     // Just do this temporarily until the EndNode is inserted
-    pEndOfSection = (SwEndNode*)this;
+    pEndOfSection = reinterpret_cast<SwEndNode*>(this);
 }
 
 void SwStartNode::CheckSectionCondColl() const

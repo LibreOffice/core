@@ -337,8 +337,8 @@ static void lcl_CopyCol( _FndBox & rFndBox, _CpyPara *const pCpyPara)
                 aFrmSz.SetWidth( nSz / ( pCpyPara->nCpyCnt + 1 ) );
 
                 // Create a new Format for the new Box, specifying its size.
-                aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pNewFmt->GetDoc()->
-                                            MakeTableLineFmt();
+                aFindFrm.pNewFrmFmt = reinterpret_cast<SwTableBoxFmt*>(pNewFmt->GetDoc()->
+                                            MakeTableLineFmt());
                 *aFindFrm.pNewFrmFmt = *pNewFmt;
                 aFindFrm.pNewFrmFmt->SetFmtAttr( aFrmSz );
             }
@@ -1943,14 +1943,14 @@ lcl_CopyLineToDoc(const _FndLine& rFndLine, _CpyPara *const pCpyPara)
     if( itFind == pCpyPara->rTabFrmArr.end() )
     {
         // It doesn't exist yet, so copy it
-        aFindFrm.pNewFrmFmt = (SwTableBoxFmt*)pCpyPara->pDoc->MakeTableLineFmt();
+        aFindFrm.pNewFrmFmt = reinterpret_cast<SwTableBoxFmt*>(pCpyPara->pDoc->MakeTableLineFmt());
         aFindFrm.pNewFrmFmt->CopyAttrs( *rFndLine.GetLine()->GetFrmFmt() );
         pCpyPara->rTabFrmArr.insert( aFindFrm );
     }
     else
         aFindFrm = *itFind;
 
-    SwTableLine* pNewLine = new SwTableLine( (SwTableLineFmt*)aFindFrm.pNewFrmFmt,
+    SwTableLine* pNewLine = new SwTableLine( reinterpret_cast<SwTableLineFmt*>(aFindFrm.pNewFrmFmt),
                         rFndLine.GetBoxes().size(), pCpyPara->pInsBox );
     if( pCpyPara->pInsBox )
     {

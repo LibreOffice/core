@@ -388,7 +388,7 @@ DECLARE_OOXMLEXPORT_TEST(testGenericTextField, "Unsupportedtextfields.docx")
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    OUString contents = OUString::createFromAscii(reinterpret_cast<char*>((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match("PRINTDATE   \\* MERGEFORMAT"));
     xmlXPathFreeObject(pXmlObj);
 }

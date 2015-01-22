@@ -187,7 +187,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
     const SwElemItem* pElemAttr = 0;
 
     rSet->GetItemState( FN_PARAM_ELEM , false,
-                                    (const SfxPoolItem**)&pElemAttr );
+                                    reinterpret_cast<const SfxPoolItem**>(&pElemAttr) );
     if(pElemAttr)
     {
         m_pTblCB->Check (pElemAttr->bTable);
@@ -414,7 +414,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     const   SwAddPrinterItem*   pAddPrinterAttr = 0;
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , false,
-                                    (const SfxPoolItem**)&pAddPrinterAttr ))
+                                    reinterpret_cast<const SfxPoolItem**>(&pAddPrinterAttr) ))
     {
         m_pGrfCB->Check(pAddPrinterAttr->bPrintGraphic || pAddPrinterAttr->bPrintDraw);
         m_pCtrlFldCB->Check(       pAddPrinterAttr->bPrintControl);
@@ -1427,7 +1427,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
     const SwDocDisplayItem* pDocDisplayAttr = 0;
 
     rSet->GetItemState( FN_PARAM_DOCDISP, false,
-                                    (const SfxPoolItem**)&pDocDisplayAttr );
+                                    reinterpret_cast<const SfxPoolItem**>(&pDocDisplayAttr) );
     if(pDocDisplayAttr)
     {
         m_pParaCB->Check  ( pDocDisplayAttr->bParagraphEnd );
@@ -2385,7 +2385,7 @@ void SwTestTabPage::Reset( const SfxItemSet* )
     const SwTestItem* pTestAttr = 0;
 
     if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
-                                    (const SfxPoolItem**)&pTestAttr ))
+                                    reinterpret_cast<const SfxPoolItem**>(&pTestAttr) ))
     {
         m_pTest1CBox->Check(pTestAttr->bTest1);
         m_pTest2CBox->Check(pTestAttr->bTest2);

@@ -3537,6 +3537,11 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
     SvTreeListBox::DataChanged( rDCEvt );
 }
 
+SwNavigationPI* SwContentTree::GetParentWindow()
+{
+    return static_cast<SwNavigationPI*>(Window::GetParent());
+}
+
 sal_Int32  SwContentTree::GetEntryRealChildrenNum( SvTreeListEntry* pParent ) const
 {
     // ist es ein Inhaltstyp?

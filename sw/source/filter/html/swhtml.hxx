@@ -517,7 +517,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void SaveAttrTab( _HTMLAttrTable& rNewAttrTab );
     void SplitAttrTab( const SwPosition& rNewPos );
     void SplitAttrTab( _HTMLAttrTable& rNewAttrTab, bool bMoveEndBack = true );
-    void RestoreAttrTab( const _HTMLAttrTable& rNewAttrTab,
+    void RestoreAttrTab( _HTMLAttrTable& rNewAttrTab,
                          bool bSetNewStart = false );
     void InsertAttr( const SfxPoolItem& rItem, bool bLikePara = false,
                      bool bInsAtStart=false );

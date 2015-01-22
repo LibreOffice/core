@@ -1430,7 +1430,7 @@ namespace
         if ( RES_ATTRSET_CHG == nWhich )
         {
             static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
-                GetItemState( RES_ANCHOR, false, (const SfxPoolItem**)&pAnchorFmt );
+                GetItemState( RES_ANCHOR, false, reinterpret_cast<const SfxPoolItem**>(&pAnchorFmt) );
         }
         else if ( RES_ANCHOR == nWhich )
         {

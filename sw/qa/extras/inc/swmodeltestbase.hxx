@@ -394,7 +394,7 @@ protected:
         if (!mpXmlBuffer)
             dumpLayout();
 
-        return xmlParseMemory((const char*)xmlBufferContent(mpXmlBuffer), xmlBufferLength(mpXmlBuffer));;
+        return xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)), xmlBufferLength(mpXmlBuffer));;
     }
 
     /**
@@ -413,9 +413,9 @@ protected:
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
         OUString aRet;
         if (aAttribute.getLength())
-            aRet = OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr())));
+            aRet = OUString::createFromAscii(reinterpret_cast<char*>(xmlGetProp(pXmlNode, BAD_CAST(aAttribute.getStr()))));
         else
-            aRet = OUString::createFromAscii((const char*)xmlNodeGetContent(pXmlNode));
+            aRet = OUString::createFromAscii(reinterpret_cast<char*>(xmlNodeGetContent(pXmlNode)));
 
         xmlFreeDoc(pXmlDoc);
 
