@@ -192,7 +192,7 @@ void SAL_CALL DragSource::initialize(const Sequence< Any >& aArguments)
       throw Exception("DragSource::initialize: Provided view is not attached to a vcl frame",
                       static_cast<OWeakObject*>(this));
   }
-  mpFrame = static_cast<AquaSalFrame*>([pWin performSelector: @selector(getSalFrame)]);
+  mpFrame = reinterpret_cast<AquaSalFrame*>([pWin performSelector: @selector(getSalFrame)]);
 
   mDragSourceHelper = [[DragSourceHelper alloc] initWithDragSource: this];
 

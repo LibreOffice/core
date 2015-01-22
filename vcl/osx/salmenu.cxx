@@ -246,7 +246,7 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
     if( ! mbMenuBar )
     {
         mpMenu = [[SalNSMenu alloc] initWithMenu: this];
-        [mpMenu setDelegate: static_cast<id<NSMenuDelegate>>(mpMenu)];
+        [mpMenu setDelegate: reinterpret_cast< id<NSMenuDelegate> >(mpMenu)];
     }
     else
     {
