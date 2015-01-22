@@ -182,7 +182,11 @@ copy-stuff:
 	echo 'BuildVersion=' >> assets/program/versionrc
 	echo 'buildid=$(shell cd $(SRCDIR) && git log -1 --format=%H)' >> assets/program/versionrc
 	echo 'ReferenceOOoMajorMinor=4.1' >> assets/program/versionrc
-	sed -i 's|android:versionName=".*"|android:versionName="$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%H)/$(OOO_VENDOR)"|' AndroidManifest.xml
+	sed -e 's|@ANDROID_DEBUGGABLE@|$(if $(ENABLE_DEBUG),android:debuggable="true",)|' \
+	    -e 's|@ANDROID_INSTALL_LOCATION@|$(if $(ENABLE_DEBUG),internalOnly,preferExternal)|' \
+	    -e 's|@ANDROID_VERSION_NAME@|$(LIBO_VERSION_MAJOR).$(LIBO_VERSION_MINOR).$(LIBO_VERSION_MICRO).$(LIBO_VERSION_PATCH)$(LIBO_VERSION_SUFFIX)$(LIBO_VERSION_SUFFIX_SUFFIX)/$(shell cd $(SRCDIR) && git log -1 --format=%h)/$(OOO_VENDOR)|' \
+	    -e 's|@ANDROID_VERSION_NUMBER@|$(if $(versionCode),$(versionCode),1)|' \
+	    < AndroidManifest.xml.in > AndroidManifest.xml
 #
 # .res files
 	mkdir -p assets/program/resource

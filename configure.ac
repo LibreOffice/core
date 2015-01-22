@@ -3789,8 +3789,6 @@ fi
 
 if test -n "$ENABLE_DBGUTIL" -o \( -n "$enable_debug" -a "$enable_debug" != "no" \) ; then
     ENABLE_DEBUG="TRUE"
-    ANDROID_DEBUGGABLE='android:debuggable="true"'
-    ANDROID_INSTALL_LOCATION='android:installLocation="internalOnly"'
     if test -n "$ENABLE_DBGUTIL" ; then
         AC_MSG_RESULT([yes (dbgutil)])
     else
@@ -3798,13 +3796,9 @@ if test -n "$ENABLE_DBGUTIL" -o \( -n "$enable_debug" -a "$enable_debug" != "no"
     fi
 else
     ENABLE_DEBUG=""
-    ANDROID_DEBUGGABLE=""
-    ANDROID_INSTALL_LOCATION='android:installLocation="preferExternal"'
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
-AC_SUBST(ANDROID_DEBUGGABLE)
-AC_SUBST(ANDROID_INSTALL_LOCATION)
 
 if test "$enable_sal_log" = yes; then
     ENABLE_SAL_LOG=TRUE
@@ -4420,7 +4414,6 @@ if test "$cross_compiling" = "yes"; then
         bin/get_config_variables \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
-        android/experimental/LOAndroid3/AndroidManifest.xml.in \
         config_host.mk.in \
         Makefile.in \
         lo.xcent.in \
@@ -12795,8 +12788,7 @@ if test -f config_host.mk; then
     config_md5=`$MD5SUM config_host.mk | sed "s/ .*//"`
 fi
 
-AC_CONFIG_FILES([android/experimental/LOAndroid3/AndroidManifest.xml
-                 config_host.mk
+AC_CONFIG_FILES([config_host.mk
                  Makefile
                  lo.xcent
                  instsetoo_native/util/openoffice.lst
