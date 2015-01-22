@@ -1162,11 +1162,33 @@ SvXMLImportContext *SvxXMLListStyleContext::CreateChildContext(
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-    SvxXMLListStyleContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    SvxXMLListStyleContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
     throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    uno::Reference< xml::sax::XFastContextHandler > pContext;
+
+    if( bOutline ?
+        (Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_outline_level_style))
+        : (Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_list_level_style_number)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_list_level_style_bullet)
+        || Element == (FastToken::NAMESPACE | XML_NAMESPACE_TEXT | XML_list_level_style_image) ) )
+    {
+        SvxXMLListLevelStyleContext_Impl *pLevelStyle =
+            new SvxXMLListLevelStyleContext_Impl( GetImport(), Element, xAttrList );
+        if( !pLevelStyles )
+            pLevelStyles = new SvxXMLListStyle_Impl;
+        pLevelStyles->push_back( pLevelStyle );
+        pLevelStyle->AddFirstRef();
+
+        pContext = pLevelStyle;
+    }
+    else
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    return pContext;
 }
 
 void SvxXMLListStyleContext::FillUnoNumRule(
