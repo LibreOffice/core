@@ -133,7 +133,7 @@ void XMLCharContext::EndElement()
         }
         else
         {
-            OUStringBuffer sBuff( m_nCount );
+            OUStringBuffer sBuff(static_cast<int>(m_nCount));
             while( m_nCount-- )
                 sBuff.append( &m_c, 1 );
 
