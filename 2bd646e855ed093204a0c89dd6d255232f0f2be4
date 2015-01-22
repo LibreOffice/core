@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a43c5e1_e036dcb3",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-22T20:00:49Z",
+      "side": 1,
+      "message": "Argh, no :-)\n\nWhat I meant was, convert the entire string argument aStr to UTF-8 once so it contains only 8-bit characters, and then operate on the single characters of that string with aURL+\u003dOUString::number(aStrUtf8[i],16)\n\nSorry if I wasn\u0027t clear enough on that.\n\nThe toAsciiLowerCase() isn\u0027t needed, Excel does it uppercase.\n\nBtw, instead of using an OUString for aUrl an OStringBuffer aUrlBuf would be better suited, and then use sal_Char c and aUrlBuf.append(c) and aUrlBuf.append(static_cast\u003csal_Int32\u003e(c),16) and at the end do PushString(OUString::fromUtf8(aUrlBuf.makeStringAndClear()))\n\nIf I made sense this time? ;-)",
+      "revId": "2bd646e855ed093204a0c89dd6d255232f0f2be4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
