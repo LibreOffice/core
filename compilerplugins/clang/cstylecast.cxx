@@ -98,12 +98,10 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_BitCast ) {
         QualType t1 = resolvePointers(expr->getSubExprAsWritten()->getType());
         QualType t2 = resolvePointers(expr->getType());
-        // Ignore "safe" casts for now that do not involve incomplete types (and
-        // can thus not be interpreted as either a static_cast or a
+        // Ignore "safe" casts for now that involve casting from or to void*
+        // (and can thus not be interpreted as either a static_cast or a
         // reinterpret_cast, with potentially different results):
-        if (t1->isVoidType() || t2->isVoidType()
-            || !(t1->isIncompleteType() || t2->isIncompleteType()))
-        {
+        if (t1->isVoidType() || t2->isVoidType()) {
             return true;
         }
         if (t1->isIncompleteType()) {
