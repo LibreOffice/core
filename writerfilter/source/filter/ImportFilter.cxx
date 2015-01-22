@@ -57,8 +57,8 @@ static OUString lcl_GetExceptionMessage(xml::sax::SAXParseException const& e)
 {
     OUString const thisMessage("SAXParseException: "
         "\"" + e.Message + "\" "
-        + "stream \"" + e.SystemId + "\""
-        + ", Line " + OUString::number(e.LineNumber)
+        "stream \"" + e.SystemId + "\""
+        ", Line " + OUString::number(e.LineNumber)
         + ", Column " + OUString::number(e.ColumnNumber));
     OUString const restMessage(lcl_GetExceptionMessageRec(e));
     return restMessage + "\n" + thisMessage;
