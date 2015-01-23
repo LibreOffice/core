@@ -360,9 +360,19 @@ SwViewShell::~SwViewShell()
     if ( mpDoc )
     {
         GetLayout()->DeRegisterShell( this );
-        if(mpDoc->getIDocumentLayoutAccess().GetCurrentViewShell()==this)
-            mpDoc->getIDocumentLayoutAccess().SetCurrentViewShell( this->GetNext()!=this ?
-            this->GetNext() : nullptr );
+        auto& rLayoutAccess(mpDoc->getIDocumentLayoutAccess());
+        if(rLayoutAccess.GetCurrentViewShell()==this)
+        {
+            rLayoutAccess.SetCurrentViewShell(nullptr);
+            for(SwViewShell& rShell : GetRingContainer())
+            {
+                if(&rShell != this)
+                {
+                    rLayoutAccess.SetCurrentViewShell(&rShell);
+                    break;
+                }
+            }
+        }
     }
 
     delete mpTmpRef;
