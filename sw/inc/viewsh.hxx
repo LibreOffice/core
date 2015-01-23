@@ -580,11 +580,11 @@ public:
     /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API for Writer.
     void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
     /// Invokes the registered callback, if there are any.
-    void libreOfficeKitCallback(int nType, const char* pPayload);
+    void libreOfficeKitCallback(int nType, const char* pPayload) const;
     /// Set if we are doing tiled rendering.
     void setTiledRendering(bool bTiledRendering);
     /// Are we doing tiled rendering?
-    bool isTiledRendering();
+    bool isTiledRendering() const;
 
 };
 

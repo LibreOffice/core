@@ -123,7 +123,7 @@ void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
     mpLibreOfficeKitData = pData;
 }
 
-void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload)
+void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
     if (mpLibreOfficeKitCallback)
         mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
@@ -134,7 +134,7 @@ void SwViewShell::setTiledRendering(bool bTiledRendering)
     mbTiledRendering = bTiledRendering;
 }
 
-bool SwViewShell::isTiledRendering()
+bool SwViewShell::isTiledRendering() const
 {
     return mbTiledRendering;
 }
