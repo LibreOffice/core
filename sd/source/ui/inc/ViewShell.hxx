@@ -563,7 +563,7 @@ protected:
 private:
     ::vcl::Window* mpParentWindow;
     /** This window updater is used to keep all relevant windows up to date
-        with reference to the digit langugage used to display digits in text
+        with reference to the digit language used to display digits in text
         shapes.
     */
     ::std::unique_ptr< ::sd::WindowUpdater> mpWindowUpdater;

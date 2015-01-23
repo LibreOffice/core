@@ -63,7 +63,7 @@ public class UnoPkgContainer extends ParcelContainer {
 
         LogUtils.DEBUG("** getRegisterPackage ctx = " + containerUrl);
         LogUtils.DEBUG("** getRegisterPackage  for uri " + url);
-        LogUtils.DEBUG("** getRegisterPackage  for langugage " + language);
+        LogUtils.DEBUG("** getRegisterPackage  for language " + language);
 
         ParcelContainer result = registeredPackages.get(url);
         LogUtils.DEBUG("getRegisterPackage result is  " + result);
