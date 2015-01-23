@@ -246,16 +246,13 @@ void SwViewShell::ImplEndAction( const bool bIdleEnd )
     //will this put the EndAction of the last shell in the sequence?
 
     SwViewShell::mbLstAct = true;
-    SwViewShell *pSh = this->GetNext();
-    while ( pSh != this )
+    for(SwViewShell& rShell : GetRingContainer())
     {
-        if ( pSh->ActionPend() )
+        if(&rShell != this && rShell.ActionPend())
         {
             SwViewShell::mbLstAct = false;
-            pSh = this;
+            break;
         }
-        else
-            pSh = pSh->GetNext();
     }
 
     const bool bIsShellForCheckViewLayout = ( this == GetLayout()->GetCurrShell() );
