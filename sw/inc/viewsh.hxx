@@ -197,6 +197,7 @@ protected:
 
     LibreOfficeKitCallback mpLibreOfficeKitCallback;
     void* mpLibreOfficeKitData;
+    bool mbInLibreOfficeKitCallback;
 
 public:
     TYPEINFO();
