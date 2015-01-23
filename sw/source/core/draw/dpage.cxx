@@ -128,11 +128,17 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
 {
-    SwViewShell *pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
-    while (pSh && pSh->Imp()->GetPageView() != pPV)
-        pSh = pSh->GetNext();
-    if (pSh)
+    SwViewShell* pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().getIDocumentLayoutAccess().GetCurrentViewShell();
+    if(pSh)
     {
+        for(SwViewShell& rShell : pSh->GetRingContainer())
+        {
+            if(rShell.Imp()->GetPageView() == pPV)
+            {
+                pSh = &rShell;
+                break;
+            }
+        }
         if ( pGridLst )
             const_cast<SwDPage*>(this)->pGridLst->Clear();
         else
