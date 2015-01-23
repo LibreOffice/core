@@ -12022,6 +12022,8 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
         if test "$with_hamcrest" = "yes"; then
             if test -e /usr/share/lib/java/hamcrest.jar; then
                 HAMCREST_JAR=/usr/share/lib/java/hamcrest.jar
+            elif test -e /usr/share/java/hamcrest/core.jar; then
+                HAMCREST_JAR=/usr/share/java/hamcrest/core.jar
             else
                 HAMCREST_JAR=/usr/share/java/hamcrest.jar
             fi
