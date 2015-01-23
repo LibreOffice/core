@@ -1058,28 +1058,30 @@ void SwDrawContact::Changed( const SdrObject& rObj,
     }
 
     //Put on Action, but not if presently anywhere an action runs.
-    SwViewShell *pSh = nullptr, *pOrg;
+    bool bHasActions(true);
     SwRootFrm *pTmpRoot = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
     if ( pTmpRoot && pTmpRoot->IsCallbackActionEnabled() )
     {
-        pOrg = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
-        pSh = pOrg;
+        SwViewShell* const pSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         if ( pSh )
-            do
-            {   if ( pSh->Imp()->IsAction() || pSh->Imp()->IsIdleAction() )
-                    pSh = nullptr;
-                else
-                    pSh = pSh->GetNext();
-
-            } while ( pSh && pSh != pOrg );
-
-        if ( pSh )
+        {
+            for(SwViewShell& rShell : pSh->GetRingContainer() )
+            {
+                if ( rShell.Imp()->IsAction() || rShell.Imp()->IsIdleAction() )
+                {
+                    bHasActions = true;
+                    break;
+                }
+                bHasActions = false;
+            }
+        }
+        if(!bHasActions)
             pTmpRoot->StartAllAction();
     }
     SdrObjUserCall::Changed( rObj, eType, rOldBoundRect );
     _Changed( rObj, eType, &rOldBoundRect );    //Attention, possibly suicidal!
 
-    if ( pSh )
+    if(!bHasActions)
         pTmpRoot->EndAllAction();
 }
 
