@@ -49,24 +49,19 @@ namespace
         {
             if (!m_pViewShell)
                 return;
-            SwViewShell *pSh = m_pViewShell;
-            do
+            for(SwViewShell& rShell : m_pViewShell->GetRingContainer())
             {
-                if (!pSh->IsViewLocked())
+                if(rShell.IsViewLocked())
                 {
-                    m_aViewWasUnLocked.push_back(pSh);
-                    pSh->LockView(true);
+                    m_aViewWasUnLocked.push_back(&rShell);
+                    rShell.LockView(true);
                 }
-                pSh = static_cast<SwViewShell*>(pSh->GetNext());
-            } while (pSh != m_pViewShell);
+            }
         }
         ~LockAllViews()
         {
-            for (std::vector<SwViewShell*>::iterator aI = m_aViewWasUnLocked.begin(); aI != m_aViewWasUnLocked.end(); ++aI)
-            {
-                SwViewShell *pSh = *aI;
-                pSh->LockView(false);
-            }
+            for(SwViewShell* pShell : m_aViewWasUnLocked)
+                pShell->LockView(false);
         }
     };
 }
