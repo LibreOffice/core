@@ -1,5 +1,6 @@
 package org.libreoffice;
 
+import android.graphics.PointF;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -33,6 +34,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public SubTile mTile;
     public String mTouchType;
     public MotionEvent mMotionEvent;
+    public PointF mDocumentTouchCoordinate;
     public KeyEvent mKeyEvent;
 
     public LOEvent(int type) {
@@ -81,11 +83,12 @@ public class LOEvent implements Comparable<LOEvent> {
         mTile = tile;
     }
 
-    public LOEvent(int type, String touchType, MotionEvent motionEvent) {
+    public LOEvent(int type, String touchType, MotionEvent motionEvent, PointF documentTouchCoordinate) {
         mType = type;
         mTypeString = "Touch";
         mTouchType = touchType;
         mMotionEvent = motionEvent;
+        mDocumentTouchCoordinate = documentTouchCoordinate;
     }
 
     public LOEvent(int type, KeyEvent keyEvent) {

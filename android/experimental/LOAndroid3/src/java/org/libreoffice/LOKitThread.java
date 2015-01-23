@@ -151,7 +151,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 if (!LOKitShell.isEditingEnabled()) {
                     return;
                 }
-                touch(event.mTouchType, event.mMotionEvent);
+                touch(event.mTouchType, event.mMotionEvent, event.mDocumentTouchCoordinate);
                 break;
             case LOEvent.KEY_PRESS:
                 if (!LOKitShell.isEditingEnabled()) {
@@ -162,7 +162,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         }
     }
 
-    private void touch(String touchType, MotionEvent motionEvent) {
+    private void touch(String touchType, MotionEvent motionEvent, PointF mDocumentTouchCoordinate) {
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
     }
 
