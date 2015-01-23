@@ -576,24 +576,24 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             bComplete = false;
             SwGrfNode* pNd = static_cast<SwGrfNode*>( GetNode());
 
-            SwViewShell *pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
+            SwViewShell* pVSh = pNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
             if( pVSh )
             {
                 GraphicAttr aAttr;
                 if( pNd->GetGrfObj().IsCached( pVSh->GetOut(), Point(),
                             Prt().SSize(), &pNd->GetGraphicAttr( aAttr, this ) ))
                 {
-                    SwViewShell *pSh = pVSh;
-                    do {
-                        SET_CURR_SHELL( pSh );
-                        if( pSh->GetWin() )
+                    for(SwViewShell rShell : pVSh->GetRingContainer())
+                    {
+                        SET_CURR_SHELL( &rShell );
+                        if( rShell.GetWin() )
                         {
-                            if( pSh->IsPreview() )
-                                ::RepaintPagePreview( pSh, Frm().SVRect() );
+                            if( rShell.IsPreview() )
+                                ::RepaintPagePreview( &rShell, Frm().SVRect() );
                             else
-                                pSh->GetWin()->Invalidate( Frm().SVRect() );
+                                rShell.GetWin()->Invalidate( Frm().SVRect() );
                         }
-                    } while( pVSh != (pSh = static_cast<SwViewShell*>(pSh->GetNext()) ));
+                    }
                 }
             }
         }
@@ -640,23 +640,21 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             if( !pVSh )
                 break;
 
-            SwViewShell *pSh = pVSh;
-            do {
-                SET_CURR_SHELL( pSh );
-                if( pSh->IsPreview() )
+            for(SwViewShell& rShell : pVSh->GetRingContainer())
+            {
+                SET_CURR_SHELL( &rShell );
+                if( rShell.IsPreview() )
                 {
-                    if( pSh->GetWin() )
-                        ::RepaintPagePreview( pSh, aRect );
+                    if( rShell.GetWin() )
+                        ::RepaintPagePreview( &rShell, aRect );
                 }
-                else if ( pSh->VisArea().IsOver( aRect ) &&
-                   OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
+                else if ( rShell.VisArea().IsOver( aRect ) &&
+                   OUTDEV_WINDOW == rShell.GetOut()->GetOutDevType() )
                 {
                     // invalidate instead of painting
-                    pSh->GetWin()->Invalidate( aRect.SVRect() );
+                    rShell.GetWin()->Invalidate( aRect.SVRect() );
                 }
-
-                pSh = static_cast<SwViewShell *>(pSh->GetNext());
-            } while( pSh != pVSh );
+            }
         }
         break;
 
