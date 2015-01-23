@@ -94,7 +94,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
-    static ScHeaderFooterContentObj* getImplementation( const com::sun::star::uno::Reference<
+    static rtl::Reference<ScHeaderFooterContentObj> getImplementation( const com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XHeaderFooterContent> xObj );
 
                             // XServiceInfo
@@ -112,7 +112,7 @@ class ScHeaderFooterTextData : boost::noncopyable
 {
 private:
     EditTextObject* mpTextObj;
-    ScHeaderFooterContentObj&   rContentObj;
+    rtl::Reference<ScHeaderFooterContentObj> rContentObj;
     sal_uInt16                      nPart;
     ScEditEngineDefaulter*      pEditEngine;
     SvxEditEngineForwarder*     pForwarder;
@@ -120,7 +120,7 @@ private:
 
 public:
     ScHeaderFooterTextData(
-        ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+        rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
     ~ScHeaderFooterTextData();
 
                             // helper functions
@@ -130,7 +130,7 @@ public:
     ScEditEngineDefaulter*  GetEditEngine() { GetTextForwarder(); return pEditEngine; }
 
     sal_uInt16                  GetPart() const         { return nPart; }
-    ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
+    rtl::Reference<ScHeaderFooterContentObj> GetContentObj() const { return rContentObj; }
 
     const EditTextObject* GetTextObject() const { return mpTextObj;}
 };
@@ -156,7 +156,7 @@ private:
 
 public:
     ScHeaderFooterTextObj(
-        ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
+        rtl::Reference<ScHeaderFooterContentObj> const & rContent, sal_uInt16 nP, const EditTextObject* pTextObj);
     virtual ~ScHeaderFooterTextObj();
 
     const EditTextObject* GetTextObject() const;

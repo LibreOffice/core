@@ -591,9 +591,9 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
     {
         if ( xContent.is() )
         {
-            ScHeaderFooterContentObj* pImp =
+            rtl::Reference<ScHeaderFooterContentObj> pImp =
                     ScHeaderFooterContentObj::getImplementation( xContent );
-            if (pImp)
+            if (pImp.is())
             {
                 const EditTextObject* pImpLeft = pImp->GetLeftEditObject();
                 delete pLeftArea;
