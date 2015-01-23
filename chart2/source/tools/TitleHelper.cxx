@@ -152,19 +152,19 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
 uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIndex
                             , const uno::Reference< frame::XModel >& xModel )
 {
+    uno::Reference< XTitled > xTitled;
     if(nTitleIndex == TitleHelper::MAIN_TITLE)
     {
-        uno::Reference< XTitled > xTitled( xModel, uno::UNO_QUERY );
-        return xTitled->getTitleObject();
+        xTitled.set( xModel, uno::UNO_QUERY );
     }
-
-    uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
-    uno::Reference< XDiagram > xDiagram;
-
-    if( xChartDoc.is())
-        xDiagram.set( xChartDoc->getFirstDiagram());
-
-    uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xDiagram ) );
+    else
+    {
+        uno::Reference< XChartDocument > xChartDoc( xModel, uno::UNO_QUERY );
+        uno::Reference< XDiagram > xDiagram;
+        if( xChartDoc.is())
+            xDiagram.set( xChartDoc->getFirstDiagram());
+        xTitled = lcl_getTitleParent( nTitleIndex, xDiagram );
+    }
     if( xTitled.is())
         return xTitled->getTitleObject();
     return NULL;
