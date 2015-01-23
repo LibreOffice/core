@@ -586,14 +586,6 @@ public:
     /// Are we doing tiled rendering?
     bool isTiledRendering();
 
-    SwViewShell* GetNext()
-        { return GetNextInRing(); }
-    const SwViewShell* GetNext() const
-        { return GetNextInRing(); }
-    SwViewShell* GetPrev()
-        { return GetPrevInRing(); }
-    const SwViewShell* GetPrev() const
-        { return GetPrevInRing(); }
 };
 
 // manages global ShellPointer
