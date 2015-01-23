@@ -710,18 +710,20 @@ extern std::vector<SvGlobalName*> *pGlobalOLEExcludeList;
 
 void SwDoc::PrtOLENotify( bool bAll )
 {
-    SwFEShell *pShell = 0;
-    if ( getIDocumentLayoutAccess().GetCurrentViewShell() )
+    SwFEShell *pShell = nullptr;
     {
         SwViewShell *pSh = getIDocumentLayoutAccess().GetCurrentViewShell();
-        if ( !pSh->ISA(SwFEShell) )
-            do
-            {   pSh = static_cast<SwViewShell*>(pSh->GetNext());
-            } while ( !pSh->ISA(SwFEShell) &&
-                      pSh != getIDocumentLayoutAccess().GetCurrentViewShell() );
-
-        if ( pSh->ISA(SwFEShell) )
-            pShell = static_cast<SwFEShell*>(pSh);
+        if ( pSh )
+        {
+            for(SwViewShell& rShell : pSh->GetRingContainer())
+            {
+                if(rShell.ISA(SwFEShell))
+                {
+                    pShell = static_cast<SwFEShell*>(&rShell);
+                    break;
+                }
+            }
+        }
     }
     if ( !pShell )
     {
