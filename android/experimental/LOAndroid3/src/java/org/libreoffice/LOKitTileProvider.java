@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -294,6 +295,21 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         mOffice.postKeyEvent(Office.KEY_PRESS, code);
     }
 
+    private void mouseButton(int type, PointF inDocument) {
+        int x = (int) pixelToTwip(inDocument.x, mDPI);
+        int y = (int) pixelToTwip(inDocument.y, mDPI);
+        mDocument.postMouseEvent(type, x, y);
+    }
+
+    @Override
+    public void mouseButtonDown(PointF inDocument) {
+        mouseButton(Document.MOUSE_BUTTON_DOWN, inDocument);
+    }
+
+    @Override
+    public void mouseButtonUp(PointF inDocument) {
+        mouseButton(Document.MOUSE_BUTTON_UP, inDocument);
+    }
 
     @Override
     protected void finalize() throws Throwable {

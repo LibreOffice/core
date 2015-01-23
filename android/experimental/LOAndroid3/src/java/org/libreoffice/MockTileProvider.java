@@ -1,6 +1,7 @@
 package org.libreoffice;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.view.KeyEvent;
 
 import org.mozilla.gecko.gfx.BufferedCairoImage;
@@ -23,7 +24,7 @@ public class MockTileProvider implements TileProvider {
             LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdapter().add(partView);
+                    LibreOfficeMainActivity.mAppContext.getDocumentPartViewListAdapter().add(partView);
                 }
             });
         }
@@ -89,6 +90,16 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public void keyPress(KeyEvent keyEvent) {
+    }
+
+    @Override
+    public void mouseButtonDown(PointF inDocument) {
+
+    }
+
+    @Override
+    public void mouseButtonUp(PointF inDocument) {
+
     }
 
     @Override

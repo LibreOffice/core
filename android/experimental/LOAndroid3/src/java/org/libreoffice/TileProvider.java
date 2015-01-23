@@ -2,6 +2,7 @@ package org.libreoffice;
 
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.KeyEvent;
 
@@ -65,6 +66,18 @@ public interface TileProvider {
      * @param keyEvent - contains the
      */
     void keyPress(KeyEvent keyEvent);
+
+    /**
+     * Trigger a mouse button down event.
+     * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
+     */
+    void mouseButtonDown(PointF documentCoordinate);
+
+    /**
+     * Trigger a mouse button up event.
+     * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
+     */
+    void mouseButtonUp(PointF documentCoordinate);
 
     /**
      * Callback to retrieve invalidation calls
