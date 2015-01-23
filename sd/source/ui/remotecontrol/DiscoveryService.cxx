@@ -122,7 +122,18 @@ void DiscoveryService::setupSockets()
 
     struct ip_mreq multicastRequest;
 
+// the Win32 SDK 8.1 deprecates inet_addr()
+#ifdef _WIN32_WINNT_WINBLUE
+    IN_ADDR addr;
+    OUString const saddr("239.0.0.1");
+    INT ret = InetPtonW(AF_INET, saddr.getStr(), & addr);
+    if (1 == ret)
+    {
+        multicastRequest.imr_multiaddr.s_addr = addr.S_un.S_addr;
+    }
+#else
     multicastRequest.imr_multiaddr.s_addr = inet_addr( "239.0.0.1" );
+#endif
     multicastRequest.imr_interface.s_addr = htonl(INADDR_ANY);
 
     rc = setsockopt( mSocket, IPPROTO_IP, IP_ADD_MEMBERSHIP,
