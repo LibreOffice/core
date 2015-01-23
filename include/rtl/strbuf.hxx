@@ -97,10 +97,14 @@ public:
         rtl_string_new_WithLength( &pData, length );
     }
 #if __cplusplus >= 201103L
+    // GCC 4.6 lacks delegating ctors
+#if defined(__clang__) || !defined(__GNUC__) || (__GNUC__ > 4) || (__GNUC_MINOR__ > 6)
     explicit OStringBuffer(unsigned int length)
         : OStringBuffer(static_cast<int>(length))
     {
     }
+#if SAL_TYPES_SIZEOFLONG == 4
+    // additional overloads for sal_Int32 sal_uInt32
     explicit OStringBuffer(long length)
         : OStringBuffer(static_cast<int>(length))
     {
@@ -109,9 +113,11 @@ public:
         : OStringBuffer(static_cast<int>(length))
     {
     }
+#endif
     // avoid obvious bugs
     explicit OStringBuffer(char) = delete;
     explicit OStringBuffer(sal_Unicode) = delete;
+#endif
 #endif
 
     /**
