@@ -55,6 +55,7 @@
 
 #include <rtl/ref.hxx>
 #include <osl/diagnose.h>
+#include <sal/alloca.h>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
