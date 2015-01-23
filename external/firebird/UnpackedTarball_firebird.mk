@@ -17,6 +17,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-c++11.patch.1 \
 	external/firebird/firebird-c++11replfn.patch.0 \
 	external/firebird/firebird-no-open-temp-on-shutdown.patch.1 \
+        external/firebird/firebird.disable-ib-util-not-found.patch.1 \
 ))
 
 ifeq ($(OS)-$(COM),WNT-MSC)
