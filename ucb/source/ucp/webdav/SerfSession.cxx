@@ -30,7 +30,7 @@
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
 #include "AprEnv.hxx"
-#include <apr/apr_strings.h>
+#include <apr_strings.h>
 
 #include "DAVAuthListener.hxx"
 #include "SerfTypes.hxx"
