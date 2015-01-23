@@ -649,8 +649,15 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     sal_Int32 nSeriesIndex = 0;
     sal_Int32 nMaxPointCount = 0;
     double nMaxVal = findMaxValue(rDataSeriesContainer)/100;
-    const VDataSeries& rFirstRow = *(rDataSeriesContainer.begin());
-    mnBarsInRow = rFirstRow.getTotalPointCount();
+    if (rDataSeriesContainer.empty())
+    {
+        mnBarsInRow = 0;
+    }
+    else
+    {
+        const VDataSeries& rFirstRow = *(rDataSeriesContainer.begin());
+        mnBarsInRow = rFirstRow.getTotalPointCount();
+    }
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
