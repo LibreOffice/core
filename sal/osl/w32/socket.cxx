@@ -584,6 +584,15 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
 
     if (strDottedAddr && strDottedAddr->length)
     {
+// the Win32 SDK 8.1 deprecates inet_addr()
+#ifdef _WIN32_WINNT_WINBLUE
+        IN_ADDR addr;
+        INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
+        if (1 == ret)
+        {
+            nAddr = addr.S_un.S_addr;
+        }
+#else
         /* Dotted host address for limited broadcast */
         rtl_String *pDottedAddr = NULL;
 
@@ -592,7 +601,9 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
             RTL_TEXTENCODING_UTF8, OUSTRING_TO_OSTRING_CVTFLAGS);
 
         nAddr = inet_addr (pDottedAddr->buffer);
+
         rtl_string_release (pDottedAddr);
+#endif
     }
 
     if (nAddr != OSL_INADDR_NONE)
@@ -635,6 +646,16 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
     sal_Int32    Port)
 {
     sal_uInt32 Addr;
+
+// the Win32 SDK 8.1 deprecates inet_addr()
+#ifdef _WIN32_WINNT_WINBLUE
+    IN_ADDR addr;
+    INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
+    if (1 == ret)
+    {
+        Addr = addr.S_un.S_addr;
+    }
+#else
     rtl_String  *pDottedAddr=NULL;
 
     rtl_uString2String(
@@ -643,6 +664,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 
     Addr= inet_addr (pDottedAddr->buffer);
     rtl_string_release (pDottedAddr);
+#endif
 
     oslSocketAddr pAddr = 0;
     if(Addr != OSL_INADDR_NONE)

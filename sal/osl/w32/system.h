@@ -68,6 +68,7 @@
     #pragma warning(disable:4917)
     #include <winsock2.h>
     #include <wsipx.h>
+    #include <ws2tcpip.h>
     #include <shlobj.h>
     #ifndef NO_DEBUG_CRT
         #include <crtdbg.h>
