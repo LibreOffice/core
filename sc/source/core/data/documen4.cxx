@@ -375,7 +375,8 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
     }
 
     ScRefAddress aRef;
-    OUStringBuffer aForString('=');
+    OUStringBuffer aForString;
+    aForString.append('=');
     aForString.append(ScCompiler::GetNativeSymbol(ocTableOp));
     aForString.append(ScCompiler::GetNativeSymbol( ocOpen));
 
