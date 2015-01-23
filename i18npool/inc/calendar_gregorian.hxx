@@ -85,6 +85,10 @@ public:
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    // XCalendar4
+    virtual void SAL_CALL setLocalDateTime(double TimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLocalDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

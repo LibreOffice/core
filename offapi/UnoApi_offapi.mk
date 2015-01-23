@@ -224,6 +224,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/i18n,\
 	IndexEntrySupplier \
 	InputSequenceChecker \
 	LocaleCalendar \
+	LocaleCalendar2 \
 	LocaleData \
 	NativeNumberSupplier \
 	NumberFormatMapper \
@@ -2752,6 +2753,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/i18n,\
 	XBreakIterator \
 	XCalendar \
 	XCalendar3 \
+	XCalendar4 \
 	XCharacterClassification \
 	XCollator \
 	XExtendedCalendar \

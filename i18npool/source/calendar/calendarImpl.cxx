@@ -57,7 +57,7 @@ CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeExceptio
 void SAL_CALL
 CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) throw (RuntimeException, std::exception)
 {
-    Reference < XCalendar3 > xOldCalendar( xCalendar );  // backup
+    Reference < XCalendar4 > xOldCalendar( xCalendar );  // backup
     sal_Int32 i;
 
     for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
@@ -151,6 +151,24 @@ CalendarImpl::getDateTime() throw(RuntimeException, std::exception)
 {
     if (xCalendar.is())
         return xCalendar->getDateTime();
+    else
+        throw ERROR ;
+}
+
+void SAL_CALL
+CalendarImpl::setLocalDateTime( double fTimeInDays ) throw(RuntimeException, std::exception)
+{
+    if (xCalendar.is())
+        xCalendar->setLocalDateTime( fTimeInDays );
+    else
+        throw ERROR ;
+}
+
+double SAL_CALL
+CalendarImpl::getLocalDateTime() throw(RuntimeException, std::exception)
+{
+    if (xCalendar.is())
+        return xCalendar->getLocalDateTime();
     else
         throw ERROR ;
 }
@@ -352,8 +370,9 @@ CalendarImpl::supportsService(const OUString& rServiceName) throw( RuntimeExcept
 Sequence< OUString > SAL_CALL
 CalendarImpl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     aRet[0] = "com.sun.star.i18n.LocaleCalendar";
+    aRet[1] = "com.sun.star.i18n.LocaleCalendar2";
     return aRet;
 }
 

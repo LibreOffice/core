@@ -20,7 +20,7 @@
 #include <rtl/strbuf.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <com/sun/star/i18n/LocaleCalendar.hpp>
+#include <com/sun/star/i18n/LocaleCalendar2.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -34,7 +34,7 @@ CalendarWrapper::CalendarWrapper(
         :
         aEpochStart( Date( 1, 1, 1970 ) )
 {
-    xC = LocaleCalendar::create(rxContext);
+    xC = LocaleCalendar2::create(rxContext);
 }
 
 CalendarWrapper::~CalendarWrapper()

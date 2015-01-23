@@ -19,7 +19,7 @@
 #ifndef INCLUDED_I18NPOOL_INC_CALENDARIMPL_HXX
 #define INCLUDED_I18NPOOL_INC_CALENDARIMPL_HXX
 
-#include <com/sun/star/i18n/XCalendar3.hpp>
+#include <com/sun/star/i18n/XCalendar4.hpp>
 #include <com/sun/star/i18n/CalendarDisplayCode.hpp>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
@@ -36,7 +36,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 class CalendarImpl : public cppu::WeakImplHelper2
 <
-    com::sun::star::i18n::XCalendar3,
+    com::sun::star::i18n::XCalendar4,
     com::sun::star::lang::XServiceInfo
 >
 {
@@ -84,6 +84,10 @@ public:
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    // XCalendar4
+    virtual void SAL_CALL setLocalDateTime(double TimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLocalDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -91,14 +95,14 @@ public:
 
 private:
     struct lookupTableItem {
-    lookupTableItem(const OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 >& _xCalendar) :
+    lookupTableItem(const OUString& _uniqueID, com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar4 >& _xCalendar) :
         uniqueID(_uniqueID), xCalendar(_xCalendar) {}
     OUString uniqueID;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 > xCalendar;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar4 > xCalendar;
     };
     std::vector<lookupTableItem*> lookupTable;
     com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
-    com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar3 > xCalendar;
+    com::sun::star::uno::Reference < com::sun::star::i18n::XCalendar4 > xCalendar;
 };
 
 } } } }

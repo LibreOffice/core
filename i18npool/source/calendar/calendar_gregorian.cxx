@@ -317,6 +317,40 @@ Calendar_gregorian::getDateTime() throw(RuntimeException, std::exception)
     return fR / U_MILLIS_PER_DAY;
 }
 
+void SAL_CALL
+Calendar_gregorian::setLocalDateTime( double fTimeInDays ) throw(RuntimeException, std::exception)
+{
+    // See setDateTime() for why the rounding.
+    double fM = fTimeInDays * U_MILLIS_PER_DAY;
+    double fR = rtl::math::round( fM );
+    SAL_INFO_IF( fM != fR, "i18npool",
+            "Calendar_gregorian::setLocalDateTime: " << std::fixed << fM << " rounded to " << fR);
+    int32_t nZoneOffset, nDSTOffset;
+    UErrorCode status;
+    body->getTimeZone().getOffset( fR, TRUE, nZoneOffset, nDSTOffset, status = U_ZERO_ERROR );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    body->setTime( fR - (nZoneOffset + nDSTOffset), status = U_ZERO_ERROR );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    getValue();
+}
+
+double SAL_CALL
+Calendar_gregorian::getLocalDateTime() throw(RuntimeException, std::exception)
+{
+    if (fieldSet) {
+        setValue();
+        getValue();
+    }
+    UErrorCode status;
+    double fTime = body->getTime( status = U_ZERO_ERROR );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    int32_t nZoneOffset = body->get( UCAL_ZONE_OFFSET, status = U_ZERO_ERROR );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    int32_t nDSTOffset = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR );
+    if ( !U_SUCCESS(status) ) throw ERROR;
+    return (fTime + (nZoneOffset + nDSTOffset)) / U_MILLIS_PER_DAY;
+}
+
 // map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
 // By using eraArray, it can take care Japanese and Taiwan ROC calendar.
 void Calendar_gregorian::mapFromGregorian() throw(RuntimeException)

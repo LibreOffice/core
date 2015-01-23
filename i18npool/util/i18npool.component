@@ -44,6 +44,7 @@
   </implementation>
   <implementation name="com.sun.star.i18n.CalendarImpl">
     <service name="com.sun.star.i18n.LocaleCalendar"/>
+    <service name="com.sun.star.i18n.LocaleCalendar2"/>
   </implementation>
   <implementation name="com.sun.star.i18n.Calendar_ROC">
     <service name="com.sun.star.i18n.Calendar_ROC"/>

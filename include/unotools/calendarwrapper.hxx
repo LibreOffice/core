@@ -35,13 +35,13 @@ namespace com { namespace sun { namespace star {
 
 namespace com { namespace sun { namespace star {
     namespace i18n {
-        class XCalendar3;
+        class XCalendar4;
     }
 }}}
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar3 >   xC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar4 >   xC;
 
             DateTime            aEpochStart;        // 1Jan1970
 
@@ -61,10 +61,9 @@ public:
     void setDateTime( double fTimeInDays );
     /// get UTC date/time
     double getDateTime() const;
-    /// convenience method to set local date/time
-    void setLocalDateTime( double fTimeInDays );
-    /// convenience method to get local date/time
-    double getLocalDateTime() const;
+
+    // For local setDateTime() and getDateTime() see further down at wrapper
+    // implementations of XCalendar4.
 
     // wrapper implementations of XCalendar
 
@@ -95,6 +94,13 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getGenitiveMonths() const;
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getPartitiveMonths() const;
+
+    // wrapper implementations of XCalendar4
+
+    /// set local date/time
+    void setLocalDateTime( double fTimeInDays );
+    /// get local date/time
+    double getLocalDateTime() const;
 
     // convenience methods
 
