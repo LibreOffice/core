@@ -967,8 +967,7 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     CalcAscent( rInf, pPor );
 
     const SwFont* pTmpFnt = rInf.GetFont();
-    sal_Int32 nExpect = std::min( sal_Int32( reinterpret_cast<vcl::Font const *>(pTmpFnt)->GetSize().Height() ),
-                                  //TODO: is that reinterpret_cast sound?
+    sal_Int32 nExpect = std::min( sal_Int32( pTmpFnt->GetHeight() ),
                              sal_Int32( pPor->GetAscent() ) ) / 8;
     if ( !nExpect )
         nExpect = 1;
