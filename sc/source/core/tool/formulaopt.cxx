@@ -496,7 +496,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                 break;
                 case SCFORMULAOPT_OPENCL_SUBSET_OPS:
                 {
-                    OUString sVal = ScOpCodeSetToNumberString(GetCalcConfig().maOpenCLSubsetOpCodes);
+                    OUString sVal = ScOpCodeSetToSymbolicString(GetCalcConfig().maOpenCLSubsetOpCodes);
                     pValues[nProp] >>= sVal;
                     GetCalcConfig().maOpenCLSubsetOpCodes = ScStringToOpCodeSet(sVal);
                 }
@@ -643,7 +643,7 @@ void ScFormulaCfg::Commit()
             break;
             case SCFORMULAOPT_OPENCL_SUBSET_OPS:
             {
-                OUString sVal = ScOpCodeSetToNumberString(GetCalcConfig().maOpenCLSubsetOpCodes);
+                OUString sVal = ScOpCodeSetToSymbolicString(GetCalcConfig().maOpenCLSubsetOpCodes);
                 pValues[nProp] <<= sVal;
             }
             break;
