@@ -150,7 +150,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
         FillFieldLists(0);
 
     // ListBox selection:
-    if ( aSortData.maKeyState[0].bDoSort )
+    if (!aSortData.maKeyState.empty() && aSortData.maKeyState[0].bDoSort)
     {
         // Make sure that the all sort keys are reset
         for ( sal_uInt16 i=nSortKeyCount; i<aSortData.GetSortKeyCount(); i++ )
