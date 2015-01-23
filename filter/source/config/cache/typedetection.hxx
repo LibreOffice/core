@@ -226,7 +226,7 @@ private:
 
 
 
-    /** @short      validate the specified type and its relation ships
+    /** @short      validate the specified type and its relationships
                     and set all needed information related to this type
                     in the specified descriptor.
 
@@ -249,7 +249,7 @@ private:
 
 
 
-    /** @short      validate the specified filter and its relation ships
+    /** @short      validate the specified filter and its relationships
                     and set all needed information related to this filter
                     in the specified descriptor.
 

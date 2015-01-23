@@ -3094,7 +3094,7 @@ void Frame::implts_checkSuicide()
     m_bSelfClose = false;
     aReadLock.clear();
     /* } SAFE */
-    // force close and deliver owner ship to source of possible throwed veto exception
+    // force close and deliver ownership to source of possible throwed veto exception
     // Attention: Because this method is not designed to throw such exception we must suppress
     // it for outside code!
     try

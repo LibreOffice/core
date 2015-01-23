@@ -1331,7 +1331,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
     SwNodeIndex aInsertIndex( rTableNodes.rbegin()->rbegin()->aEnd );
     ++aInsertIndex;
 
-    //!! owner ship will be transferred in c-tor to SwNodes array.
+    //!! ownership will be transferred in c-tor to SwNodes array.
     //!! Thus no real problem here...
     new SwEndNode( aInsertIndex, *pTblNd );
 

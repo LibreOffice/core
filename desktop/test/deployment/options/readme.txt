@@ -134,7 +134,7 @@ modules1.oxt: Defines two Modules and three Nodes. The Nodes may not
 be displayed in OOo's options dialog because there is currently no application
 which uses this Module. However the Nodes are displayed in the options dialog
 of the Extension Manager.
-There are three Nodes defined. The relation ship is this:
+There are three Nodes defined. The relationship is this:
 
 -module1
 	-node 1

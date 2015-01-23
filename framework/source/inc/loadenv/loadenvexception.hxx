@@ -50,7 +50,7 @@ class LoadEnvException
             ID_NO_CONFIG_ACCESS,
 
             /** @short  Some data obtained from the filter configuration seems to incorrect.
-                @descr  Might a filter-type relation ship seem to be damaged. */
+                @descr  Might a filter-type relationship seem to be damaged. */
             ID_INVALID_FILTER_CONFIG,
 
             /** @short  indicates a corrupted media descriptor.

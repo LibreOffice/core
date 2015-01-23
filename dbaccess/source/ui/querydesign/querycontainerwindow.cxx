@@ -68,7 +68,7 @@ namespace dbaui
             Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
             m_xBeamer = NULL;
             if(xCloseable.is())
-                xCloseable->close(sal_False); // false - holds the owner ship of this frame
+                xCloseable->close(sal_False); // false - holds the ownership of this frame
         }
 
         boost::scoped_ptr<vcl::Window> aTemp(m_pSplitter);

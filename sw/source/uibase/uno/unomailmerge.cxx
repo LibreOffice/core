@@ -402,7 +402,7 @@ SwXMailMerge::~SwXMailMerge()
         //! because there is no automatism that will do that later.
         //! #120086#
         if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
-            OSL_FAIL("owner ship transferred to vetoing object!" );
+            OSL_FAIL("ownership transferred to vetoing object!" );
 
         xModel = 0;
         xDocSh = 0; // destroy doc shell

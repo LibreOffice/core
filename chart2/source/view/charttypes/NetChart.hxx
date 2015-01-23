@@ -33,7 +33,7 @@ public:
              ::com::sun::star::chart2::XChartType >& xChartTypeModel
              , sal_Int32 nDimensionCount
              , bool bNoArea
-             , PlottingPositionHelper* pPlottingPositionHelper //takes owner ship
+             , PlottingPositionHelper* pPlottingPositionHelper //takes ownership
              );
     virtual ~NetChart();
 

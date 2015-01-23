@@ -564,7 +564,7 @@ TransferableHelper* OApplicationController::copyObject()
                 break;
         }
 
-        // the owner ship goes to ODataClipboards
+        // the ownership goes to ODataClipboards
         return pData;
     }
     catch(const SQLException&)

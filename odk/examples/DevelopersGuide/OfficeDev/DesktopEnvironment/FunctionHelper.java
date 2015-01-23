@@ -765,7 +765,7 @@ public class FunctionHelper
                 com.sun.star.util.XCloseable.class, xFrame);
             if (xCloseable!=null)
             {
-                // We deliver the owner ship of this frame not to the (possible)
+                // We deliver the ownership of this frame not to the (possible)
                 // source which throw a CloseVetoException. We whishto have it
                 // under our own control.
                 try
