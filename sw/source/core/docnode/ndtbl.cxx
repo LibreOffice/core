@@ -746,7 +746,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Set Orientation in the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pNdTbl->RegisterToFormat( *pTableFmt );
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
@@ -1110,6 +1109,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
     lcl_BalanceTable(*pTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl,
             pUndo, &aPosArr);
+    pTable->RegisterToFormat(*pTblFmt);
     lcl_SetTableBoxWidths(*pTable, nMaxBoxes, *pBoxFmt, *pDoc, &aPosArr);
 
     return pTblNd;
@@ -1215,9 +1215,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             rTableNodes, pTableFmt, pLineFmt, pBoxFmt,
             getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
 
-    SwTable * pNdTbl = &pTblNd->GetTable();
-    OSL_ENSURE( pNdTbl, "No Table Node created"  );
-    pNdTbl->RegisterToFormat( *pTableFmt );
+    SwTable& rNdTbl = pTblNd->GetTable();
 
     if( !pBoxFmt->GetDepends() )
     {
@@ -1232,7 +1230,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
-    return pNdTbl;
+    return &rNdTbl;
 }
 
 SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
@@ -1407,6 +1405,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
             nMaxBoxes = nBoxes;
     }
 
+    pTable->RegisterToFormat(*pTblFmt);
     lcl_SetTableBoxWidths2(*pTable, nMaxBoxes, *pBoxFmt, *pDoc);
 
     return pTblNd;
