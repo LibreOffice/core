@@ -285,10 +285,7 @@ AC_ARG_WITH(android-ndk,
 AC_ARG_WITH(android-ndk-toolchain-version,
     AS_HELP_STRING([--with-android-ndk-toolchain-version],
         [Specify which toolchain version to use, of those present in the
-        Android NDK you are using. Mandatory if the NDK used has several
-        toolchain versions for the host architecture you are building for.
-        Possible values are 4.6, 4.8, clang3.3 and clang3.4. Only 4.8 has been
-        tested for real...]), ,)
+        Android NDK you are using. The default is 4.9 currently.]), ,)
 
 AC_ARG_WITH(android-sdk,
     AS_HELP_STRING([--with-android-sdk],
@@ -329,6 +326,11 @@ if test -n "$with_android_ndk"; then
         # "x86" in some contexts
         android_cpu=x86
         android_platform_prefix=$android_cpu
+    fi
+
+    if test -z "$with_android_ndk_toolchain_version"; then
+        # Default to gcc 4.9
+        with_android_ndk_toolchain_version=4.9
     fi
 
     case "$with_android_ndk_toolchain_version" in
