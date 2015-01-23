@@ -509,7 +509,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // ppDepAttr gibt einen Attribut-Tabellen-Eintrag an, dessen Attribute
     // gesetzt sein muessen, bevor das Attribut beendet werden darf
     void NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem );
-    void EndAttr( _HTMLAttr *pAttr, _HTMLAttr **ppDepAttr=0,
+    bool EndAttr( _HTMLAttr *pAttr, _HTMLAttr **ppDepAttr=0,
                   bool bChkEmpty=true );
     void DeleteAttr( _HTMLAttr* pAttr );
 

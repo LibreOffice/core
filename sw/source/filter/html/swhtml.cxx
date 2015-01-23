@@ -3000,9 +3000,11 @@ void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
         (*ppAttr) = new _HTMLAttr( *pPam->GetPoint(), rItem, ppAttr );
 }
 
-void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
+bool SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                             bool bChkEmpty )
 {
+    bool bRet = true;
+
     OSL_ENSURE( !ppDepAttr, "SwHTMLParser::EndAttr: ppDepAttr-Feature ungetestet?" );
     // Der Listenkopf ist im Attribut gespeichert
     _HTMLAttr **ppHead = pAttr->ppHead;
@@ -3137,6 +3139,7 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
         // leere Attribute in der Prev-Liste befinden, die dann trotzdem
         // gesetzt werden muessen
         _HTMLAttr *pPrev = pAttr->GetPrev();
+        bRet = false;
         delete pAttr;
 
         if( pPrev )
@@ -3164,6 +3167,8 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
 
     if( bMoveBack )
         pPam->Move( fnMoveForward );
+
+    return bRet;
 }
 
 void SwHTMLParser::DeleteAttr( _HTMLAttr* pAttr )
