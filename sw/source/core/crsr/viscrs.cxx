@@ -583,26 +583,28 @@ short SwShellCrsr::MaxReplaceArived()
     {
         // Terminate old actions. The table-frames get constructed and
         // a SSelection can be created.
-        std::vector<sal_uInt16> aArr;
-        sal_uInt16 nActCnt;
-        SwViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
-                  *pSh = pShell;
-        do {
-            for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
-                pSh->EndAction();
-            aArr.push_back( nActCnt );
-        } while( pShell != ( pSh = pSh->GetNext()) );
-
+        std::vector<sal_uInt16> vActionCounts;
+        for(SwViewShell& rShell : const_cast< SwCrsrShell* >( GetShell() )->GetRingContainer())
         {
-            nRet = MessageDialog(pDlg, "AskSearchDialog",
-                                 "modules/swriter/ui/asksearchdialog.ui").Execute();
+            sal_uInt16 nActCnt = 0;
+            while(rShell.ActionPend())
+            {
+                rShell.EndAction();
+                ++nActCnt;
+            }
+            vActionCounts.push_back(nActCnt);
         }
-
-        for( std::vector<sal_uInt16>::size_type n = 0; n < aArr.size(); ++n )
+        nRet = MessageDialog(pDlg, "AskSearchDialog",
+                "modules/swriter/ui/asksearchdialog.ui").Execute();
+        auto pActionCount = vActionCounts.begin();
+        for(SwViewShell& rShell : const_cast< SwCrsrShell* >( GetShell() )->GetRingContainer())
         {
-            for( nActCnt = aArr[n]; nActCnt--; )
-                pSh->StartAction();
-            pSh = pSh->GetNext();
+            while(*pActionCount)
+            {
+                rShell.StartAction();
+                --(*pActionCount);
+            }
+            ++pActionCount;
         }
     }
     else
