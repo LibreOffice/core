@@ -145,7 +145,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 if (comphelper::string::isalphaAscii(cNextCh))
                 {
                     // den naechsten Identifer scannen
-                    OUStringBuffer sTmpBuffer( 32L );
+                    OUStringBuffer sTmpBuffer(32);
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
@@ -241,7 +241,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 if( 'i'==cNextCh || 'I'==cNextCh)
                 {
                     // den naechsten Identifer scannen
-                    OUStringBuffer sTmpBuffer( 32L );
+                    OUStringBuffer sTmpBuffer(32);
                     do {
                         sTmpBuffer.append( cNextCh );
                         cNextCh = GetNextChar();
@@ -385,7 +385,7 @@ CSS1Token CSS1Parser::GetNextToken()
 
                         // den naechsten Identifer scannen
                         OUString aIdent;
-                        OUStringBuffer sTmpBuffer2( 64L );
+                        OUStringBuffer sTmpBuffer2(64);
                         do {
                             sTmpBuffer2.append( cNextCh );
                             cNextCh = GetNextChar();
@@ -535,7 +535,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 bool bEOFSave = bEOF;
 
                 // erstmal versuchen eine Hex-Zahl zu scannen
-                OUStringBuffer sTmpBuffer( 6L );
+                OUStringBuffer sTmpBuffer(6);
                 do {
                     sTmpBuffer.append( cNextCh );
                     cNextCh = GetNextChar();
@@ -591,7 +591,7 @@ CSS1Token CSS1Parser::GetNextToken()
                 bool bHexColor = true;
 
                 // den naechsten Identifer scannen
-                OUStringBuffer sTmpBuffer( 64L );
+                OUStringBuffer sTmpBuffer(64);
                 do {
                     sTmpBuffer.append( cNextCh );
                     if( bHexColor )
@@ -621,7 +621,7 @@ CSS1Token CSS1Parser::GetNextToken()
                        aToken.equalsIgnoreAsciiCase( "rgb" )) ) )
                 {
                     int nNestCnt = 0;
-                    OUStringBuffer sTmpBuffer2( 64L );
+                    OUStringBuffer sTmpBuffer2(64);
                     do {
                         sTmpBuffer2.append( cNextCh );
                         switch( cNextCh )
