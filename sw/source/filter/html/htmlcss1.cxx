@@ -2298,7 +2298,9 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
             if( RES_PARATR_BEGIN > nWhich )
                 (*ppAttr)->SetLikePara();
             aParaAttrs.push_back( *ppAttr );
-            EndAttr( *ppAttr, 0, false );
+            bool bSuccess = EndAttr( *ppAttr, 0, false );
+            if (!bSuccess)
+                aParaAttrs.pop_back();
         }
 
         pItem = aIter.NextItem();
