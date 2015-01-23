@@ -287,8 +287,9 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
 
             bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
+            bool bReduceBlockFormat = nFormat == SOT_FORMATSTR_ID_HTML || nFormat == SOT_FORMAT_RTF;
             ScRange aReducedBlock = aBlock;
-            if ( nFormat == SOT_FORMATSTR_ID_HTML && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab() )
+            if (bReduceBlockFormat && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab())
             {
                 bool bShrunk = false;
                 //shrink the area to allow pasting to external applications
