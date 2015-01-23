@@ -83,7 +83,7 @@ public:
     virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const SAL_OVERRIDE;
     virtual sal_uInt16      GetEnumValue() const SAL_OVERRIDE;
     virtual void            SetEnumValue( sal_uInt16 nNewVal ) SAL_OVERRIDE;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow )

@@ -115,7 +115,7 @@ public:
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE
     { return new SfxUInt16Item(*this); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 

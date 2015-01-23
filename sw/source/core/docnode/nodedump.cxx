@@ -10,63 +10,20 @@
 #include "doc.hxx"
 #include "drawdoc.hxx"
 #include <IDocumentDrawModelAccess.hxx>
-#include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <UndoManager.hxx>
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"
-#include "docary.hxx"
 #include "switerator.hxx"
-#include "fmtfld.hxx"
 #include "docufld.hxx"
 #include "txatbase.hxx"
-#include "fmtautofmt.hxx"
-#include "fmtcntnt.hxx"
-#include "fmtornt.hxx"
-#include "fmtfsize.hxx"
-#include "fmtclbl.hxx"
-#include "fmteiro.hxx"
-#include "charfmt.hxx"
-#include "frmfmt.hxx"
-#include "fmtanchr.hxx"
-#include "fmtsrnd.hxx"
-#include "paratr.hxx"
 #include "redline.hxx"
-#include "section.hxx"
-#include "fmtclds.hxx"
-#include "fmtpdsc.hxx"
-#include "pagedesc.hxx"
-#include "fchrfmt.hxx"
-#include "fmtfollowtextflow.hxx"
-#include "fmtwrapinfluenceonobjpos.hxx"
 #include <swmodule.hxx>
 #include <svl/itemiter.hxx>
-#include <svl/intitem.hxx>
-#include <editeng/charrotateitem.hxx>
-#include <editeng/rsiditem.hxx>
-#include <editeng/fontitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/editobj.hxx>
-#include <editeng/outlobj.hxx>
-#include <editeng/postitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <svx/xdef.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/svdmodel.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xbtmpit.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/xflbmtit.hxx>
-#include <svx/xflbmpit.hxx>
-#include <svx/xflbstit.hxx>
 #include <tools/datetimeutils.hxx>
 
-#include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
-#include <boost/optional.hpp>
-#include <rtl/strbuf.hxx>
 #include <comphelper/anytostring.hxx>
 
 using namespace com::sun::star;
@@ -398,125 +355,7 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
     const SfxPoolItem* pItem = aIter.FirstItem();
     while (pItem)
     {
-        bool bDone = true;
-        switch (pItem->Which())
-        {
-            case RES_CHRATR_POSTURE:
-            case RES_CHRATR_CJK_POSTURE:
-            case RES_CHRATR_CTL_POSTURE:
-                static_cast<const SvxPostureItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CHRATR_WEIGHT:
-            case RES_CHRATR_CJK_WEIGHT:
-            case RES_CHRATR_CTL_WEIGHT:
-                static_cast<const SvxWeightItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CHRATR_RSID:
-                static_cast<const SvxRsidItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CHRATR_ROTATE:
-                static_cast<const SvxCharRotateItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_PARATR_OUTLINELEVEL:
-                static_cast<const SfxUInt16Item*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_PARATR_NUMRULE:
-                static_cast<const SwNumRuleItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CHRATR_FONT:
-            case RES_CHRATR_CTL_FONT:
-                static_cast<const SvxFontItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CHRATR_BACKGROUND:
-                static_cast<const SvxBrushItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CHRATR_FONTSIZE:
-                static_cast<const SvxFontHeightItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_CNTNT:
-                static_cast<const SwFmtCntnt*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_FRM_SIZE:
-                static_cast<const SwFmtFrmSize*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_VERT_ORIENT:
-                static_cast<const SwFmtVertOrient*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_HORI_ORIENT:
-                static_cast<const SwFmtHoriOrient*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_ANCHOR:
-                static_cast<const SwFmtAnchor*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_SURROUND:
-                static_cast<const SwFmtSurround*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_FOLLOW_TEXT_FLOW:
-                static_cast<const SwFmtFollowTextFlow*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_WRAP_INFLUENCE_ON_OBJPOS:
-                static_cast<const SwFmtWrapInfluenceOnObjPos*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_COL:
-                static_cast<const SwFmtCol*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLSTYLE:
-                static_cast<const XFillStyleItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLCOLOR:
-                static_cast<const XFillColorItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLBITMAP:
-                static_cast<const XFillBitmapItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLTRANSPARENCE:
-                static_cast<const XFillTransparenceItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLBMP_TILE:
-                static_cast<const XFillBmpTileItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLBMP_POS:
-                static_cast<const XFillBmpPosItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case XATTR_FILLBMP_STRETCH:
-                static_cast<const XFillBmpStretchItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_PROTECT:
-                static_cast<const SvxProtectItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_EDIT_IN_READONLY:
-                static_cast<const SwFmtEditInReadonly*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_COLUMNBALANCE:
-                static_cast<const SwFmtNoBalancedColumns*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_LR_SPACE:
-                static_cast<const SvxLRSpaceItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_UL_SPACE:
-                static_cast<const SvxULSpaceItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_SHADOW:
-                static_cast<const SvxShadowItem*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_PAGEDESC:
-                static_cast<const SwFmtPageDesc*>(pItem)->dumpAsXml(writer);
-                break;
-            case RES_FRMATR_CONDITIONAL_STYLE_NAME:
-            case RES_FRMATR_STYLE_NAME:
-                static_cast<const SfxStringItem*>(pItem)->dumpAsXml(writer);
-                break;
-            default: bDone = false; break;
-        }
-        if (bDone)
-        {
-            pItem = aIter.NextItem();
-            continue;
-        }
-
-        writer.startElement("item");
-        writer.writeFormatAttribute("whichId", TMP_FORMAT, pItem->Which());
-        writer.endElement();
+        pItem->dumpAsXml(writer);
         pItem = aIter.NextItem();
     }
 }

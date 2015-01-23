@@ -45,7 +45,7 @@ public:
     const SwNodeIndex *GetCntntIdx() const { return pStartNode; }
     void SetNewCntntIdx( const SwNodeIndex *pIdx );
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline const SwFmtCntnt &SwAttrSet::GetCntnt(bool bInP) const

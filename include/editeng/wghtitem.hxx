@@ -70,7 +70,7 @@ public:
     void                    SetWeight( FontWeight eNew )
                                 { SetValue( (sal_uInt16)eNew ); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_EDITENG_WGHTITEM_HXX

@@ -59,7 +59,7 @@ public:
     void    SetContour( bool bNew )         { bContour = bNew; }
     void    SetOutside( bool bNew )         { bOutside = bNew; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )

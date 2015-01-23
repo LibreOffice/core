@@ -51,7 +51,7 @@ public:
     virtual sal_uInt16          GetValueCount() const SAL_OVERRIDE;
     css::drawing::FillStyle GetValue() const { return (css::drawing::FillStyle) SfxEnumItem::GetValue(); }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 #endif

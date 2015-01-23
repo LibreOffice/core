@@ -163,7 +163,7 @@ public:
      that corresponds to what constitutes the column for the user. */
     sal_uInt16 CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline const SwFmtCol &SwAttrSet::GetCol(bool bInP) const

@@ -92,7 +92,7 @@ public:
 
     SfxMapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 #endif

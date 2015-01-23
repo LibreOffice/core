@@ -98,7 +98,7 @@ public:
     void    SetWidthPercent ( sal_uInt8 n ) { m_nWidthPercent  = n; }
     void    SetWidthPercentRelation ( sal_Int16 n ) { m_eWidthPercentRelation  = n; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(bool bInP) const

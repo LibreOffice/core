@@ -81,7 +81,7 @@ public:
     void RegisterToEndNotInfo( SwEndNoteInfo& );
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(bool bInP) const

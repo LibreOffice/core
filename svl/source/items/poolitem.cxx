@@ -21,6 +21,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 #include <osl/diagnose.h>
+#include <libxml/xmlwriter.h>
 
 TYPEINIT0(SfxPoolItem);
 TYPEINIT1(SfxVoidItem, SfxPoolItem);
@@ -205,6 +206,13 @@ bool SfxPoolItem::GetPresentation
 )   const
 {
     return false;
+}
+
+void SfxPoolItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxPoolItem"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 SfxVoidItem::SfxVoidItem( sal_uInt16 which ):

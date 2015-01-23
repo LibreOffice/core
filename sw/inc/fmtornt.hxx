@@ -63,7 +63,7 @@ public:
     SwTwips GetPos() const { return m_nYPos; }
     void    SetPos( SwTwips nNew ) { m_nYPos = nNew; }
 
-     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
@@ -100,7 +100,7 @@ public:
     bool IsPosToggle() const { return bPosToggle; }
     void SetPosToggle( bool bNew ) { bPosToggle = bNew; }
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )

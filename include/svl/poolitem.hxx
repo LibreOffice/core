@@ -194,6 +194,7 @@ public:
 
     sal_uLong                GetRefCount() const { return m_nRefCount; }
     inline SfxItemKind       GetKind() const { return m_nKind; }
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     SfxPoolItem&             operator=( const SfxPoolItem& );    // not implemented!!

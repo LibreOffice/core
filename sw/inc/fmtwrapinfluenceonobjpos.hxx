@@ -57,7 +57,7 @@ public:
     sal_Int16 GetWrapInfluenceOnObjPos(
                         const bool _bIterativeAsOnceConcurrent = false ) const;
 
-    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(bool bInP) const
