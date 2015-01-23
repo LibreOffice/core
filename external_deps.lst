@@ -243,6 +243,7 @@ if (WITH_CATA_FONTS==YES)
     MD5 = cfa8bec07bf5b6856dd20f0cb28b3929
     name = croscorefonts-1.23.0.tar.gz
     URL1 = http://gsdview.appspot.com/chromeos-localmirror/distfiles/$(name)
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if ( true )
     MD5 = fdb27bfe2dbe2e7b57ae194d9bf36bab
