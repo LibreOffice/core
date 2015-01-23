@@ -454,6 +454,7 @@ debug_callback(GLenum source, GLenum type, GLuint id,
 
 namespace {
 
+#ifdef DBG_UTIL
 int unxErrorHandler(Display* dpy, XErrorEvent* event)
 {
     char err[256];
@@ -465,6 +466,7 @@ int unxErrorHandler(Display* dpy, XErrorEvent* event)
     SAL_WARN("vcl.opengl", "Error: " << err << ", Req: " << req << ", Minor: " << minor);
     return 0;
 }
+#endif
 
 typedef int (*errorHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
 
