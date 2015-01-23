@@ -119,7 +119,7 @@ bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew )
             SwViewShell* pVsh = pFrm->getRootFrm()->GetCurrShell();
             if( pVsh )
             {
-                if( pVsh->GetNext() != pVsh ||
+                if( pVsh->GetRingContainer().size() > 1 ||
                     ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->size() ) )
                 {
                     if( !pFrm->GetOfst() )
