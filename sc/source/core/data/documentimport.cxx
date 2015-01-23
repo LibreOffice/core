@@ -333,7 +333,8 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
 
     ScDocument* pDoc = &mpImpl->mrDoc;
     ScRefAddress aRef;
-    OUStringBuffer aFormulaBuf('=');
+    OUStringBuffer aFormulaBuf;
+    aFormulaBuf.append('=');
     aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocTableOp));
     aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
 
