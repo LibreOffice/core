@@ -335,12 +335,8 @@ void DocumentDeviceManager::PrtDataChanged()
             std::set<SwRootFrm*> aAllLayouts = m_rDoc.GetAllLayouts();
             std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::InvalidateAllCntnt), INV_SIZE));
 
-            do
-            {
-                pSh->InitPrt( getPrinter(false) );
-                pSh = static_cast<SwViewShell*>(pSh->GetNext());
-            }
-            while ( pSh != m_rDoc.getIDocumentLayoutAccess().GetCurrentViewShell() );
+            for(SwViewShell& rShell : pSh->GetRingContainer())
+                rShell.InitPrt(getPrinter(false));
         }
     }
     if ( bDraw && m_rDoc.getIDocumentDrawModelAccess().GetDrawModel() )
