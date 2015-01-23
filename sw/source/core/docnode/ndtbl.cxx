@@ -458,11 +458,11 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         }
     }
 
-    SwTable * pNdTbl = &pTblNd->GetTable();
-    pNdTbl->RegisterToFormat( *pTableFmt );
+    SwTable& rNdTbl = pTblNd->GetTable();
+    rNdTbl.RegisterToFormat( *pTableFmt );
 
-    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
-    pNdTbl->SetTableModel( bNewModel );
+    rNdTbl.SetRowsToRepeat( nRowsToRepeat );
+    rNdTbl.SetTableModel( bNewModel );
 
     std::vector<SwTableBoxFmt*> aBoxFmtArr;
     SwTableBoxFmt* pBoxFmt = 0;
@@ -479,7 +479,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
 
     SwNodeIndex aNdIdx( *pTblNd, 1 ); // Set to StartNode of first Box
-    SwTableLines& rLines = pNdTbl->GetTabLines();
+    SwTableLines& rLines = rNdTbl.GetTabLines();
     for( sal_uInt16 n = 0; n < nRows; ++n )
     {
         SwTableLine* pLine = new SwTableLine( pLineFmt, nCols, 0 );
@@ -553,8 +553,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     getIDocumentState().SetModified();
-    CHECK_TABLE( *pNdTbl );
-    return pNdTbl;
+    CHECK_TABLE(rNdTbl);
+    return &rNdTbl;
 }
 
 SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
@@ -723,14 +723,13 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
             aRg, cCh, pTableFmt, pLineFmt, pBoxFmt,
             getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ), pUndo );
 
-    SwTable * pNdTbl = &pTblNd->GetTable();
-    OSL_ENSURE( pNdTbl, "No Table Node created" );
+    SwTable& rNdTbl = pTblNd->GetTable();
 
     const sal_uInt16 nRowsToRepeat =
             tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
             rInsTblOpts.mnRowsToRepeat :
             0;
-    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
+    rNdTbl.SetRowsToRepeat(nRowsToRepeat);
 
     bool bUseBoxFmt = false;
     if( !pBoxFmt->GetDepends() )
@@ -745,7 +744,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Set Orientation in the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pNdTbl->RegisterToFormat( *pTableFmt );
+    rNdTbl.RegisterToFormat(*pTableFmt);
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
@@ -766,7 +765,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         SwHistory* pHistory = pUndo ? &pUndo->GetHistory() : 0;
 
         SwTableBoxFmt *pBoxF = 0;
-        SwTableLines& rLines = pNdTbl->GetTabLines();
+        SwTableLines& rLines = rNdTbl.GetTabLines();
         sal_uInt16 nRows = rLines.size();
         for( sal_uInt16 n = 0; n < nRows; ++n )
         {
@@ -853,9 +852,9 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     // Check the boxes for numbers
     if( IsInsTblFormatNum() )
     {
-        for (size_t nBoxes = pNdTbl->GetTabSortBoxes().size(); nBoxes; )
+        for (size_t nBoxes = rNdTbl.GetTabSortBoxes().size(); nBoxes; )
         {
-            ChkBoxNumFmt( *pNdTbl->GetTabSortBoxes()[ --nBoxes ], false );
+            ChkBoxNumFmt(*rNdTbl.GetTabSortBoxes()[ --nBoxes ], false);
         }
     }
 
@@ -877,7 +876,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty(true, NULL, 0);
-    return pNdTbl;
+    return &rNdTbl;
 }
 
 static void lcl_RemoveBreaks(SwCntntNode & rNode, SwTableFmt *const pTableFmt)
@@ -1004,7 +1003,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
     SwDoc* pDoc = GetDoc();
     std::vector<sal_uInt16> aPosArr;
-    SwTable * pTable = &pTblNd->GetTable();
+    SwTable& rTable = pTblNd->GetTable();
     SwTableBox* pBox;
     sal_uInt16 nBoxes, nLines, nMaxBoxes = 0;
 
@@ -1049,7 +1048,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         pTxtNd->pStartOfSection = pTblNd;
 
         SwTableLine* pLine = new SwTableLine( pLineFmt, 1, 0 );
-        pTable->GetTabLines().insert( pTable->GetTabLines().begin() + nLines, pLine );
+        rTable.GetTabLines().insert(rTable.GetTabLines().begin() + nLines, pLine);
 
         SwStartNode* pSttNd;
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
@@ -1106,9 +1105,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
             nMaxBoxes = nBoxes;
     }
 
-    lcl_BalanceTable(*pTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl,
+    lcl_BalanceTable(rTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl,
             pUndo, &aPosArr);
-    lcl_SetTableBoxWidths(*pTable, nMaxBoxes, *pBoxFmt, *pDoc, &aPosArr);
+    lcl_SetTableBoxWidths(rTable, nMaxBoxes, *pBoxFmt, *pDoc, &aPosArr);
 
     return pTblNd;
 }
@@ -1213,9 +1212,8 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             rTableNodes, pTableFmt, pLineFmt, pBoxFmt,
             getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
 
-    SwTable * pNdTbl = &pTblNd->GetTable();
-    OSL_ENSURE( pNdTbl, "No Table Node created"  );
-    pNdTbl->RegisterToFormat( *pTableFmt );
+    SwTable& rNdTbl = pTblNd->GetTable();
+    rNdTbl.RegisterToFormat(*pTableFmt);
 
     if( !pBoxFmt->GetDepends() )
     {
@@ -1230,7 +1228,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     getIDocumentState().SetModified();
     getIDocumentFieldsAccess().SetFieldsDirty( true, NULL, 0 );
-    return pNdTbl;
+    return &rNdTbl;
 }
 
 SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
@@ -1331,12 +1329,12 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 
     SwTableNode * pTblNd = new SwTableNode( rTableNodes.begin()->begin()->aStart );
     //insert the end node after the last text node
-   SwNodeIndex aInsertIndex( rTableNodes.rbegin()->rbegin()->aEnd );
-   ++aInsertIndex;
+    SwNodeIndex aInsertIndex( rTableNodes.rbegin()->rbegin()->aEnd );
+    ++aInsertIndex;
 
-   //!! owner ship will be transferred in c-tor to SwNodes array.
-   //!! Thus no real problem here...
-   new SwEndNode( aInsertIndex, *pTblNd );
+    //!! owner ship will be transferred in c-tor to SwNodes array.
+    //!! Thus no real problem here...
+    new SwEndNode( aInsertIndex, *pTblNd );
 
 #if OSL_DEBUG_LEVEL > 1
     const SwNodeRange& rStartRange = *rTableNodes.begin()->begin();
@@ -1346,7 +1344,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
 #endif
 
     SwDoc* pDoc = GetDoc();
-    SwTable * pTable = &pTblNd->GetTable();
+    SwTable& rTable = pTblNd->GetTable();
     SwTableBox* pBox;
     sal_uInt16 nBoxes, nLines, nMaxBoxes = 0;
 
@@ -1368,7 +1366,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
         ++aRowIter, nLines++, nBoxes = 0 )
     {
         SwTableLine* pLine = new SwTableLine( pLineFmt, 1, 0 );
-        pTable->GetTabLines().insert( pTable->GetTabLines().begin() + nLines, pLine );
+        rTable.GetTabLines().insert(rTable.GetTabLines().begin() + nLines, pLine);
 
         std::vector< SwNodeRange >::const_iterator aCellIter = aRowIter->begin();
 
@@ -1404,7 +1402,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
             nMaxBoxes = nBoxes;
     }
 
-    lcl_SetTableBoxWidths2(*pTable, nMaxBoxes, *pBoxFmt, *pDoc);
+    lcl_SetTableBoxWidths2(rTable, nMaxBoxes, *pBoxFmt, *pDoc);
 
     return pTblNd;
 }
