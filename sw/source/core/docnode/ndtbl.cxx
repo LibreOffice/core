@@ -459,7 +459,6 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     SwTable& rNdTbl = pTblNd->GetTable();
-    rNdTbl.RegisterToFormat( *pTableFmt );
 
     rNdTbl.SetRowsToRepeat( nRowsToRepeat );
     rNdTbl.SetTableModel( bNewModel );
@@ -744,7 +743,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Set Orientation in the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    rNdTbl.RegisterToFormat(*pTableFmt);
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
@@ -1107,6 +1105,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
     lcl_BalanceTable(rTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl,
             pUndo, &aPosArr);
+    rTable.RegisterToFormat(*pTblFmt);
     lcl_SetTableBoxWidths(rTable, nMaxBoxes, *pBoxFmt, *pDoc, &aPosArr);
 
     return pTblNd;
@@ -1402,6 +1401,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
             nMaxBoxes = nBoxes;
     }
 
+    rTable.RegisterToFormat(*pTblFmt);
     lcl_SetTableBoxWidths2(rTable, nMaxBoxes, *pBoxFmt, *pDoc);
 
     return pTblNd;
