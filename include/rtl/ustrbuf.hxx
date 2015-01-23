@@ -92,8 +92,6 @@ public:
         rtl_uString_new_WithLength( &pData, length );
     }
 #if __cplusplus >= 201103L
-    // GCC 4.6 lacks delegating ctors
-#if defined(__clang__) || !defined(__GNUC__) || (__GNUC__ > 4) || (__GNUC_MINOR__ > 6)
     explicit OUStringBuffer(unsigned int length)
         : OUStringBuffer(static_cast<int>(length))
     {
@@ -112,7 +110,6 @@ public:
     // avoid obvious bugs
     explicit OUStringBuffer(char) = delete;
     explicit OUStringBuffer(sal_Unicode) = delete;
-#endif
 #endif
 
     /**
