@@ -117,7 +117,7 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
     if( rValue >>= aStrFamilyName )
     {
-        OUStringBuffer sValue( aStrFamilyName.getLength() + 2L );
+        OUStringBuffer sValue( aStrFamilyName.getLength() + 2 );
         sal_Int32 nPos = 0;
         do
         {

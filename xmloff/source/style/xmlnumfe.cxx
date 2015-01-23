@@ -305,7 +305,7 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 
 static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, bool bDefPart, const OUString& rPrefix )
 {
-    OUStringBuffer aFmtName( 10L );
+    OUStringBuffer aFmtName(10);
     aFmtName.append( rPrefix );
     aFmtName.append( nKey );
     if (!bDefPart)
@@ -724,7 +724,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
     {
         // style namespace
 
-        OUStringBuffer aCondStr( 20L );
+        OUStringBuffer aCondStr(20);
         aCondStr.appendAscii( "value()" );          //! define constant
         switch ( nOp )
         {

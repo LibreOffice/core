@@ -161,10 +161,10 @@ void xdictionary::initDictionaryData(const sal_Char *pLang)
     aEntry.maLang = OString( pLang, strlen( pLang ) );
 
 #ifdef SAL_DLLPREFIX
-    OUStringBuffer aBuf( strlen( pLang ) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
+    OUStringBuffer aBuf( sal::static_int_cast<int>(strlen(pLang) + 7 + 6) );    // mostly "lib*.so" (with * == dict_zh)
     aBuf.appendAscii( SAL_DLLPREFIX );
 #else
-    OUStringBuffer aBuf( strlen( pLang ) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
+    OUStringBuffer aBuf( sal::static_int_cast<int>(strlen(pLang) + 7 + 4) );    // mostly "*.dll" (with * == dict_zh)
 #endif
     aBuf.appendAscii( "dict_" ).appendAscii( pLang ).appendAscii( SAL_DLLEXTENSION );
     aEntry.mhModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );

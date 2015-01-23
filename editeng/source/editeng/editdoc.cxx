@@ -2206,7 +2206,7 @@ OUString EditDoc::GetText( LineEnd eEnd ) const
 
     const OUString aSep = EditDoc::GetSepStr( eEnd );
     const sal_Int32 nSepSize = aSep.getLength();
-    const sal_uLong nLen = GetTextLen() + (nNodes - 1)*nSepSize;
+    const sal_uInt32 nLen = GetTextLen() + (nNodes - 1)*nSepSize;
 
     OUStringBuffer aBuffer(nLen + 16); // leave some slack
 

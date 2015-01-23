@@ -476,7 +476,8 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
                 (bFallback && aFallback.equalsAscii(aLibTable[i].pLocale)))
         {
 #ifndef DISABLE_DYNLOADING
-            OUStringBuffer aBuf(strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction));
+            OUStringBuffer aBuf(sal::static_int_cast<int>(
+                        strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction)));
             {
                 ::osl::MutexGuard aGuard( maMutex );
                 for (size_t l = 0; l < maLookupTable.size(); l++)
