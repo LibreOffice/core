@@ -120,46 +120,11 @@ std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
     return rStream;
 }
 
-namespace {
-
-formula::FormulaCompiler::OpCodeMapPtr setup()
-{
-    SfxObjectShell* pObjShell = SfxObjectShell::Current();
-    ScDocShell* pScDocShell = PTR_CAST(ScDocShell, pObjShell);
-
-    if (pScDocShell)
-    {
-        ScDocument& rDoc(pScDocShell->GetDocument());
-        ScCompiler* pComp(new ScCompiler(&rDoc, ScAddress()));
-        return pComp->GetOpCodeMap(css::sheet::FormulaLanguage::NATIVE);
-    }
-
-    return nullptr;
-}
-
-} // anonymous namespace
-
-OUString ScOpCodeSetToNumberString(const ScCalcConfig::OpCodeSet& rOpCodes)
-{
-    OUStringBuffer result;
-
-    for (auto i = rOpCodes.cbegin(); i != rOpCodes.cend(); ++i)
-    {
-        if (i != rOpCodes.cbegin())
-            result.append(';');
-        result.append(static_cast<sal_Int32>(*i));
-    }
-
-    return result.toString();
-}
-
 OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 {
     OUStringBuffer result;
-    formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(setup());
-
-    if (!pOpCodeMap)
-        return ScOpCodeSetToNumberString(rOpCodes);
+    formula::FormulaCompiler aCompiler;
+    formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
     for (auto i = rOpCodes.cbegin(); i != rOpCodes.cend(); ++i)
     {
@@ -174,16 +139,15 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 {
     ScCalcConfig::OpCodeSet result;
-    formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(setup());
+    formula::FormulaCompiler aCompiler;
+    formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 
-    OUString s(rOpCodes + ";");
-
-    const formula::OpCodeHashMap *pHashMap(nullptr);
-    if (pOpCodeMap)
-        pHashMap = pOpCodeMap->getHashMap();
+    const formula::OpCodeHashMap *pHashMap(pOpCodeMap->getHashMap());
 
     sal_Int32 fromIndex(0);
     sal_Int32 semicolon;
+    OUString s(rOpCodes + ";");
+
     while ((semicolon = s.indexOf(';', fromIndex)) >= 0)
     {
         if (semicolon > fromIndex)
@@ -192,17 +156,13 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
             sal_Int32 n = element.toInt32();
             if (n > 0 || (n == 0 && element == "0"))
                 result.insert(static_cast<OpCodeEnum>(n));
-            else if (pHashMap)
+            else
             {
                 auto opcode(pHashMap->find(element));
                 if (opcode != pHashMap->end())
                     result.insert(static_cast<OpCodeEnum>(opcode->second));
                 else
                     SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
-            }
-            else
-            {
-                SAL_WARN("sc.opencl", "No current doc, can't convert from OpCode name to value");
             }
         }
         fromIndex = semicolon+1;
