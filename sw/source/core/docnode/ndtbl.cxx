@@ -459,6 +459,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     SwTable& rNdTbl = pTblNd->GetTable();
+    rNdTbl.RegisterToFormat( *pTableFmt );
 
     rNdTbl.SetRowsToRepeat( nRowsToRepeat );
     rNdTbl.SetTableModel( bNewModel );
@@ -1212,7 +1213,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
             getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD )/*, pUndo*/ );
 
     SwTable& rNdTbl = pTblNd->GetTable();
-    rNdTbl.RegisterToFormat(*pTableFmt);
 
     if( !pBoxFmt->GetDepends() )
     {
