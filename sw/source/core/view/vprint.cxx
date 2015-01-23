@@ -601,7 +601,7 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
         pSh->maVisArea = aSwRect;
 
         if ( pSh->GetViewOptions()->getBrowseMode() &&
-             pSh->GetNext() == pSh )
+             pSh->GetRingContainer().size() == 1 )
         {
             pSh->CheckBrowseView( false );
             pSh->GetLayout()->Lower()->InvalidateSize();
