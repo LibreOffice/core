@@ -26,6 +26,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uuid.h>
+#include <sal/alloca.h>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
