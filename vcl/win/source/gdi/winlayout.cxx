@@ -32,10 +32,7 @@
 #include "sallayout.hxx"
 
 #include <cstdio>
-#include <malloc.h>
-#ifndef __MINGW32__
-#define alloca _alloca
-#endif
+#include <sal/alloca.h>
 
 #include <algorithm>
 
