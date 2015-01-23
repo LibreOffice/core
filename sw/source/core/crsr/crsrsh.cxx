@@ -907,8 +907,12 @@ void SwCrsrShell::ClearMark()
     // is there any GetMark?
     if( m_pTblCrsr )
     {
-        while( m_pCurCrsr->GetNext() != m_pCurCrsr )
-            delete m_pCurCrsr->GetNext();
+        std::vector<SwViewShell*> vShells;
+        for(SwViewShell& rShell : GetRingContainer())
+            if(&rShell != this)
+                vShells.push_back(&rShell);
+        for(SwViewShell* pShell : vShells)
+            delete pShell;
         m_pTblCrsr->DeleteMark();
 
         m_pCurCrsr->DeleteMark();
@@ -2678,7 +2682,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, vcl::Window *pInitWin,
 SwCrsrShell::~SwCrsrShell()
 {
     // if it is not the last view then at least the field should be updated
-    if( GetNext() != this )
+    if( !unique() )
         CheckTblBoxCntnt( m_pCurCrsr->GetPoint() );
     else
         ClearTblBoxCntnt();
