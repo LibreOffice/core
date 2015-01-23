@@ -165,11 +165,11 @@ void OOXMLEmbeddedFontHandler::sprm(Sprm & /*sprm*/)
   class OOXMLFooterHandler
  */
 OOXMLFooterHandler::OOXMLFooterHandler(OOXMLFastContextHandler * pContext)
-: mpFastContext(pContext), msStreamId(), mnType(0)
+    : mpFastContext(pContext), msStreamId(), mnType(0)
 {
 }
 
-OOXMLFooterHandler::~OOXMLFooterHandler()
+void OOXMLFooterHandler::finalize()
 {
     mpFastContext->resolveFooter(mnType, msStreamId);
 }
@@ -197,11 +197,11 @@ void OOXMLFooterHandler::sprm(Sprm & /*sprm*/)
   class OOXMLHeaderHandler
  */
 OOXMLHeaderHandler::OOXMLHeaderHandler(OOXMLFastContextHandler * pContext)
-: mpFastContext(pContext), msStreamId(), mnType(0)
+    : mpFastContext(pContext), msStreamId(), mnType(0)
 {
 }
 
-OOXMLHeaderHandler::~OOXMLHeaderHandler()
+void OOXMLHeaderHandler::finalize()
 {
     mpFastContext->resolveHeader(mnType, msStreamId);
 }

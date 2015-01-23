@@ -1048,12 +1048,14 @@ void OOXMLFastContextHandlerProperties::handleHdrFtr()
         {
             OOXMLFooterHandler aFooterHandler(this);
             mpPropertySet->resolve(aFooterHandler);
+            aFooterHandler.finalize();
         }
         break;
     case W_TOKEN(headerReference):
         {
             OOXMLHeaderHandler aHeaderHandler(this);
             mpPropertySet->resolve(aHeaderHandler);
+            aHeaderHandler.finalize();
         }
         break;
     default:

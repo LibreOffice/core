@@ -55,7 +55,8 @@ class OOXMLFooterHandler : public Properties
     sal_Int32 mnType;
 public:
     OOXMLFooterHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFooterHandler();
+    virtual ~OOXMLFooterHandler() {}
+    void finalize();
     virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
     virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
 };
@@ -67,7 +68,8 @@ class OOXMLHeaderHandler : public Properties
     sal_Int32 mnType;
 public:
     OOXMLHeaderHandler(OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLHeaderHandler();
+    virtual ~OOXMLHeaderHandler() {}
+    void finalize();
     virtual void attribute(Id name, Value & val) SAL_OVERRIDE;
     virtual void sprm(Sprm & sprm) SAL_OVERRIDE;
 };
