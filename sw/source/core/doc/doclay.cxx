@@ -1268,18 +1268,17 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
 
 IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 {
-    SwViewShell *pSh, *pStartSh;
-    pSh = pStartSh = pThis->getIDocumentLayoutAccess().GetCurrentViewShell();
-    if( pStartSh )
-        do {
-            if( pSh->GetWin() )
+    SwViewShell* pStartSh = pThis->getIDocumentLayoutAccess().GetCurrentViewShell();
+    if(pStartSh)
+        for(SwViewShell& rShell : pStartSh->GetRingContainer())
+        {
+            if(rShell.GetWin())
             {
                 // Make sure to repaint with virtual device
-                pSh->LockPaint();
-                pSh->UnlockPaint( true );
+                rShell.LockPaint();
+                rShell.UnlockPaint( true );
             }
-            pSh = static_cast<SwViewShell*>(pSh->GetNext());
-        } while( pSh != pStartSh );
+        }
     return 0;
 }
 
@@ -1637,19 +1636,14 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
 {
     std::set<SwRootFrm*> aAllLayouts;
     SwViewShell *pStart = getIDocumentLayoutAccess().GetCurrentViewShell();
-    SwViewShell *pTemp = pStart;
-    if ( pTemp )
+    if(pStart)
     {
-        do
+        for(SwViewShell& rShell : pStart->GetRingContainer())
         {
-            if (pTemp->GetLayout())
-            {
-                aAllLayouts.insert(pTemp->GetLayout());
-                pTemp = static_cast<SwViewShell*>(pTemp->GetNext());
-            }
-        } while(pTemp!=pStart);
+            if(rShell.GetLayout())
+                aAllLayouts.insert(rShell.GetLayout());
+        }
     }
-
     return aAllLayouts;
 }
 
