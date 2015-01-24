@@ -163,11 +163,10 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
             switch ( pFld->GetTyp()->Which() )
             {
             case RES_SETEXPFLD:
-                nRet = static_cast<const SwSetExpField*>( pFld )->GetValue();
+                nRet = static_cast<const SwSetExpField*>(pFld)->GetValue();
                 break;
             case RES_USERFLD:
-                nRet = reinterpret_cast<SwUserFieldType const *>(pFld)->GetValue();
-                    //TODO: is that reinterpret_cast sound?
+                nRet = static_cast<const SwUserField*>(pFld)->GetValue();
                 break;
             case RES_TABLEFLD:
                 {
