@@ -288,8 +288,13 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
         //If object is marked , the corresponding entry is set true ,
         //else the corresponding entry is set false .
         FreshNavigatrTree();
-        if ( mbPipette )
-            static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->PipetteClicked();
+        if (mbPipette)
+        {
+            SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+            SvxBmpMask* pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+            if (pBmpMask)
+                pBmpMask->PipetteClicked();
+        }
     }
 }
 
