@@ -53,7 +53,7 @@ protected:
     // Reset in the first line
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    inline SwTxtIter(SwTxtNode* pTxtNode)
+    SwTxtIter(SwTxtNode* pTxtNode)
         : SwAttrIter(pTxtNode)
         , pFrm(NULL)
         , pInf(NULL)
@@ -70,16 +70,17 @@ protected:
         , bOneBlock(false)
         , bLastBlock(false)
         , bLastCenter(false)
-        {}
+    {
+    }
 public:
-    inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf )
-        : SwAttrIter( pTxtFrm != NULL ? pTxtFrm->GetTxtNode() : NULL)
+    SwTxtIter(SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf)
+        : SwAttrIter(pTxtFrm->GetTxtNode())
         , bOneBlock(false)
         , bLastBlock(false)
         , bLastCenter(false)
-        {
-            CtorInitTxtIter( pTxtFrm, pTxtInf );
-        }
+    {
+        CtorInitTxtIter(pTxtFrm, pTxtInf);
+    }
     inline const SwLineLayout *GetCurr() const { return pCurr; } // NEVER 0!
     inline const SwLineLayout *GetNext() const { return pCurr->GetNext(); }
            const SwLineLayout *GetPrev();
@@ -159,7 +160,7 @@ protected:
     inline void SetDropLeft( const sal_uInt16 nNew ) { nDropLeft = nNew; }
 
     void CtorInitTxtMargin( SwTxtFrm *pFrm, SwTxtSizeInfo *pInf );
-    inline SwTxtMargin(SwTxtNode* pTxtNode)
+    SwTxtMargin(SwTxtNode* pTxtNode)
         : SwTxtIter(pTxtNode)
         , nLeft(0)
         , nRight(0)
@@ -170,13 +171,14 @@ protected:
         , nDropLines(0)
         , nAdjust(0)
         , mnTabLeft(0)
-        { }
+    {
+    }
 public:
-    inline SwTxtMargin( SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf )
-        : SwTxtIter( pTxtFrm != NULL ? pTxtFrm->GetTxtNode() : NULL)
-        {
-            CtorInitTxtMargin( pTxtFrm, pTxtSizeInf );
-        }
+    SwTxtMargin(SwTxtFrm *pTxtFrm, SwTxtSizeInfo *pTxtSizeInf)
+        : SwTxtIter(pTxtFrm->GetTxtNode())
+    {
+        CtorInitTxtMargin( pTxtFrm, pTxtSizeInf );
+    }
     inline SwTwips GetLeftMargin() const;
     inline SwTwips Left() const;
     inline SwTwips Right() const { return nRight; }
