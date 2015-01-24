@@ -73,10 +73,14 @@ void SwBaseShell::InsertURLButton(const OUString& rURL, const OUString& rTarget,
         if (rMarkList.GetMark(0))
         {
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
+            OSL_ENSURE( pUnoCtrl, "not an SdrUnoObj" );
+            if (!pUnoCtrl)
+                return;
+
             uno::Reference< awt::XControlModel >  xControlModel = pUnoCtrl->GetUnoControlModel();
 
             OSL_ENSURE( xControlModel.is(), "UNO-Control without Model" );
-            if( !xControlModel.is() )
+            if (!xControlModel.is())
                 return;
 
             uno::Reference< beans::XPropertySet >  xPropSet(xControlModel, uno::UNO_QUERY);
