@@ -1120,8 +1120,11 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
     SdNavigatorWin* pNavWin = NULL;
     SvTreeListEntry* pEntry = GetEntry(rPosPixel);
 
-    if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
-        pNavWin = static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
+    if (mpFrame->HasChildWindow(SID_NAVIGATOR))
+    {
+        SfxChildWindow* pWnd = mpFrame->GetChildWindow(SID_NAVIGATOR);
+        pNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : NULL;
+    }
 
     if (pEntry != NULL
         && pNavWin !=NULL
