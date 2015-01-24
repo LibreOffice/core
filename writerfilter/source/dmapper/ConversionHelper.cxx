@@ -516,6 +516,7 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
         case NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal:
         case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital:
         case NS_ooxml::LN_Value_ST_NumberFormat_koreanCounting:
+        case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2:
             nRet = style::NumberingType::NUMBER_HANGUL_KO;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_ideographLegalTraditional:
@@ -536,7 +537,6 @@ sal_Int16 ConvertNumberingType(sal_Int32 nFmt)
         case NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCountingThousand:
         case NS_ooxml::LN_Value_ST_NumberFormat_ideographDigital:
         case NS_ooxml::LN_Value_ST_NumberFormat_chineseCountingThousand:
-        case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2:
             nRet = style::NumberingType::NUMBER_LOWER_ZH;
             break;
         case NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified:

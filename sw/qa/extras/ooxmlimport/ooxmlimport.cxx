@@ -85,6 +85,30 @@ public:
         if (OString(filename) == "smartart.docx" || OString(filename) == "strict-smartart.docx")
             SvtFilterOptions::Get().SetSmartArt2Shape(false);
     }
+
+    bool CjkNumberedListTestHelper(sal_Int16 &nValue)
+    {
+        bool isNumber = false;
+        uno::Reference<text::XTextRange> xPara(getParagraph(1));
+        uno::Reference< beans::XPropertySet > properties( xPara, uno::UNO_QUERY);
+        properties->getPropertyValue("NumberingIsNumber") >>= isNumber;
+        if (!isNumber)
+            return false;
+        uno::Reference<container::XIndexAccess> xLevels( properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+        uno::Sequence< beans::PropertyValue > aPropertyValue;
+        xLevels->getByIndex(0) >>= aPropertyValue;
+        for( int j = 0 ; j< aPropertyValue.getLength() ; ++j)
+        {
+            beans::PropertyValue aProp= aPropertyValue[j];
+            if (aProp.Name == "NumberingType")
+            {
+                nValue = aProp.Value.get<sal_Int16>();
+                return true;
+            }
+        }
+        return false;
+
+    }
 };
 
 DECLARE_OOXMLIMPORT_TEST(testN751054, "n751054.docx")
@@ -2560,6 +2584,12 @@ DECLARE_OOXMLIMPORT_TEST(testChtOutlineNumberingOoxml, "chtoutline.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(aExpectedSuffix,SAL_N_ELEMENTS(aExpectedSuffix)), aSuffix);
 }
 
+DECLARE_OOXMLIMPORT_TEST_ONLY(testOoxmlCjklist44, "cjklist44.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HANGUL_KO, numFormat);
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
