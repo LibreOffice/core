@@ -518,7 +518,7 @@ private:
     SAL_DLLPRIVATE void    impl_RemoveElement_nothrow(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
 
 
-    // asyncronous cursor actions/navigation slot handling
+    // asynchronous cursor actions/navigation slot handling
 
 public:
     /** execute the given form slot

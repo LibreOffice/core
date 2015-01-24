@@ -582,7 +582,7 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
     mpGlobalSyncData->PlayGlobalActions( rWriter );
 }
 
-/* global actions, syncronisation to the recorded metafile isn't needed,
+/* global actions, synchronisation to the recorded metafile isn't needed,
    all actions will be played after the last page was recorded
 */
 //--->i56629

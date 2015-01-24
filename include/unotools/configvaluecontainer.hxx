@@ -40,7 +40,7 @@ namespace utl
 
         <p>The basic idea of this class is that it's clients (usually derived classes) simply register an
         address in memory and a node path, and upon explicit request, the configuration value and the memory
-        are syncronized.<br/>
+        are synchronized.<br/>
         This means that when calling <method>read</method>, the current configuration values are copied into
         the memory registered for them, and upon calling <method>write</method> the current values in memory
         are set in the configuration nodes.</p>

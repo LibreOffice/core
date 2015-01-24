@@ -1990,7 +1990,7 @@ void SmViewShell::Activate( bool bIsMDIActivate )
     {
         //! Since there is no way to be informed if a "drag and drop"
         //! event has taken place, we call SetText here in order to
-        //! syncronize the GraphicWindow display with the text in the
+        //! synchronize the GraphicWindow display with the text in the
         //! EditEngine.
         SmDocShell *pDoc = GetDoc();
         pDoc->SetText( pDoc->GetEditEngine().GetText( LINEEND_LF ) );

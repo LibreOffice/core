@@ -314,7 +314,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
         }
         else
         {
-            // Syncronize regions cache ids with SfxDocumentTemplates
+            // Synchronize regions cache ids with SfxDocumentTemplates
             if (nRegionId != USHRT_MAX && (*pRegionIt)->mnRegionId > nRegionId)
                 --(*pRegionIt)->mnRegionId;
 
@@ -325,7 +325,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
     if (nRegionId == USHRT_MAX)
         return false;
 
-    // Syncronize view regions ids with SfxDocumentTemplates
+    // Synchronize view regions ids with SfxDocumentTemplates
     std::vector<ThumbnailViewItem*>::iterator pViewIt = mItemList.begin();
     for ( pViewIt = mItemList.begin(); pViewIt != mItemList.end(); ++pViewIt)
     {
@@ -434,7 +434,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
                 }
                 else
                 {
-                    // Keep region document id syncronized with SfxDocumentTemplates
+                    // Keep region document id synchronized with SfxDocumentTemplates
                     if (aIter->nDocId > pViewItem->mnDocId)
                         --aIter->nDocId;
 
@@ -442,7 +442,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
                 }
             }
 
-            // Keep view document id syncronized with SfxDocumentTemplates
+            // Keep view document id synchronized with SfxDocumentTemplates
             std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
             for (; pItemIter != mItemList.end(); ++pItemIter)
             {
@@ -533,7 +533,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     }
                     else
                     {
-                        // Keep region document id syncronized with SfxDocumentTemplates
+                        // Keep region document id synchronized with SfxDocumentTemplates
                         if (pPropIter->nDocId > pViewItem->mnDocId)
                             --pPropIter->nDocId;
 
@@ -541,7 +541,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     }
                 }
 
-                // Keep view document id syncronized with SfxDocumentTemplates
+                // Keep view document id synchronized with SfxDocumentTemplates
                 std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
                 for (; pItemIter != mItemList.end(); ++pItemIter)
                 {

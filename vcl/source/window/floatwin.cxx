@@ -567,7 +567,7 @@ void FloatingWindow::ImplCallPopupModeEnd()
     // PopupMode is finished
     mbInPopupMode = false;
 
-    // call Handler asyncron.
+    // call Handler asynchron.
     if ( !mnPostId )
         mnPostId = Application::PostUserEvent( LINK( this, FloatingWindow, ImplEndPopupModeHdl ) );
 }

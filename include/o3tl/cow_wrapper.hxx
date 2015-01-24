@@ -83,7 +83,7 @@ namespace o3tl
 
         Regarding thread safety: this wrapper is <em>not</em>
         thread-safe per se, because cow_wrapper has no way of
-        syncronizing the potentially many different cow_wrapper
+        synchronizing the potentially many different cow_wrapper
         instances, that reference a single shared value_type
         instance. That said, when passing
         <code>ThreadSafeRefCountingPolicy</code> as the

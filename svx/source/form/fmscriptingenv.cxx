@@ -127,13 +127,13 @@ namespace svxform
                 a clearable guard to our mutex. Must be the only active guard to our mutex.
             @param _rEvent
                 the event to fire
-            @param _pSyncronousResult
+            @param _pSynchronousResult
                 a place to take a possible result of the script call.
 
             @precond
                 m_pScriptExecutor is not <NULL/>.
         */
-        void    impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSyncronousResult );
+        void    impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult );
 
     private:
         DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
@@ -156,7 +156,7 @@ namespace svxform
         virtual ~FormScriptingEnvironment();
 
         // callback for FormScriptListener
-        void doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult );
+        void doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSynchronousResult );
 
         // IFormScriptingEnvironment
         virtual void registerEventAttacherManager( const Reference< XEventAttacherManager >& _rxManager ) SAL_OVERRIDE;
@@ -715,12 +715,12 @@ namespace svxform
     }
 
 
-    void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSyncronousResult )
+    void FormScriptListener::impl_doFireScriptEvent_nothrow( ::osl::ClearableMutexGuard& _rGuard, const ScriptEvent& _rEvent, Any* _pSynchronousResult )
     {
         OSL_PRECOND( m_pScriptExecutor, "FormScriptListener::impl_doFireScriptEvent_nothrow: this will crash!" );
 
         _rGuard.clear();
-        m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSyncronousResult );
+        m_pScriptExecutor->doFireScriptEvent( _rEvent, _pSynchronousResult );
     }
 
 
@@ -898,11 +898,11 @@ namespace svxform
     }
 
 
-    void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult )
+    void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSynchronousResult )
     {
 #if !HAVE_FEATURE_SCRIPTING
         (void) _rEvent;
-        (void) _pSyncronousResult;
+        (void) _pSynchronousResult;
         (void) m_rFormModel;
 #else
         SolarMutexClearableGuard aSolarGuard;
@@ -973,7 +973,7 @@ namespace svxform
         aSolarGuard.clear();
 
         Any aIgnoreResult;
-        pScript->invoke( _rEvent.Arguments, _pSyncronousResult ? *_pSyncronousResult : aIgnoreResult );
+        pScript->invoke( _rEvent.Arguments, _pSynchronousResult ? *_pSynchronousResult : aIgnoreResult );
         pScript.reset();
 
         {
