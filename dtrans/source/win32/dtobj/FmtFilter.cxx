@@ -448,6 +448,7 @@ std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
     catch(sal::systools::ComError& ex)
     {
         OSL_FAIL(ex.what());
+        (void)ex;
     }
     return target;
 }
