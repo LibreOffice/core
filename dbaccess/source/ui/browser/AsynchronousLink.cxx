@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbaccess/AsyncronousLink.hxx>
+#include <dbaccess/AsynchronousLink.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
 
-// OAsyncronousLink
+// OAsynchronousLink
 using namespace dbaui;
-OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
+OAsynchronousLink::OAsynchronousLink( const Link& _rHandler )
     :m_aHandler(_rHandler)
     ,m_aEventSafety()
     ,m_aDestructionSafety()
@@ -31,7 +31,7 @@ OAsyncronousLink::OAsyncronousLink( const Link& _rHandler )
 {
 }
 
-OAsyncronousLink::~OAsyncronousLink()
+OAsynchronousLink::~OAsynchronousLink()
 {
     {
         ::osl::MutexGuard aEventGuard( m_aEventSafety );
@@ -49,15 +49,15 @@ OAsyncronousLink::~OAsyncronousLink()
     }
 }
 
-void OAsyncronousLink::Call( void* _pArgument )
+void OAsynchronousLink::Call( void* _pArgument )
 {
     ::osl::MutexGuard aEventGuard( m_aEventSafety );
     if (m_nEventId)
         Application::RemoveUserEvent(m_nEventId);
-    m_nEventId = Application::PostUserEvent( LINK( this, OAsyncronousLink, OnAsyncCall ), _pArgument );
+    m_nEventId = Application::PostUserEvent( LINK( this, OAsynchronousLink, OnAsyncCall ), _pArgument );
 }
 
-void OAsyncronousLink::CancelCall()
+void OAsynchronousLink::CancelCall()
 {
     ::osl::MutexGuard aEventGuard( m_aEventSafety );
     if ( m_nEventId )
@@ -65,7 +65,7 @@ void OAsyncronousLink::CancelCall()
     m_nEventId = 0;
 }
 
-IMPL_LINK(OAsyncronousLink, OnAsyncCall, void*, _pArg)
+IMPL_LINK(OAsynchronousLink, OnAsyncCall, void*, _pArg)
 {
     {
         ::osl::MutexGuard aDestructionGuard( m_aDestructionSafety );
