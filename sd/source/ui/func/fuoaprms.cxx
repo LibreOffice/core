@@ -654,21 +654,24 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pRunningObj = pObject1;
             }
 
-            DBG_ASSERT(pPath, "no curve found");
+            assert(pRunningObj && pPath && "no curve found");
 
             // push the running object to the end of the curve
-            Rectangle aCurRect(pRunningObj->GetLogicRect());
-            Point     aCurCenter(aCurRect.Center());
-            const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
-            sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
-            const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1L));
-            sal_uInt32 nPoints(aPolygon.count());
-            const ::basegfx::B2DPoint aNewB2DCenter(aPolygon.getB2DPoint(nPoints - 1L));
-            const Point aNewCenter(FRound(aNewB2DCenter.getX()), FRound(aNewB2DCenter.getY()));
-            Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
-            pRunningObj->Move(aDistance);
+            if (pRunningObj)
+            {
+                Rectangle aCurRect(pRunningObj->GetLogicRect());
+                Point     aCurCenter(aCurRect.Center());
+                const ::basegfx::B2DPolyPolygon& rPolyPolygon = pPath->GetPathPoly();
+                sal_uInt32 nNoOfPolygons(rPolyPolygon.count());
+                const ::basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nNoOfPolygons - 1L));
+                sal_uInt32 nPoints(aPolygon.count());
+                const ::basegfx::B2DPoint aNewB2DCenter(aPolygon.getB2DPoint(nPoints - 1L));
+                const Point aNewCenter(FRound(aNewB2DCenter.getX()), FRound(aNewB2DCenter.getY()));
+                Size aDistance(aNewCenter.X() - aCurCenter.X(), aNewCenter.Y() - aCurCenter.Y());
+                pRunningObj->Move(aDistance);
 
-            pUndoMgr->AddUndoAction(mpDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
+                pUndoMgr->AddUndoAction(mpDoc->GetSdrUndoFactory().CreateUndoMoveObject( *pRunningObj, aDistance));
+            }
         }
 
         for (size_t nObject = 0; nObject < nCount; ++nObject)
