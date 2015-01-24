@@ -343,10 +343,10 @@ void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 
     if ( GetViewFrame()->HasChildWindow( nId ) )
     {
-        SvxBmpMask* pDlg = static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow( nId )->GetWindow() );
-
-        if ( pDlg->NeedsColorList() )
-            pDlg->SetColorList( GetDoc()->GetColorList() );
+        SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
+        SvxBmpMask* pDlg = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+        if (pDlg && pDlg->NeedsColorList())
+            pDlg->SetColorList(GetDoc()->GetColorList());
     }
 
     if ( rMarkList.GetMarkCount() == 1 )
