@@ -1091,6 +1091,8 @@ void ScCheckListMenuWindow::selectCurrentMemberOnly(bool bSet)
 {
     setAllMemberState(!bSet);
     SvTreeListEntry* pEntry = maChecks.GetCurEntry();
+    if (!pEntry)
+        return;
     maChecks.CheckEntry(pEntry, bSet );
 }
 
@@ -1486,7 +1488,6 @@ void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
     if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
     {
         SvTreeListEntry* pEntry = GetCurEntry();
-
         if ( pEntry )
         {
             bool bCheck = ( GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED );
