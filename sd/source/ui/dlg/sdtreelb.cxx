@@ -1170,9 +1170,8 @@ void SdPageObjsTLB::StartDrag( sal_Int8 nAction, const Point& rPosPixel)
  */
 void SdPageObjsTLB::DoDrag()
 {
-    mpDropNavWin = ( mpFrame->HasChildWindow( SID_NAVIGATOR ) ) ?
-                  static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) ) :
-                  NULL;
+    SfxChildWindow* pWnd = mpFrame->HasChildWindow(SID_NAVIGATOR) ? mpFrame->GetChildWindow(SID_NAVIGATOR) : NULL;
+    mpDropNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : NULL;
 
     if( mpDropNavWin )
     {
