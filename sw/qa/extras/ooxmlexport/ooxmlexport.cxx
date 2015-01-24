@@ -610,6 +610,12 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
     assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","chineseCountingThousand" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumNone, "outline-num-none.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/numbering.xml"))
+        assertXPath(pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt", "val", "none");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
     // This was "Outline", i.e. <w:numId> was not imported from the Heading 2 paragraph style.

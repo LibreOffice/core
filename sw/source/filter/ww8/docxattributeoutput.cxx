@@ -5591,7 +5591,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
         case style::NumberingType::NUMBER_HANGUL_KO: aType="koreanDigital";break;
         case style::NumberingType::NUMBER_UPPER_KO: aType="koreanLegal"; break;
         default:
-            aType = "decimal";        break;
+            aType = "none";        break;
     }
     return aType;
 }
