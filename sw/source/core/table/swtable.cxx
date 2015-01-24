@@ -303,6 +303,17 @@ SwTable::~SwTable()
     delete pHTMLLayout;
 }
 
+namespace
+{
+
+template<class T>
+inline T lcl_MulDiv64(sal_uInt64 nA, sal_uInt64 nM, sal_uInt64 nD)
+{
+    return static_cast<T>((nA*nM)/nD);
+}
+
+}
+
 static void FmtInArr( std::vector<SwFmt*>& rFmtArr, SwFmt* pBoxFmt )
 {
     std::vector<SwFmt*>::const_iterator it = std::find( rFmtArr.begin(), rFmtArr.end(), pBoxFmt );
@@ -323,10 +334,8 @@ static void lcl_ModifyLines( SwTableLines &rLines, const long nOld,
         for( size_t i = 0; i < rFmtArr.size(); ++i )
         {
             SwFmt* pFmt = rFmtArr[i];
-            sal_uInt64 nBox = pFmt->GetFrmSize().GetWidth();
-            nBox *= nNew;
-            nBox /= nOld;
-            SwFmtFrmSize aNewBox( ATT_VAR_SIZE, SwTwips(nBox), 0 );
+            const SwTwips nBox = lcl_MulDiv64<SwTwips>(pFmt->GetFrmSize().GetWidth(), nNew, nOld);
+            SwFmtFrmSize aNewBox( ATT_VAR_SIZE, nBox, 0 );
             pFmt->LockModify();
             pFmt->SetFmtAttr( aNewBox );
             pFmt->UnlockModify();
@@ -353,10 +362,7 @@ static void lcl_ModifyBoxes( SwTableBoxes &rBoxes, const long nOld,
         nOriginalSum += nBox;
         nBox *= nNew;
         nBox /= nOld;
-        sal_uInt64 nWishedSum = nOriginalSum;
-        nWishedSum *= nNew;
-        nWishedSum /= nOld;
-        nWishedSum -= nSum;
+        const sal_uInt64 nWishedSum = lcl_MulDiv64<sal_uInt64>(nOriginalSum, nNew, nOld) - nSum;
         if( nWishedSum > 0 )
         {
             if( nBox == nWishedSum )
@@ -447,23 +453,21 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
             const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
             for ( size_t i = 0; i < rBoxes.size(); ++i )
             {
-                SwTwips nWidth = rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
+                const SwTwips nWidth = rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
                 nSum += nWidth;
-                sal_uInt64 nTmp = nSum;
-                nTmp *= nAct;
-                nTmp /= nWish;
+                const long nTmp = lcl_MulDiv64<long>(nSum, nAct, nWish);
 
                 if (rBoxes[i] != pCur)
                 {
                     if ( pLine == pBox->GetUpper() || 0 == nLeftMin )
-                        nLeftMin = static_cast<long>(nTmp - nPos);
-                    nPos = static_cast<long>(nTmp);
+                        nLeftMin = nTmp - nPos;
+                    nPos = nTmp;
                 }
                 else
                 {
                     nSum -= nWidth;
                     if ( 0 == nRightMax )
-                        nRightMax = static_cast<long>(nTmp - nPos);
+                        nRightMax = nTmp - nPos;
                     break;
                 }
             }
@@ -707,11 +711,9 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
             for ( size_t i = 0; (i < rBoxes.size()) && (rBoxes[i] != pCur); ++i)
             {
-                sal_uInt64 nWidth = rBoxes[i]->GetFrmFmt()->
-                                        GetFrmSize().GetWidth();
-                nWidth *= nOldAct;
-                nWidth /= rParm.nOldWish;
-                nLeft += static_cast<long>(nWidth);
+                nLeft += lcl_MulDiv64<long>(
+                    rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth(),
+                    nOldAct, rParm.nOldWish);
             }
             pCur  = pLine->GetUpper();
             pLine = pCur ? pCur->GetUpper() : 0;
@@ -721,10 +723,10 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
         if ( nLeft != rParm.rOld.GetLeft() ) // There are still boxes before this.
         {
             // Right edge is left edge plus width.
-            sal_uInt64 nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-            nWidth *= nOldAct;
-            nWidth /= rParm.nOldWish;
-            long nRight = nLeft + (long)nWidth;
+            const long nWidth = lcl_MulDiv64<long>(
+                pBox->GetFrmFmt()->GetFrmSize().GetWidth(),
+                nOldAct, rParm.nOldWish);
+            const long nRight = nLeft + nWidth;
             size_t nLeftPos  = 0;
             size_t nRightPos = 0;
             bool bFoundLeftPos = false;
@@ -755,10 +757,10 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
             if ( rParm.rOld.Count() )
             {
                 // Calculate the difference to the edge touching the first box.
-                sal_uInt64 nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-                nWidth *= nOldAct;
-                nWidth /= rParm.nOldWish;
-                const long nTmp = (long)nWidth + rParm.rOld.GetLeft();
+                const long nWidth = lcl_MulDiv64<long>(
+                    pBox->GetFrmFmt()->GetFrmSize().GetWidth(),
+                    nOldAct, rParm.nOldWish);
+                const long nTmp = nWidth + rParm.rOld.GetLeft();
                 for ( size_t i = 0; i < rParm.rOld.Count(); ++i )
                 {
                     if ( nTmp >= (rParm.rOld[i] - COLFUZZY) &&
@@ -1115,12 +1117,9 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
             aNewSpanPos.push_back( nRowSpanCount );
         bRowSpan = bCurrRowSpan;
         nOrgSum += nCurrWidth;
-        sal_uInt64 nSum = nOrgSum;
-        nSum *= nWidth;
-        nSum /= nWish;
-        nSum *= nWish;
-        nSum /= nWidth;
-        const sal_uInt16 nPos = static_cast<sal_uInt16>(nSum);
+        const sal_uInt16 nPos = lcl_MulDiv64<sal_uInt16>(
+            lcl_MulDiv64<sal_uInt64>(nOrgSum, nWidth, nWish),
+            nWish, nWidth);
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
             ++nCurr;
@@ -1165,11 +1164,10 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
                     pCurr->second = pLeftMove->second;
                 else
                 {
-                    sal_uInt64 nTmp = pCurr->first - pLast->first;
-                    nTmp *= pLeftMove->second - pLast->second;
-                    nTmp /= pLeftMove->first - pLast->first;
-                    nTmp += pLast->second;
-                    pCurr->second = (sal_uInt16)nTmp;
+                    pCurr->second = lcl_MulDiv64<sal_uInt16>(
+                        pCurr->first - pLast->first,
+                        pLeftMove->second - pLast->second,
+                        pLeftMove->first - pLast->first) + pLast->second;
                 }
             }
             pLast = pCurr;
@@ -1189,11 +1187,10 @@ static void lcl_CalcNewWidths( std::list<sal_uInt16> &rSpanPos, ChangeList& rCha
                     pCurr->second = pLast->second;
                 else
                 {
-                    sal_uInt64 nTmp = pCurr->first - pLast->first;
-                    nTmp *= pNext->second - pLast->second;
-                    nTmp /= pNext->first - pLast->first;
-                    nTmp += pLast->second;
-                    pCurr->second = (sal_uInt16)nTmp;
+                    pCurr->second = lcl_MulDiv64<sal_uInt16>(
+                        pCurr->first - pLast->first,
+                        pNext->second - pLast->second,
+                        pNext->first - pLast->first) + pLast->second;
                 }
                 ++pCurr;
             }
@@ -1243,10 +1240,8 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             nOldPos = rOld[i] - rParm.rOld.GetLeft();
             nNewPos = rNew[i] - rParm.rNew.GetLeft();
         }
-        nNewPos *= rParm.nNewWish;
-        nNewPos /= nNewWidth;
-        nOldPos *= rParm.nOldWish;
-        nOldPos /= nOldWidth;
+        nNewPos = lcl_MulDiv64<sal_uInt64>(nNewPos, rParm.nNewWish, nNewWidth);
+        nOldPos = lcl_MulDiv64<sal_uInt64>(nOldPos, rParm.nOldWish, nOldWidth);
         if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )
         {
             ColChange aChg( (sal_uInt16)nOldPos, (sal_uInt16)nNewPos );
