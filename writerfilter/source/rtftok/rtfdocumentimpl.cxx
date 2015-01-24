@@ -119,7 +119,7 @@ static void
 lcl_putBorderProperty(RTFStack& aStates, Id nId, RTFValue::Pointer_t pValue)
 {
     RTFSprms* pAttributes = nullptr;
-    if (aStates.top().nBorderState == BORDER_PARAGRAPH_BOX)
+    if (aStates.top().nBorderState == RTFBorderState::PARAGRAPH_BOX)
         for (int i = 0; i < 4; i++)
         {
             RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(lcl_getParagraphBorder(i));
@@ -129,7 +129,7 @@ lcl_putBorderProperty(RTFStack& aStates, Id nId, RTFValue::Pointer_t pValue)
                 rAttributes.set(nId, pValue);
             }
         }
-    else if (aStates.top().nBorderState == BORDER_CHARACTER)
+    else if (aStates.top().nBorderState == RTFBorderState::CHARACTER)
     {
         RTFValue::Pointer_t pPointer = aStates.top().aCharacterSprms.find(NS_ooxml::LN_EG_RPrBase_bdr);
         if (pPointer.get())
@@ -139,11 +139,11 @@ lcl_putBorderProperty(RTFStack& aStates, Id nId, RTFValue::Pointer_t pValue)
         }
     }
     // Attributes of the last border type
-    else if (aStates.top().nBorderState == BORDER_PARAGRAPH)
+    else if (aStates.top().nBorderState == RTFBorderState::PARAGRAPH)
         pAttributes = &lcl_getLastAttributes(aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr);
-    else if (aStates.top().nBorderState == BORDER_CELL)
+    else if (aStates.top().nBorderState == RTFBorderState::CELL)
         pAttributes = &lcl_getLastAttributes(aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders);
-    else if (aStates.top().nBorderState == BORDER_PAGE)
+    else if (aStates.top().nBorderState == RTFBorderState::PAGE)
         pAttributes = &lcl_getLastAttributes(aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders);
     if (pAttributes)
         pAttributes->set(nId, pValue);
@@ -2992,7 +2992,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         auto pValue = std::make_shared<RTFValue>(aAttributes);
         for (int i = 0; i < 4; i++)
             m_aStates.top().aParagraphSprms.set(lcl_getParagraphBorder(i), pValue);
-        m_aStates.top().nBorderState = BORDER_PARAGRAPH_BOX;
+        m_aStates.top().nBorderState = RTFBorderState::PARAGRAPH_BOX;
     }
     break;
     case RTF_LTRSECT:
@@ -3058,7 +3058,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         }
         lcl_putNestedSprm(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_tcBorders, nParam, pValue);
-        m_aStates.top().nBorderState = BORDER_CELL;
+        m_aStates.top().nBorderState = RTFBorderState::CELL;
     }
     break;
     case RTF_PGBRDRT:
@@ -3087,7 +3087,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         }
         lcl_putNestedSprm(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgBorders, nParam, pValue);
-        m_aStates.top().nBorderState = BORDER_PAGE;
+        m_aStates.top().nBorderState = RTFBorderState::PAGE;
     }
     break;
     case RTF_BRDRT:
@@ -3116,7 +3116,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         }
         lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PrBase_pBdr, nParam, pValue);
-        m_aStates.top().nBorderState = BORDER_PARAGRAPH;
+        m_aStates.top().nBorderState = RTFBorderState::PARAGRAPH;
     }
     break;
     case RTF_CHBRDR:
@@ -3124,7 +3124,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         RTFSprms aAttributes;
         auto pValue = std::make_shared<RTFValue>(aAttributes);
         m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_bdr, pValue);
-        m_aStates.top().nBorderState = BORDER_CHARACTER;
+        m_aStates.top().nBorderState = RTFBorderState::CHARACTER;
     }
     break;
     case RTF_CLMGF:
@@ -6100,7 +6100,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       nInternalState(RTFInternalState::NORMAL),
       nDestinationState(DESTINATION_NORMAL),
       eFieldStatus(RTFFieldStatus::NONE),
-      nBorderState(BORDER_NONE),
+      nBorderState(RTFBorderState::NONE),
       aTableSprms(),
       aTableAttributes(),
       aCharacterSprms(),

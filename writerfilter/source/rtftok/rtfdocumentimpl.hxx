@@ -34,14 +34,14 @@ namespace writerfilter
 {
 namespace rtftok
 {
-enum RTFBorderState
+enum class RTFBorderState
 {
-    BORDER_NONE,
-    BORDER_PARAGRAPH,
-    BORDER_PARAGRAPH_BOX,
-    BORDER_CELL,
-    BORDER_PAGE,
-    BORDER_CHARACTER
+    NONE,
+    PARAGRAPH,
+    PARAGRAPH_BOX,
+    CELL,
+    PAGE,
+    CHARACTER
 };
 
 /// Minimalistic buffer of elements for nested cells.
