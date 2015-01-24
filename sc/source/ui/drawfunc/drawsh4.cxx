@@ -40,8 +40,11 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
     sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-    if ( pViewFrm->HasChildWindow(nId) )
-        pDlg = static_cast<SvxFontWorkDialog*>(pViewFrm->GetChildWindow(nId)->GetWindow());
+    if (pViewFrm->HasChildWindow(nId))
+    {
+        SfxChildWindow* pWnd = pViewFrm->GetChildWindow(nId);
+        pDlg = pWnd ? static_cast<SvxFontWorkDialog*>(pWnd->GetWindow()) : NULL;
+    }
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
