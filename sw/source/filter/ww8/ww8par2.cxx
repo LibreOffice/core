@@ -595,7 +595,7 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
         //case 43:
         case 44:nType = style::NumberingType::NUMBER_UPPER_KO; break;
         default:
-            nType= style::NumberingType::ARABIC;break;
+            nType= style::NumberingType::NUMBER_NONE;break;
         }
         rNum.SetNumberingType( nType );
     }
