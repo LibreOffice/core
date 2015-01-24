@@ -51,7 +51,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
             switch( pVar->GetType() )
             {
             case SbxSTRING:
-                pUnoArgs[i] <<= OUString( pVar->GetOUString() );
+                pUnoArgs[i] <<= pVar->GetOUString();
                 break;
             case SbxCHAR:
                 pUnoArgs[i] <<= (sal_Int16)pVar->GetChar() ;
@@ -183,7 +183,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 if( GetSpzFrmFmts()->Contains( pFmt ) &&
                     0 != (pIMap = pFmt->GetURL().GetMap()) )
                 {
-                    for( sal_uInt16 nPos = pIMap->GetIMapObjectCount(); nPos; )
+                    for( size_t nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
                             bCheckPtr = false;      // misuse as a flag
