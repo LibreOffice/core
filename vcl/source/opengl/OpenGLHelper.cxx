@@ -18,6 +18,7 @@
 #include <boost/scoped_array.hpp>
 #include <vcl/pngwrite.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/svapp.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <vector>
@@ -408,6 +409,11 @@ bool OpenGLHelper::isVCLOpenGLEnabled()
     static bool bSet = false;
     static bool bEnable = false;
     static bool bForceOpenGL = false;
+
+    // If we are a console app, then we don't use OpenGL
+    if ( Application::IsConsoleOnly() )
+        return false;
+
     if (bSet)
     {
         return bForceOpenGL || bEnable;
