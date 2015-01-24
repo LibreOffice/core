@@ -117,7 +117,7 @@ namespace dbaui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;        // notifier for changes in the clipboard
         ImplSVEvent *           m_nAsyncDrop;
-        OAsynchronousLink        m_aSelectContainerEvent;
+        OAsyncronousLink        m_aSelectContainerEvent;
         PreviewMode             m_ePreviewMode;             // the mode of the preview
         ElementType             m_eCurrentType;
         bool                m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date

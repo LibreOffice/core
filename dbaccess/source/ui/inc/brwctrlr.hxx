@@ -96,8 +96,8 @@ namespace dbaui
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    // notifier for changes in the clipboard
 
-        OAsynchronousLink        m_aAsyncGetCellFocus;
-        OAsynchronousLink        m_aAsyncDisplayError;
+        OAsyncronousLink        m_aAsyncGetCellFocus;
+        OAsyncronousLink        m_aAsyncDisplayError;
         ::dbtools::SQLExceptionInfo m_aCurrentError;
 
         OUString                  m_sStateSaveRecord;
@@ -273,7 +273,7 @@ namespace dbaui
             // load the form
             // the default implementation does an direct load or starts a load thread, depending on the multithread capabilities
             // of the data source.
-            // the default implementation also calls LoadFinished after a synchronous load, so be sure to do the same if you override
+            // the default implementation also calls LoadFinished after a syncronous load, so be sure to do the same if you override
             // this metod and don't call the base class' method
 
         virtual void LoadFinished(bool bWasSynch);

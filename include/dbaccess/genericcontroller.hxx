@@ -26,7 +26,7 @@
 #include <map>
 #include <vector>
 
-#include <dbaccess/AsynchronousLink.hxx>
+#include <dbaccess/AsyncronousLink.hxx>
 #include <dbaccess/controllerframe.hxx>
 #include <dbaccess/dbaccessdllapi.h>
 #include <dbaccess/IController.hxx>
@@ -238,8 +238,8 @@ namespace dbaui
         ::osl::Mutex            m_aFeatureMutex;        // locked when features are append to or remove from deque
         StateCache              m_aStateCache;          // save the current status of feature state
         Dispatch                m_arrStatusListener;    // all our listeners where we dispatch status changes
-        OAsynchronousLink        m_aAsyncInvalidateAll;
-        OAsynchronousLink        m_aAsyncCloseTask;      // called when a task should be closed
+        OAsyncronousLink        m_aAsyncInvalidateAll;
+        OAsyncronousLink        m_aAsyncCloseTask;      // called when a task should be closed
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >         m_xUrlTransformer;      // needed sometimes
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;

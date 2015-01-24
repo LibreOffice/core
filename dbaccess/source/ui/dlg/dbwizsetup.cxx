@@ -42,7 +42,7 @@
 #include "dbaccess_helpid.hrc"
 #include "ConnectionPageSetup.hxx"
 #include "UITools.hxx"
-#include <dbaccess/AsynchronousLink.hxx>
+#include <dbaccess/AsyncronousLink.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
@@ -880,7 +880,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             Reference< XDesktop2 >              m_xDesktop;
             Reference< XInteractionHandler2 >   m_xInteractionHandler;
             OUString                     m_sURL;
-            OAsynchronousLink                    m_aAsyncCaller;
+            OAsyncronousLink                    m_aAsyncCaller;
 
         public:
             AsyncLoader( const Reference< XComponentContext >& _rxORB, const OUString& _rURL );

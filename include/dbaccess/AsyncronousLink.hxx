@@ -36,7 +36,7 @@ namespace dbaui
         event while another thread tries to delete this event in the _destructor_ of the
         class).
     */
-    class OAsynchronousLink
+    class OAsyncronousLink
     {
         Link                m_aHandler;
 
@@ -47,10 +47,10 @@ namespace dbaui
 
     public:
         /** constructs the object
-            @param      _rHandler           The link to be called asynchronously
+            @param      _rHandler           The link to be called asyncronously
         */
-        OAsynchronousLink( const Link& _rHandler );
-        virtual ~OAsynchronousLink();
+        OAsyncronousLink( const Link& _rHandler );
+        virtual ~OAsyncronousLink();
 
         bool    IsRunning() const { return m_nEventId != 0; }
 
