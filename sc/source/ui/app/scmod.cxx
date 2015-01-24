@@ -771,12 +771,12 @@ void ScModule::RecentFunctionsChanged()
 
     //! notify all views
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if ( pViewFrm && pViewFrm->HasChildWindow(nFuncListID) )
+    if (pViewFrm && pViewFrm->HasChildWindow(nFuncListID))
     {
-        ScFunctionChildWindow* pWnd = static_cast<ScFunctionChildWindow*>(pViewFrm->GetChildWindow( nFuncListID ));
-
+        ScFunctionChildWindow* pWnd = static_cast<ScFunctionChildWindow*>(pViewFrm->GetChildWindow(nFuncListID));
+        if (!pWnd)
+            return;
         ScFunctionDockWin* pFuncList = static_cast<ScFunctionDockWin*>(pWnd->GetWindow());
-
         pFuncList->InitLRUList();
     }
 }
