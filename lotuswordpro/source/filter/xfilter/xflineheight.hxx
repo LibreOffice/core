@@ -119,7 +119,7 @@ inline void XFLineHeight::SetSpace(double value)
 inline void XFLineHeight::Reset()
 {
     m_eType = enumLHNone;
-    memset(&m_Value, 0, sizeof(m_Value));
+    m_Value.m_nValue = 0;
 }
 
 inline enumLHType XFLineHeight::GetType()
