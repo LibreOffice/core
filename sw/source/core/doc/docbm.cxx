@@ -55,6 +55,7 @@
 #include <edimp.hxx>
 #include <stdio.h>
 #include <tools/datetimeutils.hxx>
+#include <comphelper/anytostring.hxx>
 
 using namespace ::boost;
 using namespace ::sw::mark;
@@ -1137,6 +1138,78 @@ namespace sw { namespace mark
     {
         return (m_aMarkNamesSet.find(rName) != m_aMarkNamesSet.end());
     }
+
+void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("markManager"));
+    if (!m_vBookmarks.empty())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("bookmarks"));
+        for (const_iterator_t it = m_vBookmarks.begin(); it != m_vBookmarks.end(); ++it)
+        {
+            pMark_t pMark = *it;
+            xmlTextWriterStartElement(pWriter, BAD_CAST("bookmark"));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pMark->GetMarkStart().nNode.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startOffset"), BAD_CAST(OString::number(pMark->GetMarkStart().nContent.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endNode"), BAD_CAST(OString::number(pMark->GetMarkEnd().nNode.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endOffset"), BAD_CAST(OString::number(pMark->GetMarkEnd().nContent.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
+            xmlTextWriterEndElement(pWriter);
+        }
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (!m_vFieldmarks.empty())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmarks"));
+        for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
+        {
+            pMark_t pMark = *it;
+            xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmark"));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pMark->GetMarkStart().nNode.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startOffset"), BAD_CAST(OString::number(pMark->GetMarkStart().nContent.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endNode"), BAD_CAST(OString::number(pMark->GetMarkEnd().nNode.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endOffset"), BAD_CAST(OString::number(pMark->GetMarkEnd().nContent.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
+            if (sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark.get()))
+            {
+                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
+                if (pParameters)
+                {
+                    xmlTextWriterStartElement(pWriter, BAD_CAST("parameters"));
+                    for (sw::mark::IFieldmark::parameter_map_t::iterator parameter = pParameters->begin(); parameter != pParameters->end(); ++parameter)
+                    {
+                        xmlTextWriterStartElement(pWriter, BAD_CAST("parameter"));
+                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(parameter->first.toUtf8().getStr()));
+                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(comphelper::anyToString(parameter->second).toUtf8().getStr()));
+                        xmlTextWriterEndElement(pWriter);
+                    }
+                    xmlTextWriterEndElement(pWriter);
+                }
+            }
+            xmlTextWriterEndElement(pWriter);
+        }
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (!m_vAnnotationMarks.empty())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("annotationmarks"));
+        for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
+        {
+            pMark_t pMark = *it;
+            xmlTextWriterStartElement(pWriter, BAD_CAST("annotationmark"));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pMark->GetMarkStart().nNode.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startOffset"), BAD_CAST(OString::number(pMark->GetMarkStart().nContent.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endNode"), BAD_CAST(OString::number(pMark->GetMarkEnd().nNode.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endOffset"), BAD_CAST(OString::number(pMark->GetMarkEnd().nContent.GetIndex()).getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
+            xmlTextWriterEndElement(pWriter);
+        }
+        xmlTextWriterEndElement(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+}
 
 }} // namespace ::sw::mark
 

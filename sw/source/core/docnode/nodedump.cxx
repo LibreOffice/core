@@ -24,7 +24,6 @@
 #include <tools/datetimeutils.hxx>
 
 #include <libxml/xmlwriter.h>
-#include <comphelper/anytostring.hxx>
 
 using namespace com::sun::star;
 
@@ -128,90 +127,6 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w ) const
 
     writer.endElement();
 }
-
-namespace sw {
-namespace mark {
-void MarkManager::dumpAsXml( xmlTextWriterPtr w ) const
-{
-    WriterHelper writer(w);
-    writer.startElement("markManager");
-    if (!m_vBookmarks.empty())
-    {
-        writer.startElement("bookmarks");
-        for (const_iterator_t it = m_vBookmarks.begin(); it != m_vBookmarks.end(); ++it)
-        {
-            pMark_t pMark = *it;
-            writer.startElement("bookmark");
-            writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
-            writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
-            writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
-            writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
-            OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
-            writer.endElement();
-        }
-        writer.endElement();
-    }
-
-    if (!m_vFieldmarks.empty())
-    {
-        writer.startElement("fieldmarks");
-        for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
-        {
-            pMark_t pMark = *it;
-            writer.startElement("fieldmark");
-            writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
-            writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
-            writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
-            writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
-            OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
-
-            if (sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark.get()))
-            {
-                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
-                if (pParameters)
-                {
-                    writer.startElement("parameters");
-                    for (sw::mark::IFieldmark::parameter_map_t::iterator parameter = pParameters->begin(); parameter != pParameters->end(); ++parameter)
-                    {
-                        writer.startElement("parameter");
-                        OString aName = OUStringToOString(parameter->first, RTL_TEXTENCODING_UTF8);
-                        writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-                        OString aValue = OUStringToOString(comphelper::anyToString(parameter->second), RTL_TEXTENCODING_UTF8);
-                        writer.writeFormatAttribute("value", "%s", BAD_CAST(aValue.getStr()));
-                        writer.endElement();
-                    }
-                    writer.endElement();
-                }
-            }
-
-            writer.endElement();
-        }
-        writer.endElement();
-    }
-
-    if (!m_vAnnotationMarks.empty())
-    {
-        writer.startElement("annotationmarks");
-        for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
-        {
-            pMark_t pMark = *it;
-            writer.startElement("annotationmark");
-            writer.writeFormatAttribute("startNode", TMP_FORMAT, pMark->GetMarkStart().nNode.GetIndex());
-            writer.writeFormatAttribute("startOffset", TMP_FORMAT_I32, pMark->GetMarkStart().nContent.GetIndex());
-            writer.writeFormatAttribute("endNode", TMP_FORMAT, pMark->GetMarkEnd().nNode.GetIndex());
-            writer.writeFormatAttribute("endOffset", TMP_FORMAT_I32, pMark->GetMarkEnd().nContent.GetIndex());
-            OString txt8 = OUStringToOString(pMark->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST( txt8.getStr()));
-            writer.endElement();
-        }
-        writer.endElement();
-    }
-    writer.endElement();
-}
-} // namespace mark
-} // namespace sw
 
 void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
 {
