@@ -113,27 +113,27 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
             switch (nContextID)
             {
-                case CTF_SC_ALLPADDING                  : pAllPaddingProperty = &*property; break;
-                case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = &*property; break;
-                case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = &*property; break;
-                case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = &*property; break;
-                case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = &*property; break;
-                case CTF_SC_ALLBORDER                   : pAllBorderProperty = &*property; break;
-                case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = &*property; break;
-                case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = &*property; break;
-                case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = &*property; break;
-                case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = &*property; break;
-                case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = &*property; break;
-                case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = &*property; break;
-                case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = &*property; break;
-                case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = &*property; break;
-                case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = &*property; break;
-                case CTF_SC_DIAGONALTLBR                : pDiagBorders[XML_LINE_TLBR] = &*property; break;
-                case CTF_SC_DIAGONALBLTR                : pDiagBorders[XML_LINE_BLTR] = &*property; break;
-                case CTF_SC_DIAGONALTLBRWIDTH           : pOldDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
-                case CTF_SC_DIAGONALTLBRWIDTHS          : pDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
-                case CTF_SC_DIAGONALBLTRWIDTH           : pOldDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
-                case CTF_SC_DIAGONALBLTRWIDTHS          : pDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
+                case CTF_SC_ALLPADDING                  : pAllPaddingProperty = property; break;
+                case CTF_SC_LEFTPADDING                 : pPadding[XML_LINE_LEFT] = property; break;
+                case CTF_SC_RIGHTPADDING                : pPadding[XML_LINE_RIGHT] = property; break;
+                case CTF_SC_TOPPADDING                  : pPadding[XML_LINE_TOP] = property; break;
+                case CTF_SC_BOTTOMPADDING               : pPadding[XML_LINE_BOTTOM] = property; break;
+                case CTF_SC_ALLBORDER                   : pAllBorderProperty = property; break;
+                case CTF_SC_LEFTBORDER                  : pBorders[XML_LINE_LEFT] = property; break;
+                case CTF_SC_RIGHTBORDER                 : pBorders[XML_LINE_RIGHT] = property; break;
+                case CTF_SC_TOPBORDER                   : pBorders[XML_LINE_TOP] = property; break;
+                case CTF_SC_BOTTOMBORDER                : pBorders[XML_LINE_BOTTOM] = property; break;
+                case CTF_SC_ALLBORDERWIDTH              : pAllBorderWidthProperty = property; break;
+                case CTF_SC_LEFTBORDERWIDTH             : pBorderWidths[XML_LINE_LEFT] = property; break;
+                case CTF_SC_RIGHTBORDERWIDTH            : pBorderWidths[XML_LINE_RIGHT] = property; break;
+                case CTF_SC_TOPBORDERWIDTH              : pBorderWidths[XML_LINE_TOP] = property; break;
+                case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = property; break;
+                case CTF_SC_DIAGONALTLBR                : pDiagBorders[XML_LINE_TLBR] = property; break;
+                case CTF_SC_DIAGONALBLTR                : pDiagBorders[XML_LINE_BLTR] = property; break;
+                case CTF_SC_DIAGONALTLBRWIDTH           : pOldDiagBorderWidths[XML_LINE_TLBR] = property; break;
+                case CTF_SC_DIAGONALTLBRWIDTHS          : pDiagBorderWidths[XML_LINE_TLBR] = property; break;
+                case CTF_SC_DIAGONALBLTRWIDTH           : pOldDiagBorderWidths[XML_LINE_BLTR] = property; break;
+                case CTF_SC_DIAGONALBLTRWIDTHS          : pDiagBorderWidths[XML_LINE_BLTR] = property; break;
             }
         }
     }
