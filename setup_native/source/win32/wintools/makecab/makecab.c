@@ -296,7 +296,6 @@ int main(int argc, char *argv[])
     DDFSRCFILE *srcList = NULL;
     DDFSRCFILE *srcListCurr = NULL;
     HFCI fci = NULL;
-    ERF erf;
     char * cmd = NULL;
     unsigned int cmdSize = 0;
 
