@@ -1281,7 +1281,7 @@ RTLFUNC(Mid)
                 OUString aResultStr;
                 if (nStartPos > aArgStr.getLength())
                 {
-                    aResultStr = "";
+                    // do nothing
                 }
                 else if(nArgCount == 2)
                 {
