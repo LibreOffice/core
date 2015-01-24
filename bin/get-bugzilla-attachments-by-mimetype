@@ -325,6 +325,7 @@ rss_bugzillas = {
     # does not add it back immediately .-)
     # 'novell': 'https://bugzilla.novell.com/buglist.cgi',
     'ooo': 'https://issues.apache.org/ooo/buglist.cgi',
+    'tdf': 'http://bugs.documentfoundation.org/buglist.cgi',
 }
 
 redhatrpc = 'https://bugzilla.redhat.com/xmlrpc.cgi'
