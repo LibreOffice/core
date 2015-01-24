@@ -30,9 +30,8 @@ sal_uInt16 ScIMapChildWindowId()
 SvxIMapDlg* ScGetIMapDlg()
 {
     //! pass view frame here and in SVXIMAPDLG()
-
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if( pViewFrm && pViewFrm->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
+    if (pViewFrm && pViewFrm->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
         return SVXIMAPDLG();
     else
         return NULL;
