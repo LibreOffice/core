@@ -1329,8 +1329,11 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
             SdNavigatorWin* pNavWin = NULL;
             sal_uInt16          nId = SID_NAVIGATOR;
 
-            if( mpFrame->HasChildWindow( nId ) )
-                pNavWin = static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( nId )->GetContextWindow( SD_MOD() ) );
+            if (mpFrame->HasChildWindow(nId))
+            {
+                SfxChildWindow* pWnd = mpFrame->GetChildWindow(nId);
+                pNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : NULL;
+            }
 
             if( pNavWin && ( pNavWin == mpParent ) )
             {
