@@ -1228,8 +1228,8 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
         return;
     for( size_t i = 0; i <= rOld.Count(); ++i )
     {
-        sal_uInt64 nNewPos;
-        sal_uInt64 nOldPos;
+        long nNewPos;
+        long nOldPos;
         if( i == rOld.Count() )
         {
             nOldPos = rParm.rOld.GetRight() - rParm.rOld.GetLeft();
@@ -1240,8 +1240,8 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
             nOldPos = rOld[i] - rParm.rOld.GetLeft();
             nNewPos = rNew[i] - rParm.rNew.GetLeft();
         }
-        nNewPos = lcl_MulDiv64<sal_uInt64>(nNewPos, rParm.nNewWish, nNewWidth);
-        nOldPos = lcl_MulDiv64<sal_uInt64>(nOldPos, rParm.nOldWish, nOldWidth);
+        nNewPos = lcl_MulDiv64<long>(nNewPos, rParm.nNewWish, nNewWidth);
+        nOldPos = lcl_MulDiv64<long>(nOldPos, rParm.nOldWish, nOldWidth);
         if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )
         {
             ColChange aChg( (sal_uInt16)nOldPos, (sal_uInt16)nNewPos );
