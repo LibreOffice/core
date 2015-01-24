@@ -301,21 +301,21 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                     }
                 }
 
-                if( bCont )
+                SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(
+                                         SvxBmpMaskChildWindow::GetChildWindowId());
+                SvxBmpMask* pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+                assert(pBmpMask);
+                if (bCont && pBmpMask)
                 {
                     const Graphic&  rOldGraphic = pNewObj->GetGraphic();
-                    const Graphic   aNewGraphic( static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow(
-                                                 SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
-                                                 Mask( rOldGraphic ) );
+                    const Graphic   aNewGraphic(pBmpMask->Mask(rOldGraphic));
 
                     if( aNewGraphic != rOldGraphic )
                     {
                         SdrPageView* pPV = mpDrawView->GetSdrPageView();
 
                         pNewObj->SetEmptyPresObj( false );
-                        pNewObj->SetGraphic( static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow(
-                                             SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
-                                             Mask( pNewObj->GetGraphic() ) );
+                        pNewObj->SetGraphic(pBmpMask->Mask(pNewObj->GetGraphic()));
 
                         OUString aStr( mpDrawView->GetDescriptionOfMarkedObjects() );
                         aStr += " " + SD_RESSTR(STR_EYEDROPPER);

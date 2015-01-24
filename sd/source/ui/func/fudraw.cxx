@@ -523,7 +523,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                  mpViewShell->GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
         {
             // pipette mode
-            SfxChildWindow* pWnd =  mpViewShell->GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+            SfxChildWindow* pWnd = mpViewShell->GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
             SvxBmpMask* pMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
             if (pMask && pMask->IsEyedropping())
             {
