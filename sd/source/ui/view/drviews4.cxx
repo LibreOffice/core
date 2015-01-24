@@ -369,7 +369,14 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
         ShowMousePosInfo(aRect, pWin);
 
-        if ( mbPipette && GetViewFrame()->HasChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() ) )
+        SvxBmpMask* pBmpMask = NULL;
+        if (mbPipette && GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
+        {
+            SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId());
+            pBmpMask = pWnd ? static_cast<SvxBmpMask*>(pWnd->GetWindow()) : NULL;
+        }
+
+        if (pBmpMask)
         {
             const long      nStartX = maMousePos.X() - PIPETTE_RANGE;
             const long      nEndX = maMousePos.X() + PIPETTE_RANGE;
@@ -392,8 +399,7 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                 }
             }
 
-            static_cast<SvxBmpMask*>( GetViewFrame()->GetChildWindow( SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
-                SetColor( Color( (sal_uInt8) ( nRed / fDiv + .5 ),
+            pBmpMask->SetColor( Color( (sal_uInt8) ( nRed / fDiv + .5 ),
                                  (sal_uInt8) ( nGreen / fDiv + .5 ),
                                  (sal_uInt8) ( nBlue / fDiv + .5 ) ) );
         }
