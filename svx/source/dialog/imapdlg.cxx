@@ -109,9 +109,9 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
 void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap,
                                            const TargetList* pTargetList, void* pEditingObj )
 {
-    if ( SfxViewFrame::Current() &&
-         SfxViewFrame::Current()->HasChildWindow( SvxIMapDlgChildWindow::GetChildWindowId() ) )
-        SVXIMAPDLG()->UpdateLink( rGraphic, pImageMap, pTargetList, pEditingObj );
+    SvxIMapDlg* pDlg = SVXIMAPDLG();
+    if (pDlg)
+        pDlg->UpdateLink(rGraphic, pImageMap, pTargetList, pEditingObj);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeStatusBar(vcl::Window *pParent, VclBuilder::stringmap &)

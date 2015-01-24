@@ -155,17 +155,13 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
-
-/*************************************************************************
-|*
-|* Defines
-|*
-\************************************************************************/
-
-#define SVXIMAPDLG() ( static_cast<SvxIMapDlg*>( SfxViewFrame::Current()->GetChildWindow(         \
-                        SvxIMapDlgChildWindow::GetChildWindowId() )->   \
-                        GetWindow() ) )
-
+inline SvxIMapDlg* SVXIMAPDLG()
+{
+    SfxChildWindow* pWnd = NULL;
+    if (SfxViewFrame::Current() && SfxViewFrame::Current()->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
+        pWnd = SfxViewFrame::Current()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : NULL;
+}
 
 #endif // INCLUDED_SVX_IMAPDLG_HXX
 
