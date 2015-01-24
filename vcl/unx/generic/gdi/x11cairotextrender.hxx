@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_UNX_GENERIC_GDI_X11CAIROTEXTRENDER_HXX value
 
 #include "cairotextrender.hxx"
-#include "generic/glyphcache.hxx"
 
 #include "unx/saldata.hxx"
 #include "unx/saldisp.hxx"
@@ -41,7 +40,7 @@ public:
     X11CairoTextRender(bool bPrinter, X11SalGraphics& rParent);
 
     virtual GlyphCache& getPlatformGlyphCache() SAL_OVERRIDE;
-    virtual cairo_surface_t* getCairoSurface( const ServerFontLayout &rLayout ) SAL_OVERRIDE;
+    virtual cairo_surface_t* getCairoSurface() SAL_OVERRIDE;
     virtual void getSurfaceOffset(double& nDX, double& nDY) SAL_OVERRIDE;
     virtual void clipRegion(cairo_t* cr) SAL_OVERRIDE;
     virtual void drawSurface(cairo_t* cr) SAL_OVERRIDE;

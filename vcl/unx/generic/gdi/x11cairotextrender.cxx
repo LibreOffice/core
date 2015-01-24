@@ -53,8 +53,7 @@ GlyphCache& X11CairoTextRender::getPlatformGlyphCache()
     return X11GlyphCache::GetInstance();
 }
 
-
-cairo_surface_t* X11CairoTextRender::getCairoSurface( const ServerFontLayout& )
+cairo_surface_t* X11CairoTextRender::getCairoSurface()
 {
     // find a XRenderPictFormat compatible with the Drawable
     XRenderPictFormat* pVisualFormat = mrParent.GetXRenderFormat();
