@@ -868,13 +868,13 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
             {
                 if ( aType == GRAPHIC_BITMAP )
                 {
-                    GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
+                    (void)GraphicConverter::Export( aStream, rGraphic, CVT_PNG );
                     sMediaType = "image/png";
                     pExtension = ".png";
                 }
                 else
                 {
-                    GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
+                    (void)GraphicConverter::Export( aStream, rGraphic, CVT_EMF );
                     sMediaType = "image/x-emf";
                     pExtension = ".emf";
                 }
