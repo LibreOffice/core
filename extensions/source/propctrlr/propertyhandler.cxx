@@ -270,7 +270,7 @@ namespace pcr
             FindPropertyByHandle( _nPropId )
         );
         if ( pFound != m_aSupportedProperties.end() )
-            return &(*pFound);
+            return pFound;
         return NULL;
     }
 
