@@ -525,7 +525,7 @@ sal_uInt16 _PostItFld::GetPageNo(
     //Probably only once. For the page number we don't select a random one,
     //but the PostIt's first occurrence in the selected area.
     rVirtPgNo = 0;
-    sal_uInt16 nPos = GetCntnt();
+    const sal_Int32 nPos = GetCntnt();
     SwIterator<SwTxtFrm,SwTxtNode> aIter( GetTxtFld()->GetTxtNode() );
     for( SwTxtFrm* pFrm = aIter.First(); pFrm;  pFrm = aIter.Next() )
     {
@@ -738,7 +738,8 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
     sal_Int16 nPostItMode = (sal_Int16) rOptions.getIntValue( "PrintAnnotationMode", 0 );
     OSL_ENSURE(nPostItMode == POSTITS_NONE || rData.HasPostItData(),
             "print post-its without post-it data?" );
-    const sal_uInt16 nPostItCount = rData.HasPostItData() ? rData.m_pPostItFields->size() : 0;
+    const _SetGetExpFlds::size_type nPostItCount =
+        rData.HasPostItData() ? rData.m_pPostItFields->size() : 0;
     if (nPostItMode != POSTITS_NONE && nPostItCount > 0)
     {
         SET_CURR_SHELL( rData.m_pPostItShell.get() );
@@ -765,7 +766,7 @@ void SwDoc::UpdatePagesForPrintingWithPostItData(
         // already get them in the correct order
         sal_uInt16 nVirtPg = 0, nLineNo = 0, nLastPageNum = 0, nPhyPageNum = 0;
         bool bIsFirstPostIt = true;
-        for (sal_uInt16 i = 0; i < nPostItCount; ++i)
+        for (_SetGetExpFlds::size_type i = 0; i < nPostItCount; ++i)
         {
             _PostItFld& rPostIt = static_cast<_PostItFld&>(*(*rData.m_pPostItFields)[ i ]);
             nLastPageNum = nPhyPageNum;
@@ -895,8 +896,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         return;
 
     const SwPageFrm *pStPage  = dynamic_cast<const SwPageFrm*>( rLayout.Lower() );
-    sal_Int32 i = 0;
-    for ( i = 1; pStPage && i < nDocPageCount; ++i )
+    for ( sal_Int32 i = 1; pStPage && i < nDocPageCount; ++i )
         pStPage = static_cast<const SwPageFrm*>(pStPage->GetNext());
     if ( !pStPage )          // Then it was that
         return;
@@ -936,7 +936,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // now fill the vector for calculating the page pairs with the start frames
     // from the above obtained vector
     std::vector< const SwPageFrm * > aVec;
-    for ( i = 0; i < sal_Int32(aPagesToPrint.size()); ++i)
+    for ( std::vector< sal_Int32 >::size_type i = 0; i < aPagesToPrint.size(); ++i)
     {
         const sal_Int32 nPage = aPagesToPrint[i];
         const SwPageFrm *pFrm = validStartFrms[ nPage ];
@@ -956,9 +956,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     }
 
     // make sure that all pages are in correct order
-    sal_uInt16 nSPg = 0;
-    sal_uInt32 nEPg = aVec.size();
-    sal_uInt16 nStep = 1;
+    std::vector< const SwPageFrm * >::size_type nSPg = 0;
+    std::vector< const SwPageFrm * >::size_type nEPg = aVec.size();
+    sal_Int32 nStep = 1;
     if ( 0 == (nEPg & 1 ))      // there are no uneven ones!
         --nEPg;
 
@@ -973,7 +973,7 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     // the number of 'virtual' pages to be printed
     sal_Int32 nCntPage = (( nEPg - nSPg ) / ( 2 * nStep )) + 1;
 
-    for ( sal_uInt16 nPrintCount = 0; nSPg < nEPg &&
+    for ( sal_Int32 nPrintCount = 0; nSPg < nEPg &&
             nPrintCount < nCntPage; ++nPrintCount )
     {
         pStPage = aVec[ nSPg ];
@@ -1196,20 +1196,19 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
     if( pExtDoc && !rOutNds.empty() )
     {
-        sal_uInt16 i;
         ::StartProgress( STR_STATSTR_SUMMARY, 0, rOutNds.size(), GetDocShell() );
         SwNodeIndex aEndOfDoc( pExtDoc->GetNodes().GetEndOfContent(), -1 );
-        for( i = 0; i < rOutNds.size(); ++i )
+        for( SwOutlineNodes::size_type i = 0; i < rOutNds.size(); ++i )
         {
-            ::SetProgressState( i, GetDocShell() );
+            ::SetProgressState( static_cast<long>(i), GetDocShell() );
             const sal_uLong nIndex = rOutNds[ i ]->GetIndex();
 
             const int nLvl = GetNodes()[ nIndex ]->GetTxtNode()->GetAttrOutlineLevel()-1;
             if( nLvl > nLevel )
                 continue;
-            sal_uInt16 nEndOfs = 1;
+            long nEndOfs = 1;
             sal_uInt8 nWish = nPara;
-            sal_uLong nNextOutNd = i + 1 < (sal_uInt16)rOutNds.size() ?
+            sal_uLong nNextOutNd = i + 1 < rOutNds.size() ?
                 rOutNds[ i + 1 ]->GetIndex() : GetNodes().Count();
             bool bKeep = false;
             while( ( nWish || bKeep ) && nIndex + nEndOfs < nNextOutNd &&
@@ -1226,7 +1225,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bIm
             GetNodes()._Copy( aRange, aEndOfDoc );
         }
         const SwTxtFmtColls *pColl = pExtDoc->GetTxtFmtColls();
-        for( i = 0; i < pColl->size(); ++i )
+        for( SwTxtFmtColls::size_type i = 0; i < pColl->size(); ++i )
             (*pColl)[ i ]->ResetFmtAttr( RES_PAGEDESC, RES_BREAK );
         SwNodeIndex aIndx( pExtDoc->GetNodes().GetEndOfExtras() );
         ++aEndOfDoc;
@@ -1351,9 +1350,8 @@ bool SwDoc::RemoveInvisibleContent()
         // Delete/empty all hidden areas
         SwSectionFmts aSectFmts;
         SwSectionFmts& rSectFmts = GetSections();
-        sal_uInt16 n;
 
-        for( n = rSectFmts.size(); n; )
+        for( SwSectionFmts::size_type n = rSectFmts.size(); n; )
         {
             SwSectionFmt* pSectFmt = rSectFmts[ --n ];
             // don't add sections in Undo/Redo
@@ -1380,11 +1378,13 @@ bool SwDoc::RemoveInvisibleContent()
                 SwSectionData aSectionData( *pSect );
                 aSectionData.SetCondition( OUString() );
                 aSectionData.SetHidden( false );
-                UpdateSection( n, aSectionData );
+                UpdateSection( static_cast<sal_uInt16>(n), aSectionData );
             }
         }
 
-        if( 0 != ( n = aSectFmts.size() ))
+        SwSectionFmts::size_type n = aSectFmts.size();
+
+        if( 0 != n )
         {
             while( n )
             {
@@ -1460,9 +1460,8 @@ bool SwDoc::HasInvisibleContent() const
     if( ! bRet )
     {
         const SwSectionFmts& rSectFmts = GetSections();
-        sal_uInt16 n;
 
-        for( n = rSectFmts.size(); !bRet && (n > 0); )
+        for( SwSectionFmts::size_type n = rSectFmts.size(); !bRet && (n > 0); )
         {
             SwSectionFmt* pSectFmt = rSectFmts[ --n ];
             // don't add sections in Undo/Redo
@@ -1496,9 +1495,9 @@ bool SwDoc::ConvertFieldsToText()
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
 
     const SwFldTypes* pMyFldTypes = getIDocumentFieldsAccess().GetFldTypes();
-    sal_uInt16 nCount = pMyFldTypes->size();
+    const SwFldTypes::size_type nCount = pMyFldTypes->size();
     //go backward, field types are removed
-    for(sal_uInt16 nType = nCount;  nType > 0;  --nType)
+    for(SwFldTypes::size_type nType = nCount; nType > 0; --nType)
     {
         const SwFieldType *pCurType = (*pMyFldTypes)[nType - 1];
 
@@ -1702,7 +1701,7 @@ SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, bool bTblCrsr )
 
 void SwDoc::ChkCondColls()
 {
-     for (sal_uInt16 n = 0; n < mpTxtFmtCollTbl->size(); n++)
+     for (SwTxtFmtColls::size_type n = 0; n < mpTxtFmtCollTbl->size(); ++n)
      {
         SwTxtFmtColl *pColl = (*mpTxtFmtCollTbl)[n];
         if (RES_CONDTXTFMTCOLL == pColl->Which())
