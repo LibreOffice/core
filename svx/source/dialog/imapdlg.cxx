@@ -109,7 +109,7 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
 void SvxIMapDlgChildWindow::UpdateIMapDlg( const Graphic& rGraphic, const ImageMap* pImageMap,
                                            const TargetList* pTargetList, void* pEditingObj )
 {
-    SvxIMapDlg* pDlg = SVXIMAPDLG();
+    SvxIMapDlg* pDlg = GetIMapDlg();
     if (pDlg)
         pDlg->UpdateLink(rGraphic, pImageMap, pTargetList, pEditingObj);
 }
@@ -771,6 +771,14 @@ IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl)
     m_pTbxIMapDlg1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
 
     return 0L;
+}
+
+SvxIMapDlg* GetIMapDlg()
+{
+    SfxChildWindow* pWnd = NULL;
+    if (SfxViewFrame::Current() && SfxViewFrame::Current()->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
+        pWnd = SfxViewFrame::Current()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+    return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : NULL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

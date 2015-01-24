@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <svx/imapdlg.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
 #include <svx/gallery.hxx>
@@ -106,7 +107,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 
             if ( pThisFrame->HasChildWindow( nId ) )
             {
-                SvxIMapDlg* pDlg = ScGetIMapDlg();
+                SvxIMapDlg* pDlg = GetIMapDlg();
                 if ( pDlg )
                 {
                     SdrView* pDrView = GetSdrView();
@@ -131,7 +132,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
             if ( pMark )
             {
                 SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
-                SvxIMapDlg* pDlg = ScGetIMapDlg();
+                SvxIMapDlg* pDlg = GetIMapDlg();
 
                 if ( ScIMapDlgGetObj(pDlg) == (void*) pSdrObj )
                 {
@@ -192,7 +193,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                     {
                         const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
-                            if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
+                            if ( ScIMapDlgGetObj(GetIMapDlg()) ==
                                         (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
                                 bDisable = false;
                     }

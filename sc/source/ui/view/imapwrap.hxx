@@ -28,8 +28,6 @@ class Graphic;
 class ImageMap;
 class SvxIMapDlg;
 
-SvxIMapDlg * ScGetIMapDlg();
-
 sal_uInt16 ScIMapChildWindowId();
 
 ImageMap const & ScIMapDlgGetMap(SvxIMapDlg * pDlg);

@@ -155,13 +155,7 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 };
 
-inline SvxIMapDlg* SVXIMAPDLG()
-{
-    SfxChildWindow* pWnd = NULL;
-    if (SfxViewFrame::Current() && SfxViewFrame::Current()->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
-        pWnd = SfxViewFrame::Current()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
-    return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : NULL;
-}
+SVX_DLLPUBLIC SvxIMapDlg* GetIMapDlg();
 
 #endif // INCLUDED_SVX_IMAPDLG_HXX
 

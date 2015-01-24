@@ -27,16 +27,6 @@ sal_uInt16 ScIMapChildWindowId()
     return SvxIMapDlgChildWindow::GetChildWindowId();
 }
 
-SvxIMapDlg* ScGetIMapDlg()
-{
-    //! pass view frame here and in SVXIMAPDLG()
-    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-    if (pViewFrm && pViewFrm->HasChildWindow(SvxIMapDlgChildWindow::GetChildWindowId()))
-        return SVXIMAPDLG();
-    else
-        return NULL;
-}
-
 void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
                     const TargetList* pTargetList, void* pEditingObj )
 {
