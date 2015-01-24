@@ -624,16 +624,15 @@ void Compare::CountDifference( const CompareData& rData, sal_uLong* pCounts )
 void Compare::SetDiscard( const CompareData& rData,
                             sal_Char* pDiscard, sal_uLong* pCounts )
 {
-    sal_uLong nLen = rData.GetLineCount();
+    const sal_uLong nLen = rData.GetLineCount();
 
     // calculate Max with respect to the line count
-    sal_uInt16 nMax = 5;
-    sal_uLong n;
+    sal_uLong nMax = 5;
 
-    for( n = nLen / 64; ( n = n >> 2 ) > 0; )
+    for( sal_uLong n = nLen / 64; ( n = n >> 2 ) > 0; )
         nMax <<= 1;
 
-    for( n = 0; n < nLen; ++n )
+    for( sal_uLong n = 0; n < nLen; ++n )
     {
         sal_uLong nIdx = rData.GetIndex( n );
         if( nIdx )
@@ -2077,7 +2076,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
         const SwRedlineTbl& rSrcRedlTbl = rSrcDoc.getIDocumentRedlineAccess().GetRedlineTbl();
         sal_uLong nEndOfExtra = rSrcDoc.GetNodes().GetEndOfExtras().GetIndex();
         sal_uLong nMyEndOfExtra = GetNodes().GetEndOfExtras().GetIndex();
-        for( sal_uInt16 n = 0; n < rSrcRedlTbl.size(); ++n )
+        for( SwRedlineTbl::size_type n = 0; n < rSrcRedlTbl.size(); ++n )
         {
             const SwRangeRedline* pRedl = rSrcRedlTbl[ n ];
             sal_uLong nNd = pRedl->GetPoint()->nNode.GetIndex();

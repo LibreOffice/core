@@ -130,8 +130,8 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const OUString& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {
     bool bRet = false;
-    sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
-    if( (sal_uInt16) -1 != nIdx )
+    const sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
+    if( USHRT_MAX != nIdx )
     {
         bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );

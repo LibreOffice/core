@@ -1369,7 +1369,7 @@ void _DelBookmarks(
     // which holds all position information as offset.
     // Assignement happens after moving.
     SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-    for(sal_uInt16 nCnt = 0; nCnt < rTbl.size(); ++nCnt )
+    for(SwRedlineTbl::size_type nCnt = 0; nCnt < rTbl.size(); ++nCnt )
     {
         // Is at position?
         SwRangeRedline* pRedl = rTbl[ nCnt ];

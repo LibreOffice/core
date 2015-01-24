@@ -229,6 +229,7 @@ public:
     using _SwRedlineTbl::begin;
     using _SwRedlineTbl::end;
     using _SwRedlineTbl::size;
+    using _SwRedlineTbl::size_type;
     using _SwRedlineTbl::operator[];
     using _SwRedlineTbl::empty;
 };
