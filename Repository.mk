@@ -801,9 +801,9 @@ endif
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
 	instsetoo_native_setup_ure \
-	jvmfwk_jvmfwk3_ini \
 	ure_install \
 	$(if $(ENABLE_JAVA),\
+		jvmfwk_jvmfwk3_ini \
 		jvmfwk_javavendors \
 		jvmfwk_jreproperties \
 		$(if $(filter MACOSX,$(OS)),bridges_jnilib_java_uno) \
