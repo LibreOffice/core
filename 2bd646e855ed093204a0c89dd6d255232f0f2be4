@@ -16,6 +16,24 @@
       "revId": "2bd646e855ed093204a0c89dd6d255232f0f2be4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a43c5e1_80511865",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-01-24T10:55:15Z",
+      "side": 1,
+      "message": "It\u0027s not that your comment doesn\u0027t make sense or is unclear, it\u0027s simply me being foggy. ;-)\n\nI changed the code to OStringBuffer/sal_Char, but sal_Char produces an assertion on rtl::isAsciiAlphanumeric(c) for \u0027special characters\u0027 .\n\nI now use OStringBuffer/sal_Unicode, which IMHO gives the best looking code.\n\nTested with normal and special characters. The hexagonal values are lower case, but that cannot be a problem; URLs are not case sensitive as far as I know.",
+      "parentUuid": "5a43c5e1_e036dcb3",
+      "revId": "2bd646e855ed093204a0c89dd6d255232f0f2be4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
