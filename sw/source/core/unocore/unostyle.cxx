@@ -3723,8 +3723,6 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
             }
 
             sal_uInt16 nRes = 0;
-            bool bLeft = false;
-            bool bFirst = false;
             const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
 
             switch(pEntry->nWID)
@@ -3853,6 +3851,8 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 {
                     //UUUU cleanups for readability (undos removed, rearranged)
                     bool bHeader(false);
+                    bool bLeft(false);
+                    bool bFirst(false);
 
                     switch(pEntry->nWID)
                     {
