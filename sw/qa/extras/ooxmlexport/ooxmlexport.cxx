@@ -583,6 +583,13 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist35, "cjklist35.docx")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOOxmlOutlineNumNone, "outline-num-none.odt")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_NONE, numFormat);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
     // This was "Outline", i.e. <w:numId> was not imported from the Heading 2 paragraph style.
