@@ -88,7 +88,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/app/AppTitleWindow \
     dbaccess/source/ui/app/AppView \
     dbaccess/source/ui/app/subcomponentmanager \
-    dbaccess/source/ui/browser/AsyncronousLink \
+    dbaccess/source/ui/browser/AsynchronousLink \
     dbaccess/source/ui/browser/brwctrlr \
     dbaccess/source/ui/browser/brwview \
     dbaccess/source/ui/browser/dataview \
