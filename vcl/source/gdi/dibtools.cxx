@@ -758,7 +758,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, Bitmap* pBmpAlpha, sal_uLon
             SvMemoryStream* pMemStm = NULL;
             sal_uInt8* pData = NULL;
 
-            if(nBitCount <= 8)
+            if (aHeader.nBitCount <= 8)
             {
                 if(aHeader.nColsUsed)
                 {
