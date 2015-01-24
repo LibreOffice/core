@@ -585,6 +585,31 @@ DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist35, "cjklist35.docx")
     CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_LOWER_ZH, numFormat);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testOoxmlCjklist44, "cjklist44.docx")
+{
+    sal_Int16   numFormat;
+    CPPUNIT_ASSERT(CjkNumberedListTestHelper(numFormat));
+    CPPUNIT_ASSERT_EQUAL(style::NumberingType::NUMBER_HANGUL_KO, numFormat);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHTW, "numlist-zhtw.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","taiwaneseCountingThousand" );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testOoxmlNumListZHCN, "numlist-zhcn.odt")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:numFmt","val","chineseCountingThousand" );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testNumParentStyle, "num-parent-style.docx")
 {
     // This was "Outline", i.e. <w:numId> was not imported from the Heading 2 paragraph style.

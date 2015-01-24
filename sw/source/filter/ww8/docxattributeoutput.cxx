@@ -5576,7 +5576,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
                 const LanguageType eLang = rLang.GetLanguage();
 
                 if (LANGUAGE_CHINESE_SIMPLIFIED == eLang) {
-                    aType="taiwaneseCountingThousand";
+                    aType="chineseCountingThousand";
                 }
             }
         break;
