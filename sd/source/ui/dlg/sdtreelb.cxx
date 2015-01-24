@@ -1262,9 +1262,9 @@ void SdPageObjsTLB::OnDragFinished( sal_uInt8 )
 {
     if( mpFrame->HasChildWindow( SID_NAVIGATOR ) )
     {
-        SdNavigatorWin* pNewNavWin = static_cast<SdNavigatorWin*>( mpFrame->GetChildWindow( SID_NAVIGATOR )->GetContextWindow( SD_MOD() ) );
-
-        if( mpDropNavWin == pNewNavWin)
+        SfxChildWindow* pWnd = mpFrame->GetChildWindow(SID_NAVIGATOR);
+        SdNavigatorWin* pNewNavWin = pWnd ? static_cast<SdNavigatorWin*>(pWnd->GetContextWindow(SD_MOD())) : NULL;
+        if (mpDropNavWin == pNewNavWin)
         {
             MouseEvent aMEvt( mpDropNavWin->GetPointerPosPixel() );
             SvTreeListBox::MouseButtonUp( aMEvt );
