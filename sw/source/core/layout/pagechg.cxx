@@ -1447,9 +1447,8 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 {
     while ( pPage )
     {
-        if ( pPage->GetSortedObjs() )
+        if (pPage->GetSortedObjs())
         {
-            pPage->GetSortedObjs();
             size_t i = 0;
             while ( pPage->GetSortedObjs() && i< pPage->GetSortedObjs()->size() )
             {
