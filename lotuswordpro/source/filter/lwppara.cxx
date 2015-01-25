@@ -578,8 +578,6 @@ void LwpPara::RegisterStyle()
                     LwpNumberingOverride* pNumbering = this->GetParaNumbering();
                     sal_uInt16 nPosition = pNumbering->GetPosition();
                     bool bLesser = m_pSilverBullet->IsLesserLevel(nPosition);
-                    /*sal_Bool bResetSection =*/ m_pSilverBullet->IsNewSection(nPosition);
-                    bool bHeading;
                     LwpPara* pPara = this;
                     LwpPara* pPrePara = NULL;
                     sal_uInt16 nNum = 0, nLevel = 0, nFoundLevel = 0xffff, nFoundBound = 0;
@@ -589,7 +587,7 @@ void LwpPara::RegisterStyle()
                     {
                         nFoundBound++;
                     }
-                    bHeading = pNumbering->IsHeading();
+                    bool bHeading = pNumbering->IsHeading();
 
                     while(true)
                     {
