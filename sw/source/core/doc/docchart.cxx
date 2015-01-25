@@ -53,7 +53,7 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
     {
         // Remove brackets at the beginning and from the end
         OUString sBox( rSelection );
-        if( '<' == sBox[0] ) sBox = sBox.copy( 0, 1 );
+        if( '<' == sBox[0] ) sBox = sBox.copy( 1 );
         if( '>' == sBox[ sBox.getLength()-1  ] ) sBox = sBox.copy( 0, sBox.getLength()-1 );
 
         sal_Int32 nSeparator = sBox.indexOf( ':' );
