@@ -82,14 +82,19 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         GetCellType(nVCol, nVRow, nVTab, eVType);
         // #i108005# convert target value to number using default format,
         // as previously done in ScInterpreter::GetDouble
+        ScFormulaCell* pFormula = NULL;
         double fTargetVal = 0.0;
         sal_uInt32 nFIndex = 0;
         if ( eFType == CELLTYPE_FORMULA && eVType == CELLTYPE_VALUE &&
              GetFormatTable()->IsNumberFormat( sValStr, nFIndex, fTargetVal ) )
         {
+            ScAddress aFormulaAdr( nFCol, nFRow, nFTab );
+            pFormula = GetFormulaCell( aFormulaAdr );
+        }
+        if (pFormula)
+        {
             bool bDoneIteration = false;
             ScAddress aValueAdr( nVCol, nVRow, nVTab );
-            ScAddress aFormulaAdr( nFCol, nFRow, nFTab );
             double* pVCell = GetValueCell( aValueAdr );
 
             ScRange aVRange( aValueAdr, aValueAdr );    // for SetDirty
@@ -104,7 +109,6 @@ bool ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
             double fBestF, fFPrev;
             fBestX = fXPrev = fSaveVal;
 
-            ScFormulaCell* pFormula = GetFormulaCell( aFormulaAdr );
             pFormula->Interpret();
             bool bError = ( pFormula->GetErrCode() != 0 );
             // bError always corresponds with fF
