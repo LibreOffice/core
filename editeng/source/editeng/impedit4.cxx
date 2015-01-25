@@ -1685,8 +1685,6 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
     OUString aRes;
     LanguageType nResLang = LANGUAGE_NONE;
 
-    /* ContentNode* pLastNode = */ aEditDoc.GetObject( aEditDoc.Count()-1 );
-
     EditPaM aPos( CreateEditPaM( pConvInfo->aConvContinue ) );
     EditSelection aCurSel = EditSelection( aPos, aPos );
 
