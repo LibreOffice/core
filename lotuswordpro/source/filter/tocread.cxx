@@ -124,7 +124,7 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
         return BenErr_UnknownBentoFormatVersion;
     pCurrLabel += 2;
 
-    UtGetIntelWord(pCurrLabel); pCurrLabel += 2;    // Minor version
+    pCurrLabel += 2;    // Minor version
 
     *pTOCOffset = UtGetIntelDWord(pCurrLabel); pCurrLabel += 4;
     *pTOCSize = UtGetIntelDWord(pCurrLabel);
