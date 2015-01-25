@@ -57,7 +57,6 @@ SvTreeListEntry::SvTreeListEntry()
     , bIsMarked(false)
     , pUserData(NULL)
     , nEntryFlags(0)
-    , maBackColor(Application::GetSettings().GetStyleSettings().GetRowColor())
 {
 }
 
@@ -68,7 +67,6 @@ SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r)
     , bIsMarked(r.bIsMarked)
     , pUserData(r.pUserData)
     , nEntryFlags(r.nEntryFlags)
-    , maBackColor(Application::GetSettings().GetStyleSettings().GetRowColor())
 {
     SvTreeListEntries::const_iterator it = r.maChildren.begin(), itEnd = r.maChildren.end();
     for (; it != itEnd; ++it)

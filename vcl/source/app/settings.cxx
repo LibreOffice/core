@@ -91,7 +91,6 @@ struct ImplStyleData
     Color                           maActiveBorderColor;
     Color                           maActiveColor;
     Color                           maActiveTextColor;
-    Color                           maRowColor;
     Color                           maAlternatingRowColor;
     Color                           maButtonTextColor;
     Color                           maButtonRolloverTextColor;
@@ -563,7 +562,6 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveBorderColor( rData.maActiveBorderColor ),
     maActiveColor( rData.maActiveColor ),
     maActiveTextColor( rData.maActiveTextColor ),
-    maRowColor( rData.maRowColor ),
     maAlternatingRowColor( rData.maAlternatingRowColor ),
     maButtonTextColor( rData.maButtonTextColor ),
     maButtonRolloverTextColor( rData.maButtonRolloverTextColor ),
@@ -742,7 +740,6 @@ void ImplStyleData::SetStandardStyles()
     maVisitedLinkColor          = Color( 0x00, 0x00, 0xCC );
     maHighlightLinkColor        = Color( COL_LIGHTBLUE );
     maFontColor                 = Color( COL_BLACK );
-    maRowColor                  = Color( COL_WHITE );
     maAlternatingRowColor       = Color( 0xEE, 0xEE, 0xEE );
 
     mnBorderSize                = 1;
@@ -1358,19 +1355,6 @@ const Color&
 StyleSettings::GetInactiveTabColor() const
 {
     return mpData->maInactiveTabColor;
-}
-
-void
-StyleSettings::SetRowColor( const Color& rColor )
-{
-    CopyData();
-    mpData->maRowColor = rColor;
-}
-
-const Color&
-StyleSettings::GetRowColor() const
-{
-    return mpData->maRowColor;
 }
 
 void
