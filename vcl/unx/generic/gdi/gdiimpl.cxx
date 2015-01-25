@@ -1230,7 +1230,7 @@ void X11SalGraphicsImpl::SetROPFillColor( SalROPColor nROPColor )
 
 void X11SalGraphicsImpl::SetXORMode( bool bSet, bool )
 {
-    if( !mbXORMode == bSet )
+    if (mbXORMode != bSet)
     {
         mbXORMode   = bSet;
         mbPenGC     = false;
