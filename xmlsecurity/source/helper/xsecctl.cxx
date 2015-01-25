@@ -1019,10 +1019,8 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, com::sun::
         throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     int index = findSignatureInfor(securityId);
-    DBG_ASSERT( index != -1, "Signature Not Found!" );
-
-    SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
-
+    assert(index != -1 && "Signature Not Found!");
+    SignatureInformation& signatureInfor = m_vInternalSignatureInformations.at(index).signatureInfor;
     signatureInfor.nStatus = nResult;
 }
 
@@ -1033,10 +1031,8 @@ void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, com::sun:
         throw (com::sun::star::uno::RuntimeException, std::exception)
 {
     int index = findSignatureInfor(securityId);
-    DBG_ASSERT( index != -1, "Signature Not Found!" );
-
-    SignatureInformation& signatureInfor = m_vInternalSignatureInformations[index].signatureInfor;
-
+    assert(index != -1 && "Signature Not Found!");
+    SignatureInformation& signatureInfor = m_vInternalSignatureInformations.at(index).signatureInfor;
     signatureInfor.nStatus = nResult;
 }
 
