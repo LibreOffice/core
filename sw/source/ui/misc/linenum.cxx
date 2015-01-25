@@ -32,6 +32,7 @@
 #include "linenum.hxx"
 #include "uitool.hxx"
 #include <fmtline.hxx>
+#include "poolfmt.hrc"
 
 #include <IDocumentStylePoolAccess.hxx>
 
@@ -146,7 +147,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     m_pNumberingOnCB->Check(rInf.IsPaintLineNumbers());
 
     // Header/Footer Line Numbering
-    rtl::Reference< SwDocStyleSheet > xStyleSheet = lcl_getDocStyleSheet("Footer", pSh);
+    rtl::Reference< SwDocStyleSheet > xStyleSheet = lcl_getDocStyleSheet(SW_RESSTR(STR_POOLCOLL_FOOTER), pSh);
     if(xStyleSheet.is())
     {
         SfxItemSet& rSet = xStyleSheet->GetItemSet();
@@ -221,8 +222,8 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     pSh->SetLineNumberInfo(aInf);
 
     // Set LineNumber explicitly for Header and Footer
-    lcl_setLineNumbering("Footer",pSh,m_pNumberingOnFooterHeader->IsChecked());
-    lcl_setLineNumbering("Header",pSh,m_pNumberingOnFooterHeader->IsChecked());
+    lcl_setLineNumbering(SW_RESSTR(STR_POOLCOLL_FOOTER), pSh, m_pNumberingOnFooterHeader->IsChecked());
+    lcl_setLineNumbering(SW_RESSTR(STR_POOLCOLL_HEADER), pSh, m_pNumberingOnFooterHeader->IsChecked());
     if( m_pNumberingOnFooterHeader->IsChecked())
        m_pNumberingOnFooterHeader->SetState(TRISTATE_TRUE);
     else
