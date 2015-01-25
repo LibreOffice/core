@@ -5527,6 +5527,9 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      nGroupShapeFlags(0),                   // ensure initialization here, as some corrupted
                                             // files may yield to this being unitialized
      maBaseURL( rBaseURL ),
+     mnCurMaxShapeId(0),
+     mnDrawingsSaved(0),
+     mnIdClusters(0),
      rStCtrl(  rStCtrl_  ),
      pStData(  pStData_  ),
      pStData2( pStData2_ ),
