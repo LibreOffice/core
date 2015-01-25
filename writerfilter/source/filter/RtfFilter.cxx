@@ -167,12 +167,13 @@ OUString RtfFilter_getImplementationName() throw(uno::RuntimeException)
     return OUString("com.sun.star.comp.Writer.RtfFilter");
 }
 
-uno::Sequence< OUString > RtfFilter_getSupportedServiceNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> RtfFilter_getSupportedServiceNames() throw(uno::RuntimeException)
 {
-    uno::Sequence < OUString > aRet(2);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.document.ImportFilter";
-    pArray[1] = "com.sun.star.document.ExportFilter";
+    uno::Sequence<OUString> aRet =
+    {
+        OUString("com.sun.star.document.ImportFilter"),
+        OUString("com.sun.star.document.ExportFilter")
+    };
     return aRet;
 }
 
