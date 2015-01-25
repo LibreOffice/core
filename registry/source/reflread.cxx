@@ -1241,8 +1241,6 @@ TypeRegistryEntry::TypeRegistryEntry(
         new ReferenceList(
             m_pBuffer + offset + entrySize, m_bufferLen - (offset + entrySize),
             readUINT16(offset), m_pCP.get()));
-
-    m_pReferences->parseIndex();
 }
 
 typereg_Version TypeRegistryEntry::getVersion() const {
