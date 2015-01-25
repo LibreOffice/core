@@ -25,6 +25,7 @@
 #include <svtools/miscopt.hxx>
 #include <stdio.h>
 #include <boost/scoped_ptr.hpp>
+#include <rtl/character.hxx>
 
 // To activate tracing enable in sbtrace.hxx
 #ifdef DBG_TRACE_BASIC
@@ -124,12 +125,6 @@ inline void lcl_findNextLine( char*& rpc, char* pe )
         ++rpc;
 }
 
-inline bool lcl_isAlpha( char c )
-{
-    bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
-    return bRet;
-}
-
 static void lcl_ReadIniFile( const char* pIniFileName )
 {
     const int BUF_SIZE = 1000;
@@ -153,7 +148,7 @@ static void lcl_ReadIniFile( const char* pIniFileName )
 
         // Read variable
         char* pVarStart = pc;
-        while( pc < pe && lcl_isAlpha( *pc ) )
+        while( pc < pe && rtl::isAsciiAlpha( *pc ) )
             ++pc;
         int nVarLen = pc - pVarStart;
         if( nVarLen == 0 )

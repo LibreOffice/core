@@ -108,18 +108,13 @@ bool BasicCharClass::isLetterUnicode( sal_Unicode c )
 
 bool BasicCharClass::isAlpha( sal_Unicode c, bool bCompatible )
 {
-  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+  return rtl::isAsciiAlpha(c)
     || (bCompatible && isLetter( c ));
-}
-
-bool BasicCharClass::isDigit( sal_Unicode c )
-{
-  return (c >= '0' && c <= '9');
 }
 
 bool BasicCharClass::isAlphaNumeric( sal_Unicode c, bool bCompatible )
 {
-  return isDigit( c ) || isAlpha( c, bCompatible );
+  return rtl::isAsciiDigit( c ) || isAlpha( c, bCompatible );
 }
 
 bool BasicCharClass::isWhitespace( sal_Unicode c )
