@@ -50,10 +50,8 @@ OString loadShader(const OUString& rFilename)
         boost::scoped_array<char> content(new char[nSize+1]);
         sal_uInt64 nBytesRead = 0;
         aFile.read(content.get(), nSize, nBytesRead);
-        if(nSize != nBytesRead)
-            assert(false);
-
-        content[nSize] = 0;
+        assert(nSize == nBytesRead);
+        content[nBytesRead] = 0;
         return OString(content.get());
     }
     else
