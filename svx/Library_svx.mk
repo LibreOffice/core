@@ -73,6 +73,7 @@ $(eval $(call gb_Library_use_externals,svx,\
 	boost_headers \
 	icuuc \
 	icu_headers \
+    $(if $(filter ZINT,$(BUILD_TYPE)),zint) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
@@ -97,6 +98,10 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/accessibility/lookupcolorname \
 	svx/source/accessibility/svxpixelctlaccessiblecontext \
     svx/source/accessibility/svxrectctaccessiblecontext \
+    $(if $(filter ZINT,$(BUILD_TYPE)),\
+        svx/source/customshapes/BarCodeCustomShapeEngine \
+        svx/source/customshapes/BarCodeRender \
+    ) \
     svx/source/customshapes/EnhancedCustomShape3d \
     svx/source/customshapes/EnhancedCustomShapeEngine \
     svx/source/customshapes/EnhancedCustomShapeFontWork \

@@ -84,4 +84,8 @@
       constructor="com_sun_star_comp_svx_NumberingToolBoxControl_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
+  <implementation name="org.libreoffice.draw.barcode"
+      constructor="org_libreoffice_draw_barcode_get_implementation">
+    <service name="com.sun.star.drawing.CustomShapeEngine"/>
+  </implementation>
 </component>

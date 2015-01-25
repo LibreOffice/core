@@ -74,7 +74,6 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 {
         SdrObject*                  pCustomShapeObj;
         MSO_SPT                     eSpType;
-
         sal_Int32                   nCoordLeft;
         sal_Int32                   nCoordTop;
         sal_Int32                   nCoordWidthG;
