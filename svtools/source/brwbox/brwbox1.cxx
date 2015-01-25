@@ -299,7 +299,6 @@ void BrowseBox::InsertDataColumn( sal_uInt16 nItemId, const OUString& rText,
     ColumnInserted( nPos );
 }
 
-
 sal_uInt16 BrowseBox::ToggleSelectedColumn()
 {
     sal_uInt16 nSelectedColId = BROWSER_INVALIDID;
@@ -307,7 +306,9 @@ sal_uInt16 BrowseBox::ToggleSelectedColumn()
     {
         DoHideCursor( "ToggleSelectedColumn" );
         ToggleSelection();
-        nSelectedColId = (*pCols)[ pColSel->FirstSelected() ]->GetId();
+        long nSelected = pColSel->FirstSelected();
+        if (nSelected != static_cast<long>(SFX_ENDOFSELECTION))
+            nSelectedColId = (*pCols)[nSelected]->GetId();
         pColSel->SelectAll(false);
     }
     return nSelectedColId;
