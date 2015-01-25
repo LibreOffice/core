@@ -1106,7 +1106,6 @@ const SfxPoolItem* SfxBindings::Execute_Impl( sal_uInt16 nId, const SfxPoolItem*
 
     SfxDispatcher &rDispatcher = *pDispatcher;
     rDispatcher.Flush();
-    rDispatcher.GetFrame();  // -Wall is this required???
 
     // get SlotServer (Slot+ShellLevel) and Shell from cache
     ::boost::scoped_ptr<SfxStateCache> xCache;

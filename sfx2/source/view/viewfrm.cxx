@@ -845,15 +845,15 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     }
 }
 
-
 void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
 {
     SfxObjectShell* pSh = GetObjectShell();
     if ( !pSh )
+    {
         // I'm just on reload and am yielding myself ...
         return;
+    }
 
-    GetFrame().GetParentFrame();
     SfxWhichIter aIter( rSet );
     for ( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich() )
     {
@@ -924,8 +924,6 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         }
     }
 }
-
-
 
 void SfxViewFrame::ExecHistory_Impl( SfxRequest &rReq )
 {
