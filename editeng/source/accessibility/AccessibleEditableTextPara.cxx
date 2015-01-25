@@ -1701,6 +1701,8 @@ namespace accessibility
             {
                 break;
             }
+            if (!ree.pFieldItem)
+                continue;
             if(  (Segment.SegmentEnd > reeBegin && Segment.SegmentEnd <= reeEnd) ||
                   (Segment.SegmentStart >= reeBegin && Segment.SegmentStart < reeEnd)  )
             {
