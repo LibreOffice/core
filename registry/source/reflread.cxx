@@ -821,8 +821,6 @@ public:
         }
     }
 
-    sal_uInt32 parseIndex() { return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_REFERENCE_ENTRY_SIZE));}
-
     const sal_Char* getReferenceName(sal_uInt16 index);
     RTReferenceType getReferenceType(sal_uInt16 index);
     const sal_Char* getReferenceDoku(sal_uInt16 index);
