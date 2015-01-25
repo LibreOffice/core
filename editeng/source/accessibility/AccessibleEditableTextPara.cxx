@@ -930,7 +930,7 @@ namespace accessibility
                 break;
             }
         }
-        if( nFoundFieldIndex >= 0  )
+        if (nFoundFieldIndex >= 0 && ree.pFieldItem)
         {
             // So we get a field, check its type now.
             nFieldType = ree.pFieldItem->GetField()->GetClassId() ;
