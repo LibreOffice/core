@@ -108,6 +108,7 @@ OpenGLContext::~OpenGLContext()
 #ifdef DBG_UTIL
 void OpenGLContext::AddRef(OpenGLSalGraphicsImpl* pImpl)
 {
+    SAL_WARN_IF(!pImpl, "vcl.opengl", "added now");
     assert(mnRefCount > 0);
     mnRefCount++;
 
@@ -116,6 +117,7 @@ void OpenGLContext::AddRef(OpenGLSalGraphicsImpl* pImpl)
 
 void OpenGLContext::DeRef(OpenGLSalGraphicsImpl* pImpl)
 {
+    SAL_WARN_IF(!pImpl, "vcl.opengl", "removed now");
 
     auto it = maParents.find(pImpl);
     if(it != maParents.end())
@@ -1377,6 +1379,11 @@ void OpenGLContext::makeCurrent()
     GLXDrawable nDrawable = mbPixmap ? m_aGLWin.glPix : m_aGLWin.win;
     if (!glXMakeCurrent( m_aGLWin.dpy, nDrawable, m_aGLWin.ctx ))
     {
+        for (auto it = maParents.begin(), itEnd = maParents.end(); it != itEnd; ++it)
+        {
+            SAL_DEBUG(*it);
+            SAL_DEBUG((*it)->IsOffscreen());
+        }
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent failed on drawable " << nDrawable << " pixmap? " << mbPixmap);
         return;
     }
