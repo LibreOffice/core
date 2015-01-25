@@ -2561,6 +2561,23 @@ endef
 
 endif # !SYSTEM_LIBPNG
 
+ifeq (ZINT,$(filter ZINT,$(BUILD_TYPE)))
+
+define gb_LinkTarget__use_zint
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,zint) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	zint \
+)
+endef
+
+else
+
+gb_LinkTarget__use_zint :=
+
+endif # ZINT
 
 ifneq ($(SYSTEM_CURL),)
 

@@ -207,6 +207,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,WPG,WPG_TARBALL) \
 		$(call fetch_Optional,WPS,WPS_TARBALL) \
 		$(call fetch_Optional,XSLTML,XSLTML_TARBALL) \
+		$(call fetch_Optional,ZINT,ZINT_TARBALL) \
 		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \

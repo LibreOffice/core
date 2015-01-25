@@ -1,0 +1,22 @@
+diff --git a/backend/library.c b/backend/library.c
+index 467e471..b89e08d 100755
+--- a/backend/library.c
++++ b/backend/library.c
+@@ -716,6 +716,8 @@ int ZBarcode_Encode(struct zint_symbol *symbol, unsigned char *source, int lengt
+ 	return error_number;
+ }
+ 
++#if 0 // LibreOffice - not needed
++
+ int ZBarcode_Print(struct zint_symbol *symbol, int rotate_angle)
+ {
+ 	int error_number;
+@@ -909,6 +911,8 @@ int ZBarcode_Encode_File_and_Buffer(struct zint_symbol *symbol, char *filename,
+ 	return ZBarcode_Buffer(symbol, rotate_angle);
+ }
+ 
++#endif // LibreOffice - not needed
++
+ /*
+  * Rendering support, initially added by Sam Lown.
+  *

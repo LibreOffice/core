@@ -95,6 +95,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,WPG,libwpg) \
 	$(call gb_Helper_optional,WPS,libwps) \
 	$(call gb_Helper_optional,XSLTML,xsltml) \
+	$(call gb_Helper_optional,ZINT,zint) \
 	$(call gb_Helper_optional,ZLIB,zlib) \
 	$(call gb_Helper_optional_for_host,DESKTOP, \
 		$(if $(WITH_GALLERY_BUILD), \

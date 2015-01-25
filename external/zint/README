@@ -1,0 +1,5 @@
+zint is based on an improved fork of the zint library from:
+     git clone git://git.code.sf.net/u/oehhar/zint
+
+After analysis of various other variants of zint which were
+found wanting. We only use the BSD licensed backend/ pieces.

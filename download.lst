@@ -148,6 +148,8 @@ export WPG_TARBALL := libwpg-0.3.0.tar.bz2
 export WPS_MD5SUM := a111d9ef5a0dab564e9aec0f2cf8d218
 export WPS_TARBALL := libwps-0.3.1.tar.bz2
 export XSLTML_TARBALL := a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
+export ZINT_MD5SUM := 8faf9de125910e3ff1ab94afaaee163b
+export ZINT_TARBALL := zint.tar.bz2
 export ZLIB_MD5SUM := 44d667c142d7cda120332623eab69f40
 export ZLIB_TARBALL := zlib-1.2.8.tar.gz
 

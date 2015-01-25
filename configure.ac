@@ -1388,6 +1388,11 @@ AC_ARG_ENABLE(liblangtag,
          implementation.]),
 )
 
+AC_ARG_ENABLE(zint-barcode,
+    AS_HELP_STRING([--enable-zint-barcode],
+        [Enable the building of an internal bar/QR code library.])
+)
+
 AC_ARG_ENABLE(bogus-pkg-config,
     AS_HELP_STRING([--enable-bogus-pkg-config],
         [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
@@ -7343,6 +7348,13 @@ fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 AC_SUBST(SYSTEM_ZLIB)
+
+dnl ===================================================================
+dnl zint barcode functionality
+dnl ===================================================================
+if test -n "$enable_zint_barcode" -a "$enable_zint_barcode" != "no"; then
+   BUILD_TYPE="$BUILD_TYPE ZINT"
+fi
 
 dnl ===================================================================
 dnl Check for system jpeg
