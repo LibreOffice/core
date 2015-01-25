@@ -1055,6 +1055,12 @@ void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow
         ORowSetRow rRow = (*m_aCurrentRow);
         OSL_ENSURE(rRow.is() ,"Invalid size of vector!");
 #endif
+
+        // notification order
+        // - column values
+        if ( _bDoNotify )
+            firePropertyChange(_rOldValues);
+
     }
     else
     {
@@ -1063,11 +1069,6 @@ void ORowSetBase::setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow
         m_aBookmark     = Any();
         m_aCurrentRow.setBookmark(m_aBookmark);
     }
-
-    // notification order
-    // - column values
-    if ( _bDoNotify )
-        firePropertyChange(_rOldValues);
 
     // TODO: can this be done before the notifications?
     if(!(m_bBeforeFirst || m_bAfterLast) && !m_aCurrentRow.isNull() && m_aCurrentRow->is() && m_aCurrentRow != m_pCache->getEnd())
