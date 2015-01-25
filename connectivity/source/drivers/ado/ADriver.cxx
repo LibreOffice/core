@@ -31,6 +31,8 @@
 
 #include "resource/sharedresources.hxx"
 
+#include <memory>
+
 using namespace connectivity;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -118,10 +120,12 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
     if ( ! acceptsURL(url) )
         return NULL;
 
-    OConnection* pCon = new OConnection(this);
+    // we need to wrap the connection as the construct call might throw
+    std::unique_ptr<OConnection> pCon(new OConnection(this));
     pCon->construct(url,info);
-    Reference< XConnection > xCon = pCon;
-    m_xConnections.push_back(WeakReferenceHelper(*pCon));
+    OConnection* pPtr = pCon.get();
+    Reference< XConnection > xCon = pCon.release();
+    m_xConnections.push_back(WeakReferenceHelper(*pPtr));
 
     return xCon;
 }
