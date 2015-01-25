@@ -315,6 +315,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
         case PROPERTY_ID_ACTIVE_CONNECTION:
             // the new connection
             {
+                assert(m_aActiveConnection == rValue);
                 Reference< XConnection > xNewConnection(m_aActiveConnection,UNO_QUERY);
                 setActiveConnection(xNewConnection, false);
             }
