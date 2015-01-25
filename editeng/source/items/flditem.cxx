@@ -567,7 +567,14 @@ static OUString read_unicode( SvPersistStream & rStm )
     rtl_uString *pStr = NULL;
     sal_uInt16 nL = 0;
     rStm.ReadUInt16( nL );
-    if ( nL )
+    const size_t nMaxRecords = rStm.remainingSize() / sizeof(sal_Unicode);
+    if (nL > nMaxRecords)
+    {
+        SAL_WARN("editeng", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nL << " claimed, truncating");
+        nL = nMaxRecords;
+    }
+    if (nL)
     {
         pStr = rtl_uString_alloc(nL);
         //endian specific?, yipes!
