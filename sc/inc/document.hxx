@@ -217,11 +217,11 @@ namespace com { namespace sun { namespace star {
 #define SC_ASIANKERNING_INVALID         0xff
 
 enum ScDocumentMode
-    {
-        SCDOCMODE_DOCUMENT,
-        SCDOCMODE_CLIP,
-        SCDOCMODE_UNDO
-    };
+{
+    SCDOCMODE_DOCUMENT,
+    SCDOCMODE_CLIP,
+    SCDOCMODE_UNDO
+};
 
 struct ScDocStat
 {
@@ -229,6 +229,12 @@ struct ScDocStat
     SCTAB   nTableCount;
     sal_uLong   nCellCount;
     sal_uInt16  nPageCount;
+    ScDocStat()
+        : nTableCount(0)
+        , nCellCount(0)
+        , nPageCount(0)
+    {
+    }
 };
 
 // DDE link modes
