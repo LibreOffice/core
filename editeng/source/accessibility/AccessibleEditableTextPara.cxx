@@ -1663,9 +1663,11 @@ namespace accessibility
             {
                 break;
             }
-            if(  nIndex >= reeBegin && nIndex < reeEnd )
+            if (!ree.pFieldItem)
+                continue;
+            if (nIndex >= reeBegin && nIndex < reeEnd)
             {
-                if(ree.pFieldItem->GetField()->GetClassId() != text::textfield::Type::URL)
+                if (ree.pFieldItem->GetField()->GetClassId() != text::textfield::Type::URL)
                 {
                     nFoundFieldIndex = j;
                     break;
