@@ -747,10 +747,8 @@ SwRedlineExtraData* SwRedlineExtraData_FormattingChanges::CreateNew() const
     return new SwRedlineExtraData_FormattingChanges( *this );
 }
 
-void SwRedlineExtraData_FormattingChanges::Reject( SwPaM& rPam ) const
+void SwRedlineExtraData_FormattingChanges::Reject(SwPaM&) const
 {
-    rPam.GetDoc();  // This is here just to prevent build 'warning'
-
     // ToDo: Add 'Reject' logic
 }
 
