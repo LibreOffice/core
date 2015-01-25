@@ -35,9 +35,8 @@ public:
     bool isLetter( sal_Unicode c );
     bool isLetterUnicode( sal_Unicode c );
     bool isAlpha( sal_Unicode c, bool bCompatible );
-    bool isDigit( sal_Unicode c );
     bool isAlphaNumeric( sal_Unicode c, bool bCompatible );
-    bool isWhitespace( sal_Unicode c );
+    static bool isWhitespace( sal_Unicode c );
 };
 
 class theBasicCharClass: public rtl::Static<BasicCharClass, theBasicCharClass> {};

@@ -152,7 +152,7 @@ void SbiScanner::scanAlphanumeric()
 void SbiScanner::scanGoto()
 {
     sal_Int32 n = nCol;
-    while(n < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[n]))
+    while(n < aLine.getLength() && BasicCharClass::isWhitespace(aLine[n]))
         ++n;
 
     if(n + 1 < aLine.getLength())
@@ -180,7 +180,7 @@ bool SbiScanner::readLine()
 
     // Trim trailing whitespace
     sal_Int32 nEnd = n;
-    while(nBufPos < nEnd && theBasicCharClass::get().isWhitespace(aBuf[nEnd - 1]))
+    while(nBufPos < nEnd && BasicCharClass::isWhitespace(aBuf[nEnd - 1]))
         --nEnd;
 
     aLine = aBuf.copy(nBufPos, nEnd - nBufPos);
@@ -223,10 +223,10 @@ bool SbiScanner::NextSym()
         nOldCol1 = nOldCol2 = 0;
     }
 
-    if(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
+    if(nCol < aLine.getLength() && BasicCharClass::isWhitespace(aLine[nCol]))
     {
         bSpaces = true;
-        while(nCol < aLine.getLength() && theBasicCharClass::get().isWhitespace(aLine[nCol]))
+        while(nCol < aLine.getLength() && BasicCharClass::isWhitespace(aLine[nCol]))
             ++pLine, ++nCol;
     }
 
@@ -298,8 +298,8 @@ bool SbiScanner::NextSym()
     }
 
     // read in and convert if number
-    else if((nCol < aLine.getLength() && theBasicCharClass::get().isDigit(aLine[nCol] & 0xFF)) ||
-            (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && theBasicCharClass::get().isDigit(aLine[nCol + 1] & 0xFF)))
+    else if((nCol < aLine.getLength() && rtl::isAsciiDigit(aLine[nCol])) ||
+            (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && rtl::isAsciiDigit(aLine[nCol + 1])))
     {
         short exp = 0;
         short dec = 0;
