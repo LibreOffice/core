@@ -28,8 +28,8 @@ sal_Int32 SwExpandPortion::GetCrsrOfst( const sal_uInt16 nOfst ) const
 bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
     rTxt.clear();
-    // Nicht etwa: return 0 != rTxt.Len();
-    // Weil: leere Felder ersetzen CH_TXTATR gegen einen Leerstring
+    // Do not do: return 0 != rTxt.Len();
+    // Reason being: empty fields replace CH_TXTATR with an empty string
     return true;
 }
 
@@ -44,19 +44,17 @@ SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
     return rInf.GetTxtSize();
 }
 
-// 5010: Exp und Tabs
-
 bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 {
     SwTxtSlot aDiffTxt( &rInf, this, true, false );
     const sal_Int32 nFullLen = rInf.GetLen();
 
-    // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
-    // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
-    // false returnen wegen SetFull ...
+    // As odd as it may seem: the query for GetLen() must return
+    // false due to the ExpandPortions _after_ the aDiffTxt (see SoftHyphs)
+    // caused by the SetFull ...
     if( !nFullLen )
     {
-        // nicht Init(), weil wir Hoehe und Ascent brauchen
+        // Do not Init(), because we need height and ascent
         Width(0);
         return false;
     }
@@ -75,7 +73,7 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );
 
-    // do we have to repaint a post it portion?
+    // Do we have to repaint a post it portion?
     if( rInf.OnWin() && pPortion && !pPortion->Width() )
         pPortion->PrePaint( rInf, this );
 
@@ -98,11 +96,11 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwLinePortion *SwBlankPortion::Compress() { return this; }
 
-// 5497: Es gibt schon Gemeinheiten auf der Welt...
-// Wenn eine Zeile voll mit HardBlanks ist und diese ueberlaeuft,
-// dann duerfen keine Underflows generiert werden!
-// Komplikationen bei Flys...
-
+/**
+ * If a Line is full of HardBlanks and overflows, we must not generate
+ * underflows!
+ * Causes problems with Fly
+ */
 sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
     sal_Int32 nIdx, bool bUnderflow ) const
 {
@@ -114,9 +112,10 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
     while( pPos && pPos->IsBlankPortion() )
         pPos = pPos->GetPortion();
     if( !pPos || !rInf.GetIdx() || ( !pPos->GetLen() && pPos == rInf.GetRoot() ) )
-        return 0; // Nur noch BlankPortions unterwegs
-    // Wenn vor uns ein Blank ist, brauchen wir kein Underflow ausloesen,
-    // wenn hinter uns ein Blank ist, brauchen wir kein Underflow weiterreichen
+        return 0; // There are just BlankPortions left
+
+    // If a Blank is preceding us, we do not need to trigger underflow
+    // If a Blank is succeeding us, we do not need to pass on the underflow
     if (bUnderflow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
         return 0;
     if( nIdx && !const_cast<SwTxtFormatInfo&>(rInf).GetFly() )
@@ -125,9 +124,9 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
             pPos = pPos->GetPortion();
         if( !pPos )
         {
-        //Hier wird ueberprueft, ob es in dieser Zeile noch sinnvolle Umbrueche
-        //gibt, Blanks oder Felder etc., wenn nicht, kein Underflow.
-        //Wenn Flys im Spiel sind, lassen wir das Underflow trotzdem zu.
+        // We check to see if there are useful line breaks, blanks or fields etc. left
+        // In case there still are some, no underflow
+        // If there are Flys, we still allow the underflow
             sal_Int32 nBlank = nIdx;
             while( --nBlank > rInf.GetLineStart() )
             {
@@ -149,7 +148,9 @@ sal_uInt16 SwBlankPortion::MayUnderflow( const SwTxtFormatInfo &rInf,
     return 2;
 }
 
-// Format end of Line
+/**
+ * Format End of Line
+ */
 void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     sal_uInt16 nMay = MayUnderflow( rInf, rInf.GetIdx() - nLineLength, true );
@@ -169,7 +170,9 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
     }
 }
 
-// 7771: Underflows weiterreichen und selbst ausloesen!
+/**
+ * Pass on the underflows and trigger them ourselves!
+ */
 bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 {
     const bool bFull = rInf.IsUnderflow() || SwExpandPortion::Format( rInf );
@@ -216,14 +219,14 @@ void SwPostItsPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Nicht zu fassen: PostIts sind immer zu sehen.
+    // Unbelievable: PostIts are always visible
     return rInf.OnWin() ? rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
 }
 
 bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
 {
     const bool bRet = SwLinePortion::Format( rInf );
-    // 32749: PostIts sollen keine Auswirkung auf Zeilenhoehe etc. haben
+    // PostIts should not have an effect on line height etc.
     SetAscent( 1 );
     Height( 1 );
     return bRet;

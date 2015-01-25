@@ -399,8 +399,8 @@ SwSoftHyphPortion::SwSoftHyphPortion() :
 
 sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
-    // Moment errechnet werden:
+    // Although we're in the const, nViewWidth should be calculated at
+    // the last possible moment
     if( !Width() && rInf.OnWin() && rInf.GetOpt().IsSoftHyph() && !IsExpand() )
     {
         if( !nViewWidth )
@@ -412,13 +412,15 @@ sal_uInt16 SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     return nViewWidth;
 }
 
-/*  Faelle:
- *  1) SoftHyph steht in der Zeile, ViewOpt aus.
- *     -> unsichtbar, Nachbarn unveraendert
- *  2) SoftHyph steht in der Zeile, ViewOpt an.
- *     -> sichtbar, Nachbarn veraendert
- *  3) SoftHyph steht am Zeilenende, ViewOpt aus/an.
- *     -> immer sichtbar, Nachbarn unveraendert
+/**
+ * Cases:
+ *
+ *  1) SoftHyph is in the line, ViewOpt off
+ *     -> invisible, neighbors unchanged
+ *  2) SoftHyph is in the line, ViewOpt on
+ *     -> visible, neighbors unchanged
+ *  3) SoftHyph is at the end of the line, ViewOpt or or off
+ *     -> always visible, neighbors unchanged
  */
 void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
@@ -429,20 +431,22 @@ void SwSoftHyphPortion::Paint( const SwTxtPaintInfo &rInf ) const
     }
 }
 
-/* Die endgueltige Breite erhalten wir im FormatEOL().
- * In der Underflow-Phase stellen wir fest, ob ueberhaupt ein
- * alternatives Spelling vorliegt. Wenn ja ...
+/**
+ * We get the final width from the FormatEOL()
  *
- * Fall 1: "Au-to"
- * 1) {Au}{-}{to}, {to} passt nicht mehr => Underflow
- * 2) {-} ruft Hyphenate => keine Alternative
- * 3) FormatEOL() und bFull = true
+ * During the underflow-phase we determine, whether or not
+ * there's an alternative spelling at all ...
  *
- * Fall 2: "Zuc-ker"
- * 1) {Zuc}{-}{ker}, {ker} passt nicht mehr => Underflow
- * 2) {-} ruft Hyphenate => Alternative!
- * 3) Underflow() und bFull = true
- * 4) {Zuc} ruft Hyphenate => {Zuk}{-}{ker}
+ * Case 1: "Au-to"
+ * 1) {Au}{-}{to}, {to} does not fit anymore => underflow
+ * 2) {-} calls hyphenate => no alternative
+ * 3) FormatEOL() and bFull = true
+ *
+ * Case 2: "Zuc-ker"
+ * 1) {Zuc}{-}{ker}, {ker} does not fit anymore => underflow
+ * 2) {-} calls hyphenate => alternative!
+ * 3) Underflow() and bFull = true
+ * 4) {Zuc} calls hyphenate => {Zuk}{-}{ker}
  */
 bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
@@ -492,15 +496,16 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
     SetExpand( false );
     if( !bFull )
     {
-        // default-maessig besitzen wir keine Breite, aber eine Hoehe
+        // By default, we do not have a width, but we do have a height
         nHyphWidth = Width();
         Width(0);
     }
     return bFull;
 }
 
-// Format end of Line
-
+/**
+ * Format End of Line
+ */
 void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
     if( !IsExpand() )
@@ -509,7 +514,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
         if( rInf.GetLast() == this )
             rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
 
-        // 5964: alte Werte muessen wieder zurueckgesetzt werden.
+        // We need to reset the old values
         const SwTwips nOldX  = rInf.X();
         const sal_Int32 nOldIdx = rInf.GetIdx();
         rInf.X( rInf.X() - PrtWidth() );
@@ -517,9 +522,8 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
         const bool bFull = SwHyphPortion::Format( rInf );
         nHyphWidth = Width();
 
-        // 6976: Eine truebe Sache: Wir werden erlaubterweise breiter,
-        // aber gleich wird noch ein Fly verarbeitet, der eine korrekte
-        // X-Position braucht.
+        // Shady business: We're allowed to get wider, but a Fly is also
+        // being processed, which needs a correct X position
         if( bFull || !rInf.GetFly() )
             rInf.X( nOldX );
         else
@@ -528,10 +532,12 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
     }
 }
 
-// Wir expandieren:
-// - wenn die Sonderzeichen sichtbar sein sollen
-// - wenn wir am Ende der Zeile stehen.
-// - wenn wir vor einem (echten/emuliertem) Zeilenumbruch stehen
+/**
+ * We're expanding:
+ * - if the special characters should be visible
+ * - if we're at the end of the line
+ * - if we're before a (real/emulated) line break
+ */
 bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
     if( IsExpand() || ( rInf.OnWin() && rInf.GetOpt().IsSoftHyph() ) ||
@@ -554,8 +560,8 @@ void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 void SwSoftHyphStrPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // Bug oder feature?:
-    // {Zu}{k-}{ker}, {k-} wird grau statt {-}
+    // Bug or feature?:
+    // {Zu}{k-}{ker}, {k-} will be gray instead of {-}
     rInf.DrawViewOpt( *this, POR_SOFTHYPH );
     SwHyphStrPortion::Paint( rInf );
 }

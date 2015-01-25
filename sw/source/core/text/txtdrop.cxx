@@ -315,10 +315,8 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     const_cast<SwDropPortion*>(this)->Width( Width() - nX );
     const_cast<SwDropPortion*>(this)->SetAscent( nDropHeight );
 
-    // adapt Clipregion to us
-    // Und zwar immer, und nie mit dem bestehenden ClipRect
-    // verrechnen, weil dies auf die Zeile eingestellt sein koennte.
-
+    // Always adapt Clipregion to us, never set it off using the existing ClipRect
+    // as that could be set for the line
     SwRect aClipRect;
     if ( rInf.OnWin() )
     {
@@ -327,7 +325,8 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     }
     SwSaveClip aClip( (OutputDevice*)rInf.GetOut() );
     aClip.ChgClip( aClipRect, rInf.GetTxtFrm() );
-    // Das machen, was man sonst nur macht ...
+
+    // Just do, what we always do ...
     PaintTxt( rInf );
 
     // save old values
@@ -376,6 +375,7 @@ bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
     Truncate();
     SetLen( nOldLen );
     rInf.SetLen( nOldInfLen );
+
     return true;
 }
 
