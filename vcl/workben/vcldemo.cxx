@@ -1209,6 +1209,7 @@ class DemoWin : public WorkWindow
             , mrWin(rWin)
         {
             maDelay.Seconds = nDelaySecs;
+            maDelay.Nanosec = 0;
             launch();
         }
         virtual ~RenderThread()
