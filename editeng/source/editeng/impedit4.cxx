@@ -1918,7 +1918,6 @@ void ImpEditEngine::StartSpelling(EditView& rEditView, bool bMultipleDoc)
 
 Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& rSelection)
 {
-    aEditDoc.GetObject( (aEditDoc.Count()-1) );
     EditSelection aCurSel( rSelection.Min() );
 
     OUString aWord;
