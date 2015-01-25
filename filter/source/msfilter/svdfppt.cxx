@@ -1201,7 +1201,15 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 {
                     sal_Int16 i, nRowCount = 0;
                     rSt.ReadInt16( nRowCount ).ReadInt16( i ).ReadInt16( i );
-                    if ( nRowCount )
+                    const size_t nMinRecordSize = 4;
+                    const size_t nMaxRecords = rSt.remainingSize() / nMinRecordSize;
+                    if (nRowCount > 0 && static_cast<size_t>(nRowCount) > nMaxRecords)
+                    {
+                        SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
+                                 " max possible entries, but " << nRowCount << " claimed, truncating");
+                        nRowCount = nMaxRecords;
+                    }
+                    if (nRowCount > 0)
                     {
                         sal_uInt32* pTableArry = new sal_uInt32[ nRowCount + 2 ];
                         pTableArry[ 0 ] = nTableProperties;
