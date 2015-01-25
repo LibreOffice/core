@@ -741,12 +741,14 @@ void ComponentContext::disposing()
         &envs, &envCount, &rtl_allocateMemory, OUString("java").pData);
     assert(envCount >= 0);
     assert(envCount == 0 || envs != nullptr);
-    for (sal_Int32 i = 0; i != envCount; ++i) {
-        assert(envs[i] != nullptr);
-        assert(envs[i]->dispose != nullptr);
-        (*envs[i]->dispose)(envs[i]);
+    if (envs) {
+        for (sal_Int32 i = 0; i != envCount; ++i) {
+            assert(envs[i] != nullptr);
+            assert(envs[i]->dispose != nullptr);
+            (*envs[i]->dispose)(envs[i]);
+        }
+        rtl_freeMemory(envs);
     }
-    rtl_freeMemory(envs);
 }
 
 ComponentContext::ComponentContext(
