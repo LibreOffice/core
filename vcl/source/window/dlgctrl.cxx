@@ -231,7 +231,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
                     pWindow = ImplGetChildWindow( this, nFormStart, i, true );
             }
 
-            if ( i <= nFormEnd )
+            if (i <= nFormEnd && pWindow)
             {
                 // carry the 2nd index, in case all controls are disabled
                 sal_uInt16 nStartIndex2 = i;
@@ -252,9 +252,9 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, sal_uInt16 nType,
                     else
                         pWindow = ImplGetNextWindow( this, i, i, true );
                 }
-                while ( (i != nStartIndex) && (i != nStartIndex2) );
+                while (i != nStartIndex && i != nStartIndex2 && pWindow);
 
-                if ( (i == nStartIndex2) &&
+                if ( (i == nStartIndex2) && pWindow &&
                      (!(pWindow->GetStyle() & WB_TABSTOP) || !isEnabledInLayout(pWindow)) )
                     i = nStartIndex;
             }
