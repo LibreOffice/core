@@ -1660,7 +1660,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                         const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                         for(;pBegin != pEnd;++pBegin)
                         {
-                            aSQL.append( (sal_Int32)*pBegin, 16 ).getStr();
+                            aSQL.append( (sal_Int32)*pBegin, 16 );
                         }
                         if(nSearchable == ColumnSearch::CHAR)
                             aSQL.append( "\'" );
