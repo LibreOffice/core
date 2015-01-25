@@ -41,7 +41,7 @@ class InsertObjectDialog_Impl : public ModalDialog
 {
 protected:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > m_xObj;
-    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& m_xStorage;
+    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage > m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
 
     InsertObjectDialog_Impl(vcl::Window * pParent, const OUString& rID,
