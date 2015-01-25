@@ -88,6 +88,10 @@ protected:
     void SetLayer();
     void SetThumbnail();
 
+    /** Some shapes eg. Custom Shapes are really wrappers for other
+        shape engines, we need to ensure that we initialize them
+        before we start setting properties */
+    virtual void InitialShapeSetup() {}
     void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
     void AddShape(OUString const & serviceName);
     void SetTransformation();
@@ -611,6 +615,8 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         bool bTemporaryShape);
     virtual ~SdXMLCustomShapeContext();
+
+    virtual void InitialShapeSetup() SAL_OVERRIDE;
 
     virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;

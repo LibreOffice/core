@@ -418,6 +418,8 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         // set shape local
         mxShape = xShape;
 
+        InitialShapeSetup();
+
         if(!maShapeName.isEmpty())
         {
             uno::Reference< container::XNamed > xNamed( mxShape, uno::UNO_QUERY );
@@ -3767,6 +3769,35 @@ void SdXMLCustomShapeContext::processAttribute( sal_uInt16 nPrefix, const OUStri
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
+void SdXMLCustomShapeContext::InitialShapeSetup()
+{
+    try
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
+        {
+            if ( !maCustomShapeEngine.isEmpty() )
+            {
+                uno::Any aAny;
+                aAny <<= maCustomShapeEngine;
+                xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), aAny );
+            }
+            if ( !maCustomShapeData.isEmpty() )
+            {
+                uno::Any aAny;
+                aAny <<= maCustomShapeData;
+                xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), aAny );
+            }
+        }
+    }
+    catch(const uno::Exception&)
+    {
+        OSL_FAIL( "could not set enhanced customshape geometry" );
+    }
+
+    SdXMLShapeContext::InitialShapeSetup();
+}
+
 void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     // create rectangle shape
@@ -3780,29 +3811,6 @@ void SdXMLCustomShapeContext::StartElement( const uno::Reference< xml::sax::XAtt
         // set pos, size, shear and rotate
         SetTransformation();
 
-        try
-        {
-            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
-            if( xPropSet.is() )
-            {
-                if ( !maCustomShapeEngine.isEmpty() )
-                {
-                    uno::Any aAny;
-                    aAny <<= maCustomShapeEngine;
-                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeEngine ), aAny );
-                }
-                if ( !maCustomShapeData.isEmpty() )
-                {
-                    uno::Any aAny;
-                    aAny <<= maCustomShapeData;
-                    xPropSet->setPropertyValue( EASGet( EAS_CustomShapeData ), aAny );
-                }
-            }
-        }
-        catch(const uno::Exception&)
-        {
-            OSL_FAIL( "could not set enhanced customshape geometry" );
-        }
         SdXMLShapeContext::StartElement(xAttrList);
     }
 }
