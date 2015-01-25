@@ -51,7 +51,6 @@ FilterDialog::FilterDialog( vcl::Window* pParentWindow )
 {
     get(m_pFtURL, "url");
     get(m_pLbFilters, "filters");
-    m_pFtURL->GetOutputSizePixel();
     Size aSize(pParentWindow->LogicToPixel(Size(182, 175), MAP_APPFONT));
     m_pLbFilters->set_height_request(aSize.Height());
     m_pLbFilters->set_width_request(aSize.Width());
