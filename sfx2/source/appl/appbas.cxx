@@ -129,8 +129,6 @@ XLibraryContainer * SfxApplication::GetBasicContainer()
 #endif
 }
 
-
-
 StarBASIC* SfxApplication::GetBasic()
 {
 #if !HAVE_FEATURE_SCRIPTING
@@ -140,10 +138,8 @@ StarBASIC* SfxApplication::GetBasic()
 #endif
 }
 
-
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
-    rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
     {
@@ -162,7 +158,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             assert(false);
     }
 }
-
 
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
