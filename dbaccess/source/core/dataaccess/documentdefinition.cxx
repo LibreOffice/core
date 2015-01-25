@@ -164,7 +164,6 @@ namespace dbaccess
         Reference< XEmbeddedObject >    m_xBroadCaster;
         ODocumentDefinition*            m_pDefinition;
         bool                            m_bInStateChange;
-        bool                            m_bInChangingState;
     protected:
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
     public:
@@ -173,7 +172,6 @@ namespace dbaccess
             ,m_xBroadCaster(_xBroadCaster)
             ,m_pDefinition(_pDefinition)
             ,m_bInStateChange(false)
-            ,m_bInChangingState(false)
         {
             osl_atomic_increment( &m_refCount );
             {
