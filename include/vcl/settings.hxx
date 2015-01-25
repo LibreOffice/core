@@ -351,9 +351,6 @@ public:
     void                            SetInactiveTabColor( const Color& rColor );
     const Color&                    GetInactiveTabColor() const;
 
-    void                            SetRowColor( const Color& rColor );
-    const Color&                    GetRowColor() const;
-
     void                            SetAlternatingRowColor( const Color& rColor );
     const Color&                    GetAlternatingRowColor() const;
 

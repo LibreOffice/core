@@ -470,12 +470,14 @@ IMPL_LINK_INLINE_END( SvTreeListBox, CloneHdl_Impl, SvTreeListEntry*, pEntry )
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pParent, sal_uLong nPos )
 {
     sal_uLong nInsPos = pModel->Insert( pEntry, pParent, nPos );
+    pEntry->SetBackColor( GetBackground().GetColor() );
     if(mbAlternatingRowColors)
     {
         if(nPos == TREELIST_APPEND)
-            pEntry->SetBackColor( Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetSettings().GetStyleSettings().GetRowColor() ?
-                                    GetSettings().GetStyleSettings().GetAlternatingRowColor() :
-                                    GetSettings().GetStyleSettings().GetRowColor() );
+        {
+            if(Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetBackground().GetColor())
+                pEntry->SetBackColor( GetSettings().GetStyleSettings().GetAlternatingRowColor() );
+        }
         else
             SetAlternatingRowColors( true );
     }
@@ -485,12 +487,14 @@ sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry, SvTreeListEntry* pPare
 sal_uLong SvTreeListBox::Insert( SvTreeListEntry* pEntry,sal_uLong nRootPos )
 {
     sal_uLong nInsPos = pModel->Insert( pEntry, nRootPos );
+    pEntry->SetBackColor( GetBackground().GetColor() );
     if(mbAlternatingRowColors)
     {
         if(nRootPos == TREELIST_APPEND)
-            pEntry->SetBackColor( Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetSettings().GetStyleSettings().GetRowColor() ?
-                                    GetSettings().GetStyleSettings().GetAlternatingRowColor() :
-                                    GetSettings().GetStyleSettings().GetRowColor() );
+        {
+            if(Prev(pEntry) && Prev(pEntry)->GetBackColor() == GetBackground().GetColor())
+                pEntry->SetBackColor( GetSettings().GetStyleSettings().GetAlternatingRowColor() );
+        }
         else
             SetAlternatingRowColors( true );
     }
@@ -3020,6 +3024,8 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
                     SetTextColor( aBackupTextColor );
                     Control::SetFont( aBackupFont );
                 }
+                else
+                    aWallpaper.SetColor( pEntry->GetBackColor() );
             }
 
             // draw background
@@ -3414,14 +3420,13 @@ void SvTreeListBox::SetAlternatingRowColors( bool bEnable )
         SvTreeListEntry* pEntry = pModel->First();
         for(size_t i = 0; pEntry; ++i)
         {
-            pEntry->SetBackColor( i % 2 == 0 ? GetSettings().GetStyleSettings().GetRowColor() :
-                                               GetSettings().GetStyleSettings().GetAlternatingRowColor());
+            pEntry->SetBackColor( i % 2 == 0 ? GetBackground().GetColor() : GetSettings().GetStyleSettings().GetAlternatingRowColor());
             pEntry = pModel->Next(pEntry);
         }
     }
     else
         for(SvTreeListEntry* pEntry = pModel->First(); pEntry; pEntry = pModel->Next(pEntry))
-            pEntry->SetBackColor( GetSettings().GetStyleSettings().GetRowColor() );
+            pEntry->SetBackColor( GetBackground().GetColor() );
 
     pImp->UpdateAll();
 }
