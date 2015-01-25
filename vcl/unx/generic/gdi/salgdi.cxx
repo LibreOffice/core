@@ -129,6 +129,7 @@ SalGraphicsImpl* X11SalGraphics::GetImpl() const
 
 void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
 {
+    SAL_DEBUG("X11SalGraphics::SetDrawable: " << aDrawable);
     // shortcut if nothing changed
     if( hDrawable_ == aDrawable )
         return;
@@ -164,12 +165,14 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     bWindow_    = true;
     bVirDev_    = false;
 
+    SAL_DEBUG("X11SalGraphics::Init: " << aTarget);
     SetDrawable( aTarget, nXScreen );
     mpImpl->Init();
 }
 
 void X11SalGraphics::DeInit()
 {
+    SAL_DEBUG("X11SalGraphics::DeInit: " << hDrawable_);
     SetDrawable( None, m_nXScreen );
 }
 

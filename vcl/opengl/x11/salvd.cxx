@@ -56,6 +56,7 @@ X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
     mpGraphics = new X11SalGraphics();
     mpGraphics->SetLayout( 0 );
     mpGraphics->Init( this );
+    SAL_DEBUG("X11OpenGLSalVirtaulDevice: created drawable: " << mpGraphics->GetDrawable());
 }
 
 X11OpenGLSalVirtualDevice::~X11OpenGLSalVirtualDevice()
