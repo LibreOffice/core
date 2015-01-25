@@ -61,7 +61,6 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITERGLOB_8;
         *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITERGLOB_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
