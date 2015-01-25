@@ -51,16 +51,16 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
     const SwTableBox* pSttBox, *pEndBox;
     if( 2 < rSelection.getLength() )
     {
-        // Remove brackets at the beginning and from the end
-        OUString sBox( rSelection );
-        if( '<' == sBox[0] ) sBox = sBox.copy( 1 );
-        if( '>' == sBox[ sBox.getLength()-1  ] ) sBox = sBox.copy( 0, sBox.getLength()-1 );
-
-        sal_Int32 nSeparator = sBox.indexOf( ':' );
+        const sal_Int32 nSeparator {rSelection.indexOf( ':' )};
         OSL_ENSURE( -1 != nSeparator, "no valid selection" );
 
-        pSttBox = GetTblBox( sBox.copy( 0, nSeparator ));
-        pEndBox = GetTblBox( sBox.copy( nSeparator+1 ));
+        // Remove brackets at the beginning and from the end
+        const sal_Int32 nOffset {'<' == rSelection[0] ? 1 : 0};
+        const sal_Int32 nLength {'>' == rSelection[ rSelection.getLength()-1 ]
+            ? rSelection.getLength()-1 : rSelection.getLength()};
+
+        pSttBox = GetTblBox(rSelection.copy( nOffset, nSeparator - nOffset ));
+        pEndBox = GetTblBox(rSelection.copy( nSeparator+1, nLength - (nSeparator+1) ));
     }
     else
     {
