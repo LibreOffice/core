@@ -4626,7 +4626,7 @@ void OpRsq::GenSlidingWindowFunction(
     ss << "    double fInx;\n";
     ss << "    double fIny;\n";
     ss << "    double tmp0,tmp1;\n";
-    vSubArguments.size();
+
     ss <<"\n";
 
     ss << "   for(int i=0; i<"<<nCurWindowSize<<"; i++)\n";
