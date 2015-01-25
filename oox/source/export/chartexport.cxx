@@ -1776,10 +1776,14 @@ void ChartExport::exportSeries( Reference< chart2::XChartType > xChartType, sal_
                         xSeriesPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
                         if(xErrorBarYProps.is())
                             exportErrorBar(xErrorBarYProps, true);
-                        Reference< XPropertySet > xErrorBarXProps;
-                        xSeriesPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
-                        if(xErrorBarXProps.is())
-                            exportErrorBar(xErrorBarXProps, false);
+                        if (eChartType != chart::TYPEID_BAR &&
+                                eChartType != chart::TYPEID_HORBAR)
+                        {
+                            Reference< XPropertySet > xErrorBarXProps;
+                            xSeriesPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
+                            if(xErrorBarXProps.is())
+                                exportErrorBar(xErrorBarXProps, false);
+                        }
                     }
 
                     // export categories
