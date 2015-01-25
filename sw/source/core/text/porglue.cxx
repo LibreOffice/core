@@ -118,7 +118,7 @@ void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
 
 void SwGluePortion::Join( SwGluePortion *pVictim )
 {
-    // Die GluePortion wird ausgesogen und weggespuelt ...
+    // The GluePortion is extracted and flushed away ...
     AddPrtWidth( pVictim->PrtWidth() );
     SetLen( pVictim->GetLen() + GetLen() );
     if( Height() < pVictim->Height() )
@@ -129,7 +129,9 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
     delete pVictim;
 }
 
-// Wir erwarten ein framelokales SwRect !
+/**
+ * We're expecting a frame-local SwRect!
+ */
 SwFixPortion::SwFixPortion( const SwRect &rRect )
        :SwGluePortion( sal_uInt16(rRect.Width()) ), nFix( sal_uInt16(rRect.Left()) )
 {
@@ -149,14 +151,16 @@ SwMarginPortion::SwMarginPortion( const sal_uInt16 nFixedWidth )
     SetWhichPor( POR_MARGIN );
 }
 
-// In the outer loop all portions are inspected - the GluePortions
-// at the end are processed first.
-// The end is shifted forwardly till no more GluePortions remain.
-// Always GluePortion-pairs (pLeft and pRight) are treated, where
-// textportions between pLeft and pRight are moved at the back of
-// pRight if pRight has enough Glue. With every move part of the
-// Glue is transferred from pRight to pLeft.
-// The next loop starts with the processed pLeft as pRight.
+/**
+ * In the outer loop all portions are inspected - the GluePortions
+ * at the end are processed first.
+ * The end is shifted forwardly till no more GluePortions remain.
+ * Always GluePortion-pairs (pLeft and pRight) are treated, where
+ * textportions between pLeft and pRight are moved at the back of
+ * pRight if pRight has enough Glue. With every move part of the
+ * Glue is transferred from pRight to pLeft.
+ * The next loop starts with the processed pLeft as pRight.
+ */
 void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
 {
     SwGluePortion *pRight = 0;

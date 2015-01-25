@@ -32,11 +32,11 @@ class SwFldPortion : public SwExpandPortion
 {
     friend class SwTxtFormatter;
 protected:
-    OUString  aExpand;              // The expanded field
-    SwFont  *pFnt;                  // For multi-line fields
-    sal_Int32 nNextOffset;         // Offset of the follow in the original string
+    OUString  aExpand;          // The expanded field
+    SwFont  *pFnt;              // For multi-line fields
+    sal_Int32 nNextOffset;      // Offset of the follow in the original string
     sal_Int32 nNextScriptChg;
-    sal_uInt16  nViewWidth;             // Screen width for empty fields
+    sal_uInt16  nViewWidth;     // Screen width for empty fields
     bool bFollow : 1;           // 2nd or later part of a field
     bool bLeft : 1;             // Used by SwNumberPortion
     bool bHide : 1;             // Used by SwNumberPortion
@@ -107,8 +107,9 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-// Distinguish only for painting/hide
-
+/**
+ * Distinguish only for painting/hide
+ */
 class SwHiddenPortion : public SwFldPortion
 {
 public:
@@ -202,12 +203,14 @@ public:
     OUTPUT_OPERATOR_OVERRIDE
 };
 
-// Used in for asian layout specialities to display up to six characters
-// in 2 rows and 2-3 columns.
-// e.g.
-//
-//       A..  A..  A.B  A.B   A.B.C   A.B.C
-//       ...  ..B  .C.  C.D   .D.E.   D.E.F
+/**
+ * Used in for asian layout specialities to display up to six characters
+ * in 2 rows and 2-3 columns.
+ * E.g.: <pre>
+ *        A..  A..  A.B  A.B   A.B.C   A.B.C
+ *        ...  ..B  .C.  C.D   .D.E.   D.E.F
+ *        </pre>
+ */
 class SwCombinedPortion : public SwFldPortion
 {
     sal_uInt16 aPos[6];     // up to six X positions

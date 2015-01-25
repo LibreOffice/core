@@ -131,8 +131,9 @@ sal_uInt16 SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
     return nViewWidth;
 }
 
-// 8653: in keinem Fall nur SetLen(0);
-
+/**
+ * Never just use SetLen(0)
+ */
 class SwFldSlot
 {
     const OUString *pOldTxt;
@@ -154,7 +155,7 @@ SwFldSlot::SwFldSlot( const SwTxtFormatInfo* pNew, const SwFldPortion *pPor )
 {
     bOn = pPor->GetExpTxt( *pNew, aTxt );
 
-    // Der Text wird ausgetauscht...
+    // The text will be replaced ...
     if( bOn )
     {
         pInf = (SwTxtFormatInfo*)pNew;
@@ -257,10 +258,9 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
             if (nCurrDir == UBIDI_RTL)
             {
                 nTmp = SW_CTL;
-                //If we decided that this range was RTL after all and the
-                //previous range was complex but clipped to the start of this
-                //range, then extend it to be complex over the additional RTL
-                //range
+                // If we decided that this range was RTL after all and the
+                // previous range was complex but clipped to the start of this
+                // range, then extend it to be complex over the additional RTL range
                 if (nScript == i18n::ScriptType::COMPLEX)
                     nNextScriptChg = nNextDirChg;
             }
@@ -316,18 +316,18 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
 
         SwFontSave aSave( rInf, pFnt );
 
-        // 8674: Laenge muss 0 sein, bei bFull nach Format ist die Laenge
-        // gesetzt und wird in nRest uebertragen. Ansonsten bleibt die
-        // Laenge erhalten und wuerde auch in nRest einfliessen!
+        // Length must be 0: the length is set for bFull after format
+        // and passed along in nRest. Or else the old length would be
+        // retained and be used for nRest!
         SetLen(0);
         const sal_Int32 nFollow = IsFollow() ? 0 : 1;
 
-        // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
-        // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
-        // false returnen wegen SetFull ...
+        // As odd is may seem: the query for GetLen() must return false due
+        // to the ExpandPortions _after_ aDiffTxt (see SoftHyphs), caused
+        // by SetFull.
         if( !nFullLen )
         {
-            // nicht Init(), weil wir Hoehe und Ascent brauchen
+            // Don't Init(), as we need height and ascent
             Width(0);
             bFull = rInf.Width() <= rInf.GetPos().X();
         }
@@ -353,14 +353,14 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
         bEOL = !nTmpLen && nFollow && bFull;
         nRest = nOldFullLen - nTmpLen;
 
-        // Das Zeichen wird in der ersten Portion gehalten.
-        // Unbedingt nach Format!
+        // The char is held in the first position
+        // Unconditionally after format!
         SetLen( (m_bNoLength) ? 0 : nFollow );
 
         if( nRest )
         {
-            // aExpand ist noch nicht gekuerzt worden, der neue Ofst
-            // ergibt sich durch nRest.
+            // aExpand has not yet been shortened; the new Ofst is a
+            // result of nRest
             sal_Int32 nNextOfst = aExpand.getLength() - nRest;
 
             if ( IsQuoVadisPortion() )
@@ -403,10 +403,11 @@ bool SwFldPortion::Format( SwTxtFormatInfo &rInf )
             }
             pFld->SetFollow( true );
             SetHasFollow( true );
-            // In nNextOffset steht bei einem neuangelegten Feld zunaechst
-            // der Offset, an dem es selbst im Originalstring beginnt.
-            // Wenn beim Formatieren ein FollowFeld angelegt wird, wird
-            // der Offset dieses FollowFelds in nNextOffset festgehalten.
+
+            // For a newly created field, nNextOffset contains the Offset
+            // of it's start of the original string
+            // If a FollowField is created when formatting, this FollowField's
+            // Offset is being held in nNextOffset
             nNextOffset = nNextOffset + nNextOfst;
             pFld->SetNextOffset( nNextOffset );
             rInf.SetRest( pFld );
@@ -425,7 +426,7 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion pollution?" );
     if( Width() && ( !bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
-        // Dies ist eine freizuegige Auslegung der Hintergrundbelegung ...
+        // A very liberal use of the background
         rInf.DrawViewOpt( *this, POR_FLD );
         SwExpandPortion::Paint( rInf );
     }
@@ -485,7 +486,7 @@ void SwHiddenPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 bool SwHiddenPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) const
 {
-    // Nicht auf IsHidden() abfragen !
+    // Do not query for IsHidden()!
     return SwFldPortion::GetExpTxt( rInf, rTxt );
 }
 
@@ -521,11 +522,12 @@ SwFldPortion *SwNumberPortion::Clone( const OUString &rExpand ) const
                                 nMinDist, mbLabelAlignmentPosAndSpaceModeActive );
 }
 
-// 5010: Wir sind in der Lage, mehrzeilige NumFelder anzulegen!
-// 3689: Fies ist, wenn man in der Dialogbox soviel Davor-Text
-// eingibt, bis die Zeile ueberlaeuft.
-// Man muss die Fly-Ausweichmanoever beachten!
-
+/**
+ * We can create multiple NumFields
+ * Tricky, if one enters enough previous-text in the dialog box
+ * to cause the line to overflow
+ * We need to keep the Fly's evasion tactics in mind
+ */
 bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 {
     SetHide( false );
@@ -558,9 +560,8 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
                 nDiff = rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
             }
         }
-        // proposal from Juergen and Volkmar:
-        // Der Textteil hinter der Numerierung sollte immer
-        // mindestens beim linken Rand beginnen.
+        // The text part of the numbering should always at least
+        // start at the left margin
         if( nDiff < 0 )
             nDiff = 0;
         else if ( nDiff > rInf.X() )
@@ -570,10 +571,11 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
 
         if( nDiff < nFixWidth + nMinDist )
             nDiff = nFixWidth + nMinDist;
-        // 2739: Numerierung weicht Fly aus, kein nDiff in der zweiten Runde
-        // fieser Sonderfall: FlyFrm liegt in dem Bereich,
-        // den wir uns gerade unter den Nagel reissen wollen.
-        // Die NumberPortion wird als verborgen markiert.
+
+        // Numbering evades the Fly, no nDiff in the second round
+        // Tricky special case: FlyFrm is in an Area we're just about to
+        // acquire
+        // The NumberPortion is marked as hidden
         const bool bFly = rInf.GetFly() ||
             ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
         if( nDiff > rInf.Width() )
@@ -596,12 +598,14 @@ bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
+
+/**
+ * A FormatEOL indicates that the subsequent text did not fit onto
+ * the line anymore. In order for the Numbering to follow through,
+ * we hide this NumberPortion
+ */
 void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 {
-/*  Ein FormatEOL deutet daraufhin, dass der folgende Text
- *  nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
- *  wird diese NumberPortion verborgen.
- */
 
     // This caused trouble with flys anchored as characters.
     // If one of these is numbered but does not fit to the line,
@@ -610,12 +614,13 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo& )
 //    SetHide( true );
 }
 
+
+/**
+ * A hidden NumberPortion is not displayed, unless there are TextPortions in
+ * this line or there's just one line at all
+ */
 void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-/*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
- *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
- */
-
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
         SwLinePortion *pTmp = GetPortion();
@@ -839,19 +844,19 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     long nDiff = mbLabelAlignmentPosAndSpaceModeActive
                  ? 0
                  : rInf.Left() - rInf.First() + rInf.ForcedLeftMargin();
-    // proposal by Juergen and Volkmar:
-    // Der Textteil hinter der Numerierung sollte immer
-    // mindestens beim linken Rand beginnen.
+    // The TextPortion should at least always start on the
+    // left margin
     if( nDiff < 0 )
         nDiff = 0;
     else if ( nDiff > rInf.X() )
         nDiff -= rInf.X();
     if( nDiff < nFixWidth + nMinDist )
         nDiff = nFixWidth + nMinDist;
-    // 2739: Numerierung weicht Fly aus, kein nDiff in der zweiten Runde
-    // fieser Sonderfall: FlyFrm liegt in dem Bereich,
-    // den wir uns gerade unter den Nagel reissen wollen.
-    // Die NumberPortion wird als verborgen markiert.
+
+    // Numbering evades Fly, no nDiff in the second round
+    // Tricky special case: FlyFrm is in the Area we were just
+    // about to get a hold of.
+    // The NumberPortion is marked as hidden
     if( nDiff > rInf.Width() )
     {
         nDiff = rInf.Width();
@@ -864,13 +869,15 @@ bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     return bFull;
 }
 
+
+/**
+ * A hidden NumberPortion is not displayed, unless there are TextPortions in
+ * this line or there's only one line at all
+ */
 void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( DontPaint() )
         return;
-/*  Eine verborgene NumberPortion wird nicht angezeigt, es sei denn, es gibt
- *  Textportions in dieser Zeile oder es gibt ueberhaupt nur eine einzige Zeile.
- */
     if ( IsHide() && rInf.GetParaPortion() && rInf.GetParaPortion()->GetNext() )
     {
         SwLinePortion *pTmp = GetPortion();
@@ -1009,10 +1016,8 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
         {
             if( GetGrfHeight() >= nFlyAsc + nFlyDesc )
             {
-                // wenn ich genauso gross bin wie die Zeile, brauche ich mich
-                // nicht an der Zeile nicht weiter ausrichten, ich lasse
-                // dann auch den max. Ascent der Zeile unveraendert
-
+                // If I'm as large as the line, I do not need to adjust
+                // at the line; I'll leave the max. ascent unchanged
                 SetRelPos( nFlyAsc );
             }
             else if ( GetOrient() == text::VertOrientation::LINE_CENTER )
@@ -1038,9 +1043,9 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
             {
                 if( pPor->IsGrfNumPortion() )
                     static_cast<SwGrfNumPortion*>(pPor)->StopAnimation( pOut );
-                // Die Numerierungsportion sitzt immer vor dem ersten Zeichen,
-                // deshalb koennen wir abbrechen, sobald wir eine Portion mit
-                // einer Laenge > 0 erreicht haben.
+                // The NumberPortion is always at the first char,
+                // which means we can cancel as soon as we've reached a portion
+                // with a length > 0
                 pPor = pPor->GetLen() ? 0 : pPor->GetPortion();
             }
             pLine = pLine->GetLen() ? 0 : pLine->GetNext();
@@ -1048,7 +1053,9 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
     }
 }
 
-// initializes the script array and clears the width array
+/**
+ * Initializes the script array and clears the width array
+ */
 SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     : SwFldPortion( rTxt )
     , nUpPos(0)
@@ -1059,6 +1066,7 @@ SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     SetWhichPor( POR_COMBINED );
     if( aExpand.getLength() > 6 )
         aExpand = aExpand.copy( 0, 6 );
+
     // Initialization of the scripttype array,
     // the arrays of width and position are filled by the format function
     if( g_pBreakIt->GetBreakIter().is() )
@@ -1113,8 +1121,9 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( i == nTop ) // change the row
                 aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
             aOutPos.X() = aOldPos.X() + aPos[i];        // X position
-            const sal_uInt8 nAct = aScrType[i];             // script type
+            const sal_uInt8 nAct = aScrType[i];        // script type
             aTmpFont.SetActual( nAct );
+
             // if there're more than 4 characters to display, we choose fonts
             // with 2/3 of the original font width.
             if( aWidth[ nAct ] )
@@ -1144,6 +1153,7 @@ bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     }
 
     OSL_ENSURE( nCount < 7, "Too much combined characters" );
+
     // If there are leading "weak"-scripttyped characters in this portion,
     // they get the actual scripttype.
     for( sal_Int32 i = 0; i < nCount && SW_SCRIPTS == aScrType[i]; ++i )

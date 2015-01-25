@@ -52,12 +52,12 @@ class SwFlyCntPortion : public SwLinePortion
     virtual sal_Int32 GetCrsrOfst( const sal_uInt16 nOfst ) const SAL_OVERRIDE;
 
 public:
-    // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
+    // Use new datatype for parameter <nFlags>
     SwFlyCntPortion( const SwTxtFrm& rFrm, SwFlyInCntFrm *pFly,
                      const Point &rBase,
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
                      objectpositioning::AsCharFlags nFlags );
-    // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
+    // Use new datatype for parameter <nFlags>
     SwFlyCntPortion( const SwTxtFrm& rFrm, SwDrawContact *pDrawContact,
                      const Point &rBase,
                      long nAscent, long nDescent, long nFlyAsc, long nFlyDesc,
@@ -74,7 +74,7 @@ public:
     inline sal_uInt8 GetAlign() const { return nAlign; }
     inline void SetAlign( sal_uInt8 nNew ) { nAlign = nNew; }
     inline void SetMax( bool bNew ) { bMax = bNew; }
-    // OD 29.07.2003 #110978# - use new datatype for parameter <nFlags>
+    // Use new datatype for parameter <nFlags>
     void SetBase( const SwTxtFrm& rFrm, const Point &rBase,
                   long nLnAscent, long nLnDescent,
                   long nFlyAscent, long nFlyDescent,
