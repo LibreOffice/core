@@ -53,6 +53,7 @@ ga \
 gd \
 gl \
 gu \
+gug \
 he \
 hi \
 hr \

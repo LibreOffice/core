@@ -33,7 +33,7 @@ bg       0  1026   # Bulgarian
 bn       0  2117   # Bengali
 bn-BD    0  2117   # Bengali Bangladesh
 bn-IN    0  1093   # Bengali India
-bo       0  2121   
+bo       0  2121
 br       0  1150   # Breton
 brx      0  1603   # Bodo (India)
 bs       0  5146   # bosnian
@@ -64,6 +64,7 @@ gd       0  1084   # Gaelic (Scotland)
 gl       0  1110   # Galician
 gu       0  1095   # Gujarati
 gu-IN    0  1095   # Gujarati
+gug      0  1140   # Guarani - Paraguay
 he       0  1037
 hi       0  1081
 hr       0  1050   # Croatian
@@ -116,7 +117,7 @@ om       0  2162
 or       0  1096   # Odia
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
-pap      0  2171 
+pap      0  2171
 pl       0  1045
 ps       0  2171
 pt       0  2070
@@ -145,7 +146,7 @@ st       0  1072   # Southern Sotho, Sutu
 sv       0  1053
 sw       0  1089   # Swahili
 sw-TZ    0  1089   # Swahili
-so       0  1143  
+so       0  1143
 ta       0  1097   # Tamil
 ta-IN    0  1097   # Tamil
 te       0  1098

@@ -520,6 +520,12 @@ en-US = "Gujarati"
 [STR_DESC_MODULE_HELPPACK_GU]
 en-US = "Installs Gujarati help in %PRODUCTNAME %PRODUCTVERSION"
 
+[STR_NAME_MODULE_HELPPACK_GUG]
+en-US = "Guarani"
+
+[STR_DESC_MODULE_HELPPACK_GUG]
+en-US = "Installs Guarani help in %PRODUCTNAME %PRODUCTVERSION"
+
 [STR_NAME_MODULE_HELPPACK_EN_ZA]
 en-US = "English (South Africa)"
 
