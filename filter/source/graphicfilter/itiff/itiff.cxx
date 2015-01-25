@@ -1266,6 +1266,15 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 pTIFF->ReadUInt16( nNumTags );
                 nPos = pTIFF->Tell();
 
+                const size_t nMinRecordSize = 8;
+                const size_t nMaxRecords = pTIFF->remainingSize() / nMinRecordSize;
+                if (nNumTags > nMaxRecords)
+                {
+                    SAL_WARN("filter.tiff", "Parsing error: " << nMaxRecords <<
+                             " max possible entries, but " << nNumTags << " claimed, truncating");
+                    nNumTags = nMaxRecords;
+                }
+
                 // Schleife ueber Tags:
                 for( i = 0; i < nNumTags; i++ )
                 {
