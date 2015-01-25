@@ -215,10 +215,7 @@ bool SbiBuffer::operator +=( sal_uInt32 n )
     {
         sal_uInt16 n1 = static_cast<sal_uInt16>( n & 0xFFFF );
         sal_uInt16 n2 = static_cast<sal_uInt16>( n >> 16 );
-        if ( operator +=( n1 ) && operator +=( n2 ) )
-        {
-            return true;
-        }
+        operator +=(n1) && operator +=(n2);
         return true;
     }
     else
