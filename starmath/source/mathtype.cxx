@@ -25,13 +25,13 @@
 void MathType::Init()
 {
     //These are the default MathType sizes
-    aSizeTable[0]=12;
-    aSizeTable[1]=8;
-    aSizeTable[2]=6;
-    aSizeTable[3]=24;
-    aSizeTable[4]=10;
-    aSizeTable[5]=12;
-    aSizeTable[6]=12;
+    aSizeTable.push_back(12);
+    aSizeTable.push_back(8);
+    aSizeTable.push_back(6);
+    aSizeTable.push_back(24);
+    aSizeTable.push_back(10);
+    aSizeTable.push_back(12);
+    aSizeTable.push_back(12);
 
     /*
     These are the default MathType italic/bold settings If mathtype is changed
