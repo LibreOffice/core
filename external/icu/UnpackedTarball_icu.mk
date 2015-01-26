@@ -24,6 +24,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,icu,\
 	external/icu/icu4c-icu11100.patch.1 \
 	external/icu/icu4c-scriptrun.patch \
 	external/icu/icu4c-icu11451.patch.1 \
+	external/icu/rtti.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
