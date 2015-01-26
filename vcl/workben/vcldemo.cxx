@@ -301,19 +301,21 @@ public:
         RENDER_DETAILS(text,KEY_T,1)
 
         bool mbClip;
+        bool mbArabicText;
 
-        DrawText() :
-            mbClip (false) {}
+        DrawText()
+            : mbClip (false)
+            , mbArabicText (false) {}
 
-        DrawText( bool bClip )
-            : mbClip (bClip) {}
+        DrawText( bool bClip, bool bArabicText )
+            : mbClip (bClip)
+            , mbArabicText (bArabicText) {}
 
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
-            OUString aText("Click any rect to zoom!!!!");
+            OUString aLatinText("Click any rect to zoom!!!!");
 
-            /* Arabic text
             const unsigned char pTextUTF8[] = {
                 0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
                 0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
@@ -321,10 +323,23 @@ public:
                 0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
                 0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
             };
-            OUString aText( reinterpret_cast<char const *>(pTextUTF8),
+            OUString aArabicText( reinterpret_cast<char const *>(pTextUTF8),
                             SAL_N_ELEMENTS( pTextUTF8 ) - 1,
                             RTL_TEXTENCODING_UTF8 );
-            */
+
+            OUString aText;
+            int nPrintNumCopies;
+
+            if (mbArabicText)
+            {
+                aText = aArabicText;
+                nPrintNumCopies=2;
+            }
+            else
+            {
+                aText = aLatinText;
+                nPrintNumCopies=20;
+            }
 
             std::vector<OUString> maFontNames;
             sal_uInt32 nCols[] = {
@@ -341,13 +356,12 @@ public:
             if (mbClip)
                 rDev.SetClipRegion( vcl::Region(r - Point(200, 200) ) );
 
-#define PRINT_N_TEXT 20
-            for (int i = 0; i < PRINT_N_TEXT; i++) {
+            for (int i = 0; i < nPrintNumCopies; i++) {
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
                 // random font size to avoid buffering
-                vcl::Font aFont(maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom())/PRINT_N_TEXT));
+                vcl::Font aFont(maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
                 rDev.SetFont(aFont);
-                rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (PRINT_N_TEXT - i)/PRINT_N_TEXT));
+                rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (nPrintNumCopies - i) / nPrintNumCopies));
             }
 
             if (mbClip)
@@ -360,7 +374,15 @@ public:
         RENDER_DETAILS(cliptext,KEY_T,1)
 
         DrawClipText()
-            : DrawText( true ) {}
+            : DrawText( true, false ) {}
+    };
+
+    struct DrawArabicText : public DrawText
+    {
+        RENDER_DETAILS(arabictext,KEY_T,1)
+
+        DrawArabicText()
+            : DrawText( false, true ) {}
     };
 
     struct DrawCheckered : public RegionRenderer
@@ -1158,6 +1180,7 @@ void DemoRenderer::InitRenderers()
     maRenderers.push_back(new DrawLines());
     maRenderers.push_back(new DrawText());
     maRenderers.push_back(new DrawClipText());
+    maRenderers.push_back(new DrawArabicText());
     maRenderers.push_back(new DrawPoly());
     maRenderers.push_back(new DrawEllipse());
     maRenderers.push_back(new DrawCheckered());
