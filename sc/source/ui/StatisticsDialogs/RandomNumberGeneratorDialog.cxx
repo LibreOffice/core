@@ -23,16 +23,7 @@
 #include "docfunc.hxx"
 #include "StatisticsDialogs.hrc"
 
-#include <boost/random.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/random/binomial_distribution.hpp>
-#include <boost/random/normal_distribution.hpp>
-#include <boost/random/cauchy_distribution.hpp>
-#include <boost/random/bernoulli_distribution.hpp>
-#include <boost/random/chi_squared_distribution.hpp>
-#include <boost/random/geometric_distribution.hpp>
-#include <boost/random/negative_binomial_distribution.hpp>
+#include <random>
 
 #include "RandomNumberGeneratorDialog.hxx"
 
@@ -178,7 +169,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
         seedValue = now.Nanosec;
     }
 
-    boost::mt19937 seed(seedValue);
+    std::mt19937 seed(seedValue);
 
     sal_Int64 parameterInteger1 = mpParameter1Value->GetValue();
     sal_Int64 parameterInteger2 = mpParameter2Value->GetValue();
@@ -196,64 +187,64 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
     {
         case DIST_UNIFORM:
         {
-            boost::random::uniform_real_distribution<> distribution(parameter1, parameter2);
-            boost::variate_generator<boost::mt19937&, boost::random::uniform_real_distribution<> > rng(seed, distribution);
+            std::uniform_real_distribution<> distribution(parameter1, parameter2);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_REAL, aDecimalPlaces);
             break;
         }
         case DIST_UNIFORM_INTEGER:
         {
-            boost::random::uniform_int_distribution<> distribution(parameterInteger1, parameterInteger2);
-            boost::variate_generator<boost::mt19937&, boost::random::uniform_int_distribution<> > rng(seed, distribution);
+            std::uniform_int_distribution<> distribution(parameterInteger1, parameterInteger2);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_INTEGER, aDecimalPlaces);
             break;
         }
         case DIST_NORMAL:
         {
-            boost::random::normal_distribution<> distribution(parameter1, parameter2);
-            boost::variate_generator<boost::mt19937&, boost::random::normal_distribution<> > rng(seed, distribution);
+            std::normal_distribution<> distribution(parameter1, parameter2);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_NORMAL, aDecimalPlaces);
             break;
         }
         case DIST_CAUCHY:
         {
-            boost::random::cauchy_distribution<> distribution(parameter1);
-            boost::variate_generator<boost::mt19937&, boost::random::cauchy_distribution<> > rng(seed, distribution);
+            std::cauchy_distribution<> distribution(parameter1);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_CAUCHY, aDecimalPlaces);
             break;
         }
         case DIST_BERNOULLI:
         {
-            boost::random::bernoulli_distribution<> distribution(parameter1);
-            boost::variate_generator<boost::mt19937&, boost::random::bernoulli_distribution<> > rng(seed, distribution);
+            std::bernoulli_distribution distribution(parameter1);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_BERNOULLI, aDecimalPlaces);
             break;
         }
         case DIST_BINOMIAL:
         {
-            boost::random::binomial_distribution<> distribution(parameterInteger2, parameter1);
-            boost::variate_generator<boost::mt19937&, boost::random::binomial_distribution<> > rng(seed, distribution);
+            std::binomial_distribution<> distribution(parameterInteger2, parameter1);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_BINOMIAL, aDecimalPlaces);
             break;
         }
         case DIST_NEGATIVE_BINOMIAL:
         {
-            boost::random::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
-            boost::variate_generator<boost::mt19937&, boost::random::negative_binomial_distribution<> > rng(seed, distribution);
+            std::negative_binomial_distribution<> distribution(parameterInteger2, parameter1);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_NEGATIVE_BINOMIAL, aDecimalPlaces);
             break;
         }
         case DIST_CHI_SQUARED:
         {
-            boost::random::chi_squared_distribution<> distribution(parameter1);
-            boost::variate_generator<boost::mt19937&, boost::random::chi_squared_distribution<> > rng(seed, distribution);
+            std::chi_squared_distribution<> distribution(parameter1);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_CHI_SQUARED, aDecimalPlaces);
             break;
         }
         case DIST_GEOMETRIC:
         {
-            boost::random::geometric_distribution<> distribution(parameter1);
-            boost::variate_generator<boost::mt19937&, boost::random::geometric_distribution<> > rng(seed, distribution);
+            std::geometric_distribution<> distribution(parameter1);
+            auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_GEOMETRIC, aDecimalPlaces);
             break;
         }
