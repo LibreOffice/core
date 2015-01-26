@@ -221,6 +221,11 @@ void ParaWin::UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i )
 
 ParaWin::~ParaWin()
 {
+    dispose();
+}
+
+void ParaWin::dispose()
+{
     // #i66422# if the focus changes during destruction of the controls,
     // don't call the focus handlers
     Link aEmptyLink;
@@ -228,6 +233,7 @@ ParaWin::~ParaWin()
     m_pBtnFx2->SetGetFocusHdl( aEmptyLink );
     m_pBtnFx3->SetGetFocusHdl( aEmptyLink );
     m_pBtnFx4->SetGetFocusHdl( aEmptyLink );
+    TabPage::dispose();
 }
 
 

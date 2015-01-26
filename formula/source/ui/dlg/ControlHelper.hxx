@@ -48,6 +48,7 @@ public:
                     EditBox( vcl::Window* pParent, WinBits nBits );
 
                     virtual ~EditBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     MultiLineEdit*  GetEdit() {return pMEdit;}
 

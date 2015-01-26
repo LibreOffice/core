@@ -361,10 +361,16 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeEditBox(vcl::Window *p
 
 EditBox::~EditBox()
 {
+    dispose();
+}
+
+void EditBox::dispose()
+{
     MultiLineEdit* pTheEdit=pMEdit;
     pMEdit->Disable();
     pMEdit=NULL;
     delete pTheEdit;
+    Control::dispose();
 }
 
 // When the selection is changed this function will be called
@@ -481,8 +487,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *p
 
 RefEdit::~RefEdit()
 {
+    dispose();
+}
+
+void RefEdit::dispose()
+{
     aIdle.SetIdleHdl( Link() );
     aIdle.Stop();
+    Edit::dispose();
 }
 
 void RefEdit::SetRefString( const OUString& rStr )

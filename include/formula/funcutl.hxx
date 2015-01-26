@@ -48,6 +48,7 @@ public:
     RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
     virtual ~RefEdit();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetRefString( const OUString& rStr );
 
