@@ -38,7 +38,7 @@
 #endif
 
 #define FONTCACHEFILE "/user/psprint/pspfontcache"
-#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 5"
+#define CACHE_MAGIC "LibreOffice PspFontCacheFile format 6"
 
 using namespace std;
 using namespace psp;
