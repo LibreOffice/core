@@ -31,13 +31,13 @@ public:
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitCXXRecordDecl(const CXXRecordDecl * decl);
-
     bool VisitFieldDecl(const FieldDecl * decl);
 
     bool VisitParmVarDecl(ParmVarDecl const * decl);
 
     bool VisitFunctionDecl( const FunctionDecl* var );
+
+    bool VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl);
 
 private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
@@ -79,32 +79,67 @@ bool isPointerToWindowSubclass(const QualType& pType) {
     return isDerivedFromWindow(recordDecl);
 }
 
-bool VCLWidgets::VisitCXXRecordDecl(const CXXRecordDecl * recordDecl) {
-    if (ignoreLocation(recordDecl)) {
+bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl)
+{
+    if (ignoreLocation(pCXXDestructorDecl)) {
         return true;
     }
-    if (!recordDecl->isCompleteDefinition())
+    if (!pCXXDestructorDecl->hasBody()) {
         return true;
+    }
+    const CXXRecordDecl * pRecordDecl = pCXXDestructorDecl->getParent();
     // check if this class is derived from Window
-    if (!isDerivedFromWindow(recordDecl)) {
+    if (!isDerivedFromWindow(pRecordDecl)) {
         return true;
     }
-    if (!recordDecl->hasUserDeclaredDestructor()) {
-        return true;
+    bool foundVclPtrField = false;
+    for(auto fieldDecl : pRecordDecl->fields()) {
+        const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
+        if (pFieldRecordType) {
+            const CXXRecordDecl *pFieldRecordDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
+            static const char sVclPtr[] = "VcllPtr";
+            if (pFieldRecordDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+               foundVclPtrField = true;
+               break;
+            }
+       }
     }
     bool foundDispose = false;
-    for(auto methodDecl : recordDecl->methods()) {
+    for(auto methodDecl : pRecordDecl->methods()) {
         if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
            foundDispose = true;
            break;
         }
     }
-    if (!foundDispose) {
+    const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pCXXDestructorDecl->getBody());
+    // having an empty body and no dispose() method is fine
+    if (!foundVclPtrField && !foundDispose && pCompoundStatement->size() == 0) {
+        return true;
+    }
+    if (foundVclPtrField && pCompoundStatement->size() == 0) {
         report(
             DiagnosticsEngine::Warning,
-            "vcl::Window subclass with destructor should declare a dispose() method.",
-            recordDecl->getLocation())
-          << recordDecl->getSourceRange();
+            "vcl::Window subclass with VclPtr field must call dispose() from it's destructor.",
+            pCXXDestructorDecl->getBody()->getLocStart())
+          << pCXXDestructorDecl->getBody()->getSourceRange();
+        return true;
+    }
+    // check that the destructor for a vcl::Window subclass does nothing except call into the dispose() method
+    bool ok = false;
+    if (pCompoundStatement->size() == 1) {
+        const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
+        if (pCallExpr) {
+            ok = true;
+        }
+    }
+    if (!ok) {
+        report(
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass should have nothing in it's destructor but a call to dispose().",
+            pCXXDestructorDecl->getBody()->getLocStart())
+          << pCXXDestructorDecl->getBody()->getSourceRange()
+          << pCXXDestructorDecl->getCanonicalDecl()->getSourceRange();
+        return true;
     }
     return true;
 }
@@ -134,16 +169,35 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (recordDecl == nullptr) {
         return true;
     }
+
     // check if this field is derived from Window
-    if (!isDerivedFromWindow(recordDecl)) {
-        return true;
+    if (isDerivedFromWindow(recordDecl)) {
+        report(
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass allocated as a class member, should be allocated via VclPtr.",
+            fieldDecl->getLocation())
+          << fieldDecl->getSourceRange();
     }
 
-    report(
-        DiagnosticsEngine::Warning,
-        "vcl::Window subclass allocated as a class member, should be allocated via VclPtr.",
-        fieldDecl->getLocation())
-      << fieldDecl->getSourceRange();
+    // If this field is a VclPtr field, then the class MUST have a dispose method
+    static const char sVclPtr[] = "VcllPtr";
+    if (recordDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+        bool foundDispose = false;
+        for(auto methodDecl : recordDecl->methods()) {
+            if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
+               foundDispose = true;
+               break;
+            }
+        }
+        if (!foundDispose) {
+        report(
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass with a VclPtr field MUST have a dispose() method.",
+            recordDecl->getLocation())
+          << recordDecl->getSourceRange();
+        }
+    }
+
     return true;
 }
 
@@ -179,6 +233,7 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
         && pMethodDecl->getParent()->getQualifiedNameAsString().find("VclPtr") != std::string::npos) {
         return true;
     }
+    // ignore the vcl::Window::dispose() method
     if (pMethodDecl
         && pMethodDecl->getParent()->getQualifiedNameAsString().compare("vcl::Window") == 0) {
         return true;
@@ -192,30 +247,12 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
           << functionDecl->getSourceRange();
     }
     if (functionDecl->hasBody() && pMethodDecl && isDerivedFromWindow(pMethodDecl->getParent())) {
-        const CXXDestructorDecl *pDestructorDecl = dyn_cast<CXXDestructorDecl>(pMethodDecl);
-        // check that the destructor for a vcl::Window subclass does nothing except call into the dispose() method
-        if (pDestructorDecl) {
-            const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(functionDecl->getBody());
-            bool ok = false;
-            if (pCompoundStatement && pCompoundStatement->size() == 1) {
-                const CXXMemberCallExpr *pCallExpr = dyn_cast<CXXMemberCallExpr>(*pCompoundStatement->body_begin());
-                if (pCallExpr) {
-                    ok = true;
-                }
-            }
-            if (!ok) {
-                report(
-                    DiagnosticsEngine::Warning,
-                    "vcl::Window subclass should have nothing in it's destructor but a call to dispose().",
-                    functionDecl->getBody()->getLocStart())
-                  << functionDecl->getBody()->getSourceRange();
-            }
         // check the last thing that the dispose() method does, is to call into the superclass dispose method
-        } else if (pMethodDecl->getNameAsString() == "dispose") {
+        if (pMethodDecl->getNameAsString() == "dispose") {
             if (!isDisposeCallingSuperclassDispose(pMethodDecl)) {
                 report(
                     DiagnosticsEngine::Warning,
-                    "vcl::Window subclass dispose() method MUST call it's superclass dispose() as the last thing it does.",
+                    "vcl::Window subclass dispose() method MUST call it's superclass dispose() as the last thing it does",
                     functionDecl->getBody()->getLocStart())
                   << functionDecl->getBody()->getSourceRange();
            }
