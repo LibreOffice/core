@@ -321,7 +321,7 @@ bool SvpSalGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -329,7 +329,7 @@ const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
-    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
+    return GenPspGraphics::DoGetFontEncodingVector(aFont, pNonEncoded, ppPriority);
 }
 
 const void* SvpSalGraphics::GetEmbedFontData(
