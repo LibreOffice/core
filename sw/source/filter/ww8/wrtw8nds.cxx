@@ -1526,7 +1526,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
         SfxItemState eState =
             pFlyFmt->GetItemState(RES_BACKGROUND, true, &pItem);
         pRet = static_cast<const SvxBrushItem*>(pItem);
-        if (SfxItemState::SET != eState || (!pRet->GetGraphic() &&
+        if (SfxItemState::SET != eState || !pRet || (!pRet->GetGraphic() &&
             pRet->GetColor() == COL_TRANSPARENT))
         {
             pRet = 0;
