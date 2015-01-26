@@ -359,7 +359,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:"))
     {
-        if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:access"))
+        if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:"))
         {
             if (sDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;"))
                 return DST_MSACCESS_2007;
