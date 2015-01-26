@@ -572,7 +572,7 @@ protected:
     DECL_LINK(ScrollBarHdl, void *);
     void InitScrollBars(const Size &rRequest);
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
-    void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); VclBin::dispose(); }
+    void dispose() SAL_OVERRIDE { m_pVScroll.disposeAndClear(); m_pHScroll.disposeAndClear(); m_aScrollBarBox.disposeAndClear(); VclBin::dispose(); }
 private:
     bool m_bUserManagedScrolling;
     VclPtr<ScrollBar> m_pVScroll;

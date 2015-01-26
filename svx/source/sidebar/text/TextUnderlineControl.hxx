@@ -36,6 +36,8 @@ public:
         vcl::Window* pParent,
         svx::sidebar::TextPropertyPanel& rPanel,
         SfxBindings* pBindings);
+    virtual ~TextUnderlineControl();
+    virtual void dispose() SAL_OVERRIDE;
     void Rearrange(FontUnderline eLine);
 
 private:

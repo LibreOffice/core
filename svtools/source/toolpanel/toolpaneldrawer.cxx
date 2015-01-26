@@ -87,7 +87,16 @@ namespace svt
         m_aVisualization->SetAccessibleDescription( i_rTitle );
     }
 
+    ToolPanelDrawer::~ToolPanelDrawer()
+    {
+        dispose();
+    }
 
+    void ToolPanelDrawer::dispose()
+    {
+        m_aVisualization.disposeAndClear();
+        vcl::Window::dispose();
+    }
 
     long ToolPanelDrawer::GetPreferredHeightPixel() const
     {

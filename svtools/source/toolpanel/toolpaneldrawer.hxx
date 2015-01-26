@@ -63,6 +63,8 @@ namespace svt
     {
     public:
         ToolPanelDrawer( vcl::Window& i_rParent, const OUString& i_rTitle );
+        virtual ~ToolPanelDrawer();
+        virtual void dispose() SAL_OVERRIDE;
 
         long    GetPreferredHeightPixel() const;
         void    SetExpanded( const bool i_bExpanded );

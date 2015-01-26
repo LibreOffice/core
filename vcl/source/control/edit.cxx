@@ -280,6 +280,7 @@ void Edit::dispose()
 
     SetType(WINDOW_WINDOW);
 
+    mpSubEdit.disposeAndClear();
     Control::dispose();
 }
 

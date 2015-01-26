@@ -53,6 +53,7 @@ EmptyPanel::~EmptyPanel()
 
 void EmptyPanel::dispose()
 {
+    maMessageControl.disposeAndClear();
     Control::dispose();
 }
 

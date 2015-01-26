@@ -65,6 +65,18 @@ TextUnderlineControl::TextUnderlineControl (
     FreeResource();
 }
 
+TextUnderlineControl::~TextUnderlineControl()
+{
+    dispose();
+}
+
+void TextUnderlineControl::dispose()
+{
+    maVSUnderline.disposeAndClear();
+    maPBOptions.disposeAndClear();
+    svx::sidebar::PopupControl::dispose();
+}
+
 void TextUnderlineControl::initial()
 {
     maVSUnderline->SetColor(GetSettings().GetStyleSettings().GetHighContrastMode() ?
