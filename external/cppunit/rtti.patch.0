@@ -1,0 +1,15 @@
+--- include/cppunit/config/CppUnitApi.h
++++ include/cppunit/config/CppUnitApi.h
+@@ -20,6 +20,12 @@
+ #define CPPUNIT_NEED_DLL_DECL 1
+ #endif
+ 
++#elif defined __GNUC__ //TODO: actually only works for modern enough GCC
++
++#define CPPUNIT_API __attribute__ ((visibility("default")))
++#undef CPPUNIT_NEED_DLL_DECL
++#define CPPUNIT_NEED_DLL_DECL 0
++
+ #endif
+ 
+ 
