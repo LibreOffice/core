@@ -518,9 +518,15 @@ void Test::testI116701()
 
 void Test::testDateInput()
 {
-    // Data from https://bugs.documentfoundation.org/show_bug.cgi?id=63230
-    // attachment https://bugs.documentfoundation.org/attachment.cgi?id=79051
     const char* aData[][2] = {
+        "Europe/Paris", "1938-10-07",       // i#76623
+        "Europe/Moscow", "1919-07-01",      // i#86094
+        "Europe/Tallinn", "1790-03-01",     // i#105864
+        "Australia/Perth", "2004-04-11",    // i#17222
+        "America/Sao_Paulo", "1902-04-22",  // tdf#44286
+
+        // Data from https://bugs.documentfoundation.org/show_bug.cgi?id=63230
+        // https://bugs.documentfoundation.org/attachment.cgi?id=79051
         "Africa/Accra", "1800-01-01",
         "Africa/Accra", "1800-04-10",
         "Africa/Addis_Ababa", "1870-01-01",
