@@ -43,6 +43,7 @@
 #include "statcach.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sidebar/ContextChangeBroadcaster.hxx>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -292,6 +293,19 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
 
         DBG_WARNING( "W3: invalidating slot-id unknown in shell" );
     }
+}
+
+void SfxShell::HandleOpenXmlFilterSettings(SfxRequest & rReq)
+{
+    try
+    {
+        uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
+        xDialog->execute();
+    }
+    catch (const uno::Exception&)
+    {
+    }
+    rReq.Ignore ();
 }
 
 void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
