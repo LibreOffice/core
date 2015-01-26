@@ -118,10 +118,15 @@ namespace pcr
 
     TabOrderDialog::~TabOrderDialog()
     {
+        dispose();
+    }
+
+    void TabOrderDialog::dispose()
+    {
         m_pLB_Controls->Hide();
         //  delete pLB_Controls;
         delete pImageList;
-
+        ModalDialog::dispose();
     }
 
 

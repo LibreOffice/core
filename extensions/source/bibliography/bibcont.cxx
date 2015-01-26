@@ -56,19 +56,10 @@ BibSplitWindow::BibSplitWindow( vcl::Window* pParent, WinBits nStyle ) : SplitWi
 {
 }
 
-BibSplitWindow::~BibSplitWindow()
-{
-}
-
 BibTabPage::BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
                         TabPage( pParent, rID, rUIXMLDescription ), BibShortCutHandler( this )
 {
 }
-
-BibTabPage::~BibTabPage()
-{
-}
-
 
 using namespace osl;
 using namespace ::com::sun::star;
@@ -94,12 +85,18 @@ BibWindowContainer::BibWindowContainer( vcl::Window* pParent, BibShortCutHandler
 
 BibWindowContainer::~BibWindowContainer()
 {
+    dispose();
+}
+
+void BibWindowContainer::dispose()
+{
     if( pChild )
     {
         vcl::Window* pDel = GetChild();
         pChild = NULL;          // prevents GetFocus for child while deleting!
         delete pDel;
     }
+    vcl::Window::dispose();
 }
 
 void BibWindowContainer::Resize()
@@ -132,6 +129,11 @@ BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
 
 BibBookContainer::~BibBookContainer()
 {
+    dispose();
+}
+
+void BibBookContainer::dispose()
+{
     if( xTopFrameRef.is() )
         xTopFrameRef->dispose();
     if( xBottomFrameRef.is() )
@@ -152,6 +154,7 @@ BibBookContainer::~BibBookContainer()
     }
 
     CloseBibModul( pBibMod );
+    BibSplitWindow::dispose();
 }
 
 void BibBookContainer::Split()

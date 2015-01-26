@@ -105,6 +105,7 @@ private:
 public:
     SaneDlg( vcl::Window*, Sane&, bool );
     virtual ~SaneDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual short Execute() SAL_OVERRIDE;
     void UpdateScanArea( bool );

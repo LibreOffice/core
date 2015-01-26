@@ -66,6 +66,7 @@ namespace abp
     public:
         TypeSelectionPage( OAddessBookSourcePilot* _pParent );
         virtual ~TypeSelectionPage();
+        virtual void        dispose() SAL_OVERRIDE;
 
         // retrieves the currently selected type
         AddressSourceType   getSelectedType() const;

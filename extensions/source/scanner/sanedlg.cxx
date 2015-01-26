@@ -239,7 +239,13 @@ SaneDlg::SaneDlg( vcl::Window* pParent, Sane& rSane, bool bScanEnabled ) :
 
 SaneDlg::~SaneDlg()
 {
+    dispose();
+}
+
+void SaneDlg::dispose()
+{
     mrSane.SetReloadOptionsHdl( maOldLink );
+    ModalDialog::dispose();
 }
 
 namespace {

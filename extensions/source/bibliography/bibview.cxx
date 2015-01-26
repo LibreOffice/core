@@ -60,6 +60,11 @@ namespace bib
 
     BibView::~BibView()
     {
+        dispose();
+    }
+
+    void BibView::dispose()
+    {
         BibGeneralPage* pGeneralPage = m_pGeneralPage;
         m_pGeneralPage = NULL;
 
@@ -97,6 +102,7 @@ namespace bib
 
         pGeneralPage->RemoveListeners();
         m_xGeneralPage = NULL;
+        BibWindow::dispose();
     }
 
     void BibView::UpdatePages()

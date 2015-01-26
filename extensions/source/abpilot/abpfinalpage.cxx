@@ -64,7 +64,13 @@ namespace abp
 
     FinalPage::~FinalPage()
     {
+        dispose();
+    }
+
+    void FinalPage::dispose()
+    {
         delete m_pLocationController;
+        AddressBookSourcePage::dispose();
     }
 
     bool FinalPage::isValidName() const

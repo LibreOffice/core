@@ -345,8 +345,8 @@ namespace pcr
 
     OBrowserListBox::OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle| WB_CLIPCHILDREN)
-            ,m_aLinesPlayground(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN)
-            ,m_aVScroll(this,WB_VSCROLL|WB_REPEAT|WB_DRAG)
+            ,m_aLinesPlayground(new vcl::Window(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN))
+            ,m_aVScroll(new ScrollBar(this,WB_VSCROLL|WB_REPEAT|WB_DRAG))
             ,m_pHelpWindow( new InspectorHelpWindow( this ) )
             ,m_pLineListener(NULL)
             ,m_pControlObserver( NULL )
@@ -362,17 +362,22 @@ namespace pcr
         aListBox.SetPosSizePixel(Point(0,0),Size(100,100));
         m_nRowHeight = aListBox.GetSizePixel().Height()+2;
         SetBackground( pParent->GetBackground() );
-        m_aLinesPlayground.SetBackground( GetBackground() );
+        m_aLinesPlayground->SetBackground( GetBackground() );
 
-        m_aLinesPlayground.SetPosPixel(Point(0,0));
-        m_aLinesPlayground.SetPaintTransparent(true);
-        m_aLinesPlayground.Show();
-        m_aVScroll.Hide();
-        m_aVScroll.SetScrollHdl(LINK(this, OBrowserListBox, ScrollHdl));
+        m_aLinesPlayground->SetPosPixel(Point(0,0));
+        m_aLinesPlayground->SetPaintTransparent(true);
+        m_aLinesPlayground->Show();
+        m_aVScroll->Hide();
+        m_aVScroll->SetScrollHdl(LINK(this, OBrowserListBox, ScrollHdl));
     }
 
 
     OBrowserListBox::~OBrowserListBox()
+    {
+        dispose();
+    }
+
+    void OBrowserListBox::dispose()
     {
         OSL_ENSURE( !IsModified(), "OBrowserListBox::~OBrowserListBox: still modified - should have been committed before!" );
             // doing the commit here, while we, as well as our owner, as well as some other components,
@@ -384,7 +389,9 @@ namespace pcr
 
         Hide();
         Clear();
-
+        m_aLinesPlayground.disposeAndClear();
+        m_aVScroll.disposeAndClear();
+        Control::dispose();
     }
 
 
@@ -425,7 +432,7 @@ namespace pcr
         if (m_bIsActive)
         {
             // TODO: what's the sense of this?
-            m_aVScroll.SetThumbPos(100);
+            m_aVScroll->SetThumbPos(100);
             MoveThumbTo(0);
             Resize();
         }
@@ -452,31 +459,31 @@ namespace pcr
             aLinesArea.Bottom() -= nHelpWindowHeight;
             aLinesArea.Bottom() -= aHelpWindowDistance.Height();
         }
-        m_aLinesPlayground.SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
+        m_aLinesPlayground->SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
 
         UpdateVScroll();
 
         bool bNeedScrollbar = m_aLines.size() > (sal_uInt32)CalcVisibleLines();
         if ( !bNeedScrollbar )
         {
-            if ( m_aVScroll.IsVisible() )
-                m_aVScroll.Hide();
+            if ( m_aVScroll->IsVisible() )
+                m_aVScroll->Hide();
             // scroll to top
             m_nYOffset = 0;
-            m_aVScroll.SetThumbPos( 0 );
+            m_aVScroll->SetThumbPos( 0 );
         }
         else
         {
-            Size aVScrollSize( m_aVScroll.GetSizePixel() );
+            Size aVScrollSize( m_aVScroll->GetSizePixel() );
 
             // adjust the playground's width
             aLinesArea.Right() -= aVScrollSize.Width();
-            m_aLinesPlayground.SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
+            m_aLinesPlayground->SetPosSizePixel( aLinesArea.TopLeft(), aLinesArea.GetSize() );
 
             // position the scrollbar
             aVScrollSize.Height() = aLinesArea.GetHeight();
             Point aVScrollPos( aLinesArea.GetWidth(), 0 );
-            m_aVScroll.SetPosSizePixel( aVScrollPos, aVScrollSize );
+            m_aVScroll->SetPosSizePixel( aVScrollPos, aVScrollSize );
         }
 
         for ( sal_uInt16 i = 0; i < m_aLines.size(); ++i )
@@ -489,7 +496,7 @@ namespace pcr
 
         // show the scrollbar
         if ( bNeedScrollbar )
-            m_aVScroll.Show();
+            m_aVScroll->Show();
 
         // position the help window
         if ( bPositionHelpWindow )
@@ -543,7 +550,7 @@ namespace pcr
 
     sal_uInt16 OBrowserListBox::CalcVisibleLines()
     {
-        Size aSize(m_aLinesPlayground.GetOutputSizePixel());
+        Size aSize(m_aLinesPlayground->GetOutputSizePixel());
         sal_uInt16 nResult = 0;
         if (0 != m_nRowHeight)
             nResult = (sal_uInt16) aSize.Height()/m_nRowHeight;
@@ -555,18 +562,18 @@ namespace pcr
     void OBrowserListBox::UpdateVScroll()
     {
         sal_uInt16 nLines = CalcVisibleLines();
-        m_aVScroll.SetPageSize(nLines-1);
-        m_aVScroll.SetVisibleSize(nLines-1);
+        m_aVScroll->SetPageSize(nLines-1);
+        m_aVScroll->SetVisibleSize(nLines-1);
 
         size_t nCount = m_aLines.size();
         if (nCount>0)
         {
-            m_aVScroll.SetRange(Range(0,nCount-1));
-            m_nYOffset = -m_aVScroll.GetThumbPos()*m_nRowHeight;
+            m_aVScroll->SetRange(Range(0,nCount-1));
+            m_nYOffset = -m_aVScroll->GetThumbPos()*m_nRowHeight;
         }
         else
         {
-            m_aVScroll.SetRange(Range(0,0));
+            m_aVScroll->SetRange(Range(0,0));
             m_nYOffset = 0;
         }
     }
@@ -574,7 +581,7 @@ namespace pcr
 
     void OBrowserListBox::PositionLine( sal_uInt16 _nIndex )
     {
-        Size aSize(m_aLinesPlayground.GetOutputSizePixel());
+        Size aSize(m_aLinesPlayground->GetOutputSizePixel());
         Point aPos(0, m_nYOffset);
 
         aSize.Height() = m_nRowHeight;
@@ -612,7 +619,7 @@ namespace pcr
 
     void OBrowserListBox::UpdatePlayGround()
     {
-        sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
+        sal_Int32 nThumbPos = m_aVScroll->GetThumbPos();
         sal_Int32 nLines = CalcVisibleLines();
 
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
@@ -729,7 +736,7 @@ namespace pcr
     sal_uInt16 OBrowserListBox::InsertEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 _nPos)
     {
         // create a new line
-        BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, &m_aLinesPlayground ) );
+        BrowserLinePointer pBrowserLine( new OBrowserLine( _rPropertyData.sName, m_aLinesPlayground.get() ) );
 
         // check that the name is unique
         ListBoxLines::iterator it = m_aLines.begin();
@@ -794,7 +801,7 @@ namespace pcr
     {
         if ( _nPos < m_aLines.size() )
         {
-            sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
+            sal_Int32 nThumbPos = m_aVScroll->GetThumbPos();
 
             if (_nPos < nThumbPos)
                 MoveThumbTo(_nPos);
@@ -812,19 +819,19 @@ namespace pcr
     void OBrowserListBox::MoveThumbTo(sal_Int32 _nNewThumbPos)
     {
         // disable painting to prevent flicker
-        m_aLinesPlayground.EnablePaint(false);
+        m_aLinesPlayground->EnablePaint(false);
 
-        sal_Int32 nDelta = _nNewThumbPos - m_aVScroll.GetThumbPos();
+        sal_Int32 nDelta = _nNewThumbPos - m_aVScroll->GetThumbPos();
         // adjust the scrollbar
-        m_aVScroll.SetThumbPos(_nNewThumbPos);
+        m_aVScroll->SetThumbPos(_nNewThumbPos);
         sal_Int32 nThumbPos = _nNewThumbPos;
 
-        m_nYOffset = -m_aVScroll.GetThumbPos() * m_nRowHeight;
+        m_nYOffset = -m_aVScroll->GetThumbPos() * m_nRowHeight;
 
         sal_Int32 nLines = CalcVisibleLines();
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
 
-        m_aLinesPlayground.Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
+        m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
 
         if (1 == nDelta)
         {
@@ -841,27 +848,27 @@ namespace pcr
             UpdatePlayGround();
         }
 
-        m_aLinesPlayground.EnablePaint(true);
-        m_aLinesPlayground.Invalidate(INVALIDATE_CHILDREN);
+        m_aLinesPlayground->EnablePaint(true);
+        m_aLinesPlayground->Invalidate(INVALIDATE_CHILDREN);
     }
 
 
     IMPL_LINK(OBrowserListBox, ScrollHdl, ScrollBar*, _pScrollBar )
     {
-        DBG_ASSERT(_pScrollBar == &m_aVScroll, "OBrowserListBox::ScrollHdl: where does this come from?");
+        DBG_ASSERT(_pScrollBar == m_aVScroll.get(), "OBrowserListBox::ScrollHdl: where does this come from?");
         (void)_pScrollBar;
 
         // disable painting to prevent flicker
-        m_aLinesPlayground.EnablePaint(false);
+        m_aLinesPlayground->EnablePaint(false);
 
-        sal_Int32 nThumbPos = m_aVScroll.GetThumbPos();
+        sal_Int32 nThumbPos = m_aVScroll->GetThumbPos();
 
-        sal_Int32 nDelta = m_aVScroll.GetDelta();
+        sal_Int32 nDelta = m_aVScroll->GetDelta();
         m_nYOffset = -nThumbPos * m_nRowHeight;
 
         sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + CalcVisibleLines());
 
-        m_aLinesPlayground.Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
+        m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, SCROLL_CHILDREN);
 
         if (1 == nDelta)
         {
@@ -872,12 +879,12 @@ namespace pcr
         {
             PositionLine((sal_uInt16)nThumbPos);
         }
-        else if (nDelta!=0 || m_aVScroll.GetType() == SCROLL_DONTKNOW)
+        else if (nDelta!=0 || m_aVScroll->GetType() == SCROLL_DONTKNOW)
         {
             UpdatePlayGround();
         }
 
-        m_aLinesPlayground.EnablePaint(true);
+        m_aLinesPlayground->EnablePaint(true);
         return 0;
     }
 
@@ -1129,7 +1136,7 @@ namespace pcr
             rLine.pLine->SetTitle(_rPropertyData.DisplayName);
             rLine.xHandler = _rPropertyData.xPropertyHandler;
 
-            sal_uInt16 nTextWidth = (sal_uInt16)m_aLinesPlayground.GetTextWidth(_rPropertyData.DisplayName);
+            sal_uInt16 nTextWidth = (sal_uInt16)m_aLinesPlayground->GetTextWidth(_rPropertyData.DisplayName);
             if (m_nTheNameSize< nTextWidth)
                 m_nTheNameSize = nTextWidth;
 
@@ -1216,21 +1223,21 @@ namespace pcr
                     break;
 
                 long nScrollOffset = 0;
-                if ( m_aVScroll.IsVisible() )
+                if ( m_aVScroll->IsVisible() )
                 {
                     if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEUP )
-                        nScrollOffset = -m_aVScroll.GetPageSize();
+                        nScrollOffset = -m_aVScroll->GetPageSize();
                     else if ( pKeyEvent->GetKeyCode().GetCode() == KEY_PAGEDOWN )
-                        nScrollOffset = m_aVScroll.GetPageSize();
+                        nScrollOffset = m_aVScroll->GetPageSize();
                 }
 
                 if ( nScrollOffset )
                 {
-                    long nNewThumbPos = m_aVScroll.GetThumbPos() + nScrollOffset;
-                    nNewThumbPos = ::std::max( nNewThumbPos, m_aVScroll.GetRangeMin() );
-                    nNewThumbPos = ::std::min( nNewThumbPos, m_aVScroll.GetRangeMax() );
-                    m_aVScroll.DoScroll( nNewThumbPos );
-                    nNewThumbPos = m_aVScroll.GetThumbPos();
+                    long nNewThumbPos = m_aVScroll->GetThumbPos() + nScrollOffset;
+                    nNewThumbPos = ::std::max( nNewThumbPos, m_aVScroll->GetRangeMin() );
+                    nNewThumbPos = ::std::min( nNewThumbPos, m_aVScroll->GetRangeMax() );
+                    m_aVScroll->DoScroll( nNewThumbPos );
+                    nNewThumbPos = m_aVScroll->GetThumbPos();
 
                     sal_uInt16 nFocusControlPos = 0;
                     sal_uInt16 nActiveControlPos = impl_getControlPos( m_xActiveControl );
@@ -1271,9 +1278,9 @@ namespace pcr
                 )
             {
                 // interested in scroll events if we have a scrollbar
-                if ( m_aVScroll.IsVisible() )
+                if ( m_aVScroll->IsVisible() )
                 {
-                    HandleScrollCommand( *pCommand, NULL, &m_aVScroll );
+                    HandleScrollCommand( *pCommand, NULL, m_aVScroll.get() );
                 }
             }
         }

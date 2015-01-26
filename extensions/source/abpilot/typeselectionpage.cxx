@@ -151,11 +151,17 @@ namespace abp
 
     TypeSelectionPage::~TypeSelectionPage()
     {
+        dispose();
+    }
+
+    void TypeSelectionPage::dispose()
+    {
         for ( ::std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             loop->m_bVisible = false;
         }
+        AddressBookSourcePage::dispose();
     }
 
 

@@ -87,6 +87,7 @@ namespace bib
 
             BibGridwin(vcl::Window* pParent, WinBits nStyle = WB_3DLOOK );
             virtual ~BibGridwin();
+            virtual void dispose() SAL_OVERRIDE;
 
             void createGridWin(const Reference< awt::XControlModel > & xDbForm);
             void disposeGridWin();
@@ -107,9 +108,15 @@ namespace bib
 
     BibGridwin::~BibGridwin()
     {
+        dispose();
+    }
+
+    void BibGridwin::dispose()
+    {
         RemoveFromTaskPaneList( this );
 
         disposeGridWin();
+        vcl::Window::dispose();
     }
 
     void BibGridwin::Resize()
@@ -195,6 +202,11 @@ namespace bib
 
     BibBeamer::~BibBeamer()
     {
+        dispose();
+    }
+
+    void BibBeamer::dispose()
+    {
         if ( isFormConnected() )
             disconnectForm();
 
@@ -215,7 +227,7 @@ namespace bib
             pDel->disposeGridWin();
             delete pDel;
         }
-
+        BibSplitWindow::dispose();
     }
 
     void BibBeamer::createToolBar()

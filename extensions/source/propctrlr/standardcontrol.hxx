@@ -383,6 +383,7 @@ namespace pcr
     public:
         DropDownEditControl( vcl::Window* _pParent, WinBits _nStyle );
         virtual ~DropDownEditControl();
+        virtual void dispose() SAL_OVERRIDE;
 
         void setOperationMode( MultiLineOperationMode _eMode ) { m_nOperationMode = _eMode; }
         MultiLineOperationMode getOperationMode() const { return m_nOperationMode; }

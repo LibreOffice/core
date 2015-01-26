@@ -364,12 +364,18 @@ BibGeneralPage::BibGeneralPage(vcl::Window* pParent, BibDataManager* pMan):
 
 BibGeneralPage::~BibGeneralPage()
 {
+    dispose();
+}
+
+void BibGeneralPage::dispose()
+{
     if (pDatMan && xPosListener.is())
     {
         uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
         if(xRowSet.is())
             xRowSet->removeRowSetListener(xPosListener);
     }
+    BibTabPage::dispose();
 }
 
 void BibGeneralPage::RemoveListeners()

@@ -102,6 +102,7 @@ namespace pcr
         );
 
         virtual ~TabOrderDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         void SetModified();
     };

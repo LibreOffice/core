@@ -959,14 +959,16 @@ namespace pcr
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
-        MultiLineEdit   m_aImplEdit;
+        VclPtr<MultiLineEdit>   m_aImplEdit;
 
     protected:
         virtual void    Resize() SAL_OVERRIDE;
 
     public:
                         OMultilineFloatingEdit(vcl::Window* _pParen);
-        MultiLineEdit&  getEdit() { return m_aImplEdit; }
+        virtual         ~OMultilineFloatingEdit();
+        virtual void    dispose() SAL_OVERRIDE;
+        MultiLineEdit&  getEdit() { return *m_aImplEdit.get(); }
 
     protected:
         virtual bool    PreNotify(NotifyEvent& _rNEvt) SAL_OVERRIDE;
@@ -975,15 +977,25 @@ namespace pcr
 
     OMultilineFloatingEdit::OMultilineFloatingEdit(vcl::Window* _pParent)
         :FloatingWindow(_pParent, WB_BORDER)
-        ,m_aImplEdit(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER)
+        ,m_aImplEdit(new MultiLineEdit(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER))
     {
-        m_aImplEdit.Show();
+        m_aImplEdit->Show();
     }
 
+    OMultilineFloatingEdit::~OMultilineFloatingEdit()
+    {
+        dispose();
+    }
+
+    void OMultilineFloatingEdit::dispose()
+    {
+        m_aImplEdit.disposeAndClear();
+        FloatingWindow::dispose();
+    }
 
     void OMultilineFloatingEdit::Resize()
     {
-        m_aImplEdit.SetSizePixel(GetOutputSizePixel());
+        m_aImplEdit->SetSizePixel(GetOutputSizePixel());
     }
 
 
@@ -1060,6 +1072,11 @@ namespace pcr
 
     DropDownEditControl::~DropDownEditControl()
     {
+        dispose();
+    }
+
+    void DropDownEditControl::dispose()
+    {
         {
             boost::scoped_ptr<vcl::Window> aTemp(m_pFloatingEdit);
             m_pFloatingEdit = NULL;
@@ -1069,6 +1086,8 @@ namespace pcr
             boost::scoped_ptr<vcl::Window> aTemp(m_pDropdownButton);
             m_pDropdownButton = NULL;
         }
+        m_pImplEdit.disposeAndClear();
+        DropDownEditControl_Base::dispose();
     }
 
 

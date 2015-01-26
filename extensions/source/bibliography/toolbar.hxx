@@ -109,20 +109,20 @@ class BibToolBar:   public ToolBox
     private:
 
         BibToolBarListenerArr   aListenerArr;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
+        css::uno::Reference< css::frame::XController >  xController;
         Idle                    aIdle;
         ImageList               aImgLst;
         ImageList               aImgLstHC;
         ImageList               aBigImgLst;
         ImageList               aBigImgLstHC;
-        FixedText               aFtSource;
-        ListBox                 aLBSource;
-        FixedText               aFtQuery;
-        Edit                    aEdQuery;
+        VclPtr<FixedText>       aFtSource;
+        VclPtr<ListBox>         aLBSource;
+        VclPtr<FixedText>       aFtQuery;
+        VclPtr<Edit>            aEdQuery;
         PopupMenu               aPopupMenu;
         sal_uInt16              nMenuId;
         sal_uInt16              nSelMenuItem;
-        OUString           aQueryField;
+        OUString                aQueryField;
         Link                    aLayoutManager;
         sal_Int16               nSymbolsSize;
         sal_Int16               nOutStyle;
@@ -150,6 +150,7 @@ class BibToolBar:   public ToolBox
 
         BibToolBar(vcl::Window* pParent, Link aLink, WinBits nStyle = WB_3DLOOK );
         virtual ~BibToolBar();
+        virtual void dispose() SAL_OVERRIDE;
 
         void    SetXController(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > &);
 

@@ -130,11 +130,6 @@ namespace abp
         SetHelpId(HID_ABSPILOT);
     }
 
-    OAddessBookSourcePilot::~OAddessBookSourcePilot()
-    {
-    }
-
-
     OUString OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
         sal_uInt16 nResId = 0;

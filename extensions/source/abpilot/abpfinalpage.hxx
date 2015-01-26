@@ -53,6 +53,7 @@ namespace abp
     public:
         FinalPage( OAddessBookSourcePilot* _pParent );
         virtual ~FinalPage();
+        virtual void dispose() SAL_OVERRIDE;
 
     protected:
         // OWizardPage overridables

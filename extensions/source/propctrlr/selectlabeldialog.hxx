@@ -58,6 +58,7 @@ namespace pcr
     public:
         OSelectLabelDialog(vcl::Window* pParent, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xControlModel);
         virtual ~OSelectLabelDialog();
+        virtual void dispose() SAL_OVERRIDE;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  GetSelected() const { return m_pNoAssignment->IsChecked() ? ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > () : m_xSelectedControl; }
 

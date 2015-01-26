@@ -93,8 +93,8 @@ namespace pcr
                             ,public PcrClient
     {
     protected:
-        Window                      m_aLinesPlayground;
-        ScrollBar                   m_aVScroll;
+        VclPtr<Window>              m_aLinesPlayground;
+        VclPtr<ScrollBar>           m_aVScroll;
         ::std::unique_ptr< InspectorHelpWindow >
                                     m_pHelpWindow;
         ListBoxLines                m_aLines;
@@ -125,6 +125,7 @@ namespace pcr
                                     OBrowserListBox( vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL );
 
                                     virtual ~OBrowserListBox();
+        virtual void                dispose() SAL_OVERRIDE;
 
         void                        UpdateAll();
 

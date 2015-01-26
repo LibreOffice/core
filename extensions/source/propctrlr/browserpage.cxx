@@ -35,25 +35,31 @@ namespace pcr
 
     OBrowserPage::OBrowserPage(vcl::Window* pParent,WinBits nWinStyle)
             :TabPage(pParent,nWinStyle)
-            ,m_aListBox(this)
+            ,m_aListBox(new OBrowserListBox(this))
     {
-        m_aListBox.SetBackground(GetBackground());
-        m_aListBox.SetPaintTransparent( true );
-        m_aListBox.Show();
+        m_aListBox->SetBackground(GetBackground());
+        m_aListBox->SetPaintTransparent( true );
+        m_aListBox->Show();
     }
 
 
     OBrowserPage::~OBrowserPage()
     {
+        dispose();
     }
 
+    void OBrowserPage::dispose()
+    {
+        m_aListBox.disposeAndClear();
+        TabPage::dispose();
+    }
 
     void OBrowserPage::Resize()
     {
         Size aSize( GetOutputSizePixel() );
         aSize.Width() -= LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
         aSize.Height() -= LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
-        m_aListBox.SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
+        m_aListBox->SetPosSizePixel( Point( LAYOUT_BORDER_LEFT, LAYOUT_BORDER_TOP ), aSize );
     }
 
 
@@ -65,19 +71,19 @@ namespace pcr
     {
         Window::StateChanged( nType);
         if (StateChangedType::VISIBLE == nType)
-            m_aListBox.ActivateListBox(IsVisible());
+            m_aListBox->ActivateListBox(IsVisible());
     }
 
 
     sal_Int32 OBrowserPage::getMinimumWidth()
     {
-        return m_aListBox.GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
+        return m_aListBox->GetMinimumWidth() + LAYOUT_BORDER_LEFT + LAYOUT_BORDER_RIGHT;
     }
 
 
     sal_Int32 OBrowserPage::getMinimumHeight()
     {
-        return m_aListBox.GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
+        return m_aListBox->GetMinimumHeight() + LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM;
     }
 
 

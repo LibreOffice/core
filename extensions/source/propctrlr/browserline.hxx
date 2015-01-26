@@ -50,17 +50,17 @@ namespace pcr
     class OBrowserLine
     {
     private:
-        OUString         m_sEntryName;
-        FixedText               m_aFtTitle;
+        OUString                m_sEntryName;
+        VclPtr<FixedText>       m_aFtTitle;
         Size                    m_aOutputSize;
         Point                   m_aLinePos;
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                 m_xControl;
-        vcl::Window*                 m_pControlWindow;
+        vcl::Window*            m_pControlWindow;
         PushButton*             m_pBrowseButton;
         PushButton*             m_pAdditionalBrowseButton;
         IButtonClickListener*   m_pClickListener;
-        vcl::Window*                 m_pTheParent;
+        vcl::Window*            m_pTheParent;
         sal_uInt16              m_nNameWidth;
         sal_uInt16              m_nEnableFlags;
         bool                    m_bIndentTitle;

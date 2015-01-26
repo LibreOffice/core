@@ -53,6 +53,11 @@ namespace pcr
 
     OPropertyBrowserView::~OPropertyBrowserView()
     {
+        dispose();
+    }
+
+    void OPropertyBrowserView::dispose()
+    {
         if(m_pPropBox)
         {
             sal_uInt16 nTmpPage = m_pPropBox->GetCurPage();
@@ -61,7 +66,7 @@ namespace pcr
             boost::scoped_ptr<vcl::Window> aTemp(m_pPropBox);
             m_pPropBox = NULL;
         }
-
+        vcl::Window::dispose();
     }
 
 

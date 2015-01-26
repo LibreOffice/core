@@ -63,14 +63,12 @@ class BibSplitWindow : public SplitWindow, public BibShortCutHandler
 {
 public:
                             BibSplitWindow( vcl::Window* pParent,WinBits nStyle = WB_3DLOOK);
-    virtual                 ~BibSplitWindow();
 };
 
 class BibTabPage : public TabPage, public BibShortCutHandler
 {
 public:
     BibTabPage( vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-    virtual ~BibTabPage();
 };
 
 #endif

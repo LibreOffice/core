@@ -29,27 +29,38 @@ namespace pcr
 
     InspectorHelpWindow::InspectorHelpWindow( vcl::Window* _pParent )
         :Window( _pParent, WB_DIALOGCONTROL )
-        ,m_aSeparator( this )
-        ,m_aHelpText( this, WB_LEFT | WB_READONLY | WB_AUTOVSCROLL )
+        ,m_aSeparator( new FixedLine(this) )
+        ,m_aHelpText( new MultiLineEdit(this, WB_LEFT | WB_READONLY | WB_AUTOVSCROLL) )
         ,m_nMinLines( 3 )
         ,m_nMaxLines( 8 )
     {
         SetBackground();
         SetPaintTransparent(true);
-        m_aSeparator.SetText( PcrRes(RID_STR_HELP_SECTION_LABEL).toString() );
-        m_aSeparator.SetBackground();
-        m_aSeparator.Show();
+        m_aSeparator->SetText( PcrRes(RID_STR_HELP_SECTION_LABEL).toString() );
+        m_aSeparator->SetBackground();
+        m_aSeparator->Show();
 
-        m_aHelpText.SetControlBackground( /*m_aSeparator.GetBackground().GetColor() */);
-        m_aHelpText.SetBackground();
-        m_aHelpText.SetPaintTransparent(true);
-        m_aHelpText.Show();
+        m_aHelpText->SetControlBackground( /*m_aSeparator->GetBackground().GetColor() */);
+        m_aHelpText->SetBackground();
+        m_aHelpText->SetPaintTransparent(true);
+        m_aHelpText->Show();
     }
 
+    InspectorHelpWindow::~InspectorHelpWindow()
+    {
+        dispose();
+    }
+
+    void InspectorHelpWindow::dispose()
+    {
+        m_aSeparator.disposeAndClear();
+        m_aHelpText.disposeAndClear();
+        vcl::Window::dispose();
+    }
 
     void InspectorHelpWindow::SetText( const OUString& _rStr )
     {
-        m_aHelpText.SetText( _rStr );
+        m_aHelpText->SetText( _rStr );
     }
 
 
@@ -63,7 +74,7 @@ namespace pcr
     long InspectorHelpWindow::impl_getHelpTextBorderHeight()
     {
         sal_Int32 nTop(0), nBottom(0), nDummy(0);
-        m_aHelpText.GetBorder( nDummy, nTop, nDummy, nBottom );
+        m_aHelpText->GetBorder( nDummy, nTop, nDummy, nBottom );
         return nTop + nBottom;
     }
 
@@ -84,13 +95,13 @@ namespace pcr
 
     long InspectorHelpWindow::impl_getMinimalTextWindowHeight()
     {
-        return impl_getHelpTextBorderHeight() + m_aHelpText.GetTextHeight() * m_nMinLines;
+        return impl_getHelpTextBorderHeight() + m_aHelpText->GetTextHeight() * m_nMinLines;
     }
 
 
     long InspectorHelpWindow::impl_getMaximalTextWindowHeight()
     {
-        return impl_getHelpTextBorderHeight() + m_aHelpText.GetTextHeight() * m_nMaxLines;
+        return impl_getHelpTextBorderHeight() + m_aHelpText->GetTextHeight() * m_nMaxLines;
     }
 
 
@@ -100,8 +111,8 @@ namespace pcr
         long nMinTextWindowHeight = impl_getMinimalTextWindowHeight();
         long nMaxTextWindowHeight = impl_getMaximalTextWindowHeight();
 
-        Rectangle aTextRect( Point( 0, 0 ), m_aHelpText.GetOutputSizePixel() );
-        aTextRect = m_aHelpText.GetTextRect( aTextRect, m_aHelpText.GetText(),
+        Rectangle aTextRect( Point( 0, 0 ), m_aHelpText->GetOutputSizePixel() );
+        aTextRect = m_aHelpText->GetTextRect( aTextRect, m_aHelpText->GetText(),
             TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
         long nActTextWindowHeight = impl_getHelpTextBorderHeight() + aTextRect.GetHeight();
 
@@ -120,11 +131,11 @@ namespace pcr
 
         Rectangle aSeparatorArea( aPlayground );
         aSeparatorArea.Bottom() = aSeparatorArea.Top() + LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height();
-        m_aSeparator.SetPosSizePixel( aSeparatorArea.TopLeft(), aSeparatorArea.GetSize() );
+        m_aSeparator->SetPosSizePixel( aSeparatorArea.TopLeft(), aSeparatorArea.GetSize() );
 
         Rectangle aTextArea( aPlayground );
         aTextArea.Top() = aSeparatorArea.Bottom() + a3AppFont.Height();
-        m_aHelpText.SetPosSizePixel( aTextArea.TopLeft(), aTextArea.GetSize() );
+        m_aHelpText->SetPosSizePixel( aTextArea.TopLeft(), aTextArea.GetSize() );
     }
 
 

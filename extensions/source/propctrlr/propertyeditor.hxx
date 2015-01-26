@@ -24,6 +24,7 @@
 
 #include <com/sun/star/inspection/XPropertyControl.hpp>
 #include <vcl/tabctrl.hxx>
+#include <vcl/vclptr.hxx>
 #include <boost/mem_fn.hpp>
 #include <map>
 
@@ -54,7 +55,7 @@ namespace pcr
         };
 
     private:
-        TabControl                  m_aTabControl;
+        VclPtr<TabControl>          m_aTabControl;
         IPropertyLineListener*      m_pListener;
         IPropertyControlObserver*   m_pObserver;
         sal_uInt16                  m_nNextId;
@@ -74,6 +75,7 @@ namespace pcr
                                     OPropertyEditor (vcl::Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
                                     virtual ~OPropertyEditor();
+        virtual void                dispose() SAL_OVERRIDE;
 
         void                        EnableUpdate();
         void                        DisableUpdate();

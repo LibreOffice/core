@@ -50,6 +50,7 @@ namespace pcr
         OPropertyBrowserView( vcl::Window* pParent, WinBits nBits = 0);
 
         virtual ~OPropertyBrowserView();
+        virtual void dispose() SAL_OVERRIDE;
 
         OPropertyEditor&    getPropertyBox() { return *m_pPropBox; }
 
