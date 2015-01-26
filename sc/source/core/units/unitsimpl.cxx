@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#include "unitsImpl.hxx"
+#include "unitsimpl.hxx"
 
 #include "util.hxx"
 
@@ -31,7 +31,7 @@ using namespace std;
 ::osl::Mutex sc::units::UnitsImpl::ourSingletonMutex;
 ::boost::weak_ptr< UnitsImpl > sc::units::UnitsImpl::ourUnits;
 
-::boost::shared_ptr< Units > UnitsImpl::GetUnits() {
+::boost::shared_ptr< UnitsImpl > UnitsImpl::GetUnits() {
     osl::MutexGuard aGuard(ourSingletonMutex);
     boost::shared_ptr< UnitsImpl > pUnits = ourUnits.lock();
 
