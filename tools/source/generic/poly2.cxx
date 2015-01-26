@@ -578,6 +578,15 @@ SvStream& ReadPolyPolygon( SvStream& rIStream, tools::PolyPolygon& rPolyPoly )
     // Read number of polygons
     rIStream.ReadUInt16( nPolyCount );
 
+    const size_t nMinRecordSize = sizeof(sal_uInt16);
+    const size_t nMaxRecords = rIStream.remainingSize() / nMinRecordSize;
+    if (nPolyCount > nMaxRecords)
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nPolyCount << " claimed, truncating");
+        nPolyCount = nMaxRecords;
+    }
+
     if( nPolyCount )
     {
         if ( rPolyPoly.mpImplPolyPolygon->mnRefCount > 1 )
