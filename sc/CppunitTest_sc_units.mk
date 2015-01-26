@@ -78,6 +78,7 @@ $(eval $(call gb_CppunitTest_set_include,sc_units,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/source/core/inc \
     -I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/source/core/units \
     $$(INCLUDE) \
 ))
 

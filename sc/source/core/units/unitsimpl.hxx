@@ -32,7 +32,13 @@ struct ut_system;
 namespace sc {
 namespace units {
 
+namespace test {
+    class UnitsTest;
+}
+
 class UnitsImpl: public Units {
+    friend class test::UnitsTest;
+
 private:
     static ::osl::Mutex ourSingletonMutex;
     static ::boost::weak_ptr< UnitsImpl > ourUnits;
@@ -47,7 +53,7 @@ private:
     }
 
 public:
-    static ::boost::shared_ptr< Units > GetUnits();
+    static ::boost::shared_ptr< UnitsImpl > GetUnits();
 
     UnitsImpl();
     virtual ~UnitsImpl();
