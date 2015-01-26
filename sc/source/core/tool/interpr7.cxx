@@ -225,16 +225,18 @@ void ScInterpreter::ScEncodeURL()
             return;
         }
 
-        OStringBuffer aUrlBuf;
-        for ( int i = 0; i < aStr.getLength(); i++ )
+        OString aUtf8Str( aStr.toUtf8());
+        const sal_Int32 nLen = aUtf8Str.getLength();
+        OStringBuffer aUrlBuf( nLen );;
+        for ( int i = 0; i < nLen; i++ )
         {
-            sal_Unicode c = aStr[ i ];
-            if ( rtl::isAsciiAlphanumeric( c ) || c == '-' || c == '_' )
-                aUrlBuf.append( static_cast<sal_Char>( c ) );
+            sal_Char c = aUtf8Str[ i ];
+            if ( rtl::isAsciiAlphanumeric( static_cast<sal_uChar>( c ) ) || c == '-' || c == '_' )
+                aUrlBuf.append( c );
             else
             {
                 aUrlBuf.append( '%' );
-                aUrlBuf.append( OString::number( static_cast<sal_Int32>( c ), 16 ).toAsciiUpperCase() );
+                aUrlBuf.append( OString::number( static_cast<sal_uChar>( c ), 16 ).toAsciiUpperCase() );
             }
         }
         PushString( OUString::fromUtf8( aUrlBuf.makeStringAndClear() ) );
