@@ -202,7 +202,12 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
         bool                                        m_bUserOverride;
 
+        /// mapping from unicode (well, UCS-2) to font code
         std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
+        /// HACK for Type 1 fonts: if multiple UCS-2 codes map to the same
+        /// font code, this set contains the preferred one, i.e., the one that
+        /// is specified explicitly via "C" or "CH" in the AFM file
+        std::set<sal_Unicode>                  m_aEncodingVectorPriority;
         std::map< sal_Unicode, OString >       m_aNonEncoded;
 
         explicit PrintFont( fonttype::type eType );
@@ -438,7 +443,7 @@ public:
     // if ppNonEncoded is set and non encoded type1 glyphs exist
     // then *ppNonEncoded is set to the mapping for nonencoded glyphs.
     // the encoding vector contains -1 for non encoded glyphs
-    const std::map< sal_Unicode, sal_Int32 >* getEncodingMap( fontID nFontID, const std::map< sal_Unicode, OString >** ppNonEncoded ) const;
+    const std::map< sal_Unicode, sal_Int32 >* getEncodingMap( fontID nFontID, const std::map< sal_Unicode, OString >** ppNonEncoded, std::set<sal_Unicode> const ** ppPriority ) const;
 
     // evaluates copyright flags for TrueType fonts for printing/viewing
     // type1 fonts do not have such a feature, so return for them is true

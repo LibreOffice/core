@@ -2655,7 +2655,7 @@ void WinSalGraphics::FreeEmbedFontData( const void* pData, long /*nLen*/ )
     delete[] reinterpret_cast<char*>(const_cast<void*>(pData));
 }
 
-const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* WinSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const**)
 {
     // TODO: even for builtin fonts we get here... why?
     if( !pFont->IsEmbeddable() )

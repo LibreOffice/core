@@ -1013,7 +1013,7 @@ bool GenPspGraphics::CreateFontSubset(
     return bSuccess;
 }
 
-const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
 {
     // in this context the pFont->GetFontId() is a valid PSP
     // font since they are the only ones left after the PDF
@@ -1021,7 +1021,7 @@ const Ucs2SIntMap* GenPspGraphics::GetFontEncodingVector( const PhysicalFontFace
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
-    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
+    return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded, ppPriority );
 }
 
 void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
@@ -1038,7 +1038,7 @@ void GenPspGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
-const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
 {
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
 
@@ -1050,7 +1050,7 @@ const Ucs2SIntMap* GenPspGraphics::DoGetFontEncodingVector( fontID aFont, const 
         return NULL;
     }
 
-    return rMgr.getEncodingMap( aFont, pNonEncoded );
+    return rMgr.getEncodingMap( aFont, pNonEncoded, ppPriority );
 }
 
 void GenPspGraphics::DoGetGlyphWidths( psp::fontID aFont,

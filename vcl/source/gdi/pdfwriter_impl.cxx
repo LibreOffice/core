@@ -3104,7 +3104,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     assert(pGraphics);
 
     // prepare font encoding
-    const Ucs2SIntMap* pEncoding = pGraphics->GetFontEncodingVector( pFont, NULL );
+    std::set<sal_Unicode> const * pPriority(0);
+    const Ucs2SIntMap *const pEncoding =
+        pGraphics->GetFontEncodingVector( pFont, nullptr, &pPriority );
     sal_Int32 nToUnicodeStream = 0;
     sal_uInt8 nEncoding[256];
     sal_Ucs nEncodedCodes[256];
@@ -3131,8 +3133,31 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
             //Instead perhaps we could try and get the GetFontCharMap and loop
             //over sal_UCS4 GetCharFromIndex( int nCharIndex ) const from 0 to 255
             //to build it up
-            if (nEncodedCodes[nCode] != 0)
-                continue;
+            if (nEncoding[nCode] != 0)
+            {
+                // should not have 2 identical mappings
+                assert(nEncodedCodes[nCode] != it->first);
+                if (pPriority)
+                {
+                    bool bExist = pPriority->find(nEncodedCodes[nCode]) != pPriority->end();
+                    bool bIter  = pPriority->find(it->first) != pPriority->end();
+                    SAL_WARN_IF(bExist && bIter, "vcl.gdi", "both are preferred? odd...");
+                    if (bExist)
+                    {
+                        continue;
+                    }
+                    // note: aUnicodes will contain the old one but that
+                    // does not matter because there's nothing iterating it
+                }
+                else
+                {
+                    // is this fallback important? let's prefer lower one.
+                    // actually the map is sorted so just rely on that
+                    assert(nEncodedCodes[nCode] < it->first);
+                    SAL_WARN("vcl.gdi", "emitEmbeddedFont: ignoring code " << nCode << " mapping to " << it->first << " in favor of " << nEncodedCodes[nCode]);
+                    continue;
+                }
+            }
             nEncodedCodes[ nCode ] = it->first;
             nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
             pEncToUnicodeIndex[ nCode ] = static_cast<sal_Int32>(aUnicodes.size());
@@ -7276,7 +7301,7 @@ bool PDFWriterImpl::registerGlyphs( int nGlyphs,
             const Ucs2OStrMap* pNonEncoded = NULL;
             if (!getReferenceDevice()->AcquireGraphics())
                 return false;
-            pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
+            pEncoding = pGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded, 0);
 
             Ucs2SIntMap::const_iterator enc_it;
             Ucs2OStrMap::const_iterator nonenc_it;

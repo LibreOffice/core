@@ -730,7 +730,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
 }
 
 const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
-    const PhysicalFontFace*, const Ucs2OStrMap** /*ppNonEncoded*/ )
+    const PhysicalFontFace*, const Ucs2OStrMap** /*ppNonEncoded*/, std::set<sal_Unicode> const** )
 {
     return NULL;
 }
