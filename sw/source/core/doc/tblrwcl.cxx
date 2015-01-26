@@ -4334,7 +4334,7 @@ bool SwTable::SetRowHeight( SwTableBox& rAktBox, sal_uInt16 eType,
 
         xFndBox.reset();
 
-        if( ppUndo && *ppUndo )
+        if (ppUndo && *ppUndo && aParam.pUndo)
         {
             aParam.pUndo->SetColWidthParam( nBoxIdx, static_cast<sal_uInt16>(eTblChgMode), eType,
                                             nAbsDiff, nRelDiff );
