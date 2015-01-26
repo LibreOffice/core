@@ -26,8 +26,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
-const double MILLISECONDS_PER_DAY = 1000.0 * 60.0 * 60.0 * 24.0;
-
 CalendarWrapper::CalendarWrapper(
             const Reference< uno::XComponentContext > & rxContext
             )
