@@ -1696,9 +1696,8 @@ bool ScInterpreter::ConvertMatrixParameters()
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScExternalRefCache::TokenArrayRef pArray;
                         GetExternalDoubleRef(nFileId, aTabName, rRef, pArray);
-                        if (nGlobalError)
+                        if (nGlobalError || !pArray)
                             break;
-
                         formula::FormulaToken* pTemp = pArray->First();
                         if (!pTemp)
                             break;
