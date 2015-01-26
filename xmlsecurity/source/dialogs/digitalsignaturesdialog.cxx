@@ -235,7 +235,13 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
 DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
+    dispose();
+}
+
+void DigitalSignaturesDialog::dispose()
+{
     delete m_pSignaturesLB;
+    ModalDialog::dispose();
 }
 
 bool DigitalSignaturesDialog::Init()

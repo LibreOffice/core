@@ -66,7 +66,7 @@ private:
     FixedText*          m_pHintDocFT;
     FixedText*          m_pHintBasicFT;
     FixedText*          m_pHintPackageFT;
-    SvSimpleTable*     m_pSignaturesLB;
+    SvSimpleTable*      m_pSignaturesLB;
     FixedImage*         m_pSigsValidImg;
     FixedText*          m_pSigsValidFI;
     FixedImage*         m_pSigsInvalidImg;
@@ -117,6 +117,7 @@ public:
         css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Initialize the dialog and the security environment, returns TRUE on success
     bool    Init();

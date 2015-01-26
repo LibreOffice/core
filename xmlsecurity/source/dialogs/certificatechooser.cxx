@@ -81,7 +81,13 @@ CertificateChooser::CertificateChooser( vcl::Window* _pParent, uno::Reference< u
 
 CertificateChooser::~CertificateChooser()
 {
+    dispose();
+}
+
+void CertificateChooser::dispose()
+{
     delete m_pCertLB;
+    ModalDialog::dispose();
 }
 
 short CertificateChooser::Execute()

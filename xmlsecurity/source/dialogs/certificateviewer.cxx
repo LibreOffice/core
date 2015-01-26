@@ -61,9 +61,15 @@ CertificateViewer::CertificateViewer(
 
 CertificateViewer::~CertificateViewer()
 {
+    dispose();
+}
+
+void CertificateViewer::dispose()
+{
     delete mpTabCtrl->GetTabPage(mnGeneralId);
     delete mpTabCtrl->GetTabPage(mnDetailsId);
     delete mpTabCtrl->GetTabPage(mnPathId);
+    TabDialog::dispose();
 }
 
 CertificateViewerTP::CertificateViewerTP( vcl::Window* _pParent, const OString& rID,
@@ -256,8 +262,14 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( vcl::Window* _pParent, C
 
 CertificateViewerDetailsTP::~CertificateViewerDetailsTP()
 {
+    dispose();
+}
+
+void CertificateViewerDetailsTP::dispose()
+{
     Clear();
     delete m_pElementsLB;
+    CertificateViewerTP::dispose();
 }
 
 void CertificateViewerDetailsTP::ActivatePage()

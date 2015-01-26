@@ -58,6 +58,7 @@ private:
 public:
     CertificateViewer( vcl::Window* pParent, const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const css::uno::Reference< css::security::XCertificate >& rXCert, bool bCheckForPrivateKey );
     virtual             ~CertificateViewer();
+    virtual void        dispose() SAL_OVERRIDE;
 };
 
 
@@ -108,6 +109,7 @@ private:
 public:
                         CertificateViewerDetailsTP( vcl::Window* pParent, CertificateViewer* _pDlg );
     virtual             ~CertificateViewerDetailsTP();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
 };

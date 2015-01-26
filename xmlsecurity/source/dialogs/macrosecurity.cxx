@@ -84,8 +84,14 @@ MacroSecurity::MacroSecurity( vcl::Window* _pParent,
 
 MacroSecurity::~MacroSecurity()
 {
+    dispose();
+}
+
+void MacroSecurity::dispose()
+{
     delete m_pTabCtrl->GetTabPage(m_nSecTrustId);
     delete m_pTabCtrl->GetTabPage(m_nSecLevelId);
+    TabDialog::dispose();
 }
 
 MacroSecurityTP::MacroSecurityTP(vcl::Window* _pParent, const OString& rID,
@@ -394,7 +400,13 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
 
 MacroSecurityTrustedSourcesTP::~MacroSecurityTrustedSourcesTP()
 {
+    dispose();
+}
+
+void MacroSecurityTrustedSourcesTP::dispose()
+{
     delete m_pTrustCertLB;
+    MacroSecurityTP::dispose();
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()

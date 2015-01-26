@@ -67,6 +67,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext>& rxCtx,
         const css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
     virtual ~MacroSecurity();
+    virtual void dispose() SAL_OVERRIDE;
 
     inline void EnableReset(bool _bEnable = true)
     {
@@ -140,6 +141,7 @@ private:
 public:
     MacroSecurityTrustedSourcesTP(vcl::Window* pParent, MacroSecurity* _pDlg);
     virtual ~MacroSecurityTrustedSourcesTP();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage() SAL_OVERRIDE;
     virtual void        ClosePage( void ) SAL_OVERRIDE;
