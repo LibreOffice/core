@@ -177,9 +177,9 @@ bool X11SalGraphics::CreateFontSubset(
             pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
-const void* X11SalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* X11SalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen )
 {
-    return mpTextRenderImpl->GetEmbedFontData(pFont, pUnicodes, pWidths, rInfo, pDataLen);
+    return mpTextRenderImpl->GetEmbedFontData(pFont, pUnicodes, pWidths, nLen, rInfo, pDataLen);
 }
 
 void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )

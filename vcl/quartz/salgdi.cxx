@@ -738,6 +738,7 @@ const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
 const void* AquaSalGraphics::GetEmbedFontData( const PhysicalFontFace*,
                               const sal_Ucs* /*pUnicodes*/,
                               sal_Int32* /*pWidths*/,
+                              size_t /*nLen*/,
                               FontSubsetInfo&,
                               long* /*pDataLen*/ )
 {

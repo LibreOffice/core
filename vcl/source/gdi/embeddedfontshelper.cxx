@@ -265,15 +265,9 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     }
     if( selected != NULL )
     {
-        sal_Ucs unicodes[ 256 ];
-        for( int i = 0;
-             i < 256;
-             ++i )
-            unicodes[ i ] = 'A'; // Just something, not needed, but GetEmbedFontData() needs it.
-        sal_Int32 widths[ 256 ];
         FontSubsetInfo info;
         long size;
-        if( const void* data = graphics->GetEmbedFontData( selected, unicodes, widths, info, &size ))
+        if( const void* data = graphics->GetEmbedFontData( selected, NULL, NULL, 0, info, &size ))
         {
             if( sufficientTTFRights( data, size, rights ))
             {
