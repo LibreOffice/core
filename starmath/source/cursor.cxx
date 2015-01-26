@@ -676,6 +676,8 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
     OSL_ENSURE( nParentIndex != -1, "pLine must be a subnode of pLineParent!");
+    if (nParentIndex < 0)
+        return;
 
     //Convert line to list
     SmNodeList *pLineList = NodeToList(pLine);
