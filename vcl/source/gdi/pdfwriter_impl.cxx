@@ -3119,15 +3119,24 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
         memset( pEncToUnicodeIndex, 0, sizeof(pEncToUnicodeIndex) );
         for( Ucs2SIntMap::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
         {
-            if( it->second != -1 )
-            {
-                sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
-                nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
-                nEncodedCodes[ nCode ] = it->first;
-                pEncToUnicodeIndex[ nCode ] = static_cast<sal_Int32>(aUnicodes.size());
-                aUnicodes.push_back( it->first );
-                pUnicodesPerGlyph[ nCode ] = 1;
-            }
+            if(it->second == -1)
+                continue;
+            sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
+            //We're not doing this right here. We have taken a unicode-to-font_index map
+            //and are trying to generate a font_index-to-unicode mapping from it
+            //Which assumes that there is a 1-to-1 mapping there, but that might not be
+            //true.
+            //
+            //Instead perhaps we could try and get the GetFontCharMap and loop
+            //over sal_UCS4 GetCharFromIndex( int nCharIndex ) const from 0 to 255
+            //to build it up
+            if (nEncodedCodes[nCode] != 0)
+                continue;
+            nEncodedCodes[ nCode ] = it->first;
+            nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
+            pEncToUnicodeIndex[ nCode ] = static_cast<sal_Int32>(aUnicodes.size());
+            aUnicodes.push_back( it->first );
+            pUnicodesPerGlyph[ nCode ] = 1;
         }
     }
 
