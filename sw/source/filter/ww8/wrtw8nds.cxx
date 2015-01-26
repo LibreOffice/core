@@ -1506,7 +1506,7 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
     SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
 
     const SvxBrushItem* pRet = static_cast<const SvxBrushItem*>(pItem);
-    if (SfxItemState::SET != eState || (!pRet->GetGraphic() &&
+    if (SfxItemState::SET != eState || !pRet || (!pRet->GetGraphic() &&
         pRet->GetColor() == COL_TRANSPARENT))
     {
         pRet = &(DefaultItemGet<SvxBrushItem>(*pDoc,RES_BACKGROUND));
