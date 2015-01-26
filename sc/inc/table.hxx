@@ -330,7 +330,7 @@ public:
     bool        SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const OUString& rString,
                            ScSetStringParam* pParam = NULL );
 
-    void SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
+    bool SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText );
     void SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
     SCROW GetFirstEditTextRow( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const;
 

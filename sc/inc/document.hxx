@@ -826,7 +826,7 @@ public:
      * SfxItemPool instance returned from ScDocument::GetEditPool()</i>.
      * This is very important.</p>
      */
-    SC_DLLPUBLIC void SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
+    SC_DLLPUBLIC bool SetEditText( const ScAddress& rPos, EditTextObject* pEditText );
 
     void SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool );
 

@@ -398,8 +398,8 @@ void ScViewFunc::DoThesaurus( bool bRecord )
         {
             // The cell will own the text object instance.
             EditTextObject* pText = pThesaurusEngine->CreateTextObject();
-            rDoc.SetEditText(ScAddress(nCol,nRow,nTab), pText);
-            aNewText.set(*pText);
+            if (rDoc.SetEditText(ScAddress(nCol,nRow,nTab), pText))
+                aNewText.set(*pText);
         }
         else
         {

@@ -3240,15 +3240,15 @@ bool ScDocument::SetString(
     return SetString(rPos.Col(), rPos.Row(), rPos.Tab(), rString, pParam);
 }
 
-void ScDocument::SetEditText( const ScAddress& rPos, EditTextObject* pEditText )
+bool ScDocument::SetEditText( const ScAddress& rPos, EditTextObject* pEditText )
 {
     if (!TableExists(rPos.Tab()))
     {
         delete pEditText;
-        return;
+        return false;
     }
 
-    maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), pEditText);
+    return maTabs[rPos.Tab()]->SetEditText(rPos.Col(), rPos.Row(), pEditText);
 }
 
 void ScDocument::SetEditText( const ScAddress& rPos, const EditTextObject& rEditText, const SfxItemPool* pEditPool )

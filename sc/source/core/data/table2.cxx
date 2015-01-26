@@ -1344,15 +1344,16 @@ bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const OUString& rS
         return false;
 }
 
-void ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
+bool ScTable::SetEditText( SCCOL nCol, SCROW nRow, EditTextObject* pEditText )
 {
     if (!ValidColRow(nCol, nRow))
     {
         delete pEditText;
-        return;
+        return false;
     }
 
     aCol[nCol].SetEditText(nRow, pEditText);
+    return true;
 }
 
 void ScTable::SetEditText( SCCOL nCol, SCROW nRow, const EditTextObject& rEditText, const SfxItemPool* pEditPool )
