@@ -302,14 +302,17 @@ public:
 
         bool mbClip;
         bool mbArabicText;
+        bool mbRotate;
 
         DrawText()
             : mbClip (false)
-            , mbArabicText (false) {}
+            , mbArabicText (false)
+            , mbRotate (false) {}
 
-        DrawText( bool bClip, bool bArabicText )
+        DrawText( bool bClip, bool bArabicText, bool bRotate )
             : mbClip (bClip)
-            , mbArabicText (bArabicText) {}
+            , mbArabicText (bArabicText)
+            , mbRotate (bRotate) {}
 
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
@@ -360,7 +363,11 @@ public:
             for (int i = 0; i < nPrintNumCopies; i++) {
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
                 // random font size to avoid buffering
-                vcl::Font aFont(maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
+                vcl::Font aFont( maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
+
+                if (mbRotate)
+                    aFont.SetOrientation(450);
+
                 rDev.SetFont(aFont);
                 rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (nPrintNumCopies - i) / nPrintNumCopies));
             }
@@ -375,7 +382,7 @@ public:
         RENDER_DETAILS(cliptext,KEY_T,1)
 
         DrawClipText()
-            : DrawText( true, false ) {}
+            : DrawText( true, false, false ) {}
     };
 
     struct DrawArabicText : public DrawText
@@ -383,7 +390,15 @@ public:
         RENDER_DETAILS(arabictext,KEY_T,1)
 
         DrawArabicText()
-            : DrawText( false, true ) {}
+            : DrawText( false, true, false ) {}
+    };
+
+    struct DrawRotatedText : public DrawText
+    {
+        RENDER_DETAILS(rotatedtext,KEY_T,1)
+
+        DrawRotatedText()
+            : DrawText( false, false, true ) {}
     };
 
     struct DrawCheckered : public RegionRenderer
@@ -1182,6 +1197,7 @@ void DemoRenderer::InitRenderers()
     maRenderers.push_back(new DrawText());
     maRenderers.push_back(new DrawClipText());
     maRenderers.push_back(new DrawArabicText());
+    maRenderers.push_back(new DrawRotatedText());
     maRenderers.push_back(new DrawPoly());
     maRenderers.push_back(new DrawEllipse());
     maRenderers.push_back(new DrawCheckered());
