@@ -411,7 +411,7 @@ public:
     // glyphs with only a name) exist it is set to the corresponding
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
-    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded );
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded, std::set<sal_Unicode> const** );
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
