@@ -1399,8 +1399,14 @@ Size SvxPathControl::GetOptimalSize() const
 
 SvxPathControl::~SvxPathControl()
 {
+    dispose();
+}
+
+void SvxPathControl::dispose()
+{
     delete m_pFocusCtrl;
     delete m_pHeaderBar;
+    vcl::Window::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxPathControl(vcl::Window *pParent, VclBuilder::stringmap &)

@@ -178,6 +178,11 @@ XMLFilterTestDialog::XMLFilterTestDialog(vcl::Window* pParent,
 
 XMLFilterTestDialog::~XMLFilterTestDialog()
 {
+    dispose();
+}
+
+void XMLFilterTestDialog::dispose()
+{
     try
     {
         if( mxGlobalBroadcaster.is() )
@@ -189,6 +194,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     }
 
     delete m_pFilterInfo;
+    ModalDialog::dispose();
 }
 
 void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )

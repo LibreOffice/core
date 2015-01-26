@@ -36,73 +36,86 @@ inline sal_Int32 implMap( vcl::Window& /*rWnd*/, sal_Int32 nVal )
 
 ImpSVGDialog::ImpSVGDialog( vcl::Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent ),
-    maFI( this ),
-    maCBTinyProfile( this ),
-    maCBEmbedFonts( this ),
-    maCBUseNativeDecoration( this ),
-    maBTOK( this, WB_DEF_OK ),
-    maBTCancel( this ),
-    maBTHelp( this ),
+    maFI( new FixedLine(this) ),
+    maCBTinyProfile( new CheckBox(this) ),
+    maCBEmbedFonts( new CheckBox(this) ),
+    maCBUseNativeDecoration( new CheckBox(this) ),
+    maBTOK( new OKButton(this, WB_DEF_OK) ),
+    maBTCancel( new CancelButton(this) ),
+    maBTHelp( new HelpButton(this) ),
     maConfigItem( SVG_EXPORTFILTER_CONFIGPATH, &rFilterData ),
     mbOldNativeDecoration( false )
 {
     SetText( "SVG Export Options" );
     SetOutputSizePixel( Size( implMap( *this, 177 ), implMap( *this, 77 ) ) );
 
-    maFI.SetText( "Export" );
-    maFI.SetPosSizePixel( Point( implMap( *this, 6 ), implMap( *this, 3 ) ),
+    maFI->SetText( "Export" );
+    maFI->SetPosSizePixel( Point( implMap( *this, 6 ), implMap( *this, 3 ) ),
                                  Size( implMap( *this, 165 ), implMap( *this, 8 ) ) );
 
-    maCBTinyProfile.SetText( "Use SVG Tiny profile" );
-    maCBTinyProfile.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 14 ) ),
+    maCBTinyProfile->SetText( "Use SVG Tiny profile" );
+    maCBTinyProfile->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 14 ) ),
                                      Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBEmbedFonts.SetText( "Embed fonts" );
-    maCBEmbedFonts.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 27 ) ),
+    maCBEmbedFonts->SetText( "Embed fonts" );
+    maCBEmbedFonts->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 27 ) ),
                                     Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBUseNativeDecoration.SetText( "Use SVG native text decoration" );
-    maCBUseNativeDecoration.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
+    maCBUseNativeDecoration->SetText( "Use SVG native text decoration" );
+    maCBUseNativeDecoration->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
                                              Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( SVG_PROP_TINYPROFILE ), false ) );
-    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( SVG_PROP_EMBEDFONTS ), true ) );
-    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( SVG_PROP_NATIVEDECORATION ), true ) );
+    maCBTinyProfile->Check( maConfigItem.ReadBool( OUString( SVG_PROP_TINYPROFILE ), false ) );
+    maCBEmbedFonts->Check( maConfigItem.ReadBool( OUString( SVG_PROP_EMBEDFONTS ), true ) );
+    maCBUseNativeDecoration->Check( maConfigItem.ReadBool( OUString( SVG_PROP_NATIVEDECORATION ), true ) );
 
-    maBTOK.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
+    maBTOK->SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
                             Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
-    maBTCancel.SetPosSizePixel( Point( implMap( *this, 65 ), implMap( *this, 57 ) ),
+    maBTCancel->SetPosSizePixel( Point( implMap( *this, 65 ), implMap( *this, 57 ) ),
                                 Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
-    maBTHelp.SetPosSizePixel( Point( implMap( *this, 121 ), implMap( *this, 57 ) ),
+    maBTHelp->SetPosSizePixel( Point( implMap( *this, 121 ), implMap( *this, 57 ) ),
                               Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
 
-    maCBTinyProfile.SetToggleHdl( LINK( this, ImpSVGDialog, OnToggleCheckbox ) );
-    OnToggleCheckbox( &maCBTinyProfile );
+    maCBTinyProfile->SetToggleHdl( LINK( this, ImpSVGDialog, OnToggleCheckbox ) );
+    OnToggleCheckbox( maCBTinyProfile.get() );
 
-    maFI.Show();
+    maFI->Show();
 
-    maCBTinyProfile.Show();
-    maCBEmbedFonts.Show();
-    maCBUseNativeDecoration.Show();
+    maCBTinyProfile->Show();
+    maCBEmbedFonts->Show();
+    maCBUseNativeDecoration->Show();
 
-    maBTOK.Show();
-    maBTCancel.Show();
-    maBTHelp.Show();
+    maBTOK->Show();
+    maBTCancel->Show();
+    maBTHelp->Show();
 }
 
 
 
 ImpSVGDialog::~ImpSVGDialog()
 {
+    dispose();
+}
+
+void ImpSVGDialog::dispose()
+{
+    maFI.disposeAndClear();
+    maCBTinyProfile.disposeAndClear();
+    maCBEmbedFonts.disposeAndClear();
+    maCBUseNativeDecoration.disposeAndClear();
+    maBTOK.disposeAndClear();
+    maBTCancel.disposeAndClear();
+    maBTHelp.disposeAndClear();
+    ModalDialog::dispose();
 }
 
 
 
 Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 {
-    maConfigItem.WriteBool( OUString( SVG_PROP_TINYPROFILE ), maCBTinyProfile.IsChecked() );
-    maConfigItem.WriteBool( OUString( SVG_PROP_EMBEDFONTS ), maCBEmbedFonts.IsChecked() );
-    maConfigItem.WriteBool( OUString( SVG_PROP_NATIVEDECORATION ), maCBUseNativeDecoration.IsChecked() );
+    maConfigItem.WriteBool( OUString( SVG_PROP_TINYPROFILE ), maCBTinyProfile->IsChecked() );
+    maConfigItem.WriteBool( OUString( SVG_PROP_EMBEDFONTS ), maCBEmbedFonts->IsChecked() );
+    maConfigItem.WriteBool( OUString( SVG_PROP_NATIVEDECORATION ), maCBUseNativeDecoration->IsChecked() );
 
     return( maConfigItem.GetFilterData() );
 }
@@ -111,19 +124,19 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 
 IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
 {
-    if( pBox == &maCBTinyProfile )
+    if( pBox == maCBTinyProfile.get() )
     {
         if( pBox->IsChecked() )
         {
-            mbOldNativeDecoration = maCBUseNativeDecoration.IsChecked();
+            mbOldNativeDecoration = maCBUseNativeDecoration->IsChecked();
 
-            maCBUseNativeDecoration.Check( false );
-            maCBUseNativeDecoration.Disable();
+            maCBUseNativeDecoration->Check( false );
+            maCBUseNativeDecoration->Disable();
         }
         else
         {
-            maCBUseNativeDecoration.Enable();
-            maCBUseNativeDecoration.Check( mbOldNativeDecoration );
+            maCBUseNativeDecoration->Enable();
+            maCBUseNativeDecoration->Check( mbOldNativeDecoration );
         }
     }
 

@@ -75,9 +75,15 @@ XMLFilterTabDialog::XMLFilterTabDialog(vcl::Window *pParent, ResMgr& rResMgr,
 
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
+    dispose();
+}
+
+void XMLFilterTabDialog::dispose()
+{
     delete mpBasicPage;
     delete mpXSLTPage;
     delete mpNewInfo;
+    TabDialog::dispose();
 }
 
 

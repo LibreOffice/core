@@ -63,6 +63,7 @@ class ImplErrorDialog : public MessageDialog
     public:
     ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     virtual ~ImplErrorDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class ImpPDFTabSecurityPage;
@@ -171,6 +172,7 @@ public:
                      const css::uno::Reference< XComponent >& rDoc
                      );
     virtual ~ImpPDFTabDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     Sequence< PropertyValue >   GetFilterData();
 

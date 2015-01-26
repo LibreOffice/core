@@ -312,6 +312,11 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl)
 
 ImpPDFTabDialog::~ImpPDFTabDialog()
 {
+    dispose();
+}
+
+void ImpPDFTabDialog::dispose()
+{
 //delete the pages, needed because otherwise the child tab pages
 //don't get destroyed
     RemoveTabPage(mnGeneralPageId);
@@ -320,6 +325,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage(mnLinksPage);
     RemoveTabPage(mnSecurityPageId);
     RemoveTabPage(mnSigningPageId);
+    SfxTabDialog::dispose();
 }
 
 
@@ -1511,9 +1517,15 @@ ImplErrorDialog::ImplErrorDialog(const std::set< vcl::PDFWriter::ErrorCode >& rE
 
 ImplErrorDialog::~ImplErrorDialog()
 {
+    dispose();
+}
+
+void ImplErrorDialog::dispose()
+{
     // free strings again
     for( sal_uInt16 n = 0; n < m_pErrors->GetEntryCount(); n++ )
         delete static_cast<OUString*>(m_pErrors->GetEntryData( n ));
+    MessageDialog::dispose();
 }
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)

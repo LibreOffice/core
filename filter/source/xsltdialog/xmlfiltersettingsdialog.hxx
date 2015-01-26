@@ -50,6 +50,7 @@ public:
     HeaderBar* getHeaderBar() { return m_pHeaderBar; }
     XMLFilterListBox* getListBox() { return m_pFocusCtrl; }
     virtual ~SvxPathControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 };
