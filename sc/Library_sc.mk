@@ -690,6 +690,9 @@ $(call gb_Library_add_exception_objects,sc,\
 ifeq ($(ENABLE_CALC_UNITVERIFICATION),TRUE)
 $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/units/units \
+	sc/source/core/units/unitsimpl \
+	sc/source/core/units/util \
+	sc/source/core/units/utunit \
 ))
 endif
 

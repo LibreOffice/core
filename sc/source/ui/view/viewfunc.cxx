@@ -465,7 +465,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             }
 
 #ifdef ENABLE_CALC_UNITVERIFICATION
-            boost::shared_ptr< sc::Units > pUnits = sc::Units::GetUnits();
+            boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
             if ( pUnits->verifyFormula( pArr, aPos, pDoc ) )
             {
                 SAL_INFO( "sc.units", "verification successful" );

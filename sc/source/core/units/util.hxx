@@ -7,14 +7,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-#include <units.hxx>
-#include "unitsimpl.hxx"
+#ifndef INCLUDED_SC_SOURCE_CORE_UNITS_UTIL_HXX
+#define INCLUDED_SC_SOURCE_CORE_UNITS_UTIL_HXX
 
-using namespace sc;
-using namespace sc::units;
+#include <rtl/ustring.hxx>
 
-boost::shared_ptr< Units > Units::GetUnits() {
-    return UnitsImpl::GetUnits();
+namespace sc {
+    namespace units {
+        /*
+         * Get an english text description for ut_get_status().
+         * Should only be used for internal debugging purposes.
+         */
+        OUString getUTStatus();
+    }
 }
+
+#endif // INCLUDED_SC_SOURCE_CORE_UNITS_UTIL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
