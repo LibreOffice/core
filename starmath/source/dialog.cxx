@@ -891,8 +891,14 @@ SmDistanceDialog::SmDistanceDialog(vcl::Window *pParent)
 
 SmDistanceDialog::~SmDistanceDialog()
 {
+    dispose();
+}
+
+void SmDistanceDialog::dispose()
+{
     for (int i = 0; i < NOCATEGORIES; i++)
         DELETEZ(Categories[i]);
+    ModalDialog::dispose();
 }
 
 void SmDistanceDialog::DataChanged( const DataChangedEvent &rEvt )
@@ -1181,14 +1187,26 @@ void SmShowSymbolSetWindow::setScrollbar(ScrollBar *pVScrollBar)
 
 SmShowSymbolSet::SmShowSymbolSet(vcl::Window *pParent)
     : VclHBox(pParent, false, 6)
-    , aSymbolWindow(this, WB_TABSTOP)
-    , aVScrollBar(this, WinBits(WB_VSCROLL))
+    , aSymbolWindow(new SmShowSymbolSetWindow(this, WB_TABSTOP))
+    , aVScrollBar(new ScrollBar(this, WinBits(WB_VSCROLL)))
 {
-    aSymbolWindow.set_hexpand(true);
-    aSymbolWindow.set_vexpand(true);
-    aSymbolWindow.setScrollbar(&aVScrollBar);
-    aSymbolWindow.calccols();
-    aSymbolWindow.Show();
+    aSymbolWindow->set_hexpand(true);
+    aSymbolWindow->set_vexpand(true);
+    aSymbolWindow->setScrollbar(aVScrollBar.get());
+    aSymbolWindow->calccols();
+    aSymbolWindow->Show();
+}
+
+SmShowSymbolSet::~SmShowSymbolSet()
+{
+    dispose();
+}
+
+void SmShowSymbolSet::dispose()
+{
+    aSymbolWindow.disposeAndClear();
+    aVScrollBar.disposeAndClear();
+    VclHBox::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSmShowSymbolSet(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -2032,6 +2050,12 @@ SmSymDefineDialog::SmSymDefineDialog(vcl::Window * pParent,
 
 SmSymDefineDialog::~SmSymDefineDialog()
 {
+    dispose();
+}
+
+void SmSymDefineDialog::dispose()
+{
+    ModalDialog::dispose();
 }
 
 void SmSymDefineDialog::InitColor_Impl()

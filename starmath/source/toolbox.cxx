@@ -139,6 +139,11 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
 
 SmToolBoxWindow::~SmToolBoxWindow()
 {
+    dispose();
+}
+
+void SmToolBoxWindow::dispose()
+{
     int i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
     {
@@ -147,6 +152,7 @@ SmToolBoxWindow::~SmToolBoxWindow()
     }
     for (i = 0;  i < NUM_TBX_CATEGORIES + 1;  ++i)
         delete aImageLists[i];
+    SfxFloatingWindow::dispose();
 }
 
 SmViewShell * SmToolBoxWindow::GetView()

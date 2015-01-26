@@ -123,6 +123,11 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
 
 SmEditWindow::~SmEditWindow()
 {
+    dispose();
+}
+
+void SmEditWindow::dispose()
+{
     aModifyIdle.Stop();
 
     StartCursorMove();
@@ -148,6 +153,7 @@ SmEditWindow::~SmEditWindow()
     delete pHScrollBar;
     delete pVScrollBar;
     delete pScrollBox;
+    vcl::Window::dispose();
 }
 
 void SmEditWindow::StartCursorMove()

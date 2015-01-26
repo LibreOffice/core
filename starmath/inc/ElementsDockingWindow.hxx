@@ -141,6 +141,7 @@ public:
                              SfxChildWindow* pChildWindow,
                              vcl::Window* pParent );
     virtual ~SmElementsDockingWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void EndDocking( const Rectangle& rReactangle, bool bFloatMode) SAL_OVERRIDE;
     virtual void ToggleFloatingMode() SAL_OVERRIDE;

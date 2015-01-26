@@ -224,6 +224,7 @@ class SmDistanceDialog : public ModalDialog
 public:
     SmDistanceDialog(vcl::Window *pParent);
     virtual ~SmDistanceDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ReadFrom(const SmFormat &rFormat);
     void WriteTo (SmFormat &rFormat) /*const*/;
@@ -288,19 +289,21 @@ public:
 
 class SmShowSymbolSet : public VclHBox
 {
-    SmShowSymbolSetWindow aSymbolWindow;
-    ScrollBar   aVScrollBar;
+    VclPtr<SmShowSymbolSetWindow> aSymbolWindow;
+    VclPtr<ScrollBar>             aVScrollBar;
 
 public:
     SmShowSymbolSet(vcl::Window *pParent);
+    virtual ~SmShowSymbolSet();
+    virtual void dispose() SAL_OVERRIDE;
 
-    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow.SetSymbolSet(rSymbolSet); }
+    void    SetSymbolSet(const SymbolPtrVec_t& rSymbolSet) { aSymbolWindow->SetSymbolSet(rSymbolSet); }
 
-    void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow.SelectSymbol(nSymbol); }
-    sal_uInt16  GetSelectSymbol() const { return aSymbolWindow.GetSelectSymbol(); }
+    void    SelectSymbol(sal_uInt16 nSymbol) { aSymbolWindow->SelectSymbol(nSymbol); }
+    sal_uInt16  GetSelectSymbol() const { return aSymbolWindow->GetSelectSymbol(); }
 
-    void SetSelectHdl(const Link& rLink)   { aSymbolWindow.SetSelectHdl(rLink); }
-    void SetDblClickHdl(const Link& rLink) { aSymbolWindow.SetDblClickHdl(rLink); }
+    void SetSelectHdl(const Link& rLink)   { aSymbolWindow->SetSelectHdl(rLink); }
+    void SetDblClickHdl(const Link& rLink) { aSymbolWindow->SetDblClickHdl(rLink); }
 };
 
 
@@ -455,6 +458,7 @@ class SmSymDefineDialog : public ModalDialog
 public:
     SmSymDefineDialog(vcl::Window *pParent, OutputDevice *pFntListDevice, SmSymbolManager &rMgr);
     virtual ~SmSymDefineDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     using OutputDevice::SetFont;
 

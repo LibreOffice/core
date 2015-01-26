@@ -65,6 +65,7 @@ public:
                     SfxChildWindow *pChildWindow,
                     Window         *pParent);
     virtual ~SmToolBoxWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Window
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

@@ -95,6 +95,7 @@ private:
 public:
     SmGraphicWindow(SmViewShell* pShell);
     virtual ~SmGraphicWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     // Window
     virtual void    MouseButtonDown(const MouseEvent &rMEvt) SAL_OVERRIDE;
@@ -159,7 +160,7 @@ public:
 
 class SmCmdBoxWindow : public SfxDockingWindow
 {
-    SmEditWindow        aEdit;
+    VclPtr<SmEditWindow>        aEdit;
     SmEditController    aController;
     bool                bExiting;
 
@@ -187,10 +188,11 @@ public:
                    Window         *pParent);
 
     virtual ~SmCmdBoxWindow ();
+    virtual void dispose() SAL_OVERRIDE;
 
     void AdjustPosition();
 
-    SmEditWindow& GetEditWindow() { return aEdit; }
+    SmEditWindow& GetEditWindow() { return *aEdit.get(); }
     SmViewShell  *GetView();
 };
 
@@ -231,7 +233,7 @@ class SmViewShell: public SfxViewShell
 
     std::unique_ptr<SmViewShell_Impl> pImpl;
 
-    SmGraphicWindow     aGraphic;
+    VclPtr<SmGraphicWindow>     aGraphic;
     SmGraphicController aGraphicController;
     OUString            aStatusText;
 
@@ -290,8 +292,8 @@ public:
     }
 
     SmEditWindow * GetEditWindow();
-          SmGraphicWindow & GetGraphicWindow()       { return aGraphic; }
-    const SmGraphicWindow & GetGraphicWindow() const { return aGraphic; }
+          SmGraphicWindow & GetGraphicWindow()       { return *aGraphic.get(); }
+    const SmGraphicWindow & GetGraphicWindow() const { return *aGraphic.get(); }
 
     void        SetStatusText(const OUString& rText);
 
