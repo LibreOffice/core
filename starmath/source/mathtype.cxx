@@ -1862,7 +1862,7 @@ bool MathType::HandleSize(sal_Int16 nLstSize,sal_Int16 nDefSize, int &rSetSize)
          in aTypeFaces, and a test would be done to see if the new font
          size would be the same as what starmath would have chosen for
          itself anyway in which case the size setting could be ignored*/
-        nLstSize = aSizeTable[nLstSize];
+        nLstSize = aSizeTable.at(nLstSize);
         nLstSize = nLstSize + nDefSize;
         if (nLstSize != nCurSize)
         {
