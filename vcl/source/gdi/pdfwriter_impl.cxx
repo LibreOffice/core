@@ -3008,7 +3008,10 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
             if( aUnicodeMap.find( c ) != aUnicodeMap.end() )
                 pWidths[ c ] = aGlyphWidths[ aUnicodeMap[ c ] ];
         }
-
+        //TODO: surely this is utterly broken because aGlyphIds is just all zeros, if we
+        //had the right glyphids here then I imagine we could replace pDuWidths with
+        //pWidths and remove pWidths assignment above. i.e. start with the glyph ids
+        //and map those to unicode rather than try and reverse map them ?
         pGraphics->CreateFontSubset( aTmpName, pFont, aGlyphIds, pEncoding, pDuWidths, 256, aInfo );
         osl_removeFile( aTmpName.pData );
     }
