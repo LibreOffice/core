@@ -20,7 +20,11 @@
 #ifndef INCLUDED_VCL_INC_UNX_DESKTOPS_HXX
 #define INCLUDED_VCL_INC_UNX_DESKTOPS_HXX
 
-enum DesktopType {
+#include <sal/config.h>
+
+#include <sal/types.h>
+
+enum SAL_DLLPUBLIC_RTTI DesktopType {
     DESKTOP_NONE, // headless, i.e. no X connection at all
     DESKTOP_UNKNOWN, // unknown desktop, simple WM, etc.
     DESKTOP_GNOME,

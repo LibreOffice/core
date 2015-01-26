@@ -34,11 +34,13 @@
 #include <rtl/ustring.hxx>
 #include <vcl/keycod.hxx>
 
+#include <vcl/window.hxx>
+    // complete vcl::Window for SalFrame::CallCallback under -fsanitize=function
+
 class AllSettings;
 class SalGraphics;
 class SalBitmap;
 class SalMenu;
-namespace vcl { class Window; }
 
 struct SalFrameState;
 struct SalInputContext;

@@ -20,6 +20,7 @@
 #define INCLUDED_SFX2_CHILDWIN_HXX
 
 #include <sal/config.h>
+
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <vcl/window.hxx>
@@ -28,9 +29,12 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/chalign.hxx>
 
+#include <sfx2/bindings.hxx>
+    // complete SfxBindings for complete SfxChildWinCtor, SfxChildWinContextCtor
+    // under -fsanitize=function
+
 class SfxWorkWindow;
 class SfxModule;
-class SfxBindings;
 class SfxShell;
 class SfxChildWindow;
 class SfxChildWindowContext;
@@ -45,7 +49,7 @@ class SfxChildWindowContext;
 #define CHILDWIN_NOPOS            USHRT_MAX
 
 // ChildWindow Configuration
-struct SfxChildWinInfo
+struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
 {
     bool                bVisible;
     Point               aPos;

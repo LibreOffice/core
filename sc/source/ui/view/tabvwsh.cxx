@@ -41,6 +41,9 @@
 #include "spelldialog.hxx"
 #include <searchresults.hxx>
 
+#include <sfx2/request.hxx>
+    // needed for -fsanitize=function visibility of typeinfo for functions of
+    // type void(SfxShell*,SfxRequest&) defined in scslots.hxx
 #define ScTabViewShell
 #include "scslots.hxx"
 

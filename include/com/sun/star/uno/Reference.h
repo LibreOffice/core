@@ -213,7 +213,7 @@ template< typename T2 > struct UpCast< XInterface, T2 > {};
     for reference type.
 */
 template< class interface_type >
-class Reference : public BaseReference
+class SAL_DLLPUBLIC_RTTI Reference : public BaseReference
 {
     /** Queries given interface for type interface_type.
 

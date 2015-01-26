@@ -131,7 +131,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_freeAlignedMemory (
 
 /** Opaque rtl_arena_type.
  */
-typedef struct rtl_arena_st rtl_arena_type;
+typedef struct SAL_DLLPUBLIC_RTTI rtl_arena_st rtl_arena_type;
 
 #define RTL_ARENA_NAME_LENGTH 31
 

@@ -33,6 +33,9 @@
 #include "popup.hrc"
 #include "shells.hrc"
 
+#include <sfx2/request.hxx>
+    // needed for -fsanitize=function visibility of typeinfo for functions of
+    // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebDrawFormShell
 #include "swslots.hxx"
 

@@ -19,6 +19,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sax/tools/converter.hxx>

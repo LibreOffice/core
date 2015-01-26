@@ -31,6 +31,9 @@
 #include "web.hrc"
 
 // STATIC DATA
+#include <sfx2/request.hxx>
+    // needed for -fsanitize=function visibility of typeinfo for functions of
+    // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebFrameShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"

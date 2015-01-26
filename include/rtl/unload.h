@@ -39,7 +39,7 @@ extern "C"
 
     @deprecated Do not use.
 */
-typedef struct _rtl_ModuleCount
+typedef struct SAL_DLLPUBLIC_RTTI _rtl_ModuleCount
 {
     void ( SAL_CALL * acquire ) ( struct _rtl_ModuleCount * that );
     void ( SAL_CALL * release ) ( struct _rtl_ModuleCount * that );

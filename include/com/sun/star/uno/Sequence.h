@@ -52,7 +52,7 @@ namespace uno
     @tparam E element type of sequence
 */
 template< class E >
-class SAL_WARN_UNUSED Sequence
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Sequence
 {
     /** sequence handle
     */

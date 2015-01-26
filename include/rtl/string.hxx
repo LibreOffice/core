@@ -85,7 +85,7 @@ namespace rtl
   use this class.
 */
 
-class SAL_WARN_UNUSED OString
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI OString
 {
 public:
     /// @cond INTERNAL

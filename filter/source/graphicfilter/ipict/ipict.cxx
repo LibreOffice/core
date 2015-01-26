@@ -30,7 +30,8 @@
 #include "shape.hxx"
 #include <boost/scoped_array.hpp>
 
-class FilterConfigItem;
+#include <vcl/FilterConfigItem.hxx>
+    // complete FilterConfigItem for GraphicImport under -fsanitize=function
 
 namespace PictReaderInternal {
   //! utilitary class to store a pattern, ...

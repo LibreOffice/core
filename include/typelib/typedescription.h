@@ -37,7 +37,7 @@ struct _typelib_TypeDescription;
 
 /** Holds a weak reference to a type description.
 */
-typedef struct _typelib_TypeDescriptionReference
+typedef struct SAL_DLLPUBLIC_RTTI _typelib_TypeDescriptionReference
 {
     /** reference count of type; don't ever modify this by yourself, use
         typelib_typedescriptionreference_acquire() and typelib_typedescriptionreference_release()
@@ -68,7 +68,7 @@ typedef struct _typelib_TypeDescriptionReference
     typelib_TypeDescriptionReference for the first six members.
     So a typedescription can be used as type reference.
 */
-typedef struct _typelib_TypeDescription
+typedef struct SAL_DLLPUBLIC_RTTI _typelib_TypeDescription
 {
     /** reference count; don't ever modify this by yourself, use
         typelib_typedescription_acquire() and typelib_typedescription_release()
@@ -367,7 +367,7 @@ typedef struct _typelib_InterfaceAttributeTypeDescription
         <code>typelib_typedescription_complete</code>.</li>
     </ul>
 */
-typedef struct _typelib_InterfaceTypeDescription
+typedef struct SAL_DLLPUBLIC_RTTI _typelib_InterfaceTypeDescription
 {
     /** inherits all members of typelib_TypeDescription
     */

@@ -33,6 +33,9 @@
 #include "wdocsh.hxx"
 #include "web.hrc"
 
+#include <sfx2/request.hxx>
+    // needed for -fsanitize=function visibility of typeinfo for functions of
+    // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebDocShell
 #include "swslots.hxx"
 

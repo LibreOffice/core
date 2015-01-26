@@ -87,7 +87,7 @@ struct ImplTextConverter
 /* - TextEncoding - Structures - */
 /* ----------------------------- */
 
-struct ImplTextEncodingData
+struct SAL_DLLPUBLIC_RTTI ImplTextEncodingData
 {
     ImplTextConverter maConverter;
     sal_uInt8 mnMinCharSize;

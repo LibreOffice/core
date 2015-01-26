@@ -46,7 +46,7 @@ class Type;
     return true if the any contains an assignable value (no data loss), e.g. the any contains a
     short and you >>= it into a long variable.
 */
-class SAL_WARN_UNUSED Any : public uno_Any
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Any : public uno_Any
 {
 public:
     /// @cond INTERNAL

@@ -37,7 +37,7 @@ struct _uno_Mapping;
 
 /** This is the binary specification of an UNO any.
 */
-typedef struct _uno_Any
+typedef struct SAL_DLLPUBLIC_RTTI _uno_Any
 {
     /** type of value
     */

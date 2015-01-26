@@ -55,6 +55,9 @@
 #include <oox/ole/olehelper.hxx>
 #include <rtl/math.hxx>
 
+#include <sfx2/objsh.hxx>
+    // complete SfxObjectShell for SaveVBA under -fsanitize=function
+
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::presentation;

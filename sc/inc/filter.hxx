@@ -79,7 +79,7 @@ class ScEEAbsImport {
         SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 };
 
-class ScFormatFilterPlugin {
+class SAL_DLLPUBLIC_RTTI ScFormatFilterPlugin {
   public:
     // various import filters
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, rtl_TextEncoding eSrc = RTL_TEXTENCODING_DONTKNOW ) = 0;

@@ -35,6 +35,9 @@
 #include "web.hrc"
 #include "wgrfsh.hxx"
 
+#include <sfx2/request.hxx>
+    // needed for -fsanitize=function visibility of typeinfo for functions of
+    // type void(SfxShell*,SfxRequest&) defined in swslots.hxx
 #define SwWebGrfShell
 #include "swslots.hxx"
 

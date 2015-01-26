@@ -58,7 +58,7 @@ typedef void (SAL_CALL * uno_DispatchMethod)(
 
 /** The binary C uno interface description.
 */
-typedef struct _uno_Interface
+typedef struct SAL_DLLPUBLIC_RTTI _uno_Interface
 {
     /** Acquires uno interface.
 

@@ -50,7 +50,7 @@ typedef sal_uInt16  RegAccessMode;
     a value and link keys which navigate over the linktarget to an existing
     other key (which are no longer supported).
 */
-enum RegKeyType
+enum SAL_DLLPUBLIC_RTTI RegKeyType
 {
     /// represents a real key
     RG_KEYTYPE,
@@ -66,7 +66,7 @@ enum RegKeyType
     to define own data structures and store these types in the registry. The UNO
     core reflection data is stored as a binary blob in the type registry.
  */
-enum RegValueType
+enum SAL_DLLPUBLIC_RTTI RegValueType
 {
     /// The key has no value or the value type is unknown.
     RG_VALUETYPE_NOT_DEFINED,
@@ -87,7 +87,7 @@ enum RegValueType
 };
 
 /// specifies the possible error codes which can occur using the registry API.
-enum RegError
+enum SAL_DLLPUBLIC_RTTI RegError
 {
     /// no error.
     REG_NO_ERROR,

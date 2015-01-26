@@ -111,7 +111,7 @@ template<char C> struct SAL_WARN_UNUSED OUStringLiteral1 {
   less people should have understanding problems when they use this class.
 */
 
-class SAL_WARN_UNUSED OUString
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI OUString
 {
 public:
     /// @cond INTERNAL

@@ -51,7 +51,7 @@ enum UnoType_NoAcquire
 
     @see typelib_TypeDescriptionReference
 */
-class SAL_WARN_UNUSED Type
+class SAL_WARN_UNUSED SAL_DLLPUBLIC_RTTI Type
 {
     /** the C typelib reference pointer
     */

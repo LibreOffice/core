@@ -61,7 +61,7 @@ typedef void (SAL_CALL * uno_MapInterfaceFunc)(
 
 /** This is the binary specification of a mapping.
 */
-typedef struct _uno_Mapping
+typedef struct SAL_DLLPUBLIC_RTTI _uno_Mapping
 {
     /** Acquires mapping
     */

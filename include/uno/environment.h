@@ -38,7 +38,7 @@ struct _typelib_InterfaceTypeDescription;
 
 /** The binary specification of an UNO environment.
 */
-typedef struct _uno_Environment
+typedef struct SAL_DLLPUBLIC_RTTI _uno_Environment
 {
     /** reserved for future use (0 if not used)
     */
@@ -130,7 +130,7 @@ typedef void * (SAL_CALL * uno_memAlloc)( sal_Size nBytes );
 
 /** The binary specification of an UNO environment supporting interface registration.
 */
-typedef struct _uno_ExtEnvironment
+typedef struct SAL_DLLPUBLIC_RTTI _uno_ExtEnvironment
 {
     /** inherits all members of an uno_Environment
     */
