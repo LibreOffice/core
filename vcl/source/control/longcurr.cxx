@@ -85,6 +85,8 @@ static OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const 
         OUString aFractionStr = rLocaleDataWrapper.getNum( (long)aFraction, 0 );
 
         sal_Int32 nSPos = aTemplate.indexOf( '1' );
+        if (nSPos == -1)
+            break;
         if ( aFractionStr.getLength() == 1 )
             aTemplate[ nSPos ] = aFractionStr[0];
         else
