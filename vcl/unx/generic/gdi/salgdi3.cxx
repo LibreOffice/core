@@ -187,9 +187,9 @@ void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
     mpTextRenderImpl->FreeEmbedFontData(pData, nLen);
 }
 
-const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
+const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
 {
-    return mpTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded);
+    return mpTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded, ppPriority);
 }
 
 void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
