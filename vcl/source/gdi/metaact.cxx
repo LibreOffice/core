@@ -1289,7 +1289,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     sal_Int32 nAryLen(0);
     rIStm.ReadInt32(nAryLen);
 
-    if ( mnIndex + mnLen > maStr.getLength() )
+    if (mnLen > maStr.getLength() - mnIndex)
     {
         mnIndex = 0;
         mpDXAry = 0;
