@@ -589,7 +589,7 @@ SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
     , m_nWhichId( nWhichId )
 {
     const SfxPoolItem* pItem = 0;
-    if (rChangedFormat.GetItemState( nWhichId, false, &pItem ) == SfxItemState::SET)
+    if (rChangedFormat.GetItemState(nWhichId, false, &pItem ) == SfxItemState::SET && pItem)
     {
         m_pOldItem.reset( pItem->Clone() );
     }
