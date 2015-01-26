@@ -367,8 +367,6 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
     if ( i != nLen )
          rName.truncate(i);
 
-    // Remove Script at the end
-    rName = StripScriptFromName(rName.toString());
     nLen = rName.getLength();
 
     // remove all whitespaces and converts to lower case ASCII
