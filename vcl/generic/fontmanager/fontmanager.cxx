@@ -290,6 +290,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
     }
 
     m_aEncodingVector.clear();
+    m_aEncodingVectorPriority.clear();
     // fill in global info
 
     // PSName
@@ -503,7 +504,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                 {
                     pUnicodes[i] = pChar->code + 0xf000;
                     if( bFillEncodingvector )
+                    {
                         m_aEncodingVector[ pUnicodes[i] ] = pChar->code;
+                        m_aEncodingVectorPriority.insert(pUnicodes[i]);
+                    }
                     continue;
                 }
 
@@ -564,7 +568,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                 {
                     m_pMetrics->m_aMetrics[ pUnicodes[i] ] = aMetric;
                     if( bFillEncodingvector )
+                    {
                         m_aEncodingVector[ pUnicodes[i] ] = pChar->code;
+                        m_aEncodingVectorPriority.insert(pUnicodes[i]);
+                    }
                 }
                 else if( pChar->name )
                 {
@@ -592,13 +599,21 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                     ::std::pair< ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
                           ::boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
                           aCodes = rManager.getUnicodeFromAdobeCode( pChar->code );
+                    bool bFirst = true;
                     while( aCodes.first != aCodes.second )
                     {
                         if( (*aCodes.first).second != 0 )
                         {
                             m_pMetrics->m_aMetrics[ (*aCodes.first).second ] = aMetric;
                             if( bFillEncodingvector )
+                            {
                                 m_aEncodingVector[ (*aCodes.first).second ] = pChar->code;
+                                if (bFirst) // arbitrarily prefer the first one
+                                {
+                                    m_aEncodingVectorPriority.insert((*aCodes.first).second);
+                                    bFirst = false;
+                                }
+                            }
                         }
                         ++aCodes.first;
                     }
@@ -612,7 +627,10 @@ bool PrintFontManager::PrintFont::readAfmMetrics( MultiAtomProvider* pProvider, 
                     m_pMetrics->m_aMetrics[ code ] = aMetric;
                     // maybe should try to find the name in the convtabs ?
                     if( bFillEncodingvector )
+                    {
                         m_aEncodingVector[ code ] = pChar->code;
+                        m_aEncodingVectorPriority.insert(code);
+                    }
                 }
             }
         }
@@ -2132,7 +2150,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     }
 }
 
-const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, OString >** pNonEncoded ) const
+const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( fontID nFont, const std::map< sal_Unicode, OString >** pNonEncoded, std::set<sal_Unicode> const** ppPriority ) const
 {
     PrintFont* pFont = getFont( nFont );
     if( !pFont || pFont->m_eType != fonttype::Type1 )
@@ -2143,6 +2161,11 @@ const std::map< sal_Unicode, sal_Int32 >* PrintFontManager::getEncodingMap( font
 
     if( pNonEncoded )
         *pNonEncoded = pFont->m_aNonEncoded.size() ? &pFont->m_aNonEncoded : NULL;
+
+    if (ppPriority)
+    {
+        *ppPriority = &pFont->m_aEncodingVectorPriority;
+    }
 
     return pFont->m_aEncodingVector.size() ? &pFont->m_aEncodingVector : NULL;
 }
