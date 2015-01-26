@@ -1745,6 +1745,51 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
     return sFileName;
 }
 
+/** Tries to obtain a simple address without OUString/OString allocation
+ *
+ *  @returns TRUE at success (it is enough to call OUString Format() at FALSE)
+ *
+ */
+
+bool ScAddress::TryFormat(char * s, sal_uInt16 nFlags, const ScDocument* pDoc,
+                           const Details& rDetails) const
+{
+    if( nFlags & SCA_VALID )
+        nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
+    if(( pDoc && (nFlags & SCA_VALID_TAB ) && ( nTab >= pDoc->GetTableCount() || ( nFlags & SCA_TAB_3D ))) ||
+         ! (nFlags & SCA_VALID_COL) || ! (nFlags & SCA_VALID_ROW) ||
+            (nFlags & SCA_COL_ABSOLUTE) != 0 || (nFlags & SCA_ROW_ABSOLUTE) != 0 )
+    {
+       return false;
+    }
+
+    switch( rDetails.eConv )
+    {
+    default :
+    // Note: length of s (defined by SIMPLEADDRESSLEN) supports the following simple addresses
+    case formula::FormulaGrammar::CONV_OOO:
+    case formula::FormulaGrammar::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_XL_OOX:
+        if (nCol >= 26 * 26)
+            // TODO: extend it for full column range
+            return false;
+        if( nCol < 26 )
+            *s = 'A' + nCol;
+        else
+        {
+            *s = 'A' + nCol / 26 - 1;
+            s++;
+            *s = 'A' + nCol % 26;
+        }
+        sprintf(s + 1, "%d", nRow + 1);
+        break;
+    case formula::FormulaGrammar::CONV_XL_R1C1:
+        // not used in XLSX export
+        return false;
+    }
+    return true;
+}
+
 OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
                            const Details& rDetails) const
 {
