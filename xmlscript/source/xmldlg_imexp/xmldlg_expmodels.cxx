@@ -589,6 +589,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     // collect elements
     readDefaults();
     readBoolAttr( "ScaleImage", XMLNS_DIALOGS_PREFIX ":scale-image" );
+    readImageScaleModeAttr( "ScaleMode", XMLNS_DIALOGS_PREFIX ":scale-mode" );
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":src" );
     readEvents();

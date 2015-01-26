@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -1008,6 +1009,36 @@ void ElementDescriptor::readScrollableSettings()
                   XMLNS_DIALOGS_PREFIX ":hscroll" );
     readBoolAttr( "VScroll",
                   XMLNS_DIALOGS_PREFIX ":vscroll" );
+}
+
+void ElementDescriptor::readImageScaleModeAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any aImageScaleMode( _xProps->getPropertyValue( rPropName ) );
+
+        if (aImageScaleMode.getValueTypeClass() == TypeClass_SHORT)
+        {
+            sal_Int16 nImageScaleMode;
+            aImageScaleMode >>= nImageScaleMode;
+
+            switch(nImageScaleMode)
+            {
+                case ::awt::ImageScaleMode::NONE:
+                    addAttribute( rAttrName, OUString( "none") );
+                    break;
+                case ::awt::ImageScaleMode::ISOTROPIC:
+                    addAttribute( rAttrName, OUString( "isotropic") );
+                    break;
+                case ::awt::ImageScaleMode::ANISOTROPIC:
+                    addAttribute( rAttrName, OUString( "anisotropic" ) );
+                    break;
+                default:
+                    OSL_ENSURE( 0, "### illegal image scale mode value.");
+                    break;
+            }
+        }
+    }
 }
 
 void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible )

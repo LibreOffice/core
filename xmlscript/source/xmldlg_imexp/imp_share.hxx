@@ -468,6 +468,9 @@ public:
     bool importDataAwareProperty(
         OUString const & rPropName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importImageScaleModeProperty(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 };
 
 class ControlImportContext : public ImportContext

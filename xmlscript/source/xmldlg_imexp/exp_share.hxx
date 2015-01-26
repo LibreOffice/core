@@ -161,6 +161,8 @@ public:
         OUString const & rPropName, OUString const & rAttrName );
     void readSelectionTypeAttr(
         OUString const & rPropName, OUString const & rAttrName );
+    void readImageScaleModeAttr(
+        OUString const & rPropName, OUString const & rAttrName );
     void readDataAwareAttr(
         OUString const & rAttrName );
     inline void addBoolAttr(
