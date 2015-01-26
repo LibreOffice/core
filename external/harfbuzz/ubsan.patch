@@ -42,3 +42,45 @@
  }
  template <typename Type>
  static inline bool hb_object_set_user_data (Type               *obj,
+--- src/hb-ot-map-private.hh
++++ src/hb-ot-map-private.hh
+@@ -52,8 +52,12 @@
+     unsigned int needs_fallback : 1;
+     unsigned int auto_zwj : 1;
+ 
+-    static int cmp (const feature_map_t *a, const feature_map_t *b)
+-    { return a->tag < b->tag ? -1 : a->tag > b->tag ? 1 : 0; }
++    static int cmp (const void *va, const void *vb)
++    {
++      const feature_map_t *a = static_cast<const feature_map_t *>(va);
++      const feature_map_t *b = static_cast<const feature_map_t *>(vb);
++      return a->tag < b->tag ? -1 : a->tag > b->tag ? 1 : 0;
++    }
+   };
+ 
+   struct lookup_map_t {
+--- src/hb-ot-tag.cc
++++ src/hb-ot-tag.cc
+@@ -591,9 +591,11 @@
+ };
+ 
+ static int
+-lang_compare_first_component (const char *a,
+-			      const char *b)
++lang_compare_first_component (const void *va,
++			      const void *vb)
+ {
++  const char *a = static_cast<const char *>(va);
++  const char *b = static_cast<const char *>(vb);
+   unsigned int da, db;
+   const char *p;
+ 
+@@ -641,7 +643,7 @@
+   /* Find a language matching in the first component */
+   lang_tag = (LangTag *) bsearch (lang_str, ot_languages,
+ 				  ARRAY_LENGTH (ot_languages), sizeof (LangTag),
+-				  (hb_compare_func_t) lang_compare_first_component);
++				  lang_compare_first_component);
+   if (lang_tag)
+     return lang_tag->tag;
+ 
