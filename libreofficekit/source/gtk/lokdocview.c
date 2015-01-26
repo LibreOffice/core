@@ -19,6 +19,9 @@
 #ifndef G_SOURCE_REMOVE
 #define G_SOURCE_REMOVE FALSE
 #endif
+#ifndef g_info
+#define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
+#endif
 
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
