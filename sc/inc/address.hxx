@@ -325,9 +325,6 @@ public:
                     ExternalInfo* pExtInfo = NULL,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
-    SC_DLLPUBLIC bool TryFormat( char * s, sal_uInt16 nFlags = 0,
-                                  const ScDocument* pDocument = NULL,
-                                  const Details& rDetails = detailsOOOa1) const;
     SC_DLLPUBLIC OUString Format( sal_uInt16 nFlags = 0,
                                   const ScDocument* pDocument = NULL,
                                   const Details& rDetails = detailsOOOa1) const;

@@ -41,11 +41,6 @@ using namespace ::oox;
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
-// max string length of simple addresses (eg. ABC1000000\0)
-#if MAXROWCOUNT_DEFINE < 9999999
-#define SIMPLEADDRESSLEN 11
-#endif
-
 // Helper records for cell records
 
 XclExpStringRec::XclExpStringRec( const XclExpRoot& rRoot, const OUString& rResult ) :
@@ -635,10 +630,9 @@ static OString lcl_GetStyleId( XclExpXmlStream& rStrm, const XclExpCellBase& rCe
 
 void XclExpNumberCell::SaveXml( XclExpXmlStream& rStrm )
 {
-    char fastAdr[SIMPLEADDRESSLEN];
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::TryToChar( fastAdr, GetXclPos() ) ? fastAdr : XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      "n",
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -929,12 +923,11 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = NULL;
     OUString    sValue;
-    char fastAdr[SIMPLEADDRESSLEN];
 
     XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::TryToChar( fastAdr, GetXclPos() ) ? fastAdr : XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      sType,
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -1314,10 +1307,9 @@ bool XclExpRkCell::TryMerge( const XclExpCellBase& rCell )
 
 void XclExpRkCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol )
 {
-    char fastAdr[SIMPLEADDRESSLEN];
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::TryToChar( fastAdr, rAddress ) ? fastAdr : XclXmlUtils::ToOString( rAddress ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rAddress ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, nXFId ).getStr(),
             XML_t,      "n",
             // OOXTODO: XML_cm, XML_vm, XML_ph
