@@ -481,8 +481,8 @@ public:
     bool createFontSubset( FontSubsetInfo&,
                            fontID nFont,
                            const OUString& rOutFile,
-                           sal_GlyphId* pGlyphIDs,
-                           sal_uInt8* pNewEncoding,
+                           const sal_GlyphId* pGlyphIDs,
+                           const sal_uInt8* pNewEncoding,
                            sal_Int32* pWidths,
                            int nGlyphs,
                            bool bVertical = false

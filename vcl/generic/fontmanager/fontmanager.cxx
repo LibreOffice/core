@@ -1923,8 +1923,8 @@ bool PrintFontManager::createFontSubset(
                                         FontSubsetInfo& rInfo,
                                         fontID nFont,
                                         const OUString& rOutFile,
-                                        sal_GlyphId* pGlyphIds,
-                                        sal_uInt8* pNewEncoding,
+                                        const sal_GlyphId* pGlyphIds,
+                                        const sal_uInt8* pNewEncoding,
                                         sal_Int32* pWidths,
                                         int nGlyphs,
                                         bool bVertical

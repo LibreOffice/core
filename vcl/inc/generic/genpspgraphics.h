@@ -102,8 +102,8 @@ public:
 
     virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
-                                              sal_GlyphId* pGlyphIDs,
-                                              sal_uInt8* pEncoding,
+                                              const sal_GlyphId* pGlyphIDs,
+                                              const sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo ) SAL_OVERRIDE;

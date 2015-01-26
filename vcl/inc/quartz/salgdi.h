@@ -367,8 +367,8 @@ public:
     // as "undefined character"
     virtual bool            CreateFontSubset( const OUString& rToFile,
                                                   const PhysicalFontFace* pFont,
-                                                  sal_GlyphId* pGlyphIds,
-                                                  sal_uInt8* pEncoding,
+                                                  const sal_GlyphId* pGlyphIds,
+                                                  const sal_uInt8* pEncoding,
                                                   sal_Int32* pWidths,
                                                   int nGlyphs,
                                                   FontSubsetInfo& rInfo // out parameter
