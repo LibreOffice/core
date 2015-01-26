@@ -44,6 +44,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -1334,6 +1335,43 @@ bool ImportContext::importSelectionTypeProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( eSelectionType ) );
+        return true;
+    }
+    return false;
+}
+
+//__________________________________________________________________________________________________
+bool ImportContext::importImageScaleModeProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aImageScaleMode(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (!aImageScaleMode.isEmpty())
+    {
+        sal_Int16 nImageScaleMode;
+
+        if (aImageScaleMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        {
+            nImageScaleMode = awt::ImageScaleMode::NONE;
+        }
+        else if (aImageScaleMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("isotropic") ))
+        {
+            nImageScaleMode = awt::ImageScaleMode::ISOTROPIC;
+        }
+        else if (aImageScaleMode.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("anisotropic") ))
+        {
+            nImageScaleMode = awt::ImageScaleMode::ANISOTROPIC;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid scale image mode value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nImageScaleMode ) );
         return true;
     }
     return false;

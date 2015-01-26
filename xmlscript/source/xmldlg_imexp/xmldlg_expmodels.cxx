@@ -591,6 +591,8 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     readDefaults();
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleImage") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":scale-image") ) );
+    readImageScaleModeAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleMode") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":scale-mode") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":src") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),

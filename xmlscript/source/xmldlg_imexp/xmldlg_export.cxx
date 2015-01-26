@@ -38,6 +38,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -962,6 +963,36 @@ void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUStr
                     break;
                 default:
                     OSL_ENSURE( 0, "### illegal selection type value!" );
+                    break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readImageScaleModeAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any aImageScaleMode( _xProps->getPropertyValue( rPropName ) );
+
+        if (aImageScaleMode.getValueTypeClass() == TypeClass_SHORT)
+        {
+            sal_Int16 nImageScaleMode;
+            aImageScaleMode >>= nImageScaleMode;
+
+            switch(nImageScaleMode)
+            {
+                case ::awt::ImageScaleMode::NONE:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("none") ) );
+                    break;
+                case ::awt::ImageScaleMode::ISOTROPIC:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("isotropic") ) );
+                    break;
+                case ::awt::ImageScaleMode::ANISOTROPIC:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("anisotropic") ) );
+                    break;
+                default:
+                    OSL_ENSURE( 0, "### illegal image scale mode value.");
                     break;
             }
         }

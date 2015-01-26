@@ -999,6 +999,9 @@ void ImageControlElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleImage") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("scale-image") ),
                                _xAttributes );
+    ctx.importImageScaleModeProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleMode") ),
+                                     OUString( RTL_CONSTASCII_USTRINGPARAM("scale-mode") ),
+                                     _xAttributes );
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("src") ),
                               _xAttributes );

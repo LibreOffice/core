@@ -153,6 +153,8 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readSelectionTypeAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readImageScaleModeAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     //
     inline void addBoolAttr(
         ::rtl::OUString const & rAttrName, sal_Bool bValue )
