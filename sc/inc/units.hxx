@@ -11,45 +11,26 @@
 #define INCLUDED_SC_INC_UNITS_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-
-#include <osl/mutex.hxx>
-
-struct ut_system;
 
 class ScAddress;
 class ScDocument;
 class ScTokenArray;
 
 namespace sc {
+namespace units {
 
-/*
- * We implement this as a singleton which automatically
- * cleans itself up thanks to the use of shared and weak
- * pointers.
- */
+class UnitsImpl;
+
 class Units {
-private:
-    // A scoped_ptr would be more appropriate, however
-    // we require a custom deleter which scoped_ptr doesn't
-    // offer.
-    ::boost::shared_ptr< ut_system > mpUnitSystem;
-
-    Units();
-
-    static ::osl::Mutex ourSingletonMutex;
-    static ::boost::weak_ptr< Units > ourUnits;
-
 public:
     static ::boost::shared_ptr< Units > GetUnits();
 
-    ~Units();
+    virtual bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) = 0;
 
-    bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc);
-
+    virtual ~Units() {}
 };
 
-} // namespace sc
+}} // namespace sc::units
 
 #endif // INCLUDED_SC_INC_UNITS_HXX
 
