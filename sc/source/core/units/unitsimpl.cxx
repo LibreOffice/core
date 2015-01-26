@@ -81,7 +81,42 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
 
     auto nOpCode = static_cast<std::underlying_type<const OpCode>::type>(rOpCode);
 
-    if (nOpCode >= SC_OPCODE_START_BIN_OP &&
+    // TODO: sc/source/core/tool/parclass.cxx has a mapping of opcodes to possible operands, which we
+    // should probably be using in practice.
+
+    if (nOpCode >= SC_OPCODE_START_UN_OP &&
+        nOpCode < SC_OPCODE_STOP_UN_OP) {
+
+        if (!(rUnitStack.size() >= 1)) {
+            SAL_WARN("sc.units", "no units on stack for unary operation");
+            return 0;
+        }
+
+        UtUnit pUnit = rUnitStack.top();
+        rUnitStack.pop();
+
+        switch (rOpCode) {
+        case ocNot:
+            if (!ut_is_dimensionless(pUnit.get())) {
+                return 0;
+            }
+            // We just keep the same unit (in this case no unit) so can
+            // fall through.
+        case ocNeg:
+            // fall through -- same as OcNegSub
+            // It seems the difference is that ocNeg: 'NEG(value)', and ocNegSub: '-value' when
+            // in human readable form.
+        case ocNegSub:
+            // do nothing: since we're just negating the value which doesn't
+            // affect units in any way, we just return the current unit.
+            pOut = pUnit;
+            break;
+        default:
+            // Only the above 3 opcodes are in the range we have tested for previously
+            // (...START_UN_OP to ...STOP_UN_OP).
+            assert(false);
+        }
+    } else if (nOpCode >= SC_OPCODE_START_BIN_OP &&
         nOpCode < SC_OPCODE_STOP_BIN_OP) {
 
         if (!(rUnitStack.size() >= 2)) {
@@ -120,6 +155,8 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
             assert(false);
         }
 
+    } else {
+        SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
     }
     // TODO: else if unary, or no params, or ...
     // TODO: implement further sensible opcode handling
