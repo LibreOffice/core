@@ -799,18 +799,20 @@ bool SwView::ExecSmartTagPopup( const Point& rPt )
 class SwFieldDialog : public FloatingWindow
 {
 private:
-    ListBox aListBox;
+    VclPtr<ListBox> aListBox;
     IFieldmark *pFieldmark;
 
     DECL_LINK( MyListBoxHandler, ListBox * );
 
 public:
     SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM );
+    virtual ~SwFieldDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
     FloatingWindow( parent, WB_BORDER | WB_SYSTEMWINDOW ),
-    aListBox(this),
+    aListBox(new ListBox(this)),
     pFieldmark( fieldBM )
 {
     if ( fieldBM != NULL )
@@ -827,7 +829,7 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
                 pCurrent != vListEntries.getArray() + vListEntries.getLength();
                 ++pCurrent)
             {
-                aListBox.InsertEntry(*pCurrent);
+                aListBox->InsertEntry(*pCurrent);
             }
         }
 
@@ -838,18 +840,29 @@ SwFieldDialog::SwFieldDialog( SwEditWin* parent, IFieldmark *fieldBM ) :
         {
             sal_Int32 nSelection = -1;
             pResult->second >>= nSelection;
-            aListBox.SelectEntryPos( nSelection );
+            aListBox->SelectEntryPos( nSelection );
         }
     }
 
-    Size lbSize(aListBox.GetOptimalSize());
+    Size lbSize(aListBox->GetOptimalSize());
     lbSize.Width()+=50;
     lbSize.Height()+=20;
-    aListBox.SetSizePixel(lbSize);
-    aListBox.SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
-    aListBox.Show();
+    aListBox->SetSizePixel(lbSize);
+    aListBox->SetSelectHdl( LINK( this, SwFieldDialog, MyListBoxHandler ) );
+    aListBox->Show();
 
     SetSizePixel( lbSize );
+}
+
+SwFieldDialog::~SwFieldDialog()
+{
+    dispose();
+}
+
+void SwFieldDialog::dispose()
+{
+    aListBox.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )

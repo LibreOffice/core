@@ -43,14 +43,14 @@ PageSizeControl::PageSizeControl(
     const FieldUnit eFUnit )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_SIZE) )
     , mpSizeValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::TEXT_TEXT, this, SW_RES(VS_SIZE) ) )
-    , maMoreButton( this, SW_RES(CB_SIZE_MORE) )
-    , maWidthHeightField( this, SW_RES(FLD_WIDTH_HEIGHT) )
+    , maMoreButton( new PushButton( this, SW_RES(CB_SIZE_MORE) ) )
+    , maWidthHeightField( new MetricField( this, SW_RES(FLD_WIDTH_HEIGHT) ) )
     , mePaper( ePaper )
     , maPaperList()
     , mrPagePropPanel(rPanel)
 {
-    maWidthHeightField.Hide();
-    SetFieldUnit( maWidthHeightField, eFUnit );
+    maWidthHeightField->Hide();
+    SetFieldUnit( *maWidthHeightField.get(), eFUnit );
 
     maPaperList.push_back( PAPER_A3 );
     maPaperList.push_back( PAPER_A4 );
@@ -68,7 +68,7 @@ PageSizeControl::PageSizeControl(
     {
         OUString aMetricStr;
         {
-            const OUString aText = maWidthHeightField.GetText();
+            const OUString aText = maWidthHeightField->GetText();
             for (short i = aText.getLength() - 1; i >= 0; i--)
             {
                 sal_Unicode c = aText[i];
@@ -86,7 +86,7 @@ PageSizeControl::PageSizeControl(
             }
         }
 
-        const LocaleDataWrapper& localeDataWrapper = maWidthHeightField.GetLocaleDataWrapper();
+        const LocaleDataWrapper& localeDataWrapper = maWidthHeightField->GetLocaleDataWrapper();
         OUString aWidthStr;
         OUString aHeightStr;
         OUString aItemText2;
@@ -99,19 +99,19 @@ PageSizeControl::PageSizeControl(
             {
                 Swap( aPaperSize );
             }
-            maWidthHeightField.SetValue( maWidthHeightField.Normalize( aPaperSize.Width() ), FUNIT_TWIP );
+            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Width() ), FUNIT_TWIP );
             aWidthStr = localeDataWrapper.getNum(
-                maWidthHeightField.GetValue(),
-                maWidthHeightField.GetDecimalDigits(),
-                maWidthHeightField.IsUseThousandSep(),
-                maWidthHeightField.IsShowTrailingZeros() );
+                maWidthHeightField->GetValue(),
+                maWidthHeightField->GetDecimalDigits(),
+                maWidthHeightField->IsUseThousandSep(),
+                maWidthHeightField->IsShowTrailingZeros() );
 
-            maWidthHeightField.SetValue( maWidthHeightField.Normalize( aPaperSize.Height() ), FUNIT_TWIP);
+            maWidthHeightField->SetValue( maWidthHeightField->Normalize( aPaperSize.Height() ), FUNIT_TWIP);
             aHeightStr = localeDataWrapper.getNum(
-                maWidthHeightField.GetValue(),
-                maWidthHeightField.GetDecimalDigits(),
-                maWidthHeightField.IsUseThousandSep(),
-                maWidthHeightField.IsShowTrailingZeros() );
+                maWidthHeightField->GetValue(),
+                maWidthHeightField->GetDecimalDigits(),
+                maWidthHeightField->IsUseThousandSep(),
+                maWidthHeightField->IsShowTrailingZeros() );
 
             aItemText2 = aWidthStr + " x " + aHeightStr + " " + aMetricStr;
 
@@ -135,15 +135,23 @@ PageSizeControl::PageSizeControl(
     mpSizeValueSet->Format();
     mpSizeValueSet->StartSelection();
 
-    maMoreButton.SetClickHdl( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );
-    maMoreButton.GrabFocus();
+    maMoreButton->SetClickHdl( LINK( this, PageSizeControl, MoreButtonClickHdl_Impl ) );
+    maMoreButton->GrabFocus();
 
     FreeResource();
 }
 
-PageSizeControl::~PageSizeControl(void)
+PageSizeControl::~PageSizeControl()
+{
+    dispose();
+}
+
+void PageSizeControl::dispose()
 {
     delete mpSizeValueSet;
+    maMoreButton.disposeAndClear();
+    maWidthHeightField.disposeAndClear();
+    ::svx::sidebar::PopupControl::dispose();
 }
 
 IMPL_LINK(PageSizeControl, ImplSizeHdl, void *, pControl)

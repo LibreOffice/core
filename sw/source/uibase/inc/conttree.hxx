@@ -144,6 +144,7 @@ protected:
 public:
     SwContentTree(vcl::Window* pParent, const ResId& rResId);
     virtual ~SwContentTree();
+    virtual void dispose() SAL_OVERRIDE;
     OUString        GetEntryAltText( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     OUString        GetEntryLongDescription( SvTreeListEntry* pEntry ) const SAL_OVERRIDE;
     SdrObject*      GetDrawingObjectsByContent(const SwContent *pCnt);
@@ -313,6 +314,7 @@ protected:
 public:
     SwGlobalTree(vcl::Window* pParent, const ResId& rResId);
     virtual ~SwGlobalTree();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox);
     void                InsertRegion( const SwGlblDocContent* pCont,

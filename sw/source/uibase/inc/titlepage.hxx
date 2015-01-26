@@ -63,6 +63,7 @@ private:
 public:
     SwTitlePageDlg( vcl::Window *pParent );
     virtual ~SwTitlePageDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

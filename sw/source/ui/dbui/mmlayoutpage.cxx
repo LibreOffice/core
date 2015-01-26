@@ -155,9 +155,14 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
 
 SwMailMergeLayoutPage::~SwMailMergeLayoutPage()
 {
+    dispose();
+}
+
+void SwMailMergeLayoutPage::dispose()
+{
     delete m_pExampleFrame;
     File::remove( m_sExampleURL );
-
+    svt::OWizardPage::dispose();
 }
 
 void SwMailMergeLayoutPage::ActivatePage()

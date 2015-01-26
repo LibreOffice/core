@@ -84,6 +84,7 @@ class SwMailMergeLayoutPage : public svt::OWizardPage
 public:
         SwMailMergeLayoutPage( SwMailMergeWizard* _pParent);
         virtual ~SwMailMergeLayoutPage();
+    virtual void            dispose() SAL_OVERRIDE;
 
     static SwFrmFmt*        InsertAddressAndGreeting(SwView* pView,
                                             SwMailMergeConfigItem& rConfigItem,

@@ -38,7 +38,7 @@ PageColumnControl::PageColumnControl(
     const bool bLandscape )
     : ::svx::sidebar::PopupControl( pParent, SW_RES(RID_POPUP_SWPAGE_COLUMN) )
     , mpColumnValueSet( new ::svx::sidebar::ValueSetWithTextControl( ::svx::sidebar::ValueSetWithTextControl::IMAGE_TEXT, this, SW_RES(VS_COLUMN) ) )
-    , maMoreButton( this, SW_RES(CB_COLUMN_MORE) )
+    , maMoreButton( new PushButton( this, SW_RES(CB_COLUMN_MORE) ) )
     , mnColumnType( nColumnType )
     , mrPagePropPanel(rPanel)
 {
@@ -69,15 +69,22 @@ PageColumnControl::PageColumnControl(
     mpColumnValueSet->Format();
     mpColumnValueSet->StartSelection();
 
-    maMoreButton.SetClickHdl( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );
-    maMoreButton.GrabFocus();
+    maMoreButton->SetClickHdl( LINK( this, PageColumnControl, MoreButtonClickHdl_Impl ) );
+    maMoreButton->GrabFocus();
 
     FreeResource();
 }
 
 PageColumnControl::~PageColumnControl(void)
 {
+    dispose();
+}
+
+void PageColumnControl::dispose()
+{
     delete mpColumnValueSet;
+    maMoreButton.disposeAndClear();
+    ::svx::sidebar::PopupControl::dispose();
 }
 
 IMPL_LINK(PageColumnControl, ImplColumnHdl, void *, pControl)

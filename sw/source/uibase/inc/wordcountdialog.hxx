@@ -57,6 +57,7 @@ public:
                              vcl::Window *pParent,
                              SfxChildWinInfo* pInfo);
     virtual ~SwWordCountFloatDlg();
+    virtual void dispose() SAL_OVERRIDE;
     void    UpdateCounts();
 
     void    SetCounts(const SwDocStat &rCurrCnt, const SwDocStat &rDocStat);

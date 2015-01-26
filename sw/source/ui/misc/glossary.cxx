@@ -232,8 +232,14 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
 SwGlossaryDlg::~SwGlossaryDlg()
 {
+    dispose();
+}
+
+void SwGlossaryDlg::dispose()
+{
     m_pCategoryBox->Clear();
     delete pExampleFrame;
+    SvxStandardDialog::dispose();
 }
 
 // select new group

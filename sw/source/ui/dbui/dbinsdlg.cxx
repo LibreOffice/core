@@ -412,10 +412,16 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
 
 SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
 {
+    dispose();
+}
+
+void SwInsertDBColAutoPilot::dispose()
+{
     delete pTblSet;
     delete pRep;
 
     delete pTAutoFmt;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK( SwInsertDBColAutoPilot, PageHdl, Button*, pButton )

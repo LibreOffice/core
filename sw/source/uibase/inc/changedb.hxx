@@ -59,6 +59,7 @@ class SwChangeDBDlg: public SvxStandardDialog
 public:
     SwChangeDBDlg(SwView& rVw);
     virtual ~SwChangeDBDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

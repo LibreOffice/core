@@ -135,7 +135,13 @@ SwMailConfigPage::SwMailConfigPage( vcl::Window* pParent, const SfxItemSet& rSet
 
 SwMailConfigPage::~SwMailConfigPage()
 {
+    dispose();
+}
+
+void SwMailConfigPage::dispose()
+{
     delete m_pConfigItem;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage*  SwMailConfigPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet)

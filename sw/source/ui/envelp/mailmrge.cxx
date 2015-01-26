@@ -389,6 +389,11 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
 SwMailMergeDlg::~SwMailMergeDlg()
 {
+    dispose();
+}
+
+void SwMailMergeDlg::dispose()
+{
     if(m_xFrame.is())
     {
         m_xFrame->setComponent(NULL, NULL);
@@ -401,6 +406,7 @@ SwMailMergeDlg::~SwMailMergeDlg()
         delete pData;
     }
     delete pImpl;
+    SvxStandardDialog::dispose();
 }
 
 void SwMailMergeDlg::Apply()

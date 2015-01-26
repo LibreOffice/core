@@ -62,7 +62,13 @@ SwLabPrtPage::SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
 SwLabPrtPage::~SwLabPrtPage()
 {
+    dispose();
+}
+
+void SwLabPrtPage::dispose()
+{
     delete pPrinter;
+    SfxTabPage::dispose();
 }
 
 IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )

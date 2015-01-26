@@ -71,6 +71,7 @@ private:
 public:
     SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh);
     virtual ~SwJavaEditDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     OUString GetScriptText() const { return aText; }
 

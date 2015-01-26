@@ -62,6 +62,7 @@ private:
 public:
     SwCompatibilityOptPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwCompatibilityOptPage();
+    virtual void            dispose() SAL_OVERRIDE;
 
     static SfxTabPage*      Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
 

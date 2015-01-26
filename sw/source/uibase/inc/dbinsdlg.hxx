@@ -158,6 +158,7 @@ public:
         const SwDBData& rData  );
 
     virtual ~SwInsertDBColAutoPilot();
+    virtual void dispose() SAL_OVERRIDE;
 
     void DataToDoc( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,

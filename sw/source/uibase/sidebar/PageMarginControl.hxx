@@ -60,25 +60,26 @@ public:
         const bool bLandscape,
         const FieldUnit eFUnit,
         const SfxMapUnit eUnit );
-    virtual ~PageMarginControl(void);
+    virtual ~PageMarginControl();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpMarginValueSet;
 
-    FixedText maCustom;
-    FixedText maLeft;
-    FixedText maInner;
-    MetricField maLeftMarginEdit;
-    FixedText maRight;
-    FixedText maOuter;
-    MetricField maRightMarginEdit;
-    FixedText maTop;
-    MetricField maTopMarginEdit;
-    FixedText maBottom;
-    MetricField maBottomMarginEdit;
+    VclPtr<FixedText> maCustom;
+    VclPtr<FixedText> maLeft;
+    VclPtr<FixedText> maInner;
+    VclPtr<MetricField> maLeftMarginEdit;
+    VclPtr<FixedText> maRight;
+    VclPtr<FixedText> maOuter;
+    VclPtr<MetricField> maRightMarginEdit;
+    VclPtr<FixedText> maTop;
+    VclPtr<MetricField> maTopMarginEdit;
+    VclPtr<FixedText> maBottom;
+    VclPtr<MetricField> maBottomMarginEdit;
 
     // hidden metric field
-    MetricField maWidthHeightField;
+    VclPtr<MetricField> maWidthHeightField;
 
     long mnPageLeftMargin;
     long mnPageRightMargin;

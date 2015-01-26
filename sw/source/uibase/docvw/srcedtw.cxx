@@ -268,7 +268,12 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     n->addPropertiesChangeListener(s, listener_.get());
 }
 
- SwSrcEditWindow::~SwSrcEditWindow()
+SwSrcEditWindow::~SwSrcEditWindow()
+{
+    dispose();
+}
+
+void SwSrcEditWindow::dispose()
 {
     css::uno::Reference< css::beans::XMultiPropertySet > n;
     {
@@ -291,6 +296,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
         delete pTextEngine;
     }
     delete pOutWin;
+    vcl::Window::dispose();
 }
 
 void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )

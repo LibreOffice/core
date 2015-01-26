@@ -63,7 +63,13 @@ PageOrientationControl::PageOrientationControl(
 
 PageOrientationControl::~PageOrientationControl(void)
 {
+    dispose();
+}
+
+void PageOrientationControl::dispose()
+{
     delete mpOrientationValueSet;
+    ::svx::sidebar::PopupControl::dispose();
 }
 
 IMPL_LINK(PageOrientationControl, ImplOrientationHdl, void *, pControl)

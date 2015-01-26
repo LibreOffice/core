@@ -193,7 +193,13 @@ SwOutlineTabDialog::SwOutlineTabDialog(vcl::Window* pParent, const SfxItemSet* p
 
 SwOutlineTabDialog::~SwOutlineTabDialog()
 {
+    dispose();
+}
+
+void SwOutlineTabDialog::dispose()
+{
     delete pNumRule;
+    SfxTabDialog::dispose();
 }
 
 void SwOutlineTabDialog::PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage)

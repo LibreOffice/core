@@ -66,7 +66,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
                                         sal_uInt32 nFlags,
                                         const Link* pInitializedLink,
                                         const OUString* pURL ) :
-    aTopWindow(&rWin, this),
+    aTopWindow(new SwFrmCtrlWindow(&rWin, this)),
     aMenuRes(SW_RES(RES_FRMEX_MENU)),
     pModuleView(SW_MOD()->GetView()),
     nStyleFlags(nFlags),
@@ -76,7 +76,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
     if (pURL && !pURL->isEmpty())
         sArgumentURL = *pURL;
 
-    aTopWindow.SetPosSizePixel(Point(0, 0), rWin.GetSizePixel());
+    aTopWindow->SetPosSizePixel(Point(0, 0), rWin.GetSizePixel());
 
     if( pInitializedLink )
         aInitializedLink = *pInitializedLink;
@@ -87,7 +87,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
 
     CreateControl();
 
-    aTopWindow.Show();
+    aTopWindow->Show();
 }
 
 void SwOneExampleFrame::CreateErrorMessage(vcl::Window* pParent)
@@ -117,7 +117,7 @@ void SwOneExampleFrame::CreateControl()
     _xControl = uno::Reference< awt::XControl >(xInst, uno::UNO_QUERY);
     if(_xControl.is())
     {
-        uno::Reference< awt::XWindowPeer >  xParent( aTopWindow.GetComponentInterface() );
+        uno::Reference< awt::XWindowPeer >  xParent( aTopWindow->GetComponentInterface() );
 
         uno::Reference< awt::XToolkit >  xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
 
@@ -125,7 +125,7 @@ void SwOneExampleFrame::CreateControl()
 
         uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
         xWin->setVisible(sal_False);
-        Size aWinSize(aTopWindow.GetOutputSizePixel());
+        Size aWinSize(aTopWindow->GetOutputSizePixel());
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
@@ -361,7 +361,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         }
 
         uno::Reference< awt::XWindow >  xWin( _xControl, uno::UNO_QUERY );
-        Size aWinSize(aTopWindow.GetOutputSizePixel());
+        Size aWinSize(aTopWindow->GetOutputSizePixel());
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
         // can only be done here - the SFX changes the ScrollBar values
@@ -376,7 +376,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             xScrCrsr->screenUp();
 
         xWin->setVisible( sal_True );
-        aTopWindow.Show();
+        aTopWindow->Show();
 
         if( xTunnel.is() )
         {
@@ -482,7 +482,7 @@ void SwOneExampleFrame::CreatePopup(const Point& rPt)
         aPop.SetPopupMenu( ITEM_ZOOM, &aSubPop1 );
         aSubPop1.SetSelectHdl(aSelLk);
     }
-    aPop.Execute( &aTopWindow, rPt );
+    aPop.Execute( aTopWindow.get(), rPt );
 
 }
 

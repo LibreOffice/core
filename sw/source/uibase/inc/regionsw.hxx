@@ -131,6 +131,7 @@ class SwEditRegionDlg : public SfxModalDialog
 public:
     SwEditRegionDlg( vcl::Window* pParent, SwWrtShell& rWrtSh );
     virtual ~SwEditRegionDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SelectSection(const OUString& rSectionName);
 
@@ -184,6 +185,7 @@ class SwInsertSectionTabPage : public SfxTabPage
 public:
     SwInsertSectionTabPage(vcl::Window *pParent, const SfxItemSet &rAttrSet);
     virtual ~SwInsertSectionTabPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    SetWrtShell(SwWrtShell& rSh);
 

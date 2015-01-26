@@ -31,6 +31,7 @@ class SwHeaderFooterWin : public MenuButton, public SwFrameControl
 public:
     SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm, bool bHeader );
     virtual ~SwHeaderFooterWin( );
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetOffset( Point aOffset, long nXLineStart, long nXLineEnd );
 

@@ -109,6 +109,7 @@ class SwCaptionDialog : public SvxStandardDialog
 public:
      SwCaptionDialog( vcl::Window *pParent, SwView &rV );
     virtual ~SwCaptionDialog();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 #endif

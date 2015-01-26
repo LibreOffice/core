@@ -66,6 +66,7 @@ class SwSidebarWin : public vcl::Window
                       SwPostItBits aBits,
                       SwSidebarItem& rSidebarItem );
         virtual ~SwSidebarWin();
+        virtual void dispose() SAL_OVERRIDE;
 
         void SetSize( const Size& rNewSize );
         void SetPosSizePixelRect( long nX,

@@ -47,13 +47,14 @@ public:
         const Paper ePaper,
         const bool bLandscape,
         const FieldUnit eFUnit );
-    virtual ~PageSizeControl(void);
+    virtual ~PageSizeControl();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     ::svx::sidebar::ValueSetWithTextControl* mpSizeValueSet;
-    PushButton maMoreButton;
+    VclPtr<PushButton> maMoreButton;
     // hidden metric field
-    MetricField maWidthHeightField;
+    VclPtr<MetricField> maWidthHeightField;
 
     Paper mePaper;
     ::std::vector< Paper > maPaperList;

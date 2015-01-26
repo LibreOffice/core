@@ -46,7 +46,13 @@ IMPL_LINK_NOARG(SwWordCountFloatDlg, CloseHdl)
 
 SwWordCountFloatDlg::~SwWordCountFloatDlg()
 {
+    dispose();
+}
+
+void SwWordCountFloatDlg::dispose()
+{
     SwViewShell::SetCareWin( 0 );
+    SfxModelessDialog::dispose();
 }
 
 namespace

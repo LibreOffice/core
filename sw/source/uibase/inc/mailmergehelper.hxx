@@ -60,7 +60,7 @@ struct SwAddressPreview_Impl;
 // and also the resulting address filled with database data
 class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
 {
-    ScrollBar               aVScrollBar;
+    VclPtr<ScrollBar>       aVScrollBar;
     SwAddressPreview_Impl*  pImpl;
     Link                    m_aSelectHdl;
 
@@ -77,6 +77,8 @@ class SW_DLLPUBLIC SwAddressPreview : public vcl::Window
 
 public:
     SwAddressPreview(vcl::Window* pParent, WinBits nStyle=WB_BORDER);
+    virtual ~SwAddressPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void positionScrollBar();
 

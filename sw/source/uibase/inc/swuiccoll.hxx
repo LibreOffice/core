@@ -49,6 +49,7 @@ class SwCondCollPage : public SfxTabPage
 
     SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwCondCollPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual int     DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 

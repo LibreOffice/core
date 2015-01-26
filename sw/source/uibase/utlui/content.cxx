@@ -842,8 +842,14 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
 
 SwContentTree::~SwContentTree()
 {
+    dispose();
+}
+
+void SwContentTree::dispose()
+{
     Clear(); // If applicable erase content types previously.
     bIsInDrag = false;
+    SvTreeListBox::dispose();
 }
 
 OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
@@ -1600,11 +1606,11 @@ void SwContentTree::Display( bool bActive )
         bIsLastReadOnly = bReadOnly;
         bool bDisable =  pShell == 0 || bReadOnly;
         SwNavigationPI* pNavi = GetParentWindow();
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_UP , !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_DOWN, !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_LEFT, !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_ITEM_RIGHT, !bDisable);
-        pNavi->aContentToolBox.EnableItem(FN_SELECT_SET_AUTO_BOOKMARK, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_UP , !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_DOWN, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_LEFT, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_ITEM_RIGHT, !bDisable);
+        pNavi->aContentToolBox->EnableItem(FN_SELECT_SET_AUTO_BOOKMARK, !bDisable);
     }
     if(pShell)
     {
@@ -1933,7 +1939,7 @@ bool SwContentTree::ToggleToRoot()
         }
     }
     pConfig->SetRootType( nRootType );
-    GetParentWindow()->aContentToolBox.CheckItem(FN_SHOW_ROOT, bIsRoot);
+    GetParentWindow()->aContentToolBox->CheckItem(FN_SHOW_ROOT, bIsRoot);
     return bIsRoot;
 }
 
@@ -3052,10 +3058,10 @@ bool SwContentTree::Select( SvTreeListEntry* pEntry, bool bSelect )
         }
     }
     SwNavigationPI* pNavi = GetParentWindow();
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_UP ,  bEnable);
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_DOWN, bEnable);
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_LEFT, bEnable);
-    pNavi->aContentToolBox.EnableItem(FN_ITEM_RIGHT,bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_UP ,  bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_DOWN, bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_LEFT, bEnable);
+    pNavi->aContentToolBox->EnableItem(FN_ITEM_RIGHT,bEnable);
 
     return SvTreeListBox::Select(pEntry, bSelect);
 }

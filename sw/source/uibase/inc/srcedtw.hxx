@@ -118,6 +118,7 @@ protected:
 public:
                     SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView );
                     virtual ~SwSrcEditWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetScrollBarRanges();
     void            InitScrollBars();

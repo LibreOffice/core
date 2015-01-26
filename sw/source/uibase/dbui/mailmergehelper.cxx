@@ -187,12 +187,23 @@ struct  SwAddressPreview_Impl
 
 SwAddressPreview::SwAddressPreview(vcl::Window* pParent, WinBits nStyle)
     : Window( pParent, nStyle )
-    , aVScrollBar(this, WB_VSCROLL)
+    , aVScrollBar(new ScrollBar(this, WB_VSCROLL))
     , pImpl(new SwAddressPreview_Impl())
 {
-    aVScrollBar.SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
+    aVScrollBar->SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
     positionScrollBar();
     Show();
+}
+
+SwAddressPreview::~SwAddressPreview()
+{
+    dispose();
+}
+
+void SwAddressPreview::dispose()
+{
+    aVScrollBar.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressPreview(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -207,10 +218,10 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressPreview(vcl::
 void SwAddressPreview::positionScrollBar()
 {
     Size aSize(GetOutputSizePixel());
-    Size aScrollSize(aVScrollBar.get_preferred_size().Width(), aSize.Height());
-    aVScrollBar.SetSizePixel(aScrollSize);
+    Size aScrollSize(aVScrollBar->get_preferred_size().Width(), aSize.Height());
+    aVScrollBar->SetSizePixel(aScrollSize);
     Point aSrollPos(aSize.Width() - aScrollSize.Width(), 0);
-    aVScrollBar.SetPosPixel(aSrollPos);
+    aVScrollBar->SetPosPixel(aSrollPos);
 }
 
 void SwAddressPreview::Resize()
@@ -235,7 +246,7 @@ void SwAddressPreview::SetAddress(const OUString& rAddress)
 {
     pImpl->aAddresses.clear();
     pImpl->aAddresses.push_back(rAddress);
-    aVScrollBar.Show(false);
+    aVScrollBar->Show(false);
     Invalidate();
 }
 
@@ -251,9 +262,9 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
     pImpl->nSelectedAddress = nSelect;
     // now make it visible..
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
-    sal_uInt16 nStartRow = (sal_uInt16)aVScrollBar.GetThumbPos();
+    sal_uInt16 nStartRow = (sal_uInt16)aVScrollBar->GetThumbPos();
     if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
-        aVScrollBar.SetThumbPos( nSelectRow );
+        aVScrollBar->SetThumbPos( nSelectRow );
 }
 
 void SwAddressPreview::Clear()
@@ -294,13 +305,13 @@ void SwAddressPreview::UpdateScrollBar()
 {
     if(pImpl->nColumns)
     {
-        aVScrollBar.SetVisibleSize(pImpl->nRows);
+        aVScrollBar->SetVisibleSize(pImpl->nRows);
         sal_uInt16 nResultingRows = (sal_uInt16)(pImpl->aAddresses.size() + pImpl->nColumns - 1) / pImpl->nColumns;
         ++nResultingRows;
-        aVScrollBar.Show(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows);
-        aVScrollBar.SetRange(Range(0, nResultingRows));
-        if(aVScrollBar.GetThumbPos() > nResultingRows)
-            aVScrollBar.SetThumbPos(nResultingRows);
+        aVScrollBar->Show(pImpl->bEnableScrollBar && nResultingRows > pImpl->nRows);
+        aVScrollBar->SetRange(Range(0, nResultingRows));
+        if(aVScrollBar->GetThumbPos() > nResultingRows)
+            aVScrollBar->SetThumbPos(nResultingRows);
     }
 }
 
@@ -318,10 +329,10 @@ void SwAddressPreview::Paint(const Rectangle&)
 
     Size aSize = GetOutputSizePixel();
     sal_uInt16 nStartRow = 0;
-    if(aVScrollBar.IsVisible())
+    if(aVScrollBar->IsVisible())
     {
-        aSize.Width() -= aVScrollBar.GetSizePixel().Width();
-        nStartRow = (sal_uInt16)aVScrollBar.GetThumbPos();
+        aSize.Width() -= aVScrollBar->GetSizePixel().Width();
+        nStartRow = (sal_uInt16)aVScrollBar->GetThumbPos();
     }
     Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
     aPartSize.Width() -= 2;
@@ -358,9 +369,9 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
         Size aSize(GetOutputSizePixel());
         Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
         sal_uInt32 nRow = rMousePos.Y() / aPartSize.Height() ;
-        if(aVScrollBar.IsVisible())
+        if(aVScrollBar->IsVisible())
         {
-            nRow += (sal_uInt16)aVScrollBar.GetThumbPos();
+            nRow += (sal_uInt16)aVScrollBar->GetThumbPos();
         }
         sal_uInt32 nCol = rMousePos.X() / aPartSize.Width();
         sal_uInt32 nSelect = nRow * pImpl->nColumns + nCol;

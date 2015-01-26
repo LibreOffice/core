@@ -185,7 +185,13 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
 
 SwCharURLPage::~SwCharURLPage()
 {
+    dispose();
+}
+
+void SwCharURLPage::dispose()
+{
     delete pINetItem;
+    SfxTabPage::dispose();
 }
 
 void SwCharURLPage::Reset(const SfxItemSet* rSet)

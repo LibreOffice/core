@@ -147,7 +147,13 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(vcl::Window* pParent,
 
 SwSelectDBTableDialog::~SwSelectDBTableDialog()
 {
+    dispose();
+}
+
+void SwSelectDBTableDialog::dispose()
+{
     delete m_pTable;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)

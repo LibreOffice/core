@@ -146,6 +146,7 @@ protected:
 public:
         SwScrollNaviPopup( sal_uInt16 nId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, vcl::Window *pParent );
         virtual ~SwScrollNaviPopup();
+    virtual void dispose() SAL_OVERRIDE;
 
     static OUString         GetQuickHelpText(bool bNext);
 

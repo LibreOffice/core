@@ -214,10 +214,16 @@ SwColumnDlg::SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh)
 
 SwColumnDlg::~SwColumnDlg()
 {
+    dispose();
+}
+
+void SwColumnDlg::dispose()
+{
     delete pTabPage;
     delete pPageSet;
     delete pSectionSet;
     delete pSelectionSet;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
@@ -542,7 +548,13 @@ SwColumnPage::SwColumnPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwColumnPage::~SwColumnPage()
 {
+    dispose();
+}
+
+void SwColumnPage::dispose()
+{
     delete pColMgr;
+    SfxTabPage::dispose();
 }
 
 void SwColumnPage::SetPageWidth(long nPageWidth)

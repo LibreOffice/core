@@ -204,10 +204,17 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(vcl::Window *pParent, SwWrtShell &rShell, boo
 
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
+    dispose();
+}
+
+void SwInsFootNoteDlg::dispose()
+{
     SwViewShell::SetCareWin(0);
 
     if (bEdit)
         rSh.ResetSelect(0, false);
+
+    SvxStandardDialog::dispose();
 }
 
 void SwInsFootNoteDlg::Init()

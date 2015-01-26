@@ -37,6 +37,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
                          SwSidebarItem& rSidebarItem,
                          SwFmtFld* aField );
         virtual ~SwAnnotationWin();
+        virtual void dispose() SAL_OVERRIDE;
 
         virtual void    UpdateData() SAL_OVERRIDE;
         virtual void    SetPostItText() SAL_OVERRIDE;

@@ -49,6 +49,7 @@ class AutoFmtPreview : public vcl::Window
 public:
     AutoFmtPreview(vcl::Window* pParent, WinBits nStyle);
     virtual ~AutoFmtPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void NotifyChange( const SwTableAutoFmt& rNewData );
 
@@ -174,9 +175,15 @@ SwAutoFormatDlg::SwAutoFormatDlg( vcl::Window* pParent, SwWrtShell* pWrtShell,
 
 SwAutoFormatDlg::~SwAutoFormatDlg()
 {
+    dispose();
+}
+
+void SwAutoFormatDlg::dispose()
+{
     if (bCoreDataChanged)
         pTableTbl->Save();
     delete pTableTbl;
+    SfxModalDialog::dispose();
 }
 
 void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
@@ -537,7 +544,13 @@ void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
 
 AutoFmtPreview::~AutoFmtPreview()
 {
+    dispose();
+}
+
+void AutoFmtPreview::dispose()
+{
     delete pNumFmt;
+    vcl::Window::dispose();
 }
 
 static void lcl_SetFontProperties(

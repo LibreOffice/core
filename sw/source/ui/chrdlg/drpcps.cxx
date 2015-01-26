@@ -117,6 +117,7 @@ public:
     void SetDropCapsPage(SwDropCapsPage* pPage) { mpPage = pPage; }
 
     virtual ~SwDropCapsPict();
+    virtual void dispose() SAL_OVERRIDE;
 
     void UpdatePaintSettings( void );       // also invalidates control!
 
@@ -202,8 +203,14 @@ static void calcFontHeightAnyAscent( OutputDevice* _pWin, vcl::Font& _rFont, lon
 
 SwDropCapsPict::~SwDropCapsPict()
 {
+    dispose();
+}
+
+void SwDropCapsPict::dispose()
+{
      if( mbDelPrinter )
          delete mpPrinter;
+     Control::dispose();
 }
 
 /// Get the details of the first script change.

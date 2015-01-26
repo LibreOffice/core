@@ -46,6 +46,7 @@ class SwLabPrtPage : public SfxTabPage
 
      SwLabPrtPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwLabPrtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK( CountHdl, Button * );
 

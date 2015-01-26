@@ -76,6 +76,7 @@ public:
     SwCreateAddressListDialog(
             vcl::Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig);
     virtual ~SwCreateAddressListDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     const OUString&         GetURL() const {    return m_sURL;    }
     void                    Find( const OUString& rSearch, sal_Int32 nColumn);

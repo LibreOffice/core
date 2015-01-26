@@ -149,6 +149,7 @@ class SwGlossaryDlg : public SvxStandardDialog
 public:
     SwGlossaryDlg(SfxViewFrame* pViewFrame, SwGlossaryHdl* pGlosHdl, SwWrtShell *pWrtShell);
     virtual ~SwGlossaryDlg();
+    virtual void dispose() SAL_OVERRIDE;
     OUString GetCurrGrpName() const;
     OUString GetCurrLongName() const
     {

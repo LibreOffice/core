@@ -124,9 +124,15 @@ SwCondCollPage::SwCondCollPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwCondCollPage::~SwCondCollPage()
 {
+    dispose();
+}
+
+void SwCondCollPage::dispose()
+{
     for(sal_Int32 i = 0; i < m_pFilterLB->GetEntryCount(); ++i)
         delete static_cast<sal_uInt16*>(m_pFilterLB->GetEntryData(i));
 
+    SfxTabPage::dispose();
 }
 
 int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)

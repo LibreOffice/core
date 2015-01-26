@@ -411,7 +411,13 @@ void SwCaptionDialog::DrawSample()
 
 SwCaptionDialog::~SwCaptionDialog()
 {
+    dispose();
+}
+
+void SwCaptionDialog::dispose()
+{
     delete pMgr;
+    SvxStandardDialog::dispose();
 }
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( vcl::Window *pParent, SwView &rV,

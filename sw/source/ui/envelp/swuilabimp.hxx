@@ -110,6 +110,7 @@ class SwVisitingCardPage : public SfxTabPage
 
     SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& rSet);
     virtual ~SwVisitingCardPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;

@@ -55,10 +55,16 @@ SwModalRedlineAcceptDlg::SwModalRedlineAcceptDlg(vcl::Window *pParent)
 
 SwModalRedlineAcceptDlg::~SwModalRedlineAcceptDlg()
 {
+    dispose();
+}
+
+void SwModalRedlineAcceptDlg::dispose()
+{
     AcceptAll(false);   // refuse everything remaining
     pImplDlg->FillInfo(GetExtraData());
 
     delete pImplDlg;
+    SfxModalDialog::dispose();
 }
 
 void SwModalRedlineAcceptDlg::Activate()

@@ -137,13 +137,19 @@ void SwModelessRedlineAcceptDlg::FillInfo(SfxChildWinInfo& rInfo) const
 
 SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 {
+    dispose();
+}
+
+void SwModelessRedlineAcceptDlg::dispose()
+{
     delete pImplDlg;
+    SfxModelessDialog::dispose();
 }
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder,
                                        vcl::Window *pContentArea, bool bAutoFmt) :
     pParentDlg      (pParent),
-    aTabPagesCTRL   (pContentArea, pBuilder),
+    aTabPagesCTRL   (new SvxAcceptChgCtr(pContentArea, pBuilder)),
     aPopup          (SW_RES(MN_REDLINE_POPUP)),
     sInserted       (SW_RES(STR_REDLINE_INSERTED)),
     sDeleted        (SW_RES(STR_REDLINE_DELETED)),
@@ -156,8 +162,8 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     bRedlnAutoFmt   (bAutoFmt),
     bInhibitActivate( false )
 {
-    aTabPagesCTRL.SetHelpId(HID_REDLINE_CTRL);
-    pTPView = aTabPagesCTRL.GetViewPage();
+    aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);
+    pTPView = aTabPagesCTRL->GetViewPage();
 
     pTable = pTPView->GetTableControl();
 
@@ -173,9 +179,9 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     pTPView->EnableAcceptAll(false);
     pTPView->EnableRejectAll(false);
 
-    aTabPagesCTRL.GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
+    aTabPagesCTRL->GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
 
-    ListBox *pActLB = aTabPagesCTRL.GetFilterPage()->GetLbAction();
+    ListBox *pActLB = aTabPagesCTRL->GetFilterPage()->GetLbAction();
     pActLB->InsertEntry(sInserted);
     pActLB->InsertEntry(sDeleted);
     pActLB->InsertEntry(sFormated);
@@ -247,7 +253,7 @@ void SwRedlineAcceptDlg::InitAuthors()
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
 
-    SvxTPFilter *pFilterPage = aTabPagesCTRL.GetFilterPage();
+    SvxTPFilter *pFilterPage = aTabPagesCTRL->GetFilterPage();
 
     std::vector<OUString> aStrings;
     OUString sOldAuthor(pFilterPage->GetSelectedAuthor());
@@ -911,7 +917,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl)
 
 IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
 {
-    SvxTPFilter *pFilterTP = aTabPagesCTRL.GetFilterPage();
+    SvxTPFilter *pFilterTP = aTabPagesCTRL->GetFilterPage();
 
     if (pFilterTP->IsAction())
         sFilterAction = pFilterTP->GetLbAction()->GetSelectEntry();
@@ -1242,7 +1248,13 @@ SwRedlineAcceptPanel::SwRedlineAcceptPanel(vcl::Window* pParent, const css::uno:
 
 SwRedlineAcceptPanel::~SwRedlineAcceptPanel()
 {
+    dispose();
+}
+
+void SwRedlineAcceptPanel::dispose()
+{
     delete mpImplDlg;
+    PanelLayout::dispose();
 }
 
 void SwRedlineAcceptPanel::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)

@@ -153,8 +153,14 @@ SwEnvDlg::SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
 SwEnvDlg::~SwEnvDlg()
 {
+    dispose();
+}
+
+void SwEnvDlg::dispose()
+{
     delete pAddresseeSet;
     delete pSenderSet;
+    SfxTabDialog::dispose();
 }
 
 void SwEnvDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)

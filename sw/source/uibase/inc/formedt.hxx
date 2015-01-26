@@ -50,23 +50,23 @@ class SwIdxFormDlg : public SvxStandardDialog
     void            UpdatePattern();
     void            Apply() SAL_OVERRIDE;
 
-    ListBox         aEntryLB;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBT;
-    FixedText       aLevelFT;
-    Edit            aEntryED;
-    PushButton      aEntryBT;
-    PushButton      aTabBT;
-    PushButton      aPageBT;
-    PushButton      aJumpBT;
-    FixedLine       aEntryFL;
-    FixedText       aLevelFT2;
-    ListBox         aLevelLB;
-    FixedText       aTemplateFT;
-    ListBox         aParaLayLB;
-    PushButton      aStdBT;
-    PushButton      aAssignBT;
-    FixedLine       aFormatFL;
+    VclPtr<ListBox>         aEntryLB;
+    VclPtr<OKButton>        aOKBtn;
+    VclPtr<CancelButton>    aCancelBT;
+    VclPtr<FixedText>       aLevelFT;
+    VclPtr<Edit>            aEntryED;
+    VclPtr<PushButton>      aEntryBT;
+    VclPtr<PushButton>      aTabBT;
+    VclPtr<PushButton>      aPageBT;
+    VclPtr<PushButton>      aJumpBT;
+    VclPtr<FixedLine>       aEntryFL;
+    VclPtr<FixedText>       aLevelFT2;
+    VclPtr<ListBox>         aLevelLB;
+    VclPtr<FixedText>       aTemplateFT;
+    VclPtr<ListBox>         aParaLayLB;
+    VclPtr<PushButton>      aStdBT;
+    VclPtr<PushButton>      aAssignBT;
+    VclPtr<FixedLine>       aFormatFL;
 
     SwWrtShell     &rSh;
     SwForm         *pForm;
@@ -76,6 +76,7 @@ class SwIdxFormDlg : public SvxStandardDialog
 public:
     SwIdxFormDlg( vcl::Window* pParent, SwWrtShell &rShell, const SwForm& rForm );
     virtual ~SwIdxFormDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     const SwForm&   GetTOXForm();
 };

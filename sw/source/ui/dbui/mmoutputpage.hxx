@@ -126,6 +126,7 @@ protected:
 public:
         SwMailMergeOutputPage( SwMailMergeWizard* _pParent);
         virtual ~SwMailMergeOutputPage();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 
@@ -192,6 +193,7 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
 public:
     SwSendMailDialog( vcl::Window* pParent, SwMailMergeConfigItem& );
     virtual ~SwSendMailDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     void                AddDocument( SwMailDescriptor& rDesc );
     void                SetDocumentCount( sal_Int32 nAllDocuments );

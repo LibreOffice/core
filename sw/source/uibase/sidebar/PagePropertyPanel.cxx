@@ -200,8 +200,14 @@ PagePropertyPanel::PagePropertyPanel(
 
 PagePropertyPanel::~PagePropertyPanel()
 {
+    dispose();
+}
+
+void PagePropertyPanel::dispose()
+{
     delete[] maImgSize;
     delete[] maImgSize_L;
+    PanelLayout::dispose();
 }
 
 void PagePropertyPanel::Initialize()

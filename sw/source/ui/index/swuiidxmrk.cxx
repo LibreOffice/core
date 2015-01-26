@@ -1007,6 +1007,7 @@ public:
                             bool bNewEntry,
                             bool bCreate);
     virtual ~SwCreateAuthEntryDlg_Impl();
+    virtual void    dispose() SAL_OVERRIDE;
 
     OUString        GetEntryText(ToxAuthorityField eField) const;
 
@@ -1519,6 +1520,11 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(vcl::Window* pParent,
 
 SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
 {
+    dispose();
+}
+
+void SwCreateAuthEntryDlg_Impl::dispose()
+{
     for(int i = 0; i < AUTH_FIELD_END; i++)
     {
         delete pFixedTexts[i];
@@ -1526,6 +1532,7 @@ SwCreateAuthEntryDlg_Impl::~SwCreateAuthEntryDlg_Impl()
     }
     delete pTypeListBox;
     delete pIdentifierBox;
+    ModalDialog::dispose();
 }
 
 OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) const

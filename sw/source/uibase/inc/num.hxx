@@ -117,6 +117,7 @@ public:
     SwNumPositionTabPage(vcl::Window* pParent,
                                const SfxItemSet& rSet);
     virtual ~SwNumPositionTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;

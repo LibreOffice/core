@@ -57,6 +57,7 @@ public:
                                 m_bVertical(false){}
 
     virtual ~SwPageGridExample();
+    virtual void dispose() SAL_OVERRIDE;
     void UpdateExample( const SfxItemSet& rSet );
 };
 

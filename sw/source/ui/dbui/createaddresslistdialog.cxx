@@ -74,6 +74,7 @@ class SwAddressControl_Impl : public Control
 public:
     SwAddressControl_Impl(vcl::Window* pParent , WinBits nBits );
     virtual ~SwAddressControl_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void        SetData(SwCSVData& rDBData);
 
@@ -113,6 +114,11 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAddressControlImpl(v
 
 SwAddressControl_Impl::~SwAddressControl_Impl()
 {
+    dispose();
+}
+
+void SwAddressControl_Impl::dispose()
+{
     ::std::vector<FixedText*>::iterator aTextIter;
     for(aTextIter = m_aFixedTexts.begin(); aTextIter != m_aFixedTexts.end(); ++aTextIter)
         delete *aTextIter;
@@ -121,6 +127,7 @@ SwAddressControl_Impl::~SwAddressControl_Impl()
         delete *aEditIter;
     delete m_pScrollBar;
     delete m_pWindow;
+    Control::dispose();
 }
 
 void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
@@ -495,8 +502,14 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
 
 SwCreateAddressListDialog::~SwCreateAddressListDialog()
 {
+    dispose();
+}
+
+void SwCreateAddressListDialog::dispose()
+{
     delete m_pCSVData;
     delete m_pFindDlg;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)

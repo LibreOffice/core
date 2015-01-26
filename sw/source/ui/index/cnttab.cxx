@@ -140,8 +140,8 @@ typedef ::svt::EditBrowseBox SwEntryBrowseBox_Base;
 
 class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 {
-    Edit                    aCellEdit;
-    ::svt::CheckBoxControl  aCellCheckBox;
+    VclPtr<Edit>                    aCellEdit;
+    VclPtr<::svt::CheckBoxControl>  aCellCheckBox;
 
     OUString  sSearch;
     OUString  sAlternative;
@@ -174,6 +174,8 @@ protected:
 
 public:
     SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pBuilder);
+    virtual ~SwEntryBrowseBox();
+    virtual void                    dispose() SAL_OVERRIDE;
     void                            ReadEntries(SvStream& rInStr);
     void                            WriteEntries(SvStream& rOutStr);
 
@@ -199,6 +201,7 @@ public:
     SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAutoMarkURL,
                        bool bCreate);
     virtual ~SwAutoMarkDlg_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 
 };
 
@@ -319,6 +322,11 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(vcl::Window* pParent, const SfxItemSet&
 
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
+    dispose();
+}
+
+void SwMultiTOXTabDialog::dispose()
+{
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(m_pShowExampleCB->IsChecked());
 
     // fdo#38515 Avoid setting focus on deleted controls in the destructors
@@ -336,6 +344,7 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
     delete[] pDescArr;
     delete pMgr;
     delete pExampleFrame;
+    SfxTabDialog::dispose();
 }
 
 void SwMultiTOXTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
@@ -632,6 +641,7 @@ class SwAddStylesDlg_Impl : public SfxModalDialog
 public:
     SwAddStylesDlg_Impl(vcl::Window* pParent, SwWrtShell& rWrtSh, OUString rStringArr[]);
     virtual ~SwAddStylesDlg_Impl();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
@@ -706,7 +716,13 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(vcl::Window* pParent,
 
 SwAddStylesDlg_Impl::~SwAddStylesDlg_Impl()
 {
+    dispose();
+}
+
+void SwAddStylesDlg_Impl::dispose()
+{
     delete m_pHeaderTree;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
@@ -881,8 +897,14 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwTOXSelectTabPage::~SwTOXSelectTabPage()
 {
+    dispose();
+}
+
+void SwTOXSelectTabPage::dispose()
+{
     delete pIndexRes;
     delete pIndexEntryWrapper;
+    SfxTabPage::dispose();
 }
 
 void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
@@ -2624,6 +2646,11 @@ void SwTokenWindow::setAllocation(const Size &rAllocation)
 
 SwTokenWindow::~SwTokenWindow()
 {
+    dispose();
+}
+
+void SwTokenWindow::dispose()
+{
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         Control* pControl = (*it);
@@ -2631,6 +2658,7 @@ SwTokenWindow::~SwTokenWindow()
         pControl->SetLoseFocusHdl( Link() );
         delete pControl;
     }
+    VclHBox::dispose();
 }
 
 void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
@@ -3505,7 +3533,13 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwTOXStylesTabPage::~SwTOXStylesTabPage()
 {
+    dispose();
+}
+
+void SwTOXStylesTabPage::dispose()
+{
     delete m_pCurrentForm;
+    SfxTabPage::dispose();
 }
 
 bool SwTOXStylesTabPage::FillItemSet( SfxItemSet* )
@@ -3705,8 +3739,8 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
                            BROWSER_VLINESFULL |
                            BROWSER_AUTO_VSCROLL|
                            BROWSER_HIDECURSOR   )
-    , aCellEdit(&GetDataWindow(), 0)
-    , aCellCheckBox(&GetDataWindow())
+    , aCellEdit(new Edit(&GetDataWindow(), 0))
+    , aCellCheckBox(new ::svt::CheckBoxControl(&GetDataWindow()))
     , nCurrentRow(0)
     , bModified(false)
 {
@@ -3720,9 +3754,9 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     sYes = pBuilder->get<vcl::Window>("yes")->GetText();
     sNo = pBuilder->get<vcl::Window>("no")->GetText();
 
-    aCellCheckBox.GetBox().EnableTriState(false);
-    xController = new ::svt::EditCellController(&aCellEdit);
-    xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
+    aCellCheckBox->GetBox().EnableTriState(false);
+    xController = new ::svt::EditCellController(aCellEdit.get());
+    xCheckController = new ::svt::CheckBoxCellController(aCellCheckBox.get());
 
     // HACK: BrowseBox doesn't invalidate its children, how it should be.
     // That's why WB_CLIPCHILDREN is reset in order to enforce the
@@ -3751,6 +3785,18 @@ SwEntryBrowseBox::SwEntryBrowseBox(vcl::Window* pParent, VclBuilderContainer* pB
     for(sal_uInt16 i = 1; i < 8; i++)
         InsertDataColumn( i, *aTitles[i - 1], nWidth,
                           HIB_STDSTYLE, HEADERBAR_APPEND );
+}
+
+SwEntryBrowseBox::~SwEntryBrowseBox()
+{
+    dispose();
+}
+
+void SwEntryBrowseBox::dispose()
+{
+    aCellEdit.disposeAndClear();
+    aCellCheckBox.disposeAndClear();
+    SwEntryBrowseBox_Base::dispose();
 }
 
 void SwEntryBrowseBox::Resize()
@@ -4042,7 +4088,13 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(vcl::Window* pParent, const OUString& rAu
 
 SwAutoMarkDlg_Impl::~SwAutoMarkDlg_Impl()
 {
+    dispose();
+}
+
+void SwAutoMarkDlg_Impl::dispose()
+{
     delete m_pEntriesBB;
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwAutoMarkDlg_Impl, OkHdl)

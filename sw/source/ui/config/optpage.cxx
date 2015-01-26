@@ -573,11 +573,17 @@ SwStdFontTabPage::SwStdFontTabPage( vcl::Window* pParent,
 
 SwStdFontTabPage::~SwStdFontTabPage()
 {
+    dispose();
+}
+
+void SwStdFontTabPage::dispose()
+{
     delete pFontList;
     if (bDeletePrinter)
     {
         delete pPrt;
     }
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SwStdFontTabPage::Create( vcl::Window* pParent,

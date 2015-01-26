@@ -102,7 +102,8 @@ namespace sw { namespace sidebar {
             vcl::Window* pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>& rxFrame,
             SfxBindings* pBindings );
-        virtual ~PagePropertyPanel(void);
+        virtual ~PagePropertyPanel();
+        virtual void dispose() SAL_OVERRIDE;
 
         SfxBindings* mpBindings;
 

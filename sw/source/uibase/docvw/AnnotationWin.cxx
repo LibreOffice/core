@@ -70,7 +70,13 @@ SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
 
 SwAnnotationWin::~SwAnnotationWin()
 {
+    dispose();
+}
+
+void SwAnnotationWin::dispose()
+{
     delete mpButtonPopup;
+    sw::sidebarwindows::SwSidebarWin::dispose();
 }
 
 void SwAnnotationWin::SetPostItText()

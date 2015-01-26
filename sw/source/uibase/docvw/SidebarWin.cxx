@@ -137,6 +137,11 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
 
 SwSidebarWin::~SwSidebarWin()
 {
+    dispose();
+}
+
+void SwSidebarWin::dispose()
+{
     mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
                                        *this );
 
@@ -201,6 +206,7 @@ SwSidebarWin::~SwSidebarWin()
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );
+    vcl::Window::dispose();
 }
 
 void SwSidebarWin::Paint( const Rectangle& rRect)

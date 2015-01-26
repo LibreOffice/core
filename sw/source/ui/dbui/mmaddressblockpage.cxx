@@ -746,9 +746,9 @@ OUString SwCustomizeAddressBlockDialog::GetAddress()
 class SwAssignFieldsControl : public Control
 {
     friend class SwAssignFieldsDialog;
-    ScrollBar                   m_aVScroll;
-    HeaderBar                   m_aHeaderHB;
-    Window                      m_aWindow;
+    VclPtr<ScrollBar>           m_aVScroll;
+    VclPtr<HeaderBar>           m_aHeaderHB;
+    VclPtr<Window>              m_aWindow;
 
     ::std::vector<FixedText*>   m_aFieldNames;
     ::std::vector<ListBox*>     m_aMatches;
@@ -773,6 +773,7 @@ class SwAssignFieldsControl : public Control
 public:
     SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits);
     virtual ~SwAssignFieldsControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void        Init(SwMailMergeConfigItem& rConfigItem);
     void        SetModifyHdl(const Link& rModifyHdl)
@@ -791,23 +792,23 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSwAssignFieldsControl(
 
 SwAssignFieldsControl::SwAssignFieldsControl(vcl::Window* pParent, WinBits nBits) :
     Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP | WB_DIALOGCONTROL),
-    m_aVScroll(this),
-    m_aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aWindow(this, WB_BORDER | WB_DIALOGCONTROL),
+    m_aVScroll(new ScrollBar(this)),
+    m_aHeaderHB(new HeaderBar(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER)),
+    m_aWindow(new vcl::Window(this, WB_BORDER | WB_DIALOGCONTROL)),
     m_rConfigItem(NULL),
     m_nLBStartTopPos(0),
     m_nYOffset(0),
     m_nFirstYPos(0)
 {
-    long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
+    long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
     Size aOutputSize(GetOutputSize());
-    m_aVScroll.Show();
-    m_aHeaderHB.SetSizePixel(
+    m_aVScroll->Show();
+    m_aHeaderHB->SetSizePixel(
         Size(aOutputSize.Width(), nHBHeight));
-    m_aHeaderHB.Show();
-    m_aWindow.SetPosPixel(Point( 0, nHBHeight) );
-    m_aWindow.SetSizePixel(Size(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
-    m_aWindow.Show();
+    m_aHeaderHB->Show();
+    m_aWindow->SetPosPixel(Point( 0, nHBHeight) );
+    m_aWindow->SetSizePixel(Size(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+    m_aWindow->Show();
 }
 
 Size SwAssignFieldsControl::GetOptimalSize() const
@@ -819,7 +820,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
 {
     m_rConfigItem = &rConfigItem;
     Size aOutputSize(GetOutputSize());
-    long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
+    long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
 
     //get the name of the default headers
     const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
@@ -845,9 +846,9 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         const OUString rHeader = rHeaders.GetString( i );
-        FixedText* pNewText = new FixedText(&m_aWindow, WB_VCENTER);
+        FixedText* pNewText = new FixedText(m_aWindow.get(), WB_VCENTER);
         pNewText->SetText("<" + rHeader + ">");
-        ListBox* pNewLB = new ListBox(&m_aWindow, WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
+        ListBox* pNewLB = new ListBox(m_aWindow.get(), WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
         pNewText->set_mnemonic_widget(pNewLB);
         pNewLB->InsertEntry(SW_RESSTR(SW_STR_NONE));
         pNewLB->SelectEntryPos(0);
@@ -861,7 +862,7 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
 
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
-        FixedText* pNewPreview = new FixedText(&m_aWindow, WB_VCENTER);
+        FixedText* pNewPreview = new FixedText(m_aWindow.get(), WB_VCENTER);
         pNewText->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
         pNewLB->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
         pNewPreview->SetSizePixel(Size(aOutputSize.Width() - 2 * nControlWidth, nControlHeight));
@@ -911,17 +912,22 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
         pNewPreview->Show();
         pNewPreview->SetPosPixel(Point(2 * nControlWidth + 6, nMove));
     }
-    m_aVScroll.SetRange(Range(0, rHeaders.Count()));
-    m_aVScroll.SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
-    m_aVScroll.EnableDrag();
-    m_aVScroll.SetVisibleSize(m_aVScroll.GetPageSize());
-    m_aVScroll.SetScrollHdl(LINK(this, SwAssignFieldsControl, ScrollHdl_Impl));
+    m_aVScroll->SetRange(Range(0, rHeaders.Count()));
+    m_aVScroll->SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
+    m_aVScroll->EnableDrag();
+    m_aVScroll->SetVisibleSize(m_aVScroll->GetPageSize());
+    m_aVScroll->SetScrollHdl(LINK(this, SwAssignFieldsControl, ScrollHdl_Impl));
 
-    m_aVScroll.SetPosPixel(Point(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), nHBHeight));
-    m_aVScroll.SetSizePixel(Size(m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+    m_aVScroll->SetPosPixel(Point(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), nHBHeight));
+    m_aVScroll->SetSizePixel(Size(m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
 }
 
 SwAssignFieldsControl::~SwAssignFieldsControl()
+{
+    dispose();
+}
+
+void SwAssignFieldsControl::dispose()
 {
     ::std::vector<FixedText*>::iterator aFIIter;
     for(aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
@@ -931,6 +937,11 @@ SwAssignFieldsControl::~SwAssignFieldsControl()
         delete *aLBIter;
     for(aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
         delete *aFIIter;
+
+    m_aVScroll.disposeAndClear();
+    m_aHeaderHB.disposeAndClear();
+    m_aWindow.disposeAndClear();
+    Control::dispose();
 }
 
 void SwAssignFieldsControl::Resize()
@@ -938,22 +949,22 @@ void SwAssignFieldsControl::Resize()
     Window::Resize();
 
     Size aOutputSize = GetOutputSize();
-    long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
+    long nHBHeight = m_aHeaderHB->CalcWindowSizePixel().Height();
 
-    m_aWindow.SetSizePixel(Size(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+    m_aWindow->SetSizePixel(Size(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
 
-    m_aVScroll.SetPosPixel(Point(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), nHBHeight));
-    m_aVScroll.SetSizePixel(Size(m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+    m_aVScroll->SetPosPixel(Point(aOutputSize.Width() - m_aVScroll->GetSizePixel().Width(), nHBHeight));
+    m_aVScroll->SetSizePixel(Size(m_aVScroll->GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
     if(m_nYOffset)
-        m_aVScroll.SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
-    m_aVScroll.SetVisibleSize(m_aVScroll.GetPageSize());
-    m_aVScroll.DoScroll(0);
+        m_aVScroll->SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
+    m_aVScroll->SetVisibleSize(m_aVScroll->GetPageSize());
+    m_aVScroll->DoScroll(0);
 
     sal_Int32 nColWidth = aOutputSize.Width() / 3;
-    m_aHeaderHB.SetSizePixel(Size(aOutputSize.Width(), nHBHeight));
-    m_aHeaderHB.SetItemSize(1, nColWidth);
-    m_aHeaderHB.SetItemSize(2, nColWidth);
-    m_aHeaderHB.SetItemSize(3, nColWidth);
+    m_aHeaderHB->SetSizePixel(Size(aOutputSize.Width(), nHBHeight));
+    m_aHeaderHB->SetItemSize(1, nColWidth);
+    m_aHeaderHB->SetItemSize(2, nColWidth);
+    m_aHeaderHB->SetItemSize(3, nColWidth);
 
     if (m_aFieldNames.empty() || m_aMatches.empty())
         return;
@@ -988,7 +999,7 @@ void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && CommandWheelMode::ZOOM != pWheelData->GetMode())
             {
-                HandleScrollCommand( rCEvt, 0, &m_aVScroll );
+                HandleScrollCommand( rCEvt, 0, m_aVScroll.get() );
             }
         }
         break;
@@ -1014,15 +1025,15 @@ bool SwAssignFieldsControl::PreNotify( NotifyEvent& rNEvt )
 
 void SwAssignFieldsControl::MakeVisible( sal_Int32 nIndex )
 {
-    long nThumb = m_aVScroll.GetThumbPos();
-    long nPage = m_aVScroll.GetPageSize();
+    long nThumb = m_aVScroll->GetThumbPos();
+    long nPage = m_aVScroll->GetPageSize();
     if(nThumb > nIndex)
-        m_aVScroll.SetThumbPos( nIndex );
+        m_aVScroll->SetThumbPos( nIndex );
     else if( (nThumb + nPage) < nIndex)
-        m_aVScroll.SetThumbPos( nIndex - nPage );
+        m_aVScroll->SetThumbPos( nIndex - nPage );
     else
         return;
-    ScrollHdl_Impl( &m_aVScroll );
+    ScrollHdl_Impl( m_aVScroll.get() );
 }
 
 IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
@@ -1132,13 +1143,13 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
         sAddressElement = SW_RESSTR(ST_SALUTATIONELEMENT);
     }
 
-    Size aOutputSize(m_pFieldsControl->m_aHeaderHB.GetSizePixel());
+    Size aOutputSize(m_pFieldsControl->m_aHeaderHB->GetSizePixel());
     sal_Int32 nFirstWidth;
     sal_Int32 nSecondWidth = nFirstWidth = aOutputSize.Width() / 3;
     const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED| HIB_FIXEDPOS;
-    m_pFieldsControl->m_aHeaderHB.InsertItem( 1, sAddressElement, nFirstWidth, nHeadBits|HIB_LEFT);
-    m_pFieldsControl->m_aHeaderHB.InsertItem( 2, sMatchesTo,      nSecondWidth, nHeadBits|HIB_LEFT);
-    m_pFieldsControl->m_aHeaderHB.InsertItem( 3, sPreview,
+    m_pFieldsControl->m_aHeaderHB->InsertItem( 1, sAddressElement, nFirstWidth, nHeadBits|HIB_LEFT);
+    m_pFieldsControl->m_aHeaderHB->InsertItem( 2, sMatchesTo,      nSecondWidth, nHeadBits|HIB_LEFT);
+    m_pFieldsControl->m_aHeaderHB->InsertItem( 3, sPreview,
             aOutputSize.Width() - nFirstWidth - nSecondWidth, nHeadBits|HIB_LEFT);
 
     m_pFieldsControl->SetModifyHdl(LINK(this, SwAssignFieldsDialog, AssignmentModifyHdl_Impl ));

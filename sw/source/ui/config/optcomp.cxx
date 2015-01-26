@@ -128,7 +128,13 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(vcl::Window* pParent, const SfxIt
 
 SwCompatibilityOptPage::~SwCompatibilityOptPage()
 {
+    dispose();
+}
+
+void SwCompatibilityOptPage::dispose()
+{
     delete m_pImpl;
+    SfxTabPage::dispose();
 }
 
 sal_uLong convertBools2Ulong_Impl

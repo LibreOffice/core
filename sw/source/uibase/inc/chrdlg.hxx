@@ -82,6 +82,7 @@ public:
                                            const SfxItemSet& rSet );
 
                         virtual ~SwCharURLPage();
+    virtual void        dispose() SAL_OVERRIDE;
     static SfxTabPage*  Create( vcl::Window* pParent,
                                 const SfxItemSet* rAttrSet);
 

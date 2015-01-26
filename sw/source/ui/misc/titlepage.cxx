@@ -270,7 +270,13 @@ IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl)
 
 SwTitlePageDlg::~SwTitlePageDlg()
 {
+    dispose();
+}
+
+void SwTitlePageDlg::dispose()
+{
     delete mpPageFmtDesc;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwTitlePageDlg, EditHdl)

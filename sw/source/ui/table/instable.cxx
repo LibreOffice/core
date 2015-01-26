@@ -137,7 +137,13 @@ IMPL_LINK_NOARG(SwInsTableDlg, OKHdl)
 
 SwInsTableDlg::~SwInsTableDlg()
 {
+    dispose();
+}
+
+void SwInsTableDlg::dispose()
+{
     delete pTAutoFmt;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )

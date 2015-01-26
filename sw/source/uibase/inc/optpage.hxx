@@ -188,6 +188,7 @@ class SwStdFontTabPage : public SfxTabPage
             SwStdFontTabPage( vcl::Window* pParent,
                                        const SfxItemSet& rSet );
             virtual ~SwStdFontTabPage();
+     virtual void       dispose() SAL_OVERRIDE;
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent,

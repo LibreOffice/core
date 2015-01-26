@@ -109,7 +109,13 @@ void NumFormatListBox::Init(short nFormatType, bool bUsrFmts)
 
 NumFormatListBox::~NumFormatListBox()
 {
+    dispose();
+}
+
+void NumFormatListBox::dispose()
+{
     delete pOwnFormatter;
+    ListBox::dispose();
 }
 
 SwView* NumFormatListBox::GetView()

@@ -170,7 +170,13 @@ SwLabDlg::SwLabDlg(vcl::Window* pParent, const SfxItemSet& rSet,
 
 SwLabDlg::~SwLabDlg()
 {
+    dispose();
+}
+
+void SwLabDlg::dispose()
+{
     delete pRecs;
+    SfxTabDialog::dispose();
 }
 
 void SwLabDlg::GetLabItem(SwLabItem &rItem)
@@ -586,12 +592,18 @@ SwVisitingCardPage::SwVisitingCardPage(vcl::Window* pParent, const SfxItemSet& r
 
 SwVisitingCardPage::~SwVisitingCardPage()
 {
+    dispose();
+}
+
+void SwVisitingCardPage::dispose()
+{
     for(sal_Int32 i = 0; i < m_pAutoTextGroupLB->GetEntryCount(); ++i)
         delete static_cast<OUString*>(m_pAutoTextGroupLB->GetEntryData( i ));
     m_xAutoText = 0;
 
     ClearUserData();
     delete pExampleFrame;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SwVisitingCardPage::Create(vcl::Window* pParent, const SfxItemSet* rSet)

@@ -516,6 +516,11 @@ sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
+    dispose();
+}
+
+void SwEditRegionDlg::dispose()
+{
     SvTreeListEntry* pEntry = m_pTree->First();
     while( pEntry )
     {
@@ -524,6 +529,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     }
 
     delete m_pDocInserter;
+    SfxModalDialog::dispose();
 }
 
 void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
@@ -1533,7 +1539,13 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
 
 SwInsertSectionTabPage::~SwInsertSectionTabPage()
 {
+    dispose();
+}
+
+void SwInsertSectionTabPage::dispose()
+{
     delete m_pDocInserter;
+    SfxTabPage::dispose();
 }
 
 void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)

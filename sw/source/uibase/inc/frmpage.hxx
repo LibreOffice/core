@@ -227,6 +227,7 @@ class SwGrfExtPage: public SfxTabPage
     virtual void    ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet);
     virtual ~SwGrfExtPage();
+    virtual void dispose() SAL_OVERRIDE;
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

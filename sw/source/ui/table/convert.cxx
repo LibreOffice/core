@@ -174,7 +174,13 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
 
 SwConvertTableDlg:: ~SwConvertTableDlg()
 {
+    dispose();
+}
+
+void SwConvertTableDlg::dispose()
+{
     delete pTAutoFmt;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK( SwConvertTableDlg, AutoFmtHdl, PushButton*, pButton )

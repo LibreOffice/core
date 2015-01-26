@@ -4968,6 +4968,11 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
 
 SwEditWin::~SwEditWin()
 {
+    dispose();
+}
+
+void SwEditWin::dispose()
+{
     m_aKeyInputTimer.Stop();
     delete m_pShadCrsr;
     delete m_pRowColumnSelectionStart;
@@ -4979,6 +4984,7 @@ SwEditWin::~SwEditWin()
 
     delete m_pUserMarker;
     delete m_pAnchorMarker;
+    vcl::Window::dispose();
 }
 
 /**

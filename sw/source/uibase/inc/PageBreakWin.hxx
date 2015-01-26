@@ -35,6 +35,7 @@ class SwPageBreakWin : public MenuButton, public SwFrameControl
 public:
     SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm );
     virtual ~SwPageBreakWin( );
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void Select( ) SAL_OVERRIDE;

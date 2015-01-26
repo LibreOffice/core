@@ -73,6 +73,7 @@ friend class SwEnvPreview;
 public:
      SwEnvDlg(vcl::Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, bool bInsert);
     virtual ~SwEnvDlg();
+    virtual void dispose() SAL_OVERRIDE;
 };
 
 class SwEnvPage : public SfxTabPage

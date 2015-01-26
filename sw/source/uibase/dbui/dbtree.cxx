@@ -196,7 +196,13 @@ Size SwDBTreeList::GetOptimalSize() const
 
 SwDBTreeList::~SwDBTreeList()
 {
+    dispose();
+}
+
+void SwDBTreeList::dispose()
+{
     delete pImpl;
+    SvTreeListBox::dispose();
 }
 
 void SwDBTreeList::InitTreeList()

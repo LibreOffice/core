@@ -116,12 +116,18 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
 
 SwPageBreakWin::~SwPageBreakWin( )
 {
+    dispose();
+}
+
+void SwPageBreakWin::dispose()
+{
     m_bDestroyed = true;
     m_aFadeTimer.Stop();
 
     delete m_pPopupMenu;
     delete m_pLine;
     delete m_pMousePt;
+    MenuButton::dispose();
 }
 
 void SwPageBreakWin::Paint( const Rectangle& )

@@ -300,7 +300,13 @@ SwMailMergeOutputPage::SwMailMergeOutputPage(SwMailMergeWizard* _pParent)
 
 SwMailMergeOutputPage::~SwMailMergeOutputPage()
 {
+    dispose();
+}
+
+void SwMailMergeOutputPage::dispose()
+{
     delete m_pTempPrinter;
+    svt::OWizardPage::dispose();
 }
 
 void SwMailMergeOutputPage::ActivatePage()

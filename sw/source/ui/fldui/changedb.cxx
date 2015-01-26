@@ -164,8 +164,15 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
 // destroy dialog
 SwChangeDBDlg::~SwChangeDBDlg()
 {
-    delete pMgr;
+    dispose();
 }
+
+void SwChangeDBDlg::dispose()
+{
+    delete pMgr;
+    SvxStandardDialog::dispose();
+}
+
 // close
 void SwChangeDBDlg::Apply()
 {

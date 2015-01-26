@@ -58,8 +58,8 @@ SFX_IMPL_POS_CHILDWINDOW_WITHID( SwInputChild, FN_EDIT_FORMULA, SFX_OBJECTBAR_OB
 
 SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     : ToolBox(  pParent ,   SW_RES( RID_TBX_FORMULA )),
-    aPos(       this,       SW_RES(ED_POS)),
-    aEdit(      this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION),
+    aPos(       new Edit(this,       SW_RES(ED_POS))),
+    aEdit(      new InputEdit(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION)),
     aPopMenu(   SW_RES(MN_CALC_POPUP)),
     pMgr(0),
     pWrtShell(0),
@@ -75,7 +75,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
 
     FreeResource();
 
-    aEdit.SetSizePixel( aEdit.CalcMinimumSize() );
+    aEdit->SetSizePixel( aEdit->CalcMinimumSize() );
 
     SfxImageManager* pManager = SfxImageManager::GetImageManager( *SW_MOD() );
     pManager->RegisterToolBox(this);
@@ -83,15 +83,15 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     pView = ::GetActiveView();
     pWrtShell = pView ? pView->GetWrtShellPtr() : 0;
 
-    InsertWindow( ED_POS, &aPos, ToolBoxItemBits::NONE, 0);
+    InsertWindow( ED_POS, aPos.get(), ToolBoxItemBits::NONE, 0);
     SetItemText(ED_POS, SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
-    aPos.SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
+    aPos->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TYPE));
     SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TOOLBAR));
     InsertSeparator ( 1 );
     InsertSeparator ();
-    InsertWindow( ED_FORMULA, &aEdit);
+    InsertWindow( ED_FORMULA, aEdit.get());
     SetItemText(ED_FORMULA, SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
-    aEdit.SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
+    aEdit->SetAccessibleName(SW_RESSTR(STR_ACCESS_FORMULA_TEXT));
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
     SetItemImage( FN_FORMULA_CALC,   pManager->GetImage(FN_FORMULA_CALC   ));
@@ -102,7 +102,7 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
 
     Size    aSizeTbx = CalcWindowSizePixel();
-    Size    aEditSize = aEdit.GetSizePixel();
+    Size    aEditSize = aEdit->GetSizePixel();
     Rectangle aItemRect( GetItemRect(FN_FORMULA_CALC) );
     long nMaxHeight = (aEditSize.Height() > aItemRect.GetHeight()) ? aEditSize.Height() : aItemRect.GetHeight();
     if( nMaxHeight+2 > aSizeTbx.Height() )
@@ -112,20 +112,25 @@ SwInputWindow::SwInputWindow( vcl::Window* pParent, SfxBindings* pBind )
     SetSizePixel( aSize );
 
     // align edit and item vcentered
-    Size    aPosSize = aPos.GetSizePixel();
+    Size    aPosSize = aPos->GetSizePixel();
     aPosSize.Height()  = nMaxHeight;
     aEditSize.Height() = nMaxHeight;
-    Point aPosPos  = aPos.GetPosPixel();
-    Point aEditPos = aEdit.GetPosPixel();
+    Point aPosPos  = aPos->GetPosPixel();
+    Point aEditPos = aEdit->GetPosPixel();
     aPosPos.Y()    = (aSize.Height() - nMaxHeight)/2 + 1;
     aEditPos.Y()   = (aSize.Height() - nMaxHeight)/2 + 1;
-    aPos.SetPosSizePixel( aPosPos, aPosSize );
-    aEdit.SetPosSizePixel( aEditPos, aEditSize );
+    aPos->SetPosSizePixel( aPosPos, aPosSize );
+    aEdit->SetPosSizePixel( aEditPos, aEditSize );
 
     aPopMenu.SetSelectHdl(LINK( this, SwInputWindow, MenuHdl ));
 }
 
 SwInputWindow::~SwInputWindow()
+{
+    dispose();
+}
+
+void SwInputWindow::dispose()
 {
     SfxImageManager::GetImageManager( *SW_MOD() )->ReleaseToolBox(this);
 
@@ -140,6 +145,10 @@ SwInputWindow::~SwInputWindow()
         pWrtShell->EndSelTblCells();
 
     CleanupUglyHackWithUndo();
+
+    aPos.disposeAndClear();
+    aEdit.disposeAndClear();
+    ToolBox::dispose();
 }
 
 void SwInputWindow::CleanupUglyHackWithUndo()
@@ -179,12 +188,12 @@ void SwInputWindow::Resize()
     ToolBox::Resize();
 
     long    nWidth      = GetSizePixel().Width();
-    long    nLeft       = aEdit.GetPosPixel().X();
-    Size    aEditSize   = aEdit.GetSizePixel();
+    long    nLeft       = aEdit->GetPosPixel().X();
+    Size    aEditSize   = aEdit->GetSizePixel();
 
     aEditSize.Width() = std::max( ((long)(nWidth - nLeft - 5)), (long)0 );
-    aEdit.SetSizePixel( aEditSize );
-    aEdit.Invalidate();
+    aEdit->SetSizePixel( aEditSize );
+    aEdit->Invalidate();
 }
 
 void SwInputWindow::ShowWin()
@@ -210,11 +219,11 @@ void SwInputWindow::ShowWin()
             short nSrch = -1;
             while( (nPos = rPos.indexOf( ':',nPos + 1 ) ) != -1 )
                 nSrch = (short) nPos;
-            aPos.SetText( rPos.copy( ++nSrch ) );
+            aPos->SetText( rPos.copy( ++nSrch ) );
             aAktTableName = pWrtShell->GetTableFmt()->GetName();
         }
         else
-            aPos.SetText(SW_RESSTR(STR_TBL_FORMULA));
+            aPos->SetText(SW_RESSTR(STR_TBL_FORMULA));
 
         // Edit current field
         OSL_ENSURE(pMgr == 0, "FieldManager not deleted");
@@ -273,15 +282,15 @@ void SwInputWindow::ShowWin()
 
         bFirst = false;
 
-        aEdit.SetModifyHdl( LINK( this, SwInputWindow, ModifyHdl ));
+        aEdit->SetModifyHdl( LINK( this, SwInputWindow, ModifyHdl ));
 
-        aEdit.SetText( sEdit );
-        aEdit.SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
+        aEdit->SetText( sEdit );
+        aEdit->SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
         sOldFml = sEdit;
 
-        aEdit.Invalidate();
-        aEdit.Update();
-        aEdit.GrabFocus();
+        aEdit->Invalidate();
+        aEdit->Update();
+        aEdit->GrabFocus();
         // For input cut the UserInterface
 
         pView->GetEditWin().LockKeyInput(true);
@@ -326,7 +335,7 @@ static const char * const aStrArr[] = {
     {
         OUString aTmp( OUString::createFromAscii(aStrArr[nId - 1]) );
         aTmp += " ";
-        aEdit.ReplaceSelected( aTmp );
+        aEdit->ReplaceSelected( aTmp );
     }
     return 0;
 }
@@ -376,7 +385,7 @@ void  SwInputWindow::ApplyFormula()
     pWrtShell->Pop( false );
 
     // Formular should always begin with "=", so remove it here again
-    OUString sEdit(comphelper::string::strip(aEdit.GetText(), ' '));
+    OUString sEdit(comphelper::string::strip(aEdit->GetText(), ' '));
     if( !sEdit.isEmpty() && '=' == sEdit[0] )
         sEdit = sEdit.copy( 1 );
     SfxStringItem aParam(FN_EDIT_FORMULA, sEdit);
@@ -422,11 +431,11 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
         if( pTblFmt && aAktTableName != pTblFmt->GetName() )
             sTblNm = pTblFmt->GetName();
 
-        aEdit.UpdateRange( sBoxNms, sTblNm );
+        aEdit->UpdateRange( sBoxNms, sTblNm );
 
         OUString sNew;
         sNew += OUString(CH_LRE);
-        sNew += aEdit.GetText();
+        sNew += aEdit->GetText();
         sNew += OUString(CH_PDF);
 
         if( sNew != sOldFml )
@@ -449,7 +458,7 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
         }
     }
     else
-        aEdit.GrabFocus();
+        aEdit->GrabFocus();
     return 0;
 }
 
@@ -463,9 +472,9 @@ void SwInputWindow::SetFormula( const OUString& rFormula, bool bDelFlag )
         else
             sEdit += rFormula;
     }
-    aEdit.SetText( sEdit );
-    aEdit.SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
-    aEdit.Invalidate();
+    aEdit->SetText( sEdit );
+    aEdit->SetSelection( Selection( sEdit.getLength(), sEdit.getLength() ) );
+    aEdit->Invalidate();
     bDelSel = bDelFlag;
 }
 
@@ -477,7 +486,7 @@ IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
         DelBoxCntnt();
         OUString sNew;
         sNew += OUString(CH_LRE);
-        sNew += aEdit.GetText();
+        sNew += aEdit->GetText();
         sNew += OUString(CH_PDF);
         pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();

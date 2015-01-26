@@ -102,6 +102,7 @@ public:
                         SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
                         bool bGlobal = false);
     virtual ~SwMultiTOXTabDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage ) SAL_OVERRIDE;
 
@@ -221,6 +222,7 @@ class SwTOXSelectTabPage : public SfxTabPage
 public:
     SwTOXSelectTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXSelectTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
@@ -283,6 +285,7 @@ class SwTokenWindow : public VclHBox, public VclBuilderContainer
 public:
     SwTokenWindow(vcl::Window* pParent);
     virtual ~SwTokenWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetTabPage(SwTOXEntryTabPage *pParent) { m_pParent = pParent; }
 
@@ -480,6 +483,7 @@ class SwTOXStylesTabPage : public SfxTabPage
 public:
     SwTOXStylesTabPage(vcl::Window* pParent, const SfxItemSet& rAttrSet);
     virtual ~SwTOXStylesTabPage();
+    virtual void        dispose() SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;

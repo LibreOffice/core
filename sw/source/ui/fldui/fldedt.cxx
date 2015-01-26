@@ -214,8 +214,14 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 
 SwFldEditDlg::~SwFldEditDlg()
 {
+    dispose();
+}
+
+void SwFldEditDlg::dispose()
+{
     SwViewShell::SetCareWin(NULL);
     pSh->EnterStdMode();
+    SfxSingleTabDialog::dispose();
 }
 
 void SwFldEditDlg::EnableInsert(bool bEnable)

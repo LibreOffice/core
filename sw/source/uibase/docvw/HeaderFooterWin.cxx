@@ -169,8 +169,14 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )
 {
+    dispose();
+}
+
+void SwHeaderFooterWin::dispose()
+{
     delete m_pPopupMenu;
     delete m_pLine;
+    MenuButton::dispose();
 }
 
 const SwPageFrm* SwHeaderFooterWin::GetPageFrame( )

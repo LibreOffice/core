@@ -63,6 +63,7 @@ class SwConvertTableDlg: public SfxModalDialog
 public:
     SwConvertTableDlg( SwView& rView, bool bToTable );
     virtual ~SwConvertTableDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void GetValues( sal_Unicode& rDelim,
                     SwInsertTableOptions& rInsTblOpts,

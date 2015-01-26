@@ -163,7 +163,13 @@ SwNumPositionTabPage::SwNumPositionTabPage(vcl::Window* pParent,
 
 SwNumPositionTabPage::~SwNumPositionTabPage()
 {
+    dispose();
+}
+
+void SwNumPositionTabPage::dispose()
+{
     delete pActNum;
+    SfxTabPage::dispose();
 }
 
 void SwNumPositionTabPage::InitControls()

@@ -265,6 +265,11 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
 
 SwAddressListDialog::~SwAddressListDialog()
 {
+    dispose();
+}
+
+void SwAddressListDialog::dispose()
+{
     SvTreeListEntry* pEntry = m_pListLB->First();
     while(pEntry)
     {
@@ -273,6 +278,7 @@ SwAddressListDialog::~SwAddressListDialog()
         pEntry = m_pListLB->Next( pEntry );
     }
     delete m_pListLB;
+    SfxModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)

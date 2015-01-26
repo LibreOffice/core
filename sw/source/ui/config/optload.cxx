@@ -517,8 +517,14 @@ SwCaptionOptPage::SwCaptionOptPage( vcl::Window* pParent, const SfxItemSet& rSet
 
 SwCaptionOptPage::~SwCaptionOptPage()
 {
+    dispose();
+}
+
+void SwCaptionOptPage::dispose()
+{
     DelUserData();
     delete pMgr;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SwCaptionOptPage::Create( vcl::Window* pParent,

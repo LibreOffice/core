@@ -2364,7 +2364,13 @@ SwGrfExtPage::SwGrfExtPage(vcl::Window *pParent, const SfxItemSet &rSet)
 
 SwGrfExtPage::~SwGrfExtPage()
 {
+    dispose();
+}
+
+void SwGrfExtPage::dispose()
+{
     delete pGrfDlg;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* SwGrfExtPage::Create( vcl::Window *pParent, const SfxItemSet *rSet )

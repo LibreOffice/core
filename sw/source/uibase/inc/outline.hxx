@@ -58,7 +58,7 @@ class SwOutlineTabDialog : public SfxTabDialog
 
     bool                bModified : 1;
 
-    protected:
+protected:
     DECL_LINK(CancelHdl, void *);
     DECL_LINK( FormHdl, Button * );
     DECL_LINK( MenuSelectHdl, Menu * );
@@ -66,17 +66,18 @@ class SwOutlineTabDialog : public SfxTabDialog
         virtual void    PageCreated(sal_uInt16 nPageId, SfxTabPage& rPage) SAL_OVERRIDE;
         virtual short   Ok() SAL_OVERRIDE;
 
-    public:
+public:
         SwOutlineTabDialog(vcl::Window* pParent,
                     const SfxItemSet* pSwItemSet,
                     SwWrtShell &);
         virtual ~SwOutlineTabDialog();
+    virtual void        dispose() SAL_OVERRIDE;
 
     SwNumRule*          GetNumRule() {return pNumRule;}
-    sal_uInt16              GetLevel(const OUString &rFmtName) const;
+    sal_uInt16          GetLevel(const OUString &rFmtName) const;
     OUString*           GetCollNames() {return aCollNames;}
 
-    static sal_uInt16       GetActNumLevel() {return nNumLevel;}
+    static sal_uInt16   GetActNumLevel() {return nNumLevel;}
     static void         SetActNumLevel(sal_uInt16 nSet) {nNumLevel = nSet;}
 };
 

@@ -250,10 +250,16 @@ SwSortDlg::SwSortDlg(vcl::Window* pParent, SwWrtShell &rShell)
 
 SwSortDlg::~SwSortDlg()
 {
+    dispose();
+}
+
+void SwSortDlg::dispose()
+{
     ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB1);
     ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB2);
     ::lcl_ClearLstBoxAndDelUserData(*m_pTypDLB3);
     delete pColRes;
+    SvxStandardDialog::dispose();
 }
 
 sal_Unicode SwSortDlg::GetDelimChar() const
