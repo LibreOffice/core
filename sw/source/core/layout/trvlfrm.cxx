@@ -771,7 +771,7 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
 
         // Restrict nX to the left and right borders of pTab:
         // (is this really necessary?)
-        if ( !pTable->GetUpper()->IsInTab() )
+        if (pTable && !pTable->GetUpper()->IsInTab())
         {
             const bool bRTL = pTable->IsRightToLeft();
             const long nPrtLeft = bRTL ?
