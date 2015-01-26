@@ -2755,9 +2755,11 @@ bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNew
         if (bSingle)
         {
             ScFlatUInt16RowSegments::RangeData aData;
-            mpRowHeights->getRangeData(nStartRow, aData);
-            if (nNewHeight == aData.mnValue && nEndRow <= aData.mnRow2)
+            if (mpRowHeights->getRangeData(nStartRow, aData) &&
+                nNewHeight == aData.mnValue && nEndRow <= aData.mnRow2)
+            {
                 bSingle = false;    // no difference in this range
+            }
         }
         if (bSingle)
         {
