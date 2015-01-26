@@ -502,12 +502,12 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 
     const SwTOXBaseSection& rTOXSect = static_cast<const SwTOXBaseSection&>(rTOXBase);
     SwSectionFmt const * pFmt = rTOXSect.GetFmt();
-    if( pFmt )
+    /* Save the start node of the TOX' section. */
+    SwSectionNode const * pMyNode = pFmt ? pFmt->GetSectionNode() : NULL;
+    if (pMyNode)
     {
         GetIDocumentUndoRedo().StartUndo( UNDO_CLEARTOXRANGE, NULL );
 
-        /* Save the start node of the TOX' section. */
-        SwSectionNode const * pMyNode = pFmt->GetSectionNode();
         /* Save start node of section's surrounding. */
         SwNode const * pStartNd = pMyNode->StartOfSectionNode();
 
