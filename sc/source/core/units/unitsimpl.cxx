@@ -21,7 +21,6 @@
 #include <svl/zformat.hxx>
 
 #include <boost/scoped_array.hpp>
-#include <stack>
 
 using namespace formula;
 using namespace sc;
@@ -77,36 +76,55 @@ UnitsImpl::~UnitsImpl() {
     // (i.e. if udunits can't handle being used across threads)?
 }
 
-UtUnit UnitsImpl::getOutputUnitsForOpCode(const UtUnit& pFirstUnit, const UtUnit& pSecondUnit, const OpCode& rOpCode) {
+UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpCode& rOpCode) {
     UtUnit pOut;
 
-    switch (rOpCode) {
-    case ocAdd:
-        // Adding and subtracting both require the same units on both sides
-        // hence we can just fall through / use the same logic.
-    case ocSub:
-        if (ut_compare(pFirstUnit.get(), pSecondUnit.get()) == 0) {
-            // The two units are identical, hence we can return either.
-            pOut = pFirstUnit;
-            SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit.getString());
-        } else {
-            // TODO: notify/link UI.
+    auto nOpCode = static_cast<std::underlying_type<const OpCode>::type>(rOpCode);
+
+    if (nOpCode >= SC_OPCODE_START_BIN_OP &&
+        nOpCode < SC_OPCODE_STOP_BIN_OP) {
+
+        if (!(rUnitStack.size() >= 2)) {
+            SAL_WARN("sc.units", "less than two units on stack when attempting binary operation");
+            // TODO: what should we be telling the user in this case? Can this even happen (i.e.
+            // should we just be asserting here?)
+            return 0;
         }
-        break;
-    case ocMul:
-        pOut.reset(ut_multiply(pFirstUnit.get(), pSecondUnit.get()));
-        break;
-    case ocDiv:
-        pOut.reset(ut_divide(pFirstUnit.get(), pSecondUnit.get()));
-        break;
-    default:
-        SAL_INFO("sc.units", "unit verification not supported for opcode: " << static_cast<std::underlying_type<const OpCode>::type>(rOpCode));
-        assert(false);
+
+        UtUnit pSecondUnit = rUnitStack.top();
+        rUnitStack.pop();
+        UtUnit pFirstUnit = rUnitStack.top();
+        rUnitStack.pop();
+
+        switch (rOpCode) {
+        case ocAdd:
+            // Adding and subtracting both require the same units on both sides
+            // hence we can just fall through / use the same logic.
+        case ocSub:
+            if (ut_compare(pFirstUnit.get(), pSecondUnit.get()) == 0) {
+                // The two units are identical, hence we can return either.
+                pOut = pFirstUnit;
+                SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit.getString());
+            } else {
+                // TODO: notify/link UI.
+            }
+            break;
+        case ocMul:
+            pOut.reset(ut_multiply(pFirstUnit.get(), pSecondUnit.get()));
+            break;
+        case ocDiv:
+            pOut.reset(ut_divide(pFirstUnit.get(), pSecondUnit.get()));
+            break;
+        default:
+            SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);
+            assert(false);
+        }
+
     }
+    // TODO: else if unary, or no params, or ...
+    // TODO: implement further sensible opcode handling
 
     return pOut;
-
-// TODO: implement further sensible opcode handling
 }
 
 OUString UnitsImpl::extractUnitStringFromFormat(const OUString& rFormatString) {
@@ -216,17 +234,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
         }
         case formula::svByte:
         {
-            if (!(aUnitStack.size() >= 2)) {
-                SAL_WARN("sc.units", "less than two units on stack when attempting binary operation");
-                return false;
-            }
-
-            UtUnit pSecondUnit = aUnitStack.top();
-            aUnitStack.pop();
-            UtUnit pFirstUnit = aUnitStack.top();
-            aUnitStack.pop();
-
-            UtUnit pOut = getOutputUnitsForOpCode(pFirstUnit, pSecondUnit, pToken->GetOpCode());
+            UtUnit pOut = getOutputUnitsForOpCode(aUnitStack, pToken->GetOpCode());
 
             // A null unit indicates either invalid units and/or other erronous input
             // i.e. is an indication that getOutputUnitsForOpCode failed.

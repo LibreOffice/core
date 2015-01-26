@@ -23,6 +23,8 @@
 #include <units.hxx>
 #include "utunit.hxx"
 
+#include <stack>
+
 namespace formula {
     class FormulaToken;
 }
@@ -61,7 +63,7 @@ public:
     virtual bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) SAL_OVERRIDE;
 
 private:
-    UtUnit getOutputUnitsForOpCode(const UtUnit& pFirstUnit, const UtUnit& pSecondUnit, const OpCode& rOpCode);
+    UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
     OUString extractUnitStringFromFormat(const OUString& rFormatString);
     OUString extractUnitStringForCell(ScAddress& rAddress, ScDocument* pDoc);
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
