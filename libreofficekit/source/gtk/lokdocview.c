@@ -163,10 +163,14 @@ void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
         // Same as nRows / nColumns, but from the previous renderDocument() call.
         guint nOldRows, nOldColumns;
 
+#if GTK_CHECK_VERSION(2,22,0)
         gtk_table_get_size(GTK_TABLE(pDocView->pTable), &nOldRows, &nOldColumns);
         if (nOldRows != nRows || nOldColumns != nColumns)
             // Can't do partial rendering, document size changed.
             pPartial = NULL;
+#else
+        pPartial = NULL;
+#endif
     }
     if (!pPartial)
     {
