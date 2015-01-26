@@ -49,9 +49,9 @@ core_factory_list = [
     ("libxolo.a", "xo_component_getFactory"),
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
-    ("libcanvasfactorylo.a", "canvasfactory_component_getFactory", "#ifdef ANDROID"),
-    ("libvclcanvaslo.a", "vclcanvas_component_getFactory", "#ifdef ANDROID"),
-    ("libmtfrendererlo.a", "mtfrenderer_component_getFactory", "#ifdef ANDROID"),
+    ("libcanvasfactorylo.a", "canvasfactory_component_getFactory"),
+    ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
+    ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ]
 
 core_constructor_list = [
@@ -150,14 +150,14 @@ draw_factory_list = [
     ("libsvgfilterlo.a", "svgfilter_component_getFactory"),
     ("libdeployment.a", "deployment_component_getFactory"),
     ("libemboleobj.a", "emboleobj_component_getFactory"),
-    ("libanimcorelo.a", "animcore_component_getFactory", "#ifdef ANDROID"),
+    ("libanimcorelo.a", "animcore_component_getFactory"),
     ]
 
 draw_constructor_list = [
     ]
 
 writer_factory_list = [
-    ("libsblo.a", "sb_component_getFactory", "#ifdef ANDROID"),
+    ("libsblo.a", "sb_component_getFactory"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
