@@ -255,11 +255,17 @@ SdPageObjsTLB::SdPageObjsTLB( vcl::Window* pParentWin, WinBits nStyle )
 
 SdPageObjsTLB::~SdPageObjsTLB()
 {
+    dispose();
+}
+
+void SdPageObjsTLB::dispose()
+{
     if ( mpBookmarkDoc )
         CloseBookmarkDoc();
     else
         // no document was created from mpMedium, so this object is still the owner of it
         delete mpMedium;
+    SvTreeListBox::dispose();
 }
 
 // helper function for  GetEntryAltText and GetEntryLongDescription

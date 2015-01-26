@@ -284,11 +284,17 @@ AnnotationWindow::AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShel
 
 AnnotationWindow::~AnnotationWindow()
 {
+    dispose();
+}
+
+void AnnotationWindow::dispose()
+{
     delete mpMeta;
     delete mpOutlinerView;
     delete mpOutliner;
     delete mpVScrollbar;
     delete mpTextWindow;
+    FloatingWindow::dispose();
 }
 
 void AnnotationWindow::InitControls()

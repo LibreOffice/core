@@ -33,27 +33,34 @@ NavigatorWrapper::NavigatorWrapper (
     SfxBindings* pBindings)
     : Control(pParent, 0),
       mrViewShellBase(rViewShellBase),
-      maNavigator(
+      maNavigator(new SdNavigatorWin(
         this,
         NULL,
         SdResId(FLT_NAVIGATOR),
         pBindings,
-        ::boost::bind(&NavigatorWrapper::UpdateNavigator, this))
+        ::boost::bind(&NavigatorWrapper::UpdateNavigator, this)))
 {
-    maNavigator.SetPosSizePixel(
+    maNavigator->SetPosSizePixel(
         Point(0,0),
         GetSizePixel());
-    maNavigator.SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
-    maNavigator.Show();
+    maNavigator->SetBackground(sfx2::sidebar::Theme::GetWallpaper(sfx2::sidebar::Theme::Paint_PanelBackground));
+    maNavigator->Show();
 }
 
 NavigatorWrapper::~NavigatorWrapper (void)
 {
+    dispose();
+}
+
+void NavigatorWrapper::dispose()
+{
+    maNavigator.disposeAndClear();
+    Control::dispose();
 }
 
 void NavigatorWrapper::Resize (void)
 {
-    maNavigator.SetSizePixel(GetSizePixel());
+    maNavigator->SetSizePixel(GetSizePixel());
 }
 
 css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32 nWidth)
@@ -65,12 +72,12 @@ css::ui::LayoutSize NavigatorWrapper::GetHeightForWidth (const sal_Int32 nWidth)
 
 void NavigatorWrapper::UpdateNavigator (void)
 {
-    maNavigator.InitTreeLB(mrViewShellBase.GetDocument());
+    maNavigator->InitTreeLB(mrViewShellBase.GetDocument());
 }
 
 void NavigatorWrapper::GetFocus (void)
 {
-    maNavigator.GrabFocus();
+    maNavigator->GrabFocus();
 }
 
 } } // end of namespace sd::sidebar

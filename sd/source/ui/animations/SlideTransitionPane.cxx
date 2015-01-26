@@ -483,8 +483,14 @@ SlideTransitionPane::SlideTransitionPane(
 
 SlideTransitionPane::~SlideTransitionPane()
 {
+    dispose();
+}
+
+void SlideTransitionPane::dispose()
+{
     maLateInitTimer.Stop();
     removeListener();
+    PanelLayout::dispose();
 }
 
 void SlideTransitionPane::DataChanged (const DataChangedEvent& rEvent)

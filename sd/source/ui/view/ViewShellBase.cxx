@@ -204,6 +204,7 @@ class FocusForwardingWindow : public vcl::Window
 public:
     FocusForwardingWindow (vcl::Window& rParentWindow, ViewShellBase& rBase);
     virtual ~FocusForwardingWindow (void);
+    virtual void dispose() SAL_OVERRIDE;
     virtual void KeyInput (const KeyEvent& rEvent) SAL_OVERRIDE;
     virtual void Command (const CommandEvent& rEvent) SAL_OVERRIDE;
 
@@ -1385,7 +1386,13 @@ FocusForwardingWindow::FocusForwardingWindow (
 
 FocusForwardingWindow::~FocusForwardingWindow (void)
 {
+    dispose();
+}
+
+void FocusForwardingWindow::dispose()
+{
     SAL_INFO("sd.view", "destroyed FocusForwardingWindow at " << this);
+    vcl::Window::dispose();
 }
 
 void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)

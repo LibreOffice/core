@@ -444,10 +444,16 @@ const Image&  CustomAnimationList::getImage( sal_uInt16 nId )
 
 CustomAnimationList::~CustomAnimationList()
 {
+    dispose();
+}
+
+void CustomAnimationList::dispose()
+{
     if( mpMainSequence.get() )
         mpMainSequence->removeListener( this );
 
     clear();
+    SvTreeListBox::dispose();
 }
 
 void CustomAnimationList::KeyInput( const KeyEvent& rKEvt )

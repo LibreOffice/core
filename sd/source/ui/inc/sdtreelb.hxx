@@ -187,6 +187,7 @@ public:
     SdPageObjsTLB( vcl::Window* pParent, const SdResId& rSdResId );
     SdPageObjsTLB( vcl::Window* pParent, WinBits nStyle );
                             virtual ~SdPageObjsTLB();
+    virtual void      dispose() SAL_OVERRIDE;
 
    // helper function for   GetEntryAltText and GetEntryLongDescription
     OUString          getAltLongDescText( SvTreeListEntry* pEntry , bool isAltText) const;

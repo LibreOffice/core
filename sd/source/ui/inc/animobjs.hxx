@@ -85,6 +85,7 @@ class AnimationWindow : public SfxDockingWindow
 public:
     AnimationWindow(SfxBindings* pBindings, SfxChildWindow *pCW, vcl::Window* pParent);
     virtual ~AnimationWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     void    AddObj( ::sd::View& rView );
     void    CreateAnimObj( ::sd::View& rView );

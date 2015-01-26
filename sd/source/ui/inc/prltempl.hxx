@@ -86,6 +86,7 @@ private:
 public:
     SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, vcl::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool );
     virtual ~SdPresLayoutTemplateDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     const SfxItemSet* GetOutputItemSet() const;
 };

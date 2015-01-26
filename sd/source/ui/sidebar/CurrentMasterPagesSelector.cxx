@@ -91,6 +91,11 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
 
 CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 {
+    dispose();
+}
+
+void CurrentMasterPagesSelector::dispose()
+{
     if (mrDocument.GetDocSh() != NULL)
     {
         EndListening(*mrDocument.GetDocSh());
@@ -102,6 +107,8 @@ CurrentMasterPagesSelector::~CurrentMasterPagesSelector (void)
 
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
+
+    MasterPagesSelector::dispose();
 }
 
 void CurrentMasterPagesSelector::LateInit (void)

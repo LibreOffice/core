@@ -114,7 +114,7 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const OUString & rName  )
     if( bSuccess )
     {
         // user edited page names may be changed by the page so update control
-        maTabControl.SetPageText( nPageId, rName );
+        maTabControl->SetPageText( nPageId, rName );
 
         // set document to modified state
         GetDoc()->SetChanged( true );
@@ -146,7 +146,7 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
     OUString aNewName;
     pDialog->GetName( aNewName );
 
-    SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl.GetCurPageId() - 1, GetPageKind() );
+    SdPage* pCurrentPage = GetDoc()->GetSdPage( maTabControl->GetCurPageId() - 1, GetPageKind() );
 
     return long(pCurrentPage && ( aNewName == pCurrentPage->GetName() || GetDocSh()->IsNewPageNameValid( aNewName ) ));
 }

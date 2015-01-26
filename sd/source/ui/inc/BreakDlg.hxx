@@ -53,6 +53,7 @@ public:
         sal_uLong nSumActionCount,
         sal_uLong nObjCount);
     virtual ~BreakDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     short Execute() SAL_OVERRIDE;
 

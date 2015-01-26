@@ -101,11 +101,11 @@ class ClientBox:
     Link            m_aClickHdl;
     Link            m_aDeauthoriseHdl;
 
-    NumericBox      m_aPinBox;
-    PushButton      m_aDeauthoriseButton;
-    Rectangle       m_sPinTextRect;
+    VclPtr<NumericBox>      m_aPinBox;
+    VclPtr<PushButton>      m_aDeauthoriseButton;
+    Rectangle               m_sPinTextRect;
 
-    ScrollBar       m_aScrollBar;
+    VclPtr<ScrollBar>       m_aScrollBar;
 
     com::sun::star::uno::Reference< ClientRemovedListener > m_xRemoveListener;
 
@@ -136,7 +136,8 @@ class ClientBox:
 
 public:
                     ClientBox( vcl::Window* pParent, WinBits nStyle );
-                   virtual ~ClientBox();
+    virtual         ~ClientBox();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;

@@ -104,11 +104,17 @@ MasterPagesSelector::MasterPagesSelector (
 
 MasterPagesSelector::~MasterPagesSelector (void)
 {
+    dispose();
+}
+
+void MasterPagesSelector::dispose()
+{
     Clear();
     UpdateLocks(ItemList());
 
     Link aChangeListener (LINK(this,MasterPagesSelector,ContainerChangeListener));
     mpContainer->RemoveChangeListener(aChangeListener);
+    PreviewValueSet::dispose();
 }
 
 void MasterPagesSelector::LateInit (void)

@@ -41,6 +41,7 @@ public:
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~Ruler (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetNullOffset(const Point& rOffset);
 

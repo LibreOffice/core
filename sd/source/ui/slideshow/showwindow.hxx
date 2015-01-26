@@ -51,6 +51,7 @@ class ShowWindow
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, vcl::Window* pParent );
     virtual ~ShowWindow (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     bool         SetEndMode();
     bool            SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeoutSec = SLIDE_NO_TIMEOUT, Graphic* pLogo = NULL );

@@ -73,6 +73,7 @@ public:
         ViewShellBase& rViewShellBase,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     void Dispose (void);
 

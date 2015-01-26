@@ -102,6 +102,7 @@ class AnnotationWindow : public FloatingWindow
     public:
         AnnotationWindow( AnnotationManagerImpl& rManager, DrawDocShell* pDocShell, vcl::Window* pParent );
         virtual ~AnnotationWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         void StartEdit();
 

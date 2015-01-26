@@ -64,6 +64,7 @@ class CustomAnimationPane : public PanelLayout, public ICustomAnimationListContr
 public:
     CustomAnimationPane( vcl::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame, const Size& rMinSize );
     virtual ~CustomAnimationPane();
+    virtual void dispose() SAL_OVERRIDE;
 
     // callbacks
     void onSelectionChanged();

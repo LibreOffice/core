@@ -69,6 +69,7 @@ private:
 public:
     HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pParent, SdDrawDocument* pDoc, SdPage* pCurrentPage );
     virtual ~HeaderFooterDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     void ApplyToAll();
     void Apply();

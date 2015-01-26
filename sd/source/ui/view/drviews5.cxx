@@ -114,7 +114,7 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     ViewShell::ArrangeGUIElements ();
 
-    maTabControl.Hide();
+    maTabControl->Hide();
 
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
@@ -352,7 +352,7 @@ void DrawViewShell::WriteFrameViewData()
         mpFrameView->SetSelectedPage(0);
     else
     {
-        mpFrameView->SetSelectedPage( maTabControl.GetCurPageId() - 1 );
+        mpFrameView->SetSelectedPage( maTabControl->GetCurPageId() - 1 );
     }
 
     mpFrameView->SetViewShEditMode(meEditMode, mePageKind);

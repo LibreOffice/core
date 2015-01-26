@@ -240,8 +240,14 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, vcl::Window* pPar
 
 HeaderFooterDialog::~HeaderFooterDialog()
 {
+    dispose();
+}
+
+void HeaderFooterDialog::dispose()
+{
     delete mpSlideTabPage;
     delete mpNotesHandoutsTabPage;
+    TabDialog::dispose();
 }
 
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )

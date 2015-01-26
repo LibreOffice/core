@@ -84,6 +84,11 @@ CopyDlg::CopyDlg(vcl::Window* pWindow, const SfxItemSet& rInAttrs,
 
 CopyDlg::~CopyDlg()
 {
+    dispose();
+}
+
+void CopyDlg::dispose()
+{
     OUString& rStr = GetExtraData();
 
     rStr = OUString::number(m_pNumFldCopies->GetValue());
@@ -108,6 +113,8 @@ CopyDlg::~CopyDlg()
     rStr += OUString( TOKEN );
 
     rStr += OUString::number( m_pLbEndColor->GetSelectEntryColor().GetColor() );
+
+    SfxModalDialog::dispose();
 }
 
 /**

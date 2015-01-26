@@ -98,6 +98,7 @@ public:
         SfxBindings* pBindings,
         const UpdateRequestFunctor& rUpdateRequest);
     virtual ~SdNavigatorWin();
+    virtual void                dispose() SAL_OVERRIDE;
 
     virtual void                KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
@@ -118,9 +119,9 @@ private:
     friend class SdNavigatorControllerItem;
     friend class SdPageNameControllerItem;
 
-    ToolBox                     maToolbox;
-    SdPageObjsTLB               maTlbObjects;
-    ListBox                     maLbDocs;
+    VclPtr<ToolBox>             maToolbox;
+    VclPtr<SdPageObjsTLB>       maTlbObjects;
+    VclPtr<ListBox>             maLbDocs;
 
     ::sd::NavigatorChildWindow*     mpChildWinContext;
     Size                        maSize;

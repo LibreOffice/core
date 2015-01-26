@@ -67,8 +67,14 @@ BreakDlg::BreakDlg(
 
 BreakDlg::~BreakDlg()
 {
+    dispose();
+}
+
+void BreakDlg::dispose()
+{
     delete mpProgress;
     delete pProgrInfo;
+    SfxModalDialog::dispose();
 }
 
 // Control-Handler for cancel button

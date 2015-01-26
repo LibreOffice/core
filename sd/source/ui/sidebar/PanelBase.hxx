@@ -45,6 +45,7 @@ public:
         vcl::Window* pParentWindow,
         ViewShellBase& rViewShellBase);
     virtual ~PanelBase (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void Resize (void) SAL_OVERRIDE;
 

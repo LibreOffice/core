@@ -1769,7 +1769,13 @@ IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
 
 AssistentDlg::~AssistentDlg()
 {
+    dispose();
+}
+
+void AssistentDlg::dispose()
+{
     delete mpImpl;
+    ModalDialog::dispose();
 }
 
 SfxObjectShellLock AssistentDlg::GetDocument()

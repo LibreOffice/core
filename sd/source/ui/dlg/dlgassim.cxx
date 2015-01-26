@@ -78,7 +78,13 @@ IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
 
 SdPageListControl::~SdPageListControl()
 {
+    dispose();
+}
+
+void SdPageListControl::dispose()
+{
     delete m_pCheckButton;
+    SvTreeListBox::dispose();
 }
 
 void SdPageListControl::Clear()

@@ -63,6 +63,7 @@ public:
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
         const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~MasterPagesSelector (void);
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void LateInit (void);
 

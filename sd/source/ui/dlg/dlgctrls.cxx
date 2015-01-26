@@ -40,7 +40,13 @@ FadeEffectLB::FadeEffectLB(vcl::Window* pParent, WinBits nStyle)
 
 FadeEffectLB::~FadeEffectLB()
 {
+    dispose();
+}
+
+void FadeEffectLB::dispose()
+{
     delete mpImpl;
+    ListBox::dispose();
 }
 
 void FadeEffectLB::Fill()

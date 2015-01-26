@@ -79,8 +79,14 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
 
 ShowWindow::~ShowWindow(void)
 {
+    dispose();
+}
+
+void ShowWindow::dispose()
+{
     maPauseTimer.Stop();
     maMouseTimer.Stop();
+    ::sd::Window::dispose();
 }
 
 void ShowWindow::KeyInput(const KeyEvent& rKEvt)

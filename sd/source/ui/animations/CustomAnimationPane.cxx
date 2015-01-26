@@ -225,6 +225,11 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
 
 CustomAnimationPane::~CustomAnimationPane()
 {
+    dispose();
+}
+
+void CustomAnimationPane::dispose()
+{
     maLateInitTimer.Stop();
 
     removeListener();
@@ -235,6 +240,7 @@ CustomAnimationPane::~CustomAnimationPane()
     for( aIter = aTags.begin(); aIter != aTags.end(); ++aIter )
         (*aIter)->Dispose();
 
+    PanelLayout::dispose();
 }
 
 void CustomAnimationPane::addUndo()

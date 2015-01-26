@@ -37,6 +37,7 @@ private:
 public:
     SdPageListControl( vcl::Window* pParent, const WinBits nStyle );
     virtual ~SdPageListControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void Fill( SdDrawDocument* pDoc );
     void Clear();

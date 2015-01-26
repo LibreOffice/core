@@ -320,8 +320,9 @@ Control* FontPropertyBox::getControl()
 class DropdownMenuBox : public Edit
 {
 public:
-    DropdownMenuBox( vcl::Window* pParent, const VclPtr<Edit> &pSubControl, PopupMenu* pMenu );
+    DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu );
     virtual ~DropdownMenuBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     void Resize() SAL_OVERRIDE;
     bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -334,7 +335,7 @@ private:
     PopupMenu*   mpMenu;
 };
 
-DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, const VclPtr<Edit> &pSubControl, PopupMenu* pMenu )
+DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, PopupMenu* pMenu )
 :   Edit( pParent, WB_BORDER|WB_TABSTOP| WB_DIALOGCONTROL ),
     mpSubControl(pSubControl),mpDropdownButton(0),mpMenu(pMenu)
 {
@@ -350,9 +351,16 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, const VclPtr<Edit> &pSub
 
 DropdownMenuBox::~DropdownMenuBox()
 {
+    dispose();
+}
+
+void DropdownMenuBox::dispose()
+{
     SetSubEdit(VclPtr<Edit>());
     delete mpDropdownButton;
     delete mpMenu;
+    mpSubControl.disposeAndClear();
+    Edit::dispose();
 }
 
 void DropdownMenuBox::Resize()
@@ -2138,12 +2146,19 @@ CustomAnimationDialog::CustomAnimationDialog(vcl::Window* pParent, STLPropertySe
 
 CustomAnimationDialog::~CustomAnimationDialog()
 {
+    dispose();
+}
+
+void CustomAnimationDialog::dispose()
+{
     delete mpEffectTabPage;
     delete mpDurationTabPage;
     delete mpTextAnimTabPage;
 
     delete mpSet;
     delete mpResultSet;
+
+    TabDialog::dispose();
 }
 
 STLPropertySet* CustomAnimationDialog::getResultSet()
@@ -2221,8 +2236,14 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makePropertyControl( vcl::
 
 PropertyControl::~PropertyControl()
 {
+    dispose();
+}
+
+void PropertyControl::dispose()
+{
     if( mpSubControl )
         delete mpSubControl;
+    ListBox::dispose();
 }
 
 void PropertyControl::setSubControl( PropertySubControl* pSubControl )

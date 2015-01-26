@@ -83,7 +83,13 @@ SdDocPreviewWin::SdDocPreviewWin( vcl::Window* pParent, const WinBits nStyle )
 
 SdDocPreviewWin::~SdDocPreviewWin()
 {
+    dispose();
+}
+
+void SdDocPreviewWin::dispose()
+{
     delete pMetaFile;
+    Control::dispose();
 }
 
 Size SdDocPreviewWin::GetOptimalSize() const

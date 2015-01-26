@@ -38,9 +38,15 @@ PanelBase::PanelBase (
 
 PanelBase::~PanelBase (void)
 {
+    dispose();
+}
+
+void PanelBase::dispose()
+{
     OSL_TRACE("deleting wrapped control at %p", mpWrappedControl.get());
     mpWrappedControl.reset();
     OSL_TRACE("deleting PanelBase at %p from parent %p", this, GetParent());
+    Control::dispose();
 }
 
 void PanelBase::Dispose (void)

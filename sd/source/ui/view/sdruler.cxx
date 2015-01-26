@@ -92,10 +92,16 @@ Ruler::Ruler( DrawViewShell& rViewSh, vcl::Window* pParent, ::sd::Window* pWin, 
 
 Ruler::~Ruler()
 {
+    dispose();
+}
+
+void Ruler::dispose()
+{
     SfxBindings& rBindings = pCtrlItem->GetBindings();
     rBindings.EnterRegistrations();
     delete pCtrlItem;
     rBindings.LeaveRegistrations();
+    SvxRuler::dispose();
 }
 
 void Ruler::MouseButtonDown(const MouseEvent& rMEvt)

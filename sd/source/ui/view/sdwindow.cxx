@@ -94,12 +94,18 @@ Window::Window(vcl::Window* pParent)
 
 Window::~Window (void)
 {
+    dispose();
+}
+
+void Window::dispose()
+{
     if (mpViewShell != NULL)
     {
         WindowUpdater* pWindowUpdater = mpViewShell->GetWindowUpdater();
         if (pWindowUpdater != NULL)
             pWindowUpdater->UnregisterWindow (this);
     }
+    vcl::Window::dispose();
 }
 
 void Window::SetViewShell (ViewShell* pViewSh)

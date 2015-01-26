@@ -532,6 +532,11 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( vcl::Window* pParent, 
 
 CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
 {
+    dispose();
+}
+
+void CustomAnimationCreateDialog::dispose()
+{
     storePosition();
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
@@ -543,6 +548,7 @@ CustomAnimationCreateDialog::~CustomAnimationCreateDialog()
     delete mpTabPages[MOTIONPATH];
     delete mpTabPages[MISCEFFECTS];
 
+    TabDialog::dispose();
 }
 
 CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() const

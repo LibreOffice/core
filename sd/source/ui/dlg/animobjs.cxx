@@ -206,6 +206,11 @@ AnimationWindow::AnimationWindow(SfxBindings* pInBindings, SfxChildWindow *pCW, 
 
 AnimationWindow::~AnimationWindow()
 {
+    dispose();
+}
+
+void AnimationWindow::dispose()
+{
     delete pControllerItem;
 
     for (size_t i = 0; i < m_FrameList.size(); ++i)
@@ -220,6 +225,8 @@ AnimationWindow::~AnimationWindow()
     delete pMyDoc;
 
     delete m_pCtlDisplay;
+
+    SfxDockingWindow::dispose();
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
