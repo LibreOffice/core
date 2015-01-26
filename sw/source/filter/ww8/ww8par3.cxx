@@ -1148,7 +1148,14 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
         return;
 
     // 1.1 alle LST einlesen
-
+    const size_t nMinRecordSize = 10 + 2*nMaxLevel;
+    const size_t nMaxRecords = rSt.remainingSize() / nMinRecordSize;
+    if (nListCount > nMaxRecords)
+    {
+        SAL_WARN("sw.ww8", "Parsing error: " << nMaxRecords <<
+                 " max possible entries, but " << nListCount << " claimed, truncating");
+        nListCount = nMaxRecords;
+    }
     for (sal_uInt16 nList=0; nList < nListCount; ++nList)
     {
         if (nRemainingPlcfLst < cbLSTF)
