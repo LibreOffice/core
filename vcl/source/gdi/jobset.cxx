@@ -235,19 +235,24 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
     {
-        sal_Size nFirstPos = rIStream.Tell();
-
         sal_uInt16 nLen = 0;
         rIStream >> nLen;
-        if ( !nLen )
+        if (nLen <= 4)
             return rIStream;
 
         sal_uInt16 nSystem = 0;
         rIStream >> nSystem;
-
-        char* pTempBuf = new char[nLen];
-        rIStream.Read( pTempBuf,  nLen - sizeof( nLen ) - sizeof( nSystem ) );
-        if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
+        const size_t nRead = nLen - sizeof(nLen) - sizeof(nSystem);
+        if (nRead > rIStream.remainingSize())
+        {
+            SAL_WARN("vcl", "Parsing error: " << rIStream.remainingSize() <<
+                     " max possible entries, but " << nRead << " claimed, truncating");
+            return rIStream;
+        }
+        sal_Size nFirstPos = rIStream.Tell();
+        char* pTempBuf = new char[nRead];
+        rIStream.Read(pTempBuf,  nRead);
+        if (nRead >= sizeof(ImplOldJobSetupData))
         {
             ImplOldJobSetupData* pData = (ImplOldJobSetupData*)pTempBuf;
             if ( rJobSetup.mpData )
@@ -289,8 +294,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )
                 {
-                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
-                    while( rIStream.Tell() < nFirstPos + nLen )
+                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
+                    while( rIStream.Tell() < nFirstPos + nRead )
                     {
                         OUString aKey = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
                         OUString aValue = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rIStream, RTL_TEXTENCODING_UTF8);
@@ -308,9 +313,9 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                         else
                             pJobData->maValueMap[ aKey ] = aValue;
                     }
-                    DBG_ASSERT( rIStream.Tell() == nFirstPos+nLen, "corrupted job setup" );
+                    DBG_ASSERT( rIStream.Tell() == nFirstPos+nRead, "corrupted job setup" );
                     // ensure correct stream position
-                    rIStream.Seek( nFirstPos + nLen );
+                    rIStream.Seek(nFirstPos + nRead);
                 }
             }
         }
