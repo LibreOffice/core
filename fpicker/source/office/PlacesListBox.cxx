@@ -43,8 +43,14 @@ PlacesListBox_Impl::PlacesListBox_Impl( PlacesListBox* pParent, const OUString& 
 
 PlacesListBox_Impl::~PlacesListBox_Impl( )
 {
+    dispose();
+}
+
+void PlacesListBox_Impl::dispose()
+{
     delete mpHeaderBar;
     mpParent = NULL;
+    SvHeaderTabListBox::dispose();
 }
 
 void PlacesListBox_Impl::MouseButtonUp( const MouseEvent& rMEvt )
@@ -82,9 +88,15 @@ PlacesListBox::PlacesListBox( vcl::Window* pParent, SvtFileDialog* pFileDlg, con
 
 PlacesListBox::~PlacesListBox( )
 {
+    dispose();
+}
+
+void PlacesListBox::dispose()
+{
     delete mpImpl;
     delete mpAddBtn;
     delete mpDelBtn;
+    Control::dispose();
 }
 
 void PlacesListBox::AppendPlace( PlacePtr pPlace )

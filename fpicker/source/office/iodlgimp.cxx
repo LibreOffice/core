@@ -106,7 +106,13 @@ SvtFileDialogURLSelector::SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFi
 
 SvtFileDialogURLSelector::~SvtFileDialogURLSelector()
 {
+    dispose();
+}
+
+void SvtFileDialogURLSelector::dispose()
+{
     delete m_pMenu;
+    MenuButton::dispose();
 }
 
 

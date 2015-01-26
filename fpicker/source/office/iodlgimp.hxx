@@ -92,6 +92,7 @@ protected:
 protected:
     SvtFileDialogURLSelector( vcl::Window* _pParent, SvtFileDialog* _pDlg, WinBits nBits, sal_uInt16 _nButtonId );
     virtual ~SvtFileDialogURLSelector();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void        Activate() SAL_OVERRIDE;
 };
