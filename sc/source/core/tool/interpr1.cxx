@@ -174,6 +174,11 @@ void ScInterpreter::ScIfJump()
                     xNew = new ScJumpMatrixToken( pJumpMat );
                     GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(pCur, xNew));
                 }
+                if (!xNew.get())
+                {
+                    PushIllegalArgument();
+                    return;
+                }
                 PushTempToken( xNew.get());
                 // set endpoint of path for main code line
                 aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
