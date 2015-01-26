@@ -1795,6 +1795,7 @@ $(call gb_LinkTarget_use_package,$(1),libodfgen)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libodfgen)/inc \
+	-DLIBODFGEN_VISIBILITY \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
@@ -1856,6 +1857,7 @@ $(call gb_LinkTarget_use_package,$(1),librevenge)
 
 $(call gb_LinkTarget_set_include,$(1),\
 	$(REVENGE_CFLAGS) \
+	-DLIBREVENGE_VISIBILITY \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_add_libs,$(1),\
