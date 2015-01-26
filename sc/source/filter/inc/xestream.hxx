@@ -266,9 +266,11 @@ public:
     static OString ToOString( const Color& rColor );
     static OString ToOString( const OUString& s );
     static OString ToOString( const ScfUInt16Vec& rBuffer );
+    static bool TryToChar( char * s, const ScAddress& rRange );
     static OString ToOString( const ScAddress& rRange );
     static OString ToOString( const ScRange& rRange );
     static OString ToOString( const ScRangeList& rRangeList );
+    static bool TryToChar( char * s, const XclAddress& rAddress );
     static OString ToOString( const XclAddress& rAddress );
     static OString ToOString( const XclExpString& s );
     static OString ToOString( const XclRange& rRange );
