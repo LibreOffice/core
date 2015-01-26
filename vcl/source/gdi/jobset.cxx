@@ -227,9 +227,15 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
 
         sal_uInt16 nSystem = 0;
         rIStream.ReadUInt16( nSystem );
-
+        const size_t nRead = nLen - sizeof(nLen) - sizeof(nSystem);
+        if (nRead > rIStream.remainingSize())
+        {
+            SAL_WARN("vcl", "Parsing error: " << rIStream.remainingSize() <<
+                     " max possible entries, but " << nRead << " claimed, truncating");
+            return rIStream;
+        }
         boost::scoped_array<char> pTempBuf(new char[nLen]);
-        rIStream.Read( pTempBuf.get(),  nLen - sizeof( nLen ) - sizeof( nSystem ) );
+        rIStream.Read(pTempBuf.get(),  nRead);
         if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
         {
             ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
