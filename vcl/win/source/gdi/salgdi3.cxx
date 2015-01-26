@@ -2442,7 +2442,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
 }
 
 bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
-    const PhysicalFontFace* pFont, sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
+    const PhysicalFontFace* pFont, const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
     // TODO: use more of the central font-subsetting code, move stuff there if needed

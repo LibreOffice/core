@@ -121,8 +121,8 @@ public:
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) SAL_OVERRIDE;
     virtual bool        CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
-                                              sal_GlyphId* pGlyphIds,
-                                              sal_uInt8* pEncoding,
+                                              const sal_GlyphId* pGlyphIds,
+                                              const sal_uInt8* pEncoding,
                                               sal_Int32* pWidths,
                                               int nGlyphs,
                                               FontSubsetInfo& rInfo
