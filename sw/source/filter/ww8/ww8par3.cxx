@@ -2232,6 +2232,14 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
             "Unknown formfield dropdown list structure. Report to cmc");
         if (!bAllOk)    //Not as expected, don't risk it at all.
             nNoStrings = 0;
+        const size_t nMinRecordSize = sizeof(sal_uInt16);
+        const size_t nMaxRecords = pDataStream->remainingSize() / nMinRecordSize;
+        if (nNoStrings > nMaxRecords)
+        {
+            SAL_WARN("sw.ww8", "Parsing error: " << nMaxRecords <<
+                     " max possible entries, but " << nNoStrings << " claimed, truncating");
+            nNoStrings = nMaxRecords;
+        }
         maListEntries.reserve(nNoStrings);
         for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
         {
