@@ -25,7 +25,7 @@ module com { module sun { module star { module i18n {
 
     @since LibreOffice 4.5
  */
-published interface XCalendar4 : com::sun::star::i18n::XCalendar3
+interface XCalendar4 : com::sun::star::i18n::XCalendar3
 {
     /** Set the local date/time as an offset to the start of the
         calendar at 1-Jan-1970 00:00. The integer part represents the

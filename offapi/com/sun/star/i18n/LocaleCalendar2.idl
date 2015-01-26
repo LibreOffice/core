@@ -18,7 +18,7 @@ module com { module sun { module star { module i18n {
 
     @since LibreOffice 4.5
  */
-published service LocaleCalendar2 : XCalendar4;
+service LocaleCalendar2 : XCalendar4;
 
 }; }; }; };
 
