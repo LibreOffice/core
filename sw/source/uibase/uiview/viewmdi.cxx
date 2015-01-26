@@ -439,7 +439,7 @@ IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
         if(m_pSrchItem)
         {
             bool bBackward = m_pSrchItem->GetBackward();
-            if(rSh.HasSelection() && !bNext == rSh.IsCrsrPtAtEnd())
+            if (rSh.HasSelection() && bNext != rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             m_pSrchItem->SetBackward(!bNext);
             SfxRequest aReq(FN_REPEAT_SEARCH, SfxCallMode::SLOT, pThis->GetPool());
