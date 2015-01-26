@@ -551,18 +551,17 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_TOOLBOX_DEACTIVATE:
         //case VCLEVENT_TOOLBOX_SELECT:
             break;
-        // IA2 CWS. MT: Still using VCLEVENT_TOOLBOX_CLICK, see comment in vcl/source/window/toolbox2.cxx
-        /*
+
         case VCLEVENT_TOOLBOX_ITEMUPDATED:
         {
             if ( rVclWindowEvent.GetData() )
             {
                 UpdateChecked_Impl( TOOLBOX_ITEM_NOTFOUND );
-                UpdateIndeterminate_Impl( (sal_Int32)rVclWindowEvent.GetData() );
+                UpdateIndeterminate_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
             }
         break;
         }
-        */
+
         case VCLEVENT_TOOLBOX_HIGHLIGHT:
             UpdateFocus_Impl();
             break;

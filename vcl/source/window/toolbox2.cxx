@@ -1458,8 +1458,7 @@ void ToolBox::SetItemState( sal_uInt16 nItemId, TriState eState )
             // Notify button changed event to prepare accessibility bridge
             CallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
 
-            // Notify
-            //Solution:Call accessible listener to notify state_changed event
+            // Call accessible listener to notify state_changed event
             CallEventListeners( VCLEVENT_TOOLBOX_ITEMUPDATED, reinterpret_cast< void* >(nPos) );
         }
     }
