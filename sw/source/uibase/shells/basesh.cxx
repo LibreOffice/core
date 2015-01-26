@@ -131,14 +131,20 @@ static sal_uInt8 nFooterPos;
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-#define SWCONTOURDLG(rView) ( static_cast<SvxContourDlg*>( rView.GetViewFrame()->GetChildWindow(  \
-                          SvxContourDlgChildWindow::GetChildWindowId() )->  \
-                          GetWindow() ) )
+namespace
+{
+    SvxContourDlg* GetContourDlg(SwView &rView)
+    {
+        SfxChildWindow *pChildWindow = rView.GetViewFrame()->GetChildWindow(
+            SvxContourDlgChildWindow::GetChildWindowId());
+
+        return pChildWindow ? static_cast<SvxContourDlg*>(pChildWindow->GetWindow()) : NULL;
+    }
+}
 
 #define SWIMAPDLG(rView) ( static_cast<SvxIMapDlg*>( rView.GetViewFrame()->GetChildWindow(        \
                         SvxIMapDlgChildWindow::GetChildWindowId() )->   \
                         GetWindow() ) )
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -181,9 +187,12 @@ static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
         if ( nSel & nsSelectionType::SEL_GRF )
             rSh.GetGrfNms( &aGrfName, 0 );
 
-        SvxContourDlg *pDlg = SWCONTOURDLG(rSh.GetView());
-        pDlg->Update( aGraf, !aGrfName.isEmpty(),
-                  rSh.GetGraphicPolygon(), rSh.GetIMapInventor() );
+        SvxContourDlg *pDlg = GetContourDlg(rSh.GetView());
+        if (pDlg)
+        {
+            pDlg->Update(aGraf, !aGrfName.isEmpty(),
+                         rSh.GetGraphicPolygon(), rSh.GetIMapInventor());
+        }
     }
     return bRet;
 }
@@ -943,12 +952,12 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_CONTOUR_EXEC:
         {
-            SvxContourDlg *pDlg = SWCONTOURDLG(GetView());
+            SvxContourDlg *pDlg = GetContourDlg(GetView());
             // Check, if the allocation is useful or allowed at all.
             int nSel = rSh.GetSelectionType();
             if ( nSel & (nsSelectionType::SEL_GRF|nsSelectionType::SEL_OLE) )
             {
-                if ( pDlg->GetEditingObject() == rSh.GetIMapInventor() )
+                if (pDlg && pDlg->GetEditingObject() == rSh.GetIMapInventor())
                 {
                     rSh.StartAction();
                     SfxItemSet aSet( rSh.GetAttrPool(), RES_SURROUND, RES_SURROUND);
@@ -1527,8 +1536,8 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                 sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
                 if( !bDisable && GetView().GetViewFrame()->HasChildWindow( nId ))
                 {
-                    SvxContourDlg *pDlg = SWCONTOURDLG(GetView());
-                    if( pDlg->GetEditingObject() != rSh.GetIMapInventor() )
+                    SvxContourDlg *pDlg = GetContourDlg(GetView());
+                    if (pDlg && pDlg->GetEditingObject() != rSh.GetIMapInventor())
                         bDisable = true;
                 }
                 rSet.Put(SfxBoolItem(nWhich, bDisable));
