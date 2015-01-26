@@ -613,7 +613,10 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 
     SfxViewFrame* pVFrame = GetView().GetViewFrame();
     if ( pVFrame->HasChildWindow(nId) )
-        pDlg = static_cast<SvxFontWorkDialog*>(pVFrame->GetChildWindow(nId)->GetWindow());
+    {
+        SfxChildWindow *pChildWindow = pVFrame->GetChildWindow(nId);
+        pDlg = pChildWindow ? static_cast<SvxFontWorkDialog*>(pChildWindow->GetWindow()) : NULL;
+    }
 
     if ( rMarkList.GetMarkCount() == 1 )
         pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
