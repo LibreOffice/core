@@ -43,6 +43,8 @@ private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
 };
 
+static const char sVclPtr[] = "VclPtr";
+
 bool BaseCheckNotWindowSubclass(const CXXRecordDecl *BaseDefinition, void *) {
     if (BaseDefinition->getQualifiedNameAsString().compare("vcl::Window") == 0) {
         return false;
@@ -88,6 +90,10 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
         return true;
     }
     const CXXRecordDecl * pRecordDecl = pCXXDestructorDecl->getParent();
+    // ignore vcl::Window class
+    if (pRecordDecl->getQualifiedNameAsString().compare("vcl::Window") == 0) {
+        return true;
+    }
     // check if this class is derived from Window
     if (!isDerivedFromWindow(pRecordDecl)) {
         return true;
@@ -96,9 +102,8 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     for(auto fieldDecl : pRecordDecl->fields()) {
         const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
         if (pFieldRecordType) {
-            const CXXRecordDecl *pFieldRecordDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
-            static const char sVclPtr[] = "VcllPtr";
-            if (pFieldRecordDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+            const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
+            if (pFieldRecordTypeDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
                foundVclPtrField = true;
                break;
             }
@@ -180,21 +185,23 @@ bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     }
 
     // If this field is a VclPtr field, then the class MUST have a dispose method
-    static const char sVclPtr[] = "VcllPtr";
-    if (recordDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+    const CXXRecordDecl *pParentRecordDecl = dyn_cast<CXXRecordDecl>(fieldDecl->getParent());
+    if (pParentRecordDecl && isDerivedFromWindow(pParentRecordDecl)
+        && recordDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0)
+    {
         bool foundDispose = false;
-        for(auto methodDecl : recordDecl->methods()) {
+        for(auto methodDecl : pParentRecordDecl->methods()) {
             if (methodDecl->isInstance() && methodDecl->param_size()==0 && methodDecl->getNameAsString() == "dispose") {
                foundDispose = true;
                break;
             }
         }
         if (!foundDispose) {
-        report(
-            DiagnosticsEngine::Warning,
-            "vcl::Window subclass with a VclPtr field MUST have a dispose() method.",
-            recordDecl->getLocation())
-          << recordDecl->getSourceRange();
+            report(
+                DiagnosticsEngine::Warning,
+                "vcl::Window subclass with a VclPtr field MUST have a dispose() method.",
+                fieldDecl->getLocation())
+              << fieldDecl->getSourceRange();
         }
     }
 
@@ -257,6 +264,47 @@ bool VCLWidgets::VisitFunctionDecl( const FunctionDecl* functionDecl )
                   << functionDecl->getBody()->getSourceRange();
            }
         }
+    }
+    // check dispose method to make sure we are actually disposing all of the VclPtr fields
+    if (pMethodDecl && pMethodDecl->isInstance() && pMethodDecl->getBody() && pMethodDecl->param_size()==0
+        && pMethodDecl->getNameAsString() == "dispose")
+    {
+        std::vector<std::string> aVclPtrFields;
+        for(auto fieldDecl : pMethodDecl->getParent()->fields()) {
+            const RecordType *pFieldRecordType = fieldDecl->getType()->getAs<RecordType>();
+            if (pFieldRecordType) {
+                const CXXRecordDecl *pFieldRecordTypeDecl = dyn_cast<CXXRecordDecl>(pFieldRecordType->getDecl());
+                if (pFieldRecordTypeDecl->getQualifiedNameAsString().compare(0, strlen(sVclPtr), sVclPtr) == 0) {
+                   aVclPtrFields.push_back(fieldDecl->getNameAsString());
+                }
+           }
+        }
+        if (!aVclPtrFields.empty()) {
+            const CompoundStmt *pCompoundStatement = dyn_cast<CompoundStmt>(pMethodDecl->getBody());
+            for(const Stmt* pStmt : pCompoundStatement->body()) {
+                const CallExpr *pCallExpr = dyn_cast<CallExpr>(pStmt);
+                if (!pCallExpr) continue;
+                if (!pCallExpr->getDirectCallee()) continue;
+                const CXXMethodDecl *pCalleeMethodDecl = dyn_cast<CXXMethodDecl>(pCallExpr->getDirectCallee());
+                if (!pCalleeMethodDecl) continue;
+                if (pCalleeMethodDecl->getNameAsString() != "disposeAndClear") continue;
+                const MemberExpr *pCalleeMemberExpr = dyn_cast<MemberExpr>(pCallExpr->getCallee());
+                if (!pCalleeMemberExpr) continue;
+                const MemberExpr *pCalleeMemberExprBase = dyn_cast<MemberExpr>(pCalleeMemberExpr->getBase());
+                std::string xxx = pCalleeMemberExprBase->getMemberDecl()->getNameAsString();
+                aVclPtrFields.erase(std::remove(aVclPtrFields.begin(), aVclPtrFields.end(), xxx), aVclPtrFields.end());
+            }
+            if (!aVclPtrFields.empty()) {
+                std::string aMessage = "vcl::Window subclass dispose() method does not call disposeAndClear() on the following field(s) ";
+                for(auto s : aVclPtrFields)
+                    aMessage += ", " + s;
+                report(
+                    DiagnosticsEngine::Warning,
+                    aMessage,
+                    functionDecl->getBody()->getLocStart())
+                  << functionDecl->getBody()->getSourceRange();
+           }
+       }
     }
     return true;
 }
