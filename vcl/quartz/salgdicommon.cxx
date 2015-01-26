@@ -178,10 +178,10 @@ static void AddPolyPolygonToPath( CGMutablePathRef xPath,
 }
 
 bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
-                                            const PhysicalFontFace* pFontData,
-                                            sal_GlyphId* pGlyphIds, sal_uInt8* pEncoding,
-                                            sal_Int32* pGlyphWidths, int nGlyphCount,
-                                            FontSubsetInfo& rInfo )
+                                        const PhysicalFontFace* pFontData,
+                                        const sal_GlyphId* pGlyphIds, const sal_uInt8* pEncoding,
+                                        sal_Int32* pGlyphWidths, int nGlyphCount,
+                                        FontSubsetInfo& rInfo )
 {
     // TODO: move more of the functionality here into the generic subsetter code
 

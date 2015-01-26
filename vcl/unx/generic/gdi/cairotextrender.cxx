@@ -596,8 +596,8 @@ SystemFontData CairoTextRender::GetSysFontData( int nFallbackLevel ) const
 bool CairoTextRender::CreateFontSubset(
                                    const OUString& rToFile,
                                    const PhysicalFontFace* pFont,
-                                   sal_GlyphId* pGlyphIds,
-                                   sal_uInt8* pEncoding,
+                                   const sal_GlyphId* pGlyphIds,
+                                   const sal_uInt8* pEncoding,
                                    sal_Int32* pWidths,
                                    int nGlyphCount,
                                    FontSubsetInfo& rInfo
