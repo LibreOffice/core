@@ -28,6 +28,11 @@ public:
     UnitsTest() {};
     virtual ~UnitsTest() {};
 
+    virtual void setUp() SAL_OVERRIDE;
+    virtual void tearDown() SAL_OVERRIDE;
+
+    ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
+
     void testStringExtraction();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
@@ -35,11 +40,19 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void UnitsTest::testStringExtraction() {
-    ::boost::shared_ptr< UnitsImpl > pUnitsImpl = UnitsImpl::GetUnits();
+void UnitsTest::setUp() {
+    BootstrapFixture::setUp();
 
-    CPPUNIT_ASSERT(pUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
-    CPPUNIT_ASSERT(pUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
+    mpUnitsImpl = UnitsImpl::GetUnits();
+}
+
+void UnitsTest::tearDown() {
+    BootstrapFixture::tearDown();
+}
+
+void UnitsTest::testStringExtraction() {
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
