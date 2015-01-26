@@ -57,7 +57,6 @@ public:
     void testSharedString();
     void testSharedStringPool();
     void testSharedStringPoolPurge();
-    void testFdo44286();
     void testFdo60915();
     void testI116701();
     void testDateInput();
@@ -67,7 +66,6 @@ public:
     CPPUNIT_TEST(testSharedString);
     CPPUNIT_TEST(testSharedStringPool);
     CPPUNIT_TEST(testSharedStringPoolPurge);
-    CPPUNIT_TEST(testFdo44286);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST(testDateInput);
@@ -407,32 +405,6 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
     CPPUNIT_ASSERT_EQUAL(sExpected, sStr);
 }
 
-void Test::testFdo44286()
-{
-    LanguageType eLang = LANGUAGE_ENGLISH_US;
-    OUString sCode = "YYYY-MM-DD", sExpected;
-    double fPreviewNumber;
-    SvNumberFormatter aFormatter(m_xContext, eLang);
-    {
-        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("America/Sao_Paulo"));
-        sExpected = "1902-04-22";
-        fPreviewNumber = 843;
-        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
-    }
-    {
-        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("Europe/Berlin"));
-        sExpected = "1790-07-27";
-        fPreviewNumber = -39967;
-        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
-    }
-    {
-        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("US/Mountain"));
-        sExpected = "1790-07-26";
-        fPreviewNumber = -39968;
-        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
-    }
-}
-
 void Test::testFdo60915()
 {
     LanguageType eLang = LANGUAGE_THAI;
@@ -524,6 +496,8 @@ void Test::testDateInput()
         "Europe/Tallinn", "1790-03-01",     // i#105864
         "Australia/Perth", "2004-04-11",    // i#17222
         "America/Sao_Paulo", "1902-04-22",  // tdf#44286
+        "Europe/Berlin", "1790-07-27",
+        "US/Mountain", "1790-07-26",
 
         // Data from https://bugs.documentfoundation.org/show_bug.cgi?id=63230
         // https://bugs.documentfoundation.org/attachment.cgi?id=79051
