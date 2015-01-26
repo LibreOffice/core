@@ -139,6 +139,12 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 
 #if !defined(ANDROID)
 
+namespace {
+
+extern "C" typedef DesktopType Fn_get_desktop_environment();
+
+}
+
 static DesktopType get_desktop_environment()
 {
     OUString aModule(DESKTOP_DETECTOR_DLL_NAME);
@@ -148,8 +154,9 @@ static DesktopType get_desktop_environment()
     DesktopType ret = DESKTOP_UNKNOWN;
     if( aMod )
     {
-        DesktopType (*pSym)() = reinterpret_cast<DesktopType(*)()>(
-            osl_getAsciiFunctionSymbol( aMod, "get_desktop_environment" ));
+        Fn_get_desktop_environment * pSym
+            = reinterpret_cast<Fn_get_desktop_environment *>(
+                osl_getAsciiFunctionSymbol(aMod, "get_desktop_environment"));
         if( pSym )
             ret = pSym();
     }

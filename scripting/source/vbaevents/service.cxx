@@ -19,8 +19,6 @@
 
 #include "cppuhelper/implementationentry.hxx"
 #include <osl/diagnose.h>
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
 
 #include <service.hxx>
 
@@ -49,8 +47,8 @@ using namespace ::com::sun::star::uno;
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT  void * SAL_CALL vbaevents_component_getFactory(
-        const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
+        const sal_Char * pImplName, void * pServiceManager,
+        void * pRegistryKey )
     {
         OSL_TRACE("In component_getFactory");
         return ::cppu::component_getFactoryHelper(

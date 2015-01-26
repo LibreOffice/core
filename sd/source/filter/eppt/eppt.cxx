@@ -1448,7 +1448,7 @@ bool PPTWriter::ImplWriteAtomEnding()
 
 // - exported function -
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData, SvStorageRef& rSvStorage,
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rXModel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > & rXStatInd,
                             SvMemoryStream* pVBA, sal_uInt32 nCnvrtFlags )
@@ -1467,7 +1467,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL ExportPPT( const std::vector< com:
     return bStatus;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
 {
     SvStorageRef xDest( new SvStorage( new SvMemoryStream(), true ) );
     SvxImportMSVBasic aMSVBas( rDocShell, *xDest );
