@@ -192,21 +192,22 @@ bool ScDocument::HasTable( SCTAB nTab ) const
 bool ScDocument::GetName( SCTAB nTab, OUString& rName ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+    {
         if (maTabs[nTab])
         {
             maTabs[nTab]->GetName( rName );
             return true;
         }
+    }
     rName.clear();
     return false;
 }
 
 OUString ScDocument::GetCopyTabName( SCTAB nTab ) const
 {
-    if (nTab < static_cast<SCTAB>(maTabNames.size()))
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabNames.size()))
         return maTabNames[nTab];
-    else
-        return OUString();
+    return OUString();
 }
 
 bool ScDocument::SetCodeName( SCTAB nTab, const OUString& rName )
