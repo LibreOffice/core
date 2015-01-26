@@ -371,15 +371,27 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     struct KnownPrefix
     {
-        const sal_Char*         pAsciiPrefix;
+        const OUString          sPrefix;
         const DATASOURCE_TYPE   eType;
         const bool              bMatchComplete;
 
-        KnownPrefix( const sal_Char* _p, const DATASOURCE_TYPE _t, const bool _m )
-            :pAsciiPrefix( _p )
+        KnownPrefix( const OUString &_s, const DATASOURCE_TYPE _t, const bool _m )
+            :sPrefix( _s )
             ,eType ( _t )
             ,bMatchComplete( _m )
         {
+        }
+
+        bool match( const OUString &url)
+        {
+            if(bMatchComplete)
+            {
+                return url.equalsIgnoreAsciiCase(sPrefix);
+            }
+            else
+            {
+                return url.startsWithIgnoreAsciiCase(sPrefix);
+            }
         }
     };
     KnownPrefix aKnowPrefixes[] =
@@ -408,9 +420,10 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
     {
-        sal_uInt16 nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.getLength() : (sal_uInt16)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
-        if ( sDsn.equalsIgnoreAsciiCaseAsciiL( aKnowPrefixes[i].pAsciiPrefix, nMatchLen ) )
+        if( aKnowPrefixes[i].match(sDsn) )
+        {
             return aKnowPrefixes[i].eType;
+        }
     }
 
     return DST_UNKNOWN;
