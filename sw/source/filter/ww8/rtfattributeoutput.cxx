@@ -3624,7 +3624,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
     const sal_uInt8* pGraphicAry = 0;
     SvMemoryStream aStream;
     if (GraphicConverter::Export(aStream, *pGraphic, CVT_PNG) != ERRCODE_NONE)
-        OSL_FAIL("failed to export the graphic");
+        SAL_WARN("sw.rtf", "failed to export the graphic");
     aStream.Seek(STREAM_SEEK_TO_END);
     sal_uInt32 nSize = aStream.Tell();
     pGraphicAry = (sal_uInt8*)aStream.GetData();
@@ -3634,7 +3634,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrmFmt* pFlyFrmFmt, S
     pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
     SvMemoryStream aWmfStream;
     if (GraphicConverter::Export(aWmfStream, *pGraphic, CVT_WMF) != ERRCODE_NONE)
-        OSL_FAIL("failed to export the graphic");
+        SAL_WARN("sw.rtf", "failed to export the graphic");
     aWmfStream.Seek(STREAM_SEEK_TO_END);
     nSize = aWmfStream.Tell();
     pGraphicAry = (sal_uInt8*)aWmfStream.GetData();
@@ -3834,7 +3834,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     else
     {
         aStream.Seek(0);
-        GraphicConverter::Export(aStream, rGraphic, CVT_WMF);
+        if (GraphicConverter::Export(aStream, rGraphic, CVT_WMF) != ERRCODE_NONE)
+            SAL_WARN("sw.rtf", "failed to export the graphic");
         pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
         aStream.Seek(STREAM_SEEK_TO_END);
         nSize = aStream.Tell();
@@ -3850,7 +3851,8 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
             m_rExport.Strm().WriteCharPtr("}" "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
 
             aStream.Seek(0);
-            GraphicConverter::Export(aStream, rGraphic, CVT_WMF);
+            if (GraphicConverter::Export(aStream, rGraphic, CVT_WMF) != ERRCODE_NONE)
+                SAL_WARN("sw.rtf", "failed to export the graphic");
             pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
             aStream.Seek(STREAM_SEEK_TO_END);
             nSize = aStream.Tell();
