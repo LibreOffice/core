@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_fc6209ad",
+        "filename": "sc/source/core/tool/interpr7.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-01-26T17:36:36Z",
+      "side": 1,
+      "message": "This still does not work if c \u003e 255, e.g. for c\u003d\u003d256 the resulting string would be \"%100\". This is why in the earlier comment I said the entire string should be converted to UTF-8 first so you can simply operate on the octets.\n\nShall I take over at this point?",
+      "revId": "f3ea13175eef4ce976fd0d0de27381a3d90a2527",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
