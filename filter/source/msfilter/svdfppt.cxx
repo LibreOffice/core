@@ -4927,6 +4927,14 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             {
                 sal_uInt16 i, nDistance, nAlignment, nNumberOfTabStops = 0;
                 rIn.ReadUInt16( nNumberOfTabStops );
+                const size_t nMinRecordSize = 4;
+                const size_t nMaxRecords = rIn.remainingSize() / nMinRecordSize;
+                if (nNumberOfTabStops > nMaxRecords)
+                {
+                    SAL_WARN("filter.ms", "Parsing error: " << nMaxRecords <<
+                             " max possible entries, but " << nNumberOfTabStops << " claimed, truncating");
+                    nNumberOfTabStops = nMaxRecords;
+                }
                 for ( i = 0; i < nNumberOfTabStops; i++ )
                 {
                     rIn.ReadUInt16( nDistance )
