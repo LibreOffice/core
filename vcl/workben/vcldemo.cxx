@@ -299,6 +299,15 @@ public:
     struct DrawText : public RegionRenderer
     {
         RENDER_DETAILS(text,KEY_T,1)
+
+        bool mbClip;
+
+        DrawText() :
+            mbClip (false) {}
+
+        DrawText( bool bClip )
+            : mbClip (bClip) {}
+
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
                                   const RenderContext &) SAL_OVERRIDE
         {
@@ -315,6 +324,10 @@ public:
               };
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
                 maFontNames.push_back(OUString::createFromAscii(pNames[i]));
+
+            if (mbClip)
+                rDev.SetClipRegion( vcl::Region(r - Point(200, 200) ) );
+
 #define PRINT_N_TEXT 20
             for (int i = 0; i < PRINT_N_TEXT; i++) {
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
@@ -323,7 +336,18 @@ public:
                 rDev.SetFont(aFont);
                 rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (PRINT_N_TEXT - i)/PRINT_N_TEXT));
             }
+
+            if (mbClip)
+                rDev.SetClipRegion();
         }
+    };
+
+    struct DrawClipText : public DrawText
+    {
+        RENDER_DETAILS(cliptext,KEY_T,1)
+
+        DrawClipText()
+            : DrawText( true ) {}
     };
 
     struct DrawCheckered : public RegionRenderer
@@ -969,6 +993,9 @@ public:
             for (size_t i = 0; i < maRenderers.size(); i++)
             {
                 RegionRenderer * r = maRenderers[i];
+
+                rDev.SetClipRegion( vcl::Region( aRegions[i] ) );
+
                 // profiling?
                 if (getIterCount() > 0)
                 {
@@ -981,8 +1008,13 @@ public:
                     } else
                         for (int j = 0; j < r->getTestRepeatCount(); j++)
                             r->RenderRegion(rDev, aRegions[i], aCtx);
-                } else
+                }
+                else
+                {
                     r->RenderRegion(rDev, aRegions[i], aCtx);
+                }
+
+                rDev.SetClipRegion();
             }
         }
     }
@@ -1112,6 +1144,7 @@ void DemoRenderer::InitRenderers()
 {
     maRenderers.push_back(new DrawLines());
     maRenderers.push_back(new DrawText());
+    maRenderers.push_back(new DrawClipText());
     maRenderers.push_back(new DrawPoly());
     maRenderers.push_back(new DrawEllipse());
     maRenderers.push_back(new DrawCheckered());
@@ -1172,7 +1205,7 @@ void DemoRenderer::addTime(int i, double t)
     maRenderers[i]->countTime++;
 }
 
-void DemoRenderer::selectRenderer(const OUString &rName)
+void DemoRenderer::selectRenderer(const OUString &rName )
 {
     for (size_t i = 0; i < maRenderers.size(); i++)
     {
@@ -1384,7 +1417,7 @@ public:
                     if (bLast)
                         return showHelp(aRenderer);
                     else
-                        aRenderer.selectRenderer(GetCommandLineParam(++i));
+                        aRenderer.selectRenderer(GetCommandLineParam(i));
                 }
                 else if (aArg == "--test")
                 {
