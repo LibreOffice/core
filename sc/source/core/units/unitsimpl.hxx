@@ -67,10 +67,8 @@ private:
     OUString extractUnitStringFromFormat(const OUString& rFormatString);
     OUString extractUnitStringForCell(ScAddress& rAddress, ScDocument* pDoc);
     UtUnit getUnitForRef(formula::FormulaToken* pToken,
-                        const ScAddress& rFormulaAddress,
-                        ScDocument* pDoc,
-                        ::boost::shared_ptr< ut_system > pUnitSystem);
-
+                         const ScAddress& rFormulaAddress,
+                         ScDocument* pDoc);
 };
 
 }} // namespace sc::units
