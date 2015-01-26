@@ -442,12 +442,6 @@ ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
             for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
                 RscDepend       * pDep = pFName->aDepLst[ i ];
-                pTC->aFileTab.GetFile( pDep->GetFileKey() );
-            }
-
-            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
-            {
-                RscDepend       * pDep = pFName->aDepLst[ i ];
                 RscFile         * pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
                 // Kein Pfad und Include Datei
                 if( pFNTmp && !pFNTmp->bLoaded )
