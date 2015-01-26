@@ -48,13 +48,7 @@ bAllowDoubles
         DBG_ASSERT( bAllowDoubles ||
                     ( !_nEventId && ( !_pIdle || !_pIdle->IsActive() ) ),
                     "Schon ein Call unterwegs" );
-        if( _nEventId )
-        {
-            if( _pMutex ) _pMutex->acquire();
-            Application::RemoveUserEvent( _nEventId );
-            if( _pMutex ) _pMutex->release();
-        }
-        if( _pIdle )_pIdle->Stop();
+        ClearPendingCall();
         if( bUseTimer )
         {
             if( !_pIdle )
