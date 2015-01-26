@@ -121,7 +121,6 @@
 
 #include <langhelper.hxx>
 
-#include <wordcountdialog.hxx>
 #include <tools/diagnose_ex.h>
 #include <boost/scoped_ptr.hpp>
 
@@ -426,16 +425,15 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 InsertSymbol(rReq);
             break;
         }
-            case FN_INSERT_STRING:
-                {
+        case FN_INSERT_STRING:
+        {
             const SfxPoolItem* pItem = 0;
-            if(pNewAttrs)
+            if (pNewAttrs)
                 pNewAttrs->GetItemState(nSlot, false, &pItem );
-                        if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
-                                pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
-                        break;
-                }
-
+            if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
+                pOLV->InsertText(static_cast<const SfxStringItem *>(pItem)->GetValue());
+            break;
+        }
         case FN_FORMAT_FOOTNOTE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -466,18 +464,9 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SfxViewFrame* pVFrame = rView.GetViewFrame();
-            if (pVFrame != NULL)
-            {
-                pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-                Invalidate(rReq.GetSlot());
-
-                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
-                if (pWrdCnt)
-                    pWrdCnt->UpdateCounts();
-            }
+            rView.UpdateWordCount(this, nSlot);
+            break;
         }
-        break;
         case SID_CHAR_DLG_EFFECT:
         case SID_CHAR_DLG:
         {

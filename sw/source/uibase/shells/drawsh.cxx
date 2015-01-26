@@ -65,7 +65,6 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
-#include <wordcountdialog.hxx>
 #include "misc.hrc"
 #include <boost/scoped_ptr.hpp>
 
@@ -327,16 +326,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            if (pVFrame != NULL)
-            {
-                pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-                Invalidate(rReq.GetSlot());
-
-                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
-                if (pWrdCnt)
-                    pWrdCnt->UpdateCounts();
-            }
+            GetView().UpdateWordCount(this, nSlotId);
         }
         break;
         case SID_EXTRUSION_TOOGLE:

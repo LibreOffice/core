@@ -78,7 +78,6 @@
 #include "misc.hrc"
 
 #include <svx/dialogs.hrc>
-#include <wordcountdialog.hxx>
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>
@@ -266,18 +265,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            if (pVFrame != NULL)
-            {
-                pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-                Invalidate(rReq.GetSlot());
-
-                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
-                if (pWrdCnt)
-                    pWrdCnt->UpdateCounts();
-            }
+            GetView().UpdateWordCount(this, nSlot);
+            break;
         }
-        break;
         default: bMore = true;
     }
 

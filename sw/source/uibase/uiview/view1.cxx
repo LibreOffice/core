@@ -37,6 +37,7 @@
 #include <cmdid.h>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <wordcountdialog.hxx>
 
 extern bool bDocSzUpdated;
 
@@ -177,6 +178,20 @@ void SwView::StateFormatPaintbrush(SfxItemSet &rSet)
     {
         if( !m_pFormatClipboard->CanCopyThisType( GetWrtShell().GetSelectionType() ) )
             rSet.DisableItem( SID_FORMATPAINTBRUSH );
+    }
+}
+
+void SwView::UpdateWordCount(SfxShell* pShell, sal_uInt16 nSlot)
+{
+    SfxViewFrame* pVFrame = GetViewFrame();
+    if (pVFrame != NULL)
+    {
+        pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
+        pShell->Invalidate(nSlot);
+
+        SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
+        if (pWrdCnt)
+            pWrdCnt->UpdateCounts();
     }
 }
 

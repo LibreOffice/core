@@ -93,7 +93,6 @@
 #include <viewopt.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
-#include <wordcountdialog.hxx>
 
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
@@ -405,16 +404,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
         case FN_WORDCOUNT_DIALOG:
         {
-            SfxViewFrame* pVFrame = GetView().GetViewFrame();
-            if (pVFrame != NULL)
-            {
-                pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-                Invalidate(rReq.GetSlot());
-
-                SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
-                if (pWrdCnt)
-                    pWrdCnt->UpdateCounts();
-            }
+            GetView().UpdateWordCount(this, nSlot);
         }
         break;
         case SID_PARA_DLG:

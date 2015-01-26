@@ -544,6 +544,7 @@ public:
     void            StateSearch(SfxItemSet &);
     void            GetState(SfxItemSet&);
     void            StateStatusLine(SfxItemSet&);
+    void            UpdateWordCount(SfxShell*, sal_uInt16);
 
     // functions for drawing
     void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);

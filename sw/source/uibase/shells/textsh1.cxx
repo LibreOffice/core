@@ -109,7 +109,6 @@
 #include <sfx2/objface.hxx>
 #include <langhelper.hxx>
 #include <uiitems.hxx>
-#include <wordcountdialog.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
@@ -1344,16 +1343,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     break;
     case FN_WORDCOUNT_DIALOG:
     {
-        SfxViewFrame* pVFrame = GetView().GetViewFrame();
-        if (pVFrame != NULL)
-        {
-            pVFrame->ToggleChildWindow(FN_WORDCOUNT_DIALOG);
-            Invalidate(rReq.GetSlot());
-
-            SwWordCountWrapper *pWrdCnt = static_cast<SwWordCountWrapper*>(pVFrame->GetChildWindow(SwWordCountWrapper::GetChildWindowId()));
-            if (pWrdCnt)
-                pWrdCnt->UpdateCounts();
-        }
+        GetView().UpdateWordCount(this, nSlot);
     }
     break;
     default:
