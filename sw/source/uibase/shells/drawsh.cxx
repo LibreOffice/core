@@ -42,9 +42,6 @@
 #include <IDocumentStatistics.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
-
 #include <svx/svdoashp.hxx>
 #include <svx/xtable.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
@@ -325,15 +322,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
         break;
         case SID_OPEN_XML_FILTERSETTINGS:
         {
-            try
-            {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
-                xDialog->execute();
-            }
-            catch (const uno::Exception&)
-            {
-            }
-            rReq.Ignore ();
+            HandleOpenXmlFilterSettings(rReq);
         }
         break;
         case FN_WORDCOUNT_DIALOG:

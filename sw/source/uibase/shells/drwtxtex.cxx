@@ -400,15 +400,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         break;
         case SID_OPEN_XML_FILTERSETTINGS:
         {
-            try
-            {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
-                xDialog->execute();
-            }
-            catch (const uno::Exception&)
-            {
-            }
-            rReq.Ignore ();
+            HandleOpenXmlFilterSettings(rReq);
         }
         break;
         case FN_WORDCOUNT_DIALOG:

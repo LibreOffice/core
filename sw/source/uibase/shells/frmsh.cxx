@@ -67,8 +67,6 @@
 #include <swwait.hxx>
 #include <docstat.hxx>
 #include <IDocumentStatistics.hxx>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
 #include <helpid.h>
 #include <cmdid.h>
@@ -263,15 +261,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         }
         case SID_OPEN_XML_FILTERSETTINGS:
         {
-            try
-            {
-                uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create(::comphelper::getProcessComponentContext());
-                xDialog->execute();
-            }
-            catch (const uno::Exception&)
-            {
-            }
-            rReq.Ignore ();
+            HandleOpenXmlFilterSettings(rReq);
         }
         break;
         case FN_WORDCOUNT_DIALOG:

@@ -18,9 +18,7 @@
  */
 
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <hintids.hxx>
 #include <cmdid.h>
 #include <helpid.h>
@@ -1321,15 +1319,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     break;
     case SID_OPEN_XML_FILTERSETTINGS:
     {
-        try
-        {
-            uno::Reference < ui::dialogs::XExecutableDialog > xDialog = ui::dialogs::XSLTFilterDialog::create( ::comphelper::getProcessComponentContext() );
-            xDialog->execute();
-        }
-        catch (const uno::Exception&)
-        {
-        }
-        rReq.Ignore ();
+        HandleOpenXmlFilterSettings(rReq);
     }
     break;
     case FN_FORMAT_APPLY_HEAD1:
