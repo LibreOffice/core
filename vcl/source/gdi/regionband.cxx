@@ -265,8 +265,7 @@ void RegionBand::load(SvStream& rIStrm)
         // get next header
         rIStrm.ReadUInt16( nTmp16 );
     }
-    while(STREAMENTRY_END != (StreamEntryType)nTmp16);
-
+    while (STREAMENTRY_END != (StreamEntryType)nTmp16 && rIStrm.good());
 }
 
 void RegionBand::save(SvStream& rOStrm) const
