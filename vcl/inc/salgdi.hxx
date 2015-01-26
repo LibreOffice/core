@@ -30,6 +30,7 @@
 #include "sallayout.hxx"
 
 #include <map>
+#include <set>
 
 class PhysicalFontCollection;
 class SalBitmap;
@@ -273,7 +274,7 @@ public:
     // map for non encoded glyphs; the encoding vector contains -1
     // as encoding for these cases
     virtual const Ucs2SIntMap*
-                            GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded ) = 0;
+                            GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded, std::set<sal_Unicode> const** ppPriority) = 0;
 
     // GetEmbedFontData: gets the font data for a font marked
     // embeddable by GetDevFontList or NULL in case of error
