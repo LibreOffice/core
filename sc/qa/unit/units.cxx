@@ -7,12 +7,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "units.hxx"
+#include "unitsimpl.hxx"
 
 #include "helper/qahelper.hxx"
 
+using namespace sc::units;
+
+// In order to be able to access the private members of UnitsImpl for
+// testing, we need to be a friend of UnitsImpl. For this to work
+// UnitsTest can't be a member of the anonymous namespace hence the
+// need to use a namespace here.
+namespace sc {
+namespace units {
+namespace test {
+
 class UnitsTest:
-    public test::BootstrapFixture
+    public ::test::BootstrapFixture
 {
 public:
     UnitsTest() {};
@@ -26,12 +36,16 @@ public:
 };
 
 void UnitsTest::testStringExtraction() {
-    CPPUNIT_ASSERT(extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
-    CPPUNIT_ASSERT(extractUnitStringFromFormat("#\"cm\"") == "cm");
+    ::boost::shared_ptr< UnitsImpl > pUnitsImpl = UnitsImpl::GetUnits();
+
+    CPPUNIT_ASSERT(pUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
+    CPPUNIT_ASSERT(pUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
+
+}}} // namespace sc::units::test
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
