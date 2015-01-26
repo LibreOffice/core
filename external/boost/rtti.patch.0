@@ -1,0 +1,20 @@
+--- boost/function/function_base.hpp
++++ boost/function/function_base.hpp
+@@ -97,7 +97,7 @@
+        * object pointers, and a structure that resembles a bound
+        * member function pointer.
+        */
+-      union function_buffer
++      union BOOST_SYMBOL_VISIBLE function_buffer
+       {
+         // For pointers to function objects
+         mutable void* obj_ptr;
+@@ -159,7 +159,7 @@
+       };
+ 
+       // The operation type to perform on the given functor/function pointer
+-      enum functor_manager_operation_type {
++      enum BOOST_SYMBOL_VISIBLE functor_manager_operation_type {
+         clone_functor_tag,
+         move_functor_tag,
+         destroy_functor_tag,
