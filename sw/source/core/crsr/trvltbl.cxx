@@ -218,9 +218,9 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         else
         {
             // will become point of table cursor
-            pStt = aCells[ bVert ? (bRow ? 0 : 3) : (bRow ? 2 : 1) ]->GetTabBox();
+            pStt = aCells[bVert ? 0 : (bRow ? 2 : 1)]->GetTabBox();
             // will become mark of table cursor
-            pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();
+            pEnd = aCells[bVert ? 3 : (bRow ? 1 : 2)]->GetTabBox();
         }
     }
 
