@@ -1817,18 +1817,29 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
     bObjsDirect = true;
 }
 
-SwBorderAttrs::SwBorderAttrs( const SwModify *pMod, const SwFrm *pConstructor ) :
-    SwCacheObj( pMod ),
-    rAttrSet( pConstructor->IsCntntFrm()
+SwBorderAttrs::SwBorderAttrs(const SwModify *pMod, const SwFrm *pConstructor)
+    : SwCacheObj(pMod)
+    , rAttrSet(pConstructor->IsCntntFrm()
                     ? static_cast<const SwCntntFrm*>(pConstructor)->GetNode()->GetSwAttrSet()
-                    : static_cast<const SwLayoutFrm*>(pConstructor)->GetFmt()->GetAttrSet() ),
-    rUL     ( rAttrSet.GetULSpace() ),
+                    : static_cast<const SwLayoutFrm*>(pConstructor)->GetFmt()->GetAttrSet())
+    , rUL(rAttrSet.GetULSpace())
     // #i96772#
     // LRSpaceItem is copied due to the possibility that it is adjusted - see below
-    rLR     ( rAttrSet.GetLRSpace() ),
-    rBox    ( rAttrSet.GetBox()     ),
-    rShadow ( rAttrSet.GetShadow()  ),
-    aFrmSize( rAttrSet.GetFrmSize().GetSize() )
+    , rLR(rAttrSet.GetLRSpace())
+    , rBox(rAttrSet.GetBox())
+    , rShadow(rAttrSet.GetShadow())
+    , aFrmSize(rAttrSet.GetFrmSize().GetSize())
+    , bIsLine(false)
+    , bJoinedWithPrev(false)
+    , bJoinedWithNext(false)
+    , nTopLine(0)
+    , nBottomLine(0)
+    , nLeftLine(0)
+    , nRightLine(0)
+    , nTop(0)
+    , nBottom(0)
+    , nGetTopLine(0)
+    , nGetBottomLine(0)
 {
     // #i96772#
     const SwTxtFrm* pTxtFrm = dynamic_cast<const SwTxtFrm*>(pConstructor);
