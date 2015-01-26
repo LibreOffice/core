@@ -64,6 +64,7 @@ public:
                                         const PhysicalFontFace*,
                                         const sal_Ucs* pUnicodes,
                                         sal_Int32* pWidths,
+                                        size_t nLen,
                                         FontSubsetInfo& rInfo,
                                         long* pDataLen ) = 0;
 

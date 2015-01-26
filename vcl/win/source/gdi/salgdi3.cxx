@@ -2596,7 +2596,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 }
 
 const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
-    const sal_Unicode* pUnicodes, sal_Int32* pCharWidths,
+    const sal_Unicode* pUnicodes, sal_Int32* pCharWidths, size_t nLen,
     FontSubsetInfo& rInfo, long* pDataLen )
 {
     // create matching FontSelectPattern
@@ -2634,7 +2634,7 @@ const void* WinSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont,
     rInfo.m_nCapHeight  = aTm.tmAscent; // Well ...
 
     // get individual character widths
-    for( int i = 0; i < 256; ++i )
+    for (size_t i = 0; i < nLen; ++i)
     {
         int nCharWidth = 0;
         const sal_Unicode cChar = pUnicodes[i];

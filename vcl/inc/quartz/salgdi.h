@@ -393,6 +393,7 @@ public:
     virtual const void*     GetEmbedFontData( const PhysicalFontFace*,
                                               const sal_Ucs* pUnicodes,
                                               sal_Int32* pWidths,
+                                              size_t nLen,
                                               FontSubsetInfo& rInfo,
                                               long* pDataLen ) SAL_OVERRIDE;
     // frees the font data again

@@ -2969,7 +2969,8 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const PhysicalFo
         sal_Ucs nEncodedCodes[256];
         sal_Int32 pEncWidths[256];
 
-        pFontData = (const unsigned char*)pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, aInfo, &nFontLen );
+        //TODO: surely this is utterly broken because GetEmbedFontData loops over the uninitialized nEncodedCodes as input
+        pFontData = (const unsigned char*)pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pEncWidths, 256, aInfo, &nFontLen );
 
         if( pFontData )
         {
@@ -3147,7 +3148,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
     sal_Int32 nLength1, nLength2;
     try
     {
-        if( (pFontData = (const unsigned char*)pGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) != NULL )
+        if( (pFontData = (const unsigned char*)pGraphics->GetEmbedFontData(pFont, nEncodedCodes, pWidths, 256, aInfo, &nFontLen)) != NULL )
         {
             if( (aInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) == 0 )
                 throw FontException();

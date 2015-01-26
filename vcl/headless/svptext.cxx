@@ -336,6 +336,7 @@ const void* SvpSalGraphics::GetEmbedFontData(
     const PhysicalFontFace* pFont,
     const sal_Ucs* pUnicodes,
     sal_Int32* pWidths,
+    size_t nLen,
     FontSubsetInfo& rInfo,
     long* pDataLen
     )
@@ -346,7 +347,7 @@ const void* SvpSalGraphics::GetEmbedFontData(
     // which this method was created). The correct way would
     // be to have the GlyphCache search for the PhysicalFontFace pFont
     psp::fontID aFont = pFont->GetFontId();
-    return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
+    return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, nLen, rInfo, pDataLen );
 }
 
 void SvpSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
