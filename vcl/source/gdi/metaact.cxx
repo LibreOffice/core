@@ -1065,6 +1065,14 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     {
         sal_uInt16 nNumberOfComplexPolygons(0);
         rIStm.ReadUInt16( nNumberOfComplexPolygons );
+        const size_t nMinRecordSize = sizeof(sal_uInt16);
+        const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
+        if (nNumberOfComplexPolygons > nMaxRecords)
+        {
+            SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
+                     " max possible entries, but " << nNumberOfComplexPolygons << " claimed, truncating");
+            nNumberOfComplexPolygons = nMaxRecords;
+        }
         for (sal_uInt16 i = 0; i < nNumberOfComplexPolygons; ++i)
         {
             sal_uInt16 nIndex(0);
