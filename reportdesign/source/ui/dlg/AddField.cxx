@@ -151,11 +151,11 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
             ,::comphelper::OPropertyChangeListener(m_aMutex)
             ,::comphelper::OContainerListener(m_aMutex)
             ,m_xRowSet(_xRowSet)
-            ,m_aActions(this,ModuleRes(RID_TB_SORTING))
+            ,m_aActions(new ToolBox(this,ModuleRes(RID_TB_SORTING)))
             ,m_pListBox(new OAddFieldWindowListBox( this ))
-            ,m_aFixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) )
-            ,m_aHelpText(this, ModuleRes(ADDFIELD_HELP_FIELD) )
-            ,m_aInsertButton(this, WB_TABSTOP|WB_CENTER)
+            ,m_aFixedLine(new FixedLine(this, ModuleRes(ADDFIELD_FL_HELP_SEPARATOR) ))
+            ,m_aHelpText(new FixedText(this, ModuleRes(ADDFIELD_HELP_FIELD) ))
+            ,m_aInsertButton(new PushButton(this, WB_TABSTOP|WB_CENTER))
             ,m_nCommandType(0)
             ,m_bEscapeProcessing(false)
             ,m_pChangeListener(NULL)
@@ -165,13 +165,13 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     SetMinOutputSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 
-    m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
-    m_aActions.SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
+    m_aActions->SetStyle(m_aActions->GetStyle()|WB_LINESPACING);
+    m_aActions->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
-    m_aActions.SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
-    setToolBox(&m_aActions);
-    m_aActions.CheckItem(SID_FM_SORTUP);
-    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, false);
+    m_aActions->SetSelectHdl(LINK(this, OAddFieldWindow, OnSortAction));
+    setToolBox(m_aActions.get());
+    m_aActions->CheckItem(SID_FM_SORTUP);
+    m_aActions->EnableItem(SID_ADD_CONTROL_PAIR, false);
 
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->SetSelectHdl(LINK( this, OAddFieldWindow, OnSelectHdl ) );
@@ -179,12 +179,12 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
     m_pListBox->SetDoubleClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
     m_pListBox->Show();
     const OUString sTitle(ModuleRes(RID_STR_INSERT));
-    m_aInsertButton.SetText(sTitle);
-    m_aInsertButton.SetClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
-    m_aInsertButton.Show();
+    m_aInsertButton->SetText(sTitle);
+    m_aInsertButton->SetClickHdl(LINK( this, OAddFieldWindow, OnDoubleClickHdl ) );
+    m_aInsertButton->Show();
 
-    m_aFixedLine.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
-    m_aHelpText.SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
+    m_aFixedLine->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
+    m_aHelpText->SetControlBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 
@@ -209,6 +209,11 @@ OAddFieldWindow::OAddFieldWindow(vcl::Window* pParent
 
 OAddFieldWindow::~OAddFieldWindow()
 {
+    dispose();
+}
+
+void OAddFieldWindow::dispose()
+{
     if ( m_pListBox.get() )
     {
         SvTreeList* pModel = m_pListBox->GetModel();
@@ -222,6 +227,12 @@ OAddFieldWindow::~OAddFieldWindow()
         m_pChangeListener->dispose();
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
+
+    m_aActions.disposeAndClear();
+    m_aFixedLine.disposeAndClear();
+    m_aHelpText.disposeAndClear();
+    m_aInsertButton.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 
@@ -307,10 +318,10 @@ void OAddFieldWindow::Update()
     {
         // ListBox loeschen
         m_pListBox->Clear();
-        const sal_uInt16 nItemCount = m_aActions.GetItemCount();
+        const sal_uInt16 nItemCount = m_aActions->GetItemCount();
         for (sal_uInt16 j = 0; j< nItemCount; ++j)
         {
-            m_aActions.EnableItem(m_aActions.GetItemId(j),false);
+            m_aActions->EnableItem(m_aActions->GetItemId(j),false);
         }
 
         OUString aTitle(ModuleRes(RID_STR_FIELDSELECTION));
@@ -356,7 +367,7 @@ void OAddFieldWindow::Update()
             {
                 for (sal_uInt16 i = 0; i < nItemCount; ++i)
                 {
-                    m_aActions.EnableItem(m_aActions.GetItemId(i));
+                    m_aActions->EnableItem(m_aActions->GetItemId(i));
                 }
             }
                 OnSelectHdl(NULL);
@@ -380,15 +391,15 @@ void OAddFieldWindow::Resize()
     const Size aFixedTextSize(LogicToPixel( Size( FIXEDTEXT_WIDTH, FIXEDTEXT_HEIGHT ), MAP_APPFONT ));
 
     // ToolBar
-    Size aToolbarSize( m_aActions.GetSizePixel() );
+    Size aToolbarSize( m_aActions->GetSizePixel() );
     Point aToolbarPos( aRelated.Width(), aRelated.Height());
-    m_aActions.SetPosPixel(Point(aToolbarPos.X(), aToolbarPos.Y()));
+    m_aActions->SetPosPixel(Point(aToolbarPos.X(), aToolbarPos.Y()));
 
     Size aLBSize( aWindowSize );
     aLBSize.Width()  -= ( 2 * aRelated.Width() );
 
     // help text
-    const Size aHelpTextSize = m_aHelpText.CalcMinimumSize(aLBSize.Width());
+    const Size aHelpTextSize = m_aHelpText->CalcMinimumSize(aLBSize.Width());
 
     // ListBox
     Point aLBPos( aRelated.Width(), aRelated.Height() + aToolbarSize.Height() + aRelated.Height() );
@@ -402,11 +413,11 @@ void OAddFieldWindow::Resize()
     // FixedLine
     Size aFLSize( aLBSize.Width(),aFixedTextSize.Height() );
     Point aFLPos( aRelated.Width(), aLBPos.Y() + aLBSize.Height() + aRelated.Height());
-    m_aFixedLine.SetPosSizePixel( aFLPos, aFLSize );
+    m_aFixedLine->SetPosSizePixel( aFLPos, aFLSize );
 
     // Help text
     Point aFTPos( aRelated.Width(), aFLPos.Y() + aFLSize.Height() + aRelated.Height() );
-    m_aHelpText.SetPosSizePixel( aFTPos, aHelpTextSize );
+    m_aHelpText->SetPosSizePixel( aFTPos, aHelpTextSize );
 }
 
 uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const
@@ -477,7 +488,7 @@ void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEve
 
 IMPL_LINK( OAddFieldWindow, OnSelectHdl, void* ,/*_pAddFieldDlg*/)
 {
-    m_aActions.EnableItem(SID_ADD_CONTROL_PAIR, ( m_pListBox.get() && m_pListBox->GetSelectionCount() > 0 ));
+    m_aActions->EnableItem(SID_ADD_CONTROL_PAIR, ( m_pListBox.get() && m_pListBox->GetSelectionCount() > 0 ));
 
     return 0L;
 }
@@ -495,7 +506,7 @@ void OAddFieldWindow::setImageList(sal_Int16 _eBitmapSet)
     sal_Int16 nN = IMG_ADDFIELD_DLG_SC;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         nN = IMG_ADDFIELD_DLG_LC;
-    m_aActions.SetImageList(ImageList(ModuleRes(nN)));
+    m_aActions->SetImageList(ImageList(ModuleRes(nN)));
 }
 
 void OAddFieldWindow::resizeControls(const Size& _rDiff)
@@ -509,27 +520,27 @@ void OAddFieldWindow::resizeControls(const Size& _rDiff)
 
 IMPL_LINK( OAddFieldWindow, OnSortAction, ToolBox*, /*NOTINTERESTEDIN*/ )
 {
-    const sal_uInt16 nCurItem = m_aActions.GetCurItemId();
+    const sal_uInt16 nCurItem = m_aActions->GetCurItemId();
     if ( SID_ADD_CONTROL_PAIR == nCurItem )
         OnDoubleClickHdl(NULL);
     else
     {
-        if ( SID_FM_REMOVE_FILTER_SORT == nCurItem || !m_aActions.IsItemChecked(nCurItem) )
+        if ( SID_FM_REMOVE_FILTER_SORT == nCurItem || !m_aActions->IsItemChecked(nCurItem) )
         {
-            const sal_uInt16 nItemCount = m_aActions.GetItemCount();
+            const sal_uInt16 nItemCount = m_aActions->GetItemCount();
             for (sal_uInt16 j = 0; j< nItemCount; ++j)
             {
-                const sal_uInt16 nItemId = m_aActions.GetItemId(j);
+                const sal_uInt16 nItemId = m_aActions->GetItemId(j);
                 if ( nCurItem != nItemId )
-                    m_aActions.CheckItem(nItemId,false);
+                    m_aActions->CheckItem(nItemId,false);
             }
             SvSortMode eSortMode = SortNone;
             if ( SID_FM_REMOVE_FILTER_SORT != nCurItem )
             {
-                m_aActions.CheckItem(nCurItem,!m_aActions.IsItemChecked(nCurItem));
-                if ( m_aActions.IsItemChecked(SID_FM_SORTUP) )
+                m_aActions->CheckItem(nCurItem,!m_aActions->IsItemChecked(nCurItem));
+                if ( m_aActions->IsItemChecked(SID_FM_SORTUP) )
                     eSortMode = SortAscending;
-                else if ( m_aActions.IsItemChecked(SID_FM_SORTDOWN) )
+                else if ( m_aActions->IsItemChecked(SID_FM_SORTDOWN) )
                     eSortMode = SortDescending;
             }
 

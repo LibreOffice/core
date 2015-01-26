@@ -48,9 +48,9 @@ oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
-,m_aVRuler(this,WB_VERT)
-,m_aText(this,WB_HYPHENATION)
-,m_aImage(this,WB_LEFT|WB_TOP|WB_SCALE)
+,m_aVRuler(new Ruler(this,WB_VERT))
+,m_aText(new FixedText(this,WB_HYPHENATION))
+,m_aImage(new FixedImage(this,WB_LEFT|WB_TOP|WB_SCALE))
 ,m_pParent(_pParent)
 ,m_bShowRuler(true)
 {
@@ -59,20 +59,20 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
     osl_atomic_increment(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();
-    m_aText.SetHelpId(HID_RPT_START_TITLE);
-    m_aText.SetPaintTransparent(true);
-    m_aImage.SetHelpId(HID_RPT_START_IMAGE);
-    m_aText.Show();
-    m_aImage.Show();
-    m_aVRuler.Show();
-    m_aVRuler.Activate();
-    m_aVRuler.SetPagePos(0);
-    m_aVRuler.SetBorders();
-    m_aVRuler.SetIndents();
-    m_aVRuler.SetMargin1();
-    m_aVRuler.SetMargin2();
+    m_aText->SetHelpId(HID_RPT_START_TITLE);
+    m_aText->SetPaintTransparent(true);
+    m_aImage->SetHelpId(HID_RPT_START_IMAGE);
+    m_aText->Show();
+    m_aImage->Show();
+    m_aVRuler->Show();
+    m_aVRuler->Activate();
+    m_aVRuler->SetPagePos(0);
+    m_aVRuler->SetBorders();
+    m_aVRuler->SetIndents();
+    m_aVRuler->SetMargin1();
+    m_aVRuler->SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
-    m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
+    m_aVRuler->SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
     EnableChildTransparentMode( true );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
     SetPaintTransparent( true );
@@ -80,18 +80,27 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
 
 OStartMarker::~OStartMarker()
 {
+    dispose();
+}
+
+void OStartMarker::dispose()
+{
     if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
     }
+    m_aVRuler.disposeAndClear();
+    m_aText.disposeAndClear();
+    m_aImage.disposeAndClear();
+    OColorListener::dispose();
 }
 
 sal_Int32 OStartMarker::getMinHeight() const
 {
     Fraction aExtraWidth(long(2*REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
-    return LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() + (long)aExtraWidth;
+    return LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() + (long)aExtraWidth;
 }
 
 void OStartMarker::Paint( const Rectangle& rRect )
@@ -107,7 +116,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
     }
     else
     {
-        const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
+        const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
         nSize = aSize.Width() - nVRulerWidth;
         aSize.Width() += nCornerWidth;
         SetClipRegion(vcl::Region(PixelToLogic(Rectangle(Point(),Size(nSize,aSize.Height())))));
@@ -148,8 +157,8 @@ void OStartMarker::setColor()
     Color aTextColor = GetTextColor();
     if ( aColor.GetLuminance() < 128 )
         aTextColor = COL_WHITE;
-    m_aText.SetTextColor(aTextColor);
-    m_aText.SetLineColor(m_nColor);
+    m_aText->SetTextColor(aTextColor);
+    m_aText->SetLineColor(m_nColor);
 }
 
 void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
@@ -162,14 +171,14 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     const Size aOutputSize = GetOutputSizePixel();
     if( aPos.X() > aOutputSize.Width() || aPos.Y() > aOutputSize.Height() )
         return;
-    Rectangle aRect(m_aImage.GetPosPixel(),m_aImage.GetSizePixel());
+    Rectangle aRect(m_aImage->GetPosPixel(),m_aImage->GetSizePixel());
     if ( rMEvt.GetClicks() == 2 || aRect.IsInside( aPos ) )
     {
         m_bCollapsed = !m_bCollapsed;
 
         changeImage();
 
-        m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
+        m_aVRuler->Show(!m_bCollapsed && m_bShowRuler);
         if ( m_aCollapsedLink.IsSet() )
             m_aCollapsedLink.Call(this);
     }
@@ -180,7 +189,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 void OStartMarker::changeImage()
 {
     Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-    m_aImage.SetImage(*pImage);
+    m_aImage->SetImage(*pImage);
 }
 
 void OStartMarker::initDefaultNodeImages()
@@ -192,11 +201,11 @@ void OStartMarker::initDefaultNodeImages()
     }
 
     Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-    m_aImage.SetImage(*pImage);
-    m_aImage.SetMouseTransparent(true);
-    m_aImage.SetBackground();
-    m_aText.SetBackground();
-    m_aText.SetMouseTransparent(true);
+    m_aImage->SetImage(*pImage);
+    m_aImage->SetMouseTransparent(true);
+    m_aImage->SetBackground();
+    m_aText->SetBackground();
+    m_aText->SetMouseTransparent(true);
 }
 
 void OStartMarker::ImplInitSettings()
@@ -212,11 +221,11 @@ void OStartMarker::Resize()
     const long nOutputWidth  = aOutputSize.Width();
     const long nOutputHeight = aOutputSize.Height();
 
-    const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
+    const long nVRulerWidth = m_aVRuler->GetSizePixel().Width();
     const Point aRulerPos(nOutputWidth - nVRulerWidth,0);
-    m_aVRuler.SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
+    m_aVRuler->SetPosSizePixel(aRulerPos,Size(nVRulerWidth,nOutputHeight));
 
-    Size aImageSize = m_aImage.GetImage().GetSizePixel();
+    Size aImageSize = m_aImage->GetImage().GetSizePixel();
     const MapMode& rMapMode = GetMapMode();
     aImageSize.Width() = long(aImageSize.Width() * (double)rMapMode.GetScaleX());
     aImageSize.Height() = long(aImageSize.Height() * (double)rMapMode.GetScaleY());
@@ -225,17 +234,17 @@ void OStartMarker::Resize()
     aExtraWidth *= rMapMode.GetScaleX();
 
     Point aPos(aImageSize.Width() + (long)(aExtraWidth + aExtraWidth), aExtraWidth);
-    const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText.GetTextHeight())).Height());
-    m_aText.SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
+    const long nHeight = ::std::max<sal_Int32>(nOutputHeight - 2*aPos.Y(),LogicToPixel(Size(0,m_aText->GetTextHeight())).Height());
+    m_aText->SetPosSizePixel(aPos,Size(aRulerPos.X() - aPos.X(),nHeight));
 
     aPos.X() = aExtraWidth;
-    aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
-    m_aImage.SetPosSizePixel(aPos,aImageSize);
+    aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText->GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
+    m_aImage->SetPosSizePixel(aPos,aImageSize);
 }
 
 void OStartMarker::setTitle(const OUString& _sTitle)
 {
-    m_aText.SetText(_sTitle);
+    m_aText->SetText(_sTitle);
 }
 
 void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
@@ -252,12 +261,12 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
 void OStartMarker::showRuler(bool _bShow)
 {
     m_bShowRuler = _bShow;
-    m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
+    m_aVRuler->Show(!m_bCollapsed && m_bShowRuler);
 }
 
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( !m_aText.GetText().isEmpty())
+    if( !m_aText->GetText().isEmpty())
     {
         // Hilfe anzeigen
         Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
@@ -268,9 +277,9 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
         aItemRect.Right()  = aPt.X();
         aItemRect.Bottom() = aPt.Y();
         if( rHEvt.GetMode() == HelpEventMode::BALLOON )
-            Help::ShowBalloon( this, aItemRect.Center(), aItemRect, m_aText.GetText());
+            Help::ShowBalloon( this, aItemRect.Center(), aItemRect, m_aText->GetText());
         else
-            Help::ShowQuickHelp( this, aItemRect, m_aText.GetText() );
+            Help::ShowQuickHelp( this, aItemRect, m_aText->GetText() );
     }
 }
 
@@ -284,8 +293,8 @@ void OStartMarker::setCollapsed(bool _bCollapsed)
 void OStartMarker::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
-    m_aVRuler.SetZoom(_aZoom);
-    setZoomFactor(_aZoom,m_aText);
+    m_aVRuler->SetZoom(_aZoom);
+    setZoomFactor(_aZoom, *m_aText.get());
     Resize();
     Invalidate();
 }

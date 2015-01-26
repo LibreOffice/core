@@ -97,6 +97,7 @@ class OFieldExpressionControl : public TContainerListenerBase
 public:
     OFieldExpressionControl(OGroupsSortingDialog* _pParentDialog, vcl::Window *_pParent);
     virtual ~OFieldExpressionControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -182,6 +183,12 @@ OFieldExpressionControl::OFieldExpressionControl(OGroupsSortingDialog* _pParentD
 
 OFieldExpressionControl::~OFieldExpressionControl()
 {
+    dispose();
+}
+
+
+void OFieldExpressionControl::dispose()
+{
     WeakImplHelper1::acquire();
     uno::Reference< report::XGroups > xGroups = m_pParent->getGroups();
     xGroups->removeContainerListener(this);
@@ -193,6 +200,7 @@ OFieldExpressionControl::~OFieldExpressionControl()
         Application::RemoveUserEvent( m_nDeleteEvent );
 
     delete m_pComboCell;
+    OFieldExpressionControl_Base::dispose();
 }
 
 uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
@@ -970,11 +978,17 @@ OGroupsSortingDialog::OGroupsSortingDialog(vcl::Window* _pParent, bool _bReadOnl
 
 OGroupsSortingDialog::~OGroupsSortingDialog()
 {
+    dispose();
+}
+
+void OGroupsSortingDialog::dispose()
+{
     delete m_pFieldExpression;
     m_xColumns.clear();
     m_pReportListener->dispose();
     if ( m_pCurrentGroupListener.is() )
         m_pCurrentGroupListener->dispose();
+    FloatingWindow::dispose();
 }
 
 void OGroupsSortingDialog::UpdateData( )

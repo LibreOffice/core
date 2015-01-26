@@ -45,10 +45,10 @@ namespace rptui
                             , public ::cppu::BaseMutex
                             , public ::comphelper::OPropertyChangeListener
     {
-        Ruler                   m_aHRuler;
+        VclPtr<Ruler>           m_aHRuler;
         ODesignView*            m_pView;
         OScrollWindowHelper*    m_pParent;
-        OViewsWindow            m_aViewsWindow;
+        VclPtr<OViewsWindow>    m_aViewsWindow;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>   m_pReportListener;
         ::std::unique_ptr<DlgEdFactory>
                                 m_pObjFac;
@@ -67,6 +67,7 @@ namespace rptui
     public:
         OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView);
         virtual ~OReportWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void Resize() SAL_OVERRIDE;
@@ -136,7 +137,7 @@ namespace rptui
         */
         void            showRuler(bool _bShow);
 
-        inline sal_Int32 getRulerHeight() const { return m_aHRuler.GetSizePixel().Height(); }
+        inline sal_Int32 getRulerHeight() const { return m_aHRuler->GetSizePixel().Height(); }
 
         /** returns the total width of the first section
         */

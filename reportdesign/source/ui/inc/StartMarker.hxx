@@ -31,9 +31,9 @@ namespace rptui
     class OStartMarker : public OColorListener
     {
 
-        Ruler                       m_aVRuler;
-        FixedText                   m_aText;
-        FixedImage                  m_aImage;
+        VclPtr<Ruler>               m_aVRuler;
+        VclPtr<FixedText>           m_aText;
+        VclPtr<FixedImage>          m_aImage;
         OSectionWindow*             m_pParent;
         static Image*               s_pDefCollapsed;
         static Image*               s_pDefExpanded;
@@ -50,6 +50,7 @@ namespace rptui
     public:
         OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry);
         virtual ~OStartMarker();
+        virtual void dispose() SAL_OVERRIDE;
 
         // SfxListener
         virtual void    Notify(SfxBroadcaster & rBc, SfxHint const & rHint) SAL_OVERRIDE;

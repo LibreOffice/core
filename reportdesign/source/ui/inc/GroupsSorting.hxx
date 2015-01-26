@@ -145,6 +145,7 @@ public:
                         ,bool _bReadOnly
                         ,::rptui::OReportController* _pController);
     virtual ~OGroupsSortingDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     /** sets the newe columns at the groups dialog.
         @param  _xColumns the new columns

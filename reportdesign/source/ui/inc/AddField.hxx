@@ -54,18 +54,18 @@ class  OAddFieldWindow  :public FloatingWindow
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   m_xRowSet;
 
-    ToolBox                                                                     m_aActions;
+    VclPtr<ToolBox>                                                             m_aActions;
 
     ::std::unique_ptr<OAddFieldWindowListBox>                                   m_pListBox;
-    FixedLine                                                                   m_aFixedLine;
-    FixedText                                                                   m_aHelpText;
+    VclPtr<FixedLine>                                                           m_aFixedLine;
+    VclPtr<FixedText>                                                           m_aHelpText;
 
-    PushButton                                                                  m_aInsertButton;
+    VclPtr<PushButton>                                                          m_aInsertButton;
     Link                                                                        m_aCreateLink;
-    OUString                                                             m_aCommandName;
-    OUString                                                             m_sFilter;
+    OUString                                                                    m_aCommandName;
+    OUString                                                                    m_sFilter;
     sal_Int32                                                                   m_nCommandType;
-    bool                                                                    m_bEscapeProcessing;
+    bool                                                                        m_bEscapeProcessing;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
     ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
@@ -80,6 +80,7 @@ public:
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xRowSet);
 
     virtual ~OAddFieldWindow();
+    virtual void dispose() SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
     virtual void GetFocus() SAL_OVERRIDE;
     virtual bool PreNotify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;

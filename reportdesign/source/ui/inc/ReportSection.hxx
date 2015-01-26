@@ -81,6 +81,7 @@ namespace rptui
     public:
         OReportSection(OSectionWindow* _pParent,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
         virtual ~OReportSection();
+        virtual void dispose() SAL_OVERRIDE;
 
         // window overrides
         virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

@@ -48,14 +48,14 @@ namespace rptui
                                 ,   public IMarkedSection
     {
     private:
-        ScrollBar           m_aHScroll;
-        ScrollBar           m_aVScroll;
-        ScrollBarBox        m_aCornerWin;       // window in the bottom right corner
-        Size                m_aTotalPixelSize;
-        ODesignView*        m_pParent;
-        OReportWindow       m_aReportWindow;
+        VclPtr<ScrollBar>           m_aHScroll;
+        VclPtr<ScrollBar>           m_aVScroll;
+        VclPtr<ScrollBarBox>        m_aCornerWin;       // window in the bottom right corner
+        Size                        m_aTotalPixelSize;
+        ODesignView*                m_pParent;
+        VclPtr<OReportWindow>       m_aReportWindow;
         ::rtl::Reference<comphelper::OPropertyChangeMultiplexer >
-                            m_pReportDefintionMultiPlexer; // listener for property changes
+                                    m_pReportDefintionMultiPlexer; // listener for property changes
 
         DECL_LINK( ScrollHdl, ScrollBar*);
         Size ResizeScrollBars();
@@ -74,17 +74,18 @@ namespace rptui
     public:
         OScrollWindowHelper( ODesignView* _pReportDesignView);
         virtual ~OScrollWindowHelper();
+        virtual void dispose() SAL_OVERRIDE;
 
         /** late ctor
         */
         void                    initialize();
 
-        inline Point            getThumbPos() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
-        inline const OReportWindow& getReportWindow() const { return m_aReportWindow; }
+        inline Point            getThumbPos() const { return Point(m_aHScroll->GetThumbPos(),m_aVScroll->GetThumbPos())/*m_aScrollOffset*/; }
+        inline const OReportWindow& getReportWindow() const { return *m_aReportWindow.get(); }
         void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
-        inline ScrollBar&       GetHScroll() { return m_aHScroll; }
-        inline ScrollBar&       GetVScroll() { return m_aVScroll; }
+        inline ScrollBar&       GetHScroll() { return *m_aHScroll.get(); }
+        inline ScrollBar&       GetVScroll() { return *m_aVScroll.get(); }
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );

@@ -97,11 +97,13 @@ IMPL_LINK( ConditionField, OnFormula, Button*, _pClickedButton )
 class OColorPopup : public FloatingWindow
 {
     DECL_LINK( SelectHdl, void * );
-    Condition* m_pCondition;
+    Condition*      m_pCondition;
     sal_uInt16      m_nSlotId;
 public:
     OColorPopup(vcl::Window* _pParent,Condition* _pCondition);
-    ValueSet        m_aColorSet;
+    virtual ~OColorPopup();
+    virtual void dispose() SAL_OVERRIDE;
+    VclPtr<ValueSet>        m_aColorSet;
 
     virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
     virtual void Resize() SAL_OVERRIDE;
@@ -114,9 +116,9 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 :FloatingWindow(_pParent, WinBits( WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK|WB_DIALOGCONTROL ))
 ,m_pCondition(_pCondition)
 ,m_nSlotId(0)
-,m_aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) )
+,m_aColorSet( new ValueSet(this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT)) )
 {
-    m_aColorSet.SetHelpId( HID_RPT_POPUP_COLOR_CTRL );
+    m_aColorSet->SetHelpId( HID_RPT_POPUP_COLOR_CTRL );
     SetHelpId( HID_RPT_POPUP_COLOR );
     const Size aSize12( 13, 13 );
     short i = 0;
@@ -127,34 +129,45 @@ OColorPopup::OColorPopup(vcl::Window* _pParent,Condition* _pCondition)
 
     if ( nCount > PALETTE_SIZE )
         // Show scrollbar if more than PALLETTE_SIZE colors are available
-        m_aColorSet.SetStyle( m_aColorSet.GetStyle() | WB_VSCROLL );
+        m_aColorSet->SetStyle( m_aColorSet->GetStyle() | WB_VSCROLL );
 
     for ( i = 0; i < nCount; i++ )
     {
         XColorEntry* pEntry = pColorList->GetColor(i);
-        m_aColorSet.InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
+        m_aColorSet->InsertItem( i+1, pEntry->GetColor(), pEntry->GetName() );
     }
 
     while ( i < PALETTE_SIZE )
     {
         // fill empty elements if less then PALLETTE_SIZE colors are available
-        m_aColorSet.InsertItem( i+1, aColWhite, aStrWhite );
+        m_aColorSet->InsertItem( i+1, aColWhite, aStrWhite );
         i++;
     }
 
-    m_aColorSet.SetSelectHdl( LINK( this, OColorPopup, SelectHdl ) );
-    m_aColorSet.SetColCount( PALETTE_X );
-    m_aColorSet.SetLineCount( PALETTE_Y );
-    Size aSize = m_aColorSet.CalcWindowSizePixel( aSize12 );
+    m_aColorSet->SetSelectHdl( LINK( this, OColorPopup, SelectHdl ) );
+    m_aColorSet->SetColCount( PALETTE_X );
+    m_aColorSet->SetLineCount( PALETTE_Y );
+    Size aSize = m_aColorSet->CalcWindowSizePixel( aSize12 );
     aSize.Width()  += 4;
     aSize.Height() += 4;
     SetOutputSizePixel( aSize );
-    m_aColorSet.Show();
+    m_aColorSet->Show();
+}
+
+OColorPopup::~OColorPopup()
+{
+    dispose();
+}
+
+void OColorPopup::dispose()
+{
+    m_aColorSet.disposeAndClear();
+    FloatingWindow::dispose();
 }
 
 void OColorPopup::KeyInput( const KeyEvent& rKEvt )
 {
-    m_aColorSet.KeyInput(rKEvt);
+    m_aColorSet->KeyInput(rKEvt);
 }
 
 void OColorPopup::Resize()
@@ -162,12 +175,12 @@ void OColorPopup::Resize()
     Size aSize = GetOutputSizePixel();
     aSize.Width()  -= 4;
     aSize.Height() -= 4;
-    m_aColorSet.SetPosSizePixel( Point(2,2), aSize );
+    m_aColorSet->SetPosSizePixel( Point(2,2), aSize );
 }
 
 void OColorPopup::StartSelection()
 {
-    m_aColorSet.StartSelection();
+    m_aColorSet->StartSelection();
 }
 
 void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
@@ -175,20 +188,20 @@ void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
     m_nSlotId = _nSlotId;
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == _nSlotId || SID_BACKGROUND_COLOR == _nSlotId )
     {
-        m_aColorSet.SetStyle( m_aColorSet.GetStyle() | WB_NONEFIELD );
-        m_aColorSet.SetText( OUString(ModuleRes( STR_TRANSPARENT )) );
+        m_aColorSet->SetStyle( m_aColorSet->GetStyle() | WB_NONEFIELD );
+        m_aColorSet->SetText( OUString(ModuleRes( STR_TRANSPARENT )) );
     }
 }
 
 IMPL_LINK_NOARG(OColorPopup, SelectHdl)
 {
-    sal_uInt16 nItemId = m_aColorSet.GetSelectItemId();
-    Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet.GetItemColor( nItemId ) );
+    sal_uInt16 nItemId = m_aColorSet->GetSelectItemId();
+    Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet->GetItemColor( nItemId ) );
 
     /*  #i33380# Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
-    m_aColorSet.SetNoSelection();
+    m_aColorSet->SetNoSelection();
 
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -294,6 +307,11 @@ sal_uInt16 Condition::mapToolbarItemToSlotId(sal_uInt16 nItemId) const
 
 Condition::~Condition()
 {
+    dispose();
+}
+
+void Condition::dispose()
+{
     m_bInDestruction = true;
 
     delete m_pColorFloat;
@@ -301,6 +319,7 @@ Condition::~Condition()
     delete m_pCondLHS;
     delete m_pCondRHS;
     delete m_pBtnUpdaterBackgroundColor;
+    VclHBox::dispose();
 }
 
 IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )

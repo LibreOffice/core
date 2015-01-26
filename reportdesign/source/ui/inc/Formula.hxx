@@ -68,6 +68,7 @@ public:
         , svl::SharedStringPool& rStrPool );
 
     virtual ~FormulaDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // IFormulaEditorHelper
     virtual void notifyChange() SAL_OVERRIDE;

@@ -185,8 +185,14 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
 
 OViewsWindow::~OViewsWindow()
 {
+    dispose();
+}
+
+void OViewsWindow::dispose()
+{
     m_aColorConfig.RemoveListener(this);
     m_aSections.clear();
+    vcl::Window::dispose();
 }
 
 void OViewsWindow::impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet)

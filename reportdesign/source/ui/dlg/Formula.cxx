@@ -87,6 +87,11 @@ void FormulaDialog::fill()
 
 FormulaDialog::~FormulaDialog()
 {
+    dispose();
+}
+
+void FormulaDialog::dispose()
+{
     if ( m_pAddField )
     {
         SvtViewOptions aDlgOpt( E_WINDOW, OUString( HID_RPT_FIELD_SEL_WIN ) );
@@ -97,6 +102,7 @@ FormulaDialog::~FormulaDialog()
     }
 
     StoreFormEditData( m_pFormulaData );
+    formula::FormulaModalDialog::dispose();
 }
 
 

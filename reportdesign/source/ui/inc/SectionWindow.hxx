@@ -47,11 +47,11 @@ namespace rptui
                             ,   public ::cppu::BaseMutex
                             ,   public ::comphelper::OPropertyChangeListener
     {
-        OViewsWindow*   m_pParent;
-        OStartMarker    m_aStartMarker;
-        OReportSection  m_aReportSection;
-        Splitter        m_aSplitter;
-        OEndMarker      m_aEndMarker;
+        OViewsWindow*           m_pParent;
+        VclPtr<OStartMarker>    m_aStartMarker;
+        VclPtr<OReportSection>  m_aReportSection;
+        VclPtr<Splitter>        m_aSplitter;
+        VclPtr<OEndMarker>      m_aEndMarker;
 
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> m_pSectionMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> m_pGroupMulti;
@@ -98,10 +98,11 @@ namespace rptui
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                         ,const OUString& _sColorEntry);
         virtual ~OSectionWindow();
+        virtual void dispose() SAL_OVERRIDE;
 
-        inline OStartMarker&    getStartMarker()    { return m_aStartMarker;     }
-        inline OReportSection&  getReportSection()  { return m_aReportSection;   }
-        inline OEndMarker&      getEndMarker()      { return m_aEndMarker;       }
+        inline OStartMarker&    getStartMarker()    { return *m_aStartMarker.get();     }
+        inline OReportSection&  getReportSection()  { return *m_aReportSection.get();   }
+        inline OEndMarker&      getEndMarker()      { return *m_aEndMarker.get();       }
         inline OViewsWindow*    getViewsWindow()    { return m_pParent;          }
 
         void    setCollapsed(bool _bCollapsed);

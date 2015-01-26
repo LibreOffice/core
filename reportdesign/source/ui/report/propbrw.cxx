@@ -185,6 +185,11 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
 
 PropBrw::~PropBrw()
 {
+    dispose();
+}
+
+void PropBrw::dispose()
+{
     if (m_xBrowserController.is())
         implDetachController();
 
@@ -204,6 +209,7 @@ PropBrw::~PropBrw()
     {}
 
     ::rptui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    DockingWindow::dispose();
 }
 
 void PropBrw::setCurrentPage(const OUString& _sLastActivePage)

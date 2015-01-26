@@ -182,6 +182,7 @@ protected:
 public:
     NavigatorTree(vcl::Window* pParent,OReportController& _rController );
     virtual ~NavigatorTree();
+    virtual void dispose() SAL_OVERRIDE;
 
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
     DECL_LINK( OnDropActionTimer, void* );
@@ -255,6 +256,11 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
 
 NavigatorTree::~NavigatorTree()
 {
+    dispose();
+}
+
+void NavigatorTree::dispose()
+{
     SvTreeListEntry* pCurrent = First();
     while ( pCurrent )
     {
@@ -263,6 +269,7 @@ NavigatorTree::~NavigatorTree()
     }
     m_pReportListener->dispose();
     m_pSelectionListener->dispose();
+    SvTreeListBox::dispose();
 }
 
 void NavigatorTree::Command( const CommandEvent& rEvt )

@@ -59,12 +59,12 @@ namespace rptui
     class ODesignView : public dbaui::ODataView, public SfxBroadcaster, public IMarkedSection
     {
     private:
-        SplitWindow                         m_aSplitWin;
+        VclPtr<SplitWindow>                 m_aSplitWin;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
         OReportController&                  m_rReportController;
-        OScrollWindowHelper                 m_aScrollWindow;
-        vcl::Window*                             m_pTaskPane;
+        VclPtr<OScrollWindowHelper>         m_aScrollWindow;
+        vcl::Window*                        m_pTaskPane;
         PropBrw*                            m_pPropWin;
         OAddFieldWindow*                    m_pAddField;
         OSectionView*                       m_pCurrentView;
@@ -72,8 +72,8 @@ namespace rptui
         Idle                                m_aMarkIdle;
         Point                               m_aScrollOffset;
         DlgEdMode                           m_eMode;
-        sal_uInt16                              m_nCurrentPosition;
-        sal_uInt16                              m_eActObj;
+        sal_uInt16                          m_nCurrentPosition;
+        sal_uInt16                          m_eActObj;
         bool                                m_bFirstDraw;
         Size                                m_aGridSizeCoarse;
         Size                                m_aGridSizeFine;
@@ -100,6 +100,7 @@ namespace rptui
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&,
                     OReportController& _rController);
         virtual ~ODesignView();
+        virtual void dispose() SAL_OVERRIDE;
 
         // Window overrides
         virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;

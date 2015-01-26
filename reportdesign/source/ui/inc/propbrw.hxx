@@ -90,6 +90,7 @@ public:
             ,Window* pParent
             ,ODesignView*  _pDesignView);
     virtual ~PropBrw();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void LoseFocus() SAL_OVERRIDE;
 
