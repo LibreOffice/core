@@ -814,7 +814,8 @@ void SfxCommonTemplateDialog_Impl::ClearResource()
 
 void SfxCommonTemplateDialog_Impl::impl_clear()
 {
-    DELETEX(SfxStyleFamilies, pStyleFamilies);
+    delete pStyleFamilies;
+    pStyleFamilies = NULL;
     sal_uInt16 i;
     for ( i = 0; i < MAX_FAMILIES; ++i )
         DELETEX(SfxTemplateItem, pFamilyState[i]);
