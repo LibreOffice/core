@@ -332,7 +332,7 @@ namespace svt
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
                     RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
-                    WizardState nRequiredState = rActivePath[ nItemIndex ];
+                    WizardState nRequiredState = rActivePath.at(nItemIndex);
                     if ( nPresentItemId != nRequiredState )
                     {
                         m_pImpl->pRoadmap->DeleteRoadmapItem( nItemIndex );
@@ -346,7 +346,7 @@ namespace svt
                 bInsertItem = bNeedItem;
             }
 
-            WizardState nState( rActivePath[ nItemIndex ] );
+            WizardState nState(rActivePath.at(nItemIndex));
             if ( bInsertItem )
             {
                 m_pImpl->pRoadmap->InsertRoadmapItem(
@@ -603,7 +603,7 @@ namespace svt
                 // there is an item with this index in the roadmap - does it match what is requested by
                 // the respective state in the active path?
                 RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
-                WizardState nRequiredState = rActivePath[ nItemIndex ];
+                WizardState nRequiredState = rActivePath.at(nItemIndex);
                 if ( _nState == nRequiredState )
                 {
                     m_pImpl->pRoadmap->ChangeRoadmapItemLabel( nPresentItemId, getStateDisplayName( nRequiredState ) );
