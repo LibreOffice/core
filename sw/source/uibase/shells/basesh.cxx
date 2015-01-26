@@ -1241,9 +1241,10 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
             case SID_IMAP_EXEC:
                 {
                     sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
-                    SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
-                        static_cast<SvxIMapDlg*>( pVFrame->GetChildWindow( nId )
-                                            ->GetWindow()) : 0;
+                    SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
+                        pVFrame->GetChildWindow(nId) : 0;
+                    SvxIMapDlg *pDlg = pChildWindow ?
+                        static_cast<SvxIMapDlg*>(pChildWindow->GetWindow()) : 0;
 
                     if( pDlg && ( SID_IMAP_EXEC == nSlot ||
                                 ( SID_IMAP == nSlot && !bProtect)) &&
