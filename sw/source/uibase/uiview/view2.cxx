@@ -1072,8 +1072,11 @@ void SwView::Execute(SfxRequest &rReq)
                 pVFrame->ToggleChildWindow( SID_NAVIGATOR );
                 pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
             }
-            static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->CreateNavigationTool(
-                            GetVisArea(), true, &pVFrame->GetWindow());
+            if (pCh)
+            {
+                static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->CreateNavigationTool(
+                                GetVisArea(), true, &pVFrame->GetWindow());
+            }
         }
         break;
         case SID_JUMPTOMARK:
