@@ -236,8 +236,12 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObj4( const XclImpRoot& rRoot, XclImpStr
             default:
                 OSL_TRACE( "XclImpDrawObjBase::ReadObj4 - unknown object type 0x%04hX", nObjType );
                 rRoot.GetTracer().TraceUnsupportedObjects();
-                xDrawObj.reset( new XclImpPhObj( rRoot ) );
         }
+    }
+
+    if (!xDrawObj)
+    {
+        xDrawObj.reset(new XclImpPhObj(rRoot));
     }
 
     xDrawObj->mnTab = rRoot.GetCurrScTab();
