@@ -201,7 +201,7 @@ OUString UnitsImpl::extractUnitStringForCell(ScAddress& rAddress, ScDocument* pD
 }
 
 UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaAddress,
-                    ScDocument* pDoc, ::boost::shared_ptr< ut_system > pUnitSystem) {
+                    ScDocument* pDoc) {
     assert(pToken->GetType() == formula::svSingleRef);
 
     ScSingleRefData* pRef = pToken->GetSingleRef();
@@ -220,7 +220,7 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     // hence we need to manually detect that case and return the dimensionless unit.
     if (sUnitString.getLength() == 0) {
         SAL_INFO("sc.units", "empty unit string: returning dimensionless unit");
-        return UtUnit(ut_get_dimensionless_unit_one(pUnitSystem.get()));
+        return UtUnit(ut_get_dimensionless_unit_one(mpUnitSystem.get()));
     }
 
     SAL_INFO("sc.units", "got unit string [" << sUnitString << "]");
@@ -229,7 +229,7 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     // TODO: we should probably have a cache of unit strings here to save reparsing
     // on every run?
 
-    UtUnit pUnit(ut_parse(pUnitSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
+    UtUnit pUnit(ut_parse(mpUnitSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
 
     if (!pUnit) {
         SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
@@ -253,7 +253,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
         switch (pToken->GetType()) {
         case formula::svSingleRef:
         {
-            UtUnit pUnit(getUnitForRef(pToken, rFormulaAddress, pDoc, mpUnitSystem));
+            UtUnit pUnit(getUnitForRef(pToken, rFormulaAddress, pDoc));
 
             if (!pUnit) {
                 SAL_INFO("sc.units", "no unit returned for scSingleRef, ut_status: " << getUTStatus());
