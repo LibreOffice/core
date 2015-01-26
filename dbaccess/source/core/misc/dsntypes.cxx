@@ -233,7 +233,7 @@ void ODsnTypeCollection::extractHostNamePort(const OUString& _rDsn,OUString& _sD
         _sDatabaseName = sUrl.getToken(comphelper::string::getTokenCount(sUrl, '/') - 1, '/');
     }
     else if ( _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=")
-         || _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") )
+           || _rDsn.startsWithIgnoreAsciiCase("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=") )
     {
         OUString sNewFileName;
         if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )
