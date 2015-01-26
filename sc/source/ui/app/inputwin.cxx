@@ -173,9 +173,9 @@ static ScTextWndBase* lcl_chooseRuntimeImpl( vcl::Window* pParent, SfxBindings* 
 ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
-        aWndPos         ( this ),
-        pRuntimeWindow ( lcl_chooseRuntimeImpl( this, pBind ) ),
-        aTextWindow    ( *pRuntimeWindow ),
+        aWndPos         ( new ScPosWnd(this) ),
+        pRuntimeWindow  ( lcl_chooseRuntimeImpl( this, pBind ) ),
+        aTextWindow     ( *pRuntimeWindow ),
         pInputHdl       ( NULL ),
         aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // Not always new as a Resource
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
@@ -202,7 +202,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     OSL_ENSURE( pViewSh, "no view shell for input window" );
 
     // Position window, 3 buttons, input window
-    InsertWindow    ( 1, &aWndPos, ToolBoxItemBits::NONE,                                     0 );
+    InsertWindow    ( 1, aWndPos.get(), ToolBoxItemBits::NONE,                                0 );
     InsertSeparator (                                                     1 );
     InsertItem      ( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ), ToolBoxItemBits::NONE, 2 );
     InsertItem      ( SID_INPUT_SUM,      IMAGE( SID_INPUT_SUM ), ToolBoxItemBits::NONE,      3 );
@@ -210,8 +210,8 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
     InsertSeparator (                                                     5 );
     InsertWindow    ( 7, &aTextWindow, ToolBoxItemBits::NONE,                                 6 );
 
-    aWndPos    .SetQuickHelpText( ScResId( SCSTR_QHELP_POSWND ) );
-    aWndPos    .SetHelpId       ( HID_INSWIN_POS );
+    aWndPos   ->SetQuickHelpText( ScResId( SCSTR_QHELP_POSWND ) );
+    aWndPos   ->SetHelpId       ( HID_INSWIN_POS );
     aTextWindow.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
     aTextWindow.SetHelpId       ( HID_INSWIN_INPUT );
 
@@ -227,7 +227,7 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
-    aWndPos     .Show();
+    aWndPos   ->Show();
     aTextWindow.Show();
 
     pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
@@ -259,6 +259,11 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, SfxBindings* pBind ) :
 
 ScInputWindow::~ScInputWindow()
 {
+    dispose();
+}
+
+void ScInputWindow::dispose()
+{
     bool bDown = ( ScGlobal::pSysLocale == NULL ); // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
@@ -282,6 +287,9 @@ ScInputWindow::~ScInputWindow()
     }
 
     SfxImageManager::GetImageManager( *SC_MOD() )->ReleaseToolBox( this );
+
+    aWndPos.disposeAndClear();
+    ToolBox::dispose();
 }
 
 void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
@@ -630,7 +638,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
 
 void ScInputWindow::SetPosString( const OUString& rStr )
 {
-    aWndPos.SetPos( rStr );
+    aWndPos->SetPos( rStr );
 }
 
 void ScInputWindow::SetTextString( const OUString& rString )
@@ -690,7 +698,7 @@ void ScInputWindow::SetSumAssignMode()
 
 void ScInputWindow::SetFormulaMode( bool bSet )
 {
-    aWndPos.SetFormulaMode(bSet);
+    aWndPos->SetFormulaMode(bSet);
     aTextWindow.SetFormulaMode(bSet);
 }
 
@@ -755,7 +763,7 @@ void ScInputWindow::SwitchToTextWin()
 
 void ScInputWindow::PosGrabFocus()
 {
-    aWndPos.GrabFocus();
+    aWndPos->GrabFocus();
 }
 
 void ScInputWindow::EnableButtons( bool bEnable )
@@ -897,54 +905,62 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
     :   ScTextWndBase        ( pParent, WinBits(WB_HIDE |  WB_TABSTOP ) ),
-        aMultiTextWnd        ( this, pViewSh ),
-        aButton              ( this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE ),
-        aScrollBar           ( this, WB_TABSTOP | WB_VERT | WB_DRAG ),
+        aMultiTextWnd        ( new ScMultiTextWnd(this, pViewSh) ),
+        aButton              ( new ImageButton(this, WB_TABSTOP | WB_RECTSTYLE | WB_SMALLSTYLE) ),
+        aScrollBar           ( new ScrollBar(this, WB_TABSTOP | WB_VERT | WB_DRAG) ),
         nVertOffset          ( 0 )
 {
-      aMultiTextWnd.Show();
-      aMultiTextWnd.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
-      aMultiTextWnd.SetHelpId( HID_INSWIN_INPUT );
+      aMultiTextWnd->Show();
+      aMultiTextWnd->SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
+      aMultiTextWnd->SetHelpId( HID_INSWIN_INPUT );
 
-      Size aSize( GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd.GetPixelHeightForLines(1) );
+      Size aSize( GetSettings().GetStyleSettings().GetScrollBarSize(), aMultiTextWnd->GetPixelHeightForLines(1) );
 
-      aButton.SetClickHdl( LINK( this, ScInputBarGroup, ClickHdl ) );
-      aButton.SetSizePixel( aSize );
-      aButton.Enable();
-      aButton.SetSymbol( SymbolType::SPIN_DOWN  );
-      aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
-      aButton.Show();
+      aButton->SetClickHdl( LINK( this, ScInputBarGroup, ClickHdl ) );
+      aButton->SetSizePixel( aSize );
+      aButton->Enable();
+      aButton->SetSymbol( SymbolType::SPIN_DOWN  );
+      aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
+      aButton->Show();
 
-      aScrollBar.SetSizePixel( aSize );
-      aScrollBar.SetScrollHdl( LINK( this, ScInputBarGroup, Impl_ScrollHdl ) );
+      aScrollBar->SetSizePixel( aSize );
+      aScrollBar->SetScrollHdl( LINK( this, ScInputBarGroup, Impl_ScrollHdl ) );
 }
 
 ScInputBarGroup::~ScInputBarGroup()
 {
+    dispose();
+}
 
+void ScInputBarGroup::dispose()
+{
+    aMultiTextWnd.disposeAndClear();
+    aButton.disposeAndClear();
+    aScrollBar.disposeAndClear();
+    ScTextWndBase::dispose();
 }
 
 void
 ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    aMultiTextWnd.InsertAccessibleTextData( rTextData );
+    aMultiTextWnd->InsertAccessibleTextData( rTextData );
 }
 
 void
 ScInputBarGroup::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
 {
-    aMultiTextWnd.RemoveAccessibleTextData( rTextData );
+    aMultiTextWnd->RemoveAccessibleTextData( rTextData );
 }
 
 const OUString&
 ScInputBarGroup::GetTextString() const
 {
-    return aMultiTextWnd.GetTextString();
+    return aMultiTextWnd->GetTextString();
 }
 
 void ScInputBarGroup::SetTextString( const OUString& rString )
 {
-    aMultiTextWnd.SetTextString(rString);
+    aMultiTextWnd->SetTextString(rString);
 }
 
 void ScInputBarGroup::Resize()
@@ -965,89 +981,89 @@ void ScInputBarGroup::Resize()
     Size aSize  = GetSizePixel();
     aSize.Width() = std::max( ((long)(nWidth - nLeft - LEFT_OFFSET)), (long)0 );
 
-    aScrollBar.SetPosPixel(Point( aSize.Width() - aButton.GetSizePixel().Width(), aButton.GetSizePixel().Height() ) );
+    aScrollBar->SetPosPixel(Point( aSize.Width() - aButton->GetSizePixel().Width(), aButton->GetSizePixel().Height() ) );
 
     Size aTmpSize( aSize );
-    aTmpSize.Width() = aTmpSize.Width() - aButton.GetSizePixel().Width() - BUTTON_OFFSET;
-    aMultiTextWnd.SetSizePixel(aTmpSize);
+    aTmpSize.Width() = aTmpSize.Width() - aButton->GetSizePixel().Width() - BUTTON_OFFSET;
+    aMultiTextWnd->SetSizePixel(aTmpSize);
 
-    aMultiTextWnd.Resize();
+    aMultiTextWnd->Resize();
 
-    aSize.Height() = aMultiTextWnd.GetSizePixel().Height();
+    aSize.Height() = aMultiTextWnd->GetSizePixel().Height();
 
     SetSizePixel(aSize);
 
-    if( aMultiTextWnd.GetNumLines() > 1 )
+    if( aMultiTextWnd->GetNumLines() > 1 )
     {
-        aButton.SetSymbol( SymbolType::SPIN_UP  );
-        aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
-        Size scrollSize = aButton.GetSizePixel();
-        scrollSize.Height() = aMultiTextWnd.GetSizePixel().Height() - aButton.GetSizePixel().Height();
-        aScrollBar.SetSizePixel( scrollSize );
+        aButton->SetSymbol( SymbolType::SPIN_UP  );
+        aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_COLLAPSE_FORMULA ) );
+        Size scrollSize = aButton->GetSizePixel();
+        scrollSize.Height() = aMultiTextWnd->GetSizePixel().Height() - aButton->GetSizePixel().Height();
+        aScrollBar->SetSizePixel( scrollSize );
 
-        Size aOutSz = aMultiTextWnd.GetOutputSize();
+        Size aOutSz = aMultiTextWnd->GetOutputSize();
 
-        aScrollBar.SetVisibleSize( aOutSz.Height() );
-        aScrollBar.SetPageSize( aOutSz.Height() );
-        aScrollBar.SetLineSize( aMultiTextWnd.GetTextHeight() );
-        aScrollBar.SetRange( Range( 0, aMultiTextWnd.GetEditEngTxtHeight() ) );
+        aScrollBar->SetVisibleSize( aOutSz.Height() );
+        aScrollBar->SetPageSize( aOutSz.Height() );
+        aScrollBar->SetLineSize( aMultiTextWnd->GetTextHeight() );
+        aScrollBar->SetRange( Range( 0, aMultiTextWnd->GetEditEngTxtHeight() ) );
 
-        aScrollBar.Resize();
-        aScrollBar.Show();
+        aScrollBar->Resize();
+        aScrollBar->Show();
     }
     else
     {
-        aButton.SetSymbol( SymbolType::SPIN_DOWN  );
-        aButton.SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
-        aScrollBar.Hide();
+        aButton->SetSymbol( SymbolType::SPIN_DOWN  );
+        aButton->SetQuickHelpText( ScResId( SCSTR_QHELP_EXPAND_FORMULA ) );
+        aScrollBar->Hide();
     }
 
-    aButton.SetPosPixel(Point(aSize.Width() - aButton.GetSizePixel().Width(), 0));
+    aButton->SetPosPixel(Point(aSize.Width() - aButton->GetSizePixel().Width(), 0));
 
     Invalidate();
 }
 
 void ScInputBarGroup::StopEditEngine( bool bAll )
 {
-    aMultiTextWnd.StopEditEngine( bAll );
+    aMultiTextWnd->StopEditEngine( bAll );
 }
 
 void ScInputBarGroup::StartEditEngine()
 {
-    aMultiTextWnd.StartEditEngine();
+    aMultiTextWnd->StartEditEngine();
 }
 
 void ScInputBarGroup::MakeDialogEditView()
 {
-    aMultiTextWnd.MakeDialogEditView();
+    aMultiTextWnd->MakeDialogEditView();
 }
 
 EditView* ScInputBarGroup::GetEditView()
 {
-    return aMultiTextWnd.GetEditView();
+    return aMultiTextWnd->GetEditView();
 }
 
 bool ScInputBarGroup::IsInputActive()
 {
-    return aMultiTextWnd.IsInputActive();
+    return aMultiTextWnd->IsInputActive();
 }
 
 void ScInputBarGroup::SetFormulaMode(bool bSet)
 {
-    aMultiTextWnd.SetFormulaMode(bSet);
+    aMultiTextWnd->SetFormulaMode(bSet);
 }
 
 void ScInputBarGroup::IncrementVerticalSize()
 {
-    aMultiTextWnd.SetNumLines( aMultiTextWnd.GetNumLines() + 1 );
+    aMultiTextWnd->SetNumLines( aMultiTextWnd->GetNumLines() + 1 );
     TriggerToolboxLayout();
 }
 
 void ScInputBarGroup::DecrementVerticalSize()
 {
-    if ( aMultiTextWnd.GetNumLines() > 1 )
+    if ( aMultiTextWnd->GetNumLines() > 1 )
     {
-        aMultiTextWnd.SetNumLines( aMultiTextWnd.GetNumLines() - 1 );
+        aMultiTextWnd->SetNumLines( aMultiTextWnd->GetNumLines() - 1 );
         TriggerToolboxLayout();
     }
 }
@@ -1063,19 +1079,19 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
         OSL_FAIL("The parent window pointer pParent is null");
         return 1;
     }
-    if( aMultiTextWnd.GetNumLines() > 1 )
+    if( aMultiTextWnd->GetNumLines() > 1 )
     {
-        aMultiTextWnd.SetNumLines( 1 );
+        aMultiTextWnd->SetNumLines( 1 );
     }
     else
     {
-        aMultiTextWnd.SetNumLines( aMultiTextWnd.GetLastNumExpandedLines() );
+        aMultiTextWnd->SetNumLines( aMultiTextWnd->GetLastNumExpandedLines() );
     }
     TriggerToolboxLayout();
 
     // Restore focus to input line(s) if necessary
     if (  SC_MOD()->GetInputHdl()->IsTopMode() )
-        aMultiTextWnd.GrabFocus();
+        aMultiTextWnd->GrabFocus();
     return 0;
 }
 
@@ -1104,7 +1120,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
         if ( xLayoutManager.is() )
         {
-            if ( aMultiTextWnd.GetNumLines() > 1)
+            if ( aMultiTextWnd->GetNumLines() > 1)
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_LOCKVERT );
             else
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
@@ -1132,13 +1148,13 @@ void ScInputBarGroup::TriggerToolboxLayout()
 
 IMPL_LINK_NOARG(ScInputBarGroup, Impl_ScrollHdl)
 {
-    aMultiTextWnd.DoScroll();
+    aMultiTextWnd->DoScroll();
     return 0;
 }
 
 void ScInputBarGroup::TextGrabFocus()
 {
-    aMultiTextWnd.TextGrabFocus();
+    aMultiTextWnd->TextGrabFocus();
 }
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
@@ -1480,11 +1496,17 @@ ScTextWnd::ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh )
 
 ScTextWnd::~ScTextWnd()
 {
+    dispose();
+}
+
+void ScTextWnd::dispose()
+{
     while (!maAccTextDatas.empty()) {
         maAccTextDatas.back()->Dispose();
     }
     delete pEditView;
     delete pEditEngine;
+    ScTextWndBase::dispose();
 }
 
 void ScTextWnd::Paint( const Rectangle& rRect )
@@ -2068,11 +2090,17 @@ ScPosWnd::ScPosWnd( vcl::Window* pParent ) :
 
 ScPosWnd::~ScPosWnd()
 {
+    dispose();
+}
+
+void ScPosWnd::dispose()
+{
     EndListening( *SfxGetpApp() );
 
     HideTip();
 
     delete pAccel;
+    ComboBox::dispose();
 }
 
 void ScPosWnd::SetFormulaMode( bool bSet )

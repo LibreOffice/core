@@ -45,11 +45,11 @@ namespace sc { namespace sidebar {
 CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_BORDERSTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
-    maTBBorder1(this, ScResId(TB_BORDER1)),
-    maTBBorder2(this, ScResId(TB_BORDER2)),
-    maTBBorder3(this, ScResId(TB_BORDER3)),
-    maFL1(this, ScResId(FL_1)),
-    maFL2(this, ScResId(FL_2)),
+    maTBBorder1(new ToolBox(this, ScResId(TB_BORDER1))),
+    maTBBorder2(new ToolBox(this, ScResId(TB_BORDER2))),
+    maTBBorder3(new ToolBox(this, ScResId(TB_BORDER3))),
+    maFL1(new FixedLine(this, ScResId(FL_1))),
+    maFL2(new FixedLine(this, ScResId(FL_2))),
     mpImageList(0)
 {
     Initialize();
@@ -58,7 +58,18 @@ CellBorderStyleControl::CellBorderStyleControl(vcl::Window* pParent, CellAppeara
 
 CellBorderStyleControl::~CellBorderStyleControl(void)
 {
+    dispose();
+}
+
+void CellBorderStyleControl::dispose()
+{
     delete[] mpImageList;
+    maTBBorder1.disposeAndClear();
+    maTBBorder2.disposeAndClear();
+    maTBBorder3.disposeAndClear();
+    maFL1.disposeAndClear();
+    maFL2.disposeAndClear();
+    svx::sidebar::PopupControl::dispose();
 }
 
 void CellBorderStyleControl::Initialize()
@@ -81,60 +92,60 @@ void CellBorderStyleControl::Initialize()
     mpImageList[14] = Image(ScResId(IMG_BORDER15));
     mpImageList[15] = Image(ScResId(IMG_BORDER16));
 
-    maTBBorder1.SetItemImage(TBI_BORDER1_NONE, mpImageList[0]);
-    maTBBorder1.SetItemImage(TBI_BORDER1_ALL, mpImageList[1]);
-    maTBBorder1.SetItemImage(TBI_BORDER1_OUTER, mpImageList[2]);
-    maTBBorder1.SetItemImage(TBI_BORDER1_OUTERBOLD, mpImageList[3]);
-    maTBBorder1.SetBackground(Wallpaper());
-    maTBBorder1.SetPaintTransparent(true);
-    Size aTbxSize( maTBBorder1.CalcWindowSizePixel() );
-    maTBBorder1.SetOutputSizePixel( aTbxSize );
+    maTBBorder1->SetItemImage(TBI_BORDER1_NONE, mpImageList[0]);
+    maTBBorder1->SetItemImage(TBI_BORDER1_ALL, mpImageList[1]);
+    maTBBorder1->SetItemImage(TBI_BORDER1_OUTER, mpImageList[2]);
+    maTBBorder1->SetItemImage(TBI_BORDER1_OUTERBOLD, mpImageList[3]);
+    maTBBorder1->SetBackground(Wallpaper());
+    maTBBorder1->SetPaintTransparent(true);
+    Size aTbxSize( maTBBorder1->CalcWindowSizePixel() );
+    maTBBorder1->SetOutputSizePixel( aTbxSize );
     Link aLink  = LINK(this, CellBorderStyleControl, TB1SelectHdl);
-    maTBBorder1.SetSelectHdl ( aLink );
+    maTBBorder1->SetSelectHdl ( aLink );
 
-    maTBBorder2.SetLineCount(2);
-    maTBBorder2.InsertItem(TBI_BORDER2_LEFT, mpImageList[4]);
-    maTBBorder2.InsertItem(TBI_BORDER2_RIGHT, mpImageList[5]);
-    maTBBorder2.InsertItem(TBI_BORDER2_TOP, mpImageList[6]);
-    maTBBorder2.InsertItem(TBI_BORDER2_BOT, mpImageList[7]);
-    maTBBorder2.InsertBreak();
-    maTBBorder2.InsertItem(TBI_BORDER2_BLTR, mpImageList[8]);
-    maTBBorder2.InsertItem(TBI_BORDER2_TLBR, mpImageList[9]);
-    maTBBorder2.InsertItem(TBI_BORDER2_TOPBOT, mpImageList[10]);
-    maTBBorder2.InsertItem(TBI_BORDER2_LEFTRIGHT, mpImageList[11]);
-    maTBBorder2.SetBackground(Wallpaper());
-    maTBBorder2.SetPaintTransparent(true);
-    aTbxSize = maTBBorder2.CalcWindowSizePixel() ;
-    maTBBorder2.SetOutputSizePixel( aTbxSize );
-    maTBBorder2.SetHelpId(TBI_BORDER2_LEFT, HID_PROPERTYPANEL_SC_BORDER_TBI_LEFT);
-    maTBBorder2.SetHelpId(TBI_BORDER2_RIGHT, HID_PROPERTYPANEL_SC_BORDER_TBI_RIGHT);
-    maTBBorder2.SetHelpId(TBI_BORDER2_TOP, HID_PROPERTYPANEL_SC_BORDER_TBI_TOP);
-    maTBBorder2.SetHelpId(TBI_BORDER2_BOT, HID_PROPERTYPANEL_SC_BORDER_TBI_BOT);
-    maTBBorder2.SetHelpId(TBI_BORDER2_BLTR, HID_PROPERTYPANEL_SC_BORDER_TBI_BLTR);
-    maTBBorder2.SetHelpId(TBI_BORDER2_TLBR, HID_PROPERTYPANEL_SC_BORDER_TBI_TLBR);
-    maTBBorder2.SetHelpId(TBI_BORDER2_TOPBOT, HID_PROPERTYPANEL_SC_BORDER_TBI_TOPBOT);
-    maTBBorder2.SetHelpId(TBI_BORDER2_LEFTRIGHT, HID_PROPERTYPANEL_SC_BORDER_TBI_LEFTRIGHT);
-    maTBBorder2.SetItemText(TBI_BORDER2_LEFT, ScResId(STR_BORDER_1));
-    maTBBorder2.SetItemText(TBI_BORDER2_RIGHT, ScResId(STR_BORDER_2));
-    maTBBorder2.SetItemText(TBI_BORDER2_TOP, ScResId(STR_BORDER_3));
-    maTBBorder2.SetItemText(TBI_BORDER2_BOT, ScResId(STR_BORDER_4));
-    maTBBorder2.SetItemText(TBI_BORDER2_BLTR, ScResId(STR_BORDER_5));
-    maTBBorder2.SetItemText(TBI_BORDER2_TLBR, ScResId(STR_BORDER_6));
-    maTBBorder2.SetItemText(TBI_BORDER2_TOPBOT, ScResId(STR_BORDER_7));
-    maTBBorder2.SetItemText(TBI_BORDER2_LEFTRIGHT, ScResId(STR_BORDER_8));
+    maTBBorder2->SetLineCount(2);
+    maTBBorder2->InsertItem(TBI_BORDER2_LEFT, mpImageList[4]);
+    maTBBorder2->InsertItem(TBI_BORDER2_RIGHT, mpImageList[5]);
+    maTBBorder2->InsertItem(TBI_BORDER2_TOP, mpImageList[6]);
+    maTBBorder2->InsertItem(TBI_BORDER2_BOT, mpImageList[7]);
+    maTBBorder2->InsertBreak();
+    maTBBorder2->InsertItem(TBI_BORDER2_BLTR, mpImageList[8]);
+    maTBBorder2->InsertItem(TBI_BORDER2_TLBR, mpImageList[9]);
+    maTBBorder2->InsertItem(TBI_BORDER2_TOPBOT, mpImageList[10]);
+    maTBBorder2->InsertItem(TBI_BORDER2_LEFTRIGHT, mpImageList[11]);
+    maTBBorder2->SetBackground(Wallpaper());
+    maTBBorder2->SetPaintTransparent(true);
+    aTbxSize = maTBBorder2->CalcWindowSizePixel() ;
+    maTBBorder2->SetOutputSizePixel( aTbxSize );
+    maTBBorder2->SetHelpId(TBI_BORDER2_LEFT, HID_PROPERTYPANEL_SC_BORDER_TBI_LEFT);
+    maTBBorder2->SetHelpId(TBI_BORDER2_RIGHT, HID_PROPERTYPANEL_SC_BORDER_TBI_RIGHT);
+    maTBBorder2->SetHelpId(TBI_BORDER2_TOP, HID_PROPERTYPANEL_SC_BORDER_TBI_TOP);
+    maTBBorder2->SetHelpId(TBI_BORDER2_BOT, HID_PROPERTYPANEL_SC_BORDER_TBI_BOT);
+    maTBBorder2->SetHelpId(TBI_BORDER2_BLTR, HID_PROPERTYPANEL_SC_BORDER_TBI_BLTR);
+    maTBBorder2->SetHelpId(TBI_BORDER2_TLBR, HID_PROPERTYPANEL_SC_BORDER_TBI_TLBR);
+    maTBBorder2->SetHelpId(TBI_BORDER2_TOPBOT, HID_PROPERTYPANEL_SC_BORDER_TBI_TOPBOT);
+    maTBBorder2->SetHelpId(TBI_BORDER2_LEFTRIGHT, HID_PROPERTYPANEL_SC_BORDER_TBI_LEFTRIGHT);
+    maTBBorder2->SetItemText(TBI_BORDER2_LEFT, ScResId(STR_BORDER_1));
+    maTBBorder2->SetItemText(TBI_BORDER2_RIGHT, ScResId(STR_BORDER_2));
+    maTBBorder2->SetItemText(TBI_BORDER2_TOP, ScResId(STR_BORDER_3));
+    maTBBorder2->SetItemText(TBI_BORDER2_BOT, ScResId(STR_BORDER_4));
+    maTBBorder2->SetItemText(TBI_BORDER2_BLTR, ScResId(STR_BORDER_5));
+    maTBBorder2->SetItemText(TBI_BORDER2_TLBR, ScResId(STR_BORDER_6));
+    maTBBorder2->SetItemText(TBI_BORDER2_TOPBOT, ScResId(STR_BORDER_7));
+    maTBBorder2->SetItemText(TBI_BORDER2_LEFTRIGHT, ScResId(STR_BORDER_8));
     aLink  = LINK(this, CellBorderStyleControl, TB2SelectHdl);
-    maTBBorder2.SetSelectHdl ( aLink );
+    maTBBorder2->SetSelectHdl ( aLink );
 
-    maTBBorder3.SetItemImage(TBI_BORDER3_S1, mpImageList[12]);
-    maTBBorder3.SetItemImage(TBI_BORDER3_S2, mpImageList[13]);
-    maTBBorder3.SetItemImage(TBI_BORDER3_S3, mpImageList[14]);
-    maTBBorder3.SetItemImage(TBI_BORDER3_S4, mpImageList[15]);
-    maTBBorder3.SetBackground(Wallpaper());
-    maTBBorder3.SetPaintTransparent(true);
-    aTbxSize = maTBBorder3.CalcWindowSizePixel() ;
-    maTBBorder3.SetOutputSizePixel( aTbxSize );
+    maTBBorder3->SetItemImage(TBI_BORDER3_S1, mpImageList[12]);
+    maTBBorder3->SetItemImage(TBI_BORDER3_S2, mpImageList[13]);
+    maTBBorder3->SetItemImage(TBI_BORDER3_S3, mpImageList[14]);
+    maTBBorder3->SetItemImage(TBI_BORDER3_S4, mpImageList[15]);
+    maTBBorder3->SetBackground(Wallpaper());
+    maTBBorder3->SetPaintTransparent(true);
+    aTbxSize = maTBBorder3->CalcWindowSizePixel() ;
+    maTBBorder3->SetOutputSizePixel( aTbxSize );
     aLink  = LINK(this, CellBorderStyleControl, TB3SelectHdl);
-    maTBBorder3.SetSelectHdl ( aLink );
+    maTBBorder3->SetSelectHdl ( aLink );
 }
 
 IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)

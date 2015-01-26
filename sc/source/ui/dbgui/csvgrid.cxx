@@ -85,9 +85,15 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
 
 ScCsvGrid::~ScCsvGrid()
 {
+    dispose();
+}
+
+void ScCsvGrid::dispose()
+{
     OSL_ENSURE(mpColorConfig, "the object hasn't been initialized properly");
     if (mpColorConfig)
         mpColorConfig->RemoveListener(this);
+    ScCsvControl::dispose();
 }
 
 void

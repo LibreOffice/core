@@ -47,16 +47,16 @@ class ScFunctionDockWin : public SfxDockingWindow, public SfxListener
 
 private:
     Idle                aIdle;
-    ScPrivatSplit       aPrivatSplit;
-    ListBox             aCatBox;
-    ListBox             aFuncList;
-    ListBox             aDDFuncList;
+    VclPtr<ScPrivatSplit> aPrivatSplit;
+    VclPtr<ListBox>     aCatBox;
+    VclPtr<ListBox>     aFuncList;
+    VclPtr<ListBox>     aDDFuncList;
     ListBox*            pAllFuncList;
 
     SfxChildAlignment   eSfxNewAlignment;
     SfxChildAlignment   eSfxOldAlignment;
-    ImageButton         aInsertButton;
-    FixedText           aFiFuncDesc;
+    VclPtr<ImageButton> aInsertButton;
+    VclPtr<FixedText>   aFiFuncDesc;
     sal_uLong           nMinWidth;
     sal_uLong           nMinHeight;
     Size                aOldSize;
@@ -105,6 +105,7 @@ public:
                                         const ResId& rResId );
 
                     virtual ~ScFunctionDockWin();
+    virtual void    dispose() SAL_OVERRIDE;
 
     using SfxDockingWindow::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;

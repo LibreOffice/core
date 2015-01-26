@@ -159,7 +159,13 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( vcl::Window* pParent,
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
 {
+    dispose();
+}
+
+void ScSolverOptionsDialog::dispose()
+{
     delete mpCheckButtonData;
+    ModalDialog::dispose();
 }
 
 const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()

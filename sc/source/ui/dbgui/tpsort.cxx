@@ -516,6 +516,11 @@ ScTabPageSortOptions::ScTabPageSortOptions( vcl::Window*             pParent,
 
 ScTabPageSortOptions::~ScTabPageSortOptions()
 {
+    dispose();
+}
+
+void ScTabPageSortOptions::dispose()
+{
     sal_uInt16 nEntries = m_pLbOutPos->GetEntryCount();
 
     for ( sal_uInt16 i=1; i<nEntries; i++ )
@@ -523,6 +528,7 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
 
     delete pColRes;
     delete pColWrap;        //! not if from document
+    SfxTabPage::dispose();
 }
 
 void ScTabPageSortOptions::Init()

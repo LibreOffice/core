@@ -34,6 +34,7 @@ public:
                                  InsertDeleteFlags nCheckDefaults = IDF_NONE,
                                  const OUString*  pStrTitle = NULL );
             virtual ~ScInsertContentsDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     InsertDeleteFlags GetInsContentsCmdBits() const;
     sal_uInt16      GetFormulaCmdBits() const;

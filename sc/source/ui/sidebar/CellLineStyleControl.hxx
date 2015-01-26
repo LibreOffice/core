@@ -31,8 +31,8 @@ class CellLineStyleControl : public svx::sidebar::PopupControl
 {
 private:
     CellAppearancePropertyPanel&       mrCellAppearancePropertyPanel;
-    PushButton                         maPushButtonMoreOptions;
-    CellLineStyleValueSet              maCellLineStyleValueSet;
+    VclPtr<PushButton>                 maPushButtonMoreOptions;
+    VclPtr<CellLineStyleValueSet>      maCellLineStyleValueSet;
     OUString                           maStr[CELL_LINE_STYLE_ENTRIES];
 
     /// bitfield
@@ -46,18 +46,20 @@ private:
 
 public:
     CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel);
+    virtual ~CellLineStyleControl();
+    virtual void dispose() SAL_OVERRIDE;
 
     void GetFocus() SAL_OVERRIDE;
     void SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_uInt16 dis);
 
     ValueSet& GetValueSet()
     {
-        return maCellLineStyleValueSet;
+        return *maCellLineStyleValueSet.get();
     }
 
     Control& GetPushButton()
     {
-        return maPushButtonMoreOptions;
+        return *maPushButtonMoreOptions.get();
     }
 };
 

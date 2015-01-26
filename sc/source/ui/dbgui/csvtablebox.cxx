@@ -25,33 +25,48 @@
 
 ScCsvTableBox::ScCsvTableBox( vcl::Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),
-    maRuler( *this ),
-    maGrid( *this ),
-    maHScroll( this, WB_HORZ | WB_DRAG ),
-    maVScroll( this, WB_VERT | WB_DRAG ),
-    maScrollBox( this )
+    maRuler( new ScCsvRuler(*this) ),
+    maGrid( new ScCsvGrid(*this) ),
+    maHScroll( new ScrollBar( this, WB_HORZ | WB_DRAG ) ),
+    maVScroll( new ScrollBar( this, WB_VERT | WB_DRAG ) ),
+    maScrollBox( new ScrollBarBox(this) )
 {
     mbFixedMode = false;
     mnFixedWidth = 1;
 
-    maHScroll.EnableRTL( false ); // RTL
-    maHScroll.SetLineSize( 1 );
-    maVScroll.SetLineSize( 1 );
+    maHScroll->EnableRTL( false ); // RTL
+    maHScroll->SetLineSize( 1 );
+    maVScroll->SetLineSize( 1 );
 
     Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
     SetCmdHdl( aLink );
-    maRuler.SetCmdHdl( aLink );
-    maGrid.SetCmdHdl( aLink );
+    maRuler->SetCmdHdl( aLink );
+    maGrid->SetCmdHdl( aLink );
 
     aLink = LINK( this, ScCsvTableBox, ScrollHdl );
-    maHScroll.SetScrollHdl( aLink );
-    maVScroll.SetScrollHdl( aLink );
+    maHScroll->SetScrollHdl( aLink );
+    maVScroll->SetScrollHdl( aLink );
 
     aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
-    maHScroll.SetEndScrollHdl( aLink );
-    maVScroll.SetEndScrollHdl( aLink );
+    maHScroll->SetEndScrollHdl( aLink );
+    maVScroll->SetEndScrollHdl( aLink );
 
     InitControls();
+}
+
+ScCsvTableBox::~ScCsvTableBox()
+{
+    dispose();
+}
+
+void ScCsvTableBox::dispose()
+{
+    maRuler.disposeAndClear();
+    maGrid.disposeAndClear();
+    maHScroll.disposeAndClear();
+    maVScroll.disposeAndClear();
+    maScrollBox.disposeAndClear();
+    ScCsvControl::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScCsvTableBox(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -73,7 +88,7 @@ void ScCsvTableBox::SetSeparatorsMode()
     {
         // rescue data for fixed width mode
         mnFixedWidth = GetPosCount();
-        maFixColStates = maGrid.GetColumnStates();
+        maFixColStates = maGrid->GetColumnStates();
         // switch to separators mode
         mbFixedMode = false;
         // reset and reinitialize controls
@@ -81,7 +96,7 @@ void ScCsvTableBox::SetSeparatorsMode()
         Execute( CSVCMD_SETLINEOFFSET, 0 );
         Execute( CSVCMD_SETPOSCOUNT, 1 );
         Execute( CSVCMD_NEWCELLTEXTS );
-        maGrid.SetColumnStates( maSepColStates );
+        maGrid->SetColumnStates( maSepColStates );
         InitControls();
         EnableRepaint();
     }
@@ -92,15 +107,15 @@ void ScCsvTableBox::SetFixedWidthMode()
     if( !mbFixedMode )
     {
         // rescue data for separators mode
-        maSepColStates = maGrid.GetColumnStates();
+        maSepColStates = maGrid->GetColumnStates();
         // switch to fixed width mode
         mbFixedMode = true;
         // reset and reinitialize controls
         DisableRepaint();
         Execute( CSVCMD_SETLINEOFFSET, 0 );
         Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
-        maGrid.SetSplits( maRuler.GetSplits() );
-        maGrid.SetColumnStates( maFixColStates );
+        maGrid->SetSplits( maRuler->GetSplits() );
+        maGrid->SetColumnStates( maFixColStates );
         InitControls();
         EnableRepaint();
     }
@@ -108,12 +123,12 @@ void ScCsvTableBox::SetFixedWidthMode()
 
 void ScCsvTableBox::Init()
 {
-    maGrid.Init();
+    maGrid->Init();
 }
 
 void ScCsvTableBox::InitControls()
 {
-    maGrid.UpdateLayoutData();
+    maGrid->UpdateLayoutData();
 
     long nScrollBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     Size aWinSize = CalcOutputSize( GetSizePixel() );
@@ -126,30 +141,30 @@ void ScCsvTableBox::InitControls()
     if( mbFixedMode )
     {
         // ruler sets height internally
-        maRuler.setPosSizePixel( 0, 0, nDataWidth, 0 );
-        sal_Int32 nY = maRuler.GetSizePixel().Height();
+        maRuler->setPosSizePixel( 0, 0, nDataWidth, 0 );
+        sal_Int32 nY = maRuler->GetSizePixel().Height();
         maData.mnWinHeight -= nY;
-        maGrid.setPosSizePixel( 0, nY, nDataWidth, maData.mnWinHeight );
+        maGrid->setPosSizePixel( 0, nY, nDataWidth, maData.mnWinHeight );
     }
     else
-        maGrid.setPosSizePixel( 0, 0, nDataWidth, nDataHeight );
-    maGrid.Show();
-    maRuler.Show( mbFixedMode );
+        maGrid->setPosSizePixel( 0, 0, nDataWidth, nDataHeight );
+    maGrid->Show();
+    maRuler->Show( mbFixedMode );
 
     // scrollbars always visible
-    maHScroll.setPosSizePixel( 0, nDataHeight, nDataWidth, nScrollBarSize );
+    maHScroll->setPosSizePixel( 0, nDataHeight, nDataWidth, nScrollBarSize );
     InitHScrollBar();
-    maHScroll.Show();
+    maHScroll->Show();
 
     // scrollbars always visible
-    maVScroll.setPosSizePixel( nDataWidth, 0, nScrollBarSize, nDataHeight );
+    maVScroll->setPosSizePixel( nDataWidth, 0, nScrollBarSize, nDataHeight );
     InitVScrollBar();
-    maVScroll.Show();
+    maVScroll->Show();
 
-    bool bScrBox = maHScroll.IsVisible() && maVScroll.IsVisible();
+    bool bScrBox = maHScroll->IsVisible() && maVScroll->IsVisible();
     if( bScrBox )
-        maScrollBox.setPosSizePixel( nDataWidth, nDataHeight, nScrollBarSize, nScrollBarSize );
-    maScrollBox.Show( bScrBox );
+        maScrollBox->setPosSizePixel( nDataWidth, nDataHeight, nScrollBarSize, nScrollBarSize );
+    maScrollBox->Show( bScrBox );
 
     // let the controls self-adjust to visible area
     Execute( CSVCMD_SETPOSOFFSET, GetFirstVisPos() );
@@ -158,18 +173,18 @@ void ScCsvTableBox::InitControls()
 
 void ScCsvTableBox::InitHScrollBar()
 {
-    maHScroll.SetRange( Range( 0, GetPosCount() + 2 ) );
-    maHScroll.SetVisibleSize( GetVisPosCount() );
-    maHScroll.SetPageSize( GetVisPosCount() * 3 / 4 );
-    maHScroll.SetThumbPos( GetFirstVisPos() );
+    maHScroll->SetRange( Range( 0, GetPosCount() + 2 ) );
+    maHScroll->SetVisibleSize( GetVisPosCount() );
+    maHScroll->SetPageSize( GetVisPosCount() * 3 / 4 );
+    maHScroll->SetThumbPos( GetFirstVisPos() );
 }
 
 void ScCsvTableBox::InitVScrollBar()
 {
-    maVScroll.SetRange( Range( 0, GetLineCount() + 1 ) );
-    maVScroll.SetVisibleSize( GetVisLineCount() );
-    maVScroll.SetPageSize( GetVisLineCount() - 2 );
-    maVScroll.SetThumbPos( GetFirstVisLine() );
+    maVScroll->SetRange( Range( 0, GetLineCount() + 1 ) );
+    maVScroll->SetVisibleSize( GetVisLineCount() );
+    maVScroll->SetPageSize( GetVisLineCount() - 2 );
+    maVScroll->SetThumbPos( GetFirstVisLine() );
 }
 
 void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
@@ -197,9 +212,9 @@ void ScCsvTableBox::SetUniStrings(
     for( sal_Int32 nLine = GetFirstVisLine(); nLine < nEndLine; ++nLine, ++pString )
     {
         if( mbFixedMode )
-            maGrid.ImplSetTextLineFix( nLine, *pString );
+            maGrid->ImplSetTextLineFix( nLine, *pString );
         else
-            maGrid.ImplSetTextLineSep( nLine, *pString, rSepChars, cTextSep, bMergeSep );
+            maGrid->ImplSetTextLineSep( nLine, *pString, rSepChars, cTextSep, bMergeSep );
     }
     EnableRepaint();
 }
@@ -212,15 +227,15 @@ void ScCsvTableBox::InitTypes( const ListBox& rListBox )
     StringVec aTypeNames( nTypeCount );
     for( sal_uInt16 nIndex = 0; nIndex < nTypeCount; ++nIndex )
         aTypeNames[ nIndex ] = rListBox.GetEntry( nIndex );
-    maGrid.SetTypeNames( aTypeNames );
+    maGrid->SetTypeNames( aTypeNames );
 }
 
 void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
 {
     if( mbFixedMode )
-        maGrid.FillColumnDataFix( rOptions );
+        maGrid->FillColumnDataFix( rOptions );
     else
-        maGrid.FillColumnDataSep( rOptions );
+        maGrid->FillColumnDataSep( rOptions );
 }
 
 // event handling -------------------------------------------------------------
@@ -253,8 +268,8 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         case CSVCMD_REPAINT:
             if( !IsNoRepaint() )
             {
-                maGrid.ImplRedraw();
-                maRuler.ImplRedraw();
+                maGrid->ImplRedraw();
+                maRuler->ImplRedraw();
                 InitHScrollBar();
                 InitVScrollBar();
             }
@@ -269,12 +284,12 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             else
             {
                 DisableRepaint();
-                ScCsvColStateVec aStates( maGrid.GetColumnStates() );
+                ScCsvColStateVec aStates( maGrid->GetColumnStates() );
                 sal_Int32 nPos = GetFirstVisPos();
                 Execute( CSVCMD_SETPOSCOUNT, 1 );
                 Execute( CSVCMD_UPDATECELLTEXTS );
                 Execute( CSVCMD_SETPOSOFFSET, nPos );
-                maGrid.SetColumnStates( aStates );
+                maGrid->SetColumnStates( aStates );
                 EnableRepaint();
             }
         break;
@@ -282,40 +297,40 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             maUpdateTextHdl.Call( this );
         break;
         case CSVCMD_SETCOLUMNTYPE:
-            maGrid.SetSelColumnType( nParam1 );
+            maGrid->SetSelColumnType( nParam1 );
         break;
         case CSVCMD_EXPORTCOLUMNTYPE:
             maColTypeHdl.Call( this );
         break;
         case CSVCMD_SETFIRSTIMPORTLINE:
-            maGrid.SetFirstImportedLine( nParam1 );
+            maGrid->SetFirstImportedLine( nParam1 );
         break;
 
         case CSVCMD_INSERTSPLIT:
             OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::InsertSplit - invalid call" );
-            if( maRuler.GetSplitCount() + 1 < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT) )
+            if( maRuler->GetSplitCount() + 1 < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT) )
             {
-                maRuler.InsertSplit( nParam1 );
-                maGrid.InsertSplit( nParam1 );
+                maRuler->InsertSplit( nParam1 );
+                maGrid->InsertSplit( nParam1 );
             }
         break;
         case CSVCMD_REMOVESPLIT:
             OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveSplit - invalid call" );
-            maRuler.RemoveSplit( nParam1 );
-            maGrid.RemoveSplit( nParam1 );
+            maRuler->RemoveSplit( nParam1 );
+            maGrid->RemoveSplit( nParam1 );
         break;
         case CSVCMD_TOGGLESPLIT:
-            Execute( maRuler.HasSplit( nParam1 ) ? CSVCMD_REMOVESPLIT : CSVCMD_INSERTSPLIT, nParam1 );
+            Execute( maRuler->HasSplit( nParam1 ) ? CSVCMD_REMOVESPLIT : CSVCMD_INSERTSPLIT, nParam1 );
         break;
         case CSVCMD_MOVESPLIT:
             OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::MoveSplit - invalid call" );
-            maRuler.MoveSplit( nParam1, nParam2 );
-            maGrid.MoveSplit( nParam1, nParam2 );
+            maRuler->MoveSplit( nParam1, nParam2 );
+            maGrid->MoveSplit( nParam1, nParam2 );
         break;
         case CSVCMD_REMOVEALLSPLITS:
             OSL_ENSURE( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::RemoveAllSplits - invalid call" );
-            maRuler.RemoveAllSplits();
-            maGrid.RemoveAllSplits();
+            maRuler->RemoveAllSplits();
+            maGrid->RemoveAllSplits();
         break;
         default:
             bFound = false;
@@ -371,8 +386,8 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
     if( maData != aOldData )
     {
         DisableRepaint();
-        maRuler.ApplyLayout( aOldData );
-        maGrid.ApplyLayout( aOldData );
+        maRuler->ApplyLayout( aOldData );
+        maGrid->ApplyLayout( aOldData );
         EnableRepaint();
     }
 
@@ -383,9 +398,9 @@ IMPL_LINK( ScCsvTableBox, ScrollHdl, ScrollBar*, pScrollBar )
 {
     OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollHdl - missing sender" );
 
-    if( pScrollBar == &maHScroll )
+    if( pScrollBar == maHScroll.get() )
         Execute( CSVCMD_SETPOSOFFSET, pScrollBar->GetThumbPos() );
-    else if( pScrollBar == &maVScroll )
+    else if( pScrollBar == maVScroll.get() )
         Execute( CSVCMD_SETLINEOFFSET, pScrollBar->GetThumbPos() );
 
     return 0;
@@ -395,12 +410,12 @@ IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
 {
     OSL_ENSURE( pScrollBar, "ScCsvTableBox::ScrollEndHdl - missing sender" );
 
-    if( pScrollBar == &maHScroll )
+    if( pScrollBar == maHScroll.get() )
     {
         if( GetRulerCursorPos() != CSV_POS_INVALID )
-            Execute( CSVCMD_MOVERULERCURSOR, maRuler.GetNoScrollPos( GetRulerCursorPos() ) );
+            Execute( CSVCMD_MOVERULERCURSOR, maRuler->GetNoScrollPos( GetRulerCursorPos() ) );
         if( GetGridCursorPos() != CSV_POS_INVALID )
-            Execute( CSVCMD_MOVEGRIDCURSOR, maGrid.GetNoScrollCol( GetGridCursorPos() ) );
+            Execute( CSVCMD_MOVEGRIDCURSOR, maGrid->GetNoScrollCol( GetGridCursorPos() ) );
     }
 
     return 0;

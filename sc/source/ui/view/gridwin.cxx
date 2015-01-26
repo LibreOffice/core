@@ -224,6 +224,7 @@ public:
                 ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
                                  SCCOL nNewCol, SCROW nNewRow, ScFilterBoxMode eNewMode );
                 virtual ~ScFilterListBox();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    Select() SAL_OVERRIDE;
@@ -258,8 +259,14 @@ ScFilterListBox::ScFilterListBox( vcl::Window* pParent, ScGridWindow* pGrid,
 
 ScFilterListBox::~ScFilterListBox()
 {
+    dispose();
+}
+
+void ScFilterListBox::dispose()
+{
     if (IsMouseCaptured())
         ReleaseMouse();
+    ListBox::dispose();
 }
 
 void ScFilterListBox::EndInit()
@@ -522,6 +529,18 @@ ScGridWindow::ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos 
 
 ScGridWindow::~ScGridWindow()
 {
+    dispose();
+}
+
+void ScGridWindow::dispose()
+{
+    // #114409#
+    ImpDestroyOverlayObjects();
+
+    delete pFilterBox;
+    delete pFilterFloat;
+    delete pNoteMarker;
+    vcl::Window::dispose();
 }
 
 void ScGridWindow::ClickExtern()

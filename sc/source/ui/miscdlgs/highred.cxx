@@ -69,8 +69,14 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl:
 
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
+    dispose();
+}
+
+void ScHighlightChgDlg::dispose()
+{
     SetDispatcherLock( false );
     delete m_pFilterCtr;
+    ScAnyRefDlg::dispose();
 }
 
 void ScHighlightChgDlg::Init()

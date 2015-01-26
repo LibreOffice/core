@@ -233,7 +233,13 @@ ScZoomSliderWnd::ScZoomSliderWnd( vcl::Window* pParent, const ::com::sun::star::
 
 ScZoomSliderWnd::~ScZoomSliderWnd()
 {
+    dispose();
+}
+
+void ScZoomSliderWnd::dispose()
+{
     delete mpImpl;
+    vcl::Window::dispose();
 }
 
 void ScZoomSliderWnd::MouseButtonDown( const MouseEvent& rMEvt )

@@ -302,6 +302,7 @@ public:
 
     ScGridWindow( vcl::Window* pParent, ScViewData* pData, ScSplitPos eWhichPos );
     virtual ~ScGridWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     // #i70788# flush and get overlay

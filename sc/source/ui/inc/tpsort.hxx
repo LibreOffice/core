@@ -109,6 +109,7 @@ public:
     ScTabPageSortOptions( vcl::Window*            pParent,
             const SfxItemSet&  rArgSet );
     virtual ~ScTabPageSortOptions();
+    virtual void dispose() SAL_OVERRIDE;
 
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage

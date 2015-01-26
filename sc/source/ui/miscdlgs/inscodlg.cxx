@@ -361,6 +361,11 @@ IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl)
 
 ScInsertContentsDlg::~ScInsertContentsDlg()
 {
+    dispose();
+}
+
+void ScInsertContentsDlg::dispose()
+{
     ScInsertContentsDlg::nPreviousChecks2 = 0;
     if(mpBtnSkipEmptyCells->IsChecked())
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_NOEMPTY;
@@ -378,6 +383,7 @@ ScInsertContentsDlg::~ScInsertContentsDlg()
         else if ( mpRbMoveRight->IsChecked() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_CELLSRIGHT;
     }
+    ModalDialog::dispose();
 }
 
 sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const

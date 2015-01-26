@@ -185,10 +185,12 @@ class ScValidationDlg
 
 public:
     explicit ScValidationDlg( vcl::Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
-    virtual                     ~ScValidationDlg()
+    virtual                     ~ScValidationDlg() { dispose(); }
+    virtual void                dispose() SAL_OVERRIDE
     {
         if( m_bOwnRefHdlr )
             RemoveRefDlg( false );
+        ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>::dispose();
     }
     static ScValidationDlg * Find1AliveObject( vcl::Window *pAncestor )
     {

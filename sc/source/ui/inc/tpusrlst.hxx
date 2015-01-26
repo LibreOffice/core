@@ -44,6 +44,7 @@ private:
             ScTpUserLists( vcl::Window*              pParent,
                            const SfxItemSet&    rArgSet );
             virtual ~ScTpUserLists();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     FixedText*          mpFtLists;

@@ -81,6 +81,7 @@ public:
                                ScViewData*      ptrViewData);
 
                     virtual ~ScHighlightChgDlg();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    SetActive() SAL_OVERRIDE;
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc ) SAL_OVERRIDE;

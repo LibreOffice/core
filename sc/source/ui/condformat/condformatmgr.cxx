@@ -133,8 +133,14 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument*
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
+    dispose();
+}
+
+void ScCondFormatManagerDlg::dispose()
+{
     delete m_pCtrlManager;
     delete mpFormatList;
+    ModalDialog::dispose();
 }
 
 

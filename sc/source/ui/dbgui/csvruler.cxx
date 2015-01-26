@@ -101,7 +101,13 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
 
 ScCsvRuler::~ScCsvRuler()
 {
+    dispose();
+}
+
+void ScCsvRuler::dispose()
+{
     save_FixedWidthList( maSplits );
+    ScCsvControl::dispose();
 }
 
 // common ruler handling ------------------------------------------------------

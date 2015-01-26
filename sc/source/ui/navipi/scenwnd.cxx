@@ -197,23 +197,23 @@ void ScScenarioListBox::DeleteScenario( bool bQueryBox )
 ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_List,
                                     const OUString& aQH_Comment)
     :   Window      ( pParent, WB_TABSTOP | WB_DIALOGCONTROL ),
-        aLbScenario ( *this ),
-        aEdComment  ( this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP )
+        aLbScenario ( new ScScenarioListBox(*this) ),
+        aEdComment  ( new MultiLineEdit(this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP) )
 {
     vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     aFont.SetWeight( WEIGHT_LIGHT );
-    aEdComment.SetFont( aFont );
-    aEdComment.SetMaxTextLen( 512 );
-    aLbScenario.SetPosPixel( Point(0,0) );
-    aLbScenario.SetHelpId(HID_SC_SCENWIN_TOP);
-    aEdComment.SetHelpId(HID_SC_SCENWIN_BOTTOM);
-    aLbScenario.Show();
-    aEdComment.Show();
+    aEdComment->SetFont( aFont );
+    aEdComment->SetMaxTextLen( 512 );
+    aLbScenario->SetPosPixel( Point(0,0) );
+    aLbScenario->SetHelpId(HID_SC_SCENWIN_TOP);
+    aEdComment->SetHelpId(HID_SC_SCENWIN_BOTTOM);
+    aLbScenario->Show();
+    aEdComment->Show();
 
-    aLbScenario.SetQuickHelpText(aQH_List);
-    aEdComment.SetQuickHelpText(aQH_Comment);
-    aEdComment.SetBackground( Color( COL_LIGHTGRAY ) );
+    aLbScenario->SetQuickHelpText(aQH_List);
+    aEdComment->SetQuickHelpText(aQH_Comment);
+    aEdComment->SetBackground( Color( COL_LIGHTGRAY ) );
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
@@ -226,6 +226,14 @@ ScScenarioWindow::ScScenarioWindow( vcl::Window* pParent, const OUString& aQH_Li
 
 ScScenarioWindow::~ScScenarioWindow()
 {
+    dispose();
+}
+
+void ScScenarioWindow::dispose()
+{
+    aLbScenario.disposeAndClear();
+    aEdComment.disposeAndClear();
+    vcl::Window::dispose();
 }
 
 void ScScenarioWindow::Paint( const Rectangle& rRect )
@@ -242,26 +250,26 @@ void ScScenarioWindow::NotifyState( const SfxPoolItem* pState )
 {
     if( pState )
     {
-        aLbScenario.Enable();
+        aLbScenario->Enable();
 
         if ( pState->ISA(SfxStringItem) )
         {
             OUString aNewEntry( static_cast<const SfxStringItem*>(pState)->GetValue() );
 
             if ( !aNewEntry.isEmpty() )
-                aLbScenario.SelectEntry( aNewEntry );
+                aLbScenario->SelectEntry( aNewEntry );
             else
-                aLbScenario.SetNoSelection();
+                aLbScenario->SetNoSelection();
         }
         else if ( pState->ISA(SfxStringListItem) )
         {
-            aLbScenario.UpdateEntries( static_cast<const SfxStringListItem*>(pState)->GetList() );
+            aLbScenario->UpdateEntries( static_cast<const SfxStringListItem*>(pState)->GetList() );
         }
     }
     else
     {
-        aLbScenario.Disable();
-        aLbScenario.SetNoSelection();
+        aLbScenario->Disable();
+        aLbScenario->SetNoSelection();
     }
 }
 
@@ -273,10 +281,10 @@ void ScScenarioWindow::SetSizePixel( const Size& rNewSize )
     Window::SetSizePixel( aSize );
 
     aSize.Height() = nHeight;
-    aLbScenario.SetSizePixel( aSize );
+    aLbScenario->SetSizePixel( aSize );
 
     aSize.Height() -= 4;
-    aEdComment.SetPosSizePixel( Point( 0, nHeight+4 ), aSize );
+    aEdComment->SetPosSizePixel( Point( 0, nHeight+4 ), aSize );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

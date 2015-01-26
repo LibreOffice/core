@@ -108,7 +108,13 @@ ScShareDocumentDlg::ScShareDocumentDlg( vcl::Window* pParent, ScViewData* pViewD
 
 ScShareDocumentDlg::~ScShareDocumentDlg()
 {
+    dispose();
+}
+
+void ScShareDocumentDlg::dispose()
+{
     delete m_pLbUsers;
+    ModalDialog::dispose();
 }
 
 IMPL_LINK_NOARG(ScShareDocumentDlg, ToggleHandle)

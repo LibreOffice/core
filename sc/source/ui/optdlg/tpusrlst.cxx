@@ -84,8 +84,14 @@ ScTpUserLists::ScTpUserLists( vcl::Window*               pParent,
 
 ScTpUserLists::~ScTpUserLists()
 {
+    dispose();
+}
+
+void ScTpUserLists::dispose()
+{
     delete pUserLists;
     delete pRangeUtil;
+    SfxTabPage::dispose();
 }
 
 void ScTpUserLists::Init()

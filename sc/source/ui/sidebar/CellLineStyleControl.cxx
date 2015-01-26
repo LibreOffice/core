@@ -36,27 +36,39 @@ namespace sc { namespace sidebar {
 CellLineStyleControl::CellLineStyleControl(vcl::Window* pParent, CellAppearancePropertyPanel& rPanel)
 :   svx::sidebar::PopupControl(pParent, ScResId(RID_POPUPPANEL_APPEARANCE_CELL_LINESTYLE)),
     mrCellAppearancePropertyPanel(rPanel),
-    maPushButtonMoreOptions(this, ScResId(PB_OPTIONS)),
-    maCellLineStyleValueSet(this, ScResId(VS_STYLE)),
+    maPushButtonMoreOptions(new PushButton(this, ScResId(PB_OPTIONS))),
+    maCellLineStyleValueSet(new sc::sidebar::CellLineStyleValueSet(this, ScResId(VS_STYLE))),
     mbVSfocus(true)
 {
     Initialize();
     FreeResource();
 }
 
+CellLineStyleControl::~CellLineStyleControl()
+{
+    dispose();
+}
+
+void CellLineStyleControl::dispose()
+{
+    maPushButtonMoreOptions.disposeAndClear();
+    maCellLineStyleValueSet.disposeAndClear();
+    svx::sidebar::PopupControl::dispose();
+}
+
 void CellLineStyleControl::Initialize()
 {
-    //maPushButtonMoreOptions.SetIcoPosX(2);
+    //maPushButtonMoreOptions->SetIcoPosX(2);
     Link aLink = LINK(this, CellLineStyleControl, PBClickHdl);
-    maPushButtonMoreOptions.SetClickHdl(aLink);
+    maPushButtonMoreOptions->SetClickHdl(aLink);
 
-    maCellLineStyleValueSet.SetStyle(maCellLineStyleValueSet.GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
-    maCellLineStyleValueSet.SetControlBackground(GetSettings().GetStyleSettings().GetMenuColor());
-    maCellLineStyleValueSet.SetColor(GetSettings().GetStyleSettings().GetMenuColor());
+    maCellLineStyleValueSet->SetStyle(maCellLineStyleValueSet->GetStyle()| WB_3DLOOK |  WB_NO_DIRECTSELECT);
+    maCellLineStyleValueSet->SetControlBackground(GetSettings().GetStyleSettings().GetMenuColor());
+    maCellLineStyleValueSet->SetColor(GetSettings().GetStyleSettings().GetMenuColor());
 
     for(sal_uInt16 i = 1 ; i <= 9 ; i++)
     {
-        maCellLineStyleValueSet.InsertItem(i);
+        maCellLineStyleValueSet->InsertItem(i);
     }
 
     maStr[0] = GetSettings().GetLocaleI18nHelper().GetNum( 5, 2 ) + "pt";
@@ -68,46 +80,46 @@ void CellLineStyleControl::Initialize()
     maStr[6] = GetSettings().GetLocaleI18nHelper().GetNum( 450, 2 ) + "pt";
     maStr[7] = GetSettings().GetLocaleI18nHelper().GetNum( 505, 2 ) + "pt";
     maStr[8] = GetSettings().GetLocaleI18nHelper().GetNum( 750, 2 ) + "pt";
-    maCellLineStyleValueSet.SetUnit(&maStr[0]);
+    maCellLineStyleValueSet->SetUnit(&maStr[0]);
 
     for (sal_uInt16 i = 1; i <= CELL_LINE_STYLE_ENTRIES; ++i)
     {
-        maCellLineStyleValueSet.SetItemText(i, maStr[i-1]);
+        maCellLineStyleValueSet->SetItemText(i, maStr[i-1]);
     }
 
     SetAllNoSel();
     aLink = LINK(this, CellLineStyleControl, VSSelectHdl);
-    maCellLineStyleValueSet.SetSelectHdl(aLink);
-    maCellLineStyleValueSet.StartSelection();
-    maCellLineStyleValueSet.Show();
+    maCellLineStyleValueSet->SetSelectHdl(aLink);
+    maCellLineStyleValueSet->StartSelection();
+    maCellLineStyleValueSet->Show();
 }
 
 void CellLineStyleControl::GetFocus()
 {
     if(!mbVSfocus)
     {
-        maPushButtonMoreOptions.GrabFocus();
+        maPushButtonMoreOptions->GrabFocus();
     }
     else
     {
-        maCellLineStyleValueSet.GrabFocus();
+        maCellLineStyleValueSet->GrabFocus();
     }
 }
 
 void CellLineStyleControl::SetAllNoSel()
 {
-    maCellLineStyleValueSet.SelectItem(0);
-    maCellLineStyleValueSet.SetNoSelection();
-    maCellLineStyleValueSet.Format();
+    maCellLineStyleValueSet->SelectItem(0);
+    maCellLineStyleValueSet->SetNoSelection();
+    maCellLineStyleValueSet->Format();
     Invalidate();
-    maCellLineStyleValueSet.StartSelection();
+    maCellLineStyleValueSet->StartSelection();
 }
 
 IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
 {
     if(pControl == &maCellLineStyleValueSet)
     {
-        const sal_uInt16 iPos(maCellLineStyleValueSet.GetSelectItemId());
+        const sal_uInt16 iPos(maCellLineStyleValueSet->GetSelectItemId());
         SvxLineItem aLineItem(SID_FRAME_LINESTYLE);
         using namespace ::com::sun::star::table::BorderLineStyle;
         editeng::SvxBorderStyle nStyle = SOLID;
@@ -178,7 +190,7 @@ IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
 
 IMPL_LINK(CellLineStyleControl, PBClickHdl, PushButton *, pPBtn)
 {
-    if(pPBtn == &maPushButtonMoreOptions)
+    if(pPBtn == maPushButtonMoreOptions.get())
     {
         if(mrCellAppearancePropertyPanel.GetBindings())
         {
@@ -200,48 +212,48 @@ void CellLineStyleControl::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal
 
     if(out == DEF_LINE_WIDTH_0 && in == 0 && dis == 0)  //1
     {
-        maCellLineStyleValueSet.SetSelItem(1);
+        maCellLineStyleValueSet->SetSelItem(1);
     }
     else if(out == DEF_LINE_WIDTH_2 && in == 0 && dis == 0) //2
     {
-        maCellLineStyleValueSet.SetSelItem(2);
+        maCellLineStyleValueSet->SetSelItem(2);
     }
     else if(out == DEF_LINE_WIDTH_3 && in == 0 && dis == 0) //3
     {
-        maCellLineStyleValueSet.SetSelItem(3);
+        maCellLineStyleValueSet->SetSelItem(3);
     }
     else if(out == DEF_LINE_WIDTH_4 && in == 0 && dis == 0) //4
     {
-        maCellLineStyleValueSet.SetSelItem(4);
+        maCellLineStyleValueSet->SetSelItem(4);
     }
     else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_1) //5
     {
-        maCellLineStyleValueSet.SetSelItem(5);
+        maCellLineStyleValueSet->SetSelItem(5);
     }
     else if(out == DEF_LINE_WIDTH_0 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) //6
     {
-        maCellLineStyleValueSet.SetSelItem(6);
+        maCellLineStyleValueSet->SetSelItem(6);
     }
     else if(out == DEF_LINE_WIDTH_1 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_1) //7
     {
-        maCellLineStyleValueSet.SetSelItem(7);
+        maCellLineStyleValueSet->SetSelItem(7);
     }
     else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_0 && dis == DEF_LINE_WIDTH_2) //8
     {
-        maCellLineStyleValueSet.SetSelItem(8);
+        maCellLineStyleValueSet->SetSelItem(8);
     }
     else if(out == DEF_LINE_WIDTH_2 && in == DEF_LINE_WIDTH_2 && dis == DEF_LINE_WIDTH_2) //9
     {
-        maCellLineStyleValueSet.SetSelItem(9);
+        maCellLineStyleValueSet->SetSelItem(9);
     }
     else
     {
-        maCellLineStyleValueSet.SetSelItem(0);
+        maCellLineStyleValueSet->SetSelItem(0);
         mbVSfocus = false;
     }
 
-    maCellLineStyleValueSet.Format();
-    maCellLineStyleValueSet.StartSelection();
+    maCellLineStyleValueSet->Format();
+    maCellLineStyleValueSet->StartSelection();
 }
 
 } } // end of namespace svx::sidebar

@@ -66,8 +66,14 @@ ScTpCalcOptions::ScTpCalcOptions(vcl::Window* pParent, const SfxItemSet& rCoreAt
 
 ScTpCalcOptions::~ScTpCalcOptions()
 {
+    dispose();
+}
+
+void ScTpCalcOptions::dispose()
+{
     delete pOldOptions;
     delete pLocalOptions;
+    SfxTabPage::dispose();
 }
 
 void ScTpCalcOptions::Init()

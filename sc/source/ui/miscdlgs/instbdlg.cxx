@@ -64,9 +64,15 @@ ScInsertTableDlg::ScInsertTableDlg( vcl::Window* pParent, ScViewData& rData, SCT
 
 ScInsertTableDlg::~ScInsertTableDlg()
 {
+    dispose();
+}
+
+void ScInsertTableDlg::dispose()
+{
     if (pDocShTables)
         pDocShTables->DoClose();
     delete pDocInserter;
+    ModalDialog::dispose();
 }
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )

@@ -46,6 +46,7 @@ public:
     ScAutoFmtPreview(vcl::Window* pParent);
     void DetectRTL(ScViewData *pViewData);
     virtual ~ScAutoFmtPreview();
+    virtual void dispose() SAL_OVERRIDE;
 
     void NotifyChange( ScAutoFormatData* pNewData );
 

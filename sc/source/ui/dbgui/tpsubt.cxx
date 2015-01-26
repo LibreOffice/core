@@ -67,6 +67,11 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( vcl::Window* pParent,
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
+    dispose();
+}
+
+void ScTpSubTotalGroup::dispose()
+{
     sal_uLong  nCount = mpLbColumns->GetEntryCount();
 
     if ( nCount > 0 )
@@ -79,6 +84,7 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
             delete pData;
         }
     }
+    SfxTabPage::dispose();
 }
 
 void ScTpSubTotalGroup::Init()

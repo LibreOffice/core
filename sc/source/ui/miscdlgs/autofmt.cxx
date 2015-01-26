@@ -90,7 +90,13 @@ void ScAutoFmtPreview::Resize()
 
 ScAutoFmtPreview::~ScAutoFmtPreview()
 {
+    dispose();
+}
+
+void ScAutoFmtPreview::dispose()
+{
     delete pNumFmt;
+    vcl::Window::dispose();
 }
 
 static void lcl_SetFontProperties(

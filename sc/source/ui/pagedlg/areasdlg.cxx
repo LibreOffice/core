@@ -136,6 +136,11 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Win
 
 ScPrintAreasDlg::~ScPrintAreasDlg()
 {
+    dispose();
+}
+
+void ScPrintAreasDlg::dispose()
+{
     // Extra-Data an ListBox-Entries abraeumen
     ListBox* aLb[3] = { pLbPrintArea, pLbRepeatRow, pLbRepeatCol };
 
@@ -145,6 +150,7 @@ ScPrintAreasDlg::~ScPrintAreasDlg()
         for ( sal_uInt16 j=0; j<nCount; j++ )
             delete static_cast<OUString*>(aLb[i]->GetEntryData(j));
     }
+    ScAnyRefDlg::dispose();
 }
 
 bool ScPrintAreasDlg::Close()

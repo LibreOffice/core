@@ -41,6 +41,7 @@ protected:
 
 public:
     virtual ~ScTpSubTotalGroup();
+    virtual void dispose() SAL_OVERRIDE;
 
     bool            DoReset         ( sal_uInt16            nGroupNo,
                                       const SfxItemSet& rArgSet  );

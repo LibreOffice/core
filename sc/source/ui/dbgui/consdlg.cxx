@@ -105,8 +105,14 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::W
 
 ScConsolidateDlg::~ScConsolidateDlg()
 {
+    dispose();
+}
+
+void ScConsolidateDlg::dispose()
+{
     delete [] pAreaData;
     delete pRangeUtil;
+    ScAnyRefDlg::dispose();
 }
 
 void ScConsolidateDlg::Init()

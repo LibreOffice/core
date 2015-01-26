@@ -143,8 +143,14 @@ ScPreview::ScPreview( vcl::Window* pParent, ScDocShell* pDocSh, ScPreviewShell* 
 
 ScPreview::~ScPreview()
 {
+    dispose();
+}
+
+void ScPreview::dispose()
+{
     delete pDrawView;
     delete pLocationData;
+    vcl::Window::dispose();
 }
 
 void ScPreview::UpdateDrawView()        // nTab must be right

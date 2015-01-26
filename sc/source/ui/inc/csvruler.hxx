@@ -55,6 +55,7 @@ private:
 public:
     explicit                    ScCsvRuler( ScCsvControl& rParent );
                                 virtual ~ScCsvRuler();
+    virtual void                dispose() SAL_OVERRIDE;
 
     // common ruler handling --------------------------------------------------
 public:

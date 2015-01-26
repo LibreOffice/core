@@ -464,7 +464,13 @@ ScImportAsciiDlg::ScImportAsciiDlg( vcl::Window* pParent, const OUString& aDatNa
 
 ScImportAsciiDlg::~ScImportAsciiDlg()
 {
+    dispose();
+}
+
+void ScImportAsciiDlg::dispose()
+{
     delete[] mpRowPosArray;
+    ModalDialog::dispose();
 }
 
 bool ScImportAsciiDlg::GetLine( sal_uLong nLine, OUString &rText )

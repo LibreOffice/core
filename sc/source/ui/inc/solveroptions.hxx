@@ -61,6 +61,7 @@ public:
                            const OUString& rEngine,
                            const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProperties );
     virtual ~ScSolverOptionsDialog();
+    virtual void dispose() SAL_OVERRIDE;
 
     // already updated in selection handler
     const OUString& GetEngine() const { return maEngine; }

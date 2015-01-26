@@ -102,7 +102,13 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pParent
 
 ScNameDlg::~ScNameDlg()
 {
+    dispose();
+}
+
+void ScNameDlg::dispose()
+{
     delete m_pRangeManagerTable;
+    ScAnyRefDlg::dispose();
 }
 
 void ScNameDlg::Init()

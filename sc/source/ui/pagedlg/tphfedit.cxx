@@ -118,6 +118,11 @@ void ScEditWindow::Resize()
 
 ScEditWindow::~ScEditWindow()
 {
+    dispose();
+}
+
+void ScEditWindow::dispose()
+{
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
     {
@@ -127,6 +132,7 @@ ScEditWindow::~ScEditWindow()
     }
     delete pEdEngine;
     delete pEdView;
+    Control::dispose();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeScEditWindow(vcl::Window *pParent, VclBuilder::stringmap &)

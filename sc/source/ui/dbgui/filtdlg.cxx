@@ -160,12 +160,18 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
 
 ScFilterDlg::~ScFilterDlg()
 {
+    dispose();
+}
+
+void ScFilterDlg::dispose()
+{
     delete pOptionsMgr;
     delete pOutItem;
 
     // Hack: RefInput control
     pTimer->Stop();
     delete pTimer;
+    ScAnyRefDlg::dispose();
 }
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )

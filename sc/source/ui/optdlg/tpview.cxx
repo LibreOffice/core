@@ -95,7 +95,13 @@ ScTpContentOptions::ScTpContentOptions( vcl::Window*         pParent,
 
 ScTpContentOptions::~ScTpContentOptions()
 {
+    dispose();
+}
+
+void ScTpContentOptions::dispose()
+{
     delete pLocalOptions;
+    SfxTabPage::dispose();
 }
 
 SfxTabPage* ScTpContentOptions::Create( vcl::Window*     pParent,

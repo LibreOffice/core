@@ -240,8 +240,14 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
+    dispose();
+}
+
+void ScImportOptionsDlg::dispose()
+{
     delete pFieldSepTab;
     delete pTextSepTab;
+    ModalDialog::dispose();
 }
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const

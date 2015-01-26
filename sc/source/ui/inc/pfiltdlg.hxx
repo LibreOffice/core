@@ -40,6 +40,7 @@ class ScPivotFilterDlg : public ModalDialog
 public:
     ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgSet, SCTAB nSourceTab);
     virtual ~ScPivotFilterDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     const ScQueryItem&  GetOutputItem();
 

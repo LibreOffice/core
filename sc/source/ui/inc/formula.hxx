@@ -55,6 +55,7 @@ public:
                     ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                         vcl::Window* pParent, ScViewData* pViewData ,formula::IFunctionManager* _pFunctionMgr);
                     virtual ~ScFormulaDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     // IFormulaEditorHelper
     virtual void notifyChange() SAL_OVERRIDE;

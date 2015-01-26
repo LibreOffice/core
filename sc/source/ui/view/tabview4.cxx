@@ -382,41 +382,41 @@ void ScTabView::UpdateScrollBars()
 
     nVisXL = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
     long nMaxXL = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL, MAXCOL, 0 );
-    SetScrollBar( aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
+    SetScrollBar( *aHScrollLeft.get(), nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, MAXROW, nStartY );
-    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, bLayoutRTL );
+    SetScrollBar( *aVScrollBottom.get(), nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, bLayoutRTL );
 
     if (bRight)
     {
         nVisXR = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
         long nMaxXR = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR, MAXCOL, nStartX );
-        SetScrollBar( aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bLayoutRTL );
+        SetScrollBar( *aHScrollRight.get(), nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bLayoutRTL );
     }
 
     if (bTop)
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
         long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, MAXROW, 0 );
-        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), bLayoutRTL );
+        SetScrollBar( *aVScrollTop.get(), nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), bLayoutRTL );
     }
 
     //      Bereich testen
 
-    nDiff = lcl_UpdateBar( aHScrollLeft, nVisXL );
+    nDiff = lcl_UpdateBar( *aHScrollLeft.get(), nVisXL );
     if (nDiff) ScrollX( nDiff, SC_SPLIT_LEFT );
     if (bRight)
     {
-        nDiff = lcl_UpdateBar( aHScrollRight, nVisXR );
+        nDiff = lcl_UpdateBar( *aHScrollRight.get(), nVisXR );
         if (nDiff) ScrollX( nDiff, SC_SPLIT_RIGHT );
     }
 
-    nDiff = lcl_UpdateBar( aVScrollBottom, nVisYB );
+    nDiff = lcl_UpdateBar( *aVScrollBottom.get(), nVisYB );
     if (nDiff) ScrollY( nDiff, SC_SPLIT_BOTTOM );
     if (bTop)
     {
-        nDiff = lcl_UpdateBar( aVScrollTop, nVisYT );
+        nDiff = lcl_UpdateBar( *aVScrollTop.get(), nVisYT );
         if (nDiff) ScrollY( nDiff, SC_SPLIT_TOP );
     }
 

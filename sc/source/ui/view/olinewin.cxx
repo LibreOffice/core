@@ -71,10 +71,16 @@ ScOutlineWindow::ScOutlineWindow( vcl::Window* pParent, ScOutlineMode eMode, ScV
 
 ScOutlineWindow::~ScOutlineWindow()
 {
+    dispose();
+}
+
+void ScOutlineWindow::dispose()
+{
     // remove the window from task pane list
     if( SystemWindow* pSysWin = GetSystemWindow() )
         if( TaskPaneList* pTaskPaneList = pSysWin->GetTaskPaneList() )
             pTaskPaneList->RemoveWindow( this );
+    vcl::Window::dispose();
 }
 
 void ScOutlineWindow::SetHeaderSize( long nNewSize )

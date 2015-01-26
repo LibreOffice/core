@@ -41,7 +41,13 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParen
 
 SearchResultsDlg::~SearchResultsDlg()
 {
+    dispose();
+}
+
+void SearchResultsDlg::dispose()
+{
     delete mpList;
+    ModelessDialog::dispose();
 }
 
 void SearchResultsDlg::FillResults( ScDocument* pDoc, const ScRangeList &rMatchedRanges )

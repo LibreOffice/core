@@ -50,6 +50,7 @@ class ScCondFormatManagerDlg : public ModalDialog
 public:
     ScCondFormatManagerDlg(vcl::Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos);
     virtual ~ScCondFormatManagerDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     ScConditionalFormatList* GetConditionalFormatList();
 

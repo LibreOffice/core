@@ -154,6 +154,11 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
 
 ScAcceptChgDlg::~ScAcceptChgDlg()
 {
+    dispose();
+}
+
+void ScAcceptChgDlg::dispose()
+{
     ClearView();
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
 
@@ -164,6 +169,7 @@ ScAcceptChgDlg::~ScAcceptChgDlg()
     }
 
     delete m_pAcceptChgCtr;
+    SfxModelessDialog::dispose();
 }
 
 void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)

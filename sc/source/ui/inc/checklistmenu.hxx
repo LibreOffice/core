@@ -196,7 +196,8 @@ class ScCheckListBox : public SvTreeListBox
     public:
 
     ScCheckListBox( vcl::Window* pParent, WinBits nWinStyle = 0 );
-    virtual ~ScCheckListBox() { delete mpCheckButton; }
+    virtual ~ScCheckListBox() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE { delete mpCheckButton; SvTreeListBox::dispose(); }
     void Init();
     void CheckEntry( const OUString& sName, SvTreeListEntry* pParent, bool bCheck = true );
     void CheckEntry( SvTreeListEntry* pEntry, bool bCheck = true );
@@ -238,6 +239,7 @@ public:
 
     explicit ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* pDoc);
     virtual ~ScCheckListMenuWindow();
+    virtual void dispose() SAL_OVERRIDE;
 
     virtual void MouseMove(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;
@@ -329,16 +331,15 @@ private:
 private:
     SvTreeListEntry* findEntry(  SvTreeListEntry* pParent, const OUString& rText );
 
-    Edit maEdSearch;
+    VclPtr<Edit>           maEdSearch;
+    VclPtr<ScCheckListBox> maChecks;
 
-    ScCheckListBox maChecks;
+    VclPtr<TriStateBox>     maChkToggleAll;
+    VclPtr<ImageButton>     maBtnSelectSingle;
+    VclPtr<ImageButton>     maBtnUnselectSingle;
 
-    TriStateBox     maChkToggleAll;
-    ImageButton     maBtnSelectSingle;
-    ImageButton     maBtnUnselectSingle;
-
-    OKButton        maBtnOk;
-    CancelButton    maBtnCancel;
+    VclPtr<OKButton>        maBtnOk;
+    VclPtr<CancelButton>    maBtnCancel;
 
     ::std::vector<vcl::Window*>          maTabStopCtrls;
     size_t                          mnCurTabStop;

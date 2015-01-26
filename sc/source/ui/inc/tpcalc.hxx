@@ -43,6 +43,7 @@ private:
                 ScTpCalcOptions( vcl::Window*            pParent,
                                  const SfxItemSet&  rCoreSet );
                 virtual ~ScTpCalcOptions();
+    virtual void dispose() SAL_OVERRIDE;
 
 private:
     CheckBox*       m_pBtnIterate;

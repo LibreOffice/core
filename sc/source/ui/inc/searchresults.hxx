@@ -29,6 +29,7 @@ class SearchResultsDlg : public ModelessDialog
 public:
     SearchResultsDlg( SfxBindings* _pBindings, vcl::Window* pParent, sal_uInt16 nId );
     virtual ~SearchResultsDlg();
+    virtual void dispose() SAL_OVERRIDE;
 
     void FillResults( ScDocument* pDoc, const ScRangeList& rMatchedRanges );
 

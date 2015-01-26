@@ -62,6 +62,7 @@ class ScTextWnd : public ScTextWndBase, public DragSourceHelper     // edit wind
 public:
                     ScTextWnd( vcl::Window* pParent, ScTabViewShell* pViewSh );
     virtual         ~ScTextWnd();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
     virtual const OUString& GetTextString() const SAL_OVERRIDE;
@@ -139,6 +140,7 @@ private:
 public:
                     ScPosWnd( vcl::Window* pParent );
     virtual         ~ScPosWnd();
+    virtual void    dispose() SAL_OVERRIDE;
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( bool bSet );
@@ -201,8 +203,9 @@ class ScInputBarGroup : public ScTextWndBase
 public:
                     ScInputBarGroup( vcl::Window* Parent, ScTabViewShell* pViewSh );
     virtual         ~ScInputBarGroup();
-    virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
-    virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
+    virtual void    dispose() SAL_OVERRIDE;
+    virtual void    InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
+    virtual void    RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData ) SAL_OVERRIDE;
 //    virtual void    Paint(const Rectangle& rRect );
     void            SetTextString( const OUString& rString ) SAL_OVERRIDE;
     void            StartEditEngine() SAL_OVERRIDE;
@@ -217,16 +220,16 @@ public:
     bool            IsFocus();
     void            MakeDialogEditView() SAL_OVERRIDE;
     bool            IsInputActive() SAL_OVERRIDE;
-    ScrollBar&      GetScrollBar() { return aScrollBar; }
+    ScrollBar&      GetScrollBar() { return *aScrollBar.get(); }
     void            IncrementVerticalSize();
     void            DecrementVerticalSize();
-    long            GetNumLines() { return aMultiTextWnd.GetNumLines(); }
+    long            GetNumLines() { return aMultiTextWnd->GetNumLines(); }
     long            GetVertOffset() { return  nVertOffset; }
 private:
     void            TriggerToolboxLayout();
-    ScMultiTextWnd  aMultiTextWnd;
-    ImageButton     aButton;
-    ScrollBar       aScrollBar;
+    VclPtr<ScMultiTextWnd>  aMultiTextWnd;
+    VclPtr<ImageButton>     aButton;
+    VclPtr<ScrollBar>       aScrollBar;
     long            nVertOffset;
     DECL_LINK( ClickHdl, void* );
     DECL_LINK( Impl_ScrollHdl, void* );
@@ -238,6 +241,7 @@ class ScInputWindow : public ToolBox                        // Parent toolbox
 public:
                     ScInputWindow( vcl::Window* pParent, SfxBindings* pBind );
     virtual         ~ScInputWindow();
+    virtual void    dispose() SAL_OVERRIDE;
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
@@ -284,7 +288,7 @@ protected:
     bool UseSubTotal( ScRangeList* pRangeList ) const;
     bool IsPointerAtResizePos();
 private:
-    ScPosWnd        aWndPos;
+    VclPtr<ScPosWnd>  aWndPos;
     std::unique_ptr<ScTextWndBase> pRuntimeWindow;
     ScTextWndBase&  aTextWindow;
     ScInputHandler* pInputHdl;

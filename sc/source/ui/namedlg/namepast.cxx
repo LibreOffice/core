@@ -65,7 +65,13 @@ ScNamePasteDlg::ScNamePasteDlg( vcl::Window * pParent, ScDocShell* pShell, bool 
 
 ScNamePasteDlg::~ScNamePasteDlg()
 {
+    dispose();
+}
+
+void ScNamePasteDlg::dispose()
+{
     delete mpTable;
+    ModalDialog::dispose();
 }
 
 IMPL_LINK( ScNamePasteDlg, ButtonHdl, Button *, pButton )

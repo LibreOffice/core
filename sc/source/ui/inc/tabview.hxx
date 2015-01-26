@@ -112,13 +112,13 @@ private:
     ScTabSplitter*      pHSplitter;
     ScTabSplitter*      pVSplitter;
     ScTabControl*       pTabControl;
-    ScrollBar           aVScrollTop;
-    ScrollBar           aVScrollBottom;         // initially visible
-    ScrollBar           aHScrollLeft;           // initially visible
-    ScrollBar           aHScrollRight;
-    ScCornerButton      aCornerButton;
-    ScCornerButton      aTopButton;
-    ScrollBarBox        aScrollBarBox;
+    VclPtr<ScrollBar>           aVScrollTop;
+    VclPtr<ScrollBar>           aVScrollBottom;         // initially visible
+    VclPtr<ScrollBar>           aHScrollLeft;           // initially visible
+    VclPtr<ScrollBar>           aHScrollRight;
+    VclPtr<ScCornerButton>      aCornerButton;
+    VclPtr<ScCornerButton>      aTopButton;
+    VclPtr<ScrollBarBox>        aScrollBarBox;
 
     boost::scoped_ptr<ScHintWindow> mpInputHintWindow; // popup window for data validation
 

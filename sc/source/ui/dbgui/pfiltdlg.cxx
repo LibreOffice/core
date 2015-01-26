@@ -83,10 +83,16 @@ ScPivotFilterDlg::ScPivotFilterDlg(vcl::Window* pParent, const SfxItemSet& rArgS
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
+    dispose();
+}
+
+void ScPivotFilterDlg::dispose()
+{
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
 
     delete pOutItem;
+    ModalDialog::dispose();
 }
 
 void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )

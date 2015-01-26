@@ -80,6 +80,7 @@ public:
                                     vcl::Window* pParent, const OUString& aDatName,
                                     SvStream* pInStream, ScImportAsciiCall eCall );
                                 virtual ~ScImportAsciiDlg();
+    virtual void                dispose() SAL_OVERRIDE;
 
     void                        GetOptions( ScAsciiOptions& rOpt );
     void                        SaveParameters();

@@ -35,6 +35,7 @@ private:
 public:
     CellLineStyleValueSet( vcl::Window* pParent, const ResId& rResId);
     virtual ~CellLineStyleValueSet();
+    virtual void dispose() SAL_OVERRIDE;
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
