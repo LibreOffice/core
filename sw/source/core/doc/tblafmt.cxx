@@ -1165,19 +1165,29 @@ bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                 rStream.ReadUInt16( nAnz );
 
                 bRet = 0 == rStream.GetError();
-
-                for( sal_uInt16 i = 0; i < nAnz; ++i )
+                if (bRet)
                 {
-                    pNew = new SwTableAutoFmt( OUString() );
-                    bRet = pNew->Load( rStream, aVersions );
-                    if( bRet )
+                    const size_t nMinRecordSize = sizeof(sal_uInt16);
+                    const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
+                    if (nAnz > nMaxRecords)
                     {
-                        m_pImpl->m_AutoFormats.push_back(pNew);
+                        SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
+                                 " max possible entries, but " << nAnz << " claimed, truncating");
+                        nAnz = nMaxRecords;
                     }
-                    else
+                    for (sal_uInt16 i = 0; i < nAnz; ++i)
                     {
-                        delete pNew;
-                        break;
+                        pNew = new SwTableAutoFmt( OUString() );
+                        bRet = pNew->Load( rStream, aVersions );
+                        if( bRet )
+                        {
+                            m_pImpl->m_AutoFormats.push_back(pNew);
+                        }
+                        else
+                        {
+                            delete pNew;
+                            break;
+                        }
                     }
                 }
             }
