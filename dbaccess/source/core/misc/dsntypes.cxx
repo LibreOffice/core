@@ -408,9 +408,20 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 
     for ( size_t i=0; i < sizeof( aKnowPrefixes ) / sizeof( aKnowPrefixes[0] ); ++i )
     {
-        sal_uInt16 nMatchLen = aKnowPrefixes[i].bMatchComplete ? sDsn.getLength() : (sal_uInt16)rtl_str_getLength( aKnowPrefixes[i].pAsciiPrefix );
-        if ( sDsn.equalsIgnoreAsciiCaseAsciiL( aKnowPrefixes[i].pAsciiPrefix, nMatchLen ) )
-            return aKnowPrefixes[i].eType;
+        if(aKnowPrefixes[i].bMatchComplete)
+        {
+            if(sDsn.equalsIgnoreAsciiCaseAsciiL( aKnowPrefixes[i].pAsciiPrefix ))
+            {
+                return aKnowPrefixes[i].eType;
+            }
+        }
+        else
+        {
+            if(sDsn.startsWithIgnoreAsciiCase( aKnowPrefixes[i].pAsciiPrefix ))
+            {
+                return aKnowPrefixes[i].eType;
+            }
+        }
     }
 
     return DST_UNKNOWN;
