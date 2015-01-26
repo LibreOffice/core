@@ -8,6 +8,9 @@
 from __future__ import print_function
 from optparse import OptionParser
 
+import sys
+import xml.etree.ElementTree as ET
+
 # foo_component_getFactory functions are split into groups, so that you could
 # choose e.g. 'core' and 'writer' functionality and through factory_map,
 # relevant function sections will be referenced in lo_get_factory_map().
@@ -183,11 +186,41 @@ constructor_map = {
     'writer' : writer_constructor_list,
     }
 
+# instead of outputting native-code.cxx, reduce the services.rdb according to
+# the constraints, so that we can easily emulate what services do we need to
+# add for a fully functional file loading / saving / ...
+def limit_rdb(services_rdb, full_constructor_map):
+    ET.register_namespace('','http://openoffice.org/2010/uno-components')
+    tree = ET.parse(services_rdb[0])
+    root = tree.getroot()
+
+    for component in root.findall('{http://openoffice.org/2010/uno-components}component'):
+        for implementation in component.findall('{http://openoffice.org/2010/uno-components}implementation'):
+            constructor = implementation.get('constructor')
+            if constructor != None and constructor not in full_constructor_map:
+                component.remove(implementation)
+
+    tree.write(services_rdb[0] + '.out', xml_declaration = True, method = 'xml')
+
+
+# do the actual work
 opts = OptionParser()
 opts.add_option("-j", "--java-guard", action="store_true", help="include external java functions", dest="java", default=False)
 opts.add_option("-g", "--group", action="append", help="group of implementations to make available in application", dest="groups")
+opts.add_option("-r", "--limit-rdb", action="append", help="instead of outputting native-code.cxx, limit the services.rdb only to the services defined by the groups", dest="services")
 
 (options, args) = opts.parse_args()
+
+# construct a list of all the contructors that we need according to -g's
+full_constructor_map = {}
+if options.groups:
+    for constructor_group in options.groups:
+        for constructor in constructor_map[constructor_group]:
+            full_constructor_map[constructor] = True
+
+if options.services:
+    limit_rdb(options.services, full_constructor_map)
+    exit(0)
 
 print ("""/*
  * This is a generated file. Do not edit.
@@ -215,9 +248,8 @@ if options.groups:
 
 print ('')
 if options.groups:
-    for constructor_group in options.groups:
-        for constructor in constructor_map[constructor_group]:
-            print ('void * '+constructor+'( void *, void * );')
+    for constructor in full_constructor_map.keys():
+        print ('void * '+constructor+'( void *, void * );')
 
 print ("""
 const lib_to_factory_mapping *
@@ -272,9 +304,8 @@ lo_get_constructor_map(void)
     static lib_to_constructor_mapping map[] = {""")
 
 if options.groups:
-    for constructor_group in options.groups:
-        for constructor in constructor_map[constructor_group]:
-            print ('        { "' +constructor+ '", ' +constructor+ ' },')
+    for constructor in full_constructor_map.keys():
+        print ('        { "' +constructor+ '", ' +constructor+ ' },')
 
 print ("""
         { 0, 0 }
