@@ -3095,6 +3095,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     SdrHdl* pHdl;
                     if( !bIsDocReadOnly &&
                         !m_pAnchorMarker &&
+                        pSdrView &&
                         0 != ( pHdl = pSdrView->PickHandle(aDocPos) ) &&
                             ( pHdl->GetKind() == HDL_ANCHOR ||
                               pHdl->GetKind() == HDL_ANCHOR_TR ) )
