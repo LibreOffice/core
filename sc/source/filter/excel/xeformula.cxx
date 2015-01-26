@@ -589,11 +589,14 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
         break;
         case EXC_FMLATYPE_SHARED:
             mxData->mbOk = pScBasePos != 0;
-            OSL_ENSURE( mxData->mbOk, "XclExpFmlaCompImpl::Init - missing cell address" );
-            // clone the passed token array, convert references relative to current cell position
-            mxData->mxOwnScTokArr.reset( rScTokArr.Clone() );
-            ScCompiler::MoveRelWrap( *mxData->mxOwnScTokArr, GetDocPtr(), *pScBasePos, MAXCOL, MAXROW );
-            // don't remember pScBasePos in mxData->mpScBasePos, shared formulas use real relative refs
+            assert(mxData->mbOk && "XclExpFmlaCompImpl::Init - missing cell address");
+            if (mxData->mbOk)
+            {
+                // clone the passed token array, convert references relative to current cell position
+                mxData->mxOwnScTokArr.reset( rScTokArr.Clone() );
+                ScCompiler::MoveRelWrap( *mxData->mxOwnScTokArr, GetDocPtr(), *pScBasePos, MAXCOL, MAXROW );
+                // don't remember pScBasePos in mxData->mpScBasePos, shared formulas use real relative refs
+            }
         break;
         default:;
     }
