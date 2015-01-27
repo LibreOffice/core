@@ -247,9 +247,8 @@ if options.groups:
                 print ('#endif')
 
 print ('')
-if options.groups:
-    for constructor in full_constructor_map.keys():
-        print ('void * '+constructor+'( void *, void * );')
+for constructor in sorted(full_constructor_map.keys()):
+    print ('void * '+constructor+'( void *, void * );')
 
 print ("""
 const lib_to_factory_mapping *
@@ -303,9 +302,8 @@ lo_get_constructor_map(void)
 {
     static lib_to_constructor_mapping map[] = {""")
 
-if options.groups:
-    for constructor in full_constructor_map.keys():
-        print ('        { "' +constructor+ '", ' +constructor+ ' },')
+for constructor in sorted(full_constructor_map.keys()):
+    print ('        { "' +constructor+ '", ' +constructor+ ' },')
 
 print ("""
         { 0, 0 }
