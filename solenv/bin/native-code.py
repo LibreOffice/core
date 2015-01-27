@@ -189,7 +189,7 @@ constructor_map = {
 # instead of outputting native-code.cxx, reduce the services.rdb according to
 # the constraints, so that we can easily emulate what services do we need to
 # add for a fully functional file loading / saving / ...
-def limit_rdb(services_rdb, full_constructor_map):
+def limit_rdb(services_rdb, full_factory_map, full_constructor_map):
     ET.register_namespace('','http://openoffice.org/2010/uno-components')
     tree = ET.parse(services_rdb[0])
     root = tree.getroot()
@@ -211,15 +211,27 @@ opts.add_option("-r", "--limit-rdb", action="append", help="instead of outputtin
 
 (options, args) = opts.parse_args()
 
-# construct a list of all the contructors that we need according to -g's
+# dict of all the contructors that we need according to -g's
 full_constructor_map = {}
 if options.groups:
     for constructor_group in options.groups:
         for constructor in constructor_map[constructor_group]:
             full_constructor_map[constructor] = True
 
+# dict of all the factories that we need according to -g's
+full_factory_map = {}
+if options.groups:
+    for factory_group in options.groups:
+        for entry in factory_map[factory_group]:
+            factory_guard = None
+            if len(entry) > 2:
+                factory_guard = entry[2]
+            map_entry = { 'function': entry[1], 'guard': factory_guard }
+            full_factory_map[entry[0]] = map_entry
+
+# are we only shuffling the services.rdb?
 if options.services:
-    limit_rdb(options.services, full_constructor_map)
+    limit_rdb(options.services, full_factory_map, full_constructor_map)
     exit(0)
 
 print ("""/*
@@ -232,19 +244,14 @@ print ("""/*
 extern "C" {
 """)
 
-if options.groups:
-    for factory_group in options.groups:
-        for entry in factory_map[factory_group]:
-            factory_name = entry[0]
-            factory_function = entry[1]
-            factory_guard = None
-            if len(entry) > 2:
-                factory_guard = entry[2]
-            if factory_guard:
-                print (factory_guard)
-            print ('void * '+factory_function+'( const char* , void* , void* );')
-            if factory_guard:
-                print ('#endif')
+for entry in sorted(full_factory_map.keys()):
+    factory_function = full_factory_map[entry]['function']
+    factory_guard = full_factory_map[entry]['guard']
+    if factory_guard:
+        print (factory_guard)
+    print('void * ' + factory_function + '( const char* , void* , void* );')
+    if factory_guard:
+        print ('#endif')
 
 print ('')
 for constructor in sorted(full_constructor_map.keys()):
@@ -256,19 +263,14 @@ lo_get_factory_map(void)
 {
     static lib_to_factory_mapping map[] = {""")
 
-if options.groups:
-    for factory_group in options.groups:
-        for entry in factory_map[factory_group]:
-            factory_name = entry[0]
-            factory_function = entry[1]
-            factory_guard = None
-            if len(entry) > 2:
-                factory_guard = entry[2]
-            if factory_guard:
-                print (factory_guard)
-            print ('        { "'+factory_name+'", '+factory_function+' },')
-            if factory_guard:
-                print ('#endif')
+for entry in sorted(full_factory_map.keys()):
+    factory_function = full_factory_map[entry]['function']
+    factory_guard = full_factory_map[entry]['guard']
+    if factory_guard:
+        print (factory_guard)
+    print('        { "' + entry + '", ' + factory_function + ' },')
+    if factory_guard:
+        print ('#endif')
 
 print ("""
         { 0, 0 }
