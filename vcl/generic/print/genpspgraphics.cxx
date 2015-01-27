@@ -1255,8 +1255,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
             aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
         pUnicodes = aUnicodes;
     }
-    if (!rMgr.getMetrics(
-            aFont, pUnicodes, nLen, nLen == 0 ? nullptr : &aMetrics[0]))
+    if (!rMgr.getMetrics(aFont, pUnicodes, nLen, aMetrics.data()))
         return NULL;
 
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
