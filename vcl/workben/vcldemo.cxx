@@ -393,13 +393,13 @@ public:
             : DrawText( false, true, false ) {}
     };
 
-    struct DrawRotatedText : public DrawText
-    {
-        RENDER_DETAILS(rotatedtext,KEY_T,1)
+    // struct DrawRotatedText : public DrawText
+    // {
+    //     RENDER_DETAILS(rotatedtext,KEY_T,1)
 
-        DrawRotatedText()
-            : DrawText( false, false, true ) {}
-    };
+    //     DrawRotatedText()
+    //         : DrawText( false, false, true ) {}
+    // };
 
     struct DrawCheckered : public RegionRenderer
     {
