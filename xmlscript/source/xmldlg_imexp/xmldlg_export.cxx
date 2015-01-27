@@ -1034,7 +1034,7 @@ void ElementDescriptor::readImageScaleModeAttr( OUString const & rPropName, OUSt
                     addAttribute( rAttrName, OUString( "anisotropic" ) );
                     break;
                 default:
-                    OSL_ENSURE( 0, "### illegal image scale mode value.");
+                    OSL_ENSURE( false, "### illegal image scale mode value.");
                     break;
             }
         }
