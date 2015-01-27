@@ -44,6 +44,8 @@ struct _LOKDocView
     gboolean m_bEdit;
     /// Position and size of the visible cursor.
     GdkRectangle m_aVisibleCursor;
+    /// Cursor is visible or hidden (for blinking).
+    gboolean m_bCursorVisible;
 };
 
 struct _LOKDocViewClass

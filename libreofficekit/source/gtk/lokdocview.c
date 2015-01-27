@@ -16,8 +16,9 @@
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 
-#ifndef G_SOURCE_REMOVE
+#if !GLIB_CHECK_VERSION(2,32,0)
 #define G_SOURCE_REMOVE FALSE
+#define G_SOURCE_CONTINUE TRUE
 #endif
 #ifndef g_info
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
@@ -114,6 +115,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->fZoom = 1;
     pDocView->m_bEdit = FALSE;
     memset(&pDocView->m_aVisibleCursor, 0, sizeof(pDocView->m_aVisibleCursor));
+    pDocView->m_bCursorVisible = FALSE;
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -148,6 +150,23 @@ static gboolean lcl_isEmptyRectangle(GdkRectangle* pRectangle)
     return pRectangle->x == 0 && pRectangle->y == 0 && pRectangle->width == 0 && pRectangle->height == 0;
 }
 
+/// Takes care of the blinking cursor.
+static gboolean lcl_handleTimeout(gpointer pData)
+{
+    LOKDocView* pDocView = pData;
+
+    if (pDocView->m_bEdit)
+    {
+        if (pDocView->m_bCursorVisible)
+            pDocView->m_bCursorVisible = FALSE;
+        else
+            pDocView->m_bCursorVisible = TRUE;
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));
+    }
+
+    return G_SOURCE_CONTINUE;
+}
+
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
 {
     LOKDocView* pDocView = pData;
@@ -156,7 +175,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     (void)pEvent;
     pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
 
-    if (!lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
+    if (pDocView->m_bCursorVisible && !lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
     {
         if (pDocView->m_aVisibleCursor.width == 0)
             // Set a minimal width if it would be 0.
@@ -339,6 +358,7 @@ static gboolean lok_docview_callback(gpointer pData)
     case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
     {
         pCallback->m_pDocView->m_aVisibleCursor = lcl_payloadToRectangle(pCallback->m_pPayload);
+        pCallback->m_pDocView->m_bCursorVisible = TRUE;
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
     }
     break;
@@ -445,6 +465,7 @@ SAL_DLLPUBLIC_EXPORT void lok_docview_set_edit( LOKDocView* pDocView,
     {
         g_info("lok_docview_set_edit: entering edit mode, registering callback");
         pDocView->pDocument->pClass->registerCallback(pDocView->pDocument, &lok_docview_callback_worker, pDocView);
+        g_timeout_add(600, &lcl_handleTimeout, pDocView);
     }
     pDocView->m_bEdit = bEdit;
 }
