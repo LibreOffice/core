@@ -60,7 +60,13 @@ typedef enum
      * Rectangle format: "width,height,x,y", where all numbers are document
      * coordinates, in twips.
      */
-    LOK_CALLBACK_INVALIDATE_TILES
+    LOK_CALLBACK_INVALIDATE_TILES,
+    /**
+     * The size and/or the position of the visible cursor changed.
+     *
+     * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
 }
 LibreOfficeKitCallbackType;
 

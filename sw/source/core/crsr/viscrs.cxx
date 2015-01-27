@@ -175,6 +175,15 @@ void SwVisCrsr::_SetPosAndShow()
     m_aTxtCrsr.SetSize( aRect.SSize() );
 
     m_aTxtCrsr.SetPos( aRect.Pos() );
+
+    if (m_pCrsrShell->isTiledRendering())
+    {
+        std::stringstream ss;
+        ss << aRect.Width() << ", " << aRect.Height() << ", " << aRect.Left() << ", " << aRect.Top();
+        OString sRect = ss.str().c_str();
+        m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
+    }
+
     if ( !m_pCrsrShell->IsCrsrReadonly()  || m_pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
     {
         if ( m_pCrsrShell->GetDrawView() )
