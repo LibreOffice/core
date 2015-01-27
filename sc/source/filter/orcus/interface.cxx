@@ -682,6 +682,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         SAL_WARN("sc.orcus.style", "invalid border id");
         return;
     }
+    const border& rBorder = maBorders[nBorderId];
+    rBorder.applyToItemSet(rSet);
 
     size_t nProtectionId = rXf.mnProtectionId;
     if (nProtectionId >= maProtections.size())
@@ -689,6 +691,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         SAL_WARN("sc.orcus.style", "invalid protection id");
         return;
     }
+    const protection& rProtection = maProtections[nProtectionId];
+    rProtection.applyToItemSet(rSet);
 
     size_t nNumberFormatId = rXf.mnNumberFormatId;
     if (nNumberFormatId >= maNumberFormats.size())
@@ -696,6 +700,8 @@ void ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, const xf& rXf)
         SAL_WARN("sc.orcus.style", "invalid number format id");
         return;
     }
+    const number_format& rFormat = maNumberFormats[nNumberFormatId];
+    rFormat.applyToItemSet(rSet);
 }
 
 bool ScOrcusStyles::applyXfToItemSet(SfxItemSet& rSet, size_t xfId)
