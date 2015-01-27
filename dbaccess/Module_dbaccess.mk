@@ -45,7 +45,8 @@ $(eval $(call gb_Module_add_check_targets,dbaccess,\
 	CppunitTest_dbaccess_empty_stdlib_save \
 	CppunitTest_dbaccess_nolib_save \
 	CppunitTest_dbaccess_macros_test \
-	CppunitTest_dbaccess_RowSetClones \
+	$(if $(ENABLE_JAVA), \
+		CppunitTest_dbaccess_RowSetClones) \
 ))
 
 ifeq ($(ENABLE_JAVA),TRUE)
