@@ -9,7 +9,11 @@
 
 #include "unitsimpl.hxx"
 
+#include "formulacell.hxx"
+
 #include "helper/qahelper.hxx"
+
+#include <com/sun/star/util/NumberFormat.hpp>
 
 using namespace sc::units;
 
@@ -34,25 +38,145 @@ public:
     ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
 
     void testStringExtraction();
+    void testUnitVerification();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
     CPPUNIT_TEST(testStringExtraction);
+    CPPUNIT_TEST(testUnitVerification);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    ScDocument *mpDoc;
+    ScDocShellRef m_xDocShRef;
 };
 
 void UnitsTest::setUp() {
     BootstrapFixture::setUp();
 
+    ScDLL::Init();
+    m_xDocShRef = new ScDocShell(
+        SFXMODEL_STANDARD |
+        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
+        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+
+    mpDoc = &m_xDocShRef->GetDocument();
+
     mpUnitsImpl = UnitsImpl::GetUnits();
 }
 
 void UnitsTest::tearDown() {
+    m_xDocShRef.Clear();
     BootstrapFixture::tearDown();
 }
 
 void UnitsTest::testStringExtraction() {
     CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
     CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
+}
+
+void UnitsTest::testUnitVerification() {
+    // Make sure we have at least one tab to work with
+    mpDoc->EnsureTable(0);
+
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    sal_uInt32 nKeyCM, nKeyKG, nKeyS, nKeyCM_S;
+
+    // Used to return position of error in input string for PutEntry
+    // -- not needed here.
+    sal_Int32 nCheckPos;
+
+    short nType = css::util::NumberFormat::DEFINED;
+
+    OUString sCM = "#\"cm\"";
+    pFormatter->PutEntry(sCM, nCheckPos, nType, nKeyCM);
+    OUString sKG = "#\"kg\"";
+    pFormatter->PutEntry(sKG, nCheckPos, nType, nKeyKG);
+    OUString sS = "#\"s\"";
+    pFormatter->PutEntry(sS, nCheckPos, nType, nKeyS);
+    OUString sCM_S = "#\"cm/s\"";
+    pFormatter->PutEntry(sCM_S, nCheckPos, nType, nKeyCM_S);
+
+    // 1st column: 10cm, 20cm, 30cm
+    ScAddress address(0, 0, 0);
+    mpDoc->SetNumberFormat(address, nKeyCM);
+    mpDoc->SetValue(address, 10);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyCM);
+    mpDoc->SetValue(address, 20);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyCM);
+    mpDoc->SetValue(address, 30);
+
+    // 2nd column: 1kg, 2kg, 3kg
+    address = ScAddress(1, 0, 0);
+    mpDoc->SetNumberFormat(address, nKeyKG);
+    mpDoc->SetValue(address, 1);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyKG);
+    mpDoc->SetValue(address, 2);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyKG);
+    mpDoc->SetValue(address, 3);
+
+    // 3rd column: 1s, 2s, 3s
+    address = ScAddress(2, 0, 0);
+    mpDoc->SetNumberFormat(address, nKeyS);
+    mpDoc->SetValue(address, 1);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyS);
+    mpDoc->SetValue(address, 2);
+
+    address.IncRow();
+    mpDoc->SetNumberFormat(address, nKeyS);
+    mpDoc->SetValue(address, 3);
+
+    // 4th column: 5cm/s
+    address = ScAddress(3, 0, 0);
+    mpDoc->SetNumberFormat(address, nKeyCM_S);
+    mpDoc->SetValue(address, 5);
+
+    ScFormulaCell* pCell;
+    ScTokenArray* pTokens;
+
+    // Test that addition of the same unit is successful
+    address = ScAddress(0, 4, 0);
+    mpDoc->SetFormula(address, "=A1+A2");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Test that addition of different units fails
+    address = ScAddress(0, 6, 0);
+    mpDoc->SetFormula(address, "=A1+B1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Test that addition and multiplication works (i.e. kg*s+kg*s)
+    address = ScAddress(0, 7, 0);
+    mpDoc->SetFormula(address, "=A1*B1+A2*B2");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Test another combination (i.e. cm/s+'cm/s')
+    address = ScAddress(0, 8, 0);
+    mpDoc->SetFormula(address, "=A1/C1+D1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+
+    // Test that another combination fails (cm*kg/s+'cm/s')
+    address = ScAddress(0, 9, 0);
+    mpDoc->SetFormula(address, "=A1*B1/C1+D1");
+    pCell = mpDoc->GetFormulaCell(address);
+    pTokens = pCell->GetCode();
+    CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
