@@ -4867,6 +4867,20 @@ void Test::testMatrixOp()
     nVal = m_pDoc->GetValue(2, 1, 0);
     CPPUNIT_ASSERT_EQUAL(4.0, nVal);
 
+    m_pDoc->SetString(4, 0, 0, "=SUMPRODUCT({1;2;4}+8)");
+    m_pDoc->SetString(4, 1, 0, "=SUMPRODUCT(8+{1;2;4})");
+    m_pDoc->SetString(4, 2, 0, "=SUMPRODUCT({1;2;4}-8)");
+    m_pDoc->SetString(4, 3, 0, "=SUMPRODUCT(8-{1;2;4})");
+    m_pDoc->SetString(4, 4, 0, "=SUMPRODUCT({1;2;4}+{8;16;32})");
+    m_pDoc->SetString(4, 5, 0, "=SUMPRODUCT({8;16;32}+{1;2;4})");
+    m_pDoc->SetString(4, 6, 0, "=SUMPRODUCT({1;2;4}-{8;16;32})");
+    m_pDoc->SetString(4, 7, 0, "=SUMPRODUCT({8;16;32}-{1;2;4})");
+    double fResult[8] = { 31.0, 31.0, -17.0, 17.0, 63.0, 63.0, -49.0, 49.0 };
+    for (size_t i = 0; i < SAL_N_ELEMENTS(fResult); ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL( fResult[i], m_pDoc->GetValue(4, i, 0));
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
