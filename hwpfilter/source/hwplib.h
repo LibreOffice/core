@@ -32,7 +32,6 @@
 typedef unsigned short  hchar;
 typedef int     hunit;
 typedef unsigned char       kchar;
-typedef unsigned char       echar;
 #endif                                            // _HCHAR_
 
 #if !defined(WIN32)

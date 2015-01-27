@@ -51,7 +51,6 @@ class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 public:
             TYPEINFO();
 };
-typedef tools::SvRef<SvRttiBase> SvRttiBaseRef;
 
 #define SV_DECL_PERSIST( Class, CLASS_ID )                          \
     TYPEINFO_OVERRIDE();                                                     \

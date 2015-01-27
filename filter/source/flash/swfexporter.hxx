@@ -111,7 +111,6 @@ struct ShapeAnimationInfo
     ShapeAnimationInfo( ShapeInfo* pShapeInfo, sal_uInt16 nDepth ) : mpShapeInfo( pShapeInfo ), mnDepth( nDepth ) {}
 };
 
-typedef std::vector<ShapeAnimationInfo> ShapeAnimationInfoVector;
 
 
 

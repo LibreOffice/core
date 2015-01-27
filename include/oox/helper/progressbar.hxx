@@ -56,7 +56,6 @@ public:
     virtual void        setPosition( double fPosition ) = 0;
 };
 
-typedef ::boost::shared_ptr< IProgressBar > IProgressBarRef;
 
 
 

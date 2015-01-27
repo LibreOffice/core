@@ -41,7 +41,6 @@ namespace writerfilter {
 namespace ooxml
 {
 
-typedef std::shared_ptr<Stream> StreamPointer_t;
 
 class OOXMLFastContextHandler: public ::cppu::WeakImplHelper1<css::xml::sax::XFastContextHandler>
 {

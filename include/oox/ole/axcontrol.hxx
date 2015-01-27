@@ -857,7 +857,6 @@ public: // direct access needed for legacy VML drawing controls
     bool                mbFontSupport;      ///< True = control supports the font property.
 };
 
-typedef ::boost::shared_ptr< AxContainerModelBase > AxContainerModelRef;
 
 
 

@@ -59,10 +59,6 @@ const char CFG_ENTRY_PRIMARY[] = "PrimaryKeys";
 const char CFG_ENTRY_GLOBAL[] = "Global";
 const char CFG_ENTRY_MODULES[] = "Modules";
 
-/** "global" type to make accelerator presets unique, so they can be used
-    in combination with the salhelper::SingletonRef mechanism! */
-typedef PresetHandler AcceleratorPresets;
-
 /**
     implements a read/write access to the accelerator configuration.
  */

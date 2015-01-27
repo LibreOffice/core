@@ -218,7 +218,6 @@ void touch_ui_selection_none();
 // thread.
 
 typedef enum { DOWN, MOVE, UP} MLOMouseButtonState;
-typedef enum { NONE, SHIFT, META } MLOModifiers;
 typedef int MLOModifierMask;
 
 void touch_lo_keyboard_did_hide();

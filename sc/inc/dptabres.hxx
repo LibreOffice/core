@@ -234,7 +234,6 @@ struct ScDPParentDimData
     ScDPParentDimData(SCROW nIndex, const ScDPDimension* pDim, const ScDPLevel* pLev, const ScDPMember* pMember);
 };
 
-typedef std::vector <ScDPParentDimData *>                 DimMemberArray;
 typedef std::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
 
 class ResultMembers

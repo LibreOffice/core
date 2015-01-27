@@ -418,9 +418,7 @@ typedef OUStringList                                                OrderList;
 
 typedef CheckedIterator< OUStringList >                             CheckedStringListIterator;
 typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator;
-typedef CheckedIterator< PerformanceHash >                          CheckedPerformanceIterator;
 
-typedef ::std::vector< FilterHash::const_iterator >                 FilterQuery;
 
 // Use private static data container to hold all values of configuration!
 

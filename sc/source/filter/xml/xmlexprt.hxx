@@ -69,7 +69,6 @@ class CompileFormulaContext;
 
 }
 
-typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
 class ScXMLExport : public SvXMLExport
 {

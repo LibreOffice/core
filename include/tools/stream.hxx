@@ -167,7 +167,6 @@ public:
     virtual void    Terminate() = 0;
 };
 
-typedef tools::SvRef<SvOpenLockBytes> SvOpenLockBytesRef;
 
 // SvAsyncLockBytes
 
@@ -197,7 +196,6 @@ public:
     virtual void    Terminate() SAL_OVERRIDE { m_bTerminated = true; }
 };
 
-typedef tools::SvRef<SvAsyncLockBytes> SvAsyncLockBytesRef;
 
 // SvStream
 

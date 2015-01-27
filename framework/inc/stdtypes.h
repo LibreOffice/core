@@ -101,13 +101,6 @@ void free(std::vector<T>& vec)
 }
 
 /**
-    Basic string queue based on a std::queue()
-    It implements some additional funtionality which can be useful but
-    is missing at the normal std implementation.
-*/
-typedef ::std::queue< OUString > OUStringQueue;
-
-/**
     Basic hash based on a std::unordered_map() which provides key=[OUString] and value=[template type] pairs
     It implements some additional funtionality which can be useful but
     is missing at the normal hash implementation.
@@ -138,7 +131,6 @@ typedef BaseHash< OUString > OUStringHashMap;
     Our helper class OPropertySetHelper works optimized with handles but sometimes we have only a property name.
     Mapping between these two parts of a property should be done in the fastest way :-)
 */
-typedef BaseHash< sal_Int32 > NameToHandleHash;
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar<OUString> ListenerHash;
 
