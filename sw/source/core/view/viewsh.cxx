@@ -125,9 +125,7 @@ void SwViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallbac
 
 void SwViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
 {
-    if (mbInLibreOfficeKitCallback && nType == LOK_CALLBACK_INVALIDATE_TILES)
-        // Make sure no more invalidation events are issued when we're in the
-        // callback already.
+    if (mbInLibreOfficeKitCallback)
         return;
 
     if (mpLibreOfficeKitCallback)

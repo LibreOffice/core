@@ -88,7 +88,7 @@ void SwVisCrsr::Show()
         m_bIsVisible = true;
 
         // display at all?
-        if( m_pCrsrShell->VisArea().IsOver( m_pCrsrShell->m_aCharRect ) )
+        if( m_pCrsrShell->VisArea().IsOver( m_pCrsrShell->m_aCharRect ) || m_pCrsrShell->isTiledRendering() )
             _SetPosAndShow();
     }
 }
