@@ -155,7 +155,8 @@
   <implementation name="com.sun.star.form.OFormattedFieldWrapper">
     <service name="stardiv.one.form.component.Edit"/>
   </implementation>
-  <implementation name="com.sun.star.form.OFormsCollection">
+  <implementation name="com.sun.star.form.OFormsCollection"
+      constructor="com_sun_star_form_OFormsCollection_get_implementation">
     <service name="com.sun.star.form.Forms"/>
   </implementation>
   <implementation name="com.sun.star.form.OGridControlModel">
