@@ -2548,6 +2548,8 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(::com::sun::
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     AddElement(xTemp);
+
+    SolarMutexGuard g;
     m_pShell->DetermineForms(true);
 }
 
@@ -2573,6 +2575,8 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
     Reference< XInterface> xTemp;
     evt.Element >>= xTemp;
     RemoveElement(xTemp);
+
+    SolarMutexGuard g;
     m_pShell->DetermineForms(true);
 }
 
@@ -2598,6 +2602,7 @@ void FmXFormShell::UpdateForms( bool _bInvalidate )
         AddElement( m_xForms );
     }
 
+    SolarMutexGuard g;
     m_pShell->DetermineForms( _bInvalidate );
 }
 
