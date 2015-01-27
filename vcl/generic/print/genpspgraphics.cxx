@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <vector>
+
 #include <sal/types.h>
 
 // for mmap etc.
@@ -1243,7 +1247,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     int xMin, yMin, xMax, yMax;
     rMgr.getFontBoundingBox( aFont, xMin, yMin, xMax, yMax );
 
-    psp::CharacterMetric aMetrics[nLen];
+    std::vector<psp::CharacterMetric> aMetrics(nLen);
     sal_Ucs aUnicodes[nLen];
     if( aFontInfo.m_aEncoding == RTL_TEXTENCODING_SYMBOL && aFontInfo.m_eType == psp::fonttype::Type1 )
     {
@@ -1251,7 +1255,8 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
             aUnicodes[i] = pUnicodes[i] < 0x0100 ? pUnicodes[i] + 0xf000 : pUnicodes[i];
         pUnicodes = aUnicodes;
     }
-    if (!rMgr.getMetrics(aFont, pUnicodes, nLen, aMetrics))
+    if (!rMgr.getMetrics(
+            aFont, pUnicodes, nLen, nLen == 0 ? nullptr : &aMetrics[0]))
         return NULL;
 
     OString aSysPath = rMgr.getFontFileSysPath( aFont );
