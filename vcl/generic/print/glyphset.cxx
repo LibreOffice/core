@@ -744,7 +744,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAllowType42
 
     utl::TempFile aTmpFile;
     aTmpFile.EnableKillingFile();
-    FILE* pTmpFile = fopen(OUStringToOString(aTmpFile.GetFileName(), osl_getThreadTextEncoding()).getStr(), "wb");
+    FILE* pTmpFile = fopen(OUStringToOString(aTmpFile.GetFileName(), osl_getThreadTextEncoding()).getStr(), "w+b");
     if (pTmpFile == NULL)
         return false;
 

@@ -699,7 +699,7 @@ bool Sane::Start( BitmapTransporter& rBitmap )
             }
             utl::TempFile aFrame;
             aFrame.EnableKillingFile();
-            FILE* pFrame = fopen(OUStringToOString(aFrame.GetFileName(), osl_getThreadTextEncoding()).getStr(), "wb");
+            FILE* pFrame = fopen(OUStringToOString(aFrame.GetFileName(), osl_getThreadTextEncoding()).getStr(), "w+b");
             if( ! pFrame )
             {
                 bSuccess = false;
