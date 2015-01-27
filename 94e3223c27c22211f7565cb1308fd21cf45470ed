@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a50d1a3_7ce4b90c",
+        "filename": "connectivity/source/drivers/ado/ADriver.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2015-01-27T01:52:40Z",
+      "side": 1,
+      "message": "Unfortunately, this does not protect against leaks when the ctor throws. That\u0027s because the unique_ptr wouldn\u0027t be constructed yet, nor would a reference to the allocated memory be reachable by any code (other than OConnection\u0027s ctor, which threw).\n\nThe proper solution is to call std::make_unique which forwards the args to the ctor and ensures thread-safe construction of a unique_ptr that does\u0027t leak.\n\nHowever, make_unique is missing from C++11 and it was only added in C++14.\n\nA cheap solution is to use shared_ptr and make_shared, which is short of writing make_unique (which is a bad idea).",
+      "revId": "94e3223c27c22211f7565cb1308fd21cf45470ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
