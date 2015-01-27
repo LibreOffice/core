@@ -72,7 +72,8 @@ void FastAttributeList::clear()
 {
     maAttributeTokens.clear();
     maAttributeValues.resize(1);
-    if (maUnknownAttributes.size() > 0)
+    assert(maAttributeValues[0] == 0);
+    if (!maUnknownAttributes.empty())
         maUnknownAttributes.clear();
 }
 
