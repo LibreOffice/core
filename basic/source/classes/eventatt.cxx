@@ -48,7 +48,7 @@
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 
-
+#include <vcl/svapp.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <sbunoobj.hxx>
 #include <basic/sbstar.hxx>
@@ -161,12 +161,16 @@ public:
 // Methods XAllListener
 void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException, std::exception )
 {
+    SolarMutexGuard g;
+
     firing_impl( aScriptEvent, NULL );
 }
 
 Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
     throw ( InvocationTargetException, RuntimeException, std::exception )
 {
+    SolarMutexGuard g;
+
     Any aRetAny;
     firing_impl( aScriptEvent, &aRetAny );
     return aRetAny;
