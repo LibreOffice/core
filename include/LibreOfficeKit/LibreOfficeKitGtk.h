@@ -42,6 +42,8 @@ struct _LOKDocView
     LibreOfficeKitDocument* pDocument;
     /// View or edit mode.
     gboolean m_bEdit;
+    /// Position and size of the visible cursor.
+    GdkRectangle m_aVisibleCursor;
 };
 
 struct _LOKDocViewClass

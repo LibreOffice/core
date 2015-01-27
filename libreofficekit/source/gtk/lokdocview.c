@@ -26,6 +26,7 @@
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
 static float pixelToTwip(float nInput);
+static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData);
 
 // We specifically need to destroy the document when closing in order to ensure
 // that lock files etc. are cleaned up.
@@ -112,9 +113,12 @@ static void lok_docview_init( LOKDocView* pDocView )
 
     pDocView->fZoom = 1;
     pDocView->m_bEdit = FALSE;
+    memset(&pDocView->m_aVisibleCursor, 0, sizeof(pDocView->m_aVisibleCursor));
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
+    g_signal_connect_after(pDocView->pEventBox, "expose-event",
+                           G_CALLBACK(renderOverlay), pDocView);
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
@@ -137,6 +141,38 @@ static float twipToPixel(float nInput)
 static float pixelToTwip(float nInput)
 {
     return (nInput / g_nDPI) * 1440.0f;
+}
+
+static gboolean lcl_isEmptyRectangle(GdkRectangle* pRectangle)
+{
+    return pRectangle->x == 0 && pRectangle->y == 0 && pRectangle->width == 0 && pRectangle->height == 0;
+}
+
+static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
+{
+    LOKDocView* pDocView = pData;
+    cairo_t* pCairo;
+
+    (void)pEvent;
+    pCairo = gdk_cairo_create(gtk_widget_get_window(pWidget));
+
+    if (!lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor))
+    {
+        if (pDocView->m_aVisibleCursor.width == 0)
+            // Set a minimal width if it would be 0.
+            pDocView->m_aVisibleCursor.width = 30;
+
+        cairo_set_source_rgb(pCairo, 0, 0, 0);
+        cairo_rectangle(pCairo,
+                        twipToPixel(pDocView->m_aVisibleCursor.x),
+                        twipToPixel(pDocView->m_aVisibleCursor.y),
+                        twipToPixel(pDocView->m_aVisibleCursor.width),
+                        twipToPixel(pDocView->m_aVisibleCursor.height));
+        cairo_fill(pCairo);
+    }
+
+    cairo_destroy(pCairo);
+    return FALSE;
 }
 
 void renderDocument(LOKDocView* pDocView, GdkRectangle* pPartial)
@@ -298,6 +334,12 @@ static gboolean lok_docview_callback(gpointer pData)
         }
         else
             renderDocument(pCallback->m_pDocView, NULL);
+    }
+    break;
+    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+    {
+        pCallback->m_pDocView->m_aVisibleCursor = lcl_payloadToRectangle(pCallback->m_pPayload);
+        gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
     }
     break;
     default:
