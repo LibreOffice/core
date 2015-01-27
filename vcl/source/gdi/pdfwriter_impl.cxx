@@ -3125,6 +3125,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const Physical
             if(it->second == -1)
                 continue;
             sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
+            SAL_WARN_IF(nCode != it->second, "vcl.gdi", "emitEmbeddedFont: FIXME: cannot handle Type 1 font with code points > 256");
             //We're not doing this right here. We have taken a unicode-to-font_index map
             //and are trying to generate a font_index-to-unicode mapping from it
             //Which assumes that there is a 1-to-1 mapping there, but that might not be
