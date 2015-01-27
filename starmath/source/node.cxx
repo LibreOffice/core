@@ -2046,7 +2046,7 @@ void SmFontNode::CreateTextFromNode(OUString &rText)
                         rText += "-";
                         break;
                     case FNTSIZ_MULTIPLY:
-                        rText += "*'";
+                        rText += "*";
                         break;
                     case FNTSIZ_DIVIDE:
                         rText += "/";
