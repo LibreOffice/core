@@ -63,9 +63,10 @@ class FractionPrinter(object):
         self.val = val
 
     def to_string(self):
-        numerator = self.val['value']['num']
-        denominator = self.val['value']['den']
-        if self.val['valid']:
+        impl = self.val['mpImpl'].dereference()
+        numerator = impl['value']['num']
+        denominator = impl['value']['den']
+        if impl['valid']:
             return "%d/%d" % (numerator, denominator)
         else:
             return "invalid %s %d/%d" % (self.typename, numerator, denominator)
