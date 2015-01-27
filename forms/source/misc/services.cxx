@@ -197,7 +197,6 @@ void ensureClassInfos()
     // = various
     aServices.realloc(1);
     aServices.getArray()[0] = "com.sun.star.form.Forms";
-    REGISTER_CLASS_CORE(OFormsCollection);
 
     REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
 

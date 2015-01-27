@@ -160,5 +160,11 @@ InterfaceRef  OFormsCollection::getParent() throw( RuntimeException, std::except
 
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_form_OFormsCollection_get_implementation(css::uno::XComponentContext* context,
+                                                      css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OFormsCollection(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
