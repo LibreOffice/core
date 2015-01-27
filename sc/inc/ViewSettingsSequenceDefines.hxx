@@ -23,7 +23,7 @@
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 
-#define SC_VIEWSETTINGS_COUNT               23
+#define SC_VIEWSETTINGS_COUNT               24
 
 #define SC_VIEW_ID                          0
 #define SC_TABLE_VIEWSETTINGS               1
@@ -41,13 +41,14 @@
 #define SC_COLROWHDR                        13
 #define SC_SHEETTABS                        14
 #define SC_OUTLSYMB                         15
-#define SC_SNAPTORASTER                     16
-#define SC_RASTERVIS                        17
-#define SC_RASTERRESX                       18
-#define SC_RASTERRESY                       19
-#define SC_RASTERSUBX                       20
-#define SC_RASTERSUBY                       21
-#define SC_RASTERSYNC                       22
+#define SC_VALUE_HIGHLIGHTING               16
+#define SC_SNAPTORASTER                     17
+#define SC_RASTERVIS                        18
+#define SC_RASTERRESX                       19
+#define SC_RASTERRESY                       20
+#define SC_RASTERSUBX                       21
+#define SC_RASTERSUBY                       22
+#define SC_RASTERSYNC                       23
 
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence

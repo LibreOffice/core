@@ -2708,6 +2708,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
             ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_SHEETTABS].Value, pOptions->GetOption( VOPT_TABCONTROLS ) );
             pSettings[SC_OUTLSYMB].Name = SC_UNO_OUTLSYMB;
             ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_OUTLSYMB].Value, pOptions->GetOption( VOPT_OUTLINER ) );
+            pSettings[SC_VALUE_HIGHLIGHTING].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_VALUEHIGH ) );
+            ScUnoHelpFunctions::SetBoolInAny( pSettings[SC_VALUE_HIGHLIGHTING].Value, pOptions->GetOption( VOPT_SYNTAX ) );
 
             const ScGridOptions& aGridOpt = pOptions->GetGridOptions();
             pSettings[SC_SNAPTORASTER].Name = SC_UNO_SNAPTORASTER;
@@ -2861,6 +2863,8 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             if ( rSettings[i].Value >>= nTemp16 )
                 pOptions->SetObjMode( VOBJ_TYPE_DRAW, (nTemp16 == 1) ? VOBJ_MODE_HIDE : VOBJ_MODE_SHOW );
         }
+        else if ( sName.compareToAscii( SC_UNO_VALUEHIGH ) == 0 )
+            pOptions->SetOption( VOPT_SYNTAX, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
         else
         {
             ScGridOptions aGridOpt(pOptions->GetGridOptions());
