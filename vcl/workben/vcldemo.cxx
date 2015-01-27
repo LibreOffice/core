@@ -331,7 +331,7 @@ public:
                             RTL_TEXTENCODING_UTF8 );
 
             OUString aText;
-            int nPrintNumCopies;
+            int nPrintNumCopies=0;
 
             if (mbArabicText)
             {
@@ -1197,7 +1197,7 @@ void DemoRenderer::InitRenderers()
     maRenderers.push_back(new DrawText());
     maRenderers.push_back(new DrawClipText());
     maRenderers.push_back(new DrawArabicText());
-    maRenderers.push_back(new DrawRotatedText());
+    //maRenderers.push_back(new DrawRotatedText());
     maRenderers.push_back(new DrawPoly());
     maRenderers.push_back(new DrawEllipse());
     maRenderers.push_back(new DrawCheckered());
