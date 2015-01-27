@@ -33,7 +33,8 @@
   <implementation name="com.sun.star.comp.forms.FormOperations">
     <service name="com.sun.star.form.runtime.FormOperations"/>
   </implementation>
-  <implementation name="com.sun.star.comp.forms.ODatabaseForm">
+  <implementation name="com.sun.star.comp.forms.ODatabaseForm"
+      constructor="com_sun_star_comp_forms_ODatabaseForm_get_implementation">
     <service name="com.sun.star.form.FormComponent"/>
     <service name="com.sun.star.form.FormComponents"/>
     <service name="com.sun.star.form.component.DataForm"/>
