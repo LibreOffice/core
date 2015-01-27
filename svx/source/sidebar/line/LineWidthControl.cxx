@@ -150,6 +150,7 @@ void LineWidthControl::Initialize()
     for(int i = 0; i <= 7 ; i++)
     {
         rStr[i] = rStr[i].replace('.', cSep);//Modify
+        rStr[i] += " ";
         rStr[i] += mstrPT;
     }
     //end
