@@ -718,6 +718,13 @@ OString XclXmlUtils::ToOString( const OUString& s )
     return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
 }
 
+OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const ScAddress& rAddress )
+{
+    if (!rAddress.TryFormat(s, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)))
+        s.append(ToOString(rAddress));
+    return s;
+}
+
 OString XclXmlUtils::ToOString( const ScAddress& rAddress )
 {
     OUString sAddress(rAddress.Format(SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)));
@@ -758,6 +765,11 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
     aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL )) );
 
     return aAddress;
+}
+
+OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const XclAddress& rAddress )
+{
+    return ToOString( s, lcl_ToAddress( rAddress ));
 }
 
 OString XclXmlUtils::ToOString( const XclAddress& rAddress )

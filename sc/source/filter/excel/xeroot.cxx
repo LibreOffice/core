@@ -57,6 +57,7 @@ XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
 {
     SvtSaveOptions aSaveOpt;
     mbRelUrl = mrMedium.IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys();
+    maStringBuf = OStringBuffer(10); // for simple addresses, like ABC1000000
 }
 
 XclExpRootData::~XclExpRootData()

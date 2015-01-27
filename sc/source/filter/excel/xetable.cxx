@@ -632,7 +632,7 @@ void XclExpNumberCell::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      "n",
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -923,11 +923,10 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = NULL;
     OUString    sValue;
-
     XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      sType,
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -1309,7 +1308,7 @@ void XclExpRkCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& r
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( rAddress ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), rAddress ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, nXFId ).getStr(),
             XML_t,      "n",
             // OOXTODO: XML_cm, XML_vm, XML_ph
