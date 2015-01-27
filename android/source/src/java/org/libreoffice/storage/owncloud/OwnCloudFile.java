@@ -10,6 +10,7 @@ import java.util.List;
 import org.libreoffice.storage.IFile;
 
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.resources.files.DownloadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.ReadRemoteFolderOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
 
@@ -97,8 +98,14 @@ public class OwnCloudFile implements IFile {
 
     @Override
     public File getDocument() {
-        // TODO Auto-generated method stub
-        return null;
+        if (isDirectory()) {
+            return null;
+        }
+        File downFolder = provider.getCacheDir();
+        DownloadRemoteFileOperation operation = new DownloadRemoteFileOperation(
+                file.getRemotePath(), downFolder.getAbsolutePath());
+        operation.execute(provider.getClient());
+        return new File(downFolder.getAbsolutePath() + file.getRemotePath());
     }
 
     @Override
