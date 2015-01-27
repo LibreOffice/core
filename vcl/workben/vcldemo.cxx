@@ -1258,7 +1258,7 @@ void DemoRenderer::addTime(int i, double t)
     maRenderers[i]->countTime++;
 }
 
-void DemoRenderer::selectRenderer(const OUString &rName )
+void DemoRenderer::selectRenderer(const OUString &rName)
 {
     for (size_t i = 0; i < maRenderers.size(); i++)
     {
@@ -1470,7 +1470,7 @@ public:
                     if (bLast)
                         return showHelp(aRenderer);
                     else
-                        aRenderer.selectRenderer(GetCommandLineParam(i));
+                        aRenderer.selectRenderer(GetCommandLineParam(++i));
                 }
                 else if (aArg == "--test")
                 {
