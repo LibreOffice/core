@@ -272,12 +272,24 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     }
 
     public void open(IFile document) {
-        File file = document.getDocument();
-        Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
-        String packageName = getApplicationContext().getPackageName();
-        ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
-        i.setComponent(componentName);
-        startActivity(i);
+        new AsyncTask<IFile, Void, File>() {
+            @Override
+            protected File doInBackground(IFile... document) {
+                // this operation may imply network access and must be run in
+                // a different thread
+                return document[0].getDocument();
+            }
+
+            @Override
+            protected void onPostExecute(File file) {
+                Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+                String packageName = getApplicationContext().getPackageName();
+                ComponentName componentName = new ComponentName(packageName,
+                        LibreOfficeMainActivity.class.getName());
+                i.setComponent(componentName);
+                startActivity(i);
+            }
+        }.execute(document);
     }
 
     private void open(int position) {
