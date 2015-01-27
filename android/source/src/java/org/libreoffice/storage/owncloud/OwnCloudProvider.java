@@ -1,5 +1,6 @@
 package org.libreoffice.storage.owncloud;
 
+import java.io.File;
 import java.net.URI;
 
 import org.libreoffice.R;
@@ -23,6 +24,7 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 public class OwnCloudProvider implements IDocumentProvider {
 
     private OwnCloudClient client;
+    private File cacheDir;
 
     // TODO: these must be configurable
     final private String serverUrl = "http://10.0.2.2/owncloud"; //emulator host machine
@@ -36,6 +38,13 @@ public class OwnCloudProvider implements IDocumentProvider {
         client.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
                 userName, password));
 
+        // make sure cache directory exists, and clear it
+        // TODO: probably we should do smarter cache management
+        cacheDir = new File(context.getCacheDir(), "ownCloud");
+        if (cacheDir.exists()) {
+            deleteRecursive(cacheDir);
+        }
+        cacheDir.mkdirs();
     }
 
     @Override
@@ -73,4 +82,27 @@ public class OwnCloudProvider implements IDocumentProvider {
         return client;
     }
 
+    /**
+     * Used by OwnCloudFiles to get the cache directory they should download
+     * files to.
+     *
+     * @return cache directory.
+     */
+    protected File getCacheDir() {
+        return cacheDir;
+    }
+
+    /**
+     * Deletes files and recursively deletes directories.
+     *
+     * @param file
+     *            File or directory to be deleted.
+     */
+    private void deleteRecursive(File file) {
+        if (file.isDirectory()) {
+            for (File child : file.listFiles())
+                deleteRecursive(child);
+        }
+        file.delete();
+    }
 }
