@@ -281,6 +281,127 @@ void ScOrcusSheetProperties::set_merge_cell_range(const char* /*p_range*/, size_
 {
 }
 
+ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc):
+    mnTab(nTab),
+    mrDoc(rDoc)
+{
+    (void)mnTab;
+    (void)mrDoc;
+}
+
+ScOrcusConditionalFormat::~ScOrcusConditionalFormat()
+{
+}
+
+void ScOrcusConditionalFormat::set_color(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
+        os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_color");
+}
+
+void ScOrcusConditionalFormat::set_condition_type(os::condition_type_t /*type*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_condition_type");
+}
+
+void ScOrcusConditionalFormat::set_formula(const char* /*p*/, size_t /*n*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_formula");
+}
+
+void ScOrcusConditionalFormat::set_date(os::condition_date_t /*date*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_date");
+}
+
+void ScOrcusConditionalFormat::commit_condition()
+{
+    SAL_INFO("sc.orcus.condformat", "commit_condition");
+}
+
+void ScOrcusConditionalFormat::set_icon_name(const char* /*p*/, size_t /*n*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_icon_name");
+}
+
+void ScOrcusConditionalFormat::set_databar_gradient(bool /*gradient*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_databar_gradient");
+}
+
+void ScOrcusConditionalFormat::set_databar_axis(os::databar_axis_t /*axis*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_databar_axis");
+}
+
+void ScOrcusConditionalFormat::set_databar_color_positive(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
+        os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_databar_color_positive");
+}
+
+void ScOrcusConditionalFormat::set_databar_color_negative(os::color_elem_t /*alpha*/, os::color_elem_t /*red*/,
+        os::color_elem_t /*green*/, os::color_elem_t /*blue*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_databar_color_negative");
+}
+
+void ScOrcusConditionalFormat::set_min_databar_length(double /*length*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_min_databar_length");
+}
+
+void ScOrcusConditionalFormat::set_max_databar_length(double /*length*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_max_databar_length");
+}
+
+void ScOrcusConditionalFormat::set_show_value(bool /*show*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_show_value");
+}
+
+void ScOrcusConditionalFormat::set_iconset_reverse(bool /*reverse*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_iconset_reverse");
+}
+
+void ScOrcusConditionalFormat::set_xf_id(size_t /*xf*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_xf_id");
+}
+
+void ScOrcusConditionalFormat::set_operator(os::condition_operator_t /*condition_type*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_operator");
+}
+
+void ScOrcusConditionalFormat::set_type(os::conditional_format_t /*type*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_type");
+}
+
+void ScOrcusConditionalFormat::commit_entry()
+{
+    SAL_INFO("sc.orcus.condformat", "commit_entry");
+}
+
+void ScOrcusConditionalFormat::set_range(const char* /*p*/, size_t /*n*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_range");
+}
+
+void ScOrcusConditionalFormat::set_range(os::row_t /*row_start*/, os::col_t /*col_start*/,
+        os::row_t /*row_end*/, os::col_t /*col_end*/)
+{
+    SAL_INFO("sc.orcus.condformat", "set_range");
+}
+
+void ScOrcusConditionalFormat::commit_format()
+{
+    SAL_INFO("sc.orcus.condformat", "commit_format");
+}
+
 ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& rFactory) :
     mrDoc(rDoc),
     mnTab(nTab),
@@ -288,6 +409,7 @@ ScOrcusSheet::ScOrcusSheet(ScDocumentImport& rDoc, SCTAB nTab, ScOrcusFactory& r
     mrStyles(static_cast<ScOrcusStyles&>(*mrFactory.get_styles())),
     maAutoFilter(rDoc.getDoc()),
     maProperties(mnTab, mrDoc),
+    maConditionalFormat(mnTab, rDoc.getDoc()),
     mnCellCount(0)
 {
 }
@@ -310,6 +432,11 @@ os::iface::import_table* ScOrcusSheet::get_table()
 os::iface::import_sheet_properties* ScOrcusSheet::get_sheet_properties()
 {
     return &maProperties;
+}
+
+os::iface::import_conditional_format* ScOrcusSheet::get_conditional_format()
+{
+    return &maConditionalFormat;
 }
 
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)

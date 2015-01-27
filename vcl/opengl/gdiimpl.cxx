@@ -898,6 +898,8 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& rTexture, const SalT
 {
     OpenGLZone aZone;
 
+    SAL_INFO("vcl.opengl", "draw texture rect");
+
     GLfloat aTexCoord[8];
     rTexture.GetCoord( aTexCoord, rPosAry, bInverted );
     mpProgram->SetTextureCoord( aTexCoord );
@@ -907,6 +909,8 @@ void OpenGLSalGraphicsImpl::DrawTextureRect( OpenGLTexture& rTexture, const SalT
 void OpenGLSalGraphicsImpl::DrawTexture( OpenGLTexture& rTexture, const SalTwoRect& pPosAry, bool bInverted )
 {
     OpenGLZone aZone;
+
+    SAL_INFO("vcl.opengl", "draw texture");
 
     if( !UseProgram( "textureVertexShader", "textureFragmentShader" ) )
         return;
