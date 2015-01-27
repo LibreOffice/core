@@ -8,15 +8,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-#This digs through a pile of bugzilla's and populates the cwd with a big
-#collection of bug-docs in per-filetype dirs with bug-ids as names with
-#prefixes to indicate which bug-tracker, e.g.
+# This digs through a pile of bugzilla's and populates the cwd with a big
+# collection of bug-docs in per-filetype dirs with bug-ids as names with
+# prefixes to indicate which bug-tracker, e.g.
 #
-#fdo-bugid-X.suffix
-#rhbz-bugid-X.suffix
-#moz-bugid-X.suffix
+# fdo-bugid-X.suffix
+# rhbz-bugid-X.suffix
+# moz-bugid-X.suffix
 #
-#where X is the n'th attachment of that type in the bug
+# where X is the n'th attachment of that type in the bug
+#
+# The results are stored in the current directory, categorized by the
+# extension of the downloaded file.  When a file already exists, it is assumed
+# it is already downloaded by a previous run, and up-to-date.
 
 from __future__ import print_function
 import feedparser
