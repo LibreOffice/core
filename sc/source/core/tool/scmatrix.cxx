@@ -2553,12 +2553,12 @@ public:
 
     double operator()(double nVal) const
     {
-        return nVal - mnVal;
+        return mnVal - nVal;
     }
 
     double operator()(bool bVal) const
     {
-        return (double)bVal - mnVal;
+        return mnVal - (double)bVal;
     }
 
     svl::SharedString operator()(const svl::SharedString&) const
