@@ -11,6 +11,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 
 import org.mozilla.gecko.OnInterceptTouchListener;
 
@@ -54,7 +55,7 @@ public final class TouchEventHandler {
     // before we begin panning the page
     private final int EVENT_LISTENER_TIMEOUT = 200;
 
-    private final LayerView mView;
+    private final View mView;
     private final GestureDetector mGestureDetector;
     private final SimpleScaleGestureDetector mScaleGestureDetector;
     private final JavaPanZoomController mPanZoomController;
@@ -63,9 +64,6 @@ public final class TouchEventHandler {
     // notification
     private final Queue<MotionEvent> mEventQueue;
     private final ListenerTimeoutProcessor mListenerTimeoutProcessor;
-
-    // the listener we use to notify gecko of touch events
-    private OnInterceptTouchListener mOnTouchListener;
 
     // whether or not we should wait for touch listeners to respond (this state is
     // per-tab and is updated when we switch tabs).
@@ -122,11 +120,11 @@ public final class TouchEventHandler {
     //   processed. (n is the absolute value of the balance.)
     private int mProcessingBalance;
 
-    TouchEventHandler(Context context, LayerView view, GeckoLayerClient layerClient) {
+    TouchEventHandler(Context context, View view, JavaPanZoomController panZoomController) {
         mView = view;
 
         mEventQueue = new LinkedList<MotionEvent>();
-        mPanZoomController = (JavaPanZoomController)layerClient.getPanZoomController();
+        mPanZoomController = panZoomController;
         mGestureDetector = new GestureDetector(context, mPanZoomController);
         mScaleGestureDetector = new SimpleScaleGestureDetector(mPanZoomController);
         mListenerTimeoutProcessor = new ListenerTimeoutProcessor();
@@ -140,28 +138,6 @@ public final class TouchEventHandler {
 
     /* This function MUST be called on the UI thread */
     public boolean handleEvent(MotionEvent event) {
-        // if we don't have gecko listeners, just dispatch the event
-        // and be done with it, no extra work needed.
-        if (mOnTouchListener == null) {
-            dispatchEvent(event);
-            return true;
-        }
-
-        if (mOnTouchListener.onInterceptTouchEvent(mView, event)) {
-            return true;
-        }
-
-        // if this is a hover event just notify gecko, we don't have any interest in the java layer.
-        if (isHoverEvent(event)) {
-            mOnTouchListener.onTouch(mView, event);
-            return true;
-        }
-
-        if (isScrollEvent(event)) {
-            dispatchEvent(event);
-            return true;
-        }
-
         if (isDownEvent(event)) {
             // this is the start of a new block of events! whee!
             mHoldInQueue = mWaitForTouchListeners;
@@ -204,9 +180,6 @@ public final class TouchEventHandler {
             mPanZoomController.preventedTouchFinished();
         }
 
-        // notify gecko of the event
-        mOnTouchListener.onTouch(mView, event);
-
         return true;
     }
 
@@ -235,16 +208,6 @@ public final class TouchEventHandler {
         mWaitForTouchListeners = aValue;
     }
 
-    /* This function MUST be called on the UI thread. */
-    public void setOnTouchListener(OnInterceptTouchListener onTouchListener) {
-        mOnTouchListener = onTouchListener;
-    }
-
-    private boolean isHoverEvent(MotionEvent event) {
-        int action = (event.getAction() & MotionEvent.ACTION_MASK);
-        return (action == MotionEvent.ACTION_HOVER_ENTER || action == MotionEvent.ACTION_HOVER_MOVE || action == MotionEvent.ACTION_HOVER_EXIT);
-    }
-
     private boolean isDownEvent(MotionEvent event) {
         int action = (event.getAction() & MotionEvent.ACTION_MASK);
         return (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN);
@@ -253,14 +216,6 @@ public final class TouchEventHandler {
     private boolean touchFinished(MotionEvent event) {
         int action = (event.getAction() & MotionEvent.ACTION_MASK);
         return (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL);
-    }
-
-    private boolean isScrollEvent(MotionEvent event) {
-        if (Build.VERSION.SDK_INT <= 11) {
-            return false;
-        }
-        int action = (event.getAction() & MotionEvent.ACTION_MASK);
-        return (action == MotionEvent.ACTION_SCROLL);
     }
 
     /**
@@ -274,7 +229,7 @@ public final class TouchEventHandler {
         if (mScaleGestureDetector.isInProgress()) {
             return;
         }
-        mPanZoomController.onTouchEvent(event);
+        mPanZoomController.handleEvent(event);
     }
 
     /**

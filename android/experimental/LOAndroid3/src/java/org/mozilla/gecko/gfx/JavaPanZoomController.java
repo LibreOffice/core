@@ -7,10 +7,13 @@ package org.mozilla.gecko.gfx;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.os.Build;
 import android.util.FloatMath;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.InputDevice;
 import android.view.MotionEvent;
+import android.view.View;
 
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
@@ -74,7 +77,7 @@ public class JavaPanZoomController
     private final SubdocumentScrollHelper mSubscroller;
     private final Axis mX;
     private final Axis mY;
-
+    private final TouchEventHandler mTouchEventHandler;
     private Thread mMainThread;
 
     /* The timer that handles flings or bounces. */
@@ -90,11 +93,12 @@ public class JavaPanZoomController
     /* Whether or not to wait for a double-tap before dispatching a single-tap */
     private boolean mWaitForDoubleTap;
 
-    public JavaPanZoomController(PanZoomTarget target) {
+    public JavaPanZoomController(PanZoomTarget target, View view) {
         mTarget = target;
         mSubscroller = new SubdocumentScrollHelper();
         mX = new AxisX(mSubscroller);
         mY = new AxisY(mSubscroller);
+        mTouchEventHandler = new TouchEventHandler(view.getContext(), view, this);
 
         mMainThread = LibreOfficeMainActivity.mAppContext.getMainLooper().getThread();
         checkMainThread();
@@ -104,6 +108,7 @@ public class JavaPanZoomController
 
     public void destroy() {
         mSubscroller.destroy();
+        mTouchEventHandler.destroy();
     }
 
     private final static float easeOut(float t) {
@@ -131,15 +136,40 @@ public class JavaPanZoomController
         }
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:   return onTouchStart(event);
-            case MotionEvent.ACTION_MOVE:   return onTouchMove(event);
-            case MotionEvent.ACTION_UP:     return onTouchEnd(event);
-            case MotionEvent.ACTION_CANCEL: return onTouchCancel(event);
-            case MotionEvent.ACTION_SCROLL: return onScroll(event);
-            default:                        return false;
+    /** This function MUST be called on the UI thread */
+    public boolean onMotionEvent(MotionEvent event) {
+        if (Build.VERSION.SDK_INT <= 11) {
+            return false;
         }
+
+        switch (event.getSource() & InputDevice.SOURCE_CLASS_MASK) {
+        case InputDevice.SOURCE_CLASS_POINTER:
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_SCROLL: return handlePointerScroll(event);
+            }
+            break;
+        }
+        return false;
+    }
+
+    /** This function MUST be called on the UI thread */
+    public boolean onTouchEvent(MotionEvent event) {
+        return mTouchEventHandler.handleEvent(event);
+    }
+
+    boolean handleEvent(MotionEvent event) {
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+        case MotionEvent.ACTION_DOWN:   return handleTouchStart(event);
+        case MotionEvent.ACTION_MOVE:   return handleTouchMove(event);
+        case MotionEvent.ACTION_UP:     return handleTouchEnd(event);
+        case MotionEvent.ACTION_CANCEL: return handleTouchCancel(event);
+        }
+        return false;
+    }
+
+    /** This function MUST be called on the UI thread */
+    public void notifyDefaultActionPrevented(boolean prevented) {
+        mTouchEventHandler.handleEventListenerAction(!prevented);
     }
 
     /** This function must be called from the UI thread. */
@@ -150,24 +180,24 @@ public class JavaPanZoomController
         // snaps to edges. for other cases (where the user's finger(s) are down) don't do
         // anything special.
         switch (mState) {
-            case FLING:
-                mX.stopFling();
-                mY.stopFling();
-                // fall through
-            case BOUNCE:
-            case ANIMATED_ZOOM:
-                // the zoom that's in progress likely makes no sense any more (such as if
-                // the screen orientation changed) so abort it
-                setState(PanZoomState.NOTHING);
-                // fall through
-            case NOTHING:
-                // Don't do animations here; they're distracting and can cause flashes on page
-                // transitions.
-                synchronized (mTarget.getLock()) {
-                    mTarget.setViewportMetrics(getValidViewportMetrics());
-                    mTarget.forceRedraw();
-                }
-                break;
+        case FLING:
+            mX.stopFling();
+            mY.stopFling();
+            // fall through
+        case BOUNCE:
+        case ANIMATED_ZOOM:
+            // the zoom that's in progress likely makes no sense any more (such as if
+            // the screen orientation changed) so abort it
+            setState(PanZoomState.NOTHING);
+            // fall through
+        case NOTHING:
+            // Don't do animations here; they're distracting and can cause flashes on page
+            // transitions.
+            synchronized (mTarget.getLock()) {
+                mTarget.setViewportMetrics(getValidViewportMetrics());
+                mTarget.forceRedraw();
+            }
+            break;
         }
     }
 
@@ -212,122 +242,123 @@ public class JavaPanZoomController
      * Panning/scrolling
      */
 
-    private boolean onTouchStart(MotionEvent event) {
+    private boolean handleTouchStart(MotionEvent event) {
         // user is taking control of movement, so stop
         // any auto-movement we have going
         stopAnimationTimer();
 
         switch (mState) {
-            case ANIMATED_ZOOM:
-                // We just interrupted a double-tap animation, so force a redraw in
-                // case this touchstart is just a tap that doesn't end up triggering
-                // a redraw
-                mTarget.forceRedraw();
-                // fall through
-            case FLING:
-            case BOUNCE:
-            case NOTHING:
-            case WAITING_LISTENERS:
-                startTouch(event.getX(0), event.getY(0), event.getEventTime());
-                return false;
-            case TOUCHING:
-            case PANNING:
-            case PANNING_LOCKED:
-            case PANNING_HOLD:
-            case PANNING_HOLD_LOCKED:
-            case PINCHING:
-                Log.e(LOGTAG, "Received impossible touch down while in " + mState);
-                return false;
+        case ANIMATED_ZOOM:
+            // We just interrupted a double-tap animation, so force a redraw in
+            // case this touchstart is just a tap that doesn't end up triggering
+            // a redraw
+            mTarget.forceRedraw();
+            // fall through
+        case FLING:
+        case BOUNCE:
+        case NOTHING:
+        case WAITING_LISTENERS:
+            startTouch(event.getX(0), event.getY(0), event.getEventTime());
+            return false;
+        case TOUCHING:
+        case PANNING:
+        case PANNING_LOCKED:
+        case PANNING_HOLD:
+        case PANNING_HOLD_LOCKED:
+        case PINCHING:
+            Log.e(LOGTAG, "Received impossible touch down while in " + mState);
+            return false;
         }
-        Log.e(LOGTAG, "Unhandled case " + mState + " in onTouchStart");
+        Log.e(LOGTAG, "Unhandled case " + mState + " in handleTouchStart");
         return false;
     }
 
-    private boolean onTouchMove(MotionEvent event) {
+    private boolean handleTouchMove(MotionEvent event) {
 
         switch (mState) {
-            case FLING:
-            case BOUNCE:
-            case WAITING_LISTENERS:
-                // should never happen
-                Log.e(LOGTAG, "Received impossible touch move while in " + mState);
-                // fall through
-            case ANIMATED_ZOOM:
-            case NOTHING:
-                // may happen if user double-taps and drags without lifting after the
-                // second tap. ignore the move if this happens.
+        case FLING:
+        case BOUNCE:
+        case WAITING_LISTENERS:
+            // should never happen
+            Log.e(LOGTAG, "Received impossible touch move while in " + mState);
+            // fall through
+        case ANIMATED_ZOOM:
+        case NOTHING:
+            // may happen if user double-taps and drags without lifting after the
+            // second tap. ignore the move if this happens.
+            return false;
+
+        case TOUCHING:
+            // Don't allow panning if there is an element in full-screen mode. See bug 775511.
+            if (mTarget.isFullScreen() || panDistance(event) < PAN_THRESHOLD) {
                 return false;
+            }
+            cancelTouch();
+            startPanning(event.getX(0), event.getY(0), event.getEventTime());
+            track(event);
+            return true;
 
-            case TOUCHING:
-                if (panDistance(event) < PAN_THRESHOLD) {
-                    return false;
-                }
-                cancelTouch();
-                startPanning(event.getX(0), event.getY(0), event.getEventTime());
-                track(event);
-                return true;
+        case PANNING_HOLD_LOCKED:
+            setState(PanZoomState.PANNING_LOCKED);
+            // fall through
+        case PANNING_LOCKED:
+            track(event);
+            return true;
 
-            case PANNING_HOLD_LOCKED:
-                setState(PanZoomState.PANNING_LOCKED);
-                // fall through
-            case PANNING_LOCKED:
-                track(event);
-                return true;
+        case PANNING_HOLD:
+            setState(PanZoomState.PANNING);
+            // fall through
+        case PANNING:
+            track(event);
+            return true;
 
-            case PANNING_HOLD:
-                setState(PanZoomState.PANNING);
-                // fall through
-            case PANNING:
-                track(event);
-                return true;
-
-            case PINCHING:
-                // scale gesture listener will handle this
-                return false;
+        case PINCHING:
+            // scale gesture listener will handle this
+            return false;
         }
-        Log.e(LOGTAG, "Unhandled case " + mState + " in onTouchMove");
+        Log.e(LOGTAG, "Unhandled case " + mState + " in handleTouchMove");
         return false;
     }
 
-    private boolean onTouchEnd(MotionEvent event) {
+    private boolean handleTouchEnd(MotionEvent event) {
 
         switch (mState) {
-            case FLING:
-            case BOUNCE:
-            case WAITING_LISTENERS:
-                // should never happen
-                Log.e(LOGTAG, "Received impossible touch end while in " + mState);
-                // fall through
-            case ANIMATED_ZOOM:
-            case NOTHING:
-                // may happen if user double-taps and drags without lifting after the
-                // second tap. ignore if this happens.
-                return false;
+        case FLING:
+        case BOUNCE:
+        case WAITING_LISTENERS:
+            // should never happen
+            Log.e(LOGTAG, "Received impossible touch end while in " + mState);
+            // fall through
+        case ANIMATED_ZOOM:
+        case NOTHING:
+            // may happen if user double-taps and drags without lifting after the
+            // second tap. ignore if this happens.
+            return false;
 
-            case TOUCHING:
-                // the switch into TOUCHING might have happened while the page was
-                // snapping back after overscroll. we need to finish the snap if that
-                // was the case
-                bounce();
-                return false;
+        case TOUCHING:
+            // the switch into TOUCHING might have happened while the page was
+            // snapping back after overscroll. we need to finish the snap if that
+            // was the case
+            bounce();
+            return false;
 
-            case PANNING:
-            case PANNING_LOCKED:
-            case PANNING_HOLD:
-            case PANNING_HOLD_LOCKED:
-                setState(PanZoomState.FLING);
-                fling();
-                return true;
+        case PANNING:
+        case PANNING_LOCKED:
+        case PANNING_HOLD:
+        case PANNING_HOLD_LOCKED:
+            setState(PanZoomState.FLING);
+            fling();
+            return true;
 
-            case PINCHING:
-                setState(PanZoomState.NOTHING);
-                return true;
+        case PINCHING:
+            setState(PanZoomState.NOTHING);
+            return true;
         }
-        Log.e(LOGTAG, "Unhandled case " + mState + " in onTouchEnd");
+        Log.e(LOGTAG, "Unhandled case " + mState + " in handleTouchEnd");
         return false;
     }
 
-    private boolean onTouchCancel(MotionEvent event) {
+    private boolean handleTouchCancel(MotionEvent event) {
         cancelTouch();
 
         if (mState == PanZoomState.WAITING_LISTENERS) {
@@ -345,7 +376,7 @@ public class JavaPanZoomController
         return false;
     }
 
-    private boolean onScroll(MotionEvent event) {
+    private boolean handlePointerScroll(MotionEvent event) {
         if (mState == PanZoomState.NOTHING || mState == PanZoomState.FLING) {
             float scrollX = event.getAxisValue(MotionEvent.AXIS_HSCROLL);
             float scrollY = event.getAxisValue(MotionEvent.AXIS_VSCROLL);
@@ -414,8 +445,8 @@ public class JavaPanZoomController
 
         for (int i = 0; i < event.getHistorySize(); i++) {
             track(event.getHistoricalX(0, i),
-                    event.getHistoricalY(0, i),
-                    event.getHistoricalEventTime(i));
+                  event.getHistoricalY(0, i),
+                  event.getHistoricalEventTime(i));
         }
         track(event.getX(0), event.getY(0), event.getEventTime());
 
@@ -791,6 +822,9 @@ public class JavaPanZoomController
 
     @Override
     public boolean onScale(SimpleScaleGestureDetector detector) {
+        if (mTarget.isFullScreen())
+            return false;
+
         if (mState != PanZoomState.PINCHING)
             return false;
 
@@ -834,7 +868,7 @@ public class JavaPanZoomController
             }
 
             scrollBy(mLastZoomFocus.x - detector.getFocusX(),
-                    mLastZoomFocus.y - detector.getFocusY());
+                     mLastZoomFocus.y - detector.getFocusY());
             PointF focus = new PointF(detector.getFocusX(), detector.getFocusY());
             scaleWithFocus(newZoomFactor, focus);
         }
@@ -867,7 +901,6 @@ public class JavaPanZoomController
         mTarget.setViewportMetrics(viewportMetrics);
     }
 
-    @Override
     public boolean getRedrawHint() {
         switch (mState) {
             case PINCHING:
@@ -989,19 +1022,16 @@ public class JavaPanZoomController
     }
 
     /** This function must be called from the UI thread. */
-    @Override
     public void abortPanning() {
         checkMainThread();
         bounce();
     }
 
-    @Override
     public void setOverScrollMode(int overscrollMode) {
         mX.setOverScrollMode(overscrollMode);
         mY.setOverScrollMode(overscrollMode);
     }
 
-    @Override
     public int getOverScrollMode() {
         return mX.getOverScrollMode();
     }

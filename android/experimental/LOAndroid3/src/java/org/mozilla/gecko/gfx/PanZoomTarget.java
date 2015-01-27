@@ -21,4 +21,6 @@ public interface PanZoomTarget {
     public boolean post(Runnable action);
     public Object getLock();
     public PointF convertViewPointToLayerPoint(PointF viewPoint);
+
+    boolean isFullScreen();
 }

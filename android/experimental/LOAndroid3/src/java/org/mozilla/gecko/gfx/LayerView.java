@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
+import org.mozilla.gecko.OnInterceptTouchListener;
 
 import java.lang.reflect.Method;
 import java.nio.IntBuffer;
@@ -45,7 +46,7 @@ public class LayerView extends FrameLayout {
     private static String LOGTAG = LayerView.class.getName();
 
     private GeckoLayerClient mLayerClient;
-    private TouchEventHandler mTouchEventHandler;
+    private PanZoomController mPanZoomController;
     private GLController mGLController;
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;
@@ -53,11 +54,13 @@ public class LayerView extends FrameLayout {
     private boolean mRenderTimeReset;
     /* Must be a PAINT_xxx constant */
     private int mPaintState = PAINT_NONE;
+    private boolean mFullScreen = false;
 
     private SurfaceView mSurfaceView;
     private TextureView mTextureView;
 
     private Listener mListener;
+    private OnInterceptTouchListener mTouchIntercepter;
 
     /* Flags used to determine when to show the painted surface. The integer
      * order must correspond to the order in which these states occur. */
@@ -105,7 +108,7 @@ public class LayerView extends FrameLayout {
 
     void connect(GeckoLayerClient layerClient) {
         mLayerClient = layerClient;
-        mTouchEventHandler = new TouchEventHandler(getContext(), this, layerClient);
+        mPanZoomController = mLayerClient.getPanZoomController();
         mRenderer = new LayerRenderer(this);
         mInputConnectionHandler = null;
 
@@ -115,24 +118,79 @@ public class LayerView extends FrameLayout {
         createGLThread();
     }
 
+    public void show() {
+        // Fix this if TextureView support is turned back on above
+        mSurfaceView.setVisibility(View.VISIBLE);
+    }
+
+    public void hide() {
+        // Fix this if TextureView support is turned back on above
+        mSurfaceView.setVisibility(View.INVISIBLE);
+    }
+
+    public void destroy() {
+        if (mLayerClient != null) {
+            mLayerClient.destroy();
+        }
+        if (mRenderer != null) {
+            mRenderer.destroy();
+        }
+    }
+
+    public void setTouchIntercepter(final OnInterceptTouchListener touchIntercepter) {
+        // this gets run on the gecko thread, but for thread safety we want the assignment
+        // on the UI thread.
+        post(new Runnable() {
+            public void run() {
+                mTouchIntercepter = touchIntercepter;
+            }
+        });
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             requestFocus();
-        return mTouchEventHandler.handleEvent(event);
+        }
+
+        if (mTouchIntercepter != null && mTouchIntercepter.onInterceptTouchEvent(this, event)) {
+            return true;
+        }
+        if (mPanZoomController != null && mPanZoomController.onTouchEvent(event)) {
+            return true;
+        }
+        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean onHoverEvent(MotionEvent event) {
-        return mTouchEventHandler.handleEvent(event);
+        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (mPanZoomController != null && mPanZoomController.onMotionEvent(event)) {
+            return true;
+        }
+        return false;
     }
 
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
-    public TouchEventHandler getTouchEventHandler() { return mTouchEventHandler; }
+    public PanZoomController getPanZoomController() { return mPanZoomController; }
 
     /** The LayerRenderer calls this to indicate that the window has changed size. */
     public void setViewportSize(IntSize size) {
         mLayerClient.setViewportSize(new FloatSize(size));
+    }
+
+    public ImmutableViewportMetrics getViewportMetrics() {
+        return mLayerClient.getViewportMetrics();
     }
 
     @Override
@@ -174,6 +232,13 @@ public class LayerView extends FrameLayout {
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (mInputConnectionHandler != null)
             return mInputConnectionHandler.onKeyUp(keyCode, event);
+        return false;
+    }
+
+    public boolean isIMEEnabled() {
+        /*if (mInputConnectionHandler != null) {
+            return mInputConnectionHandler.isIMEEnabled();
+        }*/
         return false;
     }
 
@@ -241,7 +306,6 @@ public class LayerView extends FrameLayout {
     public int getPaintState() {
         return mPaintState;
     }
-
 
     public LayerRenderer getRenderer() {
         return mRenderer;
@@ -421,5 +485,13 @@ public class LayerView extends FrameLayout {
         LayerViewException(String e) {
             super(e);
         }
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        mFullScreen = fullScreen;
+    }
+
+    public boolean isFullScreen() {
+        return mFullScreen;
     }
 }

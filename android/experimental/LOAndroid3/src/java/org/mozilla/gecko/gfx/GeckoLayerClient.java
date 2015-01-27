@@ -61,7 +61,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     /* The new color for the checkerboard. */
     private int mCheckerboardColor;
 
-    private final PanZoomController mPanZoomController;
+    private PanZoomController mPanZoomController;
     private LayerView mView;
 
     public GeckoLayerClient(Context context) {
@@ -75,12 +75,11 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mViewportMetrics = new ImmutableViewportMetrics(displayMetrics);
         mZoomConstraints = new ZoomConstraints(false);
-
-        mPanZoomController = PanZoomController.Factory.create(this);
     }
 
     public void setView(LayerView view) {
         mView = view;
+        mPanZoomController = PanZoomController.Factory.create(this, view);
         mView.connect(this);
     }
 
@@ -345,6 +344,11 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
                 ((viewPoint.y + origin.y) / zoom));
 
         return layerPoint;
+    }
+
+    @Override
+    public boolean isFullScreen() {
+        return false;
     }
 
     public void destroy() {
