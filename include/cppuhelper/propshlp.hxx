@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
-#include <memory>
 #include <cppuhelper/cppuhelperdllapi.h>
 
 
@@ -649,7 +648,7 @@ protected:
 
     /** reserved for future use. finally, the future has arrived...
      */
-    const std::auto_ptr<Impl> m_pReserved;
+    Impl * const m_pReserved;
 
 private:
     OPropertySetHelper( const OPropertySetHelper & );

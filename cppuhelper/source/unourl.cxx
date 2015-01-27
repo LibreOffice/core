@@ -31,6 +31,7 @@
 #include <sal/types.h>
 
 #include <map>
+#include <memory>
 
 using cppu::UnoUrl;
 using cppu::UnoUrlDescriptor;
@@ -137,49 +138,47 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
 }
 
 UnoUrlDescriptor::UnoUrlDescriptor(rtl::OUString const & rDescriptor):
-    m_xImpl(new Impl(rDescriptor))
+    m_pImpl(new Impl(rDescriptor))
 {}
-
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-UnoUrlDescriptor::UnoUrlDescriptor(std::auto_ptr< Impl > & rImpl):
-    m_xImpl(rImpl)
-{}
-SAL_WNODEPRECATED_DECLARATIONS_POP
 
 UnoUrlDescriptor::UnoUrlDescriptor(UnoUrlDescriptor const & rOther):
-    m_xImpl(rOther.m_xImpl->clone())
+    m_pImpl(rOther.m_pImpl->clone())
 {}
 
 UnoUrlDescriptor::~UnoUrlDescriptor()
-{}
+{
+    delete m_pImpl;
+}
 
 UnoUrlDescriptor & UnoUrlDescriptor::operator =(UnoUrlDescriptor const & rOther)
 {
-    m_xImpl.reset(rOther.m_xImpl->clone());
+    std::unique_ptr<Impl> newImpl(rOther.m_pImpl->clone());
+    delete m_pImpl;
+    m_pImpl = newImpl.release();
     return *this;
 }
 
 rtl::OUString const & UnoUrlDescriptor::getDescriptor() const
 {
-    return m_xImpl->m_aDescriptor;
+    return m_pImpl->m_aDescriptor;
 }
 
 rtl::OUString const & UnoUrlDescriptor::getName() const
 {
-    return m_xImpl->m_aName;
+    return m_pImpl->m_aName;
 }
 
 bool UnoUrlDescriptor::hasParameter(rtl::OUString const & rKey) const
 {
-    return m_xImpl->m_aParameters.find(rKey.toAsciiLowerCase())
-        != m_xImpl->m_aParameters.end();
+    return m_pImpl->m_aParameters.find(rKey.toAsciiLowerCase())
+        != m_pImpl->m_aParameters.end();
 }
 
 rtl::OUString UnoUrlDescriptor::getParameter(rtl::OUString const & rKey) const
 {
     Impl::Parameters::const_iterator
-        aIt(m_xImpl->m_aParameters.find(rKey.toAsciiLowerCase()));
-    return aIt == m_xImpl->m_aParameters.end() ? rtl::OUString() : aIt->second;
+        aIt(m_pImpl->m_aParameters.find(rKey.toAsciiLowerCase()));
+    return aIt == m_pImpl->m_aParameters.end() ? rtl::OUString() : aIt->second;
 }
 
 class UnoUrl::Impl
@@ -196,15 +195,13 @@ public:
     static inline Impl * create(rtl::OUString const & rUrl);
 
 private:
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    Impl(std::auto_ptr< UnoUrlDescriptor::Impl > & rConnection,
-                              std::auto_ptr< UnoUrlDescriptor::Impl > & rProtocol,
-                              rtl::OUString const & rObjectName):
-        m_aConnection(rConnection),
-        m_aProtocol(rProtocol),
+    Impl(rtl::OUString const & rConnectionDescriptor,
+         rtl::OUString const & rProtocolDescriptor,
+         rtl::OUString const & rObjectName):
+        m_aConnection(rConnectionDescriptor),
+        m_aProtocol(rProtocolDescriptor),
         m_aObjectName(rObjectName)
     {}
-SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
 inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
@@ -217,19 +214,13 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     if (j < 0)
         throw rtl::MalformedUriException(
             rtl::OUString("UNO URL has too few semicolons"));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< UnoUrlDescriptor::Impl >
-        xConnection(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    rtl::OUString aConnection(rUrl.copy(i, j - i));
     i = j + 1;
     j = rUrl.indexOf(0x3B, i); // ';'
     if (j < 0)
         throw rtl::MalformedUriException(
             rtl::OUString("UNO URL has too few semicolons"));
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    std::auto_ptr< UnoUrlDescriptor::Impl >
-        xProtocol(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
-    SAL_WNODEPRECATED_DECLARATIONS_POP
+    rtl::OUString aProtocol(rUrl.copy(i, j - i));
     i = j + 1;
     if (i == rUrl.getLength())
         throw rtl::MalformedUriException(
@@ -247,37 +238,41 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
             throw rtl::MalformedUriException(
                 rtl::OUString("UNO URL contains invalid ObjectName"));
     }
-    return new Impl(xConnection, xProtocol, rUrl.copy(i));
+    return new Impl(aConnection, aProtocol, rUrl.copy(i));
 }
 
-UnoUrl::UnoUrl(rtl::OUString const & rUrl): m_xImpl(Impl::create(rUrl))
+UnoUrl::UnoUrl(rtl::OUString const & rUrl): m_pImpl(Impl::create(rUrl))
 {}
 
-UnoUrl::UnoUrl(UnoUrl const & rOther): m_xImpl(rOther.m_xImpl->clone())
+UnoUrl::UnoUrl(UnoUrl const & rOther): m_pImpl(rOther.m_pImpl->clone())
 {}
 
 UnoUrl::~UnoUrl()
-{}
+{
+    delete m_pImpl;
+}
 
 UnoUrl & UnoUrl::operator =(UnoUrl const & rOther)
 {
-    m_xImpl.reset(rOther.m_xImpl->clone());
+    std::unique_ptr<Impl> newImpl(rOther.m_pImpl->clone());
+    delete m_pImpl;
+    m_pImpl = newImpl.release();
     return *this;
 }
 
 UnoUrlDescriptor const & UnoUrl::getConnection() const
 {
-    return m_xImpl->m_aConnection;
+    return m_pImpl->m_aConnection;
 }
 
 UnoUrlDescriptor const & UnoUrl::getProtocol() const
 {
-    return m_xImpl->m_aProtocol;
+    return m_pImpl->m_aProtocol;
 }
 
 rtl::OUString const & UnoUrl::getObjectName() const
 {
-    return m_xImpl->m_aObjectName;
+    return m_pImpl->m_aObjectName;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

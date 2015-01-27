@@ -20,7 +20,8 @@
 #ifndef INCLUDED_CPPUHELPER_UNOURL_HXX
 #define INCLUDED_CPPUHELPER_UNOURL_HXX
 
-#include <memory>
+#include <sal/config.h>
+
 #include <cppuhelper/cppuhelperdllapi.h>
 
 namespace rtl { class OUString; }
@@ -48,10 +49,6 @@ public:
         Thrown when the given string representation is invalid.
      */
     explicit UnoUrlDescriptor(rtl::OUString const & rDescriptor);
-
-    /// @cond INTERNAL
-    explicit UnoUrlDescriptor(std::auto_ptr< Impl > & rImpl);
-    /// @endcond
 
     UnoUrlDescriptor(UnoUrlDescriptor const & rOther);
 
@@ -98,7 +95,7 @@ public:
     rtl::OUString getParameter(rtl::OUString const & rKey) const;
 
 private:
-    std::auto_ptr< Impl > m_xImpl;
+    Impl * m_pImpl;
 };
 
 /** Parse UNO URLs into their components.
@@ -175,7 +172,7 @@ public:
 private:
     class Impl;
 
-    std::auto_ptr< Impl > m_xImpl;
+    Impl * m_pImpl;
 };
 
 }

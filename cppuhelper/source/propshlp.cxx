@@ -199,6 +199,7 @@ OPropertySetHelper2::OPropertySetHelper2(
  */
 OPropertySetHelper::~OPropertySetHelper()
 {
+    delete m_pReserved;
 }
 OPropertySetHelper2::~OPropertySetHelper2()
 {
@@ -631,8 +632,6 @@ void OPropertySetHelper::fire
     sal_Bool bVetoable
 )
 {
-    OSL_ENSURE( m_pReserved.get(), "No OPropertySetHelper::Impl" );
-
     if (! m_pReserved->m_bFireEvents)
         return;
 
