@@ -622,7 +622,19 @@ ScOrcusStyles::protection::protection():
 {
 }
 
+void ScOrcusStyles::protection::applyToItemSet(SfxItemSet& /*rSet*/) const
+{
+}
+
 ScOrcusStyles::border::border()
+{
+}
+
+void ScOrcusStyles::border::applyToItemSet(SfxItemSet& /*rSet*/) const
+{
+}
+
+void ScOrcusStyles::number_format::applyToItemSet(SfxItemSet& /*rSet*/) const
 {
 }
 
