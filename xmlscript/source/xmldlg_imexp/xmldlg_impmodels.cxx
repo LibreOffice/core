@@ -911,8 +911,6 @@ void ImageControlElement::endElement()
     ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
     ctx.importBooleanProperty( "ScaleImage", "scale-image", _xAttributes );
     ctx.importImageScaleModeProperty( "ScaleMode" , "scale-mode" , _xAttributes );
-    Reference< document::XStorageBasedDocument > xDocStorage( _pImport->getDocOwner(), UNO_QUERY );
-
     ctx.importImageURLProperty( "ImageURL" , "src" , _xAttributes );
     ctx.importBooleanProperty( "Tabstop", "tabstop", _xAttributes );
     ctx.importEvents( _events );
