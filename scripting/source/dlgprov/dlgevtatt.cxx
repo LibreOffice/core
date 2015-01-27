@@ -211,7 +211,7 @@ namespace dlgprov
     }
 
 
-    void SAL_CALL DialogEventsAttacherImpl::attachEventsToControl( const Reference< XControl>& xControl, const Reference< XScriptEventsSupplier >& xEventsSupplier, const Any& Helper )
+    void DialogEventsAttacherImpl::attachEventsToControl( const Reference< XControl>& xControl, const Reference< XScriptEventsSupplier >& xEventsSupplier, const Any& Helper )
     {
         if ( xEventsSupplier.is() )
         {
