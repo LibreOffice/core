@@ -124,12 +124,21 @@ BrowserColumn::~BrowserColumn()
 void BrowserColumn::SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom)
 {
     _nWidth = nNewWidthPixel;
-    double n = (double)_nWidth;
-    n *= (double)rCurrentZoom.GetDenominator();
-    if (!rCurrentZoom.GetNumerator())
-        throw o3tl::divide_by_zero();
-    n /= (double)rCurrentZoom.GetNumerator();
-    _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
+    // Avoid overflow when called with LONG_MAX from
+    // BrowseBox::AutoSizeLastColumn:
+    if (_nWidth == LONG_MAX)
+    {
+        _nOriginalWidth = _nWidth;
+    }
+    else
+    {
+        double n = (double)_nWidth;
+        n *= (double)rCurrentZoom.GetDenominator();
+        if (!rCurrentZoom.GetNumerator())
+            throw o3tl::divide_by_zero();
+        n /= (double)rCurrentZoom.GetNumerator();
+        _nOriginalWidth = n>0 ? (long)(n+0.5) : -(long)(-n+0.5);
+    }
 }
 
 void BrowserColumn::Draw( BrowseBox& rBox, OutputDevice& rDev, const Point& rPos, bool bCurs  )
