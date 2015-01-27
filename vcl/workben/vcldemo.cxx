@@ -319,7 +319,6 @@ public:
         {
             OUString aText("Click any rect to zoom!!!!");
 
-            /* Arabic text
             const unsigned char pTextUTF8[] = {
                 0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
                 0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
@@ -327,10 +326,12 @@ public:
                 0x86, 0x20, 0xd8, 0xab, 0xd9, 0x84, 0xd8, 0xa7,
                 0xd8, 0xab, 0xd8, 0xa9, 0xd9, 0x8c, 0x00
             };
-            OUString aText( reinterpret_cast<char const *>(pTextUTF8),
+            OUString aArabicText( reinterpret_cast<char const *>(pTextUTF8),
                             SAL_N_ELEMENTS( pTextUTF8 ) - 1,
                             RTL_TEXTENCODING_UTF8 );
-            */
+
+            if (mbArabicText)
+                aText = aArabicText;
 
             std::vector<OUString> maFontNames;
             sal_uInt32 nCols[] = {
@@ -344,8 +345,14 @@ public:
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
                 maFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
-#define PRINT_N_TEXT 20
-            for (int i = 0; i < PRINT_N_TEXT; i++) {
+            int nPrintNumCopies=0;
+
+            if (mbArabicText)
+                nPrintNumCopies=2;
+            else
+                nPrintNumCopies=20;
+
+            for (int i = 0; i < nPrintNumCopies; i++) {
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
                 // random font size to avoid buffering
                 vcl::Font aFont( maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
