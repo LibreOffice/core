@@ -631,8 +631,9 @@ static OString lcl_GetStyleId( XclExpXmlStream& rStrm, const XclExpCellBase& rCe
 void XclExpNumberCell::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    OStringBuffer rBuf = rStrm.GetRoot().GetStringBuf();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::TryToOString( rBuf, GetXclPos() ) ? rBuf.getStr() : XclXmlUtils::ToOString( GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      "n",
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -923,11 +924,11 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 {
     const char* sType = NULL;
     OUString    sValue;
-
     XclXmlUtils::GetFormulaTypeAndValue( mrScFmlaCell, sType, sValue );
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    OStringBuffer rBuf = rStrm.GetRoot().GetStringBuf();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::TryToOString( rBuf, GetXclPos() ) ? rBuf.getStr() : XclXmlUtils::ToOString( GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      sType,
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -1308,8 +1309,9 @@ bool XclExpRkCell::TryMerge( const XclExpCellBase& rCell )
 void XclExpRkCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress& rAddress, sal_uInt32 nXFId, sal_uInt16 nRelCol )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+    OStringBuffer rBuf = rStrm.GetRoot().GetStringBuf();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( rAddress ).getStr(),
+            XML_r,      XclXmlUtils::TryToOString( rBuf, rAddress ) ? rBuf.getStr() : XclXmlUtils::ToOString( rAddress ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, nXFId ).getStr(),
             XML_t,      "n",
             // OOXTODO: XML_cm, XML_vm, XML_ph

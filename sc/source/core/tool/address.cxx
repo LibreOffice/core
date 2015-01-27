@@ -1745,6 +1745,40 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
     return sFileName;
 }
 
+/** Tries to obtain a simple address without OUString/OString allocation
+ *
+ *  @returns TRUE at success (it is enough to call OUString Format() at FALSE)
+ *
+ */
+
+bool ScAddress::TryFormat(OStringBuffer& s, sal_uInt16 nFlags, const ScDocument* pDoc,
+                           const Details& rDetails) const
+{
+    if( nFlags & SCA_VALID )
+        nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
+    if(( pDoc && (nFlags & SCA_VALID_TAB ) && ( nTab >= pDoc->GetTableCount() || ( nFlags & SCA_TAB_3D ))) ||
+         ! (nFlags & SCA_VALID_COL) || ! (nFlags & SCA_VALID_ROW) ||
+            (nFlags & SCA_COL_ABSOLUTE) != 0 || (nFlags & SCA_ROW_ABSOLUTE) != 0 )
+    {
+       return false;
+    }
+
+    switch( rDetails.eConv )
+    {
+    default :
+    case formula::FormulaGrammar::CONV_OOO:
+    case formula::FormulaGrammar::CONV_XL_A1:
+    case formula::FormulaGrammar::CONV_XL_OOX:
+        ScColToAlpha( s, nCol );
+        s.append( OString::number(nRow+1) );
+        break;
+    case formula::FormulaGrammar::CONV_XL_R1C1:
+        // not used in XLSX export
+        return false;
+    }
+    return true;
+}
+
 OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
                            const Details& rDetails) const
 {
@@ -2101,6 +2135,34 @@ void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
         rBuf.append(comphelper::string::reverseString(aStr));
     }
 }
+
+void ScColToAlpha( OStringBuffer& rBuf, SCCOL nCol )
+{
+    if (nCol < 26*26)
+    {
+        if (nCol < 26)
+            rBuf.append( static_cast<char>( 'A' + nCol ));
+        else
+        {
+            rBuf.append( static_cast<char>( 'A' + nCol / 26 - 1 ));
+            rBuf.append( static_cast<char>( 'A' + nCol % 26 ));
+        }
+    }
+    else
+    {
+        OString aStr;
+        while (nCol >= 26)
+        {
+            SCCOL nC = nCol % 26;
+            aStr += OString( static_cast<char> ( 'A' + nC ));
+            nCol = sal::static_int_cast<SCCOL>( nCol - nC );
+            nCol = nCol / 26 - 1;
+        }
+        aStr += OString( static_cast<char> ( 'A' + nCol ));
+        rBuf.append(comphelper::string::reverseString(aStr));
+    }
+}
+
 
 bool AlphaToCol( SCCOL& rCol, const OUString& rStr)
 {
