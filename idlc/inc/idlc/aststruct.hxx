@@ -24,7 +24,6 @@
 #include "idlc/idlctypes.hxx"
 
 class AstStruct;
-typedef ::std::vector< AstStruct* > InheritedTypes;
 
 class AstStruct : public AstType
                 , public AstScope

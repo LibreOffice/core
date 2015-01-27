@@ -40,7 +40,6 @@ namespace ww8
 const unsigned int MAXTABLECELLS = 63;
 
 class WW8TableNodeInfo;
-typedef boost::shared_ptr<SwRect> SwRectPtr;
 typedef ::std::vector<const SwTableBox *> TableBoxVector;
 typedef boost::shared_ptr<TableBoxVector> TableBoxVectorPtr;
 typedef ::std::vector<sal_uInt32> GridCols;

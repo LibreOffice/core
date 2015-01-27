@@ -63,7 +63,6 @@ namespace sfx2 {
     namespace sidebar { class Theme; }
 }
 
-typedef Link* LinkPtr;
 
 typedef std::vector<SfxDdeDocTopic_Impl*> SfxDdeDocTopics_Impl;
 

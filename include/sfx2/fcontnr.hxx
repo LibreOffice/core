@@ -42,8 +42,6 @@ class SfxMedium;
 class SfxFilterContainer_Impl;
 class SfxFrame;
 
-//#define SFX_FILTER_CONTAINER_FACTORY 1
-typedef sal_uInt16 SfxFilterContainerFlags;
 
 class SfxRefItem : public SfxPoolItem
 {

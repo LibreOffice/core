@@ -50,7 +50,6 @@ namespace oox {
 
 namespace oox {
 
-typedef ::boost::shared_ptr< oox::BinaryXInputStream > BinaryXInputStreamRef;
 
 namespace ole {
 

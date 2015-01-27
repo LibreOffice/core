@@ -694,8 +694,6 @@ bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSeque
 }
 
 typedef vector< OUString > tStringVector;
-typedef vector< double > tDoubleVector;
-typedef vector< vector< OUString > > t2DStringVector;
 typedef vector< vector< double > > t2DNumberContainer;
 
 struct lcl_TableData

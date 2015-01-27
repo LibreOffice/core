@@ -1291,7 +1291,6 @@ private:
     PreferredItemVector maPreferred;
 };
 
-typedef ::boost::shared_ptr< StorageObjectBase > StorageObjectRef;
 
 
 
@@ -1354,7 +1353,6 @@ protected:
     OUString     maSysFileName;
 };
 
-typedef ::boost::shared_ptr< OutputObjectBase > OutputObjectRef;
 
 
 
@@ -1550,7 +1548,6 @@ protected:
     BinaryInputStreamRef mxStrm;
 };
 
-typedef ::boost::shared_ptr< InputObjectBase > InputObjectRef;
 
 
 

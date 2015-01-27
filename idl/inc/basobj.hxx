@@ -47,7 +47,6 @@ public:
 protected:
     virtual ~SvMetaObject() {}
 };
-typedef tools::SvRef<SvMetaObject> SvMetaObjectRef;
 
 class SvMetaObjectMemberList : public SvRefMemberList<SvMetaObject *> {};
 
@@ -104,7 +103,6 @@ public:
     virtual bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SvMetaName> SvMetaNameRef;
 
 class SvMetaNameMemberList : public SvRefMemberList<SvMetaName *> {};
 
@@ -180,7 +178,6 @@ public:
 protected:
     virtual void        ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SvMetaExtern> SvMetaExternRef;
 
 class SvMetaExternMemberList : public SvRefMemberList<SvMetaExtern *> {};
 

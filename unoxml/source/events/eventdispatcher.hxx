@@ -43,7 +43,6 @@ namespace events {
 
 typedef std::multimap< xmlNodePtr, css::uno::Reference< css::xml::dom::events::XEventListener> > ListenerMap;
 typedef std::map< OUString, ListenerMap*> TypeListenerMap;
-typedef std::vector<ListenerMap::value_type> ListenerPairVector;
 
 class CEventDispatcher
 {

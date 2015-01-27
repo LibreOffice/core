@@ -326,7 +326,6 @@ public:
     /// Handling of margins, header and footer for any kind of sections breaks.
     void HandleMarginsHeaderFooter(DomainMapper_Impl& rDM_Impl);
 };
-typedef std::shared_ptr<SectionPropertyMap> SectionPropertyMapPtr;
 
 
 

@@ -278,7 +278,6 @@ struct SortStruct
 };
 
 typedef SortStruct  SORT;
-typedef SORT*       PSORT;
 
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   mpShape( pShape ),

@@ -94,7 +94,6 @@ public:
 
 typedef tools::SvRef<SvStringHashEntry> SvStringHashEntryRef;
 
-typedef ::std::vector< SvStringHashEntry* > SvStringHashList;
 
 class SvStringHashTable : public SvHashTable
 {

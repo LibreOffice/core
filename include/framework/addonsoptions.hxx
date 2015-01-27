@@ -49,7 +49,6 @@
 namespace framework
 {
 
-typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > MergeMenuDefinition;
 
 struct FWE_DLLPUBLIC MergeMenuInstruction
 {

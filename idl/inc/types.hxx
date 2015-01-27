@@ -202,7 +202,6 @@ public:
             TYPEINFO_OVERRIDE();
             SvMetaTypeString();
 };
-typedef tools::SvRef<SvMetaTypeString> SvMetaTypeStringRef;
 
 class SvMetaTypeStringMemberList : public SvRefMemberList<SvMetaTypeString *> {};
 
@@ -246,7 +245,6 @@ public:
             TYPEINFO_OVERRIDE();
             SvMetaTypevoid();
 };
-typedef tools::SvRef<SvMetaTypevoid> SvMetaTypevoidRef;
 class SvMetaTypevoidMemberList : public SvRefMemberList<SvMetaTypevoid *> {};
 
 

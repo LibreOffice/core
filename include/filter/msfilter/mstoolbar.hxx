@@ -339,7 +339,6 @@ public:
 #endif
 };
 
-typedef cppu::WeakImplHelper1< css::container::XIndexContainer > PropertyValueIndexContainer_BASE;
 
 class MSFILTER_DLLPUBLIC TBVisualData : public TBBase
 {

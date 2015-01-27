@@ -171,16 +171,6 @@ typedef INT32 int32_t;
 #include <dispatch/dispatch.h>
 #endif
 
-/* DNSServiceRef, DNSRecordRef
- *
- * Opaque internal data types.
- * Note: client is responsible for serializing access to these structures if
- * they are shared between concurrent threads.
- */
-
-typedef struct _DNSServiceRef_t *DNSServiceRef;
-typedef struct _DNSRecordRef_t *DNSRecordRef;
-
 struct sockaddr;
 
 /*! @enum General flags
@@ -302,7 +292,6 @@ enum
      * call DNSServiceCreateConnection(&MainRef) to initialize the main DNSServiceRef.
      * For each subsequent operation that is to share that same connection, the client copies
      * the MainRef, and then passes the address of that copy, setting the ShareConnection flag
-     * to tell the library that this DNSServiceRef is not a typical uninitialized DNSServiceRef;
      * it's a copy of an existing DNSServiceRef whose connection information should be reused.
      *
      * For example:

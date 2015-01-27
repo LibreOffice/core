@@ -171,7 +171,6 @@ struct ScPivotFuncData
 #endif
 };
 
-typedef std::vector<ScPivotFuncData> ScPivotFuncDataVector;
 typedef std::vector<ScDPName> ScDPNameVec;
 
 #endif
