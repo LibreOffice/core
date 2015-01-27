@@ -8,6 +8,7 @@
 from __future__ import print_function
 from optparse import OptionParser
 
+import re
 import sys
 import xml.etree.ElementTree as ET
 
@@ -195,10 +196,25 @@ def limit_rdb(services_rdb, full_factory_map, full_constructor_map):
     root = tree.getroot()
 
     for component in root.findall('{http://openoffice.org/2010/uno-components}component'):
+        # direct
+        uri = component.get('uri')
+        component_name = None
+        if uri != None:
+            component_name = re.sub('^vnd.sun.star.expand:\$LO_LIB_DIR/([^.]*).so$', '\\1.a', uri)
+        if component_name in full_factory_map:
+            continue
+
+        # via a constructor - limit only to those we have
+        has_constructor = False
         for implementation in component.findall('{http://openoffice.org/2010/uno-components}implementation'):
             constructor = implementation.get('constructor')
-            if constructor != None and constructor not in full_constructor_map:
+            if constructor in full_constructor_map:
+                has_constructor = True
+            else:
                 component.remove(implementation)
+
+        if not has_constructor:
+            root.remove(component)
 
     tree.write(services_rdb[0] + '.out', xml_declaration = True, method = 'xml')
 
