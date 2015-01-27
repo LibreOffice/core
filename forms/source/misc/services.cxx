@@ -221,9 +221,6 @@ void SAL_CALL createRegistryInfo_FORMS()
     static bool bInit = false;
     if (!bInit)
     {
-#if HAVE_FEATURE_DBCONNECTIVITY
-        createRegistryInfo_ODatabaseForm();
-#endif
         createRegistryInfo_OFilterControl();
         createRegistryInfo_OScrollBarModel();
         createRegistryInfo_OSpinButtonModel();
