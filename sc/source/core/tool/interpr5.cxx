@@ -1297,7 +1297,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             }
             else
             {
-                pMat->SubAddOp(true, fVal, aString, *pResMat);
+                pMat->SubAddOp(false, -fVal, aString, *pResMat);
             }
             PushMatrix(pResMat);
         }
