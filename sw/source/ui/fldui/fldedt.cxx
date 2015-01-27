@@ -49,28 +49,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <swuiexp.hxx>
 
-void SwFldEditDlg::EnsureSelection(SwField *pCurFld)
-{
-    if (pSh->CrsrInsideInputFld())
-    {
-        // move cursor to start of Input Field
-        SwInputField* pInputFld = dynamic_cast<SwInputField*>(pCurFld);
-        if (pInputFld && pInputFld->GetFmtFld())
-        {
-            pSh->GotoField( *(pInputFld->GetFmtFld()) );
-        }
-    }
-
-    /* Only create selection if there is none already.
-       Normalize PaM instead of swapping. */
-    if (!pSh->HasSelection())
-    {
-        //Note that after this, it is possible that rMgr.GetCurFld() != pCurFld
-        pSh->Right(CRSR_SKIP_CHARS, true, 1, false );
-    }
-
-    pSh->NormalizePam();
-}
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     : SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0,
@@ -84,12 +62,28 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     SwFldMgr aMgr(pSh);
 
     SwField *pCurFld = aMgr.GetCurFld();
-    if (!pCurFld)
+    if(!pCurFld)
         return;
 
     SwViewShell::SetCareWin(this);
 
-    EnsureSelection(pCurFld);
+    if ( pSh->CrsrInsideInputFld() )
+    {
+        // move cursor to start of Input Field
+        SwInputField* pInputFld = dynamic_cast<SwInputField*>(pCurFld);
+        if ( pInputFld != NULL
+             && pInputFld->GetFmtFld() != NULL )
+        {
+            pSh->GotoField( *(pInputFld->GetFmtFld()) );
+        }
+    }
+
+    if ( ! pSh->HasSelection() )
+    {
+        pSh->Right(CRSR_SKIP_CHARS, true, 1, false);
+    }
+
+    pSh->NormalizePam();
 
     sal_uInt16 nGroup = aMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
@@ -260,7 +254,12 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurFld = rMgr.GetCurFld();
 
-    EnsureSelection(pCurFld);
+    /* #108536# Only create selection if there is none
+        already. Normalize PaM instead of swapping. */
+    if ( ! pSh->HasSelection() )
+        pSh->Right(CRSR_SKIP_CHARS, true, 1, false );
+
+    pSh->NormalizePam();
 
     sal_uInt16 nGroup = rMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 

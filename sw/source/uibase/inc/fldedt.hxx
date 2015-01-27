@@ -37,10 +37,9 @@ class SwFldEditDlg : public SfxSingleTabDialog
     void            Init();
     SfxTabPage*     CreatePage(sal_uInt16 nGroup);
 
-    void EnsureSelection(SwField *pCurFld);
 public:
 
-    SwFldEditDlg(SwView& rVw);
+     SwFldEditDlg(SwView& rVw);
     virtual ~SwFldEditDlg();
 
     DECL_LINK(OKHdl, void *);
