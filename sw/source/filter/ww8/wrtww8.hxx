@@ -354,7 +354,6 @@ public:
 };
 
 typedef std::vector<DrawObj> DrawObjVector;
-typedef DrawObjVector::iterator DrawObjIter;
 typedef DrawObjVector::const_iterator cDrawObjIter;
 
 typedef std::vector<DrawObj *> DrawObjPointerVector;

@@ -136,7 +136,6 @@ private:
     SAL_DLLPRIVATE static CustomAnimationPresets*  mpCustomAnimationPresets;
 };
 
-typedef boost::shared_ptr< CustomAnimationPresets > CustomAnimationPresetsPtr;
 
 css::uno::Reference< css::animations::XAnimationNode > implImportEffects( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceFactory, const OUString& rPath );
 

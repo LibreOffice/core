@@ -61,7 +61,6 @@ struct TextCharacterProperties;
 typedef ::boost::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
 
 struct TextBodyProperties;
-typedef ::boost::shared_ptr< TextBodyProperties > TextBodyPropertiesPtr;
 
 struct EffectProperties;
 typedef ::boost::shared_ptr< EffectProperties > EffectPropertiesPtr;

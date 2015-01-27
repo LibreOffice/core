@@ -45,7 +45,6 @@ public:
     DeckDescriptor (const DeckDescriptor& rOther);
     ~DeckDescriptor (void);
 };
-typedef ::boost::shared_ptr<DeckDescriptor> SharedDeckDescriptor;
 
 } } // end of namespace sfx2::sidebar
 

@@ -109,7 +109,6 @@ void BinaryOutputStream::writeArray( const Type* opnArray, sal_Int32 nElemCount 
     writeArray(pArray.get(), nElemCount);
 }
 
-typedef ::boost::shared_ptr< BinaryOutputStream > BinaryOutputStreamRef;
 
 
 

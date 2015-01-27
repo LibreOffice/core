@@ -46,7 +46,6 @@ public:
     PanelDescriptor (const PanelDescriptor& rPanelDescriptor);
     ~PanelDescriptor (void);
 };
-typedef ::boost::shared_ptr<PanelDescriptor> SharedPanelDescriptor;
 
 } } // end of namespace sfx2::sidebar
 

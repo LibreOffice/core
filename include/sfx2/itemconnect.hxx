@@ -323,9 +323,7 @@ public:
 
 
 
-typedef NumericConnection< Int16ItemWrapper  > Int16NumericConnection;
 typedef NumericConnection< UInt16ItemWrapper > UInt16NumericConnection;
-typedef NumericConnection< Int32ItemWrapper  > Int32NumericConnection;
 typedef NumericConnection< UInt32ItemWrapper > UInt32NumericConnection;
 
 
@@ -354,9 +352,7 @@ public:
 
 
 
-typedef MetricConnection< Int16ItemWrapper  > Int16MetricConnection;
 typedef MetricConnection< UInt16ItemWrapper > UInt16MetricConnection;
-typedef MetricConnection< Int32ItemWrapper  > Int32MetricConnection;
 typedef MetricConnection< UInt32ItemWrapper > UInt32MetricConnection;
 
 
@@ -387,9 +383,7 @@ public:
 
 
 
-typedef ListBoxConnection< Int16ItemWrapper >  Int16ListBoxConnection;
 typedef ListBoxConnection< UInt16ItemWrapper > UInt16ListBoxConnection;
-typedef ListBoxConnection< Int32ItemWrapper >  Int32ListBoxConnection;
 typedef ListBoxConnection< UInt32ItemWrapper > UInt32ListBoxConnection;
 
 
@@ -420,9 +414,7 @@ public:
 
 
 
-typedef ValueSetConnection< Int16ItemWrapper >  Int16ValueSetConnection;
 typedef ValueSetConnection< UInt16ItemWrapper > UInt16ValueSetConnection;
-typedef ValueSetConnection< Int32ItemWrapper >  Int32ValueSetConnection;
 typedef ValueSetConnection< UInt32ItemWrapper > UInt32ValueSetConnection;
 
 

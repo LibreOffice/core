@@ -667,7 +667,6 @@ public:
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
-typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
 
 
 

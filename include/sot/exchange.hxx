@@ -41,7 +41,6 @@ struct DataFlavorEx : public ::com::sun::star::datatransfer::DataFlavor
     SotFormatStringId mnSotId;
 };
 
-typedef ::std::vector< ::com::sun::star::datatransfer::DataFlavor > DataFlavorVector;
 typedef ::std::vector< DataFlavorEx >                               _DataFlavorExVector;
 
 // JP 23.03.2001 - this struct is only for "hide" the STD of the vetor,
@@ -51,8 +50,6 @@ struct DataFlavorExVector : public _DataFlavorExVector
 {
 };
 
-typedef ::std::list< ::com::sun::star::datatransfer::DataFlavor >   DataFlavorList;
-typedef ::std::list< DataFlavorEx >                                 DataFlavorExList;
 
 SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVector,
                                       sal_uLong nId );

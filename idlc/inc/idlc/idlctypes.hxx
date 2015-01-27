@@ -44,7 +44,6 @@ typedef ::std::set< OString, LessString >    StringSet;
 
 class AstDeclaration;
 
-typedef std::unordered_map< OString, AstDeclaration*, OStringHash > DeclMap;
 typedef std::list< AstDeclaration* > DeclList;
 
 class AstScope;

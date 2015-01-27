@@ -35,7 +35,6 @@ class ScChangeActionDel;
 class ScBigRange;
 class ScEditEngineTextObj;
 
-typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 typedef std::map<sal_uLong, ScChangeAction*> ScChangeActionMap;
 
 class ScChangeTrackingExportHelper

@@ -99,7 +99,6 @@ public:
     ::com::sun::star::uno::Any getUnoAny();
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SbUnoStructRefObject> SbUnoStructRefObjectRef;
 
 class SbUnoObject: public SbxObject
 {
@@ -242,7 +241,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >& getUnoClass( void ) { return m_xClass; }
 
 };
-typedef tools::SvRef<SbUnoClass> SbUnoClassRef;
 
 
 // function to find a global identifier in
@@ -269,7 +267,6 @@ public:
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SbUnoService> SbUnoServiceRef;
 
 SbUnoService* findUnoService( const OUString& rName );
 
@@ -309,7 +306,6 @@ public:
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& ) SAL_OVERRIDE;
 };
-typedef tools::SvRef<SbUnoSingleton> SbUnoSingletonRef;
 
 SbUnoSingleton* findUnoSingleton( const OUString& rName );
 

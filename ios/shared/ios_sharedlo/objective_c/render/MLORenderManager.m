@@ -48,7 +48,6 @@ static const NSTimeInterval
 
 static const NSInteger BUFFER_COUNT=2;
 
-typedef enum {X,Y,Z} MLOGestureDirection;
 #define MLOGestureDirectionString(enum) [@[@"X",@"Y",@"Z"] objectAtIndex:enum]
 
 @interface MLORenderManager ()

@@ -48,7 +48,6 @@ namespace dp_gui {
 
 class TheExtensionManager;
 
-typedef ::boost::shared_ptr< FixedHyperlink > TFixedHyperlink;
 
 
 //                          struct Entry_Impl

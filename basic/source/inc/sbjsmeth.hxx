@@ -37,7 +37,6 @@ public:
     TYPEINFO_OVERRIDE();
 };
 
-typedef tools::SvRef<SbJScriptMethod> SbJScriptMethodRef;
 
 #endif
 

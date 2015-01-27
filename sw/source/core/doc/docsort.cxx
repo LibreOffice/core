@@ -62,7 +62,6 @@ OUString*           SwSortElement::pLastAlgorithm = 0;
 LocaleDataWrapper*  SwSortElement::pLclData = 0;
 
 // List of all sorted elements
-typedef SwSortElement*      SwSortElementPtr;
 
 typedef ::boost::ptr_multiset<SwSortTxtElement> SwSortTxtElements;
 typedef ::boost::ptr_multiset<SwSortBoxElement> SwSortBoxElements;

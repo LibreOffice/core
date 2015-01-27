@@ -44,9 +44,7 @@ class SfxObjectShell;
  * probably what the user expects to see when viewing the code
  */
 
-typedef std::unordered_map< sal_Int32, OUString >  ObjIdToName;
 
-typedef std::map< OUString, ObjIdToName >  ControlAttributeInfo;
 
 class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
