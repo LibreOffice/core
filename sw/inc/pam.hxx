@@ -74,6 +74,7 @@ struct SW_DLLPUBLIC SwPosition
     bool operator >=(const SwPosition &) const;
     bool operator ==(const SwPosition &) const;
     bool operator !=(const SwPosition &) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 std::ostream &operator <<(std::ostream& s, const SwPosition& position);

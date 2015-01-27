@@ -190,6 +190,14 @@ SwDoc * SwPosition::GetDoc() const
     return nNode.GetNode().GetDoc();
 }
 
+void SwPosition::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swPosition"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nNode"), BAD_CAST(OString::number(nNode.GetIndex()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nContent"), BAD_CAST(OString::number(nContent.GetIndex()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+}
+
 std::ostream &operator <<(std::ostream& s, const SwPosition& position)
 {
     return s << "SwPosition (node " << position.nNode.GetIndex() << ", offset " << position.nContent.GetIndex() << ")";

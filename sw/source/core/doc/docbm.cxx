@@ -1149,11 +1149,13 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
             pMark_t pMark = *it;
             xmlTextWriterStartElement(pWriter, BAD_CAST("bookmark"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pMark->GetMarkStart().nNode.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startOffset"), BAD_CAST(OString::number(pMark->GetMarkStart().nContent.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endNode"), BAD_CAST(OString::number(pMark->GetMarkEnd().nNode.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endOffset"), BAD_CAST(OString::number(pMark->GetMarkEnd().nContent.GetIndex()).getStr()));
             xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
+            xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
+            pMark->GetMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
+            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
+            pMark->GetOtherMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
             xmlTextWriterEndElement(pWriter);
         }
         xmlTextWriterEndElement(pWriter);
@@ -1166,11 +1168,13 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
             pMark_t pMark = *it;
             xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmark"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pMark->GetMarkStart().nNode.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startOffset"), BAD_CAST(OString::number(pMark->GetMarkStart().nContent.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endNode"), BAD_CAST(OString::number(pMark->GetMarkEnd().nNode.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endOffset"), BAD_CAST(OString::number(pMark->GetMarkEnd().nContent.GetIndex()).getStr()));
             xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
+            xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
+            pMark->GetMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
+            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
+            pMark->GetOtherMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
             if (sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark.get()))
             {
                 sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
@@ -1199,11 +1203,13 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
             pMark_t pMark = *it;
             xmlTextWriterStartElement(pWriter, BAD_CAST("annotationmark"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startNode"), BAD_CAST(OString::number(pMark->GetMarkStart().nNode.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("startOffset"), BAD_CAST(OString::number(pMark->GetMarkStart().nContent.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endNode"), BAD_CAST(OString::number(pMark->GetMarkEnd().nNode.GetIndex()).getStr()));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("endOffset"), BAD_CAST(OString::number(pMark->GetMarkEnd().nContent.GetIndex()).getStr()));
             xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
+            xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
+            pMark->GetMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
+            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
+            pMark->GetOtherMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
             xmlTextWriterEndElement(pWriter);
         }
         xmlTextWriterEndElement(pWriter);
