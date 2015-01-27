@@ -718,9 +718,11 @@ OString XclXmlUtils::ToOString( const OUString& s )
     return OUStringToOString( s, RTL_TEXTENCODING_UTF8  );
 }
 
-bool XclXmlUtils::TryToOString( OStringBuffer& s, const ScAddress& rAddress )
+OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const ScAddress& rAddress )
 {
-    return rAddress.TryFormat(s, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1));
+    if (!rAddress.TryFormat(s, SCA_VALID, NULL, ScAddress::Details( FormulaGrammar::CONV_XL_A1)))
+        s.append(ToOString(rAddress));
+    return s;
 }
 
 OString XclXmlUtils::ToOString( const ScAddress& rAddress )
@@ -765,9 +767,9 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
     return aAddress;
 }
 
-bool XclXmlUtils::TryToOString( OStringBuffer& s, const XclAddress& rAddress )
+OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const XclAddress& rAddress )
 {
-    return TryToOString( s, lcl_ToAddress( rAddress ));
+    return ToOString( s, lcl_ToAddress( rAddress ));
 }
 
 OString XclXmlUtils::ToOString( const XclAddress& rAddress )

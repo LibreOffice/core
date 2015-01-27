@@ -267,11 +267,11 @@ public:
     static OString ToOString( const Color& rColor );
     static OString ToOString( const OUString& s );
     static OString ToOString( const ScfUInt16Vec& rBuffer );
-    static bool TryToOString( OStringBuffer& s, const ScAddress& rRange );
+    static OStringBuffer& ToOString( OStringBuffer& s, const ScAddress& rRange );
     static OString ToOString( const ScAddress& rRange );
     static OString ToOString( const ScRange& rRange );
     static OString ToOString( const ScRangeList& rRangeList );
-    static bool TryToOString( OStringBuffer& s, const XclAddress& rAddress );
+    static OStringBuffer& ToOString( OStringBuffer& s, const XclAddress& rAddress );
     static OString ToOString( const XclAddress& rAddress );
     static OString ToOString( const XclExpString& s );
     static OString ToOString( const XclRange& rRange );
