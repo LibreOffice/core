@@ -390,9 +390,7 @@ static Mapping loadExternalMapping(
 
         if (! fpGetMapFunc)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE( "Could not find mapfunc for %s", OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr());
-#endif
+            SAL_INFO("cppu", "Could not find mapfunc for " << aName);
             return Mapping();
         }
 
@@ -665,10 +663,7 @@ void SAL_CALL uno_registerMapping(
     {
         OUString aMappingName(
             getMappingName( pFrom, pTo, pAddPurpose ? OUString(pAddPurpose) : OUString() ) );
-#if OSL_DEBUG_LEVEL > 2
-        OString cstr( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "> inserting new mapping: %s", cstr.getStr() );
-#endif
+        SAL_INFO("cppu", "> inserting new mapping: " << aMappingName);
         // count initially 1
         MappingEntry * pEntry = new MappingEntry( *ppMapping, freeMapping, aMappingName );
         rData.aName2Entry[ aMappingName ] = pEntry;
@@ -705,10 +700,7 @@ void SAL_CALL uno_revokeMapping(
         rData.aMapping2Entry.erase( pEntry->pMapping );
         rData.aName2Entry.erase( pEntry->aMappingName );
         aGuard.clear();
-#if OSL_DEBUG_LEVEL > 2
-        OString cstr( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US  ) );
-        OSL_TRACE( "> revoking mapping %s", cstr.getStr() );
-#endif
+        SAL_INFO("cppu", "> revoking mapping " << pEntry->aMappingName);
         (*pEntry->freeMapping)( pEntry->pMapping );
         delete pEntry;
     }
