@@ -39,58 +39,23 @@ static const char aRootName[] = "Office.Math";
 #define FONT_FORMAT_LIST    "FontFormatList"
 
 
-
-
-static Sequence< OUString > lcl_GetFontPropertyNames()
+static const char * aFontPropNames[] =
 {
-    static const char * aPropNames[] =
-    {
-        "Name",
-        "CharSet",
-        "Family",
-        "Pitch",
-        "Weight",
-        "Italic",
-        0
-    };
+    "Name",
+    "CharSet",
+    "Family",
+    "Pitch",
+    "Weight",
+    "Italic"
+};
 
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( 6 );
-    OUString *pNames = aNames.getArray();
-    for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
-}
-
-
-
-
-static Sequence< OUString > lcl_GetSymbolPropertyNames()
+static const char * aSymbolPropNames[] =
 {
-    static const char * aPropNames[] =
-    {
-        "Char",
-        "Set",
-        "Predefined",
-        "FontFormatId",
-        0
-    };
-
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( 4 );
-    OUString *pNames = aNames.getArray();
-    for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
-}
-
-
+    "Char",
+    "Set",
+    "Predefined",
+    "FontFormatId"
+};
 
 static const char * aMathPropNames[] =
 {
@@ -168,6 +133,16 @@ static Sequence< OUString > lcl_GetPropertyNames(
         pNames[i] = OUString::createFromAscii( *ppPropName );
     }
     return aNames;
+}
+
+static Sequence< OUString > lcl_GetFontPropertyNames()
+{
+    return lcl_GetPropertyNames( aFontPropNames, SAL_N_ELEMENTS( aFontPropNames ) );
+}
+
+static Sequence< OUString > lcl_GetSymbolPropertyNames()
+{
+    return lcl_GetPropertyNames( aSymbolPropNames, SAL_N_ELEMENTS( aSymbolPropNames ) );
 }
 
 static Sequence< OUString > GetFormatPropertyNames()
