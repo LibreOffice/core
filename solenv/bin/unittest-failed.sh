@@ -29,7 +29,7 @@ export CPPUNITTRACE="\"[full path to devenv.exe]\" /debugexe" # for interactive 
 EOF
 elif [ "$3" = "MACOSX" ]; then
 cat << EOF
-export CPPUNITTRACE="lldb --" # for interactive debugging on OSX
+export CPPUNITTRACE="lldb --" # for interactive debugging on OS X
 EOF
 else
 cat << EOF
