@@ -265,6 +265,12 @@
             <value xml:lang="en-US">.uno:BasicStepOver</value>
           </prop>
         </node>
+        <node oor:name="F8_SHIFT_MOD1" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:BasicStepOut</value>
+          </prop>
+        </node>
         <node oor:name="F9" oor:op="replace">
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
