@@ -300,23 +300,52 @@ public:
     {
         RENDER_DETAILS(text,KEY_T,1)
 
-        bool mbClip;
-        bool mbArabicText;
-        bool mbRotate;
-
-        DrawText()
-            : mbClip (false)
-            , mbArabicText (false)
-            , mbRotate (false) {}
-
-        DrawText( bool bClip, bool bArabicText, bool bRotate )
-            : mbClip (bClip)
-            , mbArabicText (bArabicText)
-            , mbRotate (bRotate) {}
-
         virtual void RenderRegion(OutputDevice &rDev, Rectangle r,
-                                  const RenderContext &) SAL_OVERRIDE
+                                  const RenderContext &rCtx) SAL_OVERRIDE
         {
+            if (rCtx.meStyle == RENDER_EXPANDED)
+            {
+                std::vector<Rectangle> aRegions(DemoRenderer::partition(rCtx, 4, 2));
+                DemoRenderer::clearRects(rDev, aRegions);
+
+                bool bClip=true, bArabicText=true, bRotate=true;
+
+                int nRegions=0;
+
+                for (int nClipRow=0; nClipRow < 2; nClipRow++)
+                {
+                    if (!bArabicText)
+                        bArabicText=true;
+
+                    for (int nArabicRow=0; nArabicRow < 2; nArabicRow++)
+                    {
+                        if (!bRotate)
+                            bRotate=true;
+
+                        for (int nRotateRow=0; nRotateRow < 2; nRotateRow++)
+                        {
+                            drawText( rDev, aRegions[nRegions], bClip, bArabicText, bRotate );
+
+                            nRegions++;
+                            bRotate=false;
+                        }
+
+                        bArabicText=false;
+                    }
+
+                    bClip=false;
+                }
+            }
+            else
+            {
+                drawText(rDev, r, false, false, false);
+            }
+        }
+
+        void drawText (OutputDevice &rDev, Rectangle r, bool bClip, bool bArabicText, bool bRotate)
+        {
+            rDev.SetClipRegion( vcl::Region(r) );
+
             OUString aLatinText("Click any rect to zoom!!!!");
 
             const unsigned char pTextUTF8[] = {
@@ -331,19 +360,19 @@ public:
                             RTL_TEXTENCODING_UTF8 );
 
             OUString aText;
+
             int nPrintNumCopies=0;
 
-            if (mbArabicText)
+            if (bArabicText)
             {
                 aText = aArabicText;
-                nPrintNumCopies=2;
+                nPrintNumCopies=20;
             }
             else
             {
                 aText = aLatinText;
                 nPrintNumCopies=20;
             }
-
             std::vector<OUString> maFontNames;
             sal_uInt32 nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
@@ -357,49 +386,31 @@ public:
             for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
                 maFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
-            if (mbClip)
-                rDev.SetClipRegion( vcl::Region(r - Point(200, 200) ) );
+            if (bClip)
+            {
+                Rectangle aRect( r.TopLeft(), Size( r.GetWidth()/2, r.GetHeight()/2) );
+                rDev.SetClipRegion( vcl::Region( aRect ) );
+            }
 
-            for (int i = 0; i < nPrintNumCopies; i++) {
+            for (int i = 0; i < nPrintNumCopies; i++)
+            {
+                Rectangle aRect = r;
+
                 rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
                 // random font size to avoid buffering
                 vcl::Font aFont( maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
 
-                if (mbRotate)
+                if (bRotate)
+                {
+                    aRect.TopLeft() = r.BottomLeft();
                     aFont.SetOrientation(450);
+                }
 
                 rDev.SetFont(aFont);
-                rDev.DrawText(r, aText.copy(0, 4 + (aText.getLength() - 4) * (nPrintNumCopies - i) / nPrintNumCopies));
+                rDev.DrawText(aRect, aText);
             }
-
-            if (mbClip)
-                rDev.SetClipRegion();
         }
     };
-
-    struct DrawClipText : public DrawText
-    {
-        RENDER_DETAILS(cliptext,KEY_T,1)
-
-        DrawClipText()
-            : DrawText( true, false, false ) {}
-    };
-
-    struct DrawArabicText : public DrawText
-    {
-        RENDER_DETAILS(arabictext,KEY_T,1)
-
-        DrawArabicText()
-            : DrawText( false, true, false ) {}
-    };
-
-    // struct DrawRotatedText : public DrawText
-    // {
-    //     RENDER_DETAILS(rotatedtext,KEY_T,1)
-
-    //     DrawRotatedText()
-    //         : DrawText( false, false, true ) {}
-    // };
 
     struct DrawCheckered : public RegionRenderer
     {
@@ -1195,9 +1206,6 @@ void DemoRenderer::InitRenderers()
 {
     maRenderers.push_back(new DrawLines());
     maRenderers.push_back(new DrawText());
-    maRenderers.push_back(new DrawClipText());
-    maRenderers.push_back(new DrawArabicText());
-    //maRenderers.push_back(new DrawRotatedText());
     maRenderers.push_back(new DrawPoly());
     maRenderers.push_back(new DrawEllipse());
     maRenderers.push_back(new DrawCheckered());
@@ -1258,7 +1266,7 @@ void DemoRenderer::addTime(int i, double t)
     maRenderers[i]->countTime++;
 }
 
-void DemoRenderer::selectRenderer(const OUString &rName)
+void DemoRenderer::selectRenderer(const OUString &rName )
 {
     for (size_t i = 0; i < maRenderers.size(); i++)
     {
