@@ -506,6 +506,68 @@ struct Round : Area
 
 };
 
+struct Normdist : Area
+{
+    Normdist() :
+        Area("Normdist")
+    {
+    }
+
+    virtual ~Normdist()
+    {
+    }
+
+    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    {
+        pDoc->SetString(ScAddress(0,0,nTab), "num");
+        pDoc->SetString(ScAddress(1,0,nTab), "avg");
+        pDoc->SetString(ScAddress(2,0,nTab), "stdev");
+        pDoc->SetString(ScAddress(3,0,nTab), "type");
+        pDoc->SetString(ScAddress(4,0,nTab), "NORMDIST(num,avg,stdev,type)");
+        pDoc->SetString(ScAddress(5,0,nTab), "expected");
+    }
+
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    {
+        const double nNum(comphelper::rng::uniform_real_distribution(0, 100));
+        const double nAvg(comphelper::rng::uniform_real_distribution(0, 100));
+        const double nStDev(comphelper::rng::uniform_real_distribution(1, 10));
+        const int nType(comphelper::rng::uniform_int_distribution(0, 1));
+
+        pDoc->SetValue(ScAddress(0,1+nRow,nTab), nNum);
+        pDoc->SetValue(ScAddress(1,1+nRow,nTab), nAvg);
+        pDoc->SetValue(ScAddress(2,1+nRow,nTab), nStDev);
+        pDoc->SetValue(ScAddress(3,1+nRow,nTab), nType);
+
+        pDoc->SetString(ScAddress(4,1+nRow,nTab),
+                        "=NORMDIST(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "," + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "," + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "," + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        ")");
+
+        if (nType == 1)
+            pDoc->SetValue(ScAddress(5,1+nRow,nTab), ScInterpreter::integralPhi((nNum-nAvg)/nStDev));
+        else
+            pDoc->SetValue(ScAddress(5,1+nRow,nTab), ScInterpreter::phi((nNum-nAvg)/nStDev)/nStDev);
+
+        pDoc->SetString(ScAddress(6,1+nRow,nTab),
+                        "=IF(ABS(" + ScAddress(4,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "-" + ScAddress(5,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        ")<=3e-10"
+                        ",0,1)");
+    }
+
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    {
+        return "=SUM(" +
+            ScRange(ScAddress(6,1,nTab),
+                    ScAddress(6,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+            ")";
+    }
+
+};
+
 struct Reduction : Op
 {
     int mnNum;
@@ -681,6 +743,8 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                 }));
 
     xTestDocument->addTest(Round());
+
+    xTestDocument->addTest(Normdist());
 
     xTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
                                      [] (double nAccum, double nArg)
