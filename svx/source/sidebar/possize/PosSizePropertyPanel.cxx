@@ -488,6 +488,12 @@ IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 
     if( (nChar < '0') || (nChar > '9') )
         return 0;
+
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
+
+    sTmp = sTmp.replace(cSep,'.'); // toDouble() expects decimal point
+
     double dTmp = sTmp.toDouble();
     if(bNegative)
     {
