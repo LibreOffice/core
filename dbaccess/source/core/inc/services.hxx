@@ -29,7 +29,6 @@ extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition();
 extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
-extern "C" void SAL_CALL createRegistryInfo_ORowSet();
 
 #endif
 

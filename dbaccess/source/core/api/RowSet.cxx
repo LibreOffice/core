@@ -96,9 +96,11 @@ using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 
-extern "C" void SAL_CALL createRegistryInfo_ORowSet()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_dba_ORowSet_get_implementation(css::uno::XComponentContext* context,
+                                                 css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::dba::OAutoRegistration< ORowSet > aAutoRegistration;
+    return cppu::acquire(new ORowSet(context));
 }
 
 #define NOTIFY_LISTERNERS_CHECK(_rListeners,T,method)                             \
