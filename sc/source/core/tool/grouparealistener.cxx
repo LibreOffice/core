@@ -80,6 +80,10 @@ FormulaGroupAreaListener::FormulaGroupAreaListener(
     assert(mppTopCell); // This can't be NULL.
 }
 
+FormulaGroupAreaListener::~FormulaGroupAreaListener()
+{
+}
+
 ScRange FormulaGroupAreaListener::getListeningRange() const
 {
     ScRange aRet = maRange;

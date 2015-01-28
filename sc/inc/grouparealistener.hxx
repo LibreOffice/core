@@ -36,6 +36,8 @@ public:
     FormulaGroupAreaListener(
         const ScRange& rRange, ScFormulaCell** ppTopCell, SCROW nGroupLen, bool bStartFixed, bool bEndFixed );
 
+    virtual ~FormulaGroupAreaListener();
+
     ScRange getListeningRange() const;
 
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
