@@ -655,8 +655,10 @@ struct Reduction : Op
 
 }
 
-IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
+IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, pButton)
 {
+    pButton->Disable();
+
     // Automatically test the current implementation of OpenCL. If it
     // seems good, whitelist it. If it seems bad, blacklist it.
 
