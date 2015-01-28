@@ -1,0 +1,8 @@
+udunits allows for parsing and manipulation of (physical) units.
+
+Important: when updating it's necessary to obtain the tarball from
+the official ftp site:
+    ftp://ftp.unidata.ucar.edu/pub/udunits/
+The tarballs from the github repository are missing autoconf and
+info files, i.e using these would require the installation of additional
+tooling, beyond what we already require for LibreOffice. 

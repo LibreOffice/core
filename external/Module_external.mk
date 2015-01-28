@@ -89,6 +89,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,RHINO,rhino) \
 	$(call gb_Helper_optional,SERF,serf) \
 	$(call gb_Helper_optional,UCPP,ucpp) \
+	$(call gb_Helper_optional,UDUNITS2,udunits2) \
 	$(call gb_Helper_optional,VIGRA,vigra) \
 	$(call gb_Helper_optional,VISIO,libvisio) \
 	$(call gb_Helper_optional,WPD,libwpd) \

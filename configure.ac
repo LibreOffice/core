@@ -1393,6 +1393,11 @@ AC_ARG_ENABLE(firebird-sdbc,
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
 ,enable_firebird_sdbc=yes)
 
+AC_ARG_ENABLE(calc-unitverification,
+    AS_HELP_STRING([--enable-calc-unitverification],
+        [Enable the experimental unit verification features. Only use if you actively want to hack on this.]),
+)
+
 AC_ARG_ENABLE(winegcc,
     AS_HELP_STRING([--enable-winegcc],
         [Enable use of winegcc during the build, in order to create msi* tools
@@ -1685,6 +1690,11 @@ AC_ARG_WITH(system-firebird,
         [Use Firebird libraries already on system, for building the Firebird-SDBC
          driver. If fb_config is not in PATH, use FBCONFIG to point to it.]),,
     [with_system_firebird="$with_system_libs"])
+
+AC_ARG_WITH(system-udunits2,
+    AS_HELP_STRING([--with-system-udunits2],
+        [Use udunits libraries already on system, for building calc unit-verification it.]),,
+    [with_system_udunits2="$with_system_libs"])
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
@@ -8618,6 +8628,68 @@ dnl ===================================================================
 dnl Check for system mdds
 dnl ===================================================================
 libo_CHECK_SYSTEM_MODULE([mdds], [MDDS], [mdds >= 0.12.0], ["-I${WORKDIR}/UnpackedTarball/mdds/include"])
+
+dnl ===================================================================
+dnl Check for calc unit-verification
+dnl ===================================================================
+ENABLE_CALC_UNITVERIFICATION=""
+if test "x$enable_calc_unitverification" = "xyes"; then
+    SCPDEFS="$SCPDEFS -DWITH_CALC_UNITVERIFICATION"
+
+    dnl ===================================================================
+    dnl Check for system udunits2
+    dnl ===================================================================
+    AC_MSG_CHECKING([which udunits2 to use])
+    if test "$with_system_udunits2" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_UDUNITS2=TRUE
+        AC_PATH_PROG(FIREBIRDCONFIG, [fb_config])
+        if test -z "$FIREBIRDCONFIG"; then
+            AC_MSG_NOTICE([No fb_config -- using pkg-config])
+            PKG_CHECK_MODULES(FIREBIRD, fbembed)
+            FIREBIRD_VERSION=`pkg-config --modversion fbembed`
+        else
+            AC_MSG_NOTICE([fb_config found])
+            FIREBIRD_VERSION=`$FIREBIRDCONFIG --version`
+            AC_MSG_CHECKING([for Firebird Client library])
+            FIREBIRD_CFLAGS=`$FIREBIRDCONFIG --cflags`
+            FIREBIRD_LIBS=`$FIREBIRDCONFIG --embedlibs`
+        fi
+        AC_MSG_RESULT([includes `$FIREBIRD_CFLAGS', libraries `$FIREBIRD_LIBS'])
+        AC_MSG_CHECKING([Firebird version])
+        if test -n "${FIREBIRD_VERSION}"; then
+            FIREBIRD_MAJOR=`echo $FIREBIRD_VERSION | cut -d"." -f1`
+            FIREBIRD_MINOR=`echo $FIREBIRD_VERSION | cut -d"." -f2`
+            if test "$FIREBIRD_MAJOR" -eq "2" -a "$FIREBIRD_MINOR" -eq "5"; then
+                AC_MSG_RESULT([OK])
+            else
+                AC_MSG_ERROR([Ensure firebird 2.5.x is installed])
+            fi
+        else
+            __save_CFLAGS="${CFLAGS}"
+            CFLAGS="${CFLAGS} ${FIREBIRD_CFLAGS}"
+            AC_COMPILE_IFELSE([AC_LANG_SOURCE([[#include <ibase.h>
+#if defined(FB_API_VER) && FB_API_VER == 25
+#else
+#error "Wrong Firebird API version"
+#endif]])],AC_MSG_RESULT([OK]),AC_MSG_ERROR([Ensure firebird 2.5.x is installed]))
+            CFLAGS="${__save_CFLAGS}"
+        fi
+        ENABLE_FIREBIRD_SDBC="TRUE"
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_UDUNITS2=
+        UDUNITS2_CFLAGS="-I${WORKDIR}/UnpackedTarball/udunits2/lib"
+        UDUNITS2_LIBS="-ludunits2"
+
+        BUILD_TYPE="$BUILD_TYPE UDUNITS2"
+        ENABLE_CALC_UNITVERIFICATION="TRUE"
+    fi
+fi
+AC_SUBST(ENABLE_CALC_UNITVERIFICATION)
+AC_SUBST(SYSTEM_UDUNITS2)
+AC_SUBST(UDUNITS2_CFLAGS)
+AC_SUBST(UDUNITS2_LIBS)
 
 dnl ===================================================================
 dnl Check for system glm

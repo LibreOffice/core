@@ -201,6 +201,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,RHINO,SWING_TARBALL) \
 		$(call fetch_Optional,SERF,SERF_TARBALL) \
 		$(call fetch_Optional,UCPP,UCPP_TARBALL) \
+		$(call fetch_Optional,UDUNITS2,UDUNITS2_TARBALL) \
 		$(call fetch_Optional,VIGRA,VIGRA_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
 		$(call fetch_Optional,WPD,WPD_TARBALL) \
