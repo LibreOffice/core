@@ -211,6 +211,17 @@ bool SwTableCursor::IsSelOvrCheck(int eFlags)
     return SwCursor::IsSelOvrCheck(eFlags);
 }
 
+namespace
+{
+    const SwTxtAttr* InputFieldAtPos(SwPosition *pPos)
+    {
+        SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+        if (!pTxtNd)
+            return NULL;
+        return pTxtNd->GetTxtAttrAt(pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT);
+    }
+}
+
 bool SwCursor::IsSelOvr( int eFlags )
 {
     SwDoc* pDoc = GetDoc();
@@ -325,9 +336,9 @@ bool SwCursor::IsSelOvr( int eFlags )
     if( pNd->IsCntntNode() && !dynamic_cast<SwUnoCrsr*>(this) )
     {
         const SwCntntFrm* pFrm = static_cast<const SwCntntNode*>(pNd)->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() );
-        if( pFrm && pFrm->IsValid()
-            && 0 == pFrm->Frm().Height()
-            && 0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
+        if ( (nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags)   //allowed to change position if it's a bad one
+            && pFrm && pFrm->IsValid() && !pFrm->Frm().Height()     //a bad zero height position
+            && !InputFieldAtPos(GetPoint()) )                       //unless it's a (vertical) input field
         {
             // skip to the next/prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
@@ -412,23 +423,10 @@ bool SwCursor::IsSelOvr( int eFlags )
         return true; // we need a frame
     }
 
-    // assure that selection is only inside an InputField or contains the InputField completely
+    // ensure that selection is only inside an InputField or contains the InputField completely
     {
-        const SwTxtAttr* pInputFldTxtAttrAtPoint = NULL;
-        SwTxtNode* pTxtNdAtPoint = GetPoint()->nNode.GetNode().GetTxtNode();
-        if ( pTxtNdAtPoint != NULL )
-        {
-            pInputFldTxtAttrAtPoint =
-                pTxtNdAtPoint->GetTxtAttrAt( GetPoint()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
-        }
-
-        const SwTxtAttr* pInputFldTxtAttrAtMark = NULL;
-        SwTxtNode* pTxtNdAtMark = GetMark()->nNode.GetNode().GetTxtNode();
-        if ( pTxtNdAtMark != NULL )
-        {
-            pInputFldTxtAttrAtMark =
-                pTxtNdAtMark->GetTxtAttrAt( GetMark()->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
-        }
+        const SwTxtAttr* pInputFldTxtAttrAtPoint = InputFieldAtPos(GetPoint());
+        const SwTxtAttr* pInputFldTxtAttrAtMark = InputFieldAtPos(GetMark());
 
         if ( pInputFldTxtAttrAtPoint != pInputFldTxtAttrAtMark )
         {
@@ -449,6 +447,7 @@ bool SwCursor::IsSelOvr( int eFlags )
             {
                 const sal_Int32 nNewPointPos =
                     bIsForwardSelection ? *(pInputFldTxtAttrAtPoint->End()) : pInputFldTxtAttrAtPoint->GetStart();
+                SwTxtNode* pTxtNdAtPoint = GetPoint()->nNode.GetNode().GetTxtNode();
                 GetPoint()->nContent.Assign( pTxtNdAtPoint, nNewPointPos );
             }
 
@@ -456,6 +455,7 @@ bool SwCursor::IsSelOvr( int eFlags )
             {
                 const sal_Int32 nNewMarkPos =
                     bIsForwardSelection ? pInputFldTxtAttrAtMark->GetStart() : *(pInputFldTxtAttrAtMark->End());
+                SwTxtNode* pTxtNdAtMark = GetMark()->nNode.GetNode().GetTxtNode();
                 GetMark()->nContent.Assign( pTxtNdAtMark, nNewMarkPos );
             }
         }
