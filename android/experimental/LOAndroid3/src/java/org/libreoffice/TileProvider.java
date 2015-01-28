@@ -63,9 +63,15 @@ public interface TileProvider {
 
     /**
      * Trigger a key press.
-     * @param keyEvent - contains the
+     * @param keyEvent - contains information about key event
      */
     void keyPress(KeyEvent keyEvent);
+
+    /**
+     * Trigger a key release.
+     * @param keyEvent - contains information about key event
+     */
+    void keyRelease(KeyEvent keyEvent);
 
     /**
      * Trigger a mouse button down event.

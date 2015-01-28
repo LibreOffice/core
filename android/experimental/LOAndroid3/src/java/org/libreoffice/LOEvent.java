@@ -19,7 +19,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int THUMBNAIL = 8;
     public static final int TILE_RERENDER = 9;
     public static final int TOUCH = 10;
-    public static final int KEY_PRESS = 11;
+    public static final int KEY_EVENT = 11;
 
     public final int mType;
     public int mPriority = 0;
@@ -35,6 +35,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mTouchType;
     public MotionEvent mMotionEvent;
     public PointF mDocumentTouchCoordinate;
+    public String mKeyEventType;
     public KeyEvent mKeyEvent;
 
     public LOEvent(int type) {
@@ -91,8 +92,10 @@ public class LOEvent implements Comparable<LOEvent> {
         mDocumentTouchCoordinate = documentTouchCoordinate;
     }
 
-    public LOEvent(int type, KeyEvent keyEvent) {
+    public LOEvent(int type, String keyEventType, KeyEvent keyEvent) {
         mType = type;
+        mTypeString = "KeyEvent";
+        mKeyEventType = keyEventType;
         mKeyEvent = keyEvent;
     }
 

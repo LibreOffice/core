@@ -93,6 +93,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void keyRelease(KeyEvent keyEvent) {
+
+    }
+
+    @Override
     public void mouseButtonDown(PointF inDocument) {
 
     }

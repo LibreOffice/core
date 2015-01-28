@@ -147,6 +147,10 @@ public class LayerView extends FrameLayout {
         });
     }
 
+    public void setInputConnectionHandler(InputConnectionHandler inputConnectionHandler) {
+        mInputConnectionHandler = inputConnectionHandler;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {

@@ -277,22 +277,27 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         this.tileInvalidationCallback = tileInvalidationCallback;
     }
 
-    @Override
-    public void keyPress(KeyEvent keyEvent) {
-        int code = 0;
+    private int getKeyCode(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode())
         {
-        case KeyEvent.KEYCODE_DEL:
-            code = com.sun.star.awt.Key.BACKSPACE;
-            break;
-        case KeyEvent.KEYCODE_ENTER:
-            code = com.sun.star.awt.Key.RETURN;
-            break;
-        default:
-            code = keyEvent.getUnicodeChar();
-            break;
+            case KeyEvent.KEYCODE_DEL:
+                return com.sun.star.awt.Key.BACKSPACE;
+            case KeyEvent.KEYCODE_ENTER:
+                return com.sun.star.awt.Key.RETURN;
         }
+        return keyEvent.getUnicodeChar();
+    }
+
+    @Override
+    public void keyPress(KeyEvent keyEvent) {
+        int code = getKeyCode(keyEvent);
         mOffice.postKeyEvent(Office.KEY_PRESS, code);
+    }
+
+    @Override
+    public void keyRelease(KeyEvent keyEvent) {
+        int code = getKeyCode(keyEvent);
+        mOffice.postKeyEvent(Office.KEY_RELEASE, code);
     }
 
     private void mouseButton(int type, PointF inDocument) {

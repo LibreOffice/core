@@ -153,11 +153,15 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 }
                 touch(event.mTouchType, event.mMotionEvent, event.mDocumentTouchCoordinate);
                 break;
-            case LOEvent.KEY_PRESS:
+            case LOEvent.KEY_EVENT:
                 if (!LOKitShell.isEditingEnabled()) {
                     return;
                 }
-                mTileProvider.keyPress(event.mKeyEvent);
+                if (event.mKeyEventType == "KeyPress") {
+                    mTileProvider.keyPress(event.mKeyEvent);
+                } else if (event.mKeyEventType.equals("KeyRelease")) {
+                    mTileProvider.keyRelease(event.mKeyEvent);
+                }
                 break;
         }
     }

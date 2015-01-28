@@ -128,6 +128,7 @@ public class LibreOfficeMainActivity extends LOAbout {
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerClient.setView(layerView);
+        layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
     }
 
@@ -237,16 +238,6 @@ public class LibreOfficeMainActivity extends LOAbout {
             LOKitShell.sendEvent(LOEventFactory.changePart(partView.partIndex));
             mDrawerLayout.closeDrawer(mDrawerList);
         }
-    }
-
-
-    /**
-     * Listen to key presses and send event to LOK.
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LOKitShell.sendKeyPressEvent(event);
-        return super.onKeyDown(keyCode, event);
     }
 }
 
