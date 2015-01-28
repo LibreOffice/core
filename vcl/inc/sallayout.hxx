@@ -273,9 +273,15 @@ struct GlyphItem
 {
     int     mnFlags;
     int     mnCharPos;      // index in string
+
     int     mnOrigWidth;    // original glyph width
     int     mnNewWidth;     // width after adjustments
     int     mnXOffset;
+
+    int     mnOrigHeight;    // original glyph height
+    int     mnNewHeight;     // width after adjustments
+    int     mnYOffset;
+
     sal_GlyphId maGlyphId;
     Point   maLinearPos;    // absolute position of non rotated string
 
@@ -298,10 +304,12 @@ public:
             {}
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth, int nXOffset )
+                long nFlags, int nOrigWidth, int nXOffset, int nOrigHeight, int nYOffset )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(nXOffset),
+                mnOrigHeight(nOrigHeight), mnNewHeight(nOrigHeight),
+                mnYOffset(nYOffset),
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
@@ -330,6 +338,7 @@ public:
 
     // used by upper layers
     virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
+    virtual Rectangle GetTextRect() const;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
