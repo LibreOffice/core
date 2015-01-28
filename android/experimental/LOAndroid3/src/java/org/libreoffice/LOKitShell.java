@@ -9,6 +9,8 @@ import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.mozilla.gecko.gfx.LayerView;
+
 
 public class LOKitShell {
     private static final String LOGTAG = LOKitShell.class.getSimpleName();
@@ -93,5 +95,9 @@ public class LOKitShell {
 
     public static boolean isEditingEnabled() {
         return false;
+    }
+
+    public static LayerView getLayerView() {
+        return LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
     }
 }
