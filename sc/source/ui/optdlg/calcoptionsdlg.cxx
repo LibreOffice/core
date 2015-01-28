@@ -16,6 +16,7 @@
 #include "calcoptionsdlg.hxx"
 #include "docfunc.hxx"
 #include "docsh.hxx"
+#include "interpre.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
 #include "scopetools.hxx"
@@ -620,6 +621,12 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                 [] (double nArg)
                                 {
                                     return (nArg == 0);
+                                }));
+
+    xTestDocument->addTest(UnOp("NormSInv", "NORMSINV", 0, 1, 3e-10,
+                                [] (double nArg)
+                                {
+                                    return ScInterpreter::gaussinv(nArg);
                                 }));
 
     xTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
