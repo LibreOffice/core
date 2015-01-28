@@ -175,7 +175,34 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
 class FieldDeletionModify : public SwModify
 {
     public:
-        FieldDeletionModify(AbstractFldInputDlg* pInputFieldDlg) : mpInputFieldDlg(pInputFieldDlg) {}
+        FieldDeletionModify(AbstractFldInputDlg* pInputFieldDlg, SwField* pFld)
+            : mpInputFieldDlg(pInputFieldDlg)
+        {
+            SwInputField *const pInputField(dynamic_cast<SwInputField*>(pFld));
+            SwSetExpField *const pSetExpFld(dynamic_cast<SwSetExpField*>(pFld));
+
+            if (pInputField && pInputField->GetFmtFld())
+            {
+                mpFmtFld = pInputField->GetFmtFld();
+            }
+            else if (pSetExpFld && pSetExpFld->GetFmtFld())
+            {
+                mpFmtFld = pSetExpFld->GetFmtFld();
+            }
+
+            // Register for possible field deletion while dialog is open
+            if (mpFmtFld)
+                mpFmtFld->Add(this);
+        }
+
+        ~FieldDeletionModify()
+        {
+            if (mpFmtFld)
+            {
+                // Dialog closed, remove modification listener
+                mpFmtFld->Remove(this);
+            }
+        }
 
         void Modify( const SfxPoolItem* pOld, const SfxPoolItem *) SAL_OVERRIDE
         {
@@ -186,6 +213,7 @@ class FieldDeletionModify : public SwModify
                 {
                 case RES_REMOVE_UNO_OBJECT:
                 case RES_OBJECTDYING:
+                    mpFmtFld = NULL;
                     mpInputFieldDlg->EndDialog(RET_CANCEL);
                     break;
                 }
@@ -193,10 +221,10 @@ class FieldDeletionModify : public SwModify
         }
     private:
         AbstractFldInputDlg* mpInputFieldDlg;
+        SwFmtFld* mpFmtFld;
 };
 
 // Start input dialog for a specific field
-
 bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
                                    vcl::Window* pParentWin, OString* pWindowState )
 {
@@ -208,29 +236,11 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
 
-    FieldDeletionModify aModify(pDlg.get());
-    SwInputField *const pInputField(dynamic_cast<SwInputField*>(pFld));
-    SwSetExpField *const pSetExpFld(dynamic_cast<SwSetExpField*>(pFld));
-    if (pInputField && pInputField->GetFmtFld())
-    {
-        // Register for possible input field deletion while dialog is open
-        pInputField->GetFmtFld()->Add(&aModify);
-    }
-    else if (pSetExpFld && pSetExpFld->GetFmtFld())
-    {
-        pSetExpFld->GetFmtFld()->Add(&aModify);
-    }
+    bool bRet;
 
-    bool bRet = RET_CANCEL == pDlg->Execute();
-
-    if (pInputField && pInputField->GetFmtFld())
     {
-        // Dialog closed, remove modification listener
-        pInputField->GetFmtFld()->Remove(&aModify);
-    }
-    else if (pSetExpFld && pSetExpFld->GetFmtFld())
-    {
-        pSetExpFld->GetFmtFld()->Remove(&aModify);
+        FieldDeletionModify aModify(pDlg.get(), pFld);
+        bRet = RET_CANCEL == pDlg->Execute();
     }
 
     if(pWindowState)
