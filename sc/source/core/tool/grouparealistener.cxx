@@ -15,6 +15,8 @@
 #include <column.hxx>
 #include <listenerquery.hxx>
 #include <listenerqueryids.hxx>
+#include <document.hxx>
+#include <table.hxx>
 
 namespace sc {
 
@@ -69,15 +71,31 @@ public:
 
 }
 
-FormulaGroupAreaListener::FormulaGroupAreaListener(
-    const ScRange& rRange, ScFormulaCell** ppTopCell, SCROW nGroupLen, bool bStartFixed, bool bEndFixed ) :
+FormulaGroupAreaListener::FormulaGroupAreaListener( const ScRange& rRange, const ScDocument& rDocument,
+        const ScAddress& rTopCellPos, SCROW nGroupLen, bool bStartFixed, bool bEndFixed ) :
     maRange(rRange),
-    mppTopCell(ppTopCell),
+    mpColumn(NULL),
+    mnTopCellRow(rTopCellPos.Row()),
     mnGroupLen(nGroupLen),
     mbStartFixed(bStartFixed),
     mbEndFixed(bEndFixed)
 {
-    assert(mppTopCell); // This can't be NULL.
+    const ScTable* pTab = rDocument.FetchTable( rTopCellPos.Tab());
+    assert(pTab);
+    mpColumn = pTab->FetchColumn( rTopCellPos.Col());
+    assert(mpColumn);
+    SAL_INFO( "sc.core.grouparealistener",
+            "FormulaGroupAreaListener ctor this " << this <<
+            " range " << maRange.Format(SCA_VALID) <<
+            " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
+}
+
+FormulaGroupAreaListener::~FormulaGroupAreaListener()
+{
+    SAL_INFO( "sc.core.grouparealistener",
+            "FormulaGroupAreaListener dtor this " << this <<
+            " range " << maRange.Format(SCA_VALID) <<
+            " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
 }
 
 ScRange FormulaGroupAreaListener::getListeningRange() const
@@ -116,7 +134,7 @@ void FormulaGroupAreaListener::Query( QueryBase& rQuery ) const
     {
         case SC_LISTENER_QUERY_FORMULA_GROUP_RANGE:
         {
-            ScFormulaCell* pTop = *mppTopCell;
+            const ScFormulaCell* pTop = getTopCell();
             ScRange aRange(pTop->aPos);
             aRange.aEnd.IncRow(mnGroupLen-1);
             QueryRange& rQR = static_cast<QueryRange&>(rQuery);
@@ -164,8 +182,17 @@ void FormulaGroupAreaListener::collectFormulaCells(
 void FormulaGroupAreaListener::collectFormulaCells(
     SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const
 {
-    ScFormulaCell** pp = mppTopCell;
-    ScFormulaCell** ppEnd = pp + mnGroupLen;
+    SAL_INFO( "sc.core.grouparealistener",
+            "FormulaGroupAreaListener::collectFormulaCells() this " << this <<
+            " range " << maRange.Format(SCA_VALID) <<
+            " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
+
+    ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
+    assert(pp);
+    if (!pp)
+        return;
+
+    ScFormulaCell* const * ppEnd = pp + mnGroupLen;
 
     if (mbStartFixed)
     {
@@ -247,8 +274,15 @@ void FormulaGroupAreaListener::collectFormulaCells(
 
 ScAddress FormulaGroupAreaListener::getTopCellPos() const
 {
-    const ScFormulaCell& rFC = **mppTopCell;
-    return rFC.aPos;
+    const ScFormulaCell* p = getTopCell();
+    return p ? p->aPos : ScAddress();
+}
+
+const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
+{
+    const ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
+    assert(pp);
+    return pp ? *pp : NULL;
 }
 
 const ScRange& FormulaGroupAreaListener::getRange() const
