@@ -37,6 +37,7 @@
 #include <vcl/toolbox.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
+#include <vcl/settings.hxx>
 
 using namespace css;
 using namespace cssu;
