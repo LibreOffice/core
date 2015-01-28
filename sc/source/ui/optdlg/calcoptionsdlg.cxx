@@ -231,7 +231,7 @@ struct Area
     OUString msTitle;
     int mnRows;
 
-    Area(const OUString& rTitle, int nRows) :
+    Area(const OUString& rTitle, int nRows = ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize + 1) :
         msTitle(rTitle),
         mnRows(nRows)
     {
@@ -306,7 +306,7 @@ struct Op : Area
        const OUString& rOp,
        double nRangeLo, double nRangeHi,
        double nEpsilon) :
-        Area(rTitle, 200),
+        Area(rTitle),
         msOp(rOp),
         mnRangeLo(nRangeLo),
         mnRangeHi(nRangeHi),
@@ -458,7 +458,7 @@ struct BinOp : Op
 struct Round : Area
 {
     Round() :
-        Area("Round", 200)
+        Area("Round")
     {
     }
 
