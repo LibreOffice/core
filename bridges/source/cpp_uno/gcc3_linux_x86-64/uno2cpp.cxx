@@ -404,7 +404,7 @@ void unoInterfaceProxyDispatch(
                 uno_Interface * pInterface = 0;
                 (*pThis->getBridge()->getUnoEnv()->getRegisteredInterface)(
                     pThis->getBridge()->getUnoEnv(),
-                    (void **)&pInterface, pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
+                    reinterpret_cast<void **>(&pInterface), pThis->oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(pTD) );
 
                 if (pInterface)
                 {

@@ -792,7 +792,7 @@ void AccessController::checkPermission(
 
     // first dynamic check of ac contexts
     Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
     Reference< security::XAccessControlContext > xACC( getDynamicRestriction( xContext ) );
     if (xACC.is())
     {
@@ -823,7 +823,7 @@ Any AccessController::doRestricted(
     if (xRestriction.is())
     {
         Reference< XCurrentContext > xContext;
-        ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
+        ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
 
         // override restriction
         Reference< XCurrentContext > xNewContext(
@@ -856,7 +856,7 @@ Any AccessController::doPrivileged(
     }
 
     Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
 
     Reference< security::XAccessControlContext > xOldRestr(
         getDynamicRestriction( xContext ) );
@@ -891,7 +891,7 @@ Reference< security::XAccessControlContext > AccessController::getContext()
     }
 
     Reference< XCurrentContext > xContext;
-    ::uno_getCurrentContext( (void **)&xContext, s_envType.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xContext), s_envType.pData, 0 );
 
     return acc_Intersection::create(
         getDynamicRestriction( xContext ),

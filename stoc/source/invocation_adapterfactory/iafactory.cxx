@@ -851,7 +851,7 @@ Reference< XInterface > FactoryImpl::createAdapter(
         // map one interface to C++
         uno_Interface * pUnoI = &that->m_pInterfaces[ 0 ];
         m_aUno2Cpp.mapInterface(
-            (void **)&xRet, pUnoI, ::getCppuType( &xRet ) );
+            reinterpret_cast<void **>(&xRet), pUnoI, ::getCppuType( &xRet ) );
         that->release();
         OSL_ASSERT( xRet.is() );
         if (! xRet.is())

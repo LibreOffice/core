@@ -45,7 +45,7 @@ inline Reference< XCurrentContext > SAL_CALL getCurrentContext()
 {
     Reference< XCurrentContext > xRet;
     ::rtl::OUString aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME );
-    ::uno_getCurrentContext( (void **)&xRet, aEnvTypeName.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&xRet), aEnvTypeName.pData, 0 );
     return xRet;
 }
 /** Setting the current context.
@@ -95,7 +95,7 @@ public:
 inline ContextLayer::ContextLayer( Reference< XCurrentContext > const & xNewContext )
     : m_aEnvTypeName( CPPU_CURRENT_LANGUAGE_BINDING_NAME )
 {
-    ::uno_getCurrentContext( (void **)&m_xPreviousContext, m_aEnvTypeName.pData, 0 );
+    ::uno_getCurrentContext( reinterpret_cast<void **>(&m_xPreviousContext), m_aEnvTypeName.pData, 0 );
     ::uno_setCurrentContext( xNewContext.get(), m_aEnvTypeName.pData, 0 );
 }
 

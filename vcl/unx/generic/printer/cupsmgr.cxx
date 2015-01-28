@@ -647,7 +647,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
-        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
+        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, reinterpret_cast<void**>(&pOptions) );
 
         OString sJobName(OUStringToOString(rJobTitle, aEnc));
 

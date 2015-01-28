@@ -186,7 +186,7 @@ jobject Bridge::call_uno(
 #endif
         (nParams * sizeof (void *)) +
         return_size + (nParams * sizeof (largest)) );
-    void ** uno_args = (void **) mem;
+    void ** uno_args = reinterpret_cast<void **>(mem);
     void * uno_ret = return_size == 0 ? 0 : (mem + (nParams * sizeof (void *)));
     largest * uno_args_mem = reinterpret_cast<largest *>
         (mem + (nParams * sizeof (void *)) + return_size);

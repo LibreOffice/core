@@ -489,7 +489,7 @@ uno_Interface * Bridge::map_to_uno(
 
     uno_Interface * pUnoI = 0;
     (*m_uno_env->getRegisteredInterface)(
-        m_uno_env, (void **)&pUnoI,
+        m_uno_env, reinterpret_cast<void **>(&pUnoI),
         oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(info->m_td.get()) );
 
     if (0 == pUnoI) // no existing interface, register new proxy
@@ -500,7 +500,7 @@ uno_Interface * Bridge::map_to_uno(
             javaI, static_cast<jstring>(jo_oid.get()), oid, info );
 
         (*m_uno_env->registerProxyInterface)(
-            m_uno_env, (void **)&pUnoI,
+            m_uno_env, reinterpret_cast<void **>(&pUnoI),
             UNO_proxy_free,
             oid.pData, reinterpret_cast<typelib_InterfaceTypeDescription *>(info->m_td.get()) );
     }
@@ -667,7 +667,7 @@ void SAL_CALL UNO_proxy_dispatch(
                 uno_Interface * pInterface = 0;
                 (*bridge->m_uno_env->getRegisteredInterface)(
                     bridge->m_uno_env,
-                    (void **) &pInterface, that->m_oid.pData,
+                    reinterpret_cast<void **>(&pInterface), that->m_oid.pData,
                     reinterpret_cast<typelib_InterfaceTypeDescription *>(demanded_td.get()) );
 
                 if (0 == pInterface)
@@ -719,7 +719,7 @@ void SAL_CALL UNO_proxy_dispatch(
 
                             (*bridge->m_uno_env->registerProxyInterface)(
                                 bridge->m_uno_env,
-                                (void **) &pUnoI2,
+                                reinterpret_cast<void **>(&pUnoI2),
                                 UNO_proxy_free, that->m_oid.pData,
                                 reinterpret_cast<
                                   typelib_InterfaceTypeDescription * >(

@@ -218,7 +218,7 @@ RegError REGISTRY_CALLTYPE setValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -260,7 +260,7 @@ RegError REGISTRY_CALLTYPE setLongListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -302,7 +302,7 @@ RegError REGISTRY_CALLTYPE setStringListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -344,7 +344,7 @@ RegError REGISTRY_CALLTYPE setUnicodeListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -389,7 +389,7 @@ RegError REGISTRY_CALLTYPE getValueInfo(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret != REG_NO_ERROR)
             return _ret;
 
@@ -435,7 +435,7 @@ RegError REGISTRY_CALLTYPE getValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -474,7 +474,7 @@ RegError REGISTRY_CALLTYPE getLongListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -513,7 +513,7 @@ RegError REGISTRY_CALLTYPE getStringListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 
@@ -550,7 +550,7 @@ RegError REGISTRY_CALLTYPE getUnicodeListValue(RegKeyHandle hKey,
     if (keyName->length)
     {
         ORegKey* pSubKey = 0;
-        RegError _ret1 = pKey->openKey(keyName, (RegKeyHandle*)&pSubKey);
+        RegError _ret1 = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pSubKey));
         if (_ret1 != REG_NO_ERROR)
             return _ret1;
 

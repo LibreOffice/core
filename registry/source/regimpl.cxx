@@ -830,7 +830,7 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     }
 
     ORegKey* pOldKey = 0;
-    _ret = pKey->openKey(keyName, (RegKeyHandle*)&pOldKey);
+    _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pOldKey));
     if (_ret != REG_NO_ERROR)
         return _ret;
 
@@ -1363,7 +1363,7 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
     }
 
     ORegKey* pTmpKey = 0;
-    _ret = pSourceKey->openKey(keyName, (RegKeyHandle*)&pTmpKey);
+    _ret = pSourceKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pTmpKey));
     if (_ret != REG_NO_ERROR)
         return _ret;
 

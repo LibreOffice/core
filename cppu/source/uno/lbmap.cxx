@@ -228,7 +228,7 @@ static void SAL_CALL mediate_mapInterface(
         uno_Mapping * pFrom2Uno = that->aFrom2Uno.get();
 
         uno_Interface * pUnoI = 0;
-        (*pFrom2Uno->mapInterface)( pFrom2Uno, (void **) &pUnoI, pInterface, pInterfaceTypeDescr );
+        (*pFrom2Uno->mapInterface)( pFrom2Uno, reinterpret_cast<void **>(&pUnoI), pInterface, pInterfaceTypeDescr );
         if (0 == pUnoI)
         {
             void * pOut = *ppOut;

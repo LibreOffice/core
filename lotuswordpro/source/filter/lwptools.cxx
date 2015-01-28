@@ -261,13 +261,13 @@ XFDateStyle* LwpTools::GetSystemDateStyle(bool bLongFormat)
     UErrorCode status = U_ZERO_ERROR;
     UChar* pattern = NULL;
 
-    nLengthNeed = udat_toPattern((void *const *)fmt,sal_False,NULL,nLength,&status);
+    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,NULL,nLength,&status);
     if (status == U_BUFFER_OVERFLOW_ERROR)
     {
         status = U_ZERO_ERROR;
         nLength = nLengthNeed +1;
         pattern = (UChar*)malloc(sizeof(UChar)*nLength);
-        udat_toPattern((void *const *)fmt,sal_False,pattern,nLength,&status);
+        udat_toPattern(reinterpret_cast<void **>(fmt),sal_False,pattern,nLength,&status);
     }
     if (pattern == NULL)
         return NULL;
@@ -649,13 +649,13 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
     int32_t nLengthNeed;
     UErrorCode status = U_ZERO_ERROR;
     UChar* pattern = NULL;
-    nLengthNeed = udat_toPattern((void *const *)fmt,false,NULL,nLength,&status);
+    nLengthNeed = udat_toPattern(reinterpret_cast<void **>(fmt),false,NULL,nLength,&status);
     if (status == U_BUFFER_OVERFLOW_ERROR)
     {
         status = U_ZERO_ERROR;
         nLength = nLengthNeed +1;
         pattern = (UChar*)malloc(sizeof(UChar)*nLength);
-        udat_toPattern((void *const *)fmt,false,pattern,nLength,&status);
+        udat_toPattern(reinterpret_cast<void **>(fmt),false,pattern,nLength,&status);
     }
 
     if (pattern == NULL)

@@ -568,7 +568,7 @@ static inline bool icopyConstructFromElements(
             pSeq = reallocSeq( pSeq, sizeof(void *), nAlloc );
         if (pSeq != 0)
         {
-            void ** pDestElements = (void **) pSeq->elements;
+            void ** pDestElements = reinterpret_cast<void **>(pSeq->elements);
             for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
             {
                 _acquire( pDestElements[nPos] =

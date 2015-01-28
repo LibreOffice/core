@@ -325,7 +325,7 @@ inline bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x )
         ::rtl::OUString( UNO_LB_UNO ) );
     OSL_ASSERT( aMapping.is() );
     aMapping.mapInterface(
-            (void **)ppRet, x.get(), ::cppu::getTypeFavourUnsigned( &x ) );
+            reinterpret_cast<void **>(ppRet), x.get(), ::cppu::getTypeFavourUnsigned( &x ) );
     return (0 != *ppRet);
 }
 

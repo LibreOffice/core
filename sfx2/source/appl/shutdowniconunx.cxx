@@ -428,7 +428,7 @@ void plugin_shutdown_sys_tray()
     if (pMonitor)
     {
         g_signal_handlers_disconnect_by_func(pMonitor,
-            (void*)notify_file_changed, pMonitor);
+            reinterpret_cast<gpointer>(&notify_file_changed), pMonitor);
         g_file_monitor_cancel(pMonitor);
         g_object_unref(pMonitor);
         pMonitor = NULL;

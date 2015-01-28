@@ -83,7 +83,8 @@ using ::rtl::OString;
 inline ::rtl::OUString getExecutablePath( void )
 {
     ::rtl::OUString dirPath;
-    osl::Module::getUrlFromAddress( ( void* ) &getExecutablePath, dirPath );
+    osl::Module::getUrlFromAddress(
+        reinterpret_cast<oslGenericFunction>(&getExecutablePath), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') );
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
     dirPath += rtl::OUString("Executable");

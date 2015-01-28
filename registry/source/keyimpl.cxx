@@ -90,7 +90,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     ORegKey* pKey = this;
     if ( !keyName.isEmpty() )
     {
-        _ret = openKey(keyName, (RegKeyHandle*)&pKey);
+        _ret = openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pKey));
         if (_ret != REG_NO_ERROR)
             return _ret;
     }
@@ -113,7 +113,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
             OUString const sSubKeyName = iter.m_pszName;
 
             ORegKey* pOpenSubKey = 0;
-            _ret = pKey->openKey(sSubKeyName, (RegKeyHandle*)&pOpenSubKey);
+            _ret = pKey->openKey(sSubKeyName, reinterpret_cast<RegKeyHandle*>(&pOpenSubKey));
             if (_ret != REG_NO_ERROR)
             {
                 *phOpenSubKeys = NULL;
@@ -130,7 +130,7 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
         _err = rStoreDir.next(iter);
     }
 
-    *phOpenSubKeys = (RegKeyHandle*)pSubKeys;
+    *phOpenSubKeys = reinterpret_cast<RegKeyHandle*>(pSubKeys);
     if (!keyName.isEmpty())
     {
         (void) releaseKey(pKey);
@@ -154,7 +154,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     ORegKey* pKey = this;
     if (!keyName.isEmpty())
     {
-        _ret = openKey(keyName, (RegKeyHandle*)&pKey);
+        _ret = openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pKey));
         if (_ret != REG_NO_ERROR)
             return _ret;
     }

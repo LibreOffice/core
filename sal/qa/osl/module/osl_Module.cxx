@@ -38,7 +38,8 @@ inline ::rtl::OUString getDllURL( void )
 #endif
 
     ::rtl::OUString dirPath, dllPath;
-    osl::Module::getUrlFromAddress( ( void* ) &getDllURL, dirPath );
+    osl::Module::getUrlFromAddress(
+        reinterpret_cast<oslGenericFunction>(&getDllURL), dirPath);
     dirPath = dirPath.copy( 0, dirPath.lastIndexOf('/') + 1);
     osl::FileBase::getAbsoluteFileURL( dirPath, libPath, dllPath );
 
@@ -81,7 +82,10 @@ namespace osl_Module
         void ctors_name_mode( )
         {
             OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
+            bRes = osl::Module::getUrlFromAddress(
+                reinterpret_cast<oslGenericFunction>(
+                    &osl_Module::testClass::myFunc),
+                aFileURL);
 
             if ( !( bRes ) )
             {
@@ -113,7 +117,10 @@ namespace osl_Module
         void getUrlFromAddress_001( )
         {
             OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL ) ;
+            bRes = osl::Module::getUrlFromAddress(
+                reinterpret_cast<oslGenericFunction>(
+                    &osl_Module::testClass::myFunc),
+                aFileURL);
             if ( !( bRes ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
@@ -131,7 +138,8 @@ namespace osl_Module
             FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
 
             OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
+            bRes = osl::Module::getUrlFromAddress(
+                reinterpret_cast<oslGenericFunction>(pFunc), aFileURL);
             if ( !( bRes  ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.", false );
@@ -214,7 +222,10 @@ namespace osl_Module
         void is_001( )
         {
             OUString aFileURL;
-            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
+            bRes = osl::Module::getUrlFromAddress(
+                reinterpret_cast<oslGenericFunction>(
+                    osl_Module::testClass::myFunc),
+                aFileURL);
             if ( !( bRes  ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module - using executable instead", false );

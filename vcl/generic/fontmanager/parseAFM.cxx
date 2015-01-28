@@ -732,7 +732,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
             case CODE:
                 if (!(count < fi->numOfChars))
                 {
-                    reallocFontMetrics( (void**)&(fi->cmi),
+                    reallocFontMetrics( reinterpret_cast<void**>(&fi->cmi),
                                         &(fi->numOfChars), enlargeCount(fi->numOfChars),
                                         sizeof(CharMetricInfo) );
                     temp = &(fi->cmi[ count - 1 ]);
@@ -756,7 +756,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
             case CODEHEX:
                 if (!(count < fi->numOfChars ))
                 {
-                    reallocFontMetrics( (void**)&(fi->cmi),
+                    reallocFontMetrics( reinterpret_cast<void**>(&fi->cmi),
                                         &(fi->numOfChars), enlargeCount(fi->numOfChars),
                                         sizeof(CharMetricInfo) );
                     temp = &(fi->cmi[ count - 1 ]);
@@ -841,7 +841,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
     } /* while */
 
     if ((error == ok) && (count != fi->numOfChars))
-        error = reallocFontMetrics( (void**)&(fi->cmi), &(fi->numOfChars),
+        error = reallocFontMetrics( reinterpret_cast<void**>(&fi->cmi), &(fi->numOfChars),
                                     count, sizeof(CharMetricInfo) );
 
     if ((error == ok) && (count != fi->numOfChars))
@@ -907,7 +907,7 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
                 case TRACKKERN:
                     if (!(tcount < fi->numOfTracks))
                     {
-                        reallocFontMetrics( (void**)&(fi->tkd), &(fi->numOfTracks),
+                        reallocFontMetrics( reinterpret_cast<void**>(&fi->tkd), &(fi->numOfTracks),
                                             enlargeCount(fi->numOfTracks), sizeof(TrackKernData) );
                     }
 
@@ -947,7 +947,7 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
     } /* while */
 
     if (error == ok && tcount != fi->numOfTracks)
-        error = reallocFontMetrics( (void**)&(fi->tkd), &(fi->numOfTracks),
+        error = reallocFontMetrics( reinterpret_cast<void**>(&fi->tkd), &(fi->numOfTracks),
                                     tcount, sizeof(TrackKernData) );
 
     if (error == ok && tcount != fi->numOfTracks)
@@ -1013,7 +1013,7 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
                 case KERNPAIR:
                     if (!(pcount < fi->numOfPairs))
                     {
-                        reallocFontMetrics( (void**)&(fi->pkd), &(fi->numOfPairs),
+                        reallocFontMetrics( reinterpret_cast<void**>(&fi->pkd), &(fi->numOfPairs),
                                             enlargeCount(fi->numOfPairs), sizeof(PairKernData) );
                     }
                     if (pcount < fi->numOfPairs)
@@ -1037,7 +1037,7 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
                 case KERNPAIRXAMT:
                     if (!(pcount < fi->numOfPairs))
                     {
-                        reallocFontMetrics( (void**)&(fi->pkd), &(fi->numOfPairs),
+                        reallocFontMetrics( reinterpret_cast<void**>(&fi->pkd), &(fi->numOfPairs),
                                             enlargeCount(fi->numOfPairs), sizeof(PairKernData) );
                     }
                     if (pcount < fi->numOfPairs)
@@ -1072,7 +1072,7 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
     } /* while */
 
     if ((error == ok) && (pcount != fi->numOfPairs))
-        error = reallocFontMetrics( (void**)&(fi->pkd), &(fi->numOfPairs),
+        error = reallocFontMetrics( reinterpret_cast<void**>(&fi->pkd), &(fi->numOfPairs),
                                     pcount, sizeof(PairKernData) );
 
     if (error == ok && pcount != fi->numOfPairs)
@@ -1117,7 +1117,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
         }
         if (ccount > fi->numOfComps)
         {
-            reallocFontMetrics( (void**)&(fi->ccd), &(fi->numOfComps),
+            reallocFontMetrics( reinterpret_cast<void**>(&fi->ccd), &(fi->numOfComps),
                                 enlargeCount(fi->numOfComps), sizeof(CompCharData) );
         }
         if (ccount > fi->numOfComps)
@@ -1155,7 +1155,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
                 case COMPCHAR:
                     if (!(ccount < fi->numOfComps))
                     {
-                        reallocFontMetrics( (void**)&(fi->ccd), &(fi->numOfComps),
+                        reallocFontMetrics( reinterpret_cast<void**>(&fi->ccd), &(fi->numOfComps),
                                             enlargeCount(fi->numOfComps), sizeof(CompCharData) );
                     }
                     if (ccount < fi->numOfComps)
@@ -1209,7 +1209,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
     } /* while */
 
     if (error == ok && ccount != fi->numOfComps)
-        reallocFontMetrics( (void**)&(fi->ccd), &(fi->numOfComps),
+        reallocFontMetrics( reinterpret_cast<void**>(&fi->ccd), &(fi->numOfComps),
                             ccount, sizeof(CompCharData) );
 
     if (error == ok && ccount != fi->numOfComps)

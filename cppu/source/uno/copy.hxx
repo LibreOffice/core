@@ -479,16 +479,16 @@ inline uno_Sequence * icopyConstructSequence(
                 if (pDest != 0)
                 {
                     char * pElements = pDest->elements;
-                    void ** pSourceElements = (void **)pSource->elements;
+                    void ** pSourceElements = reinterpret_cast<void **>(pSource->elements);
                     typelib_TypeDescription * pElementTypeDescr = 0;
                     TYPELIB_DANGER_GET( &pElementTypeDescr, pElementType );
                     for ( sal_Int32 nPos = nElements; nPos--; )
                     {
-                        ((void **)pElements)[nPos] = 0;
+                        reinterpret_cast<void **>(pElements)[nPos] = 0;
                         if (((void **)pSourceElements)[nPos])
                         {
                             (*mapping->mapInterface)(
-                                mapping, (void **)pElements + nPos,
+                                mapping, reinterpret_cast<void **>(pElements) + nPos,
                                 pSourceElements[nPos],
                                 reinterpret_cast<typelib_InterfaceTypeDescription *>(
                                     pElementTypeDescr) );

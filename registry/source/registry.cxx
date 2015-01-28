@@ -264,14 +264,14 @@ static RegError REGISTRY_CALLTYPE loadKey(RegHandle hReg,
 
 
     ORegKey* pNewKey = 0;
-    RegError _ret = pKey->openKey(keyName, (RegKeyHandle*)&pNewKey);
+    RegError _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
     if (_ret == REG_NO_ERROR)
     {
         pKey->releaseKey(pNewKey);
         pKey->deleteKey(keyName);
     }
 
-    _ret = pKey->createKey(keyName, (RegKeyHandle*)&pNewKey);
+    _ret = pKey->createKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
     if (_ret != REG_NO_ERROR)
         return _ret;
 
@@ -312,7 +312,7 @@ static RegError REGISTRY_CALLTYPE saveKey(RegHandle hReg,
         return REG_INVALID_KEY;
 
     ORegKey* pNewKey = 0;
-    RegError _ret = pKey->openKey(keyName, (RegKeyHandle*)&pNewKey);
+    RegError _ret = pKey->openKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
     if (_ret != REG_NO_ERROR)
         return _ret;
 
@@ -355,7 +355,7 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
     if (keyName->length)
     {
         ORegKey* pNewKey = 0;
-        RegError _ret = pKey->createKey(keyName, (RegKeyHandle*)&pNewKey);
+        RegError _ret = pKey->createKey(keyName, reinterpret_cast<RegKeyHandle*>(&pNewKey));
         if (_ret != REG_NO_ERROR)
             return _ret;
 

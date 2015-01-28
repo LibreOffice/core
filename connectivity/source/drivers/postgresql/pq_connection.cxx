@@ -146,8 +146,8 @@ static sal_Int32 readLogLevelFromConfiguration()
 {
     sal_Int32 loglevel = LogLevel::NONE;
     OUString fileName;
-    osl_getModuleURLFromAddress(
-        (void*) readLogLevelFromConfiguration, &fileName.pData );
+    osl_getModuleURLFromFunctionAddress(
+        reinterpret_cast<oslGenericFunction>(readLogLevelFromConfiguration), &fileName.pData );
     fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
 #ifdef MACOSX
     fileName += "../Resources/";

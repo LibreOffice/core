@@ -186,7 +186,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
             // Get the parameter number that requires data
 
             sal_Int32* paramIndex = 0;
-            nReturn = N3SQLParamData(m_aStatementHandle,(SQLPOINTER*)&paramIndex);
+            nReturn = N3SQLParamData(m_aStatementHandle, reinterpret_cast<SQLPOINTER*>(&paramIndex));
 
             // If the parameter index is -1, there is no
             // more data required

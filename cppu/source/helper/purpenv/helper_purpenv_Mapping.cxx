@@ -163,7 +163,7 @@ void Mapping::mapInterface(
     OSL_ASSERT(pOId);
 
      // try to get any known interface from target environment
-    m_to.get()->pExtEnv->getRegisteredInterface(m_to.get()->pExtEnv, (void **)ppOut, pOId, pTypeDescr);
+    m_to.get()->pExtEnv->getRegisteredInterface(m_to.get()->pExtEnv, reinterpret_cast<void **>(ppOut), pOId, pTypeDescr);
 
     if (!*ppOut) // not yet there, register new proxy interface
     {
@@ -179,7 +179,7 @@ void Mapping::mapInterface(
 
         // proxy may be exchanged during registration
         m_to.get()->pExtEnv->registerProxyInterface(m_to.get()->pExtEnv,
-                                                    (void **)&pProxy,
+                                                    reinterpret_cast<void **>(&pProxy),
                                                     Proxy_free,
                                                     pOId,
                                                     pTypeDescr);
