@@ -74,11 +74,13 @@
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
+#include "units.hxx"
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
 #include <docfuncutil.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 
 static void lcl_PostRepaintCondFormat( const ScConditionalFormat *pCondFmt, ScDocShell *pDocSh )
 {
@@ -461,6 +463,18 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     }
                 }
             }
+
+#ifdef ENABLE_CALC_UNITVERIFICATION
+            boost::shared_ptr< sc::Units > pUnits = sc::Units::GetUnits();
+            if ( pUnits->verifyFormula( pArr, aPos, pDoc ) )
+            {
+                SAL_INFO( "sc.units", "verification successful" );
+            }
+            else
+            {
+                SAL_INFO( "sc.units", "verification failed" );
+            }
+#endif
         } while ( bAgain );
         // to be used in multiple tabs, the formula must be compiled anew
         // via ScFormulaCell copy-ctor because of RangeNames,
