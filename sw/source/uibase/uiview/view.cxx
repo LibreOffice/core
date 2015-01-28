@@ -1253,8 +1253,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         const Rectangle &rVis = GetVisArea();
         const SwViewOption* pVOpt = m_pWrtShell->GetViewOptions();
 
-        long nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
-        long nRight = bBrowse ? LONG_MIN : rVis.Right(), nBottom = bBrowse ? LONG_MIN : rVis.Bottom();
+        sal_Int64 nX = rRect.Left(), nY = rRect.Top(), nLeft = rVis.Left(), nTop = rVis.Top();
+        sal_Int64 nRight = bBrowse ? LONG_MIN : rVis.Right(), nBottom = bBrowse ? LONG_MIN : rVis.Bottom();
         sal_Int16 nZoomType = static_cast< sal_Int16 >(pVOpt->GetZoomType());
         sal_Int16 nZoomFactor = static_cast < sal_Int16 > (pVOpt->GetZoom());
         bool bViewLayoutBookMode = pVOpt->IsViewLayoutBookMode();
