@@ -455,6 +455,57 @@ struct BinOp : Op
     }
 };
 
+struct Round : Area
+{
+    Round() :
+        Area("Round", 200)
+    {
+    }
+
+    virtual ~Round()
+    {
+    }
+
+    virtual void addHeader(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    {
+        pDoc->SetString(ScAddress(0,0,nTab), "x");
+        pDoc->SetString(ScAddress(1,0,nTab), "n");
+        pDoc->SetString(ScAddress(2,0,nTab), "ROUND(x,n)");
+        pDoc->SetString(ScAddress(3,0,nTab), "expected");
+    }
+
+    virtual void addRow(ScDocument *pDoc, int nRow, int nTab) const SAL_OVERRIDE
+    {
+        const double nX(comphelper::rng::uniform_real_distribution(0, 100));
+        const int nN(comphelper::rng::uniform_int_distribution(1, 10));
+
+        pDoc->SetValue(ScAddress(0,1+nRow,nTab), nX);
+        pDoc->SetValue(ScAddress(1,1+nRow,nTab), nN);
+
+        pDoc->SetString(ScAddress(2,1+nRow,nTab),
+                        "=ROUND(" + ScAddress(0,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "," + ScAddress(1,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        ")");
+
+        pDoc->SetValue(ScAddress(3,1+nRow,nTab), ::rtl::math::round(nX, (short) nN, rtl_math_RoundingMode_Corrected));
+
+        pDoc->SetString(ScAddress(4,1+nRow,nTab),
+                        "=IF(ABS(" + ScAddress(2,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        "-" + ScAddress(3,1+nRow,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                        ")<=3e-10"
+                        ",0,1)");
+    }
+
+    virtual OUString getSummaryFormula(ScDocument *pDoc, int nTab) const SAL_OVERRIDE
+    {
+        return "=SUM(" +
+            ScRange(ScAddress(4,1,nTab),
+                    ScAddress(4,1+mnRows-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+            ")";
+    }
+
+};
+
 struct Reduction : Op
 {
     int mnNum;
@@ -628,6 +679,8 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
                                 {
                                     return ScInterpreter::gaussinv(nArg);
                                 }));
+
+    xTestDocument->addTest(Round());
 
     xTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
                                      [] (double nAccum, double nArg)
