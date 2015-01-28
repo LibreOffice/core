@@ -195,7 +195,7 @@ class FieldDeletionModify : public SwModify
                 mpFmtFld->Add(this);
         }
 
-        ~FieldDeletionModify()
+        virtual ~FieldDeletionModify()
         {
             if (mpFmtFld)
             {
