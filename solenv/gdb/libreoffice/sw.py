@@ -89,8 +89,8 @@ class SwRectPrinter(object):
         children = [ ( 'point', point), ( 'size', size ) ]
         return children.__iter__()
 
-class SwIMarkPrinter(object):
-    '''Prints sw::mark::IMark.'''
+class SwUnoMarkPrinter(object):
+    '''Prints sw::mark::UnoMark.'''
 
     def __init__(self, typename, value):
         self.typename = typename
@@ -100,31 +100,11 @@ class SwIMarkPrinter(object):
         return "%s" % (self.typename)
 
     def children(self):
-        if str(self.value.dynamic_type) == "sw::mark::UnoMark":
-            unoMark = self.value.cast(self.value.dynamic_type)
-            pos1 = unoMark['m_pPos1']
-            pos2 = unoMark['m_pPos2']
-            children = [ ( 'pos1', pos1), ( 'pos2', pos2 ) ]
-            return children.__iter__()
-        else:
-            return self._iterator(self.value)
-
-class SwModifyPrinter(object):
-    '''Prints SwModify.'''
-
-    def __init__(self, typename, value):
-        self.typename = typename
-        self.value = value
-
-    def to_string(self):
-        return "%s" % (self.typename)
-
-    def children(self):
-        if str(self.value.dynamic_type) == "SwUnoCrsr":
-            unoCrsr = self.value.cast(self.value.dynamic_type)
-            return SwUnoCrsrPrinter(self.typename, unoCrsr).children()
-        else:
-            return self._iterator(self.value)
+        unoMark = self.value.cast(self.value.dynamic_type)
+        pos1 = unoMark['m_pPos1']
+        pos2 = unoMark['m_pPos2']
+        children = [ ( 'pos1', pos1), ( 'pos2', pos2 ) ]
+        return children.__iter__()
 
 class SwXTextRangeImplPrinter(object):
     '''Prints SwXTextRange::Impl.'''
@@ -313,11 +293,10 @@ def build_pretty_printers():
     printer.add('SwPaM', SwPaMPrinter)
     printer.add('SwUnoCrsr', SwUnoCrsrPrinter)
     printer.add('SwRect', SwRectPrinter)
-    printer.add('sw::mark::IMark', SwIMarkPrinter)
+    printer.add('sw::mark::UnoMark', SwUnoMarkPrinter)
     printer.add('SwXTextRange::Impl', SwXTextRangeImplPrinter)
     printer.add('sw::UnoImplPtr', SwUnoImplPtrPrinter)
     printer.add('SwXTextRange', SwXTextRangePrinter)
-    printer.add('SwModify', SwModifyPrinter)
     printer.add('SwXTextCursor::Impl', SwXTextCursorImplPrinter)
     printer.add('SwXTextCursor', SwXTextCursorPrinter)
 
