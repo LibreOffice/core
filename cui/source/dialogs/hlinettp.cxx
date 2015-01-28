@@ -176,7 +176,7 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
         aURL.SetUserAndPass ( m_pEdLogin->GetText(), m_pEdPassword->GetText() );
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-        return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+        return aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     else //#105788# always create a URL even if it is not valid
         return aStrURL;
 }
