@@ -110,14 +110,11 @@ static typelib_TypeClass cpp2uno_call(
 
         int nUsedGPR = 0;
         int nUsedSSE = 0;
-#if OSL_DEBUG_LEVEL > 0
-        bool bFitsRegisters =
-#endif
-            x86_64::examine_argument( rParam.pTypeRef, false, nUsedGPR, nUsedSSE );
+        bool bFitsRegisters = x86_64::examine_argument( rParam.pTypeRef, false, nUsedGPR, nUsedSSE );
         if ( !rParam.bOut && bridges::cpp_uno::shared::isSimpleType( rParam.pTypeRef ) ) // value
         {
             // Simple types must fit exactly one register on x86_64
-            assert( bFitsRegisters && ( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) ) );
+            assert( bFitsRegisters && ( ( nUsedSSE == 1 && nUsedGPR == 0 ) || ( nUsedSSE == 0 && nUsedGPR == 1 ) ) ); (void)bFitsRegisters;
 
             if ( nUsedSSE == 1 )
             {
