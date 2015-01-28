@@ -231,7 +231,7 @@ struct Area
     OUString msTitle;
     int mnRows;
 
-    Area(const OUString& rTitle, int nRows = ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize + 1) :
+    Area(const OUString& rTitle, int nRows = ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize + 2) :
         msTitle(rTitle),
         mnRows(nRows)
     {
@@ -253,6 +253,8 @@ struct OpenCLTester
     int mnTestAreas;
     ScDocShell* mpDocShell;
     ScDocument *mpDoc;
+    bool mbOldAutoCalc;
+    ScCalcConfig maOldCalcConfig;
 
     OpenCLTester() :
         mnTestAreas(0)
@@ -269,13 +271,18 @@ struct OpenCLTester
 
         mpDoc = &mpDocShell->GetDocument();
 
+        mbOldAutoCalc = mpDoc->GetAutoCalc();
+        mpDoc->SetAutoCalc(false);
+        maOldCalcConfig = ScInterpreter::GetGlobalConfig();
+        ScCalcConfig aConfig(maOldCalcConfig);
+        aConfig.mnOpenCLMinimumFormulaGroupSize = 20;
+        ScInterpreter::SetGlobalConfig(aConfig);
+
         mpDoc->SetString(ScAddress(0,0,0), "Result:");
     }
 
     void addTest(const Area &rArea)
     {
-        sc::AutoCalcSwitch aACSwitch(*mpDoc, true);
-
         mnTestAreas++;
         (void) mpDocShell->GetDocFunc().InsertTable(mnTestAreas, rArea.msTitle, false, true);
 
@@ -570,21 +577,18 @@ struct Normdist : Area
 
 struct Reduction : Op
 {
-    int mnNum;
     double mnAccumInitial;
-    double (*mpFun)(double nAccum, double nArg);
+    double (*mpFun)(double nAccum, double nArg, const Reduction& rReduction);
     bool (*mpFilterOut)(double nArg);
 
     Reduction(const OUString& rTitle,
               const OUString& rOp,
-              int nNum,
               double nAccumInitial,
               double nRangeLo, double nRangeHi,
               double nEpsilon,
-              double (*pFun)(double nAccum, double nArg),
+              double (*pFun)(double nAccum, double nArg, const Reduction& rReduction),
               bool (*pFilterOut)(double nArg) = nullptr) :
         Op(rTitle, rOp, nRangeLo, nRangeHi, nEpsilon),
-        mnNum(nNum),
         mnAccumInitial(nAccumInitial),
         mpFun(pFun),
         mpFilterOut(pFilterOut)
@@ -612,30 +616,30 @@ struct Reduction : Op
 
         pDoc->SetValue(ScAddress(0,1+nRow,nTab), nArg);
 
-        if (nRow >= mnNum-1)
+        if (nRow >= mnRows/2-1)
         {
-            pDoc->SetString(ScAddress(1,1+nRow-mnNum+1,nTab),
+            pDoc->SetString(ScAddress(1,1+nRow-mnRows/2+1,nTab),
                             "=" + msOp + "(" +
-                            ScRange(ScAddress(0,1+nRow-mnNum+1,nTab),
+                            ScRange(ScAddress(0,1+nRow-mnRows/2+1,nTab),
                                     ScAddress(0,1+nRow,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW) +
                             ")");
 
             double nAccum(mnAccumInitial);
-            for (int i = 0; i < mnNum; i++)
-                nAccum = mpFun(nAccum, pDoc->GetValue(ScAddress(0,1+nRow-mnNum+i+1,nTab)));
+            for (int i = 0; i < mnRows/2; i++)
+                nAccum = mpFun(nAccum, pDoc->GetValue(ScAddress(0,1+nRow-mnRows/2+i+1,nTab)), *this);
 
-            pDoc->SetValue(ScAddress(2,1+nRow-mnNum+1,nTab), nAccum);
+            pDoc->SetValue(ScAddress(2,1+nRow-mnRows/2+1,nTab), nAccum);
 
             if (mnEpsilon != 0)
-                pDoc->SetString(ScAddress(3,1+nRow-mnNum+1,nTab),
-                                "=IF(ABS(" + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                                "-" + ScAddress(2,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                pDoc->SetString(ScAddress(3,1+nRow-mnRows/2+1,nTab),
+                                "=IF(ABS(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "-" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                                 ")<=" + OUString::number(mnEpsilon) +
                                 ",0,1)");
             else
-                pDoc->SetString(ScAddress(3,1+nRow-mnNum+1,nTab),
-                                "=IF(" + ScAddress(1,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
-                                "=" + ScAddress(2,1+nRow-mnNum+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                pDoc->SetString(ScAddress(3,1+nRow-mnRows/2+1,nTab),
+                                "=IF(" + ScAddress(1,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
+                                "=" + ScAddress(2,1+nRow-mnRows/2+1,nTab).Format(SCA_VALID_COL|SCA_VALID_ROW) +
                                 ",0,1)");
         }
     }
@@ -644,7 +648,7 @@ struct Reduction : Op
     {
         return "=SUM(" +
             ScRange(ScAddress(3,1+0,nTab),
-                    ScAddress(3,1+mnRows-mnNum-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
+                    ScAddress(3,1+mnRows-mnRows/2-1,nTab)).Format(SCA_VALID|SCA_TAB_3D|SCA_VALID_COL|SCA_VALID_ROW|SCA_VALID_TAB, pDoc) +
             ")";
     }
 };
@@ -746,35 +750,38 @@ IMPL_LINK( ScCalcOptionsDialog, TestClickHdl, PushButton*, )
 
     xTestDocument->addTest(Normdist());
 
-    xTestDocument->addTest(Reduction("Sum", "SUM", 100, 0, -1000, 1000, 3e-10,
-                                     [] (double nAccum, double nArg)
+    xTestDocument->addTest(Reduction("Sum", "SUM", 0, -1000, 1000, 3e-10,
+                                     [] (double nAccum, double nArg, const Reduction&)
                                      {
                                          return (nAccum + nArg);
                                      }));
 
-    xTestDocument->addTest(Reduction("Average", "AVERAGE", 100, 0, -1000, 1000, 3e-10,
-                                     [] (double nAccum, double nArg)
+    xTestDocument->addTest(Reduction("Average", "AVERAGE", 0, -1000, 1000, 3e-10,
+                                     [] (double nAccum, double nArg, const Reduction& rReduction)
                                      {
-                                         return (nAccum + nArg/100.);
+                                         return (nAccum + nArg/(rReduction.mnRows/2));
                                      }));
 
-    xTestDocument->addTest(Reduction("Product", "PRODUCT", 100, 1, 0.1, 2.5, 3e-10,
-                                     [] (double nAccum, double nArg)
+    xTestDocument->addTest(Reduction("Product", "PRODUCT", 1, 0.1, 2.5, 3e-10,
+                                     [] (double nAccum, double nArg, const Reduction&)
                                      {
                                          return (nAccum * nArg);
                                      }));
 
-    xTestDocument->addTest(Reduction("Min", "MIN", 100, DBL_MAX, -1000, 1000, 0,
-                                     [] (double nAccum, double nArg)
+    xTestDocument->addTest(Reduction("Min", "MIN", DBL_MAX, -1000, 1000, 0,
+                                     [] (double nAccum, double nArg, const Reduction&)
                                      {
                                          return std::min(nAccum, nArg);
                                      }));
 
-    xTestDocument->addTest(Reduction("Max", "MAX", 100, -DBL_MAX, -1000, 1000, 0,
-                                     [] (double nAccum, double nArg)
+    xTestDocument->addTest(Reduction("Max", "MAX", -DBL_MAX, -1000, 1000, 0,
+                                     [] (double nAccum, double nArg, const Reduction&)
                                      {
                                          return std::max(nAccum, nArg);
                                      }));
+
+    xTestDocument->mpDoc->CalcAll();
+    ScInterpreter::SetGlobalConfig(xTestDocument->maOldCalcConfig);
 
     return 0;
 }
