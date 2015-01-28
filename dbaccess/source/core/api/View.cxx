@@ -107,8 +107,7 @@ namespace dbaccess
                 aOwnTypes.push_back(*pIter);
         }
 
-        Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
-        return Sequence< Type >(pTypes, aOwnTypes.size());
+        return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
     }
 
     void SAL_CALL View::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException, std::exception)

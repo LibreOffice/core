@@ -270,7 +270,7 @@ namespace comphelper
         ::std::vector<T> const& v )
     {
         return ::com::sun::star::uno::Sequence<T>(
-            v.empty() ? 0 : &v[0], static_cast<sal_Int32>(v.size()) );
+            v.data(), static_cast<sal_Int32>(v.size()) );
     }
 
 

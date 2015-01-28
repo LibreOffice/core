@@ -279,8 +279,7 @@ Sequence< Type > SAL_CALL OCollection::getTypes() throw (RuntimeException, std::
             if ( *pBegin != aType )
                 aOwnTypes.push_back(*pBegin);
         }
-        Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
-        return Sequence< Type >(pTypes,aOwnTypes.size());
+        return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
     }
     return OCollectionBase::getTypes( );
 }

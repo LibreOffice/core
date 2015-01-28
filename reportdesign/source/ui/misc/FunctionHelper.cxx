@@ -179,8 +179,7 @@ OUString FunctionDescription::getFormula(const ::std::vector< OUString >& _aArgu
     OUString sFormula;
     try
     {
-        const OUString *pArguments = _aArguments.empty() ? 0 : &_aArguments[0];
-        sFormula = m_xFunctionDescription->createFormula(uno::Sequence< OUString >(pArguments, _aArguments.size()));
+        sFormula = m_xFunctionDescription->createFormula(uno::Sequence< OUString >(_aArguments.data(), _aArguments.size()));
     }
     catch(const uno::Exception&)
     {

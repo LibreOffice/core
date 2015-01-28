@@ -224,10 +224,8 @@ namespace pcr
             Reference< XPropertySet > xDetailFormProps( m_xDetailForm, UNO_QUERY );
             if ( xDetailFormProps.is() )
             {
-                OUString *pFields = aDetailFields.empty() ? 0 : &aDetailFields[0];
-                xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< OUString >( pFields, aDetailFields.size() ) ) );
-                pFields = aMasterFields.empty() ? 0 : &aMasterFields[0];
-                xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< OUString >( pFields, aMasterFields.size() ) ) );
+                xDetailFormProps->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< OUString >( aDetailFields.data(), aDetailFields.size() ) ) );
+                xDetailFormProps->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< OUString >( aMasterFields.data(), aMasterFields.size() ) ) );
             }
         }
         catch( const Exception& )

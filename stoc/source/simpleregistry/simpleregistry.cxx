@@ -419,8 +419,7 @@ void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
         list.push_back(seqValue[i]);
     }
     RegError err = key_.setLongListValue(
-        OUString(), list.empty() ? 0 : &list[0],
-        static_cast< sal_uInt32 >(list.size()));
+        OUString(), list.data(), static_cast< sal_uInt32 >(list.size()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (("com.sun.star.registry.SimpleRegistry key setLongListValue:"
@@ -608,8 +607,7 @@ void Key::setAsciiListValue(
         list2.push_back(const_cast< char * >(i->getStr()));
     }
     RegError err = key_.setStringListValue(
-        OUString(), list2.empty() ? 0 : &list2[0],
-        static_cast< sal_uInt32 >(list2.size()));
+        OUString(), list2.data(), static_cast< sal_uInt32 >(list2.size()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (("com.sun.star.registry.SimpleRegistry key"
@@ -745,8 +743,7 @@ void Key::setStringListValue(
         list.push_back(const_cast< sal_Unicode * >(seqValue[i].getStr()));
     }
     RegError err = key_.setUnicodeListValue(
-        OUString(), list.empty() ? 0 : &list[0],
-        static_cast< sal_uInt32 >(list.size()));
+        OUString(), list.data(), static_cast< sal_uInt32 >(list.size()));
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (("com.sun.star.registry.SimpleRegistry key"

@@ -305,8 +305,7 @@ uno::Sequence< Reference<uno::XInterface> > PropBrw::CreateCompPropSet(const Sdr
             pCurrent = pGroupIterator.get() && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
         }
     }
-    Reference<uno::XInterface> *pSets = aSets.empty() ? NULL : &aSets[0];
-    return uno::Sequence< Reference<uno::XInterface> >(pSets, aSets.size());
+    return uno::Sequence< Reference<uno::XInterface> >(aSets.data(), aSets.size());
 }
 
 void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> >& _aObjects )

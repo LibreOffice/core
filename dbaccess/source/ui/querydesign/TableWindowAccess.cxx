@@ -224,8 +224,7 @@ namespace dbaui
                 aRelations.push_back(xInterface);
             }
 
-            Reference<XInterface> *pRelations = aRelations.empty() ? 0 : &aRelations[0];
-            Sequence< Reference<XInterface> > aSeq(pRelations, aRelations.size());
+            Sequence< Reference<XInterface> > aSeq(aRelations.data(), aRelations.size());
             return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR,aSeq);
         }
         return AccessibleRelation();

@@ -502,8 +502,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             }
         }
     }
-    const FormulaOpCodeMapEntry* pRet = aVec.empty() ? 0 : &aVec[0];
-    return uno::Sequence< FormulaOpCodeMapEntry >( pRet, aVec.size());
+    return uno::Sequence< FormulaOpCodeMapEntry >(aVec.data(), aVec.size());
 }
 
 

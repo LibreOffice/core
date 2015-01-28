@@ -528,8 +528,7 @@ Sequence< OUString > PermissionCollection::toStrings() const
     {
         strings.push_back( perm->toString() );
     }
-    return Sequence< OUString >(
-        strings.empty() ? 0 : &strings[ 0 ], strings.size() );
+    return Sequence< OUString >( strings.data(), strings.size() );
 }
 #endif
 

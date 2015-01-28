@@ -230,8 +230,8 @@ inline static typelib_TypeDescription * createCTD(
             (typelib_TypeClass)xType->getTypeClass(),
             aMemberTypeName.pData, // type name
             xAttribute->isReadOnly(),
-            getExc.size(), getExc.empty() ? 0 : &getExc[0],
-            setExc.size(), setExc.empty() ? 0 : &setExc[0] );
+            getExc.size(), getExc.data(),
+            setExc.size(), setExc.data() );
     }
     return pRet;
 }

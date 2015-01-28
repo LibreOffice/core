@@ -120,10 +120,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             data.resize(len);
             status = U_ZERO_ERROR;
-            len = coll->cloneBinary(data.empty() ? 0 : &data[0], len, status);
+            len = coll->cloneBinary(data.data(), len, status);
         }
         if (U_SUCCESS(status))
-            data_write(argv[2], argv[3], data.empty() ? 0 : &data[0], len);
+            data_write(argv[2], argv[3], data.data(), len);
         else {
             printf("Could not get rule data from collator\n");
         }

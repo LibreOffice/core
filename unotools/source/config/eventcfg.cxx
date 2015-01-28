@@ -274,8 +274,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
 
 Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw (RuntimeException)
 {
-    const OUString* pRet = m_supportedEvents.empty() ? NULL : &m_supportedEvents[0];
-    return uno::Sequence< OUString >(pRet, m_supportedEvents.size());
+    return uno::Sequence< OUString >(m_supportedEvents.data(), m_supportedEvents.size());
 }
 
 bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)

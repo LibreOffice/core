@@ -175,7 +175,7 @@ uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedPr
     ::std::vector< beans::Property > aNewProps;
     rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
 
-    return aNewProps.empty() ? uno::Sequence< beans::Property > () : uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
+    return uno::Sequence< beans::Property >(aNewProps.data(), aNewProps.size());
 }
 
 uno::Sequence< OUString > SAL_CALL ReportComponentHandler::getSupersededProperties() throw (uno::RuntimeException, std::exception)

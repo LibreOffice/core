@@ -218,8 +218,7 @@ namespace connectivity
                                 ,0
                                 ,makeAny(sal_True)
                                 ,PropertyState_DIRECT_VALUE) );
-            PropertyValue* pProps = aProps.empty() ? 0 : &aProps[0];
-            return Sequence< PropertyValue >(pProps, aProps.size());
+            return Sequence< PropertyValue >(aProps.data(), aProps.size());
         }
     }
 

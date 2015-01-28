@@ -475,8 +475,7 @@ uno::Sequence< OUString > SAL_CALL OSection::getAvailableReportComponentNames(  
     ::osl::MutexGuard aGuard(m_aMutex);
 
     const ::std::vector< OUString >& aRet = lcl_getControlModelMap();
-    const OUString* pRet = aRet.empty() ? 0 : &aRet[0];
-    return uno::Sequence< OUString >(pRet, aRet.size());
+    return uno::Sequence< OUString >(aRet.data(), aRet.size());
 }
 
 // XChild

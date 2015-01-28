@@ -382,7 +382,7 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             aNewProps.push_back(aValue);
         }
     }
-    return aNewProps.empty() ? uno::Sequence< beans::Property > () : uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
+    return uno::Sequence< beans::Property >(aNewProps.data(), aNewProps.size());
 }
 
 uno::Sequence< OUString > SAL_CALL DataProviderHandler::getSupersededProperties() throw (uno::RuntimeException, std::exception)

@@ -666,8 +666,7 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException, std::
     }
     aOwnTypes.push_back(cppu::UnoType<com::sun::star::lang::XUnoTunnel>::get());
 
-    const Type* pAttrs = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
-    return Sequence< Type >(pAttrs, aOwnTypes.size());
+    return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
 }
 
 

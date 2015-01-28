@@ -356,8 +356,7 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException, std::
                 aOwnTypes.push_back(*pIter);
             }
         }
-        Type *pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
-        return Sequence< Type >(pTypes, aOwnTypes.size());
+        return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
     }
     return OTableHelper::getTypes();
 }

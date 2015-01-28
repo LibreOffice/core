@@ -324,10 +324,8 @@ namespace dbtools
 
         if ( bNeedExchangeLinks )
         {
-            OUString *pFields = aStrippedMasterFields.empty() ? 0 : &aStrippedMasterFields[0];
-            m_aMasterFields = Sequence< OUString >( pFields, aStrippedMasterFields.size() );
-            pFields = aStrippedDetailFields.empty() ? 0 : &aStrippedDetailFields[0];
-            m_aDetailFields = Sequence< OUString >( pFields, aStrippedDetailFields.size() );
+            m_aMasterFields = Sequence< OUString >( aStrippedMasterFields.data(), aStrippedMasterFields.size() );
+            m_aDetailFields = Sequence< OUString >( aStrippedDetailFields.data(), aStrippedDetailFields.size() );
         }
     }
 

@@ -1092,8 +1092,7 @@ Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
             vec.push_back( p.first->second );
             ++p.first;
         }
-        ret = Sequence< Reference< XInterface > >(
-            vec.empty() ? 0 : &vec[ 0 ], vec.size() );
+        ret = Sequence< Reference< XInterface > >( vec.data(), vec.size() );
     }
 
     return ret;

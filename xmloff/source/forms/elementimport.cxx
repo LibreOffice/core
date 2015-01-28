@@ -2022,8 +2022,7 @@ namespace xmloff
             }
             while (nElementStart < nLength);
 
-            OUString *pElements = aElements.empty() ? 0 : &aElements[0];
-            aList = Sequence< OUString >(pElements, aElements.size());
+            aList = Sequence< OUString >(aElements.data(), aElements.size());
         }
         else
         {

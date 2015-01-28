@@ -96,8 +96,7 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException, std
             aOwnTypes.push_back(*pBegin);
         }
     }
-    const Type *pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
-    return Sequence< Type >(pTypes, aOwnTypes.size());
+    return Sequence< Type >(aOwnTypes.data(), aOwnTypes.size());
 }
 
 

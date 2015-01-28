@@ -88,8 +88,7 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException,
             aOwnTypes.push_back(*pBegin);
         }
     }
-    Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
-    Sequence< Type > aRet(pTypes, aOwnTypes.size());
+    Sequence< Type > aRet(aOwnTypes.data(), aOwnTypes.size());
     return ::comphelper::concatSequences(aRet,OFlatResultSet_BASE::getTypes());
 }
 

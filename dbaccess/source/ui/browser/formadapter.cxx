@@ -1479,8 +1479,7 @@ Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName) throw( ::com::sun
 
 Sequence< OUString > SAL_CALL SbaXFormAdapter::getElementNames() throw( RuntimeException, std::exception )
 {
-    OUString *pChildNames = m_aChildNames.empty() ? 0 : &m_aChildNames[0];
-    return Sequence< OUString >(pChildNames, m_aChildNames.size());
+    return Sequence< OUString >(m_aChildNames.data(), m_aChildNames.size());
 }
 
 sal_Bool SAL_CALL SbaXFormAdapter::hasByName(const OUString& aName) throw( RuntimeException, std::exception )
