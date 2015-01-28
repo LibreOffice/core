@@ -737,12 +737,12 @@ void ScForecast();
 void ScNoName();
 void ScBadName();
 // Statistics:
-double phi(double x);
-double integralPhi(double x);
 double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
 double gauss(double x);
 
 public:
+static SC_DLLPUBLIC double phi(double x);
+static SC_DLLPUBLIC double integralPhi(double x);
 static SC_DLLPUBLIC double gaussinv(double x);
 
 private:
