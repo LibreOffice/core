@@ -1060,8 +1060,8 @@ public:
     void            ClearLookupCaches();
 
                     // calculate automatically
-    void            SetAutoCalc( bool bNewAutoCalc );
-    bool            GetAutoCalc() const { return bAutoCalc; }
+    SC_DLLPUBLIC void SetAutoCalc( bool bNewAutoCalc );
+    SC_DLLPUBLIC bool GetAutoCalc() const { return bAutoCalc; }
                     // calculate automatically in/from/for ScDocShell disabled
     void            SetAutoCalcShellDisabled( bool bNew ) { bAutoCalcShellDisabled = bNew; }
     bool            IsAutoCalcShellDisabled() const { return bAutoCalcShellDisabled; }
