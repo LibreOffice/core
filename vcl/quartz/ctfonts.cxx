@@ -324,7 +324,7 @@ ImplDevFontAttributes DevFontFromCTFontDescriptor( CTFontDescriptorRef pFD, bool
     // TODO: use other traits such as MonoSpace/Condensed/Expanded or Vertical too
     SInt64 nSymbolTrait = 0;
     CFNumberRef pSymbolNum = NULL;
-    if( CFDictionaryGetValueIfPresent( pAttrDict, kCTFontSymbolicTrait, (const void**)&pSymbolNum ) ) {
+    if( CFDictionaryGetValueIfPresent( pAttrDict, kCTFontSymbolicTrait, reinterpret_cast<const void**>(&pSymbolNum) ) ) {
         CFNumberGetValue( pSymbolNum, kCFNumberSInt64Type, &nSymbolTrait );
         rDFA.SetSymbolFlag( ((nSymbolTrait & kCTFontClassMaskTrait) == kCTFontSymbolicClass) );
     }
