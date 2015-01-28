@@ -1158,7 +1158,7 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
 
 
 OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
-                                          const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
+                                         const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
                                          const Reference< XPropertySet > & xField,
                                          bool bUseRealName)
 {
