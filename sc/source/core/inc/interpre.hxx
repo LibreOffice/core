@@ -118,7 +118,7 @@ class ScInterpreter
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
 
-    static void SetGlobalConfig(const ScCalcConfig& rConfig);
+    static SC_DLLPUBLIC void SetGlobalConfig(const ScCalcConfig& rConfig);
     static SC_DLLPUBLIC const ScCalcConfig& GetGlobalConfig();
 
     static void GlobalExit();           // called by ScGlobal::Clear()
