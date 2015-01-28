@@ -514,7 +514,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 int32_t nYAdvance = pHbPositions[i].y_advance >> 6;
 
                 Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
-                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset);
+                const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset, nYAdvance, nYOffset);
                 rLayout.AppendGlyph(aGI);
 
                 aCurrPos.X() += nXAdvance;
