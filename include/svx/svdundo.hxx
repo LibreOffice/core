@@ -242,9 +242,6 @@ protected:
     SdrView*                    pView;      // To be able to re-create the selection for a
     SdrPageView*                pPageView;  // for a ObjDel, Undo
     sal_uInt32                      nOrdNum;
-    // It's possible that the object is re-assigned during a Undo/Redo.
-    // The object is deleted in the dtor, if bOwner==TRUE
-    ObjListListener*            m_pListener;
 
 protected:
     SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect = false);
