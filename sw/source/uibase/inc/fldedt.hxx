@@ -23,6 +23,7 @@
 
 class SwView;
 class SwWrtShell;
+class SwFldMgr;
 
 class SwFldEditDlg : public SfxSingleTabDialog
 {
@@ -37,9 +38,10 @@ class SwFldEditDlg : public SfxSingleTabDialog
     void            Init();
     SfxTabPage*     CreatePage(sal_uInt16 nGroup);
 
+    void EnsureSelection(SwField *pCurFld, SwFldMgr &rMgr);
 public:
 
-     SwFldEditDlg(SwView& rVw);
+    SwFldEditDlg(SwView& rVw);
     virtual ~SwFldEditDlg();
 
     DECL_LINK(OKHdl, void *);

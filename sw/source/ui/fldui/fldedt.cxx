@@ -49,6 +49,44 @@
 #include <boost/scoped_ptr.hpp>
 #include <swuiexp.hxx>
 
+void SwFldEditDlg::EnsureSelection(SwField *pCurFld, SwFldMgr &rMgr)
+{
+    if (pSh->CrsrInsideInputFld())
+    {
+        // move cursor to start of Input Field
+        SwInputField* pInputFld = dynamic_cast<SwInputField*>(pCurFld);
+        if (pInputFld && pInputFld->GetFmtFld())
+        {
+            pSh->GotoField( *(pInputFld->GetFmtFld()) );
+        }
+    }
+
+    /* Only create selection if there is none already.
+       Normalize PaM instead of swapping. */
+    if (!pSh->HasSelection())
+    {
+        SwShellCrsr* pCrsr = pSh->getShellCrsr(true);
+        SwPosition aOrigPos(*pCrsr->GetPoint());
+
+        //After this attempt it is possible that rMgr.GetCurFld() != pCurFld if
+        //the field was in e.g. a zero height portion and so invisible in which
+        //case it will be skipped over
+        pSh->Right(CRSR_SKIP_CHARS, true, 1, false );
+        //So (fdo#50640) if it didn't work then reposition back to the original
+        //location where the field was
+        SwField *pRealCurFld = rMgr.GetCurFld();
+        bool bSelectionFailed = pCurFld != pRealCurFld;
+        if (bSelectionFailed)
+        {
+            pCrsr->DeleteMark();
+            *pCrsr->GetPoint() = aOrigPos;
+        }
+    }
+
+    pSh->NormalizePam();
+
+    assert(pCurFld == rMgr.GetCurFld());
+}
 
 SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     : SfxSingleTabDialog(&rVw.GetViewFrame()->GetWindow(), 0,
@@ -62,28 +100,12 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     SwFldMgr aMgr(pSh);
 
     SwField *pCurFld = aMgr.GetCurFld();
-    if(!pCurFld)
+    if (!pCurFld)
         return;
 
     SwViewShell::SetCareWin(this);
 
-    if ( pSh->CrsrInsideInputFld() )
-    {
-        // move cursor to start of Input Field
-        SwInputField* pInputFld = dynamic_cast<SwInputField*>(pCurFld);
-        if ( pInputFld != NULL
-             && pInputFld->GetFmtFld() != NULL )
-        {
-            pSh->GotoField( *(pInputFld->GetFmtFld()) );
-        }
-    }
-
-    if ( ! pSh->HasSelection() )
-    {
-        pSh->Right(CRSR_SKIP_CHARS, true, 1, false);
-    }
-
-    pSh->NormalizePam();
+    EnsureSelection(pCurFld, aMgr);
 
     sal_uInt16 nGroup = aMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
@@ -254,12 +276,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurFld = rMgr.GetCurFld();
 
-    /* #108536# Only create selection if there is none
-        already. Normalize PaM instead of swapping. */
-    if ( ! pSh->HasSelection() )
-        pSh->Right(CRSR_SKIP_CHARS, true, 1, false );
-
-    pSh->NormalizePam();
+    EnsureSelection(pCurFld, rMgr);
 
     sal_uInt16 nGroup = rMgr.GetGroup(false, pCurFld->GetTypeId(), pCurFld->GetSubType());
 
