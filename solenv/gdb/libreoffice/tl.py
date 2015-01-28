@@ -8,7 +8,6 @@
 #
 
 import gdb
-import six
 
 from libreoffice.util import printing
 
@@ -161,146 +160,6 @@ class TimePrinter(object):
     def to_string(self):
         return str(TimeImpl.parse(self.val))
 
-class IteratorHelper(six.Iterator):
-    '''Implements a container iterator useable for both 'linear'
-        containers (like DynArray or List) and Tables
-    '''
-
-    def __init__(self, block, count, type = None):
-        self.count = count
-        self.type = type
-        self.pos = 0
-        self.block = None
-        self.block_count = 0
-        self.block_pos = 0
-        if block:
-            self._next_block(block)
-
-        self._check_invariant()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.pos == self.count:
-            raise StopIteration()
-
-        if self.block_pos == self.block_count:
-            self._next_block(self.block['pNext'])
-
-        name = self.name()
-        val = self.value()
-        self.advance()
-
-        self._check_invariant()
-        return (name, val)
-
-    def _next_block(self, block):
-        assert block
-
-        self.block = block.dereference()
-        self.block_pos = 0
-        self.block_count = block['nCount']
-
-        assert self.block_count <= block['nSize']
-        assert self.block_count + self.pos <= self.count
-
-    def _check_invariant(self):
-        assert self.count >= 0
-        assert self.pos >= 0
-        assert self.pos <= self.count
-        assert self.block_count >= 0
-        if self.pos < self.count:
-            assert self.block_count > 0
-            assert self.block != None
-        assert self.block_count <= self.count
-        assert self.block_pos >= 0
-        assert self.block_pos <= self.block_count
-
-class NoItemType(Exception):
-    pass
-
-class ContainerHelper(object):
-    '''Provides support for specialized container printers'''
-
-    def __init__(self, typename, val, iterator):
-        self.typename = typename
-        self.val = val
-        self.iterator = iterator
-
-    def to_string(self):
-        size = self.val['nCount']
-        if size > 0:
-            return "%s of length %d" % (self.typename, size)
-        elif size == 0:
-            return "empty %s" % self.typename
-        else:
-            return "invalid %s" % self.typename
-
-    def children(self):
-        count = self.val.cast(gdb.lookup_type('Container'))['nCount']
-        return self.iterator(self.val['pFirstBlock'], count)
-
-class LinearIterator(IteratorHelper):
-    '''Is iterator for 'linear' container'''
-
-    def __init__(self, block, count, type = None):
-        super(LinearIterator, self).__init__(block, count, type)
-
-    def name(self):
-        return str(self.pos)
-
-    def value(self):
-        nodes = self.block['pNodes']#.cast(self.type.pointer())
-        return nodes[self.block_pos]
-
-    def advance(self):
-        self.pos += 1
-        self.block_pos += 1
-
-class LinearContainerPrinter(ContainerHelper):
-    '''Prints 'linear' container, like DynArray or List'''
-
-    def __init__(self, typename, val):
-        super(LinearContainerPrinter, self).__init__(typename, val, LinearIterator)
-
-    def display_hint(self):
-        return 'array'
-
-class TableIterator(IteratorHelper):
-    '''Is iterator for Table'''
-
-    def __init__(self, block, count, type = None):
-        super(TableIterator, self).__init__(block, count, type)
-        # ULONG doesn't work on 64-bit for some reason (gdb says it has
-        # size 4 and it's not a typedef to sal_uIntPtr)
-        self._key_type = gdb.lookup_type('sal_uIntPtr')
-        self.is_key = True
-
-    def name(self):
-        return ''
-
-    def value(self):
-        nodes = self.block['pNodes']#.cast(self.type.pointer())
-        val = nodes[self.block_pos]
-        if self.is_key:
-            val = str(val.cast(self._key_type))
-        return val
-
-    def advance(self):
-        self.pos += 1
-        self.block_pos += 1
-        self.is_key = not self.is_key
-
-class TablePrinter(ContainerHelper):
-    '''Prints table'''
-
-    def __init__(self, typename, val):
-        super(TablePrinter, self).__init__(typename, val, TableIterator)
-
-    def display_hint(self):
-        return 'map'
-
 class PointPrinter(object):
     '''Prints a Point.'''
 
@@ -357,12 +216,6 @@ def build_pretty_printers():
     global printer
 
     printer = printing.Printer('libreoffice/tl')
-
-    # old-style containers
-    printer.add('DynArray', LinearContainerPrinter)
-    printer.add('List', LinearContainerPrinter)
-    printer.add('Stack', LinearContainerPrinter)
-    printer.add('Table', TablePrinter)
 
     # various types
     printer.add('BigInt', BigIntPrinter)
