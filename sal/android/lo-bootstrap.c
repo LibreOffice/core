@@ -115,6 +115,7 @@ static uint16_t cdir_entries;
  * functions.
  */
 
+typedef struct direntry *direntry;
 
 struct direntry {
     UT_hash_handle hh;
