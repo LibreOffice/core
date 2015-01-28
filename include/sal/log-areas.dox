@@ -90,6 +90,7 @@ certain functionality.
 @section cppu
 
 @li @c cppu
+@li @c cppu.log
 @li @c cppu.unsafebridge
 
 @section cppuhelper

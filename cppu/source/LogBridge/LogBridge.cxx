@@ -135,63 +135,63 @@ bool LogBridge::v_isValid(rtl::OUString * pReason)
             case typelib_TypeClass_STRING:
                 {
                     const ::rtl::OString sValue( ::rtl::OUStringToOString(*static_cast< ::rtl::OUString*>(pArg),osl_getThreadTextEncoding()));
-                    SAL_INFO("cppu", "" << sValue.getStr());
+                    SAL_INFO("cppu.log", "" << sValue.getStr());
                 }
                 break;
             case typelib_TypeClass_BOOLEAN:
-               SAL_INFO("cppu", "" << *static_cast<sal_Bool*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<sal_Bool*>(pArg));
                 break;
             case typelib_TypeClass_BYTE:
-               SAL_INFO("cppu", "" << *static_cast<sal_Int8*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<sal_Int8*>(pArg));
                 break;
             case typelib_TypeClass_CHAR:
-               SAL_INFO("cppu", "" << *static_cast<sal_Char*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<sal_Char*>(pArg));
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-               SAL_INFO("cppu", "" << *static_cast<sal_Int16*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<sal_Int16*>(pArg));
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-               SAL_INFO("cppu", "" << *static_cast<sal_Int32*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<sal_Int32*>(pArg));
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
-               SAL_INFO("cppu", "" << *static_cast<sal_Int64*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<sal_Int64*>(pArg));
                 break;
             case typelib_TypeClass_FLOAT:
-               SAL_INFO("cppu", "" << *static_cast<float*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<float*>(pArg));
                 break;
             case typelib_TypeClass_DOUBLE:
-               SAL_INFO("cppu", "" << *static_cast<double*>(pArg));
+               SAL_INFO("cppu.log", "" << *static_cast<double*>(pArg));
                 break;
             case typelib_TypeClass_TYPE:
                 {
                     const ::rtl::OString sValue( ::rtl::OUStringToOString(((com::sun::star::uno::Type*)pArg)->getTypeName(),osl_getThreadTextEncoding()));
-                   SAL_INFO("cppu", "" << sValue.getStr());
+                   SAL_INFO("cppu.log", "" << sValue.getStr());
                 }
                 break;
             case typelib_TypeClass_ANY:
                 if ( static_cast<uno_Any*>(pArg)->pData )
                     traceValue(static_cast<uno_Any*>(pArg)->pType,static_cast<uno_Any*>(pArg)->pData);
                 else
-                   SAL_INFO("cppu", "void");
+                   SAL_INFO("cppu.log", "void");
                 break;
             case typelib_TypeClass_EXCEPTION:
-               SAL_INFO("cppu", "exception");
+               SAL_INFO("cppu.log", "exception");
                 break;
             case typelib_TypeClass_INTERFACE:
                 {
                     const ::rtl::OString sValue( ::rtl::OUStringToOString(_pTypeRef->pTypeName,osl_getThreadTextEncoding()));
-                   SAL_INFO("cppu", "" << sValue.getStr() << "0x" << std::hex << pArg);
+                   SAL_INFO("cppu.log", "" << sValue.getStr() << "0x" << std::hex << pArg);
                 }
                 break;
             case typelib_TypeClass_VOID:
-               SAL_INFO("cppu", "void");
+               SAL_INFO("cppu.log", "void");
                 break;
             default:
-               SAL_INFO("cppu", "0x" << std::hex << pArg);
+               SAL_INFO("cppu.log", "0x" << std::hex << pArg);
                 break;
         } // switch(pParams[i].pTypeRef->eTypeClass)
     }
@@ -214,40 +214,40 @@ void LogProbe(
         sTemp = ::rtl::OUStringToOString(pMemberType->pTypeName,RTL_TEXTENCODING_ASCII_US);
     if ( pre  )
     {
-        SAL_INFO("cppu", "{ LogBridge () " << sTemp.getStr() );
+        SAL_INFO("cppu.log", "{ LogBridge () " << sTemp.getStr() );
         if ( nParams )
         {
-           SAL_INFO("cppu", "\n| : ( LogBridge ");
+           SAL_INFO("cppu.log", "\n| : ( LogBridge ");
             for(sal_Int32 i = 0;i < nParams;++i)
             {
                 if ( i > 0 )
-                   SAL_INFO("cppu", ",");
+                   SAL_INFO("cppu.log", ",");
                 traceValue(pParams[i].pTypeRef,pArgs[i]);
 
             }
-           SAL_INFO("cppu", ")");
+           SAL_INFO("cppu.log", ")");
         } // if ( nParams )
-       SAL_INFO("cppu", "\n");
+       SAL_INFO("cppu.log", "\n");
     }
     else if ( !pre )
     {
-        SAL_INFO("cppu", "} LogBridge () " << sTemp.getStr());
+        SAL_INFO("cppu.log", "} LogBridge () " << sTemp.getStr());
         if ( ppException && *ppException )
         {
-            SAL_INFO("cppu", " exception occurred : ");
+            SAL_INFO("cppu.log", " exception occurred : ");
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
             const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));
-           SAL_INFO("cppu", "" << sValue.getStr());
+           SAL_INFO("cppu.log", "" << sValue.getStr());
             TYPELIB_DANGER_RELEASE( pElementTypeDescr );
         }
         else if ( pReturnTypeRef )
         {
-           SAL_INFO("cppu", " return : ");
+           SAL_INFO("cppu.log", " return : ");
             traceValue(pReturnTypeRef,pReturn);
         } // if ( pReturn && pReturnTypeRef )
 
-       SAL_INFO("cppu", "\n");
+       SAL_INFO("cppu.log", "\n");
     }
 }
 
