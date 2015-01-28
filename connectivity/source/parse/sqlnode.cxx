@@ -1159,7 +1159,8 @@ OUString OSQLParser::stringToDouble(const OUString& _rValue,sal_Int16 _nScale)
 
 OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString& rStatement,
                                           const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
-                                         const Reference< XPropertySet > & xField)
+                                         const Reference< XPropertySet > & xField,
+                                         bool bUseRealName)
 {
     // Guard the parsing
     ::osl::MutexGuard aGuard(getMutex());
@@ -1183,7 +1184,7 @@ OSQLParseNode* OSQLParser::predicateTree(OUString& rErrorMessage, const OUString
             // #75243# use the RealName of the column if there is any otherwise the name which could be the alias
             // of the field
             Reference< XPropertySetInfo> xInfo = m_xField->getPropertySetInfo();
-            if ( xInfo->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)))
+            if ( bUseRealName && xInfo->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)))
                 m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME)) >>= aString;
             else
                 m_xField->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aString;

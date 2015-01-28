@@ -191,9 +191,12 @@ namespace connectivity
                        bool bInternational = false);
 
         // Check a Predicate
+        // set bUseRealName to false if you pass a xField that comes from where you got that field,
+        // as opposed from to from yourself.
         OSQLParseNode* predicateTree(OUString& rErrorMessage, const OUString& rStatement,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xField);
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xField,
+                       bool bUseRealName = true);
 
         // Access to the context
         const IParseContext& getContext() const {return *m_pContext;}

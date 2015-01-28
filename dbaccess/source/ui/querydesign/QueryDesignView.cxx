@@ -3079,10 +3079,23 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
     }
 
     OUString sTest(_sCriteria);
+    // _rxColumn, if it is a "lookup" column, not a computed column,
+    // is guaranteed to be the column taken from the *source* of the column,
+    // that is either a table or another query.
+    // _rxColumn is *not* taken from the columns of the query we are constructing
+    // (and rightfully so, since it may not be part of these columns; SELECT A FROM t WHERE B = foo)
+    // If it is a computed column, we just constructed it above, with same Name and RealName.
+    // In all cases, we should use the "external" name of the column, not the "RealName";
+    // the latter is the name that the column had in the source of the source query.
+    // An example: we are designing "SELECT A, B FROM q WHERE C='foo'"
+    // q itself is query "SELECT aye AS A, bee as B, cee as C FROM t"
+    // We are currently treating the entry "C='foo'"
+    // Then _rxColumn has Name "C" and RealName "cee". We should *obviously* use "C", not "cee".
     OSQLParseNode* pParseNode = rParser.predicateTree(  _rsErrorMessage,
                                                         sTest,
                                                         static_cast<OQueryController&>(getController()).getNumberFormatter(),
-                                                        _rxColumn);
+                                                        _rxColumn,
+                                                        false);
     return pParseNode;
 }
 
