@@ -25,6 +25,8 @@
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <assert.h>
 #include "system.hxx"
 #include "file_url.hxx"
@@ -232,13 +234,44 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 
 #endif // !DISABLE_DYNLOADING
 
+namespace {
+
+void * getSymbol(oslModule module, char const * symbol) {
+    assert(symbol != nullptr);
+    // We do want to use dlsym() also in the DISABLE_DYNLOADING case
+    // just to look up symbols in the static executable, I think:
+    void * p = dlsym(module, symbol);
+    SAL_INFO_IF(
+        p == nullptr, "sal.osl",
+        "dlsym(" << module << ", " << symbol << "): " << dlerror());
+    return p;
+}
+
+}
+
 /*****************************************************************************/
 /* osl_getSymbol */
 /*****************************************************************************/
 void* SAL_CALL
 osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 {
-    return (void *) osl_getFunctionSymbol(Module, pSymbolName);
+    // Arbitrarily using UTF-8:
+    OString s;
+    if (!OUString::unacquired(&pSymbolName).convertToString(
+            &s, RTL_TEXTENCODING_UTF8,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+             RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+    {
+        SAL_INFO(
+            "sal.osl", "cannot convert \"" << OUString::unacquired(&pSymbolName)
+                << "\" to UTF-8");
+        return nullptr;
+    }
+    if (s.indexOf('\0') != -1) {
+        SAL_INFO("sal.osl", "\"" << s << "\" contains embedded NUL");
+        return nullptr;
+    }
+    return getSymbol(Module, s.getStr());
 }
 
 /*****************************************************************************/
@@ -247,19 +280,9 @@ osl_getSymbol(oslModule Module, rtl_uString* pSymbolName)
 oslGenericFunction SAL_CALL
 osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 {
-    void *fcnAddr = NULL;
-
-    // We do want to use dlsym() also in the DISABLE_DYNLOADING case
-    // just to look up symbols in the static executable, I think.
-    if (pSymbol)
-    {
-        fcnAddr = dlsym(Module, pSymbol);
-        SAL_INFO_IF(
-            fcnAddr == 0, "sal.osl",
-            "dlsym(" << Module << ", " << pSymbol << "): " << dlerror());
-    }
-
-    return (oslGenericFunction) fcnAddr;
+    return reinterpret_cast<oslGenericFunction>(getSymbol(Module, pSymbol));
+        // requires conditionally-supported conversion from void * to function
+        // pointer
 }
 
 /*****************************************************************************/
@@ -268,26 +291,10 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 oslGenericFunction SAL_CALL
 osl_getFunctionSymbol(oslModule module, rtl_uString *puFunctionSymbolName)
 {
-    oslGenericFunction pSymbol = NULL;
-
-    if( puFunctionSymbolName )
-    {
-        rtl_String* pSymbolName = NULL;
-
-        rtl_uString2String( &pSymbolName,
-            rtl_uString_getStr(puFunctionSymbolName),
-            rtl_uString_getLength(puFunctionSymbolName),
-            RTL_TEXTENCODING_UTF8,
-            OUSTRING_TO_OSTRING_CVTFLAGS );
-
-        if( pSymbolName != NULL )
-        {
-            pSymbol = osl_getAsciiFunctionSymbol(module, rtl_string_getStr(pSymbolName));
-            rtl_string_release(pSymbolName);
-        }
-    }
-
-    return pSymbol;
+    return reinterpret_cast<oslGenericFunction>(
+        osl_getSymbol(module, puFunctionSymbolName));
+        // requires conditionally-supported conversion from void * to function
+        // pointer
 }
 
 /*****************************************************************************/
@@ -333,7 +340,10 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
 /*****************************************************************************/
 sal_Bool SAL_CALL osl_getModuleURLFromFunctionAddress(oslGenericFunction addr, rtl_uString ** ppLibraryUrl)
 {
-    return osl_getModuleURLFromAddress((void*)addr, ppLibraryUrl);
+    return osl_getModuleURLFromAddress(
+        reinterpret_cast<void*>(addr), ppLibraryUrl);
+        // requires conditionally-supported conversion from function pointer to
+        // void *
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
