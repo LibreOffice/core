@@ -1305,10 +1305,12 @@ namespace
     {
         bool bRet = true;
         ::connectivity::OSQLParseNode* pFirstColumnRef = _pFirstColumnRef;
-        for (int i = 0; i < 3 && bRet; i+=2)
+        for (size_t i = 0; bRet && i < _pCondition->count() && bRet; ++i)
         {
             const  ::connectivity::OSQLParseNode* pChild = _pCondition->getChild(i);
-            if ( SQL_ISRULE(pChild,search_condition) )
+            if ( pChild->isToken() )
+                continue;
+            else if ( SQL_ISRULE(pChild,search_condition) )
                 bRet = CheckOrCriteria(pChild,pFirstColumnRef);
             else
             {
