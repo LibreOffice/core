@@ -446,10 +446,9 @@ namespace connectivity
 
     inline OSQLParseNode* OSQLParseNode::getChild(sal_uInt32 nPos) const
     {
-        OSL_ENSURE(nPos < m_aChildren.size(), "Invalid Position");
+        assert(nPos < m_aChildren.size());
 
-        //  return m_aChildren[nPos];
-        return m_aChildren.at(nPos);
+        return m_aChildren[nPos];
     }
 
     // utilities to query for a specific rule, token or punctuation
