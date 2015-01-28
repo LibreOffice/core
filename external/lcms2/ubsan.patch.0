@@ -1,3 +1,14 @@
+--- src/cmsnamed.c
++++ src/cmsnamed.c
+@@ -221,7 +221,7 @@
+ cmsBool  CMSEXPORT cmsMLUsetWide(cmsMLU* mlu, const char Language[3], const char Country[3], const wchar_t* WideString)
+ {
+     cmsUInt16Number Lang  = _cmsAdjustEndianess16(*(cmsUInt16Number*) Language);
+-    cmsUInt16Number Cntry = _cmsAdjustEndianess16(*(cmsUInt16Number*) Country);
++    cmsUInt16Number Cntry = Country[0] | ((cmsUInt16Number) Country[1]) << 8;
+     cmsUInt32Number len;
+ 
+     if (mlu == NULL) return FALSE;
 --- src/lcms2_internal.h
 +++ src/lcms2_internal.h
 @@ -93,7 +93,7 @@
