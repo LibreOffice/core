@@ -145,10 +145,10 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
             }
             break;
         case ocMul:
-            pOut.reset(ut_multiply(pFirstUnit.get(), pSecondUnit.get()));
+            pOut = pFirstUnit * pSecondUnit;
             break;
         case ocDiv:
-            pOut.reset(ut_divide(pFirstUnit.get(), pSecondUnit.get()));
+            pOut = pFirstUnit / pSecondUnit;
             break;
         default:
             SAL_INFO("sc.units", "unit verification not supported for opcode: " << nOpCode);

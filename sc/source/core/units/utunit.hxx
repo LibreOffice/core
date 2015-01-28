@@ -62,6 +62,16 @@ public:
     bool operator==(const UtUnit& rUnit) {
         return ut_compare(this->get(), rUnit.get()) == 0;
     }
+
+    UtUnit operator*(const UtUnit& rUnit) {
+        return UtUnit(ut_multiply(this->get(), rUnit.get()));
+    }
+
+    UtUnit operator/(const UtUnit& rUnit) {
+        // the parameter is the right hand side value in the operation,
+        // i.e. we are working with this / rUnit.
+        return UtUnit(ut_divide(this->get(), rUnit.get()));
+    }
 };
 
 }} // namespace sc::units
