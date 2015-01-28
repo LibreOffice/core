@@ -68,6 +68,7 @@ namespace sw { namespace mark
                 { return GetMarkEnd() > rPos; }
 
             virtual OUString ToString( ) const =0;
+            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const = 0;
     };
 
     class SW_DLLPUBLIC IBookmark

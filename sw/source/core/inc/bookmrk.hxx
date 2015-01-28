@@ -88,6 +88,7 @@ namespace sw {
                 { m_pPos2.reset(); }
 
             virtual OUString ToString( ) const SAL_OVERRIDE;
+            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 
             void Swap()
             {

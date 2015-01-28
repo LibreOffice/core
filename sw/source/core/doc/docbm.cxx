@@ -1146,18 +1146,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         xmlTextWriterStartElement(pWriter, BAD_CAST("bookmarks"));
         for (const_iterator_t it = m_vBookmarks.begin(); it != m_vBookmarks.end(); ++it)
-        {
-            pMark_t pMark = *it;
-            xmlTextWriterStartElement(pWriter, BAD_CAST("bookmark"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
-            xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
-            pMark->GetMarkPos().dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
-            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
-            pMark->GetOtherMarkPos().dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
-            xmlTextWriterEndElement(pWriter);
-        }
+            (*it)->dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
 
@@ -1168,13 +1157,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
         {
             pMark_t pMark = *it;
             xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmark"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
-            xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
-            pMark->GetMarkPos().dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
-            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
-            pMark->GetOtherMarkPos().dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
+            pMark->dumpAsXml(pWriter);
             if (sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark.get()))
             {
                 sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
@@ -1200,18 +1183,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         xmlTextWriterStartElement(pWriter, BAD_CAST("annotationmarks"));
         for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
-        {
-            pMark_t pMark = *it;
-            xmlTextWriterStartElement(pWriter, BAD_CAST("annotationmark"));
-            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pMark->GetName().toUtf8().getStr()));
-            xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
-            pMark->GetMarkPos().dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
-            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
-            pMark->GetOtherMarkPos().dumpAsXml(pWriter);
-            xmlTextWriterEndElement(pWriter);
-            xmlTextWriterEndElement(pWriter);
-        }
+            (*it)->dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
     xmlTextWriterEndElement(pWriter);

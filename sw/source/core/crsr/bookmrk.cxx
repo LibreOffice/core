@@ -32,6 +32,7 @@
 #include <unobookmark.hxx>
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
+#include <libxml/xmlwriter.h>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -171,6 +172,19 @@ namespace sw { namespace mark
         return "Mark: ( Name, [ Node1, Index1 ] ): ( " + m_aName + ", [ "
             + OUString::number( GetMarkPos().nNode.GetIndex( ) )  + ", "
             + OUString::number( GetMarkPos().nContent.GetIndex( ) ) + " ] )";
+    }
+
+    void MarkBase::dumpAsXml(xmlTextWriterPtr pWriter) const
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("markBase"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(m_aName.toUtf8().getStr()));
+        xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
+        GetMarkPos().dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+        xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
+        GetOtherMarkPos().dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+        xmlTextWriterEndElement(pWriter);
     }
 
     MarkBase::~MarkBase()
