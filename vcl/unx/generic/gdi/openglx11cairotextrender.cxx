@@ -45,15 +45,9 @@ cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface( const ServerFontLayo
 
         if (!rLayout.GetOrientation() )
         {
-            // GetBoundRect can fail!
-            if ( rLayout.GetBoundRect(mrParent, aTextBoundRect) )
-            {
-                if ( aTextBoundRect.GetWidth() == 0 || aTextBoundRect.GetHeight() == 0 )
-                    aTextBoundRect = aClipRect;
-                else
-                    aTextBoundRect.setWidth( rLayout.GetTextWidth() );
-            }
-            else
+            aTextBoundRect = rLayout.GetTextRect();
+
+            if ( aTextBoundRect.GetWidth() == 0 || aTextBoundRect.GetHeight() == 0 )
                 aTextBoundRect = aClipRect;
         }
         else
