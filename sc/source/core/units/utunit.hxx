@@ -58,6 +58,10 @@ public:
     explicit operator bool() const {
         return mpUnit.operator bool();
     }
+
+    bool operator==(const UtUnit& rUnit) {
+        return ut_compare(this->get(), rUnit.get()) == 0;
+    }
 };
 
 }} // namespace sc::units

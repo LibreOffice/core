@@ -136,7 +136,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
             // Adding and subtracting both require the same units on both sides
             // hence we can just fall through / use the same logic.
         case ocSub:
-            if (ut_compare(pFirstUnit.get(), pSecondUnit.get()) == 0) {
+            if (pFirstUnit == pSecondUnit) {
                 // The two units are identical, hence we can return either.
                 pOut = pFirstUnit;
                 SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit.getString());
