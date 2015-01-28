@@ -26,9 +26,18 @@ public class Document {
     public static final int DOCTYPE_DRAWING = 3;
     public static final int DOCTYPE_OTHER = 4;
 
+    /**
+     * Mouse event types
+     */
     public static final int MOUSE_BUTTON_DOWN = 0;
     public static final int MOUSE_BUTTON_UP = 1;
     public static final int MOUSE_MOVE = 2;
+
+    /**
+     * Callback message types
+     */
+    public static final int CALLBACK_INVALIDATE_TILES = 0;
+    public static final int CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1;
 
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
