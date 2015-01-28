@@ -109,7 +109,7 @@ class DemoRenderer
 
 public:
     DemoRenderer() : mnSegmentsX(4)
-                   , mnSegmentsY(3)
+                   , mnSegmentsY(4)
                    , mnSelectedRenderer(-1)
                    , iterCount(0)
 #if FIXME_BOUNCE_BUTTON
