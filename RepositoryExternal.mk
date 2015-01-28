@@ -147,6 +147,47 @@ endef
 
 endif # SYSTEM_MDDS
 
+ifeq ($(ENABLE_CALC_UNITVERIFICATION),TRUE)
+
+ifneq ($(SYSTEM_UDUNITS2),)
+
+define gb_LinkTarget__use_libudunits2
+$(call gb_LinkTarget_set_include,$(1),\
+	$(UDUNITS2_CFLAGS) \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(UDUNIT2_LIBS))
+
+endef
+
+else # !SYSTEM_UDUNITS2
+
+define gb_LinkTarget__use_libudunits2
+$(call gb_LinkTarget_use_package,$(1),udunits2)
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	-I$(call gb_UnpackedTarball_get_dir,udunits2)/lib \
+)
+ifeq ($(COM),MSC)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,udunits2)/udunits2.lib \
+)
+else
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,udunits2)/lib -ludunits2 \
+)
+endif
+
+endef
+
+endif # !SYSTEM_UDUNITS2
+
+else # !ENABLE_CALC_UNITVERIFICATION
+
+gb_LinkTarget__use_libudunits2 :=
+
+endif # ENABLE_CALC_UNITVERIFICATION
+
 ifneq ($(SYSTEM_GLM),)
 
 gb_LinkTarget__use_glm_headers :=
