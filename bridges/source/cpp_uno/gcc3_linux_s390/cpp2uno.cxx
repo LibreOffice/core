@@ -360,7 +360,7 @@ static typelib_TypeClass cpp_mediate(
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
-    assert(nMemberPos < pTypeDescr->nAllMembers, "### illegal member index!");
+    assert(nMemberPos < pTypeDescr->nAllMembers);
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 
