@@ -49,6 +49,9 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 		CppunitTest_sc_ucalc) \
     CppunitTest_sc_filters_test \
     CppunitTest_sc_rangelst_test \
+    $(if $(ENABLE_CALC_UNITVERIFICATION), \
+        CppunitTest_sc_units \
+    ) \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
