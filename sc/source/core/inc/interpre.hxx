@@ -26,6 +26,7 @@
 #include <formula/errorcodes.hxx>
 #include <formula/tokenarray.hxx>
 #include "scdll.hxx"
+#include "scdllapi.h"
 #include "types.hxx"
 #include "externalrefmgr.hxx"
 #include "calcconfig.hxx"
@@ -740,7 +741,11 @@ double phi(double x);
 double integralPhi(double x);
 double taylor(const double* pPolynom, sal_uInt16 nMax, double x);
 double gauss(double x);
-double gaussinv(double x);
+
+public:
+static SC_DLLPUBLIC double gaussinv(double x);
+
+private:
 double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function
 double GetBetaDistPDF(double fX, double fA, double fB); //probability density function)
 double GetChiDist(double fChi, double fDF);     // for LEGACY.CHIDIST, returns right tail
