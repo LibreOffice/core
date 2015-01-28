@@ -53,7 +53,15 @@ namespace xmloff
     SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const OUString& _rLocalName,
             const Reference< XAttributeList>& xAttrList )
     {
-        return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
+        SvXMLImportContext* pRet = 0;
+        try
+        {
+            pRet = GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );
+        } catch (const Exception& rException)
+        {
+            SAL_WARN("xmloff.forms", "OFormsRootImport::CreateChildContext: " << rException.Message);
+        }
+        return pRet;
     }
 
     void OFormsRootImport::implImportBool(const Reference< XAttributeList >& _rxAttributes, OfficeFormsAttributes _eAttribute,
