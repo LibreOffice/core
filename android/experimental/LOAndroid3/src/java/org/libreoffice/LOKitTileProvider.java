@@ -339,31 +339,49 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         return mDocument.getPart();
     }
 
+    private RectF convertCallbackMessageStringToRectF(String text) {
+        if (text.equals("EMPTY")) {
+            return null;
+        }
+
+        String[] coordinates = text.split(",");
+
+        if (coordinates.length != 4) {
+            return null;
+        }
+        int width = Integer.decode(coordinates[0].trim());
+        int height = Integer.decode(coordinates[1].trim());
+        int x = Integer.decode(coordinates[2].trim());
+        int y = Integer.decode(coordinates[3].trim());
+        RectF rect = new RectF(
+                twipToPixel(x, mDPI),
+                twipToPixel(y, mDPI),
+                twipToPixel(x + width, mDPI),
+                twipToPixel(y + height, mDPI)
+        );
+        return rect;
+    }
+
     /**
      * Process the retrieved messages from LOK
      */
     @Override
     public void messageRetrieved(int signalNumber, String payload) {
         switch (signalNumber) {
-            case 0:
-                if (!payload.equals("EMPTY")) {
-                    String[] coordinates = payload.split(",");
-
-                    if (coordinates.length == 4) {
-                        int width = Integer.decode(coordinates[0].trim());
-                        int height = Integer.decode(coordinates[1].trim());
-                        int x = Integer.decode(coordinates[2].trim());
-                        int y = Integer.decode(coordinates[3].trim());
-                        RectF rect = new RectF(
-                                twipToPixel(x, mDPI),
-                                twipToPixel(y, mDPI),
-                                twipToPixel(x + width, mDPI),
-                                twipToPixel(y + height, mDPI)
-                        );
-                        tileInvalidationCallback.invalidate(rect);
-                    }
+            case Document.CALLBACK_INVALIDATE_TILES: {
+                RectF rect = convertCallbackMessageStringToRectF(payload);
+                if (rect != null) {
+                    tileInvalidationCallback.invalidate(rect);
                 }
                 break;
+            }
+            case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR: {
+                RectF rect = convertCallbackMessageStringToRectF(payload);
+                if (rect != null) {
+                    //tileInvalidationCallback.invalidate(rect);
+                }
+                break;
+            }
         }
     }
 }
