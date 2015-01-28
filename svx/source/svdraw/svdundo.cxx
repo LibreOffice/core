@@ -679,73 +679,11 @@ OUString SdrUndoGeoObj::GetComment() const
 
 
 
-class SdrUndoObjList::ObjListListener : public SfxListener
-{
-public:
-    ObjListListener(SdrUndoObjList& rThat, SdrObject& rObject, SfxBroadcaster& rBroadcaster);
-    virtual ~ObjListListener();
-
-private:
-    virtual void Notify(SfxBroadcaster& rBroadcaster, const SfxHint& rHint) SAL_OVERRIDE;
-
-private:
-    SdrUndoObjList& m_rThat;
-    SdrObject& m_rObject;
-    SfxBroadcaster* m_pBroadcaster;
-};
-
-SdrUndoObjList::ObjListListener::ObjListListener(SdrUndoObjList& rThat, SdrObject& rObject, SfxBroadcaster& rBroadcaster)
-    : m_rThat(rThat)
-    , m_rObject(rObject)
-    , m_pBroadcaster(&rBroadcaster)
-{
-    StartListening(*m_pBroadcaster);
-}
-
-SdrUndoObjList::ObjListListener::~ObjListListener()
-{
-    if (m_pBroadcaster)
-        EndListening(*m_pBroadcaster);
-}
-
-void SdrUndoObjList::ObjListListener::Notify(SfxBroadcaster&, const SfxHint& rHint)
-{
-    const SdrHint* const pSdrHint(dynamic_cast<const SdrHint*>(&rHint));
-    if (pSdrHint)
-    {
-        if (pSdrHint->GetObject() == &m_rObject)
-        {
-            switch (pSdrHint->GetKind())
-            {
-            case HINT_OBJCHG :
-                if (IsListening(*m_pBroadcaster))
-                {
-                    const sal_uInt32 nNewOrdNum(m_rObject.GetOrdNum());
-                    if (nNewOrdNum != m_rThat.GetOrdNum())
-                        m_rThat.SetOrdNum(nNewOrdNum);
-                }
-                break;
-            case HINT_OBJREMOVED :
-                SAL_WARN_IF(!IsListening(*m_pBroadcaster), "svx.sdr", "Object is not in any list");
-                EndListening(*m_pBroadcaster);
-                break;
-            case HINT_OBJINSERTED :
-                SAL_WARN_IF(IsListening(*m_pBroadcaster), "svx.sdr", "Object is already in a list");
-                StartListening(*m_pBroadcaster);
-                break;
-            default :
-                break;
-            }
-        }
-    }
-}
-
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     : SdrUndoObj(rNewObj)
     , bOwner(false)
     , pView(NULL)
     , pPageView(NULL)
-    , m_pListener(NULL)
 {
     pObjList=pObj->GetObjList();
     if (bOrdNumDirect)
@@ -756,15 +694,11 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     {
         nOrdNum=pObj->GetOrdNum();
     }
-
-    m_pListener = new ObjListListener(*this, *pObj, *pObj->GetModel());
 }
 
 SdrUndoObjList::~SdrUndoObjList()
 {
     SolarMutexGuard aGuard;
-
-    delete m_pListener;
 
     if (pObj!=NULL && IsOwner())
     {
