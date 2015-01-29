@@ -96,8 +96,6 @@ public class LibreOfficeMainActivity extends LOAbout {
 
         mMainHandler = new Handler();
 
-        LayoutInflater.from(this).setFactory(ViewFactory.getInstance());
-
         if (getIntent().getData() != null) {
             mInputFile = getIntent().getData().getPath();
         } else {
