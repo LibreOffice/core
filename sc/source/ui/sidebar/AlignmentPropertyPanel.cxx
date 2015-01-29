@@ -113,16 +113,35 @@ void AlignmentPropertyPanel::Initialize()
 IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 {
     OUString sTmp = mpMtrAngle->GetText();
+    if (sTmp.isEmpty())
+        return 0;
+    sal_Unicode nChar = sTmp[0];
+    if( nChar == '-' )
+    {
+        if (sTmp.getLength() < 2)
+            return 0;
+        nChar = sTmp[1];
+    }
 
-    sal_Unicode nChar = sTmp.isEmpty() ? 0 : sTmp[0];
-    if((sTmp.getLength()== 1 &&  nChar == '-') ||
-        (nChar != '-' && ((nChar < '0') || (nChar > '9') ) ))   ////modify
+    if( (nChar < '0') || (nChar > '9') )
         return 0;
 
-    double dTmp = sTmp.toDouble();
-    FormatDegrees(dTmp);
+    const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
+    const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    sal_Int64 nTmp = (sal_Int64)dTmp*100;
+    // Do not check that the entire string was parsed up to its end, there may
+    // be a degree symbol following the number. Note that this also means that
+    // the number recognized just stops at any non-matching character.
+    /* TODO: we could check for the degree symbol stop if there are no other
+     * cases with different symbol characters in any language? */
+    rtl_math_ConversionStatus eStatus;
+    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
+    if (eStatus != rtl_math_ConversionStatus_Ok)
+        return 0;
+
+    FormatDegrees(fTmp);
+
+    sal_Int64 nTmp = (sal_Int64)fTmp*100;
     SfxInt32Item aAngleItem( SID_ATTR_ALIGN_DEGREES,(sal_uInt32) nTmp);
 
     GetBindings()->GetDispatcher()->Execute(
