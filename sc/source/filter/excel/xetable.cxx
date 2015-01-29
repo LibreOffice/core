@@ -663,7 +663,7 @@ void XclExpBooleanCell::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      "b",
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -766,7 +766,7 @@ void XclExpLabelCell::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), GetXclPos() ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
             XML_t,      "s",
             // OOXTODO: XML_cm, XML_vm, XML_ph
@@ -1276,7 +1276,7 @@ void XclExpBlankCell::WriteXmlContents( XclExpXmlStream& rStrm, const XclAddress
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->singleElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( rAddress ).getStr(),
+            XML_r,      XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), rAddress ).getStr(),
             XML_s,      lcl_GetStyleId( rStrm, nXFId ).getStr(),
             FSEND );
 }

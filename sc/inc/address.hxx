@@ -326,9 +326,10 @@ public:
                     ExternalInfo* pExtInfo = NULL,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
 
-    SC_DLLPUBLIC bool TryFormat( OStringBuffer& s, sal_uInt16 nFlags = 0,
+    SC_DLLPUBLIC void Format( OStringBuffer& r, sal_uInt16 nFlags = 0,
                                   const ScDocument* pDocument = NULL,
                                   const Details& rDetails = detailsOOOa1) const;
+
     SC_DLLPUBLIC OUString Format( sal_uInt16 nFlags = 0,
                                   const ScDocument* pDocument = NULL,
                                   const Details& rDetails = detailsOOOa1) const;
@@ -891,8 +892,6 @@ bool ConvertDoubleRef( ScDocument* pDocument, const OUString& rRefString,
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( OUStringBuffer& rBuffer, SCCOL nCol);
-
-SC_DLLPUBLIC void ScColToAlpha( OStringBuffer& rBuffer, SCCOL nCol);
 
 inline void ScColToAlpha( OUString& rStr, SCCOL nCol)
 {
