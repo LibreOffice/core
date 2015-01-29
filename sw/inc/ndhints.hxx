@@ -123,7 +123,7 @@ public:
     }
     SwTxtAttr * GetEnd( const size_t nPos )
     {
-        assert(nPos < m_HintStarts.size());
+        assert(nPos < m_HintEnds.size());
         return m_HintEnds[nPos];
     }
 
