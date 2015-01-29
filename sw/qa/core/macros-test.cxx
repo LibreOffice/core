@@ -43,6 +43,8 @@
 
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <IDocumentContentOperations.hxx>
 #include "docsh.hxx"
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
@@ -66,6 +68,7 @@ public:
 #if !defined MACOSX && !defined WNT
     void testVba();
 #endif
+    void testBookmarkDeleteAndJoin();
     void testFdo55289();
     void testFdo68983();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
@@ -75,6 +78,7 @@ public:
     //CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testVba);
 #endif
+    CPPUNIT_TEST(testBookmarkDeleteAndJoin);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
 
@@ -160,6 +164,45 @@ void SwMacrosTest::testVba()
     }
 }
 #endif
+
+void SwMacrosTest::testBookmarkDeleteAndJoin()
+{
+    SwDoc *const pDoc = new SwDoc;
+    pDoc->GetIDocumentUndoRedo().DoUndo(true); // bug is in SwUndoDelete
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.InsertString(aPaM, OUString("A"));
+    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    rIDCO.InsertString(aPaM, OUString("A"));
+    rIDCO.AppendTxtNode(*aPaM.GetPoint());
+    aPaM.Move(fnMoveBackward, fnGoNode);
+    aPaM.Move(fnMoveBackward, fnGoNode);
+    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.SetMark();
+    aPaM.Move(fnMoveForward, fnGoDoc);
+    IDocumentMarkAccess & rIDMA = *pDoc->getIDocumentMarkAccess();
+    sw::mark::IMark *pMark =
+            rIDMA.makeMark(aPaM, "test", IDocumentMarkAccess::BOOKMARK);
+    CPPUNIT_ASSERT(pMark);
+    // select so pMark start position is on a node that is fully deleted
+    aPaM.Move(fnMoveBackward, fnGoNode);
+    // must leave un-selected content in last node to get the bJoinPrev flag!
+    aPaM.Move(fnMoveBackward, fnGoCntnt);
+    aPaM.Exchange();
+    aPaM.Move(fnMoveBackward, fnGoDoc);
+    // delete
+    rIDCO.DeleteAndJoin(aPaM, false);
+
+    for (IDocumentMarkAccess::const_iterator_t i = rIDMA.getAllMarksBegin(); i != rIDMA.getAllMarksEnd(); ++i)
+    {
+        // problem was that the nContent was pointing at deleted node
+        CPPUNIT_ASSERT((*i)->GetMarkStart().nNode.GetNode().GetCntntNode() ==
+            static_cast<const SwCntntNode*>((*i)->GetMarkStart().nContent.GetIdxReg()));
+    }
+}
 
 void SwMacrosTest::testFdo55289()
 {
