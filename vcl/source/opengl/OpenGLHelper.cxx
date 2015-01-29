@@ -97,6 +97,35 @@ namespace {
     }
 }
 
+static void addPreamble(OString& rShaderSource, const OString& rPreamble)
+{
+    if (rPreamble.isEmpty())
+        return;
+
+    OString aVersionStr("#version");
+    int nVersionStrStartPos = rShaderSource.indexOf(aVersionStr, 0);
+
+    if (nVersionStrStartPos == -1)
+    {
+        rShaderSource = rPreamble + "\n" + rShaderSource;
+    }
+    else
+    {
+        int nVersionStrEndPos = rShaderSource.indexOf('\n', nVersionStrStartPos);
+
+        // no way this should happen - if this is the case, then it's a syntax error
+        assert(nVersionStrEndPos != -1);
+
+        if (nVersionStrEndPos == -1)
+            nVersionStrEndPos = nVersionStrStartPos + 8;
+
+        OString aVersionLine = rShaderSource.copy(0, nVersionStrEndPos - nVersionStrStartPos);
+        OString aShaderBody = rShaderSource.copy(nVersionStrEndPos - nVersionStrStartPos);
+
+        rShaderSource = aVersionLine + "\n" + rPreamble + "\n" + aShaderBody;
+    }
+}
+
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString& rFragmentShaderName, const OString& preamble)
 {
     // Create the shaders
@@ -108,7 +137,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     // Compile Vertex Shader
     OString aVertexShaderSource = loadShader(rVertexShaderName);
     if( !preamble.isEmpty())
-        aVertexShaderSource = preamble + "\n" + aVertexShaderSource;
+        addPreamble( aVertexShaderSource, preamble );
     char const * VertexSourcePointer = aVertexShaderSource.getStr();
     glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
     glCompileShader(VertexShaderID);
@@ -122,7 +151,7 @@ GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,const OUString
     // Compile Fragment Shader
     OString aFragmentShaderSource = loadShader(rFragmentShaderName);
     if( !preamble.isEmpty())
-        aFragmentShaderSource = preamble + "\n" + aFragmentShaderSource;
+        addPreamble( aFragmentShaderSource, preamble );
     char const * FragmentSourcePointer = aFragmentShaderSource.getStr();
     glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
     glCompileShader(FragmentShaderID);
