@@ -41,8 +41,16 @@
     [documents addObject:test1];
 
     while ((document = [dirEnumerator nextObject])) {
-        nDocs++;
-        [documents addObject:[documentsDirectory stringByAppendingPathComponent:document]];
+        NSString *fullPath = [documentsDirectory stringByAppendingPathComponent:document];
+        BOOL isDirectory;
+        if ([fileManager fileExistsAtPath:fullPath isDirectory:&isDirectory]) {
+            if (isDirectory)
+                [dirEnumerator skipDescendants];
+            else {
+                nDocs++;
+                [documents addObject:fullPath];
+            }
+        }
     }
 
     if (nDocs == 0) {
