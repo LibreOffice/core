@@ -376,12 +376,6 @@ namespace accessibility
         return uno::Sequence< OUString > (&sServiceName, 1);
     }
 
-    OUString SAL_CALL AccessibleImageBullet::getServiceName (void) throw (uno::RuntimeException)
-    {
-
-        return OUString("com.sun.star.accessibility.AccessibleContext");
-    }
-
     void AccessibleImageBullet::SetIndexInParent( sal_Int32 nIndex )
     {
 

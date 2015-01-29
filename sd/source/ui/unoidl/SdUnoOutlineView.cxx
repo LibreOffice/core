@@ -130,11 +130,6 @@ void SdUnoOutlineView::setFastPropertyValue (
     }
 }
 
-void SAL_CALL SdUnoOutlineView::disposing (const ::com::sun::star::lang::EventObject& )
-    throw (::com::sun::star::uno::RuntimeException)
-{
-}
-
 Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
     sal_Int32 nHandle)
     throw(css::beans::UnknownPropertyException,

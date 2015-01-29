@@ -1369,10 +1369,6 @@ void ViewShell::Paint (const Rectangle&, ::sd::Window* )
 {
 }
 
-void ViewShell::Draw(OutputDevice &, const vcl::Region &)
-{
-}
-
 void ViewShell::ShowUIControls (bool bVisible)
 {
     mpImpl->mbIsShowingUIControls = bVisible;

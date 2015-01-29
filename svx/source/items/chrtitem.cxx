@@ -254,45 +254,17 @@ SfxPoolItem* SvxDoubleItem::Create(SvStream& rIn, sal_uInt16 /*nVersion*/) const
     return new SvxDoubleItem(_fVal, Which());
 }
 
-
-
 SvStream& SvxDoubleItem::Store(SvStream& rOut, sal_uInt16 /*nItemVersion*/) const
 {
     rOut.WriteDouble( fVal );
     return rOut;
 }
 
-
-
-double SvxDoubleItem::GetMin() const
-{
-    return DBL_MIN;
-}
-
-
-
-double SvxDoubleItem::GetMax() const
-{
-    return DBL_MAX;
-}
-
-
-
-SfxFieldUnit SvxDoubleItem::GetUnit() const
-{
-    return SFX_FUNIT_NONE;
-}
-
-
-
-
-
 bool SvxDoubleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= fVal;
     return true;
 }
-
 
 bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {

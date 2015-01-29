@@ -3633,10 +3633,6 @@ void SvTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         Control::RequestHelp( rHEvt );
 }
 
-void SvTreeListBox::CursorMoved( SvTreeListEntry* )
-{
-}
-
 IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
 {
     const SvTreeListEntry* pLeft = pData->pLeft;
@@ -3931,10 +3927,6 @@ void SvTreeListBox::EnableCellFocus()
 void SvTreeListBox::CallImplEventListeners(sal_uLong nEvent, void* pData)
 {
     CallEventListeners(nEvent, pData);
-}
-
-void SvTreeListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& /*rStateSet*/ ) const
-{
 }
 
 void SvTreeListBox::set_min_width_in_chars(sal_Int32 nChars)

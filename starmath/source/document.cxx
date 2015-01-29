@@ -696,14 +696,6 @@ SmDocShell::~SmDocShell()
     delete pPrinter;
 }
 
-
-bool SmDocShell::SetData( const OUString& rData )
-{
-    SetText( rData );
-    return true;
-}
-
-
 bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     bool     bSuccess = false;

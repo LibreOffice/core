@@ -447,17 +447,6 @@ namespace sw { namespace mark
             pResult->second >>= bResult;
         return bResult;
     }
-
-    OUString CheckboxFieldmark::toString( ) const
-    {
-
-        return "CheckboxFieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( "
-            + m_aName + ", " + GetFieldname() + ", [ "
-            + OUString::number(GetMarkPos().nNode.GetIndex( ) ) + ", "
-            + OUString::number( GetMarkPos( ).nContent.GetIndex( ) ) + " ], ["
-            + OUString::number( GetOtherMarkPos().nNode.GetIndex( ) ) + ", "
-            + OUString::number( GetOtherMarkPos( ).nContent.GetIndex( ) ) + " ] ) ";
-    }
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

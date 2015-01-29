@@ -226,11 +226,6 @@ protected:
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);
     virtual void            InPlaceActivate( bool bActive ) SAL_OVERRIDE;
-public:
-    void setDocAccTitle( const OUString& rTitle );
-    const OUString getDocAccTitle() const;
-    void setDocReadOnly( bool bReadOnly);
-    bool getDocReadOnly() const;
 private:
     void setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage);
 };

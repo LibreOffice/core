@@ -670,44 +670,12 @@ bool SAL_CALL VCLXAccessibleList::contains( const awt::Point& rPoint ) throw (Ru
     return bInside;
 }
 
-
-Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleAt( const awt::Point& rPoint )
-    throw (RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    Reference< XAccessible > xChild;
-    if ( m_pListBoxHelper )
-    {
-        UpdateVisibleLineCount();
-        if ( contains( rPoint ) && m_nVisibleLineCount > 0 )
-        {
-            Point aPos = VCLPoint( rPoint );
-            sal_uInt16 nEndPos = m_pListBoxHelper->GetTopEntry() + (sal_uInt16)m_nVisibleLineCount;
-            for ( sal_uInt16 i = m_pListBoxHelper->GetTopEntry(); i < nEndPos; ++i )
-            {
-                if ( m_pListBoxHelper->GetBoundingRectangle(i).IsInside( aPos ) )
-                {
-                    xChild = getAccessibleChild(i);
-                    break;
-                }
-            }
-        }
-    }
-
-    return xChild;
-}
-
-
 //===== XServiceInfo ==========================================================
-
 OUString VCLXAccessibleList::getImplementationName (void)
     throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleList" );
 }
-
 
 Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames (void)
     throw (RuntimeException, std::exception)
@@ -718,7 +686,6 @@ Sequence< OUString > VCLXAccessibleList::getSupportedServiceNames (void)
     aNames[nLength] = "com.sun.star.accessibility.AccessibleList";
     return aNames;
 }
-
 
 void VCLXAccessibleList::UpdateVisibleLineCount()
 {
@@ -735,7 +702,6 @@ void VCLXAccessibleList::UpdateVisibleLineCount()
         }
     }
 }
-
 
 void VCLXAccessibleList::UpdateEntryRange_Impl()
 {

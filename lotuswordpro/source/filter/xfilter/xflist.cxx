@@ -101,29 +101,4 @@ void    XFList::ToXml(IXFStream *pStrm)
         pStrm->EndElement( "text:unordered-list" );
 }
 
-void    XFList::StartList(IXFStream *pStrm, bool bContinueNumber)
-{
-    IXFAttrList *pAttrList = pStrm->GetAttrList();
-    assert(NULL!=pAttrList);
-
-    pAttrList->Clear();
-    if( !GetStyleName().isEmpty() )
-        pAttrList->AddAttribute( "text:style-name", GetStyleName() );
-    if( bContinueNumber )
-        pAttrList->AddAttribute( "text:continue-numbering", "true" );
-
-    if( m_bOrdered )
-        pStrm->StartElement( "text:ordered-list" );
-    else
-        pStrm->StartElement( "text:unordered-list" );
-}
-
-void    XFList::EndList(IXFStream *pStrm)
-{
-    if( m_bOrdered )
-        pStrm->EndElement( "text:ordered-list" );
-    else
-        pStrm->EndElement( "text:unordered-list" );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

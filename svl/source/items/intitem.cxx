@@ -121,25 +121,7 @@ SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
     return new SfxInt16Item(*this);
 }
 
-sal_Int16 SfxInt16Item::GetMin() const
-{
-    return -32768;
-}
-
-sal_Int16 SfxInt16Item::GetMax() const
-{
-    return 32767;
-}
-
-SfxFieldUnit SfxInt16Item::GetUnit() const
-{
-    return SFX_FUNIT_NONE;
-}
-
-
 //  class SfxUInt16Item
-
-
 TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
 
 void SfxUInt16Item::dumpAsXml(xmlTextWriterPtr pWriter) const

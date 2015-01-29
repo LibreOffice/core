@@ -524,11 +524,6 @@ ScGridWindow::~ScGridWindow()
     delete pNoteMarker;
 }
 
-void ScGridWindow::Resize( const Size& )
-{
-    //  gar nix
-}
-
 void ScGridWindow::ClickExtern()
 {
     do

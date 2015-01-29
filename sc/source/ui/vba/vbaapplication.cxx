@@ -141,11 +141,6 @@ ScVbaApplication::~ScVbaApplication()
     return ScVbaStaticAppSettings::get().mbEnableEvents;
 }
 
-SfxObjectShell* ScVbaApplication::GetDocShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
-{
-    return static_cast< SfxObjectShell* >( excel::getDocShell( xModel ) );
-}
-
 OUString SAL_CALL
 ScVbaApplication::getExactName( const OUString& aApproximateName ) throw (uno::RuntimeException, std::exception)
 {
@@ -1278,40 +1273,6 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
         aRet = sbxToUnoValue( pNew );
     }
     return aRet;
-}
-
-uno::Any SAL_CALL ScVbaApplication::GetOpenFilename(
-        const uno::Any& rFileFilter, const uno::Any& rFilterIndex, const uno::Any& rTitle,
-        const uno::Any& rButtonText, const uno::Any& rMultiSelect ) throw (uno::RuntimeException)
-{
-    uno::Sequence< uno::Any > aArgs( 6 );
-    aArgs[ 0 ] <<= getThisExcelDoc( mxContext );
-    aArgs[ 1 ] = rFileFilter;
-    aArgs[ 2 ] = rFilterIndex;
-    aArgs[ 3 ] = rTitle;
-    aArgs[ 4 ] = rButtonText;
-    aArgs[ 5 ] = rMultiSelect;
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XExecutableDialog > xFilePicker( xFactory->createInstanceWithArgumentsAndContext(
-        OUString( "ooo.vba.OpenFilePicker" ), aArgs, mxContext ), uno::UNO_QUERY_THROW );
-    return xFilePicker->execute();
-}
-
-uno::Any SAL_CALL ScVbaApplication::GetSaveAsFilename(
-        const uno::Any& rInitialFileName, const uno::Any& rFileFilter, const uno::Any& rFilterIndex,
-        const uno::Any& rTitle, const uno::Any& rButtonText ) throw (uno::RuntimeException)
-{
-    uno::Sequence< uno::Any > aArgs( 6 );
-    aArgs[ 0 ] <<= getThisExcelDoc( mxContext );
-    aArgs[ 1 ] = rInitialFileName;
-    aArgs[ 2 ] = rFileFilter;
-    aArgs[ 3 ] = rFilterIndex;
-    aArgs[ 4 ] = rTitle;
-    aArgs[ 5 ] = rButtonText;
-    uno::Reference< lang::XMultiComponentFactory > xFactory( mxContext->getServiceManager(), uno::UNO_SET_THROW );
-    uno::Reference< XExecutableDialog > xFilePicker( xFactory->createInstanceWithArgumentsAndContext(
-        OUString( "ooo.vba.SaveAsFilePicker" ), aArgs, mxContext ), uno::UNO_QUERY_THROW );
-    return xFilePicker->execute();
 }
 
 uno::Reference< frame::XModel >

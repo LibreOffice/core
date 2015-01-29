@@ -96,24 +96,6 @@ SfxPoolItem * CntByteItem::Clone(SfxItemPool *) const
     return new CntByteItem(*this);
 }
 
-// virtual
-sal_uInt8 CntByteItem::GetMin() const
-{
-    return 0;
-}
-
-// virtual
-sal_uInt8 CntByteItem::GetMax() const
-{
-    return 255;
-}
-
-// virtual
-SfxFieldUnit CntByteItem::GetUnit() const
-{
-    return SFX_FUNIT_NONE;
-}
-
 TYPEINIT1_AUTOFACTORY(CntUInt16Item, SfxPoolItem);
 
 CntUInt16Item::CntUInt16Item(sal_uInt16 which, SvStream & rStream) :
@@ -199,24 +181,6 @@ SfxPoolItem * CntUInt16Item::Clone(SfxItemPool *) const
     return new CntUInt16Item(*this);
 }
 
-// virtual
-sal_uInt16 CntUInt16Item::GetMin() const
-{
-    return 0;
-}
-
-// virtual
-sal_uInt16 CntUInt16Item::GetMax() const
-{
-    return 65535;
-}
-
-// virtual
-SfxFieldUnit CntUInt16Item::GetUnit() const
-{
-    return SFX_FUNIT_NONE;
-}
-
 TYPEINIT1_AUTOFACTORY(CntInt32Item, SfxPoolItem);
 
 CntInt32Item::CntInt32Item(sal_uInt16 which, SvStream & rStream)
@@ -296,24 +260,6 @@ SvStream & CntInt32Item::Store(SvStream &rStream, sal_uInt16) const
 SfxPoolItem * CntInt32Item::Clone(SfxItemPool *) const
 {
     return new CntInt32Item(*this);
-}
-
-// virtual
-sal_Int32 CntInt32Item::GetMin() const
-{
-    return sal_Int32(0x80000000);
-}
-
-// virtual
-sal_Int32 CntInt32Item::GetMax() const
-{
-    return 0x7FFFFFFF;
-}
-
-// virtual
-SfxFieldUnit CntInt32Item::GetUnit() const
-{
-    return SFX_FUNIT_NONE;
 }
 
 TYPEINIT1_AUTOFACTORY(CntUInt32Item, SfxPoolItem);
@@ -400,24 +346,6 @@ SvStream & CntUInt32Item::Store(SvStream &rStream, sal_uInt16) const
 SfxPoolItem * CntUInt32Item::Clone(SfxItemPool *) const
 {
     return new CntUInt32Item(*this);
-}
-
-// virtual
-sal_uInt32 CntUInt32Item::GetMin() const
-{
-    return 0;
-}
-
-// virtual
-sal_uInt32 CntUInt32Item::GetMax() const
-{
-    return 0xFFFFFFFF;
-}
-
-// virtual
-SfxFieldUnit CntUInt32Item::GetUnit() const
-{
-    return SFX_FUNIT_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

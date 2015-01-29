@@ -41,17 +41,6 @@ public:
     virtual ~Interceptor();
 
     void DisconnectDocHolder();
-    // overwritten to release the statuslistner.
-
-    // XComponent
-    void SAL_CALL
-    addEventListener(
-        const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& xListener )
-        throw( com::sun::star::uno::RuntimeException );
-
-    void SAL_CALL
-    removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
-        throw( com::sun::star::uno::RuntimeException );
 
     //XDispatch
     virtual void SAL_CALL

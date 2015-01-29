@@ -45,7 +45,6 @@ public:
     void ExecuteExportAsGraphic(SfxRequest& rReq);
     void GetExportAsGraphicState(SfxItemSet &rSet);
 
-    void HandleSelectionChange(void);
 };
 
 #endif

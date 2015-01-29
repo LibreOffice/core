@@ -673,13 +673,6 @@ public:
 
     virtual void            RefChanged() SAL_OVERRIDE;
 
-                            // via getImplementation()
-    void            SetArrayFormulaWithGrammar( const OUString& rFormula,
-                                    const OUString& rFormulaNmsp,
-                                    const formula::FormulaGrammar::Grammar )
-                                throw (css::uno::RuntimeException,
-                                       std::exception);
-
                             // XCellRangeAddressable
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getRangeAddress()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

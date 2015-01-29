@@ -55,13 +55,6 @@ ScVbaName::~ScVbaName()
 {
 }
 
-css::uno::Reference< ov::excel::XWorksheet >
-ScVbaName::getWorkSheet() throw (css::uno::RuntimeException)
-{
-    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
-    return xApplication->getActiveSheet();
-}
-
 OUString
 ScVbaName::getName() throw (css::uno::RuntimeException, std::exception)
 {
@@ -212,11 +205,6 @@ ScVbaName::getRefersToRange() throw (css::uno::RuntimeException, std::exception)
     uno::Reference< ov::excel::XRange > xRange = ScVbaRange::getRangeObjectForName(
         mxContext, mxNamedRange->getName(), excel::getDocShell( mxModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
     return xRange;
-}
-
-void
-ScVbaName::setRefersToRange( const css::uno::Reference< ov::excel::XRange > /*rRange*/ ) throw (css::uno::RuntimeException)
-{
 }
 
 void

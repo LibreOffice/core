@@ -93,9 +93,6 @@ namespace accessibility
         virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        // XServiceName
-        OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException);
-
         /** Set the current index in the accessibility parent
 
             @attention This method does not lock the SolarMutex,

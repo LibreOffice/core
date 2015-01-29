@@ -6228,19 +6228,6 @@ Selection SwEditWin::GetSurroundingTextSelection() const
     }
 }
 
-// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
-// There are other notifications for this when the active view has changed, so please update the code to use that event mechanism
-void SwEditWin::SwitchView()
-{
-#ifdef ACCESSIBLE_LAYOUT
-    if (!Application::IsAccessibilityEnabled())
-    {
-        return ;
-    }
-    rView.GetWrtShell().InvalidateAccessibleFocus();
-#endif
-}
-
 void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
 {
     OString sRectangle;
@@ -6254,10 +6241,6 @@ void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
         sRectangle = ss.str().c_str();
     }
     m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
-}
-
-void SwEditWin::LogicMouseMove(const MouseEvent& /*rMouseEvent*/)
-{
 }
 
 void SwEditWin::LogicMouseButtonDown(const MouseEvent& rMouseEvent)

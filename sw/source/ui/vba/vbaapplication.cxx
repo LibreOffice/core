@@ -51,11 +51,6 @@ SwVbaApplication::~SwVbaApplication()
 {
 }
 
-SfxObjectShell* SwVbaApplication::GetDocShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
-{
-    return static_cast< SfxObjectShell* >( word::getDocShell( xModel ) );
-}
-
 OUString SAL_CALL
 SwVbaApplication::getName() throw (uno::RuntimeException, std::exception)
 {

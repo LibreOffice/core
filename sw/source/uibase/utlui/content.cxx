@@ -3542,18 +3542,4 @@ SwNavigationPI* SwContentTree::GetParentWindow()
     return static_cast<SwNavigationPI*>(Window::GetParent());
 }
 
-sal_Int32  SwContentTree::GetEntryRealChildrenNum( SvTreeListEntry* pParent ) const
-{
-    // ist es ein Inhaltstyp?
-    if(lcl_IsContentType(pParent))
-    {
-        if(!pParent->HasChildren())
-        {
-            SwContentType* pCntType = (SwContentType*)pParent->GetUserData();
-            return pCntType->GetMemberCount();
-        }
-    }
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

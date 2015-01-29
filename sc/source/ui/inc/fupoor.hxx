@@ -75,10 +75,6 @@ public:
 
     void Paint(const Rectangle&, vcl::Window*) {}
 
-    void DoCut();
-    void DoCopy();
-    void DoPaste();
-
     // Mouse- & Key-Events; return value=TRUE: Event was processed
     virtual bool KeyInput(const KeyEvent& rKEvt);
     virtual bool MouseMove(const MouseEvent&) { return false; }

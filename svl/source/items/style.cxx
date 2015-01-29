@@ -151,13 +151,7 @@ SfxStyleSheetBase::~SfxStyleSheetBase()
     }
 }
 
-sal_uInt16 SfxStyleSheetBase::GetVersion() const
-{
-    return 0x0000;
-}
-
 // Change name
-
 const OUString& SfxStyleSheetBase::GetName() const
 {
     return aName;
@@ -207,13 +201,7 @@ OUString SfxStyleSheetBase::GetDisplayName() const
     }
 }
 
-void SfxStyleSheetBase::SetDisplayName( const OUString& rDisplayName )
-{
-    maDisplayName = rDisplayName;
-}
-
 // Change Parent
-
 const OUString& SfxStyleSheetBase::GetParent() const
 {
     return aParent;
@@ -955,11 +943,6 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const OUString& rName,
                                               SfxStyleFamily eFam, sal_uInt16 mask )
 {
     return new SfxStyleSheet( rName, *this, eFam, mask );
-}
-
-SfxStyleSheetBase* SfxStyleSheetPool::Create( const SfxStyleSheet& r )
-{
-    return new SfxStyleSheet( r );
 }
 
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )

@@ -79,12 +79,8 @@ public:
         SdPage* pMasterPage,
         sal_uInt16 nInsertionIndex);
 
-    Size GetPreferredSize (void);
     sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
-    bool IsResizable (void);
-    vcl::Window* GetWindow (void);
-    sal_Int32 GetMinimumWidth (void);
 
     /** Update the selection of previews according to whatever
         influences them apart from mouse and keyboard.  If, for

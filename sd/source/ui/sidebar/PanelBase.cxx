@@ -66,17 +66,6 @@ void PanelBase::Resize (void)
     }
 }
 
-::com::sun::star::uno::Reference<
-    ::com::sun::star::accessibility::XAccessible> PanelBase::CreateAccessibleObject (
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible>& )
-{
-    if (ProvideWrappedControl())
-        return mpWrappedControl->GetAccessible();
-    else
-        return NULL;
-}
-
 void PanelBase::SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     mxSidebar = rxSidebar;

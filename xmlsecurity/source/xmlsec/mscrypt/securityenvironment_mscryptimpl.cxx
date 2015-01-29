@@ -322,22 +322,6 @@ void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( 
     }
 }
 
-void SecurityEnvironment_MSCryptImpl :: rejectSymKey( HCRYPTKEY aSymKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY symkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-
-    if( aSymKey != NULL ) {
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aSymKey ) {
-                symkey = *keyIt ;
-                CryptDestroyKey( symkey ) ;
-                m_tSymKeyList.erase( keyIt ) ;
-                break ;
-            }
-        }
-    }
-}
-
 HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY symkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
@@ -352,44 +336,6 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getSymKey( unsigned int position ) 
     return symkey ;
 }
 
-void SecurityEnvironment_MSCryptImpl :: adoptPubKey( HCRYPTKEY aPubKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   pubkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-
-    if( aPubKey != NULL ) {
-        //First try to find the key in the list
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPubKey )
-                return ;
-        }
-
-        //If we do not find the key in the list, add a new node
-        pubkey = aPubKey ;
-
-        try {
-            m_tPubKeyList.push_back( pubkey ) ;
-        } catch ( Exception& ) {
-            CryptDestroyKey( pubkey ) ;
-        }
-    }
-}
-
-void SecurityEnvironment_MSCryptImpl :: rejectPubKey( HCRYPTKEY aPubKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY pubkey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-
-    if( aPubKey != NULL ) {
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPubKey ) {
-                pubkey = *keyIt ;
-                CryptDestroyKey( pubkey ) ;
-                m_tPubKeyList.erase( keyIt ) ;
-                break ;
-            }
-        }
-    }
-}
-
 HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
     HCRYPTKEY pubkey ;
     std::list< HCRYPTKEY >::iterator keyIt ;
@@ -402,44 +348,6 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPubKey( unsigned int position ) 
         pubkey = *keyIt ;
 
     return pubkey ;
-}
-
-void SecurityEnvironment_MSCryptImpl :: adoptPriKey( HCRYPTKEY aPriKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   prikey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-
-    if( aPriKey != NULL ) {
-        //First try to find the key in the list
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPriKey )
-                return ;
-        }
-
-        //If we do not find the key in the list, add a new node
-        prikey = aPriKey ;
-
-        try {
-            m_tPriKeyList.push_back( prikey ) ;
-        } catch ( Exception& ) {
-            CryptDestroyKey( prikey ) ;
-        }
-    }
-}
-
-void SecurityEnvironment_MSCryptImpl :: rejectPriKey( HCRYPTKEY aPriKey ) throw( Exception , RuntimeException ) {
-    HCRYPTKEY   prikey ;
-    std::list< HCRYPTKEY >::iterator keyIt ;
-
-    if( aPriKey != NULL ) {
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPriKey ) {
-                prikey = *keyIt ;
-                CryptDestroyKey( prikey ) ;
-                m_tPriKeyList.erase( keyIt ) ;
-                break ;
-            }
-        }
-    }
 }
 
 HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) throw( Exception , RuntimeException ) {

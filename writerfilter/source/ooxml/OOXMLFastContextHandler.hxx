@@ -83,7 +83,6 @@ public:
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-    sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8> & rId) throw (css::uno::RuntimeException);
 
     // local
 
@@ -187,7 +186,6 @@ public:
     void propagateTableProperties();
     void propagateRowProperties();
     void propagateCellProperties();
-    bool propagatesProperties() const;
     void sendPropertiesWithId(const Id & rId);
     void sendPropertiesToParent();
     void sendCellProperties();
@@ -234,8 +232,6 @@ protected:
     void startAction(Token_t Element);
     void endAction(Token_t Element);
 
-    OOXMLPropertySet * getPicturePropSet
-    (const OUString & rId);
     virtual void resolvePropertySetAttrs();
 
     css::uno::Reference< css::uno::XComponentContext > getComponentContext() { return m_xContext;}
@@ -364,7 +360,6 @@ public:
         const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    void newPropertySet(OOXMLPropertySet::Pointer_t pPropertySet);
 protected:
     OOXMLTableImpl mTable;
 

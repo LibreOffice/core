@@ -111,11 +111,6 @@ namespace slideshow
             mpRootNode->end();
         }
 
-        void SlideAnimations::dispose()
-        {
-            mpRootNode.reset();
-            maContext.dispose();
-        }
     }
 }
 

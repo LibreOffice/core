@@ -504,11 +504,6 @@ void SwXMLTextBlocks::SetIsTextOnly( const OUString& rShort, bool bNewValue )
         aNames[nIdx]->bIsOnlyTxt = bNewValue;
 }
 
-void SwXMLTextBlocks::SetIsTextOnly( sal_uInt16 nIdx, bool bNewValue )
-{
-    aNames[nIdx]->bIsOnlyTxt = bNewValue;
-}
-
 bool SwXMLTextBlocks::IsOnlyTextBlock( const OUString& rShort ) const
 {
     sal_uInt16 nIdx = GetIndex ( rShort );

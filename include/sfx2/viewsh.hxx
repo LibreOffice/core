@@ -256,7 +256,6 @@ public:
     const Size&                 GetMargin() const;
     void                        SetMargin( const Size& );
     void                        DisconnectAllClients();
-    SfxFrame*                   GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
     bool                        NewWindowAllowed() const            { return !bNoNewWindow; }
     void                        SetNewWindowAllowed( bool bSet )    { bNoNewWindow = !bSet; }
 

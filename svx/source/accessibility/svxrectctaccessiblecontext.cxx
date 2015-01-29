@@ -248,11 +248,6 @@ bool SAL_CALL SvxRectCtlAccessibleContext::isVisible() throw( RuntimeException )
     return mpRepr->IsVisible();
 }
 
-bool SAL_CALL SvxRectCtlAccessibleContext::isFocusTraversable() throw( RuntimeException )
-{
-    return true;
-}
-
 // XAccessibleContext
 sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
@@ -450,36 +445,6 @@ void SAL_CALL SvxRectCtlAccessibleContext::removeAccessibleEventListener( const 
     }
 }
 
-void SAL_CALL SvxRectCtlAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& xListener )
-    throw( RuntimeException )
-{
-    if( xListener.is() )
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        ThrowExceptionIfNotAlive();
-
-        Reference< awt::XWindow >   xWindow = VCLUnoHelper::GetInterface( mpRepr );
-        if( xWindow.is() )
-            xWindow->addFocusListener( xListener );
-    }
-}
-
-void SAL_CALL SvxRectCtlAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& xListener )
-    throw (RuntimeException)
-{
-    if( xListener.is() )
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        ThrowExceptionIfNotAlive();
-
-        Reference< awt::XWindow >   xWindow = VCLUnoHelper::GetInterface( mpRepr );
-        if( xWindow.is() )
-            xWindow->removeFocusListener( xListener );
-    }
-}
-
 void SAL_CALL SvxRectCtlAccessibleContext::grabFocus() throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aSolarGuard;
@@ -488,12 +453,6 @@ void SAL_CALL SvxRectCtlAccessibleContext::grabFocus() throw( RuntimeException, 
     ThrowExceptionIfNotAlive();
 
     mpRepr->GrabFocus();
-}
-
-Any SAL_CALL SvxRectCtlAccessibleContext::getAccessibleKeyBinding() throw( RuntimeException )
-{
-    // here is no implementation, because here are no KeyBindings for every object
-    return Any();
 }
 
 sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
@@ -835,46 +794,10 @@ awt::Size SAL_CALL SvxRectCtlChildAccessibleContext::getSize() throw( RuntimeExc
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
-bool SAL_CALL SvxRectCtlChildAccessibleContext::isShowing() throw( RuntimeException )
-{
-    return true;
-}
-
-bool SAL_CALL SvxRectCtlChildAccessibleContext::isVisible() throw( RuntimeException )
-{
-    ::osl::MutexGuard                   aGuard( maMutex );
-
-    ThrowExceptionIfNotAlive();
-
-    return mxParent.is()? ( static_cast< SvxRectCtlAccessibleContext* >( mxParent.get() ) )->isVisible() : sal_False;
-}
-
-bool SAL_CALL SvxRectCtlChildAccessibleContext::isFocusTraversable() throw( RuntimeException )
-{
-    return false;
-}
-
-void SAL_CALL SvxRectCtlChildAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
-    throw( RuntimeException )
-{
-    OSL_FAIL( "SvxRectCtlChildAccessibleContext::addFocusListener: not implemented" );
-}
-
-void SAL_CALL SvxRectCtlChildAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& /*xListener*/ )
-    throw (RuntimeException)
-{
-    OSL_FAIL( "SvxRectCtlChildAccessibleContext::removeFocusListener: not implemented" );
-}
-
 void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeException, std::exception )
 {
 }
 
-Any SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleKeyBinding() throw( RuntimeException )
-{
-    // here is no implementation, because here are no KeyBindings for every object
-    return Any();
-}
 sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {

@@ -497,8 +497,6 @@ public:
 
     virtual SfxObjectShell*     GetObjectShell() SAL_OVERRIDE;
 
-    SfxFrame*                   GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
                                 GetModel() const;
     // Only temporarily for the applications!
@@ -518,7 +516,6 @@ public:
     bool                        IsInPlaceActive();
     bool                        IsUIActive();
     virtual void                InPlaceActivate( bool );
-    void                        UIActivate( bool );
 
     static bool                 CopyStoragesOfUnknownMediaType(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,

@@ -170,11 +170,6 @@ void TableManager::handle0x7()
 #endif
 }
 
-void TableManager::props(TablePropertyMapPtr pProps)
-{
-    setProps(pProps);
-}
-
 bool TableManager::sprm(Sprm& rSprm)
 {
     bool bRet = true;

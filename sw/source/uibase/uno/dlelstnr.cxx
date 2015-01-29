@@ -72,31 +72,6 @@ SwLinguServiceEventListener::~SwLinguServiceEventListener()
 {
 }
 
-void SwLinguServiceEventListener::processDictionaryListEvent(
-            const DictionaryListEvent& rDicListEvent)
-        throw( RuntimeException )
-{
-    SolarMutexGuard aGuard;
-
-    sal_Int16 nEvt = rDicListEvent.nCondensedEvent;
-
-    sal_Int16 nSpellWrongFlags =
-            DictionaryListEventFlags::ADD_POS_ENTRY     |
-            DictionaryListEventFlags::DEL_NEG_ENTRY     |
-            DictionaryListEventFlags::ACTIVATE_POS_DIC  |
-            DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
-    bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
-    sal_Int16 nSpellAllFlags =
-            DictionaryListEventFlags::ADD_NEG_ENTRY     |
-            DictionaryListEventFlags::DEL_POS_ENTRY     |
-            DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
-            DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-    bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
-
-    if (bIsSpellWrong || bIsSpellAll)
-        SW_MOD()->CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
-}
-
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
             const LinguServiceEvent& rLngSvcEvent )
         throw(RuntimeException, std::exception)

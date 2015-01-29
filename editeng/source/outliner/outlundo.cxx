@@ -118,12 +118,6 @@ void OutlinerUndoChangeDepth::Redo()
     GetOutliner()->ImplInitDepth( mnPara, mnNewDepth, false );
 }
 
-void OutlinerUndoChangeDepth::Repeat()
-{
-    OSL_FAIL( "Repeat not implemented!" );
-}
-
-
 OutlinerUndoCheckPara::OutlinerUndoCheckPara( Outliner* pOutliner, sal_Int32 nPara )
     : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
@@ -143,12 +137,6 @@ void OutlinerUndoCheckPara::Redo()
     pPara->Invalidate();
     GetOutliner()->ImplCalcBulletText( mnPara, false, false );
 }
-
-void OutlinerUndoCheckPara::Repeat()
-{
-    OSL_FAIL( "Repeat not implemented!" );
-}
-
 
 OLUndoExpand::OLUndoExpand(Outliner* pOut, sal_uInt16 _nId )
     : EditUndo( _nId, 0 )
@@ -197,22 +185,14 @@ void OLUndoExpand::Restore( bool bUndo )
     }
 }
 
-
 void OLUndoExpand::Undo()
 {
     Restore( true );
 }
 
-
 void OLUndoExpand::Redo()
 {
     Restore( false );
-}
-
-
-void OLUndoExpand::Repeat()
-{
-    OSL_FAIL("Not implemented");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1208,25 +1208,6 @@ uno::Reference< frame::XController >
     return aRet;
 }
 
-void SwDocShell::setDocAccTitle( const OUString& rTitle )
-{
-    if (mpDoc)
-    {
-        mpDoc->setDocAccTitle( rTitle );
-    }
-}
-
-const OUString SwDocShell::getDocAccTitle() const
-{
-    OUString sRet;
-    if (mpDoc)
-    {
-        sRet = mpDoc->getDocAccTitle();
-    }
-
-    return sRet;
-}
-
 static const char* s_EventNames[] =
 {
     "OnPageCountChange",

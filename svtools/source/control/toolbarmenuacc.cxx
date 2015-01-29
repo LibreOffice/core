@@ -427,24 +427,12 @@ awt::Size SAL_CALL ToolbarMenuAcc::getSize() throw (RuntimeException, std::excep
     return awt::Size( aOutSize.Width(), aOutSize.Height() );
 }
 
-
-
 void SAL_CALL ToolbarMenuAcc::grabFocus() throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
     mpParent->mrMenu.GrabFocus();
 }
-
-
-
-Any SAL_CALL ToolbarMenuAcc::getAccessibleKeyBinding() throw (RuntimeException)
-{
-    ThrowIfDisposed();
-    return Any();
-}
-
-
 
 sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException, std::exception)
 {
@@ -453,16 +441,12 @@ sal_Int32 SAL_CALL ToolbarMenuAcc::getForeground() throw (RuntimeException, std:
     return static_cast<sal_Int32>(nColor);
 }
 
-
-
 sal_Int32 SAL_CALL ToolbarMenuAcc::getBackground() throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetMenuColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
-
-
 
 void SAL_CALL ToolbarMenuAcc::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
@@ -471,8 +455,6 @@ void SAL_CALL ToolbarMenuAcc::selectAccessibleChild( sal_Int32 nChildIndex ) thr
 
     mpParent->selectAccessibleChild( nChildIndex );
 }
-
-
 
 sal_Bool SAL_CALL ToolbarMenuAcc::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
@@ -909,28 +891,15 @@ awt::Size SAL_CALL ToolbarMenuEntryAcc::getSize() throw (RuntimeException, std::
     return aRet;
 }
 
-
-
 void SAL_CALL ToolbarMenuEntryAcc::grabFocus() throw (RuntimeException, std::exception)
 {
     // nothing to do
 }
 
-
-
-Any SAL_CALL ToolbarMenuEntryAcc::getAccessibleKeyBinding() throw (RuntimeException)
-{
-    return Any();
-}
-
-
-
 sal_Int32 SAL_CALL ToolbarMenuEntryAcc::getForeground(  ) throw (RuntimeException, std::exception)
 {
     return static_cast<sal_Int32>(Application::GetSettings().GetStyleSettings().GetMenuTextColor().GetColor());
 }
-
-
 
 sal_Int32 SAL_CALL ToolbarMenuEntryAcc::getBackground(  )  throw (RuntimeException, std::exception)
 {

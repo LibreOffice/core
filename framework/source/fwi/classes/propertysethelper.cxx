@@ -63,21 +63,6 @@ void SAL_CALL PropertySetHelper::impl_addPropertyInfo(const css::beans::Property
     m_lProps[aProperty.Name] = aProperty;
 }
 
-void SAL_CALL PropertySetHelper::impl_removePropertyInfo(const OUString& sProperty)
-    throw(css::beans::UnknownPropertyException,
-          css::uno::Exception                 )
-{
-    TransactionGuard aTransaction(m_rTransactionManager, E_SOFTEXCEPTIONS);
-
-    SolarMutexGuard g;
-
-    PropertySetHelper::TPropInfoHash::iterator pIt = m_lProps.find(sProperty);
-    if (pIt == m_lProps.end())
-        throw css::beans::UnknownPropertyException();
-
-    m_lProps.erase(pIt);
-}
-
 void SAL_CALL PropertySetHelper::impl_enablePropertySet()
 {
 }

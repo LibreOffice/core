@@ -47,12 +47,6 @@ uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText() t
   return uno::Reference< text::XText > ();
 }
 
-uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryAggregation( const uno::Type & ) throw(uno::RuntimeException)
-{
-  // TODO (empty?)
-  return uno::Any();
-}
-
 uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {

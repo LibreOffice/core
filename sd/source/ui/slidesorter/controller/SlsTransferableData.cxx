@@ -68,24 +68,6 @@ TransferableData::~TransferableData (void)
         EndListening(*mpViewShell);
 }
 
-void TransferableData::DragFinished (sal_Int8 nDropAction)
-{
-    if (mpViewShell != NULL)
-        mpViewShell->DragFinished(nDropAction);
-    /*
-    for (CallbackContainer::const_iterator
-             iCallback(maDragFinishCallbacks.begin()),
-             iEnd(maDragFinishCallbacks.end());
-         iCallback!=iEnd;
-         ++iCallback)
-    {
-        if (*iCallback)
-            (*iCallback)(nDropAction);
-    }
-    maDragFinishCallbacks.clear();
-    */
-}
-
 void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);

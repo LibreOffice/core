@@ -140,9 +140,6 @@ public:
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
-    void    AddWindow(::sd::Window* pWin);
-    void    RemoveWindow(::sd::Window* pWin);
-
     virtual void ChangeEditMode (EditMode eMode, bool bIsLayerModeActive);
 
     virtual void    SetZoom( long nZoom ) SAL_OVERRIDE;

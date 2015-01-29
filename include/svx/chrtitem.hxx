@@ -323,11 +323,6 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVersion) const SAL_OVERRIDE;
     virtual SvStream& Store(SvStream& rOut, sal_uInt16 nItemVersion ) const SAL_OVERRIDE;
 
-    double GetMin() const;
-    double GetMax() const;
-
-    SfxFieldUnit GetUnit() const;
-
     double GetValue() const { return fVal; }
     void SetValue(double fNewVal) { fVal = fNewVal; }
 };

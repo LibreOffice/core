@@ -768,27 +768,6 @@ namespace DOM
     {
         return OUString();
     }
-
-    void SAL_CALL CElement::setElementName(const OUString& aName)
-        throw (RuntimeException, DOMException)
-    {
-        if (aName.isEmpty() || (0 <= aName.indexOf(':')))
-        {
-            DOMException e;
-            e.Code = DOMExceptionType_INVALID_CHARACTER_ERR;
-            throw e;
-        }
-
-        ::osl::MutexGuard const g(m_rMutex);
-
-        if (0 == m_aNodePtr) {
-            throw RuntimeException();
-        }
-        OString oName = OUStringToOString(aName, RTL_TEXTENCODING_UTF8);
-        xmlChar const *xName = reinterpret_cast<xmlChar const *>(oName.getStr());
-        xmlNodeSetName(m_aNodePtr, xName);
-    }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

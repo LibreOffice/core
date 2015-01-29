@@ -58,7 +58,6 @@ private:
 
 protected:
 
-    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
     // OCommonAccessibleComponent

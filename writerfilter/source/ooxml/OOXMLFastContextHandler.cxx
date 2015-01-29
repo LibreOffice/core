@@ -281,20 +281,6 @@ const uno::Sequence< sal_Int8 > & OOXMLFastContextHandler::getUnoTunnelId()
     return theOOXMLFastContextHandlerUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL OOXMLFastContextHandler::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
-{
-    if( rId.getLength() == 16
-        && 0 == memcmp( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast<sal_Int64>
-            (reinterpret_cast<sal_IntPtr>(this));
-    }
-
-    return 0x0;
-}
-
 void OOXMLFastContextHandler::setStream(Stream * pStream)
 {
     mpStream = pStream;
@@ -353,12 +339,6 @@ void OOXMLFastContextHandler::setParent
 (OOXMLFastContextHandler * pParent)
 {
     mpParent = pParent;
-}
-
-OOXMLPropertySet * OOXMLFastContextHandler::getPicturePropSet
-(const OUString & rId)
-{
-    return mpParserState->getDocument()->getPicturePropSet(rId);
 }
 
 void OOXMLFastContextHandler::sendTableDepth() const
@@ -695,11 +675,6 @@ void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const Id & rId)
 
     pPropertySet->add(pProp);
     mpParserState->setCharacterProperties(pPropertySet);
-}
-
-bool OOXMLFastContextHandler::propagatesProperties() const
-{
-    return false;
 }
 
 void OOXMLFastContextHandler::propagateCellProperties()
@@ -1267,12 +1242,6 @@ void OOXMLFastContextHandlerTable::addCurrentChild()
             mTable.add(pTmpVal);
         }
     }
-}
-
-void OOXMLFastContextHandlerTable::newPropertySet
-(OOXMLPropertySet::Pointer_t /*pPropertySet*/)
-{
-
 }
 
 /*

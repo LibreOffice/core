@@ -133,11 +133,6 @@ namespace accessibility
 
             mxThis = rInterface;
         }
-        uno::Reference< XAccessible > GetEventSource() const
-        {
-
-            return mxThis;
-        }
 
         void SetOffset( const Point& );
         Point GetOffset() const
@@ -505,21 +500,6 @@ namespace accessibility
     {
     }
 
-    const SvxEditSource& AccessibleStaticTextBase::GetEditSource() const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-
-        const SvxEditSource& aEditSource = mpImpl->GetEditSource();
-
-        mpImpl->CheckInvariants();
-
-        return aEditSource;
-#else
-        return mpImpl->GetEditSource();
-#endif
-    }
-
     void AccessibleStaticTextBase::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )
     {
 #ifdef DBG_UTIL
@@ -549,21 +529,6 @@ namespace accessibility
 #endif
     }
 
-    uno::Reference< XAccessible > AccessibleStaticTextBase::GetEventSource() const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-
-        uno::Reference< XAccessible > xRet( mpImpl->GetEventSource() );
-
-        mpImpl->CheckInvariants();
-
-        return xRet;
-#else
-        return mpImpl->GetEventSource();
-#endif
-    }
-
     void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
     {
 #ifdef DBG_UTIL
@@ -577,37 +542,6 @@ namespace accessibility
         mpImpl->CheckInvariants();
 #else
         mpImpl->SetOffset( rPoint );
-#endif
-    }
-
-    Point AccessibleStaticTextBase::GetOffset() const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-
-        Point aPoint( mpImpl->GetOffset() );
-
-        mpImpl->CheckInvariants();
-
-        return aPoint;
-#else
-        return mpImpl->GetOffset();
-#endif
-    }
-
-    void AccessibleStaticTextBase::UpdateChildren()
-    {
-#ifdef DBG_UTIL
-        // precondition: solar mutex locked
-        DBG_TESTSOLARMUTEX();
-
-        mpImpl->CheckInvariants();
-
-        mpImpl->UpdateChildren();
-
-        mpImpl->CheckInvariants();
-#else
-        mpImpl->UpdateChildren();
 #endif
     }
 

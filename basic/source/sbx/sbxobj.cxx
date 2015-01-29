@@ -427,31 +427,6 @@ SbxVariable* SbxObject::Make( const OUString& rName, SbxClassType ct, SbxDataTyp
     return pVar;
 }
 
-SbxObject* SbxObject::MakeObject( const OUString& rName, const OUString& rClass )
-{
-    // Is the object already available?
-    if( !ISA(SbxCollection) )
-    {
-        SbxVariable* pRes = pObjs->Find( rName, SbxCLASS_OBJECT );
-        if( pRes )
-        {
-            return PTR_CAST(SbxObject,pRes);
-        }
-    }
-    SbxObject* pVar = CreateObject( rClass );
-    if( pVar )
-    {
-        pVar->SetName( rName );
-        pVar->SetParent( this );
-        pObjs->Put( pVar, pObjs->Count() );
-        SetModified( true );
-        // The object listen always
-        StartListening( pVar->GetBroadcaster(), true );
-        Broadcast( SBX_HINT_OBJECTCHANGED );
-    }
-    return pVar;
-}
-
 void SbxObject::Insert( SbxVariable* pVar )
 {
     sal_uInt16 nIdx;
@@ -706,60 +681,6 @@ bool SbxObject::StoreData( SvStream& rStrm ) const
     }
     ((SbxObject*) this)->SetModified( false );
     return true;
-}
-
-OUString SbxObject::GenerateSource( const OUString &rLinePrefix,
-                                    const SbxObject* )
-{
-    // Collect the properties in a String
-    OUString aSource;
-    SbxArrayRef xProps( GetProperties() );
-    bool bLineFeed = false;
-    for ( sal_uInt16 nProp = 0; nProp < xProps->Count(); ++nProp )
-    {
-        SbxPropertyRef xProp = static_cast<SbxProperty*>( xProps->Get(nProp) );
-        OUString aPropName( xProp->GetName() );
-        if ( xProp->CanWrite() &&
-             !( xProp->GetHashCode() == nNameHash &&
-                aPropName.equalsIgnoreAsciiCase(pNameProp)))
-        {
-            // Insert a break except in front of the first property
-            if ( bLineFeed )
-            {
-                aSource += "\n";
-            }
-            else
-            {
-                bLineFeed = true;
-            }
-            aSource += rLinePrefix;
-            aSource += ".";
-            aSource += aPropName;
-            aSource += " = ";
-
-            // convert the property value to text
-            switch ( xProp->GetType() )
-            {
-            case SbxEMPTY:
-            case SbxNULL:
-                // no value
-                break;
-
-            case SbxSTRING:
-                // Strings in quotation mark
-                aSource += "\"";
-                aSource += xProp->GetOUString();
-                aSource += "\"";
-                break;
-
-            default:
-                // miscellaneous, such as e.g. numbers directly
-                aSource += xProp->GetOUString();
-                break;
-            }
-        }
-    }
-    return aSource;
 }
 
 static bool CollectAttrs( const SbxBase* p, OUString& rRes )

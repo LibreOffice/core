@@ -97,12 +97,6 @@ const ::oox::drawingml::Theme* QuickDiagrammingImport::getCurrentTheme() const
     return 0;
 }
 
-sal_Int32 QuickDiagrammingImport::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
-{
-    // TODO
-    return 0;
-}
-
 const oox::drawingml::table::TableStyleListPtr QuickDiagrammingImport::getTableStyles()
 {
     return oox::drawingml::table::TableStyleListPtr();

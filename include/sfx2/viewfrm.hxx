@@ -119,7 +119,6 @@ public:
     SfxBindings&            GetBindings() { return *pBindings; }
     const SfxBindings&      GetBindings() const  { return *pBindings; }
     vcl::Window&            GetWindow() const;
-    void                    SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY );
 
     SfxProgress*            GetProgress() const;
 
@@ -139,16 +138,6 @@ public:
     bool                    Close();
     virtual void            Activate( bool bUI ) SAL_OVERRIDE;
     virtual void            Deactivate( bool bUI ) SAL_OVERRIDE;
-
-    // DDE-Interface
-    long                    DdeExecute( const OUString& rCmd );
-    bool                    DdeGetData( const OUString& rItem,
-                                        const OUString& rMimeType,
-                                        ::com::sun::star::uno::Any & rValue );
-    bool                    DdeSetData( const OUString& rItem,
-                                        const OUString& rMimeType,
-                                        const ::com::sun::star::uno::Any & rValue );
-    ::sfx2::SvLinkSource*   DdeCreateLinkSource( const OUString& rItem );
 
     void                    UpdateTitle();
 

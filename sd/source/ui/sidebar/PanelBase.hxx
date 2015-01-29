@@ -57,11 +57,6 @@ public:
     // ISidebarReceiver
     virtual void SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible>& rxParent);
-
 protected:
     ::boost::scoped_ptr< vcl::Window> mpWrappedControl;
     virtual vcl::Window* CreateWrappedControl (

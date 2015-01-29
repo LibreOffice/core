@@ -966,13 +966,6 @@ void SAL_CALL SwAccessibleContext::grabFocus()
     }
 }
 
-uno::Any SAL_CALL SwAccessibleContext::getAccessibleKeyBinding()
-        throw (uno::RuntimeException)
-{
-    // There are no key bindings
-    return uno::Any();
-}
-
 sal_Int32 SAL_CALL SwAccessibleContext::getForeground()
         throw (uno::RuntimeException, std::exception)
 {

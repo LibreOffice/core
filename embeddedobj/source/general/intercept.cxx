@@ -28,7 +28,6 @@ using namespace ::com::sun::star;
 
 #define IUL 6
 
-
 uno::Sequence< OUString > Interceptor::m_aInterceptedURL(IUL);
 
 class StatusChangeListenerContainer
@@ -41,39 +40,11 @@ public:
     }
 };
 
-
 void Interceptor::DisconnectDocHolder()
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_pDocHolder = NULL;
 }
-
-void SAL_CALL
-Interceptor::addEventListener(
-    const uno::Reference<lang::XEventListener >& Listener )
-    throw( uno::RuntimeException )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( ! m_pDisposeEventListeners )
-        m_pDisposeEventListeners =
-            new cppu::OInterfaceContainerHelper( m_aMutex );
-
-    m_pDisposeEventListeners->addInterface( Listener );
-}
-
-
-void SAL_CALL
-Interceptor::removeEventListener(
-    const uno::Reference< lang::XEventListener >& Listener )
-    throw( uno::RuntimeException )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
-}
-
 
 Interceptor::Interceptor( DocumentHolder* pDocHolder )
     : m_pDocHolder( pDocHolder ),
@@ -89,7 +60,6 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
 
 }
 
-
 Interceptor::~Interceptor()
 {
     if( m_pDisposeEventListeners )
@@ -98,8 +68,6 @@ Interceptor::~Interceptor()
     if(m_pStatCL)
         delete m_pStatCL;
 }
-
-
 
 //XDispatch
 void SAL_CALL

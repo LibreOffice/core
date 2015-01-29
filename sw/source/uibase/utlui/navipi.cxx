@@ -488,16 +488,7 @@ IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
     return 0;
 }
 
-bool SwNavigationPI::Close()
-{
-    SfxViewFrame* pVFrame = pCreateView->GetViewFrame();
-    pVFrame->GetBindings().Invalidate(SID_NAVIGATOR);
-    pVFrame->GetDispatcher()->Execute(SID_NAVIGATOR);
-    return true;
-}
-
 // Setting of an automatic mark
-
 void SwNavigationPI::MakeMark()
 {
     SwView *pView = GetCreateView();
@@ -952,47 +943,7 @@ NumEditAction& SwNavigationPI::GetPageEdit()
     return *static_cast<NumEditAction*>(aContentToolBox.GetItemWindow(FN_PAGENUMBER));
 }
 
-SfxChildAlignment SwNavigationPI::CheckAlignment
-    (
-        SfxChildAlignment eActAlign,
-        SfxChildAlignment eAlign
-    )
-{
-SfxChildAlignment eRetAlign;
-
-    if(_IsZoomedIn())
-        eRetAlign = SFX_ALIGN_NOALIGNMENT;
-    else
-        switch (eAlign)
-        {
-            case SFX_ALIGN_BOTTOM:
-            case SFX_ALIGN_LOWESTBOTTOM:
-            case SFX_ALIGN_HIGHESTBOTTOM:
-                eRetAlign = eActAlign;
-                break;
-
-            case SFX_ALIGN_TOP:
-            case SFX_ALIGN_HIGHESTTOP:
-            case SFX_ALIGN_LOWESTTOP:
-            case SFX_ALIGN_LEFT:
-            case SFX_ALIGN_RIGHT:
-            case SFX_ALIGN_FIRSTLEFT:
-            case SFX_ALIGN_LASTLEFT:
-            case SFX_ALIGN_FIRSTRIGHT:
-            case SFX_ALIGN_LASTRIGHT:
-                eRetAlign = eAlign;
-                break;
-
-            default:
-                eRetAlign = eAlign;
-                break;
-        }
-    return eRetAlign;
-
-}
-
 // Notification on modified DocInfo
-
 void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == pCreateView)

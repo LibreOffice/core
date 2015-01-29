@@ -1273,15 +1273,6 @@ AbstractSvxHlinkDlgMarkWnd* AbstractDialogFactory_Impl::CreateSvxHlinkDlgMarkWnd
     return 0;
 }
 
-SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( sal_uInt32,
-                                            vcl::Window* pParent,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& ,
-                                            const SfxItemSet* pAttrSet )
-{
-    SfxModalDialog* pDlg = new SvxCharacterMap( pParent, true, pAttrSet );
-    return new CuiAbstractSfxDialog_Impl( pDlg );
-}
-
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog(vcl::Window* pParent,
     const SfxItemSet& rSet)
 {

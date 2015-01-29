@@ -385,11 +385,6 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
         rItemSet.DisableItem( SID_CREATELINK );
 }
 
-void SfxViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
-{
-    GetViewShell()->SetZoomFactor( rZoomX, rZoomY );
-}
-
 void SfxViewFrame::Activate( bool bMDI )
 {
     DBG_ASSERT(GetViewShell(), "No Shell");

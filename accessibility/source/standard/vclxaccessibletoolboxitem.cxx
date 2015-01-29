@@ -584,15 +584,9 @@ sal_Int32 SAL_CALL VCLXAccessibleToolBoxItem::getBackground(  ) throw (RuntimeEx
 }
 
 // XAccessibleExtendedComponent
-
 Reference< awt::XFont > SAL_CALL VCLXAccessibleToolBoxItem::getFont(    ) throw (RuntimeException, std::exception)
 {
     return uno::Reference< awt::XFont >();
-}
-
-awt::FontDescriptor SAL_CALL VCLXAccessibleToolBoxItem::getFontMetrics( const Reference< awt::XFont >& xFont ) throw (RuntimeException)
-{
-    return xFont->getFontDescriptor();
 }
 
 OUString SAL_CALL VCLXAccessibleToolBoxItem::getTitledBorderText(  ) throw (RuntimeException, std::exception)

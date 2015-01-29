@@ -293,9 +293,6 @@ public:
      read by the binary filter: */
     virtual void UpdateLinks() SAL_OVERRIDE;
 
-    void setDocAccTitle( const OUString& rTitle );
-    const OUString getDocAccTitle() const;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
                                 GetController();
 

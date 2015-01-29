@@ -415,13 +415,6 @@ void SAL_CALL ThumbnailViewAcc::grabFocus()
     mpParent->GrabFocus();
 }
 
-uno::Any SAL_CALL ThumbnailViewAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    ThrowIfDisposed();
-    return uno::Any();
-}
-
 sal_Int32 SAL_CALL ThumbnailViewAcc::getForeground(  )
     throw (uno::RuntimeException, std::exception)
 {
@@ -955,12 +948,6 @@ void SAL_CALL ThumbnailViewItemAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)
 {
     // nothing to do
-}
-
-uno::Any SAL_CALL ThumbnailViewItemAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    return uno::Any();
 }
 
 sal_Int32 SAL_CALL ThumbnailViewItemAcc::getForeground(  )

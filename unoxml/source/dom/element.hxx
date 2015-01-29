@@ -159,12 +159,6 @@ namespace DOM
                 const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
             throw (css::uno::RuntimeException, css::xml::dom::DOMException, std::exception) SAL_OVERRIDE;
 
-        /**
-        sets the element name
-        */
-        void SAL_CALL setElementName(const OUString& elementName)
-            throw (css::uno::RuntimeException, css::xml::dom::DOMException);
-
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
             throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

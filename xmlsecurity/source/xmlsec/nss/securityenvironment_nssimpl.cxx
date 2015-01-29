@@ -254,21 +254,6 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
     }
 }
 
-void SecurityEnvironment_NssImpl :: rejectSymKey( PK11SymKey* aSymKey ) throw( Exception , RuntimeException ) {
-    std::list< PK11SymKey* >::iterator keyIt ;
-
-    if( aSymKey != NULL ) {
-        for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aSymKey ) {
-                PK11SymKey* symkey = *keyIt ;
-                PK11_FreeSymKey( symkey ) ;
-                m_tSymKeyList.erase( keyIt ) ;
-                break ;
-            }
-        }
-    }
-}
-
 PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) throw( Exception , RuntimeException ) {
     PK11SymKey* symkey ;
     std::list< PK11SymKey* >::iterator keyIt ;
@@ -283,44 +268,6 @@ PK11SymKey* SecurityEnvironment_NssImpl :: getSymKey( unsigned int position ) th
     return symkey ;
 }
 
-void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) throw( Exception , RuntimeException ) {
-    std::list< SECKEYPublicKey* >::iterator keyIt ;
-
-    if( aPubKey != NULL ) {
-        //First try to find the key in the list
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPubKey )
-                return ;
-        }
-
-        //If we do not find the key in the list, add a new node
-        SECKEYPublicKey* pubkey = SECKEY_CopyPublicKey( aPubKey ) ;
-        if( pubkey == NULL )
-            throw RuntimeException() ;
-
-        try {
-            m_tPubKeyList.push_back( pubkey ) ;
-        } catch ( Exception& ) {
-            SECKEY_DestroyPublicKey( pubkey ) ;
-        }
-    }
-}
-
-void SecurityEnvironment_NssImpl :: rejectPubKey( SECKEYPublicKey* aPubKey ) throw( Exception , RuntimeException ) {
-    std::list< SECKEYPublicKey* >::iterator keyIt ;
-
-    if( aPubKey != NULL ) {
-        for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPubKey ) {
-                SECKEYPublicKey* pubkey = *keyIt ;
-                SECKEY_DestroyPublicKey( pubkey ) ;
-                m_tPubKeyList.erase( keyIt ) ;
-                break ;
-            }
-        }
-    }
-}
-
 SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position ) throw( Exception , RuntimeException ) {
     SECKEYPublicKey* pubkey ;
     std::list< SECKEYPublicKey* >::iterator keyIt ;
@@ -333,44 +280,6 @@ SECKEYPublicKey* SecurityEnvironment_NssImpl :: getPubKey( unsigned int position
         pubkey = *keyIt ;
 
     return pubkey ;
-}
-
-void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) throw( Exception , RuntimeException ) {
-    std::list< SECKEYPrivateKey* >::iterator keyIt ;
-
-    if( aPriKey != NULL ) {
-        //First try to find the key in the list
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPriKey )
-                return ;
-        }
-
-        //If we do not find the key in the list, add a new node
-        SECKEYPrivateKey* prikey = SECKEY_CopyPrivateKey( aPriKey ) ;
-        if( prikey == NULL )
-            throw RuntimeException() ;
-
-        try {
-            m_tPriKeyList.push_back( prikey ) ;
-        } catch ( Exception& ) {
-            SECKEY_DestroyPrivateKey( prikey ) ;
-        }
-    }
-}
-
-void SecurityEnvironment_NssImpl :: rejectPriKey( SECKEYPrivateKey* aPriKey ) throw( Exception , RuntimeException ) {
-    std::list< SECKEYPrivateKey* >::iterator keyIt ;
-
-    if( aPriKey != NULL ) {
-        for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
-            if( *keyIt == aPriKey ) {
-                SECKEYPrivateKey* prikey = *keyIt ;
-                SECKEY_DestroyPrivateKey( prikey ) ;
-                m_tPriKeyList.erase( keyIt ) ;
-                break ;
-            }
-        }
-    }
 }
 
 SECKEYPrivateKey* SecurityEnvironment_NssImpl :: getPriKey( unsigned int position ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException )  {

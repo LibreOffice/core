@@ -100,10 +100,4 @@ bool E3dAttributesUndoAction::CanRepeat(SfxRepeatTarget& /*rView*/) const
     return false;
 }
 
-// Multiple Undo is not possible
-
-void E3dAttributesUndoAction::Repeat()
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

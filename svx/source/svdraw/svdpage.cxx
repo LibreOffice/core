@@ -568,34 +568,6 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
     return pObj;
 }
 
-SdrObject* SdrObjList::NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
-{
-    if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())
-    {
-        OSL_ASSERT(nOldObjNum<maList.size());
-        OSL_ASSERT(nNewObjNum<maList.size());
-        return NULL;
-    }
-
-    SdrObject* pObj=maList[nOldObjNum];
-    if (nOldObjNum==nNewObjNum) return pObj;
-    DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcSetObjectOrdNum: Object not found.");
-    if (pObj!=NULL) {
-        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::NbcSetObjectOrdNum: ZObjekt does not have status Inserted.");
-        RemoveObjectFromContainer(nOldObjNum);
-
-        InsertObjectIntoContainer(*pObj,nNewObjNum);
-
-        // No need to delete visualisation data since same object
-        // gets inserted again. Also a single ActionChanged is enough
-        pObj->ActionChanged();
-
-        pObj->SetOrdNum(nNewObjNum);
-        bObjOrdNumsDirty=true;
-    }
-    return pObj;
-}
-
 SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
 {
     if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())

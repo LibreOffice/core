@@ -105,10 +105,4 @@ void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
     Invalidate();
 }
 
-void ScChartShell::HandleSelectionChange (void)
-{
-    // Do not call the implementation in the base class.  Let
-    // Activate()/Deactivate() handle context switches.
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

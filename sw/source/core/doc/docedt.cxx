@@ -273,12 +273,6 @@ void _SaveRedlEndPosForRestore::_Restore()
     }
 }
 
-void SwDoc::SetModified(SwPaM &rPaM)
-{
-    SwDataChanged aTmp( rPaM );
-    getIDocumentState().SetModified();
-}
-
 /// Convert list of ranges of whichIds to a corresponding list of whichIds
 static std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
 {

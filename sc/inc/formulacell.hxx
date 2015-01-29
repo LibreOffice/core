@@ -78,8 +78,9 @@ public:
 
     ScFormulaCellGroup();
     ~ScFormulaCellGroup();
-
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     void scheduleCompilation();
+#endif
 
     void setCode( const ScTokenArray& rCode );
     void setCode( ScTokenArray* pCode );

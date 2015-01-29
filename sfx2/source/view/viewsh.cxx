@@ -1883,27 +1883,14 @@ void SfxViewShell::SetMargin( const Size& rSize )
     }
 }
 
-
-
 void SfxViewShell::MarginChanged()
 {
 }
-
-
 
 bool SfxViewShell::IsShowView_Impl() const
 {
     return pImp->m_bIsShowView;
 }
-
-
-
-SfxFrame* SfxViewShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
-{
-    return pSelf;
-}
-
-
 
 void SfxViewShell::JumpToMark( const OUString& rMark )
 {

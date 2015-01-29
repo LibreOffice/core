@@ -206,13 +206,6 @@ namespace accessibility
          */
         void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
 
-        /** Get the event source
-
-            @return the interface that is set as the source for
-            accessibility events sent by this object.
-         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
-
         /** Set offset of EditEngine/Outliner from parent
 
             If the origin of the underlying EditEngine/Outliner does
@@ -228,12 +221,6 @@ namespace accessibility
             The offset in screen coordinates (i.e. pixel)
         */
         void SetOffset( const Point& rPoint );
-
-        /** Query offset of EditEngine/Outliner from parent
-
-            @return the offset in screen coordinates (i.e. pixel)
-        */
-        Point GetOffset() const;
 
         /** Set offset the object adds to all children's indices
 
@@ -338,38 +325,12 @@ namespace accessibility
 
             @attention Fires state change events, therefore, don't hold any mutex
 
-            @param nEventId
-            Id of the event to send, @see AccessibleEventId
-
-            @param rNewValue
-            The value we've changed into
-
-            @param rOldValue
-            The old value before the change
-        */
-        void FireEvent( const sal_Int16 nEventId,
-                                const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
-                                const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
-
-        /** Call this method to invoke all event listeners with the given event
-
-            @attention Fires state change events, therefore, don't hold any mutex
-
             @param rEvent
             The event to send, @see AccessibleEventObject
 
         */
         // TODO: make that virtual next time
         void FireEvent( const ::com::sun::star::accessibility::AccessibleEventObject& rEvent ) const;
-
-        /** Query select state of the text managed by this object
-
-            @attention Don't call with locked mutexes. You may hold
-            the solar mutex, but this method acquires it anyway.
-
-            @return sal_True, if the text or parts of it are currently selected
-        */
-        bool IsSelected() const;
 
         // XAccessibleContext child handling methods
 

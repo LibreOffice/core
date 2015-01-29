@@ -77,7 +77,6 @@ public:
 
 class OutlinerUndoChangeDepth : public OutlinerUndoBase
 {
-    using SfxUndoAction::Repeat;
 private:
     sal_Int32       mnPara;
     sal_Int16       mnOldDepth;
@@ -88,7 +87,6 @@ public:
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
-    void            Repeat();
 };
 
 // Help-Undo: If it does not exist an OutlinerUndoAction for a certain action
@@ -96,7 +94,6 @@ public:
 // to be recalculated.
 class OutlinerUndoCheckPara : public OutlinerUndoBase
 {
-    using SfxUndoAction::Repeat;
 private:
     sal_Int32       mnPara;
 
@@ -105,24 +102,16 @@ public:
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;
-    void            Repeat();
 };
-
-
-
-
-
 
 class OLUndoExpand : public EditUndo
 {
-    using SfxUndoAction::Repeat;
     void Restore( bool bUndo );
 public:
     OLUndoExpand( Outliner* pOut, sal_uInt16 nId );
     virtual ~OLUndoExpand();
     virtual void Undo() SAL_OVERRIDE;
     virtual void Redo() SAL_OVERRIDE;
-    void Repeat();
 
     sal_uInt16* pParas;  // 0 == nCount contains paragraph number
     Outliner* pOutliner;

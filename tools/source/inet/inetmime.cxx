@@ -2851,25 +2851,6 @@ sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
 }
 
 // virtual
-void INetMIMEOutputSink::writeSequence(const sal_uInt32 * pBegin,
-                                       const sal_uInt32 * pEnd)
-{
-    DBG_ASSERT(pBegin && pBegin <= pEnd,
-               "INetMIMEOutputSink::writeSequence(): Bad sequence");
-
-    sal_Char * pBufferBegin = new sal_Char[pEnd - pBegin];
-    sal_Char * pBufferEnd = pBufferBegin;
-    while (pBegin != pEnd)
-    {
-        DBG_ASSERT(*pBegin < 256,
-                   "INetMIMEOutputSink::writeSequence(): Bad octet");
-        *pBufferEnd++ = sal_Char(*pBegin++);
-    }
-    writeSequence(pBufferBegin, pBufferEnd);
-    delete[] pBufferBegin;
-}
-
-// virtual
 void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
                                        const sal_Unicode * pEnd)
 {

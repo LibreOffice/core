@@ -425,64 +425,6 @@ void SfxObjectShell::ReconnectDdeLinks(SfxObjectShell& rServer)
     }
 }
 
-/*  [Description]
-
-    This method can be overridden by application developers, to receive
-    DDE-commands directed to the their SfxApplication subclass.
-
-    The base implementation understands the API functionality of the
-    relevant SfxViewFrame, which is shown and the relevant SfxViewShell
-    and the relevant SfxApplication subclass in BASIC syntax. Return
-    values can not be transferred, unfortunately.
-*/
-long SfxViewFrame::DdeExecute( const OUString&   rCmd ) // Expressed in our BASIC-Syntax
-{
-    if ( GetObjectShell() )
-        return GetObjectShell()->DdeExecute( rCmd );
-
-    return 0;
-}
-
-/*  [Description]
-
-    This method can be overridden by application developers, to receive
-    DDE-data-requests directed to their SfxApplication subclass.
-
-    The base implementation provides no data and returns false.
-*/
-bool SfxViewFrame::DdeGetData( const OUString&,            // the Item to be addressed
-                               const OUString&,            // in: Format
-                               ::com::sun::star::uno::Any& )// out: requested data
-{
-    return false;
-}
-
-/*  [Description]
-
-    This method can be overridden by application developers, to receive
-    DDE-data directed to their SfxApplication subclass.
-
-    The base implementation is not receiving any data and returns false.
-*/
-bool SfxViewFrame::DdeSetData( const OUString&,                  // the Item to be addressed
-                               const OUString&,                  // in: Format
-                               const ::com::sun::star::uno::Any& )// out: requested data
-{
-    return false;
-}
-
-/*  [Description]
-
-    This method can be overridden by application developers, to establish
-    a DDE-hotlink to their SfxApplication subclass.
-
-    The base implementation is not generate a link and returns 0.
-*/
-::sfx2::SvLinkSource* SfxViewFrame::DdeCreateLinkSource( const OUString&  )// the Item to be addressed
-{
-    return 0;
-}
-
 bool SfxApplication::InitializeDde()
 {
     int nError = 0;

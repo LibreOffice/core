@@ -3425,22 +3425,15 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     {
         // unit (from settings) is Point
         vcl::Font aFont( rStyleSettings.GetFieldFont() );
-        //const vcl::Font& rFont = pView->GetFont();
-        //if( pView->HasFontTextColor() )
-            aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        //if( pView->HasFontFillColor() )
-            //aFont.SetFillColor( rFont.GetFillColor() );
+        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         pView->SetPointFont( aFont );
         SetDefaultTextSize();
     }
 
-    //if( !pView->HasFontTextColor() )
-        pView->SetTextColor( rStyleSettings.GetFieldTextColor() );
-    //if( !pView->HasFontFillColor() )
-        pView->SetTextFillColor();
+    pView->SetTextColor( rStyleSettings.GetFieldTextColor() );
+    pView->SetTextFillColor();
 
-    //if( !pView->HasBackground() )
-        pView->SetBackground( rStyleSettings.GetFieldColor());
+    pView->SetBackground( rStyleSettings.GetFieldColor());
 
     long nScrBarSize = rStyleSettings.GetScrollBarSize();
     if( nScrBarSize != nHorSBarHeight || nScrBarSize != nVerSBarWidth )

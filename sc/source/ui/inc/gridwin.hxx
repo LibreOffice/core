@@ -286,8 +286,6 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
 protected:
-    using Window::Resize;
-    void            Resize( const Size& rSize );
     virtual void    PrePaint() SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
@@ -383,7 +381,6 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
-    void            SwitchView();
 
     void            UpdateDPFromFieldPopupMenu();
     bool            UpdateVisibleRange();

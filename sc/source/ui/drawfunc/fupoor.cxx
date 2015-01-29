@@ -198,42 +198,11 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
         return pView->Command(rCEvt,pWindow);
 }
 
-void FuPoor::DoCut()
-{
-    if (pView)
-    {
-//!     pView->DoCut(pWindow);
-    }
-}
-
-/*************************************************************************
-|*
-|* Copy object to clipboard
-|*
-\************************************************************************/
-
-void FuPoor::DoCopy()
-{
-    if (pView)
-    {
-//!     pView->DoCopy(pWindow);
-    }
-}
-
-void FuPoor::DoPaste()
-{
-    if (pView)
-    {
-//!     pView->DoPaste(pWindow);
-    }
-}
-
 /*************************************************************************
 |*
 |* Timer-Handler fuer Drag&Drop
 |*
 \************************************************************************/
-
 IMPL_LINK_NOARG(FuPoor, DragTimerHdl)
 {
     //  ExecuteDrag (und das damit verbundene Reschedule) direkt aus dem Timer
@@ -255,8 +224,6 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
     {
         pWindow->ReleaseMouse();
         bIsInDragMode = true;
-
-//      pView->BeginDrag(pWindow, aMDPos);
         pViewShell->GetScDrawView()->BeginDrag(pWindow, aMDPos);
     }
     return 0;

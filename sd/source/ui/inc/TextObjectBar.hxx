@@ -53,8 +53,6 @@ public:
     void GetCharState( SfxItemSet& rSet );
     void Execute( SfxRequest &rReq );
 
-    void Command( const CommandEvent& rCEvt );
-
 private:
     ViewShell* mpViewShell;
     ::sd::View* mpView;

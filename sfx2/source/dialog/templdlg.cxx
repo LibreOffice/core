@@ -279,16 +279,10 @@ SfxTemplatePanelControl::SfxTemplatePanelControl (
     SetStyle(GetStyle() & ~WB_DOCKABLE);
 }
 
-
-
-
 SfxTemplatePanelControl::~SfxTemplatePanelControl (void)
 {
     delete pImpl;
 }
-
-
-
 
 void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
 {
@@ -302,17 +296,6 @@ void SfxTemplatePanelControl::DataChanged( const DataChangedEvent& _rDCEvt )
     DockingWindow::DataChanged( _rDCEvt );
 }
 
-
-
-
-void SfxTemplatePanelControl::Update()
-{
-    pImpl->Update();
-}
-
-
-
-
 void SfxTemplatePanelControl::Resize()
 {
     if(pImpl)
@@ -320,38 +303,10 @@ void SfxTemplatePanelControl::Resize()
     DockingWindow::Resize();
 }
 
-
 void SfxTemplatePanelControl::FreeResource (void)
 {
     DockingWindow::FreeResource();
 }
-
-
-SfxChildAlignment SfxTemplatePanelControl::CheckAlignment(SfxChildAlignment eActAlign,SfxChildAlignment eAlign)
-{
-    switch (eAlign)
-    {
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_HIGHESTTOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_HIGHESTBOTTOM:
-            return eActAlign;
-
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
-        case SFX_ALIGN_FIRSTLEFT:
-        case SFX_ALIGN_LASTLEFT:
-        case SFX_ALIGN_FIRSTRIGHT:
-        case SFX_ALIGN_LASTRIGHT:
-            return eAlign;
-
-        default:
-            return eAlign;
-    }
-}
-
 
 void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
 {
@@ -371,8 +326,6 @@ void SfxTemplatePanelControl::StateChanged( StateChangedType nStateChange )
 
     DockingWindow::StateChanged( nStateChange );
 }
-
-
 
 void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
 {

@@ -132,13 +132,7 @@ bool SAL_CALL SvtRulerAccessible::isVisible() throw( RuntimeException )
     return mpRepr->IsVisible();
 }
 
-bool SAL_CALL SvtRulerAccessible::isFocusTraversable() throw( RuntimeException )
-{
-    return true;
-}
-
 //=====  XAccessibleContext  ==================================================
-
 sal_Int32 SAL_CALL SvtRulerAccessible::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -293,36 +287,6 @@ void SAL_CALL SvtRulerAccessible::removeAccessibleEventListener( const uno::Refe
     }
 }
 
-void SAL_CALL SvtRulerAccessible::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
-    throw( RuntimeException )
-{
-    if( xListener.is() )
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        ThrowExceptionIfNotAlive();
-
-        uno::Reference< awt::XWindow >  xWindow = VCLUnoHelper::GetInterface( mpRepr );
-        if( xWindow.is() )
-            xWindow->addFocusListener( xListener );
-    }
-}
-
-void SAL_CALL SvtRulerAccessible::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
-    throw (RuntimeException)
-{
-    if( xListener.is() )
-    {
-        ::osl::MutexGuard   aGuard( m_aMutex );
-
-        ThrowExceptionIfNotAlive();
-
-        uno::Reference< awt::XWindow >  xWindow = VCLUnoHelper::GetInterface( mpRepr );
-        if( xWindow.is() )
-            xWindow->removeFocusListener( xListener );
-    }
-}
-
 void SAL_CALL SvtRulerAccessible::grabFocus() throw( RuntimeException, std::exception )
 {
     SolarMutexGuard     aSolarGuard;
@@ -331,12 +295,6 @@ void SAL_CALL SvtRulerAccessible::grabFocus() throw( RuntimeException, std::exce
     ThrowExceptionIfNotAlive();
 
     mpRepr->GrabFocus();
-}
-
-Any SAL_CALL SvtRulerAccessible::getAccessibleKeyBinding() throw( RuntimeException )
-{
-    // here is no implementation, because here are no KeyBindings for every object
-    return Any();
 }
 
 sal_Int32 SvtRulerAccessible::getForeground(  )

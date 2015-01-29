@@ -40,7 +40,6 @@ import com.sun.star.uno.XInterface;
  *  <li><code> getLocationOnScreen()</code></li>
  *  <li><code> getSize()</code></li>
  *  <li><code> grabFocus()</code></li>
- *  <li><code> getAccessibleKeyBinding()</code></li>
  * </ul> <p>
  *
  * @see com.sun.star.accessibility.XAccessibleComponent

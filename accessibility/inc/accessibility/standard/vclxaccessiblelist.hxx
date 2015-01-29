@@ -113,9 +113,6 @@ public:
     // XAccessibleComponent
     bool SAL_CALL contains (const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleAt (const ::com::sun::star::awt::Point& aPoint)
-        throw (::com::sun::star::uno::RuntimeException);
 
 
     // XServiceInfo

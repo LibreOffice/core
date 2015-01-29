@@ -185,14 +185,8 @@ protected:
     /// Format-dependent part of the actual export.
     virtual void ExportDocument_Impl() SAL_OVERRIDE;
 
-    /// Output page/section breaks
-    void OutputPageSectionBreaks( const SwTxtNode& );
-
     /// Output SwEndNode
     virtual void OutputEndNode( const SwEndNode& ) SAL_OVERRIDE;
-
-    /// Output SwTableNode
-    void OutputTableNode( const SwTableNode& );
 
     /// Output SwGrfNode
     virtual void OutputGrfNode( const SwGrfNode& ) SAL_OVERRIDE;

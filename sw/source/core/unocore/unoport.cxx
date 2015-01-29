@@ -845,56 +845,6 @@ uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
     return aRet;
 }
 
-void SwXTextPortion::attach(const uno::Reference< text::XTextRange > & /*xTextRange*/)
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    // SwXTextPortion cannot be created at the factory therefore
-    // they cannot be attached
-    throw uno::RuntimeException();
-}
-
-uno::Reference< text::XTextRange >  SwXTextPortion::getAnchor()
-throw( uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    uno::Reference< text::XTextRange >  aRet;
-    SwUnoCrsr* pUnoCrsr = GetCursor();
-    if (!pUnoCrsr)
-        throw uno::RuntimeException();
-
-    aRet = new SwXTextRange(*pUnoCrsr, m_xParentText);
-    return aRet;
-}
-
-void SwXTextPortion::dispose()
-throw( uno::RuntimeException )
-{
-    SolarMutexGuard aGuard;
-    SwUnoCrsr* pUnoCrsr = GetCursor();
-    if (!pUnoCrsr)
-        throw uno::RuntimeException();
-
-    setString(OUString());
-    pUnoCrsr->Remove(this);
-}
-
-void SAL_CALL SwXTextPortion::addEventListener(
-        const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException)
-{
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.addInterface(xListener);
-}
-
-void SAL_CALL SwXTextPortion::removeEventListener(
-        const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException)
-{
-    // no need to lock here as m_pImpl is const and container threadsafe
-    m_pImpl->m_EventListeners.removeInterface(xListener);
-}
-
 uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumeration(const OUString& /*aServiceName*/)
         throw( uno::RuntimeException, std::exception )
 {

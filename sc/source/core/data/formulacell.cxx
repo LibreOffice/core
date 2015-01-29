@@ -495,16 +495,16 @@ ScFormulaCellGroup::~ScFormulaCellGroup()
     delete mpImpl;
 }
 
+#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
 void ScFormulaCellGroup::scheduleCompilation()
 {
-#if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     meKernelState = sc::OpenCLKernelCompilationScheduled;
     sc::CLBuildKernelWorkItem aWorkItem;
     aWorkItem.meWhatToDo = sc::CLBuildKernelWorkItem::COMPILE;
     aWorkItem.mxGroup = this;
     sxCompilationThread->push(aWorkItem);
-#endif
 }
+#endif
 
 void ScFormulaCellGroup::setCode( const ScTokenArray& rCode )
 {

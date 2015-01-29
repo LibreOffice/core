@@ -1594,12 +1594,6 @@ ErrCode SfxObjectShell::CallXScript( const OUString& rScriptURL,
     return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError, pCaller );
 }
 
-
-SfxFrame* SfxObjectShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
-{
-    return pSelf;
-}
-
 SfxObjectShellFlags SfxObjectShell::GetFlags() const
 {
     if( pImp->eFlags == SFXOBJECTSHELL_UNDEFINED )
@@ -1821,10 +1815,6 @@ bool SfxObjectShell::IsUIActive()
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     return pFrame && pFrame->GetFrame().IsInPlace() && pFrame->GetFrame().GetWorkWindow_Impl()->IsVisible_Impl();
-}
-
-void SfxObjectShell::UIActivate( bool )
-{
 }
 
 void SfxObjectShell::InPlaceActivate( bool )

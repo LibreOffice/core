@@ -169,13 +169,6 @@ protected:
         @return  The bounding box (VCL rect.) in screen coordinates. */
     virtual Rectangle implGetBoundingBoxOnScreen() SAL_OVERRIDE;
 
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The count of used rows. */
-    sal_Int32 implGetRowCount() const;
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The count of used columns. */
-    sal_Int32 implGetColumnCount() const;
-
     // internal helper methods ------------------------------------------------
 
     /** @return  <TRUE/>, if the objects is a header bar for rows. */

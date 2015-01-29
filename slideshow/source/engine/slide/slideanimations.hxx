@@ -103,9 +103,6 @@ namespace slideshow
              */
             void end();
 
-            /// Release all references. Does not notify anything.
-            void dispose();
-
         private:
             SlideShowContext         maContext;
             const basegfx::B2DVector maSlideSize;

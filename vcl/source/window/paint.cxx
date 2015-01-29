@@ -682,10 +682,6 @@ void Window::Paint( const Rectangle& rRect )
     CallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
 }
 
-void Window::PostPaint()
-{
-}
-
 void Window::SetPaintTransparent( bool bTransparent )
 {
 

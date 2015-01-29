@@ -104,7 +104,6 @@ class SVX_DLLPUBLIC E3dAttributesUndoAction : public SdrUndoAction
         virtual bool CanRepeat(SfxRepeatTarget& rView) const SAL_OVERRIDE;
         virtual void Undo() SAL_OVERRIDE;
         virtual void Redo() SAL_OVERRIDE;
-        void Repeat();
 };
 
 #endif // INCLUDED_SVX_E3DUNDO_HXX

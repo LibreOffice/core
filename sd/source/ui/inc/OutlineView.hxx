@@ -93,10 +93,6 @@ public:
     void            SetActualPage( SdPage* pActual );
 
     void Paint (const Rectangle& rRect, ::sd::Window* pWin);
-    void AdjustPosSizePixel(
-        const Point &rPos,
-        const Size &rSize,
-        ::sd::Window* pWindow);
 
                     // Callbacks fuer LINKs
     DECL_LINK( ParagraphInsertedHdl, Outliner * );

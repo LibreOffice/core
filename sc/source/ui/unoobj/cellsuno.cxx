@@ -5128,16 +5128,7 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const OUString& aFormula )
     SetArrayFormula_Impl( aFormula, OUString(), formula::FormulaGrammar::GRAM_PODF_A1);
 }
 
-void ScCellRangeObj::SetArrayFormulaWithGrammar(const OUString& rFormula,
-    const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
-        throw (uno::RuntimeException, std::exception)
-{
-    SolarMutexGuard aGuard;
-    SetArrayFormula_Impl( rFormula, rFormulaNmsp, eGrammar);
-}
-
 // XArrayFormulaTokens
-
 uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens()
     throw (uno::RuntimeException, std::exception)
 {

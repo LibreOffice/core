@@ -225,7 +225,6 @@ public:
     virtual OUString                GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos = -1 ) const SAL_OVERRIDE;
     virtual vcl::Window*                 GetWindowInstance() SAL_OVERRIDE;
 
-    using SvTreeListBox::FillAccessibleStateSet;
     virtual void                    FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& _rStateSet, ::svt::AccessibleBrowseBoxObjType _eType ) const SAL_OVERRIDE;
     virtual void                    FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumn ) const SAL_OVERRIDE;
     virtual void                    GrabTableFocus() SAL_OVERRIDE;

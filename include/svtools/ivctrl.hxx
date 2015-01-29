@@ -322,7 +322,6 @@ public:
 
     bool                HasBackground() const;
     bool                HasFont() const;
-    bool                HasFontTextColor() const;
     bool                HasFontFillColor() const;
 
     void                SetFontColorToBackground ( bool bDo = true ) { _bAutoFontColor = bDo; }

@@ -141,7 +141,6 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
                     CreateAccessible() SAL_OVERRIDE;
-    void SwitchView();
 };
 
 /**

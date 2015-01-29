@@ -189,7 +189,6 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void) SAL_OVERRIDE;
-    void SwitchView();
 
     OUString GetSurroundingText() const SAL_OVERRIDE;
     Selection GetSurroundingTextSelection() const SAL_OVERRIDE;

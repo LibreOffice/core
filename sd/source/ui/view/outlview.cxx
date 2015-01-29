@@ -240,13 +240,6 @@ void OutlineView::InvalidateSlideNumberArea()
 {
 }
 
-/**
- * Window size was changed
- */
-void OutlineView::AdjustPosSizePixel(const Point &,const Size &,::sd::Window*)
-{
-}
-
 void OutlineView::AddWindowToPaintView(OutputDevice* pWin)
 {
     bool bAdded = false;

@@ -489,9 +489,6 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
-    /** Fills the StateSet with all states (except DEFUNC, done by the accessible object). */
-    void FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const;
-
     /** Fills the StateSet of one entry. */
     void FillAccessibleEntryStateSet( SvTreeListEntry* pEntry, ::utl::AccessibleStateSetHelper& rStateSet ) const;
 
@@ -577,7 +574,6 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
-    void            CursorMoved( SvTreeListEntry* pNewCursor );
     virtual void    PreparePaint( SvTreeListEntry* );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 

@@ -314,8 +314,6 @@ public:
 
     void            CursorPosChanged();
 
-    SfxChildAlignment
-                    CheckAlignment(SfxChildAlignment,SfxChildAlignment);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 

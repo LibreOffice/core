@@ -325,18 +325,6 @@ bool SlideSorterViewShell::RelocateToParentWindow (::vcl::Window* pParentWindow)
     }
 }
 
-void SlideSorterViewShell::GetFocus (void)
-{
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->GetController().GetFocusManager().ShowFocus();
-}
-
-void SlideSorterViewShell::LoseFocus (void)
-{
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->GetController().GetFocusManager().HideFocus();
-}
-
 SdPage* SlideSorterViewShell::getCurrentPage(void) const
 {
     // since SlideSorterViewShell::GetActualPage() currently also
@@ -519,12 +507,6 @@ void SlideSorterViewShell::Deactivate (bool /*bIsMDIActivate*/)
 {
     // Save Settings - Specifically SlidesPerRow to retrieve it later
     WriteFrameViewData();
-}
-
-SvBorder SlideSorterViewShell::GetBorder (bool )
-{
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    return mpSlideSorter->GetBorder();
 }
 
 void SlideSorterViewShell::Command (

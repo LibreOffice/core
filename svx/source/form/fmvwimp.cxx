@@ -197,7 +197,6 @@ FormViewPageWindowAdapter::~FormViewPageWindowAdapter()
 {
 }
 
-
 void FormViewPageWindowAdapter::dispose()
 {
     for (   ::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
@@ -230,33 +229,21 @@ void FormViewPageWindowAdapter::dispose()
     m_aControllerList.clear();
 }
 
-
-
 sal_Bool SAL_CALL FormViewPageWindowAdapter::hasElements(void) throw( RuntimeException, std::exception )
 {
     return getCount() != 0;
 }
-
 
 Type SAL_CALL  FormViewPageWindowAdapter::getElementType(void) throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<XFormController>::get();
 }
 
-// XEnumerationAccess
-
-Reference< XEnumeration >  SAL_CALL FormViewPageWindowAdapter::createEnumeration(void) throw( RuntimeException )
-{
-    return new ::comphelper::OEnumerationByIndex(this);
-}
-
 // XIndexAccess
-
 sal_Int32 SAL_CALL FormViewPageWindowAdapter::getCount(void) throw( RuntimeException, std::exception )
 {
     return m_aControllerList.size();
 }
-
 
 Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
@@ -268,7 +255,6 @@ Any SAL_CALL FormViewPageWindowAdapter::getByIndex(sal_Int32 nIndex) throw( Inde
     aElement <<= m_aControllerList[nIndex];
     return aElement;
 }
-
 
 void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl >& _Control ) throw (RuntimeException, std::exception)
 {
@@ -283,7 +269,6 @@ void SAL_CALL FormViewPageWindowAdapter::makeVisible( const Reference< XControl 
         m_pViewImpl->getView()->MakeVisible( aNewRect, *m_pWindow );
     }
 }
-
 
 Reference< XFormController >  getControllerSearchChildren( const Reference< XIndexAccess > & xIndex, const Reference< XTabControllerModel > & xModel)
 {
@@ -308,7 +293,6 @@ Reference< XFormController >  getControllerSearchChildren( const Reference< XInd
 }
 
 // Search the according controller
-
 Reference< XFormController >  FormViewPageWindowAdapter::getController( const Reference< XForm > & xForm ) const
 {
     Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);

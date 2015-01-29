@@ -1133,11 +1133,6 @@ namespace sw { namespace mark
         sortSubsetMarks();
     }
 
-    bool MarkManager::hasMark(const OUString& rName) const
-    {
-        return (m_aMarkNamesSet.find(rName) != m_aMarkNamesSet.end());
-    }
-
 void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("markManager"));

@@ -101,11 +101,6 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& /* rPrinterName */ )
     return false;
 }
 
-void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& /* rCommands */ )
-{
-
-}
-
 const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::getSystemPrintQueues()
 {
     return m_aSystemPrintQueues;

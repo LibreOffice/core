@@ -150,7 +150,6 @@ public:
     virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum);
     virtual SdrObject* ReplaceObject(SdrObject* pNewObj, size_t nObjNum);
     /// Modify ZOrder of an SdrObject
-    SdrObject* NbcSetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
     virtual SdrObject* SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum);
 
     void SetRectsDirty();

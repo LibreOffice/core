@@ -836,26 +836,6 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
     return bSuccess;
 }
 
-void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommands )
-{
-    if( m_pQueueInfo && m_pQueueInfo->hasChanged() )
-    {
-        m_aSystemPrintCommand = m_pQueueInfo->getCommand();
-        m_pQueueInfo->getSystemQueues( m_aSystemPrintQueues );
-        delete m_pQueueInfo, m_pQueueInfo = NULL;
-    }
-
-    std::list< SystemPrintQueue >::const_iterator it;
-    rCommands.clear();
-    OUString aPrinterConst( "(PRINTER)" );
-    for( it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
-    {
-        OUString aCmd( m_aSystemPrintCommand );
-        aCmd = aCmd.replaceAll( aPrinterConst, it->m_aQueue );
-        rCommands.push_back( aCmd );
-    }
-}
-
 const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::getSystemPrintQueues()
 {
     if( m_pQueueInfo && m_pQueueInfo->hasChanged() )

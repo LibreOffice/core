@@ -187,17 +187,6 @@ void SotFactory::DecSvObjectCount( SotObject * pObj )
 }
 
 /*************************************************************************
-|*    SotFactory::CreateInstance()
-|*
-|*    Beschreibung
-*************************************************************************/
-void * SotFactory::CreateInstance( SotObject ** ppObj ) const
-{
-    assert(pCreateFunc && "SotFactory::CreateInstance: pCreateFunc == 0");
-    return pCreateFunc( ppObj );
-}
-
-/*************************************************************************
 |*    SotFactory::Is()
 |*
 |*    Beschreibung
@@ -214,8 +203,5 @@ bool SotFactory::Is( const SotFactory * pSuperCl ) const
     }
     return false;
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

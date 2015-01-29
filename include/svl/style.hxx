@@ -116,9 +116,6 @@ public:
         If the display name is empty, this method returns the internal name. */
     OUString GetDisplayName() const;
 
-    // sets the display name of this style
-    void SetDisplayName( const OUString& );
-
     virtual const OUString& GetParent() const;
     virtual bool SetParent( const OUString& );
     virtual const OUString& GetFollow() const;
@@ -146,7 +143,6 @@ public:
     virtual void   SetHelpId( const OUString& r, sal_uLong nId );
 
     virtual SfxItemSet& GetItemSet();
-    sal_uInt16 GetVersion() const;
 };
 
 /* Class to iterate and search on a SfxStyleSheetBasePool */
@@ -304,7 +300,6 @@ class SVL_DLLPUBLIC SfxStyleSheetPool: public SfxStyleSheetBasePool
 protected:
     using SfxStyleSheetBasePool::Create;
     virtual SfxStyleSheetBase* Create(const OUString&, SfxStyleFamily, sal_uInt16 mask) SAL_OVERRIDE;
-    SfxStyleSheetBase* Create(const SfxStyleSheet &);
 
 public:
     SfxStyleSheetPool( SfxItemPool const& );

@@ -1715,21 +1715,6 @@ namespace accessibility
 #endif
     }
 
-    uno::Reference< XAccessible > AccessibleTextHelper::GetEventSource() const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-
-        uno::Reference< XAccessible > xRet( mpImpl->GetEventSource() );
-
-        mpImpl->CheckInvariants();
-
-        return xRet;
-#else
-        return mpImpl->GetEventSource();
-#endif
-    }
-
     void AccessibleTextHelper::SetFocus( bool bHaveFocus )
     {
 #ifdef DBG_UTIL
@@ -1761,19 +1746,6 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue, const uno::Any& rOldValue ) const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
-
-        mpImpl->FireEvent( nEventId, rNewValue, rOldValue );
-
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
-    }
-
     void AccessibleTextHelper::FireEvent( const AccessibleEventObject& rEvent ) const
     {
 #ifdef DBG_UTIL
@@ -1800,21 +1772,6 @@ namespace accessibility
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
-#endif
-    }
-
-    Point AccessibleTextHelper::GetOffset() const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-
-        Point aPoint( mpImpl->GetOffset() );
-
-        mpImpl->CheckInvariants();
-
-        return aPoint;
-#else
-        return mpImpl->GetOffset();
 #endif
     }
 
@@ -1888,23 +1845,6 @@ namespace accessibility
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
-#endif
-    }
-
-    bool AccessibleTextHelper::IsSelected() const
-    {
-        SolarMutexGuard aGuard;
-
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-
-        bool aRet = mpImpl->IsSelected();
-
-        mpImpl->CheckInvariants();
-
-        return aRet;
-#else
-        return mpImpl->IsSelected();
 #endif
     }
 

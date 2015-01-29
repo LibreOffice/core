@@ -69,7 +69,6 @@ public:
     // Manage elements
     bool GetAll( SbxClassType ) { return true; }
     SbxVariable* Make( const OUString&, SbxClassType, SbxDataType, bool bIsRuntimeFunction = false );
-    SbxObject* MakeObject( const OUString&, const OUString& );
     virtual void Insert( SbxVariable* );
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
     // without Broadcasts, only used in SO2/auto.cxx
@@ -77,9 +76,6 @@ public:
     void Remove( const OUString&, SbxClassType );
     virtual void Remove( SbxVariable* );
 
-    // Macro-Recording
-    OUString GenerateSource( const OUString &rLinePrefix,
-                                     const SbxObject *pRelativeTo );
     // Direct access on arrays
     SbxArray* GetMethods()      { return pMethods;  }
     SbxArray* GetProperties()   { return pProps;    }

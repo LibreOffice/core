@@ -437,47 +437,6 @@ const ::std::vector< OUString >& lcl_getControlModelMap()
 
 }
 
-uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportComponent( const OUString& _sReportComponentSpecifier ) throw (uno::Exception, lang::IllegalArgumentException,uno::RuntimeException)
-{
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
-    const ::std::vector< OUString >& aRet = lcl_getControlModelMap();
-    ::std::vector< OUString >::const_iterator aFind = ::std::find(aRet.begin(),aRet.end(),_sReportComponentSpecifier);
-    if ( aFind == aRet.end() )
-        throw lang::IllegalArgumentException();
-
-    uno::Reference< report::XReportComponent > xRet;
-    uno::Reference< lang::XMultiServiceFactory> xFac(getReportDefinition(),uno::UNO_QUERY_THROW);
-    switch( aFind - aRet.begin()  )
-    {
-        case 0:
-            xRet.set(xFac->createInstance("com.sun.star.form.component.FixedText"),uno::UNO_QUERY);
-            break;
-        case 1:
-            xRet.set(xFac->createInstance("com.sun.star.awt.UnoControlFixedLineModel"),uno::UNO_QUERY);
-            break;
-        case 2:
-            xRet.set(xFac->createInstance("com.sun.star.form.component.DatabaseImageControl"),uno::UNO_QUERY);
-            break;
-        case 3:
-            xRet.set(xFac->createInstance("com.sun.star.form.component.FormattedField"),uno::UNO_QUERY);
-            break;
-        case 4:
-            xRet.set(xFac->createInstance("com.sun.star.drawing.ControlShape"),uno::UNO_QUERY);
-            break;
-        default:
-            break;
-    }
-    return xRet;
-}
-
-uno::Sequence< OUString > SAL_CALL OSection::getAvailableReportComponentNames(  ) throw (uno::RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    const ::std::vector< OUString >& aRet = lcl_getControlModelMap();
-    return uno::Sequence< OUString >(aRet.data(), aRet.size());
-}
-
 // XChild
 uno::Reference< uno::XInterface > SAL_CALL OSection::getParent(  ) throw (uno::RuntimeException, std::exception)
 {

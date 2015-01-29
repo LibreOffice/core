@@ -70,14 +70,6 @@ SwVbaTable::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException
     xRows->removeByIndex( 0, xRows->getCount() );
 }
 
-uno::Reference< word::XRange > SAL_CALL
-SwVbaTable::ConvertToText( const uno::Any& /*Separator*/, const uno::Any& /*NestedTables*/ ) throw (script::BasicErrorException, uno::RuntimeException)
-{
-    // #FIXME the helper api uses the dreaded dispatch mechanism, holding off
-    // implementation while I look for alternative solution
-    throw uno::RuntimeException();
-}
-
 OUString SAL_CALL
 SwVbaTable::getName() throw (uno::RuntimeException, std::exception)
 {

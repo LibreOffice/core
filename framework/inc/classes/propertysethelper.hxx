@@ -112,18 +112,6 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
             throw(css::beans::PropertyExistException,
                   css::uno::Exception               );
 
-        /** remove an existing property info from the set of supported ones.
-         *
-         *  @param  sProperty
-         *          the name of the property.
-         *
-         *  @throw  [com::sun::star::beans::UnknownPropertyException]
-         *          if no property with the specified name exists.
-         */
-        void SAL_CALL impl_removePropertyInfo(const OUString& sProperty)
-            throw(css::beans::UnknownPropertyException,
-                  css::uno::Exception                 );
-
         /** mark the object as "useable for working" or "dead".
          *
          *  This correspond to the lifetime handling implemented by the base class TransactionBase.

@@ -945,19 +945,6 @@ SvXMLImportContext* ORptFilter::CreateStylesContext(const OUString& rLocalName,
     return pContext;
 }
 
-SvXMLImport&         ORptFilter::getGlobalContext()
-{
-    return *this;
-}
-
-void ORptFilter::enterEventContext()
-{
-}
-
-void ORptFilter::leaveEventContext()
-{
-}
-
 SvXMLImportContext *ORptFilter::CreateFontDeclsContext(
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )

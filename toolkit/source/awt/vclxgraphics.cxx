@@ -184,23 +184,6 @@ void VCLXGraphics::setFont( const uno::Reference< awt::XFont >& rxFont ) throw(u
     maFont = VCLUnoHelper::CreateFont( rxFont );
 }
 
-uno::Reference< awt::XFont > VCLXGraphics::getFont() throw(uno::RuntimeException)
-{
-    uno::Reference< awt::XFont > xFont;
-    uno::Reference< awt::XDevice > xDevice( getDevice() );
-
-    SolarMutexGuard aGuard;
-
-    if ( xDevice.is() )
-    {
-        VCLXFont *pFont = new VCLXFont;
-        pFont->Init( *xDevice.get(), maFont );
-        xFont.set( static_cast< ::cppu::OWeakObject* >( pFont ), uno::UNO_QUERY );
-    }
-
-    return xFont;
-}
-
 void VCLXGraphics::selectFont( const awt::FontDescriptor& rDescription ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -215,23 +198,11 @@ void VCLXGraphics::setTextColor( sal_Int32 nColor ) throw(uno::RuntimeException,
     maTextColor = Color( (sal_uInt32)nColor );
 }
 
-::sal_Int32 VCLXGraphics::getTextColor() throw(uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    return maTextColor.GetColor();
-}
-
 void VCLXGraphics::setTextFillColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     maTextFillColor = Color( (sal_uInt32)nColor );
-}
-
-::sal_Int32 VCLXGraphics::getTextFillColor() throw(uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    return maTextFillColor.GetColor();
 }
 
 void VCLXGraphics::setLineColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
@@ -241,12 +212,6 @@ void VCLXGraphics::setLineColor( sal_Int32 nColor ) throw(uno::RuntimeException,
     maLineColor = Color( (sal_uInt32)nColor );
 }
 
-::sal_Int32 VCLXGraphics::getLineColor() throw(uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    return maLineColor.GetColor();
-}
-
 void VCLXGraphics::setFillColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -254,24 +219,11 @@ void VCLXGraphics::setFillColor( sal_Int32 nColor ) throw(uno::RuntimeException,
     maFillColor = Color( (sal_uInt32)nColor );
 }
 
-::sal_Int32 VCLXGraphics::getFillColor() throw(uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    return maFillColor.GetColor();
-}
-
 void VCLXGraphics::setRasterOp( awt::RasterOperation eROP ) throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     meRasterOp = (RasterOp)eROP;
-}
-
-awt::RasterOperation VCLXGraphics::getRasterOp()
-throw(uno::RuntimeException)
-{
-    SolarMutexGuard aGuard;
-    return (awt::RasterOperation) meRasterOp;
 }
 
 void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion ) throw(uno::RuntimeException, std::exception)

@@ -305,13 +305,6 @@ void SdXShape::dispose()
     delete this;
 }
 
-// XInterface
-uno::Any SAL_CALL SdXShape::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException)
-{
-    return mpShape->queryAggregation( rType );
-}
-
 uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException, std::exception)
 {

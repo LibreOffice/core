@@ -113,15 +113,6 @@ namespace accessibility
         EDITENG_DLLPRIVATE AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& );
 
     public:
-        /** Query the current edit source
-
-            @attention This method returns by reference, so you are
-            responsible for serialization (typically, you acquired the
-            solar mutex when calling this method). Thus, the method
-            should only be called from the main office thread.
-
-        */
-        const SvxEditSource& GetEditSource() const;
 
         /** Set the current edit source
 
@@ -164,13 +155,6 @@ namespace accessibility
          */
         void SetEventSource( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rInterface );
 
-        /** Get the event source
-
-            @return the interface that is set as the source for
-            accessibility events sent by this object.
-         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetEventSource() const;
-
         /** Set offset of EditEngine from parent
 
             @attention You are required to have the solar mutex
@@ -185,30 +169,6 @@ namespace accessibility
             The offset in screen coordinates (i.e. pixel)
         */
         void SetOffset( const Point& rPoint );
-
-        /** Query offset of EditEngine from parent
-
-            @return the offset in screen coordinates (i.e. pixel)
-        */
-        Point GetOffset() const;
-
-        /** Update the visible children
-
-            As this class currently does not represent any content
-            using children, this does nothing at the moment.
-
-            @attention You are required to have the solar mutex
-            locked, when calling this method. Thus, the method should
-            only be called from the main office thread.
-
-            This method reevaluates the visibility of all
-            children. Call this method if your visibility state has
-            changed somehow, e.g. if the visible area has changed and
-            the AccessibleStaticTextHelper isn't notified
-            internally. Normally, there should not be a need to call
-            this method.
-        */
-        void UpdateChildren();
 
         /** Drop all references and enter disposed state
 

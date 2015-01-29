@@ -124,7 +124,6 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
                                   sal_Int32 nFileFormat,
                                   bool bTemplate = false ) const SAL_OVERRIDE;
 
-    bool                SetData( const OUString& rData );
     virtual sal_uLong   GetMiscStatus() const SAL_OVERRIDE;
     virtual void        OnDocumentPrinterChanged( Printer * ) SAL_OVERRIDE;
     virtual bool        InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage ) SAL_OVERRIDE;

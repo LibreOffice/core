@@ -40,14 +40,6 @@ void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
         ToolBox::MouseButtonDown(rEvt);
 }
 
-long SwHelpToolBox::DoubleClick( ToolBox* pCaller )
-{
-    // No doubleclick on button
-    if( 0 == pCaller->GetCurItemId() && aDoubleClickLink.Call(0) )
-        return sal_True;
-    return sal_False;
-}
-
 SwHelpToolBox::~SwHelpToolBox() {}
 
 sal_Int8 SwHelpToolBox::AcceptDrop( const AcceptDropEvent& rEvt )

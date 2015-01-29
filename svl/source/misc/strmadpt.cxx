@@ -470,23 +470,7 @@ SvInputStream::~SvInputStream()
     delete m_pPipe;
 }
 
-// virtual
-void SvInputStream::AddMark(sal_uLong nPos)
-{
-    if (open() && m_pPipe)
-        m_pPipe->addMark(nPos);
-}
-
-// virtual
-void SvInputStream::RemoveMark(sal_uLong nPos)
-{
-    if (open() && m_pPipe)
-        m_pPipe->removeMark(nPos);
-}
-
-
 //  SvOutputStream
-
 
 // virtual
 sal_uLong SvOutputStream::GetData(void *, sal_uLong)

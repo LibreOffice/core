@@ -267,16 +267,6 @@ bool SotStorageStream::Commit()
     return GetError() == SVSTREAM_OK;
 }
 
-bool SotStorageStream::Revert()
-{
-    if( pOwnStm )
-    {
-        pOwnStm->Revert();
-        SetError( pOwnStm->GetError() );
-    }
-    return GetError() == SVSTREAM_OK;
-}
-
 bool SotStorageStream::SetProperty( const OUString& rName, const ::com::sun::star::uno::Any& rValue )
 {
     UCBStorageStream* pStg = PTR_CAST( UCBStorageStream, pOwnStm );
@@ -615,14 +605,6 @@ const OUString & SotStorage::GetName() const
     return m_aName;
 }
 
-
-void SotStorage::ResetError()
-{
-    m_nError = SVSTREAM_OK;
-    if( m_pOwnStg )
-        m_pOwnStg->ResetError();
-}
-
 void SotStorage::SetClass( const SvGlobalName & rName,
                            sal_uLong nOriginalClipFormat,
                            const OUString & rUserTypeName )
@@ -630,17 +612,6 @@ void SotStorage::SetClass( const SvGlobalName & rName,
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
         m_pOwnStg->SetClass( rName, nOriginalClipFormat, rUserTypeName );
-    else
-        SetError( SVSTREAM_GENERALERROR );
-}
-
-void SotStorage::SetConvertClass( const SvGlobalName & rName,
-                                  sal_uLong nOriginalClipFormat,
-                                  const OUString & rUserTypeName )
-{
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-        m_pOwnStg->SetConvertClass( rName, nOriginalClipFormat, rUserTypeName );
     else
         SetError( SVSTREAM_GENERALERROR );
 }
@@ -678,16 +649,6 @@ OUString SotStorage::GetUserName()
     return aName;
 }
 
-bool SotStorage::ShouldConvert()
-{
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-        return m_pOwnStg->ShouldConvert();
-    else
-        SetError( SVSTREAM_GENERALERROR );
-    return false;
-}
-
 void SotStorage::FillInfoList( SvStorageInfoList * pFillList ) const
 {
     DBG_ASSERT( Owner(), "must be owner" );
@@ -718,20 +679,6 @@ bool SotStorage::Commit()
     if( m_pOwnStg )
     {
         if( !m_pOwnStg->Commit() )
-            SetError( m_pOwnStg->GetError() );
-    }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-
-    return SVSTREAM_OK == GetError();
-}
-
-bool SotStorage::Revert()
-{
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-    {
-        if( !m_pOwnStg->Revert() )
             SetError( m_pOwnStg->GetError() );
     }
     else
@@ -837,20 +784,6 @@ bool SotStorage::Remove( const OUString & rEleName )
     return SVSTREAM_OK == GetError();
 }
 
-bool SotStorage::Rename( const OUString & rEleName, const OUString & rNewName )
-{
-    DBG_ASSERT( Owner(), "must be owner" );
-    if( m_pOwnStg )
-    {
-        m_pOwnStg->Rename( rEleName, rNewName );
-        SetError( m_pOwnStg->GetError() );
-    }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-
-    return SVSTREAM_OK == GetError();
-}
-
 bool SotStorage::CopyTo( const OUString & rEleName,
                          SotStorage * pNewSt, const OUString & rNewName )
 {
@@ -859,23 +792,6 @@ bool SotStorage::CopyTo( const OUString & rEleName,
     if( m_pOwnStg )
     {
         m_pOwnStg->CopyTo( rEleName, pNewSt->m_pOwnStg, rNewName );
-        SetError( m_pOwnStg->GetError() );
-        SetError( pNewSt->GetError() );
-    }
-    else
-        SetError( SVSTREAM_GENERALERROR );
-
-    return SVSTREAM_OK == GetError();
-}
-
-bool SotStorage::MoveTo( const OUString & rEleName,
-                         SotStorage * pNewSt, const OUString & rNewName )
-{
-    DBG_ASSERT( Owner(), "must be owner" );
-    DBG_ASSERT( pNewSt->Owner(), "must be owner" );
-    if( m_pOwnStg )
-    {
-        m_pOwnStg->MoveTo( rEleName, pNewSt->m_pOwnStg, rNewName );
         SetError( m_pOwnStg->GetError() );
         SetError( pNewSt->GetError() );
     }

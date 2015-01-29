@@ -47,8 +47,6 @@ public:
     */
     virtual void Fill (ItemList& rItemList) SAL_OVERRIDE;
 
-    void GetState (SfxItemSet& rItemSet);
-
 protected:
     virtual void NotifyContainerChangeEvent (const MasterPageContainerChangeEvent& rEvent) SAL_OVERRIDE;
 

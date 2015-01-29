@@ -1326,38 +1326,4 @@ void ScNavigatorDlg::EndOfDataArea()
     }
 }
 
-SfxChildAlignment ScNavigatorDlg::CheckAlignment(
-                            SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
-{
-    SfxChildAlignment eRetAlign;
-
-    //! no docking, if Listbox not exists ???
-
-    switch (eAlign)
-    {
-        case SFX_ALIGN_TOP:
-        case SFX_ALIGN_HIGHESTTOP:
-        case SFX_ALIGN_LOWESTTOP:
-        case SFX_ALIGN_BOTTOM:
-        case SFX_ALIGN_LOWESTBOTTOM:
-        case SFX_ALIGN_HIGHESTBOTTOM:
-            eRetAlign = eActAlign;              // illegal
-            break;
-
-        case SFX_ALIGN_LEFT:
-        case SFX_ALIGN_RIGHT:
-        case SFX_ALIGN_FIRSTLEFT:
-        case SFX_ALIGN_LASTLEFT:
-        case SFX_ALIGN_FIRSTRIGHT:
-        case SFX_ALIGN_LASTRIGHT:
-            eRetAlign = eAlign;                 // legal
-            break;
-
-        default:
-            eRetAlign = eAlign;
-            break;
-    }
-    return eRetAlign;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

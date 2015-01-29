@@ -552,13 +552,6 @@ public:
     virtual bool sprm(Sprm & rSprm);
 
     /**
-       Handle properties at current handle.
-
-       @param pProps   the properites
-     */
-    void props(TablePropertyMapPtr pProps);
-
-    /**
        Handle occurrence of character 0x7.
      */
     void handle0x7();

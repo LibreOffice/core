@@ -467,18 +467,6 @@ com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
     pAccessibleDocument->Init();
 
     return xAcc;
- }
-
-// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
-// There are other notifications for this when the active view has chnaged, so
-// please update the code to use that event mechanism
-void ScGridWindow::SwitchView()
-{
-    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(false).get());
-    if (pAccDoc)
-    {
-        pAccDoc->SwitchViewFireFocus();
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

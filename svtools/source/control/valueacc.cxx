@@ -527,8 +527,6 @@ awt::Size SAL_CALL ValueSetAcc::getSize()
     return aRet;
 }
 
-
-
 void SAL_CALL ValueSetAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)
 {
@@ -536,17 +534,6 @@ void SAL_CALL ValueSetAcc::grabFocus()
     const SolarMutexGuard aSolarGuard;
     mpParent->GrabFocus();
 }
-
-
-
-uno::Any SAL_CALL ValueSetAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    ThrowIfDisposed();
-    return uno::Any();
-}
-
-
 
 sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
     throw (uno::RuntimeException, std::exception)
@@ -556,8 +543,6 @@ sal_Int32 SAL_CALL ValueSetAcc::getForeground(  )
     return static_cast<sal_Int32>(nColor);
 }
 
-
-
 sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
     throw (uno::RuntimeException, std::exception)
 {
@@ -565,8 +550,6 @@ sal_Int32 SAL_CALL ValueSetAcc::getBackground(  )
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
-
-
 
 void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
@@ -1090,16 +1073,12 @@ sal_Bool SAL_CALL ValueItemAcc::containsPoint( const awt::Point& aPoint )
     return Rectangle( aNullPoint, aSize ).IsInside( aTestPoint );
 }
 
-
-
 uno::Reference< accessibility::XAccessible > SAL_CALL ValueItemAcc::getAccessibleAtPoint( const awt::Point& )
     throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< accessibility::XAccessible > xRet;
     return xRet;
 }
-
-
 
 awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
     throw (uno::RuntimeException, std::exception)
@@ -1124,8 +1103,6 @@ awt::Rectangle SAL_CALL ValueItemAcc::getBounds()
     return aRet;
 }
 
-
-
 awt::Point SAL_CALL ValueItemAcc::getLocation()
     throw (uno::RuntimeException, std::exception)
 {
@@ -1137,8 +1114,6 @@ awt::Point SAL_CALL ValueItemAcc::getLocation()
 
     return aRet;
 }
-
-
 
 awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
     throw (uno::RuntimeException, std::exception)
@@ -1158,8 +1133,6 @@ awt::Point SAL_CALL ValueItemAcc::getLocationOnScreen()
     return aRet;
 }
 
-
-
 awt::Size SAL_CALL ValueItemAcc::getSize()
     throw (uno::RuntimeException, std::exception)
 {
@@ -1172,23 +1145,11 @@ awt::Size SAL_CALL ValueItemAcc::getSize()
     return aRet;
 }
 
-
-
 void SAL_CALL ValueItemAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)
 {
     // nothing to do
 }
-
-
-
-uno::Any SAL_CALL ValueItemAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    return uno::Any();
-}
-
-
 
 sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
     throw (uno::RuntimeException, std::exception)
@@ -1196,8 +1157,6 @@ sal_Int32 SAL_CALL ValueItemAcc::getForeground(  )
     sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
-
-
 
 sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
     throw (uno::RuntimeException, std::exception)
@@ -1209,8 +1168,6 @@ sal_Int32 SAL_CALL ValueItemAcc::getBackground(  )
         nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
-
-
 
 sal_Int64 SAL_CALL ValueItemAcc::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw( uno::RuntimeException, std::exception )
 {

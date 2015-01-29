@@ -313,13 +313,6 @@ namespace toolkit
     }
 
 
-    Any SAL_CALL OAccessibleControlContext::getAccessibleKeyBinding(  ) throw (RuntimeException)
-    {
-        // we do not have any key bindings to activate a UNO control in design mode
-        return Any();
-    }
-
-
     sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
         SolarMutexGuard aSolarGuard;

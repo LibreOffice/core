@@ -950,17 +950,6 @@ void Window::DropScroll(const Point& rMousePos)
     }
 }
 
-// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
-// There are other notifications for this when the active view has chnaged, so
-// please update the code to use that event mechanism
-void Window::SwitchView()
-{
-    if (mpViewShell)
-    {
-        mpViewShell->SwitchViewFireFocus(GetAccessible(false));
-    }
-}
-
 OUString Window::GetSurroundingText() const
 {
     if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )

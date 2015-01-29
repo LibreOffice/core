@@ -272,88 +272,37 @@ void SvxSpellWrapper::SpellEnd()
     ShowLanguageErrors();
 }
 
-
-
-
 bool SvxSpellWrapper::SpellContinue()
 {
     return false;
 }
 
-
-
 void SvxSpellWrapper::AutoCorrect( const OUString&, const OUString& )
 {
 }
-
-
-
 
 void SvxSpellWrapper::ScrollArea()
 {   // Set Scroll area
 }
 
-
-
-
 void SvxSpellWrapper::ChangeWord( const OUString&, const sal_uInt16 )
 {   // Insert Word
 }
-
-
-
 
 void SvxSpellWrapper::ChangeThesWord( const OUString& )
 {
     // replace word due to Thesaurus.
 }
 
-
-
-void SvxSpellWrapper::StartThesaurus( const OUString &rWord, sal_uInt16 nLanguage )
-{
-    Reference< XThesaurus >  xThes( SvxGetThesaurus() );
-    if (!xThes.is())
-    {
-        MessageDialog(pWin, EE_RESSTR(RID_SVXSTR_HMERR_THESAURUS),
-                      VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute();
-        return;
-    }
-
-    WAIT_ON();  // while looking up for initial word
-    EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractThesaurusDialog> pDlg(pFact->CreateThesaurusDialog( pWin, xThes, rWord, nLanguage ));
-    WAIT_OFF();
-    if ( pDlg->Execute()== RET_OK )
-    {
-        ChangeThesWord( pDlg->GetWord() );
-    }
-}
-
-
-
 void SvxSpellWrapper::ReplaceAll( const OUString &, sal_Int16 )
 {   // Replace Word from the Replace list
 }
-
-
-
-
-void SvxSpellWrapper::SetLanguage( const sal_uInt16 )
-{   // Set Language
-}
-
-
-
 
 void SvxSpellWrapper::InsertHyphen( const sal_uInt16 )
 {   // inserting and deleting Hyphae
 }
 
-
 // Testing of the document areas in the order specified by the flags
-
-
 void SvxSpellWrapper::SpellDocument( )
 {
     if ( bOtherCntnt )

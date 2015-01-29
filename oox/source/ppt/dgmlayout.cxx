@@ -148,15 +148,6 @@ const ::oox::drawingml::Theme* QuickDiagrammingLayout::getCurrentTheme() const
     return mpThemePtr.get();
 }
 
-sal_Int32 QuickDiagrammingLayout::getSchemeClr( sal_Int32 nColorSchemeToken ) const
-{
-    sal_Int32 nColor = 0;
-    if( mpThemePtr )
-        mpThemePtr->getClrScheme().getColor( nColorSchemeToken,
-                                             nColor );
-    return nColor;
-}
-
 const oox::drawingml::table::TableStyleListPtr QuickDiagrammingLayout::getTableStyles()
 {
     return oox::drawingml::table::TableStyleListPtr();

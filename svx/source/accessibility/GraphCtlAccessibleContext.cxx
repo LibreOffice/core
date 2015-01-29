@@ -474,38 +474,6 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::removeAccessibleEventListener( cons
     }
 }
 
-
-
-void SAL_CALL SvxGraphCtrlAccessibleContext::addFocusListener( const Reference< awt::XFocusListener >& xListener )
-    throw( RuntimeException )
-{
-    ::SolarMutexGuard aGuard;
-
-    if( xListener.is() )
-    {
-        Reference< ::com::sun::star::awt::XWindow > xWindow( VCLUnoHelper::GetInterface( mpControl ) );
-        if( xWindow.is() )
-            xWindow->addFocusListener( xListener );
-    }
-}
-
-
-
-void SAL_CALL SvxGraphCtrlAccessibleContext::removeFocusListener( const Reference< awt::XFocusListener >& xListener )
-    throw (RuntimeException)
-{
-    ::SolarMutexGuard aGuard;
-
-    if( xListener.is() )
-    {
-        Reference< ::com::sun::star::awt::XWindow > xWindow = VCLUnoHelper::GetInterface( mpControl );
-        if( xWindow.is() )
-            xWindow->removeFocusListener( xListener );
-    }
-}
-
-
-
 void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
@@ -516,18 +484,6 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::grabFocus() throw( RuntimeException
     mpControl->GrabFocus();
 }
 
-
-
-Any SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleKeyBinding() throw( RuntimeException )
-{
-    // here is no implementation, because here are no KeyBindings for every object
-    return Any();
-}
-
-
-
-
-
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -535,9 +491,6 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
     sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
-
-
-
 
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)

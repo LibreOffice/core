@@ -2926,53 +2926,6 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeExcep
     setUsePen( true ); // enable pen mode, update color
 }
 
-void SAL_CALL SlideshowImpl::setUseEraser( bool /*_usepen*/ ) throw (css::uno::RuntimeException)
-{
-}
-
-void SAL_CALL SlideshowImpl::setPenMode( bool bSwitchPenMode ) throw (RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    setUsePen( bSwitchPenMode ); // SwitchPen Mode
-
-}
-
-void SAL_CALL SlideshowImpl::setPointerMode( bool bSwitchPointerMode ) throw (css::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    if (mxShow.is()) try
-    {
-        mxShow->setProperty(
-                    beans::PropertyValue( "PointerVisible" ,
-                        -1,
-                        makeAny( bSwitchPointerMode ),
-                        beans::PropertyState_DIRECT_VALUE ) );
-    }
-    catch ( Exception& )
-    {
-        SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerMode(), "
-            "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
-    }
-}
-
-void SAL_CALL SlideshowImpl::setPointerPosition( const ::com::sun::star::geometry::RealPoint2D& pos ) throw (css::uno::RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    if (mxShow.is()) try
-    {
-        mxShow->setProperty(
-                    beans::PropertyValue( "PointerPosition" ,
-                        -1,
-                        makeAny( pos ),
-                        beans::PropertyState_DIRECT_VALUE ) );
-    }
-    catch ( Exception& )
-    {
-        SAL_WARN( "sd.slideshow", "sd::SlideShowImpl::setPointerPosition(), "
-            "exception caught: " << comphelper::anyToString( cppu::getCaughtException() ));
-    }
-}
-
 void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeException)
 {
     if( bEraseAllInk )
@@ -2993,16 +2946,7 @@ void SAL_CALL SlideshowImpl::setEraseAllInk(bool bEraseAllInk) throw (RuntimeExc
     }
 }
 
-void SAL_CALL SlideshowImpl::setEraseInk( sal_Int32 /*nEraseInkSize*/ ) throw (css::uno::RuntimeException)
-{
-}
-
-void SAL_CALL SlideshowImpl::setEraserMode( bool /*bSwitchEraserMode*/ ) throw (css::uno::RuntimeException)
-{
-}
-
 // XSlideShowController Methods
-
 sal_Bool SAL_CALL SlideshowImpl::isRunning(  ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;

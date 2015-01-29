@@ -535,7 +535,6 @@ public:
     ::sw::DocumentContentOperationsManager const & GetDocumentContentOperationsManager() const;
     ::sw::DocumentContentOperationsManager & GetDocumentContentOperationsManager();
 
-    void SetModified(SwPaM &rPaM);
     bool UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal = 0 );
     bool UpdateRsid( const SwPaM &rRg, sal_Int32 nLen );
 

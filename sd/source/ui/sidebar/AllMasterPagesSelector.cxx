@@ -182,14 +182,6 @@ void AllMasterPagesSelector::UpdatePageSet (ItemList& rItemList)
         rItemList.push_back((*iDescriptor)->maToken);
 }
 
-void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
-{
-    //    MasterPagesSelector::GetState(rItemSet);
-
-    if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SfxItemState::DEFAULT)
-        rItemSet.DisableItem(SID_TP_EDIT_MASTER);
-}
-
 } } // end of namespace sd::sidebar
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

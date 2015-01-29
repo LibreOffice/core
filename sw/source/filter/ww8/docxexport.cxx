@@ -457,11 +457,6 @@ void DocxExport::ExportDocument_Impl()
     delete m_pSections, m_pSections = NULL;
 }
 
-void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
-{
-    OSL_TRACE( "TODO DocxExport::OutputPageSectionBreaks( const SwTxtNode& )" );
-}
-
 void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
@@ -503,11 +498,6 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
             m_pSections->AppendSection( pAktPageDesc, pParentFmt, nRstLnNum );
         }
     }
-}
-
-void DocxExport::OutputTableNode( const SwTableNode& )
-{
-    OSL_TRACE( "TODO DocxExport::OutputTableNode( const SwTableNode& )" );
 }
 
 void DocxExport::OutputGrfNode( const SwGrfNode& )

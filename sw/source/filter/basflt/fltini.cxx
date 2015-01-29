@@ -191,8 +191,6 @@ SwRead GetReader( const OUString& rFltName )
 
 } // namespace SwReaderWriter
 
-void Writer::SetVersion( const OUString&, long ) {}
-
 bool Writer::IsStgWriter() const { return false; }
 
 bool StgWriter::IsStgWriter() const { return true; }

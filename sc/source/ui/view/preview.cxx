@@ -1527,17 +1527,6 @@ com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible> ScPre
     return xAcc;
 }
 
-// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
-// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
-void ScPreview::SwitchView()
-{
-    ScAccessibleDocumentBase* pAccDoc = static_cast<ScAccessibleDocumentBase*>(GetAccessible(false).get());
-    if (pAccDoc)
-    {
-        pAccDoc->SwitchViewFireFocus();
-    }
-}
-
 void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
 {
     Fraction aPreviewZoom( nZoom, 100 );

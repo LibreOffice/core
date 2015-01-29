@@ -74,19 +74,6 @@ public:
     bool SAL_CALL
         isVisible() throw( ::com::sun::star::uno::RuntimeException );
 
-    bool SAL_CALL
-        isFocusTraversable() throw( ::com::sun::star::uno::RuntimeException );
-
-    void SAL_CALL
-        addFocusListener(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
-            throw( ::com::sun::star::uno::RuntimeException );
-
-    void SAL_CALL
-        removeFocusListener(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
-            throw( ::com::sun::star::uno::RuntimeException );
-
     //=====  XAccessible  =====================================================
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
@@ -115,8 +102,6 @@ public:
     virtual void SAL_CALL
         grabFocus() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Any SAL_CALL
-        getAccessibleKeyBinding() throw( ::com::sun::star::uno::RuntimeException );
     virtual sal_Int32 SAL_CALL
         getForeground(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL

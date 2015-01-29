@@ -89,8 +89,6 @@ public:
      */
     virtual void    Add(XFContent *pContent);
 
-    void    InsertAtBegin(XFContent *pContent);
-    void    RemoveAt(sal_uInt32 nPos);
     rtl::Reference<XFContent> GetLastContent();
     void    RemoveLastContent();
     /**

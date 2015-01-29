@@ -72,8 +72,6 @@ public:
     */
     static SlideSorterViewShell* GetSlideSorter (ViewShellBase& rBase);
 
-    void GetFocus (void);
-    void LoseFocus (void);
     virtual SdPage* GetActualPage (void) SAL_OVERRIDE;
 
     /// inherited from sd::ViewShell
@@ -185,8 +183,6 @@ public:
     virtual bool RelocateToParentWindow (::vcl::Window* pParentWindow) SAL_OVERRIDE;
 
 protected:
-
-    SvBorder GetBorder (bool bOuterResize);
 
     /** Override this method to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.

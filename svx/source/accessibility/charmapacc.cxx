@@ -108,12 +108,6 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtual
     return xRet;
 }
 
-uno::Any SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    return uno::Any();
-}
-
 void SAL_CALL SvxShowCharSetVirtualAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)
 {
@@ -121,8 +115,6 @@ void SAL_CALL SvxShowCharSetVirtualAcc::grabFocus()
     ensureAlive();
     mpParent->GrabFocus();
 }
-
-
 
 Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
@@ -481,23 +473,12 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetAcc::ge
     return xRet;
 }
 
-
-
-
 void SAL_CALL SvxShowCharSetAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
     m_pParent->getCharSetControl()->GrabFocus();
-}
-
-
-
-uno::Any SAL_CALL SvxShowCharSetAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    return uno::Any();
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleRowCount(  ) throw (RuntimeException, std::exception)
@@ -781,19 +762,10 @@ uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL SvxShowCharSe
     return pStateSet;
 }
 
-
 void SAL_CALL SvxShowCharSetItemAcc::grabFocus()
     throw (uno::RuntimeException, std::exception)
 {
     // nothing to do
-}
-
-
-
-uno::Any SAL_CALL SvxShowCharSetItemAcc::getAccessibleKeyBinding()
-    throw (uno::RuntimeException)
-{
-    return uno::Any();
 }
 
 awt::Rectangle SvxShowCharSetItemAcc::implGetBounds(  ) throw (RuntimeException)

@@ -322,16 +322,6 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
     }
 }
 
-void OutlineViewShell::AddWindow (::sd::Window* pWin)
-{
-    pOlView->AddWindowToPaintView(pWin);
-}
-
-void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
-{
-    pOlView->DeleteWindowFromPaintView(pWin);
-}
-
 /**
  * Activate(): during the first invocation the fields get updated
  */
@@ -1452,52 +1442,6 @@ bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
     }
 
     return(bReturn);
-}
-
-/**
- * Return text of the selection
- */
-OUString OutlineViewShell::GetSelectionText(bool bCompleteWords)
-{
-    OUString aStrSelection;
-    ::Outliner& rOl = pOlView->GetOutliner();
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-
-    if (bCompleteWords)
-    {
-        ESelection aSel = pOutlinerView->GetSelection();
-        OUString aStrCurrentDelimiters = rOl.GetWordDelimiters();
-
-        rOl.SetWordDelimiters(" .,;\"'");
-        aStrSelection = rOl.GetWord( aSel.nEndPara, aSel.nEndPos );
-        rOl.SetWordDelimiters( aStrCurrentDelimiters );
-    }
-    else
-    {
-        aStrSelection = pOutlinerView->GetSelected();
-    }
-
-    return (aStrSelection);
-}
-
-/**
- * Is something selected?
- */
-bool OutlineViewShell::HasSelection(bool bText) const
-{
-    bool bReturn = false;
-
-    if (bText)
-    {
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-
-        if (pOutlinerView && !pOutlinerView->GetSelected().isEmpty())
-        {
-            bReturn = true;
-        }
-    }
-
-    return bReturn;
 }
 
 /**

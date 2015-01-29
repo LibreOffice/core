@@ -297,8 +297,6 @@ public:
     virtual void SAL_CALL grabFocus()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding()
-        throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getForeground()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getBackground()

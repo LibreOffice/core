@@ -22,11 +22,6 @@
 
 namespace sdr { namespace contact {
 
-const SdrTextObj& ViewContactOfTextObj::GetTextObj() const
-{
-    return static_cast<const SdrTextObj&>(GetSdrObject());
-}
-
 ViewContactOfTextObj::ViewContactOfTextObj(SdrTextObj& rTextObj)
 :   ViewContactOfSdrObj(rTextObj)
 {

@@ -28,10 +28,6 @@ namespace sdr { namespace contact {
 
 class ViewContactOfTextObj : public ViewContactOfSdrObj
 {
-protected:
-    // internal access to SdrTextObj
-    const SdrTextObj& GetTextObj() const;
-
 public:
     // basic constructor, used from SdrObject.
     explicit ViewContactOfTextObj(SdrTextObj& rTextObj);

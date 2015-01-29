@@ -49,12 +49,10 @@ namespace svt { namespace table
         SetFillColor( aWindowColor );
     }
 
-
     TableDataWindow::~TableDataWindow()
     {
         impl_hideTipWindow();
     }
-
 
     void TableDataWindow::Paint( const Rectangle& rUpdateRect )
     {
@@ -65,17 +63,6 @@ namespace svt { namespace table
     {
         Window::SetBackground( rColor );
     }
-
-    void TableDataWindow::SetControlBackground( const Color& rColor )
-    {
-        Window::SetControlBackground( rColor );
-    }
-
-    void TableDataWindow::SetControlBackground()
-    {
-        Window::SetControlBackground();
-    }
-
 
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {

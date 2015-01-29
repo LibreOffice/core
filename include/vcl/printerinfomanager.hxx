@@ -180,9 +180,6 @@ public:
     // returns the printer queue names
     const std::list< SystemPrintQueue >& getSystemPrintQueues();
 
-    // similar but returnse whole commandlines
-    void getSystemPrintCommands( std::list< OUString >& rCommands );
-
     // abstract print command
     // returns a stdio FILE* that a postscript file may be written to
     // this may either be a regular file or the result of popen()

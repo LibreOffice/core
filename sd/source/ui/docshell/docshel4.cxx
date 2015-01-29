@@ -1167,43 +1167,6 @@ SfxDocumentInfoDialog* DrawDocShell::CreateDocumentInfoDialog( vcl::Window *pPar
     return pDlg;
 }
 
-void DrawDocShell::setDocAccTitle( const OUString& rTitle )
-{
-    if (mpDoc )
-    {
-        mpDoc->setDocAccTitle( rTitle );
-    }
-}
-
-const OUString DrawDocShell::getDocAccTitle() const
-{
-    OUString sRet;
-    if (mpDoc)
-    {
-        sRet =  mpDoc->getDocAccTitle();
-    }
-
-    return sRet;
-}
-
-void DrawDocShell::setDocReadOnly( bool bReadOnly)
-{
-    if (mpDoc )
-    {
-        mpDoc->setDocReadOnly( bReadOnly );
-    }
-}
-
-bool DrawDocShell::getDocReadOnly() const
-{
-    if  (mpDoc)
-    {
-        return mpDoc->getDocReadOnly();
-    }
-
-    return false;
-}
-
 void DrawDocShell::setEditMode(DrawViewShell* pDrawViewShell, bool isMasterPage)
 {
     // Set the edit mode to either the normal edit mode or the

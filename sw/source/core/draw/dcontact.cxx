@@ -2352,22 +2352,6 @@ SdrHdl* SwDrawVirtObj::GetHdl(sal_uInt32 nHdlNum) const
     return pHdl;
 }
 
-SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const
-{
-    SdrHdl* pHdl = rRefObj.GetPlusHdl(rHdl, nPlNum);
-
-    if(pHdl)
-    {
-        pHdl->SetPos(pHdl->GetPos() + GetOffset());
-    }
-    else
-    {
-        OSL_ENSURE(false, "Got no SdrHdl(!)");
-    }
-
-    return pHdl;
-}
-
 void SwDrawVirtObj::NbcMove(const Size& rSiz)
 {
     SdrObject::NbcMove( rSiz );

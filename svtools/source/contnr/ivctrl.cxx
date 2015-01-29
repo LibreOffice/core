@@ -131,11 +131,6 @@ bool SvtIconChoiceCtrl::HasFont() const
     return false;
 }
 
-bool SvtIconChoiceCtrl::HasFontTextColor() const
-{
-    return true;
-}
-
 bool SvtIconChoiceCtrl::HasFontFillColor() const
 {
     return true;

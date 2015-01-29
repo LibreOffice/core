@@ -55,21 +55,11 @@ VCLXAccessibleHeaderBarItem::VCLXAccessibleHeaderBarItem( HeaderBar*    pHeadBar
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
 }
 
-
-
 VCLXAccessibleHeaderBarItem::~VCLXAccessibleHeaderBarItem()
 {
     delete m_pExternalLock;
     m_pExternalLock = NULL;
 }
-
-
-
-void VCLXAccessibleHeaderBarItem::ProcessWindowEvent( const VclWindowEvent& )
-{
-}
-
-
 
 void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -87,10 +77,7 @@ void VCLXAccessibleHeaderBarItem::FillAccessibleStateSet( utl::AccessibleStateSe
     }
 }
 
-
 // OCommonAccessibleComponent
-
-
 awt::Rectangle VCLXAccessibleHeaderBarItem::implGetBounds() throw (RuntimeException)
 {
     awt::Rectangle aBounds;

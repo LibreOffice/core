@@ -589,14 +589,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, true ) );
 }
 
-/**
- * Command event
- */
-
-void TextObjectBar::Command( const CommandEvent& )
-{
-}
-
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -253,8 +253,6 @@ namespace sw {
             virtual void ReleaseDoc(SwDoc* const pDoc) SAL_OVERRIDE;
             bool IsChecked() const SAL_OVERRIDE;
             void SetChecked(bool checked) SAL_OVERRIDE;
-
-            OUString toString( ) const;
         };
     }
 }

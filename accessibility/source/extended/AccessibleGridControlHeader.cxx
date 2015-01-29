@@ -234,18 +234,7 @@ Rectangle AccessibleGridControlHeader::implGetBoundingBoxOnScreen()
         return Rectangle(aGridRect.TopLeft(), Size(aHeaderRect.getWidth(),aGridRect.getHeight()));
 }
 
-sal_Int32 AccessibleGridControlHeader::implGetRowCount() const
-{
-    return 1;
-}
-
-sal_Int32 AccessibleGridControlHeader::implGetColumnCount() const
-{
-    return 1;
-}
-
 // internal helper methods ----------------------------------------------------
-
 Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
         sal_Int32 nRow, sal_uInt32 nColumnPos )
 {
@@ -263,10 +252,6 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
     return xChild;
 }
 
-
-
 } // namespace accessibility
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

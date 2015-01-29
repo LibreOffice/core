@@ -1826,22 +1826,6 @@ uno::Reference< ::com::sun::star::accessibility::XAccessible >
     return GetAccessible( false );
 }
 
-// MT: Removed Windows::SwitchView() introduced with IA2 CWS.
-// There are other notifications for this when the active view has chnaged, so please update the code to use that event mechanism
-void SwPagePreviewWin::SwitchView()
-{
-#ifdef ACCESSIBLE_LAYOUT
-    if (!Application::IsAccessibilityEnabled())
-    {
-        return ;
-    }
-    if (mpViewShell)
-    {
-        mpViewShell->InvalidateAccessibleFocus();
-    }
-#endif
-}
-
 void SwPagePreview::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     GetViewShell()->ApplyAccessiblityOptions(rAccessibilityOptions);

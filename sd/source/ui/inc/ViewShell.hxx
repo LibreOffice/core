@@ -188,8 +188,6 @@ public:
 
     bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
-    void Draw(OutputDevice &rDev, const ::vcl::Region &rReg);
-
     virtual void SetUIUnit(FieldUnit eUnit);
     void SetDefTabHRuler( sal_uInt16 nDefTab );
 

@@ -393,38 +393,6 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     return xResult;
 }
 
-
-uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInstanceLinkUserInit(
-                                                const uno::Sequence< sal_Int8 >& aClassID,
-                                                const OUString& aClassName,
-                                                const uno::Reference< embed::XStorage >& xStorage,
-                                                const OUString& sEntName,
-                                                const uno::Sequence< beans::PropertyValue >& lArguments,
-                                                const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException )
-{
-    uno::Reference< uno::XInterface > xResult;
-
-    OUString aEmbedFactory = m_aConfigHelper.GetFactoryNameByClassID( aClassID );
-    uno::Reference< embed::XLinkFactory > xLinkFactory(
-                        m_xContext->getServiceManager()->createInstanceWithContext(aEmbedFactory, m_xContext),
-                        uno::UNO_QUERY );
-    if ( !xLinkFactory.is() )
-        throw uno::RuntimeException(); // TODO:
-
-    return xLinkFactory->createInstanceLinkUserInit( aClassID,
-                                                    aClassName,
-                                                    xStorage,
-                                                    sEntName,
-                                                    lArguments,
-                                                    lObjArgs );
-
-}
-
-
 OUString SAL_CALL UNOEmbeddedObjectCreator::getImplementationName()
     throw ( uno::RuntimeException, std::exception )
 {
@@ -436,7 +404,6 @@ sal_Bool SAL_CALL UNOEmbeddedObjectCreator::supportsService( const OUString& Ser
 {
     return cppu::supportsService(this, ServiceName);
 }
-
 
 uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedServiceNames()
     throw ( uno::RuntimeException, std::exception )

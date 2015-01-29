@@ -1319,13 +1319,6 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, bool /*bIsAPI*/)
-{
-    SAL_WARN( "starmath", "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
-    return 0;
-}
-
-
 SfxPrinter* SmViewShell::GetPrinter(bool bCreate)
 {
     SmDocShell *pDoc = GetDoc();
@@ -1333,7 +1326,6 @@ SfxPrinter* SmViewShell::GetPrinter(bool bCreate)
         return pDoc->GetPrinter();
     return 0;
 }
-
 
 sal_uInt16 SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {

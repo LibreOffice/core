@@ -1,5 +1,15 @@
 BigInt::BigInt(unsigned int)
+CalendarWrapper::getDSTOffsetInMillis() const
+CalendarWrapper::getZoneOffsetInMillis() const
 FontCharMap::GetDefaultMap(bool)
+Interceptor::addEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
+Interceptor::removeEventListener(com::sun::star::uno::Reference<com::sun::star::lang::XEventListener> const&)
+LineListBox::Clear()
+LineListBox::InsertEntry(rtl::OUString const&, int)
+LineListBox::RemoveEntry(int)
+Menu::RequestHelp(HelpEvent const&)
+OCommonEmbeddedObject::getImplementationId()
+OOoEmbeddedObjectFactory::createInstanceLinkUserInit(com::sun::star::uno::Sequence<signed char> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::embed::XStorage> const&, rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
@@ -14,42 +24,93 @@ OutputDevice::LogicToPixel(basegfx::B2DPolygon const&) const
 OutputDevice::LogicToPixel(basegfx::B2DPolygon const&, MapMode const&) const
 OutputDevice::LogicToPixel(vcl::Region const&, MapMode const&) const
 OutputDevice::PixelToLogic(vcl::Region const&, MapMode const&) const
+Picture::Type()
 Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
+Printer::Error()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
+SalGtkFilePicker::disposing(com::sun::star::lang::EventObject const&)
+SalGtkFolderPicker::disposing(com::sun::star::lang::EventObject const&)
+SbModule::SetSource(rtl::OUString const&)
 ScBroadcastAreaSlotMachine::AreaBroadcastInRange(ScRange const&, ScHint const&) const
 ScCellValue::set(ScRefCellValue const&)
+ScCondFormatManagerDlg::IsInRefMode() const
+ScConsolidateItem::GetValueText() const
+ScDocShell::Activate()
+ScDocShell::Deactivate()
 ScDocument::CreateFormatTable() const
 ScDocument::EndAllListeners(ScRange const&)
-ScFormulaCellGroup::scheduleCompilation()
+ScDoubleItem::GetValueText() const
+ScInputStatusItem::GetValueText() const
+ScMergeAttr::GetValueText() const
+ScPageHFItem::GetValueText() const
+ScPivotItem::GetValueText() const
+ScPreviewShell::GetDescription() const
+ScPrivatSplit::GetDeltaX()
+ScQueryItem::GetValueText() const
+ScSolveItem::GetValueText() const
+ScSortItem::GetValueText() const
+ScSubTotalItem::GetValueText() const
+ScTabOpItem::GetValueText() const
+ScTabViewShell::GetDescription() const
+ScTbxInsertCtrl::Select(bool)
+ScTpCalcItem::GetValueText() const
+ScTpDefaultsItem::GetValueText() const
+ScTpFormulaItem::GetValueText() const
+ScTpPrintItem::GetValueText() const
+ScTpViewItem::GetValueText() const
+ScUserListItem::GetValueText() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
+ScViewObjectModeItem::GetValueText(unsigned short) const
+SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
+SfxBoolItem::GetValueCount() const
+SfxFrameItem::GetValueText() const
+SfxObjectShellItem::GetValueText() const
+SfxProgress::SetText(rtl::OUString const&)
+SfxTemplateDialog_Impl::Command(CommandEvent const&)
+SfxViewFrameItem::GetValueText() const
+SotObject::GetInterface(SvGlobalName const&)
+StylePool::getCount() const
 StyleSettings::SetAlternatingRowColor(Color const&)
 StyleSettings::SetCursorSize(long)
 StyleSettings::SetFloatTitleHeight(long)
 StyleSettings::SetHideDisabledMenuItems(bool)
-StyleSettings::SetRowColor(Color const&)
 StyleSettings::SetSpinSize(long)
 StyleSettings::SetTitleHeight(long)
 StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
+SvpSalFrame::enableDamageTracker(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtListener::IsListening(SvtBroadcaster&) const
+SvxColorTabPage::GetPropertyList(XPropertyListType)
+SvxColumnItem::GetValueText() const
+SvxDoubleItem::GetMax() const
+SvxDoubleItem::GetMin() const
+SvxDoubleItem::GetUnit() const
+SvxDummyTextSource::SetNotifyHdl(Link const&)
 SvxFontListBox::GetSelectEntry() const
+SvxFontWorkDialog::Zoom()
+SvxFormatCellsDialog::Apply()
+SvxLongLRSpaceItem::GetValueText() const
+SvxLongULSpaceItem::GetValueText() const
+SvxNewTableDialog::Apply()
+SvxObjectItem::GetValueText() const
 SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
+SvxPagePosSizeItem::GetValueText() const
+SvxRotateModeItem::GetValueText(unsigned short) const
+SwSelPaintRects::Paint(Rectangle const&)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()
-VCLXGraphics::getFillColor()
-VCLXGraphics::getFont()
-VCLXGraphics::getLineColor()
-VCLXGraphics::getRasterOp()
-VCLXGraphics::getTextColor()
-VCLXGraphics::getTextFillColor()
+ToolBox::UserDraw(UserDrawEvent const&)
+UnxPluginComm::NPP_GetMIMEDescription()
+X11SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&)
 XclXmlUtils::ToOString(XclRange const&)
 XmlTestTools::parseXml(utl::TempFile&)
+accessibility::AccessibleOutlineView::FireEvent(com::sun::star::accessibility::AccessibleEventObject const&)
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
@@ -170,13 +231,53 @@ comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
+connectivity::dbase::ODbaseResultSet::createAnalyzer()
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::odbc::appendSQLWCHARs(rtl::OUStringBuffer&, wchar_t const*, int)
 connectivity::sdbcx::OGroup::OGroup(bool)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
+connectivity::sdbcx::OView::disposing()
+dbaccess::OBookmarkContainer::dispose()
+dbaccess::ODatabaseDocument::disposing(com::sun::star::lang::EventObject const&)
+dbaccess::StorageInputStream::close()
+dbaui::OConnectionLineAccess::contains(com::sun::star::awt::Point const&)
+dbaui::OConnectionLineAccess::isEditable() const
+dbaui::OConnectionLineAccess::isFocusTraversable()
+dbaui::OConnectionLineAccess::isShowing()
+dbaui::OConnectionLineAccess::isVisible()
+dbaui::OGenericUnoController::InvalidateFeature(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> const&, bool)
+dbaui::OJoinDesignViewAccess::isEditable() const
+dbaui::OJoinTableView::StartDrag(signed char, Point const&)
+dbaui::OPropColumnEditCtrl::SetSpecialReadOnly(bool)
+dbaui::OPropEditCtrl::SetSpecialReadOnly(bool)
+dbaui::OPropListBoxCtrl::SetSpecialReadOnly(bool)
+dbaui::OQueryViewSwitch::resizeDocumentView(Rectangle&)
+dbaui::OQueryViewSwitch::setReadOnly(bool)
+dbaui::OSelectionBrowseBox::GetDefaultColumnWidth(rtl::OUString const&) const
+dbaui::OTableController::Load(com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> const&)
+dbaui::OTableController::Save(com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> const&)
+dbaui::OTableEditorCtrl::Redo()
+dbaui::OTableEditorCtrl::Undo()
+dbaui::OTableEditorCtrl::UpdateAll()
+dbaui::OTableRowView::SetUpdatable(bool)
+dbaui::OTableWindowAccess::isEditable() const
+dbtools::FormattedColumnValue::getColumnUpdate() const
+dbtools::FormattedColumnValue::getFieldType() const
+dbtools::FormattedColumnValue::getFormatKey() const
+dp_registry::backend::RegisteredDb::getEntry(rtl::OUString const&)
+frm::OComponentEventThread::kill()
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
+oox::core::FilterDetectDocHandler::ignorableWhitespace(rtl::OUString const&)
+oox::core::FilterDetectDocHandler::processingInstruction(rtl::OUString const&, rtl::OUString const&)
+oox::docprop::OOXMLDocPropHandler::ignorableWhitespace(rtl::OUString const&)
+oox::docprop::OOXMLDocPropHandler::processingInstruction(rtl::OUString const&, rtl::OUString const&)
 oox::drawingml::TextListStyle::dump() const
+property::OPropertySet::disposePropertySet()
+rptui::OCustomShape::GetStep() const
+rptui::ODesignView::setReadOnly(bool)
+rptui::OOle2Obj::GetStep() const
+rptui::OUnoObject::GetStep() const
 sc::CLBuildKernelThread::CLBuildKernelThread()
 sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::finish()
@@ -190,7 +291,6 @@ sc::FormulaGroupAreaListener::isEndFixed() const
 sc::FormulaGroupAreaListener::isStartFixed() const
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
-sdr::contact::ViewContactOfTextObj::GetTextObj() const
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
-vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
+sw::mark::MarkManager::hasMark(rtl::OUString const&) const

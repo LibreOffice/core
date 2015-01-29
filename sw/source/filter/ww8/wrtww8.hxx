@@ -794,9 +794,6 @@ protected:
     /// Output SwTxtNode
     virtual void OutputTextNode( const SwTxtNode& );
 
-    /// Output SwTableNode
-    void OutputTableNode( const SwTableNode& );
-
     /// Setup the chapter fields (maChapterFieldLocs).
     void GatherChapterFields();
 

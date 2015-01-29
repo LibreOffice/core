@@ -63,12 +63,6 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
-    sal_uInt8 GetMin() const;
-
-    sal_uInt8 GetMax() const;
-
-    SfxFieldUnit GetUnit() const;
-
     sal_uInt8 GetValue() const { return m_nValue; }
 
     inline void SetValue(sal_uInt8 nTheValue);
@@ -121,12 +115,6 @@ public:
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
-
-    sal_uInt16 GetMin() const;
-
-    sal_uInt16 GetMax() const;
-
-    SfxFieldUnit GetUnit() const;
 
     sal_uInt16 GetValue() const { return m_nValue; }
 
@@ -181,12 +169,6 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
-    sal_Int32 GetMin() const;
-
-    sal_Int32 GetMax() const;
-
-    SfxFieldUnit GetUnit() const;
-
     sal_Int32 GetValue() const { return m_nValue; }
 
     inline void SetValue(sal_Int32 nTheValue);
@@ -239,12 +221,6 @@ public:
     virtual SvStream & Store(SvStream & rStream, sal_uInt16) const SAL_OVERRIDE;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
-
-    sal_uInt32 GetMin() const;
-
-    sal_uInt32 GetMax() const;
-
-    SfxFieldUnit GetUnit() const;
 
     sal_uInt32 GetValue() const { return m_nValue; }
 

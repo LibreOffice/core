@@ -129,15 +129,6 @@ sal_Int32 MasterPagesSelector::GetPreferredHeight (sal_Int32 nWidth)
     return PreviewValueSet::GetPreferredHeight (nWidth);
 }
 
-Size MasterPagesSelector::GetPreferredSize (void)
-{
-    int nPreferredWidth = GetPreferredWidth(
-        PreviewValueSet::GetOutputSizePixel().Height());
-    int nPreferredHeight = GetPreferredHeight(nPreferredWidth);
-    return Size (nPreferredWidth, nPreferredHeight);
-
-}
-
 void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 {
     ItemList aNewLockList;
@@ -497,21 +488,6 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
             delete pOldData;
         PreviewValueSet::SetItemData((sal_uInt16)nIndex, pData);
     }
-}
-
-bool MasterPagesSelector::IsResizable (void)
-{
-    return false;
-}
-
-::vcl::Window* MasterPagesSelector::GetWindow (void)
-{
-    return this;
-}
-
-sal_Int32 MasterPagesSelector::GetMinimumWidth (void)
-{
-    return mpContainer->GetPreviewSizePixel().Width() + 2*3;
 }
 
 void MasterPagesSelector::UpdateSelection (void)

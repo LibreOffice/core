@@ -567,10 +567,6 @@ SwRedlineExtraData::~SwRedlineExtraData()
 {
 }
 
-void SwRedlineExtraData::Accept( SwPaM& ) const
-{
-}
-
 void SwRedlineExtraData::Reject( SwPaM& ) const
 {
 }

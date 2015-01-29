@@ -138,11 +138,6 @@ SfxStyleSheetBase* SdStyleSheetPool::Create(const OUString& rName, SfxStyleFamil
     return new SdStyleSheet(rName, *this, eFamily, _nMask);
 }
 
-SfxStyleSheetBase* SdStyleSheetPool::Create(const SdStyleSheet& rStyle)
-{
-    return new SdStyleSheet( rStyle );
-}
-
 SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const OUString& rLayoutName)
 {
     OUString aName(rLayoutName);
