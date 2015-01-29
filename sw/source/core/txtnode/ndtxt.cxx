@@ -1044,20 +1044,11 @@ void SwTxtNode::Update(
                 if (nChangePos == rIdx.GetIndex())
                 {
                     rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
-                    // mst: FIXME: why does this adjust the unused position???
-                    SwIndex * pIdx;
-                    if ( &pRedl->GetBound( true ) == pRedl->GetPoint() )
-                    {
-                        pRedl->GetBound( false ) = pRedl->GetBound( true );
-                        pIdx = &pRedl->GetBound( false ).nContent;
-                    }
-                    else
-                    {
-                        pRedl->GetBound( true ) = pRedl->GetBound( false );
-                        pIdx = &pRedl->GetBound( true ).nContent;
-                    }
-                    pIdx->Assign( &aTmpIdxReg, pIdx->GetIndex() );
                 }
+                // the unused position must not be on a SwTxtNode
+                bool const isOneUsed(&pRedl->GetBound(true) == pRedl->GetPoint());
+                assert(!pRedl->GetBound(!isOneUsed).nNode.GetNode().IsTxtNode());
+                assert(!pRedl->GetBound(!isOneUsed).nContent.GetIdxReg());
             }
         }
 
