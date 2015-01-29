@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.mozilla.gecko.TextSelection;
+import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
@@ -45,6 +47,7 @@ public class LibreOfficeMainActivity extends LOAbout {
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
+    private TextSelection mTextSelection;
 
     public LibreOfficeMainActivity() {
         super(/*newActivity=*/false);
@@ -123,6 +126,12 @@ public class LibreOfficeMainActivity extends LOAbout {
         } else {
             sLOKitThread.clearQueue();
         }
+
+        TextSelectionHandle startHandle = (TextSelectionHandle) findViewById(R.id.start_handle);
+        TextSelectionHandle middleHandle = (TextSelectionHandle) findViewById(R.id.middle_handle);
+        TextSelectionHandle endHandle = (TextSelectionHandle) findViewById(R.id.end_handle);
+
+        mTextSelection = new TextSelection(startHandle, middleHandle, endHandle);
 
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
@@ -229,6 +238,10 @@ public class LibreOfficeMainActivity extends LOAbout {
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    public TextSelection getTextSelection() {
+        return mTextSelection;
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {

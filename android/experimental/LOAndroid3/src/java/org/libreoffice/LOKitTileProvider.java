@@ -10,6 +10,7 @@ import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
+import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -303,6 +304,11 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     private void mouseButton(int type, PointF inDocument) {
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
+
+        TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
+        textSelection.positionHandle("MIDDLE", new RectF(inDocument.x, inDocument.y, inDocument.x, inDocument.y));
+        textSelection.showHandle("MIDDLE");
+
         mDocument.postMouseEvent(type, x, y);
     }
 
@@ -376,9 +382,12 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                 break;
             }
             case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR: {
+                Log.i(LOGTAG, "Invalidate visible cursor: " + payload);
                 RectF rect = convertCallbackMessageStringToRectF(payload);
                 if (rect != null) {
-                    //tileInvalidationCallback.invalidate(rect);
+                    TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
+                    textSelection.positionHandle("MIDDLE", rect);
+                    textSelection.showHandle("MIDDLE");
                 }
                 break;
             }

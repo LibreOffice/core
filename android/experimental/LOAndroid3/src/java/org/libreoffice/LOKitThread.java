@@ -168,8 +168,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     private void touch(String touchType, MotionEvent motionEvent, PointF mDocumentTouchCoordinate) {
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
-        float x = motionEvent.getX();
-        float y = motionEvent.getY();
         mTileProvider.mouseButtonDown(mDocumentTouchCoordinate);
     }
 
