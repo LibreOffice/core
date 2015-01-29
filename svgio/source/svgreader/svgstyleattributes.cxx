@@ -1893,14 +1893,18 @@ namespace svgio
             if(mbIsClipPathContent)
             {
                 static basegfx::BColor aBlack(0.0, 0.0, 0.0);
-
                 return &aBlack;
             }
             else if(maFill.isSet())
             {
                 if(maFill.isCurrent())
                 {
-                    return getColor();
+                    static basegfx::BColor aBlack(0.0, 0.0, 0.0);
+                    const basegfx::BColor *aColor = getColor();
+                    if( aColor )
+                        return aColor;
+                    else
+                        return &aBlack;
                 }
                 else if(maFill.isOn())
                 {
@@ -1930,7 +1934,12 @@ namespace svgio
             {
                 if(maStroke.isCurrent())
                 {
-                    return getColor();
+                    static basegfx::BColor aBlack(0.0, 0.0, 0.0);
+                    const basegfx::BColor *aColor = getColor();
+                    if( aColor )
+                        return aColor;
+                    else
+                        return &aBlack;
                 }
                 else if(maStroke.isOn())
                 {
