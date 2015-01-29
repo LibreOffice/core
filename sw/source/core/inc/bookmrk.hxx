@@ -226,6 +226,7 @@ namespace sw {
 
             virtual void Invalidate() SAL_OVERRIDE;
             virtual OUString ToString() const SAL_OVERRIDE;
+            virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 
         private:
             OUString m_aFieldname;

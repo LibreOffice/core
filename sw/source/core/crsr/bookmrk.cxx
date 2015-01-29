@@ -33,6 +33,7 @@
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
 #include <libxml/xmlwriter.h>
+#include <comphelper/anytostring.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -371,6 +372,24 @@ namespace sw { namespace mark
         //       fieldmark portion? If yes, please use it.
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
+    }
+
+    void Fieldmark::dumpAsXml(xmlTextWriterPtr pWriter) const
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmark"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fieldname"), BAD_CAST(m_aFieldname.toUtf8().getStr()));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fieldHelptext"), BAD_CAST(m_aFieldHelptext.toUtf8().getStr()));
+        MarkBase::dumpAsXml(pWriter);
+        xmlTextWriterStartElement(pWriter, BAD_CAST("parameters"));
+        for (auto& rParam : m_vParams)
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST("parameter"));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(rParam.first.toUtf8().getStr()));
+            xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(comphelper::anyToString(rParam.second).toUtf8().getStr()));
+            xmlTextWriterEndElement(pWriter);
+        }
+        xmlTextWriterEndElement(pWriter);
+        xmlTextWriterEndElement(pWriter);
     }
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM)

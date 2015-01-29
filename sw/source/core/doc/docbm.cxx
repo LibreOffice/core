@@ -55,7 +55,6 @@
 #include <edimp.hxx>
 #include <stdio.h>
 #include <tools/datetimeutils.hxx>
-#include <comphelper/anytostring.hxx>
 
 using namespace ::boost;
 using namespace ::sw::mark;
@@ -1154,28 +1153,7 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmarks"));
         for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
-        {
-            pMark_t pMark = *it;
-            xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmark"));
-            pMark->dumpAsXml(pWriter);
-            if (sw::mark::IFieldmark* pFieldmark = dynamic_cast<sw::mark::IFieldmark*>(pMark.get()))
-            {
-                sw::mark::IFieldmark::parameter_map_t* pParameters = pFieldmark->GetParameters();
-                if (pParameters)
-                {
-                    xmlTextWriterStartElement(pWriter, BAD_CAST("parameters"));
-                    for (sw::mark::IFieldmark::parameter_map_t::iterator parameter = pParameters->begin(); parameter != pParameters->end(); ++parameter)
-                    {
-                        xmlTextWriterStartElement(pWriter, BAD_CAST("parameter"));
-                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(parameter->first.toUtf8().getStr()));
-                        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(comphelper::anyToString(parameter->second).toUtf8().getStr()));
-                        xmlTextWriterEndElement(pWriter);
-                    }
-                    xmlTextWriterEndElement(pWriter);
-                }
-            }
-            xmlTextWriterEndElement(pWriter);
-        }
+            (*it)->dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
     }
 
