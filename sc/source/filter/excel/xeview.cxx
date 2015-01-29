@@ -182,7 +182,7 @@ void XclExpPane::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->singleElement( XML_pane,
             XML_xSplit,         OString::number( mnSplitX ).getStr(),
             XML_ySplit,         OString::number( mnSplitY ).getStr(),
-            XML_topLeftCell,    XclXmlUtils::ToOString( maSecondXclPos ).getStr(),
+            XML_topLeftCell,    XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSecondXclPos ).getStr(),
             XML_activePane,     lcl_GetActivePane( mnActivePane ),
             XML_state,          mbFrozenPanes ? "frozen" : "split",
             FSEND );
@@ -225,7 +225,7 @@ void XclExpSelection::SaveXml( XclExpXmlStream& rStrm )
 {
     rStrm.GetCurrentStream()->singleElement( XML_selection,
             XML_pane,           lcl_GetActivePane( mnPane ),
-            XML_activeCell,     XclXmlUtils::ToOString( maSelData.maXclCursor ).getStr(),
+            XML_activeCell,     XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maSelData.maXclCursor ).getStr(),
             XML_activeCellId,   OString::number(  maSelData.mnCursorIdx ).getStr(),
             XML_sqref,          XclXmlUtils::ToOString( maSelData.maXclSelection ).getStr(),
             FSEND );
@@ -426,7 +426,7 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
             XML_defaultGridColor,           mnGridColorId == XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT ) ? "true" : "false",
             // OOXTODO: XML_showWhiteSpace,
             XML_view,                       maData.mbPageMode ? "pageBreakPreview" : "normal",  // OOXTODO: pageLayout
-            XML_topLeftCell,                XclXmlUtils::ToOString( maData.maFirstXclPos ).getStr(),
+            XML_topLeftCell,                XclXmlUtils::ToOString( rStrm.GetRoot().GetStringBuf(), maData.maFirstXclPos ).getStr(),
             XML_colorId,                    OString::number(  rStrm.GetRoot().GetPalette().GetColorIndex( mnGridColorId ) ).getStr(),
             XML_zoomScale,                  lcl_GetZoom( maData.mnCurrentZoom ).getStr(),
             XML_zoomScaleNormal,            lcl_GetZoom( maData.mnNormalZoom ).getStr(),
