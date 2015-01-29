@@ -677,7 +677,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             /* Get the keys and values */
             dictKeys = (CFStringRef *) malloc(sizeof(CFStringRef)*numRecords);
             dictValues = (CFTypeRef *) malloc(sizeof(CFTypeRef)*numRecords);
-            CFDictionaryGetKeysAndValues((CFDictionaryRef) _propertyValue, (const void **) dictKeys, (const void **) dictValues);
+            CFDictionaryGetKeysAndValues((CFDictionaryRef) _propertyValue, reinterpret_cast<const void **>(dictKeys), (const void **) dictValues);
 
             propertyNameString = CFStringToOUString(_propertyName);
 
@@ -1020,7 +1020,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                 CFTypeRef *dictValues;
                 dictKeys = (CFStringRef *) malloc(sizeof(CFStringRef)*numRecords);
                 dictValues = (CFTypeRef *) malloc(sizeof(CFTypeRef)*numRecords);
-                CFDictionaryGetKeysAndValues((CFDictionaryRef) _propertyValue, (const void **) dictKeys, (const void **) dictValues);
+                CFDictionaryGetKeysAndValues((CFDictionaryRef) _propertyValue, reinterpret_cast<const void **>(dictKeys), (const void **) dictValues);
 
                 /* Going through each element... */
                 for(i = 0; i < numRecords; i++)

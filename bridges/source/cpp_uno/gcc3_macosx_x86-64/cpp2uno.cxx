@@ -236,7 +236,7 @@ static typelib_TypeClass cpp2uno_call(
                 uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
             }
             // complex return ptr is set to return reg
-            *(void **)pRegisterReturn = pCppReturn;
+            *reinterpret_cast<void **>(pRegisterReturn) = pCppReturn;
         }
         if ( pReturnTypeDescr )
         {
@@ -346,7 +346,7 @@ typelib_TypeClass cpp_vtable_call(
                         XInterface * pInterface = 0;
                         (*pCppI->getBridge()->getCppEnv()->getRegisteredInterface)
                             ( pCppI->getBridge()->getCppEnv(),
-                              (void **)&pInterface,
+                              reinterpret_cast<void **>(&pInterface),
                               pCppI->getOid().pData,
                               reinterpret_cast<typelib_InterfaceTypeDescription *>( pTD ) );
 
