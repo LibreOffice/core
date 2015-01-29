@@ -101,12 +101,13 @@ public:
     union
     {   // union only to assure alignment identical to ScRawToken
         double      nValue;
+
         struct {
-            sal_uInt8        cByte;
+            sal_uInt8   cByte;
             bool        bHasForceArray;
         } sbyte;
     };
-                DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken );
+                    DECL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken );
 };
 
 struct ScRawToken: private ScRawTokenBase
@@ -118,76 +119,92 @@ struct ScRawToken: private ScRawTokenBase
 public:
     union {
         double       nValue;
+
         struct {
-            sal_uInt8        cByte;
-            bool        bHasForceArray;
+            sal_uInt8       cByte;
+            bool            bHasForceArray;
         } sbyte;
+
         ScComplexRefData aRef;
         struct {
             sal_uInt16      nFileId;
             sal_Unicode     cTabName[MAXSTRLEN+1];
-            ScComplexRefData    aRef;
+            ScComplexRefData aRef;
         } extref;
+
         struct {
-            sal_uInt16  nFileId;
-            sal_Unicode cName[MAXSTRLEN+1];
+            sal_uInt16       nFileId;
+            sal_Unicode      cName[MAXSTRLEN+1];
         } extname;
+
         struct {
-            bool        bGlobal;
-            sal_uInt16  nIndex;
+            bool             bGlobal;
+            sal_uInt16       nIndex;
         } name;
+
         struct {
-            rtl_uString* mpData;
-            rtl_uString* mpDataIgnoreCase;
+            rtl_uString*     mpData;
+            rtl_uString*     mpDataIgnoreCase;
         } sharedstring;
+
         ScMatrix*    pMat;
         sal_uInt16   nError;
         sal_Unicode  cStr[ MAXSTRLEN+1 ];   // string (up to 255 characters + 0)
         short        nJump[ FORMULA_MAXJUMPCOUNT + 1 ];     // If/Chose token
     };
 
-                //! members not initialized
-                ScRawToken() {}
+                        //! members not initialized
+                            ScRawToken() {}
 private:
-                ~ScRawToken() {}                //! only delete via Delete()
+                            ~ScRawToken() {}                //! only delete via Delete()
 public:
-                DECL_FIXEDMEMPOOL_NEWDEL( ScRawToken );
-    formula::StackVar    GetType()   const       { return eType; }
-    OpCode      GetOpCode() const       { return eOp; }
-    void        NewOpCode( OpCode e )   { eOp = e; }
+                            DECL_FIXEDMEMPOOL_NEWDEL( ScRawToken );
+
+    formula::StackVar       GetType()   const       { return eType; }
+    OpCode                  GetOpCode() const       { return eOp; }
+    void                    NewOpCode( OpCode e )   { eOp = e; }
 
     // Use these methods only on tokens that are not part of a token array,
     // since the reference count is cleared!
-    void SetOpCode( OpCode eCode );
-    void SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase );
-    void SetSingleReference( const ScSingleRefData& rRef );
-    void SetDoubleReference( const ScComplexRefData& rRef );
-    void SetDouble( double fVal );
-    void SetErrorConstant( sal_uInt16 nErr );
+    void                    SetOpCode( OpCode eCode );
+    void                    SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase );
+    void                    SetSingleReference( const ScSingleRefData& rRef );
+    void                    SetDoubleReference( const ScComplexRefData& rRef );
+    void                    SetDouble( double fVal );
+    void                    SetErrorConstant( sal_uInt16 nErr );
 
     // These methods are ok to use, reference count not cleared.
-    void SetName(bool bGlobal, sal_uInt16 nIndex);
-    void SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef );
-    void SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef );
-    void SetExternalName( sal_uInt16 nFileId, const OUString& rName );
-    void SetMatrix( ScMatrix* p );
-    void SetExternal(const sal_Unicode* pStr);
+    void                    SetName(bool bGlobal, sal_uInt16 nIndex);
+
+    void                    SetExternalSingleRef(
+                                sal_uInt16 nFileId,
+                                const OUString& rTabName,
+                                const ScSingleRefData& rRef );
+
+    void                    SetExternalDoubleRef(
+                                sal_uInt16 nFileId,
+                                const OUString& rTabName,
+                                const ScComplexRefData& rRef );
+
+    void                    SetExternalName( sal_uInt16 nFileId, const OUString& rName );
+    void                    SetMatrix( ScMatrix* p );
+    void                    SetExternal(const sal_Unicode* pStr);
 
     /** If the token is a non-external reference, determine if the reference is
         valid. If the token is an external reference, return true. Else return
         false. Used only in ScCompiler::NextNewToken() to preserve non-existing
         sheet names in otherwise valid references.
      */
-    bool IsValidReference() const;
+    bool                    IsValidReference() const;
 
-    formula::FormulaToken* CreateToken() const;   // create typified token
-    void Load( SvStream&, sal_uInt16 nVer );
+    formula::FormulaToken*  CreateToken() const;   // create typified token
+    void                    Load( SvStream&, sal_uInt16 nVer );
 
-    static sal_Int32 GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
-    static size_t GetStrLenBytes( sal_Int32 nLen )
-        { return nLen * sizeof(sal_Unicode); }
-    static size_t GetStrLenBytes( const sal_Unicode* pStr )
-        { return GetStrLenBytes( GetStrLen( pStr ) ); }
+    static sal_Int32        GetStrLen( const sal_Unicode* pStr ); // as long as a "string" is an array
+    static size_t           GetStrLenBytes( sal_Int32 nLen )
+                                { return nLen * sizeof(sal_Unicode); }
+    static size_t           GetStrLenBytes( const sal_Unicode* pStr )
+                                { return GetStrLenBytes( GetStrLen( pStr ) ); }
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
@@ -268,8 +285,8 @@ public:
 
 private:
 
-    static CharClass            *pCharClassEnglish;                      // character classification for en_US locale
-    static const Convention     *pConventions[ formula::FormulaGrammar::CONV_LAST ];
+    static CharClass        *pCharClassEnglish;                      // character classification for en_US locale
+    static const Convention *pConventions[ formula::FormulaGrammar::CONV_LAST ];
 
     static struct AddInMap
     {
@@ -279,113 +296,114 @@ private:
         const char* pOriginal;              // programmatical name
         const char* pUpper;                 // upper case programmatical name
     } maAddInMap[];
-    static const AddInMap* GetAddInMap();
-    static size_t GetAddInMapCount();
 
-    ScDocument* pDoc;
-    ScAddress   aPos;
+    static const AddInMap*  GetAddInMap();
+    static size_t           GetAddInMapCount();
 
-    SvNumberFormatter* mpFormatter;
+private:
+    ScDocument*             pDoc;
+    ScAddress               aPos;
+
+    SvNumberFormatter*      mpFormatter;
 
     // For CONV_XL_OOX, may be set via API by MOOXML filter.
     com::sun::star::uno::Sequence<com::sun::star::sheet::ExternalLinkInfo> maExternalLinks;
 
-    sal_Unicode cSymbol[MAXSTRLEN];                 // current Symbol
-    OUString    aFormula;                           // formula source code
-    sal_Int32   nSrcPos;                            // tokenizer position (source code)
-    mutable ScRawToken maRawToken;
+    sal_Unicode             cSymbol[MAXSTRLEN];                 // current Symbol
+    OUString                aFormula;                           // formula source code
+    sal_Int32               nSrcPos;                            // tokenizer position (source code)
+    mutable ScRawToken      maRawToken;
 
-    const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
-    sal_uInt16      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
-    SCsTAB      nMaxTab;                    // last sheet in document
-    sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
-    const Convention *pConv;
+    const CharClass*        pCharClass;         // which character classification is used for parseAnyToken
+    sal_uInt16              mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
+    SCsTAB                  nMaxTab;                    // last sheet in document
+    sal_Int32               mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
+    const Convention        *pConv;
     ExtendedErrorDetection  meExtendedErrorDetection;
-    bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
-    bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
+    bool                    mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
+    bool                    mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
     std::vector<sal_uInt16> maExternalFiles;
 
-    std::vector<OUString> maTabNames;                /// sheet names mangled for the current grammar for output
-    std::vector<OUString> &GetSetupTabNames() const; /// get or setup tab names for the current grammar
+    std::vector<OUString>   maTabNames;                /// sheet names mangled for the current grammar for output
+    std::vector<OUString>   &GetSetupTabNames() const; /// get or setup tab names for the current grammar
 
-    bool   NextNewToken(bool bInArray = false);
+private:
+    bool                    NextNewToken(bool bInArray = false);
 
-    virtual void SetError(sal_uInt16 nError) SAL_OVERRIDE;
-    sal_Int32 NextSymbol(bool bInArray);
-    bool IsValue( const OUString& );
-    bool IsOpCode( const OUString&, bool bInArray );
-    bool IsOpCode2( const OUString& );
-    bool IsString();
-    bool IsReference( const OUString& );
-    bool IsSingleReference( const OUString& );
-    bool IsPredetectedReference(const OUString&);
-    bool IsDoubleReference( const OUString& );
-    bool IsMacro( const OUString& );
-    bool IsNamedRange( const OUString& );
-    bool IsExternalNamedRange( const OUString& rSymbol );
-    bool IsDBRange( const OUString& );
-    bool IsColRowName( const OUString& );
-    bool IsBoolean( const OUString& );
-    void AutoCorrectParsedSymbol();
+    virtual void            SetError(sal_uInt16 nError) SAL_OVERRIDE;
+    sal_Int32               NextSymbol(bool bInArray);
+    bool                    IsValue( const OUString& );
+    bool                    IsOpCode( const OUString&, bool bInArray );
+    bool                    IsOpCode2( const OUString& );
+    bool                    IsString();
+    bool                    IsReference( const OUString& );
+    bool                    IsSingleReference( const OUString& );
+    bool                    IsPredetectedReference(const OUString&);
+    bool                    IsDoubleReference( const OUString& );
+    bool                    IsMacro( const OUString& );
+    bool                    IsNamedRange( const OUString& );
+    bool                    IsExternalNamedRange( const OUString& rSymbol );
+    bool                    IsDBRange( const OUString& );
+    bool                    IsColRowName( const OUString& );
+    bool                    IsBoolean( const OUString& );
+    void                    AutoCorrectParsedSymbol();
 
-    void SetRelNameReference();
+    void                    SetRelNameReference();
 
     /** Obtain range data for ocName token, global or sheet local.
 
         Prerequisite: rToken is a FormulaIndexToken so IsGlobal() and
         GetIndex() can be called on it. We don't check with RTTI.
      */
-    ScRangeData* GetRangeData( const formula::FormulaToken& pToken ) const;
+    ScRangeData*            GetRangeData( const formula::FormulaToken& pToken ) const;
 
-    static void InitCharClassEnglish();
-
-public:
-    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos );
-
-    ScCompiler( ScDocument* pDocument, const ScAddress&);
-
-    ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr );
-
-    ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
-
-    virtual ~ScCompiler();
+    static void             InitCharClassEnglish();
 
 public:
-    static void DeInit();               /// all
+                            ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos );
+                            ScCompiler( ScDocument* pDocument, const ScAddress&);
+                            ScCompiler( sc::CompileFormulaContext& rCxt, const ScAddress& rPos, ScTokenArray& rArr );
+                            ScCompiler( ScDocument* pDocument, const ScAddress&,ScTokenArray& rArr);
+
+                            virtual ~ScCompiler();
+
+public:
+    static void             DeInit();               /// all
 
     // for ScAddress::Format()
-    static void CheckTabQuotes( OUString& aTabName,
+    static void             CheckTabQuotes(
+                                OUString& aTabName,
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     /** Analyzes a string for a 'Doc'#Tab construct, or 'Do''c'#Tab etc..
 
         @returns the position of the unquoted # hash mark in 'Doc'#Tab, or
                  -1 if none. */
-    static sal_Int32 GetDocTabPos( const OUString& rString );
+    static sal_Int32        GetDocTabPos( const OUString& rString );
 
-    static bool EnQuote( OUString& rStr );
-    sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
+    static bool             EnQuote( OUString& rStr );
+    sal_Unicode             GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
     // Check if it is a valid english function name
-    bool IsEnglishSymbol( const OUString& rName );
-    bool IsErrorConstant( const OUString& ) const;
+    bool                    IsEnglishSymbol( const OUString& rName );
+    bool                    IsErrorConstant( const OUString& ) const;
 
     /**
      * When auto correction is set, the jump command reorder must be enabled.
      */
-    void SetAutoCorrection( bool bVal );
-    void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
-    void            SetRefConvention( const Convention *pConvP );
-    void            SetRefConvention( const formula::FormulaGrammar::AddressConvention eConv );
+    void                    SetAutoCorrection( bool bVal );
+    void                    SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
+    void                    SetRefConvention( const Convention *pConvP );
+    void                    SetRefConvention( const formula::FormulaGrammar::AddressConvention eConv );
 
     static const Convention* GetRefConvention( formula::FormulaGrammar::AddressConvention eConv );
 
     /// Set symbol map if not empty.
-    void            SetFormulaLanguage( const OpCodeMapPtr & xMap );
+    void                    SetFormulaLanguage( const OpCodeMapPtr & xMap );
 
-    void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
+    void                    SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
-    void SetNumberFormatter( SvNumberFormatter* pFormatter );
+    void                    SetNumberFormatter( SvNumberFormatter* pFormatter );
 
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
@@ -397,25 +415,22 @@ private:
         @param eOldGrammar
             The previous grammar that was active before SetFormulaLanguage().
      */
-    void            SetGrammarAndRefConvention(
-                        const formula::FormulaGrammar::Grammar eNewGrammar,
-                        const formula::FormulaGrammar::Grammar eOldGrammar );
+    void                    SetGrammarAndRefConvention(
+                                const formula::FormulaGrammar::Grammar eNewGrammar,
+                                const formula::FormulaGrammar::Grammar eOldGrammar );
 public:
 
     /// Set external link info for ScAddress::CONV_XL_OOX.
-    void SetExternalLinks(
-        const ::com::sun::star::uno::Sequence<
-            com::sun::star::sheet::ExternalLinkInfo>& rLinks )
-    {
-        maExternalLinks = rLinks;
-    }
+    void                    SetExternalLinks(
+                                const ::com::sun::star::uno::Sequence< com::sun::star::sheet::ExternalLinkInfo>& rLinks )
+                                    { maExternalLinks = rLinks; }
 
-    void            CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rFormulaNmsp );
+    void                    CreateStringFromXMLTokenArray( OUString& rFormula, OUString& rFormulaNmsp );
 
-    void            SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
+    void                    SetExtendedErrorDetection( ExtendedErrorDetection eVal ) { meExtendedErrorDetection = eVal; }
 
-    bool            IsCorrected() { return bCorrected; }
-    const OUString& GetCorrectedFormula() { return aCorrectedFormula; }
+    bool                    IsCorrected() { return bCorrected; }
+    const OUString&         GetCorrectedFormula() { return aCorrectedFormula; }
 
     /**
      * Tokenize formula expression string into an array of tokens.
@@ -425,45 +440,48 @@ public:
      * @return heap allocated token array object. The caller <i>must</i>
      *         manage the life cycle of this object.
      */
-    ScTokenArray* CompileString( const OUString& rFormula );
-    ScTokenArray* CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
-    const ScDocument* GetDoc() const { return pDoc; }
-    const ScAddress& GetPos() const { return aPos; }
+    ScTokenArray*           CompileString( const OUString& rFormula );
+    ScTokenArray*           CompileString( const OUString& rFormula, const OUString& rFormulaNmsp );
+    const ScDocument*       GetDoc() const { return pDoc; }
+    const ScAddress&        GetPos() const { return aPos; }
 
-    void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
-    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
-                             SCCOL nMaxCol, SCROW nMaxRow );
+    void                    MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
+    static void             MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+                                         SCCOL nMaxCol, SCROW nMaxRow );
 
     /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
         bits) for all known address conventions. If more than one bit is given
         in nFlags, all bits must match. If bTestLetterNumeric is false and
         char>=128, no LetterNumeric test is done and false is returned. */
-    static bool IsCharFlagAllConventions(
-        OUString const & rStr, sal_Int32 nPos, sal_uLong nFlags, bool bTestLetterNumeric = true );
+    static bool             IsCharFlagAllConventions(
+                                OUString const & rStr,
+                                sal_Int32 nPos,
+                                sal_uLong nFlags,
+                                bool bTestLetterNumeric = true );
 
 private:
     // FormulaCompiler
-    virtual OUString FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const SAL_OVERRIDE;
-    virtual void fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const SAL_OVERRIDE;
-    virtual void fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const SAL_OVERRIDE;
-    virtual void fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const SAL_OVERRIDE;
-    virtual void fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const SAL_OVERRIDE;
+    virtual OUString        FindAddInFunction( const OUString& rUpperName, bool bLocalFirst ) const SAL_OVERRIDE;
+    virtual void            fillFromAddInCollectionUpperName( NonConstOpCodeMapPtr xMap ) const SAL_OVERRIDE;
+    virtual void            fillFromAddInCollectionEnglishName( NonConstOpCodeMapPtr xMap ) const SAL_OVERRIDE;
+    virtual void            fillFromAddInMap( NonConstOpCodeMapPtr xMap, formula::FormulaGrammar::Grammar _eGrammar ) const SAL_OVERRIDE;
+    virtual void            fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaOpCodeMapEntry >& _rVec,bool _bIsEnglish) const SAL_OVERRIDE;
 
-    virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) SAL_OVERRIDE;
-    virtual bool HandleRange() SAL_OVERRIDE;
-    virtual bool HandleSingleRef() SAL_OVERRIDE;
-    virtual bool HandleDbData() SAL_OVERRIDE;
+    virtual bool            HandleExternalReference(const formula::FormulaToken& _aToken) SAL_OVERRIDE;
+    virtual bool            HandleRange() SAL_OVERRIDE;
+    virtual bool            HandleSingleRef() SAL_OVERRIDE;
+    virtual bool            HandleDbData() SAL_OVERRIDE;
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef ) SAL_OVERRIDE;
-    virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
-    virtual void LocalizeString( OUString& rName ) const SAL_OVERRIDE;   // modify rName - input: exact name
+    virtual void            CreateStringFromExternal(OUStringBuffer& rBuffer, formula::FormulaToken* pTokenP) const SAL_OVERRIDE;
+    virtual void            CreateStringFromSingleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void            CreateStringFromDoubleRef(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void            CreateStringFromMatrix( OUStringBuffer& rBuffer, formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void            CreateStringFromIndex(OUStringBuffer& rBuffer,formula::FormulaToken* _pTokenP) const SAL_OVERRIDE;
+    virtual void            LocalizeString( OUString& rName ) const SAL_OVERRIDE;   // modify rName - input: exact name
 
     /// Access the CharTable flags
-    inline sal_uLong GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
+    inline sal_uLong        GetCharTableFlags( sal_Unicode c, sal_Unicode cLast )
         { return c < 128 ? pConv->getCharTableFlags(c, cLast) : 0; }
 };
 
