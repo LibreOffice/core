@@ -54,6 +54,11 @@ public interface TileProvider {
     boolean isTextDocument();
 
     /**
+     * Returns true if the current open document is a spreadsheet.
+     */
+    boolean isSpreadsheet();
+
+    /**
      * Register a callback that is invoked when a tile invalidation is
      * required.
      *

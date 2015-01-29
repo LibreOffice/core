@@ -270,6 +270,11 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_TEXT;
     }
 
+    @Override
+    public boolean isSpreadsheet() {
+        return mDocument != null && mDocument.getDocumentType() == Document.DOCTYPE_SPREADSHEET;
+    }
+
     /**
      * Register the tile invalidation callback.
      */

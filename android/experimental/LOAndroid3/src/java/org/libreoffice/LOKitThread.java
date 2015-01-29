@@ -63,16 +63,27 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         mViewportMetrics = mLayerClient.getViewportMetrics();
         mLayerClient.setViewportMetrics(mViewportMetrics);
 
-        if (mTileProvider.isTextDocument()) {
-            float centerY = mViewportMetrics.getCssViewport().centerY();
-            mLayerClient.zoomTo(new RectF (0, centerY, mTileProvider.getPageWidth(), centerY));
-        } else if (mViewportMetrics.getViewport().width() < mViewportMetrics.getViewport().height()) {
-            mLayerClient.zoomTo(mTileProvider.getPageWidth(), 0);
-        } else {
-            mLayerClient.zoomTo(0, mTileProvider.getPageHeight());
-        }
+        zoomAndRepositionTheDocument();
 
         mLayerClient.forceRedraw();
+    }
+
+    private void zoomAndRepositionTheDocument() {
+        if (mTileProvider.isSpreadsheet()) {
+            // Don't do anything for spreadsheets - show at 100%
+        } else if (mTileProvider.isTextDocument()) {
+            // Always zoom text document to the beginning of the document and centered by width
+            float centerY = mViewportMetrics.getCssViewport().centerY();
+            mLayerClient.zoomTo(new RectF(0, centerY, mTileProvider.getPageWidth(), centerY));
+        } else {
+            // Other documents - always show the whole document on the screen,
+            // regardless of document shape and orientation.
+            if (mViewportMetrics.getViewport().width() < mViewportMetrics.getViewport().height()) {
+                mLayerClient.zoomTo(mTileProvider.getPageWidth(), 0);
+            } else {
+                mLayerClient.zoomTo(0, mTileProvider.getPageHeight());
+            }
+        }
     }
 
     /** Invalidate everything + handle the geometry change */

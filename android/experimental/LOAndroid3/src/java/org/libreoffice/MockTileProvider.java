@@ -85,6 +85,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public boolean isSpreadsheet() {
+        return false;
+    }
+
+    @Override
     public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
     }
 
