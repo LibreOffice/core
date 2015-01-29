@@ -80,6 +80,7 @@ core_constructor_list = [
     "com_sun_star_comp_framework_UIElementFactoryManager_get_implementation",
     "com_sun_star_comp_framework_URLTransformer_get_implementation",
     "com_sun_star_comp_framework_WindowStateConfiguration_get_implementation",
+    "com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation",
     "org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation",
 # i18npool/util/i18npool.component
     "com_sun_star_i18n_BreakIterator_get_implementation",
