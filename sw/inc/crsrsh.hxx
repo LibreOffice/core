@@ -447,14 +447,8 @@ public:
      */
     void Combine();
 
-#ifdef DBG_UTIL
     void SttCrsrMove();
     void EndCrsrMove( const bool bIdleEnd = false );
-#else
-    void SttCrsrMove() { ++m_nCrsrMove; StartAction(); }
-    void EndCrsrMove( const bool bIdleEnd = false )
-            { EndAction( bIdleEnd, true ); --m_nCrsrMove; }
-#endif
 
     /*
      * When the focus is lost the selected ranges are not displayed anymore.

@@ -314,22 +314,27 @@ void SwCrsrShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
     }
 }
 
-#ifdef DBG_UTIL
 void SwCrsrShell::SttCrsrMove()
 {
+#ifdef DBG_UTIL
     OSL_ENSURE( m_nCrsrMove < USHRT_MAX, "To many nested CrsrMoves." );
+#endif
     ++m_nCrsrMove;
     StartAction();
 }
 
 void SwCrsrShell::EndCrsrMove( const bool bIdleEnd )
 {
+#ifdef DBG_UTIL
     OSL_ENSURE( m_nCrsrMove, "EndCrsrMove() without SttCrsrMove()." );
-    EndAction( bIdleEnd, true );
-    if( !--m_nCrsrMove )
-        m_bInCMvVisportChgd = false;
-}
 #endif
+    EndAction( bIdleEnd, true );
+    --m_nCrsrMove;
+#ifdef DBG_UTIL
+    if( !m_nCrsrMove )
+        m_bInCMvVisportChgd = false;
+#endif
+}
 
 bool SwCrsrShell::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
                              bool bVisualAllowed )
