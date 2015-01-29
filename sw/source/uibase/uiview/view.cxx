@@ -226,7 +226,6 @@ IMPL_LINK_NOARG(SwView, FormControlActivated)
 
 void SwView::SelectShell()
 {
-#if HAVE_FEATURE_DESKTOP
     // Attention: Maintain the SelectShell for the WebView additionally
 
     if(m_bInDtor)
@@ -455,7 +454,6 @@ void SwView::SelectShell()
         m_pWrtShell->UpdateTable();
 
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
-#endif
 }
 
 // Interaction: AttrChangedNotify() and TimeoutHdl.
