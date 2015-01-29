@@ -32,6 +32,7 @@ core_factory_list = [
     ("libfsstoragelo.a", "fsstorage_component_getFactory"),
     ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
+    ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
