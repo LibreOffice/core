@@ -130,10 +130,10 @@ SwDLL::SwDLL()
     // register your view-factories here
     RegisterFactories();
 
-#if HAVE_FEATURE_DESKTOP
     // register your shell-interfaces here
     RegisterInterfaces();
 
+#if HAVE_FEATURE_DESKTOP
     // register your controllers here
     RegisterControls();
 #endif
