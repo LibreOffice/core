@@ -477,12 +477,13 @@ IMPL_LINK( PosSizePropertyPanel, ClickAutoHdl, void *, EMPTYARG )
 IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 {
     OUString sTmp = mpMtrAngle->GetText();
-    bool    bNegative = false;
+    if (sTmp.isEmpty())
+        return 0;
     sal_Unicode nChar = sTmp[0];
-
     if( nChar == '-' )
     {
-        bNegative = true;
+        if (sTmp.getLength() < 2)
+            return 0;
         nChar = sTmp[1];
     }
 
@@ -492,15 +493,20 @@ IMPL_LINK( PosSizePropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     const sal_Unicode cSep = rLocaleWrapper.getNumDecimalSep()[0];
 
-    sTmp = sTmp.replace(cSep,'.'); // toDouble() expects decimal point
+    // Do not check that the entire string was parsed up to its end, there may
+    // be a degree symbol following the number. Note that this also means that
+    // the number recognized just stops at any non-matching character.
+    /* TODO: we could check for the degree symbol stop if there are no other
+     * cases with different symbol characters in any language? */
+    rtl_math_ConversionStatus eStatus;
+    double fTmp = rtl::math::stringToDouble( sTmp, cSep, 0, &eStatus);
+    if (eStatus != rtl_math_ConversionStatus_Ok)
+        return 0;
 
-    double dTmp = sTmp.toDouble();
-    if(bNegative)
-    {
-        while(dTmp<0)
-            dTmp += 360;
-    }
-    sal_Int64 nTmp = dTmp*100;
+    while (fTmp < 0)
+        fTmp += 360;
+
+    sal_Int64 nTmp = fTmp*100;
 
     // #i123993# Need to take UIScale into account when executing rotations
     const double fUIScale(mpView && mpView->GetModel() ? double(mpView->GetModel()->GetUIScale()) : 1.0);
