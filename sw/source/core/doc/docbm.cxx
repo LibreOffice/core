@@ -1352,12 +1352,8 @@ void _DelBookmarks(
         // Is at position?
         SwRangeRedline* pRedl = rTbl[ nCnt ];
 
-        SwPosition *pRStt = &pRedl->GetBound(true),
-                   *pREnd = &pRedl->GetBound(false);
-        if( *pRStt > *pREnd )
-        {
-            SwPosition *pTmp = pRStt; pRStt = pREnd, pREnd = pTmp;
-        }
+        SwPosition *const pRStt = pRedl->Start();
+        SwPosition *const pREnd = pRedl->End();
 
         if( lcl_Greater( *pRStt, rStt, pSttIdx ) && lcl_Lower( *pRStt, rEnd, pEndIdx ))
         {
