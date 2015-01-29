@@ -361,54 +361,98 @@ public:
 
             OUString aText;
 
-            int nPrintNumCopies=0;
+            // To have more text displayed one after the other (overlapping, and in different colours), then
+            // change this value
+            int nPrintNumCopies=1;
 
             if (bArabicText)
-            {
                 aText = aArabicText;
-                nPrintNumCopies=20;
-            }
             else
-            {
                 aText = aLatinText;
-                nPrintNumCopies=20;
-            }
+
             std::vector<OUString> maFontNames;
+
             sal_uInt32 nCols[] = {
                 COL_BLACK, COL_BLUE, COL_GREEN, COL_CYAN, COL_RED, COL_MAGENTA,
                 COL_BROWN, COL_GRAY, COL_LIGHTGRAY, COL_LIGHTBLUE, COL_LIGHTGREEN,
                 COL_LIGHTCYAN, COL_LIGHTRED, COL_LIGHTMAGENTA, COL_YELLOW, COL_WHITE
             };
+
             // a few fonts to start with
             const char *pNames[] = {
                 "Times", "Liberation Sans", "Arial", "Linux Biolinum G", "Linux Libertine Display G"
               };
-            for (size_t i = 0; i < SAL_N_ELEMENTS(pNames); i++)
+
+            size_t nNumFontNames = SAL_N_ELEMENTS(pNames);
+
+            for (size_t i = 0; i < nNumFontNames; i++)
                 maFontNames.push_back(OUString::createFromAscii(pNames[i]));
 
-            if (bClip)
+            if (bClip && !bRotate)
             {
-                Rectangle aRect( r.TopLeft(), Size( r.GetWidth()/2, r.GetHeight()/2) );
+                // only show the first quarter of the text
+                Rectangle aRect( r.TopLeft(), Size( r.GetWidth()/2, r.GetHeight()/2 ) );
                 rDev.SetClipRegion( vcl::Region( aRect ) );
             }
 
-            for (int i = 0; i < nPrintNumCopies; i++)
+            for (int i = 1; i < nPrintNumCopies+1; i++)
             {
-                Rectangle aRect = r;
+                int nFontHeight=0, nFontIndex=0, nFontColorIndex=0;
 
-                rDev.SetTextColor(Color(nCols[i % SAL_N_ELEMENTS(nCols)]));
-                // random font size to avoid buffering
-                vcl::Font aFont( maFontNames[i % maFontNames.size()], Size(0, 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies));
+                assert(nPrintCopies);
+
+                if (nPrintNumCopies == 1)
+                {
+                    float nFontMagnitude = 0.25f;
+                    // random font size to avoid buffering
+                    nFontHeight = 1 + nFontMagnitude * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Bottom() - r.Top());
+                    nFontIndex=0;
+                    nFontColorIndex=0;
+                }
+                else
+                {
+                    // random font size to avoid buffering
+                    nFontHeight = 1 + i * (0.9 + comphelper::rng::uniform_real_distribution(0.0, std::nextafter(0.1, DBL_MAX))) * (r.Top() - r.Bottom()) / nPrintNumCopies;
+                    nFontIndex = (i % maFontNames.size());
+                    nFontColorIndex=(i % maFontNames.size());
+                }
+
+                rDev.SetTextColor(Color(nCols[nFontColorIndex]));
+                vcl::Font aFont( maFontNames[nFontIndex], Size(0, nFontHeight ));
 
                 if (bRotate)
                 {
-                    aRect.TopLeft() = r.BottomLeft();
-                    aFont.SetOrientation(450);
-                }
+                    Rectangle aFontRect = r;
 
-                rDev.SetFont(aFont);
-                rDev.DrawText(aRect, aText);
+                    int nHeight = r.GetHeight();
+
+                    // move the text to the bottom of the bounding rect before rotating
+                    aFontRect.Top() += nHeight;
+                    aFontRect.Bottom() += nHeight;
+
+                    int nDegrees = 45;
+
+                    aFont.SetOrientation(nDegrees * 10);
+
+                    rDev.SetFont(aFont);
+                    rDev.DrawText(aFontRect, aText);
+
+                    if (bClip)
+                    {
+                        Rectangle aClipRect( Point( r.Left(), r.Top() + ( r.GetHeight()/2 ) ) , Size( r.GetWidth()/2, r.GetHeight()/2 ) );
+                        rDev.SetClipRegion( vcl::Region( aClipRect ) );
+                    }
+                    else
+                        rDev.SetClipRegion( vcl::Region(r) );
+                }
+                else
+                {
+                    rDev.SetFont(aFont);
+                    rDev.DrawText(r, aText);
+                }
             }
+
+            rDev.SetClipRegion();
         }
     };
 
