@@ -1198,7 +1198,7 @@ unmapFile (void* pAddr, sal_uInt64 uLength)
         return osl_File_E_OVERFLOW;
     size_t const nLength = sal::static_int_cast< size_t >(uLength);
 
-    if (-1 == munmap(static_cast<char*>(pAddr), nLength))
+    if (-1 == munmap(pAddr, nLength))
         return oslTranslateFileError(OSL_FET_ERROR, errno);
 
     return osl_File_E_None;

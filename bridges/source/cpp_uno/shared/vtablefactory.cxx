@@ -91,9 +91,9 @@ extern "C" void * SAL_CALL allocExec(
     if (p == MAP_FAILED) {
         p = 0;
     }
-    else if (mprotect (static_cast<char*>(p), n, PROT_READ | PROT_WRITE | PROT_EXEC) == -1)
+    else if (mprotect (p, n, PROT_READ | PROT_WRITE | PROT_EXEC) == -1)
     {
-        munmap (static_cast<char*>(p), n);
+        munmap (p, n);
         p = 0;
     }
 #elif defined SAL_W32
@@ -109,7 +109,7 @@ extern "C" void SAL_CALL freeExec(
     SAL_UNUSED_PARAMETER rtl_arena_type *, void * address, sal_Size size)
 {
 #if defined SAL_UNX
-    munmap(static_cast< char * >(address), size);
+    munmap(address, size);
 #elif defined SAL_W32
     (void) size; // unused
     VirtualFree(address, 0, MEM_RELEASE);
