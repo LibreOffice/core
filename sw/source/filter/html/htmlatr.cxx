@@ -1528,10 +1528,13 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
         }
         else if( nTestEnd < nEnd )
         {
-            // das Test-Attribut endet, bevor das neue endet. Das
-            // neue Attribut muss deshalb aufgesplittet werden
-            _InsertItem( new HTMLSttEndPos( rItem, nStart, nTestEnd ), i );
-            nStart = nTestEnd;
+            if( pTest->GetStart() < nStart )
+            {
+                // das Test-Attribut endet, bevor das neue endet. Das
+                // neue Attribut muss deshalb aufgesplittet werden
+                _InsertItem( new HTMLSttEndPos( rItem, nStart, nTestEnd ), i );
+                nStart = nTestEnd;
+            }
         }
         else
         {
