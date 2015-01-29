@@ -63,7 +63,7 @@
 #include <comcore.hrc>
 #include <IDocumentLayoutAccess.hxx>
 
-#if defined(ANDROID) || defined(IOS)
+#if defined(IOS)
 #include <touch/touch.h>
 #endif
 
@@ -2119,7 +2119,7 @@ void SwCrsrShell::ShowCrsr()
     {
         m_bSVCrsrVis = true;
         m_pCurCrsr->SetShowTxtInputFldOverlay( true );
-#if defined(ANDROID) || defined(IOS)
+#if defined(IOS)
         // This was dummied out both for Android and for TiledLibreOffice (iOS) anyway
         // touch_ui_show_keyboard();
 #endif
@@ -2136,7 +2136,7 @@ void SwCrsrShell::HideCrsr()
         SET_CURR_SHELL( this );
         m_pCurCrsr->SetShowTxtInputFldOverlay( false );
         m_pVisCrsr->Hide();
-#if defined(ANDROID) || defined(IOS)
+#if defined(IOS)
         // This was dummied out both for Android and for TiledLibreOffice (iOS) anyway
         // touch_ui_hide_keyboard();
 #endif
@@ -2634,7 +2634,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, vcl::Window *pInitWin )
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = rShell.IsMacroExecAllowed();
 
-#if defined(ANDROID) || defined(IOS)
+#if defined(IOS)
     HideCrsr();
 #endif
 }
@@ -2685,7 +2685,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, vcl::Window *pInitWin,
     m_pVisCrsr = new SwVisCrsr( this );
     m_bMacroExecAllowed = true;
 
-#if defined(ANDROID) || defined(IOS)
+#if defined(IOS)
     HideCrsr();
 #endif
 }
