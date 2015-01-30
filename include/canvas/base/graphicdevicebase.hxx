@@ -242,16 +242,12 @@ namespace canvas
 
         virtual sal_Bool SAL_CALL hasFullScreenMode(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.hasFullScreenMode();
+            return sal_False;
         }
 
-        virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool bEnter ) throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual sal_Bool SAL_CALL enterFullScreenMode( sal_Bool ) throw (css::uno::RuntimeException) SAL_OVERRIDE
         {
-            MutexType aGuard( BaseType::m_aMutex );
-
-            return maDeviceHelper.enterFullScreenMode( bEnter );
+            return false;
         }
 
         // XMultiServiceFactory
@@ -323,14 +319,11 @@ namespace canvas
                                                     xListener );
         }
 
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName,
-                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::beans::UnknownPropertyException,
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& ,
+                                                            const css::uno::Reference< css::beans::XPropertyChangeListener >& ) throw (css::beans::UnknownPropertyException,
                                                                                                                                                                            css::lang::WrappedTargetException,
                                                                                                                                                                            css::uno::RuntimeException) SAL_OVERRIDE
         {
-            MutexType aGuard( BaseType::m_aMutex );
-            maPropHelper.removePropertyChangeListener( aPropertyName,
-                                                       xListener );
         }
 
         virtual void SAL_CALL addVetoableChangeListener( const OUString& aPropertyName,
@@ -343,14 +336,11 @@ namespace canvas
                                                     xListener );
         }
 
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& aPropertyName,
-                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& xListener ) throw (css::beans::UnknownPropertyException,
+        virtual void SAL_CALL removeVetoableChangeListener( const OUString& ,
+                                                            const css::uno::Reference< css::beans::XVetoableChangeListener >& ) throw (css::beans::UnknownPropertyException,
                                                                                                                                                                            css::lang::WrappedTargetException,
                                                                                                                                                                            css::uno::RuntimeException) SAL_OVERRIDE
         {
-            MutexType aGuard( BaseType::m_aMutex );
-            maPropHelper.removeVetoableChangeListener( aPropertyName,
-                                                       xListener );
         }
 
     protected:

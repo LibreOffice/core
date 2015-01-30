@@ -328,9 +328,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
     {
         case SID_EDITDOC:
         {
-            if ( GetFrame().HasComponent() )
-                break;
-
             // Due to Double occupancy in toolboxes (with or without Ctrl),
             // it is also possible that the slot is enabled, but Ctrl-click
             // despite this is not!
@@ -857,14 +854,6 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
     SfxWhichIter aIter( rSet );
     for ( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich() )
     {
-        if ( GetFrame().HasComponent() )
-        {
-            // If the component is not self-dispatched, then
-            // it makes no sense!
-            rSet.DisableItem( nWhich );
-            continue;
-        }
-
         switch ( nWhich )
         {
             case SID_EDITDOC:
@@ -1441,7 +1430,6 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         pDispatcher->Push( *pObjSh );
         pDispatcher->Flush();
         StartListening( *pObjSh );
-        pObjSh->ViewAssigned();
         Notify( *pObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
         Notify( *pObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
         pDispatcher->SetReadOnly_Impl( pObjSh->IsReadOnly() );
@@ -1756,8 +1744,7 @@ void SfxViewFrame::Show()
 
     // Display Frame-window, but only if the ViewFrame has no window of its
     // own or if it does not contain a Component
-    if ( &GetWindow() == &GetFrame().GetWindow() || !GetFrame().HasComponent() )
-        GetWindow().Show();
+    GetWindow().Show();
     GetFrame().GetWindow().Show();
 }
 

@@ -44,12 +44,6 @@ namespace bib
     }
 
 
-    void OComponentListener::_disposing( const EventObject& /*_rSource*/ ) throw( RuntimeException)
-    {
-        // nothing to do here, override if you're interested in
-    }
-
-
     void OComponentListener::setAdapter( OComponentAdapterBase* pAdapter )
     {
         {
@@ -124,14 +118,10 @@ namespace bib
     // XEventListener
 
 
-    void SAL_CALL OComponentAdapterBase::disposing( const EventObject& _rSource ) throw( RuntimeException, std::exception )
+    void SAL_CALL OComponentAdapterBase::disposing( const EventObject& ) throw( RuntimeException, std::exception )
     {
         if ( m_pListener )
         {
-             // tell the listener
-            if ( !locked() )
-                m_pListener->_disposing( _rSource );
-
             // disconnect the listener
             if ( m_pListener )  // may have been reset whilest calling into _disposing
                 m_pListener->setAdapter( NULL );

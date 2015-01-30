@@ -852,8 +852,6 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // So superflous messages are filtered to NULL :-)
     implts_startWindowListening();
 
-    impl_enablePropertySet();
-
     m_pWindowCommandDispatch = new WindowCommandDispatch(xContext, this);
 
     // Initialize title functionality

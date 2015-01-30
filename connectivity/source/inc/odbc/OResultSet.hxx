@@ -20,6 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ORESULTSET_HXX
 
+#include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -154,7 +155,7 @@ namespace connectivity
             bool      isBookmarkable()          const;
             sal_Int32 getResultSetConcurrency() const;
             sal_Int32 getResultSetType()        const;
-            sal_Int32 getFetchDirection()       const;
+            static sal_Int32 getFetchDirection() { return css::sdbc::FetchDirection::FORWARD; }
             sal_Int32 getFetchSize()            const;
             OUString getCursorName()     const;
             template < typename T, SQLINTEGER BufferLength > T getStmtOption (SQLINTEGER fOption, T dflt = 0) const;

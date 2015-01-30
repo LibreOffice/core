@@ -307,9 +307,6 @@ private:
     bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-    bool IsEditable(
-        const com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
 
     void AddChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, bool bFireEvent);
     void RemoveChild(const com::sun::star::uno::Reference<com::sun::star::accessibility::XAccessible>& xAcc, bool bFireEvent);

@@ -21,11 +21,13 @@
 
 #include <cppuhelper/implementationentry.hxx>
 
+extern const struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[];
+
 class ChartTypeEntriesForServiceRegistration
 {
 public:
     static const struct ::cppu::ImplementationEntry*
-        getImplementationEntries();
+        getImplementationEntries() { return g_entries_chart2_charttypes; }
 };
 
 // INCLUDED_CHART2_SOURCE_MODEL_INC__SERVICEREGISTRATION_CHARTTYPES_HXX

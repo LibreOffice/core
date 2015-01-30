@@ -101,16 +101,6 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const OUString& rText, c
     return pEntry;
 }
 
-bool SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const OUString&, bool )
-{
-    return true;
-}
-
-bool SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )
-{
-    return true;
-}
-
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
 {
     rDev.DrawImage( rPos, pEntry->GetImage() );
@@ -119,21 +109,6 @@ void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Po
 OUString SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, bool )
 {
     return pEntry->GetText();
-}
-
-bool SvtIconChoiceCtrl::HasBackground() const
-{
-    return false;
-}
-
-bool SvtIconChoiceCtrl::HasFont() const
-{
-    return false;
-}
-
-bool SvtIconChoiceCtrl::HasFontFillColor() const
-{
-    return true;
 }
 
 void SvtIconChoiceCtrl::Paint( const Rectangle& rRect )

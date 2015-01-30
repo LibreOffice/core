@@ -204,7 +204,6 @@ class LtcBenContainer
 {
 public:
     BenError Open();
-    BenError Close();
     BenError RegisterPropertyName(const char * sPropertyName,
       pCBenPropertyName * ppPropertyName);
     // Pass NULL to begin iteration.  Done when returns NULL.
@@ -297,8 +296,6 @@ public: // Internal methods
       pCurrValueSegment);
     inline pLtcBenContainer GetContainer();
     CUtList& GetValueSegments() { return cValueSegments; }
-    // Currently, no generation support
-    BenGeneration GetGeneration() { return 1; }
 
 private: // Data
     pCBenProperty cpProperty;

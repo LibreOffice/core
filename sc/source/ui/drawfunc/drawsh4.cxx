@@ -58,9 +58,6 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 
     if(bDeactivate)
     {
-        if ( pDlg )
-            pDlg->SetActive(false);
-
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
         rSet.DisableItem(XATTR_FORMTXTDISTANCE);
@@ -86,8 +83,6 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
 
                 if ( pItem )
                     pColorList = static_cast<const SvxColorListItem*>(pItem)->GetColorList();
-
-                pDlg->SetActive();
 
                 if ( pColorList.is() )
                     pDlg->SetColorList( pColorList );

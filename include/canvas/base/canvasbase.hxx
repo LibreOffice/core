@@ -127,7 +127,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             maCanvasHelper.clear();
         }
@@ -144,9 +143,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
-
-            maCanvasHelper.drawPoint( this, aPoint, viewState, renderState );
         }
 
         virtual void SAL_CALL drawLine( const ::com::sun::star::geometry::RealPoint2D&  aStartPoint,
@@ -162,7 +158,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             maCanvasHelper.drawLine( this, aStartPoint, aEndPoint, viewState, renderState );
         }
@@ -180,7 +175,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             maCanvasHelper.drawBezier( this, aBezierSegment, aEndPoint, viewState, renderState );
         }
@@ -198,7 +192,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.drawPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
@@ -217,7 +210,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.strokePolyPolygon( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
@@ -237,7 +229,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.strokeTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, strokeAttributes );
         }
@@ -258,7 +249,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.strokeTextureMappedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes );
         }
@@ -277,7 +267,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.queryStrokeShapes( this, xPolyPolygon, viewState, renderState, strokeAttributes );
         }
@@ -295,7 +284,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.fillPolyPolygon( this, xPolyPolygon, viewState, renderState );
         }
@@ -314,7 +302,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.fillTexturedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures );
         }
@@ -333,7 +320,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.fillTextureMappedPolyPolygon( this, xPolyPolygon, viewState, renderState, textures, xMapping );
         }
@@ -391,7 +377,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.drawText( this, text, xFont, viewState, renderState, textDirection );
         }
@@ -409,7 +394,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.drawTextLayout( this, laidOutText, viewState, renderState );
         }
@@ -427,7 +411,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.drawBitmap( this, xBitmap, viewState, renderState );
         }
@@ -444,7 +427,6 @@ namespace canvas
             MutexType aGuard( BaseType::m_aMutex );
 
             mbSurfaceDirty = true;
-            maCanvasHelper.modifying();
 
             return maCanvasHelper.drawBitmapModulated( this, xBitmap, viewState, renderState );
         }

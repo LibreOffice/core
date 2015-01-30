@@ -80,10 +80,6 @@ short View3DDialog::Execute()
     {
         if( m_pGeometry )
             m_pGeometry->commitPendingChanges();
-        if( m_pAppearance )
-            m_pAppearance->commitPendingChanges();
-        if( m_pIllumination )
-            m_pIllumination->commitPendingChanges();
     }
     return nResult;
 }

@@ -478,19 +478,6 @@ void SfxStateCache::SetCachedState( bool bAlways )
 
 
 
-// Destroy FloatingWindows in all Controls with this Id
-
-void SfxStateCache::DeleteFloatingWindows()
-{
-
-    SfxControllerItem *pNextCtrl=0;
-    for ( SfxControllerItem *pCtrl=pController; pCtrl; pCtrl=pNextCtrl )
-    {
-        pNextCtrl = pCtrl->GetItemLink();
-        pCtrl->DeleteFloatingWindow();
-    }
-}
-
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SfxStateCache::GetDispatch() const
 {
     if ( pDispatch )

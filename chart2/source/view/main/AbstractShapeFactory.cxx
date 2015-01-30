@@ -115,11 +115,6 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
     return pShapeFactory;
 }
 
-sal_Int32 AbstractShapeFactory::getSymbolCount()
-{
-    return Symbol_COUNT;
-}
-
 uno::Reference< drawing::XShapes > AbstractShapeFactory::getChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {

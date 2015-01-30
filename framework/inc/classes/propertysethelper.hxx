@@ -118,7 +118,6 @@ class FWI_DLLPUBLIC PropertySetHelper : public css::beans::XPropertySet
          *  There is no chance to reactive a "dead" object by calling impl_enablePropertySet()
          *  again!
          */
-        void SAL_CALL impl_enablePropertySet();
         void SAL_CALL impl_disablePropertySet();
 
         /**

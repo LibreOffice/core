@@ -310,7 +310,6 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     {
             static_cast<SvxTransparenceTabPage&>(rPage).SetPageType( mnPageType );
             static_cast<SvxTransparenceTabPage&>(rPage).SetDlgType( 0 );
-            static_cast<SvxTransparenceTabPage&>(rPage).Construct();
     }
 }
 

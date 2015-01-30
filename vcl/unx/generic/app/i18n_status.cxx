@@ -597,11 +597,6 @@ SalFrame* I18NStatus::getStatusFrame() const
     return pRet;
 }
 
-bool I18NStatus::canToggleStatusWindow() const
-{
-    return true;
-}
-
 void I18NStatus::toggleStatusWindow()
 {
     if (m_pStatusWindow != 0)
@@ -631,7 +626,7 @@ X11ImeStatus::~X11ImeStatus()
 
 bool X11ImeStatus::canToggle()
 {
-    return vcl::I18NStatus::get().canToggleStatusWindow();
+    return true;
 }
 
 void X11ImeStatus::toggle()

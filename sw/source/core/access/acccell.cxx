@@ -473,7 +473,6 @@ sal_Bool SwAccessibleCell::isAccessibleChildSelected(
 void SwAccessibleCell::clearAccessibleSelection(  )
     throw ( uno::RuntimeException, std::exception )
 {
-    aSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleCell::selectAllAccessibleChildren(  )

@@ -166,7 +166,6 @@ ScTabView::~ScTabView()
         for (i=0; i<4; i++)
             if (pGridWin[i])
             {
-                pDrawView->VCRemoveWin(pGridWin[i]);
                 pDrawView->DeleteWindowFromPaintView(pGridWin[i]);
             }
 
@@ -211,7 +210,6 @@ void ScTabView::MakeDrawView( sal_uInt8 nForceDesignMode )
             {
                 if ( SC_SPLIT_BOTTOMLEFT != (ScSplitPos)i )
                     pDrawView->AddWindowToPaintView(pGridWin[i]);
-                pDrawView->VCAddWin(pGridWin[i]);
             }
         pDrawView->RecalcScale();
         for (i=0; i<4; i++)
@@ -247,7 +245,6 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
     if (pDrawView)
     {
         pDrawView->AddWindowToPaintView(pWin);
-        pDrawView->VCAddWin(pWin);
 
         // #114409#
         pWin->DrawLayerCreated();
@@ -260,11 +257,6 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
     {
         DrawDeselectAll();      // beendet auch Text-Edit-Modus
 
-        sal_uInt16 i;
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                pDrawView->VCRemoveWin(pGridWin[i]);    // fuer alte Page
-
         SCTAB nTab = aViewData.GetTabNo();
         pDrawView->HideSdrPage();
         pDrawView->ShowSdrPage(pDrawView->GetModel()->GetPage(nTab));
@@ -273,10 +265,6 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
 
         pDrawView->RecalcScale();
         pDrawView->UpdateWorkArea();    // PageSize ist pro Page unterschiedlich
-
-        for (i=0; i<4; i++)
-            if (pGridWin[i])
-                pDrawView->VCAddWin(pGridWin[i]);       // fuer neue Page
     }
 
     SfxBindings& rBindings = aViewData.GetBindings();

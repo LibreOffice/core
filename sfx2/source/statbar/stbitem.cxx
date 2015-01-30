@@ -415,8 +415,6 @@ throw ( uno::RuntimeException, std::exception )
 void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
 throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aGuard;
-    DoubleClick();
 }
 
 
@@ -512,7 +510,6 @@ bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 }
 
 
-
 bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 /*  [Description]
@@ -570,21 +567,6 @@ void SfxStatusBarControl::Click()
 
 
 
-void SfxStatusBarControl::DoubleClick()
-
-/*  [Description]
-
-    This virtual method is called when the user double-clicks on the
-    field in the status row that belongs to this control.
-
-    The default implementation is empty.
-*/
-
-{
-}
-
-
-
 void SfxStatusBarControl::Paint
 (
     const UserDrawEvent& /* Reference to an UserDrawEvent */
@@ -600,18 +582,6 @@ void SfxStatusBarControl::Paint
     The default implementation is empty.
 */
 
-{
-}
-
-
-
-void SfxStatusBarControl::CaptureMouse()
-{
-}
-
-
-
-void SfxStatusBarControl::ReleaseMouse()
 {
 }
 

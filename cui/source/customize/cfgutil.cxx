@@ -361,14 +361,6 @@ OUString SfxConfigFunctionListBox::GetCurLabel()
     return pData->sCommand;
 }
 
-void SfxConfigFunctionListBox::FunctionSelected()
-/*  Description
-    Resets the balloon-help because it shall
-    always show the help-text of the selected entry.
-*/
-{
-}
-
 void SfxConfigFunctionListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
 {
     pStylesInfo = pStyles;
@@ -496,16 +488,6 @@ void SfxConfigGroupListBox::InitModule()
 }
 
 
-void SfxConfigGroupListBox::InitBasic()
-{
-}
-
-
-void SfxConfigGroupListBox::InitStyles()
-{
-}
-
-
 namespace
 {
 
@@ -578,8 +560,6 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         m_xUICmdDescription   = css::frame::theUICommandDescription::get( m_xContext );
 
         InitModule();
-        InitBasic();
-        InitStyles();
     }
 
     SAL_INFO("cui.customize", "** ** About to initialise SF Scripts");

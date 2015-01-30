@@ -165,7 +165,6 @@ void Formula::makeExpr(Node *res)
              makeRoot(tmp);
              break;
          case ID_ARROWEXPR:
-             makeArrow(tmp);
              break;
          case ID_ACCENTEXPR:
              makeAccent(tmp);
@@ -181,10 +180,8 @@ void Formula::makeExpr(Node *res)
              makeBlock(tmp);
              //fall-through
          case ID_BEGIN:
-             makeBegin(tmp);
              //fall-through
          case ID_END:
-             makeEnd(tmp);
              break;
     }
 }
@@ -463,10 +460,6 @@ void Formula::makeRoot(Node *res)
           rendEl("math:mroot");
 #endif
 }
-// DVO: add space to avoid warning
-void Formula::makeArrow(Node * /*res*/)
-{
-}
 void Formula::makeAccent(Node *res)
 {
      makeDecoration( res );
@@ -573,16 +566,6 @@ void Formula::makeBlock(Node *res)
 #else
      rendEl("math:mrow");
 #endif
-}
-
-// DVO: add space to avoid warning
-void Formula::makeBegin(Node * /*res*/)
-{
-}
-
-// DVO: add space to avoid warning
-void Formula::makeEnd(Node * /*res*/)
-{
 }
 
 int Formula::parse()

@@ -136,7 +136,6 @@ public:
 
     void ExecCtrl (SfxRequest& rRequest);
     void GetAttrState (SfxItemSet& rSet);
-    void ExecStatusBar (SfxRequest& rRequest);
 
     bool IsLocked (void) const;
 

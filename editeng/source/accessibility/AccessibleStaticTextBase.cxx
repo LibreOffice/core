@@ -130,12 +130,7 @@ namespace accessibility
 
         void SetOffset( const Point& );
 
-        void UpdateChildren();
         void Dispose();
-
-#ifdef DBG_UTIL
-        void CheckInvariants() const;
-#endif
 
         AccessibleEditableTextPara& GetParagraph( sal_Int32 nPara ) const;
         sal_Int32                   GetParagraphCount() const;
@@ -232,15 +227,6 @@ namespace accessibility
 
         if( mpTextParagraph )
             mpTextParagraph->SetEEOffset( rPoint );
-
-        // in all cases, check visibility afterwards.
-        UpdateChildren();
-    }
-
-    void AccessibleStaticTextBase_Impl::UpdateChildren()
-    {
-
-        // currently no children
     }
 
     void AccessibleStaticTextBase_Impl::Dispose()
@@ -255,13 +241,6 @@ namespace accessibility
         mxThis = NULL;
         mpTextParagraph = NULL;
     }
-
-#ifdef DBG_UTIL
-    void AccessibleStaticTextBase_Impl::CheckInvariants() const
-    {
-        // TODO
-    }
-#endif
 
     AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int32 nPara ) const
     {
@@ -494,11 +473,8 @@ namespace accessibility
         // precondition: solar mutex locked
         DBG_TESTSOLARMUTEX();
 
-        mpImpl->CheckInvariants();
-
         mpImpl->SetEditSource( std::move(pEditSource) );
 
-        mpImpl->CheckInvariants();
 #else
         mpImpl->SetEditSource( std::move(pEditSource) );
 #endif
@@ -506,15 +482,8 @@ namespace accessibility
 
     void AccessibleStaticTextBase::SetEventSource( const uno::Reference< XAccessible >& rInterface )
     {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
-
         mpImpl->SetEventSource( rInterface );
 
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
     }
 
     void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
@@ -523,11 +492,8 @@ namespace accessibility
         // precondition: solar mutex locked
         DBG_TESTSOLARMUTEX();
 
-        mpImpl->CheckInvariants();
-
         mpImpl->SetOffset( rPoint );
 
-        mpImpl->CheckInvariants();
 #else
         mpImpl->SetOffset( rPoint );
 #endif
@@ -535,15 +501,8 @@ namespace accessibility
 
     void AccessibleStaticTextBase::Dispose()
     {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
-
         mpImpl->Dispose();
 
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
     }
 
     // XAccessibleContext

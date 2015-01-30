@@ -99,8 +99,6 @@ private:
     sal_uInt8*              pMap[ 4 ];                  // temporary Scanline
 
 
-    void    MayCallback( sal_uLong nPercent );
-
     sal_uLong   DataTypeSize();
     sal_uLong   ReadIntData();
     double  ReadDoubleData();
@@ -108,7 +106,7 @@ private:
     void    ReadHeader();
     void    ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen );
 
-    bool    ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent );
+    bool    ReadMap();
         // reads/decompresses the bitmap data and fills pMap
 
     sal_uLong   GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_uLong nBitsCount );
@@ -193,12 +191,6 @@ public:
 };
 
 //=================== Methods of TIFFReader ==============================
-
-void TIFFReader::MayCallback( sal_uLong /*nPercent*/ )
-{
-}
-
-
 
 sal_uLong TIFFReader::DataTypeSize()
 {
@@ -538,7 +530,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
 
 
 
-bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
+bool TIFFReader::ReadMap()
 {
     if ( nCompression == 1 || nCompression == 32771 )
     {
@@ -559,7 +551,6 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 pTIFF->Read( pMap[ np ], nBytesPerRow );
                 if ( pTIFF->GetError() )
                     return false;
-                MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * ( np * nImageLength + ny) / ( nImageLength * nPlanes ) );
             }
             if ( !ConvertScanline( ny ) )
                 return false;
@@ -618,7 +609,6 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                     return false;
                 if ( pTIFF->GetError() )
                     return false;
-                MayCallback(nMinPercent+(nMaxPercent-nMinPercent)*(np*nImageLength+ny)/(nImageLength*nPlanes));
             }
             if ( !ConvertScanline( ny ) )
                 return false;
@@ -647,7 +637,6 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 }
                 if ( ( aLZWDecom.Decompress( pMap[ np ], nBytesPerRow ) != nBytesPerRow ) || pTIFF->GetError() )
                     return false;
-                MayCallback(nMinPercent+(nMaxPercent-nMinPercent)*(np*nImageLength+ny)/(nImageLength*nPlanes));
             }
             if ( !ConvertScanline( ny ) )
                 return false;
@@ -707,7 +696,6 @@ bool TIFFReader::ReadMap( sal_uLong nMinPercent, sal_uLong nMaxPercent )
                 } while ( nRowBytesLeft != 0 );
                 if ( pTIFF->GetError() )
                     return false;
-                MayCallback(nMinPercent+(nMaxPercent-nMinPercent)*(np*nImageLength+ny)/(nImageLength*nPlanes));
             }
             if ( !ConvertScanline( ny ) )
                 return false;
@@ -1177,8 +1165,6 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
     // number format of pTIFF at the beginning
     SvStreamEndian nOrigNumberFormat = pTIFF->GetEndian();
 
-    MayCallback( 0 );
-
     // read header:
     ReadHeader();
 
@@ -1359,7 +1345,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         pMaskAcc = pAlphaMask->AcquireWriteAccess();
                     }
 
-                    if (bStatus && ReadMap(10, 60))
+                    if (bStatus && ReadMap())
                     {
                         nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
                         MakePalCol();

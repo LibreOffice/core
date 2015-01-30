@@ -2962,10 +2962,6 @@ void createAllObjectProperties( SbxObject* pObj )
     {
         pUnoStructObj->createAllProperties();
     }
-    else
-    {
-        pObj->GetAll( SbxCLASS_DONTCARE );
-    }
 }
 
 

@@ -39,7 +39,7 @@
 
 #include "swuiccoll.hxx"
 
-static const sal_uInt16 aPageRg[] = {
+const sal_uInt16 SwCondCollPage::aPageRg[] = {
     FN_COND_COLL, FN_COND_COLL,
     0
 };
@@ -195,11 +195,6 @@ void SwCondCollPage::Reset(const SfxItemSet *)
             m_pTbLinks->Select(pE);
     }
 
-}
-
-const sal_uInt16* SwCondCollPage::GetRanges()
-{
-    return aPageRg;
 }
 
 IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )

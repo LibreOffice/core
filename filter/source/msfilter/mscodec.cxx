@@ -280,7 +280,7 @@ static void lcl_PrintDigest(const sal_uInt8* pDigest, const char* msg)
     printf("\n");
 }
 #else
-static void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
+static inline void lcl_PrintDigest(const sal_uInt8* /*pDigest*/, const char* /*msg*/)
 {
 }
 #endif

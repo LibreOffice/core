@@ -1002,10 +1002,9 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::processingInstruction( const OUStri
     saxHelper.processingInstruction(aTarget, aData);
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& xLocator )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& )
     throw (cssxs::SAXException, cssu::RuntimeException, std::exception)
 {
-    saxHelper.setDocumentLocator(xLocator);
 }
 
 /* XCompressedDocumentHandler */

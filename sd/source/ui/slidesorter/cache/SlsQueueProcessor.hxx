@@ -74,8 +74,6 @@ public:
     void Pause (void);
     void Resume (void);
 
-    void Terminate (void);
-
     void SetPreviewSize (
         const Size& rSize,
         const bool bDoSuperSampling);

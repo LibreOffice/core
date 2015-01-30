@@ -668,8 +668,6 @@ PrinterJob::StartPage (const JobData& rJobSetup)
 bool
 PrinterJob::EndPage ()
 {
-    m_pGraphics->OnEndPage();
-
     osl::File* pPageHeader = maHeaderList.back();
     osl::File* pPageBody   = maPageList.back();
 

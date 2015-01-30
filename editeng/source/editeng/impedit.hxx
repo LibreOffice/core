@@ -616,7 +616,6 @@ private:
     sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
     sal_uInt32 WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicode = false );
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_Int32 nPara, sal_Int32 nPos,

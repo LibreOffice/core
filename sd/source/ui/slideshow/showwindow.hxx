@@ -88,7 +88,6 @@ public:
 private:
     void            DrawPauseScene( bool bTimeoutOnly );
     void            DrawEndScene();
-    void            DrawBlankScene();
 
     void            DeleteWindowFromPaintView();
     void            AddWindowToPaintView();

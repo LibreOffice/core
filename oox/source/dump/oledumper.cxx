@@ -347,7 +347,7 @@ sal_uInt16 OlePropertyStreamObject::dumpPropertyContents( sal_Int32 nPropId )
     {
         case OLEPROP_TYPE_SIMPLE:   dumpPropertyValue( nPropId, nBaseType );    break;
         case OLEPROP_TYPE_VECTOR:   dumpPropertyVector( nPropId, nBaseType );   break;
-        case OLEPROP_TYPE_ARRAY:    dumpPropertyArray( nPropId, nBaseType );    break;
+        case OLEPROP_TYPE_ARRAY:    /*TODO*/;    break;
     }
     return nType;
 }
@@ -391,11 +391,6 @@ void OlePropertyStreamObject::dumpPropertyVector( sal_Int32 nPropId, sal_uInt16 
         IndentGuard aIndGuard( mxOut );
         dumpPropertyValue( nPropId, nBaseType );
     }
-}
-
-void OlePropertyStreamObject::dumpPropertyArray( sal_Int32 /*nPropId*/, sal_uInt16 /*nBaseType*/ )
-{
-    // TODO
 }
 
 sal_uInt16 OlePropertyStreamObject::dumpPropertyType()

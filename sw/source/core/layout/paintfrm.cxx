@@ -3988,19 +3988,6 @@ bool SwFlyFrm::IsBackgroundTransparent() const
     return bBackgroundTransparent;
 };
 
-/**
- * For feature #99657#
- *
- * OD 13.08.2002
- * determine, if shadow color of fly frame has to be drawn transparent
- * declaration found in /core/inc/flyfrm.cxx
- * @return true, if shadow color is transparent.
-*/
-bool SwFlyFrm::IsShadowTransparent() const
-{
-    return GetFmt()->IsShadowTransparent();
-};
-
 bool SwFlyFrm::IsPaint( SdrObject *pObj, const SwViewShell *pSh )
 {
     SdrObjUserCall *pUserCall;

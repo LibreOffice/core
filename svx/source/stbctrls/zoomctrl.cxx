@@ -144,7 +144,6 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {
     if ( COMMAND_CONTEXTMENU & rCEvt.GetCommand() && 0 != nValueSet )
     {
-        CaptureMouse();
         ZoomPopup_Impl aPop( nZoom, nValueSet );
         StatusBar& rStatusbar = GetStatusBar();
 
@@ -170,7 +169,6 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 
             execute( aArgs );
         }
-        ReleaseMouse();
     }
     else
         SfxStatusBarControl::Command( rCEvt );

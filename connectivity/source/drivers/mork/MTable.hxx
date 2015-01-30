@@ -43,8 +43,6 @@ namespace connectivity
 
             OConnection* getConnection() { return m_pConnection;}
 
-            bool isReadOnly() const { return false; }
-
             OUString getTableName() const { return m_Name; }
             OUString getSchema() const { return m_SchemaName; }
 

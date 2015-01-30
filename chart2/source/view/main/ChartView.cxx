@@ -2001,7 +2001,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
 
 namespace
 {
-sal_Int32 lcl_getDiagramTitleSpace()
+inline sal_Int32 lcl_getDiagramTitleSpace()
 {
     return 200; //=0,2 cm spacing
 }
@@ -2247,7 +2247,7 @@ awt::Rectangle ExplicitValueProvider::substractAxisTitleSizes(
 
 namespace {
 
-double lcl_getPageLayoutDistancePercentage()
+inline double lcl_getPageLayoutDistancePercentage()
 {
     return 0.02;
 }
@@ -2576,11 +2576,6 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
 
 }
 
-bool ChartView::impl_AddInDrawsAllByItself()
-{
-    return false;
-}
-
 void ChartView::impl_refreshAddIn()
 {
     if( !m_bRefreshAddIn )
@@ -2627,8 +2622,6 @@ void ChartView::createShapes()
 
     //make sure add-in is refreshed after creating the shapes
     const ::comphelper::ScopeGuard aGuard( boost::bind( &ChartView::impl_refreshAddIn, this ) );
-    if( impl_AddInDrawsAllByItself() )
-        return;
 
     m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle(0,0,0,0);
     impl_deleteCoordinateSystems();

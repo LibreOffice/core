@@ -211,9 +211,6 @@ public:
 
     void    SetListNumber( sal_Int32 level, XFNumFmt& numFmt,   sal_Int16 nStartValue = 1 );
 
-    //not implemented now.
-    void    SetListImage(){}
-
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE
     {
         return enumXFStyleList;

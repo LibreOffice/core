@@ -136,8 +136,6 @@ namespace vcl
 
             NUpTabPage( VclBuilder* );
 
-            void readFromSettings();
-            void storeToSettings();
             void initFromMultiPageSetup( const vcl::PrinterController::MultiPageSetup& );
             void enableNupControls( bool bEnable );
 

@@ -5325,9 +5325,4 @@ OUString INetURLObject::CutExtension(DecodeMechanism eMechanism,
         ? aTheExtension : OUString();
 }
 
-bool INetURLObject::IsCaseSensitive() const
-{
-    return true;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

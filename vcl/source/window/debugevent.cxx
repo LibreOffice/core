@@ -57,10 +57,6 @@ vcl::Window *DebugEventInjector::ChooseWindow()
     return aChildren[ aChildren.size() * getRandom() ];
 }
 
-void DebugEventInjector::InjectMouseEvent()
-{
-}
-
 typedef std::vector< SalMenuEvent > MenuItemIds;
 
 static void CollectMenuItemIds( Menu *pMenu, MenuItemIds &rIds )
@@ -193,8 +189,6 @@ void DebugEventInjector::InjectEvent()
         InjectKeyNavEdit();
     else if (nRand < 0.95)
         InjectMenuEvent();
-    else
-        InjectMouseEvent();
 }
 
 void DebugEventInjector::InjectKeyNavEdit()

@@ -1191,7 +1191,6 @@ void SlideShowImpl::displaySlide(
         }
     } // finally
 
-    maEventMultiplexer.notifySlideTransitionStarted();
     maListenerContainer.forEach<presentation::XSlideShowListener>(
         boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
 
@@ -1227,7 +1226,6 @@ void SlideShowImpl::redisplayCurrentSlide (void)
                 true ),
             "SlideShowImpl::notifySlideTransitionEnded"));
 
-    maEventMultiplexer.notifySlideTransitionStarted();
     maListenerContainer.forEach<presentation::XSlideShowListener>(
         boost::mem_fn( &presentation::XSlideShowListener::slideTransitionStarted ) );
 }

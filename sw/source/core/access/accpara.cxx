@@ -3040,8 +3040,6 @@ void SwAccessibleParagraph::clearAccessibleSelection(  )
     throw ( uno::RuntimeException, std::exception )
 {
     CHECK_FOR_DEFUNC( XAccessibleSelection );
-
-    aSelectionHelper.clearAccessibleSelection();
 }
 
 void SwAccessibleParagraph::selectAllAccessibleChildren(  )

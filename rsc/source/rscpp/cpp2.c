@@ -48,11 +48,6 @@
 #endif
 
 
-void InitCpp2()
-{
-
-}
-
 /*
  * Process #control lines.  Simple commands are processed inline,
  * while complex commands have their own subroutines.

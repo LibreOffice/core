@@ -34,19 +34,6 @@ namespace oglcanvas
         CanvasHelper::init(rDevice,rDeviceHelper);
     }
 
-    void BitmapCanvasHelper::copyRect( const rendering::XCanvas*                            /*pCanvas*/,
-                                       const uno::Reference< rendering::XBitmapCanvas >&    /*sourceCanvas*/,
-                                       const geometry::RealRectangle2D&                     /*sourceRect*/,
-                                       const rendering::ViewState&                          /*sourceViewState*/,
-                                       const rendering::RenderState&                        /*sourceRenderState*/,
-                                       const geometry::RealRectangle2D&                     /*destRect*/,
-                                       const rendering::ViewState&                          /*destViewState*/,
-                                       const rendering::RenderState&                        /*destRenderState*/ )
-    {
-        // TODO(F2): copyRect NYI
-    }
-
-
     uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
                                                                               bool                    /*beFast*/ )
     {
@@ -61,20 +48,6 @@ namespace oglcanvas
         return uno::Sequence< sal_Int8 >();
     }
 
-    void BitmapCanvasHelper::setData( const uno::Sequence< sal_Int8 >&      /*data*/,
-                                      const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
-                                      const geometry::IntegerRectangle2D&   /*rect*/ )
-    {
-        // TODO(F2): NYI - and improbable to ever be
-    }
-
-    void BitmapCanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       /*color*/,
-                                       const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
-                                       const geometry::IntegerPoint2D&        /*pos*/ )
-    {
-        // TODO(F2): NYI - and improbable to ever be
-    }
-
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                             const geometry::IntegerPoint2D&   /*pos*/ )
     {
@@ -85,11 +58,6 @@ namespace oglcanvas
     rendering::IntegerBitmapLayout BitmapCanvasHelper::getMemoryLayout()
     {
         return ::canvas::tools::getStdMemoryLayout(getSize());
-    }
-
-    bool BitmapCanvasHelper::hasAlpha() const
-    {
-        return true;
     }
 
 }

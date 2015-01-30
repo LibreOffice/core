@@ -70,10 +70,6 @@ ScrollBarManager::~ScrollBarManager (void)
 {
 }
 
-void ScrollBarManager::LateInitialization (void)
-{
-}
-
 void ScrollBarManager::Connect (void)
 {
     if (mpVerticalScrollBar != 0)

@@ -942,11 +942,6 @@ void FixedImage::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
             pDev->DrawImage( aPos, *pImage, nStyle );
         }
     }
-
-    mbInUserDraw = true;
-    UserDrawEvent aUDEvt( pDev, Rectangle( rPos, rSize ), 0, nStyle );
-    UserDraw( aUDEvt );
-    mbInUserDraw = false;
 }
 
 void FixedImage::Paint( const Rectangle& )
@@ -957,10 +952,6 @@ void FixedImage::Paint( const Rectangle& )
 Size FixedImage::GetOptimalSize() const
 {
     return maImage.GetSizePixel();
-}
-
-void FixedImage::UserDraw( const UserDrawEvent& )
-{
 }
 
 void FixedImage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,

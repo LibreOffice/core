@@ -115,11 +115,6 @@ namespace dbtools
     }
 
 
-    void ParameterManager::disposing( const EventObject& /*_rDisposingEvent*/ )
-    {
-    }
-
-
     void ParameterManager::setAllParametersNull()
     {
         OSL_PRECOND( isAlive(), "ParameterManager::setAllParametersNull: not initialized, or already disposed!" );

@@ -421,17 +421,6 @@ bool SfxObjectShell::Stamp_GetPrintCancelState() const
 
 
 
-void SfxObjectShell::ViewAssigned()
-
-/*  [Description]
-
-    This method is called when a view is assigned.
-*/
-
-{
-}
-
-
 // closes the Object and all its views
 
 bool SfxObjectShell::Close()

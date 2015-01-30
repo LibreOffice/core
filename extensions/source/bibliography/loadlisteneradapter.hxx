@@ -51,9 +51,6 @@ namespace bib
 
         virtual ~OComponentListener();
 
-        // XEventListener equivalents
-        void _disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw( ::com::sun::star::uno::RuntimeException );
-
     protected:
         void setAdapter( OComponentAdapterBase* _pAdapter );
     };

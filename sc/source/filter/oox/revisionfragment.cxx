@@ -215,7 +215,6 @@ void RevisionHeadersFragment::onStartElement( const AttributeList& rAttribs )
     switch (getCurrentElement())
     {
         case XLS_TOKEN(headers):
-            importHeaders(rAttribs);
         break;
         case XLS_TOKEN(header):
             importHeader(rAttribs);
@@ -280,11 +279,6 @@ void RevisionHeadersFragment::finalizeImport()
     ScChangeViewSettings aSettings;
     aSettings.SetShowChanges(true);
     rDoc.SetChangeViewSettings(aSettings);
-}
-
-void RevisionHeadersFragment::importHeaders( const AttributeList& /*rAttribs*/ )
-{
-    // Nothing for now.
 }
 
 void RevisionHeadersFragment::importHeader( const AttributeList& rAttribs )

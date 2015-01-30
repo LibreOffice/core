@@ -436,10 +436,7 @@ Registry_Api* REGISTRY_CALLTYPE initRegistry_Api(void)
                                &getStringListValue,
                                &getUnicodeListValue,
                                &freeValueList,
-                               &createLink,
-                               &deleteLink,
                                &getKeyType,
-                               &getLinkTarget,
                                &getResolvedKeyName,
                                &getKeyNames,
                                &freeKeyNames};

@@ -46,12 +46,13 @@ class TabWin_Impl;
 class SvxTabulatorTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pRanges[];
 
 public:
     virtual ~SvxTabulatorTabPage();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

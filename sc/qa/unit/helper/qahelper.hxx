@@ -220,6 +220,7 @@ struct assertion_traits<ScRange>
 
 class SCQAHELPER_DLLPUBLIC ScBootstrapFixture : public test::BootstrapFixture
 {
+    static const FileFormat aFileFormats[];
 protected:
     OUString m_aBaseString;
 
@@ -236,7 +237,7 @@ protected:
     ScDocShellRef loadDoc(const OUString& rFileName, sal_Int32 nFormat, bool bReadWrite = false );
 
 public:
-    static const FileFormat* getFileFormats();
+    static const FileFormat* getFileFormats() { return aFileFormats; }
 
     ScBootstrapFixture( const OUString& rsBaseString );
     virtual ~ScBootstrapFixture();

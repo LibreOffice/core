@@ -123,7 +123,6 @@ public:
     virtual void        AutoHide() SAL_OVERRIDE;
     virtual void        FadeOut() SAL_OVERRIDE;
     virtual void        FadeIn() SAL_OVERRIDE;
-    void                Show_Impl();
     void                Pin_Impl( bool bPinned );
     bool                ActivateNextChild_Impl( bool bForward = true );
     void                SetActiveWindow_Impl( SfxDockingWindow* pWin );

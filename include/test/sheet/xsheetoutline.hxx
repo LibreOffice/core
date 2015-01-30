@@ -27,7 +27,6 @@ public:
     void testShowLevel();
     void testUngroup();
     void testGroup();
-    void testAutoOutline();
     void testClearOutline();
 
 protected:

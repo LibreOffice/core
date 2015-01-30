@@ -487,7 +487,7 @@ std::vector<OUString> AbstractScNamePasteDlg_Impl::GetSelectedNames() const
 
 bool AbstractScNamePasteDlg_Impl::IsAllSelected() const
 {
-    return pDlg->IsAllSelected();
+    return false;
 }
 
 const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()

@@ -169,8 +169,6 @@ public:
     SwReader( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const OUString& rFilename, SwPaM& );
 
     // The only export interface is SwReader::Read(...)!!!
-    bool NeedsPasswd( const Reader& );
-    bool CheckPasswd( const OUString&, const Reader& );
     sal_uLong Read( const Reader& );
 
     // Ask for glossaries.
@@ -300,8 +298,6 @@ class SW_DLLPUBLIC SwTextBlocks
 public:
     SwTextBlocks( const OUString& );
     ~SwTextBlocks();
-
-    void Flush(){}
 
     SwDoc* GetDoc();
     void   ClearDoc();                  // Delete Doc-contents.

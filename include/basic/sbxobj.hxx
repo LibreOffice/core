@@ -67,7 +67,6 @@ public:
     // Execution of DDE-Commands
     SbxVariable* Execute( const OUString& );
     // Manage elements
-    bool GetAll( SbxClassType ) { return true; }
     SbxVariable* Make( const OUString&, SbxClassType, SbxDataType, bool bIsRuntimeFunction = false );
     virtual void Insert( SbxVariable* );
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and

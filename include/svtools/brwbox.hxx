@@ -363,7 +363,6 @@ protected:
     */
     virtual bool    SeekRow( long nRow ) = 0;
     void            DrawCursor();
-    void            PaintRow( OutputDevice &rDev, const Rectangle &rRect );
     void            PaintData( vcl::Window& rWin, const Rectangle& rRect );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const = 0;
@@ -450,7 +449,6 @@ public:
 
     // neue Handler
     virtual void    MouseButtonDown( const BrowserMouseEvent& rEvt );
-    void            MouseMove( const BrowserMouseEvent& rEvt );
     virtual void    MouseButtonUp( const BrowserMouseEvent& rEvt );
     void            StartScroll();
     virtual void    EndScroll();

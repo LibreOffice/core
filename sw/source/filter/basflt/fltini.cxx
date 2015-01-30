@@ -195,16 +195,6 @@ bool Writer::IsStgWriter() const { return false; }
 
 bool StgWriter::IsStgWriter() const { return true; }
 
-bool SwReader::NeedsPasswd( const Reader& /*rOptions*/ )
-{
-    return false;
-}
-
-bool SwReader::CheckPasswd( const OUString& /*rPasswd*/, const Reader& /*rOptions*/ )
-{
-    return true;
-}
-
 // Read Filter Flags; used by WW8 / W4W / EXCEL / LOTUS
 
 /*

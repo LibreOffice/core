@@ -174,13 +174,6 @@ namespace dbaui
         virtual void Resize() SAL_OVERRIDE;
         virtual void KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
 
-        bool isCutAllowed();
-        bool isCopyAllowed();
-        bool isPasteAllowed();
-        void copy();
-        void cut();
-        void paste();
-
         /** creates the tables page
             @param  _xConnection
                 The connection to get the table names

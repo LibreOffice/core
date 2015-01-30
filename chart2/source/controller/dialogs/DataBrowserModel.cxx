@@ -207,12 +207,6 @@ private:
     OUString m_aRole;
 };
 
-bool lcl_ShowCategories( const Reference< chart2::XDiagram > & /* xDiagram */ )
-{
-    // show categories for all charts
-    return true;
-}
-
 bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagram )
 {
     return !DiagramHelper::isCategoryDiagram(xDiagram);
@@ -802,7 +796,6 @@ void DataBrowserModel::updateFromModel()
 
     sal_Int32 nHeaderStart = 0;
     sal_Int32 nHeaderEnd   = 0;
-    if( lcl_ShowCategories( xDiagram ))
     {
         Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
         ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());

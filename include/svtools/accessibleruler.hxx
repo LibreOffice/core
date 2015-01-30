@@ -68,8 +68,6 @@ public:
 protected:
     virtual ~SvtRulerAccessible();
 public:
-    bool SAL_CALL
-        isShowing() throw( ::com::sun::star::uno::RuntimeException );
 
     bool SAL_CALL
         isVisible() throw( ::com::sun::star::uno::RuntimeException );
