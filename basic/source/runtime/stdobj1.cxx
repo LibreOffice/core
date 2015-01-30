@@ -225,11 +225,15 @@ void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, bool bWrite )
     }
 }
 
-
 TYPEINIT1( SbStdFont, SbxObject );
 
-SbStdFont::SbStdFont() :
-    SbxObject( OUString("Font") )
+SbStdFont::SbStdFont()
+    : SbxObject( OUString("Font") )
+    , bBold(false)
+    , bItalic(false)
+    , bStrikeThrough(false)
+    , bUnderline(false)
+    , nSize(0)
 {
     // Properties
     SbxVariable* p = Make( OUString("Bold"), SbxCLASS_PROPERTY, SbxVARIANT );
@@ -258,13 +262,10 @@ SbStdFont::~SbStdFont()
 {
 }
 
-
 SbxVariable* SbStdFont::Find( const OUString& rName, SbxClassType t )
 {
     return SbxObject::Find( rName, t );
 }
-
-
 
 void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             const SfxHint& rHint, const TypeId& rHintType )
