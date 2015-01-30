@@ -260,22 +260,6 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
         pChild = pChild->mpWindowImpl->mpNext;
     }
 
-    // #107176# ignore overlapwindows
-    // this only affects non-system floating windows
-    // which are either not accessible (like the HelpAgent) or should be changed to system windows anyway
-    /*
-    if( ImplIsOverlapWindow() )
-    {
-        vcl::Window* pOverlap = GetWindow( WINDOW_FIRSTOVERLAP );
-        while ( pOverlap )
-        {
-            if( pOverlap->IsVisible() )
-                nChildren++;
-            pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
-        }
-    }
-    */
-
     // report the menubarwindow as a child of THE workwindow
     if( GetType() == WINDOW_BORDERWINDOW )
     {
@@ -332,28 +316,7 @@ vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
         do pChild = pChild->mpWindowImpl->mpNext; while( pChild && ! pChild->IsVisible() );
         DBG_ASSERT( pChild, "GetAccessibleChildWindow(): wrong index in border window");
     }
-    if ( !pChild )
-    {
-        // #107176# ignore overlapwindows
-        /*
-        if( ImplIsOverlapWindow() )
-        {
-            vcl::Window* pOverlap = GetWindow( WINDOW_FIRSTOVERLAP );
-            while ( !pChild && pOverlap )
-            {
-                if ( !nChildren && pOverlap->IsVisible() )
-                {
-                    pChild = pOverlap;
-                    break;
-                }
-                pOverlap = pOverlap->GetWindow( WINDOW_NEXT );
-                if( pOverlap && pOverlap->IsVisible() )
-                    nChildren--;
-            }
-        }
-        */
 
-    }
     if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
     {
         pChild = pChild->GetChild( 0 );
