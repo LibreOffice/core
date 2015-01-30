@@ -1062,7 +1062,7 @@ void SwTxtNode::Update(
                 // the unused position must not be on a SwTxtNode
                 bool const isOneUsed(&pRedl->GetBound(true) == pRedl->GetPoint());
                 assert(!pRedl->GetBound(!isOneUsed).nNode.GetNode().IsTxtNode());
-                assert(!pRedl->GetBound(!isOneUsed).nContent.GetIdxReg());
+                assert(!pRedl->GetBound(!isOneUsed).nContent.GetIdxReg()); (void)isOneUsed;
             }
         }
 
