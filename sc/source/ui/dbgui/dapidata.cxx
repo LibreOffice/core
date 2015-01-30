@@ -68,10 +68,10 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aFtDatabase     ( this, ScResId( FT_DATABASE ) ),
     aLbDatabase     ( this, ScResId( LB_DATABASE ) ),
-    aFtObject       ( this, ScResId( FT_OBJECT ) ),
-    aCbObject       ( this, ScResId( CB_OBJECT ) ),
     aFtType         ( this, ScResId( FT_OBJTYPE ) ),
     aLbType         ( this, ScResId( LB_OBJTYPE ) ),
+    aFtObject       ( this, ScResId( FT_OBJECT ) ),
+    aCbObject       ( this, ScResId( CB_OBJECT ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )

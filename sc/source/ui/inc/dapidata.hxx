@@ -43,10 +43,10 @@ private:
     FixedLine       aFlFrame;
     FixedText       aFtDatabase;
     ListBox         aLbDatabase;
-    FixedText       aFtObject;
-    ComboBox        aCbObject;
     FixedText       aFtType;
     ListBox         aLbType;
+    FixedText       aFtObject;
+    ComboBox        aCbObject;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

@@ -247,7 +247,7 @@ ModalDialog RID_SCDLG_DAPIDATA
 
     FixedText FT_OBJECT
     {
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
         Text [ en-US ] = "Data so~urce";
     };
@@ -255,7 +255,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         HelpID = "sc:ComboBox:RID_SCDLG_DAPIDATA:CB_OBJECT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 28 ) ;
+        Pos = MAP_APPFONT ( 66 , 44 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -263,7 +263,7 @@ ModalDialog RID_SCDLG_DAPIDATA
 
     FixedText FT_OBJTYPE
     {
-        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
         Text [ en-US ] = "~Type";
     };
@@ -271,13 +271,13 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         HelpID = "sc:ListBox:RID_SCDLG_DAPIDATA:LB_OBJTYPE";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 44 ) ;
+        Pos = MAP_APPFONT ( 66 , 28 ) ;
         Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     StringList [ en-US ] =
     {
-            < "Sheet" ; Default ; > ;
+        < "Table" ; Default ; > ;
         < "Query" ; Default ; > ;
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
