@@ -57,6 +57,8 @@
 #include "reffact.hxx"
 #include "condformatdlg.hxx"
 #include "xmlsourcedlg.hxx"
+#include "attrib.hxx"
+#include "patattr.hxx"
 
 #include "RandomNumberGeneratorDialog.hxx"
 #include "SamplingDialog.hxx"
@@ -74,6 +76,7 @@
 #include "PivotLayoutDialog.hxx"
 
 #include <config_orcus.h>
+#include <comphelper/sequenceashashmap.hxx>
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
 {
@@ -455,6 +458,52 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             ScViewData& rViewData = GetViewData();
             rViewData.SetRefTabNo( rViewData.GetTabNo() );
             pResult = new ScSimpleRefDlg( pB, pCW, pParent );
+        }
+        break;
+
+        case WID_CONDFRMT_REF:
+        {
+            sal_uInt32 aKey;
+            sal_Bool bManaged = false;
+            ScRangeList aRangeList;
+            ScConditionalFormat* pCondFormat = NULL;
+            com::sun::star::beans::PropertyValue aCondManaged, aCondType, aCondKey;
+            condformat::dialog::ScCondFormatDialogType aDialogType = condformat::dialog::ScCondFormatDialogType::NONE;
+
+            ScViewData& rViewData = GetViewData();
+            rViewData.SetRefTabNo( rViewData.GetTabNo() );
+
+            aCondManaged = GetTagBagValue( OUString(PROP_CONDFRMT_MANAGED) );
+            aCondType = GetTagBagValue( OUString(PROP_CONDFRMT_TYPE) );
+            aCondKey = GetTagBagValue( OUString(PROP_CONDFRMT_KEY) );
+
+            if (aCondManaged.Value.hasValue())
+                aCondManaged.Value >>= bManaged;
+
+            if (aCondType.Value.hasValue())
+                aDialogType = static_cast< condformat::dialog::ScCondFormatDialogType > ( aCondType.Value.get < sal_Int8 > () );
+
+            if (aCondKey.Value.hasValue())
+            {
+                aCondKey.Value >>= aKey;
+                pCondFormat = pDoc->GetCondFormList(rViewData.GetTabNo())->GetFormat(aKey);
+            }
+
+            if ( pCondFormat )
+                aRangeList = pCondFormat->GetRange();
+            else
+            {
+                rViewData.GetMarkData().FillRangeListWithMarks(&aRangeList, false);
+                ScAddress aPos(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                if(aRangeList.empty())
+                {
+                    ScRange* pRange = new ScRange(aPos);
+                    aRangeList.push_back(pRange);
+                }
+            }
+
+            pResult = new ScCondFormatDlg( pB, pCW, pParent, &rViewData, pCondFormat, aRangeList,
+                aRangeList.GetTopLeftCorner(), aDialogType, bManaged );
         }
         break;
 
