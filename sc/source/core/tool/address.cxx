@@ -1710,14 +1710,14 @@ template <typename T > static inline void lcl_a1_append_c ( T &rString, int nCol
     lcl_ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
 }
 
-template <typename T > static inline void lcl_a1_append_r ( T &rString, int nRow, bool bIsAbs )
+template <typename T > static inline void lcl_a1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs )
 {
     if ( bIsAbs )
         rString.append("$");
     rString.append( nRow + 1 );
 }
 
-template <typename T > static inline void lcl_r1c1_append_c ( T &rString, int nCol, bool bIsAbs,
+template <typename T > static inline void lcl_r1c1_append_c ( T &rString, sal_Int32 nCol, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
     rString.append("C");
@@ -1734,7 +1734,7 @@ template <typename T > static inline void lcl_r1c1_append_c ( T &rString, int nC
     }
 }
 
-template <typename T > static inline void lcl_r1c1_append_r ( T &rString, int nRow, bool bIsAbs,
+template <typename T > static inline void lcl_r1c1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
     rString.append("R");
