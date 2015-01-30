@@ -299,7 +299,8 @@ void SwXPrintSettings::_preSetValues ()
 }
 
 void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException)
 {
     bool bVal;
     if ( rInfo.mnHandle != HANDLE_PRINTSET_ANNOTATION_MODE &&
@@ -606,7 +607,7 @@ void SwXViewSettings::_preSetValues ()
 void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
     throw (UnknownPropertyException, PropertyVetoException,
            IllegalArgumentException, WrappedTargetException,
-           RuntimeException)
+           RuntimeException, std::exception)
 {
     bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle && *(sal_Bool*)rValue.getValue();
     // the API flag should not be set to the application's view settings

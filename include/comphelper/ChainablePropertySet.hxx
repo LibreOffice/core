@@ -74,7 +74,8 @@ namespace comphelper
                    css::beans::PropertyVetoException,
                    css::lang::IllegalArgumentException,
                    css::lang::WrappedTargetException,
-                   css::uno::RuntimeException) = 0;
+                   css::uno::RuntimeException,
+                   std::exception) = 0;
         virtual void _postSetValues ()
             throw (css::beans::UnknownPropertyException,
                    css::beans::PropertyVetoException,

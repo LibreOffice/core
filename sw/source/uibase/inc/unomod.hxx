@@ -152,7 +152,8 @@ protected:
                css::beans::PropertyVetoException,
                css::lang::IllegalArgumentException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException) SAL_OVERRIDE;
+               css::uno::RuntimeException,
+               std::exception) SAL_OVERRIDE;
     virtual void _postSetValues()
         throw (css::beans::UnknownPropertyException,
                css::beans::PropertyVetoException,
