@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vector>
+
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -31,156 +33,97 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-
-
 static const char aRootName[] = "Office.Math";
 
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
 
-
-
-
 static Sequence< OUString > lcl_GetFontPropertyNames()
 {
-    static const char * aPropNames[] =
-    {
-        "Name",
-        "CharSet",
-        "Family",
-        "Pitch",
-        "Weight",
-        "Italic",
-        0
-    };
-
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( 6 );
-    OUString *pNames = aNames.getArray();
-    for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
+    return Sequence< OUString > {
+                        "Name",
+                        "CharSet",
+                        "Family",
+                        "Pitch",
+                        "Weight",
+                        "Italic"
+                    };
 }
-
-
-
 
 static Sequence< OUString > lcl_GetSymbolPropertyNames()
 {
-    static const char * aPropNames[] =
-    {
-        "Char",
-        "Set",
-        "Predefined",
-        "FontFormatId",
-        0
-    };
-
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( 4 );
-    OUString *pNames = aNames.getArray();
-    for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
+    return Sequence< OUString > {
+                        "Char",
+                        "Set",
+                        "Predefined",
+                        "FontFormatId"
+                    };
 }
 
-
-
-static const char * aMathPropNames[] =
+static Sequence< OUString > lcl_GetMathPropertyNames()
 {
-    "Print/Title",
-    "Print/FormulaText",
-    "Print/Frame",
-    "Print/Size",
-    "Print/ZoomFactor",
-    "LoadSave/IsSaveOnlyUsedSymbols",
-    "Misc/IgnoreSpacesRight",
-    "View/ToolboxVisible",
-    "View/AutoRedraw",
-    "View/FormulaCursor"
-};
-
-
-//! Beware of order according to *_BEGIN *_END defines in format.hxx !
-//! see respective load/save routines here
-static const char * aFormatPropNames[] =
-{
-    "StandardFormat/Textmode",
-    "StandardFormat/GreekCharStyle",
-    "StandardFormat/ScaleNormalBracket",
-    "StandardFormat/HorizontalAlignment",
-    "StandardFormat/BaseSize",
-    "StandardFormat/TextSize",
-    "StandardFormat/IndexSize",
-    "StandardFormat/FunctionSize",
-    "StandardFormat/OperatorSize",
-    "StandardFormat/LimitsSize",
-    "StandardFormat/Distance/Horizontal",
-    "StandardFormat/Distance/Vertical",
-    "StandardFormat/Distance/Root",
-    "StandardFormat/Distance/SuperScript",
-    "StandardFormat/Distance/SubScript",
-    "StandardFormat/Distance/Numerator",
-    "StandardFormat/Distance/Denominator",
-    "StandardFormat/Distance/Fraction",
-    "StandardFormat/Distance/StrokeWidth",
-    "StandardFormat/Distance/UpperLimit",
-    "StandardFormat/Distance/LowerLimit",
-    "StandardFormat/Distance/BracketSize",
-    "StandardFormat/Distance/BracketSpace",
-    "StandardFormat/Distance/MatrixRow",
-    "StandardFormat/Distance/MatrixColumn",
-    "StandardFormat/Distance/OrnamentSize",
-    "StandardFormat/Distance/OrnamentSpace",
-    "StandardFormat/Distance/OperatorSize",
-    "StandardFormat/Distance/OperatorSpace",
-    "StandardFormat/Distance/LeftSpace",
-    "StandardFormat/Distance/RightSpace",
-    "StandardFormat/Distance/TopSpace",
-    "StandardFormat/Distance/BottomSpace",
-    "StandardFormat/Distance/NormalBracketSize",
-    "StandardFormat/VariableFont",
-    "StandardFormat/FunctionFont",
-    "StandardFormat/NumberFont",
-    "StandardFormat/TextFont",
-    "StandardFormat/SerifFont",
-    "StandardFormat/SansFont",
-    "StandardFormat/FixedFont"
-};
-
-
-static Sequence< OUString > lcl_GetPropertyNames(
-        const char * aPropNames[], sal_uInt16 nCount )
-{
-
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( nCount );
-    OUString *pNames = aNames.getArray();
-    for (sal_Int32 i = 0;  i < nCount;  ++i, ++ppPropName)
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
+    return Sequence< OUString > {
+                        "Print/Title",
+                        "Print/FormulaText",
+                        "Print/Frame",
+                        "Print/Size",
+                        "Print/ZoomFactor",
+                        "LoadSave/IsSaveOnlyUsedSymbols",
+                        "Misc/IgnoreSpacesRight",
+                        "View/ToolboxVisible",
+                        "View/AutoRedraw",
+                        "View/FormulaCursor"
+                    };
 }
 
-static Sequence< OUString > GetFormatPropertyNames()
+static Sequence< OUString > lcl_GetFormatPropertyNames()
 {
-    return lcl_GetPropertyNames( aFormatPropNames, SAL_N_ELEMENTS( aFormatPropNames ) );
+    //! Beware of order according to *_BEGIN *_END defines in format.hxx !
+    //! see respective load/save routines here
+    return Sequence< OUString > {
+                        "StandardFormat/Textmode",
+                        "StandardFormat/GreekCharStyle",
+                        "StandardFormat/ScaleNormalBracket",
+                        "StandardFormat/HorizontalAlignment",
+                        "StandardFormat/BaseSize",
+                        "StandardFormat/TextSize",
+                        "StandardFormat/IndexSize",
+                        "StandardFormat/FunctionSize",
+                        "StandardFormat/OperatorSize",
+                        "StandardFormat/LimitsSize",
+                        "StandardFormat/Distance/Horizontal",
+                        "StandardFormat/Distance/Vertical",
+                        "StandardFormat/Distance/Root",
+                        "StandardFormat/Distance/SuperScript",
+                        "StandardFormat/Distance/SubScript",
+                        "StandardFormat/Distance/Numerator",
+                        "StandardFormat/Distance/Denominator",
+                        "StandardFormat/Distance/Fraction",
+                        "StandardFormat/Distance/StrokeWidth",
+                        "StandardFormat/Distance/UpperLimit",
+                        "StandardFormat/Distance/LowerLimit",
+                        "StandardFormat/Distance/BracketSize",
+                        "StandardFormat/Distance/BracketSpace",
+                        "StandardFormat/Distance/MatrixRow",
+                        "StandardFormat/Distance/MatrixColumn",
+                        "StandardFormat/Distance/OrnamentSize",
+                        "StandardFormat/Distance/OrnamentSpace",
+                        "StandardFormat/Distance/OperatorSize",
+                        "StandardFormat/Distance/OperatorSpace",
+                        "StandardFormat/Distance/LeftSpace",
+                        "StandardFormat/Distance/RightSpace",
+                        "StandardFormat/Distance/TopSpace",
+                        "StandardFormat/Distance/BottomSpace",
+                        "StandardFormat/Distance/NormalBracketSize",
+                        "StandardFormat/VariableFont",
+                        "StandardFormat/FunctionFont",
+                        "StandardFormat/NumberFont",
+                        "StandardFormat/TextFont",
+                        "StandardFormat/SerifFont",
+                        "StandardFormat/SansFont",
+                        "StandardFormat/FixedFont"
+                    };
 }
-
-static Sequence< OUString > GetOtherPropertyNames()
-{
-    return lcl_GetPropertyNames( aMathPropNames, SAL_N_ELEMENTS( aMathPropNames ) );
-}
-
-
 
 struct SmCfgOther
 {
@@ -849,7 +792,7 @@ void SmMathConfig::LoadOther()
     if (!pOther)
         pOther = new SmCfgOther;
 
-    Sequence< OUString > aNames( GetOtherPropertyNames() );
+    Sequence< OUString > aNames = lcl_GetMathPropertyNames();
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( GetProperties( aNames ) );
@@ -913,7 +856,7 @@ void SmMathConfig::SaveOther()
     if (!pOther || !IsOtherModified())
         return;
 
-    const Sequence< OUString > aNames( GetOtherPropertyNames() );
+    const Sequence< OUString > aNames = lcl_GetMathPropertyNames();
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
@@ -953,7 +896,8 @@ void SmMathConfig::LoadFormat()
         pFormat = new SmFormat;
 
 
-    Sequence< OUString > aNames( GetFormatPropertyNames() );
+    Sequence< OUString > aNames = lcl_GetFormatPropertyNames();
+
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( GetProperties( aNames ) );
@@ -1040,7 +984,7 @@ void SmMathConfig::SaveFormat()
     if (!pFormat || !IsFormatModified())
         return;
 
-    const Sequence< OUString > aNames( GetFormatPropertyNames() );
+    const Sequence< OUString > aNames = lcl_GetFormatPropertyNames();
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
