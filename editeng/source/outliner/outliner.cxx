@@ -928,7 +928,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
         bDrawBullet = rBulletState.GetValue() ? true : false;
     }
 
-    if ( ImplHasNumberFormat( nPara ) && bDrawBullet)
+    if (bDrawBullet && ImplHasNumberFormat(nPara))
     {
         bool bVertical = IsVertical();
 
