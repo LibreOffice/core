@@ -399,8 +399,6 @@ public:
             {
                 int nFontHeight=0, nFontIndex=0, nFontColorIndex=0;
 
-                assert(nPrintCopies);
-
                 if (nPrintNumCopies == 1)
                 {
                     float nFontMagnitude = 0.25f;
