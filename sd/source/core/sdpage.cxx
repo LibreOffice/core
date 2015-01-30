@@ -777,7 +777,7 @@ void SdPage::CreateTitleAndLayout(bool bInit, bool bCreate )
         pMasterPage->EnsureMasterPageDefaultBackground();
     }
 
-    if( static_cast<SdDrawDocument*>( GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+    if (GetModel() && static_cast<SdDrawDocument*>(GetModel())->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
     {
         if( mePageKind == PK_HANDOUT && bInit )
         {
