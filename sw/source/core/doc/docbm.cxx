@@ -1135,29 +1135,27 @@ namespace sw { namespace mark
 
 void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
+    struct
+    {
+        const char* pName;
+        const container_t& rContainer;
+    } aContainers[] =
+    {
+        {"bookmarks", m_vBookmarks},
+        {"fieldmarks", m_vFieldmarks},
+        {"annotationmarks", m_vAnnotationMarks}
+    };
+
     xmlTextWriterStartElement(pWriter, BAD_CAST("markManager"));
-    if (!m_vBookmarks.empty())
+    for (size_t i = 0; i < SAL_N_ELEMENTS(aContainers); ++i)
     {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("bookmarks"));
-        for (const_iterator_t it = m_vBookmarks.begin(); it != m_vBookmarks.end(); ++it)
-            (*it)->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
-    }
-
-    if (!m_vFieldmarks.empty())
-    {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("fieldmarks"));
-        for (const_iterator_t it = m_vFieldmarks.begin(); it != m_vFieldmarks.end(); ++it)
-            (*it)->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
-    }
-
-    if (!m_vAnnotationMarks.empty())
-    {
-        xmlTextWriterStartElement(pWriter, BAD_CAST("annotationmarks"));
-        for (const_iterator_t it = m_vAnnotationMarks.begin(); it != m_vAnnotationMarks.end(); ++it)
-            (*it)->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        if (!aContainers[i].rContainer.empty())
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST(aContainers[i].pName));
+            for (const_iterator_t it = aContainers[i].rContainer.begin(); it != aContainers[i].rContainer.end(); ++it)
+                (*it)->dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
+        }
     }
     xmlTextWriterEndElement(pWriter);
 }
