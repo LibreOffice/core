@@ -57,6 +57,7 @@ XclExpRootData::XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
 {
     SvtSaveOptions aSaveOpt;
     mbRelUrl = mrMedium.IsRemote() ? aSaveOpt.IsSaveRelINet() : aSaveOpt.IsSaveRelFSys();
+    maStringBuf = OStringBuffer();
 }
 
 XclExpRootData::~XclExpRootData()
