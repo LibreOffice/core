@@ -1710,21 +1710,11 @@ template <typename T > static inline void lcl_a1_append_c ( T &rString, int nCol
     lcl_ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
 }
 
-static inline void lcl_string_append_number(OUStringBuffer &rString, int nNumber)
-{
-    rString.append(OUString::number( nNumber ));
-}
-
-static inline void lcl_string_append_number(OStringBuffer &rString, int nNumber)
-{
-    rString.append(OString::number( nNumber ));
-}
-
 template <typename T > static inline void lcl_a1_append_r ( T &rString, int nRow, bool bIsAbs )
 {
     if ( bIsAbs )
         rString.append("$");
-    lcl_string_append_number(rString, nRow+1 );
+    rString.append( nRow + 1 );
 }
 
 template <typename T > static inline void lcl_r1c1_append_c ( T &rString, int nCol, bool bIsAbs,
@@ -1733,14 +1723,13 @@ template <typename T > static inline void lcl_r1c1_append_c ( T &rString, int nC
     rString.append("C");
     if (bIsAbs)
     {
-        lcl_string_append_number(rString, nCol + 1 );
+        rString.append( nCol + 1 );
     }
     else
     {
         nCol -= rDetails.nCol;
         if (nCol != 0) {
-            lcl_string_append_number(rString.append("["), nCol );
-            rString.append("]");
+            rString.append("[").append(nCol).append("]");
         }
     }
 }
@@ -1751,14 +1740,13 @@ template <typename T > static inline void lcl_r1c1_append_r ( T &rString, int nR
     rString.append("R");
     if (bIsAbs)
     {
-        lcl_string_append_number(rString, nRow + 1 );
+        rString.append( nRow + 1 );
     }
     else
     {
         nRow -= rDetails.nRow;
         if (nRow != 0) {
-            lcl_string_append_number(rString.append("["), nRow);
-            rString.append("]");
+            rString.append("[").append(nRow).append("]");
         }
     }
 }
