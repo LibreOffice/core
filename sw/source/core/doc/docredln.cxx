@@ -273,8 +273,10 @@ bool SwRedlineTbl::Insert( SwRangeRedline* p, bool bIns )
     bool bRet = false;
     if( p->HasValidRange() )
     {
-        bRet = insert( p ).second;
-        p->CallDisplayFunc();
+        std::pair<_SwRedlineTbl::const_iterator, bool> rv = insert( p );
+        size_t nP = rv.first - begin();
+        bRet = rv.second;
+        p->CallDisplayFunc(0, nP);
     }
     else if( bIns )
         bRet = InsertWithValidRanges( p );
@@ -293,7 +295,7 @@ bool SwRedlineTbl::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
         std::pair<_SwRedlineTbl::const_iterator, bool> rv = insert( p );
         rP = rv.first - begin();
         bRet = rv.second;
-        p->CallDisplayFunc();
+        p->CallDisplayFunc(0, rP);
     }
     else if( bIns )
         bRet = InsertWithValidRanges( p, &rP );
@@ -395,7 +397,7 @@ bool SwRedlineTbl::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos
                 pNew->HasValidRange() &&
                 Insert( pNew, nInsPos ) )
             {
-                pNew->CallDisplayFunc();
+                pNew->CallDisplayFunc(0, nInsPos);
                 bAnyIns = true;
                 pNew = 0;
                 if( pInsPos && *pInsPos < nInsPos )
@@ -899,23 +901,23 @@ bool SwRangeRedline::HasValidRange() const
     return false;
 }
 
-void SwRangeRedline::CallDisplayFunc( sal_uInt16 nLoop )
+void SwRangeRedline::CallDisplayFunc(sal_uInt16 nLoop, size_t nMyPos)
 {
     switch( nsRedlineMode_t::REDLINE_SHOW_MASK & GetDoc()->getIDocumentRedlineAccess().GetRedlineMode() )
     {
     case nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE:
-        Show( nLoop );
+        Show(nLoop, nMyPos);
         break;
     case nsRedlineMode_t::REDLINE_SHOW_INSERT:
-        Hide( nLoop );
+        Hide(nLoop, nMyPos);
         break;
     case nsRedlineMode_t::REDLINE_SHOW_DELETE:
-        ShowOriginal( nLoop );
+        ShowOriginal(nLoop, nMyPos);
         break;
     }
 }
 
-void SwRangeRedline::Show( sal_uInt16 nLoop )
+void SwRangeRedline::Show(sal_uInt16 nLoop, size_t nMyPos)
 {
     if( 1 <= nLoop )
     {
@@ -928,12 +930,12 @@ void SwRangeRedline::Show( sal_uInt16 nLoop )
         {
         case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
             bIsVisible = true;
-            MoveFromSection();
+            MoveFromSection(nMyPos);
             break;
 
         case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
             bIsVisible = true;
-            MoveFromSection();
+            MoveFromSection(nMyPos);
             break;
 
         case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
@@ -947,7 +949,7 @@ void SwRangeRedline::Show( sal_uInt16 nLoop )
     }
 }
 
-void SwRangeRedline::Hide( sal_uInt16 nLoop )
+void SwRangeRedline::Hide(sal_uInt16 nLoop, size_t nMyPos)
 {
     SwDoc* pDoc = GetDoc();
     RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
@@ -959,7 +961,7 @@ void SwRangeRedline::Hide( sal_uInt16 nLoop )
     case nsRedlineType_t::REDLINE_INSERT:           // Content has been inserted
         bIsVisible = true;
         if( 1 <= nLoop )
-            MoveFromSection();
+            MoveFromSection(nMyPos);
         break;
 
     case nsRedlineType_t::REDLINE_DELETE:           // Content has been deleted
@@ -968,7 +970,7 @@ void SwRangeRedline::Hide( sal_uInt16 nLoop )
         {
         case 0: MoveToSection();    break;
         case 1: CopyToSection();    break;
-        case 2: DelCopyOfSection(); break;
+        case 2: DelCopyOfSection(nMyPos); break;
         }
         break;
 
@@ -983,7 +985,7 @@ void SwRangeRedline::Hide( sal_uInt16 nLoop )
     pDoc->getIDocumentRedlineAccess().SetRedlineMode_intern( eOld );
 }
 
-void SwRangeRedline::ShowOriginal( sal_uInt16 nLoop )
+void SwRangeRedline::ShowOriginal(sal_uInt16 nLoop, size_t nMyPos)
 {
     SwDoc* pDoc = GetDoc();
     RedlineMode_t eOld = pDoc->getIDocumentRedlineAccess().GetRedlineMode();
@@ -1004,14 +1006,14 @@ void SwRangeRedline::ShowOriginal( sal_uInt16 nLoop )
         {
         case 0: MoveToSection();    break;
         case 1: CopyToSection();    break;
-        case 2: DelCopyOfSection(); break;
+        case 2: DelCopyOfSection(nMyPos); break;
         }
         break;
 
     case nsRedlineType_t::REDLINE_DELETE:           // Inhalt wurde eingefuegt
         bIsVisible = true;
         if( 1 <= nLoop )
-            MoveFromSection();
+            MoveFromSection(nMyPos);
         break;
 
     case nsRedlineType_t::REDLINE_FORMAT:           // Attributes have been applied
@@ -1241,7 +1243,7 @@ void SwRangeRedline::CopyToSection()
     }
 }
 
-void SwRangeRedline::DelCopyOfSection()
+void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
 {
     if( pCntntSect )
     {
@@ -1288,7 +1290,7 @@ void SwRangeRedline::DelCopyOfSection()
                 // bDelLastPara condition above), only redlines before the
                 // current ones can be affected.
                 const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-                sal_uInt16 n = rTbl.GetPos( this );
+                sal_uInt16 n = nMyPos;
                 OSL_ENSURE( n != USHRT_MAX, "How strange. We don't exist!" );
                 for( bool bBreak = false; !bBreak && n > 0; )
                 {
@@ -1329,16 +1331,13 @@ void SwRangeRedline::DelCopyOfSection()
     }
 }
 
-void SwRangeRedline::MoveFromSection()
+void SwRangeRedline::MoveFromSection(size_t nMyPos)
 {
     if( pCntntSect )
     {
         SwDoc* pDoc = GetDoc();
         const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
         std::vector<SwPosition*> aBeforeArr, aBehindArr;
-        typedef std::map<sal_uInt16, SwRangeRedline*> IndexAndRange;
-        IndexAndRange aIndexAndRangeMap;
-        sal_uInt16 nMyPos = rTbl.GetPos( this );
         OSL_ENSURE( this, "this is not in the array?" );
         bool bBreak = false;
         sal_uInt16 n;
@@ -1350,14 +1349,12 @@ void SwRangeRedline::MoveFromSection()
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBehindArr.push_back(&pRedl->GetBound(true));
-                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
             if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBehindArr.push_back(&pRedl->GetBound(false));
-                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
         }
@@ -1369,14 +1366,12 @@ void SwRangeRedline::MoveFromSection()
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBeforeArr.push_back(&pRedl->GetBound(true));
-                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
             if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBeforeArr.push_back(&pRedl->GetBound(false));
-                aIndexAndRangeMap.insert(std::make_pair(n, pRedl));
                 bBreak = false;
             }
         }
@@ -1451,13 +1446,6 @@ void SwRangeRedline::MoveFromSection()
             *aBeforeArr[ n ] = *Start();
         for( n = 0; n < aBehindArr.size(); ++n )
             *aBehindArr[ n ] = *End();
-        SwRedlineTbl& rResortTbl = const_cast<SwRedlineTbl&>(rTbl);
-        for (auto& a : aIndexAndRangeMap)
-        {
-            // re-insert
-            rResortTbl.Remove(a.first);
-            rResortTbl.Insert(a.second);
-        }
     }
     else
         InvalidateRange();
