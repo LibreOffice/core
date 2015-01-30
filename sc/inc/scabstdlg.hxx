@@ -81,6 +81,8 @@ public:
     virtual ScConditionalFormatList* GetConditionalFormatList() = 0;
 
     virtual bool CondFormatsChanged() = 0;
+
+    virtual ScConditionalFormat* GetCondFormatSelected() = 0;
 };
 
 class AbstractScDataPilotDatabaseDlg  :public VclAbstractDialog
