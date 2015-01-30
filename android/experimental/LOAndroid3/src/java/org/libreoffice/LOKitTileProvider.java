@@ -310,10 +310,6 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
-        TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-        textSelection.positionHandle("MIDDLE", new RectF(inDocument.x, inDocument.y, inDocument.x, inDocument.y));
-        textSelection.showHandle("MIDDLE");
-
         mDocument.postMouseEvent(type, x, y);
     }
 
@@ -378,6 +374,10 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
      */
     @Override
     public void messageRetrieved(int signalNumber, String payload) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
+
         switch (signalNumber) {
             case Document.CALLBACK_INVALIDATE_TILES: {
                 RectF rect = convertCallbackMessageStringToRectF(payload);
@@ -391,7 +391,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                 RectF rect = convertCallbackMessageStringToRectF(payload);
                 if (rect != null) {
                     TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-                    textSelection.positionHandle("MIDDLE", rect);
+                    textSelection.positionHandle("MIDDLE", new RectF(rect.right,rect.bottom, rect.right, rect.bottom));
                     textSelection.showHandle("MIDDLE");
                 }
                 break;

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import org.mozilla.gecko.gfx.CairoImage;
@@ -159,25 +160,35 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 createThumbnail(event.mTask);
                 break;
             case LOEvent.TOUCH:
-                if (!LOKitShell.isEditingEnabled()) {
-                    return;
-                }
                 touch(event.mTouchType, event.mMotionEvent, event.mDocumentTouchCoordinate);
                 break;
             case LOEvent.KEY_EVENT:
-                if (!LOKitShell.isEditingEnabled()) {
-                    return;
-                }
-                if (event.mKeyEventType == "KeyPress") {
-                    mTileProvider.keyPress(event.mKeyEvent);
-                } else if (event.mKeyEventType.equals("KeyRelease")) {
-                    mTileProvider.keyRelease(event.mKeyEvent);
-                }
+                keyEvent(event.mKeyEventType, event.mKeyEvent);
                 break;
         }
     }
 
+    /**
+     * Processes key events.
+     */
+    private void keyEvent(String keyEventType, KeyEvent keyEvent) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
+        if (keyEventType == "KeyPress") {
+            mTileProvider.keyPress(keyEvent);
+        } else if (keyEventType.equals("KeyRelease")) {
+            mTileProvider.keyRelease(keyEvent);
+        }
+    }
+
+    /**
+     * Processes touch events.
+     */
     private void touch(String touchType, MotionEvent motionEvent, PointF mDocumentTouchCoordinate) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
         mTileProvider.mouseButtonDown(mDocumentTouchCoordinate);
     }
@@ -197,10 +208,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     @Override
     public void invalidate(RectF rect) {
-        if (!LOKitShell.isEditingEnabled()) {
-            return;
-        }
-
         Log.i(LOGTAG, "Invalidate request: " + rect);
 
         mLayerClient = mApplication.getLayerClient();
