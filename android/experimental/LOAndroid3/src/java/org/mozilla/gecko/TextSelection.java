@@ -4,6 +4,7 @@
 
 package org.mozilla.gecko;
 
+import android.app.Activity;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LibreOfficeMainActivity;
+import org.libreoffice.R;
 import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;
@@ -29,12 +31,10 @@ public class TextSelection extends Layer {
     private float mViewTop;
     private float mViewZoom;
 
-    public TextSelection(TextSelectionHandle startHandle,
-                         TextSelectionHandle middleHandle,
-                         TextSelectionHandle endHandle) {
-        mStartHandle = startHandle;
-        mMiddleHandle = middleHandle;
-        mEndHandle = endHandle;
+    public TextSelection(Activity context) {
+        mStartHandle = (TextSelectionHandle) context.findViewById(R.id.start_handle);
+        mMiddleHandle = (TextSelectionHandle) context.findViewById(R.id.middle_handle);
+        mEndHandle = (TextSelectionHandle) context.findViewById(R.id.end_handle);
 
         // Only register listeners if we have valid start/middle/end handles
         if (mStartHandle == null || mMiddleHandle == null || mEndHandle == null) {

@@ -125,11 +125,7 @@ public class LibreOfficeMainActivity extends LOAbout {
             sLOKitThread.clearQueue();
         }
 
-        TextSelectionHandle startHandle = (TextSelectionHandle) findViewById(R.id.start_handle);
-        TextSelectionHandle middleHandle = (TextSelectionHandle) findViewById(R.id.middle_handle);
-        TextSelectionHandle endHandle = (TextSelectionHandle) findViewById(R.id.end_handle);
-
-        mTextSelection = new TextSelection(startHandle, middleHandle, endHandle);
+        mTextSelection = new TextSelection(mAppContext);
 
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
