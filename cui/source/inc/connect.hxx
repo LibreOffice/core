@@ -33,6 +33,7 @@ class SdrView;
 class SvxConnectionPage : public SfxTabPage
 {
 private:
+    static const sal_uInt16 pRanges[];
     ListBox*             m_pLbType;
 
     FixedText*           m_pFtLine1;
@@ -64,7 +65,7 @@ public:
     virtual ~SvxConnectionPage();
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;

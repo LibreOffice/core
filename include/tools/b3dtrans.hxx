@@ -181,7 +181,6 @@ protected:
     void PostSetObjectTrans();
     void PostSetOrientation();
     void PostSetProjection();
-    void PostSetViewport();
 
     virtual void DeviceRectangleChange();
 };

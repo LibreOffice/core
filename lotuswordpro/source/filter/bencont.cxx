@@ -91,15 +91,9 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
     *ppContainer = pContainer;
     return BenErr_OK;
 }
-BenError
-LtcBenContainer::Close()
-{
-    return BenErr_OK;
-}
 
 LtcBenContainer::~LtcBenContainer()
 {
-    Close();
 }
 
 BenError

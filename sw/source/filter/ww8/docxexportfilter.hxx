@@ -36,7 +36,6 @@ public:
     // For now, let's just do empty implementations of those.
     virtual bool        importDocument() SAL_OVERRIDE { return false; }
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE { return NULL; }
-    sal_Int32   getSchemeClr( sal_Int32 ) const { return 0; }
     virtual ::oox::vml::Drawing* getVmlDrawing() SAL_OVERRIDE { return NULL; }
     virtual ::oox::drawingml::chart::ChartConverter* getChartConverter() SAL_OVERRIDE { return NULL; }
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() SAL_OVERRIDE { return ::oox::drawingml::table::TableStyleListPtr(); }

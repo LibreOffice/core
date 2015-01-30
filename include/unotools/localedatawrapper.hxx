@@ -294,16 +294,11 @@ public:
                             { return getCurr( nNumber, nDecimals,
                                 getCurrSymbol(), bUseThousandSep ); }
 
-    // dummy returns, to be implemented
-    inline  sal_Unicode         getCurrZeroChar() const
+    inline sal_Unicode    getCurrZeroChar() const
                                     { return cCurrZeroChar; }
-    inline  bool                isNumLeadingZero() const
-                                    { return true; }
-                                /// standard decimal places
-    inline  sal_uInt16              getNumDigits() const
+    /// standard decimal places
+    static inline sal_uInt16     getNumDigits()
                                     { return 2; }
-    inline  bool                isNumTrailingZeros() const
-                                    { return true; }
 
     // reserved words
 

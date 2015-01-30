@@ -101,7 +101,6 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
             !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
-        CaptureMouse();
         BookmarkPopup_Impl aPop;
         SwWrtShell* pWrtShell = ::GetActiveWrtShell();
         if( pWrtShell && pWrtShell->getIDocumentMarkAccess()->getAllMarksCount() > 0 )
@@ -131,7 +130,6 @@ void SwBookmarkControl::Command( const CommandEvent& rCEvt )
                                         &aBookmark, 0L );
             }
         }
-        ReleaseMouse();
     }
 }
 

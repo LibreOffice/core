@@ -800,10 +800,6 @@ void SvxFontWorkDialog::SetColorList(const XColorListRef &pList)
     }
 }
 
-void SvxFontWorkDialog::SetActive(bool /*bActivate*/)
-{
-}
-
 void SvxFontWorkDialog::ApplyImageList()
 {
     if (nLastShadowTbxId == nShadowSlantId)

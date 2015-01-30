@@ -124,7 +124,6 @@ class ClientBox:
     long            GetTotalHeight() const;
     void            SetupScrollBar();
     void            DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry );
-    bool            HandleTabKey( bool bReverse );
     bool            HandleCursorKey( sal_uInt16 nKeyCode );
     void            DeleteRemoved();
 

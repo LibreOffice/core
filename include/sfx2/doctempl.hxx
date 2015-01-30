@@ -56,7 +56,6 @@ public:
                         ~SfxDocumentTemplates();
 
     bool                IsConstructed() { return pImp != NULL; }
-    void                Construct();
 
     const SfxDocumentTemplates &operator=(const SfxDocumentTemplates &);
 

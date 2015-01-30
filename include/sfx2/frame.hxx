@@ -150,16 +150,15 @@ public:
     SAL_DLLPRIVATE SfxFrame* GetContainingDocFrame_Impl( SfxFrame* pSelf );
     void                UpdateDescriptor( SfxObjectShell *pDoc );
     void                Resize();
-    bool                HasComponent() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
-                            GetComponent() const;
+                        GetComponent() const;
     void                ReleaseComponent();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                            GetFrameInterface() const;
+                        GetFrameInterface() const;
     void                Appear();
     void                AppearWithUpdate();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
-                            GetController() const;
+                        GetController() const;
 
     bool                IsInPlace() const;
 

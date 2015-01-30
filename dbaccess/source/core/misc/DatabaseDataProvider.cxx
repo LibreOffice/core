@@ -88,7 +88,6 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
 void SAL_CALL DatabaseDataProvider::disposing()
 {
     lang::EventObject aEvt(static_cast<XWeak*>(this));
-    m_aParameterManager.disposing( aEvt );
 
     m_aParameterManager.dispose();   // (to free any references it may have to me)
     m_aFilterManager.dispose();      // (dito)

@@ -163,13 +163,6 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
     OSL_ENSURE( !pView, "ScSelectionTransferObj dtor: ForgetView not called" );
 }
 
-bool ScSelectionTransferObj::StillValid()
-{
-    //! check if view still has same cell selection
-    //! (but return sal_False if data has changed inbetween)
-    return false;
-}
-
 void ScSelectionTransferObj::ForgetView()
 {
     pView = NULL;

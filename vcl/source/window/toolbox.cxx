@@ -1285,9 +1285,6 @@ void ImplTBDragMgr::EndDragging( bool bOK )
 
                 // re-calculate and show ToolBox
                 mpDragBox->ImplInvalidate( true );
-                mpDragBox->Customize( ToolBoxCustomizeEvent( mpDragBox, nTempItem,
-                                                             TOOLBOX_CUSTOMIZE_RESIZE,
-                                                             mpCustomizeData ) );
             }
             else
             {
@@ -1311,14 +1308,7 @@ void ImplTBDragMgr::EndDragging( bool bOK )
                     }
 
                     aPos = pDropBox->ScreenToOutputPixel( aPos );
-                    sal_uInt16 nPos = ToolBox::ImplFindItemPos( pDropBox, aPos );
-                    mpDragBox->Customize( ToolBoxCustomizeEvent( pDropBox, nTempItem,
-                                                                 nPos, mpCustomizeData ) );
-                }
-                else
-                {
-                    mpDragBox->Customize( ToolBoxCustomizeEvent( NULL, nTempItem,
-                                                                 0, mpCustomizeData ) );
+                    ToolBox::ImplFindItemPos( pDropBox, aPos );
                 }
             }
         }

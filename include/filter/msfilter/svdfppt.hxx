@@ -625,13 +625,6 @@ public:
     void                    ImportPage( SdrPage* pPage, const PptSlidePersistEntry* pMasterPersist = NULL );
     virtual bool            GetColorFromPalette(sal_uInt16 nNum, Color& rColor) const SAL_OVERRIDE;
     virtual bool            SeekToShape( SvStream& rSt, void* pClientData, sal_uInt32 nId ) const SAL_OVERRIDE;
-    sal_Unicode             PPTSubstitute(
-                                sal_uInt16 nFont,
-                                sal_Unicode nChar,
-                                sal_uInt32& nMappedFontId,
-                                vcl::Font& rFont,
-                                char nDefault
-                            ) const;
     const PptDocumentAtom&  GetDocumentAtom() const { return aDocAtom; }
     virtual const PptSlideLayoutAtom*   GetSlideLayoutAtom() const SAL_OVERRIDE;
     SdrObject*              CreateTable(
@@ -1176,10 +1169,6 @@ class MSFILTER_DLLPUBLIC PPTParagraphObj
 
     const PPTStyleSheet&    mrStyleSheet;
     sal_uInt32              mnInstance;
-
-protected:
-
-    void                    ImplClear();
 
 public:
 

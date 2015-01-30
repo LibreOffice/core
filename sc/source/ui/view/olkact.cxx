@@ -20,22 +20,4 @@
 
 #include "olkact.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
-void ActivateOlk( ScViewData* /* pViewData */ )
-{
-    // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
-
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
-
-void DeActivateOlk( ScViewData* /* pViewData */ )
-{
-    // Browser fuer Virtual Controls fuellen
-    //  VC's und den Browser dazu gibts nicht mehr...
-
-    //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

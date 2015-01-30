@@ -192,7 +192,6 @@ public:
     // TakeObjName...() is for the display in the UI, for example "3 frames selected".
     virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
     virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
-    sal_uInt16 GetLogicalGroup() { return 0; }
     virtual E3dObject* Clone() const SAL_OVERRIDE;
     E3dObject& operator=( const E3dObject& rObj );
 

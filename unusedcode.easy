@@ -1,6 +1,4 @@
 BigInt::BigInt(unsigned int)
-CalendarWrapper::getDSTOffsetInMillis() const
-CalendarWrapper::getZoneOffsetInMillis() const
 FontCharMap::GetDefaultMap(bool)
 LineListBox::Clear()
 LineListBox::InsertEntry(rtl::OUString const&, int)
@@ -40,7 +38,6 @@ SdrUndoObjList::SetOrdNum(unsigned int)
 SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SotObject::GetInterface(SvGlobalName const&)
-StylePool::getCount() const
 StyleSettings::SetAlternatingRowColor(Color const&)
 StyleSettings::SetCursorSize(long)
 StyleSettings::SetFloatTitleHeight(long)
@@ -58,7 +55,6 @@ SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()
-ToolBox::UserDraw(UserDrawEvent const&)
 UnxPluginComm::NPP_GetMIMEDescription()
 X11SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&)
 XclXmlUtils::ToOString(XclRange const&)

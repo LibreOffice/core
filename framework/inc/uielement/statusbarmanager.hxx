@@ -79,7 +79,6 @@ class StatusBarManager : public ::cppu::WeakImplHelper3<
         void FillStatusBar( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rStatusBarData );
 
     protected:
-        void StateChanged( StateChangedType nType );
         void DataChanged( const DataChangedEvent& rDCEvt );
         void UserDraw( const UserDrawEvent& rUDEvt );
         void Command( const CommandEvent& rEvt );

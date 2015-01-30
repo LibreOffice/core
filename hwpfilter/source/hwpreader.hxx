@@ -134,8 +134,6 @@ private:
     void makeAutoNum(AutoNum *hbox);
     void makeShowPageNum();
     void makeMailMerge(MailMerge *hbox);
-    void makeTocMark(TocMark *hbox);
-    void makeIndexMark(IndexMark *hbox);
     void makeOutline(Outline *hbox);
 
     /* --------- Styles Parsing ------------ */

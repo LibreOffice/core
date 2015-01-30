@@ -58,7 +58,6 @@ public:
     virtual     ~ScSelectionTransferObj();
 
     void        ForgetView();
-    bool        StillValid();
     ScTabView*  GetView() const     { return pView; }
 
     ScTransferObj*      GetCellData();

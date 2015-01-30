@@ -780,8 +780,6 @@ bool TextView::KeyInput( const KeyEvent& rKeyEvent )
     if ( aCurSel != aOldSel )   // Check if changed, maybe other method already changed mpImpl->maSelection, don't overwrite that!
         ImpSetSelection( aCurSel );
 
-    mpImpl->mpTextEngine->UpdateSelections();
-
     if ( ( nCode != KEY_UP ) && ( nCode != KEY_DOWN ) )
         mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
 

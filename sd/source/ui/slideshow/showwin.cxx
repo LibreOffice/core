@@ -270,7 +270,7 @@ void ShowWindow::Paint(const Rectangle& rRect)
         }
         else if( SHOWWINDOWMODE_BLANK == meShowWindowMode )
         {
-            DrawBlankScene();
+            // just blank through background color => nothing to be done here
         }
     }
 }
@@ -548,11 +548,6 @@ void ShowWindow::DrawEndScene()
     SetFont( aFont );
     DrawText( Point( aOutOrg.X() + aTextSize.Height(), aOutOrg.Y() + aTextSize.Height() ), aText );
     SetFont( aOldFont );
-}
-
-void ShowWindow::DrawBlankScene()
-{
-    // just blank through background color => nothing to be done here
 }
 
 IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )

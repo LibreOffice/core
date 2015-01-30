@@ -899,18 +899,6 @@ namespace vclcanvas
                                true );
     }
 
-    void CanvasHelper::copyRect( const rendering::XCanvas*                          ,
-                                 const uno::Reference< rendering::XBitmapCanvas >&  ,
-                                 const geometry::RealRectangle2D&                   ,
-                                 const rendering::ViewState&                        ,
-                                 const rendering::RenderState&                      ,
-                                 const geometry::RealRectangle2D&                   ,
-                                 const rendering::ViewState&                        ,
-                                 const rendering::RenderState&                       )
-    {
-        // TODO(F1)
-    }
-
     geometry::IntegerSize2D CanvasHelper::getSize()
     {
         if( !mpOutDev.get() )

@@ -66,15 +66,13 @@ private:
     sal_uLong               nBMPWidth;
     sal_uLong               nBMPHeight;
 
-    void    MayCallback(sal_uLong nPercent);
-
     void    CheckPCDImagePacFile();
         // checks whether it's a Photo-CD file with 'Image Pac'
 
     void    ReadOrientation();
         // reads the orientation and sets nOrientation
 
-    void    ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent);
+    void    ReadImage();
 
 public:
 
@@ -104,8 +102,6 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
 
     bStatus      = true;
     nLastPercent = 0;
-
-    MayCallback( 0 );
 
     // is it a PCD file with a picture? ( sets bStatus == sal_False, if that's not the case):
     CheckPCDImagePacFile();
@@ -163,18 +159,12 @@ bool PCDReader::ReadPCD( Graphic & rGraphic, FilterConfigItem* pConfigItem )
         if ( ( mpAcc = aBmp.AcquireWriteAccess() ) == 0 )
             return false;
 
-        ReadImage( 5 ,65 );
+        ReadImage();
 
         aBmp.ReleaseAccess( mpAcc ), mpAcc = NULL;
         rGraphic = aBmp;
     }
     return bStatus;
-}
-
-
-
-void PCDReader::MayCallback(sal_uLong /*nPercent*/)
-{
 }
 
 
@@ -203,7 +193,7 @@ void PCDReader::ReadOrientation()
 
 
 
-void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
+void PCDReader::ReadImage()
 {
     sal_uLong  nx,ny,nW2,nH2,nYPair,ndy,nXPair;
     long   nL,nCb,nCr,nRed,nGreen,nBlue;
@@ -360,7 +350,6 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
 
         if ( m_rPCD.GetError() )
             bStatus = false;
-        MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * nYPair / nH2 );
         if ( bStatus == false )
             break;
     }

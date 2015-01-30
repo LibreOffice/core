@@ -1280,10 +1280,6 @@ sal_uLong TextEngine::CalcParaHeight( sal_uLong nParagraph ) const
     return nHeight;
 }
 
-void TextEngine::UpdateSelections()
-{
-}
-
 Range TextEngine::GetInvalidYOffsets( sal_uLong nPortion )
 {
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPortion );

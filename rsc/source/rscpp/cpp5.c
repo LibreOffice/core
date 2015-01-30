@@ -180,12 +180,6 @@ SIZES size_table[] = {
     { 0,    0,      0       },  /* End of table */
 };
 
-void InitCpp5()
-{
-
-}
-
-
 /*
  * Evaluate an expression.  Straight-forward operator precedence.
  * This is called from control() on encountering an #if statement.

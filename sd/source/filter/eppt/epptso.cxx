@@ -426,7 +426,7 @@ bool PPTWriter::ImplCloseDocument()
                                 + 20                                    // SrKinsoku container
                                 + 18                                    // 1 TxSiStyleAtom
                                 + aTxMasterStyleAtomStrm.Tell()         // 1 TxMasterStyleAtom;
-                                + mpStyleSheet->SizeOfTxCFStyleAtom();
+                                + PPTExStyleSheet::SizeOfTxCFStyleAtom();
 
         sal_uInt32 nBytesToInsert = nEnvironment + 8;
 

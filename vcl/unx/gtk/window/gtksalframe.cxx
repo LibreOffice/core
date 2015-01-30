@@ -2849,7 +2849,6 @@ void GtkSalFrame::SetInputContext( SalInputContext* pContext )
     // create a new im context
     if( ! m_pIMHandler )
         m_pIMHandler = new IMHandler( this );
-    m_pIMHandler->setInputContext( pContext );
 }
 
 void GtkSalFrame::EndExtTextInput( sal_uInt16 nFlags )
@@ -4013,10 +4012,6 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     GetGenericData()->ErrorTrapPush();
     gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
     GetGenericData()->ErrorTrapPop();
-}
-
-void GtkSalFrame::IMHandler::setInputContext( SalInputContext* )
-{
 }
 
 void GtkSalFrame::IMHandler::sendEmptyCommit()

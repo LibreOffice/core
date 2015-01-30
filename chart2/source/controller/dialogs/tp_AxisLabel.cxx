@@ -68,16 +68,10 @@ SchAxisLabelTabPage::SchAxisLabelTabPage( vcl::Window* pParent, const SfxItemSet
     m_pOrientHlp->AddDependentWindow( *m_pFtRotate, TRISTATE_TRUE );
 
     m_pCbShowDescription->SetClickHdl( LINK( this, SchAxisLabelTabPage, ToggleShowLabel ) );
-
-    Construct();
 }
 
 SchAxisLabelTabPage::~SchAxisLabelTabPage()
 {delete m_pOrientHlp;}
-
-void SchAxisLabelTabPage::Construct()
-{
-}
 
 SfxTabPage* SchAxisLabelTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrs )
 {

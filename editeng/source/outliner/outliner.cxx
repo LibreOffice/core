@@ -223,7 +223,7 @@ void Outliner::Init( sal_uInt16 nMode )
 
     const bool bWasUndoEnabled(IsUndoEnabled());
     EnableUndo(false);
-    ImplInitDepth( 0, GetMinDepth(), false );
+    ImplInitDepth( 0, -1, false );
     GetUndoManager().Clear();
     EnableUndo(bWasUndoEnabled);
 }

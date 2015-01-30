@@ -54,12 +54,13 @@ namespace svx {
 class AlignmentTabPage : public SfxTabPage
 {
     using TabPage::DeactivatePage;
+    static const sal_uInt16 s_pRanges[];
 
 public:
     virtual             ~AlignmentTabPage();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
-    static const sal_uInt16*  GetRanges();
+    static const sal_uInt16*  GetRanges() { return s_pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

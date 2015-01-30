@@ -308,34 +308,27 @@ void ScTabView::CheckSelectionTransfer()
     {
         ScModule* pScMod = SC_MOD();
         ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
-        if ( pOld && pOld->GetView() == this && pOld->StillValid() )
+        ScSelectionTransferObj* pNew = ScSelectionTransferObj::CreateFromView( this );
+        if ( pNew )
         {
-            // selection not changed - nothing to do
-        }
-        else
-        {
-            ScSelectionTransferObj* pNew = ScSelectionTransferObj::CreateFromView( this );
-            if ( pNew )
-            {
-                //  create new selection
+            //  create new selection
 
-                if (pOld)
-                    pOld->ForgetView();
-
-                uno::Reference<datatransfer::XTransferable> xRef( pNew );
-                pScMod->SetSelectionTransfer( pNew );
-                pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
-            }
-            else if ( pOld && pOld->GetView() == this )
-            {
-                //  remove own selection
-
+            if (pOld)
                 pOld->ForgetView();
-                pScMod->SetSelectionTransfer( NULL );
-                TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
-            }
-            // else: selection from outside: leave unchanged
+
+            uno::Reference<datatransfer::XTransferable> xRef( pNew );
+            pScMod->SetSelectionTransfer( pNew );
+            pNew->CopyToSelection( GetActiveWin() );                    // may delete pOld
         }
+        else if ( pOld && pOld->GetView() == this )
+        {
+            //  remove own selection
+
+            pOld->ForgetView();
+            pScMod->SetSelectionTransfer( NULL );
+            TransferableHelper::ClearSelection( GetActiveWin() );       // may delete pOld
+        }
+        // else: selection from outside: leave unchanged
     }
 }
 

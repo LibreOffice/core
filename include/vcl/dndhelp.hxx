@@ -64,18 +64,6 @@ public:
     virtual void dragDropEnd(const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
-    void dragEnter( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde )
-        throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
-    void dragExit( const ::com::sun::star::datatransfer::dnd::DragSourceEvent& dse )
-        throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
-    void dragOver( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde )
-        throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
-    void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DragSourceDragEvent& dsde )
-        throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
 
     // ::com::sun::star::datatransfer::dnd::XDropTargetListener
     virtual void drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde )
@@ -88,9 +76,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
     virtual void dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde )
-        throw (::com::sun::star::uno::RuntimeException,
-               std::exception);
-    void dropActionChanged( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde )
         throw (::com::sun::star::uno::RuntimeException,
                std::exception);
 };

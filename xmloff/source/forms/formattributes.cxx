@@ -140,12 +140,6 @@ namespace xmloff
         return "";
     }
 
-    sal_uInt16 OAttributeMetaData::getDatabaseAttributeNamespace(sal_Int32 /*_nId*/)
-    {
-        // nothing special here
-        return XML_NAMESPACE_FORM;
-    }
-
     const sal_Char* OAttributeMetaData::getBindingAttributeName(sal_Int32 _nId)
     {
         switch (_nId)
@@ -157,12 +151,6 @@ namespace xmloff
                 OSL_FAIL("OAttributeMetaData::getBindingAttributeName: invalid id (maybe you or-ed two flags?)!");
         }
         return "";
-    }
-
-    sal_uInt16 OAttributeMetaData::getBindingAttributeNamespace(sal_Int32)
-    {
-        // nothing special here
-        return XML_NAMESPACE_FORM;
     }
 
     const sal_Char* OAttributeMetaData::getSpecialAttributeName(sal_Int32 _nId)
@@ -212,12 +200,6 @@ namespace xmloff
                 OSL_FAIL("OAttributeMetaData::getOfficeFormsAttributeName: invalid id!");
         }
         return "";
-    }
-
-    sal_uInt16 OAttributeMetaData::getOfficeFormsAttributeNamespace(OfficeFormsAttributes /* _eAttrib */)
-    {
-        // nothing special here
-        return XML_NAMESPACE_FORM;
     }
 
     //= OAttribute2Property

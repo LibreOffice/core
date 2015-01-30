@@ -341,14 +341,6 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
                     mpGlyphRTLFlags[ mnGlyphCount ] = true;
                 }
 
-                // for vertical writing use vertical alternatives
-                if( bVertical )
-                {
-                    sal_UCS4 cVert = ::GetVerticalChar( cChar );
-                    if( cVert )
-                        cChar = cVert;
-                }
-
                 // rewrite the original string
                 // update the mappings between original and rewritten string
                // TODO: support surrogates in rewritten strings

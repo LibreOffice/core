@@ -1975,7 +1975,7 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     else if ( aNameString == SC_UNONAME_SELPAGE )
         aRet <<= getCurrentPage();
     else if ( aNameString == SC_UNONAME_USESELPAGE )
-        aRet <<= getUseCurrentPage();
+        aRet <<= false;
     else if ( aNameString == SC_UNONAME_HASAUTOSHOW )
         aRet <<= (getAutoShowInfo() != NULL);
     else if ( aNameString == SC_UNONAME_AUTOSHOW )
@@ -2219,11 +2219,6 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
         pDim->SetCurrentPage( &rPage );
         SetDPObject( pDPObj );
     }
-}
-
-bool ScDataPilotFieldObj::getUseCurrentPage() const
-{
-    return false;
 }
 
 void ScDataPilotFieldObj::setUseCurrentPage( bool bUse )

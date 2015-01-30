@@ -625,13 +625,6 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 // multi byte input method only
 
 void
-SalI18N_InputContext::SetLanguage(LanguageType)
-{
-    // not yet implemented
-    return;
-}
-
-void
 SalI18N_InputContext::EndExtTextInput( sal_uInt16 /*nFlags*/ )
 {
     if ( mbUseable && (maContext != NULL) && maClientData.pFrame )

@@ -52,8 +52,6 @@ GenericPageCache::~GenericPageCache (void)
     if (mpQueueProcessor.get() != NULL)
         mpQueueProcessor->Stop();
     maRequestQueue.Clear();
-    if (mpQueueProcessor.get() != NULL)
-        mpQueueProcessor->Terminate();
     mpQueueProcessor.reset();
 
     if (mpBitmapCache.get() != NULL)

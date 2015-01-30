@@ -566,10 +566,6 @@ bool SvTreeListBox::CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 nActi
 
 
 
-void SvTreeListBox::NotifyRemoving( SvTreeListEntry* )
-{
-}
-
 /*
     NotifyMoving/Copying
     ====================
@@ -808,13 +804,8 @@ void SvTreeListBox::RecalcViewData()
             pItem->InitViewData( this, pEntry );
             nCurPos++;
         }
-        ViewDataInitialized( pEntry );
         pEntry = Next( pEntry );
     }
-}
-
-void SvTreeListBox::ViewDataInitialized( SvTreeListEntry* )
-{
 }
 
 void SvTreeListBox::ImplShowTargetEmphasis( SvTreeListEntry* pEntry, bool bShow)
@@ -1191,14 +1182,6 @@ bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
     return false;
 }
 
-void SvTreeListBox::WriteDragServerInfo( const Point&, SvLBoxDDInfo* )
-{
-}
-
-void SvTreeListBox::ReadDragServerInfo(const Point&, SvLBoxDDInfo* )
-{
-}
-
 bool SvTreeListBox::EditingCanceled() const
 {
     if( pEdCtrl && pEdCtrl->EditingCanceled() )
@@ -1279,8 +1262,6 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
     {
         nRet = DND_ACTION_NONE;
 
-        ReadDragServerInfo( rEvt.maPosPixel, &aDDInfo );
-
         SvTreeListEntry* pTarget = pTargetEntry; // may be 0!
 
         if( DND_ACTION_COPY == rEvt.mnAction )
@@ -1344,8 +1325,6 @@ void SvTreeListBox::StartDrag( sal_Int8, const Point& rPosPixel )
     aDDInfo.pApp = GetpApp();
     aDDInfo.pSource = this;
     aDDInfo.pDDStartEntry = pEntry;
-    // let derived views do their thing
-    WriteDragServerInfo( rPosPixel, &aDDInfo );
 
     pContainer->CopyAnyData( SOT_FORMATSTR_ID_TREELISTBOX,
                         reinterpret_cast<char*>(&aDDInfo), sizeof(SvLBoxDDInfo) );
@@ -2263,7 +2242,6 @@ void SvTreeListBox::ScrollOutputArea( short nDeltaEntries )
     long nThumb = pImp->aVerSBar.GetThumbPos();
     long nMax = pImp->aVerSBar.GetRange().Max();
 
-    NotifyBeginScroll();
     if( nDeltaEntries < 0 )
     {
         // move window up
@@ -2526,7 +2504,6 @@ void SvTreeListBox::ModelIsRemoving( SvTreeListEntry* pEntry )
         pEdEntry = NULL;
 
     pImp->RemovingEntry( (SvTreeListEntry*)pEntry );
-    NotifyRemoving( (SvTreeListEntry*)pEntry );
 }
 
 void SvTreeListBox::ModelHasRemoved( SvTreeListEntry* pEntry  )
@@ -3510,15 +3487,7 @@ Size SvTreeListBox::GetOutputSizePixel() const
     return aSize;
 }
 
-void SvTreeListBox::NotifyBeginScroll()
-{
-}
-
 void SvTreeListBox::NotifyEndScroll()
-{
-}
-
-void SvTreeListBox::NotifyScrolling( long )
 {
 }
 
@@ -3527,17 +3496,12 @@ void SvTreeListBox::NotifyScrolled()
     aScrolledHdl.Call( this );
 }
 
-void SvTreeListBox::NotifyInvalidating()
-{
-}
-
 void SvTreeListBox::Invalidate( sal_uInt16 nInvalidateFlags )
 {
     if( nFocusWidth == -1 )
         // to make sure that the control doesn't show the wrong focus rectangle
         // after painting
         pImp->RecalcFocusRect();
-    NotifyInvalidating();
     Control::Invalidate( nInvalidateFlags );
     pImp->Invalidate();
 }
@@ -3548,7 +3512,6 @@ void SvTreeListBox::Invalidate( const Rectangle& rRect, sal_uInt16 nInvalidateFl
         // to make sure that the control doesn't show the wrong focus rectangle
         // after painting
         pImp->RecalcFocusRect();
-    NotifyInvalidating();
     Control::Invalidate( rRect, nInvalidateFlags );
 }
 
@@ -3702,11 +3665,6 @@ void SvTreeListBox::ModelNotification( SvListAction nActionId, SvTreeListEntry* 
 void SvTreeListBox::EndSelection()
 {
     pImp->EndSelection();
-}
-
-void SvTreeListBox::RepaintScrollBars() const
-{
-    ((SvTreeListBox*)this)->pImp->RepaintScrollBars();
 }
 
 ScrollBar *SvTreeListBox::GetVScroll()

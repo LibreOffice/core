@@ -153,19 +153,8 @@ BibFrameCtrl_Impl::~BibFrameCtrl_Impl()
 {
 }
 
-void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::RuntimeException, std::exception )
+void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& ) throw( uno::RuntimeException, std::exception )
 {
-    if ( pController && aEvent.Frame == pController->getFrame())
-    {
-        if(aEvent.Action == FrameAction_FRAME_ACTIVATED)
-        {
-            pController->activate();
-        }
-        else if(aEvent.Action == FrameAction_FRAME_DEACTIVATING)
-        {
-            pController->deactivate();
-        }
-    }
 }
 
 void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
@@ -909,13 +898,5 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
 
     }
 }
-
-void BibFrameController_Impl::activate()
-{
-}
-void BibFrameController_Impl::deactivate()
-{
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

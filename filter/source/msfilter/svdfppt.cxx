@@ -3099,13 +3099,6 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
     }
 }
 
-// no longer needed
-sal_Unicode SdrPowerPointImport::PPTSubstitute( sal_uInt16 /*nFont*/, sal_Unicode /*nChar*/,
-                                        sal_uInt32& /*nMappedFontId*/, vcl::Font& /*rFont*/, char /*nDefault*/) const
-{
-    return 0;
-}
-
 PPTBuGraEntry::PPTBuGraEntry( Graphic& rGraphic, sal_uInt32 nInst ) :
     nInstance       ( nInst ),
     aBuGra          ( rGraphic )  {}
@@ -5753,7 +5746,6 @@ PPTParagraphObj::PPTParagraphObj( PPTStyleTextPropReader& rPropReader,
 
 PPTParagraphObj::~PPTParagraphObj()
 {
-    ImplClear();
 }
 
 void PPTParagraphObj::AppendPortion( PPTPortionObj& rPPTPortion )
@@ -6283,10 +6275,6 @@ PPTPortionObj* PPTParagraphObj::Next()
         return NULL;
     mnCurrentObject++;
     return &m_PortionList[i];
-}
-
-void PPTParagraphObj::ImplClear()
-{
 }
 
 PPTFieldEntry::~PPTFieldEntry()

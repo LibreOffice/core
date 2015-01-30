@@ -161,7 +161,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtModuleOptions : public utl::detail::
         bool   IsDraw     () const;
         bool   IsWriter   () const;
         bool   IsImpress  () const;
-        bool   IsBasicIDE () const;
+        static bool   IsBasicIDE () { return true; }
         bool   IsDataBase () const;
 
         ::com::sun::star::uno::Sequence < OUString > GetAllServiceNames();

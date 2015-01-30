@@ -375,7 +375,7 @@ protected:
 
                                 // save header data, call SaveActionData()
     virtual void                SaveCont( XclExpStream& rStrm ) SAL_OVERRIDE;
-    inline sal_Size             GetHeaderByteCount() const  { return 12; }
+    static inline sal_Size      GetHeaderByteCount() { return 12; }
 
                                 // override to save action data without header, called by SaveCont()
     virtual void                SaveActionData( XclExpStream& rStrm ) const = 0;

@@ -70,14 +70,11 @@ private:
      void makeDecoration(Node *res);
      void makeFunction(Node *res);
      void makeRoot(Node *res);
-     void makeArrow(Node *res);
      void makeAccent(Node *res);
      void makeParenth(Node *res);
      void makeFence(Node *res);
      void makeBracket(Node *res);
      void makeBlock(Node *res);
-     void makeBegin(Node *res);
-     void makeEnd(Node *res);
 
 private:
      Reference< XDocumentHandler >  m_rxDocumentHandler;

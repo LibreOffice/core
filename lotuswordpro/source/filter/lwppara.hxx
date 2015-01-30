@@ -153,7 +153,6 @@ public:
     void RegisterStyle() SAL_OVERRIDE;
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     void XFConvert(XFContentContainer* pCont) SAL_OVERRIDE;
-    void Release();
 
     LwpPara* GetParent();
     LwpObjectID& GetStoryID();

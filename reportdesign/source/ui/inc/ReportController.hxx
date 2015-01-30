@@ -318,7 +318,6 @@ namespace rptui
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnExecuteReport, void* );
         DECL_LINK( OnOpenHelpAgent, void* );
-        short saveModified();
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures() SAL_OVERRIDE;
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.

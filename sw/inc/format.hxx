@@ -320,18 +320,6 @@ public:
     */
     virtual bool IsBackgroundTransparent() const;
 
-    /** SwFmt::IsShadowTransparent
-
-        Virtual method to determine, if shadow of format is transparent.
-        Default implementation returns false. Thus, subclasses have to override
-        method, if the specific subclass can have a transparent shadow.
-
-        @author OD
-
-        @return false, default implementation
-    */
-    bool IsShadowTransparent() const;
-
     //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     virtual bool supportsFullDrawingLayerFillAttributeSet() const;

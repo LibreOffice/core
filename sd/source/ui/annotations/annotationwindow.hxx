@@ -136,7 +136,7 @@ class AnnotationWindow : public FloatingWindow
 
         void            SetLanguage(const SvxLanguageItem &aNewItem);
 
-        sal_Int32       GetScrollbarWidth();
+        static sal_Int32 GetScrollbarWidth() { return 16; }
 
         void            ToggleInsMode();
 

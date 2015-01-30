@@ -128,10 +128,6 @@ void ThreeD_SceneAppearance_TabPage::ActivatePage()
     updateScheme();
 }
 
-void ThreeD_SceneAppearance_TabPage::commitPendingChanges()
-{
-}
-
 void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
 {
     if(!m_bCommitToModel)

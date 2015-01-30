@@ -195,7 +195,6 @@ public:
                                 SvtFileDialog( vcl::Window* _pParent, WinBits nBits );
                                 virtual ~SvtFileDialog();
 
-    long                        OK();
     virtual short               Execute() SAL_OVERRIDE;
     virtual void                StartExecuteModal( const Link& rEndDialogHdl ) SAL_OVERRIDE;
 
@@ -239,7 +238,6 @@ public:
     sal_Int32                   getAvailableWidth();
     sal_Int32                   getAvailableHeight();
     void                        setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& rImage );
-    bool                        setShowState( bool bShowState );
     bool                        getShowState();
     bool                        isAutoExtensionEnabled();
 

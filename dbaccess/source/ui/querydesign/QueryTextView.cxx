@@ -68,12 +68,6 @@ void OQueryTextView::Resize()
     m_pEdit->SetSizePixel( GetOutputSizePixel() );
 }
 
-// check if the statement is correct when not returning false
-bool OQueryTextView::checkStatement()
-{
-    return true;
-}
-
 OUString OQueryTextView::getStatement()
 {
     return m_pEdit->GetText();
@@ -108,16 +102,6 @@ void OQueryTextView::copy()
 bool OQueryTextView::isCutAllowed()
 {
     return !m_pEdit->GetSelected().isEmpty();
-}
-
-bool OQueryTextView::isPasteAllowed()
-{
-    return true;
-}
-
-bool OQueryTextView::isCopyAllowed()
-{
-    return true;
 }
 
 void OQueryTextView::cut()

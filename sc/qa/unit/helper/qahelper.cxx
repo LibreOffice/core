@@ -72,7 +72,7 @@ std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode)
     return rStrm;
 }
 
-FileFormat aFileFormats[] = {
+const FileFormat ScBootstrapFixture::aFileFormats[] = {
     { "ods" , "calc8", "", ODS_FORMAT_TYPE },
     { "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE },
     { "xlsx", "Calc Office Open XML" , "Office Open XML Spreadsheet", XLSX_FORMAT_TYPE },
@@ -584,11 +584,6 @@ ScDocShellRef ScBootstrapFixture::loadDoc(
     unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
 
     return load(bReadWrite, aFileName, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, nFormatType);
-}
-
-const FileFormat* ScBootstrapFixture::getFileFormats()
-{
-    return aFileFormats;
 }
 
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}

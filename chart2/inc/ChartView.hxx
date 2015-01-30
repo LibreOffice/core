@@ -226,7 +226,6 @@ private: //methods
     void impl_notifyModeChangeListener( const OUString& rNewMode );
 
     void impl_refreshAddIn();
-    bool impl_AddInDrawsAllByItself();
 
     void impl_updateView( bool bCheckLockedCtrler = true );
 

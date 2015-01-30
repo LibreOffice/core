@@ -306,16 +306,6 @@ bool SbxDecimal::operator *= ( const SbxDecimal &r )
     return false;
 }
 
-bool SbxDecimal::neg( void )
-{
-    return false;
-}
-
-bool SbxDecimal::isZero( void )
-{
-    return false;
-}
-
 SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight )
 {
     (void)rLeft;

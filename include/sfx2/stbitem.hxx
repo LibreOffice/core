@@ -98,11 +98,9 @@ protected:
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Click();
-    void            DoubleClick();
     virtual void    Command( const CommandEvent& rCEvt );
     virtual bool    MouseButtonDown( const MouseEvent & );
     virtual bool    MouseMove( const MouseEvent & );
-    bool            MouseButtonUp( const MouseEvent & );
     virtual void    Paint( const UserDrawEvent &rUDEvt );
 
     static sal_uInt16   convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons );
@@ -114,8 +112,6 @@ public:
     sal_uInt16      GetSlotId() const { return nSlotId; }
     sal_uInt16      GetId() const { return nId; }
     StatusBar&      GetStatusBar() const { return *pBar; }
-    void            CaptureMouse();
-    void            ReleaseMouse();
 
     static SfxStatusBarControl* CreateControl( sal_uInt16 nSlotID, sal_uInt16 nId, StatusBar *pBar, SfxModule* );
     static void RegisterStatusBarControl(SfxModule*, SfxStbCtrlFactory*);

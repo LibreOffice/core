@@ -605,14 +605,15 @@ namespace xforms
     {
     }
 
-
-    IMPLEMENT_DEFAULT_CLONING( OBooleanType, OBooleanType_Base )
-
-
-    void OBooleanType::initializeTypedClone( const OBooleanType& /*_rCloneSource*/ )
+    OXSDDataType* OBooleanType::createClone( const OUString& _rName ) const
     {
+        return new OBooleanType( _rName );
     }
 
+    void OBooleanType::initializeClone( const OXSDDataType& _rCloneSource )
+    {
+        OBooleanType_Base::initializeClone( _rCloneSource );
+    }
 
     sal_uInt16 OBooleanType::_validate( const OUString& sValue )
     {
@@ -737,12 +738,15 @@ namespace xforms
         :classname##_Base( _rName, DataTypeClass::typeclass )   \
     {                                                           \
     }                                                           \
-                                                                \
-    IMPLEMENT_DEFAULT_CLONING( classname, classname##_Base )    \
-                                                                \
-    void classname::initializeTypedClone( const classname& /*_rCloneSource*/ )  \
-    {                                                           \
-    }                                                           \
+    OXSDDataType* classname::createClone( const OUString& _rName ) const \
+    {                                                       \
+        return new classname( _rName );                     \
+    }                                                       \
+    void classname::initializeClone( const OXSDDataType& _rCloneSource ) \
+    { \
+         classname##_Base::initializeClone( _rCloneSource );        \
+        initializeTypedClone( static_cast< const classname& >( _rCloneSource ) ); \
+    } \
 
 
 
@@ -904,11 +908,6 @@ namespace xforms
 
 
     IMPLEMENT_DEFAULT_TYPED_CLONING( OShortIntegerType, OShortIntegerType_Base )
-
-
-    void OShortIntegerType::initializeTypedClone( const OShortIntegerType& /*_rCloneSource*/ )
-    {
-    }
 
 
     bool OShortIntegerType::_getValue( const OUString& value, double& fValue )

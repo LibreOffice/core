@@ -98,7 +98,7 @@ void LwpFribText::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
                 rEncode = LwpCharSetMgr::GetInstance()->
                                               GetTextCharEncoding(m_pModifiers->CodePage);
             else
-                rEncode = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+                rEncode = LwpCharSetMgr::GetTextCharEncoding();
         }
         LwpTools::QuickReadUnicode(pObjStrm, m_Content, len, rEncode);
     }
@@ -413,7 +413,7 @@ void LwpFribUnicode::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
                 rEncode = LwpCharSetMgr::GetInstance()->
                                           GetTextCharEncoding(m_pModifiers->CodePage);
         else
-                rEncode = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+                rEncode = LwpCharSetMgr::GetTextCharEncoding();
 
         LwpTools::QuickReadUnicode(pObjStrm, m_Content, len, rEncode);
 

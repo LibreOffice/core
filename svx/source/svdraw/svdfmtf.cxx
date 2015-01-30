@@ -138,8 +138,8 @@ void ImpSdrGDIMetaFileImport::DoLoopActions(GDIMetaFile& rMtf, SvdProgressInfo* 
 
         switch (pAct->GetType())
         {
-            case META_PIXEL_ACTION          : DoAction(static_cast<MetaPixelAction          &>(*pAct)); break;
-            case META_POINT_ACTION          : DoAction(static_cast<MetaPointAction          &>(*pAct)); break;
+            case META_PIXEL_ACTION          : break;
+            case META_POINT_ACTION          : break;
             case META_LINE_ACTION           : DoAction(static_cast<MetaLineAction           &>(*pAct)); break;
             case META_RECT_ACTION           : DoAction(static_cast<MetaRectAction           &>(*pAct)); break;
             case META_ROUNDRECT_ACTION      : DoAction(static_cast<MetaRoundRectAction      &>(*pAct)); break;
@@ -668,14 +668,6 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
             }
         }
     }
-}
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/) const
-{
-}
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaPointAction& /*rAct*/) const
-{
 }
 
 void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)

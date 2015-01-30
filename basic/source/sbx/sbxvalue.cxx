@@ -1063,10 +1063,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                                 bOk = ( *(aL.pDecimal) *= *(aR.pDecimal) );
                                 break;
                             case SbxDIV:
-                                if( aR.pDecimal->isZero() )
-                                    SetError( SbxERR_ZERODIV );
-                                else
-                                    bOk = ( *(aL.pDecimal) /= *(aR.pDecimal) );
+                                bOk = ( *(aL.pDecimal) /= *(aR.pDecimal) );
                                 break;
                             case SbxPLUS:
                                 bOk = ( *(aL.pDecimal) += *(aR.pDecimal) );
@@ -1075,7 +1072,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
                                 bOk = ( *(aL.pDecimal) -= *(aR.pDecimal) );
                                 break;
                             case SbxNEG:
-                                bOk = ( aL.pDecimal->neg() );
+                                bOk = false;
                                 break;
                             default:
                                 SetError( SbxERR_NOTIMP );

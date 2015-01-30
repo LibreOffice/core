@@ -139,19 +139,7 @@ namespace xforms
 
 #define DECLARE_DEFAULT_CLONING( classname )        \
     virtual OXSDDataType* createClone( const OUString& _rName ) const SAL_OVERRIDE;    \
-    virtual void       initializeClone( const OXSDDataType& _rCloneSource ) SAL_OVERRIDE; \
-            void       initializeTypedClone( const classname& _rCloneSource );
-
-#define IMPLEMENT_DEFAULT_CLONING( classname, baseclass )   \
-    OXSDDataType* classname::createClone( const OUString& _rName ) const              \
-    {                                                       \
-        return new classname( _rName );                     \
-    }                                                       \
-    void classname::initializeClone( const OXSDDataType& _rCloneSource ) \
-    { \
-        baseclass::initializeClone( _rCloneSource );        \
-        initializeTypedClone( static_cast< const classname& >( _rCloneSource ) ); \
-    } \
+    virtual void       initializeClone( const OXSDDataType& _rCloneSource ) SAL_OVERRIDE;
 
 #define IMPLEMENT_DEFAULT_TYPED_CLONING( classname, baseclass )   \
     OXSDDataType* classname::createClone( const OUString& _rName ) const              \
@@ -162,7 +150,7 @@ namespace xforms
     { \
         baseclass::initializeClone( _rCloneSource );        \
         initializeTypedClone( static_cast< const classname& >( _rCloneSource ) ); \
-    } \
+    }
 
 #define REGISTER_VOID_PROP( prop, memberAny, type ) \
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, ::com::sun::star::beans::PropertyAttribute::BOUND | ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, \
@@ -288,6 +276,7 @@ namespace xforms
 
     protected:
         DECLARE_DEFAULT_CLONING( OStringType )
+        void       initializeTypedClone( const OStringType& _rCloneSource );
 
         // OXSDDataType overridables
         virtual sal_uInt16      _validate( const OUString& value ) SAL_OVERRIDE;
@@ -309,6 +298,7 @@ namespace xforms
 
     protected:
         DECLARE_DEFAULT_CLONING( ODecimalType )
+        void       initializeTypedClone( const ODecimalType& _rCloneSource );
 
         // OXSDDataType overridables
         virtual sal_uInt16      _validate( const OUString& value ) SAL_OVERRIDE;

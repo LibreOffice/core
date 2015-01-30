@@ -91,7 +91,7 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
         rStrm.ReadUInt32( nRefCount );
         rStrm.ReadUInt32( nNextVersionOffset );
 
-        nHeaderSize = sizeof(m_nTag) + m_ID.DiskSize()
+        nHeaderSize = sizeof(m_nTag) + LwpObjectID::DiskSize()
             + sizeof(nVersionID)
             + sizeof(nRefCount)
             + sizeof(nNextVersionOffset)

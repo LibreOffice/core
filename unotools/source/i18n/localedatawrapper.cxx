@@ -1210,11 +1210,8 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
         else
         {
             // LeadingZero, insert 0
-            if ( isNumLeadingZero() )
-            {
-                *pBuf = '0';
-                pBuf++;
-            }
+            *pBuf = '0';
+            pBuf++;
 
             // append decimal separator
             pBuf = ImplAddString( pBuf, getNumDecimalSep() );

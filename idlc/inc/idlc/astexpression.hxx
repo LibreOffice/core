@@ -151,7 +151,6 @@ public:
     bool compare(AstExpression *pExpr);
 
     OString toString();
-    void dump() {}
 private:
     // Fill out the lineno, filename and definition scope details
     void    fillDefinitionDetails();

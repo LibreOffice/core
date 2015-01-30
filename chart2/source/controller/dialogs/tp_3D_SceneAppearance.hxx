@@ -40,9 +40,6 @@ public:
         ControllerLockHelper & rControllerLockHelper );
     virtual ~ThreeD_SceneAppearance_TabPage();
 
-    // has to be called in case the dialog was closed with OK
-    void commitPendingChanges();
-
     virtual void ActivatePage() SAL_OVERRIDE;
 
 private:

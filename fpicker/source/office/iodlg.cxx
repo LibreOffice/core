@@ -1109,7 +1109,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     if ( pThis->_aOKHdl.IsSet() )
         nRet = pThis->_aOKHdl.Call( pThis );
     else
-        nRet = pThis->OK();
+        nRet = 1;
 
     if ( nRet )
     {
@@ -1377,7 +1377,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
     if ( _aOKHdl.IsSet() )
         nRet = _aOKHdl.Call( this );
     else
-        nRet = OK();
+        nRet = 1;
 
     if ( nRet )
         EndDialog( sal_True );
@@ -1618,13 +1618,6 @@ bool SvtFileDialog::Notify( NotifyEvent& rNEvt )
         }
     }
     return nRet || ModalDialog::Notify( rNEvt );
-}
-
-
-
-long SvtFileDialog::OK()
-{
-    return sal_True;
 }
 
 
@@ -2669,24 +2662,6 @@ void SvtFileDialog::setImage( sal_Int16 /*aImageFormat*/, const Any& rImage )
         Bitmap aEmpty;
         _pPrevBmp->SetBitmap( aEmpty );
     }
-}
-
-
-bool SvtFileDialog::setShowState( bool /*bShowState*/ )
-{
-    // #97633 for the system filedialog it's
-    // useful to make the preview switchable
-    // because the preview occupies
-    // half of the size of the file listbox
-    // which is not the case here,
-    // so we (TRA/FS) decided not to make
-    // the preview window switchable because
-    // else we would have to change the layout
-    // of the file dialog dynamically
-    // support for set/getShowState is opionally
-    // see com::sun::star::ui::dialogs::XFilePreview
-
-    return false;
 }
 
 

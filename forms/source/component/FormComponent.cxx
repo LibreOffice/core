@@ -194,11 +194,6 @@ Sequence<Type> OControl::_getTypes()
     return TypeBag( OComponentHelper::getTypes(), OControl_BASE::getTypes() ).getTypes();
 }
 
-void OControl::initFormControlPeer( const Reference< XWindowPeer >& /*_rxPeer*/ )
-{
-    // nothing to do here
-}
-
 // OComponentHelper
 void OControl::disposing()
 {
@@ -289,7 +284,6 @@ void SAL_CALL OControl::createPeer(const Reference<XToolkit>& _rxToolkit, const 
     if ( m_xControl.is() )
     {
         m_xControl->createPeer( _rxToolkit, _rxParent );
-        initFormControlPeer( getPeer() );
         impl_resetStateGuard_nothrow();
     }
 }
@@ -2221,10 +2215,6 @@ void OBoundControlModel::onConnectedExternalValue( )
     calculateExternalValueType();
 }
 
-void OBoundControlModel::onDisconnectedExternalValue( )
-{
-}
-
 void OBoundControlModel::onConnectedDbColumn( const Reference< XInterface >& /*_rxForm*/ )
 {
     OSL_PRECOND( !hasExternalValueBinding(), "OBoundControlModel::onConnectedDbColumn: how this? There's an external value binding!" );
@@ -2505,8 +2495,6 @@ void OBoundControlModel::disconnectExternalValueBinding( )
     // re-connect to database column of the new parent
     if ( m_xAmbientForm.is() && m_xAmbientForm->isLoaded() )
         impl_connectDatabaseColumn_noNotify( false );
-    // tell the derivee
-    onDisconnectedExternalValue();
 }
 
 void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding ) throw (IncompatibleTypesException, RuntimeException, std::exception)

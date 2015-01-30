@@ -301,10 +301,6 @@ ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()
     delete[] m_pLightSourceInfoList;
 }
 
-void ThreeD_SceneIllumination_TabPage::commitPendingChanges()
-{
-}
-
 IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)
 {
     if( m_bInCommitToModel )//don't read own changes

@@ -115,10 +115,6 @@ SlideSorterModel::~SlideSorterModel (void)
     ClearDescriptorList ();
 }
 
-void SlideSorterModel::Init (void)
-{
-}
-
 void SlideSorterModel::Dispose (void)
 {
     ClearDescriptorList ();

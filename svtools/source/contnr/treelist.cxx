@@ -1385,10 +1385,6 @@ void SvListView::ActionRemoving( SvTreeListEntry* pEntry )
     }
 }
 
-void SvListView::ActionRemoved( SvTreeListEntry* /* pEntry  */ )
-{
-}
-
 void SvListView::ActionClear()
 {
     Clear();
@@ -1412,7 +1408,6 @@ void SvListView::ModelNotification( SvListAction nActionId, SvTreeListEntry* pEn
             ActionRemoving( pEntry1 );
             break;
         case SvListAction::REMOVED:
-            ActionRemoved( pEntry1 );
             ModelHasRemoved( pEntry1 );
             break;
         case SvListAction::MOVING:

@@ -186,7 +186,6 @@ namespace frm
         if ( !bReallyActAsRichText )
         {
             UnoEditControl::createPeer( _rToolkit, _rParentPeer );
-            OControl::initFormControlPeer( getPeer() );
             return;
         }
 
@@ -239,8 +238,6 @@ namespace frm
             }
 
             mbCreatingPeer = false;
-
-            OControl::initFormControlPeer( getPeer() );
         }
     }
 

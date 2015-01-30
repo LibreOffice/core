@@ -33,6 +33,7 @@ const sal_uInt16 CAPTYPE_BITMAPS_COUNT = 3;
 class SvxCaptionTabPage : public SfxTabPage
 {
 private:
+    static const sal_uInt16 pCaptionRanges[];
     ValueSet*       m_pCT_CAPTTYPE;
     MetricField*    m_pMF_ABSTAND;
     ListBox*        m_pLB_ANSATZ;
@@ -76,7 +77,7 @@ public:
     SvxCaptionTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16*  GetRanges() { return pCaptionRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;

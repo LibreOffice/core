@@ -738,7 +738,6 @@ void XclExpPivotCache::AddFields( const ScDPObject& rDPObj )
     AddStdFields( rDPObj );
     maPCInfo.mnStdFields = GetFieldCount();
     AddGroupFields( rDPObj );
-    AddCalcFields( rDPObj );
     maPCInfo.mnTotalFields = GetFieldCount();
 };
 
@@ -788,11 +787,6 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
             }
         }
     }
-}
-
-void XclExpPivotCache::AddCalcFields( const ScDPObject& /*rDPObj*/ )
-{
-    // not supported
 }
 
 void XclExpPivotCache::WriteDconref( XclExpStream& rStrm ) const

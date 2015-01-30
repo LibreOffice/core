@@ -63,7 +63,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeTabWin_Impl(vcl::Windo
 }
 // static ----------------------------------------------------------------
 
-static const sal_uInt16 pRanges[] =
+const sal_uInt16 SvxTabulatorTabPage::pRanges[] =
 {
     SID_ATTR_TABSTOP,
     SID_ATTR_TABSTOP_OFFSET,
@@ -189,13 +189,6 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( vcl::Window* pParent, const SfxItemSet
 
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
-}
-
-
-
-const sal_uInt16* SvxTabulatorTabPage::GetRanges()
-{
-    return pRanges;
 }
 
 

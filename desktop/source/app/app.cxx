@@ -343,7 +343,6 @@ ResMgr* Desktop::GetDesktopResManager()
             //! ResMgr may modify the Locale for fallback!
             Desktop::pResMgr = ResMgr::SearchCreateResMgr( "dkt", aLanguageTag);
             AllSettings as = GetSettings();
-            as.SetUILanguageTag(aLanguageTag);
             SetSettings(as);
         }
     }

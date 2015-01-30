@@ -505,11 +505,6 @@ IMPL_LINK_NOARG(AnnotationWindow, ModifyHdl)
     return 0;
 }
 
-sal_Int32 AnnotationWindow::GetScrollbarWidth()
-{
-    return 16;
-}
-
 SvxLanguageItem AnnotationWindow::GetLanguage(void)
 {
     return SvxLanguageItem( Doc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE );

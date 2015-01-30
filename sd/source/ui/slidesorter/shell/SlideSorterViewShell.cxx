@@ -439,10 +439,8 @@ void SlideSorterViewShell::GetAttrState (SfxItemSet& rSet)
     mpSlideSorter->GetController().GetAttrState(rSet);
 }
 
-void SlideSorterViewShell::ExecStatusBar (SfxRequest& rRequest)
+void SlideSorterViewShell::ExecStatusBar (SfxRequest& )
 {
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->GetController().ExecStatusBar(rRequest);
 }
 
 void SlideSorterViewShell::Paint (

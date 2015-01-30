@@ -51,8 +51,6 @@ public:
         sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
-    void clearAccessibleSelection(  )
-        throw ( ::com::sun::star::uno::RuntimeException );
     void selectAllAccessibleChildren(  )
         throw ( ::com::sun::star::uno::RuntimeException );
     sal_Int32 getSelectedAccessibleChildCount(  )

@@ -251,31 +251,6 @@ namespace oglcanvas
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
-    bool SpriteDeviceHelper::hasFullScreenMode()
-    {
-        // TODO(F3): offer fullscreen mode the XCanvas way
-        return false;
-    }
-
-    bool SpriteDeviceHelper::enterFullScreenMode( bool /*bEnter*/ )
-    {
-        // TODO(F3): offer fullscreen mode the XCanvas way
-        return false;
-    }
-
-    ::sal_Int32 SpriteDeviceHelper::createBuffers( ::sal_Int32 /*nBuffers*/ )
-    {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
-        return 1;
-    }
-
-    void SpriteDeviceHelper::destroyBuffers()
-    {
-        // TODO(F3): implement XBufferStrategy interface. For now, we
-        // _always_ will have exactly one backbuffer
-    }
-
     namespace
     {
         /** Functor providing a StrictWeakOrdering for XSprites (over

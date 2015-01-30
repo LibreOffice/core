@@ -860,14 +860,14 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
         // decimal separator necessary
         sal_Int32 nAnz(nC - aStr.getLength());
 
-        if(nAnz >= 0 && rLoc.isNumLeadingZero())
+        if(nAnz >= 0)
             nAnz++;
 
         for(sal_Int32  i=0; i<nAnz; i++)
             aStr.insert(0, aNullCode);
 
         // remove superfluous decimal points
-        sal_Int32 nNumDigits(rLoc.getNumDigits());
+        sal_Int32 nNumDigits(LocaleDataWrapper::getNumDigits());
         sal_Int32 nWeg(nC - nNumDigits);
 
         if(nWeg > 0)

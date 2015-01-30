@@ -1339,9 +1339,9 @@ void DialogWindow::Deactivating()
     DisableBrowser();
 }
 
-sal_Int32 DialogWindow::countPages( Printer* pPrinter )
+sal_Int32 DialogWindow::countPages( Printer* )
 {
-    return pEditor->countPages( pPrinter );
+    return 1;
 }
 
 void DialogWindow::printPage( sal_Int32 nPage, Printer* pPrinter )

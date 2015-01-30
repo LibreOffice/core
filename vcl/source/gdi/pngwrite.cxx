@@ -90,7 +90,6 @@ private:
     void                ImplWriteChunk( sal_uInt8 nNumb );
     void                ImplWriteChunk( sal_uInt32 nNumb );
     void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
-    void                ImplCloseChunk( void ) const;
 };
 
 PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
@@ -233,7 +232,6 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         if ( mbStatus )
         {
             ImplOpenChunk( PNGCHUNK_IEND );     // create an IEND chunk
-            ImplCloseChunk();
         }
     }
 }
@@ -299,7 +297,6 @@ bool PNGWriterImpl::ImplWriteHeader()
         ImplWriteChunk((sal_uInt8) 0 );             // compression type
         ImplWriteChunk((sal_uInt8) 0 );             // filter type - is not supported in this version
         ImplWriteChunk((sal_uInt8) mnInterlaced );  // interlace type
-        ImplCloseChunk();
     }
     else
         mbStatus = false;
@@ -322,7 +319,6 @@ void PNGWriterImpl::ImplWritePalette()
         *pTmp++ = rColor.GetBlue();
     }
     ImplWriteChunk( pTempBuf.get(), nCount*3 );
-    ImplCloseChunk();
 }
 
 void PNGWriterImpl::ImplWriteTransparent ()
@@ -333,8 +329,6 @@ void PNGWriterImpl::ImplWriteTransparent ()
 
     for ( sal_uLong n = 0UL; n <= nTransIndex; n++ )
         ImplWriteChunk( ( nTransIndex == n ) ? (sal_uInt8) 0x0 : (sal_uInt8) 0xff );
-
-    ImplCloseChunk();
 }
 
 void PNGWriterImpl::ImplWritepHYs( const BitmapEx& rBmpEx )
@@ -351,7 +345,6 @@ void PNGWriterImpl::ImplWritepHYs( const BitmapEx& rBmpEx )
             ImplWriteChunk( nPrefSizeX );
             ImplWriteChunk( nPrefSizeY );
             ImplWriteChunk( nMapUnit );
-            ImplCloseChunk();
         }
     }
 }
@@ -440,7 +433,6 @@ void PNGWriterImpl::ImplWriteIDAT ()
         nBytes = nBytesToWrite <= mnMaxChunkSize ? nBytesToWrite : mnMaxChunkSize;
         ImplOpenChunk( PNGCHUNK_IDAT );
         ImplWriteChunk( (unsigned char*)aOStm.GetData() + ( nIDATSize - nBytesToWrite ), nBytes );
-        ImplCloseChunk();
         nBytesToWrite -= nBytes;
     }
 }
@@ -640,11 +632,6 @@ void PNGWriterImpl::ImplWriteChunk ( unsigned char* pSource, sal_uInt32 nDatSize
         rChunkData.aData.resize( nSize + nDatSize );
         memcpy( &rChunkData.aData[ nSize ], pSource, nDatSize );
     }
-}
-
-// nothing to do
-void PNGWriterImpl::ImplCloseChunk ( void ) const
-{
 }
 
 PNGWriter::PNGWriter( const BitmapEx& rBmpEx,

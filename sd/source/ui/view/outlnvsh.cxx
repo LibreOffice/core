@@ -248,11 +248,6 @@ void OutlineViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
     {
         pOlView->Paint(rRect, pWin);
     }
-
-    if(HasCurrentFunction())
-    {
-        GetCurrentFunction()->Paint(rRect, pWin);
-    }
 }
 
 void OutlineViewShell::ArrangeGUIElements ()
@@ -1098,7 +1093,6 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     pOutlinerView->Scroll(-nDelta, 0);
     pOutlinerView->ShowCursor(false);
 
-    pOlView->InvalidateSlideNumberArea();
     return 0;
 }
 
@@ -1121,8 +1115,6 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     pOutlinerView->HideCursor();
     pOutlinerView->Scroll(0, -nDelta);
     pOutlinerView->ShowCursor(false);
-
-    pOlView->InvalidateSlideNumberArea();
 
     return 0;
 }

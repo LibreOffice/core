@@ -1143,11 +1143,6 @@ void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working
 }
 
 
-sal_Int32 DlgEditor::countPages( Printer* )
-{
-    return 1;
-}
-
 void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& rTitle )
 {
     if( nPage == 0 )

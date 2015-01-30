@@ -464,11 +464,6 @@ bool PPTExStyleSheet::IsHardAttribute( sal_uInt32 nInstance, sal_uInt32 nLevel, 
     return true;
 }
 
-sal_uInt32 PPTExStyleSheet::SizeOfTxCFStyleAtom() const
-{
-    return 24;
-}
-
 // the TxCFStyleAtom stores the text properties that are used
 // when creating new objects in PowerPoint.
 

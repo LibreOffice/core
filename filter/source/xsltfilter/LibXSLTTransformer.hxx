@@ -163,8 +163,6 @@ namespace XSLT
         int SAL_CALL
         write(const char * buffer, int len);
         int SAL_CALL
-        closeInput();
-        int SAL_CALL
         closeOutput();
 
     private:

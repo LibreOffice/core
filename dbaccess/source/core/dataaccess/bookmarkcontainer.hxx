@@ -130,14 +130,6 @@ public:
     void    dispose();
 
 protected:
-    /** checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and
-        not disposed (@see dispose)
-        @param      _bIntendWriteAccess     determines whether or not the caller intends to modify the configuration.
-                                            if sal_True and the configuration is readonly, a runtime exception with
-                                            a description string is thrown.
-    */
-    void        checkValid(bool _bIntendWriteAccess) const throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::DisposedException);
-
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.
         @param      _rName      the object name to check

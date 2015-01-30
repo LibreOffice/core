@@ -44,17 +44,6 @@ ViewContact::ViewContact()
 {
 }
 
-// Methods to react on start getting viewed or stop getting
-// viewed. This info is derived from the count of members of
-// registered ViewObjectContacts. Default does nothing.
-void ViewContact::StartGettingViewed()
-{
-}
-
-void ViewContact::StopGettingViewed()
-{
-}
-
 ViewContact::~ViewContact()
 {
     deleteAllVOCs();
@@ -118,11 +107,6 @@ ViewObjectContact& ViewContact::GetViewObjectContact(ObjectContact& rObjectConta
 void ViewContact::AddViewObjectContact(ViewObjectContact& rVOContact)
 {
     maViewObjectContactVector.push_back(&rVOContact);
-
-    if(1L == maViewObjectContactVector.size())
-    {
-        StartGettingViewed();
-    }
 }
 
 // A ViewObjectContact was deleted and shall be forgotten.
@@ -133,13 +117,6 @@ void ViewContact::RemoveViewObjectContact(ViewObjectContact& rVOContact)
     if(aFindResult != maViewObjectContactVector.end())
     {
         maViewObjectContactVector.erase(aFindResult);
-
-        if(maViewObjectContactVector.empty())
-        {
-            // This may need to get asynchron later since it eventually triggers
-            // deletes of OCs where the VOC is still added.
-            StopGettingViewed();
-        }
     }
 }
 

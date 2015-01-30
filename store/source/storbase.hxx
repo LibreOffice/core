@@ -753,7 +753,6 @@ public:
 
         T * pImpl = dynamic_page_cast<T>(pHead);
         OSL_PRECOND(pImpl != 0, "store::PageHolder<T>::guard(): Null pointer");
-        pImpl->guard();
 
         return store_E_None;
     }
@@ -771,7 +770,7 @@ public:
         if (!pImpl)
             return store_E_WrongVersion;
 
-        return pImpl->verify();
+        return store_E_None;
     }
 };
 

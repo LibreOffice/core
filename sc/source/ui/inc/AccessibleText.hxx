@@ -61,8 +61,6 @@ public:
 private:
     mutable SfxBroadcaster maBroadcaster;
 
-    // prevent the using of this method of the base class
-    ScCellEditSource* GetOriginalSource() { return NULL; }
 };
 
 class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
@@ -105,9 +103,6 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos meSplitPos;
     ScAccessibleCell* mpAccessibleCell;
-
-    // prevent the using of this method of the base class
-    ScCellEditSource* GetOriginalSource() { return NULL; }
 
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
@@ -183,9 +178,6 @@ private:
     ScPreviewViewForwarder* mpViewForwarder;
     ScPreviewShell* mpViewShell;
 
-    // prevent the using of this method of the base class
-    ScCellEditSource* GetOriginalSource() { return NULL; }
-
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
@@ -211,9 +203,6 @@ private:
     OUString        maText;
     bool            mbColHeader;
     bool            mbRowHeader;
-
-    // prevent the using of this method of the base class
-    ScCellEditSource* GetOriginalSource() { return NULL; }
 
     using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
