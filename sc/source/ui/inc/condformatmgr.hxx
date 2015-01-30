@@ -55,6 +55,8 @@ public:
 
     bool CondFormatsChanged() { return mbModified;}
 
+    ScConditionalFormat* GetCondFormatSelected();
+
 private:
     PushButton *m_pBtnAdd;
     PushButton *m_pBtnRemove;
