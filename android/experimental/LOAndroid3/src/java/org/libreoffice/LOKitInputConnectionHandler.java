@@ -20,7 +20,7 @@ public class LOKitInputConnectionHandler implements InputConnectionHandler {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         LOKitShell.sendKeyPressEvent(event);
-        return true;
+        return false;
     }
 
     @Override
