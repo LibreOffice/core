@@ -38,59 +38,25 @@ static const char aRootName[] = "Office.Math";
 #define SYMBOL_LIST         "SymbolList"
 #define FONT_FORMAT_LIST    "FontFormatList"
 
-
-
-
-static Sequence< OUString > lcl_GetFontPropertyNames()
+static const char * aFontPropNames[] =
 {
-    static const char * aPropNames[] =
-    {
-        "Name",
-        "CharSet",
-        "Family",
-        "Pitch",
-        "Weight",
-        "Italic",
-        0
-    };
+    "Name",
+    "CharSet",
+    "Family",
+    "Pitch",
+    "Weight",
+    "Italic",
+    0
+};
 
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( 6 );
-    OUString *pNames = aNames.getArray();
-    for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
-}
-
-
-
-
-static Sequence< OUString > lcl_GetSymbolPropertyNames()
+static const char * aSymbolPropNames[] =
 {
-    static const char * aPropNames[] =
-    {
-        "Char",
-        "Set",
-        "Predefined",
-        "FontFormatId",
-        0
-    };
-
-    const char** ppPropName = aPropNames;
-
-    Sequence< OUString > aNames( 4 );
-    OUString *pNames = aNames.getArray();
-    for( sal_Int32 i = 0; *ppPropName;  ++i, ++ppPropName )
-    {
-        pNames[i] = OUString::createFromAscii( *ppPropName );
-    }
-    return aNames;
-}
-
-
+    "Char",
+    "Set",
+    "Predefined",
+    "FontFormatId",
+    0
+};
 
 static const char * aMathPropNames[] =
 {
@@ -154,11 +120,8 @@ static const char * aFormatPropNames[] =
     "StandardFormat/FixedFont"
 };
 
-
-static Sequence< OUString > lcl_GetPropertyNames(
-        const char * aPropNames[], sal_uInt16 nCount )
+static Sequence< OUString > lcl_GetPropertyNames(const char *aPropNames[], sal_uInt16 nCount)
 {
-
     const char** ppPropName = aPropNames;
 
     Sequence< OUString > aNames( nCount );
@@ -169,18 +132,6 @@ static Sequence< OUString > lcl_GetPropertyNames(
     }
     return aNames;
 }
-
-static Sequence< OUString > GetFormatPropertyNames()
-{
-    return lcl_GetPropertyNames( aFormatPropNames, SAL_N_ELEMENTS( aFormatPropNames ) );
-}
-
-static Sequence< OUString > GetOtherPropertyNames()
-{
-    return lcl_GetPropertyNames( aMathPropNames, SAL_N_ELEMENTS( aMathPropNames ) );
-}
-
-
 
 struct SmCfgOther
 {
@@ -443,7 +394,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
                         const OUString &rSymbolName,
                         const OUString &rBaseNode ) const
 {
-    Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
+    Sequence< OUString > aNames = lcl_GetPropertyNames( aSymbolPropNames, SAL_N_ELEMENTS ( aSymbolPropNames ) );
     sal_Int32 nProps = aNames.getLength();
 
     OUString aDelim( "/" );
@@ -574,7 +525,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
 {
     sal_uIntPtr nCount = rNewSymbols.size();
 
-    Sequence< OUString > aNames = lcl_GetSymbolPropertyNames();
+    Sequence< OUString > aNames = lcl_GetPropertyNames( aSymbolPropNames, SAL_N_ELEMENTS( aSymbolPropNames ) );
     const OUString *pNames = aNames.getConstArray();
     sal_uIntPtr nSymbolProps = sal::static_int_cast< sal_uInt32 >(aNames.getLength());
 
@@ -669,7 +620,7 @@ void SmMathConfig::LoadFontFormatList()
 void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
         const OUString &rSymbolName, const OUString &rBaseNode ) const
 {
-    Sequence< OUString > aNames = lcl_GetFontPropertyNames();
+    Sequence< OUString > aNames = lcl_GetPropertyNames( aFontPropNames, SAL_N_ELEMENTS( aFontPropNames ) );
     sal_Int32 nProps = aNames.getLength();
 
     OUString aDelim( "/" );
@@ -739,7 +690,7 @@ void SmMathConfig::SaveFontFormatList()
     if (!rFntFmtList.IsModified())
         return;
 
-    Sequence< OUString > aNames = lcl_GetFontPropertyNames();
+    Sequence< OUString > aNames = lcl_GetPropertyNames( aFontPropNames, SAL_N_ELEMENTS( aFontPropNames ) );
     sal_Int32 nSymbolProps = aNames.getLength();
 
     size_t nCount = rFntFmtList.GetCount();
@@ -849,7 +800,7 @@ void SmMathConfig::LoadOther()
     if (!pOther)
         pOther = new SmCfgOther;
 
-    Sequence< OUString > aNames( GetOtherPropertyNames() );
+    Sequence< OUString > aNames( lcl_GetPropertyNames( aMathPropNames, SAL_N_ELEMENTS( aMathPropNames ) ) );
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( GetProperties( aNames ) );
@@ -913,7 +864,7 @@ void SmMathConfig::SaveOther()
     if (!pOther || !IsOtherModified())
         return;
 
-    const Sequence< OUString > aNames( GetOtherPropertyNames() );
+    const Sequence< OUString > aNames( lcl_GetPropertyNames( aMathPropNames, SAL_N_ELEMENTS( aMathPropNames ) ) );
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
@@ -953,7 +904,8 @@ void SmMathConfig::LoadFormat()
         pFormat = new SmFormat;
 
 
-    Sequence< OUString > aNames( GetFormatPropertyNames() );
+    Sequence< OUString > aNames( lcl_GetPropertyNames( aFormatPropNames, SAL_N_ELEMENTS( aFormatPropNames ) ) );
+
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( GetProperties( aNames ) );
@@ -1040,7 +992,7 @@ void SmMathConfig::SaveFormat()
     if (!pFormat || !IsFormatModified())
         return;
 
-    const Sequence< OUString > aNames( GetFormatPropertyNames() );
+    const Sequence< OUString > aNames( lcl_GetPropertyNames( aFormatPropNames, SAL_N_ELEMENTS( aFormatPropNames ) ) );
     sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
