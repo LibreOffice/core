@@ -243,22 +243,6 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         }
 
         if( aDefaultFormatName.getLength() == 0 )
-        {
-            nCount = rGraphicFilter.GetImportFormatCount();
-            for( sal_uInt16 i = 0; i < nCount; i++ )
-            {
-                const OUString aFilterMimeType( rGraphicFilter.GetImportFormatMediaType( i ) );
-                if( aMimeType == aFilterMimeType )
-                {
-                    aDefaultFormatName = rGraphicFilter.GetImportFormatName( i );
-                    xFilterManager->appendFilter( aDefaultFormatName,  rGraphicFilter.GetImportWildcard( i ) );
-                    aMimeTypeMap[ aDefaultFormatName ] = aFilterMimeType;
-                    break;
-                }
-            }
-        }
-
-        if( aDefaultFormatName.getLength() == 0 )
             aDefaultFormatName = "PNG - Portable Network Graphic";
 
         xFilterManager->setCurrentFilter( aDefaultFormatName );
