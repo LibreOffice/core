@@ -262,6 +262,7 @@ static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
     GdkRectangle aRet;
     gchar** ppCoordinates;
 
+    aRet.width = aRet.height = aRet.x = aRet.y = 0;
     ppCoordinates = g_strsplit(pPayload, ", ", 4);
     if (!*ppCoordinates)
         return aRet;
