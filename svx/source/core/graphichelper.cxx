@@ -255,10 +255,6 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
             OUString aExportMimeType( aMimeTypeMap[xFilterManager->getCurrentFilter()] );
 
             Reference< XInputStream > xGraphStream;
-            if( aMimeType == aExportMimeType )
-            {
-                xShapeSet->getPropertyValue("GraphicStream") >>= xGraphStream;
-            }
 
             if( xGraphStream.is() )
             {
