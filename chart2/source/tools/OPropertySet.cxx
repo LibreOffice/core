@@ -74,11 +74,6 @@ void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
 OPropertySet::~OPropertySet()
 {}
 
-void OPropertySet::disposePropertySet()
-{
-    m_pImplProperties.reset( 0 );
-}
-
 Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException, std::exception)
 {

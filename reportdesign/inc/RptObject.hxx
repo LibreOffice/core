@@ -161,7 +161,6 @@ public:
 
     virtual ~OCustomShape();
 
-    sal_Int32   GetStep() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() SAL_OVERRIDE;
@@ -208,7 +207,6 @@ public:
 
     virtual ~OOle2Obj();
 
-    sal_Int32   GetStep() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent() SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape() SAL_OVERRIDE;
@@ -254,7 +252,6 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    sal_Int32   GetStep() const;
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     /** creates the m_xMediator when it doesn't already exist.

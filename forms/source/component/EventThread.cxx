@@ -145,14 +145,6 @@ void OComponentEventThread::implTerminated( )
     release( );
 }
 
-void SAL_CALL OComponentEventThread::kill()
-{
-    OComponentEventThread_TBASE::terminate();
-    OComponentEventThread_TBASE::join();
-
-    implTerminated( );
-}
-
 void SAL_CALL OComponentEventThread::onTerminated()
 {
     OComponentEventThread_TBASE::onTerminated();

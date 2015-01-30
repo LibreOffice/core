@@ -105,9 +105,6 @@ namespace rptui
         virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
 
-        // set the view readonly or not
-        void setReadOnly(bool _bReadOnly);
-
         virtual void initialize() SAL_OVERRIDE;
 
         inline OReportController&   getController() const { return m_rReportController; }

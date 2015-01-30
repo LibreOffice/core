@@ -264,11 +264,6 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
 
 }
 
-// set the view readonly or not
-void ODesignView::setReadOnly(bool /*_bReadOnly*/)
-{
-}
-
 IMPL_LINK_NOARG(ODesignView, MarkTimeout)
 {
     if ( m_pPropWin && m_pPropWin->IsVisible() )

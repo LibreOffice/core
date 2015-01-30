@@ -143,17 +143,6 @@ void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
 {
 }
 
-void SAL_CALL FilterDetectDocHandler::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
-    throw (SAXException, RuntimeException)
-{
-}
-
-void SAL_CALL FilterDetectDocHandler::processingInstruction(
-    const OUString& /*aTarget*/, const OUString& /*aData*/ )
-    throw (SAXException, RuntimeException)
-{
-}
-
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );

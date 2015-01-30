@@ -507,14 +507,6 @@ void OCustomShape::SetSnapRectImpl(const Rectangle& _rRect)
     SetSnapRect( _rRect );
 }
 
-sal_Int32 OCustomShape::GetStep() const
-{
-    // get step property
-    sal_Int32 nStep = 0;
-    OSL_FAIL("Who called me!");
-    return nStep;
-}
-
 void OCustomShape::NbcMove( const Size& rSize )
 {
     if ( m_bIsListening )
@@ -690,15 +682,6 @@ void OUnoObject::SetSnapRectImpl(const Rectangle& _rRect)
 {
     SetSnapRect( _rRect );
 }
-
-sal_Int32 OUnoObject::GetStep() const
-{
-    // get step property
-    sal_Int32 nStep = 0;
-    OSL_FAIL("Who called me!");
-    return nStep;
-}
-
 
 void OUnoObject::NbcMove( const Size& rSize )
 {
@@ -986,15 +969,6 @@ void OOle2Obj::SetSnapRectImpl(const Rectangle& _rRect)
 {
     SetSnapRect( _rRect );
 }
-
-sal_Int32 OOle2Obj::GetStep() const
-{
-    // get step property
-    sal_Int32 nStep = 0;
-    OSL_FAIL("Who called me!");
-    return nStep;
-}
-
 
 void OOle2Obj::NbcMove( const Size& rSize )
 {

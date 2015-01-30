@@ -326,10 +326,6 @@ void Menu::ImplSelectWithStart( Menu* pSMenu )
 }
 #endif
 
-void Menu::RequestHelp( const HelpEvent& )
-{
-}
-
 void Menu::ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos )
 {
     ImplMenuDelData aDelData( this );

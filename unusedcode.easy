@@ -7,7 +7,6 @@ Interceptor::removeEventListener(com::sun::star::uno::Reference<com::sun::star::
 LineListBox::Clear()
 LineListBox::InsertEntry(rtl::OUString const&, int)
 LineListBox::RemoveEntry(int)
-Menu::RequestHelp(HelpEvent const&)
 OCommonEmbeddedObject::getImplementationId()
 OOoEmbeddedObjectFactory::createInstanceLinkUserInit(com::sun::star::uno::Sequence<signed char> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::embed::XStorage> const&, rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
@@ -86,9 +85,6 @@ SvpSalInstance::PostedEventsInQueue()
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxColorTabPage::GetPropertyList(XPropertyListType)
 SvxColumnItem::GetValueText() const
-SvxDoubleItem::GetMax() const
-SvxDoubleItem::GetMin() const
-SvxDoubleItem::GetUnit() const
 SvxDummyTextSource::SetNotifyHdl(Link const&)
 SvxFontListBox::GetSelectEntry() const
 SvxFontWorkDialog::Zoom()
@@ -101,7 +97,6 @@ SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
 SvxPagePosSizeItem::GetValueText() const
 SvxRotateModeItem::GetValueText(unsigned short) const
-SwSelPaintRects::Paint(Rectangle const&)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()
@@ -265,19 +260,9 @@ dbtools::FormattedColumnValue::getColumnUpdate() const
 dbtools::FormattedColumnValue::getFieldType() const
 dbtools::FormattedColumnValue::getFormatKey() const
 dp_registry::backend::RegisteredDb::getEntry(rtl::OUString const&)
-frm::OComponentEventThread::kill()
 oglcanvas::CanvasHelper::flush() const
 oglcanvas::TextLayout::draw(com::sun::star::rendering::ViewState const&, com::sun::star::rendering::RenderState const&, com::sun::star::uno::Reference<com::sun::star::rendering::XGraphicDevice> const&) const
-oox::core::FilterDetectDocHandler::ignorableWhitespace(rtl::OUString const&)
-oox::core::FilterDetectDocHandler::processingInstruction(rtl::OUString const&, rtl::OUString const&)
-oox::docprop::OOXMLDocPropHandler::ignorableWhitespace(rtl::OUString const&)
-oox::docprop::OOXMLDocPropHandler::processingInstruction(rtl::OUString const&, rtl::OUString const&)
 oox::drawingml::TextListStyle::dump() const
-property::OPropertySet::disposePropertySet()
-rptui::OCustomShape::GetStep() const
-rptui::ODesignView::setReadOnly(bool)
-rptui::OOle2Obj::GetStep() const
-rptui::OUnoObject::GetStep() const
 sc::CLBuildKernelThread::CLBuildKernelThread()
 sc::CLBuildKernelThread::consume()
 sc::CLBuildKernelThread::finish()

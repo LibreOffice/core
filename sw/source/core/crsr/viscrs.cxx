@@ -448,11 +448,6 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     }
 }
 
-void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
-{
-    // nothing to do with overlays
-}
-
 // check current MapMode of the shell and set possibly the static members.
 // Optional set the parameters pX, pY
 void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,

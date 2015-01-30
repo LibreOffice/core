@@ -217,7 +217,6 @@ public:
     void                Deactivate();
     virtual void        Highlight();
     virtual void        Select();
-    void                RequestHelp( const HelpEvent& rHEvt );
 
     void                InsertItem( sal_uInt16 nItemId, const OUString& rStr,
                                     MenuItemBits nItemBits = MenuItemBits::NONE,

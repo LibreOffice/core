@@ -652,16 +652,6 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     }
 }
 
-void SAL_CALL OOXMLDocPropHandler::ignorableWhitespace( const OUString& )
-    throw (xml::sax::SAXException, uno::RuntimeException)
-{
-}
-
-void SAL_CALL OOXMLDocPropHandler::processingInstruction( const OUString&, const OUString& )
-    throw (xml::sax::SAXException, uno::RuntimeException)
-{
-}
-
 } // namespace docprop
 } // namespace oox
 
