@@ -1909,6 +1909,35 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_ICONSET:
         case SID_OPENDLG_CONDDATE:
             {
+                sal_uInt32  nIndex      = sal_uInt32(-1);
+                sal_uInt8   nType       = 0;
+                bool        bManaged    = false;
+
+                // Get the pool item stored it by Conditional Format Manager Dialog.
+                const SfxPoolItem* pItem = NULL;
+                sal_uInt32 nItems(pTabViewShell->GetPool().GetItemCount2( SCITEM_STRING ));
+                for( sal_uInt32 nIter = 0; nIter < nItems; ++nIter )
+                {
+                    if( NULL != (pItem = pTabViewShell->GetPool().GetItem2( SCITEM_STRING, nIter ) ) )
+                    {
+                        if ( ScCondFormatDlg::ParseXmlString(
+                                static_cast<const SfxStringItem*>(pItem)->GetValue(),
+                                nIndex, nType, bManaged))
+                            break;
+                    }
+                }
+
+                // Check if the Conditional Manager Dialog is editing or adding
+                // conditional format item.
+                if ( bManaged )
+                {
+                    sal_uInt16 nId = ScCondFormatDlgWrapper::GetChildWindowId();
+                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                    SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                    pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+                    break;
+                }
 
                 ScRangeList aRangeList;
                 ScViewData* pData = GetViewData();
@@ -1928,11 +1957,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     aRangeList.push_back(pRange);
                 }
 
-                sal_Int32 nKey = 0;
+                const ScConditionalFormat* pCondFormat = NULL;
                 const ScPatternAttr* pPattern = pDoc->GetPattern(aPos.Col(), aPos.Row(), aPos.Tab());
                 const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
                 bool bContainsCondFormat = !rCondFormats.empty();
-                ScopedVclPtr<ScCondFormatDlg> pCondFormatDlg;
+                bool bCondFormatDlg = false;
                 if(bContainsCondFormat)
                 {
                     bool bContainsExistingCondFormat = false;
@@ -1941,7 +1970,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                             itr != itrEnd; ++itr)
                     {
                         // check if at least one existing conditional format has the same range
-                        const ScConditionalFormat* pCondFormat = pList->GetFormat(*itr);
+                        pCondFormat = pList->GetFormat(*itr);
                         if(!pCondFormat)
                             continue;
 
@@ -1950,16 +1979,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         if(rCondFormatRange == aRangeList)
                         {
                             // found a matching range, edit this conditional format
-                            nKey = pCondFormat->GetKey();
-                            pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                            bCondFormatDlg = true;
                             break;
                         }
                     }
 
                     // if not found a conditional format ask whether we should edit one of the existing
                     // or should create a new overlapping conditional format
-
-                    if(!pCondFormatDlg && bContainsExistingCondFormat)
+                    if(!bCondFormatDlg && bContainsExistingCondFormat)
                     {
                         ScopedVclPtrInstance<QueryBox> aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
                                ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
@@ -1972,22 +1999,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // otherwise open the manage cond format dlg
                             if(rCondFormats.size() == 1)
                             {
-                                const ScConditionalFormat* pCondFormat = pList->GetFormat(rCondFormats[0]);
+                                pCondFormat = pList->GetFormat(rCondFormats[0]);
                                 assert(pCondFormat);
-                                const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
-                                nKey = pCondFormat->GetKey();
-                                pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE ) );
+                                bCondFormatDlg = true;
                             }
                             else
                             {
-                                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
-                                if(pDlg->Execute() == RET_OK && pDlg->CondFormatsChanged())
-                                {
-                                    ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
-                                    pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
-                                }
-                                // we need step out here because we don't want to open the normal dialog
+                                // Queue message to open Conditional Format Manager Dialog.
+                                GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
                                 break;
                             }
                         }
@@ -1996,51 +2015,50 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             // define an overlapping conditional format
                             // does not need to be handled here
                         }
-
                     }
                 }
 
-                if(!pCondFormatDlg)
+                condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
+                switch(nSlot)
                 {
-                    condformat::dialog::ScCondFormatDialogType eType = condformat::dialog::NONE;
-                    switch(nSlot)
-                    {
-                        case SID_OPENDLG_CONDFRMT:
-                            eType = condformat::dialog::CONDITION;
-                            break;
-                        case SID_OPENDLG_COLORSCALE:
-                            eType = condformat::dialog::COLORSCALE;
-                            break;
-                        case SID_OPENDLG_DATABAR:
-                            eType = condformat::dialog::DATABAR;
-                            break;
-                        case SID_OPENDLG_ICONSET:
-                            eType = condformat::dialog::ICONSET;
-                            break;
-                        case SID_OPENDLG_CONDDATE:
-                            eType = condformat::dialog::DATE;
-                            break;
-                        default:
-                            assert(false);
-                            break;
-                    }
-                    pCondFormatDlg.reset( VclPtr<ScCondFormatDlg>::Create( pTabViewShell->GetDialogParent(), pDoc, nullptr, aRangeList, aRangeList.GetTopLeftCorner(), eType ) );
+                    case SID_OPENDLG_CONDFRMT:
+                        eType = condformat::dialog::CONDITION;
+                        break;
+                    case SID_OPENDLG_COLORSCALE:
+                        eType = condformat::dialog::COLORSCALE;
+                        break;
+                    case SID_OPENDLG_DATABAR:
+                        eType = condformat::dialog::DATABAR;
+                        break;
+                    case SID_OPENDLG_ICONSET:
+                        eType = condformat::dialog::ICONSET;
+                        break;
+                    case SID_OPENDLG_CONDDATE:
+                        eType = condformat::dialog::DATE;
+                        break;
+                    default:
+                        assert(false);
+                        break;
                 }
 
-                sal_uInt16 nId = 1;
-                pScMod->SetRefDialog( nId, true );
 
-                if( pCondFormatDlg->Execute() == RET_OK )
+                if(bCondFormatDlg || !bContainsCondFormat)
                 {
-                    ScConditionalFormat* pFormat = pCondFormatDlg->GetConditionalFormat();
-                    if(pFormat)
-                        pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nKey, pFormat, aPos.Tab(), pFormat->GetRange());
-                    else
-                        pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(nKey, NULL, aPos.Tab(), ScRangeList());
+                    // Put the xml string parameter to initialize the
+                    // Conditional Format Dialog.
+                    pTabViewShell->GetPool().Put( SfxStringItem( SCITEM_STRING,
+                                                      ScCondFormatDlg::GenerateXmlString(
+                                                        pCondFormat ? pCondFormat->GetKey() : sal_uInt32(-1),
+                                                        sal_uInt8(eType),
+                                                        false
+                                                      ) ) );
+
+                    sal_uInt16      nId      = ScCondFormatDlgWrapper::GetChildWindowId();
+                    SfxViewFrame*   pViewFrm = pTabViewShell->GetViewFrame();
+                    SfxChildWindow* pWnd     = pViewFrm->GetChildWindow( nId );
+
+                    pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
                 }
-
-                pScMod->SetRefDialog( nId, false );
-
             }
             break;
 
@@ -2396,11 +2414,42 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
-                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
-                if(pDlg->Execute() == RET_OK && pDlg->CondFormatsChanged())
+                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg(
+                    pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
+                short nRet = pDlg->Execute();
+                if(nRet == RET_OK && pDlg->CondFormatsChanged())
                 {
                     ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
                     pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
+                }
+                else if(nRet == DLG_RET_ADD)
+                {
+                    // Put the xml string parameter to initialize the
+                    // Conditional Format Dialog. ( add new )
+                    pTabViewShell->GetPool().Put( SfxStringItem( SCITEM_STRING,
+                                                      ScCondFormatDlg::GenerateXmlString(
+                                                        sal_uInt32(-1),
+                                                        sal_uInt8(condformat::dialog::ScCondFormatDialogType::CONDITION),
+                                                        true
+                                                      ) ) );
+
+                    // Queue message to open Conditional Format Dialog
+                    GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
+                }
+                else if (nRet == DLG_RET_EDIT)
+                {
+                    ScConditionalFormat* pFormat = pDlg->GetCondFormatSelected();
+                    // Put the xml string parameter to initialize the
+                    // Conditional Format Dialog. ( edit selected conditional format )
+                    pTabViewShell->GetPool().Put( SfxStringItem( SCITEM_STRING,
+                                                      ScCondFormatDlg::GenerateXmlString(
+                                                        pFormat ? pFormat->GetKey() : sal_uInt32(-1),
+                                                        sal_uInt8(condformat::dialog::ScCondFormatDialogType::CONDITION),
+                                                        true
+                                                      ) ) );
+
+                    // Queue message to open Conditional Format Dialog
+                    GetViewData()->GetDispatcher().Execute( SID_OPENDLG_CONDFRMT, SfxCallMode::ASYNCHRON );
                 }
             }
             break;
