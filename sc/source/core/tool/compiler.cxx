@@ -75,6 +75,144 @@ using namespace formula;
 using namespace ::com::sun::star;
 using ::std::vector;
 
+std::unordered_map< formula::FormulaGrammar::AddressConvention, sal_uLong*, std::hash<int> > ConventionCache::maCharTables;
+
+sal_uLong* ConventionCache::GetConventionCharTable( formula::FormulaGrammar::AddressConvention eConv )
+{
+    std::unordered_map< formula::FormulaGrammar::AddressConvention, sal_uLong*, std::hash<int> >::iterator result = ConventionCache::maCharTables.find(eConv);
+
+    if ( result == maCharTables.end() )
+    {
+        createConventionCharTable(eConv);
+        return maCharTables[eConv];
+    }
+    else
+    {
+        return result->second;
+    }
+}
+
+void ConventionCache::createConventionCharTable( formula::FormulaGrammar::AddressConvention eConv )
+{
+            sal_uLong *t = new sal_uLong[128];
+
+            for (int i = 0; i < 128; i++)
+                t[i] = SC_COMPILER_C_ILLEGAL;
+
+/*   */     t[32] = SC_COMPILER_C_CHAR_DONTCARE | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* ! */     t[33] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+            if (formula::FormulaGrammar::CONV_ODF == eConv)
+/* ! */         t[33] |= SC_COMPILER_C_ODF_LABEL_OP;
+/* " */     t[34] = SC_COMPILER_C_CHAR_STRING | SC_COMPILER_C_STRING_SEP;
+/* # */     t[35] = SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_CHAR_ERRCONST;
+/* $ */     t[36] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT;
+            if (formula::FormulaGrammar::CONV_ODF == eConv)
+/* $ */         t[36] |= SC_COMPILER_C_ODF_NAME_MARKER;
+/* % */     t[37] = SC_COMPILER_C_VALUE;
+/* & */     t[38] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* ' */     t[39] = SC_COMPILER_C_NAME_SEP;
+/* ( */     t[40] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* ) */     t[41] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* * */     t[42] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* + */     t[43] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
+/* , */     t[44] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE;
+/* - */     t[45] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_SIGN;
+/* . */     t[46] = SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_VALUE | SC_COMPILER_C_IDENT | SC_COMPILER_C_NAME;
+/* / */     t[47] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+
+            for (int i = 48; i < 58; i++)
+/* 0-9 */       t[i] = SC_COMPILER_C_CHAR_VALUE | SC_COMPILER_C_WORD | SC_COMPILER_C_VALUE | SC_COMPILER_C_VALUE_EXP | SC_COMPILER_C_VALUE_VALUE | SC_COMPILER_C_IDENT | SC_COMPILER_C_NAME;
+
+/* : */     t[58] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD;
+/* ; */     t[59] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* < */     t[60] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* = */     t[61] = SC_COMPILER_C_CHAR | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* > */     t[62] = SC_COMPILER_C_CHAR_BOOL | SC_COMPILER_C_BOOL | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* ? */     t[63] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_NAME;
+/* @ */     // FREE
+
+            for (int i = 65; i < 91; i++)
+/* A-Z */       t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
+
+            if (formula::FormulaGrammar::CONV_ODF == eConv)
+            {
+/* [ */         t[91] = SC_COMPILER_C_ODF_LBRACKET;
+/* \ */         // FREE
+/* ] */         t[93] = SC_COMPILER_C_ODF_RBRACKET;
+            }
+            else
+            {
+/* [ */     // FREE
+/* \ */     // FREE
+/* ] */     // FREE
+            }
+
+/* ^ */     t[94] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+/* _ */     t[95] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
+/* ` */     // FREE
+
+            for (int i = 97; i < 123; i++)
+/* a-z */       t[i] = SC_COMPILER_C_CHAR_WORD | SC_COMPILER_C_WORD | SC_COMPILER_C_CHAR_IDENT | SC_COMPILER_C_IDENT | SC_COMPILER_C_CHAR_NAME | SC_COMPILER_C_NAME;
+
+/* { */     t[123] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array open
+/* | */     t[124] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array row sep (Should be OOo specific)
+/* } */     t[125] = SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP; // array close
+/* ~ */     t[126] = SC_COMPILER_C_CHAR;        // OOo specific
+/* 127 */   // FREE
+
+            if( formula::FormulaGrammar::CONV_XL_A1 == eConv || formula::FormulaGrammar::CONV_XL_R1C1 == eConv || FormulaGrammar::CONV_XL_OOX == eConv )
+            {
+/*   */         t[32] |=   SC_COMPILER_C_WORD;
+/* ! */         t[33] |=   SC_COMPILER_C_IDENT | SC_COMPILER_C_WORD;
+/* " */         t[34] |=   SC_COMPILER_C_WORD;
+/* # */         t[35] &= (~SC_COMPILER_C_WORD_SEP);
+/* # */         t[35] |=   SC_COMPILER_C_WORD;
+/* % */         t[37] |=   SC_COMPILER_C_WORD;
+/* ' */         t[39] |=   SC_COMPILER_C_WORD;
+
+/* % */         t[37] |=   SC_COMPILER_C_WORD;
+/* & */         t[38] |=   SC_COMPILER_C_WORD;
+/* ' */         t[39] |=   SC_COMPILER_C_WORD;
+/* ( */         t[40] |=   SC_COMPILER_C_WORD;
+/* ) */         t[41] |=   SC_COMPILER_C_WORD;
+/* * */         t[42] |=   SC_COMPILER_C_WORD;
+/* + */         t[43] |=   SC_COMPILER_C_WORD;
+#if 0 /* this really needs to be locale specific. */
+/* , */         t[44]  =   SC_COMPILER_C_CHAR | SC_COMPILER_C_WORD_SEP | SC_COMPILER_C_VALUE_SEP;
+#else
+/* , */         t[44] |=   SC_COMPILER_C_WORD;
+#endif
+/* - */         t[45] |=   SC_COMPILER_C_WORD;
+
+/* ; */         t[59] |=   SC_COMPILER_C_WORD;
+/* < */         t[60] |=   SC_COMPILER_C_WORD;
+/* = */         t[61] |=   SC_COMPILER_C_WORD;
+/* > */         t[62] |=   SC_COMPILER_C_WORD;
+/* ? */         // question really is not permitted in sheet name
+/* @ */         t[64] |=   SC_COMPILER_C_WORD;
+/* [ */         t[91] |=   SC_COMPILER_C_WORD;
+/* ] */         t[93] |=   SC_COMPILER_C_WORD;
+/* { */         t[123]|=   SC_COMPILER_C_WORD;
+/* | */         t[124]|=   SC_COMPILER_C_WORD;
+/* } */         t[125]|=   SC_COMPILER_C_WORD;
+/* ~ */         t[126]|=   SC_COMPILER_C_WORD;
+
+                if( FormulaGrammar::CONV_XL_R1C1 == eConv )
+                {
+/* [ */             t[91] |= SC_COMPILER_C_IDENT;
+/* ] */             t[93] |= SC_COMPILER_C_IDENT;
+                }
+
+                if( FormulaGrammar::CONV_XL_OOX == eConv )
+                {
+/* [ */             t[91] |= SC_COMPILER_C_CHAR_IDENT;
+/* ] */             t[93] |= SC_COMPILER_C_IDENT;
+                }
+            }
+
+            maCharTables.insert( {{eConv, t}} );
+}
+
 CharClass*                          ScCompiler::pCharClassEnglish = NULL;
 const ScCompiler::Convention*       ScCompiler::pConventions[ ]   = { NULL, NULL, NULL, NULL, NULL, NULL };
 

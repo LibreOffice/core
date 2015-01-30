@@ -32,6 +32,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/sheet/ExternalLinkInfo.hpp>
 #include <vector>
+#include <map>
 
 #include <formula/FormulaCompiler.hxx>
 
@@ -205,6 +206,17 @@ public:
                                 { return nLen * sizeof(sal_Unicode); }
     static size_t           GetStrLenBytes( const sal_Unicode* pStr )
                                 { return GetStrLenBytes( GetStrLen( pStr ) ); }
+};
+
+class ConventionCache
+{
+public:
+    static sal_uLong*       GetConventionCharTable( formula::FormulaGrammar::AddressConvention eConv );
+
+private:
+    static void             createConventionCharTable( formula::FormulaGrammar::AddressConvention eConv );
+
+    static std::unordered_map< formula::FormulaGrammar::AddressConvention, sal_uLong*, std::hash<int> > maCharTables;
 };
 
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
