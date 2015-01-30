@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 public class TextSelectionHandle extends ImageView implements View.OnTouchListener {
     private static final String LOGTAG = "GeckoTextSelectionHandle";
 
-    private enum HandleType { START, MIDDLE, END };
+    public enum HandleType { START, MIDDLE, END };
 
     private final HandleType mHandleType;
     private final int mWidth;
@@ -33,11 +33,15 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
 
     private int mLeft;
     private int mTop;
+    private boolean mIsRTL;
     private PointF mGeckoPoint;
     private int mTouchStartX;
     private int mTouchStartY;
 
     private RelativeLayout.LayoutParams mLayoutParams;
+
+    private static final int IMAGE_LEVEL_LTR = 0;
+    private static final int IMAGE_LEVEL_RTL = 1;
 
     public TextSelectionHandle(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -53,6 +57,7 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
         else
             mHandleType = HandleType.END;
 
+        mIsRTL = false;
         mGeckoPoint = new PointF(0.0f, 0.0f);
 
         mWidth = getResources().getDimensionPixelSize(R.dimen.text_selection_handle_width);
@@ -99,13 +104,7 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
             return;
         }
         // Send x coordinate on the right side of the start handle, left side of the end handle.
-        float left = (float) mLeft;
-        if (mHandleType.equals(HandleType.START))
-            left +=  mWidth - mShadow;
-        else if (mHandleType.equals(HandleType.MIDDLE))
-            left +=  (float) ((mWidth - mShadow) / 2);
-        else
-            left += mShadow;
+        float left = (float) mLeft + adjustLeftForHandle();
 
         PointF geckoPoint = new PointF(left, (float) mTop);
         geckoPoint = layerView.getLayerClient().convertViewPointToLayerPoint(geckoPoint);
@@ -123,8 +122,7 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
         setLayoutPosition();
     }
 
-    void positionFromGecko(int left, int top) {
-        Log.i(LOGTAG, "positionFromGecko: " + left + " " + top);
+    void positionFromGecko(int left, int top, boolean rtl) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
             Log.e(LOGTAG, "Can't position handle because layerView is null");
@@ -132,25 +130,32 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
         }
 
         mGeckoPoint = new PointF((float) left, (float) top);
+        if (mIsRTL != rtl) {
+            mIsRTL = rtl;
+            setImageLevel(mIsRTL ? IMAGE_LEVEL_RTL : IMAGE_LEVEL_LTR);
+        }
+
         ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
     void repositionWithViewport(float x, float y, float zoom) {
         PointF viewPoint = new PointF((mGeckoPoint.x * zoom) - x,
-                (mGeckoPoint.y * zoom) - y);
+                                      (mGeckoPoint.y * zoom) - y);
 
-        mLeft = Math.round(viewPoint.x);
-        if (mHandleType.equals(HandleType.START))
-            mLeft -=  mWidth - mShadow;
-        else if (mHandleType.equals(HandleType.MIDDLE))
-            mLeft -=  (float) ((mWidth - mShadow) / 2);
-        else
-            mLeft -= mShadow;
-
+        mLeft = Math.round(viewPoint.x) - (int) adjustLeftForHandle();
         mTop = Math.round(viewPoint.y);
 
         setLayoutPosition();
+    }
+
+    private float adjustLeftForHandle() {
+        if (mHandleType.equals(HandleType.START))
+            return mIsRTL ? mShadow : mWidth - mShadow;
+        else if (mHandleType.equals(HandleType.MIDDLE))
+            return (float) ((mWidth - mShadow) / 2);
+        else
+            return mIsRTL ? mWidth - mShadow : mShadow;
     }
 
     private void setLayoutPosition() {

@@ -11,6 +11,7 @@ import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
 import org.mozilla.gecko.TextSelection;
+import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -390,9 +391,10 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                 Log.i(LOGTAG, "Invalidate visible cursor: " + payload);
                 RectF rect = convertCallbackMessageStringToRectF(payload);
                 if (rect != null) {
+                    RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
                     TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-                    textSelection.positionHandle("MIDDLE", new RectF(rect.right,rect.bottom, rect.right, rect.bottom));
-                    textSelection.showHandle("MIDDLE");
+                    textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, underSelection);
+                    textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
                 }
                 break;
             }

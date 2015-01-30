@@ -16,6 +16,8 @@ import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;
 
+import static org.mozilla.gecko.TextSelectionHandle.HandleType.*;
+
 public class TextSelection extends Layer {
     private static final String LOGTAG = "GeckoTextSelection";
 
@@ -43,84 +45,6 @@ public class TextSelection extends Layer {
     void destroy() {
     }
 
-    public void handleMessage(String event, JSONObject message) {
-        try {
-            if (event.equals("TextSelection:ShowHandles")) {
-                final JSONArray handles = message.getJSONArray("handles");
-                LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            for (int i=0; i < handles.length(); i++) {
-                                String handle = handles.getString(i);
-
-                                if (handle.equals("START"))
-                                    mStartHandle.setVisibility(View.VISIBLE);
-                                else if (handle.equals("MIDDLE"))
-                                    mMiddleHandle.setVisibility(View.VISIBLE);
-                                else
-                                    mEndHandle.setVisibility(View.VISIBLE);
-                            }
-
-                            mViewLeft = 0.0f;
-                            mViewTop = 0.0f;
-                            mViewZoom = 0.0f;
-                            LayerView layerView = LOKitShell.getLayerView();
-                            if (layerView != null) {
-                                layerView.addLayer(TextSelection.this);
-                            }
-                        } catch(Exception e) {}
-                    }
-                });
-            } else if (event.equals("TextSelection:HideHandles")) {
-                final JSONArray handles = message.getJSONArray("handles");
-                LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            LayerView layerView = LOKitShell.getLayerView();
-                            if (layerView != null) {
-                                layerView.removeLayer(TextSelection.this);
-                            }
-
-                            for (int i=0; i < handles.length(); i++) {
-                                String handle = handles.getString(i);
-                                if (handle.equals("START"))
-                                    mStartHandle.setVisibility(View.GONE);
-                                else if (handle.equals("MIDDLE"))
-                                    mMiddleHandle.setVisibility(View.GONE);
-                                else
-                                    mEndHandle.setVisibility(View.GONE);
-                            }
-
-                        } catch(Exception e) {}
-                    }
-                });
-            } else if (event.equals("TextSelection:PositionHandles")) {
-                final JSONArray positions = message.getJSONArray("positions");
-                LibreOfficeMainActivity.mAppContext.mMainHandler.post(new Runnable() {
-                    public void run() {
-                        try {
-                            for (int i=0; i < positions.length(); i++) {
-                                JSONObject position = positions.getJSONObject(i);
-                                String handle = position.getString("handle");
-                                int left = position.getInt("left");
-                                int top = position.getInt("top");
-
-                                if (handle.equals("START"))
-                                    mStartHandle.positionFromGecko(left, top);
-                                else if (handle.equals("MIDDLE"))
-                                    mMiddleHandle.positionFromGecko(left, top);
-                                else
-                                    mEndHandle.positionFromGecko(left, top);
-                            }
-                        } catch (Exception e) { }
-                    }
-                });
-            }
-        } catch (Exception e) {
-            Log.e(LOGTAG, "Exception handling message \"" + event + "\":", e);
-        }
-    }
-
     @Override
     public void draw(final RenderContext context) {
         // cache the relevant values from the context and bail out if they are the same. we do this
@@ -144,47 +68,49 @@ public class TextSelection extends Layer {
         });
     }
 
-    public void showHandle(final String handleType) {
+    public void showHandle(final TextSelectionHandle.HandleType handleType) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                try {
-                    TextSelectionHandle handle;
-                    if (handleType.equals("START"))
-                        handle = mStartHandle;
-                    else if (handleType.equals("MIDDLE"))
-                        handle = mMiddleHandle;
-                    else
-                        handle = mEndHandle;
+                TextSelectionHandle handle = getHandle(handleType);
 
-                    handle.setVisibility(View.VISIBLE);
+                handle.setVisibility(View.VISIBLE);
 
-                    mViewLeft = 0.0f;
-                    mViewTop = 0.0f;
-                    mViewZoom = 0.0f;
-                    LayerView layerView = LOKitShell.getLayerView();
-                    if (layerView != null) {
-                        layerView.addLayer(TextSelection.this);
-                    }
-                } catch (Exception e) {
+                mViewLeft = 0.0f;
+                mViewTop = 0.0f;
+                mViewZoom = 0.0f;
+                LayerView layerView = LOKitShell.getLayerView();
+                if (layerView != null) {
+                    layerView.addLayer(TextSelection.this);
                 }
             }
         });
     }
 
-    public void positionHandle(final String handleType, final RectF position) {
+    private TextSelectionHandle getHandle(TextSelectionHandle.HandleType handleType) {
+        if (handleType == START) {
+            return mStartHandle;
+        } else if (handleType == MIDDLE) {
+            return mMiddleHandle;
+        } else {
+            return mEndHandle;
+        }
+    }
+
+    public void hideHandle(final TextSelectionHandle.HandleType handleType) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                try {
-                    TextSelectionHandle handle;
-                    if (handleType.equals("START"))
-                        handle = mStartHandle;
-                    else if (handleType.equals("MIDDLE"))
-                        handle = mMiddleHandle;
-                    else
-                        handle = mEndHandle;
+                TextSelectionHandle handle = getHandle(handleType);
+                handle.setVisibility(View.GONE);
+            }
+        });
+    }
 
-                    handle.positionFromGecko((int) position.left, (int) position.top);
-                } catch (Exception e) { }
+
+    public void positionHandle(final TextSelectionHandle.HandleType handleType, final RectF position) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                TextSelectionHandle handle = getHandle(handleType);
+                handle.positionFromGecko((int) position.left, (int) position.top, false);
             }
         });
     }
