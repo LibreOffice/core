@@ -177,6 +177,7 @@ class FieldDeletionModify : public SwModify
     public:
         FieldDeletionModify(AbstractFldInputDlg* pInputFieldDlg, SwField* pFld)
             : mpInputFieldDlg(pInputFieldDlg)
+            , mpFmtFld(NULL)
         {
             SwInputField *const pInputField(dynamic_cast<SwInputField*>(pFld));
             SwSetExpField *const pSetExpFld(dynamic_cast<SwSetExpField*>(pFld));
