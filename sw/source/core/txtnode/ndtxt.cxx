@@ -855,6 +855,8 @@ void SwTxtNode::Update(
     {
         if ( bNegative )
         {
+            std::vector<SwTxtInputFld*> aTxtInputFlds;
+
             const sal_Int32 nChangeEnd = nChangePos + nChangeLen;
             for ( size_t n = 0; n < m_pSwpHints->Count(); ++n )
             {
@@ -897,10 +899,15 @@ void SwTxtNode::Update(
                 {
                     SwTxtInputFld* pTxtInputFld = dynamic_cast<SwTxtInputFld*>(pHint);
                     if ( pTxtInputFld )
-                    {
-                        pTxtInputFld->UpdateFieldContent();
-                    }
+                        aTxtInputFlds.push_back(pTxtInputFld);
                 }
+            }
+
+            //wait until all the attribute positions are correct
+            //before updating the field contents
+            for (SwTxtInputFld* pTxtInputFld : aTxtInputFlds)
+            {
+                pTxtInputFld->UpdateFieldContent();
             }
 
             m_pSwpHints->MergePortions( *this );
@@ -911,6 +918,7 @@ void SwTxtNode::Update(
             bool bResort = false;
             bool bMergePortionsNeeded = false;
             const int coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN;
+            std::vector<SwTxtInputFld*> aTxtInputFlds;
 
             bool aDontExp[ coArrSz ];
             memset( &aDontExp, 0, coArrSz * sizeof(bool) );
@@ -1002,11 +1010,17 @@ void SwTxtNode::Update(
                 {
                     SwTxtInputFld* pTxtInputFld = dynamic_cast<SwTxtInputFld*>(pHint);
                     if ( pTxtInputFld )
-                    {
-                        pTxtInputFld->UpdateFieldContent();
-                    }
+                        aTxtInputFlds.push_back(pTxtInputFld);
                 }
             }
+
+            //wait until all the attribute positions are correct
+            //before updating the field contents
+            for (SwTxtInputFld* pTxtInputFld : aTxtInputFlds)
+            {
+                pTxtInputFld->UpdateFieldContent();
+            }
+
             if (bMergePortionsNeeded)
             {
                 m_pSwpHints->MergePortions(*this); // does Resort too
