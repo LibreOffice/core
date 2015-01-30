@@ -209,8 +209,6 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
-        OUString aMimeType;
-
         SvtPathOptions aPathOpt;
         OUString sGraphicPath( aPathOpt.GetGraphicPath() );
 
@@ -227,6 +225,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
 
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
         Reference<XFilterManager> xFilterManager( xFilePicker, UNO_QUERY );
+        const OUString aDefaultMimeType("image/png");
         OUString aDefaultFormatName;
         sal_uInt16 nCount = rGraphicFilter.GetExportFormatCount();
 
@@ -238,14 +237,12 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
             const OUString aFilterMimeType( rGraphicFilter.GetExportFormatMediaType( i ) );
             xFilterManager->appendFilter( aExportFormatName, rGraphicFilter.GetExportWildcard( i ) );
             aMimeTypeMap[ aExportFormatName ] = aFilterMimeType;
-            if( aMimeType == aFilterMimeType )
+            if( aDefaultMimeType == aFilterMimeType )
                 aDefaultFormatName = aExportFormatName;
         }
 
-        if( aDefaultFormatName.getLength() == 0 )
-            aDefaultFormatName = "PNG - Portable Network Graphic";
-
-        xFilterManager->setCurrentFilter( aDefaultFormatName );
+        if( !aDefaultFormatName.isEmpty() )
+            xFilterManager->setCurrentFilter( aDefaultFormatName );
 
         // execute dialog
 
