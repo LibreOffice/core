@@ -104,6 +104,8 @@ using namespace com::sun::star;
                 SAL_WARN_IF( *pPrev->End() > *pCurrent->Start(), "sw",
                              _ERROR_PREFIX "overlapping redlines" );
             }
+
+            assert(std::is_sorted(rTbl.begin(), rTbl.end(), CompareSwRedlineTbl()));
         }
     }
 
