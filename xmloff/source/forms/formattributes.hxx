@@ -27,6 +27,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
+#include <xmloff/xmlnmspe.hxx>
 
 struct SvXMLEnumMapEntry;
 
@@ -181,7 +182,11 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the DA_* constants.
         */
-        static sal_uInt16 getDatabaseAttributeNamespace(sal_Int32 _nId);
+        static inline sal_uInt16 getDatabaseAttributeNamespace(sal_Int32 )
+        {
+            // nothing special here
+            return XML_NAMESPACE_FORM;
+        }
 
         /** calculates the xml attribute representation of a special attribute.
             @param _nId
@@ -199,7 +204,11 @@ namespace xmloff
             @param _nId
                 the id of the attribute. Has to be one of the BA_* constants.
         */
-        static sal_uInt16 getBindingAttributeNamespace(sal_Int32 _nId);
+        static inline sal_uInt16 getBindingAttributeNamespace(sal_Int32 )
+        {
+            // nothing special here
+            return XML_NAMESPACE_FORM;
+        }
 
         /** calculates the xml namespace key to use for a special attribute.
             @param _nId
@@ -217,7 +226,10 @@ namespace xmloff
             @param _nId
                 the id of the attribute
         */
-        static sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes _eAttrib);
+        static inline sal_uInt16 getOfficeFormsAttributeNamespace(OfficeFormsAttributes )
+        { // nothing special here
+          return XML_NAMESPACE_FORM;
+        }
     };
 
     //= OAttribute2Property

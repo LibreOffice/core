@@ -74,25 +74,6 @@ int IconChoicePage::DeactivatePage( SfxItemSet* )
     return LEAVE_PAGE;
 }
 
-/**********************************************************************
-|
-| ...
-|
-\**********************************************************************/
-
-void IconChoicePage::FillUserData()
-{
-}
-
-
-
-bool IconChoicePage::IsReadOnly() const
-{
-    return false;
-}
-
-
-
 bool IconChoicePage::QueryClose()
 {
     return true;
@@ -240,7 +221,6 @@ IconChoiceDialog ::~IconChoiceDialog ()
 
         if ( pData->pPage )
         {
-            pData->pPage->FillUserData();
             OUString aPageData(pData->pPage->GetUserData());
             if ( !aPageData.isEmpty() )
             {
@@ -489,7 +469,7 @@ void IconChoiceDialog::ActivatePageImpl ()
         if ( pExampleSet )
             pData->pPage->ActivatePage( *pExampleSet );
         SetHelpId( pData->pPage->GetHelpId() );
-        bReadOnly = pData->pPage->IsReadOnly();
+        bReadOnly = false;
     }
 
 

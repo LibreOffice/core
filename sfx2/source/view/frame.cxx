@@ -695,11 +695,6 @@ SfxFrame* SfxFrameIterator::NextSibling_Impl( SfxFrame& rPrev )
     return pRet;
 }
 
-bool SfxFrame::HasComponent() const
-{
-    return false;
-}
-
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SfxFrame::GetController() const
 {
     if ( pImp->pCurrentViewFrame && pImp->pCurrentViewFrame->GetViewShell() )

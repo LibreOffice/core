@@ -45,9 +45,11 @@ class SvxBrushItem;
 class SvxBackgroundTabPage : public SvxTabPage
 {
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pPageRanges[];
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rAttrSet );
-    static const sal_uInt16*      GetRanges();
+    // returns the area of the which-values
+    static const sal_uInt16* GetRanges() { return pPageRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

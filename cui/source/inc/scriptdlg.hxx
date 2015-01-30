@@ -72,21 +72,18 @@ protected:
     virtual bool            ExpandingHdl() SAL_OVERRIDE;
 public:
     void                    Init( const OUString& language );
-    void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
-                              ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
-                    SFTreeListBox(vcl::Window* pParent);
+    void                    RequestSubEntries(  SvTreeListEntry* pRootEntry,
+                                ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+                                ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
+                            SFTreeListBox(vcl::Window* pParent);
                     virtual ~SFTreeListBox();
 
-    void            ExpandAllTrees();
-
-
-
-    SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
+    SvTreeListEntry *       insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData,
                               const OUString& factoryURL );
-    SvTreeListEntry * insertEntry(OUString const & rText, sal_uInt16 nBitmap,
+    SvTreeListEntry *       insertEntry(OUString const & rText, sal_uInt16 nBitmap,
                               SvTreeListEntry * pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData );

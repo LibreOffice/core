@@ -30,9 +30,7 @@
 #include "ScatterChartType.hxx"
 #include "BubbleChartType.hxx"
 
-namespace
-{
-static const struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
+extern const struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
 {
     {
           ::chart::AreaChartType::create
@@ -117,12 +115,5 @@ static const struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
    ,{ 0, 0, 0, 0, 0, 0 }
 };
 
-} // anonymous namespace
-
-const struct ::cppu::ImplementationEntry *
-    ChartTypeEntriesForServiceRegistration::getImplementationEntries()
-{
-    return g_entries_chart2_charttypes;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

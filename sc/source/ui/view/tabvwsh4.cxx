@@ -121,7 +121,6 @@ void ScTabViewShell::Activate(bool bMDI)
         pScMod->ViewShellChanged();
 
         ActivateView( true, bFirstActivate );
-        ActivateOlk( &GetViewData() );
 
         //  AutoCorrect umsetzen, falls der Writer seins neu angelegt hat
         UpdateDrawTextOutliner();
@@ -255,7 +254,6 @@ void ScTabViewShell::Deactivate(bool bMDI)
         bool bOldDontSwitch = bDontSwitch;
         bDontSwitch = true;
 
-        DeActivateOlk( &GetViewData() );
         ActivateView( false, false );
 
         if ( GetViewFrame()->GetFrame().IsInPlace() ) // inplace

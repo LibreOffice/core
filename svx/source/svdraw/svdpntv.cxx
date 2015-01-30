@@ -1119,7 +1119,6 @@ void SdrPaintView::ShowItemBrowser(bool bShow)
     if (bShow) {
         if (pItemBrowser==NULL) {
             pItemBrowser=new SdrItemBrowser(*static_cast<SdrView*>(this));
-            pItemBrowser->SetFloatingMode(true);
         }
         pItemBrowser->Show();
         pItemBrowser->GrabFocus();

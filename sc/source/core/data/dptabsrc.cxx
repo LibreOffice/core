@@ -1427,11 +1427,6 @@ void ScDPDimension::setFunction(sal_uInt16 nNew)
     nFunction = nNew;
 }
 
-void ScDPDimension::setUsedHierarchy(long /* nNew */)
-{
-    // #i52547# don't use the incomplete date hierarchy implementation - ignore the call
-}
-
 ScDPDimension* ScDPDimension::CreateCloneObject()
 {
     OSL_ENSURE( nSourceDim < 0, "recursive duplicate - not implemented" );
@@ -1526,9 +1521,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
 {
     if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
     {
-        sal_Int32 nInt = 0;
-        if (aValue >>= nInt)
-            setUsedHierarchy( nInt );
+        // #i52547# don't use the incomplete date hierarchy implementation - ignore the call
     }
     else if ( aPropertyName == SC_UNO_DP_ORIENTATION )
     {

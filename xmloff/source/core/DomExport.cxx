@@ -63,16 +63,6 @@ public:
     virtual ~DomVisitor() {}
     virtual void element( const Reference<XElement>& ) {}
     virtual void character( const Reference<XCharacterData>& ) {}
-    void attribute( const Reference<XAttr>& ) {}
-    void cdata( const Reference<XCDATASection>& ) {}
-    void comment( const Reference<XComment>& ) {}
-    void documentFragment( const Reference<XDocumentFragment>& ) {}
-    void document( const Reference<XDocument>& ) {}
-    void documentType( const Reference<XDocumentType>& ) {}
-    void entity( const Reference<XEntity>& ) {}
-    void entityReference( const Reference<XEntityReference>& ) {}
-    void notation( const Reference<XNotation>& ) {}
-    void processingInstruction( const Reference<XProcessingInstruction>& ) {}
     virtual void endElement( const Reference<XElement>& ) {}
 };
 
@@ -86,37 +76,27 @@ void visitNode( DomVisitor& rVisitor, const Reference<XNode>& xNode )
     switch( xNode->getNodeType() )
     {
     case NodeType_ATTRIBUTE_NODE:
-        rVisitor.attribute( Reference<XAttr>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_CDATA_SECTION_NODE:
-        rVisitor.cdata( Reference<XCDATASection>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_COMMENT_NODE:
-        rVisitor.comment( Reference<XComment>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_DOCUMENT_FRAGMENT_NODE:
-        rVisitor.documentFragment( Reference<XDocumentFragment>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_DOCUMENT_NODE:
-        rVisitor.document( Reference<XDocument>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_DOCUMENT_TYPE_NODE:
-        rVisitor.documentType( Reference<XDocumentType>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_ELEMENT_NODE:
         rVisitor.element( Reference<XElement>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_ENTITY_NODE:
-        rVisitor.entity( Reference<XEntity>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_ENTITY_REFERENCE_NODE:
-        rVisitor.entityReference( Reference<XEntityReference>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_NOTATION_NODE:
-        rVisitor.notation( Reference<XNotation>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_PROCESSING_INSTRUCTION_NODE:
-        rVisitor.processingInstruction( Reference<XProcessingInstruction>( xNode, UNO_QUERY_THROW ) );
         break;
     case NodeType_TEXT_NODE:
         rVisitor.character( Reference<XCharacterData>( xNode, UNO_QUERY_THROW ) );

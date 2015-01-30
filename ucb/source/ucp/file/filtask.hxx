@@ -86,7 +86,7 @@ namespace fileaccess
 
             bool isHandled() const
             {
-                return true;
+                return m_bHandled;
             }
 
             void clearError()

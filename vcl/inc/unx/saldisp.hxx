@@ -47,20 +47,6 @@ class   ColorMask;
 
 namespace vcl_sal { class WMAdaptor; }
 
-#define PROPERTY_SUPPORT_WM_Parent_Pixmap_None  0x00000004
-#define PROPERTY_SUPPORT_WM_ClientPos           0x00000008
-#define PROPERTY_SUPPORT_3ButtonMouse           0x00000020
-
-#define PROPERTY_BUG_XCopyArea_GXxor            0x00002000  // from window
-#define PROPERTY_BUG_Tile                       0x00008000  // Recreate the
-                                            // dither brush each time
-#define PROPERTY_BUG_FillPolygon_Tile           0x00010000  // always Toggle Fillstyle
-#define PROPERTY_BUG_DrawLine                   0x00020000  // a DrawLine is one point to short
-
-#define PROPERTY_FEATURE_TrustedSolaris         0x04000000
-
-#define PROPERTY_DEFAULT                        0x00000FCB
-
 // server vendor
 
 typedef enum  {
@@ -350,7 +336,6 @@ public:
     const SalVisual&      GetVisual( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aVisual; }
     RenderEntryMap&       GetRenderEntries( SalX11Screen nXScreen ) const { return getDataForScreen(nXScreen).m_aRenderData; }
     const Pair     &GetResolution() const { return aResolution_; }
-    sal_uLong       GetProperties() const { return PROPERTY_DEFAULT; }
     sal_uLong       GetMaxRequestSize() const { return nMaxRequestSize_; }
     Time            GetLastUserEventTime( bool bAlwaysReget = false ) const;
 

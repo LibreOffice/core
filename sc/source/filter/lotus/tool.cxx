@@ -103,11 +103,6 @@ void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_u
     rContext.pDoc->ApplyAttr( nCol, nRow, nTab, aAttr );
 }
 
-void InitPage( void )
-{   // initialize page format; meaning: get defaults from SC TODO:
-    //scGetPageFormat( 0, &aPage );
-}
-
 double SnumToDouble( sal_Int16 nVal )
 {
     const double pFacts[ 8 ] = {

@@ -134,7 +134,6 @@ bool TextConvWrapper::FindConvText_impl()
         }
         else
         {
-            ConvEnd_impl();
             bConvert = ConvNext_impl();
         }
     }
@@ -220,11 +219,6 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
     {
         OSL_FAIL( "ConvStart_impl: Unknown Area!" );
     }
-}
-
-
-void TextConvWrapper::ConvEnd_impl()
-{
 }
 
 
@@ -572,7 +566,6 @@ void TextConvWrapper::Convert()
     m_bStartChk = false;
     ConvStart_impl( SVX_SPELL_BODY_END );
     ConvertDocument();
-    ConvEnd_impl();
 }
 
 

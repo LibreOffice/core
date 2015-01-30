@@ -31,6 +31,7 @@ class SdrView;
 class SvxMeasurePage : public SvxTabPage
 {
 private:
+    static const sal_uInt16 pRanges[];
 
     MetricField*         m_pMtrFldLineDist;
     MetricField*         m_pMtrFldHelplineOverhang;
@@ -68,7 +69,7 @@ public:
     virtual ~SvxMeasurePage();
 
     static SfxTabPage*  Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() { return pRanges; }
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;

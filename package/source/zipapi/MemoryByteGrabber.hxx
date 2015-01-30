@@ -75,10 +75,6 @@ public:
     {
         return mnEnd - mnCurrent;
     }
-    void SAL_CALL closeInput(  )
-        throw(com::sun::star::io::NotConnectedException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
-    {
-    }
 
     // XSeekable chained...
     sal_Int64 SAL_CALL seek( sal_Int64 location )

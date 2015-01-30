@@ -2105,7 +2105,6 @@ sal_Bool DialogContainer_Impl::hasElements()
 {
     bool bRet = false;
 
-    mpLib->GetAll( SbxCLASS_OBJECT );
     sal_Int16 nCount = mpLib->GetObjects()->Count();
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
     {
@@ -2142,7 +2141,6 @@ uno::Any DialogContainer_Impl::getByName( const OUString& aName )
 uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     throw(uno::RuntimeException, std::exception)
 {
-    mpLib->GetAll( SbxCLASS_OBJECT );
     sal_Int16 nCount = mpLib->GetObjects()->Count();
     uno::Sequence< OUString > aRetSeq( nCount );
     OUString* pRetSeq = aRetSeq.getArray();

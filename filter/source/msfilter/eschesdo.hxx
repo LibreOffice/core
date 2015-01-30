@@ -169,7 +169,6 @@ public:
             Point               ImplMapPoint( const Point& rPoint );
             Size                ImplMapSize( const Size& rSize );
             EscherExHostAppData* ImplGetHostData() { return mpHostAppData; }
-            void MapRect(ImplEESdrObject& rObj);
 };
 
 

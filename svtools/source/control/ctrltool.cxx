@@ -33,7 +33,7 @@
 #include <svtools/ctrltool.hxx>
 
 // Standard Fontgroessen fuer scalierbare Fonts
-static const sal_IntPtr aStdSizeAry[] =
+const sal_IntPtr FontList::aStdSizeAry[] =
 {
      60,
      70,
@@ -759,11 +759,6 @@ const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const
 
     pDevice->SetMapMode( aOldMapMode );
     return mpSizeAry;
-}
-
-const sal_IntPtr* FontList::GetStdSizeAry()
-{
-    return aStdSizeAry;
 }
 
 struct ImplFSNameItem

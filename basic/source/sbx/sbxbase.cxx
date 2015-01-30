@@ -273,7 +273,7 @@ bool SbxBase::Store( SvStream& rStrm )
         if( rStrm.GetError() != SVSTREAM_OK )
             bRes = false;
         if( bRes )
-            bRes = StoreCompleted();
+            bRes = true;
         return bRes;
     }
     else
@@ -301,11 +301,6 @@ bool SbxBase::StorePrivateData( SvStream& ) const
 }
 
 bool SbxBase::LoadCompleted()
-{
-    return true;
-}
-
-bool SbxBase::StoreCompleted()
 {
     return true;
 }

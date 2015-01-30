@@ -243,13 +243,6 @@ namespace cairocanvas
         }
     }
 
-    void CanvasHelper::drawPoint( const rendering::XCanvas*     ,
-                                  const geometry::RealPoint2D&  ,
-                                  const rendering::ViewState&   ,
-                                  const rendering::RenderState&  )
-    {
-    }
-
     void CanvasHelper::drawLine( const rendering::XCanvas*      /*pCanvas*/,
                                  const geometry::RealPoint2D&   aStartPoint,
                                  const geometry::RealPoint2D&   aEndPoint,
@@ -1520,18 +1513,6 @@ namespace cairocanvas
     }
 
 
-    void CanvasHelper::copyRect( const rendering::XCanvas*                          ,
-                                 const uno::Reference< rendering::XBitmapCanvas >&  /*sourceCanvas*/,
-                                 const geometry::RealRectangle2D&                   /*sourceRect*/,
-                                 const rendering::ViewState&                        /*sourceViewState*/,
-                                 const rendering::RenderState&                      /*sourceRenderState*/,
-                                 const geometry::RealRectangle2D&                   /*destRect*/,
-                                 const rendering::ViewState&                        /*destViewState*/,
-                                 const rendering::RenderState&                      /*destRenderState*/ )
-    {
-        // TODO(F2): copyRect NYI
-    }
-
     geometry::IntegerSize2D CanvasHelper::getSize()
     {
         if( !mpSurfaceProvider )
@@ -1589,18 +1570,6 @@ namespace cairocanvas
         }
 
         return uno::Sequence< sal_Int8 >();
-    }
-
-    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        /*data*/,
-                                const rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
-                                const geometry::IntegerRectangle2D&     /*rect*/ )
-    {
-    }
-
-    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       /*color*/,
-                                 const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
-                                 const geometry::IntegerPoint2D&        /*pos*/ )
-    {
     }
 
     uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,

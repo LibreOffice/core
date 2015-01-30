@@ -486,7 +486,6 @@ public:
                              const Color& rOverlineColor,
                              const Color& rTextLineColor);
     virtual OUString  GetUndoComment( sal_uInt16 nUndoId ) const;
-    bool    FormattingParagraph( sal_Int32 nPara );
     virtual bool    SpellNextDocument();
     virtual void    FieldClicked( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos );

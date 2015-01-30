@@ -166,7 +166,6 @@ ScVbaWorkbooks::Add( const uno::Any& Template ) throw (uno::RuntimeException, st
 void SAL_CALL
 ScVbaWorkbooks::Close() throw (uno::RuntimeException, std::exception)
 {
-    closeDocuments();
 }
 
 bool

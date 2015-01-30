@@ -78,9 +78,6 @@ public:
                                 virtual ~BibFrameController_Impl();
 
 
-    void                        activate();
-    void                        deactivate();
-
     void                        ChangeDataSource(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs);
     void                        RemoveFilter();
 

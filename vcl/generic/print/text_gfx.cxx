@@ -662,11 +662,6 @@ PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
  */
 
 void
-PrinterGfx::OnEndPage ()
-{
-}
-
-void
 PrinterGfx::OnEndJob ()
 {
     maPS3Font.clear();

@@ -32,11 +32,6 @@
 #include <signal.h>
 #endif
 
-void InitCpp3()
-{
-}
-
-
 /*
  * Open a file, add it to the linked list of open files.
  * This is called only from openfile() above.

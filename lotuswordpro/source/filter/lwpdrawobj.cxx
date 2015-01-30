@@ -1099,7 +1099,7 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     else
     {
         // temporary code, need to create Encoding from the value of nTextCharacterSet
-        aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+        aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
 
     XFParagraph* pXFPara = new XFParagraph();
@@ -1311,7 +1311,7 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     else
     {
         // temporary code, need to create Encoding from the value of nTextCharacterSet
-        aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
+        aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
 
     XFParagraph* pXFPara = new XFParagraph();

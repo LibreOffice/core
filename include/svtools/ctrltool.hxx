@@ -134,6 +134,8 @@ FontList.
 class SVT_DLLPUBLIC FontList
 {
 private:
+    static const sal_IntPtr aStdSizeAry[];
+
     OUString                maMapBoth;
     OUString                maMapPrinterOnly;
     OUString                maMapScreenOnly;
@@ -193,7 +195,7 @@ public:
     const vcl::FontInfo&    GetFontInfo( sal_Handle hFontInfo ) const;
 
     const sal_IntPtr*       GetSizeAry( const vcl::FontInfo& rInfo ) const;
-    static const sal_IntPtr* GetStdSizeAry();
+    static const sal_IntPtr* GetStdSizeAry() { return aStdSizeAry; }
 
 private:
                             FontList( const FontList& ) SAL_DELETED_FUNCTION;

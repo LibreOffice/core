@@ -243,16 +243,6 @@ public:
     */
     bool IsBackgroundTransparent() const;
 
-    /** SwFlyFrm::IsShadowTransparent
-
-        determine if shadow color of fly frame has to be drawn transparently
-
-        definition found in /core/layout/paintfrm.cxx
-
-        @return true, if shadow color is transparent.
-    */
-    bool IsShadowTransparent() const;
-
     void Chain( SwFrm* _pAnchor );
     void Unchain();
     void InsertCnt();

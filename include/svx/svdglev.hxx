@@ -31,8 +31,6 @@ class SdrGluePoint;
 
 class SVX_DLLPUBLIC SdrGlueEditView: public SdrPolyEditView
 {
-    void ImpClearVars();
-
     // copy marked GluePoints and mark instead of the old ones
     void ImpCopyMarkedGluePoints();
     typedef void (*PGlueDoFunc)(SdrGluePoint&, const SdrObject* pObj, const void*, const void*, const void*, const void*, const void*);

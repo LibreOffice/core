@@ -27,10 +27,11 @@
 
 class ScTablePage : public SfxTabPage
 {
+    static const sal_uInt16 pPageTableRanges[];
 public:
     static  SfxTabPage* Create          ( vcl::Window*           pParent,
                                           const SfxItemSet* rCoreSet );
-    static  const sal_uInt16* GetRanges       ();
+    static  const sal_uInt16* GetRanges () { return pPageTableRanges; }
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::DeactivatePage;

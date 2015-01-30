@@ -279,7 +279,7 @@ void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
 {
     return SOFFICE_FILEFORMAT_31 == nFileFormatVersion
-                ? 0 : aMacroTable.GetVersion();
+                ? 0 : SvxMacroTableDtor::GetVersion();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

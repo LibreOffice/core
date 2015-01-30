@@ -54,7 +54,6 @@ class SlideSorterModel
 {
 public:
     SlideSorterModel (SlideSorter& rSlideSorter);
-    void Init (void);
 
     virtual ~SlideSorterModel (void);
     void Dispose (void);

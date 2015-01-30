@@ -134,12 +134,8 @@ namespace canvas
         ::com::sun::star::uno::Any getPropertyValue( const OUString& PropertyName ) const;
         void addPropertyChangeListener( const OUString& aPropertyName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
-        void removePropertyChangeListener( const OUString& aPropertyName,
-                                           const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener );
         void addVetoableChangeListener( const OUString& aPropertyName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
-        void removeVetoableChangeListener( const OUString& aPropertyName,
-                                           const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& xListener );
 
     private:
         std::unique_ptr<MapType> mpMap;

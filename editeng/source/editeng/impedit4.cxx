@@ -214,7 +214,7 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
         else if ( eFormat == EE_FORMAT_XML )
             WriteXML( rOutput, aSel );
         else if ( eFormat == EE_FORMAT_HTML )
-            WriteHTML( rOutput, aSel );
+            ;
         else if ( eFormat == EE_FORMAT_BIN)
             WriteBin( rOutput, aSel );
         else
@@ -998,12 +998,6 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
     }
 }
-
-sal_uInt32 ImpEditEngine::WriteHTML( SvStream&, EditSelection )
-{
-    return 0;
-}
-
 
 EditTextObject* ImpEditEngine::CreateTextObject()
 {

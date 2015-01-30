@@ -89,11 +89,6 @@ OReportWindow::~OReportWindow()
         m_pReportListener->dispose();
 }
 
-void OReportWindow::initialize()
-{
-    m_aViewsWindow.initialize();
-}
-
 void OReportWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
 {
     m_aViewsWindow.SetInsertObj( eObj,_sShapeType);

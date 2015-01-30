@@ -88,10 +88,9 @@ namespace XSLT
             return tmp->read(buffer, len);
         }
         static int
-        on_close(void * context)
+        on_close(void * )
         {
-            Reader * tmp = static_cast<Reader*> (context);
-            return tmp->closeInput();
+            return 0;
         }
     };
     /**
@@ -255,12 +254,6 @@ namespace XSLT
                     }
             }
         return len;
-    }
-
-    int
-    Reader::closeInput()
-    {
-        return 0;
     }
 
     int

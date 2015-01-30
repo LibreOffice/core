@@ -378,31 +378,6 @@ public:
     virtual void                Deactivate(bool bMDI);
 
     /**
-        A parent of the <SfxDispatcher> on which the SfxShell is located, has
-        become active, or the SfxShell instance was pushed on a <SfxDispatcher>,
-        which parent is active.
-
-        The base implementation is empty and does not need to be called.
-
-        [Cross-reference]
-
-        SfxShell::Activate()
-        */
-    void                        ParentActivate();
-
-    /**
-        The active parent of the <SfxDispatcher> on which the SfxShell is located,
-        has been disabled.
-
-        The base implementation is empty and does not need to be called.
-
-        [Cross-reference]
-
-        SfxShell::Deactivate()
-        */
-    void                        ParentDeactivate();
-
-    /**
         This method returns a pointer to the <SfxDispatcher>, when the SfxShell
         is currently <UI-active> or a NULL-pointer if it is not UI-active.
 

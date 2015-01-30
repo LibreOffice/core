@@ -313,7 +313,7 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const SAL_OVERRIDE;
 
-    inline sal_Int8 ShadowPxWidth() const
+    static inline sal_Int8 ShadowPxWidth()
     {
         return mnShadowPxWidth;
     }

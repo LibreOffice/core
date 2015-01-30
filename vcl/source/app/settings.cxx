@@ -2772,11 +2772,6 @@ void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
     }
 }
 
-void AllSettings::SetUILanguageTag( const LanguageTag& )
-{
-    // there is only one UILocale per process
-}
-
 namespace
 {
     bool GetConfigLayoutRTL(bool bMath)

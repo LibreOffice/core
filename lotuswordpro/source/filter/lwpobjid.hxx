@@ -94,7 +94,10 @@ public:
     sal_uInt32 ReadIndexed( LwpObjectStream *pStrm );
     sal_uInt32 ReadCompressed( LwpObjectStream* pObj, LwpObjectID& prev );
 
-    sal_uInt32 DiskSize() const;
+    /**
+     * @descr       return the size of object id with format: low(4bytes)+high(2bytes)
+    */
+    static sal_uInt32 DiskSize() { return sizeof(m_nLow) + sizeof(m_nHigh); }
     sal_uInt32 DiskSizeIndexed() const;
     bool IsNull() const;
     bool IsCompressed();

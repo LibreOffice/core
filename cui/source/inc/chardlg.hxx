@@ -78,6 +78,7 @@ class SvxCharNamePage : public SvxCharBasePage
 {
 
 private:
+    static const sal_uInt16 pNameRanges[];
     VclContainer*       m_pWestFrame;
     FixedText*          m_pWestFontNameFT;
     FontNameBox*        m_pWestFontNameLB;
@@ -153,7 +154,7 @@ public:
                         virtual ~SvxCharNamePage();
 
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return pNameRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -174,6 +175,7 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
+    static const sal_uInt16 pEffectsRanges[];
     FixedText*          m_pFontColorFT;
     ColorListBox*       m_pFontColorLB;
 
@@ -232,7 +234,7 @@ public:
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16* GetRanges() { return pEffectsRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -246,8 +248,10 @@ public:
 
 // class SvxCharPositionPage ---------------------------------------------
 
+
 class SvxCharPositionPage : public SvxCharBasePage
 {
+    static const sal_uInt16 pPositionRanges[];
 
 private:
     RadioButton*        m_pHighPosBtn;
@@ -311,7 +315,7 @@ public:
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16*      GetRanges() { return pPositionRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -326,6 +330,7 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
+    static const sal_uInt16 pTwoLinesRanges[];
     CheckBox*           m_pTwoLinesBtn;
     VclContainer*       m_pEnclosingFrame;
     ListBox*            m_pStartBracketLB;
@@ -354,7 +359,7 @@ public:
 
 public:
     static SfxTabPage*  Create( vcl::Window* pParent, const SfxItemSet* rSet );
-    static const sal_uInt16*      GetRanges();
+    static const sal_uInt16*  GetRanges() { return pTwoLinesRanges; }
 
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

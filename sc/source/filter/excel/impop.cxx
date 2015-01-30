@@ -668,10 +668,6 @@ void ImportExcel::DefColWidth( void )
     pColRowBuff->SetDefWidth( nScWidth );
 }
 
-void ImportExcel::Builtinfmtcnt( void )
-{
-}
-
 void ImportExcel::Colinfo( void )
 {// Column Formatting Information
     sal_uInt16  nColFirst, nColLast, nColWidth, nXF;
@@ -806,10 +802,6 @@ void ImportExcel::Hideobj( void )
     aOpts.SetObjMode( VOBJ_TYPE_DRAW,  eDraw );
 
     pD->SetViewOptions( aOpts );
-}
-
-void ImportExcel::Bundleheader( void )
-{
 }
 
 void ImportExcel::Standardwidth( void )
@@ -1041,10 +1033,6 @@ void ImportExcel::Array34( void )
         ScRange aArrayRange(nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab());
         rDoc.setMatrixCells(aArrayRange, *pErgebnis, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
     }
-}
-
-void ImportExcel::Externname34( void )
-{
 }
 
 void ImportExcel::Defrowheight345( void )

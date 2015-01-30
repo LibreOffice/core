@@ -243,7 +243,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
     SbMethod* pMethod = NULL;
 
     boost::scoped_ptr< MacroChooser > pChooser( new MacroChooser( NULL, true ) );
-    if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
+    if ( bChooseOnly || !SvtModuleOptions::IsBasicIDE() )
         pChooser->SetMode(MacroChooser::ChooseOnly);
 
     if ( !bChooseOnly && rxLimitToDocument.is() )

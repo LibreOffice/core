@@ -120,7 +120,6 @@ public:
     OUString      GetCurCommand();
     OUString      GetCurLabel();
     OUString      GetSelectedScriptURI();
-    void          FunctionSelected();
     void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
@@ -151,8 +150,6 @@ class SfxConfigGroupListBox : public SvTreeListBox
 
 
     void InitModule();
-    void InitBasic();
-    void InitStyles();
 
     OUString MapCommand2UIName(const OUString& sCommand);
 

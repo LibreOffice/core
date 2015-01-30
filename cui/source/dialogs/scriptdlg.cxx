@@ -339,10 +339,6 @@ bool SFTreeListBox::ExpandingHdl()
     return true;
 }
 
-void SFTreeListBox::ExpandAllTrees()
-{
-}
-
 SvTreeListEntry * SFTreeListBox::insertEntry(
     OUString const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData, const OUString& factoryURL )
@@ -514,7 +510,6 @@ short SvxScriptOrgDialog::Execute()
 
         pDoc = SfxObjectShell::GetNext(*pDoc);
     }
-    m_pScriptsBox->ExpandAllTrees();
 
     vcl::Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );

@@ -98,9 +98,6 @@ public:
     bool operator += ( const SbxDecimal &r );
     bool operator /= ( const SbxDecimal &r );
     bool operator *= ( const SbxDecimal &r );
-    bool neg( void );
-
-    bool isZero( void );
 
     enum CmpResult { LT, EQ, GT };
     friend CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight );

@@ -363,7 +363,7 @@ throw ( uno::RuntimeException, std::exception )
                               MouseEventModifiers::NONE,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
-    return MouseButtonUp( aMouseEvent );
+    return false;
 }
 
 
@@ -415,8 +415,6 @@ throw ( uno::RuntimeException, std::exception )
 void SAL_CALL SfxStatusBarControl::doubleClick( const awt::Point& )
 throw ( uno::RuntimeException, std::exception )
 {
-    SolarMutexGuard aGuard;
-    DoubleClick();
 }
 
 
@@ -513,33 +511,6 @@ bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
 
 
-bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
-
-/*  [Description]
-
-    This virtual method forwards the Event MouseButtonUp() of the
-    StatusBar if the mouse position is within the range of the items,
-    or if the mouse was captured by <SfxStatusBarControl::CaptureMouse()>
-
-    The default implementation is empty and returns FALSE.
-
-    [Return value]
-
-    sal_Bool                TRUE
-           The event has been processed and is not intended to
-           be forwarded to StatusBar
-
-                        FALSE
-           The event was not processed and is to be
-           be forwarded to StatusBar
-*/
-
-{
-    return false;
-}
-
-
-
 void SfxStatusBarControl::Command( const CommandEvent& )
 
 /*  [Description]
@@ -570,21 +541,6 @@ void SfxStatusBarControl::Click()
 
 
 
-void SfxStatusBarControl::DoubleClick()
-
-/*  [Description]
-
-    This virtual method is called when the user double-clicks on the
-    field in the status row that belongs to this control.
-
-    The default implementation is empty.
-*/
-
-{
-}
-
-
-
 void SfxStatusBarControl::Paint
 (
     const UserDrawEvent& /* Reference to an UserDrawEvent */
@@ -600,18 +556,6 @@ void SfxStatusBarControl::Paint
     The default implementation is empty.
 */
 
-{
-}
-
-
-
-void SfxStatusBarControl::CaptureMouse()
-{
-}
-
-
-
-void SfxStatusBarControl::ReleaseMouse()
 {
 }
 

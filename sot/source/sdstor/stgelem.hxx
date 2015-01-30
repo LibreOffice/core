@@ -76,7 +76,7 @@ public:
     void      SetFATChain( sal_Int32 n );
     sal_Int32 GetMasters() const            { return nMaster; }
     void      SetMasters( sal_Int32 n );
-    short     GetFAT1Size() const           { return cFATPagesInHeader; }
+    static short GetFAT1Size()              { return cFATPagesInHeader; }
     const ClsId& GetClassId() const         { return aClsId;        }
     sal_Int32 GetFATPage( short ) const;
     void      SetFATPage( short, sal_Int32 );

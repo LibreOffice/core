@@ -40,7 +40,6 @@ private:
     sal_uLong           mnWidth, mnHeight;  // dimensions in pixel
     sal_uLong           mnCol;
     sal_uLong           mnMaxVal;           // max value in the <missing comment>
-    bool            ImplCallback( sal_uInt16 nPercent );
     bool            ImplReadBody();
     bool            ImplReadHeader();
 
@@ -68,21 +67,6 @@ PBMReader::PBMReader(SvStream & rPBM)
 
 PBMReader::~PBMReader()
 {
-}
-
-bool PBMReader::ImplCallback( sal_uInt16 /*nPercent*/ )
-{
-/*
-    if ( pCallback != NULL )
-    {
-        if ( ( (*pCallback)( pCallerData, nPercent ) ) == sal_True )
-        {
-            mrPBM.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            return sal_True;
-        }
-    }
-*/
-    return false;
 }
 
 bool PBMReader::ReadPBM(Graphic & rGraphic )
@@ -285,7 +269,6 @@ bool PBMReader::ImplReadBody()
                         nShift = 0;
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
                     }
                 }
                 break;
@@ -304,7 +287,6 @@ bool PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (sal_uInt16)( ( 100 * nHeight ) / mnHeight ) );   // processing output in percent
                     }
                 }
                 break;
@@ -327,7 +309,6 @@ bool PBMReader::ImplReadBody()
                     {
                         nWidth = 0;
                         nHeight++;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                 }
                 break;
@@ -366,7 +347,6 @@ bool PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = true;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                 }
                 else
@@ -395,7 +375,6 @@ bool PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = true;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                     continue;
                 }
@@ -470,7 +449,6 @@ bool PBMReader::ImplReadBody()
                         nWidth = 0;
                         if ( ++nHeight == mnHeight )
                             bFinished = true;
-                        ImplCallback( (sal_uInt16) ( ( 100 * nHeight ) / mnHeight ) );  // processing output in percent
                     }
                     continue;
                 }

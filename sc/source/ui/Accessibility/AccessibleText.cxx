@@ -560,8 +560,6 @@ public:
     virtual bool        Cut() SAL_OVERRIDE;
     virtual bool        Paste() SAL_OVERRIDE;
 
-    void                GrabFocus();
-
     void                SetInvalid();
 };
 
@@ -569,7 +567,6 @@ ScEditViewForwarder::ScEditViewForwarder(EditView* pEditView, vcl::Window* pWin)
     : mpEditView(pEditView),
     mpWindow(pWin)
 {
-    GrabFocus();
 }
 
 ScEditViewForwarder::~ScEditViewForwarder()
@@ -692,10 +689,6 @@ bool ScEditViewForwarder::Paste()
         OSL_FAIL("this ViewForwarder is not valid");
     }
     return bResult;
-}
-
-void ScEditViewForwarder::GrabFocus()
-{
 }
 
 void ScEditViewForwarder::SetInvalid()
@@ -1050,8 +1043,6 @@ SvxEditViewForwarder* ScAccessibleEditObjectTextData::GetEditViewForwarder( bool
         {
             DELETEZ(mpEditViewForwarder);
         }
-        else if (mpEditViewForwarder)
-            mpEditViewForwarder->GrabFocus();
     }
     return mpEditViewForwarder;
 }

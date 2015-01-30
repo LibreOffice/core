@@ -69,7 +69,6 @@ private:
     void SelectSourceFile();
     void LoadSourceFileStructure(const OUString& rPath);
     void HandleGetFocus(Control* pCtrl);
-    void HandleLoseFocus(Control* pCtrl);
     void TreeItemSelected();
     void DefaultElementSelected(SvTreeListEntry& rEntry);
     void RepeatElementSelected(SvTreeListEntry& rEntry);
@@ -94,7 +93,6 @@ private:
     void RefEditModified();
 
     DECL_LINK(GetFocusHdl, Control*);
-    DECL_LINK(LoseFocusHdl, Control*);
     DECL_LINK(BtnPressedHdl, Button*);
     DECL_LINK(TreeItemSelectHdl, void*);
     DECL_LINK(RefModifiedHdl, void*);

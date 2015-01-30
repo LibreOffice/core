@@ -602,14 +602,6 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
         }
     }
 
-    // Contents
-    const SdOptionsContentsItem* pContentsItem = NULL;
-    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_CONTENTS,
-                            false, reinterpret_cast<const SfxPoolItem**>(&pContentsItem) ))
-    {
-        pContentsItem->SetOptions( pOptions );
-    }
-
     // Misc
     const SdOptionsMiscItem* pMiscItem = NULL;
     if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_MISC,

@@ -594,7 +594,7 @@ OStoreDirectoryPageObject::scope (
     sal_uInt32 index0, index1, index2, index3;
 
     // direct.
-    sal_uInt32 nCount = OStoreDirectoryDataBlock::directCount();
+    sal_uInt32 nCount = OStoreDirectoryDataBlock::directCount;
     sal_uInt32 nLimit = nCount;
     if (nPage < nLimit)
     {
@@ -611,7 +611,7 @@ OStoreDirectoryPageObject::scope (
 
     // single indirect.
     sal_uInt32 const nCapacity = indirect::capacityCount(rPage.m_aDescr);
-    nCount = OStoreDirectoryDataBlock::singleCount();
+    nCount = OStoreDirectoryDataBlock::singleCount;
     nLimit = nCount * nCapacity;
     if (nPage < nLimit)
     {
@@ -640,7 +640,7 @@ OStoreDirectoryPageObject::scope (
     nPage -= nLimit;
 
     // double indirect.
-    nCount = OStoreDirectoryDataBlock::doubleCount();
+    nCount = OStoreDirectoryDataBlock::doubleCount;
     nLimit = nCount * nCapacity * nCapacity;
     if (nPage < nLimit)
     {
@@ -675,7 +675,7 @@ OStoreDirectoryPageObject::scope (
     nPage -= nLimit;
 
     // triple indirect.
-    nCount = OStoreDirectoryDataBlock::tripleCount();
+    nCount = OStoreDirectoryDataBlock::tripleCount;
     nLimit = nCount * nCapacity * nCapacity * nCapacity;
     if (nPage < nLimit)
     {
@@ -1016,7 +1016,7 @@ storeError OStoreDirectoryPageObject::truncate (
     if (eScope == page::SCOPE_DIRECT)
     {
         // Truncate direct data pages.
-        sal_uInt16 i, n = OStoreDirectoryDataBlock::directCount();
+        sal_uInt16 i, n = OStoreDirectoryDataBlock::directCount;
         for (i = n; i > nRemain; i--)
         {
             // Obtain data page location.
@@ -1039,7 +1039,7 @@ storeError OStoreDirectoryPageObject::truncate (
     if (eScope == page::SCOPE_SINGLE)
     {
         // Truncate single indirect pages.
-        sal_uInt16 i, n = OStoreDirectoryDataBlock::singleCount();
+        sal_uInt16 i, n = OStoreDirectoryDataBlock::singleCount;
         for (i = n; i > nRemain; i--)
         {
             // Truncate single indirect page to zero data pages.
@@ -1058,7 +1058,7 @@ storeError OStoreDirectoryPageObject::truncate (
     if (eScope == page::SCOPE_DOUBLE)
     {
         // Truncate double indirect pages.
-        sal_uInt16 i, n = OStoreDirectoryDataBlock::doubleCount();
+        sal_uInt16 i, n = OStoreDirectoryDataBlock::doubleCount;
         for (i = n; i > nRemain; i--)
         {
             // Truncate double indirect page to zero single indirect pages.
@@ -1077,7 +1077,7 @@ storeError OStoreDirectoryPageObject::truncate (
     if (eScope == page::SCOPE_TRIPLE)
     {
         // Truncate triple indirect pages.
-        sal_uInt16 i, n = OStoreDirectoryDataBlock::tripleCount();
+        sal_uInt16 i, n = OStoreDirectoryDataBlock::tripleCount;
         for (i = n; i > nRemain; i--)
         {
             // Truncate to zero double indirect pages.

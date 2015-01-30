@@ -146,8 +146,6 @@ void SlideSorterController::Init (void)
     mpSelectionManager.reset(new SelectionManager(mrSlideSorter));
     mpClipboard.reset(new Clipboard(mrSlideSorter));
 
-    mpScrollBarManager->LateInitialization();
-
     // Create the selection function.
     SfxRequest aRequest (
         SID_OBJECT_SELECT,
@@ -680,10 +678,6 @@ void SlideSorterController::ExecCtrl (SfxRequest& rRequest)
 void SlideSorterController::GetAttrState (SfxItemSet& rSet)
 {
     mpSlotManager->GetAttrState (rSet);
-}
-
-void SlideSorterController::ExecStatusBar (SfxRequest& )
-{
 }
 
 void SlideSorterController::UpdateAllPages (void)

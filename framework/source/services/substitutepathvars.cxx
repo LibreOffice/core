@@ -128,8 +128,6 @@ class SubstitutePathVariables_Impl : public utl::ConfigItem
         virtual void Commit() SAL_OVERRIDE;
 
         private:
-            // Wrapper methods for low-level functions
-            OperatingSystem         GetOperatingSystem();
             const OUString&    GetYPDomainName();
             const OUString&    GetDNSDomainName();
             const OUString&    GetNTDomainName();
@@ -462,7 +460,7 @@ void SubstitutePathVariables_Impl::Commit()
 {
 }
 
-OperatingSystem SubstitutePathVariables_Impl::GetOperatingSystem()
+static inline OperatingSystem GetOperatingSystem()
 {
 #ifdef SOLARIS
     return OS_SOLARIS;

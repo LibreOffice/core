@@ -33,7 +33,7 @@
 
 #include <app.hrc>
 
-static const sal_uInt16 aPageRg[] = {
+const sal_uInt16 SwParagraphNumTabPage::aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
     0
 };
@@ -94,11 +94,6 @@ SfxTabPage* SwParagraphNumTabPage::Create(  vcl::Window* pParent,
                                 const SfxItemSet* rSet )
 {
     return new SwParagraphNumTabPage(pParent, *rSet);
-}
-
-const sal_uInt16* SwParagraphNumTabPage::GetRanges()
-{
-    return aPageRg;
 }
 
 bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )

@@ -82,7 +82,7 @@ public:
     static void FillProperties(
                     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rSeq,
                     const ScImportParam& rParam );
-    static long GetPropertyCount();
+    static long GetPropertyCount() { return 4; }
 };
 
 //  SortDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
@@ -96,7 +96,12 @@ public:
     static void FillProperties(
                     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rSeq,
                     const ScSortParam& rParam );
-    static long GetPropertyCount();
+    //! SortAscending muss aus der SheetSortDescriptor service-Beschreibung raus
+    static long GetPropertyCount()
+    {
+        return 9;       // TableSortDescriptor and SheetSortDescriptor
+    }
+
 };
 
 //  ScSubTotalDescriptorBase - base class for SubTotalDescriptor stand alone and in DB area (context?)

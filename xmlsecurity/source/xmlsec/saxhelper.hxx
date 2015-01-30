@@ -71,9 +71,6 @@ class SAXHelper
             const OUString& aData )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 
-        void setDocumentLocator( const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XLocator > & xLocator )
-            throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;
 } ;
 
 #endif

@@ -96,9 +96,4 @@ std::vector<OUString> ScNamePasteDlg::GetSelectedNames() const
     return maSelectedNames;
 }
 
-bool ScNamePasteDlg::IsAllSelected() const
-{
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

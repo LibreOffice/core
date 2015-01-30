@@ -107,6 +107,7 @@ class SvxTransparenceTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pTransparenceRanges[];
 
     const SfxItemSet&   rOutAttrs;
     RECT_POINT          eRP;
@@ -160,10 +161,9 @@ class SvxTransparenceTabPage : public SvxTabPage
 
 public:
     SvxTransparenceTabPage(vcl::Window* pParent, const SfxItemSet& rInAttrs);
-    void Construct();
 
     static SfxTabPage* Create(vcl::Window*, const SfxItemSet*);
-    static const sal_uInt16* GetRanges();
+    static const sal_uInt16* GetRanges() { return pTransparenceRanges; }
 
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet*) SAL_OVERRIDE;
@@ -182,7 +182,7 @@ class SvxAreaTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
-
+    static const sal_uInt16 pAreaRanges[];
 private:
     ListBox*            m_pTypeLB;
 
@@ -293,7 +293,7 @@ public:
     void    Construct();
 
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() { return pAreaRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
@@ -324,6 +324,7 @@ class SvxShadowTabPage : public SvxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
+    static const sal_uInt16 pShadowRanges[];
 
 private:
     TriStateBox*        m_pTsbShowShadow;
@@ -358,7 +359,7 @@ public:
 
     void    Construct();
     static  SfxTabPage* Create( vcl::Window*, const SfxItemSet* );
-    static  const sal_uInt16*     GetRanges();
+    static const sal_uInt16* GetRanges() { return pShadowRanges; }
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;

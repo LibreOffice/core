@@ -228,10 +228,8 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
 protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-    bool                EditedEntry( SvxIconChoiceCtrlEntry*, const OUString& rNewText, bool bCancelled );
     void                DocumentRectChanged();
     void                VisibleRectChanged();
-    bool                EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     virtual void        MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -319,10 +317,6 @@ public:
 #ifdef DBG_UTIL
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
 #endif
-
-    bool                HasBackground() const;
-    bool                HasFont() const;
-    bool                HasFontFillColor() const;
 
     void                SetFontColorToBackground ( bool bDo = true ) { _bAutoFontColor = bDo; }
     bool                AutoFontColor () { return _bAutoFontColor; }

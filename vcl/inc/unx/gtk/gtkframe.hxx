@@ -155,7 +155,6 @@ class GtkSalFrame : public SalFrame, public X11WindowProvider
         void            createIMContext();
         void            deleteIMContext();
         void            updateIMSpotLocation();
-        void            setInputContext( SalInputContext* pContext );
         void            endExtTextInput( sal_uInt16 nFlags );
         bool            handleKeyEvent( GdkEventKey* pEvent );
         void            focusChanged( bool bFocusIn );

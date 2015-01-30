@@ -148,8 +148,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL SoundHandler::impl_createIn
     SoundHandler* pClass = new SoundHandler( xServiceManager );
     /* hold it alive by increasing his ref count!!! */
     css::uno::Reference< css::uno::XInterface > xService( static_cast< ::cppu::OWeakObject* >(pClass), css::uno::UNO_QUERY );
-    /* initialize new service instance ... he can use his own refcount ... we hold it! */
-    pClass->impl_initService();
     /* return new created service as reference */
     return xService;
 }
@@ -164,10 +162,6 @@ css::uno::Reference< css::lang::XSingleServiceFactory > SoundHandler::impl_creat
         )
     );
     return xReturn;
-}
-
-void SAL_CALL SoundHandler::impl_initService()
-{
 }
 
 /*-************************************************************************************************************

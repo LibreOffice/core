@@ -1455,7 +1455,6 @@ void XMLFilterListBox::Paint( const Rectangle& rRect )
     if( mbFirstPaint )
     {
         mbFirstPaint = false;
-        RepaintScrollBars();
     }
 
     SvTabListBox::Paint( rRect );

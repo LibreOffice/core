@@ -94,7 +94,7 @@ public:
     SvStream&   Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
     SvStream&   Write( SvStream & ) const;
 
-    sal_uInt16 GetVersion() const       { return SVX_MACROTBL_AKTVERSION; }
+    static sal_uInt16 GetVersion() { return SVX_MACROTBL_AKTVERSION; }
 
     SvxMacroTable::iterator begin() { return aSvxMacroTable.begin(); }
     SvxMacroTable::const_iterator begin() const { return aSvxMacroTable.begin(); }

@@ -300,9 +300,6 @@ void SfxBindings::DeleteControllers_Impl()
         SfxStateCache *pCache = (*pImp->pCaches)[nCache];
         sal_uInt16 nSlotId = pCache->GetId();
 
-        // Delete SfxPopupWindow
-        pCache->DeleteFloatingWindows();
-
         // Re-align, because the cache may have been reduced
         sal_uInt16 nNewCount = pImp->pCaches->size();
         if ( nNewCount < nCount )
@@ -385,8 +382,6 @@ void SfxBindings::HidePopupCtrls_Impl( bool bHide )
         pImp->ePopupAction = SFX_POPUP_SHOW;
     }
 
-    for(SfxStateCacheArr_Impl::const_iterator it = pImp->pCaches->begin(); it != pImp->pCaches->end(); ++it)
-        (*it)->DeleteFloatingWindows();
     pImp->ePopupAction = SFX_POPUP_DELETE;
 }
 
