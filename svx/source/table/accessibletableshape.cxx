@@ -69,7 +69,7 @@ public:
     void init( const Reference< XAccessible>& xAccessible, const Reference< XTable >& xTable );
     void dispose();
 
-    Reference< XAccessible > getAccessibleChild( sal_Int32 i ) throw(IndexOutOfBoundsException);
+    Reference< XAccessible > getAccessibleChild(sal_Int32 i) throw (IndexOutOfBoundsException, RuntimeException);
     void getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (IndexOutOfBoundsException );
 
     // XModifyListener
@@ -151,7 +151,8 @@ Reference< AccessibleCell > AccessibleTableShapeImpl::getAccessibleCell (Referen
 }
 
 
-Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild( sal_Int32 nChildIndex ) throw(IndexOutOfBoundsException)
+Reference< XAccessible > AccessibleTableShapeImpl::getAccessibleChild(sal_Int32 nChildIndex)
+    throw (IndexOutOfBoundsException, RuntimeException)
 {
     sal_Int32 nColumn = 0, nRow = 0;
     getColumnAndRow( nChildIndex, nColumn, nRow );
