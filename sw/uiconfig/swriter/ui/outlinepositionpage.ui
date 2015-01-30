@@ -136,6 +136,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Numbering alignment:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">numalignlb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -160,7 +162,9 @@
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Minimum space between
 numbering and text:</property>
+                        <property name="use_underline">True</property>
                         <property name="justify">right</property>
+                        <property name="mnemonic_widget">numdistmf:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -186,6 +190,8 @@ numbering and text:</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Width of numbering:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">numberingwidthmf:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -226,6 +232,8 @@ numbering and text:</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Indent:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">indentmf:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -251,6 +259,8 @@ numbering and text:</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Indent at:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">indentatmf:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -275,6 +285,8 @@ numbering and text:</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Numbering alignment:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">num2alignlb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -297,6 +309,8 @@ numbering and text:</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Aligned at:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">alignedatmf:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -321,6 +335,8 @@ numbering and text:</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">at:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">atmf:0.00cm</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -357,6 +373,8 @@ numbering and text:</property>
                         <property name="hexpand">True</property>
                         <property name="xalign">1</property>
                         <property name="label" translatable="yes">Numbering followed by:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">numfollowedbylb</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>

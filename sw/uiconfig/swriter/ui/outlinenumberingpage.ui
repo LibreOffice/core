@@ -50,6 +50,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Level</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">level:border</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -92,6 +94,8 @@
                         <property name="hexpand">True</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Paragraph style:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">style</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -116,6 +120,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Number:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">numbering</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -128,6 +134,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Character style:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">charstyle</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -140,6 +148,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Show sublevels:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">sublevelsnf</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -238,6 +248,8 @@
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Before:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">prefix</property>
                           </object>
                         </child>
                       </object>
@@ -257,6 +269,8 @@
                             <property name="can_focus">False</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">After:</property>
+                            <property name="use_underline">True</property>
+                            <property name="mnemonic_widget">suffix</property>
                           </object>
                         </child>
                       </object>
@@ -271,6 +285,8 @@
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="yes">Start at:</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">startat</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
