@@ -232,6 +232,7 @@ public:
     using _SwRedlineTbl::size_type;
     using _SwRedlineTbl::operator[];
     using _SwRedlineTbl::empty;
+    using _SwRedlineTbl::Resort;
 };
 
 /// Table that holds 'extra' redlines, such as 'table row insert\delete', 'paragraph moves' etc...

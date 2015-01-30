@@ -606,7 +606,7 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
             bool bSaveInXMLImportFlag = m_rDoc.IsInXMLImport();
             m_rDoc.SetInXMLImport( false );
             // and then hide/display everything
-            void (SwRangeRedline::*pFnc)( sal_uInt16 ) = 0;
+            void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = 0;
 
             switch( nsRedlineMode_t::REDLINE_SHOW_MASK & eMode )
             {
@@ -628,10 +628,17 @@ void DocumentRedlineManager::SetRedlineMode( RedlineMode_t eMode )
 
             _CHECK_REDLINE( *this )
 
-            if( pFnc )
-                for( sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop )
-                    for( sal_uInt16 i = 0; i < mpRedlineTbl->size(); ++i )
-                        ((*mpRedlineTbl)[ i ]->*pFnc)( nLoop );
+            if (pFnc)
+            {
+                for (sal_uInt16 nLoop = 1; nLoop <= 2; ++nLoop)
+                    for (size_t i = 0; i < mpRedlineTbl->size(); ++i)
+                        ((*mpRedlineTbl)[i]->*pFnc)(nLoop, i);
+
+                //SwRangeRedline::MoveFromSection routinely changes
+                //the keys that mpRedlineTbl is sorted by
+                mpRedlineTbl->Resort();
+            }
+
             _CHECK_REDLINE( *this )
             m_rDoc.SetInXMLImport( bSaveInXMLImportFlag );
         }
@@ -1123,8 +1130,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 // Before we can merge, we make it visible!
                                 // We insert temporarily so that pNew is
                                 // also dealt with when moving the indices.
-                                mpRedlineTbl->Insert( pNewRedl );
-                                pRedl->Show();
+                                mpRedlineTbl->Insert(pNewRedl);
+                                pRedl->Show(0, mpRedlineTbl->GetPos(pRedl));
                                 mpRedlineTbl->Remove( pNewRedl );
                                 pRStt = pRedl->Start();
                                 pREnd = pRedl->End();
@@ -1301,7 +1308,9 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                 pRedl->PushData( *pNewRedl );
                                 delete pNewRedl, pNewRedl = 0;
                                 if( IsHideChanges( meRedlineMode ))
-                                    pRedl->Hide();
+                                {
+                                    pRedl->Hide(0, mpRedlineTbl->GetPos(pRedl));
+                                }
                                 bCompress = true;
                             }
                             break;
@@ -1364,8 +1373,8 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     pNewRedl->SetEnd( *pRStt, pEnd );
                                     if( IsHideChanges( meRedlineMode ))
                                     {
-                                        mpRedlineTbl->Insert( pNewRedl );
-                                        pRedl->Hide();
+                                        mpRedlineTbl->Insert(pNewRedl);
+                                        pRedl->Hide(0, mpRedlineTbl->GetPos(pRedl));
                                         mpRedlineTbl->Remove( pNewRedl );
                                     }
                                 }
@@ -1393,7 +1402,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                                     if( IsHideChanges( meRedlineMode ))
                                     {
                                         mpRedlineTbl->Insert( pNewRedl );
-                                        pRedl->Hide();
+                                        pRedl->Hide(0, mpRedlineTbl->GetPos(pRedl));
                                         mpRedlineTbl->Remove( pNewRedl );
                                     }
                                 }
@@ -1764,7 +1773,7 @@ void DocumentRedlineManager::CompressRedlines()
 {
     _CHECK_REDLINE( *this )
 
-    void (SwRangeRedline::*pFnc)(sal_uInt16) = 0;
+    void (SwRangeRedline::*pFnc)(sal_uInt16, size_t) = 0;
     switch( nsRedlineMode_t::REDLINE_SHOW_MASK & meRedlineMode )
     {
     case nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE:
@@ -1792,14 +1801,15 @@ void DocumentRedlineManager::CompressRedlines()
             !pCurEnd->nNode.GetNode().StartOfSectionNode()->IsTableNode() )
         {
             // we then can merge them
-            pPrev->Show();
-            pCur->Show();
+            size_t nPrevIndex = n-1;
+            pPrev->Show(0, nPrevIndex);
+            pCur->Show(0, n);
 
             pPrev->SetEnd( *pCur->End() );
             mpRedlineTbl->DeleteAndDestroy( n );
             --n;
             if( pFnc )
-                (pPrev->*pFnc)(0);
+                (pPrev->*pFnc)(0, nPrevIndex);
         }
     }
     _CHECK_REDLINE( *this )

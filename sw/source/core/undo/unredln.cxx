@@ -242,7 +242,7 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < (sal_uInt16)rDoc.getIDocumentRedlineAccess().GetRedlineTbl().size(),
                     "could not find an Insert object" );
         ++nFnd;
-        rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[nFnd]->Show( 1 );
+        rDoc.getIDocumentRedlineAccess().GetRedlineTbl()[nFnd]->Show(1, nFnd);
     }
 
     {

@@ -189,8 +189,8 @@ class SW_DLLPUBLIC SwRangeRedline : public SwPaM
 
     void MoveToSection();
     void CopyToSection();
-    void DelCopyOfSection();
-    void MoveFromSection();
+    void DelCopyOfSection(size_t nMyPos);
+    void MoveFromSection(size_t nMyPos);
 
 public:
     SwRangeRedline( RedlineType_t eType, const SwPaM& rPam );
@@ -260,10 +260,10 @@ public:
     // hide the Del-Redlines via Copy and Delete.
     // Otherwise at Move the attribution would be handled incorrectly.
     // All other callers must always give 0.
-    void CallDisplayFunc( sal_uInt16 nLoop = 0 );
-    void Show( sal_uInt16 nLoop = 0 );
-    void Hide( sal_uInt16 nLoop = 0 );
-    void ShowOriginal( sal_uInt16 nLoop = 0 );
+    void CallDisplayFunc(sal_uInt16 nLoop, size_t nMyPos);
+    void Show(sal_uInt16 nLoop , size_t nMyPos);
+    void Hide(sal_uInt16 nLoop , size_t nMyPos);
+    void ShowOriginal(sal_uInt16 nLoop, size_t nMyPos);
 
     /// Calculates the intersection with text node number nNdIdx.
     void CalcStartEnd(sal_uLong nNdIdx, sal_Int32& rStart, sal_Int32& rEnd) const;
