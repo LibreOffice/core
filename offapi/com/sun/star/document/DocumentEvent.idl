@@ -55,7 +55,7 @@ struct DocumentEvent : ::com::sun::star::lang::EventObject
     ::com::sun::star::frame::XController2
             ViewController;
 
-    /** contains supplemental information about the even which is being notified
+    /** contains supplemental information about the event which is being notified
 
         <p>The semantics of this additional information needs to be specified by the broadcaster
         of the event.</p>
