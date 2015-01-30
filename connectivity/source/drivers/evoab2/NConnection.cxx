@@ -40,16 +40,17 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::lang;
 
-OEvoabConnection::OEvoabConnection( OEvoabDriver& _rDriver )
-    :OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
-    ,m_rDriver(_rDriver)
-    ,m_xCatalog(NULL)
+OEvoabConnection::OEvoabConnection(OEvoabDriver& _rDriver)
+    : OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
+    , m_rDriver(_rDriver)
+    , m_eSDBCAddressType(SDBCAddress::EVO_LOCAL)
+    , m_xCatalog(NULL)
 {
 }
 
 OEvoabConnection::~OEvoabConnection()
 {
-        ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::MutexGuard aGuard( m_aMutex );
 
     if(!isClosed()) {
         acquire();
