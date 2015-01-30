@@ -644,11 +644,10 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
 }
 
-
 OEvoabResultSet::~OEvoabResultSet()
 {
+    delete m_pVersionHelper;
 }
-
 
 void OEvoabResultSet::construct( const QueryData& _rData )
 {
