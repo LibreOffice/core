@@ -276,15 +276,18 @@ namespace {
 
 bool containsOnlyColumnLabel(Edit* pEdit, ScTokenArray* pArr)
 {
-    formula::FormulaToken* token = pArr->First();
-    formula::StackVar t = token->GetType();
-    OpCode op = token->GetOpCode();
-    if( ( op == ocColRowName ) ||
-        ( ( op == ocBad ) && ( t == formula::svString ) )
-      )
+    if (pArr->GetLen() != 0 )
     {
-        pEdit->SetControlBackground(COL_YELLOW);
-        return true;
+        formula::FormulaToken* token = pArr->First();
+        formula::StackVar t = token->GetType();
+        OpCode op = token->GetOpCode();
+        if( ( op == ocColRowName ) ||
+            ( ( op == ocBad ) && ( t == formula::svString ) )
+            )
+        {
+            pEdit->SetControlBackground(COL_YELLOW);
+            return true;
+        }
     }
 
     return false;
