@@ -2323,7 +2323,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     assert(SwTable::FindTable(pTable->GetFrmFmt()) == pTable);
     assert(pTable->GetFrmFmt() ==
-            dynamic_cast<SwXTextTable*>(xRet.get())->GetFrmFmt());
+            dynamic_cast<SwXTextTable&>(*xRet.get()).GetFrmFmt());
     return xRet;
 }
 
