@@ -57,6 +57,8 @@ public:
 
     bool IsInRefMode() const;
 
+    ScConditionalFormat* GetSelection();
+
 private:
     PushButton *m_pBtnAdd;
     PushButton *m_pBtnRemove;

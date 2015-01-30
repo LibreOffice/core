@@ -149,6 +149,11 @@ ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
     return pList;
 }
 
+ScConditionalFormat* ScCondFormatManagerDlg::GetSelection()
+{
+    return m_pCtrlManager->GetSelection();
+}
+
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
 {
     m_pCtrlManager->DeleteSelection();
@@ -163,29 +168,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     if(!pFormat)
         return 0;
 
-    sal_uInt16 nId = 1;
-    ScModule* pScMod = SC_MOD();
-    pScMod->SetRefDialog( nId, true );
-    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                               pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
-    Show(false, 0);
-    if(pDlg->Execute() == RET_OK)
-    {
-        sal_Int32 nKey = pFormat->GetKey();
-        mpFormatList->erase(nKey);
-        ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
-        if(pNewFormat)
-        {
-            pNewFormat->SetKey(nKey);
-            mpFormatList->InsertNew(pNewFormat);
-        }
-
-        m_pCtrlManager->Update();
-        mbModified = true;
-    }
-    Show(true, 0);
-
-    pScMod->SetRefDialog( nId, false );
+    EndDialog( DLG_RET_EDIT );
 
     return 0;
 }
@@ -209,26 +192,7 @@ sal_uInt32 FindKey(ScConditionalFormatList* pFormatList)
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
 {
-    sal_uInt16 nId = 1;
-    ScModule* pScMod = SC_MOD();
-    pScMod->SetRefDialog( nId, true );
-    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
-                                               maPos, condformat::dialog::CONDITION));
-    Show(false, 0);
-    if(pDlg->Execute() == RET_OK)
-    {
-        ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
-        if(pNewFormat)
-        {
-            mpFormatList->InsertNew(pNewFormat);
-            pNewFormat->SetKey(FindKey(mpFormatList));
-            m_pCtrlManager->Update();
-
-            mbModified = true;
-        }
-    }
-    Show(true, 0);
-    pScMod->SetRefDialog( nId, false );
+    EndDialog( DLG_RET_ADD );
 
     return 0;
 }

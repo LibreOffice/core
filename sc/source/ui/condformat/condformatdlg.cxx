@@ -395,15 +395,19 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 
 //ScCondFormatDlg
 
-ScCondFormatDlg::ScCondFormatDlg(vcl::Window* pParent, ScDocument* pDoc,
+ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW,
+    vcl::Window* pParent, ScViewData* pViewData,
     const ScConditionalFormat* pFormat, const ScRangeList& rRange,
-    const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType)
-    : ScAnyRefModalDlg(pParent, "ConditionalFormatDialog",
+    const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType, sal_Bool bManaged)
+    : ScAnyRefDlg(pB, pCW, pParent, "ConditionalFormatDialog",
         "modules/scalc/ui/conditionalformatdialog.ui")
+    , mbManaged(bManaged)
     , maPos(rPos)
-    , mpDoc(pDoc)
+    , mpViewData(pViewData)
+    , mpDoc(pViewData->GetDocument())
     , mpLastEdit(NULL)
 {
+    get(mpBtnOk, "ok");
     get(mpBtnAdd, "add");
     get(mpBtnRemove, "delete");
 
@@ -414,15 +418,18 @@ ScCondFormatDlg::ScCondFormatDlg(vcl::Window* pParent, ScDocument* pDoc,
     get(mpRbRange, "rbassign");
     mpRbRange->SetReferences(this, mpEdRange);
 
+    maKey = pFormat ? pFormat->GetKey() : 0;
+
     get(mpCondFormList, "list");
-    mpCondFormList->init(pDoc, this, pFormat, rRange, rPos, eType);
+    mpCondFormList->init(pViewData->GetDocument(), this, pFormat, rRange, rPos, eType);
 
     OUStringBuffer aTitle( GetText() );
     aTitle.append(" ");
     OUString aRangeString;
-    rRange.Format(aRangeString, SCA_VALID, pDoc, pDoc->GetAddressConvention());
+    rRange.Format(aRangeString, SCA_VALID, pViewData->GetDocument(), pViewData->GetDocument()->GetAddressConvention());
     aTitle.append(aRangeString);
     SetText(aTitle.makeStringAndClear());
+    mpBtnOk->SetClickHdl(LINK(this, ScCondFormatDlg, BtnPressedHdl ) );
     mpBtnAdd->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, AddBtnHdl ) );
     mpBtnRemove->SetClickHdl( LINK( mpCondFormList, ScCondFormatList, RemoveBtnHdl ) );
     mpEdRange->SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
@@ -430,13 +437,10 @@ ScCondFormatDlg::ScCondFormatDlg(vcl::Window* pParent, ScDocument* pDoc,
     mpEdRange->SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     mpEdRange->SetText(aRangeString);
-
-    SC_MOD()->PushNewAnyRefDlg(this);
 }
 
 ScCondFormatDlg::~ScCondFormatDlg()
 {
-    SC_MOD()->PopAnyRefDlg();
 }
 
 void ScCondFormatDlg::SetActive()
@@ -451,7 +455,7 @@ void ScCondFormatDlg::SetActive()
 
 void ScCondFormatDlg::RefInputDone( bool bForced )
 {
-    ScAnyRefModalDlg::RefInputDone(bForced);
+    ScAnyRefDlg::RefInputDone(bForced);
 }
 
 bool ScCondFormatDlg::IsTableLocked() const
@@ -521,6 +525,32 @@ void ScCondFormatDlg::InvalidateRefData()
     mpLastEdit = NULL;
 }
 
+bool ScCondFormatDlg::Close()
+{
+    return DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
+}
+
+void ScCondFormatDlg::OkPressed()
+{
+    sal_Bool bManaged = mbManaged;
+    ScConditionalFormat* pFormat = GetConditionalFormat();
+
+    if(pFormat)
+        mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(maKey, pFormat, maPos.Tab(), pFormat->GetRange());
+    else
+        mpViewData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat(maKey, NULL, maPos.Tab(), ScRangeList());
+
+    Close();
+
+    // FIXME: Before Close() the dispatcher is locked, after Close() mpViewData is reset.
+    ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+    // Queue message to open manager dialog
+    if (bManaged && pViewSh)
+    {
+        pViewSh->GetViewData().GetDispatcher().Execute( SID_OPENDLG_CONDFRMT_MANAGER, SfxCallMode::ASYNCHRON );
+    }
+}
+
 IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
 {
     OUString aRangeStr = pEdit->GetText();
@@ -542,6 +572,13 @@ IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
 IMPL_LINK_NOARG( ScCondFormatDlg, RangeLoseFocusHdl )
 {
     //mpLastEdit = NULL;
+    return 0;
+}
+
+IMPL_LINK( ScCondFormatDlg, BtnPressedHdl, Button*, pBtn)
+{
+    if (pBtn == mpBtnOk)
+        OkPressed();
     return 0;
 }
 

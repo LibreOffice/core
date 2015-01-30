@@ -33,6 +33,7 @@
 #include "tabprotection.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
+#include <comphelper/sequenceasvector.hxx>
 
 class SbxObject;
 class SdrOle2Obj;
@@ -180,6 +181,8 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
+    // FIXME: We need generic extra data
+    comphelper::SequenceAsVector<com::sun::star::beans::PropertyValue> m_aTagBag;
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
@@ -413,6 +416,10 @@ public:
     // #i123629#
     bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
+
+    inline void ClearTagBag() { m_aTagBag.clear(); }
+    void SetTagBagValue(const OUString& aName, ::com::sun::star::uno::Any aValue);
+    ::com::sun::star::beans::PropertyValue GetTagBagValue( const OUString& rName );
 };
 
 #endif

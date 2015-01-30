@@ -21,10 +21,18 @@
 
 #include "rangelst.hxx"
 #include "condformathelper.hxx"
+#include "viewdata.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "anyrefdg.hxx"
+
+#define DLG_RET_ADD         8
+#define DLG_RET_EDIT        16
+
+#define PROP_CONDFRMT_MANAGED       "Managed"
+#define PROP_CONDFRMT_TYPE          "Type"
+#define PROP_CONDFRMT_KEY           "Key"
 
 class ScDocument;
 class ScConditionalFormat;
@@ -92,9 +100,10 @@ public:
     DECL_LINK( ColFormatTypeHdl, ListBox*);
 };
 
-class ScCondFormatDlg : public ScAnyRefModalDlg
+class ScCondFormatDlg : public ScAnyRefDlg
 {
 private:
+    PushButton* mpBtnOk;
     PushButton* mpBtnAdd;
     PushButton* mpBtnRemove;
     FixedText* mpFtRange;
@@ -102,8 +111,11 @@ private:
     formula::RefButton* mpRbRange;
 
     ScCondFormatList* mpCondFormList;
+    sal_Int32 maKey;
 
+    sal_Bool mbManaged;
     ScAddress maPos;
+    ScViewData* mpViewData;
     ScDocument* mpDoc;
 
     formula::RefEdit* mpLastEdit;
@@ -112,10 +124,12 @@ private:
 protected:
 
     virtual void RefInputDone( bool bForced = false ) SAL_OVERRIDE;
+    void OkPressed();
 
 public:
-    SC_DLLPUBLIC ScCondFormatDlg(vcl::Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
-            const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
+    SC_DLLPUBLIC ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pWindow,
+                                 ScViewData* pViewData, const ScConditionalFormat* pFormat,
+                                 const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType, sal_Bool bManaged);
     virtual ~ScCondFormatDlg();
 
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
@@ -124,9 +138,11 @@ public:
     virtual bool IsRefInputMode() const SAL_OVERRIDE;
     virtual void SetActive() SAL_OVERRIDE;
     virtual bool IsTableLocked() const SAL_OVERRIDE;
+    virtual bool Close() SAL_OVERRIDE;
 
     void InvalidateRefData();
 
+    DECL_LINK( BtnPressedHdl, Button* );
     DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
     DECL_LINK( RangeLoseFocusHdl, void* );
 };

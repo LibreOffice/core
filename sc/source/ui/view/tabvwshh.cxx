@@ -273,4 +273,28 @@ bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
     return true;
 }
 
+void ScTabViewShell::SetTagBagValue(const OUString& aName, ::com::sun::star::uno::Any aAny)
+{
+    ::com::sun::star::beans::PropertyValue aValue;
+    aValue.Name = aName;
+    aValue.Value = aAny;
+    m_aTagBag.push_back(aValue);
+}
+
+::com::sun::star::beans::PropertyValue ScTabViewShell::GetTagBagValue( const OUString& rName )
+{
+    ::com::sun::star::beans::PropertyValue aPropValue;
+    std::vector<com::sun::star::beans::PropertyValue>::iterator aIter = m_aTagBag.begin();
+
+    for (; aIter != m_aTagBag.end(); ++aIter)
+    {
+        if (aIter->Name == rName )
+        {
+            aPropValue = *aIter;
+            break;
+        }
+    }
+    return aPropValue;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
