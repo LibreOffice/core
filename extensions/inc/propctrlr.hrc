@@ -125,6 +125,7 @@
 #define HID_PROP_LINECOLOR                              "EXTENSIONS_HID_PROP_LINECOLOR"
 #define HID_PROP_BORDER                                 "EXTENSIONS_HID_PROP_BORDER"
 #define HID_PROP_ALIGN                                  "EXTENSIONS_HID_PROP_ALIGN"
+#define HID_PROP_VERTICAL_ALIGN                         "EXTENSIONS_HID_PROP_VERTICAL_ALIGN"
 #define HID_PROP_DROPDOWN                               "EXTENSIONS_HID_PROP_DROPDOWN"
 #define HID_PROP_MULTILINE                              "EXTENSIONS_HID_PROP_MULTILINE"
 #define HID_PROP_HSCROLL                                "EXTENSIONS_HID_PROP_HSCROLL"
