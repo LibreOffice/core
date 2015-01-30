@@ -222,14 +222,11 @@ uno::Reference< XAccessibleStateSet > SAL_CALL SvtRulerAccessible::getAccessible
         if( isVisible() )
             pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
 
+        if ( mpRepr->GetStyle() & WB_HORZ )
+            pStateSetHelper->AddState( AccessibleStateType::HORIZONTAL );
+        else
+            pStateSetHelper->AddState( AccessibleStateType::VERTICAL );
 
-        if ( mpRepr )
-        {
-            if ( mpRepr->GetStyle() & WB_HORZ )
-                pStateSetHelper->AddState( AccessibleStateType::HORIZONTAL );
-            else
-                pStateSetHelper->AddState( AccessibleStateType::VERTICAL );
-        }
         if(pStateSetHelper->contains(AccessibleStateType::FOCUSABLE))
         {
             pStateSetHelper->RemoveState( AccessibleStateType::FOCUSABLE );
