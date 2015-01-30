@@ -740,13 +740,14 @@ void SAL_CALL ShutdownThread::onTerminated()
 
 } // anonymous namespace
 
-
-
-
-UpdateCheck::UpdateCheck():
-    m_eState(NOT_INITIALIZED), m_eUpdateState(UPDATESTATES_COUNT),
-    m_pThread(NULL)
-{};
+UpdateCheck::UpdateCheck()
+    : m_eState(NOT_INITIALIZED)
+    , m_eUpdateState(UPDATESTATES_COUNT)
+    , m_pThread(NULL)
+    , m_bHasExtensionUpdate(false)
+    , m_bShowExtUpdDlg(false)
+{
+}
 
 UpdateCheck::~UpdateCheck() {}
 
