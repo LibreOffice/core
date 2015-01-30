@@ -133,6 +133,8 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
     virtual ScConditionalFormatList* GetConditionalFormatList() SAL_OVERRIDE;
 
     virtual bool CondFormatsChanged() SAL_OVERRIDE;
+
+    virtual ScConditionalFormat* GetSelection() SAL_OVERRIDE;
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg

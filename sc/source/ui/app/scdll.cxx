@@ -278,6 +278,7 @@ void ScDLL::Init()
 
     ScValidityRefChildWin::RegisterChildWindow(false, pMod);
     sc::SearchResultsDlgWrapper::RegisterChildWindow(false, pMod);
+    ScCondFormatDlgWrapper::RegisterChildWindow(false, pMod);
 
     // EditEngine Field; insofar not already defined in OfficeApplication::Init
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
