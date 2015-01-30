@@ -48,6 +48,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScFormulaDlgWrapper, SID_OPENDLG_FUNCTION )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScAcceptChgDlgWrapper, FID_CHG_ACCEPT )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
 
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
 
@@ -308,5 +309,7 @@ ScValidityRefChildWin::~ScValidityRefChildWin()
     if( m_bFreeWindowLock )
         pWindow = NULL;
 }
+
+IMPL_CHILD_CTOR( ScCondFormatDlgWrapper, WID_CONDFRMT_REF )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

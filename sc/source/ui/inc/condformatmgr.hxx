@@ -56,6 +56,8 @@ public:
 
     bool CondFormatsChanged() { return mbModified;}
 
+    ScConditionalFormat* GetCondFormatSelected();
+
 private:
     VclPtr<PushButton> m_pBtnAdd;
     VclPtr<PushButton> m_pBtnRemove;
