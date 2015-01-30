@@ -140,10 +140,9 @@ namespace frm
 
             // create the peer
             ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xContext, pParentWin, getModel() );
-            DBG_ASSERT( pPeer, "ONavigationBarControl::createPeer: invalid peer returned!" );
-            if ( pPeer )
-                // by definition, the returned component is acquired once
-                pPeer->release();
+            assert(pPeer && "ONavigationBarControl::createPeer: invalid peer returned!");
+            // by definition, the returned component is acquired once
+            pPeer->release();
 
             // announce the peer to the base class
             setPeer( pPeer );
