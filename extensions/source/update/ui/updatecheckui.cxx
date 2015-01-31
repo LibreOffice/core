@@ -735,8 +735,8 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
             if ( pWindow && pWindow->IsTopWindow() )
             {
                 SystemWindow *pSysWin = pWindow->GetSystemWindow();
-                MenuBar      *pMBar   = pSysWin->GetMenuBar();
-                if ( pSysWin && pMBar )
+                MenuBar *pMBar = pSysWin ? pSysWin->GetMenuBar() : NULL;
+                if (pMBar)
                 {
                     AddMenuBarIcon( pSysWin, true );
                 }
