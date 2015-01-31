@@ -4832,7 +4832,7 @@
             </node>
             <node oor:name=".uno:SpacePara15" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Line Spacing : 1.5</value>
+                    <value xml:lang="en-US">Line Spacing: 1.5</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>15</value>
@@ -4840,7 +4840,7 @@
             </node>
             <node oor:name=".uno:SpacePara2" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Line Spacing : 2</value>
+                    <value xml:lang="en-US">Line Spacing: 2</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>15</value>
