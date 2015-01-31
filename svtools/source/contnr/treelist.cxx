@@ -355,8 +355,8 @@ SvTreeListEntry* SvTreeList::CloneEntry( SvTreeListEntry* pSource ) const
     if( aCloneLink.IsSet() )
         return reinterpret_cast<SvTreeListEntry*>(aCloneLink.Call( pSource ));
     SvTreeListEntry* pEntry = CreateEntry();
-    pSource->Clone( pEntry );
-    return pSource;
+    pEntry->Clone(pSource);
+    return pEntry;
 }
 
 SvTreeListEntry* SvTreeList::CreateEntry() const
