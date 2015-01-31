@@ -252,7 +252,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
 }
 
 template<class RNG>
-void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG randomGenerator, const sal_Int16 aDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
+void ScRandomNumberGeneratorDialog::GenerateNumbers(RNG& randomGenerator, const sal_Int16 aDistributionStringId, boost::optional<sal_Int8> aDecimalPlaces)
 {
     OUString aUndo = SC_STRLOAD(RID_STATISTICS_DLGS, STR_UNDO_DISTRIBUTION_TEMPLATE);
     OUString aDistributionName = SC_STRLOAD(RID_STATISTICS_DLGS, aDistributionStringId);
