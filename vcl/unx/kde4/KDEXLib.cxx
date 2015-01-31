@@ -54,7 +54,7 @@ KDEXLib::KDEXLib() :
     SalXLib(),  m_bStartupDone(false), m_pApplication(0),
     m_pFreeCmdLineArgs(0), m_pAppCmdLineArgs(0), m_nFakeCmdLineArgs( 0 ),
     m_frameWidth( -1 ), m_isGlibEventLoopType(false),
-    m_allowKdeDialogs(false)
+    m_allowKdeDialogs(false), blockIdleTimeout(false)
 {
     // the timers created here means they belong to the main thread.
     // As the timeoutTimer runs the LO event queue, which may block on a dialog,
@@ -309,6 +309,7 @@ void KDEXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    blockIdleTimeout = !bWait;
     QAbstractEventDispatcher* dispatcher = QAbstractEventDispatcher::instance( qApp->thread());
     bool wasEvent = false;
     for( int cnt = bHandleAllCurrentEvents ? 100 : 1;
@@ -321,6 +322,7 @@ void KDEXLib::processYield( bool bWait, bool bHandleAllCurrentEvents )
     }
     if( bWait && !wasEvent )
         dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
+    blockIdleTimeout = false;
 }
 
 void KDEXLib::StartTimer( sal_uLong nMS )
@@ -360,7 +362,10 @@ void KDEXLib::timeoutActivated()
         SalKDEDisplay::self()->DispatchInternalEvent();
 
     X11SalData *pData = static_cast<X11SalData*>(ImplGetSVData()->mpSalData);
-    pData->Timeout();
+    // QGuiEventDispatcherGlib makes glib watch also X11 fd, but its hasPendingEvents()
+    // doesn't check X11, so explicitly check XPending() here.
+    bool idle = QApplication::hasPendingEvents() && !blockIdleTimeout && !XPending( QX11Info::display());
+    pData->Timeout( idle );
     // QTimer is not single shot, so will be restarted immediatelly
 }
 

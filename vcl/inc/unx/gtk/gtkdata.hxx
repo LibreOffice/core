@@ -99,6 +99,7 @@ class GtkData : public SalGenericData
     GSource *m_pUserEvent;
     oslMutex m_aDispatchMutex;
     oslCondition m_aDispatchCondition;
+    bool blockIdleTimeout;
 
 public:
     GtkData( SalInstance *pInstance );
@@ -120,6 +121,7 @@ public:
     virtual bool ErrorTrapPop( bool bIgnoreError ) SAL_OVERRIDE;
 
     inline GtkSalDisplay *GetGtkDisplay() const;
+    bool BlockIdleTimeout() const { return blockIdleTimeout; }
 };
 
 class GtkSalFrame;

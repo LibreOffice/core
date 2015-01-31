@@ -502,6 +502,7 @@ GtkData::GtkData( SalInstance *pInstance )
 #else
     : SalGenericData( SAL_DATA_GTK, pInstance )
 #endif
+    , blockIdleTimeout( false )
 {
     m_pUserEvent = NULL;
     m_aDispatchMutex = osl_createMutex();
@@ -551,6 +552,7 @@ void GtkData::Dispose()
 
 void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    blockIdleTimeout = !bWait;
     /* #i33212# only enter g_main_context_iteration in one thread at any one
      * time, else one of them potentially will never end as long as there is
      * another thread in there. Having only one yieldin thread actually dispatch
@@ -564,7 +566,10 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( osl_tryToAcquireMutex( m_aDispatchMutex ) )
             bDispatchThread = true;
         else if( ! bWait )
+        {
+            blockIdleTimeout = false;
             return; // someone else is waiting already, return
+        }
 
         if( bDispatchThread )
         {
@@ -596,6 +601,7 @@ void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
         if( bWasEvent )
             osl_setCondition( m_aDispatchCondition ); // trigger non dispatch thread yields
     }
+    blockIdleTimeout = false;
 }
 
 void GtkData::Init()
@@ -822,7 +828,7 @@ extern "C" {
         if( !pTSource->pInstance )
             return FALSE;
 
-        SalData *pSalData = GetSalData();
+        GtkData *pSalData = static_cast< GtkData* >( GetSalData());
 
         osl::Guard< comphelper::SolarMutex > aGuard( pSalData->m_pInstance->GetYieldMutex() );
 
@@ -830,7 +836,11 @@ extern "C" {
 
         ImplSVData* pSVData = ImplGetSVData();
         if( pSVData->mpSalTimer )
-            pSVData->mpSalTimer->CallCallback();
+        {
+            // TODO: context_pending should be probably checked too, but it causes locking assertion failures
+            bool idle = !pSalData->BlockIdleTimeout() && /*!g_main_context_pending( NULL ) &&*/ !gdk_events_pending();
+            pSVData->mpSalTimer->CallCallback( idle );
+        }
 
         return TRUE;
     }

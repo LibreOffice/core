@@ -344,7 +344,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     // run timers that have timed out
     if ( !pSVData->mbNoCallTimer )
         while ( pSVData->mbNotAllTimerCalled )
-            Timer::ImplTimerCallbackProc();
+            Timer::ImplTimerCallbackProc( !i_bWait );
 
     pSVData->maAppData.mnDispatchLevel++;
     // do not wait for events if application was already quit; in that
@@ -366,7 +366,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     {
         do
         {
-            Timer::ImplTimerCallbackProc();
+            Timer::ImplTimerCallbackProc( !i_bWait );
         }
         while( pSVData->mbNotAllTimerCalled );
     }

@@ -47,10 +47,10 @@ public:
         m_pProc = pProc;
     }
 
-    void            CallCallback()
+    void            CallCallback( bool idle )
     {
         if( m_pProc )
-            m_pProc();
+            m_pProc( idle );
     }
 };
 

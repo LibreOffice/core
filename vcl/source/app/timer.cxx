@@ -129,7 +129,7 @@ static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
     }
 }
 
-void Timer::ImplTimerCallbackProc()
+void Timer::ImplTimerCallbackProc( bool idle )
 {
     ImplSVData*     pSVData = ImplGetSVData();
     ImplTimerData*  pTimerData;
@@ -151,7 +151,7 @@ void Timer::ImplTimerCallbackProc()
         // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
         // call the handler as soon as the time is up.
         if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
-             !pTimerData->mbDelete && !pTimerData->mbInTimeout )
+             !pTimerData->mbDelete && !pTimerData->mbInTimeout && (!pTimerData->mpTimer->mbIdle || idle) )
         {
             // time has expired
             if ( pTimerData->GetDeadline() <= nTime )

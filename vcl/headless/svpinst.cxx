@@ -186,7 +186,10 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
                 // notify
                 ImplSVData* pSVData = ImplGetSVData();
                 if( pSVData->mpSalTimer )
-                    pSVData->mpSalTimer->CallCallback();
+                {
+                    bool idle = true; // TODO
+                    pSVData->mpSalTimer->CallCallback( idle );
+                }
             }
         }
     }

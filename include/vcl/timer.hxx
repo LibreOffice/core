@@ -61,8 +61,11 @@ public:
 
     Timer&          operator=( const Timer& rTimer );
 
+    /// @internal
     static void ImplDeInitTimer();
-    static void ImplTimerCallbackProc();
+    /// @internal
+    /// @p idle - allow also idle timers
+    static void ImplTimerCallbackProc( bool idle );
 
     /// Process all pending idle tasks ahead of time in priority order.
     static void ProcessAllIdleHandlers();

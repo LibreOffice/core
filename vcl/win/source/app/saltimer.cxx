@@ -147,7 +147,8 @@ void EmitTimerCallback()
     // try this a short time later again.
     if (pSVData->mpSalTimer && ImplSalYieldMutexTryToAcquire())
     {
-        pSVData->mpSalTimer->CallCallback();
+        bool idle = true; // TODO
+        pSVData->mpSalTimer->CallCallback( idle );
         ImplSalYieldMutexRelease();
 
         // Run the timer in the correct time, if we started this

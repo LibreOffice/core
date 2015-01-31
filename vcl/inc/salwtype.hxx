@@ -281,7 +281,7 @@ struct SalInputContext
     sal_uLong              mnOptions;
 };
 
-typedef void (*SALTIMERPROC)();
+typedef void (*SALTIMERPROC)( bool idle );
 
 #endif // INCLUDED_VCL_INC_SALWTYPE_HXX
 
