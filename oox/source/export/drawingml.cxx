@@ -636,7 +636,7 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
                           XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
-                                  I64S( MM100toEMU( nLineWidth ) ) :NULL,
+                                  I64S( oox::drawingml::convertHmmToEmu( nLineWidth ) ) :NULL,
                           FSEND );
 
     if( bColorSet )
@@ -1120,8 +1120,8 @@ void DrawingML::WriteTransformation( const Rectangle& rRect,
         nTop = 0;
     }
 
-    mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( nLeft ) ), XML_y, IS( MM100toEMU( nTop ) ), FSEND );
-    mpFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( MM100toEMU( rRect.GetWidth() ) ), XML_cy, IS( MM100toEMU( rRect.GetHeight() ) ), FSEND );
+    mpFS->singleElementNS( XML_a, XML_off, XML_x, IS( oox::drawingml::convertHmmToEmu( nLeft ) ), XML_y, IS( oox::drawingml::convertHmmToEmu( nTop ) ), FSEND );
+    mpFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( oox::drawingml::convertHmmToEmu( rRect.GetWidth() ) ), XML_cy, IS( oox::drawingml::convertHmmToEmu( rRect.GetHeight() ) ), FSEND );
 
     mpFS->endElementNS( nXmlNamespace, XML_xfrm );
 }
@@ -1924,10 +1924,10 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
         }
         mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
-                               XML_lIns, (nLeft != DEFLRINS) ? IS( MM100toEMU( nLeft ) ) : NULL,
-                               XML_rIns, (nRight != DEFLRINS) ? IS( MM100toEMU( nRight ) ) : NULL,
-                               XML_tIns, (nTop != DEFTBINS) ? IS( MM100toEMU( nTop ) ) : NULL,
-                               XML_bIns, (nBottom != DEFTBINS) ? IS( MM100toEMU( nBottom ) ) : NULL,
+                               XML_lIns, (nLeft != DEFLRINS) ? IS( oox::drawingml::convertHmmToEmu( nLeft ) ) : NULL,
+                               XML_rIns, (nRight != DEFLRINS) ? IS( oox::drawingml::convertHmmToEmu( nRight ) ) : NULL,
+                               XML_tIns, (nTop != DEFTBINS) ? IS( oox::drawingml::convertHmmToEmu( nTop ) ) : NULL,
+                               XML_bIns, (nBottom != DEFTBINS) ? IS( oox::drawingml::convertHmmToEmu( nBottom ) ) : NULL,
                                XML_anchor, sVerticalAlignment,
                                XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
                                XML_vert, sWritingMode,

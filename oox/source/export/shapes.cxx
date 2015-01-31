@@ -867,7 +867,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
             sal_Int32 nWidth(0);
             xColPropSet->getPropertyValue( "Width" ) >>= nWidth;
 
-            mpFS->singleElementNS( XML_a, XML_gridCol, XML_w, I64S(MM100toEMU(nWidth)), FSEND );
+            mpFS->singleElementNS( XML_a, XML_gridCol, XML_w, I64S(oox::drawingml::convertHmmToEmu(nWidth)), FSEND );
         }
 
         mpFS->endElementNS( XML_a, XML_tblGrid );
@@ -879,7 +879,7 @@ void ShapeExport::WriteTable( Reference< XShape > rXShape  )
 
             xRowPropSet->getPropertyValue( "Height" ) >>= nRowHeight;
 
-            mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( MM100toEMU( nRowHeight ) ), FSEND );
+            mpFS->startElementNS( XML_a, XML_tr, XML_h, I64S( oox::drawingml::convertHmmToEmu( nRowHeight ) ), FSEND );
 
             for( sal_Int32 nColumn = 0; nColumn < nColumnCount; nColumn++ )
             {

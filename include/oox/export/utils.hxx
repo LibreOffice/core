@@ -39,11 +39,6 @@ static inline sal_Int64 PPTtoEMU( sal_Int32 nPPT )
     return (sal_Int64)( (double)nPPT * 1587.5 );
 }
 
-static inline sal_Int64 MM100toEMU( sal_Int32 nMM100 )
-{
-    return (sal_Int64)nMM100 * 360;
-}
-
 static inline sal_Int64 TwipsToEMU( sal_Int32 nTwips )
 {
     return sal_Int64( nTwips ) * 635;
