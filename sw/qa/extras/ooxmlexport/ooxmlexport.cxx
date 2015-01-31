@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
@@ -631,9 +632,8 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
 {
-    if (xmlDocPtr pXmlDoc = parseExport())
-        // <w:pPr> had no <w:shd> child element, paragraph background was lost.
-        assertXPath(pXmlDoc, "//w:pPr/w:shd", "fill", "00CC00");
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

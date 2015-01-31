@@ -21,6 +21,7 @@
 #include <ConversionHelper.hxx>
 #include <TDefTableHandler.hxx>
 #include <ooxml/resourceids.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <sal/macros.h>
 #include <filter/msfilter/util.hxx>
@@ -268,9 +269,14 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( nShadingPattern ));
     }
 
-    pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
-                        : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
-                        : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
+    if (m_OutputFormat == Paragraph)
+    {
+        pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
+        pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
+    }
+    else
+        pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
+                            : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
 
     createGrabBag("originalColor", uno::makeAny(OUString::fromUtf8(msfilter::util::ConvertColor(nApplyColor, true))));
 

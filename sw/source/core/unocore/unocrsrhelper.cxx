@@ -1217,9 +1217,13 @@ void makeRedline( SwPaM& rPaM,
     // Check if the value exists
     if ( aRevertPropertiesValue >>= aRevertProperties )
     {
-        // sw/source/core/unocore/unoport.cxx#83 is where it's decided what map gets used for a text portion
-        // so it's PROPERTY_MAP_TEXTPORTION_EXTENSIONS, unless it's a redline portion
-        SfxItemPropertySet const& rPropSet = (*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXTPORTION_EXTENSIONS));
+        int nMap = 0;
+        // Make sure that paragraph format gets its own map, otherwise e.g. fill attributes are not preserved.
+        if (eType == nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT)
+            nMap = PROPERTY_MAP_PARAGRAPH;
+        else
+            nMap = PROPERTY_MAP_TEXTPORTION_EXTENSIONS;
+        SfxItemPropertySet const& rPropSet = (*aSwMapProvider.GetPropertySet(nMap));
 
         // Check if there are any properties
         if (aRevertProperties.getLength())
