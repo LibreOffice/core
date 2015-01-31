@@ -740,7 +740,7 @@ namespace xmloff
                 sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
                 OControlElement::ElementType _eType );
 
-
+        virtual ::rtl::OUString determineDefaultServiceName() const;
         void implTranslateStringListProperty(const ::rtl::OUString& _rPropertyName, const ::rtl::OUString& _rValue);
     };
 

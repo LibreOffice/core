@@ -190,7 +190,7 @@ namespace xmloff
         }
 
         if ( !m_sServiceName.getLength() )
-            determineDefaultServiceName();
+            m_sServiceName = determineDefaultServiceName();
 
         // create the object *now*. This allows setting properties in the various handleAttribute methods.
         // (Though currently not all code is migrated to this pattern, most attributes are still handled
@@ -712,6 +712,7 @@ namespace xmloff
         case OControlElement::IMAGE_FRAME:       pServiceName = "com.sun.star.form.component.DatabaseImageControl"; break;
         case OControlElement::HIDDEN:            pServiceName = "com.sun.star.form.component.HiddenControl"; break;
         case OControlElement::GRID:              pServiceName = "com.sun.star.form.component.GridControl"; break;
+        case OControlElement::VALUERANGE:        pServiceName = "com.sun.star.form.component.ScrollBar"; break;
         case OControlElement::TIME:              pServiceName = "com.sun.star.form.component.DateField"; break;
         case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.TimeField"; break;
         default:                                 break;
@@ -2219,6 +2220,12 @@ namespace xmloff
             default:
                 return new OControlImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
         }
+    }
+
+    //---------------------------------------------------------------------
+    ::rtl::OUString OFormImport::determineDefaultServiceName() const
+    {
+        return ::rtl::OUString::createFromAscii( "com.sun.star.form.component.Form" );
     }
 
 //.........................................................................
