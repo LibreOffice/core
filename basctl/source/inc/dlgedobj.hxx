@@ -121,7 +121,7 @@ public:
     void SAL_CALL TabIndexChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
 
     // PropertyChangeListener
-    void SAL_CALL _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException, std::exception);
+    void SAL_CALL _propertyChange(const css::beans::PropertyChangeEvent& evt) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     // ContainerListener
     void SAL_CALL _elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
