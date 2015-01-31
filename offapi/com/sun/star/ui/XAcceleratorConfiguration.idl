@@ -212,7 +212,8 @@ interface XAcceleratorConfiguration
                 because every URL schema can be used here.
      */
     sequence< any > getPreferredKeyEventsForCommandList( [in] sequence< string > lCommandList )
-        raises(com::sun::star::lang::IllegalArgumentException);
+        raises(com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::container::NoSuchElementException);
 
     /** search for an key-command-binding inside this configuration set,
         where the specified command is used.

@@ -737,8 +737,8 @@ AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Accelerator
 }
 
 css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
-    throw(css::lang::IllegalArgumentException   ,
-        css::uno::RuntimeException, std::exception            )
+    throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+          css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
