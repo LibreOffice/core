@@ -45,6 +45,7 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
     Image                    maDecreaseButton;
     bool                     mbValuesSet;
     bool                     mbOmitPaint;
+    bool                     mbDraggingStarted;
 
     SvxZoomSliderControl_Impl() :
         mnCurrentZoom( 0 ),
@@ -57,7 +58,8 @@ struct SvxZoomSliderControl::SvxZoomSliderControl_Impl
         maIncreaseButton(),
         maDecreaseButton(),
         mbValuesSet( false ),
-        mbOmitPaint( false ) {}
+        mbOmitPaint( false ),
+        mbDraggingStarted( false ) {}
 };
 
 const long nSliderXOffset = 20;
@@ -331,7 +333,10 @@ bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
         mpImpl->mnCurrentZoom = basegfx::zoomtools::zoomIn( static_cast<int>(mpImpl->mnCurrentZoom) );
     // click to slider
     else if( nXDiff >= nSliderXOffset && nXDiff <= aControlRect.GetWidth() - nSliderXOffset )
+    {
         mpImpl->mnCurrentZoom = Offset2Zoom( nXDiff );
+        mpImpl->mbDraggingStarted = true;
+    }
 
     if ( mpImpl->mnCurrentZoom < mpImpl->mnMinZoom )
         mpImpl->mnCurrentZoom = mpImpl->mnMinZoom;
@@ -346,6 +351,12 @@ bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     return true;
 }
 
+bool SvxZoomSliderControl::MouseButtonUp( const MouseEvent & )
+{
+    mpImpl->mbDraggingStarted = false;
+    return true;
+}
+
 bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
 {
     if ( !mpImpl->mbValuesSet )
@@ -357,7 +368,7 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
     const sal_Int32 nXDiff = aPoint.X() - aControlRect.Left();
 
     // check mouse move with button pressed
-    if ( 1 == nButtons )
+    if ( 1 == nButtons && mpImpl->mbDraggingStarted )
     {
         if ( nXDiff >= nSliderXOffset && nXDiff <= aControlRect.GetWidth() - nSliderXOffset )
         {
