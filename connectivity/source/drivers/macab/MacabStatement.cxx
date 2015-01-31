@@ -85,7 +85,6 @@ void MacabCommonStatement::disposing()
 
 void MacabCommonStatement::resetParameters() const throw(::com::sun::star::sdbc::SQLException)
 {
-    impl_throwError(STR_PARA_ONLY_PREPARED);
 }
 
 void MacabCommonStatement::getNextParameter(OUString &) const throw(::com::sun::star::sdbc::SQLException)
@@ -325,9 +324,7 @@ void MacabCommonStatement::selectRecords(MacabResultSet *pResult) const throw(SQ
     {
         if (SQL_ISRULE(pParseNode, where_clause))
         {
-            // Since we don't support parameters, don't reset them. If we ever
-            // support them, uncomment this line and fix resetParameters.
-            //resetParameters();
+            resetParameters();
             pParseNode = pParseNode->getChild(1);
             MacabCondition *pCondition = analyseWhereClause(pParseNode);
             if (pCondition->isAlwaysTrue())
