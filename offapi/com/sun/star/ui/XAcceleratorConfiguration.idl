@@ -134,7 +134,8 @@ interface XAcceleratorConfiguration
      */
     void setKeyEvent( [in] com::sun::star::awt::KeyEvent aKeyEvent,
                       [in] string                        sCommand )
-        raises(com::sun::star::lang::IllegalArgumentException);
+        raises(com::sun::star::lang::IllegalArgumentException,
+               com::sun::star::container::NoSuchElementException);
 
     /** remove a key-command-binding from this configuration set.
 

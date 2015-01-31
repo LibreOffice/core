@@ -568,8 +568,9 @@ OUString SAL_CALL XCUBasedAcceleratorConfiguration::getCommandByKeyEvent(const c
 
 void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
                                                     const OUString&    sCommand )
-                                                    throw(css::lang::IllegalArgumentException,
-                                                    css::uno::RuntimeException, std::exception         )
+                                                    throw (css::lang::IllegalArgumentException,
+                                                           css::container::NoSuchElementException,
+                                                           css::uno::RuntimeException, std::exception)
 {
     SAL_INFO( "fwk.accelerators", "XCUBasedAcceleratorConfiguration::setKeyEvent" );
 

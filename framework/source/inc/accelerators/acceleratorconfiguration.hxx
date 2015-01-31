@@ -310,8 +310,8 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper4<
 
         virtual void SAL_CALL setKeyEvent(const css::awt::KeyEvent& aKeyEvent,
             const OUString&    sCommand )
-            throw(css::lang::IllegalArgumentException,
-            css::uno::RuntimeException, std::exception         ) SAL_OVERRIDE;
+            throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL removeKeyEvent(const css::awt::KeyEvent& aKeyEvent)
             throw(css::container::NoSuchElementException,
