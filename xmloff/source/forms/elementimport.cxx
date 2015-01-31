@@ -683,6 +683,7 @@ namespace xmloff
         case OControlElement::IMAGE_FRAME:       pServiceName = "com.sun.star.form.component.DatabaseImageControl"; break;
         case OControlElement::HIDDEN:            pServiceName = "com.sun.star.form.component.HiddenControl"; break;
         case OControlElement::GRID:              pServiceName = "com.sun.star.form.component.GridControl"; break;
+        case OControlElement::VALUERANGE:        pServiceName = "com.sun.star.form.component.ScrollBar"; break;
         case OControlElement::TIME:              pServiceName = "com.sun.star.form.component.TimeField"; break;
         case OControlElement::DATE:              pServiceName = "com.sun.star.form.component.DateField"; break;
         default:                                 break;
@@ -2110,6 +2111,11 @@ namespace xmloff
             default:
                 return new OControlImport(m_rFormImport, *this, _nPrefix, _rLocalName, m_xMeAsContainer, _eType);
         }
+    }
+
+    OUString OFormImport::determineDefaultServiceName() const
+    {
+        return OUString("com.sun.star.form.component.Form");
     }
 
 }   // namespace xmloff

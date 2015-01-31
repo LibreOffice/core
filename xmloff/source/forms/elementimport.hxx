@@ -695,6 +695,7 @@ namespace xmloff
                 sal_uInt16 _nPrefix, const OUString& _rLocalName,
                 OControlElement::ElementType _eType );
 
+        virtual OUString determineDefaultServiceName() const SAL_OVERRIDE;
         void implTranslateStringListProperty(const OUString& _rPropertyName, const OUString& _rValue);
     };
 
