@@ -934,23 +934,21 @@ void OpenGLSalGraphicsImpl::DrawTransformedTexture(
             return;
     }
 
-    if( areaScaling )
+    int mnWidth = rTexture.GetWidth();
+    int mnHeight = rTexture.GetHeight();
+    if(areaScaling )
     {
         // From OpenGLSalBitmap::ImplScaleArea().
-        if( fastAreaScaling )
+        if (fastAreaScaling && mnWidth && mnHeight)
         {
-            int mnWidth = rTexture.GetWidth();
-            int mnHeight = rTexture.GetHeight();
             mpProgram->SetUniform1i( "xscale", ixscale );
             mpProgram->SetUniform1i( "yscale", iyscale );
             mpProgram->SetUniform1f( "xstep", 1.0 / mnWidth );
             mpProgram->SetUniform1f( "ystep", 1.0 / mnHeight );
             mpProgram->SetUniform1f( "ratio", 1.0 / ( ixscale * iyscale ));
         }
-        else
+        else if (mnHeight > 1 && mnWidth > 1)
         {
-            int mnWidth = rTexture.GetWidth();
-            int mnHeight = rTexture.GetHeight();
             mpProgram->SetUniform1f( "xscale", ixscale );
             mpProgram->SetUniform1f( "yscale", iyscale );
             mpProgram->SetUniform1i( "swidth", mnWidth );
