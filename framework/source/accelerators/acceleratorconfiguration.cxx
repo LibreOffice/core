@@ -170,8 +170,8 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
 }
 
 css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
-    throw(css::lang::IllegalArgumentException   ,
-          css::uno::RuntimeException, std::exception            )
+    throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+           css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

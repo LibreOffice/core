@@ -125,8 +125,8 @@ class XMLBasedAcceleratorConfiguration : public    IStorageListener,
             css::uno::RuntimeException, std::exception            ) SAL_OVERRIDE;
 
         virtual css::uno::Sequence< css::uno::Any > SAL_CALL getPreferredKeyEventsForCommandList(const css::uno::Sequence< OUString >& lCommandList)
-            throw(css::lang::IllegalArgumentException   ,
-            css::uno::RuntimeException, std::exception            ) SAL_OVERRIDE;
+            throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException,
+                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL removeCommandFromAllKeyEvents(const OUString& sCommand)
             throw(css::lang::IllegalArgumentException   ,
