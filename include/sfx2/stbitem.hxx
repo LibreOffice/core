@@ -102,7 +102,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual bool    MouseButtonDown( const MouseEvent & );
     virtual bool    MouseMove( const MouseEvent & );
-    bool            MouseButtonUp( const MouseEvent & );
+    virtual bool    MouseButtonUp( const MouseEvent & );
     virtual void    Paint( const UserDrawEvent &rUDEvt );
 
     static sal_uInt16   convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons );
