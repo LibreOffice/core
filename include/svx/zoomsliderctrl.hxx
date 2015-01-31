@@ -32,6 +32,7 @@ private:
 
     struct SvxZoomSliderControl_Impl;
     boost::scoped_ptr<SvxZoomSliderControl_Impl> mpImpl;
+    bool mbDraggingStarted;
 
     sal_uInt16 Offset2Zoom( long nOffset ) const;
     long Zoom2Offset( sal_uInt16 nZoom ) const;
@@ -49,6 +50,7 @@ public:
     virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) SAL_OVERRIDE;
     virtual void  Paint( const UserDrawEvent& rEvt ) SAL_OVERRIDE;
     virtual bool  MouseButtonDown( const MouseEvent & ) SAL_OVERRIDE;
+    virtual bool  MouseButtonUp( const MouseEvent & ) SAL_OVERRIDE;
     virtual bool  MouseMove( const MouseEvent & rEvt ) SAL_OVERRIDE;
 };
 
