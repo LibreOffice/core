@@ -1201,8 +1201,7 @@ bool SfxObjectShell::SaveTo_Impl
     }
 
     // use UCB for case sensitive/insensitive file name comparison
-    if ( pMedium
-      && !pMedium->GetName().equalsIgnoreAsciiCase("private:stream")
+    if ( !pMedium->GetName().equalsIgnoreAsciiCase("private:stream")
       && !rMedium.GetName().equalsIgnoreAsciiCase("private:stream")
       && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
