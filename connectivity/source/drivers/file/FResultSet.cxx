@@ -1676,13 +1676,10 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getP
 
 void OResultSet::doTableSpecials(const OSQLTable& _xTable)
 {
-    Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(_xTable,UNO_QUERY);
-    if(xTunnel.is())
-    {
-        m_pTable = reinterpret_cast< OFileTable* >( xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()) );
-        if(m_pTable)
-            m_pTable->acquire();
-    }
+    Reference<css::lang::XUnoTunnel> xTunnel(_xTable, UNO_QUERY_THROW);
+    m_pTable = reinterpret_cast< OFileTable* >(xTunnel->getSomething(OFileTable::getUnoTunnelImplementationId()));
+    assert(m_pTable);
+    m_pTable->acquire();
 }
 
 void OResultSet::clearInsertRow()
