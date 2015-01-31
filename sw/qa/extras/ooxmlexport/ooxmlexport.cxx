@@ -629,6 +629,13 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(114300+95250), getProperty<sal_Int32>(getShape(1), "LeftMargin"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
+{
+    if (xmlDocPtr pXmlDoc = parseExport())
+        // <w:pPr> had no <w:shd> child element, paragraph background was lost.
+        assertXPath(pXmlDoc, "//w:pPr/w:shd", "fill", "00CC00");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
