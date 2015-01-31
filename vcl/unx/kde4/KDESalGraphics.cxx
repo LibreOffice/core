@@ -46,13 +46,11 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
     const ImplControlValue& aValue )
 {
     QStyle::State nState =
-        ( (nControlState & ControlState::DEFAULT)?  QStyle::State_None:      QStyle::State_None ) |
         ( (nControlState & ControlState::ENABLED)?  QStyle::State_Enabled:   QStyle::State_None ) |
         ( (nControlState & ControlState::FOCUSED)?  QStyle::State_HasFocus:  QStyle::State_None ) |
         ( (nControlState & ControlState::PRESSED)?  QStyle::State_Sunken:    QStyle::State_None ) |
         ( (nControlState & ControlState::SELECTED)? QStyle::State_Selected : QStyle::State_None ) |
         ( (nControlState & ControlState::ROLLOVER)? QStyle::State_MouseOver: QStyle::State_None );
-        //TODO ( (nControlState & ControlState::HIDDEN)?   QStyle::State_:   QStyle::State_None ) |
 
     switch ( aValue.getTristateVal() )
     {
