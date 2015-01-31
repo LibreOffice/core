@@ -2560,7 +2560,8 @@ namespace accessibility
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleEditableTextPara::getRunAttributes(
             sal_Int32 nIndex,
             const uno::Sequence< OUString >& rRequestedAttributes )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
+        throw (beans::UnknownPropertyException, lang::IndexOutOfBoundsException,
+               uno::RuntimeException, std::exception)
     {
 
         SolarMutexGuard aGuard;

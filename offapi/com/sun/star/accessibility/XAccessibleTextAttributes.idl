@@ -86,7 +86,8 @@ interface XAccessibleTextAttributes
     sequence<::com::sun::star::beans::PropertyValue>
         getRunAttributes ( [in] long Index,
                            [in] sequence<string> RequestedAttributes )
-        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+        raises (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
 
 };
 
