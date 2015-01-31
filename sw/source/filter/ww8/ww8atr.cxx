@@ -304,6 +304,14 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
                      (nWhich >= XATTR_FILL_FIRST && nWhich < XATTR_FILL_LAST))
                     AttrOutput().OutputItem( *pItem );
             }
+
+            // Has to be called after RES_PARATR_GRABBAG is processed.
+            const XFillStyleItem* pXFillStyleItem(static_cast<const XFillStyleItem*>(rSet.GetItem(XATTR_FILLSTYLE)));
+            if (pXFillStyleItem && pXFillStyleItem->GetValue() == drawing::FillStyle_SOLID && !rSet.HasItem(RES_BACKGROUND))
+            {
+                // Construct an SvxBrushItem, as expected by the exporters.
+                AttrOutput().OutputItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+            }
         }
         pISet = 0;                      // fuer Doppel-Attribute
     }
