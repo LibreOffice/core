@@ -1120,8 +1120,8 @@ void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, 
                           XML_rot, nRotation ? I32S( nRotation ) : NULL,
                           FSEND );
 
-    pFS->singleElementNS( XML_a, XML_off, XML_x, IS( MM100toEMU( aPos.X ) ), XML_y, IS( MM100toEMU( aPos.Y ) ), FSEND );
-    pFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( MM100toEMU( aSize.Width ) ), XML_cy, IS( MM100toEMU( aSize.Height ) ), FSEND );
+    pFS->singleElementNS( XML_a, XML_off, XML_x, IS( oox::drawingml::convertHmmToEmu( aPos.X ) ), XML_y, IS( oox::drawingml::convertHmmToEmu( aPos.Y ) ), FSEND );
+    pFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( oox::drawingml::convertHmmToEmu( aSize.Width ) ), XML_cy, IS( oox::drawingml::convertHmmToEmu( aSize.Height ) ), FSEND );
 
     pFS->endElementNS( XML_xdr, XML_xfrm );
 }

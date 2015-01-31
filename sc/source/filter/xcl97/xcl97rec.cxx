@@ -1010,20 +1010,20 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const Reference< XShape >& 
             FSEND );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aStart.Col() );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_colOff ),
-            MM100toEMU( aLocation.Left() - aRangeRect.Left() ) );
+            oox::drawingml::convertHmmToEmu( aLocation.Left() - aRangeRect.Left() ) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_row ), (sal_Int32) aRange.aStart.Row() );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_rowOff ),
-            MM100toEMU( aLocation.Top() - aRangeRect.Top() ) );
+            oox::drawingml::convertHmmToEmu( aLocation.Top() - aRangeRect.Top() ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_from ) );
 
     pDrawing->startElement( FSNS( XML_xdr, XML_to ),
             FSEND );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_col ), (sal_Int32) aRange.aEnd.Col() );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_colOff ),
-            MM100toEMU( aLocation.Right() - aRangeRect.Right() ) );
+            oox::drawingml::convertHmmToEmu( aLocation.Right() - aRangeRect.Right() ) );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_row ), (sal_Int32) aRange.aEnd.Row() );
     XclXmlUtils::WriteElement( pDrawing, FSNS( XML_xdr, XML_rowOff ),
-            MM100toEMU( aLocation.Bottom() - aRangeRect.Bottom() ) );
+            oox::drawingml::convertHmmToEmu( aLocation.Bottom() - aRangeRect.Bottom() ) );
     pDrawing->endElement( FSNS( XML_xdr, XML_to ) );
 }
 
