@@ -2504,15 +2504,15 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
     short nOldType = pOldEntry->GetType();
     if ( 0 == ( nOldType & (
-                NUMBERFORMAT_NUMBER |  NUMBERFORMAT_CURRENCY | NUMBERFORMAT_PERCENT ) ) )
+                NUMBERFORMAT_NUMBER |  NUMBERFORMAT_CURRENCY | NUMBERFORMAT_PERCENT | NUMBERFORMAT_SCIENTIFIC ) ) )
     {
         //  date, time, fraction, logical, text can not be changed
-        //! in case of scientific the Numberformatter also can't
         bError = true;
     }
 
     //! SvNumberformat has a Member bStandard, but doesn't disclose it
     bool bWasStandard = ( nOldFormat == pFormatter->GetStandardIndex( eLanguage ) );
+    OUString sExponentialStandardFormat = "";
     if (bWasStandard)
     {
         //  with "Standard" the decimal places depend on cell content
@@ -2526,16 +2526,22 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
         nPrecision = 0;
         // 'E' for exponential is fixed in Numberformatter
-        if ( aOut.indexOf((sal_Unicode)'E') >= 0 )
-            bError = true;                              // exponential not changed
-        else
+        sal_Int32 nIndexE = aOut.indexOf((sal_Unicode)'E');
+        if ( nIndexE >= 0 )
         {
-            OUString aDecSep( pFormatter->GetFormatDecimalSep( nOldFormat ) );
-            sal_Int32 nPos = aOut.indexOf( aDecSep );
-            if ( nPos >= 0 )
-                nPrecision = aOut.getLength() - nPos - aDecSep.getLength();
-            // else keep 0
+          sExponentialStandardFormat = aOut.copy( nIndexE ).replace( '-', '+' );
+          for ( sal_Int32 i=1 ; i<sExponentialStandardFormat.getLength() ; i++ )
+          {
+            if ( sExponentialStandardFormat[i] >= '1' && sExponentialStandardFormat[i] <= '9' )
+              sExponentialStandardFormat = sExponentialStandardFormat.replaceAt( i, 1, OUString( "0" ) );
+          }
+          aOut = aOut.copy( 0, nIndexE ); // remove exponential part
         }
+        OUString aDecSep( pFormatter->GetFormatDecimalSep( nOldFormat ) );
+        sal_Int32 nPos = aOut.indexOf( aDecSep );
+        if ( nPos >= 0 )
+            nPrecision = aOut.getLength() - nPos - aDecSep.getLength();
+        // else keep 0
     }
 
     if (!bError)
@@ -2560,7 +2566,8 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
     {
         OUString aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLanguage,
                                                           bThousand, bNegRed,
-                                                          nPrecision, nLeading);
+                                                          nPrecision, nLeading)
+                                + sExponentialStandardFormat;
 
         nNewFormat = pFormatter->GetEntryKey( aNewPicture, eLanguage );
         if ( nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )

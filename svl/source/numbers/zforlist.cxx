@@ -2652,6 +2652,19 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     {
         sString.append('%');
     }
+    else if (eType == NUMBERFORMAT_SCIENTIFIC)
+    {
+      OUStringBuffer sOldFormatString = pFormat->GetFormatstring();
+      sal_Int32 nIndexE = sOldFormatString.indexOf('E');
+      if (nIndexE > -1)
+      {
+        sal_Int32 nIndexSep = sOldFormatString.indexOf(';');
+        if (nIndexSep > -1)
+            sString.append( sOldFormatString.copy(nIndexE, nIndexSep - nIndexE) );
+        else
+            sString.append( sOldFormatString.copy(nIndexE) );
+      }
+    }
     else if (eType == NUMBERFORMAT_CURRENCY)
     {
         OUStringBuffer sNegStr(sString);
