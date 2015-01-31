@@ -5026,6 +5026,18 @@
 					</info>
 					<value>0</value>
 				</prop>
+				<prop oor:name="PaperWidth" oor:type="xs:int">
+					<info>
+						<desc>Specifies the width of the paper [UNIT=1/100 mm].</desc>
+					</info>
+					<value>10000</value>
+				</prop>
+				<prop oor:name="PaperHeight" oor:type="xs:int">
+					<info>
+						<desc>Specifies the height of the paper [UNIT=1/100 mm].</desc>
+					</info>
+					<value>10000</value>
+				</prop>
 			</group>
 			<group oor:name="Option">
 				<info>

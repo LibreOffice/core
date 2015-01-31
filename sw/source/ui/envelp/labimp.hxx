@@ -101,6 +101,8 @@ public:
     long            lUpper;
     sal_Int32       nCols;
     sal_Int32       nRows;
+    long            lPaperWidth;
+    long            lPaperHeight;
     sal_Bool        bCont;
 };
 

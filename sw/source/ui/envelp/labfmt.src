@@ -71,7 +71,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_VDIST
     {
-        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Pos = MAP_APPFONT ( 6 , 33 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~Vertical pitch" ;
         Left = TRUE ;
@@ -80,7 +80,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:MetricField:TP_LAB_FMT:FLD_VDIST";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 33 ) ;
+        Pos = MAP_APPFONT ( 60 , 31 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -92,7 +92,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_WIDTH
     {
-        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Pos = MAP_APPFONT ( 6 , 47 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
@@ -101,7 +101,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:MetricField:TP_LAB_FMT:FLD_WIDTH";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 49 ) ;
+        Pos = MAP_APPFONT ( 60 , 45 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -113,7 +113,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 6 , 67 ) ;
+        Pos = MAP_APPFONT ( 6 , 61 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~Height" ;
         Left = TRUE ;
@@ -122,7 +122,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:MetricField:TP_LAB_FMT:FLD_HEIGHT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 65 ) ;
+        Pos = MAP_APPFONT ( 60 , 59 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -134,7 +134,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_LEFT
     {
-        Pos = MAP_APPFONT ( 6 , 83 ) ;
+        Pos = MAP_APPFONT ( 6 , 75 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~Left margin" ;
         Left = TRUE ;
@@ -143,7 +143,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:MetricField:TP_LAB_FMT:FLD_LEFT";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 81 ) ;
+        Pos = MAP_APPFONT ( 60 , 73 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -157,7 +157,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_UPPER
     {
-        Pos = MAP_APPFONT ( 6 , 99 ) ;
+        Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~Top margin" ;
         Left = TRUE ;
@@ -166,7 +166,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:MetricField:TP_LAB_FMT:FLD_UPPER";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 97 ) ;
+        Pos = MAP_APPFONT ( 60 , 87 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -180,7 +180,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_COLUMNS
     {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Pos = MAP_APPFONT ( 6 , 103 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "~Columns" ;
         Left = TRUE ;
@@ -189,7 +189,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:NumericField:TP_LAB_FMT:FLD_COLUMNS";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 113 ) ;
+        Pos = MAP_APPFONT ( 60 , 101 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -200,7 +200,7 @@ TabPage TP_LAB_FMT
     };
     FixedText TXT_ROWS
     {
-        Pos = MAP_APPFONT ( 6 , 131 ) ;
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Text [ en-US ] = "R~ows" ;
         Left = TRUE ;
@@ -209,7 +209,7 @@ TabPage TP_LAB_FMT
     {
         HelpID = "sw:NumericField:TP_LAB_FMT:FLD_ROWS";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 129 ) ;
+        Pos = MAP_APPFONT ( 60 , 115 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -218,10 +218,52 @@ TabPage TP_LAB_FMT
         Minimum = 1 ;
         First = 1 ;
     };
+    FixedText TXT_PAPER_WIDTH
+    {
+        Pos = MAP_APPFONT ( 6 , 131 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "~Paper Width" ;
+        Left = TRUE ;
+    };
+    MetricField FLD_PAPER_WIDTH
+    {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_PAPER_WIDTH";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 129 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+    };
+    FixedText TXT_PAPER_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 6 , 145 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Pape~r Height" ;
+        Left = TRUE ;
+    };
+    MetricField FLD_PAPER_HEIGHT
+    {
+        HelpID = "sw:MetricField:TP_LAB_FMT:FLD_PAPER_HEIGHT";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 143 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Repeat = TRUE ;
+        SpinSize = 10 ;
+    };
     PushButton  PB_SAVE
     {
         HelpID = "sw:PushButton:TP_LAB_FMT:PB_SAVE";
-        Pos = MAP_APPFONT ( 50 , 148 ) ;
+        Pos = MAP_APPFONT ( 50 , 164 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Save...";
     };

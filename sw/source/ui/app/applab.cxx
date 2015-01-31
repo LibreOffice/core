@@ -97,7 +97,8 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bPage)
 {
     SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
-                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
+                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT,
+                        RES_LR_SPACE, RES_LR_SPACE, 0 );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -108,6 +109,10 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                                                     text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    }
+    if ( nCol == rItem.nCols -1 )
+    {
+        aSet.Put( SvxLRSpaceItem( 0, 0, 0, 0, RES_LR_SPACE ) );
     }
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
     ASSERT( pFmt, "Fly not inserted" );
@@ -137,7 +142,8 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
                         sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bLast, sal_Bool bPage)
 {
     SfxItemSet aSet(rSh.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
-                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT, 0 );
+                        RES_VERT_ORIENT, RES_VERT_ORIENT, RES_HORI_ORIENT, RES_HORI_ORIENT,
+                        RES_LR_SPACE, RES_LR_SPACE, 0 );
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
@@ -148,6 +154,10 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
                                                     text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
         aSet.Put(SwFmtVertOrient(rItem.lUpper + nRow * rItem.lVDist,
                                                     text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
+    }
+    if ( nCol == rItem.nCols -1 )
+    {
+        aSet.Put( SvxLRSpaceItem( 0, 0, 0, 0, RES_LR_SPACE ) );
     }
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, sal_True,  &rFmt );  // Fly einfuegen
     ASSERT( pFmt, "Fly not inserted" );
@@ -272,8 +282,8 @@ static sal_uInt16 nBCTitleNo = 0;
 
             // Einstellen der Seitengroesse
             rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
-                                        rItem.lLeft  + rItem.nCols * rItem.lHDist + MINLAY,
-                                        rItem.lUpper + rItem.nRows * rItem.lVDist + MINLAY));
+                                    rItem.lPaperWidth == 0 ? rItem.lLeft  + rItem.nCols * rItem.lHDist + MINLAY : rItem.lPaperWidth,
+                                    rItem.bCont || rItem.lPaperHeight == 0 ? rItem.lUpper + rItem.nRows * rItem.lVDist + MINLAY : rItem.lPaperHeight));
 
             // Numerierungsart
             SvxNumberType aType;

@@ -100,6 +100,10 @@ class SwLabFmtPage : public SfxTabPage
     NumericField aColsField;
     FixedText    aRowsText;
     NumericField aRowsField;
+    FixedText    aPaperWidthText;
+    MetricField  aPaperWidthField;
+    FixedText    aPaperHeightText;
+    MetricField  aPaperHeightField;
     PushButton   aSavePB;
 
     Timer aPreviewTimer;

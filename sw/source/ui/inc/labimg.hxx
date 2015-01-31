@@ -63,6 +63,8 @@ public:
     sal_Int32       nRows;   // Anzahl Zeilen          (Benutzer)
     sal_Int32       nCol;    // Spalte fuer Einzeldruck
     sal_Int32       nRow;    // Zeile fuer Einzeldruck
+    sal_Int32       lPaperWidth;  // Paper Width           (user)
+    sal_Int32       lPaperHeight; // Paper Height          (user)
     sal_Bool        bAddr;// Adresse als Aufschrift?
     sal_Bool        bCont;// Endlospapier?
     sal_Bool        bPage;// Ganze Seite oder einzelnes Etikett?

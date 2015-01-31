@@ -329,6 +329,10 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aColsField   (this, SW_RES(FLD_COLUMNS)),
     aRowsText    (this, SW_RES(TXT_ROWS  )),
     aRowsField   (this, SW_RES(FLD_ROWS  )),
+    aPaperWidthText  (this, SW_RES(TXT_PAPER_WIDTH)),
+    aPaperWidthField (this, SW_RES(FLD_PAPER_WIDTH)),
+    aPaperHeightText (this, SW_RES(TXT_PAPER_HEIGHT)),
+    aPaperHeightField(this, SW_RES(FLD_PAPER_HEIGHT)),
     aSavePB      (this, SW_RES(PB_SAVE  )),
     bModified(sal_False),
     aItem        ((const SwLabItem&) rSet.Get(FN_LABEL))
@@ -344,6 +348,8 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     SetMetric(aHeightField, aMetric);
     SetMetric(aLeftField  , aMetric);
     SetMetric(aUpperField , aMetric);
+    SetMetric(aPaperWidthField, aMetric);
+    SetMetric(aPaperHeightField, aMetric);
 
     // Handler installieren
     Link aLk = LINK(this, SwLabFmtPage, ModifyHdl);
@@ -355,6 +361,8 @@ SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aUpperField .SetModifyHdl( aLk );
     aColsField  .SetModifyHdl( aLk );
     aRowsField  .SetModifyHdl( aLk );
+    aPaperWidthField .SetModifyHdl( aLk );
+    aPaperHeightField.SetModifyHdl( aLk );
 
     aLk = LINK(this, SwLabFmtPage, LoseFocusHdl);
     aHDistField .SetLoseFocusHdl( aLk );
@@ -533,6 +541,8 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
         rItem.lUpper  = rRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
         rItem.nCols   = rRec.nCols   = (sal_uInt16) aColsField.GetValue();
         rItem.nRows   = rRec.nRows   = (sal_uInt16) aRowsField.GetValue();
+        rItem.lPaperWidth  = rRec.lPaperWidth  = static_cast< long >(GETFLDVAL(aPaperWidthField));
+        rItem.lPaperHeight = rRec.lPaperHeight = static_cast< long >(GETFLDVAL(aPaperHeightField));
     }
 }
 
@@ -567,6 +577,8 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     SETFLDVAL(aHeightField, aItem.lHeight);
     SETFLDVAL(aLeftField  , aItem.lLeft  );
     SETFLDVAL(aUpperField , aItem.lUpper );
+    SETFLDVAL(aPaperWidthField , aItem.lPaperWidth );
+    SETFLDVAL(aPaperHeightField, aItem.lPaperHeight);
 
     aColsField.SetMax(aItem.nCols);
     aRowsField.SetMax(aItem.nRows);
@@ -592,6 +604,8 @@ IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
     aRec.lUpper  = static_cast< long >(GETFLDVAL(aUpperField ));
     aRec.nCols   = (sal_uInt16) aColsField.GetValue();
     aRec.nRows   = (sal_uInt16) aRowsField.GetValue();
+    aRec.lPaperWidth  = static_cast< long >(GETFLDVAL(aPaperWidthField ));
+    aRec.lPaperHeight = static_cast< long >(GETFLDVAL(aPaperHeightField));
     aRec.bCont = aItem.bCont;
     SwSaveLabelDlg* pSaveDlg = new SwSaveLabelDlg(this, aRec);
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
@@ -702,6 +716,8 @@ sal_Bool SwSaveLabelDlg::GetLabel(SwLabItem& rItem)
         rItem.lUpper  = rLabRec.lUpper;
         rItem.nCols   = rLabRec.nCols;
         rItem.nRows   = rLabRec.nRows;
+        rItem.lPaperWidth  = rLabRec.lPaperWidth;
+        rItem.lPaperHeight = rLabRec.lPaperHeight;
     }
     return bSuccess;
 }

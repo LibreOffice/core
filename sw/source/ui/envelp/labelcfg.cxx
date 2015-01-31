@@ -111,6 +111,8 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                             case 6 : pNewRec->lUpper    = MM100_TO_TWIP(nVal);break;
                             case 7 : pNewRec->nCols     = nVal; break;
                             case 8 : pNewRec->nRows     = nVal; break;
+                            case 9 : pNewRec->lPaperWidth = MM100_TO_TWIP(nVal);break;
+                            case 10: pNewRec->lPaperHeight = MM100_TO_TWIP(nVal);break;
                         }
                     }
                 }
@@ -146,7 +148,9 @@ Sequence<PropertyValue> lcl_CreateProperties(
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lLeft)   );          sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lUpper)  );          sTmp += sColon;
                 sTmp += OUString::valueOf(rRec.nCols   );sTmp += sColon;
-                sTmp += OUString::valueOf(rRec.nRows   );
+                sTmp += OUString::valueOf(rRec.nRows   );sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lPaperWidth));sTmp += sColon;
+                sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lPaperHeight));
                 pValues[nProp].Value <<= sTmp;
             }
             break;

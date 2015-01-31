@@ -51,6 +51,10 @@
 #define PB_SAVE      19
 #define FI_MAKE      20
 #define FI_TYPE      21
+#define TXT_PAPER_WIDTH  22
+#define FLD_PAPER_WIDTH  23
+#define TXT_PAPER_HEIGHT 24
+#define FLD_PAPER_HEIGHT 25
 
 #define FL_OPTIONS              1
 #define FT_MAKE         2

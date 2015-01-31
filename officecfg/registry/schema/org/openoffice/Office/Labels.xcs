@@ -40,10 +40,10 @@
 			</prop>
 			<prop oor:name="Measure" oor:type="xs:string">
 				<!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: 
-				'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while 'C' marks a continuous label and 'S' marks a sheet
+				'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows;Paper Width;Paper Height" while 'C' marks a continuous label and 'S' marks a sheet
 				-->
 				<info>
-					<desc>Contains the measurement data of the label concatenated by a colon (;) in the following order: 'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows" while &apos;C&apos; marks a continuous label and &apos;S&apos; marks a sheet.</desc>
+					<desc>Contains the measurement data of the label concatenated by a colon (;) in the following order: 'C' or 'S';Horizontal Distance;Vertical Distance;Width;Height;Left margin;Upper margin;Columns;Rows;Paper Width;Paper Height" while &apos;C&apos; marks a continuous label and &apos;S&apos; marks a sheet.</desc>
 				</info>
 			</prop>
 		</group>

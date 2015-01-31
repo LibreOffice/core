@@ -71,6 +71,8 @@ void SwLabRec::SetFromItem( const SwLabItem& rItem )
     lUpper  = rItem.lUpper;
     nCols   = rItem.nCols;
     nRows   = rItem.nRows;
+    lPaperWidth  = rItem.lPaperWidth;
+    lPaperHeight = rItem.lPaperHeight;
     bCont   = rItem.bCont;
 }
 
@@ -84,6 +86,8 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
     rItem.lUpper  = lUpper;
     rItem.nCols   = nCols;
     rItem.nRows   = nRows;
+    rItem.lPaperWidth  = lPaperWidth;
+    rItem.lPaperHeight = lPaperHeight;
 }
 
 // --------------------------------------------------------------------------
