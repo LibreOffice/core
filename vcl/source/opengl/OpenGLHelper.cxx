@@ -51,7 +51,7 @@ OString loadShader(const OUString& rFilename)
         sal_uInt64 nBytesRead = 0;
         aFile.read(content.get(), nSize, nBytesRead);
         assert(nSize == nBytesRead);
-        content[nBytesRead] = 0;
+        content.get()[nBytesRead] = 0;
         return OString(content.get());
     }
     else
