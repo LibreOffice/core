@@ -71,6 +71,7 @@ public:
     virtual OUString    GetComment() const;
     virtual OUString    GetRepeatComment(SfxRepeatTarget&) const;
     virtual sal_uInt16  GetId() const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     SfxUndoAction( const SfxUndoAction& ); // disabled
@@ -159,6 +160,7 @@ public:
     virtual sal_uInt16      GetId() const SAL_OVERRIDE;
 
     void SetComment(const OUString& rComment);
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 };
 
 

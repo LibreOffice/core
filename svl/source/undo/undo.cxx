@@ -24,6 +24,7 @@
 #include <osl/mutex.hxx>
 #include <comphelper/flagguard.hxx>
 #include <tools/diagnose_ex.h>
+#include <libxml/xmlwriter.h>
 
 #include <vector>
 #include <list>
@@ -133,6 +134,14 @@ void SfxUndoAction::Repeat(SfxRepeatTarget&)
 bool SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
     return true;
+}
+
+void SfxUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUndoAction"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("comment"), BAD_CAST(GetComment().toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 struct MarkedUndoAction
@@ -1370,6 +1379,18 @@ bool SfxListUndoAction::CanRepeat(SfxRepeatTarget&r)  const
 bool SfxListUndoAction::Merge( SfxUndoAction *pNextAction )
 {
     return !aUndoActions.empty() && aUndoActions[aUndoActions.size()-1].pAction->Merge( pNextAction );
+}
+
+void SfxListUndoAction::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxListUndoAction"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("size"), BAD_CAST(OString::number(aUndoActions.size()).getStr()));
+    SfxUndoAction::dumpAsXml(pWriter);
+
+    for (size_t i = 0; i < aUndoActions.size(); ++i)
+        aUndoActions.GetUndoAction(i)->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 /**

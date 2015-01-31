@@ -656,24 +656,6 @@ void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w ) const
     writer.endElement( );    // swextraredlinetbl
 }
 
-void lcl_dumpSfxUndoAction(WriterHelper& writer, SfxUndoAction* pAction)
-{
-    writer.startElement("undoAction");
-    writer.writeFormatAttribute("symbol", "%s", BAD_CAST(typeid(*pAction).name()));
-    writer.writeFormatAttribute("comment", "%s", BAD_CAST(OUStringToOString(pAction->GetComment(), RTL_TEXTENCODING_UTF8).getStr()));
-
-    if (SfxListUndoAction* pList = dynamic_cast<SfxListUndoAction*>(pAction))
-    {
-        writer.startElement("list");
-        writer.writeFormatAttribute("size", TMP_FORMAT, pList->aUndoActions.size());
-        for (size_t i = 0; i < pList->aUndoActions.size(); ++i)
-            lcl_dumpSfxUndoAction(writer, pList->aUndoActions.GetUndoAction(i));
-        writer.endElement();
-    }
-
-    writer.endElement();
-}
-
 void sw::UndoManager::dumpAsXml(xmlTextWriterPtr w)
 {
     WriterHelper writer(w);
@@ -682,7 +664,7 @@ void sw::UndoManager::dumpAsXml(xmlTextWriterPtr w)
     writer.writeFormatAttribute("nUndoActionCount", TMP_FORMAT, GetUndoActionCount());
 
     for (size_t i = 0; i < GetUndoActionCount(); ++i)
-        lcl_dumpSfxUndoAction(writer, GetUndoAction(i));
+        GetUndoAction(i)->dumpAsXml(w);
 
     writer.endElement();
 }
