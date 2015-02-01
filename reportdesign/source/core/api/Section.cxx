@@ -422,21 +422,6 @@ uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefiniti
     return xRet;
 }
 
-const ::std::vector< OUString >& lcl_getControlModelMap()
-{
-    static ::std::vector< OUString > s_sControlModels;
-    if ( s_sControlModels.empty() )
-    {
-        s_sControlModels.push_back( OUString("FixedText") );
-        s_sControlModels.push_back( OUString("FixedLine") );
-        s_sControlModels.push_back( OUString("ImageControl") );
-        s_sControlModels.push_back( OUString("FormattedField") );
-        s_sControlModels.push_back( OUString("Shape") );
-    }
-    return s_sControlModels;
-
-}
-
 // XChild
 uno::Reference< uno::XInterface > SAL_CALL OSection::getParent(  ) throw (uno::RuntimeException, std::exception)
 {
