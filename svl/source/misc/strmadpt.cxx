@@ -90,9 +90,6 @@ public:
 
     inline bool isEOF() const;
 
-    bool addMark(sal_uInt32 nPosition);
-    bool removeMark(sal_uInt32 nPosition);
-
     SeekResult setReadPosition(sal_uInt32 nPosition);
 };
 
@@ -743,25 +740,6 @@ sal_uInt32 SvDataPipe_Impl::write(sal_Int8 const * pBuffer, sal_uInt32 nSize)
         }
 
     return nSize - nRemain;
-}
-
-bool SvDataPipe_Impl::addMark(sal_uInt32 nPosition)
-{
-    if (m_pFirstPage != 0 && m_pFirstPage->m_nOffset > nPosition)
-        return false;
-    m_aMarks.insert(nPosition);
-    return true;
-}
-
-bool SvDataPipe_Impl::removeMark(sal_uInt32 nPosition)
-{
-    std::multiset< sal_uInt32 >::iterator t = m_aMarks.find(nPosition);
-    if (t == m_aMarks.end())
-        return false;
-    m_aMarks.erase(t);
-    // coverity[pass_freed_arg] - remove frees m_pFirstPage but then sets m_pFirstPage to something else
-    while (remove(m_pFirstPage)) ;
-    return true;
 }
 
 SvDataPipe_Impl::SeekResult SvDataPipe_Impl::setReadPosition(sal_uInt32
