@@ -1138,21 +1138,21 @@ void MarkManager::dumpAsXml(xmlTextWriterPtr pWriter) const
     struct
     {
         const char* pName;
-        const container_t& rContainer;
+        const container_t* pContainer;
     } aContainers[] =
     {
-        {"bookmarks", m_vBookmarks},
-        {"fieldmarks", m_vFieldmarks},
-        {"annotationmarks", m_vAnnotationMarks}
+        {"bookmarks", &m_vBookmarks},
+        {"fieldmarks", &m_vFieldmarks},
+        {"annotationmarks", &m_vAnnotationMarks}
     };
 
     xmlTextWriterStartElement(pWriter, BAD_CAST("markManager"));
     for (size_t i = 0; i < SAL_N_ELEMENTS(aContainers); ++i)
     {
-        if (!aContainers[i].rContainer.empty())
+        if (!aContainers[i].pContainer->empty())
         {
             xmlTextWriterStartElement(pWriter, BAD_CAST(aContainers[i].pName));
-            for (const_iterator_t it = aContainers[i].rContainer.begin(); it != aContainers[i].rContainer.end(); ++it)
+            for (const_iterator_t it = aContainers[i].pContainer->begin(); it != aContainers[i].pContainer->end(); ++it)
                 (*it)->dumpAsXml(pWriter);
             xmlTextWriterEndElement(pWriter);
         }
