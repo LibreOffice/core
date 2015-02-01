@@ -368,6 +368,8 @@ public:
     */
     void            RemoveOldestUndoActions( size_t const i_count );
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
+
 protected:
     bool    UndoWithContext( SfxUndoContext& i_context );
     bool    RedoWithContext( SfxUndoContext& i_context );

@@ -1279,6 +1279,17 @@ void SfxUndoManager::RemoveOldestUndoActions( size_t const i_count )
     }
 }
 
+void SfxUndoManager::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxUndoManager"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("nUndoActionCount"), BAD_CAST(OString::number(GetUndoActionCount()).getStr()));
+
+    for (size_t i = 0; i < GetUndoActionCount(); ++i)
+        GetUndoAction(i)->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 struct SfxListUndoAction::Impl
 {
     sal_uInt16 mnId;

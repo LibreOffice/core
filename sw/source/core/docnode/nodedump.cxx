@@ -656,17 +656,4 @@ void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w ) const
     writer.endElement( );    // swextraredlinetbl
 }
 
-void sw::UndoManager::dumpAsXml(xmlTextWriterPtr w)
-{
-    WriterHelper writer(w);
-
-    writer.startElement("m_pUndoManager");
-    writer.writeFormatAttribute("nUndoActionCount", TMP_FORMAT, GetUndoActionCount());
-
-    for (size_t i = 0; i < GetUndoActionCount(); ++i)
-        GetUndoAction(i)->dumpAsXml(w);
-
-    writer.endElement();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

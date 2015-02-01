@@ -85,8 +85,6 @@ public:
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
 
-    void dumpAsXml(xmlTextWriterPtr w);
-
 private:
     IDocumentDrawModelAccess & m_rDrawModelAccess;
     IDocumentRedlineAccess & m_rRedlineAccess;
