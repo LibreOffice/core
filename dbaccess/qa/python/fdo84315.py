@@ -7,8 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+import os
 import unittest
 from collections import deque
+import unohelper
 from org.libreoffice.unotest import UnoInProcess
 
 class Fdo84315(unittest.TestCase):
@@ -19,11 +21,13 @@ class Fdo84315(unittest.TestCase):
     def setUpClass(cls):
         cls._uno = UnoInProcess()
         cls._uno.setUp()
-        cls._xDoc = cls._uno.openBaseDoc('fdo84315.odb')
+        workdir = os.environ[ "WORKDIR_FOR_BUILD" ]
+        cls._xDoc = cls._uno.openDoc(os.path.join(workdir, "CppunitTest/fdo84315.odb"))
 
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
+        xCon.dispose()
 
     def test_fdo84315(self):
         xDoc = self.__class__._xDoc

@@ -17,4 +17,10 @@ $(eval $(call gb_PythonTest_add_modules,dbaccess_python,$(SRCDIR)/dbaccess/qa/py
 	fdo84315 \
 ))
 
+$(call gb_PythonTest_get_target,dbaccess_python) : $(WORKDIR)/CppunitTest/fdo84315.odb
+$(WORKDIR)/CppunitTest/fdo84315.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/fdo84315.odb
+	mkdir -p $(dir $@)
+	cp -P -f "$<" "$@"
+.PHONY: $(WORKDIR)/CppunitTest/fdo84315.odb
+
 # vim: set noet sw=4 ts=4:

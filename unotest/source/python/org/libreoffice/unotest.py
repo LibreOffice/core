@@ -218,6 +218,17 @@ class UnoInProcess:
         assert(self.xDoc)
         return self.xDoc
 
+    def openDoc(self, file):
+        assert(self.xContext)
+        smgr = self.getContext().ServiceManager
+        desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
+        props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", False)]
+        loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
+        url = "file://" + file
+        self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
+        assert(self.xDoc)
+        return self.xDoc
+
     def checkProperties(self, obj, dict, test):
         for k,v in dict.items():
             obj.setPropertyValue(k, v)
