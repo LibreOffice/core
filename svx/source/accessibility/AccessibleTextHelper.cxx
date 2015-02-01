@@ -118,10 +118,6 @@ namespace accessibility
         {
             mxFrontEnd = rInterface;
         }
-        uno::Reference< XAccessible > GetEventSource() const
-        {
-            return mxFrontEnd;
-        }
 
         void SetOffset( const Point& );
         Point GetOffset() const
@@ -140,8 +136,6 @@ namespace accessibility
         }
 
         void SetAdditionalChildStates( const VectorOfStates& rChildStates );
-
-        bool IsSelected() const;
 
         void Dispose();
 
@@ -348,20 +342,6 @@ namespace accessibility
             return maEditSource;
         else
             throw uno::RuntimeException("AccessibleTextHelper_Impl::GetEditSource: no edit source", mxFrontEnd );
-    }
-
-    bool AccessibleTextHelper_Impl::IsSelected() const
-    {
-        bool bRet = false;
-
-        try
-        {
-            ESelection aSelection;
-            bRet = GetEditViewForwarder().GetSelection( aSelection );
-        }
-        catch( const uno::Exception& ) {}
-
-        return bRet;
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
