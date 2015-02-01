@@ -1278,7 +1278,7 @@ SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* p
 {
     for (SbiForStack *p = pForStk; p; p = p->pNext)
     {
-        SbxVariable* pVar = p->refEnd.Is() ? (SbxVariable*)p->refEnd : NULL;
+        SbxVariable* pVar = p->refEnd.Is() ? p->refEnd.get() : NULL;
         if( p->eForType == FOR_EACH_COLLECTION && pVar != NULL &&
             PTR_CAST(BasicCollection,pVar) == pCollection )
         {
@@ -1713,7 +1713,7 @@ void SbiRuntime::StepPUT()
     // store on its own method (inside a function)?
     bool bFlagsChanged = false;
     SbxFlagBits n = SBX_NONE;
-    if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+    if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
     {
         bFlagsChanged = true;
         n = refVar->GetFlags();
@@ -1865,13 +1865,13 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     {
         bool bFlagsChanged = false;
         SbxFlagBits n = SBX_NONE;
-        if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+        if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
         {
             bFlagsChanged = true;
             n = refVar->GetFlags();
             refVar->SetFlag( SBX_WRITE );
         }
-        SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty,(SbxVariable*)refVar);
+        SbProcedureProperty* pProcProperty = PTR_CAST(SbProcedureProperty, refVar.get());
         if( pProcProperty )
         {
             pProcProperty->setSet( true );
@@ -1907,7 +1907,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 SbxObject* pObj = NULL;
 
 
-                pObj = PTR_CAST(SbxObject,(SbxVariable*)refVar);
+                pObj = PTR_CAST(SbxObject,refVar.get());
 
                 // calling GetObject on a SbxEMPTY variable raises
                 // object not set errors, make sure its an Object
@@ -2066,7 +2066,7 @@ void SbiRuntime::StepLSET()
     else
     {
         SbxFlagBits n = refVar->GetFlags();
-        if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+        if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
         {
             refVar->SetFlag( SBX_WRITE );
         }
@@ -2102,7 +2102,7 @@ void SbiRuntime::StepRSET()
     else
     {
         SbxFlagBits n = refVar->GetFlags();
-        if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+        if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
         {
             refVar->SetFlag( SBX_WRITE );
         }
@@ -3103,7 +3103,7 @@ void SbiRuntime::StepTESTFOR( sal_uInt32 nOp1 )
             {
                 Any aElem = p->xEnumeration->nextElement();
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
-                unoToSbxValue( (SbxVariable*)xVar, aElem );
+                unoToSbxValue( xVar.get(), aElem );
                 (*pForStk->refVar) = *xVar;
             }
             else
@@ -3239,7 +3239,7 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
     bool bOk = bDefault;
 
     SbxDataType t = refVal->GetType();
-    SbxVariable* pVal = (SbxVariable*)refVal;
+    SbxVariable* pVal = refVal.get();
     // we don't know the type of uno properties that are (maybevoid)
     if ( t == SbxEMPTY && refVal->ISA(SbUnoProperty) )
     {
@@ -3597,7 +3597,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             SbxVariableRef refTemp = pElem;
 
             // dissolve the notify while copying variable
-            SbxVariable* pNew = new SbxVariable( *((SbxVariable*)pElem) );
+            SbxVariable* pNew = new SbxVariable( *pElem );
             pElem->SetParameters( NULL );
             pElem = pNew;
         }
@@ -3816,7 +3816,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 {
     SbxArray* pPar;
-    if( ( pElem->GetType() & SbxARRAY ) && (SbxVariable*)refRedim != pElem )
+    if( ( pElem->GetType() & SbxARRAY ) && refRedim.get() != pElem )
     {
         SbxBase* pElemObj = pElem->GetObject();
         SbxDimArray* pDimArray = PTR_CAST(SbxDimArray,pElemObj);
@@ -4046,7 +4046,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     SbxVariableRef pObjVar = PopVar();
 
-    SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pObjVar);
+    SbxObject* pObj = PTR_CAST(SbxObject, pObjVar.get());
     if( !pObj )
     {
         SbxBase* pObjVarObj = pObjVar->GetObject();
@@ -4059,7 +4059,7 @@ void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // #74254 now per list
     if( pObj )
     {
-        SaveRef( (SbxVariable*)pObj );
+        SaveRef( static_cast<SbxVariable*>(pObj) );
     }
     PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, false ) );
 }

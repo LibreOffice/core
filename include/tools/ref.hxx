@@ -76,6 +76,8 @@ public:
 
     bool Is()         const { return pObj != 0; }
 
+    T * get()         const { return pObj; }
+
     T * operator &()  const { return pObj; }
 
     T * operator ->() const { assert(pObj != 0); return pObj; }
