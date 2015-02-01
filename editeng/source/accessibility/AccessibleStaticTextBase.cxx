@@ -120,12 +120,6 @@ namespace accessibility
         AccessibleStaticTextBase_Impl();
         ~AccessibleStaticTextBase_Impl();
 
-        SvxEditSourceAdapter& GetEditSource() const
-        {
-
-            return maEditSource;
-        }
-
         void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
@@ -135,12 +129,6 @@ namespace accessibility
         }
 
         void SetOffset( const Point& );
-        Point GetOffset() const
-        {
-
-            ::osl::MutexGuard aGuard( maMutex ); Point aPoint( maOffset );
-            return aPoint;
-        }
 
         void UpdateChildren();
         void Dispose();
