@@ -690,21 +690,24 @@ Dim vRowSource() As Variant, iCount As Integer, i As Integer, j As integer, bFou
 					For j = i To iCount - 1
 						vRowSource(j) = vRowSource(j + 1)
 					Next j
-					ReDim Preserve vRowSource(0 To iCount - 1)
 					bFound = True
 					Exit For	&apos;	Remove only 1st occurrence of string
 				End If
 			Next i
 		Case Else
 			If pvIndex &lt; 0 Or pvIndex &gt; iCount Then Goto Error_Index
-			bFound = True
 			For i = pvIndex To iCount - 1
 				vRowSource(i) = vRowSource(i + 1)
 			Next i
-			ReDim Preserve vRowSource(0 To iCount - 1)
+			bFound = True
 		End Select
 			
 	If bFound Then
+		If iCount &gt; 0 Then			&apos;	https://forum.openoffice.org/en/forum/viewtopic.php?f=47&amp;t=75008
+			ReDim Preserve vRowSource(0 To iCount - 1)
+		Else
+			vRowSource = Array()
+		End If
 		If _ParentType &lt;&gt; CTLPARENTISDIALOG Then
 			ControlModel.ListSource = vRowSource()
 		End If
