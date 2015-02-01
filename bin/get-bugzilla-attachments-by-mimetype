@@ -508,7 +508,7 @@ def generate_multi_threading():
 
             try:
                 jobs.put([uri, mimetype, prefix, extension], block=True, timeout=3)
-                print("successfully placed a job in the queue searching for " + mimetype + "in bugtracker " + prefix)
+                print("successfully placed a job in the queue searching for " + mimetype + " in bugtracker " + prefix)
             except KeyboardInterrupt:
                 raise # Ctrl+C should work
             except:
