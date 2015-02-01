@@ -1988,7 +1988,6 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     else if(pFmt)
     {
         if( ((eType == FLYCNTTYPE_GRF) || (eType == FLYCNTTYPE_OLE)) &&
-                pEntry &&
                 (isGRFATR(pEntry->nWID) ||
                         pEntry->nWID == FN_PARAM_COUNTOUR_PP ||
                         pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
@@ -2410,8 +2409,7 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
             }
             else
             {
-                if ((eType == FLYCNTTYPE_GRF) &&
-                        pEntry && isGRFATR(pEntry->nWID))
+                if ((eType == FLYCNTTYPE_GRF) && isGRFATR(pEntry->nWID))
                 {
                     const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                     if(pIdx)

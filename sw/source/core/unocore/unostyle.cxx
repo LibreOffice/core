@@ -3510,7 +3510,6 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             {
                                 // these slots are exclusive to Header/Footer, thus this is an error
                                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
-                                break;
                             }
                             default:
                             {
@@ -3605,7 +3604,6 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case  FN_UNO_FOOTER_FIRST :
                 {
                     throw lang::IllegalArgumentException();
-                    break;
                 }
                 default:
                 {
@@ -3777,7 +3775,6 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                             {
                                 // these slots are exclusive to Header/Footer, thus this is an error
                                 throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
-                                break;
                             }
                             default:
                             {
