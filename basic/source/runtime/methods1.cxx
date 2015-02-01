@@ -1832,7 +1832,7 @@ RTLFUNC(Split)
     {
         SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
         xVar->PutString( vRet[i] );
-        pArray->Put( (SbxVariable*)xVar, &i );
+        pArray->Put( static_cast<SbxVariable*>(xVar), &i );
     }
 
     // return array
