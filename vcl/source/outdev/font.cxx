@@ -2027,6 +2027,11 @@ SalLayout* OutputDevice::getFallbackFont(ImplFontEntry &rFallbackFont,
     FontSelectPattern &rFontSelData, int nFallbackLevel,
     ImplLayoutArgs& rLayoutArgs) const
 {
+    // we need a graphics
+    if (!mpGraphics && !AcquireGraphics())
+        return nullptr;
+
+    assert(mpGraphics != nullptr);
     rFallbackFont.mnSetFontFlags = mpGraphics->SetFont( &rFontSelData, nFallbackLevel );
 
     rLayoutArgs.ResetPos();
