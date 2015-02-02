@@ -763,9 +763,6 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
     if (bInitialized)
         return 1;
 
-    if (!pAppPath)
-        return 0;
-
     OUString aAppPath;
     if (pAppPath)
     {
