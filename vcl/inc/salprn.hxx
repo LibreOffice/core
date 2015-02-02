@@ -75,13 +75,13 @@ public:
                                                  long& rOutWidth, long& rOutHeight,
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
-    virtual sal_uLong                   GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
-    virtual sal_uLong                   GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual OUString                  GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
+    virtual sal_uLong               GetCapabilities( const ImplJobSetup* pSetupData, sal_uInt16 nType ) = 0;
+    virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
+    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait
-    virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
+    virtual int                     GetLandscapeAngle( const ImplJobSetup* pSetupData ) = 0;
 };
 
 class VCL_PLUGIN_PUBLIC SalPrinter
@@ -110,7 +110,7 @@ public:
     virtual bool                    AbortJob() = 0;
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, bool bNewJobData ) = 0;
     virtual bool                    EndPage() = 0;
-    virtual sal_uLong                   GetErrorCode() = 0;
+    virtual sal_uLong               GetErrorCode() = 0;
 
 };
 
