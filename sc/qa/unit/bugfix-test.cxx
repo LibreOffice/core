@@ -78,11 +78,33 @@ public:
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
+    void testTdf64229();
+
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testTdf64229);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
+
+void ScFiltersTest::testTdf64229()
+{
+    ScDocShellRef xDocSh = loadDoc("fdo64229b.", ODS);
+
+    xDocSh->DoHardRecalc(true);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo64229b.*", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    OUString aCSVFileName;
+
+    //test hard recalc: document has an incorrect cached formula result
+    //hard recalc should have updated to the correct result
+    createCSVPath(OUString("fdo64229b."), aCSVFileName);
+    testFile(aCSVFileName, rDoc, 0);
+
+    xDocSh->DoClose();
+}
+
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
