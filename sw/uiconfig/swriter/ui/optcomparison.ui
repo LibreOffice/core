@@ -143,7 +143,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="useRSID">
-                    <property name="label" translatable="yes">Use _RSID</property>
+                    <property name="label" translatable="yes">Take it into account when comparing</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -176,7 +176,7 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="storeRSID">
-                    <property name="label" translatable="yes">Store RSID</property>
+                    <property name="label" translatable="yes">Store it when changing the document</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -204,7 +204,7 @@
           <object class="GtkLabel" id="setting">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Settings</property>
+            <property name="label" translatable="yes">Random number to improve accuracy of document comparision</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
