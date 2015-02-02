@@ -51,7 +51,7 @@ public:
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    Show( bool bVisible ) = 0;
-    void                            Enable( bool /* nEnable */ ) {}
+    virtual void                    Enable( bool /* nEnable */ ) {} // overridden by WinSalObject
     virtual void                    GrabFocus() {}
 
     virtual void                    SetForwardKey( bool /* bEnable */ ) {}
