@@ -2944,7 +2944,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
-                if (aNodeStr != aNewText.copy( nCurrentStart, nLen ))
+                if (aNodeStr != aNewText)
                 {
                     aChgData.nStart     = nCurrentStart;
                     aChgData.nLen       = nLen;
