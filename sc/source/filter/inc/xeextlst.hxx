@@ -77,6 +77,7 @@ public:
 
 private:
     databar::ScAxisPosition meAxisPosition;
+    bool mbGradient;
 
     boost::scoped_ptr<XclExpExtCfvo> mpLowerLimit;
     boost::scoped_ptr<XclExpExtCfvo> mpUpperLimit;
