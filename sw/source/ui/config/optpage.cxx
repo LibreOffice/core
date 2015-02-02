@@ -2215,6 +2215,7 @@ SwCompareOptionsTabPage::SwCompareOptionsTabPage(  vcl::Window* pParent, const S
     get(m_pRsidCB, "useRSID");
     get(m_pIgnoreCB, "ignore");
     get(m_pLenNF, "ignorelen");
+    get(m_pStoreRsidCB, "storeRSID");
 
     Link aLnk( LINK( this, SwCompareOptionsTabPage, ComparisonHdl ) );
     m_pAutoRB->SetClickHdl( aLnk );
@@ -2270,6 +2271,12 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
         bRet = true;
     }
 
+    if (m_pStoreRsidCB->IsValueChangedFromSaved())
+    {
+        pOpt->SetStoreRsid(m_pStoreRsidCB->IsChecked());
+        bRet = true;
+    }
+
     return bRet;
 }
 
@@ -2313,6 +2320,9 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
 
     m_pLenNF->SetValue( pOpt->GetPieceLen() );
     m_pLenNF->SaveValue();
+
+    m_pStoreRsidCB->Check(pOpt->IsStoreRsid());
+    m_pStoreRsidCB->SaveValue();
 }
 
 IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl)

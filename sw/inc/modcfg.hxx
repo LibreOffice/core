@@ -74,6 +74,8 @@ class SwCompareConfig : public utl::ConfigItem
 
     sal_uInt16      eCmpMode;		//Compare/CompareDocuments;
     bool            bUseRsid;       //Compare/Settings/Use RSID
+    /// Compare/Settings/Store RSID
+    bool            m_bStoreRsid;
     bool            bIgnorePieces;  //Compare/Settings/Ignore pieces of length
     sal_uInt16      nPieceLen;		//Compare/Settings/Ignore pieces of length
 
@@ -349,6 +351,16 @@ public:
     sal_uInt16  GetPieceLen() const { return aCompareConfig.nPieceLen; }
     void        SetPieceLen( sal_uInt16 nLen ) { aCompareConfig.nPieceLen = nLen;
                                                  aCompareConfig.SetModified(); }
+
+    bool IsStoreRsid() const
+    {
+        return aCompareConfig.m_bStoreRsid;
+    }
+    void SetStoreRsid(bool bStoreRsid)
+    {
+        aCompareConfig.m_bStoreRsid = bStoreRsid;
+        aCompareConfig.SetModified();
+    }
 
 };
 #endif

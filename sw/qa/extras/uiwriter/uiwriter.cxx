@@ -26,6 +26,8 @@
 #include <view.hxx>
 #include <hhcwrp.hxx>
 #include <swacorr.hxx>
+#include <swmodule.hxx>
+#include <modcfg.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
 #include <test/mtfxmldump.hxx>
@@ -76,6 +78,7 @@ public:
     void testBookmarkUndo();
     void testFdo85876();
     void testFdo87448();
+    void testTdf68183();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -106,6 +109,7 @@ public:
     CPPUNIT_TEST(testBookmarkUndo);
     CPPUNIT_TEST(testFdo85876);
     CPPUNIT_TEST(testFdo87448);
+    CPPUNIT_TEST(testTdf68183);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -803,6 +807,28 @@ void SwUiWriterTest::testFdo87448()
     OString aMsg = "nFirstEnd is " + OString::number(nFirstEnd) + ", nSecondEnd is " + OString::number(nSecondEnd);
     // Assert that the difference is less than half point.
     CPPUNIT_ASSERT_MESSAGE(aMsg.getStr(), abs(nFirstEnd - nSecondEnd) < 10);
+}
+
+void SwUiWriterTest::testTdf68183()
+{
+    // First disable RSID and check if indeed no such attribute is inserted.
+    SwDoc* pDoc = createDoc();
+    SW_MOD()->GetModuleConfig()->SetStoreRsid(false);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert2("X");
+
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT_EQUAL(false, pTxtNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
+
+    // Then enable storing of RSID and make sure that the attribute is inserted.
+    SW_MOD()->GetModuleConfig()->SetStoreRsid(true);
+
+    pWrtShell->DelToStartOfLine();
+    pWrtShell->Insert2("X");
+
+    CPPUNIT_ASSERT_EQUAL(true, pTxtNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

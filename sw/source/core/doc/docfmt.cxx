@@ -73,6 +73,8 @@
 #include <SwUndoFmt.hxx>
 #include <UndoManager.hxx>
 #include <docsh.hxx>
+#include <swmodule.hxx>
+#include <modcfg.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::i18n;
@@ -405,6 +407,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 /// Set the rsid of the next nLen symbols of rRg to the current session number
 bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 {
+    if (!SW_MOD()->GetModuleConfig()->IsStoreRsid())
+        return false;
+
     SwTxtNode *pTxtNode = rRg.GetPoint()->nNode.GetNode().GetTxtNode();
     if (!pTxtNode)
     {
@@ -434,6 +439,9 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 
 bool SwDoc::UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal )
 {
+    if (!SW_MOD()->GetModuleConfig()->IsStoreRsid())
+        return false;
+
     if (!pTxtNode)
     {
         return false;
