@@ -371,6 +371,12 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             pWMF->ReadUInt16( nPolyCount );
             if (nPolyCount && pWMF->good())
             {
+                if (nPolyCount > pWMF->remainingSize() / sizeof(sal_uInt16))
+                {
+                    bRecordOk = false;
+                    break;
+                }
+
                 // Number of points of each polygon. Determine total number of points
                 boost::scoped_array<sal_uInt16> xPolygonPointCounts(new sal_uInt16[nPolyCount]);
                 sal_uInt16* pnPoints = xPolygonPointCounts.get();
@@ -403,6 +409,13 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                 for (sal_uInt16 a = 0; a < nPolyCount && pWMF->good(); ++a)
                 {
                     const sal_uInt16 nPointCount(pnPoints[a]);
+
+                    if (nPointCount > pWMF->remainingSize() / (2 * sizeof(sal_uInt16)))
+                    {
+                        bRecordOk = false;
+                        break;
+                    }
+
                     boost::scoped_array<Point> xPolygonPoints(new Point[nPointCount]);
                     Point* pPtAry = xPolygonPoints.get();
 
