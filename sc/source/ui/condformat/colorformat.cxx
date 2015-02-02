@@ -70,6 +70,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     get( mpBtnCancel, "cancel" );
     get( mpLbPos, "positive_colour" );
     get( mpLbNeg, "negative_colour" );
+    get( mpLbFillType, "fill_type" );
     get( mpLbTypeMin, "min" );
     get( mpLbTypeMax, "max" );
     get( mpLbAxisPos, "axis_pos" );
@@ -82,6 +83,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(vcl::Window* pWindow, const ScDataBar
     Init();
 
     mpLbPos->SelectEntry( rData.maPositiveColor );
+    mpLbFillType->SelectEntryPos( rData.mbGradient ? 1 : 0 );
     if(rData.mpNegativeColor)
         mpLbNeg->SelectEntry( *rData.mpNegativeColor );
 
@@ -176,7 +178,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     ScDataBarFormatData* pData = new ScDataBarFormatData();
     pData->maPositiveColor = mpLbPos->GetSelectEntryColor();
     pData->mpNegativeColor.reset(new Color(mpLbNeg->GetSelectEntryColor()));
-    pData->mbGradient = true; //FIXME
+    pData->mbGradient = ( mpLbFillType->GetSelectEntryPos() == 1 );
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
     pData->maAxisColor = mpLbAxisCol->GetSelectEntryColor();

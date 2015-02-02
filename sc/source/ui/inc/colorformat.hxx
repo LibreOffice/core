@@ -32,6 +32,7 @@ private:
 
     ListBox* mpLbTypeMin;
     ListBox* mpLbTypeMax;
+    ListBox* mpLbFillType;
     ListBox* mpLbAxisPos;
 
     Edit* mpEdMin;
