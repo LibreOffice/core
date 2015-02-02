@@ -38,6 +38,7 @@ core_factory_list = [
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
     ("libooxlo.a", "oox_component_getFactory"),
     ("libpackage2.a", "package2_component_getFactory"),
+    ("libslideshowlo.a", "slideshow_component_getFactory"),
     ("libsmlo.a", "sm_component_getFactory"),
     ("libsotlo.a", "sot_component_getFactory"),
     ("libspelllo.a", "spell_component_getFactory"),
@@ -119,6 +120,7 @@ core_constructor_list = [
 # toolkit/util/tk.component
     "stardiv_Toolkit_UnoControlContainer_get_implementation",
     "stardiv_Toolkit_UnoControlContainerModel_get_implementation",
+    "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
     "com_sun_star_comp_uui_UUIInteractionHandler_get_implementation",
