@@ -4104,4 +4104,20 @@ endef
 
 endif
 
+ifeq (OWNCLOUD_ANDROID_LIB,$(filter OWNCLOUD_ANDROID_LIB,$(BUILD_TYPE)))
+
+$(eval $(call gb_Helper_register_jars,OXT,\
+	owncloud-android-library \
+))
+
+define gb_Jar__use_owncloud_android_lib
+$(call gb_Jar_use_external_project,$(1),owncloud-android-lib)
+$(call gb_Jar_use_external_jar,$(1),$(call gb_UnpackedTarball_get_dir,owncloud-android-lib)/bin/owncloud-android-library.jar)
+endef
+define gb_ExternalProject__use_owncloud_android_lib
+$(call gb_ExternalProject_use_external_project,$(1),owncloud_android_lib)
+endef
+
+endif
+
 # vim: set noet sw=4 ts=4:
