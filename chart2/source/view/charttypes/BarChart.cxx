@@ -87,8 +87,7 @@ drawing::Direction3D BarChart::getPreferredDiagramAspectRatio() const
     {
         aRet = drawing::Direction3D(1.0,-1.0,1.0);
         BarPositionHelper* pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( MAIN_AXIS_INDEX) ) );
-        assert(pPosHelper);
-        if(pPosHelper)
+        if (pPosHelper)
         {
             drawing::Direction3D aScale( pPosHelper->getScaledLogicWidth() );
             if(aScale.DirectionX!=0.0)
