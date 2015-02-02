@@ -2718,6 +2718,51 @@ void X11SalFrame::SimulateKeyPress( sal_uInt16 nKeyCode )
     vcl_sal::getSalDisplay(GetGenericData())->SimulateKeyPress(nKeyCode);
 }
 
+namespace
+{
+struct CompressWheelEventsData
+{
+    XEvent* firstEvent;
+    bool ignore;
+    int count; // number of compressed events
+};
+
+static Bool compressWheelEvents( Display*, XEvent* event, XPointer p )
+{
+    CompressWheelEventsData* data = reinterpret_cast< CompressWheelEventsData* >( p );
+    if( data->ignore )
+        return False; // we're already after the events to compress
+    if( event->type == ButtonPress || event->type == ButtonRelease )
+    {
+        const unsigned int mask = Button1Mask << ( event->xbutton.button - Button1 );
+        if( event->xbutton.button == data->firstEvent->xbutton.button
+            && event->xbutton.window == data->firstEvent->xbutton.window
+            && event->xbutton.x == data->firstEvent->xbutton.x
+            && event->xbutton.y == data->firstEvent->xbutton.y
+            && ( event->xbutton.state | mask ) == ( data->firstEvent->xbutton.state | mask ))
+        {
+            // Count if it's another press (i.e. wheel start event).
+            if( event->type == ButtonPress )
+                ++data->count;
+            return True; // And remove the event from the queue.
+        }
+    }
+    // Non-matching event, skip certain events that cannot possibly affect input processing,
+    // but otherwise ignore all further events.
+    switch( event->type )
+    {
+        case Expose:
+        case NoExpose:
+            break;
+        default:
+            data->ignore = true;
+            break;
+    }
+    return False;
+}
+
+} // namespace
+
 long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
 {
     SalMouseEvent       aMouseEvt = {0, 0, 0, 0, 0};
@@ -2936,13 +2981,23 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                     nLines = SAL_WHEELMOUSE_EVENT_PAGESCROLL;
             }
 
+            // Compress consecutive wheel events (way too fine scrolling may cause lags if one scrolling steps takes long).
+            CompressWheelEventsData data;
+            data.firstEvent = pEvent;
+            data.count = 1;
+            XEvent dummy;
+            do
+            {
+                data.ignore = false;
+            } while( XCheckIfEvent( pEvent->xany.display, &dummy, compressWheelEvents, reinterpret_cast< XPointer >( &data )));
+
             SalWheelMouseEvent  aWheelEvt;
             aWheelEvt.mnTime        = pEvent->xbutton.time;
             aWheelEvt.mnX           = pEvent->xbutton.x;
             aWheelEvt.mnY           = pEvent->xbutton.y;
-            aWheelEvt.mnDelta       = bIncrement ? 120 : -120;
+            aWheelEvt.mnDelta       = ( bIncrement ? 120 : -120 ) * data.count;
             aWheelEvt.mnNotchDelta  = bIncrement ? 1 : -1;
-            aWheelEvt.mnScrollLines = nLines;
+            aWheelEvt.mnScrollLines = nLines * data.count;
             aWheelEvt.mnCode        = sal_GetCode( pEvent->xbutton.state );
             aWheelEvt.mbHorz        = bHoriz;
 
