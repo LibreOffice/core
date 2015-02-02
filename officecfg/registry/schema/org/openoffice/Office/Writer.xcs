@@ -2669,6 +2669,11 @@
           <desc>Defines the length of ignored pieces.</desc>
         </info>
       </prop>
+      <prop oor:name="StoreRSID" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies whether RSIDs are stored in the document model.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="Insert">
       <info>

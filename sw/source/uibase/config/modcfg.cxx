@@ -1306,14 +1306,15 @@ const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
     {
-        const int nCount = 4;
+        const int nCount = 5;
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
             "Mode",							// 0
             "UseRSID",						// 1
             "IgnorePieces",				// 2
-            "IgnoreLength"					// 3
+            "IgnoreLength", // 3
+            "StoreRSID" // 4
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -1325,6 +1326,7 @@ const Sequence<OUString>& SwCompareConfig::GetPropertyNames()
 SwCompareConfig::SwCompareConfig() :
     ConfigItem("Office.Writer/Comparison",
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE)
+    ,m_bStoreRsid(true)
 {
     eCmpMode = SVX_CMP_AUTO;
     bUseRsid = false;
@@ -1348,6 +1350,7 @@ void SwCompareConfig::Commit()
     pValues[1] <<= bUseRsid;
     pValues[2] <<= bIgnorePieces;
     pValues[3] <<= (sal_Int32) nPieceLen;
+    pValues[4] <<= m_bStoreRsid;
 
     PutProperties(aNames, aValues);
 }
@@ -1373,6 +1376,7 @@ void SwCompareConfig::Load()
                     case 1 : bUseRsid = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 2 : bIgnorePieces = *(sal_Bool*)pValues[nProp].getValue(); break;
                     case 3 : nPieceLen = nVal; break;
+                    case 4 : m_bStoreRsid = *(sal_Bool*)pValues[nProp].getValue(); break;
                 }
             }
         }

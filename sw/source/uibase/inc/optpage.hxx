@@ -409,6 +409,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
     CheckBox*     m_pRsidCB;
     CheckBox*     m_pIgnoreCB;
     NumericField* m_pLenNF;
+    CheckBox*     m_pStoreRsidCB;
 
     SwCompareOptionsTabPage( vcl::Window* pParent, const SfxItemSet& rSet );
     virtual ~SwCompareOptionsTabPage();
