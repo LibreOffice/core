@@ -82,12 +82,14 @@ public:
     void testTdf36933();
     void testTdf43700();
     void testTdf43534();
+    // void testTdf40110();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
     CPPUNIT_TEST(testTdf36933);
     CPPUNIT_TEST(testTdf43700);
     CPPUNIT_TEST(testTdf43534);
+    // CPPUNIT_TEST(testTdf40110);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -164,6 +166,26 @@ void ScFiltersTest::testTdf43534()
 
     xDocSh->DoClose();
 }
+
+/*
+void ScFiltersTest::testTdf40110()
+{
+    ScDocShellRef xDocSh = loadDoc("fdo40110test.", ODS);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo40110test.*", xDocSh.Is());
+    xDocSh->DoHardRecalc(true);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    OUString aCSVFileName;
+
+    //test hard recalc: document has an incorrect cached formula result
+    //hard recalc should have updated to the correct result
+    createCSVPath(OUString("fdo40110test."), aCSVFileName);
+    testFile(aCSVFileName, rDoc, 0);
+
+    xDocSh->DoClose();
+}
+*/
 
 
 ScFiltersTest::ScFiltersTest()
