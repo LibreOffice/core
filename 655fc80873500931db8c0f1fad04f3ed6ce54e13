@@ -16,6 +16,24 @@
       "revId": "655fc80873500931db8c0f1fad04f3ed6ce54e13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa1b9901_7d37d3e3",
+        "filename": "configmgr/CppunitTest_configmgr_unit.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2015-02-02T21:49:13Z",
+      "side": 1,
+      "message": "Markus proposed this change so we can change values without interfere with normal installation. There is another approach for this?",
+      "parentUuid": "fa1b9901_3a55e11c",
+      "revId": "655fc80873500931db8c0f1fad04f3ed6ce54e13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
