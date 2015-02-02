@@ -170,7 +170,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
 {
     OSL_PRECOND( CF_INVALID != aClipformat, "Invalid clipboard format" );
 
-    sal_Unicode wBuff[ MAX_CLIPFORMAT_NAME ];
+    sal_Unicode wBuff[ MAX_CLIPFORMAT_NAME + 1 ]; // Null terminator isn't counted, apparently.
     sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, reinterpret_cast<LPWSTR>(wBuff), MAX_CLIPFORMAT_NAME );
 
     return OUString( wBuff, nLen );
