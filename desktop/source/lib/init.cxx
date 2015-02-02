@@ -847,7 +847,20 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
     return bInitialized;
 }
 
-SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(const char* install_path)
+// Undo our clever trick of having SAL_DLLPUBLIC_EXPORT actually not
+// meaning what is says in for the DISABLE_DYNLOADING case. See
+// <sal/types.h>. Normally, when building just one big dylib (Android)
+// or executable (iOS), most of our "public" symbols don't need to be
+// visible outside that resulting dylib/executable. But
+// libreofficekit_hook must be exported for dlsym() to find it,
+// though, at least on iOS.
+
+#if defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE) && defined(DISABLE_DYNLOADING)
+__attribute__ ((visibility("default")))
+#else
+SAL_DLLPUBLIC_EXPORT
+#endif
+LibreOfficeKit *libreofficekit_hook(const char* install_path)
 {
     if (!gImpl)
     {
