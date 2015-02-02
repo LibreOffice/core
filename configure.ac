@@ -511,6 +511,9 @@ if test -n "$with_android_ndk"; then
             ;;
         esac
     fi
+
+    # remember to download the ownCloud Android library later
+    BUILD_TYPE="$BUILD_TYPE OWNCLOUD_ANDROID_LIB"
 fi
 AC_SUBST(ANDROID_NDK_GDBSERVER)
 AC_SUBST(ANDROID_APP_ABI)

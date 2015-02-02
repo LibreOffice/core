@@ -32,6 +32,8 @@ build-ant: android_version_setup copy-stuff prepare-appcompat link-so properties
 	for F in unoil; do \
 	    $(call COPYJAR,$(INSTDIR)/$(LIBO_SHARE_JAVA_FOLDER)/$${F}.jar); \
 	done
+	#ownCloud lib dependency
+	$(call COPYJAR,$(WORKDIR)/UnpackedTarball/owncloud_android_lib/bin/owncloud-android-library.jar)
 #
 	unset JAVA_HOME && $(ANT) $(if $(VERBOSE)$(verbose),,-quiet) $(if $(ENABLE_RELEASE_BUILD),release,debug)
 
