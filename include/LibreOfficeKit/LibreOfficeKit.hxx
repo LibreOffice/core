@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_HXX
-#define INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_HXX
+#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_HXX
+#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_HXX
 
 #include "LibreOfficeKit.h"
 
@@ -169,5 +169,7 @@ inline Office* lok_cpp_init(const char* pInstallPath)
 }
 
 }
-#endif
+
+#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKIT_HXX
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

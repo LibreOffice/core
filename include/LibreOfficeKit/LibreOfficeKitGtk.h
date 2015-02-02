@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_LIBREOFFICEKITGTK_H
-#define INCLUDED_DESKTOP_INC_LIBREOFFICEKITGTK_H
+#ifndef INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
+#define INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
@@ -73,4 +73,6 @@ void            lok_docview_set_edit        (LOKDocView* pDocView,
 }
 #endif
 
-#endif
+#endif // INCLUDED_LIBREOFFICEKIT_LIBREOFFICEKITGTK_H
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
