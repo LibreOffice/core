@@ -3865,16 +3865,23 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 
             rStrm.ReadUInt16( nExtraLen );
 
-            size_t nMinRecordSize = nExtraLen;
-            if (bUnicode)
-                nMinRecordSize += sizeof(sal_uInt16);
-            else
-                nMinRecordSize += sizeof(sal_uInt8);
+            const size_t nMinStringLen = bUnicode ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
+            const size_t nMinRecordSize = nExtraLen + nMinStringLen;
             const size_t nMaxPossibleStrings = rStrm.remainingSize() / nMinRecordSize;
             if (nStrings > nMaxPossibleStrings)
             {
                 SAL_WARN("sw.ww8", "STTBF claims " << nStrings << " entries, but only " << nMaxPossibleStrings << "are possible");
                 nStrings = nMaxPossibleStrings;
+            }
+
+            if (nExtraLen && nStrings)
+            {
+                const size_t nMaxExtraLen = (rStrm.remainingSize() - (nStrings * nMinStringLen)) / nStrings;
+                if (nExtraLen > nMaxExtraLen)
+                {
+                    SAL_WARN("sw.ww8", "STTBF claims " << nMaxExtraLen << " extra len, but only " << nMaxExtraLen << "are possible");
+                    nExtraLen = nMaxExtraLen;
+                }
             }
 
             for (sal_uInt16 i=0; i < nStrings; ++i)
