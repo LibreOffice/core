@@ -36,12 +36,12 @@ protected:
 
     SvStream&           aOut;
     ScDocument*         pD;
-    rtl_TextEncoding    eZielChar;      // target character set
+    rtl_TextEncoding    eTargetCharset;      // target character set
 public:
                         ExportTyp( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eDest ):
                             aOut( aStream )
                         {
-                            eZielChar = eDest;
+                            eTargetCharset = eDest;
                             pD = pDoc;
                         }
 
