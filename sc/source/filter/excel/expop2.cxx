@@ -81,7 +81,7 @@ FltError ExportBiff5::Write()
     }
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
-    pExcDoc->Write( aOut );     // wechstreamen
+    pExcDoc->Write( aOut );     // mixed stream
 
     if( pDocShell && xRootStrg.Is() )
     {
