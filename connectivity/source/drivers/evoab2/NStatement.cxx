@@ -393,9 +393,6 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_BEGINS_WITH, aMatchString.copy( 0, aMatchString.getLength() - 1 ) );
             else
                 m_pConnection->throwGenericSQLException(STR_QUERY_LIKE_WILDCARD,*this);
-
-            if( pResult && bNotLike )
-                pResult = e_book_query_not( pResult, TRUE );
         }
         else if( aMatchString.getLength() >= 3 &&
                  aMatchString.startsWith( OUString(WILDCARD) ) &&
