@@ -726,13 +726,13 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
             {
                 text::GraphicCrop aGraphCrop( 0, 0, 0, 0 );
                 if ( oClipRect.X1 )
-                    aGraphCrop.Left = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X1 ) / 100000 );
+                    aGraphCrop.Left = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X1 ) / 100000 );
                 if ( oClipRect.Y1 )
-                    aGraphCrop.Top = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y1 ) / 100000 );
+                    aGraphCrop.Top = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y1 ) / 100000 );
                 if ( oClipRect.X2 )
-                    aGraphCrop.Right = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
+                    aGraphCrop.Right = rtl::math::round( ( static_cast< double >( aOriginalSize.Width ) * oClipRect.X2 ) / 100000 );
                 if ( oClipRect.Y2 )
-                    aGraphCrop.Bottom = static_cast< sal_Int32 >( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
+                    aGraphCrop.Bottom = rtl::math::round( ( static_cast< double >( aOriginalSize.Height ) * oClipRect.Y2 ) / 100000 );
                 rPropMap.setProperty(PROP_GraphicCrop, aGraphCrop);
             }
         }

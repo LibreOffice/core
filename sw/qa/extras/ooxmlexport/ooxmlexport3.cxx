@@ -64,10 +64,7 @@ protected:
     bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
         const char* aBlacklist[] = {
             "math-escape.docx",
-            "math-mso2k7.docx",
-            "ImageCrop.docx",
-            "test_GIF_ImageCrop.docx",
-            "test_PNG_ImageCrop.docx"
+            "math-mso2k7.docx"
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
@@ -672,9 +669,7 @@ DECLARE_OOXMLEXPORT_TEST(testImageCrop, "ImageCrop.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2955 ), aGraphicCropStruct.Left );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 5477 ), aGraphicCropStruct.Right );
     CPPUNIT_ASSERT_EQUAL( sal_Int32( 2856 ), aGraphicCropStruct.Top );
-    // FIXME import test is disabled (we only check after import-export-import)
-    // The reason is that after import this is 2291 -- rounding error?
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2290 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 2291 ), aGraphicCropStruct.Bottom );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testLineSpacingexport, "test_line_spacing.docx")
@@ -800,12 +795,10 @@ DECLARE_OOXMLEXPORT_TEST(testGIFImageCrop, "test_GIF_ImageCrop.docx")
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
-    // FIXME import test is disabled (we only check after import-export-import)
-    // The reason is that after import this is 1171 -- why?
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1265 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 4256 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1109 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1448 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1085 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 3651 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 953 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1244 ), aGraphicCropStruct.Bottom );
 #endif
 }
 
@@ -823,12 +816,10 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
 
     imageProperties->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropStruct;
 
-    // FIXME import test is disabled (we only check after import-export-import)
-    // The reason is that after import this is 1141 -- why?
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1231 ), aGraphicCropStruct.Left );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1295 ), aGraphicCropStruct.Right );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1358 ), aGraphicCropStruct.Top );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 737 ), aGraphicCropStruct.Bottom );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1058 ), aGraphicCropStruct.Left );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1111 ), aGraphicCropStruct.Right );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 1164 ), aGraphicCropStruct.Top );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 635 ), aGraphicCropStruct.Bottom );
 #endif
 }
 

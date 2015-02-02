@@ -1063,10 +1063,10 @@ void DrawingML::WriteSrcRect( Reference< XPropertySet > rXPropSet, const OUStrin
         if ( (0 != aGraphicCropStruct.Left) || (0 != aGraphicCropStruct.Top) || (0 != aGraphicCropStruct.Right) || (0 != aGraphicCropStruct.Bottom) )
         {
             mpFS->singleElementNS( XML_a, XML_srcRect,
-                          XML_l, I32S(((aGraphicCropStruct.Left) * 100000) / aOriginalSize.Width()),
-                          XML_t, I32S(((aGraphicCropStruct.Top) * 100000) / aOriginalSize.Height()),
-                          XML_r, I32S(((aGraphicCropStruct.Right) * 100000) / aOriginalSize.Width()),
-                          XML_b, I32S(((aGraphicCropStruct.Bottom) * 100000) / aOriginalSize.Height()),
+                          XML_l, I32S(rtl::math::round(static_cast<double>(aGraphicCropStruct.Left) * 100000 / aOriginalSize.Width())),
+                          XML_t, I32S(rtl::math::round(static_cast<double>(aGraphicCropStruct.Top) * 100000 / aOriginalSize.Height())),
+                          XML_r, I32S(rtl::math::round(static_cast<double>(aGraphicCropStruct.Right) * 100000 / aOriginalSize.Width())),
+                          XML_b, I32S(rtl::math::round(static_cast<double>(aGraphicCropStruct.Bottom) * 100000 / aOriginalSize.Height())),
                           FSEND );
         }
     }
