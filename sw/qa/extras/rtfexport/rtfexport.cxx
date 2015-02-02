@@ -852,6 +852,13 @@ DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf88583, "tdf88583.odt")
+{
+    // This was FillStyle_NONE, as background color was missing from the color table during export.
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
