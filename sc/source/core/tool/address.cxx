@@ -1672,50 +1672,81 @@ sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
     return (p != NULL && *p == '\0') ? nRes : 0;
 }
 
-static inline void lcl_a1_append_c ( OUStringBuffer &rString, int nCol, bool bIsAbs )
+template<typename T > static inline void lcl_ScColToAlpha( T& rBuf, SCCOL nCol )
+{
+    if (nCol < 26*26)
+    {
+        if (nCol < 26)
+            rBuf.append( static_cast<char>( 'A' + nCol ));
+        else
+        {
+            rBuf.append( static_cast<char>( 'A' + nCol / 26 - 1 ));
+            rBuf.append( static_cast<char>( 'A' + nCol % 26 ));
+        }
+    }
+    else
+    {
+        sal_Int32 nInsert = rBuf.getLength();
+        while (nCol >= 26)
+        {
+            SCCOL nC = nCol % 26;
+            rBuf.insert(nInsert, static_cast<char> ( 'A' + nC ));
+            nCol = sal::static_int_cast<SCCOL>( nCol - nC );
+            nCol = nCol / 26 - 1;
+        }
+        rBuf.insert(nInsert, static_cast<char> ( 'A' + nCol ));
+    }
+}
+
+void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol)
+{
+    lcl_ScColToAlpha(rBuf, nCol);
+}
+
+template <typename T > static inline void lcl_a1_append_c ( T &rString, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
         rString.append("$");
-    ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
+    lcl_ScColToAlpha( rString, sal::static_int_cast<SCCOL>(nCol) );
 }
 
-static inline void lcl_a1_append_r ( OUStringBuffer &rString, int nRow, bool bIsAbs )
+template <typename T > static inline void lcl_a1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs )
 {
     if ( bIsAbs )
         rString.append("$");
-    rString.append(OUString::number( nRow+1 ));
+    rString.append( nRow + 1 );
 }
 
-static inline void lcl_r1c1_append_c ( OUStringBuffer &rString, int nCol, bool bIsAbs,
+template <typename T > static inline void lcl_r1c1_append_c ( T &rString, sal_Int32 nCol, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
     rString.append("C");
     if (bIsAbs)
     {
-        rString.append(OUString::number( nCol + 1 ));
+        rString.append( nCol + 1 );
     }
     else
     {
         nCol -= rDetails.nCol;
         if (nCol != 0) {
-            rString.append("[").append(OUString::number( nCol )).append("]");
+            rString.append("[").append(nCol).append("]");
         }
     }
 }
 
-static inline void lcl_r1c1_append_r ( OUStringBuffer &rString, int nRow, bool bIsAbs,
+template <typename T > static inline void lcl_r1c1_append_r ( T &rString, sal_Int32 nRow, bool bIsAbs,
                                        const ScAddress::Details& rDetails )
 {
     rString.append("R");
     if (bIsAbs)
     {
-        rString.append(OUString::number( nRow + 1 ));
+        rString.append( nRow + 1 );
     }
     else
     {
         nRow -= rDetails.nRow;
         if (nRow != 0) {
-            rString.append("[").append(OUString::number( nRow )).append("]");
+            rString.append("[").append(nRow).append("]");
         }
     }
 }
@@ -1745,17 +1776,29 @@ static OUString getFileNameFromDoc( const ScDocument* pDoc )
     return sFileName;
 }
 
-OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
-                           const Details& rDetails) const
+
+static inline void lcl_string_append(OUStringBuffer &rString, const OUString &sString)
 {
-    OUStringBuffer r;
+    rString.append(sString);
+}
+
+static inline void lcl_string_append(OStringBuffer &rString, const OUString &sString)
+{
+    rString.append(OUStringToOString( sString, RTL_TEXTENCODING_UTF8  ));
+}
+
+template<typename T > inline void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCOL nCol, sal_uInt16 nFlags,
+                                  const ScDocument* pDoc,
+                                  const ScAddress::Details& rDetails)
+{
     if( nFlags & SCA_VALID )
         nFlags |= ( SCA_VALID_ROW | SCA_VALID_COL | SCA_VALID_TAB );
     if( pDoc && (nFlags & SCA_VALID_TAB ) )
     {
         if ( nTab >= pDoc->GetTableCount() )
         {
-            return ScGlobal::GetRscString( STR_NOREF_STR );
+            lcl_string_append(r, ScGlobal::GetRscString( STR_NOREF_STR ));
+            return;
         }
         if( nFlags & SCA_TAB_3D )
         {
@@ -1786,10 +1829,10 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             {
             default :
             case formula::FormulaGrammar::CONV_OOO:
-                r.append(aDocName);
+                lcl_string_append(r, aDocName);
                 if( nFlags & SCA_TAB_ABSOLUTE )
                     r.append("$");
-                r.append(aTabName);
+                lcl_string_append(r, aTabName);
                 r.append(".");
                 break;
 
@@ -1798,9 +1841,10 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             case formula::FormulaGrammar::CONV_XL_OOX:
                 if (!aDocName.isEmpty())
                 {
-                    r.append("[").append(aDocName).append("]");
+                    lcl_string_append(r.append("["), aDocName);
+                    r.append("]");
                 }
-                r.append(aTabName);
+                lcl_string_append(r, aTabName);
                 r.append("!");
                 break;
             }
@@ -1825,6 +1869,20 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             lcl_r1c1_append_c ( r, nCol, (nFlags & SCA_COL_ABSOLUTE) != 0, rDetails );
         break;
     }
+}
+
+void ScAddress::Format( OStringBuffer& r, sal_uInt16 nFlags,
+                                  const ScDocument* pDoc,
+                                  const Details& rDetails) const
+{
+    lcl_Format(r, nTab, nRow, nCol, nFlags, pDoc, rDetails);
+}
+
+OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
+                           const Details& rDetails) const
+{
+    OUStringBuffer r;
+    lcl_Format(r, nTab, nRow, nCol, nFlags, pDoc, rDetails);
     return r.makeStringAndClear();
 }
 
@@ -2030,7 +2088,7 @@ OUString ScAddress::GetColRowString( bool bAbsolute,
     if (bAbsolute)
         aString.append("$");
 
-    ScColToAlpha( aString, nCol);
+    lcl_ScColToAlpha( aString, nCol);
 
     if ( bAbsolute )
         aString.append("$");
@@ -2068,38 +2126,6 @@ OUString ScRefAddress::GetRefString( ScDocument* pDoc, SCTAB nActTab,
         nFlags |= SCA_ROW_ABSOLUTE;
 
     return aAdr.Format(nFlags, pDoc, rDetails);
-}
-
-void ScColToAlpha( OUStringBuffer& rBuf, SCCOL nCol )
-{
-    if (nCol < 26*26)
-    {
-        if (nCol < 26)
-            rBuf.append( static_cast<sal_Unicode>( 'A' +
-                        static_cast<sal_uInt16>(nCol)));
-        else
-        {
-            rBuf.append( static_cast<sal_Unicode>( 'A' +
-                        (static_cast<sal_uInt16>(nCol) / 26) - 1));
-            rBuf.append( static_cast<sal_Unicode>( 'A' +
-                        (static_cast<sal_uInt16>(nCol) % 26)));
-        }
-    }
-    else
-    {
-        OUString aStr;
-        while (nCol >= 26)
-        {
-            SCCOL nC = nCol % 26;
-            aStr += OUString( static_cast<sal_Unicode>( 'A' +
-                    static_cast<sal_uInt16>(nC)));
-            nCol = sal::static_int_cast<SCCOL>( nCol - nC );
-            nCol = nCol / 26 - 1;
-        }
-        aStr += OUString(static_cast<sal_Unicode>( 'A' +
-                static_cast<sal_uInt16>(nCol)));
-        rBuf.append(comphelper::string::reverseString(aStr));
-    }
 }
 
 bool AlphaToCol( SCCOL& rCol, const OUString& rStr)
