@@ -3019,7 +3019,7 @@ EditPaM ImpEditEngine::GetPaM( Point aDocPos, bool bSmart )
                 nPortion++;
                 pPortion = GetParaPortions().SafeGetObject( nPortion );
             }
-            assert(pPortion); //No visible paragraph found: GetPaM
+            SAL_WARN_IF(!pPortion, "editeng", "worrying lack of any visible paragraph");
             if (!pPortion)
                 return aPaM;
             return GetPaM(pPortion, aDocPos, bSmart);
