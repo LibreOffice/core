@@ -2635,7 +2635,7 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData, const ScfProperty
         // ...but get the current base time unit from the property of the old chart API
         sal_Int32 nApiTimeUnit = 0;
         bool bValidBaseUnit = aTimeIncrement.TimeResolution >>= nApiTimeUnit;
-        OSL_ENSURE( bValidBaseUnit, "XclExpChLabelRange::Convert - cannot ghet base time unit" );
+        OSL_ENSURE( bValidBaseUnit, "XclExpChLabelRange::Convert - cannot get base time unit" );
         maDateData.mnBaseUnit = bValidBaseUnit ? lclGetTimeUnit( nApiTimeUnit ) : EXC_CHDATERANGE_DAYS;
 
         /*  Min/max values depend on base time unit, they specify the number of
