@@ -1483,7 +1483,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
     if ( nVersion >= 601 )
     {
-        bool bTmp;
+        bool bTmp(false);
         rIStream.ReadCharAsBool( bTmp );
         bVertical = bTmp;
     }
@@ -1492,28 +1492,46 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
     {
         rIStream.ReadUInt16( nScriptType );
 
-        bool bUnicodeStrings;
+        bool bUnicodeStrings(false);
         rIStream.ReadCharAsBool( bUnicodeStrings );
         if ( bUnicodeStrings )
         {
-            for ( sal_uInt16 nPara = 0; nPara < nParagraphs; nPara++ )
+            for (sal_uInt16 nPara = 0; nPara < nParagraphs; ++nPara)
             {
                 ContentInfo& rC = aContents[nPara];
-                sal_uInt16 nL;
+                sal_uInt16 nL(0);
 
                 // Text
-                rIStream.ReadUInt16( nL );
-                if ( nL )
+                rIStream.ReadUInt16(nL);
+                if (nL)
                 {
+                    size_t nMaxElementsPossible = rIStream.remainingSize() / sizeof(sal_Unicode);
+                    if (nL > nMaxElementsPossible)
+                    {
+                        SAL_WARN("editeng", "Parsing error: " << nMaxElementsPossible <<
+                                 " max possible entries, but " << nL << " claimed, truncating");
+                        nL = nMaxElementsPossible;
+                    }
+
                     rtl_uString *pStr = rtl_uString_alloc(nL);
                     rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode));
                     rC.SetText((OUString(pStr, SAL_NO_ACQUIRE)));
+
+                    nL = 0;
                 }
 
                 // StyleSheetName
                 rIStream.ReadUInt16( nL );
                 if ( nL )
                 {
+                    size_t nMaxElementsPossible = rIStream.remainingSize() / sizeof(sal_Unicode);
+                    if (nL > nMaxElementsPossible)
+                    {
+                        SAL_WARN("editeng", "Parsing error: " << nMaxElementsPossible <<
+                                 " max possible entries, but " << nL << " claimed, truncating");
+                        nL = nMaxElementsPossible;
+                    }
+
                     rtl_uString *pStr = rtl_uString_alloc(nL);
                     rIStream.Read(pStr->buffer, nL*sizeof(sal_Unicode) );
                     rC.GetStyle() = OUString(pStr, SAL_NO_ACQUIRE);
