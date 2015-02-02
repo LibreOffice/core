@@ -779,21 +779,21 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     if (m_aParents.size() && m_aParents.top().is() && !m_bTextFrame)
         m_aParents.top()->add(xShape);
 
+    if (bPib)
+    {
+        m_rImport.resolvePict(false, xShape);
+    }
+
     if (nType == ESCHER_ShpInst_PictureFrame) // picture frame
     {
         assert(!m_bTextFrame);
-        if (bPib)
-        {
-            m_rImport.resolvePict(false, xShape);
-        }
-        else // ??? not sure if the early return should be removed on else?
+        if (!bPib) // ??? not sure if the early return should be removed on else?
         {
             m_xShape = xShape; // store it for later resolvePict call
         }
-        return;
     }
 
-    if (bCustom && xShape.is())
+    if (bCustom && xShape.is() && !bPib)
     {
         uno::Reference<drawing::XEnhancedCustomShapeDefaulter> xDefaulter(xShape, uno::UNO_QUERY);
         xDefaulter->createCustomShapeDefaults(OUString::number(nType));

@@ -890,6 +890,12 @@ RTFError RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing
         nXExt = (((long)m_aStates.top().aPicture.nScaleX) * (nXExt - (m_aStates.top().aPicture.nCropL + m_aStates.top().aPicture.nCropR))) / 100L;
     if (m_aStates.top().aPicture.nScaleY != 100)
         nYExt = (((long)m_aStates.top().aPicture.nScaleY) * (nYExt - (m_aStates.top().aPicture.nCropT + m_aStates.top().aPicture.nCropB))) / 100L;
+    if (m_aStates.top().bInShape)
+    {
+        // Picture in shape: it looks like pib picture, so we will stretch the picture to shape size (tdf#49893)
+        nXExt = m_aStates.top().aShape.nRight - m_aStates.top().aShape.nLeft;
+        nYExt = m_aStates.top().aShape.nBottom - m_aStates.top().aShape.nTop;
+    }
     auto pXExtValue = std::make_shared<RTFValue>(oox::drawingml::convertHmmToEmu(nXExt));
     auto pYExtValue = std::make_shared<RTFValue>(oox::drawingml::convertHmmToEmu(nYExt));
     aExtentAttributes.set(NS_ooxml::LN_CT_PositiveSize2D_cx, pXExtValue);
