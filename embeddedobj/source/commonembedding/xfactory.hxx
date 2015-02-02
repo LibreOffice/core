@@ -21,13 +21,16 @@
 #define INCLUDED_EMBEDDEDOBJ_SOURCE_COMMONEMBEDDING_XFACTORY_HXX
 
 #include <com/sun/star/embed/XEmbeddedObjectCreator.hpp>
+#include <com/sun/star/embed/XLinkFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
-class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<
+class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper3<
                                                 ::com::sun::star::embed::XEmbeddedObjectCreator,
+                                                css::embed::XLinkFactory,
                                                 ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
@@ -64,7 +67,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceLink( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XLinkFactory
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceLinkUserInit( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceLinkUserInit( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
