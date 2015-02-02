@@ -272,6 +272,8 @@ namespace svt
         const WizardPath& rActivePath( m_pImpl->aPaths[ m_pImpl->nActivePath ] );
 
         sal_Int32 nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), rActivePath );
+        if (nCurrentStatePathIndex < 0)
+            return;
 
         // determine up to which index (in the new path) we have to display the items
         RoadmapTypes::ItemIndex nUpperStepBoundary = (RoadmapTypes::ItemIndex)rActivePath.size();
@@ -332,7 +334,7 @@ namespace svt
                     // there is an item with this index in the roadmap - does it match what is requested by
                     // the respective state in the active path?
                     RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
-                    WizardState nRequiredState = rActivePath.at(nItemIndex);
+                    WizardState nRequiredState = rActivePath[ nItemIndex ];
                     if ( nPresentItemId != nRequiredState )
                     {
                         m_pImpl->pRoadmap->DeleteRoadmapItem( nItemIndex );
@@ -346,7 +348,7 @@ namespace svt
                 bInsertItem = bNeedItem;
             }
 
-            WizardState nState(rActivePath.at(nItemIndex));
+            WizardState nState( rActivePath[ nItemIndex ] );
             if ( bInsertItem )
             {
                 m_pImpl->pRoadmap->InsertRoadmapItem(
@@ -595,6 +597,8 @@ namespace svt
         sal_Int32 nCurrentStatePathIndex = -1;
         if ( m_pImpl->nActivePath != -1 )
             nCurrentStatePathIndex = m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath );
+        if (nCurrentStatePathIndex < 0)
+            return;
         for ( RoadmapTypes::ItemIndex nItemIndex = nCurrentStatePathIndex; nItemIndex < nLoopUntil; ++nItemIndex )
         {
             bool bExistentItem = ( nItemIndex < m_pImpl->pRoadmap->GetItemCount() );
@@ -603,7 +607,7 @@ namespace svt
                 // there is an item with this index in the roadmap - does it match what is requested by
                 // the respective state in the active path?
                 RoadmapTypes::ItemId nPresentItemId = m_pImpl->pRoadmap->GetItemID( nItemIndex );
-                WizardState nRequiredState = rActivePath.at(nItemIndex);
+                WizardState nRequiredState = rActivePath[ nItemIndex ];
                 if ( _nState == nRequiredState )
                 {
                     m_pImpl->pRoadmap->ChangeRoadmapItemLabel( nPresentItemId, getStateDisplayName( nRequiredState ) );
