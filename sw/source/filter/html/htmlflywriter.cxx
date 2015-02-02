@@ -32,6 +32,7 @@
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/xoutbmp.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -490,7 +491,7 @@ void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
         break;
     case HTML_OUT_CONTROL:      // OK
         OutHTML_DrawFrmFmtAsControl( *this,
-                                    static_cast<const SwDrawFrmFmt &>(rFrmFmt), *pSdrObject,
+                                    static_cast<const SwDrawFrmFmt &>(rFrmFmt), dynamic_cast<const SdrUnoObj&>(*pSdrObject),
                                     pCntnrStr != 0 );
         break;
     case HTML_OUT_AMARQUEE:

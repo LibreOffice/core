@@ -48,6 +48,7 @@ class SwNodeIndex;
 class ImageMap;
 class SwNumRule;
 class SdrObject;
+class SdrUnoObj;
 class SvxBrushItem;
 class SvxFontItem;
 class SwHTMLNumRuleInfo;
@@ -649,7 +650,7 @@ Writer& OutHTML_SwTblNode( Writer& , SwTableNode &, const SwFrmFmt *,
                            const OUString* pCaption=0, bool bTopCaption=false );
 
 Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt, const SwDrawFrmFmt& rFmt,
-                                     const SdrObject& rSdrObj, bool bInCntnr );
+                                     const SdrUnoObj& rSdrObj, bool bInCntnr );
 Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt, const SwDrawFrmFmt& rFmt,
                                      const SdrObject& rSdrObj );
 

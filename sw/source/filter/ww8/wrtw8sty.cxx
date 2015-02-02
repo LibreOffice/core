@@ -30,6 +30,7 @@
 #include <editeng/fontitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -2165,11 +2166,11 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, sal_uInt8 nTTyp,
                     {
                         sal_uInt8 nOldTyp = rWrt.nTxtTyp;
                         rWrt.nTxtTyp = nTTyp;
-                        rWrt.GetOCXExp().ExportControl(rWrt,&rObj);
+                        rWrt.GetOCXExp().ExportControl(rWrt, dynamic_cast<const SdrUnoObj&>(rObj));
                         rWrt.nTxtTyp = nOldTyp;
                     }
                     else if( rObj.ISA( SdrTextObj ) )
-                        rWrt.WriteSdrTextObj(rObj, nTTyp);
+                        rWrt.WriteSdrTextObj(dynamic_cast<const SdrTextObj&>(rObj), nTTyp);
                     else
                     {
                         const SwFrmFmt* pFmt = ::FindFrmFmt( &rObj );

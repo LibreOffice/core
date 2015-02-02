@@ -89,6 +89,7 @@ class SdrModel;
 class SdrPage;
 class SdrObject;
 class SdrTextObj;
+class SdrUnoObj;
 class Size;
 class EditEngine;
 struct SwPosition;
@@ -749,7 +750,7 @@ public:
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
         com::sun::star::drawing::XShape > *pShape, bool bFloatingCtrl) SAL_OVERRIDE;
-    bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
+    bool ExportControl(WW8Export &rWrt, const SdrUnoObj& rFormObj);
     bool ReadOCXStream( SotStorageRef& rSrc1,
         com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > *pShapeRef=0,

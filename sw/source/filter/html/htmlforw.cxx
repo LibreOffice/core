@@ -641,12 +641,9 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
     if( !pObj || FmFormInventor != pObj->GetObjInventor() )
         return 0;
 
-    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
-    assert(pFormObj);
-    if (!pFormObj)
-        return 0;
+    const SdrUnoObj& rFormObj = dynamic_cast<const SdrUnoObj&>(*pObj);
     uno::Reference< awt::XControlModel >  xControlModel =
-            pFormObj->GetUnoControlModel();
+            rFormObj.GetUnoControlModel();
 
     OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
@@ -668,22 +665,17 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
     return 0;
 }
 
-static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
-                            SwDoc *pDoc )
+static void GetControlSize(const SdrUnoObj& rFormObj, Size& rSz, SwDoc *pDoc)
 {
     SwViewShell *pVSh = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( !pVSh )
         return;
 
-    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
-    assert(pFormObj);
-    if (!pFormObj)
-        return;
     uno::Reference< awt::XControl >  xControl;
     SdrView* pDrawView = pVSh->GetDrawView();
     OSL_ENSURE( pDrawView && pVSh->GetWin(), "no DrawView or window!" );
     if ( pDrawView && pVSh->GetWin() )
-        xControl = pFormObj->GetUnoControl( *pDrawView, *pVSh->GetWin() );
+        xControl = rFormObj.GetUnoControl( *pDrawView, *pVSh->GetWin() );
     uno::Reference< awt::XTextLayoutConstrains > xLC( xControl, uno::UNO_QUERY );
     OSL_ENSURE( xLC.is(), "kein XTextLayoutConstrains" );
     if( !xLC.is() )
@@ -697,17 +689,11 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
 
 Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                      const SwDrawFrmFmt& rFmt,
-                                     const SdrObject& rSdrObject,
+                                     const SdrUnoObj& rFormObj,
                                      bool bInCntnr )
 {
-    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
-    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObject );
-    assert(pFormObj);
-    if (!pFormObj)
-        return rWrt;
     uno::Reference< awt::XControlModel > xControlModel =
-        pFormObj->GetUnoControlModel();
+        rFormObj.GetUnoControlModel();
 
     OSL_ENSURE( xControlModel.is(), "UNO-Control ohne Model" );
     if( !xControlModel.is() )
@@ -717,6 +703,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
 
+    SwHTMLWriter & rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
     rHTMLWrt.nFormCntrlCnt++;
 
     enum Tag { TAG_INPUT, TAG_SELECT, TAG_TEXTAREA, TAG_NONE };
@@ -807,7 +794,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             !*(sal_Bool*)aTmp.getValue() )
         {
             Size aSz( 0, 0 );
-            GetControlSize( rSdrObject, aSz, rWrt.pDoc );
+            GetControlSize( rFormObj, aSz, rWrt.pDoc );
 
             // wieviele sind sichtbar ??
             if( aSz.Height() )
@@ -828,7 +815,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     case form::FormComponentType::TEXTFIELD:
         {
             Size aSz( 0, 0 );
-            GetControlSize( rSdrObject, aSz, rWrt.pDoc );
+            GetControlSize( rFormObj, aSz, rWrt.pDoc );
 
             bool bMultiLine = false;
             OUString sMultiLine("MultiLine");
@@ -913,7 +900,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     case form::FormComponentType::FILECONTROL:
         {
             Size aSz( 0, 0 );
-            GetControlSize( rSdrObject, aSz, rWrt.pDoc );
+            GetControlSize( rFormObj, aSz, rWrt.pDoc );
             eType = TYPE_FILE;
 
             if( aSz.Width() )
@@ -989,7 +976,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             sOut = "\"";
         }
 
-        Size aTwipSz( rSdrObject.GetLogicRect().GetSize() );
+        Size aTwipSz( rFormObj.GetLogicRect().GetSize() );
         Size aPixelSz( 0, 0 );
         if( (aTwipSz.Width() || aTwipSz.Height()) &&
             Application::GetDefaultDevice() )
@@ -1152,7 +1139,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             }
         }
 
-        rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmOpts, &rSdrObject,
+        rHTMLWrt.OutCSS1_FrmFmtOptions( rFmt, nFrmOpts, &rFormObj,
                                         &aItemSet );
     }
 
@@ -1291,15 +1278,11 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 // Ermitteln, ob eine Format zu einem Control gehoert und wenn ja
 // dessen Form zurueckgeben
 static void AddControl( HTMLControls& rControls,
-                        const SdrObject *pSdrObj,
+                        const SdrUnoObj& rFormObj,
                         sal_uInt32 nNodeIdx )
 {
-    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pSdrObj );
-    assert(pFormObj); //Doch kein FormObj
-    if (!pFormObj)
-        return;
     uno::Reference< awt::XControlModel > xControlModel =
-            pFormObj->GetUnoControlModel();
+            rFormObj.GetUnoControlModel();
     if( !xControlModel.is() )
         return;
 
@@ -1346,7 +1329,7 @@ void SwHTMLWriter::GetControls()
             if( !pSdrObj )
                 continue;
 
-            AddControl( aHTMLControls, pSdrObj,
+            AddControl( aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj),
                         pPosFlyFrm->GetNdIndex().GetIndex() );
         }
     }
@@ -1369,7 +1352,7 @@ void SwHTMLWriter::GetControls()
         if( !pSdrObj )
             continue;
 
-        AddControl( aHTMLControls, pSdrObj, pPos->nNode.GetIndex() );
+        AddControl( aHTMLControls, dynamic_cast<const SdrUnoObj&>(*pSdrObj), pPos->nNode.GetIndex() );
     }
 }
 

@@ -61,6 +61,7 @@ class DateTime;
 namespace vcl { class Font; }
 class MSWordExportBase;
 class SdrObject;
+class SdrTextObj;
 class SfxItemSet;
 class SvStream;
 class SvxFontItem;
@@ -1038,7 +1039,7 @@ public:
 
     void AppendFlyInFlys(const sw::Frame& rFrmFmt, const Point& rNdTopLeft);
     void WriteOutliner(const OutlinerParaObject& rOutliner, sal_uInt8 nTyp);
-    void WriteSdrTextObj(const SdrObject& rObj, sal_uInt8 nTyp);
+    void WriteSdrTextObj(const SdrTextObj& rObj, sal_uInt8 nTyp);
 
     sal_uInt32 GetSdrOrdNum( const SwFrmFmt& rFmt ) const;
     void CreateEscher();

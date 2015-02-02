@@ -1310,13 +1310,8 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
     }
 }
 
-void WW8Export::WriteSdrTextObj(const SdrObject& rObj, sal_uInt8 nTyp)
+void WW8Export::WriteSdrTextObj(const SdrTextObj& rTxtObj, sal_uInt8 nTyp)
 {
-    const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, &rObj);
-    OSL_ENSURE(pTxtObj, "That is no SdrTextObj!");
-    if (!pTxtObj)
-        return;
-
     const OutlinerParaObject* pParaObj = 0;
     bool bOwnParaObj = false;
 
@@ -1325,14 +1320,14 @@ void WW8Export::WriteSdrTextObj(const SdrObject& rObj, sal_uInt8 nTyp)
     When the object is actively being edited, that text is not set into
     the objects normal text object, but lives in a separate object.
     */
-    if (pTxtObj->IsTextEditActive())
+    if (rTxtObj.IsTextEditActive())
     {
-        pParaObj = pTxtObj->GetEditOutlinerParaObject();
+        pParaObj = rTxtObj.GetEditOutlinerParaObject();
         bOwnParaObj = true;
     }
     else
     {
-        pParaObj = pTxtObj->GetOutlinerParaObject();
+        pParaObj = rTxtObj.GetOutlinerParaObject();
     }
 
     if( pParaObj )
@@ -3112,23 +3107,19 @@ bool  SwMSConvertControls::ReadOCXStream( SotStorageRef& rSrc1,
     return bRes;
 }
 
-bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pObj)
+bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFormObj)
 {
     if (!rWW8Wrt.bWrtWW8)
         return false;
 
-    const SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObj);
-    assert(pFormObj);
-    if (!pFormObj)
-        return false;
     uno::Reference< awt::XControlModel > xControlModel =
-    pFormObj->GetUnoControlModel();
+        rFormObj.GetUnoControlModel();
 
     //Why oh lord do we use so many different units ?
     //I think I painted myself into a little bit of a
     //corner by trying to use the uno interface for
     //controls export
-    Rectangle aRect = pFormObj->GetLogicRect();
+    Rectangle aRect = rFormObj.GetLogicRect();
     aRect.SetPos(Point(0,0));
     awt::Size aSize;
     aSize.Width = TWIPS_TO_MM(aRect.Right());
