@@ -5286,7 +5286,10 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                     sal_uInt32 nMaxStrLen = aString.getLength();
                     if (nCharAnzRead + nStrLen > nMaxStrLen)
                         nStrLen = nMaxStrLen - nCharAnzRead;
-                    aCharPropSet.maString = aString.copy(nCharAnzRead, nStrLen);
+                    if (nCharAnzRead > static_cast<sal_uInt32>(aString.getLength()))
+                        aCharPropSet.maString = OUString();
+                    else
+                        aCharPropSet.maString = aString.copy(nCharAnzRead, nStrLen);
                     aCharPropList.push_back( new PPTCharPropSet( aCharPropSet, nCurrentPara ) );
                     nCharAnzRead += nCharCount;
                     bEmptyParaPossible = false;
