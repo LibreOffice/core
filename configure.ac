@@ -8639,6 +8639,9 @@ dnl ===================================================================
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to enable build of Mozilla addressbook connectivity driver for Windows])
     if test "$enable_win_mozab_driver" = "yes" -a "$WITH_MINGW" != "YES" ; then
+        if test "$BITNESS_OVERRIDE" = 64; then
+           AC_MSG_ERROR([--with-win-mozab-driver and --enable-64-bit options are mutually exclusive])
+        fi
         WITH_MOZAB4WIN=TRUE
         AC_MSG_RESULT([yes, internal (old windows mozab driver)])
         BUILD_TYPE="$BUILD_TYPE MOZ"
