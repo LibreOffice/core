@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_5a5e9546",
+        "filename": "svgio/source/svgreader/svgstyleattributes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1942,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-02-02T13:36:38Z",
+      "side": 1,
+      "message": "This piece of code seems to be almost identical to the piece above ... could it be perhaps factored out to some shared place\ne.g. to a new method (SvgStyleAttributes::getDefaultColorIfNoneSet ;-) ... whatever can an appropriate name be) or any other suitable shared place?",
+      "revId": "0d251be2a17f174d26b14393e7fe21320f16ae22",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
