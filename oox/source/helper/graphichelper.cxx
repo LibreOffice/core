@@ -34,6 +34,8 @@
 #include <osl/diagnose.h>
 #include <comphelper/seqstream.hxx>
 #include <vcl/wmf.hxx>
+#include <vcl/svapp.hxx>
+#include <tools/gen.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/token/properties.hxx"
@@ -113,7 +115,10 @@ GraphicHelper::GraphicHelper( const Reference< XComponentContext >& rxContext, c
 
     // get the metric of the output device
     OSL_ENSURE( xFrame.is(), "GraphicHelper::GraphicHelper - cannot get target frame" );
-    maDeviceInfo.PixelPerMeterX = maDeviceInfo.PixelPerMeterY = 3500.0; // some default just in case
+    // some default just in case, 100 000 is 1 meter in MM100
+    Size aDefault = Application::GetDefaultDevice()->LogicToPixel(Size(100000, 100000), MapMode(MAP_100TH_MM));
+    maDeviceInfo.PixelPerMeterX = aDefault.Width();
+    maDeviceInfo.PixelPerMeterY = aDefault.Height();
     if( xFrame.is() ) try
     {
         Reference< awt::XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
