@@ -185,6 +185,10 @@ protected:
     SAL_DLLPRIVATE void                ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
 
+    SAL_DLLPRIVATE MenuItemData* NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,
+                                               const OUString& rStr, Menu* pMenu,
+                                               size_t nPos, const OString &rIdent);
+
     /// Close the 'pStartedFrom' menu window.
     virtual void ClosePopup(Menu* pMenu) = 0;
 

@@ -366,6 +366,21 @@ void Menu::RemoveEventListener( const Link& rEventListener )
     maEventListeners.removeListener( rEventListener );
 }
 
+MenuItemData* Menu::NbcInsertItem(sal_uInt16 nId, MenuItemBits nBits,
+                                  const OUString& rStr, Menu* pMenu,
+                                  size_t nPos, const OString &rIdent)
+{
+    // put Item in MenuItemList
+    MenuItemData* pData = pItemList->Insert(nId, MenuItemType::STRING,
+                             nBits, rStr, Image(), pMenu, nPos, rIdent);
+
+    // update native menu
+    if (ImplGetSalMenu() && pData->pSalMenuItem)
+        ImplGetSalMenu()->InsertItem(pData->pSalMenuItem, nPos);
+
+    return pData;
+}
+
 void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nItemBits,
     const OString &rIdent, sal_uInt16 nPos)
 {
@@ -378,12 +393,7 @@ void Menu::InsertItem(sal_uInt16 nItemId, const OUString& rStr, MenuItemBits nIt
         nPos = MENU_APPEND;
 
     // put Item in MenuItemList
-    MenuItemData* pData = pItemList->Insert(nItemId, MenuItemType::STRING,
-                             nItemBits, rStr, Image(), this, nPos, rIdent);
-
-    // update native menu
-    if( ImplGetSalMenu() && pData->pSalMenuItem )
-        ImplGetSalMenu()->InsertItem( pData->pSalMenuItem, nPos );
+    NbcInsertItem(nItemId, nItemBits, rStr, this, nPos, rIdent);
 
     vcl::Window* pWin = ImplGetWindow();
     delete mpLayoutData, mpLayoutData = NULL;
@@ -2877,8 +2887,8 @@ sal_uInt16 PopupMenu::ImplExecute( vcl::Window* pW, const Rectangle& rRect, sal_
         if( pResMgr )
         {
             OUString aTmpEntryText( ResId( SV_RESID_STRING_NOSELECTIONPOSSIBLE, *pResMgr ) );
-            MenuItemData* pData = pItemList->Insert(
-                0xFFFF, MenuItemType::STRING, MenuItemBits::NONE, aTmpEntryText, Image(), NULL, 0xFFFF, OString() );
+
+            MenuItemData* pData = NbcInsertItem(0xFFFF, MenuItemBits::NONE, aTmpEntryText, NULL, 0xFFFF, OString());
             size_t nPos = 0;
             pData = pItemList->GetData( pData->nId, nPos );
             assert(pData);
