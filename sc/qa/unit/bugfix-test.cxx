@@ -131,17 +131,17 @@ void ScFiltersTest::testTdf36933()
 
 void ScFiltersTest::testTdf43700()
 {
-    ScDocShellRef xDocSh = loadDoc("fdo47300test.", ODS);
+    ScDocShellRef xDocSh = loadDoc("fdo43700test.", ODS);
 
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo47300test.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43700test.*", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFileName;
 
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
-    createCSVPath(OUString("fdo47300test."), aCSVFileName);
+    createCSVPath(OUString("fdo43700test."), aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
