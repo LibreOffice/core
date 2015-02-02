@@ -107,16 +107,16 @@ public:
     sal_uInt16              mnStockBrushCount;      // count of static brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent that should be processed by SalObj-Hook
     BYTE                    mnCacheDCInUse;         // count of CacheDC in use
-    bool                mbObjClassInit;         // is SALOBJECTCLASS initialised
-    bool                mbInPalChange;          // is in WM_QUERYNEWPALETTE
+    bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
+    bool                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
     BOOL                    mbScrSvrEnabled;        // ScreenSaver enabled
     int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == does not exist)
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
-    bool                mbThemeChanged;         // true if visual theme was changed: throw away theme handles
-    bool                mbThemeMenuSupport;
+    bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    bool                    mbThemeMenuSupport;
 
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;

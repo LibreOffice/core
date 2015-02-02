@@ -56,8 +56,8 @@ private:
 
     sal_uInt16          mnBitCount;
 
-    Gdiplus::Bitmap* ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource);
-    Gdiplus::Bitmap* ImplCreateGdiPlusBitmap();
+    Gdiplus::Bitmap*    ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlphaSource);
+    Gdiplus::Bitmap*    ImplCreateGdiPlusBitmap();
 
 public:
 
@@ -80,22 +80,22 @@ public:
 public:
 
     bool                        Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle );
-    virtual bool                Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
-    virtual bool                Create( const SalBitmap& rSalBmpImpl );
-    virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics* pGraphics );
-    virtual bool                Create( const SalBitmap& rSalBmpImpl, sal_uInt16 nNewBitCount );
+    virtual bool                Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal ) SAL_OVERRIDE;
+    virtual bool                Create( const SalBitmap& rSalBmpImpl ) SAL_OVERRIDE;
+    virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual bool                Create( const SalBitmap& rSalBmpImpl, sal_uInt16 nNewBitCount ) SAL_OVERRIDE;
     virtual bool                Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas,
                                            Size& rSize,
-                                           bool bMask = false );
+                                           bool bMask = false ) SAL_OVERRIDE;
 
-    virtual void                Destroy();
+    virtual void                Destroy() SAL_OVERRIDE;
 
-    virtual Size                GetSize() const { return maSize; }
-    virtual sal_uInt16              GetBitCount() const { return mnBitCount; }
+    virtual Size                GetSize() const SAL_OVERRIDE { return maSize; }
+    virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE { return mnBitCount; }
 
-    virtual BitmapBuffer*       AcquireBuffer( BitmapAccessMode nMode );
-    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode );
-    virtual bool                GetSystemData( BitmapSystemData& rData );
+    virtual BitmapBuffer*       AcquireBuffer( BitmapAccessMode nMode ) SAL_OVERRIDE;
+    virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) SAL_OVERRIDE;
+    virtual bool                GetSystemData( BitmapSystemData& rData ) SAL_OVERRIDE;
 
     virtual bool                Crop( const Rectangle& rRectPixel ) SAL_OVERRIDE;
     virtual bool                Erase( const Color& rFillColor ) SAL_OVERRIDE;

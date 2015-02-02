@@ -49,9 +49,9 @@ public:
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();
 
-    virtual SalGraphics*            AcquireGraphics();
-    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual bool                    SetSize( long nNewDX, long nNewDY );
+    virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE;
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics ) SAL_OVERRIDE;
+    virtual bool                    SetSize( long nNewDX, long nNewDY ) SAL_OVERRIDE;
 
     static HBITMAP ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY, sal_uInt16 nBitCount, void **ppDummy);
 
