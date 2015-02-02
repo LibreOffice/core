@@ -60,8 +60,6 @@ public:
     ScAddress getTopCellPos() const;
     const ScRange& getRange() const;
     SCROW getGroupLength() const;
-    bool isStartFixed() const;
-    bool isEndFixed() const;
 
 private:
     void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos );

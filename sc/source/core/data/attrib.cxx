@@ -110,16 +110,6 @@ ScMergeAttr::~ScMergeAttr()
 {
 }
 
-OUString ScMergeAttr::GetValueText() const
-{
-    OUString aRet = "("
-        + OUString::number(static_cast<sal_Int32>(nColMerge))
-        + ","
-        + OUString::number(static_cast<sal_Int32>(nRowMerge))
-        + ")";
-    return aRet;
-}
-
 bool ScMergeAttr::operator==( const SfxPoolItem& rItem ) const
 {
     OSL_ENSURE( Which() != rItem.Which() || Type() == rItem.Type(), "which ==, type !=" );
@@ -632,11 +622,6 @@ bool ScPageHFItem::PutValue( const uno::Any& rVal, sal_uInt8 /* nMemberId */ )
     return true;
 }
 
-OUString ScPageHFItem::GetValueText() const
-{
-    return OUString("ScPageHFItem");
-}
-
 bool ScPageHFItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -939,11 +924,6 @@ ScDoubleItem::ScDoubleItem( const ScDoubleItem& rItem )
     :   SfxPoolItem ( rItem )
 {
         nValue = rItem.nValue;
-}
-
-OUString ScDoubleItem::GetValueText() const
-{
-    return OUString("ScDoubleItem");
 }
 
 bool ScDoubleItem::operator==( const SfxPoolItem& rItem ) const

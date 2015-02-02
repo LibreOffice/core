@@ -105,7 +105,6 @@ public:
     const OUString&  GetSource() const;
     const OUString&  GetSource32() const { return aOUSource;}
     const OUString&  GetComment() const { return aComment; }
-    void             SetSource( const OUString& r );
     void             SetSource32( const OUString& r );
 
     bool Compile();

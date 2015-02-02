@@ -56,8 +56,6 @@ public:
                 ScMergeAttr( const ScMergeAttr& );
                 virtual ~ScMergeAttr();
 
-    OUString                GetValueText() const;
-
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Create( SvStream& rStream, sal_uInt16 nVer ) const SAL_OVERRIDE;
@@ -251,7 +249,6 @@ public:
                 ScPageHFItem( const ScPageHFItem& rItem );
                 virtual ~ScPageHFItem();
 
-    OUString        GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
@@ -303,7 +300,6 @@ public:
                 ScDoubleItem( const ScDoubleItem& rItem );
                 virtual ~ScDoubleItem();
 
-    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 

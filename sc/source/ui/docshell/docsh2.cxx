@@ -140,14 +140,6 @@ void ScDocShell::ResetDrawObjectShell()
         pDrawLayer->SetObjectShell( NULL );
 }
 
-void ScDocShell::Activate()
-{
-}
-
-void ScDocShell::Deactivate()
-{
-}
-
 ScDrawLayer* ScDocShell::MakeDrawLayer()
 {
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();

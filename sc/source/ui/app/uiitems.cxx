@@ -71,11 +71,6 @@ ScInputStatusItem::~ScInputStatusItem()
     delete pEditData;
 }
 
-OUString ScInputStatusItem::GetValueText() const
-{
-    return OUString("InputStatus");
-}
-
 bool ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -259,11 +254,6 @@ bool ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
     return bIsAdvanced;
 }
 
-OUString ScQueryItem::GetValueText() const
-{
-    return OUString("QueryItem");
-}
-
 bool ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -414,11 +404,6 @@ ScConsolidateItem::~ScConsolidateItem()
 {
 }
 
-OUString ScConsolidateItem::GetValueText() const
-{
-    return OUString("ScConsolidateItem");
-}
-
 bool ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -461,11 +446,6 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
 ScPivotItem::~ScPivotItem()
 {
     delete pSaveData;
-}
-
-OUString ScPivotItem::GetValueText() const
-{
-    return OUString("ScPivotItem");
 }
 
 bool ScPivotItem::operator==( const SfxPoolItem& rItem ) const

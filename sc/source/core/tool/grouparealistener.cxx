@@ -265,16 +265,6 @@ SCROW FormulaGroupAreaListener::getGroupLength() const
     return mnGroupLen;
 }
 
-bool FormulaGroupAreaListener::isStartFixed() const
-{
-    return mbStartFixed;
-}
-
-bool FormulaGroupAreaListener::isEndFixed() const
-{
-    return mbEndFixed;
-}
-
 void FormulaGroupAreaListener::notifyCellChange( const SfxHint& rHint, const ScAddress& rPos )
 {
     // Determine which formula cells within the group need to be notified of this change.

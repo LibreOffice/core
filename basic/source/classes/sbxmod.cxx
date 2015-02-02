@@ -871,11 +871,6 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 // The setting of the source makes the image invalid
 // and scans the method definitions newly in
 
-void SbModule::SetSource( const OUString& r )
-{
-    SetSource32( r );
-}
-
 void SbModule::SetSource32( const OUString& r )
 {
     // Default basic mode to library container mode, but.. allow Option VBASupport 0/1 override

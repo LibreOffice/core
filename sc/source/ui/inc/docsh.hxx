@@ -177,14 +177,10 @@ public:
                     virtual ~ScDocShell();
 
     using SotObject::GetInterface;
-    using SfxShell::Activate;           // with sal_Bool bMDI
-    using SfxShell::Deactivate;         // with sal_Bool bMDI
 
 #if ENABLE_TELEPATHY
     SAL_DLLPRIVATE ScCollaboration* GetCollaboration();
 #endif
-    void    Activate();
-    void    Deactivate();
 
     virtual ::svl::IUndoManager*
                     GetUndoManager() SAL_OVERRIDE;

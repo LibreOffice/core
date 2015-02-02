@@ -66,8 +66,4 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         SfxTabDialog::PageCreated( nId, rPage );
 }
 
-void SvxFormatCellsDialog::Apply()
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
