@@ -413,10 +413,20 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, tools::PolyPolygon& rPol
     for(sal_uInt16 a(0); a < nPolygonCount; a++)
     {
         sal_uInt16 nPointCount(0);
-        rIStm.ReadUInt16( nPointCount );
+        rIStm.ReadUInt16(nPointCount);
+
+        const size_t nMinPolygonSize = sizeof(sal_Int32) * 2;
+        const size_t nMaxPolygons = rIStm.remainingSize() / nMinPolygonSize;
+        if (nPointCount > nMaxPolygons)
+        {
+            SAL_WARN("vcl.gdi", "Parsing error: " << nMaxPolygons <<
+                     " max possible entries, but " << nPointCount << " claimed, truncating");
+            nPointCount = nMaxPolygons;
+        }
+
         Polygon aCandidate(nPointCount);
 
-        if(nPointCount)
+        if (nPointCount)
         {
             for(sal_uInt16 b(0); b < nPointCount; b++)
             {
