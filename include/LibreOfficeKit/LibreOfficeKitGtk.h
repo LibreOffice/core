@@ -25,7 +25,6 @@ extern "C"
 #define LOK_DOCVIEW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, lok_docview_get_type(), LOKDocViewClass)
 #define IS_LOK_DOCVIEW(obj)       GTK_CHECK_TYPE (obj, lok_docview_get_type())
 
-
 typedef struct _LOKDocView       LOKDocView;
 typedef struct _LOKDocViewClass  LOKDocViewClass;
 

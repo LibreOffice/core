@@ -23,7 +23,6 @@ extern "C"
 #include <stdlib.h>
 #include <string.h>
 
-
 #ifndef _WIN32
     #include "dlfcn.h"
     #ifdef  _AIX
@@ -38,12 +37,10 @@ extern "C"
         return dlopen(pFN, RTLD_LAZY);
     }
 
-
     void *_dlsym(void *Hnd, const char *pName)
     {
         return dlsym(Hnd, pName);
     }
-
 
     int _dlclose(void *Hnd)
     {
@@ -55,7 +52,6 @@ extern "C"
         (void)pPath;
     }
 
-
 #else
 
     #include <windows.h>
@@ -64,18 +60,15 @@ extern "C"
     #define SEPERATOR         '\\'
     #define UNOPATH           "\\..\\URE\\bin"
 
-
     void *_dlopen(const char *pFN)
     {
         return (void *) LoadLibrary(pFN);
     }
 
-
     void *_dlsym(void *Hnd, const char *pName)
     {
         return GetProcAddress((HINSTANCE) Hnd, pName);
     }
-
 
     int _dlclose(void *Hnd)
     {
@@ -119,12 +112,7 @@ extern "C"
     }
 #endif
 
-
-
-
-
 typedef LibreOfficeKit *(HookFunction)( const char *install_path);
-
 
 static LibreOfficeKit *lok_init( const char *install_path )
 {
@@ -147,7 +135,7 @@ static LibreOfficeKit *lok_init( const char *install_path )
 
     strcpy(imp_lib, install_path);
 
-     extendUnoPath(install_path);
+    extendUnoPath(install_path);
 
     imp_lib[partial_length++] = SEPERATOR;
     strcpy(imp_lib + partial_length, TARGET_LIB);
