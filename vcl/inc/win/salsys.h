@@ -27,7 +27,7 @@
 
 class WinSalSystem : public SalSystem
 {
-    public:
+public:
     struct DisplayMonitor
     {
         OUString        m_aName;
@@ -48,7 +48,7 @@ class WinSalSystem : public SalSystem
         }
         ~DisplayMonitor() {}
     };
-    private:
+private:
     std::vector<DisplayMonitor>             m_aMonitors;
     std::map<OUString, unsigned int>   m_aDeviceNameToMonitor;
     unsigned int                            m_nPrimary;
@@ -56,14 +56,14 @@ public:
     WinSalSystem() : m_nPrimary( 0 ) {}
     virtual ~WinSalSystem();
 
-    virtual unsigned int GetDisplayScreenCount();
-    virtual unsigned int GetDisplayBuiltInScreen();
-    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
-    virtual OUString GetDisplayScreenName( unsigned int nScreen );
+    virtual unsigned int GetDisplayScreenCount() SAL_OVERRIDE;
+    virtual unsigned int GetDisplayBuiltInScreen() SAL_OVERRIDE;
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen )  SAL_OVERRIDE;
+    virtual OUString GetDisplayScreenName( unsigned int nScreen )  SAL_OVERRIDE;
     virtual int ShowNativeMessageBox( const OUString& rTitle,
                                       const OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton, bool bUseResources);
+                                      int nDefaultButton, bool bUseResources)  SAL_OVERRIDE;
     bool initMonitors();
     // discards monitorinfo; used by WM_DISPLAYCHANGED handler
     void clearMonitors();

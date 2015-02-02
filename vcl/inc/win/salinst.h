@@ -36,41 +36,41 @@ public:
     WinSalInstance();
     virtual ~WinSalInstance();
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle );
-    virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
-    virtual void            DestroyObject( SalObject* pObject );
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uIntPtr nStyle ) SAL_OVERRIDE;
+    virtual void            DestroyFrame( SalFrame* pFrame ) SAL_OVERRIDE;
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true ) SAL_OVERRIDE;
+    virtual void            DestroyObject( SalObject* pObject ) SAL_OVERRIDE;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData );
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData ) SAL_OVERRIDE;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
-                                               ImplJobSetup* pSetupData );
-    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
-    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
-    virtual void            DestroyPrinter( SalPrinter* pPrinter );
-    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
-    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
-    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
-    virtual OUString             GetDefaultPrinter();
-    virtual SalTimer*           CreateSalTimer();
-    virtual SalI18NImeStatus*   CreateI18NImeStatus();
-    virtual SalSystem*          CreateSalSystem();
-    virtual SalBitmap*          CreateSalBitmap();
-    virtual comphelper::SolarMutex* GetYieldMutex();
-    virtual sal_uIntPtr         ReleaseYieldMutex();
-    virtual void                AcquireYieldMutex( sal_uIntPtr nCount );
-    virtual bool                CheckYieldMutex();
+                                               ImplJobSetup* pSetupData ) SAL_OVERRIDE;
+    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter ) SAL_OVERRIDE;
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter ) SAL_OVERRIDE;
+    virtual void            DestroyPrinter( SalPrinter* pPrinter ) SAL_OVERRIDE;
+    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList ) SAL_OVERRIDE;
+    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
+    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo ) SAL_OVERRIDE;
+    virtual OUString            GetDefaultPrinter() SAL_OVERRIDE;
+    virtual SalTimer*           CreateSalTimer() SAL_OVERRIDE;
+    virtual SalI18NImeStatus*   CreateI18NImeStatus() SAL_OVERRIDE;
+    virtual SalSystem*          CreateSalSystem() SAL_OVERRIDE;
+    virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
+    virtual comphelper::SolarMutex* GetYieldMutex() SAL_OVERRIDE;
+    virtual sal_uIntPtr         ReleaseYieldMutex() SAL_OVERRIDE;
+    virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) SAL_OVERRIDE;
+    virtual bool                CheckYieldMutex() SAL_OVERRIDE;
 
-    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool                AnyInput( VclInputFlags nType );
-    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* );
-    virtual void                DestroyMenu( SalMenu* );
-    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
-    virtual void                DestroyMenuItem( SalMenuItem* );
-    virtual SalSession*                         CreateSalSession();
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
-    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService);
+    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents ) SAL_OVERRIDE;
+    virtual bool                AnyInput( VclInputFlags nType ) SAL_OVERRIDE;
+    virtual SalMenu*            CreateMenu( bool bMenuBar, Menu* ) SAL_OVERRIDE;
+    virtual void                DestroyMenu( SalMenu* ) SAL_OVERRIDE;
+    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData ) SAL_OVERRIDE;
+    virtual void                DestroyMenuItem( SalMenuItem* ) SAL_OVERRIDE;
+    virtual SalSession*         CreateSalSession() SAL_OVERRIDE;
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) SAL_OVERRIDE;
+    virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
 
     static int WorkaroundExceptionHandlingInUSER32Lib(int nExcept, LPEXCEPTION_POINTERS pExceptionInfo);
 };

@@ -30,26 +30,26 @@ public:
     HWND                    mhWnd;                  // Window handle
     HWND                    mhWndChild;             // Child Window handle
     HWND                    mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
-    SystemEnvData         maSysData;              // SystemEnvData
+    SystemEnvData           maSysData;              // SystemEnvData
     RGNDATA*                mpClipRgnData;          // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
-    bool                mbFirstClipRect;        // Flag for first cliprect to insert
-    WinSalObject*               mpNextObject;           // pointer to next object
+    bool                    mbFirstClipRect;        // Flag for first cliprect to insert
+    WinSalObject*           mpNextObject;           // pointer to next object
 
     WinSalObject();
     virtual ~WinSalObject();
 
-    virtual void                    ResetClipRegion();
-    virtual sal_uInt16                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
-    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    EndSetClipRegion();
-    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( bool bVisible );
-    virtual void                    Enable( bool nEnable );
-    virtual void                    GrabFocus();
-    virtual const SystemEnvData*    GetSystemData() const;
+    virtual void                    ResetClipRegion() SAL_OVERRIDE;
+    virtual sal_uInt16              GetClipRegionType() SAL_OVERRIDE;
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects ) SAL_OVERRIDE;
+    virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight) SAL_OVERRIDE;
+    virtual void                    EndSetClipRegion() SAL_OVERRIDE;
+    virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void                    Show( bool bVisible ) SAL_OVERRIDE;
+    virtual void                    Enable( bool nEnable ) SAL_OVERRIDE;
+    virtual void                    GrabFocus() SAL_OVERRIDE;
+    virtual const SystemEnvData*    GetSystemData() const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_INC_WIN_SALOBJ_H
