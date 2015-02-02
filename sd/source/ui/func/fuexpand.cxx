@@ -181,7 +181,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     // create title text objects
                     SdrTextObj* pTextObj = static_cast<SdrTextObj*>(pPage->GetPresObj(PRESOBJ_TITLE));
-                    assert(pTextObj);
+                    SAL_WARN_IF(!pTextObj, "sd.core", "worrying lack of PRESOBJ_TITLE object");
                     if (!pTextObj)
                         continue;
 
