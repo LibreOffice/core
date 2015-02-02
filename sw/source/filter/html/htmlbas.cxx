@@ -278,10 +278,7 @@ void SwHTMLWriter::OutBasic()
         SbxArray *pModules = pBasic->GetModules();
         for( sal_uInt16 j=0; j<pModules->Count(); j++ )
         {
-            const SbModule *pModule = PTR_CAST( SbModule, pModules->Get(j) );
-            assert(pModule); //Wo ist das Modul?
-            if (!pModule)
-                continue;
+            const SbModule &rModule = dynamic_cast<const SbModule&>(*pModules->Get(j));
 
             OUString sLang(SVX_MACRO_LANGUAGE_STARBASIC);
             ScriptType eType = STARBASIC;
@@ -302,9 +299,9 @@ void SwHTMLWriter::OutBasic()
                    .WriteCharPtr( "\">" );
             }
 
-            const OUString& rModName = pModule->GetName();
+            const OUString& rModName = rModule.GetName();
             Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // nicht einruecken!
-            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
+            HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), rModule.GetSource(),
                                      sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,
                                      eDestEnc, &aNonConvertableCharacters );

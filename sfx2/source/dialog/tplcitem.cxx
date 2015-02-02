@@ -102,12 +102,8 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 nWaterCanState = 0xff;
             else if( eState == SfxItemState::DEFAULT )
             {
-                const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
-                assert(pStateItem); //BoolItem expected
-                if (pStateItem)
-                    nWaterCanState = pStateItem->GetValue() ? 1 : 0;
-                else
-                    nWaterCanState = 0xff;
+                const SfxBoolItem& rStateItem = dynamic_cast<const SfxBoolItem&>(*pItem);
+                nWaterCanState = rStateItem.GetValue() ? 1 : 0;
             }
             //not necessary if the last event is still on the way
             if(!nUserEventId)
