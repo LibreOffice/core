@@ -146,7 +146,8 @@ std::string fastTokenToId(sal_uInt32 nToken)
         break;""" % (token, token))
 
     print("""    }
-
+#else
+    (void)nToken;
 #endif
     return sResult;
 }
