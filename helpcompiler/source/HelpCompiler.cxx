@@ -398,16 +398,36 @@ void myparser::traverse( xmlNodePtr parentNode )
         }
         else if (!strcmp(reinterpret_cast<const char*>(test->name), "ahelp"))
         {
+            //tool-tip
             std::string text = dump(test);
             std::replace(text.begin(), text.end(), '\n', ' ');
             trim(text);
-            std::string name;
 
-            HashSet::const_iterator aEnd = extendedHelpText.end();
-            for (HashSet::const_iterator iter = extendedHelpText.begin(); iter != aEnd; ++iter)
+            //tool-tip target
+            std::string hidstr(".");  //. == previous seen hid bookmarks
+            xmlChar *hid = xmlGetProp(test, reinterpret_cast<const xmlChar*>("hid"));
+            if (hid)
             {
-                name = *iter;
-                (*helptexts)[name] = text;
+                hidstr = std::string(reinterpret_cast<char*>(hid));
+                xmlFree (hid);
+            }
+
+            if (hidstr != "." && !hidstr.empty())  //simple case of explicitly named target
+            {
+                assert(!hidstr.empty());
+                (*helptexts)[hidstr] = text;
+            }
+            else //apply to list of "current" hids determined by recent bookmarks that have hid in their branch
+            {
+                //TODO: make these asserts and flush out all our broken help ids
+                SAL_WARN_IF(hidstr.empty(), "helpcompiler", "hid='' for text:" << text);
+                SAL_WARN_IF(!hidstr.empty() && extendedHelpText.empty(), "helpcompiler", "hid='.' with no hid bookmark branches for text:" << text);
+                HashSet::const_iterator aEnd = extendedHelpText.end();
+                for (HashSet::const_iterator iter = extendedHelpText.begin(); iter != aEnd; ++iter)
+                {
+                    std::string name = *iter;
+                    (*helptexts)[name] = text;
+                }
             }
             extendedHelpText.clear();
         }
