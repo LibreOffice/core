@@ -651,10 +651,7 @@ oslSocketAddr SAL_CALL osl_createInetSocketAddr (
 #ifdef _WIN32_WINNT_WINBLUE
     IN_ADDR addr;
     INT ret = InetPtonW(AF_INET, strDottedAddr->buffer, & addr);
-    if (1 == ret)
-    {
-        Addr = addr.S_un.S_addr;
-    }
+    Addr = ret == 1 ? addr.S_un.S_addr : OSL_INADDR_NONE;
 #else
     rtl_String  *pDottedAddr=NULL;
 
