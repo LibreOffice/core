@@ -3947,6 +3947,7 @@ cygwin*)
             CPUNAME=X86_64
             RTL_ARCH=X86_64
             PLATFORMID=windows_x86_64
+            WINDOWS_X64=1
         else
             CPUNAME=INTEL
             RTL_ARCH=x86
@@ -4359,6 +4360,7 @@ AC_SUBST(OS)
 AC_SUBST(P_SEP)
 AC_SUBST(WORKDIR)
 AC_SUBST(PLATFORMID)
+AC_SUBST(WINDOWS_X64)
 AC_DEFINE_UNQUOTED(WORKDIR,"$WORKDIR")
 
 dnl ===================================================================
