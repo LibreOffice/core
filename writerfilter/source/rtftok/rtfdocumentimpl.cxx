@@ -5539,14 +5539,12 @@ RTFError RTFDocumentImpl::popState()
         comphelper::EmbeddedObjectContainer aContainer;
         OUString aName;
         uno::Reference<embed::XEmbeddedObject> xObject = aContainer.CreateEmbeddedObject(aGlobalName.GetByteSequence(), aName);
-        uno::Reference<util::XCloseable> xComponent(xObject->getComponent(), uno::UNO_QUERY);
+        uno::Reference<util::XCloseable> xComponent(xObject->getComponent(), uno::UNO_QUERY_THROW);
         // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
         // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
         // to RTLD_GLOBAL, so most probably a gcc bug.
-        oox::FormulaImportBase* pImport = dynamic_cast<oox::FormulaImportBase*>(dynamic_cast<SfxBaseModel*>(xComponent.get()));
-        assert(pImport != nullptr);
-        if (pImport)
-            pImport->readFormulaOoxml(m_aMathBuffer);
+        oox::FormulaImportBase& rImport = dynamic_cast<oox::FormulaImportBase&>(dynamic_cast<SfxBaseModel&>(*xComponent.get()));
+        rImport.readFormulaOoxml(m_aMathBuffer);
         auto pValue = std::make_shared<RTFValue>(xObject);
         RTFSprms aMathAttributes;
         aMathAttributes.set(NS_ooxml::LN_starmath, pValue);
