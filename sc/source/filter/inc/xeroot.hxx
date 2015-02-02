@@ -99,6 +99,8 @@ struct XclExpRootData : public XclRootData
 
     bool                mbRelUrl;           /// true = Store URLs relative.
 
+    OStringBuffer       maStringBuf;        /// buffer to avoid massive OUString allocations
+
     explicit            XclExpRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
     virtual             ~XclExpRootData();
@@ -149,6 +151,9 @@ public:
     XclExpPivotTableManager& GetPivotTableManager() const;
     /** Returns the differential formatting list */
     XclExpDxfs&          GetDxfs() const;
+
+    /** Clean and return the OStringBuffer */
+    inline OStringBuffer&   GetStringBuf() const { mrExpData.maStringBuf.setLength(0); return mrExpData.maStringBuf; }
 
     XclExpXmlPivotTableManager& GetXmlPivotTableManager();
 

@@ -22,6 +22,7 @@
 
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/strbuf.hxx>
 #include <osl/endian.h>
 
 #include <limits>
@@ -324,6 +325,10 @@ public:
                     const Details& rDetails = detailsOOOa1,
                     ExternalInfo* pExtInfo = NULL,
                     const css::uno::Sequence<css::sheet::ExternalLinkInfo>* pExternalLinks = NULL );
+
+    SC_DLLPUBLIC void Format( OStringBuffer& r, sal_uInt16 nFlags = 0,
+                                  const ScDocument* pDocument = NULL,
+                                  const Details& rDetails = detailsOOOa1) const;
 
     SC_DLLPUBLIC OUString Format( sal_uInt16 nFlags = 0,
                                   const ScDocument* pDocument = NULL,
