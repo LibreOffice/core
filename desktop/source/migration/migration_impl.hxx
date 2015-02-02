@@ -114,15 +114,20 @@ struct MigrationItem
         return *this;
     }
 
-    sal_Bool operator==(const MigrationItem& aMigrationItem)
+    sal_Bool areBothOpenFrom(OUString const & cmd1, OUString const & cmd2)
     {
-        return ( aMigrationItem.m_sParentNodeName == m_sParentNodeName &&
-            aMigrationItem.m_sPrevSibling    == m_sPrevSibling     &&
-            aMigrationItem.m_sCommandURL     == m_sCommandURL      &&
-            aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is()    );
+        return cmd1 == ".uno:Open" && cmd2.startsWith(".uno:OpenFrom");
     }
 
-    OUString GetPrevSibling() const { return m_sPrevSibling; }
+    sal_Bool operator==(const MigrationItem& aMigrationItem)
+    {
+        return ((aMigrationItem.m_sCommandURL == m_sCommandURL
+            || (areBothOpenFrom(aMigrationItem.m_sCommandURL, m_sCommandURL)
+            ||  areBothOpenFrom(m_sCommandURL, aMigrationItem.m_sCommandURL)))
+            && aMigrationItem.m_sParentNodeName == m_sParentNodeName
+            && aMigrationItem.m_sPrevSibling    == m_sPrevSibling
+            && aMigrationItem.m_xPopupMenu.is() == m_xPopupMenu.is() );
+    }
 };
 
 typedef ::boost::unordered_map< OUString,
@@ -187,7 +192,6 @@ private:
     install_info         m_aInfo;                // info about the version being migrated
     strings_vr           m_vrFileList;           // final list of files to be copied
      MigrationHashMap     m_aOldVersionItemsHashMap;
-     MigrationHashMap     m_aNewVersionItemsHashMap;
      OUString      m_sModuleIdentifier;
 
     // functions to control the migration process
