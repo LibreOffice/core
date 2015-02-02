@@ -2248,6 +2248,15 @@ DECLARE_RTFIMPORT_TEST(testFdo86750, "fdo86750.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("#anchor"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo49893, "fdo49893.rtf")
+{
+    // Image from shape was not loaded, invalid size of image after load
+    uno::Reference<drawing::XShape> xShape(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShape.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(432)), xShape->getSize().Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(1296)), xShape->getSize().Width);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
