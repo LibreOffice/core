@@ -779,13 +779,13 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
     sal_uInt16 nLRUFuncCount = std::min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
     sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
+    _rLastRUFunctions.clear();
 
     if ( pLRUListIds )
     {
         for (sal_uInt16 i = 0; i < nLRUFuncCount; ++i)
         {
-            if (std::find(_rLastRUFunctions.begin(), _rLastRUFunctions.end(), Get(pLRUListIds[i])) == _rLastRUFunctions.end())
-                _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
+            _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
         }
     }
 }
