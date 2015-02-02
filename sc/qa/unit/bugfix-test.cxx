@@ -79,9 +79,11 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     void testTdf64229();
+    void testTdf36933();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf64229);
+    CPPUNIT_TEST(testTdf36933);
     CPPUNIT_TEST_SUITE_END();
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -100,6 +102,24 @@ void ScFiltersTest::testTdf64229()
     //test hard recalc: document has an incorrect cached formula result
     //hard recalc should have updated to the correct result
     createCSVPath(OUString("fdo64229b."), aCSVFileName);
+    testFile(aCSVFileName, rDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf36933()
+{
+    ScDocShellRef xDocSh = loadDoc("fdo36933test.", ODS);
+
+    xDocSh->DoHardRecalc(true);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo36933test.*", xDocSh.Is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    OUString aCSVFileName;
+
+    //test hard recalc: document has an incorrect cached formula result
+    //hard recalc should have updated to the correct result
+    createCSVPath(OUString("fdo36933test."), aCSVFileName);
     testFile(aCSVFileName, rDoc, 0);
 
     xDocSh->DoClose();
