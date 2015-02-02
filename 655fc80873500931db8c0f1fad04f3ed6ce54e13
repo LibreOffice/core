@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_3a55e11c",
+        "filename": "configmgr/CppunitTest_configmgr_unit.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-02-02T14:26:38Z",
+      "side": 1,
+      "message": "what purpose does this have?",
+      "revId": "655fc80873500931db8c0f1fad04f3ed6ce54e13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
