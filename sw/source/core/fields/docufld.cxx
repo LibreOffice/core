@@ -1023,7 +1023,11 @@ template<class T>
 static double lcl_TimeToDouble( const T& rTime )
 {
     const double fNanoSecondsPerDay = 86400000000000.0;
-    return ((rTime.Hours*3600000000000LL)+(rTime.Minutes*60000000000LL)+(rTime.Seconds*1000000000LL)+(rTime.NanoSeconds)) / fNanoSecondsPerDay;
+    return (  (rTime.Hours   * SAL_CONST_INT64(3600000000000))
+            + (rTime.Minutes * SAL_CONST_INT64(  60000000000))
+            + (rTime.Seconds * SAL_CONST_INT64(   1000000000))
+            + (rTime.NanoSeconds))
+        / fNanoSecondsPerDay;
 }
 
 template<class D>
