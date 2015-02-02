@@ -34,9 +34,9 @@ class ExportTyp
 protected:
                         ~ExportTyp() {}
 
-    SvStream&           aOut;           // Ausgabe-Stream
-    ScDocument*         pD;             // Dokument
-    rtl_TextEncoding    eZielChar;      // Ziel-Zeichensatz
+    SvStream&           aOut;
+    ScDocument*         pD;
+    rtl_TextEncoding    eZielChar;      // target character set
 public:
                         ExportTyp( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eDest ):
                             aOut( aStream )
