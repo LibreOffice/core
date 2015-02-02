@@ -80,12 +80,14 @@ void ScPivotLayoutTreeListLabel::KeyInput(const KeyEvent& rKeyEvent)
     vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
-    switch (nCode)
+    if (nCode == KEY_DELETE)
     {
-        case KEY_DELETE:
-            GetModel()->Remove(GetCurEntry());
-            return;
+        const SvTreeListEntry* pEntry = GetCurEntry();
+        if (pEntry)
+            GetModel()->Remove(pEntry);
+        return;
     }
+
     SvTreeListBox::KeyInput(rKeyEvent);
 }
 
