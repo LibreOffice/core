@@ -2153,13 +2153,19 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 sal_uInt16 nNumElemMemVert = 0;
                 rIn.ReadUInt16( nNumElemVert ).ReadUInt16( nNumElemMemVert ).ReadUInt16( nElemSizeVert );
             }
-            if ( nNumElemVert )
+            bool bImport = false;
+            if (nElemSizeVert == 8 || nElemSizeVert == 4)
             {
-                sal_Int32 nX, nY;
-                sal_Int16 nTmpA, nTmpB;
+                //sanity check that the stream is long enough to fulfill nNumElem * nElemSize;
+                bImport = rIn.remainingSize() / nElemSizeVert >= nNumElemVert;
+            }
+            if (bImport)
+            {
                 aCoordinates.realloc( nNumElemVert );
-                for ( sal_uInt16 i = 0; i < nNumElemVert; i++ )
+                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
                 {
+                    sal_Int32 nX(0), nY(0);
+
                     if ( nElemSizeVert == 8 )
                     {
                         rIn.ReadInt32( nX )
@@ -2167,6 +2173,7 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                     }
                     else
                     {
+                        sal_Int16 nTmpA(0), nTmpB(0);
                         rIn.ReadInt16( nTmpA )
                            .ReadInt16( nTmpB );
 
