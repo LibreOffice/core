@@ -45,6 +45,7 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <iostream>
 #endif
+#include <svx/xflclit.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::comphelper;
@@ -1039,6 +1040,14 @@ void RtfExport::OutColorTable()
             if (0 != (pCharBox = static_cast<const SvxBoxItem*>(rPool.GetItem2(RES_CHRATR_BOX, n))))
                 InsColorLine(*pCharBox);
         }
+    }
+
+    // TextFrame or paragraph background solid fill.
+    nMaxItem = rPool.GetItemCount2(XATTR_FILLCOLOR);
+    for (sal_uInt32 i = 0; i < nMaxItem; ++i)
+    {
+        if (const XFillColorItem* pItem = static_cast<const XFillColorItem*>(rPool.GetItem2(XATTR_FILLCOLOR, i)))
+            InsColor(pItem->GetColorValue());
     }
 
     for (size_t n = 0; n < m_aColTbl.size(); ++n)
