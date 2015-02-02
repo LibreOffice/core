@@ -1142,35 +1142,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
     }
 }
 
- // #FIXME - align with NEW event stuff ( if possible )
-#if 0
-void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHelper >& xVbaEventsHelper, const SfxHint& rHint )
-{
-    if ( rHint.ISA( SfxEventHint ) )
-    {
-        uno::Sequence< uno::Any > aArgs;
-        sal_uLong nEventId = static_cast<SfxEventHint&>(rHint).GetEventId();
-        switch( nEventId )
-        {
-            case SFX_EVENT_CREATEDOC:
-            {
-                xVbaEventsHelper->ProcessCompatibleVbaEvent( VBAEVENT_DOCUMENT_NEW, aArgs );
-                break;
-            }
-            case SFX_EVENT_OPENDOC:
-            {
-                xVbaEventsHelper->ProcessCompatibleVbaEvent( VBAEVENT_DOCUMENT_OPEN, aArgs );
-                break;
-            }
-            default:
-            {
-                //do nothing
-            }
-        }
-    }
-}
-#endif
-
+#if defined WNT
 bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              uno::Any & rValue )
 {
@@ -1182,6 +1154,8 @@ bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
 {
     return mpDoc->getIDocumentLinksAdministration().SetData( rItem, rMimeType, rValue );
 }
+
+#endif
 
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const OUString& rItem )
 {

@@ -1109,23 +1109,6 @@ void XclExpChartObj::SaveXml( XclExpXmlStream& rStrm )
     pDrawing->endElement( FSNS( XML_xdr, XML_twoCellAnchor ) );
 }
 
-void XclExpChartObj::WriteShapeTransformation( sax_fastparser::FSHelperPtr pFS, const XShapeRef& rXShape, bool bFlipH, bool bFlipV, sal_Int32 nRotation )
-{
-    ::com::sun::star::awt::Point aPos = rXShape->getPosition();
-    ::com::sun::star::awt::Size aSize = rXShape->getSize();
-
-    pFS->startElementNS( XML_xdr, XML_xfrm,
-                          XML_flipH, bFlipH ? "1" : NULL,
-                          XML_flipV, bFlipV ? "1" : NULL,
-                          XML_rot, nRotation ? I32S( nRotation ) : NULL,
-                          FSEND );
-
-    pFS->singleElementNS( XML_a, XML_off, XML_x, IS( oox::drawingml::convertHmmToEmu( aPos.X ) ), XML_y, IS( oox::drawingml::convertHmmToEmu( aPos.Y ) ), FSEND );
-    pFS->singleElementNS( XML_a, XML_ext, XML_cx, IS( oox::drawingml::convertHmmToEmu( aSize.Width ) ), XML_cy, IS( oox::drawingml::convertHmmToEmu( aSize.Height ) ), FSEND );
-
-    pFS->endElementNS( XML_xdr, XML_xfrm );
-}
-
 const css::uno::Reference<css::chart::XChartDocument>& XclExpChartObj::GetChartDoc() const
 {
     return mxChartDoc;

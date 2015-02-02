@@ -229,7 +229,7 @@ public:
 };
 
 
-#if defined( WNT )
+#if defined WNT
 
 namespace {
 
@@ -338,8 +338,6 @@ long SfxApplication::DdeExecute( const OUString&   rCmd )  // Expressed in our B
     return 1;
 }
 
-#endif
-
 /*  [Description]
 
     This method can be overridden by application developers, to receive
@@ -363,8 +361,6 @@ long SfxObjectShell::DdeExecute( const OUString&   rCmd )  // Expressed in our B
 #endif
     return 1;
 }
-
-
 
 /*  [Description]
 
@@ -395,6 +391,8 @@ bool SfxObjectShell::DdeSetData( const OUString&,                    // the Item
 {
     return false;
 }
+
+#endif
 
 /*  [Description]
 

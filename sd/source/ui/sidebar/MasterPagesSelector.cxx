@@ -115,13 +115,6 @@ void MasterPagesSelector::LateInit (void)
 {
 }
 
-sal_Int32 MasterPagesSelector::GetPreferredWidth (sal_Int32 nHeight)
-{
-    const ::osl::MutexGuard aGuard (maMutex);
-
-    return PreviewValueSet::GetPreferredWidth (nHeight);
-}
-
 sal_Int32 MasterPagesSelector::GetPreferredHeight (sal_Int32 nWidth)
 {
     const ::osl::MutexGuard aGuard (maMutex);

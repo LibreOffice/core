@@ -82,8 +82,6 @@ public:
     virtual void SAL_CALL characters(const OUString & aChars)
         throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
-    static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
-
     // local
 
     void setStream(Stream * pStream);

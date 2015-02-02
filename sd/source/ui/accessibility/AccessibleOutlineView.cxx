@@ -200,12 +200,6 @@ void SAL_CALL
 
 //=====  protected internal  ==================================================
 
-void AccessibleOutlineView::FireEvent(const AccessibleEventObject& aEvent )
-{
-    // delegate listener handling to children manager.
-    maTextHelper.FireEvent(aEvent);
-}
-
 void AccessibleOutlineView::Activated (void)
 {
     SolarMutexGuard aGuard;

@@ -204,7 +204,6 @@ namespace dbaui
 
         virtual sal_uInt32          GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
 
-        sal_uInt16                  GetDefaultColumnWidth(const OUString& rName) const;
         // if you want to have an own header ...
         virtual BrowserHeader*      imp_CreateHeaderBar(BrowseBox* pParent) SAL_OVERRIDE;
 

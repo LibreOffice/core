@@ -600,7 +600,6 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleChildCount (void)
     return nCount;
 }
 
-
 Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int32 i)
     throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
@@ -624,7 +623,6 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleList::getAccessibleChild (sal_Int3
     return xChild;
 }
 
-
 Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
     throw (RuntimeException, std::exception)
 {
@@ -632,7 +630,6 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleList::getAccessibleParent(  )
 
     return m_xParent;
 }
-
 
 sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -643,31 +640,10 @@ sal_Int32 SAL_CALL VCLXAccessibleList::getAccessibleIndexInParent (void)
         return VCLXAccessibleComponent::getAccessibleIndexInParent();
 }
 
-
 sal_Int16 SAL_CALL VCLXAccessibleList::getAccessibleRole (void)
     throw (RuntimeException, std::exception)
 {
     return AccessibleRole::LIST;
-}
-
-
-//=====  XAccessibleComponent  ================================================
-
-bool SAL_CALL VCLXAccessibleList::contains( const awt::Point& rPoint ) throw (RuntimeException)
-{
-    SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    bool bInside = false;
-
-    vcl::Window* pListBox = GetWindow();
-    if ( pListBox )
-    {
-        Rectangle aRect( Point(0,0), pListBox->GetSizePixel() );
-        bInside = aRect.IsInside( VCLPoint( rPoint ) );
-    }
-
-    return bInside;
 }
 
 //===== XServiceInfo ==========================================================

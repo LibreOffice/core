@@ -292,11 +292,6 @@ SvxFontWorkDialog::~SvxFontWorkDialog()
         DELETEZ(pCtrlItems[i]);
 }
 
-void SvxFontWorkDialog::Zoom()
-{
-    SfxDockingWindow::Roll();
-}
-
 SfxChildAlignment SvxFontWorkDialog::CheckAlignment( SfxChildAlignment eActAlign,
                                                      SfxChildAlignment eAlign )
 {

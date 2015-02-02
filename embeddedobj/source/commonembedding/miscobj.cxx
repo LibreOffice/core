@@ -446,14 +446,6 @@ uno::Sequence< uno::Type > SAL_CALL OCommonEmbeddedObject::getTypes()
 
 }
 
-
-uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getImplementationId()
-        throw( uno::RuntimeException )
-{
-    return css::uno::Sequence<sal_Int8>();
-}
-
-
 uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
         throw ( uno::RuntimeException, std::exception )
 {
@@ -463,7 +455,6 @@ uno::Sequence< sal_Int8 > SAL_CALL OCommonEmbeddedObject::getClassID()
     return m_aClassID;
 }
 
-
 OUString SAL_CALL OCommonEmbeddedObject::getClassName()
         throw ( uno::RuntimeException, std::exception )
 {
@@ -472,7 +463,6 @@ OUString SAL_CALL OCommonEmbeddedObject::getClassName()
 
     return m_aClassName;
 }
-
 
 void SAL_CALL OCommonEmbeddedObject::setClassInfo(
                 const uno::Sequence< sal_Int8 >& /*aClassID*/, const OUString& /*aClassName*/ )

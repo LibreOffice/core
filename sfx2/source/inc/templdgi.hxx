@@ -323,7 +323,6 @@ private:
     DECL_LINK( MenuSelectHdl, Menu* );
 
 protected:
-    void            Command( const CommandEvent& rMEvt );
     virtual void    EnableEdit( bool = true ) SAL_OVERRIDE;
     virtual void    EnableItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;
     virtual void    CheckItem( sal_uInt16 nMesId, bool bCheck = true ) SAL_OVERRIDE;

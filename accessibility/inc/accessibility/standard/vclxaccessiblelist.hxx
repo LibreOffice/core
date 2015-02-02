@@ -110,11 +110,6 @@ public:
     virtual sal_Int16 SAL_CALL getAccessibleRole (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XAccessibleComponent
-    bool SAL_CALL contains (const ::com::sun::star::awt::Point& aPoint)
-        throw (::com::sun::star::uno::RuntimeException);
-
-
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

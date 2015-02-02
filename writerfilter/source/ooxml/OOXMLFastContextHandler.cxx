@@ -271,16 +271,6 @@ throw (uno::RuntimeException, xml::sax::SAXException)
         OOXMLFactory::getInstance()->characters(this, rString);
 }
 
-namespace
-{
-    class theOOXMLFastContextHandlerUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theOOXMLFastContextHandlerUnoTunnelId > {};
-}
-
-const uno::Sequence< sal_Int8 > & OOXMLFastContextHandler::getUnoTunnelId()
-{
-    return theOOXMLFastContextHandlerUnoTunnelId::get().getSeq();
-}
-
 void OOXMLFastContextHandler::setStream(Stream * pStream)
 {
     mpStream = pStream;

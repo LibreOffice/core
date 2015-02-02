@@ -5,7 +5,6 @@ FontCharMap::GetDefaultMap(bool)
 LineListBox::Clear()
 LineListBox::InsertEntry(rtl::OUString const&, int)
 LineListBox::RemoveEntry(int)
-OCommonEmbeddedObject::getImplementationId()
 OOoEmbeddedObjectFactory::createInstanceLinkUserInit(com::sun::star::uno::Sequence<signed char> const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::embed::XStorage> const&, rtl::OUString const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&, com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> const&)
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
@@ -65,10 +64,8 @@ SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString 
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
 SfxBoolItem::GetValueCount() const
 SfxFrameItem::GetValueText() const
-SfxObjectShell::DdeExecute(rtl::OUString const&)
 SfxObjectShellItem::GetValueText() const
 SfxProgress::SetText(rtl::OUString const&)
-SfxTemplateDialog_Impl::Command(CommandEvent const&)
 SfxViewFrameItem::GetValueText() const
 SotObject::GetInterface(SvGlobalName const&)
 StylePool::getCount() const
@@ -89,11 +86,9 @@ SvxColorTabPage::GetPropertyList(XPropertyListType)
 SvxColumnItem::GetValueText() const
 SvxDummyTextSource::SetNotifyHdl(Link const&)
 SvxFontListBox::GetSelectEntry() const
-SvxFontWorkDialog::Zoom()
 SvxFormatCellsDialog::Apply()
 SvxLongLRSpaceItem::GetValueText() const
 SvxLongULSpaceItem::GetValueText() const
-SvxNewTableDialog::Apply()
 SvxObjectItem::GetValueText() const
 SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
@@ -104,13 +99,9 @@ Test::testPerf()
 Test::testSharedFormulaMoveBlock()
 ToolBox::UserDraw(UserDrawEvent const&)
 UnxPluginComm::NPP_GetMIMEDescription()
-VCLXAccessibleList::contains(com::sun::star::awt::Point const&)
 X11SalGraphics::drawAlphaBitmap(SalTwoRect const&, SalBitmap const&)
-XclExpChartObj::WriteShapeTransformation(boost::shared_ptr<sax_fastparser::FastSerializerHelper>, com::sun::star::uno::Reference<com::sun::star::drawing::XShape> const&, bool, bool, int)
 XclXmlUtils::ToOString(XclRange const&)
 XmlTestTools::parseXml(utl::TempFile&)
-accessibility::AccessibleOutlineView::FireEvent(com::sun::star::accessibility::AccessibleEventObject const&)
-accessibility::AccessibleTextHelper_Impl::IsSelected() const
 apitest::CellProperties::testRotateReference()
 apitest::CellProperties::testVertJustify()
 apitest::DataPilotField::testAutoShowInfo()
@@ -253,7 +244,6 @@ dbaui::OPropEditCtrl::SetSpecialReadOnly(bool)
 dbaui::OPropListBoxCtrl::SetSpecialReadOnly(bool)
 dbaui::OQueryViewSwitch::resizeDocumentView(Rectangle&)
 dbaui::OQueryViewSwitch::setReadOnly(bool)
-dbaui::OSelectionBrowseBox::GetDefaultColumnWidth(rtl::OUString const&) const
 dbaui::OTableController::Load(com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> const&)
 dbaui::OTableController::Save(com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> const&)
 dbaui::OTableEditorCtrl::Redo()
@@ -282,10 +272,6 @@ sc::FormulaGroupAreaListener::isEndFixed() const
 sc::FormulaGroupAreaListener::isStartFixed() const
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
 sd::LeftImpressPaneShell::RegisterInterface(SfxModule*)
-sd::sidebar::MasterPagesSelector::GetPreferredWidth(int)
-sd::slidesorter::SlideSorter::GetBorder()
-sd::slidesorter::SlideSorterViewShell::DragFinished(signed char)
 std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >::_Rb_tree(std::_Rb_tree<rtl::OUString, std::pair<rtl::OUString const, (anonymous namespace)::TemplateId>, std::_Select1st<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> >, std::less<rtl::OUString>, std::allocator<std::pair<rtl::OUString const, (anonymous namespace)::TemplateId> > >&&)
 std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread>, std::allocator<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThread> > >::reserve(unsigned long)
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)
-writerfilter::ooxml::OOXMLFastContextHandler::getUnoTunnelId()

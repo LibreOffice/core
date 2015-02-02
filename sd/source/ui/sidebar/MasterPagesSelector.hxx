@@ -79,7 +79,6 @@ public:
         SdPage* pMasterPage,
         sal_uInt16 nInsertionIndex);
 
-    sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
 
     /** Update the selection of previews according to whatever

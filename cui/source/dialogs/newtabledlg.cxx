@@ -33,10 +33,6 @@ short SvxNewTableDialog::Execute(void)
     return ModalDialog::Execute();
 }
 
-void SvxNewTableDialog::Apply(void)
-{
-}
-
 sal_Int32 SvxNewTableDialog::getRows() const
 {
     return sal::static_int_cast< sal_Int32 >( mpNumRows->GetValue() );

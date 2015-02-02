@@ -2395,9 +2395,6 @@ void SfxTemplateDialog_Impl::Resize()
         pTreeBox->SetSizePixel(aFmtSize);
 }
 
-
-
-
 Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
 {
     if (m_pFloat != NULL)
@@ -2414,21 +2411,6 @@ Size SfxTemplateDialog_Impl::GetMinOutputSizePixel()
         return Size(0,0);
 }
 
-
-
-void SfxTemplateDialog_Impl::Command( const CommandEvent& rCEvt )
-{
-    if (m_pFloat != NULL)
-    {
-        if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
-            ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), m_pFloat );
-        else
-            m_pFloat->Command(rCEvt);
-    }
-}
-
-
-
 void SfxTemplateDialog_Impl::EnableItem(sal_uInt16 nMesId, bool bCheck)
 {
     OUString aEmpty;
@@ -2444,8 +2426,6 @@ void SfxTemplateDialog_Impl::EnableItem(sal_uInt16 nMesId, bool bCheck)
             break;
     }
 }
-
-
 
 void SfxTemplateDialog_Impl::CheckItem(sal_uInt16 nMesId, bool bCheck)
 {

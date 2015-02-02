@@ -2362,13 +2362,6 @@ sal_uInt32 OSelectionBrowseBox::GetTotalCellWidth(long nRowId, sal_uInt16 nColId
     return GetDataWindow().LogicToPixel(Size(GetDataWindow().GetTextWidth(strText),0)).Width();
 }
 
-sal_uInt16 OSelectionBrowseBox::GetDefaultColumnWidth(const OUString& /*rName*/) const
-{
-    // the base class makes it dependent on the text. I have no column headers, therefore I
-    // like to have a new Default-value
-    return static_cast<sal_uInt16>(DEFAULT_SIZE);
-}
-
 bool OSelectionBrowseBox::isCutAllowed()
 {
     bool bCutAllowed = false;

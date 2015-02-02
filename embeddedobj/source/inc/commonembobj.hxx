@@ -263,9 +263,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         throw( ::com::sun::star::uno::RuntimeException ) ;
 
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( ::com::sun::star::uno::RuntimeException ) ;
-
 // XEmbeddedObject
 
     virtual void SAL_CALL changeState( sal_Int32 nNewState )

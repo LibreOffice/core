@@ -373,10 +373,13 @@ public:
                                                bool&             rbHeader,
                                                bool&             rbFooter );
 
+#if defined WNT
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                                 ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
+#endif
+
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) SAL_OVERRIDE;
 
     const OUString& GetDdeTextFmt() const { return aDdeTextFmt; }

@@ -648,13 +648,6 @@ void SlideSorterViewShell::StartDrag (
         pWindow);
 }
 
-void SlideSorterViewShell::DragFinished (
-    sal_Int8 nDropAction)
-{
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->GetController().GetClipboard().DragFinished (nDropAction);
-}
-
 sal_Int8 SlideSorterViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,

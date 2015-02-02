@@ -168,7 +168,6 @@ public:
     void ArrangeGUIElements (
         const Point& rOffset,
         const Size& rSize);
-    SvBorder GetBorder (void);
 
     bool RelocateToWindow (::vcl::Window* pWindow);
 

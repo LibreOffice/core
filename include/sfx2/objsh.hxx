@@ -452,6 +452,7 @@ public:
     OUString                    GetTitle( sal_uInt16 nMaxLen = 0 ) const;
     void                        InvalidateName();  // Re-set to unnamed
 
+#if defined WNT
     // DDE-Interface
     long                        DdeExecute( const OUString& rCmd );
     virtual bool                DdeGetData( const OUString& rItem,
@@ -460,6 +461,7 @@ public:
     virtual bool                DdeSetData( const OUString& rItem,
                                             const OUString& rMimeType,
                                             const ::com::sun::star::uno::Any & rValue );
+#endif
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem );
     virtual void                ReconnectDdeLink(SfxObjectShell& rServer);
 

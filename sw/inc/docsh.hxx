@@ -232,10 +232,12 @@ public:
     Reader* StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
                             SwCrsrShell* pCrsrSh = 0, SwPaM* pPaM = 0);
 
+#if defined WNT
     virtual bool DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
     virtual bool DdeSetData( const OUString& rItem, const OUString& rMimeType,
                              const ::com::sun::star::uno::Any & rValue ) SAL_OVERRIDE;
+#endif
     virtual ::sfx2::SvLinkSource* DdeCreateLinkSource( const OUString& rItem ) SAL_OVERRIDE;
     virtual void ReconnectDdeLink(SfxObjectShell& rServer) SAL_OVERRIDE;
 

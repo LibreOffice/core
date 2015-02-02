@@ -372,7 +372,6 @@ bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     ProcessMouseEvent(BUTTON_UP, rEvent);
 
     mbProcessingMouseButtonDown = false;
-//    mpWindow->ReleaseMouse();
 
     return true;
 }

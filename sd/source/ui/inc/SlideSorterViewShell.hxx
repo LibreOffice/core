@@ -120,8 +120,6 @@ public:
     void StartDrag (
         const Point& rDragPt,
         ::vcl::Window* pWindow );
-    void DragFinished (
-        sal_Int8 nDropAction);
     virtual sal_Int8 AcceptDrop (
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,

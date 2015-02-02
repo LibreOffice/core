@@ -108,9 +108,6 @@ public:
 
 protected:
 
-    // overridden, as we hold the listeners ourselves
-    void FireEvent (const ::com::sun::star::accessibility::AccessibleEventObject& aEvent);
-
     // overridden to detect focus changes
     virtual void Activated (void) SAL_OVERRIDE;
 

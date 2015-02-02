@@ -385,21 +385,6 @@ void SlideSorter::ArrangeGUIElements (
     }
 }
 
-SvBorder SlideSorter::GetBorder (void)
-{
-    SvBorder aBorder;
-
-    ::boost::shared_ptr<ScrollBar> pScrollBar = GetVerticalScrollBar();
-    if (pScrollBar.get() != NULL && pScrollBar->IsVisible())
-        aBorder.Right() = pScrollBar->GetOutputSizePixel().Width();
-
-    pScrollBar = GetHorizontalScrollBar();
-    if (pScrollBar.get() != NULL && pScrollBar->IsVisible())
-        aBorder.Bottom() = pScrollBar->GetOutputSizePixel().Height();
-
-    return aBorder;
-}
-
 bool SlideSorter::RelocateToWindow (::vcl::Window* pParentWindow)
 {
    // Stop all animations for they have been started for the old window.

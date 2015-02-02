@@ -2051,6 +2051,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     rbFooter = static_cast<const SfxBoolItem&>(pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
+#if defined WNT
 bool ScDocShell::DdeGetData( const OUString& rItem,
                              const OUString& rMimeType,
                              ::com::sun::star::uno::Any & rValue )
@@ -2135,6 +2136,7 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     ScImportExport aObj( &aDocument, rItem );
     return aObj.IsRef() && aObj.ImportData( rMimeType, rValue );
 }
+#endif
 
 ::sfx2::SvLinkSource* ScDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
