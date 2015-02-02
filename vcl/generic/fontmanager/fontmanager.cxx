@@ -832,7 +832,7 @@ bool PrintFontManager::analyzeFontFile( int nDirID, const OString& rFontFile, ::
     {
         // get number of ttc entries
         int nLength = CountTTCFonts( aFullPath.getStr() );
-        if( nLength )
+        if (nLength > 0)
         {
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "ttc: %s contains %d fonts\n", aFullPath.getStr(), nLength );
