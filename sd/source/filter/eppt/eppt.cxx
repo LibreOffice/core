@@ -394,9 +394,9 @@ void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertyS
 
         // the auto color is dependent to the page background,so we have to set a page that is in the right context
         if ( nInstance == EPP_TEXTTYPE_Notes )
-            GetPageByIndex( 0, NOTICE );
+            (void)GetPageByIndex(0, NOTICE);
         else
-            GetPageByIndex( 0, MASTER );
+            (void)GetPageByIndex(0, MASTER);
 
         mpPptEscherEx->BeginAtom();
 
