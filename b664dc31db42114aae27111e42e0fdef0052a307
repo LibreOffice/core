@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_7dacb3ed",
+        "filename": "vcl/source/outdev/font.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2033,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2015-02-02T20:59:25Z",
+      "side": 1,
+      "message": "While \u0027false\u0027 may work here; we want to return a pointer from this code; so \u0027return NULL\u0027 is better - and we can drop the braces - cf. if (!pFallback) below.\n\nThanks !",
+      "revId": "b664dc31db42114aae27111e42e0fdef0052a307",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
