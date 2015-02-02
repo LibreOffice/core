@@ -62,9 +62,9 @@ sub overwrite_programfilesfolder
 {
     my ( $allvariables ) = @_;
 
-    if ( $allvariables->{'PROGRAMFILESFOLDERNAME'} )
+    if (( $allvariables->{'64BITPRODUCT'} ) && ( $allvariables->{'64BITPRODUCT'} == 1 ))
     {
-        $installer::globals::programfilesfolder = $allvariables->{'PROGRAMFILESFOLDERNAME'};
+        $installer::globals::programfilesfolder = "ProgramFiles64Folder";
     }
 }
 
