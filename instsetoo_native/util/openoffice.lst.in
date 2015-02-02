@@ -33,6 +33,7 @@ Globals
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
+            64BITPRODUCT @WINDOWS_X64@
         }
     }
 }
