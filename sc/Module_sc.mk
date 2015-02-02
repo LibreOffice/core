@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
     CppunitTest_sc_condformats \
     CppunitTest_sc_subsequent_filters_test \
     CppunitTest_sc_subsequent_export_test \
+    CppunitTest_sc_bugfix_test \
     CppunitTest_sc_html_export_test \
     CppunitTest_sc_opencl_test \
 ))
