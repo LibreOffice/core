@@ -2788,7 +2788,6 @@ bool getTTCoverage(
     // parse OS/2 header
     if (nLength >= 58)
     {
-        pTable+=4; //skip Version
         rUnicodeRange.append(GetUInt32(pTable, 42, 1));
         rUnicodeRange.append(GetUInt32(pTable, 46, 1));
         rUnicodeRange.append(GetUInt32(pTable, 50, 1));
