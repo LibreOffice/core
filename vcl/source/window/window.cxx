@@ -3212,7 +3212,6 @@ const Wallpaper& Window::GetDisplayBackground() const
 
 const OUString& Window::GetHelpText() const
 {
-
     OUString aStrHelpId( OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
     bool bStrHelpId = !aStrHelpId.isEmpty();
 
@@ -3223,7 +3222,7 @@ const OUString& Window::GetHelpText() const
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                ((vcl::Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
+                mpWindowImpl->maHelpText = pHelp->GetHelpText(aStrHelpId, this);
                 mpWindowImpl->mbHelpTextDynamic = false;
             }
         }
