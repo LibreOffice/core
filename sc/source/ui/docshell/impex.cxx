@@ -254,6 +254,13 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
 
 }
 
+bool ScImportExport::ImportData( const OUString& /* rMimeType */,
+                     const ::com::sun::star::uno::Any & /* rValue */ )
+{
+    OSL_ENSURE( false, "Implementation is missing" );
+    return false;
+}
+
 bool ScImportExport::ExportData( const OUString& rMimeType,
                                  ::com::sun::star::uno::Any & rValue )
 {

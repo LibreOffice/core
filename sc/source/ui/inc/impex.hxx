@@ -142,6 +142,8 @@ public:
     bool ImportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
     bool ExportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
 
+    bool ImportData( const OUString& rMimeType,
+                     const ::com::sun::star::uno::Any & rValue );
     bool ExportData( const OUString& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 
