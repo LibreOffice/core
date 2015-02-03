@@ -57,16 +57,11 @@ public class _XFastPropertySet extends MultiMethodTest {
         public final int handle;
         public final String name;
 
-        public Prop() {
-            handle = -1;
-            name = null;
-        }
-
         public Prop(int handle, String name) {
             this.handle = handle;
             this.name = name;
         }
-    };
+    }
 
     public XFastPropertySet oObj = null;
     private final List<Prop> props = new ArrayList<Prop>();

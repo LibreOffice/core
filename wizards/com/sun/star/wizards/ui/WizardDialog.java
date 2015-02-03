@@ -42,7 +42,6 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.ui.event.XActionListenerAdapter;
 import com.sun.star.wizards.ui.event.XItemListenerAdapter;
-import com.sun.star.wizards.ui.event.XWindowListenerAdapter;
 
 public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeListener, XTerminateListener
 {

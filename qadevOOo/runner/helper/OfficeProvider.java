@@ -31,7 +31,6 @@ import com.sun.star.util.XStringSubstitution;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.StringTokenizer;
 
 import lib.TestParameters;
 

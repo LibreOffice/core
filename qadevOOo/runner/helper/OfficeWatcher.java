@@ -18,7 +18,6 @@
 package helper;
 
 import lib.TestParameters;
-import java.util.StringTokenizer;
 import util.utils;
 
 public class OfficeWatcher extends Thread implements share.Watcher {
