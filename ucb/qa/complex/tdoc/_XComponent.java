@@ -69,15 +69,6 @@ public class _XComponent {
     private final XEventListener listener2 = new MyEventListener2();
 
     /**
-     * For the cfgmgr2.OSetElement tests: dispose the owner element.
-     */
-    protected void before() {
-        // do not dispose this component, but parent instead
-//        altDispose = (XComponent)tEnv.getObjRelation("XComponent.DisposeThis");
-
-    }
-
-    /**
     * Adds two listeners. <p>
     * Has OK status if then the first listener will receive an event
     * on <code>dispose</code> method call.
@@ -111,40 +102,6 @@ public class _XComponent {
     } // finished _removeEventListener()
 
     private boolean disposed = false;
-
-    /**
-    * Disposes the object and then check appropriate listeners were
-    * called or not. <p>
-    * Method tests to be completed successfully :
-    * <ul>
-    * <li> <code>removeEventListener</code> : method must remove one of two
-    *    listeners. </li>
-    * </ul> <p>
-    * Has OK status if liseter removed wasn't called and other listener
-    * was.
-    */
-    public boolean _dispose() {
-        disposed = false;
-
-        log.println( "begin dispose" + Thread.currentThread());
-        oObj.dispose();
-
-        util.utils.pause(500);
-        if (Loutput[0]!=null) log.println(Loutput[0]);
-        if (Loutput[1]!=null) log.println(Loutput[1]);
-        log.println( "end dispose" + Thread.currentThread());
-        disposed = true;
-
-        // check that dispose() works OK.
-        return  listenerDisposed[0] && !listenerDisposed[1];
-
-    } // finished _dispose()
-
-    /**
-    * Forces object recreation.
-    */
-    protected void after() {
-    }
 
 } // finished class _XComponent
 

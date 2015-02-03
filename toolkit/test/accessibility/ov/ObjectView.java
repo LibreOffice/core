@@ -39,7 +39,6 @@ abstract public class ObjectView
 {
     public ObjectView (ObjectViewContainer aContainer)
     {
-        maContainer = aContainer;
         mxContext = null;
     }
 
@@ -78,6 +77,4 @@ abstract public class ObjectView
 
     /// Reference to the current object to display information about.
     protected XAccessibleContext mxContext;
-
-    protected ObjectViewContainer maContainer;
 }

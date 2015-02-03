@@ -95,21 +95,5 @@ public class _XDataPilotTable {
         return bResult;
     }
 
-    /**
-    * Test sets new value of the cell obtained by object relation
-    * 'CELLFORCHANGE', and checks value of the cell obtained by object
-    * relation 'CELLFORCHECK'.<p>
-    * Has <b>OK</b> status if value of the cell obtained by object relation
-    * 'CELLFORCHECK' is changed. <p>
-     */
-    public boolean _refresh(){
-        xCellForChange.setValue(changeValue);
-        double oldData = xCellForCheck.getValue();
-        oObj.refresh();
-        double newData = xCellForCheck.getValue();
-        System.out.println("Old data:" + oldData + "; new data:" + newData);
-
-        return oldData != newData;
-    }
 }
 
