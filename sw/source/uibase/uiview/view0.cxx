@@ -78,6 +78,7 @@ using namespace ::com::sun::star;
 
 #include <unomid.h>
 #include <boost/scoped_ptr.hpp>
+#include "swabstdlg.hxx"
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
@@ -592,6 +593,16 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if(!pArgs)
         rReq.AppendItem(SfxBoolItem(nSlot, bFlag));
     rReq.Done();
+}
+
+void SwView::ExecFormatFootnote()
+{
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
+
+    boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetWindow(), GetWrtShell()));
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
+    pDlg->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
