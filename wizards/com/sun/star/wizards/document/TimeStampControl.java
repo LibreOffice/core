@@ -19,7 +19,6 @@ package com.sun.star.wizards.document;
 
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
-import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.FieldColumn;
@@ -29,7 +28,6 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XControlShape;
-import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 
 public class TimeStampControl extends DatabaseControl
@@ -38,8 +36,6 @@ public class TimeStampControl extends DatabaseControl
     private DatabaseControl oDateControl;
     private DatabaseControl oTimeControl;
     private Resource oResource;
-    private double nreldatewidth;
-    private double nreltimewidth;
     private int nDBWidth;
 
     public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint)
@@ -59,8 +55,6 @@ public class TimeStampControl extends DatabaseControl
         xShapes.add(oTimeControl.xShape);
         xShape = _oFormHandler.xShapeGrouper.group(xShapes);
         xShapes = UnoRuntime.queryInterface(XShapes.class, xShape);
-        nreldatewidth = 1.0 / ((double) getSize().Width / (double) nDateWidth);
-        nreltimewidth = 1.0 - nreldatewidth;
     }
 
     public XPropertySet getControlofGroupShapeByIndex(int _i)

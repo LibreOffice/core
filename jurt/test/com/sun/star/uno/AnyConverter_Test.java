@@ -52,7 +52,7 @@ public final class AnyConverter_Test {
     byte[] arByte;
 
     /** Class variables are initialized before each Test method */
-    @Before public void setUp() throws Exception
+    @Before public void setUp()
     {
         aBool= Boolean.TRUE;
         aChar= new Character('A');
