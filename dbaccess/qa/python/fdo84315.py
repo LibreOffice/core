@@ -27,7 +27,6 @@ class Fdo84315(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls._uno.tearDown()
-        xCon.dispose()
 
     def test_fdo84315(self):
         xDoc = self.__class__._xDoc
@@ -70,6 +69,8 @@ class Fdo84315(unittest.TestCase):
         while xResultset.next():
             self.assertEqual(xResultset.getInt(1), expected_values.popleft())
         self.assertEqual(len(expected_values), 0)
+
+        xCon.dispose()
 
 if __name__ == '__main__':
     unittest.main()
