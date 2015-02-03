@@ -84,10 +84,10 @@ STDMETHODIMP CAccHypertext::get_characterCount(long * nCharacters)
 /**
    * Get character extents.
    * @param offset  Offset.
-   * @param x Variant to accpet x position.
-   * @param y Variant to accpet y position.
-   * @param width Variant to accpet width.
-   * @param Height Variant to accpet height.
+   * @param x Variant to accept x position.
+   * @param y Variant to accept y position.
+   * @param width Variant to accept width.
+   * @param Height Variant to accept height.
    * @return Result.
 */
 STDMETHODIMP CAccHypertext::get_characterExtents(long offset, IA2CoordinateType coordType, long * x, long * y, long * width, long * height)
@@ -98,7 +98,7 @@ STDMETHODIMP CAccHypertext::get_characterExtents(long offset, IA2CoordinateType 
 
 /**
    * Get selections count.
-   * @param nSelections Variant to accpet selections count.
+   * @param nSelections Variant to accept selections count.
    * @return Result.
 */
 STDMETHODIMP CAccHypertext::get_nSelections(long * nSelections)
@@ -273,7 +273,7 @@ STDMETHODIMP CAccHypertext::scrollSubstringTo(long startIndex, long endIndex,enu
 
 /**
    * Get hyperlink count.
-   * @param hyperlinkCount Variant to accpet hyperlink count.
+   * @param hyperlinkCount Variant to accept hyperlink count.
    * @return Result.
 */
 STDMETHODIMP CAccHypertext::get_nHyperlinks(long *hyperlinkCount)
