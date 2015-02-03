@@ -43,8 +43,8 @@ typedef void* (*TypeId)();
         visibility static  void*  CreateType(); \
         visibility static  TypeId StaticType(); \
         visibility static  bool   IsOf( TypeId aSameOrSuperType ); \
-        visibility virtual TypeId Type() const SAL_OVERRIDE; \
-        visibility virtual bool   IsA( TypeId aSameOrSuperType ) const SAL_OVERRIDE
+        visibility virtual TypeId Type() const; \
+        visibility virtual bool   IsA( TypeId aSameOrSuperType ) const
 
 #define TYPEINFO_VISIBILITY_OVERRIDE(visibility) \
         visibility static  void*  CreateType(); \

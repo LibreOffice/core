@@ -226,7 +226,7 @@ protected:
     virtual SdrView* GetDrawView() const SAL_OVERRIDE;
 
 public:
-                    TYPEINFO_VISIBILITY(SC_DLLPUBLIC);
+                    TYPEINFO_VISIBILITY_OVERRIDE(SC_DLLPUBLIC);
                     SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 
