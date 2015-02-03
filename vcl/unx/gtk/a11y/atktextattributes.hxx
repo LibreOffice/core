@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 
 #include <atk/atk.h>
 
@@ -30,6 +31,10 @@ attribute_set_new_from_property_values(
     const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAttributeList,
     bool run_attributes_only,
     AtkText *text);
+
+AtkAttributeSet*
+attribute_set_new_from_extended_attributes(
+    const css::uno::Reference< css::accessibility::XAccessibleExtendedAttributes >& rExtendedAttributes );
 
 bool
 attribute_set_map_to_property_values(

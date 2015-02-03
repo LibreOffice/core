@@ -38,6 +38,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleImage.hpp>
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
@@ -62,6 +63,7 @@
 #include "atkwrapper.hxx"
 #include "atkregistry.hxx"
 #include "atklistener.hxx"
+#include "atktextattributes.hxx"
 
 #ifdef ENABLE_TRACING
 #include <stdio.h>
@@ -395,6 +397,33 @@ wrapper_get_description( AtkObject *atk_obj )
 
 /*****************************************************************************/
 
+static AtkAttributeSet *
+wrapper_get_attributes( AtkObject *atk_obj )
+{
+    AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER( atk_obj );
+    AtkAttributeSet *pSet = NULL;
+
+    if( obj->mpContext )
+    {
+        uno::Reference< accessibility::XAccessibleContext > xContext( obj->mpContext );
+        try
+        {
+            uno::Reference< accessibility::XAccessibleExtendedAttributes > xExtendedAttrs( xContext,
+                                                                                           uno::UNO_QUERY );
+            if( xExtendedAttrs.is() )
+                pSet = attribute_set_new_from_extended_attributes( xExtendedAttrs );
+        }
+        catch(const uno::Exception&)
+        {
+            g_warning( "Exception in getAccessibleAttributes()" );
+        }
+    }
+
+    return pSet;
+}
+
+/*****************************************************************************/
+
 static gint
 wrapper_get_n_children( AtkObject *atk_obj )
 {
@@ -601,6 +630,7 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
   // AtkObject methods
   atk_class->get_name = wrapper_get_name;
   atk_class->get_description = wrapper_get_description;
+  atk_class->get_attributes = wrapper_get_attributes;
   atk_class->get_n_children = wrapper_get_n_children;
   atk_class->ref_child = wrapper_ref_child;
   atk_class->get_index_in_parent = wrapper_get_index_in_parent;

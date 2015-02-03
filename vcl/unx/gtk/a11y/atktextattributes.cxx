@@ -1211,6 +1211,37 @@ attribute_set_new_from_property_values(
     return attribute_set;
 }
 
+AtkAttributeSet*
+attribute_set_new_from_extended_attributes(
+    const css::uno::Reference< css::accessibility::XAccessibleExtendedAttributes >& rExtendedAttributes )
+{
+    AtkAttributeSet *pSet = NULL;
+
+    // extended attributes is a string of colon-separated pairs of property and value,
+    // with pairs separated by semicolons. Example: "heading-level:2;weight:bold;"
+    uno::Any anyVal = rExtendedAttributes->getExtendedAttributes();
+    OUString sExtendedAttrs;
+    anyVal >>= sExtendedAttrs;
+    sal_Int32 nIndex = 0;
+    do
+    {
+        OUString sProperty = sExtendedAttrs.getToken( 0, ';', nIndex );
+
+        sal_Int32 nColonPos = 0;
+        OString sPropertyName = OUStringToOString( sProperty.getToken( 0, ':', nColonPos ),
+                                                   RTL_TEXTENCODING_UTF8 );
+        OString sPropertyValue = OUStringToOString( sProperty.getToken( 0, ':', nColonPos ),
+                                                    RTL_TEXTENCODING_UTF8 );
+
+        pSet = attribute_set_prepend( pSet,
+                                      atk_text_attribute_register( sPropertyName.getStr() ),
+                                      g_strdup_printf( sPropertyValue.getStr() ) );
+    }
+    while ( nIndex >= 0 && nIndex < sExtendedAttrs.getLength() );
+
+    return pSet;
+}
+
 AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_set )
 {
     if( ATK_TEXT_ATTR_INVALID == atk_text_attribute_misspelled )
