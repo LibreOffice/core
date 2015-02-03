@@ -223,8 +223,7 @@ void GlyphCache::UncacheFont( ServerFont& rServerFont )
     // user who wants to release it only got const ServerFonts.
     // The caching algorithm needs a non-const object
     ServerFont* pFont = const_cast<ServerFont*>( &rServerFont );
-    if( (pFont->Release() <= 0)
-    &&  (mnMaxSize <= (mnBytesUsed + mrPeer.GetByteCount())) )
+    if( (pFont->Release() <= 0) && (mnMaxSize <= mnBytesUsed) )
     {
         mpCurrentGCFont = pFont;
         GarbageCollect();
@@ -296,7 +295,7 @@ inline void GlyphCache::AddedGlyph( ServerFont& rServerFont, GlyphData& rGlyphDa
 
 void GlyphCache::GrowNotify()
 {
-    if( (mnBytesUsed + mrPeer.GetByteCount()) > mnMaxSize )
+    if( mnBytesUsed > mnMaxSize )
         GarbageCollect();
 }
 
