@@ -25,6 +25,8 @@
 using namespace connectivity;
 using namespace connectivity::file;
 
+static const double fPi = 3.14159265358979323846;
+
 ORowSetValue OOp_Abs::operate(const ORowSetValue& lhs) const
 {
     if ( lhs.isNull() )
@@ -160,7 +162,7 @@ ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Pi::operate(const ::std::vector<ORowSetValue>& /*lhs*/) const
 {
-    return 3.141592653589793116;
+    return fPi;
 }
 
 ORowSetValue OOp_Cos::operate(const ORowSetValue& lhs) const
@@ -225,7 +227,7 @@ ORowSetValue OOp_Degrees::operate(const ORowSetValue& lhs) const
         return lhs;
 
     double nLhs = lhs;
-    return nLhs*180*(1.0/3.141592653589793116);
+    return nLhs*180*(1.0/fPi);
 }
 
 ORowSetValue OOp_Radians::operate(const ORowSetValue& lhs) const
@@ -234,7 +236,7 @@ ORowSetValue OOp_Radians::operate(const ORowSetValue& lhs) const
         return lhs;
 
     double nLhs = lhs;
-    return nLhs*3.141592653589793116*(1.0/180.0);
+    return nLhs*fPi*(1.0/180.0);
 }
 
 
