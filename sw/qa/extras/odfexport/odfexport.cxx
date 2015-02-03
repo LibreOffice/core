@@ -188,7 +188,7 @@ DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 
     // Paragraph border of first paragraph
     {
-        const table::BorderLine2 aFirstParTopBorder(0x6666FF,0,26,26,7,53);
+        const table::BorderLine2 aFirstParTopBorder(0x6666FF,2,26,26,7,55);
         const sal_Int32 aFirstParTopPadding(150);
         uno::Reference<beans::XPropertySet> xSet(getParagraph(1), uno::UNO_QUERY);
 
