@@ -112,8 +112,9 @@ SAL_DLLPUBLIC_EXPORT vcl::Window* CreateWindow( VCLXWindow** ppNewComp, const ::
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
         static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( true );
-        *ppNewComp = new SVTXDateField;
-        static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( (FormatterBase*)static_cast<DateField*>(pWindow) );
+        SVTXDateField * newComp = new SVTXDateField;
+        *ppNewComp = newComp;
+        newComp->SetFormatter( (FormatterBase*)static_cast<DateField*>(pWindow) );
     }
     else if (aServiceName.equalsIgnoreAsciiCase("roadmap") )
     {
