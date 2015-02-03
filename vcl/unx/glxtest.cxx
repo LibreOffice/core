@@ -227,6 +227,7 @@ void glxtest()
   glXDestroyContext(dpy, context);
   XDestroyWindow(dpy, window);
   XFreeColormap(dpy, swa.colormap);
+  XFree(vInfo);
 
 #ifdef NS_FREE_PERMANENT_DATA // conditionally defined in nscore.h, don't forget to #include it above
   XCloseDisplay(dpy);
