@@ -115,6 +115,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>

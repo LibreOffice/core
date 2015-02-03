@@ -15,10 +15,10 @@
 */
 
 #include <algorithm>
+#include <assert.h>
 #include <boost/bind.hpp>
 #include <boost/current_function.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/random.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -52,6 +52,7 @@
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/container/XEnumerableMap.hpp>
@@ -110,6 +111,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
@@ -154,6 +156,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/uno/genfunc.h>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/uri/XVndSunStarExpandUrlReference.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -189,6 +193,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstddef>
+#include <ctype.h>
 #include <deque>
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>
@@ -196,20 +201,20 @@
 #include <limits>
 #include <map>
 #include <memory.h>
+#include <memory>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
-#include <rtl/bootstrap.hxx>
+#include <random>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -217,11 +222,15 @@
 #include <set>
 #include <stdarg.h>
 #include <string.h>
+#include <thread>
+#include <time.h>
 #include <typelib/typedescription.h>
 #include <typelib/typedescription.hxx>
 #include <ucbhelper/content.hxx>
 #include <unicode/uchar.h>
 #include <uno/data.h>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -222,7 +222,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -270,6 +269,7 @@
 #include <cppuhelper/implbase7.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -303,6 +303,7 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/outlobj.hxx>
@@ -331,6 +332,7 @@
 #include <math.h>
 #include <memory>
 #include <numeric>
+#include <o3tl/numeric.hxx>
 #include <officecfg/Office/Recovery.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
@@ -395,6 +397,7 @@
 #include <svl/aeitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/currencytable.hxx>
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
 #include <svl/intitem.hxx>
@@ -429,6 +432,7 @@
 #include <svtools/insdlg.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/popupwindowcontroller.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/rtftoken.h>
@@ -450,6 +454,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errinf.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
 #include <tools/mapunit.hxx>
@@ -463,6 +468,7 @@
 #include <tools/wldcrd.hxx>
 #include <unicode/uchar.h>
 #include <uno/mapping.hxx>
+#include <unordered_map>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/charclass.hxx>
@@ -487,7 +493,6 @@
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/floatwin.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -518,7 +523,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/xtextedt.hxx>
-#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

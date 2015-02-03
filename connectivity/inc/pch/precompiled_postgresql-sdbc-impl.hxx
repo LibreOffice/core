@@ -43,6 +43,7 @@
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/queryinterface.hxx>

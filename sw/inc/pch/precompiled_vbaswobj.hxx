@@ -52,10 +52,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/style/BreakType.hpp>
@@ -172,6 +170,7 @@
 #include <ooo/vba/word/XBookmark.hpp>
 #include <ooo/vba/word/XBorder.hpp>
 #include <ooo/vba/word/XDialog.hpp>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>

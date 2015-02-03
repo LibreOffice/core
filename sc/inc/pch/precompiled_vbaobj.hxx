@@ -66,7 +66,10 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -83,10 +86,8 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -204,6 +205,7 @@
 #include <comphelper/unwrapargs.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/component_context.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>

@@ -48,9 +48,11 @@
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <limits>
+#include <memory>
 #include <o3tl/compat_functional.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>

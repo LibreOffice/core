@@ -15,6 +15,7 @@
 */
 
 #include "libxml/xpath.h"
+#include "officecfg/Office/Calc.hxx"
 #include <algorithm>
 #include <avmedia/mediaitem.hxx>
 #include <avmedia/mediaplayer.hxx>
@@ -36,25 +37,17 @@
 #include <basic/sbxobj.hxx>
 #include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
+#include <boost/math/special_functions/log1p.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/random.hpp>
-#include <boost/random/bernoulli_distribution.hpp>
-#include <boost/random/binomial_distribution.hpp>
-#include <boost/random/cauchy_distribution.hpp>
-#include <boost/random/chi_squared_distribution.hpp>
-#include <boost/random/geometric_distribution.hpp>
-#include <boost/random/negative_binomial_distribution.hpp>
-#include <boost/random/normal_distribution.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
-#include <boost/random/uniform_real_distribution.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <cassert>
 #include <climits>
-#include <cmath>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -125,6 +118,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
+#include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
@@ -307,7 +301,6 @@
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/sheet/XSheetCondition.hpp>
-#include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/XSolver.hpp>
@@ -428,7 +421,6 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <config_features.h>
-#include <config_folders.h>
 #include <config_mpl.h>
 #include <config_options.h>
 #include <config_orcus.h>
@@ -527,6 +519,7 @@
 #include <formula/formulahelper.hxx>
 #include <formula/grammar.hxx>
 #include <formula/opcode.hxx>
+#include <formula/random.hxx>
 #include <formula/token.hxx>
 #include <formula/vectortoken.hxx>
 #include <functional>
@@ -546,8 +539,10 @@
 #include <mdds/multi_type_vector_types.hpp>
 #include <memory>
 #include <numeric>
+#include <o3tl/ptr_container.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <opencl/openclwrapper.hxx>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
@@ -556,7 +551,9 @@
 #include <osl/security.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
+#include <ostream>
 #include <queue>
+#include <random>
 #include <rsc/rscsfx.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/crc.h>
@@ -613,6 +610,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/sidebar/Theme.hxx>
@@ -708,6 +706,7 @@
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <svx/algitem.hxx>
@@ -817,7 +816,6 @@
 #include <svx/tbcontrl.hxx>
 #include <svx/tbxalign.hxx>
 #include <svx/tbxcolor.hxx>
-#include <svx/tbxcolorupdate.hxx>
 #include <svx/tbxctl.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/txenctab.hxx>
@@ -886,7 +884,6 @@
 #include <tools/resary.hxx>
 #include <tools/resid.hxx>
 #include <tools/rtti.hxx>
-#include <tools/shl.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>

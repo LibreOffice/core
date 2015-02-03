@@ -14,11 +14,15 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include <algorithm>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <cmath>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -37,6 +41,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -64,6 +69,7 @@
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/config.h>
 #include <sal/types.h>
 #include <sfx2/app.hxx>
 #include <sfx2/basedlgs.hxx>

@@ -16,6 +16,8 @@
 
 #include "svx/modctrl.hxx"
 #include "tools/rcid.h"
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -27,7 +29,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -102,6 +103,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/config.h>
 #include <sal/macros.h>
 #include <sax/tools/converter.hxx>
 #include <sfx2/app.hxx>
@@ -128,6 +130,7 @@
 #include <sot/factory.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
+#include <stack>
 #include <stdio.h>
 #include <svl/eitem.hxx>
 #include <svl/fstathelper.hxx>
@@ -182,6 +185,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/syslocale.hxx>
+#include <utility>
 #include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/help.hxx>
