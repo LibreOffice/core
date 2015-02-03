@@ -711,7 +711,12 @@ static void aBasicErrorFunc(const OUString& rError, const OUString& rAction)
 
 static bool initialize_uno(const OUString& aAppProgramURL)
 {
+#ifdef IOS
+    // For iOS we already hardocde the inifile as "rc" in the .app directory.
+    (void) aAppProgramURL;
+#else
     rtl::Bootstrap::setIniFilename(aAppProgramURL + "/" SAL_CONFIGFILE("soffice"));
+#endif
 
     xContext = cppu::defaultBootstrap_InitialComponentContext();
     if (!xContext.is())
