@@ -963,6 +963,7 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_NUMBER:
         case CAT_PERCENT:
         case CAT_CURRENCY:
+        case CAT_SCIENTIFIC:
             m_pFtOptions->Enable();
             m_pFtDecimals->Enable();
             m_pEdDecimals->Enable();
@@ -982,7 +983,6 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( bool bCheckCatChange /*= sal_Fa
         case CAT_DATE:
         case CAT_TIME:
         case CAT_BOOLEAN:
-        case CAT_SCIENTIFIC:
         case CAT_FRACTION:
         default:
             m_pFtOptions->Disable();

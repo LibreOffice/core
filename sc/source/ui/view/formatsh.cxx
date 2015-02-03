@@ -1112,7 +1112,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     eType = pEntry->GetType();
                 }
 
-                //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY
+                //Just use eType to judge whether the command is fired for NUMBER/PERCENT/CURRENCY/SCIENTIFIC
                 //In sidebar, users can fire SID_NUMBER_FORMAT command by operating the related UI controls before they are disable
                 switch(eType)
                 {
@@ -1123,6 +1123,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 case NUMBERFORMAT_PERCENT| NUMBERFORMAT_DEFINED:
                 case NUMBERFORMAT_CURRENCY:
                 case NUMBERFORMAT_CURRENCY|NUMBERFORMAT_DEFINED:
+                case NUMBERFORMAT_SCIENTIFIC:
+                case NUMBERFORMAT_SCIENTIFIC|NUMBERFORMAT_DEFINED:
                     eType = 0;
                     break;
                 default:
