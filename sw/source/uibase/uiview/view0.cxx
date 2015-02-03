@@ -79,6 +79,7 @@ using namespace ::com::sun::star;
 #include <unomid.h>
 #include <boost/scoped_ptr.hpp>
 #include "swabstdlg.hxx"
+#include "misc.hrc"
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
@@ -603,6 +604,18 @@ void SwView::ExecFormatFootnote()
     boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetWindow(), GetWrtShell()));
     OSL_ENSURE(pDlg, "Dialog creation failed!");
     pDlg->Execute();
+}
+
+void SwView::ExecNumberingOutline(SfxItemPool & rPool)
+{
+    SfxItemSet aTmp(rPool, FN_PARAM_1, FN_PARAM_1);
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    OSL_ENSURE(pFact, "Dialog creation failed!");
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                GetWindow(), &aTmp, GetWrtShell()));
+    OSL_ENSURE(pDlg, "Dialog creation failed!");
+    pDlg->Execute();
+    pDlg.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

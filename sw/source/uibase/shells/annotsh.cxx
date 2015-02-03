@@ -441,14 +441,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         }
         case FN_NUMBERING_OUTLINE_DLG:
         {
-            SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            OSL_ENSURE(pFact, "Dialog creation failed!");
-            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                        rView.GetWindow(), &aTmp, rView.GetWrtShell()));
-            OSL_ENSURE(pDlg, "Dialog creation failed!");
-            pDlg->Execute();
-            pDlg.reset();
+            rView.ExecNumberingOutline(GetPool());
             rReq.Done();
         }
         break;

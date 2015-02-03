@@ -242,14 +242,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
         }
         case FN_NUMBERING_OUTLINE_DLG:
         {
-            SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact);
-            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell()));
-            assert(pDlg);
-            pDlg->Execute();
-            pDlg.reset();
+            GetView().ExecNumberingOutline(GetPool());
             rReq.Done();
             break;
         }
