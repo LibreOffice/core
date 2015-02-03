@@ -204,7 +204,7 @@
           <object class="GtkLabel" id="setting">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Random number to improve accuracy of document comparision</property>
+            <property name="label" translatable="yes">Random number to improve accuracy of document comparison</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
