@@ -43,7 +43,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);
 
-        LibreOfficeKit.putenv("SAL_LOG=-WARN+INFO.lok");
+        LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO.lok");
         LibreOfficeKit.init(LibreOfficeMainActivity.mAppContext);
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
@@ -63,7 +63,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
             mOffice = new Office(handle);
             Log.i(LOGTAG, "====> new Office created");
             mDocument = mOffice.documentLoad(input);
-            LibreOfficeKit.putenv("SAL_LOG=-WARN+INFO.lok");
+            LibreOfficeKit.putenv("SAL_LOG=+WARN+INFO.lok");
         }
 
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
