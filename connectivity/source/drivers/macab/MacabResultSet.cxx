@@ -86,6 +86,11 @@ void MacabResultSet::someMacabRecords(const MacabCondition *pCondition)
     // maximum alloted size, which means that we'll never have to resize)
     m_aMacabRecords = new MacabRecords(allRecords);
 
+    if(pCondition->isAlwaysFalse())
+    {
+        return;
+    }
+
     MacabRecords::iterator iterator;
 
     for (iterator = allRecords->begin();
