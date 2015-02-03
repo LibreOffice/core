@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -47,6 +46,7 @@
 #include <libxml/xmlstring.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
 #include <rtl/instance.hxx>

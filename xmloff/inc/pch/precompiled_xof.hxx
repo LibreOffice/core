@@ -17,6 +17,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
@@ -30,6 +31,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ref.hxx>

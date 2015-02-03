@@ -25,6 +25,7 @@
 #include <list>
 #include <locale.h>
 #include <math.h>
+#include <memory>
 #include <osl/diagnose.h>
 #include <sal/config.h>
 #include <sal/macros.h>

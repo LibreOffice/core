@@ -14,6 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include <algorithm>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
@@ -72,8 +73,8 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/sharedunocomponent.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vector>
 #include <xmlscript/xmldlg_imexp.hxx>

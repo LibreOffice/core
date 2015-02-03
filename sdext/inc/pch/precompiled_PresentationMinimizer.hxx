@@ -98,6 +98,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>

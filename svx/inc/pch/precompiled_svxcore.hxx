@@ -14,7 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "cppuhelper/factory.hxx"
 #include "editeng/AccessibleStringWrap.hxx"
@@ -151,6 +150,8 @@
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/container/EnumerableMap.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -371,6 +372,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -407,7 +409,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/util/XUpdatable2.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xml/dom/DOMException.hpp>
@@ -433,6 +435,7 @@
 #include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -445,6 +448,7 @@
 #include <config_features.h>
 #include <config_options.h>
 #include <connectivity/IParseContext.hxx>
+#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
@@ -601,12 +605,14 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nutil/unicode.hxx>
+#include <libxml/xmlwriter.h>
 #include <limits>
 #include <linguistic/misc.hxx>
 #include <map>
 #include <math.h>
 #include <memory>
 #include <o3tl/compat_functional.hxx>
+#include <o3tl/numeric.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>
@@ -625,6 +631,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <sal/macros.h>
+#include <salhelper/thread.hxx>
 #include <sax/tools/converter.hxx>
 #include <set>
 #include <sfx2/app.hxx>
@@ -653,6 +660,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <sfx2/sfxuno.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
+#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
@@ -703,6 +712,7 @@
 #include <svtools/borderhelper.hxx>
 #include <svtools/calendar.hxx>
 #include <svtools/colorcfg.hxx>
+#include <svtools/colrdlg.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ehdl.hxx>
@@ -753,6 +763,7 @@
 #include <tools/vcompat.hxx>
 #include <tools/zcodec.hxx>
 #include <ucbhelper/content.hxx>
+#include <unordered_map>
 #include <unotools/datetime.hxx>
 #include <unotools/fontoptions.hxx>
 #include <unotools/intlwrapper.hxx>
@@ -773,7 +784,6 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/ctrl.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/dibtools.hxx>
@@ -789,11 +799,13 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/image.hxx>
 #include <vcl/jobset.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
@@ -804,7 +816,6 @@
 #include <vcl/region.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/split.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/svgdata.hxx>
@@ -815,7 +826,6 @@
 #include <vcl/window.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
-#include <unordered_map>
 #include <vector>
 #include <xmloff/xmlictxt.hxx>
 

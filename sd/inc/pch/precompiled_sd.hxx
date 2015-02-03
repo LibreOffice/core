@@ -225,7 +225,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/theAutoRecovery.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
@@ -355,11 +354,13 @@
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -612,6 +613,7 @@
 #include <svx/AccessibleShapeInfo.hxx>
 #include <svx/AffineMatrixItem.hxx>
 #include <svx/DescriptionGenerator.hxx>
+#include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include <svx/SvxColorChildWindow.hxx>
@@ -818,6 +820,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/errinf.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>

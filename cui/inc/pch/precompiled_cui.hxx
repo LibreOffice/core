@@ -43,6 +43,7 @@
 #include "svx/svxgrahicitem.hxx"
 #include "svx/xattr.hxx"
 #include "svx/xoutbmp.hxx"
+#include "ucbhelper/content.hxx"
 #include <algorithm>
 #include <avmedia/mediawindow.hxx>
 #include <basegfx/color/bcolortools.hxx>
@@ -249,8 +250,9 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/XParser.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/classids.hxx>
@@ -258,10 +260,12 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -346,6 +350,7 @@
 #include <memory>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/OptionsDialog.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/module.hxx>
 #include <osl/mutex.hxx>
@@ -356,7 +361,6 @@
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/textenc.h>
-#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -417,6 +421,7 @@
 #include <svl/cjkoptions.hxx>
 #include <svl/cntwall.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/currencytable.hxx>
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
 #include <svl/flagitem.hxx>
@@ -542,6 +547,7 @@
 #include <svx/sxmtpitm.hxx>
 #include <svx/sxmtritm.hxx>
 #include <svx/sxmuitm.hxx>
+#include <svx/transfrmhelper.hxx>
 #include <svx/ucsubset.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/viewlayoutitem.hxx>
@@ -561,6 +567,7 @@
 #include <tools/date.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/rc.h>
 #include <tools/rcid.h>
@@ -602,6 +609,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/viewoptions.hxx>
+#include <utility>
 #include <vcl/IconThemeInfo.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bmpacc.hxx>

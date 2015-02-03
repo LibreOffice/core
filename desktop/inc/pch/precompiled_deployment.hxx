@@ -18,8 +18,6 @@
 #include <boost/bind.hpp>
 #include <boost/optional.hpp>
 #include <cassert>
-#include <unordered_map>
-#include <unordered_set>
 #include <com/sun/star/beans/Ambiguous.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
@@ -143,6 +141,8 @@
 #include <svl/inettype.hxx>
 #include <ucbhelper/content.hxx>
 #include <uno/current_context.hxx>
+#include <unordered_map>
+#include <unordered_set>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>

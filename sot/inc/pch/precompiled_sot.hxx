@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/packages/manifest/ManifestWriter.hpp>

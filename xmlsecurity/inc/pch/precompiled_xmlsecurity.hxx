@@ -69,6 +69,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <rtl/math.hxx>
 #include <rtl/uri.hxx>
@@ -85,6 +86,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svtools/treelistentry.hxx>
 #include <tools/date.hxx>
+#include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>
 #include <tools/stream.hxx>

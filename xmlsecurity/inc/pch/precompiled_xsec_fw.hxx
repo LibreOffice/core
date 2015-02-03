@@ -26,6 +26,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
