@@ -406,6 +406,9 @@ namespace svgio
             const basegfx::BColor* getColor() const;
             void setColor(const SvgPaint& rColor) { maColor = rColor; }
 
+            /// Resolve current color (defaults to black if no color is specified)
+            const basegfx::BColor* getCurrentColor() const;
+
             /// Opacity content
             SvgNumber getOpacity() const { return maOpacity; }
             void setOpacity(const SvgNumber& rOpacity = SvgNumber()) { maOpacity = rOpacity; }
