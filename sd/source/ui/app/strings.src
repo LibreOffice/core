@@ -995,6 +995,12 @@ String STR_PAGE_BACKGROUND_TXT
 {
     Text [ en-US ] = "Background settings for all pages?" ;
 };
+
+String STR_STATUSBAR_MASTERPAGE
+{
+    Text [ en-US ] = "Slide Master name. Right-click for list and double-click for dialog.";
+};
+
 String STR_TITLE_RENAMESLIDE
 {
     Text [ en-US ] = "Rename Slide";

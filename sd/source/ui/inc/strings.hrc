@@ -336,6 +336,8 @@
 #define STR_PAGE_BACKGROUND_TXT             (RID_APP_START+583)
 #define STR_PAGE_BACKGROUND_TITLE           (RID_APP_START+584)
 
+#define STR_STATUSBAR_MASTERPAGE            (RID_APP_START+600)
+
 #define STR_TWAIN_NO_SOURCE                 (RID_APP_START+670)
 #define STR_UNDO_VECTORIZE                  (RID_APP_START+671)
 

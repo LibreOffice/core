@@ -28,6 +28,8 @@
 #include "drawdoc.hxx"
 #include "sdattr.hrc"
 #include "app.hrc"
+#include <sdresid.hxx>
+#include "strings.hrc"
 
 SFX_IMPL_STATUSBAR_CONTROL( SdTemplateControl, SfxStringItem );
 
@@ -64,6 +66,7 @@ SdTemplateControl::SdTemplateControl( sal_uInt16 _nSlotId,
                                       StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb )
 {
+    GetStatusBar().SetQuickHelpText(GetId(), SD_RESSTR(STR_STATUSBAR_MASTERPAGE));
 }
 
 SdTemplateControl::~SdTemplateControl()
