@@ -211,7 +211,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
     const Sequence<OUString>& rNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(rNames);
     const Any* pValues = aValues.getConstArray();
-    OSL_ENSURE(aValues.getLength() == rNames.getLength(), "GetProperties failed");
+    assert(aValues.getLength() == rNames.getLength());
     if(aValues.getLength() == rNames.getLength())
     {
         for(int nProp = 0; nProp < rNames.getLength(); nProp++)
@@ -421,7 +421,7 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
             }
             else
             {
-                OSL_FAIL("parse error in address block or greeting line");
+                SAL_WARN("sw.ui", "parse error in address block or greeting line");
             }
         }
         else
@@ -906,18 +906,18 @@ Reference< XResultSet>   SwMailMergeConfigItem::GetResultSet() const
                 xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->sFilter.isEmpty()));
                 xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->sFilter));
             }
-            catch (const Exception&)
+            catch (const Exception& e)
             {
-                OSL_FAIL("exception caught in xResultSet->SetFilter()");
+                SAL_WARN("sw.ui", "exception caught: " << e.Message);
             }
             xRowSet->execute();
             m_pImpl->xResultSet = xRowSet.get();
             m_pImpl->xResultSet->first();
             m_pImpl->nResultSetCursorPos = 1;
         }
-        catch (const Exception&)
+        catch (const Exception& e)
         {
-            OSL_FAIL("exception caught in: SwMailMergeConfigItem::GetResultSet() ");
+            SAL_WARN("sw.ui", "exception caught in: SwMailMergeConfigItem::GetResultSet() " << e.Message);
         }
     }
     return m_pImpl->xResultSet;
@@ -953,9 +953,9 @@ void  SwMailMergeConfigItem::SetFilter(OUString& rFilter)
                 uno::Reference<XRowSet> xRowSet( m_pImpl->xResultSet, UNO_QUERY_THROW );
                 xRowSet->execute();
             }
-            catch (const Exception&)
+            catch (const Exception& e)
             {
-                OSL_FAIL("exception caught in SwMailMergeConfigItem::SetFilter()");
+                SAL_WARN("sw.ui", "exception caught in SwMailMergeConfigItem::SetFilter(): " << e.Message);
             }
         }
     }
@@ -1612,7 +1612,7 @@ void SwMailMergeConfigItem::AddMergedDocument(SwDocMergeInfo& rInfo)
 
 SwDocMergeInfo& SwMailMergeConfigItem::GetDocumentMergeInfo(sal_uInt32 nDocument)
 {
-    OSL_ENSURE(m_pImpl->aMergeInfos.size() > nDocument,"invalid document index");
+    assert(nDocument < m_pImpl->aMergeInfos.size());
     return m_pImpl->aMergeInfos[nDocument];
 }
 
