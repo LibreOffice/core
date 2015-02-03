@@ -460,6 +460,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     meCalcState(sc::GroupCalcEnabled),
     meKernelState(sc::OpenCLKernelNone)
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup ctor this " << this);
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (officecfg::Office::Common::Misc::UseOpenCL::get())
     {
@@ -476,6 +477,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
 
 ScFormulaCellGroup::~ScFormulaCellGroup()
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCellGroup dtor this " << this);
 #if ENABLE_THREADED_OPENCL_KERNEL_COMPILATION
     if (officecfg::Office::Common::Misc::UseOpenCL::get())
     {
@@ -608,6 +610,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     mbPostponedDirty(false),
     aPos(rPos)
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
 }
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
@@ -637,6 +640,8 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     mbPostponedDirty(false),
     aPos( rPos )
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
+
     Compile( rFormula, true, eGrammar );    // bNoListening, Insert does that
     if (!pCode)
         // We need to have a non-NULL token array instance at all times.
@@ -669,6 +674,7 @@ ScFormulaCell::ScFormulaCell(
     mbPostponedDirty(false),
     aPos( rPos )
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
     assert(pArray); // Never pass a NULL pointer here.
 
     // Generate RPN token array.
@@ -717,6 +723,8 @@ ScFormulaCell::ScFormulaCell(
     mbPostponedDirty(false),
     aPos( rPos )
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
+
     // RPN array generation
     if( pCode->GetLen() && !pCode->GetCodeError() && !pCode->GetCodeLen() )
     {
@@ -764,6 +772,8 @@ ScFormulaCell::ScFormulaCell(
     mbPostponedDirty(false),
     aPos( rPos )
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
+
     if (bSubTotal)
         pDocument->AddSubTotalCell(this);
 }
@@ -793,6 +803,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
     mbPostponedDirty(false),
     aPos( rPos )
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell ctor this " << this);
+
     pCode = rCell.pCode->Clone();
 
     //  set back any errors and recompile
@@ -889,6 +901,8 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 
 ScFormulaCell::~ScFormulaCell()
 {
+    SAL_INFO( "sc.core.formulacell", "ScFormulaCell dtor this " << this);
+
     pDocument->RemoveFromFormulaTrack( this );
     pDocument->RemoveFromFormulaTree( this );
     pDocument->RemoveSubTotalCell(this);

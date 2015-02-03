@@ -114,6 +114,8 @@ certain functionality.
 @li @c sc.opencl.thread - Background thread to compile OpenCL kernels
 @li @c sc.qa
 @li @c sc.core
+@li @c sc.core.formulacell - ScFormulaCell and group
+@li @c sc.core.grouparealistener - sc::FormulaGroupAreaListener
 @li @c sc.filter - Calc filter
 @li @c sc.ui - Calc UI
 

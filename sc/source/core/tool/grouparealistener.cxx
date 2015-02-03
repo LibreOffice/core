@@ -78,10 +78,16 @@ FormulaGroupAreaListener::FormulaGroupAreaListener(
     mbEndFixed(bEndFixed)
 {
     assert(mppTopCell); // This can't be NULL.
+    SAL_INFO( "sc.core.grouparealistener",
+            "FormulaGroupAreaListener ctor this " << this <<
+            " range " << maRange.Format(SCA_VALID) << " *mppTopCell " << *mppTopCell << " length " << mnGroupLen);
 }
 
 FormulaGroupAreaListener::~FormulaGroupAreaListener()
 {
+    SAL_INFO( "sc.core.grouparealistener",
+            "FormulaGroupAreaListener dtor this " << this <<
+            " range " << maRange.Format(SCA_VALID) << " *mppTopCell " << *mppTopCell << " length " << mnGroupLen);
 }
 
 ScRange FormulaGroupAreaListener::getListeningRange() const
@@ -168,6 +174,10 @@ void FormulaGroupAreaListener::collectFormulaCells(
 void FormulaGroupAreaListener::collectFormulaCells(
     SCROW nRow1, SCROW nRow2, std::vector<ScFormulaCell*>& rCells ) const
 {
+    SAL_INFO( "sc.core.grouparealistener",
+            "FormulaGroupAreaListener::collectFormulaCells() this " << this <<
+            " range " << maRange.Format(SCA_VALID) << " *mppTopCell " << *mppTopCell << " length " << mnGroupLen);
+
     ScFormulaCell** pp = mppTopCell;
     ScFormulaCell** ppEnd = pp + mnGroupLen;
 
