@@ -307,6 +307,9 @@ void SwSelPaintRects::Show()
 
         HighlightInputFld();
 #else
+
+#if 0 // Totally unclear what we want to do here?
+
         const OutputDevice* pOut = GetShell()->GetWin();
         if ( ! pOut )
             pOut = GetShell()->GetOut();
@@ -315,6 +318,7 @@ void SwSelPaintRects::Show()
         {
             if (pWrtShell)
             {
+
                 // Buffer will be deallocated in the UI layer
                 MLORect *rects = (MLORect *) malloc((sizeof(MLORect))*size());
                 for (size_t i = 0; i < size(); ++i)
@@ -341,6 +345,8 @@ void SwSelPaintRects::Show()
             // touch_ui_selection_none was dummy both in TiledLibreOffice (iOS) and for Android
             // touch_ui_selection_none();
         }
+#endif
+
 #endif
     }
 }
