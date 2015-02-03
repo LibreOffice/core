@@ -895,7 +895,7 @@
                 </prop>
                 <prop oor:name="Measure">
 
-                    <value>S;6654;3386;6400;3386;646;1306;3;8;21000;29700</value>
+                    <value>S;6654;3386;6350;3386;646;1306;3;8;21000;29700</value>
                 </prop>
             </node>
             <node oor:name="L79" oor:op="replace" oor:finalized="true">
