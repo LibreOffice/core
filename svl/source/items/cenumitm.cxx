@@ -222,12 +222,6 @@ SfxPoolItem * SfxBoolItem::Clone(SfxItemPool *) const
 }
 
 // virtual
-sal_uInt16 SfxBoolItem::GetValueCount() const
-{
-    return 2;
-}
-
-// virtual
 OUString SfxBoolItem::GetValueTextByVal(bool bTheValue) const
 {
     return bTheValue ?  OUString("TRUE") : OUString("FALSE");

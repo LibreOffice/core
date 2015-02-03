@@ -2472,10 +2472,6 @@ bool SvxDummyTextSource::IsValid() const
     return false;
 }
 
-void SvxDummyTextSource::SetNotifyHdl( const Link& )
-{
-}
-
 LanguageType SvxDummyTextSource::GetLanguage( sal_Int32, sal_Int32 ) const
 {
     return LANGUAGE_DONTKNOW;

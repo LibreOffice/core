@@ -88,11 +88,6 @@ ScTpPrintItem::~ScTpPrintItem()
 {
 }
 
-OUString ScTpPrintItem::GetValueText() const
-{
-    return OUString("ScTpPrintItem");
-}
-
 bool ScTpPrintItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

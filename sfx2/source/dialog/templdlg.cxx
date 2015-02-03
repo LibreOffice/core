@@ -2112,8 +2112,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     return 0;
 }
 
-
-
 IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
 {
     if( pMenu )
@@ -2135,20 +2133,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
     return sal_True;
 }
 
-
-
-void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, vcl::Window* pWin )
-{
-    // Bug# 94152: This part should never be called, because before this happens, the TreeListBox should captured this!
-    OSL_FAIL( "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
-
-    PopupMenu* pMenu = CreateContextMenu();
-    pMenu->Execute( pWin, rPos );
-    delete pMenu;
-}
-
-
-
 SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const
 {
     const SfxStyleFamilyItem *pFamilyItem = GetFamilyItem_Impl();
@@ -2157,8 +2141,6 @@ SfxStyleFamily SfxCommonTemplateDialog_Impl::GetActualFamily() const
     else
         return pFamilyItem->GetFamily();
 }
-
-
 
 void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnable)
 {

@@ -111,10 +111,7 @@ public:
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const SAL_OVERRIDE;
 
-    sal_uInt16 GetValueCount() const;
-
     virtual OUString GetValueTextByVal(bool bTheValue) const;
-
 };
 
 #endif // INCLUDED_SVL_EITEM_HXX

@@ -88,11 +88,6 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
     }
 }
 
-OUString ScTabViewShell::GetDescription() const
-{
-    return OUString(" ** Test ** ");
-}
-
 void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 {
     sal_uInt16 nSlot = rReq.GetSlot();

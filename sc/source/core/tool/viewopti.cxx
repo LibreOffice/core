@@ -210,11 +210,6 @@ ScTpViewItem::~ScTpViewItem()
 {
 }
 
-OUString ScTpViewItem::GetValueText() const
-{
-    return OUString("ScTpViewItem");
-}
-
 bool ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

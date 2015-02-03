@@ -295,7 +295,6 @@ public:
                             {}
 
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
-    OUString        GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
     SfxViewFrame*           GetFrame() const

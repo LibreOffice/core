@@ -275,7 +275,6 @@ public:
     vcl::Window*        GetWindow() { return pWindow; }
 
     void                EnableTreeDrag( bool b = true );
-    void                ExecuteContextMenu_Impl( const Point& rPos, vcl::Window* pWin );
     void                EnableExample_Impl( sal_uInt16 nId, bool bEnable );
     SfxStyleFamily      GetActualFamily() const;
     OUString            GetSelectedEntry() const;

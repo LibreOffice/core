@@ -68,8 +68,6 @@ protected:
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize ) SAL_OVERRIDE;
 
-    OUString  GetDescription() const;
-
     virtual void    WriteUserData(OUString &, bool bBrowse = false) SAL_OVERRIDE;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) SAL_OVERRIDE;
 

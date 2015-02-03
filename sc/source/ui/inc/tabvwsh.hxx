@@ -214,7 +214,6 @@ protected:
 
     virtual OUString GetSelectionText( bool bWholeWord ) SAL_OVERRIDE;
     virtual bool     HasSelection( bool bText ) const SAL_OVERRIDE;
-    OUString         GetDescription() const;
 
     virtual void    WriteUserData(OUString &, bool bBrowse = false) SAL_OVERRIDE;
     virtual void    ReadUserData(const OUString &, bool bBrowse = false) SAL_OVERRIDE;

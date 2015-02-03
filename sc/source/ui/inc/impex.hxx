@@ -90,7 +90,6 @@ class ScImportExport
 
 public:
     ScImportExport( ScDocument* );                  // the whole document
-    ScImportExport( ScDocument*, const OUString& );   // Range/cell input
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
    ~ScImportExport();
@@ -142,8 +141,6 @@ public:
     bool ImportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
     bool ExportStream( SvStream&, const OUString& rBaseURL, sal_uLong=FORMAT_STRING );
 
-    bool ImportData( const OUString& rMimeType,
-                     const ::com::sun::star::uno::Any & rValue );
     bool ExportData( const OUString& rMimeType,
                      ::com::sun::star::uno::Any & rValue  );
 

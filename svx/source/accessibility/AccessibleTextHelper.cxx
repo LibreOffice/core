@@ -1726,19 +1726,6 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleTextHelper::FireEvent( const AccessibleEventObject& rEvent ) const
-    {
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
-
-        mpImpl->FireEvent( rEvent );
-
-#ifdef DBG_UTIL
-        mpImpl->CheckInvariants();
-#endif
-    }
-
     void AccessibleTextHelper::SetOffset( const Point& rPoint )
     {
 #ifdef DBG_UTIL

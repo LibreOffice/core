@@ -170,11 +170,6 @@ ScTpFormulaItem::~ScTpFormulaItem()
 {
 }
 
-OUString ScTpFormulaItem::GetValueText() const
-{
-    return OUString("ScTpFormulaItem");
-}
-
 bool ScTpFormulaItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

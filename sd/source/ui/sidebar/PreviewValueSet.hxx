@@ -38,7 +38,6 @@ public:
 
     void SetPreviewSize (const Size& rSize);
 
-    sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
     sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
 
     /** Set the number of rows and columns according to the current number

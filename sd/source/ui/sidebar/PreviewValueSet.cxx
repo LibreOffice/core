@@ -111,27 +111,6 @@ sal_uInt16 PreviewValueSet::CalculateRowCount (sal_uInt16 nColumnCount) const
     return (sal_uInt16)nRowCount;
 }
 
-sal_Int32 PreviewValueSet::GetPreferredWidth (sal_Int32 nHeight)
-{
-    int nPreferredWidth (maPreviewSize.Width() + 2*mnBorderWidth);
-
-    // Get height of each row.
-    int nItemHeight (maPreviewSize.Height() + 2*mnBorderHeight);
-
-    // Calculate the row- and column count and from the later the preferred
-    // width.
-    int nRowCount = nHeight / nItemHeight;
-    if (nRowCount > 0)
-    {
-        int nColumnCount = (GetItemCount()+nRowCount-1) / nRowCount;
-        if (nColumnCount > 0)
-            nPreferredWidth = (maPreviewSize.Width() + 2*mnBorderWidth)
-                * nColumnCount;
-    }
-
-    return nPreferredWidth;
-}
-
 sal_Int32 PreviewValueSet::GetPreferredHeight (sal_Int32 nWidth)
 {
     int nRowCount (CalculateRowCount(CalculateColumnCount(nWidth)));

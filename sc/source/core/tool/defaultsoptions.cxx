@@ -77,11 +77,6 @@ ScTpDefaultsItem::~ScTpDefaultsItem()
 {
 }
 
-OUString ScTpDefaultsItem::GetValueText() const
-{
-    return OUString("ScTpDefaultsItem");
-}
-
 bool ScTpDefaultsItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

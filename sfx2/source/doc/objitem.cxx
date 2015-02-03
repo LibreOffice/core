@@ -22,33 +22,18 @@
 #include <sfx2/objitem.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-
-
 TYPEINIT1_AUTOFACTORY(SfxObjectShellItem,SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SfxObjectItem,SfxPoolItem)
-
-
 
 bool SfxObjectShellItem::operator==( const SfxPoolItem &rItem ) const
 {
      return PTR_CAST(SfxObjectShellItem, &rItem)->pObjSh == pObjSh;
 }
 
-
-
-OUString SfxObjectShellItem::GetValueText() const
-{
-    return OUString();
-}
-
-
-
 SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 {
     return new SfxObjectShellItem( Which(), pObjSh );
 }
-
-
 
 bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
@@ -64,8 +49,6 @@ bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /
     }
     return true;
 }
-
-
 
 bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
@@ -98,14 +81,10 @@ bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
     return true;
 }
 
-
-
 SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 :   SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}
-
-
 
 bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 {

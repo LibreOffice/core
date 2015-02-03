@@ -99,8 +99,7 @@ namespace accessibility
         change events might be fired internally.
 
         @derive Use this class in an aggregation and forward, or
-        derive from it and overwrite. If the Remove/AddEventListener
-        methods are overwritten, make sure FireEvent is adapted,
+        derive from it and overwrite.
         too.
 
         @see SvxEditSource
@@ -320,17 +319,6 @@ namespace accessibility
             @return the state of the focus ownership
          */
         bool HaveFocus();
-
-        /** Call this method to invoke all event listeners with the given event
-
-            @attention Fires state change events, therefore, don't hold any mutex
-
-            @param rEvent
-            The event to send, @see AccessibleEventObject
-
-        */
-        // TODO: make that virtual next time
-        void FireEvent( const ::com::sun::star::accessibility::AccessibleEventObject& rEvent ) const;
 
         // XAccessibleContext child handling methods
 

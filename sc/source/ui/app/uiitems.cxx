@@ -162,11 +162,6 @@ ScSortItem::~ScSortItem()
 {
 }
 
-OUString ScSortItem::GetValueText() const
-{
-    return OUString("SortItem");
-}
-
 bool ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -302,11 +297,6 @@ ScSubTotalItem::~ScSubTotalItem()
 {
 }
 
-OUString ScSubTotalItem::GetValueText() const
-{
-    return OUString("SubTotalItem");
-}
-
 bool ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -350,11 +340,6 @@ ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
 ScUserListItem::~ScUserListItem()
 {
     delete pUserList;
-}
-
-OUString ScUserListItem::GetValueText() const
-{
-    return OUString("ScUserListItem");
 }
 
 bool ScUserListItem::operator==( const SfxPoolItem& rItem ) const
@@ -484,11 +469,6 @@ ScSolveItem::~ScSolveItem()
 {
 }
 
-OUString ScSolveItem::GetValueText() const
-{
-    return OUString("ScSolveItem");
-}
-
 bool ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
@@ -521,11 +501,6 @@ ScTabOpItem::ScTabOpItem( const ScTabOpItem& rItem )
 
 ScTabOpItem::~ScTabOpItem()
 {
-}
-
-OUString ScTabOpItem::GetValueText() const
-{
-    return OUString("ScTabOpItem");
 }
 
 bool ScTabOpItem::operator==( const SfxPoolItem& rItem ) const

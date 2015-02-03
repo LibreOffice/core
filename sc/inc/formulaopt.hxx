@@ -87,7 +87,6 @@ public:
     ScTpFormulaItem( const ScTpFormulaItem& rItem );
     virtual ~ScTpFormulaItem();
 
-    OUString                GetValueText() const;
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 

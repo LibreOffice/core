@@ -1631,17 +1631,10 @@ bool SfxViewFrameItem::operator==( const SfxPoolItem &rItem ) const
     return dynamic_cast<const SfxViewFrameItem&>(rItem).pFrame == pFrame;
 }
 
-OUString SfxViewFrameItem::GetValueText() const
-{
-    return OUString();
-}
-
-
 SfxPoolItem* SfxViewFrameItem::Clone( SfxItemPool *) const
 {
     return new SfxViewFrameItem( pFrame);
 }
-
 
 void SfxViewFrame::SetViewShell_Impl( SfxViewShell *pVSh )
 

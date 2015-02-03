@@ -116,11 +116,6 @@ ScTpCalcItem::~ScTpCalcItem()
 {
 }
 
-OUString ScTpCalcItem::GetValueText() const
-{
-    return OUString("ScTpCalcItem");
-}
-
 bool ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));

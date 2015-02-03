@@ -199,7 +199,6 @@ public:
 
     virtual bool            IsValid() const SAL_OVERRIDE;
 
-    void                    SetNotifyHdl( const Link& );
     virtual LanguageType    GetLanguage( sal_Int32, sal_Int32 ) const SAL_OVERRIDE;
     virtual sal_Int32       GetFieldCount( sal_Int32 nPara ) const SAL_OVERRIDE;
     virtual EFieldInfo      GetFieldInfo( sal_Int32 nPara, sal_uInt16 nField ) const SAL_OVERRIDE;

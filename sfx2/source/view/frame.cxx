@@ -549,13 +549,6 @@ bool SfxFrameItem::operator==( const SfxPoolItem &rItem ) const
          static_cast<const SfxFrameItem&>(rItem).wFrame == wFrame;
 }
 
-
-
-OUString SfxFrameItem::GetValueText() const
-{
-    return OUString();
-}
-
 SfxPoolItem* SfxFrameItem::Clone( SfxItemPool *) const
 {
     SfxFrameItem* pNew = new SfxFrameItem( wFrame);

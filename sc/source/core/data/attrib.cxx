@@ -868,13 +868,6 @@ bool ScViewObjectModeItem::GetPresentation
     return false;
 }
 
-OUString ScViewObjectModeItem::GetValueText( sal_uInt16 nVal ) const
-{
-    OSL_ENSURE( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
-
-    return ScGlobal::GetRscString( STR_VOBJ_MODE_SHOW + (nVal % 2));
-}
-
 sal_uInt16 ScViewObjectModeItem::GetValueCount() const
 {
     return 2;

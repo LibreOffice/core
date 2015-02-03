@@ -210,11 +210,6 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
     pPreview->SetPageNo( pPreview->GetFirstPage(nTab) );
 }
 
-OUString ScPreviewShell::GetDescription() const
-{
-    return OUString(" ** Test ** ");
-}
-
 void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     Size aOutSize( rSize );

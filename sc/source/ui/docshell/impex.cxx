@@ -125,49 +125,6 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 }
 
-// Evaluate input string - either range, cell or the whole document (when error)
-// If a View exists, the TabNo of the view will be used.
-ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
-    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
-      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
-      bFormulas( false ), bIncludeFiltered( true ),
-      bAll( false ), bSingle( true ), bUndo( pDocSh != NULL ),
-      bOverflowRow( false ), bOverflowCol( false ), bOverflowCell( false ),
-      mbApi( true ), mbImportBroadcast(false), mbOverwriting( false ),
-      mExportTextOptions()
-{
-    pUndoDoc = NULL;
-    pExtOptions = NULL;
-
-    SCTAB nTab = ScDocShell::GetCurTab();
-    aRange.aStart.SetTab( nTab );
-    OUString aPos( rPos );
-    // Named range?
-    ScRangeName* pRange = pDoc->GetRangeName();
-    if (pRange)
-    {
-        const ScRangeData* pData = pRange->findByUpperName(ScGlobal::pCharClass->uppercase(aPos));
-        if (pData)
-        {
-            if( pData->HasType( RT_REFAREA )
-                || pData->HasType( RT_ABSAREA )
-                || pData->HasType( RT_ABSPOS ) )
-            {
-                pData->GetSymbol(aPos);
-            }
-        }
-    }
-    formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
-    // Range?
-    if (aRange.Parse(aPos, pDoc, eConv) & SCA_VALID)
-        bSingle = false;
-    // Cell?
-    else if (aRange.aStart.Parse(aPos, pDoc, eConv) & SCA_VALID)
-        aRange.aEnd = aRange.aStart;
-    else
-        bAll = true;
-}
-
 ScImportExport::~ScImportExport()
 {
     delete pUndoDoc;
@@ -252,13 +209,6 @@ void ScImportExport::EndPaste(bool bAutoRowHeight)
     if ( pViewSh )
         pViewSh->UpdateInputHandler();
 
-}
-
-bool ScImportExport::ImportData( const OUString& /* rMimeType */,
-                     const ::com::sun::star::uno::Any & /* rValue */ )
-{
-    OSL_ENSURE( false, "Implementation is missing" );
-    return false;
 }
 
 bool ScImportExport::ExportData( const OUString& rMimeType,

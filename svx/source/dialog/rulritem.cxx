@@ -40,11 +40,6 @@ bool SvxLongLRSpaceItem::operator==( const SfxPoolItem& rCmp) const
         mlRight == static_cast<const SvxLongLRSpaceItem &>(rCmp).mlRight;
 }
 
-OUString SvxLongLRSpaceItem::GetValueText() const
-{
-    return OUString();
-}
-
 bool SvxLongLRSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -172,12 +167,6 @@ bool SvxLongULSpaceItem::operator==( const SfxPoolItem& rCmp) const
     return SfxPoolItem::operator==(rCmp) &&
         mlLeft == static_cast<const SvxLongULSpaceItem&>(rCmp).mlLeft &&
         mlRight == static_cast<const SvxLongULSpaceItem&>(rCmp).mlRight;
-}
-
-
-OUString SvxLongULSpaceItem::GetValueText() const
-{
-    return OUString();
 }
 
 bool SvxLongULSpaceItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -375,11 +364,6 @@ bool SvxPagePosSizeItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
     return false;
 }
 
-OUString SvxPagePosSizeItem::GetValueText() const
-{
-    return OUString();
-}
-
 bool SvxPagePosSizeItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
                         SfxMapUnit          /*eCoreUnit*/,
@@ -470,11 +454,6 @@ SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
 
 SvxColumnItem::~SvxColumnItem()
 {}
-
-OUString SvxColumnItem::GetValueText() const
-{
-    return OUString();
-}
 
 bool SvxColumnItem::GetPresentation(
                         SfxItemPresentation /*ePres*/,
@@ -713,11 +692,6 @@ bool SvxObjectItem::operator==( const SfxPoolItem& rCmp ) const
        nStartY == static_cast<const SvxObjectItem&>(rCmp).nStartY &&
        nEndY == static_cast<const SvxObjectItem&>(rCmp).nEndY &&
        bLimits == static_cast<const SvxObjectItem&>(rCmp).bLimits;
-}
-
-OUString SvxObjectItem::GetValueText() const
-{
-    return OUString();
 }
 
 bool SvxObjectItem::GetPresentation(

@@ -87,25 +87,6 @@ bool SvxRotateModeItem::GetPresentation(
     return false;
 }
 
-OUString SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
-{
-    OUString aText;
-
-    switch ( nVal )
-    {
-        case SVX_ROTATE_MODE_STANDARD:
-        case SVX_ROTATE_MODE_TOP:
-        case SVX_ROTATE_MODE_CENTER:
-        case SVX_ROTATE_MODE_BOTTOM:
-            aText = "...";
-            break;
-        default:
-            OSL_FAIL("SvxRotateModeItem: falscher enum");
-            break;
-    }
-    return aText;
-}
-
 sal_uInt16 SvxRotateModeItem::GetValueCount() const
 {
     return 4;       // STANDARD, TOP, CENTER, BOTTOM

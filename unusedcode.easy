@@ -26,37 +26,19 @@ Printer::Error()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 SalGtkFilePicker::disposing(com::sun::star::lang::EventObject const&)
 SalGtkFolderPicker::disposing(com::sun::star::lang::EventObject const&)
-SbModule::SetSource(rtl::OUString const&)
 ScBroadcastAreaSlotMachine::AreaBroadcastInRange(ScRange const&, ScHint const&) const
 ScCellValue::set(ScRefCellValue const&)
 ScCondFormatManagerDlg::IsInRefMode() const
 ScDocument::CreateFormatTable() const
 ScDocument::EndAllListeners(ScRange const&)
-ScPreviewShell::GetDescription() const
 ScPrivatSplit::GetDeltaX()
-ScSolveItem::GetValueText() const
-ScSortItem::GetValueText() const
-ScSubTotalItem::GetValueText() const
-ScTabOpItem::GetValueText() const
-ScTabViewShell::GetDescription() const
 ScTbxInsertCtrl::Select(bool)
-ScTpCalcItem::GetValueText() const
-ScTpDefaultsItem::GetValueText() const
-ScTpFormulaItem::GetValueText() const
-ScTpPrintItem::GetValueText() const
-ScTpViewItem::GetValueText() const
-ScUserListItem::GetValueText() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
-ScViewObjectModeItem::GetValueText(unsigned short) const
 SdrUndoObjList::SetOrdNum(unsigned int)
 SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
-SfxBoolItem::GetValueCount() const
-SfxFrameItem::GetValueText() const
-SfxObjectShellItem::GetValueText() const
 SfxProgress::SetText(rtl::OUString const&)
-SfxViewFrameItem::GetValueText() const
 SotObject::GetInterface(SvGlobalName const&)
 StylePool::getCount() const
 StyleSettings::SetAlternatingRowColor(Color const&)
@@ -71,16 +53,9 @@ SvpSalFrame::enableDamageTracker(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxColorTabPage::GetPropertyList(XPropertyListType)
-SvxColumnItem::GetValueText() const
-SvxDummyTextSource::SetNotifyHdl(Link const&)
 SvxFontListBox::GetSelectEntry() const
-SvxLongLRSpaceItem::GetValueText() const
-SvxLongULSpaceItem::GetValueText() const
-SvxObjectItem::GetValueText() const
 SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
-SvxPagePosSizeItem::GetValueText() const
-SvxRotateModeItem::GetValueText(unsigned short) const
 Test::testCopyPasteSkipEmptyConditionalFormatting()
 Test::testPerf()
 Test::testSharedFormulaMoveBlock()
