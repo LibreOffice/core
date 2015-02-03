@@ -203,7 +203,8 @@ void SwChangeDBDlg::UpdateFlds()
     OUString sTableName;
     OUString sColumnName;
     sal_Bool bIsTable = sal_False;
-    const OUString sTemp = m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable)
+    const OUString DBName(m_pAvailDBTLB->GetDBName(sTableName, sColumnName, &bIsTable));
+    const OUString sTemp = DBName
         + OUString(DB_DELIM)
         + sTableName
         + OUString(DB_DELIM)
