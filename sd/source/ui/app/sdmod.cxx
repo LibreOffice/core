@@ -103,9 +103,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 SdModule::~SdModule()
 {
     delete pSearchItem;
-
-    if( pNumberFormatter )
-        delete pNumberFormatter;
+    delete pNumberFormatter;
 
     ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
     if( pDocShell )
