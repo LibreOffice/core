@@ -14,11 +14,9 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/XMultiPropertySet.hpp"
 #include "com/sun/star/beans/XPropertiesChangeListener.hpp"
 #include "com/sun/star/sdb/RowSetVetoException.hpp"
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "comphelper/processfactory.hxx"
 #include "cppuhelper/basemutex.hxx"
 #include "officecfg/Office/Common.hxx"
@@ -36,7 +34,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <cassert>
-#include <unordered_map>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -142,6 +139,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -179,12 +177,14 @@
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdb/XTextConnectionSettings.hpp>
+#include <com/sun/star/sdb/application/CopyTableContinuation.hpp>
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include <com/sun/star/sdb/application/CopyTableWizard.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/sdb/application/MacroMigrationWizard.hpp>
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
+#include <com/sun/star/sdb/application/XCopyTableWizard.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
@@ -192,10 +192,13 @@
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/ConnectionPool.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
@@ -242,6 +245,7 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/ucb/AlreadyInitializedException.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -301,6 +305,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/proparrhlp.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
@@ -447,6 +452,7 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
+#include <unordered_map>
 #include <unotools/bootstrap.hxx>
 #include <unotools/closeveto.hxx>
 #include <unotools/configmgr.hxx>
@@ -455,6 +461,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/sharedunocomponent.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>

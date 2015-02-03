@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -71,6 +72,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <memory>
+#include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <string.h>

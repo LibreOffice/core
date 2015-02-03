@@ -16,7 +16,6 @@
 
 #include "officecfg/Office/Common.hxx"
 #include <algorithm>
-#include <assert.h>
 #include <boost/noncopyable.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
@@ -44,10 +43,12 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
-#include <com/sun/star/i18n/LocaleCalendar.hpp>
+#include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -95,11 +96,13 @@
 #include <comphelper/string.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstdarg>
 #include <cstdlib>
 #include <ctype.h>
+#include <deque>
 #include <errno.h>
 #include <float.h>
 #include <functional>
@@ -107,6 +110,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <iostream>
+#include <libxml/xmlwriter.h>
 #include <limits.h>
 #include <limits>
 #include <list>
@@ -116,10 +120,12 @@
 #include <mdds/multi_type_vector_custom_func1.hpp>
 #include <mdds/multi_type_vector_trait.hpp>
 #include <mdds/multi_type_vector_types.hpp>
+#include <o3tl/ptr_container.hxx>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.h>
 #include <osl/file.hxx>
+#include <osl/getglobalmutex.hxx>
 #include <osl/mutex.hxx>
 #include <osl/security.hxx>
 #include <osl/socket.hxx>
@@ -162,6 +168,7 @@
 #include <tools/wldcrd.hxx>
 #include <ucbhelper/content.hxx>
 #include <unordered_map>
+#include <unordered_set>
 #include <unotools/bootstrap.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/charclass.hxx>

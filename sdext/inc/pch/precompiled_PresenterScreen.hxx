@@ -137,6 +137,7 @@
 #include <iterator>
 #include <map>
 #include <math.h>
+#include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/mutex.hxx>
 #include <osl/thread.hxx>

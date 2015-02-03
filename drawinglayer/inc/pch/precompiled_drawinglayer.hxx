@@ -79,6 +79,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/factory.hxx>
@@ -89,6 +90,7 @@
 #include <iostream>
 #include <libxml/xmlwriter.h>
 #include <numeric>
+#include <osl/diagnose.h>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -103,6 +105,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 #include <vcl/animate.hxx>

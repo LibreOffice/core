@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/logging/DocumentIOLogRing.hpp>
@@ -50,10 +51,12 @@
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/diagnose.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
+#include <sal/config.h>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -20,7 +20,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
-#include <com/sun/star/i18n/LocaleCalendar.hpp>
+#include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/script/XErrorQuery.hpp>
@@ -32,6 +32,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
+#include <config_features.h>
+#include <config_version.h>
 #include <cstddef>
 #include <ctype.h>
 #include <errno.h>
@@ -60,7 +62,9 @@
 #include <svl/zforlist.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>
+#include <tools/debug.hxx>
 #include <tools/errcode.hxx>
+#include <tools/fract.hxx>
 #include <tools/shl.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>

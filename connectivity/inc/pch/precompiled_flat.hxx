@@ -40,6 +40,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ctype.h>
 #include <i18nlangtag/languagetag.hxx>

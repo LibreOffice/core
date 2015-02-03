@@ -19,12 +19,10 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basic/basmgr.hxx>
 #include <boost/noncopyable.hpp>
-#include <boost/optional.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/static_assert.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -37,6 +35,8 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/drawing/XConnectableShape.hpp>
 #include <com/sun/star/drawing/XConnectorShape.hpp>
@@ -81,7 +81,6 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -89,13 +88,15 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/flagguard.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <config_features.h>
-#include <config_version.h>
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
 #include <cstring>
@@ -139,7 +140,6 @@
 #include <editeng/pbinitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/protitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/shdditem.hxx>
@@ -187,7 +187,6 @@
 #include <osl/time.h>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
-#include <rtl/strbuf.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -263,7 +262,6 @@
 #include <ucbhelper/content.hxx>
 #include <unicode/ubidi.h>
 #include <unordered_set>
-#include <unotools/configmgr.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontcfg.hxx>

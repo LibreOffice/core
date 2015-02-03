@@ -80,6 +80,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/report/Function.hpp>
@@ -262,6 +263,16 @@
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/xdef.hxx>
+#include <svx/xfillit.hxx>
+#include <svx/xflbckit.hxx>
+#include <svx/xflbmpit.hxx>
+#include <svx/xflbmsli.hxx>
+#include <svx/xflbmsxy.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflboxy.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbtoxy.hxx>
+#include <svx/xfltrit.hxx>
 #include <svx/xgrscit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>

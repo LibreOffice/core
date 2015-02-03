@@ -213,7 +213,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/poly.hxx>
 #include <tools/resmgr.hxx>
-#include <tools/shl.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>

@@ -27,7 +27,6 @@
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -441,6 +440,8 @@
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <com/sun/star/xforms/XFormsUIHelper1.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
@@ -488,6 +489,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <cstdarg>
 #include <cstdlib>
+#include <ctime>
 #include <ctype.h>
 #include <deque>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -613,7 +615,6 @@
 #include <i18nutil/unicode.hxx>
 #include <iostream>
 #include <iterator>
-#include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>
 #include <limits.h>
 #include <limits>
@@ -624,6 +625,8 @@
 #include <math.h>
 #include <memory>
 #include <numeric>
+#include <o3tl/numeric.hxx>
+#include <o3tl/ptr_container.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -711,12 +714,14 @@
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/sidebar/ControlFactory.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/styledlg.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/taskpane.hxx>
+#include <sfx2/templatedlg.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -812,6 +817,7 @@
 #include <svx/AccessibleShape.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/AffineMatrixItem.hxx>
+#include <svx/ParaLineSpacingPopup.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SmartTagCtl.hxx>
 #include <svx/SmartTagItem.hxx>
@@ -957,7 +963,6 @@
 #include <svx/unomid.hxx>
 #include <svx/unomod.hxx>
 #include <svx/unomodel.hxx>
-#include <svx/unopage.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/verttexttbxctrl.hxx>
@@ -1009,7 +1014,6 @@
 #include <svx/xtextit0.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <time.h>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1033,8 +1037,6 @@
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rtti.hxx>
-#include <tools/shl.hxx>
-#include <tools/solar.h>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
@@ -1129,7 +1131,6 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
-#include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <xmloff/DocumentSettingsContext.hxx>
@@ -1165,6 +1166,8 @@
 #include <xmloff/xmlmetae.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmlnume.hxx>
+#include <xmloff/xmlnumi.hxx>
 #include <xmloff/xmlprhdl.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlscripti.hxx>

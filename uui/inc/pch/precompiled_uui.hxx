@@ -36,8 +36,6 @@
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/java/WrongJavaVersionException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,8 +49,6 @@
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/XCertificateExtension.hpp>
 #include <com/sun/star/security/XSanExtension.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest.hpp>
 #include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
@@ -73,6 +69,7 @@
 #include <com/sun/star/task/XInteractionPassword2.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
+#include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
 #include <com/sun/star/ucb/CertificateValidationRequest.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
@@ -90,6 +87,7 @@
 #include <com/sun/star/ucb/NameClashResolveRequest.hpp>
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
+#include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
@@ -99,9 +97,7 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
-#include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/xforms/InvalidDataOnSubmitException.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <comphelper/documentconstants.hxx>
@@ -110,22 +106,18 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
-#include <config_features.h>
-#include <config_folders.h>
 #include <cppu/macros.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <iostream>
 #include <memory>
-#include <officecfg/Office/Addons.hxx>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
 #include <osl/thread.hxx>
-#include <rtl/bootstrap.hxx>
 #include <rtl/digest.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -148,6 +140,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <vcl/abstdlg.hxx>
 #include <vcl/button.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

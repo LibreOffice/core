@@ -140,6 +140,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>

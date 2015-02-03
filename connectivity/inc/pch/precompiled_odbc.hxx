@@ -41,6 +41,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <o3tl/compat_functional.hxx>
@@ -48,6 +49,8 @@
 #include <osl/process.h>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
 #include <stdio.h>
 #include <string.h>
 #include <string>

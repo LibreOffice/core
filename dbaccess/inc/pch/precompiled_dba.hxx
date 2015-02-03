@@ -122,6 +122,7 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/ProxyFactory.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
@@ -270,6 +271,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_features.h>
 #include <connectivity/BlobHelper.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/FValue.hxx>
@@ -318,6 +320,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
+#include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sax/tools/converter.hxx>
 #include <set>

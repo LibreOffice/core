@@ -52,8 +52,10 @@
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <config_features.h>
 #include <config_folders.h>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>

@@ -72,6 +72,7 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
+#include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -193,12 +194,14 @@
 #include <memory>
 #include <numeric>
 #include <o3tl/compat_functional.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/uuid.h>
+#include <sal/config.h>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -315,6 +318,7 @@
 #include <vcl/image.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/openglwin.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

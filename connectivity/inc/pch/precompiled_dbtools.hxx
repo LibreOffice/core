@@ -166,7 +166,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <svtools/miscopt.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/fract.hxx>
 #include <tools/wldcrd.hxx>

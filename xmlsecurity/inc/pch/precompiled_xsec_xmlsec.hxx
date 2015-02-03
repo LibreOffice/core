@@ -39,6 +39,7 @@
 #include <nss.h>
 #include <nssckbi.h>
 #include <officecfg/Office/Common.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
@@ -57,7 +58,6 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <secmod.h>
-#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

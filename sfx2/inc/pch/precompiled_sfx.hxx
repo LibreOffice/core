@@ -42,8 +42,10 @@
 #include <basic/sbxvar.hxx>
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
+#include <boost/logic/tribool.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -401,6 +403,7 @@
 #include <com/sun/star/ui/dialogs/XFilePreview.hpp>
 #include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/theWindowContentFactoryManager.hpp>
@@ -505,12 +508,14 @@
 #include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstdarg>
 #include <cstring>
+#include <deque>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -541,6 +546,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nutil/paper.hxx>
 #include <iomanip>
+#include <iostream>
 #include <libxml/tree.h>
 #include <limits.h>
 #include <limits>
@@ -591,6 +597,7 @@
 #include <sot/storage.hxx>
 #include <sot/storinfo.hxx>
 #include <stack>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -686,6 +693,7 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/errcode.hxx>
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/helpers.hxx>
@@ -770,6 +778,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
@@ -785,6 +794,7 @@
 #include <vcl/status.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/timer.hxx>
