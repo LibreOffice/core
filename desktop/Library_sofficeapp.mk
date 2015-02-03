@@ -106,11 +106,12 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 ))
 endif
 
-# liblibreoffice bits
-ifeq ($(OS),ANDROID)
+# LibreOfficeKit bits
+ifneq ($(filter $(OS),ANDROID IOS),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
-	desktop/source/lib/lokandroid \
+	$(if $(filter $(OS),ANDROID), \
+		desktop/source/lib/lokandroid) \
 ))
 else
 ifeq ($(GUIBASE),unx)
