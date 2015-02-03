@@ -237,12 +237,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             break;
         case FN_FORMAT_FOOTNOTE_DLG:
         {
-            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            assert(pFact);
-
-            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), GetView().GetWrtShell()));
-            assert(pDlg);
-            pDlg->Execute();
+            GetView().ExecFormatFootnote();
             break;
         }
         case FN_NUMBERING_OUTLINE_DLG:
