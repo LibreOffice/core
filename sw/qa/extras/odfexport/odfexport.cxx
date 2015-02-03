@@ -42,7 +42,6 @@ public:
             // These are known problems, they should be fixed one by one.
             "fdo86963.odt",
             "shape-relsize.odt",
-            "charborder.odt",
             "fdo60769.odt",
             "first-header-footer.odt",
             "fdo38244.odt"
