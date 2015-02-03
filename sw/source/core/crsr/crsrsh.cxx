@@ -2115,7 +2115,8 @@ void SwCrsrShell::ShowCrsr()
         m_bSVCrsrVis = true;
         m_pCurCrsr->SetShowTxtInputFldOverlay( true );
 #if defined(ANDROID) || defined(IOS)
-        touch_ui_show_keyboard();
+        // This was dummied out both for Android and for TiledLibreOffice (iOS) anyway
+        // touch_ui_show_keyboard();
 #endif
         UpdateCrsr();
     }
@@ -2131,7 +2132,8 @@ void SwCrsrShell::HideCrsr()
         m_pCurCrsr->SetShowTxtInputFldOverlay( false );
         m_pVisCrsr->Hide();
 #if defined(ANDROID) || defined(IOS)
-        touch_ui_hide_keyboard();
+        // This was dummied out both for Android and for TiledLibreOffice (iOS) anyway
+        // touch_ui_hide_keyboard();
 #endif
     }
 }

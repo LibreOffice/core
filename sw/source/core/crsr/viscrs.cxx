@@ -331,12 +331,15 @@ void SwSelPaintRects::Show()
 #endif
                 }
                 // GetShell returns a SwCrsrShell which actually is a SwWrtShell
-                touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
+
+                // touch_ui_selection_start() was dummy both in TiledLibreOffice (iOS) and for Android
+                // touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
             }
         }
         else
         {
-            touch_ui_selection_none();
+            // touch_ui_selection_none was dummy both in TiledLibreOffice (iOS) and for Android
+            // touch_ui_selection_none();
         }
 #endif
     }

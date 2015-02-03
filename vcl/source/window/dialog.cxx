@@ -868,26 +868,10 @@ short Dialog::Execute()
         break;
     }
 
-    MLODialogResult result = touch_ui_dialog_modal(kind, ImplGetDialogText(this).getStr());
-
-    switch (result)
-    {
-    case MLODialogOK:
-        return RET_OK;
-    case MLODialogCancel:
-        return RET_CANCEL;
-    case MLODialogNo:
-        return RET_NO;
-    case MLODialogYes:
-        return RET_YES;
-    case MLODialogRetry:
-        return RET_RETRY;
-    case MLODialogIgnore:
-        return RET_IGNORE;
-    default:
-        SAL_WARN("vcl", "Dialog::Execute: Unhandled dialog result %d" << result);
-        return RET_OK;
-    }
+    // touch_ui_dialog_modal was dummied out both for Android and iOS (well, TiledLibreOffice anyway)
+    // For Android it returned MLODialogOK always, for iOS Cancel. Let's go with OK.
+    // MLODialogResult result = touch_ui_dialog_modal(kind, ImplGetDialogText(this).getStr());
+    return RET_OK;
 
 #endif
 }
