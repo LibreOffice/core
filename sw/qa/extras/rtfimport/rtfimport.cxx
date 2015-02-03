@@ -2248,6 +2248,14 @@ DECLARE_RTFIMPORT_TEST(testFdo86750, "fdo86750.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("#anchor"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf88811, "tdf88811.rtf")
+{
+    // The problem was that shapes anchored to the paragraph that is moved into a textframe were lost, so this was 2.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), xDrawPage->getCount());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
