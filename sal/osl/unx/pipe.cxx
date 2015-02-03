@@ -72,9 +72,6 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
     return PipeError[i].error;
 }
 
-/* macros */
-#define ERROR_FROM_NATIVE(y)    osl_PipeErrorFromNative(y)
-
 oslPipe __osl_createPipeImpl(void)
 {
     oslPipe pPipeImpl;
@@ -541,7 +538,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
 oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
 {
     (void) pPipe; /* unused */
-    return ERROR_FROM_NATIVE(errno);
+    return osl_PipeErrorFromNative(errno);
 }
 
 sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
