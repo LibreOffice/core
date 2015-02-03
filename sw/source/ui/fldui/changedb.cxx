@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDatabaseAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -197,7 +198,9 @@ void SwChangeDBDlg::UpdateFlds()
         + OUString(DB_DELIM)
         + sTableName
         + OUString(DB_DELIM)
-        + OUString(static_cast<sal_Unicode>(bIsTable ? '0' : '1'));
+        + OUString::number(bIsTable
+                            ? CommandType::TABLE
+                            : CommandType::QUERY);
     pSh->ChangeDBFields( aDBNames, sTemp);
     pSh->EndAllAction();
 }
