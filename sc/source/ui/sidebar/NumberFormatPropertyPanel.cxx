@@ -222,7 +222,8 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 sal_uInt16 nVal = pItem->GetValue();
                 mnCategorySelected = nVal;
                 mpLbCategory->SelectEntryPos(nVal);
-                if( nVal < 4 )
+                if( nVal < 4 ||  // General, Number, Percent and Currency
+                    nVal == 6 )  // scientific also
                 {
                     mpBtnThousand->Enable();
                     mpBtnNegRed->Enable();
