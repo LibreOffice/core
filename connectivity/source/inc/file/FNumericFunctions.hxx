@@ -232,7 +232,7 @@ namespace connectivity
         > SELECT PI();
                 -> 3.141593
         > SELECT PI()+0.000000000000000000;
-                -> 3.141592653589793116
+                -> 3.141592653589793238
 
         */
         class OOp_Pi : public ONthOperator
