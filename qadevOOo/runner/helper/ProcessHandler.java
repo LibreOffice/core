@@ -151,14 +151,6 @@ public class ProcessHandler
     }
 
     /**
-     * Creates instance with specified external command and set the time out for the command.
-     */
-    public ProcessHandler(String cmdLine, int timeOut)
-    {
-        this(cmdLine, null, null, null, timeOut);
-    }
-
-    /**
      * Creates instance with specified external command which
      * will be executed in the some work directory  and
      *

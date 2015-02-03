@@ -162,12 +162,6 @@ public class _XComponent {
 
     } // finished _dispose()
 
-    /**
-    * Forces object recreation.
-    */
-    protected void after() {
-    }
-
 } // finished class _XComponent
 
 

@@ -73,12 +73,6 @@ public class _XInitialization {
         return  result ;
     } // finished _initialize()
 
-    /**
-    * Disposes object environment.
-    */
-    public void after() {
-    }
-
 } // finished class _XInitialization
 
 

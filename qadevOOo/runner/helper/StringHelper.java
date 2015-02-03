@@ -21,26 +21,6 @@ package helper;
 public class StringHelper
 {
 
-    /**
-     * removes quotes if both exists at start and at end
-     */
-    public static String removeSurroundQuoteIfExists(String _sPath)
-        {
-            String sNewPath = _sPath;
-            if (
-                (_sPath.startsWith("\"") && _sPath.endsWith("\"")) ||
-                (_sPath.startsWith("'") && _sPath.endsWith("'"))
-                )
-            {
-                // remove trailing quotes, if exists
-                sNewPath = sNewPath.substring(1);
-
-                // remove trailing quotes, if exists
-                sNewPath = sNewPath.substring(0, sNewPath.length() - 1);
-            }
-            return sNewPath;
-        }
-
     public static String removeQuoteIfExists(String _sPath)
         {
             String sNewPath = _sPath;

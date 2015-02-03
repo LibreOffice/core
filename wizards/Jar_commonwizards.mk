@@ -69,7 +69,6 @@ $(eval $(call gb_Jar_add_sourcefiles,commonwizards,\
 	wizards/com/sun/star/wizards/ui/event/XActionListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XItemListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/event/XTextListenerAdapter	\
-	wizards/com/sun/star/wizards/ui/event/XWindowListenerAdapter	\
 	wizards/com/sun/star/wizards/ui/AggregateComponent				\
 	wizards/com/sun/star/wizards/ui/CommandFieldSelection				\
 	wizards/com/sun/star/wizards/ui/ControlScroller				\

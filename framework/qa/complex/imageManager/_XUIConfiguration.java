@@ -63,9 +63,4 @@ public class _XUIConfiguration {
         return !xListener.actionWasTriggered();
     }
 
-    /**
-     * Dispose because the UIConfigurationManager has to be recreated
-     */
-    public void after() {
-    }
 }
