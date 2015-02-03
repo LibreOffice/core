@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <basegfx/curve/b2dcubicbezier.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -23,6 +24,8 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <boost/checked_delete.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/rational.hpp>
 #include <boost/static_assert.hpp>
 #include <cassert>
 #include <cmath>
@@ -47,7 +50,9 @@
 #include <limits>
 #include <list>
 #include <math.h>
+#include <memory>
 #include <new>
+#include <numeric>
 #include <osl/diagnose.h>
 #include <osl/endian.h>
 #include <osl/file.hxx>

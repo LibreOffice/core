@@ -64,7 +64,6 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -115,14 +114,10 @@
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
 #include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/DocumentTemplates.hpp>
-#include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -143,7 +138,6 @@
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/Weekdays.hpp>
-#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -173,8 +167,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
@@ -194,7 +186,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
-#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
@@ -231,18 +222,15 @@
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/Time.hpp>
-#include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
-#include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <comphelper/accimplaccess.hxx>
@@ -273,6 +261,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
@@ -293,8 +282,9 @@
 #include <math.h>
 #include <memory>
 #include <numeric>
+#include <o3tl/numeric.hxx>
+#include <o3tl/ptr_container.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.h>
@@ -338,7 +328,6 @@
 #include <svl/eitem.hxx>
 #include <svl/filenotation.hxx>
 #include <svl/inettype.hxx>
-#include <svl/itempool.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/itemset.hxx>
 #include <svl/macitem.hxx>
@@ -367,8 +356,8 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/errcode.hxx>
 #include <tools/fldunit.hxx>
+#include <tools/fract.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
@@ -399,8 +388,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
 #include <unotools/configpaths.hxx>
-#include <unotools/dynamicmenuoptions.hxx>
-#include <unotools/extendedsecurityoptions.hxx>
 #include <unotools/historyoptions.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -412,7 +399,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <unotools/viewoptions.hxx>
+#include <utility>
 #include <vcl/FilterConfigItem.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/alpha.hxx>
@@ -456,7 +443,6 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 #include <vcl/prgsbar.hxx>
@@ -468,7 +454,6 @@
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/spinfld.hxx>
-#include <vcl/split.hxx>
 #include <vcl/status.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

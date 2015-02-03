@@ -49,6 +49,7 @@
 #include <comphelper/types.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <i18nlangtag/mslangid.hxx>

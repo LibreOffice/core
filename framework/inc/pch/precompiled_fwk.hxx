@@ -16,7 +16,6 @@
 
 #include "officecfg/Office/Common.hxx"
 #include <algorithm>
-#include <unordered_map>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -257,7 +256,6 @@
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
@@ -269,6 +267,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
@@ -298,6 +297,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cstring>
 #include <functional>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -364,6 +364,7 @@
 #include <tools/wldcrd.hxx>
 #include <ucbhelper/content.hxx>
 #include <uno/current_context.hxx>
+#include <unordered_map>
 #include <unotools/bootstrap.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <unotools/configitem.hxx>

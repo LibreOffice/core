@@ -47,10 +47,12 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/config.h>
 #include <svl/converter.hxx>
 #include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>

@@ -182,6 +182,7 @@
 #include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
 #include <com/sun/star/sheet/ExternalReference.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
@@ -238,16 +239,13 @@
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-#include <com/sun/star/sheet/XSheetCellRanges.hpp>
 #include <com/sun/star/sheet/XSheetCondition2.hpp>
-#include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSheetFilterDescriptor3.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/sheet/XSheetOperation.hpp>
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XUnnamedDatabaseRanges.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
@@ -292,7 +290,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/threadpool.hxx>
 #include <comphelper/types.hxx>
+#include <config_features.h>
 #include <config_orcus.h>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/factory.hxx>
@@ -354,6 +354,8 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <o3tl/numeric.hxx>
+#include <o3tl/ptr_container.hxx>
 #include <officecfg/Office/Calc.hxx>
 #include <officecfg/Setup.hxx>
 #include <officecfg/System.hxx>
@@ -497,6 +499,7 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xoutbmp.hxx>
+#include <thread>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/color.hxx>
 #include <tools/date.hxx>

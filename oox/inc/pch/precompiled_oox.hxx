@@ -25,6 +25,7 @@
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <algorithm>
 #include <assert.h>
+#include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
@@ -321,6 +322,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -339,6 +341,7 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
@@ -401,6 +404,9 @@
 #include <svx/unoapi.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
+#include <tools/color.hxx>
+#include <tools/date.hxx>
+#include <tools/datetime.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mapunit.hxx>

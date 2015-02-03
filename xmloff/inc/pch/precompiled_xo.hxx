@@ -396,6 +396,7 @@
 #include <com/sun/star/text/XLineNumberingProperties.hpp>
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -416,6 +417,7 @@
 #include <com/sun/star/text/XTextShapesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Exception.hpp>
@@ -487,6 +489,8 @@
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
+#include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -530,7 +534,6 @@
 #include <set>
 #include <stack>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <svl/itemset.hxx>
 #include <svl/nfsymbol.hxx>
@@ -548,6 +551,7 @@
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/helpers.hxx>
+#include <tools/solar.h>
 #include <tools/time.hxx>
 #include <tools/urlobj.hxx>
 #include <typeinfo>

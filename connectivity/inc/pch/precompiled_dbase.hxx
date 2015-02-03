@@ -19,6 +19,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -43,10 +44,12 @@
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/thread.h>
 #include <rtl/math.hxx>
 #include <rtl/strbuf.hxx>
+#include <sal/config.h>
 #include <stdio.h>
 #include <svl/converter.hxx>
 #include <svl/zforlist.hxx>

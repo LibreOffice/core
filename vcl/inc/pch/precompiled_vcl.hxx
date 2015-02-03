@@ -88,7 +88,6 @@
 #include "rtl/instance.hxx"
 #include "rtl/logfile.hxx"
 #include "rtl/math.hxx"
-#include "rtl/process.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/tencinfo.h"
@@ -137,6 +136,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2isize.hxx>
 #include <boost/bind.hpp>
+#include <boost/functional/hash.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/mem_fn.hpp>
 #include <boost/optional.hpp>
@@ -287,6 +287,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
@@ -296,6 +297,8 @@
 #include <ctype.h>
 #include <fcntl.h>
 #include <functional>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>

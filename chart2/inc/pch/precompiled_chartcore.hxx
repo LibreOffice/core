@@ -33,6 +33,7 @@
 #include <boost/bind.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
@@ -84,11 +85,9 @@
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
-#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -236,6 +235,7 @@
 #include <drawinglayer/XShapeDumper.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <editeng/unoprnms.hxx>
@@ -279,6 +279,7 @@
 #include <svl/zformat.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/XPropertyTable.hxx>
+#include <svx/charthelper.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/objfac3d.hxx>
@@ -296,10 +297,10 @@
 #include <svx/xtable.hxx>
 #include <time.h>
 #include <tools/color.hxx>
-#include <tools/debug.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/solar.h>
 #include <ucbhelper/content.hxx>
+#include <unordered_map>
 #include <unotools/charclass.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/lingucfg.hxx>

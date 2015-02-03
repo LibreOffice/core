@@ -20,7 +20,9 @@
 #include "osl/diagnose.hxx"
 #include "osl/module.h"
 #include "osl/module.hxx"
+#include "osl/pipe.h"
 #include "osl/process.h"
+#include "osl/socket.h"
 #include "osl/thread.h"
 #include "osl/thread.hxx"
 #include "osl/time.h"
@@ -53,7 +55,6 @@
 #include <assert.h>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
-#include <boost/unordered_map.hpp>
 #include <cassert>
 #include <config_features.h>
 #include <config_folders.h>
@@ -69,6 +70,7 @@
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
 #include <osl/endian.h>
+#include <osl/file.h>
 #include <osl/file.hxx>
 #include <osl/interlck.h>
 #include <osl/module.h>
@@ -106,6 +108,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

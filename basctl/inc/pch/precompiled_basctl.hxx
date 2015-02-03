@@ -14,18 +14,14 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <algorithm>
 #include <basic/basicmanagerrepository.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
-#include <basic/codecompletecache.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbuno.hxx>
-#include <basic/sbx.hxx>
 #include <boost/make_shared.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <cassert>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -33,7 +29,6 @@
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/UnoControlDialog.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/awt/XUnoControlContainer.hpp>
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
@@ -49,7 +44,6 @@
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
@@ -60,7 +54,6 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -73,11 +66,7 @@
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/packages/manifest/ManifestWriter.hpp>
-#include <com/sun/star/reflection/XIdlField.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/resource/StringResource.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
@@ -93,7 +82,6 @@
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -102,10 +90,6 @@
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Sequence.h>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/util/VetoException.hpp>
@@ -114,34 +98,26 @@
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/scoped_disposing_ptr.hxx>
-#include <comphelper/sequence.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/syntaxhighlight.hxx>
 #include <comphelper/types.hxx>
 #include <config_options.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <deque>
 #include <editeng/sizeitem.hxx>
 #include <editeng/unolingu.hxx>
 #include <framework/documentundoguard.hxx>
+#include <initializer_list>
 #include <map>
 #include <o3tl/compat_functional.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <osl/process.h>
-#include <rtl/bootstrap.hxx>
 #include <rtl/uri.hxx>
-#include <rtl/ustring.hxx>
-#include <sal/config.h>
-#include <sal/macros.h>
 #include <set>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -150,7 +126,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/docfile.hxx>
-#include <sfx2/genlink.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/minfitem.hxx>
@@ -159,14 +134,10 @@
 #include <sfx2/passwd.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/sfxdefs.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/storage.hxx>
-#include <sot/storinfo.hxx>
-#include <stddef.h>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
@@ -178,7 +149,6 @@
 #include <svl/whiter.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/textwindowpeer.hxx>
 #include <svtools/treelistentry.hxx>
@@ -201,7 +171,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
-#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -211,12 +180,9 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <unotools/syslocale.hxx>
-#include <vcl/bitmap.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/help.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/print.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <vcl/settings.hxx>
@@ -224,8 +190,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
-#include <vcl/texteng.hxx>
-#include <vcl/textview.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/txtattr.hxx>
 #include <vcl/unohelp.hxx>

@@ -18,6 +18,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <cassert>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -78,6 +79,7 @@
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
+#include <com/sun/star/registry/CannotRegisterImplementationException.hpp>
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #include <com/sun/star/security/RuntimePermission.hpp>
 #include <com/sun/star/security/XAccessController.hpp>
@@ -145,6 +147,7 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include <unoidl/unoidl.hxx>
+#include <unordered_map>
 #include <vector>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -72,12 +72,14 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/alloca.h>
+#include <sal/config.h>
 #include <sal/types.h>
 #include <stdio.h>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
+#include <utility>
 #include <vcl/bitmapex.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/gdimtf.hxx>

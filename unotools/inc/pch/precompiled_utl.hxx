@@ -46,7 +46,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
-#include <com/sun/star/i18n/LocaleCalendar.hpp>
+#include <com/sun/star/i18n/LocaleCalendar2.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
@@ -120,6 +120,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -134,6 +135,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -163,7 +165,6 @@
 #include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
-#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>

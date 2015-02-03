@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <boost/function.hpp>
-#include <unordered_map>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -46,17 +45,16 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <comphelper/asyncnotification.hxx>
 #include <comphelper/attributelist.hxx>
 #include <comphelper/flagguard.hxx>
+#include <comphelper/getexpandeduri.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -64,16 +62,17 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/proptypehlp.hxx>
+#include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <limits.h>
 #include <osl/conditn.hxx>
+#include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <queue>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/config.h>
 #include <sal/macros.h>
@@ -85,6 +84,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <unordered_map>
 #include <unotools/bootstrap.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/configmgr.hxx>

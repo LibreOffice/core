@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -123,6 +124,7 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpagv.hxx>

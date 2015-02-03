@@ -59,6 +59,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 #include <utility>
 #include <vector>
 
