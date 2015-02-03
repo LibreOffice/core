@@ -218,7 +218,7 @@ class enable
 
 void Desktop::enableAcceptors()
 {
-    SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::enableAcceptors");
+    SAL_INFO( "desktop.app", "enableAcceptors");
     if (!bAccept)
     {
         // from now on, all new acceptors are enabled

@@ -222,8 +222,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
 void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     throw (RuntimeException, std::exception)
 {
-    SAL_INFO( "desktop.splash", "::SplashScreen::setValue (lo119109)" );
-    SAL_INFO( "desktop.splash", "value=" << nValue );
+    SAL_INFO( "desktop.splash", "setValue: " << nValue );
 
     SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {

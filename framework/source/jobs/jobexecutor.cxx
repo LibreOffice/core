@@ -200,7 +200,7 @@ void JobExecutor::disposing() {
  */
 void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::RuntimeException, std::exception)
 {
-    SAL_INFO( "fwk", "fwk (as96863) JobExecutor::trigger()");
+    SAL_INFO( "fwk", "JobExecutor::trigger()");
 
     css::uno::Sequence< OUString > lJobs;
 

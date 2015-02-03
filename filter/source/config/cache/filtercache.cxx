@@ -813,7 +813,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigTypes;
             sPath           = CFGPACKAGE_TD_TYPES;
             pConfig         = &m_xConfigTypes;
-            sRtlLog         = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_TYPES)";
+            sRtlLog         = "impl_openconfig(E_PROVIDER_TYPES)";
         }
         break;
 
@@ -823,7 +823,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigFilters;
             sPath           = CFGPACKAGE_TD_FILTERS;
             pConfig         = &m_xConfigFilters;
-            sRtlLog         = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_FILTERS)";
+            sRtlLog         = "impl_openconfig(E_PROVIDER_FILTERS)";
         }
         break;
 
@@ -833,7 +833,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
                 return m_xConfigOthers;
             sPath   = CFGPACKAGE_TD_OTHERS;
             pConfig = &m_xConfigOthers;
-            sRtlLog = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OTHERS)";
+            sRtlLog = "impl_openconfig(E_PROVIDER_OTHERS)";
         }
         break;
 
@@ -843,7 +843,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
             // the old configuration format only. Its not cached!
             sPath   = CFGPACKAGE_TD_OLD;
             pConfig = &xOld;
-            sRtlLog = "framework (as96863) ::FilterCache::impl_openconfig(E_PROVIDER_OLD)";
+            sRtlLog = "impl_openconfig(E_PROVIDER_OLD)";
         }
         break;
 
@@ -1337,7 +1337,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
-            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load std");
+            SAL_INFO( "filter.config", "FilterCache::load std");
             impl_loadSet(xTypes, E_TYPE, E_READ_STANDARD, &m_lTypes);
         }
     }
@@ -1354,7 +1354,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
-            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all types");
+            SAL_INFO( "filter.config", "FilterCache::load all types");
             impl_loadSet(xTypes, E_TYPE, E_READ_UPDATE, &m_lTypes);
         }
     }
@@ -1371,7 +1371,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
-            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all filters");
+            SAL_INFO( "filter.config", "FilterCache::load all filters");
             impl_loadSet(xFilters, E_FILTER, E_READ_ALL, &m_lFilters);
         }
     }
@@ -1388,7 +1388,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
-            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all frame loader");
+            SAL_INFO( "filter.config", "FilterCache::load all frame loader");
             impl_loadSet(xLoaders, E_FRAMELOADER, E_READ_ALL, &m_lFrameLoaders);
         }
     }
@@ -1405,7 +1405,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
         // to our calli ...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
-            SAL_INFO( "filter.config", "framework (as96863) ::FilterCache::load all content handler");
+            SAL_INFO( "filter.config", "FilterCache::load all content handler");
             impl_loadSet(xHandlers, E_CONTENTHANDLER, E_READ_ALL, &m_lContentHandlers);
         }
     }

@@ -1346,9 +1346,7 @@ int Desktop::Main()
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
     // Startup screen
-    SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
     OpenSplashScreen();
-    SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
     SetSplashScreenProgress(10);
 
@@ -1383,7 +1381,6 @@ int Desktop::Main()
 #if HAVE_FEATURE_DESKTOP
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
-        SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main -> Lockfile" );
         m_xLockfile.reset(new Lockfile);
 
         if ( !rCmdLineArgs.IsHeadless() && !rCmdLineArgs.IsInvisible() &&
@@ -1392,16 +1389,13 @@ int Desktop::Main()
             // Lockfile exists, and user clicked 'no'
             return EXIT_FAILURE;
         }
-        SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::Main <- Lockfile" );
 
         // check if accessibility is enabled but not working and allow to quit
-        SAL_INFO( "desktop.app", "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             if( !InitAccessBridge() )
                 return EXIT_FAILURE;
         }
-        SAL_INFO( "desktop.app", "} GetEnableATToolSupport" );
 #endif
 
         // terminate if requested...

@@ -559,11 +559,10 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-    SAL_INFO( "fwk.desktop", "framework (as96863) ::Desktop::loadComponentFromURL" );
+    SAL_INFO( "fwk.desktop", "loadComponentFromURL" );
 
     css::uno::Reference< css::frame::XComponentLoader > xThis(static_cast< css::frame::XComponentLoader* >(this), css::uno::UNO_QUERY);
 
-    SAL_INFO( "fwk.desktop", "PERFORMANCE - Desktop::loadComponentFromURL()" );
     return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
