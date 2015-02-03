@@ -843,31 +843,6 @@ short Dialog::Execute()
 
 #else
 
-    MLODialogKind kind;
-
-    switch (GetType())
-    {
-    case WINDOW_MESSBOX:
-        kind = MLODialogMessage;
-        break;
-    case WINDOW_INFOBOX:
-        kind = MLODialogInformation;
-        break;
-    case WINDOW_WARNINGBOX:
-        kind = MLODialogWarning;
-        break;
-    case WINDOW_ERRORBOX:
-        kind = MLODialogError;
-        break;
-    case WINDOW_QUERYBOX:
-        kind = MLODialogQuery;
-        break;
-    default:
-        SAL_WARN("vcl", "Dialog::Execute: Unhandled window type %d" << GetType());
-        kind = MLODialogInformation;
-        break;
-    }
-
     // touch_ui_dialog_modal was dummied out both for Android and iOS (well, TiledLibreOffice anyway)
     // For Android it returned MLODialogOK always, for iOS Cancel. Let's go with OK.
     // MLODialogResult result = touch_ui_dialog_modal(kind, ImplGetDialogText(this).getStr());
