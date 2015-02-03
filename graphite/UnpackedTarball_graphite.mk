@@ -14,6 +14,7 @@ $(eval $(call gb_UnpackedTarball_set_tarball,graphite,$(GRAPHITE_TARBALL)))
 # http://projects.palaso.org/issues/1115
 $(eval $(call gb_UnpackedTarball_add_patches,graphite,\
 	graphite/graphite2.issue1115.patch.1 \
+    graphite/graphite2.win64.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
