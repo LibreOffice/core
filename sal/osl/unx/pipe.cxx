@@ -370,7 +370,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         int fd = socket(AF_UNIX, SOCK_STREAM, 0);
         if ( fd < 0 )
         {
-            SAL_WARN("osl.pipe" "socket() failed: " << strerror(errno));
+            SAL_WARN("osl.pipe", "socket() failed: " << strerror(errno));
             return;
         }
         memset(&addr, 0, sizeof(addr));
