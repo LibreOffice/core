@@ -2340,16 +2340,16 @@ bool ScInterpreter::CheckMatrix(bool _bLOG, sal_uInt8& nCase, SCSIZE& nCX,
 // LINEST
 void ScInterpreter::ScRGP()
 {
-    CalulateRGPRKP(false);
+    CalculateRGPRKP(false);
 }
 
 // LOGEST
 void ScInterpreter::ScRKP()
 {
-    CalulateRGPRKP(true);
+    CalculateRGPRKP(true);
 }
 
-void ScInterpreter::CalulateRGPRKP(bool _bRKP)
+void ScInterpreter::CalculateRGPRKP(bool _bRKP)
 {
     sal_uInt8 nParamCount = GetByte();
     if (!MustHaveParamCount( nParamCount, 1, 4 ))

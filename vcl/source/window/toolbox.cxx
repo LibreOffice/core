@@ -2174,7 +2174,7 @@ void ToolBox::ImplFormat( bool bResize )
 
     mpData->ImplClearLayoutData();
 
-    // recalulate positions and sizes
+    // recalculate positions and sizes
     Rectangle       aEmptyRect;
     long            nLineSize;
     long            nLeft;
@@ -2481,7 +2481,7 @@ void ToolBox::ImplFormat( bool bResize )
                     {
                         it->maCalcRect.Left()     = nX;
                         // if special TBX_LAYOUT_LOCKVERT lock vertical position
-                        // don't recalulate the vertical position of the item
+                        // don't recalculate the vertical position of the item
                         if ( meLayoutMode == TBX_LAYOUT_LOCKVERT && mnLines == 1 )
                         {
                             // Somewhat of a hack here, calc deletes and re-adds

@@ -724,7 +724,7 @@ void CalculateLookup(bool bHLookup);
 bool FillEntry(ScQueryEntry& rEntry);
 void CalculateAddSub(bool _bSub);
 void CalculateTrendGrowth(bool _bGrowth);
-void CalulateRGPRKP(bool _bRKP);
+void CalculateRGPRKP(bool _bRKP);
 void CalculateSumX2MY2SumX2DY2(bool _bSumX2DY2);
 void CalculateMatrixValue(const ScMatrix* pMat,SCSIZE nC,SCSIZE nR);
 bool CheckMatrix(bool _bLOG,sal_uInt8& nCase,SCSIZE& nCX,SCSIZE& nCY,SCSIZE& nRX,SCSIZE& nRY,SCSIZE& M,SCSIZE& N,ScMatrixRef& pMatX,ScMatrixRef& pMatY);
