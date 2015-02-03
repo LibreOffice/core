@@ -109,7 +109,6 @@
 #include <dbaccess/dbaundomanager.hxx>
 #include <editeng/paperinf.hxx>
 #include <framework/titlehelper.hxx>
-#include <salhelper/thread.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
 #include <svx/svdlayer.hxx>
@@ -473,67 +472,6 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
     return aRet;
 }
 
-namespace
-{
-    class FactoryLoader : public salhelper::Thread
-    {
-        OUString                          m_sMimeType;
-        uno::Reference< uno::XComponentContext > m_xContext;
-    public:
-        FactoryLoader(const OUString& _sMimeType,uno::Reference< uno::XComponentContext > const & _xContext)
-            :Thread("FactoryLoader")
-            ,m_sMimeType(_sMimeType)
-            ,m_xContext(_xContext)
-        {}
-
-    private:
-        virtual ~FactoryLoader(){}
-
-        virtual void execute() SAL_OVERRIDE;
-     };
-
-    void FactoryLoader::execute()
-    {
-        try
-        {
-            uno::Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(m_xContext);
-            uno::Reference<frame::XComponentLoader> xFrameLoad(xDesktop,uno::UNO_QUERY);
-            OUString sTarget("_blank");
-            sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
-            uno::Reference< frame::XFrame> xFrame = xDesktop->findFrame(sTarget,nFrameSearchFlag);
-            xFrameLoad.set(xFrame,uno::UNO_QUERY);
-
-            if ( xFrameLoad.is() )
-            {
-                uno::Sequence < beans::PropertyValue > aArgs( 3);
-                sal_Int32 nLen = 0;
-                aArgs[nLen].Name = "AsTemplate";
-                aArgs[nLen++].Value <<= sal_False;
-
-                aArgs[nLen].Name = "ReadOnly";
-                aArgs[nLen++].Value <<= sal_True;
-
-                aArgs[nLen].Name = "Hidden";
-                aArgs[nLen++].Value <<= sal_True;
-
-                ::comphelper::MimeConfigurationHelper aHelper(m_xContext);
-                SvtModuleOptions aModuleOptions;
-                uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
-                    aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(m_sMimeType) )),
-                    OUString(), // empty frame name
-                    0,
-                    aArgs
-                    ),uno::UNO_QUERY);
-                ::comphelper::disposeComponent(xModel);
-            }
-        }
-        catch (const uno::Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-}
-
 struct OReportDefinitionImpl
 {
     uno::WeakReference< uno::XInterface >                   m_xParent;
@@ -573,7 +511,6 @@ struct OReportDefinitionImpl
                                                             m_pObjectContainer;
     ::boost::shared_ptr<rptui::OReportModel>                m_pReportModel;
     ::rtl::Reference< ::dbaui::UndoManager >                m_pUndoManager;
-    std::vector< rtl::Reference<salhelper::Thread> >        m_aFactoryLoaders;
     OUString                                         m_sCaption;
     OUString                                         m_sCommand;
     OUString                                         m_sFilter;
@@ -717,21 +654,6 @@ void OReportDefinition::init()
 {
     try
     {
-        static bool s_bFirstTime = true;
-        if ( s_bFirstTime )
-        {
-            s_bFirstTime = false;
-            const uno::Sequence< OUString > aMimeTypes = getAvailableMimeTypes();
-            const OUString* pIter = aMimeTypes.getConstArray();
-            const OUString* pEnd  = pIter + aMimeTypes.getLength();
-            for ( ; pIter != pEnd; ++pIter )
-            {
-                rtl::Reference<salhelper::Thread> xCreatorThread = new FactoryLoader(*pIter,m_aProps->m_xContext);
-                m_pImpl->m_aFactoryLoaders.push_back(xCreatorThread);
-                xCreatorThread->launch();
-            }
-        }
-
         m_pImpl->m_pReportModel.reset(new OReportModel(this));
         m_pImpl->m_pReportModel->GetItemPool().FreezeIdRanges();
         m_pImpl->m_pReportModel->SetScaleUnit( MAP_100TH_MM );
@@ -821,14 +743,6 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_xNumberedControllers.clear();
     }
     // <--- SYNCHRONIZED
-
-    SolarMutexReleaser rel;
-    for (std::vector< rtl::Reference<salhelper::Thread> >::iterator i(
-             m_pImpl->m_aFactoryLoaders.begin());
-         i != m_pImpl->m_aFactoryLoaders.end(); ++i)
-    {
-        (*i)->join();
-    }
 }
 
 
