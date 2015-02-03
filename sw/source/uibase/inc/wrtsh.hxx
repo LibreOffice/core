@@ -396,7 +396,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     //"Handler" for changes at DrawView - for controls.
     virtual void DrawSelChanged( ) SAL_OVERRIDE;
 
-    // jump to bookmark and set the "selctions-flags" correctly again
+    // jump to bookmark and set the "selections-flags" correctly again
     bool GotoMark( const ::sw::mark::IMark* const pMark );
     bool GotoMark( const ::sw::mark::IMark* const pMark, bool bSelect, bool bStart );
     bool GotoMark( const OUString& rName );

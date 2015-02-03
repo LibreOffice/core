@@ -458,7 +458,7 @@ void SwFldFuncPage::UpdateSubType()
 {
     const sal_uInt16 nTypeId = (sal_uInt16)reinterpret_cast<sal_uLong>(m_pTypeLB->GetEntryData(GetTypeSel()));
 
-    // fill Selction-Listbox
+    // fill Selection-Listbox
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
 

@@ -89,8 +89,8 @@ STDMETHODIMP CAccText::get_characterExtents(long offset, IA2CoordinateType coord
 }
 
 /**
-   * Get slections count.
-   * @param nSelections Variant to accpet slections count.
+   * Get selections count.
+   * @param nSelections Variant to accpet selections count.
    * @return Result.
 */
 STDMETHODIMP CAccText::get_nSelections(long * nSelections)

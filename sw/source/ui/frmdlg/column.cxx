@@ -351,7 +351,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         rWrtShell.StartAction();
         rWrtShell.Push();
         rWrtShell.SetFlyFrmAttr( aTmp );
-        // undo the frame selction again
+        // undo the frame selection again
         if(rWrtShell.IsFrmSelected())
         {
             rWrtShell.UnSelectFrm();

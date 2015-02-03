@@ -873,7 +873,7 @@ SwXTextViewCursor::~SwXTextViewCursor()
 {
 }
 
-// used to determine if there is a text selction or not.
+// used to determine if there is a text selection or not.
 // If there is no text selection the functions that need a working
 // cursor will be disabled (throw RuntimeException). This will be the case
 // for the following interfaces:

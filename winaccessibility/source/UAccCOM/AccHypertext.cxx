@@ -97,8 +97,8 @@ STDMETHODIMP CAccHypertext::get_characterExtents(long offset, IA2CoordinateType 
 }
 
 /**
-   * Get slections count.
-   * @param nSelections Variant to accpet slections count.
+   * Get selections count.
+   * @param nSelections Variant to accpet selections count.
    * @return Result.
 */
 STDMETHODIMP CAccHypertext::get_nSelections(long * nSelections)

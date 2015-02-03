@@ -263,7 +263,7 @@ void FocusManager::NotifyFocusChangeListeners (void) const
     // Create a copy of the listener list to be safe when that is modified.
     ::std::vector<Link> aListeners (maFocusChangeListeners);
 
-    // Tell the slection change listeners that the selection has changed.
+    // Tell the selection change listeners that the selection has changed.
     ::std::vector<Link>::iterator iListener (aListeners.begin());
     ::std::vector<Link>::iterator iEnd (aListeners.end());
     for (; iListener!=iEnd; ++iListener)
