@@ -1048,7 +1048,7 @@ void SwCntntFrm::MakeAll()
     LockJoin();
     long nFormatCount = 0;
     // - loop prevention
-    int nConsequetiveFormatsWithoutChange = 0;
+    int nConsecutiveFormatsWithoutChange = 0;
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
 #ifdef DBG_UTIL
@@ -1326,9 +1326,9 @@ void SwCntntFrm::MakeAll()
             if( nFormatCount > STOP_FLY_FORMAT )
                 SetFlyLock( true );
             // - loop prevention
-            // No format any longer, if <cnStopFormat> consequetive formats
+            // No format any longer, if <cnStopFormat> consecutive formats
             // without change occur.
-            if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
+            if ( nConsecutiveFormatsWithoutChange <= cnStopFormat )
             {
                 Format();
             }
@@ -1445,11 +1445,11 @@ void SwCntntFrm::MakeAll()
             if ( aOldFrm_StopFormat == Frm() &&
                  aOldPrt_StopFormat == Prt() )
             {
-                ++nConsequetiveFormatsWithoutChange;
+                ++nConsecutiveFormatsWithoutChange;
             }
             else
             {
-                nConsequetiveFormatsWithoutChange = 0;
+                nConsecutiveFormatsWithoutChange = 0;
             }
         }
 
@@ -1634,7 +1634,7 @@ void SwCntntFrm::MakeAll()
         if ( bMoveOrFit && GetUpper() == pOldUp )
         {
             // FME 2007-08-30 #i81146# new loop control
-            if ( nConsequetiveFormatsWithoutChange <= cnStopFormat )
+            if ( nConsecutiveFormatsWithoutChange <= cnStopFormat )
             {
                 Prepare( PREP_MUST_FIT, 0, false );
                 mbValidSize = false;
