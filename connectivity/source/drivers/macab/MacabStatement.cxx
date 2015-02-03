@@ -329,7 +329,7 @@ void MacabCommonStatement::selectRecords(MacabResultSet *pResult) const throw(SQ
             MacabCondition *pCondition = analyseWhereClause(pParseNode);
             if (pCondition->isAlwaysTrue())
                 pResult->allMacabRecords();
-            else if (!pCondition->isAlwaysFalse())
+            else
                 pResult->someMacabRecords(pCondition);
             delete pCondition;
             return;
