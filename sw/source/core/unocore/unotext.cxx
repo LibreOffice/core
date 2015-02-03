@@ -1663,14 +1663,21 @@ SwXText::convertToTextFrame(
 
     // see if there are frames already anchored to this node
     std::set<OUString> aAnchoredFrames;
+    // for shapes, we have to work with the SdrObjects, as unique name is not guaranteed in their frame format
+    std::set<const SdrObject*> aAnchoredShapes;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
     {
         const SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        if (FLY_AT_PARA == rAnchor.GetAnchorId() &&
+        if ((FLY_AT_PARA == rAnchor.GetAnchorId() || FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
                 aStartPam.Start()->nNode.GetIndex() <= rAnchor.GetCntntAnchor()->nNode.GetIndex() &&
                 aStartPam.End()->nNode.GetIndex() >= rAnchor.GetCntntAnchor()->nNode.GetIndex())
-            aAnchoredFrames.insert(pFrmFmt->GetName());
+        {
+            if (pFrmFmt->Which() == RES_DRAWFRMFMT)
+                aAnchoredShapes.insert(pFrmFmt->FindSdrObject());
+            else
+                aAnchoredFrames.insert(pFrmFmt->GetName());
+        }
     }
 
     const uno::Reference<text::XTextFrame> xNewFrame(
@@ -1714,7 +1721,7 @@ SwXText::convertToTextFrame(
                     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
                     {
                         SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
-                        if( aAnchoredFrames.find( pFrmFmt->GetName() ) != aAnchoredFrames.end() )
+                        if (aAnchoredFrames.find(pFrmFmt->GetName()) != aAnchoredFrames.end() || aAnchoredShapes.find(pFrmFmt->FindSdrObject()) != aAnchoredShapes.end())
                         {
                             // copy the anchor to the next paragraph
                             SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
