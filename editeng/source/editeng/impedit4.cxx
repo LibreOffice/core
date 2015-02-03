@@ -2740,8 +2740,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     bool bLenChanged = false;
     EditUndoTransliteration* pUndo = NULL;
 
-    utl::TransliterationWrapper aTranslitarationWrapper( ::comphelper::getProcessComponentContext(), nTransliterationMode );
-    bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
+    utl::TransliterationWrapper aTransliterationWrapper( ::comphelper::getProcessComponentContext(), nTransliterationMode );
+    bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
 
     for ( sal_Int32 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
@@ -2814,7 +2814,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 #endif
 
                 Sequence< sal_Int32 > aOffsets;
-                OUString aNewText( aTranslitarationWrapper.transliterate(aNodeStr,
+                OUString aNewText( aTransliterationWrapper.transliterate(aNodeStr,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
@@ -2902,7 +2902,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 #endif
 
                 Sequence< sal_Int32 > aOffsets;
-                OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr,
+                OUString aNewText( aTransliterationWrapper.transliterate( aNodeStr,
                         GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nCurrentStart, nLen, &aOffsets ));
 
@@ -2942,7 +2942,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 const sal_Int32 nLen = nCurrentEnd - nCurrentStart;
 
                 Sequence< sal_Int32 > aOffsets;
-                OUString aNewText( aTranslitarationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
+                OUString aNewText( aTransliterationWrapper.transliterate( aNodeStr, nLanguage, nCurrentStart, nLen, &aOffsets ) );
 
                 if (aNodeStr != aNewText.copy( nCurrentStart, nLen ))
                 {

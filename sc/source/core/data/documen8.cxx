@@ -1200,8 +1200,8 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 {
     OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
 
-    utl::TransliterationWrapper aTranslitarationWrapper( comphelper::getProcessComponentContext(), nType );
-    bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
+    utl::TransliterationWrapper aTransliterationWrapper( comphelper::getProcessComponentContext(), nType );
+    bool bConsiderLanguage = aTransliterationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 
     boost::scoped_ptr<ScEditEngineDefaulter> pEngine;        // not using pEditEngine member because of defaults
@@ -1300,7 +1300,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
 
                     uno::Sequence<sal_Int32> aOffsets;
-                    OUString aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
+                    OUString aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
 
                     if ( aNewStr != aOldStr )
                     {
