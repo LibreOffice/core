@@ -1268,8 +1268,19 @@ Assembly ^ TypeEmitter::type_resolve(
         }
         else
         {
-            field_type =
-                get_type( pseq_members[ member_pos ] );
+            field_type = get_type( pseq_members[ member_pos ] );
+
+            if (field_type->IsArray
+                && m_incomplete_structs[cts_name]
+                && !field_type->Namespace->Equals("System"))
+            {
+                //Find the value type. In case of sequence<sequence< ... > > find the actual value type
+                ::System::Type ^ value = field_type;
+                while ((value = value->GetElementType())->IsArray);
+                //If the value type is a struct then make sure it is fully created.
+                get_complete_struct(value->FullName);
+                field_type = get_type(pseq_members[member_pos]);
+            }
         }
         members[ member_pos ] =
             entry->m_type_builder->DefineField(
@@ -1340,12 +1351,6 @@ Assembly ^ TypeEmitter::type_resolve(
         }
         else if (field_type->IsArray)
         {
-            //Find the value type. In case of sequence<sequence< ... > > find the actual value type
-            ::System::Type ^ value = field_type;
-            while ((value = value->GetElementType())->IsArray);
-            //If the value type is a struct then make sure it is fully created.
-            get_complete_struct(value->FullName);
-
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldc_I4_0 );
             code->Emit(
