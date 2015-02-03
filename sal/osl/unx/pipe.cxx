@@ -61,20 +61,6 @@ static struct
     { -1,              osl_Pipe_E_invalidError      }
 };
 
-/* map */
-/* mfe: NOT USED
-   static int osl_NativeFromPipeError(oslPipeError errorCode)
-   {
-   int i = 0;
-
-   while ((PipeError[i].error != osl_Pipe_E_invalidError) &&
-   (PipeError[i].error != errorCode)) i++;
-
-   return PipeError[i].errcode;
-
-   }
-*/
-
 /* reverse map */
 static oslPipeError osl_PipeErrorFromNative(int nativeType)
 {
