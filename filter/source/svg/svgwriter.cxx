@@ -1157,6 +1157,22 @@ void SVGTextWriter::startTextShape()
         mbIsTextShapeStarted = true;
         maParentFont = vcl::Font();
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextShape" );
+
+        // if text is rotated, set transform matrix at text element
+        const vcl::Font& rFont = mpVDev->GetFont();
+        if( rFont.GetOrientation() )
+            {
+                Point   aRot( maTextPos );
+                OUString aTransform =
+                    "translate(" + OUString::number( aRot.X() ) +
+                    "," + OUString::number( aRot.Y() ) + ") rotate(" +
+                    OUString::number( rFont.GetOrientation() * -0.1 ) +
+                    ") translate(" + OUString::number( -aRot.X() ) +
+                    "," + OUString::number( -aRot.Y() ) + ")";
+
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
+            }
+
         mpTextShapeElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, true, mbIWS );
         startTextParagraph();
     }
@@ -1244,21 +1260,6 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, OUString::number( maTextPos.X() ) );
     if( bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( maTextPos.Y() ) );
-
-    // if text is rotated, set transform matrix at new tspan element
-    const vcl::Font& rFont = mpVDev->GetFont();
-    if( rFont.GetOrientation() )
-    {
-        Point   aRot( maTextPos );
-        OUString aTransform =
-                "translate(" + OUString::number( aRot.X() ) +
-                "," + OUString::number( aRot.Y() ) + ") rotate(" +
-                OUString::number( rFont.GetOrientation() * -0.1 ) +
-                ") translate(" + OUString::number( -aRot.X() ) +
-                "," + OUString::number( -aRot.Y() ) + ")";
-
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
-    }
 
     mpTextPositionElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
 }
