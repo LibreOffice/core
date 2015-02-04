@@ -138,6 +138,8 @@ copy-stuff:
 	rm -Rf assets/share # pre-clean it
 	mkdir -p assets/share/config
 	cp -R $(INSTDIR)/share/registry assets/share
+# Filter data is needed by e.g. the drawingML preset shape import.
+	cp -R $(INSTDIR)/share/filter assets/share
 # Make sure the soffice.cfg directory is always created, it's not possible to hit any keys without it.
 	if ! test z$(DISABLE_UI) = zTRUE; then \
 		echo "Copying UI files into the apk"; \
