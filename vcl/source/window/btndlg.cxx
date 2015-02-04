@@ -332,7 +332,7 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
             if (it->mbOwnButton )
                 delete it->mpPushButton;
 
-            maItemList.erase(it);
+            it = maItemList.erase(it);
             break;
         }
     }
