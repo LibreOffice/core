@@ -460,20 +460,19 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	xof \
 	xsltdlg \
 	xsltfilter \
+	$(if $(WITH_MOZAB4WIN), \
+		mozab2 \
+		mozabdrv \
+	) \
+	$(if $(WITH_MOZAB4WIN),,\
+		mork \
+		mozbootstrap \
+	) \
 	$(if $(filter $(OS),WNT), \
 		ado \
 		$(if $(DISABLE_ATL),,oleautobridge) \
 		smplmail \
 		wininetbe1 \
-		$(if $(WITH_MOZAB4WIN), \
-			mozab2 \
-			mozabdrv \
-		) \
-		$(if $(WITH_MOZAB4WIN),,mozbootstrap) \
-	) \
-	$(if $(filter $(OS),WNT),, \
-		mork \
-		mozbootstrap \
 	) \
 	$(if $(filter $(OS),MACOSX), \
 		$(if $(ENABLE_MACOSX_SANDBOX),, \

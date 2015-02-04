@@ -102,19 +102,13 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(OS)-$(CPUNAME),WNT-INTEL)
-
 ifneq ($(WITH_MOZAB4WIN),)
+
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mozab \
 	Library_mozab \
 	Library_mozabdrv \
 ))
-else
-$(eval $(call gb_Module_add_targets,connectivity,\
-	Library_mozbootstrap \
-))
-endif
 
 else ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
