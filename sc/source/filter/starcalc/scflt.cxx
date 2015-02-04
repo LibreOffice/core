@@ -1495,7 +1495,7 @@ void Sc10Import::LoadTables()
                 bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
                 bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
                 bool bHidden = ((DataValue & crfHidden) == crfHidden);
-                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++)
+                for (SCCOL k = SanitizeCol(static_cast<SCCOL>(DataStart)); k <= SanitizeCol(static_cast<SCCOL>(DataEnd)); k++)
                 {
                     pDoc->SetColHidden(k, k, static_cast<SCTAB>(TabNo), bHidden);
                     pDoc->SetColBreak(k, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
