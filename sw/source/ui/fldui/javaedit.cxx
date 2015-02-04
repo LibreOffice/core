@@ -88,6 +88,7 @@ SwJavaEditDialog::SwJavaEditDialog(vcl::Window* pParent, SwWrtShell* pWrtSh) :
 
 SwJavaEditDialog::~SwJavaEditDialog()
 {
+    pSh->EnterStdMode();
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
@@ -95,6 +96,8 @@ SwJavaEditDialog::~SwJavaEditDialog()
 
 IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)
 {
+    pSh->EnterStdMode();
+
     SetFld();
     pMgr->GoPrev();
     pFld = (SwScriptField*)pMgr->GetCurFld();
@@ -107,6 +110,8 @@ IMPL_LINK_NOARG_INLINE_END(SwJavaEditDialog, PrevHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, NextHdl)
 {
+    pSh->EnterStdMode();
+
     SetFld();
     pMgr->GoNext();
     pFld = (SwScriptField*)pMgr->GetCurFld();
