@@ -158,8 +158,6 @@ void LwpParaStyle::Read()
 void LwpParaStyle::Apply(XFParaStyle *pParaStyle)
 {
     assert(pParaStyle);
-    if (!pParaStyle)
-        return;
 
     LwpVirtualPiece *pPiece = NULL;
     //alignment:
