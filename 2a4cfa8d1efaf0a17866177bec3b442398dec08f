@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa1b9901_20628ed9",
+        "filename": "formula/source/core/api/token.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-02-04T15:32:22Z",
+      "side": 1,
+      "message": "I spent a week puzzling on _xlfn.ceiling.math0(23.5) as I had mistaken the type argument for the return type, and svDouble adds a 0...",
+      "revId": "2a4cfa8d1efaf0a17866177bec3b442398dec08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
