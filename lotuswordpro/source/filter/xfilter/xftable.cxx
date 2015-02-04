@@ -87,11 +87,9 @@ void    XFTable::SetColumnStyle(sal_Int32 col, const OUString& style)
     m_aColumns[col] = style;
 }
 
-void    XFTable::AddRow(XFRow *pRow)
+void XFTable::AddRow(XFRow *pRow)
 {
     assert(pRow);
-    if( !pRow )
-        return;
 
     int row = pRow->GetRow();
 
