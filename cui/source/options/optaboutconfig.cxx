@@ -24,6 +24,9 @@
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/util/SearchFlags.hpp>
+#include <unotools/textsearch.hxx>
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -124,9 +127,10 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pPrefCtrl( get<SvSimpleTableContainer>("preferences") ),
     m_pResetBtn( get<PushButton>("reset") ),
     m_pEditBtn( get<PushButton>("edit") ),
+    m_pSearchBtn( get<PushButton>("searchButton") ),
+    m_pSearchEdit( get<Edit>("searchEntry") ),
     m_vectorOfModified(),
-    m_pPrefBox( new SvSimpleTable(*m_pPrefCtrl,
-                                  WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
+    m_pPrefBox( new SvSimpleTable(*m_pPrefCtrl, WB_SCROLL | WB_HSCROLL | WB_VSCROLL ) )
 {
     Size aControlSize(LogicToPixel(Size(385, 230), MAP_APPFONT));
     m_pPrefCtrl->set_width_request(aControlSize.Width());
@@ -135,6 +139,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     m_pEditBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, StandardHdl_Impl ) );
     m_pResetBtn->SetClickHdl( LINK( this, CuiAboutConfigTabPage, ResetBtnHdl_Impl ) );
     m_pPrefBox->SetDoubleClickHdl( LINK(this, CuiAboutConfigTabPage, StandardHdl_Impl) );
+    m_pSearchBtn->SetClickHdl( LINK(this, CuiAboutConfigTabPage, SearchHdl_Impl) );
 
     m_pPrefBox->InsertHeaderEntry(get<FixedText>("preference")->GetText());
     m_pPrefBox->InsertHeaderEntry(get<FixedText>("property")->GetText());
@@ -149,6 +154,11 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     aTabs[2] = aTabs[1] + fWidth * 65;
     aTabs[3] = aTabs[2] + fWidth * 20;
     aTabs[4] = aTabs[3] + fWidth * 8;
+
+    m_options.algorithmType = util::SearchAlgorithms_ABSOLUTE;
+    m_options.transliterateFlags |= i18n::TransliterationModules_IGNORE_CASE;
+    m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
+                                        util::SearchFlags::REG_NOT_ENDOFLINE);
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
     m_pPrefBox->SetAlternatingRowColors( true );
@@ -165,6 +175,10 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& r
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rValue));
 
     m_pPrefBox->Insert( pEntry );
+
+    SvTreeListEntry* pEntryClone = new SvTreeListEntry;
+    pEntryClone->Clone( pEntry );
+    m_prefBoxEntries.push_back( pEntryClone );
 }
 
 void CuiAboutConfigTabPage::Reset()
@@ -654,10 +668,71 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
 
         //update listbox value.
         m_pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
+        //update m_prefBoxEntries
+        SvTreeListEntries::iterator it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
+          [sPropertyPath, sPropertyName](SvTreeListEntry &entry) -> bool
+          {
+              return static_cast< SvLBoxString* >( entry.GetItem(1) )->GetText().equals( sPropertyPath ) &&
+                      static_cast< SvLBoxString* >( entry.GetItem(2) )->GetText().equals( sPropertyName );
+          }
+        );
+        it->ReplaceItem( new SvLBoxString( &(*it), 0, sDialogValue ), 4 );
     }
     catch( uno::Exception& )
     {
     }
+
+    return 0;
+}
+
+IMPL_LINK_NOARG( CuiAboutConfigTabPage, SearchHdl_Impl)
+{
+    m_pPrefBox->Clear();
+    m_pPrefBox->SetUpdateMode( false );
+
+    SvSortMode sortMode = m_pPrefBox->GetModel()->GetSortMode();
+    sal_uInt16 sortedCol = m_pPrefBox->GetSortedCol();
+
+    if( sortMode != SortNone )
+        m_pPrefBox->SortByCol( 0xFFFF );
+
+    if( m_pSearchEdit->GetText().isEmpty() )
+    {
+        for( auto it = m_prefBoxEntries.begin(); it != m_prefBoxEntries.end(); ++it )
+        {
+            SvTreeListEntry* pEntry = new SvTreeListEntry;
+            pEntry->Clone( &(*it) ) ;
+            m_pPrefBox->Insert( pEntry );
+        }
+    }
+    else
+    {
+        m_options.searchString = m_pSearchEdit->GetText();
+        utl::TextSearch textSearch( m_options );
+
+        for(auto it = m_prefBoxEntries.begin(); it != m_prefBoxEntries.end(); ++it)
+        {
+            sal_Int32 endPos, startPos = 0;
+
+            for(size_t i = 1; i < it->ItemCount(); ++i)
+            {
+                OUString scrTxt = static_cast< SvLBoxString* >( it->GetItem(i) )->GetText();
+                endPos = scrTxt.getLength();
+                if( textSearch.SearchForward( scrTxt, &startPos, &endPos ) )
+                {
+                    SvTreeListEntry* pEntry = new SvTreeListEntry;
+                    pEntry->Clone( &(*it) ) ;
+                    m_pPrefBox->Insert( pEntry );
+                    break;
+                }
+            }
+        }
+    }
+
+    if( sortMode != SortNone )
+        m_pPrefBox->SortByCol(sortedCol, sortMode == SortAscending);
+
+    m_pPrefBox->SetUpdateMode( true );
 
     return 0;
 }
