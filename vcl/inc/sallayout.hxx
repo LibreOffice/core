@@ -278,8 +278,6 @@ struct GlyphItem
     int     mnNewWidth;     // width after adjustments
     int     mnXOffset;
 
-    int     mnOrigHeight;    // original glyph height
-    int     mnNewHeight;     // width after adjustments
     int     mnYOffset;
 
     sal_GlyphId maGlyphId;
@@ -304,11 +302,10 @@ public:
             {}
 
             GlyphItem( int nCharPos, sal_GlyphId aGlyphId, const Point& rLinearPos,
-                long nFlags, int nOrigWidth, int nXOffset, int nOrigHeight, int nYOffset )
+                long nFlags, int nOrigWidth, int nXOffset, int nYOffset )
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(nXOffset),
-                mnOrigHeight(nOrigHeight), mnNewHeight(nOrigHeight),
                 mnYOffset(nYOffset),
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
