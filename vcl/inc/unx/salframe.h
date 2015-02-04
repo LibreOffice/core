@@ -76,7 +76,6 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
     X11SalGraphics  *pGraphics_;            // current frame graphics
     X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
 
-    XLIB_Time       nReleaseTime_;      // timestamp of last key release
     sal_uInt16      nKeyCode_;          // last key code
     sal_uInt16      nKeyState_;         // last key state
     int             nCompose_;          // compose state
