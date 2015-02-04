@@ -49,10 +49,6 @@
 #  define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, LOGTAG, __VA_ARGS__))
 #endif
 
-#ifdef IOS
-#include <touch/touch.h>
-#endif
-
 extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if defined( UNX ) && !defined MACOSX && !defined IOS && !defined ANDROID
@@ -114,22 +110,16 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_runMain(JNIEnv* /* env */,
                                                 jobject /* clazz */)
-#else
-extern "C"
-void
-touch_lo_runMain()
-#endif
 {
     int nRet;
     do {
         nRet = soffice_main();
-#ifdef ANDROID
         LOGI("soffice_main returned %d", nRet);
-#endif
     } while (nRet == EXITHELPER_NORMAL_RESTART ||
              nRet == EXITHELPER_CRASH_WITH_RESTART); // pretend to re-start.
 
 }
+#endif
 
 extern "C" void PtylTestEncryptionAndExport(const char *pathname)
 {

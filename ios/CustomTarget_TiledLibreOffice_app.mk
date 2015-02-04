@@ -50,14 +50,14 @@ TiledLibreOffice_setup:
 	# Resources #
 	rm -rf $(TiledLibreOffice_resource) 2>/dev/null
 	mkdir -p $(TiledLibreOffice_resource)
-	mkdir -p $(TiledLibreOffice_resource)/ure
+	mkdir -p $(TiledLibreOffice_resource)/services
 
 	# copy rdb files
-	cp $(INSTDIR)/program/types.rdb	            $(TiledLibreOffice_resource)
+	cp $(INSTDIR)/program/types.rdb	            $(TiledLibreOffice_resource)/udkapi.rdb
 	cp $(INSTDIR)/program/types/offapi.rdb      $(TiledLibreOffice_resource)
 	cp $(INSTDIR)/program/types/oovbaapi.rdb  	$(TiledLibreOffice_resource)
-	cp $(INSTDIR)/program/services/services.rdb $(TiledLibreOffice_resource)
-	cp $(INSTDIR)/program/services.rdb          $(TiledLibreOffice_resource)/ure
+	cp $(INSTDIR)/program/services/services.rdb $(TiledLibreOffice_resource)/services
+	cp $(INSTDIR)/program/services.rdb          $(TiledLibreOffice_resource)
 
 	# copy .res files
 	# program/resource is hardcoded in tools/source/rc/resmgr.cxx. Sure,
@@ -93,7 +93,10 @@ TiledLibreOffice_setup:
 	echo '[Bootstrap]'                                      >  $$file; \
 	echo 'LO_LIB_DIR=file://$$APP_DATA_DIR/lib/'            >> $$file; \
 	echo 'BRAND_BASE_DIR=file://$$APP_DATA_DIR'             >> $$file; \
-	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/registry' >> $$file;
+	echo 'CONFIGURATION_LAYERS=xcsxcu:$${BRAND_BASE_DIR}/share/registry res:$${BRAND_BASE_DIR}/registry' >> $$file; \
+	echo 'UNO_TYPES=file://$$APP_DATA_DIR/udkapi.rdb file://$$APP_DATA_DIR/offapi.rdb' >> $$file; \
+	echo 'UNO_SERVICES=file://$$APP_DATA_DIR/services.rdb file://$$APP_DATA_DIR/services/services.rdb' >> $$file; \
+	echo 'OSL_SOCKET_PATH=$$APP_DATA_DIR/cache' >> $$file
 
 	file=$(TiledLibreOffice_resource)/unorc; \
 	echo '[Bootstrap]' > $$file;

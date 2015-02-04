@@ -50,9 +50,8 @@
 #include <app.hxx>
 #include <salinst.hxx>
 
-// Tiled Rendering is Linux only for now.
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
-// And let's also grab the SvpSalInstance and SvpSalVirtualDevice
+// Let's grab the SvpSalInstance and SvpSalVirtualDevice
 #include <headless/svpinst.hxx>
 #include <headless/svpframe.hxx>
 #include <headless/svpvd.hxx>
@@ -582,6 +581,7 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
     pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
 
+#ifndef IOS
     VirtualDevice aDevice(0, Size(1, 1), (sal_uInt16)32);
     boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
     aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
@@ -595,6 +595,18 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
 
     *pRowStride = pBmpDev->getScanlineStride();
+#else
+    SystemGraphicsData aData;
+    aData.rCGContext = reinterpret_cast<CGContextRef>(pBuffer);
+    // the Size argument is irrelevant, I hope
+    VirtualDevice aDevice(&aData, Size(1, 1), (sal_uInt16)0);
+
+    pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
+                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+
+    (void) pRowStride;
+#endif
+
 #else
     (void) pBuffer;
     (void) nCanvasWidth;

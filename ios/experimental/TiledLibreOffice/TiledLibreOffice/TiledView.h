@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
+
 @interface TiledView : UIView
 
-- (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom;
+- (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom document:(LibreOfficeKitDocument*)document;
 
 @end
 

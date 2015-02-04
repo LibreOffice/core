@@ -15,7 +15,6 @@
 #include <postmac.h>
 
 #include <osl/process.h>
-#include <touch/touch.h>
 
 #include <unicode/udata.h>
 #include <unicode/ucnv.h>
@@ -42,6 +41,10 @@ static NSString *createPaths(NSString *base, NSString *appRootEscaped, NSArray *
 
     return result;
 }
+
+// Force reference to libreofficekit_hook
+extern "C" void *libreofficekit_hook(const char *);
+static __attribute__((used)) void *(*foop)(const char *) = libreofficekit_hook;
 
 extern "C" void lo_initialize(NSString *documentPath)
 {

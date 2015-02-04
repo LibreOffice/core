@@ -6,7 +6,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <touch/touch.h>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitInit.h>
 
 #import "AppDelegate.h"
 #import "DocumentTableViewController.h"
@@ -17,11 +18,13 @@
 @interface AppDelegate ()
 
 - (void)showDocumentList:(NSArray*)documents inFolder:(NSString*)folder;
-- (void)threadMainMethod:(NSString *)documentPath;
 
 @end
 
 @implementation AppDelegate
+
+static LibreOfficeKit* kit;
+static LibreOfficeKitDocument* document;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -72,16 +75,11 @@ const char *ptyl_test_encryption_pathname;
 
     ptyl_test_encryption_pathname = [documentPath UTF8String];
 
-    [[[NSThread alloc] initWithTarget:self selector:@selector(threadMainMethod:) object:documentPath] start];
-    vc.view = [[View alloc] initWithFrame:[self.window frame]];
-}
-
-- (void)threadMainMethod:(NSString *)documentPath
-{
-    @autoreleasepool {
-        lo_initialize(documentPath);
-        touch_lo_runMain();
-    }
+    // kit = lok_init([[[NSBundle mainBundle] bundlePath] UTF8String]);
+    kit = lok_init(NULL);
+    document = kit->pClass->documentLoad(kit, [documentPath UTF8String]);
+    document->pClass->initializeForRendering(document);
+    vc.view = [[View alloc] initWithFrame:[self.window frame] kit:kit document:document];
 }
 
 - (void)showDocumentList:(NSArray*)documents inFolder:(NSString*)folder
@@ -132,36 +130,5 @@ const char *ptyl_test_encryption_pathname;
 }
 
 @end
-
-// dummies
-
-void touch_ui_selection_start(MLOSelectionKind kind,
-                              const void *documentHandle,
-                              MLORect *rectangles,
-                              int rectangleCount,
-                              void *preview)
-{
-}
-
-void touch_ui_selection_none()
-{
-}
-
-MLODialogResult touch_ui_dialog_modal(MLODialogKind kind, const char *message)
-{
-    return MLODialogCancel;
-}
-
-void touch_ui_show_keyboard()
-{
-}
-
-void touch_ui_hide_keyboard()
-{
-}
-
-void touch_ui_damaged(int minX, int minY, int width, int height)
-{
-}
 
 // vim:set shiftwidth=4 softtabstop=4 expandtab:

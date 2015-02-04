@@ -24,7 +24,7 @@
 		BED2594118F6B89000C94C72 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BED2594018F6B89000C94C72 /* MobileCoreServices.framework */; };
 		BEEE02D11860ABDB00FBDE67 /* program in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CE1860ABB700FBDE67 /* program */; };
 		BEEE02D21860ABDB00FBDE67 /* share in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02CF1860ABB700FBDE67 /* share */; };
-		BEEE02D31860ABDB00FBDE67 /* ure in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02D01860ABB700FBDE67 /* ure */; };
+		BEEE02D31860ABDB00FBDE67 /* services in Resources */ = {isa = PBXBuildFile; fileRef = BEEE02D01860ABB700FBDE67 /* services */; };
 		BEEEF9641860740400FBDE67 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEEF9631860740400FBDE67 /* libiconv.dylib */; };
 		BEEEF9661860741400FBDE67 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BEEEF9651860741400FBDE67 /* libz.dylib */; };
 		BEEEF96A1860A25400FBDE67 /* test1.odt in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9691860A25400FBDE67 /* test1.odt */; };
@@ -33,7 +33,7 @@
 		BEEEFE031860A89100FBDE67 /* oovbaapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */; };
 		BEEEFE041860A89100FBDE67 /* rc in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9AA1860A82900FBDE67 /* rc */; };
 		BEEEFE051860A89100FBDE67 /* services.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEF9AB1860A82900FBDE67 /* services.rdb */; };
-		BEEEFE061860A89100FBDE67 /* types.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEFDFD1860A82C00FBDE67 /* types.rdb */; };
+		BEEEFE061860A89100FBDE67 /* udkapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BEEEFDFD1860A82C00FBDE67 /* udkapi.rdb */; };
 		BEEEFE071860A89100FBDE67 /* unorc in Resources */ = {isa = PBXBuildFile; fileRef = BEEEFDFE1860A82C00FBDE67 /* unorc */; };
 /* End PBXBuildFile section */
 
@@ -449,7 +449,7 @@
 		BE6DC92E19D9B5DD00AFB393 /* mutex.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = mutex.c; path = ../../../sal/osl/unx/mutex.c; sourceTree = "<group>"; };
 		BE6DC92F19D9B5DD00AFB393 /* nlsupport.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = nlsupport.c; path = ../../../sal/osl/unx/nlsupport.c; sourceTree = "<group>"; };
 		BE6DC93019D9B5DD00AFB393 /* osxlocale.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = osxlocale.cxx; path = ../../../sal/osl/unx/osxlocale.cxx; sourceTree = "<group>"; };
-		BE6DC93119D9B5DD00AFB393 /* pipe.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = pipe.c; path = ../../../sal/osl/unx/pipe.c; sourceTree = "<group>"; };
+		BE6DC93119D9B5DD00AFB393 /* pipe.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pipe.cxx; path = ../../../sal/osl/unx/pipe.cxx; sourceTree = "<group>"; };
 		BE6DC93219D9B5DD00AFB393 /* process_impl.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = process_impl.cxx; path = ../../../sal/osl/unx/process_impl.cxx; sourceTree = "<group>"; };
 		BE6DC93319D9B5DD00AFB393 /* process.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = process.cxx; path = ../../../sal/osl/unx/process.cxx; sourceTree = "<group>"; };
 		BE6DC93419D9B5DD00AFB393 /* profile.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = profile.cxx; path = ../../../sal/osl/unx/profile.cxx; sourceTree = "<group>"; };
@@ -898,7 +898,7 @@
 		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../../lo.xcconfig; sourceTree = "<group>"; };
 		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = Resources/program; sourceTree = SOURCE_ROOT; };
 		BEEE02CF1860ABB700FBDE67 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = Resources/share; sourceTree = SOURCE_ROOT; };
-		BEEE02D01860ABB700FBDE67 /* ure */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ure; path = Resources/ure; sourceTree = SOURCE_ROOT; };
+		BEEE02D01860ABB700FBDE67 /* services */ = {isa = PBXFileReference; lastKnownFileType = folder; name = services; path = Resources/services; sourceTree = SOURCE_ROOT; };
 		BEEEF9631860740400FBDE67 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BEEEF9651860741400FBDE67 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BEEEF9691860A25400FBDE67 /* test1.odt */ = {isa = PBXFileReference; lastKnownFileType = file; name = test1.odt; path = ../../../../odk/examples/java/DocumentHandling/test/test1.odt; sourceTree = "<group>"; };
@@ -907,7 +907,7 @@
 		BEEEF96F1860A82900FBDE67 /* oovbaapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = oovbaapi.rdb; path = Resources/oovbaapi.rdb; sourceTree = SOURCE_ROOT; };
 		BEEEF9AA1860A82900FBDE67 /* rc */ = {isa = PBXFileReference; lastKnownFileType = text; name = rc; path = Resources/rc; sourceTree = SOURCE_ROOT; };
 		BEEEF9AB1860A82900FBDE67 /* services.rdb */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = services.rdb; path = Resources/services.rdb; sourceTree = SOURCE_ROOT; };
-		BEEEFDFD1860A82C00FBDE67 /* types.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = types.rdb; path = Resources/types.rdb; sourceTree = SOURCE_ROOT; };
+		BEEEFDFD1860A82C00FBDE67 /* udkapi.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = udkapi.rdb; path = Resources/udkapi.rdb; sourceTree = SOURCE_ROOT; };
 		BEEEFDFE1860A82C00FBDE67 /* unorc */ = {isa = PBXFileReference; lastKnownFileType = text; name = unorc; path = Resources/unorc; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -1539,7 +1539,7 @@
 				BE6DC92E19D9B5DD00AFB393 /* mutex.c */,
 				BE6DC92F19D9B5DD00AFB393 /* nlsupport.c */,
 				BE6DC93019D9B5DD00AFB393 /* osxlocale.cxx */,
-				BE6DC93119D9B5DD00AFB393 /* pipe.c */,
+				BE6DC93119D9B5DD00AFB393 /* pipe.cxx */,
 				BE6DC93219D9B5DD00AFB393 /* process_impl.cxx */,
 				BE6DC93319D9B5DD00AFB393 /* process.cxx */,
 				BE6DC93419D9B5DD00AFB393 /* profile.cxx */,
@@ -2237,9 +2237,9 @@
 				BEEEF9AA1860A82900FBDE67 /* rc */,
 				BEEEF9AB1860A82900FBDE67 /* services.rdb */,
 				BEEE02CF1860ABB700FBDE67 /* share */,
-				BEEEFDFD1860A82C00FBDE67 /* types.rdb */,
+				BEEEFDFD1860A82C00FBDE67 /* udkapi.rdb */,
 				BEEEFDFE1860A82C00FBDE67 /* unorc */,
-				BEEE02D01860ABB700FBDE67 /* ure */,
+				BEEE02D01860ABB700FBDE67 /* services */,
 				BEEEF9691860A25400FBDE67 /* test1.odt */,
 				BE03BF9218F9A7CC00620DC7 /* icudt54l.dat */,
 			);
@@ -2308,9 +2308,9 @@
 				BEEEFE051860A89100FBDE67 /* services.rdb in Resources */,
 				BEEE02D21860ABDB00FBDE67 /* share in Resources */,
 				BE03BF9318F9A7CC00620DC7 /* icudt54l.dat in Resources */,
-				BEEEFE061860A89100FBDE67 /* types.rdb in Resources */,
+				BEEEFE061860A89100FBDE67 /* udkapi.rdb in Resources */,
 				BEEEFE071860A89100FBDE67 /* unorc in Resources */,
-				BEEE02D31860ABDB00FBDE67 /* ure in Resources */,
+				BEEE02D31860ABDB00FBDE67 /* services in Resources */,
 				BEEEF96A1860A25400FBDE67 /* test1.odt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

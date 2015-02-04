@@ -449,12 +449,12 @@ void OfficeIPCThread::RequestsCompleted( int nCount )
 
 OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
 {
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     ::osl::MutexGuard   aGuard( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
         return IPC_STATUS_OK;
 
+#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     OUString aUserInstallPath;
     OUString aDummy;
 
@@ -605,14 +605,15 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         return IPC_STATUS_2ND_OFFICE;
     }
 #else
-    pGlobalOfficeIPCThread = rtl::Reference< OfficeIPCThread >(new OfficeIPCThread);
+    rtl::Reference< OfficeIPCThread > pThread(new OfficeIPCThread);
+    pGlobalOfficeIPCThread = pThread;
+    pThread->launch();
 #endif
     return IPC_STATUS_OK;
 }
 
 void OfficeIPCThread::DisableOfficeIPCThread(bool join)
 {
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
     if( pGlobalOfficeIPCThread.is() )
@@ -635,9 +636,6 @@ void OfficeIPCThread::DisableOfficeIPCThread(bool join)
             pOfficeIPCThread->join();
         }
     }
-#else
-     (void) join;
-#endif
 }
 
 OfficeIPCThread::OfficeIPCThread() :
@@ -967,6 +965,20 @@ void OfficeIPCThread::execute()
             salhelper::Thread::wait( tval );
         }
     } while( schedule() );
+#else
+
+#if 0 // Seems to work fine to let this thread just die?
+
+    // Not sure what to do, so wait forever. Note that on iOS (or
+    // Android, but in this case ANDROID is handled like DESKTOP, see
+    // above) an app never exits voluntarily, but is always killed by
+    // the system when its resources are needed.)
+    TimeValue tval;
+    tval.Seconds = 100000;
+    tval.Nanosec = 0;
+    salhelper::Thread::wait( tval );
+#endif
+
 #endif
 }
 

@@ -6,7 +6,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include <touch/touch.h>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 #import "View.h"
 #import "TiledView.h"
@@ -19,8 +20,13 @@
 
 @implementation View
 
-- (id)initWithFrame:(CGRect)frame
+static LibreOfficeKit* loKit;
+static LibreOfficeKitDocument* loDocument;
+
+- (id)initWithFrame:(CGRect)frame kit:(LibreOfficeKit*)kit document:(LibreOfficeKitDocument*)document
 {
+    loKit = kit;
+    loDocument = document;
     self = [super initWithFrame:frame];
     if (self) {
         const int MAXZOOM = 8;
@@ -28,14 +34,15 @@
         [self setMaximumZoomScale:MAXZOOM];
         [self setDelegate:self];
 
-        MLODpxSize docSize = touch_lo_get_content_size();
+        long docWidth, docHeight;
+        document->pClass->getDocumentSize(document, &docWidth, &docHeight);
 
-        double widthScale = frame.size.width / docSize.width;
-        double docAspectRatio = docSize.height / docSize.width;
+        double widthScale = frame.size.width / docWidth;
+        double docAspectRatio = docHeight / docWidth;
 
-        // NSLog(@"View frame=%.0fx%.0f docSize=%.0fx%.0f scale=%.3f aspectRatio=%.3f", frame.size.width, frame.size.height, docSize.width, docSize.height, widthScale, docAspectRatio);
+        // NSLog(@"View frame=%.0fx%.0f docSize=%.0fx%.0f scale=%.3f aspectRatio=%.3f", frame.size.width, frame.size.height, docWidth, docHeight, widthScale, docAspectRatio);
 
-        self.subView = [[TiledView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width*docAspectRatio) scale:widthScale maxZoom:MAXZOOM];
+        self.subView = [[TiledView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.width*docAspectRatio) scale:widthScale maxZoom:MAXZOOM document:loDocument];
         [self addSubview:self.subView];
 
         UILabel *tpsLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 300, 40)];

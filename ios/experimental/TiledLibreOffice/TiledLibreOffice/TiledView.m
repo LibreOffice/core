@@ -8,7 +8,8 @@
 
 #include <CoreText/CoreText.h>
 
-#include <touch/touch.h>
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 #import "View.h"
 #import "TiledView.h"
@@ -30,6 +31,8 @@ static struct {
 } tileTimestamps[NTIMESTAMPS];
 static int oldestTimestampIndex = 0;
 static int nextTimestampIndex = 0;
+
+static LibreOfficeKitDocument* loDocument;
 
 static void dropOldTimestamps(CFTimeInterval now)
 {
@@ -96,8 +99,10 @@ int DBG_DRAW_ROUNDS_MAX = INT_MAX;
         [NSTimer scheduledTimerWithTimeInterval:DBG_DRAW_DELAY target:self selector:@selector(redraw) userInfo:nil repeats:NO];
 }
 
-- (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom
+- (id)initWithFrame:(CGRect)frame scale:(CGFloat)scale maxZoom:(int)maxZoom document:(LibreOfficeKitDocument*)document
 {
+    loDocument = document;
+
     self = [super initWithFrame:frame];
     if (self) {
         self.scale = scale;
@@ -157,7 +162,7 @@ extern const char *ptyl_test_encryption_pathname;
     // CGSize tileSize = [catl tileSize];
     CGSize tileSize = bb.size;
 
-    // NSLog(@"bb:%.0fx%.0f@(%.0f,%.0f) zoomScale:%.0f tile:%.0fx%.0f at:(%.0f,%.0f) size:%.0fx%.0f", bb.size.width, bb.size.height, bb.origin.x, bb.origin.y, zoomScale, tileSize.width, tileSize.height, bb.origin.x/self.scale, bb.origin.y/self.scale, bb.size.width/self.scale, bb.size.height/self.scale);
+    NSLog(@"bb:%.0fx%.0f@(%.0f,%.0f) zoomScale:%.0f tile:%.0fx%.0f at:(%.0f,%.0f) size:%.0fx%.0f", bb.size.width, bb.size.height, bb.origin.x, bb.origin.y, [((View *) [self superview]) zoomScale], tileSize.width, tileSize.height, bb.origin.x/self.scale, bb.origin.y/self.scale, bb.size.width/self.scale, bb.size.height/self.scale);
 
     // I don't really claim to fully understand all this. It did at
     // first seem a bit weird to be passing in a "context width x
@@ -171,10 +176,12 @@ extern const char *ptyl_test_encryption_pathname;
 
     if (!getenv("DRAW_ONLY_TILE") || tileMatches(getenv("DRAW_ONLY_TILE"), bb)) {
         fprintf(stderr, "+++ rendering to context %p\n", ctx);
-        touch_lo_draw_tile(ctx,
-                           tileSize.width, tileSize.height,
-                           CGPointMake(bb.origin.x/self.scale, bb.origin.y/self.scale),
-                           CGSizeMake(bb.size.width/self.scale, bb.size.height/self.scale));
+        int rowStride;
+        loDocument->pClass->paintTile(loDocument, (unsigned char *)ctx,
+                                      tileSize.width, tileSize.height,
+                                      &rowStride,
+                                      bb.origin.x/self.scale, bb.origin.y/self.scale,
+                                      bb.size.width/self.scale, bb.size.height/self.scale);
     } else {
         CGContextSetRGBFillColor(ctx, 1, 1, 1, 1);
         CGContextFillRect(ctx, CGRectMake(0, 0, bb.size.width, bb.size.height));
