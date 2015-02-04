@@ -102,7 +102,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-ifeq ($(OS)-$(CPU),WNT-INTEL)
+ifeq ($(OS)-$(CPUNAME),WNT-INTEL)
 
 ifneq ($(WITH_MOZAB4WIN),)
 $(eval $(call gb_Module_add_targets,connectivity,\

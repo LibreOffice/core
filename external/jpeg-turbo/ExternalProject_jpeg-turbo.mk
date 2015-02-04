@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,jpeg-turbo,build) : $(call gb_Externa
 $(call gb_ExternalProject_get_state_target,jpeg-turbo,configure) :
 	$(call gb_ExternalProject_run,configure,\
 		MAKE=$(MAKE) ./configure \
-			--build=$(if $(filter WNT,$(OS)),$(if $(filter INTEL,$(CPU)),i686-pc-cygwin,x86_64-pc-cygwin),$(BUILD_PLATFORM)) \
+			--build=$(if $(filter WNT,$(OS)),$(if $(filter INTEL,$(CPUNAME)),i686-pc-cygwin,x86_64-pc-cygwin),$(BUILD_PLATFORM)) \
 			--with-pic \
 			--enable-static \
 			--disable-shared \
