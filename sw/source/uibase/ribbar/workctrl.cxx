@@ -394,7 +394,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         "modules/swriter/ui/floatingnavigation.ui", rFrame),
     aIList(SW_RES(IL_VALUES))
 {
-    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), 0);
+    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), this, 0);
     get(m_pInfoField, "label");
 
     sal_uInt16 i;
@@ -502,8 +502,8 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
 void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ToolBox::MouseButtonUp(rMEvt);
-    if ( static_cast<SwScrollNaviPopup*>(GetParent())->IsInPopupMode() )
-        static_cast<SwScrollNaviPopup*>(GetParent())->EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
+    if (m_pNaviPopup->IsInPopupMode())
+        m_pNaviPopup->EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL);
 }
 
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
