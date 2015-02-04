@@ -363,7 +363,7 @@ public:
 
             // To have more text displayed one after the other (overlapping, and in different colours), then
             // change this value
-            int nPrintNumCopies=1;
+            const int nPrintNumCopies=1;
 
             if (bArabicText)
                 aText = aArabicText;
