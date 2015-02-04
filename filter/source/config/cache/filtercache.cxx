@@ -847,7 +847,7 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
         }
         break;
 
-        default : throw css::uno::Exception("These configuration node is not supported here for open!", 0);
+        default : throw css::uno::RuntimeException("These configuration node is not supported here for open!", 0);
     }
 
     {
@@ -879,8 +879,6 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
 
     return *pConfig;
 }
-
-
 
 css::uno::Any FilterCache::impl_getDirectCFGValue(const OUString& sDirectKey)
 {
