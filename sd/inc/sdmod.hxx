@@ -26,11 +26,13 @@
 #include <sot/storage.hxx>
 #include <tools/shl.hxx>
 #include "sddllapi.h"
+#include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
 #include <sal/types.h>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <memory>
 
 class SdOptions;
@@ -57,6 +59,9 @@ enum SdOptionStreamMode
     SD_OPTION_LOAD = 0,
     SD_OPTION_STORE = 1
 };
+
+typedef boost::ptr_map< sal_uIntPtr, SfxExtItemPropertySetInfo > SdExtPropertySetInfoCache;
+typedef boost::ptr_map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache;
 
 /*
 
@@ -121,6 +126,10 @@ public:
     virtual SfxItemSet*  CreateItemSet( sal_uInt16 nId ) SAL_OVERRIDE;
     virtual void         ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual SfxTabPage*  CreateTabPage( sal_uInt16 nId, vcl::Window* pParent, const SfxItemSet& rSet ) SAL_OVERRIDE;
+
+    SdExtPropertySetInfoCache gImplImpressPropertySetInfoCache;
+    SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;
+    SdTypesCache gImplTypesCache;
 
 protected:
 

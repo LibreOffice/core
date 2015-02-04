@@ -85,13 +85,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::drawing::XShape;
 
-typedef std::map<sal_uIntPtr, SfxExtItemPropertySetInfo*> SdExtPropertySetInfoCache;
-static SdExtPropertySetInfoCache gImplImpressPropertySetInfoCache;
-static SdExtPropertySetInfoCache gImplDrawPropertySetInfoCache;
-
-typedef std::map<sal_uInt32, uno::Sequence< uno::Type >*> SdTypesCache;
-static SdTypesCache gImplTypesCache;
-
 #define WID_EFFECT          1
 #define WID_SPEED           2
 #define WID_TEXTEFFECT      3
@@ -344,8 +337,9 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     }
     else
     {
-        const sal_uInt32 nObjId = mpShape->getShapeKind();
+        sal_uInt32 nObjId = mpShape->getShapeKind();
         uno::Sequence< uno::Type >* pTypes;
+        SdTypesCache& gImplTypesCache = SD_MOD()->gImplTypesCache;
         SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
         if( aIter == gImplTypesCache.end() )
         {
@@ -354,7 +348,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
             pTypes->realloc( nCount+1 );
             (*pTypes)[nCount] = cppu::UnoType<lang::XTypeProvider>::get();
 
-            gImplTypesCache[ nObjId ] = pTypes;
+            gImplTypesCache.insert(nObjId, pTypes);
         }
         else
         {
@@ -430,17 +424,17 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     sal_uIntPtr nObjId = reinterpret_cast<sal_uIntPtr>(mpShape->getPropertyMapEntries());
     SfxExtItemPropertySetInfo* pInfo = NULL;
 
-    SdExtPropertySetInfoCache* pCache = (mpModel && mpModel->IsImpressDocument()) ?
-        &gImplImpressPropertySetInfoCache : &gImplDrawPropertySetInfoCache;
+    SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?
+        SD_MOD()->gImplImpressPropertySetInfoCache : SD_MOD()->gImplDrawPropertySetInfoCache;
 
-    SdExtPropertySetInfoCache::iterator aIter( pCache->find( nObjId ) );
-    if( aIter == pCache->end() )
+    SdExtPropertySetInfoCache::iterator aIter( rCache.find( nObjId ) );
+    if( aIter == rCache.end() )
     {
         uno::Reference< beans::XPropertySetInfo > xInfo( mpShape->_getPropertySetInfo() );
         pInfo = new SfxExtItemPropertySetInfo( mpMap, xInfo->getProperties() );
         pInfo->acquire();
 
-        (*pCache)[ nObjId ] = pInfo;
+        rCache.insert(nObjId, pInfo);
     }
     else
     {
