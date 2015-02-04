@@ -394,7 +394,9 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
 
         rFnt.DrawPrev( this, mpPrinter, aPt, maText, nStart, nEnd - nStart );
 
-        aPt.X() += maScriptChanges[ nIdx ].textWidth;
+        if (!maScriptChanges.empty())
+            aPt.X() += maScriptChanges[ nIdx ].textWidth;
+
         if ( !GetNextScriptSegment(nIdx, nStart, nEnd, nScript) )
             break;
     }
