@@ -290,6 +290,7 @@ public:
                 , mnOrigWidth(0)
                 , mnNewWidth(0)
                 , mnXOffset(0)
+                , mnYOffset(0)
                 , maGlyphId(0)
             {}
 
