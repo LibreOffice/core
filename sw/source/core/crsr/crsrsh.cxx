@@ -2513,7 +2513,11 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             }
 
             if( bDelete )
+            {
+                if (pTmp == pTmpDel)
+                    pTmp = 0;
                 delete pTmpDel; // invalidate old area
+            }
             else
             {
                 pTmpDel->DeleteMark();
