@@ -230,6 +230,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
         {
             short nXNum = 0, nXDenom = 0, nYNum = 0, nYDenom = 0;
             pWMF->ReadInt16( nYDenom ).ReadInt16( nYNum ).ReadInt16( nXDenom ).ReadInt16( nXNum );
+            if (!nYDenom || !nXDenom)
+            {
+                pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                break;
+            }
             pOut->ScaleWinExt( (double)nXNum / nXDenom, (double)nYNum / nYDenom );
         }
         break;
