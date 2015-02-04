@@ -77,8 +77,8 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     aFont.SetWeight( WEIGHT_LIGHT );
     m_pEditED->SetFont( aFont );
 
-    pMgr = new SwFldMgr;
-    pFld = (SwScriptField*)pMgr->GetCurFld();
+    pMgr = new SwFldMgr(pSh);
+    pFld = static_cast<SwScriptField*>(pMgr->GetCurFld());
 
     bNew = !(pFld && pFld->GetTyp()->Which() == RES_SCRIPTFLD);
 
@@ -92,6 +92,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
 
 SwJavaEditDialog::~SwJavaEditDialog()
 {
+    pSh->EnterStdMode();
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
@@ -99,6 +100,8 @@ SwJavaEditDialog::~SwJavaEditDialog()
 
 IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, PrevHdl)
 {
+    pSh->EnterStdMode();
+
     SetFld();
     pMgr->GoPrev();
     pFld = (SwScriptField*)pMgr->GetCurFld();
@@ -111,6 +114,8 @@ IMPL_LINK_NOARG_INLINE_END(SwJavaEditDialog, PrevHdl)
 
 IMPL_LINK_NOARG_INLINE_START(SwJavaEditDialog, NextHdl)
 {
+    pSh->EnterStdMode();
+
     SetFld();
     pMgr->GoNext();
     pFld = (SwScriptField*)pMgr->GetCurFld();
