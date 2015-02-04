@@ -156,8 +156,7 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 
             SfxChildWindow* pWnd = GetViewFrame()->GetChildWindow(nId);
 
-            pAnimWin = pWnd ? static_cast<AnimationWindow*>(
-                GetViewFrame()->GetChildWindow(nId)->GetWindow()) : NULL;
+            pAnimWin = pWnd ? static_cast<AnimationWindow*>(pWnd->GetWindow()) : NULL;
 
             if ( pAnimWin )
             {
