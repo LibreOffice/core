@@ -1114,9 +1114,9 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 nPos = static_cast<const SwFmtFld*>(pItem)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                 {
-                    const SfxPoolItem& rOldItem =
-                        static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Get( RES_TXTATR_FIELD );
-                    if( pItem == &rOldItem )
+                    const SfxPoolItem* pOldItem = pOld ?
+                        &(static_cast<const SwAttrSetChg*>(pOld)->GetChgSet()->Get(RES_TXTATR_FIELD)) : NULL;
+                    if( pItem == pOldItem )
                     {
                         InvalidatePage();
                         SetCompletePaint();
