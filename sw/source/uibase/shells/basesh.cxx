@@ -140,11 +140,14 @@ namespace
 
         return pChildWindow ? static_cast<SvxContourDlg*>(pChildWindow->GetWindow()) : NULL;
     }
+
+    SvxIMapDlg* GetIMapDlg(SwView &rView)
+    {
+        SfxChildWindow* pWnd = rView.GetViewFrame()->GetChildWindow(SvxIMapDlgChildWindow::GetChildWindowId());
+        return pWnd ? static_cast<SvxIMapDlg*>(pWnd->GetWindow()) : NULL;
+    }
 }
 
-#define SWIMAPDLG(rView) ( static_cast<SvxIMapDlg*>( rView.GetViewFrame()->GetChildWindow(        \
-                        SvxIMapDlgChildWindow::GetChildWindowId() )->   \
-                        GetWindow() ) )
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -919,7 +922,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         break;
         case SID_IMAP_EXEC:
         {
-            SvxIMapDlg* pDlg = SWIMAPDLG(GetView());
+            SvxIMapDlg* pDlg = GetIMapDlg(GetView());
 
             // Check, if the allocation is useful or allowed at all.
             if ( rSh.IsFrmSelected() &&
@@ -1460,7 +1463,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     }
                     else
                     {
-                        SvxIMapDlg *pDlg = SWIMAPDLG(GetView());
+                        SvxIMapDlg *pDlg = GetIMapDlg(GetView());
                         if( pDlg->GetEditingObject() != rSh.GetIMapInventor() )
                             lcl_UpdateIMapDlg( rSh );
                     }
