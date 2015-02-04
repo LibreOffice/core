@@ -2203,6 +2203,12 @@ void DffPropertyReader::ApplyCustomShapeGeometryAttributes( SvStream& rIn, SfxIt
                 sal_uInt16 nElemSizeSeg = 2;
                 rIn.ReadUInt16( nNumElemSeg ).ReadUInt16( nNumElemMemSeg ).ReadUInt16( nElemSizeSeg );
             }
+            sal_Size nMaxEntriesPossible = rIn.remainingSize() / sizeof(sal_uInt16);
+            if (nNumElemSeg > nMaxEntriesPossible)
+            {
+                SAL_WARN("filter.ms", "NumElem list is longer than remaining bytes, ppt or parser is wrong");
+                nNumElemSeg = nMaxEntriesPossible;
+            }
             if ( nNumElemSeg )
             {
                 sal_Int16 nCommand;
