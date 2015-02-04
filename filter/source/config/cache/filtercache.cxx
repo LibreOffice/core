@@ -2161,52 +2161,49 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
          That would be useful to guarantee a consistent cache.
 -----------------------------------------------*/
 void FilterCache::impl_readOldFormat()
-    throw(css::uno::Exception)
 {
     // Attention: Opening/Reading of this old configuration format has to be handled gracefully.
     // Its optional and should not disturb our normal work!
     // E.g. we must check, if the package exists ...
-
-    css::uno::Reference< css::container::XNameAccess > xCfg;
     try
     {
         css::uno::Reference< css::uno::XInterface > xInt = impl_openConfig(E_PROVIDER_OLD);
-        xCfg = css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::container::XNameAccess > xCfg =
+            css::uno::Reference< css::container::XNameAccess >(xInt, css::uno::UNO_QUERY_THROW);
+
+        OUString TYPES_SET("Types");
+
+        // May be there is no type set ...
+        if (xCfg->hasByName(TYPES_SET))
+        {
+            css::uno::Reference< css::container::XNameAccess > xSet;
+            xCfg->getByName(TYPES_SET) >>= xSet;
+            const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
+            const OUString*                      pItems = lItems.getConstArray();
+            for (sal_Int32 i=0; i<lItems.getLength(); ++i)
+                m_lTypes[pItems[i]] = impl_readOldItem(xSet, E_TYPE, pItems[i]);
+        }
+
+        OUString FILTER_SET("Filters");
+        // May be there is no filter set ...
+        if (xCfg->hasByName(FILTER_SET))
+        {
+            css::uno::Reference< css::container::XNameAccess > xSet;
+            xCfg->getByName(FILTER_SET) >>= xSet;
+            const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
+            const OUString*                      pItems = lItems.getConstArray();
+            for (sal_Int32 i=0; i<lItems.getLength(); ++i)
+                m_lFilters[pItems[i]] = impl_readOldItem(xSet, E_FILTER, pItems[i]);
+        }
     }
     /* corrupt filter addon ? because it's external (optional) code .. we can ignore it. Addon wont work then ...
        but that seems to be acceptable.
        see #139088# for further information
     */
     catch(const css::uno::Exception&)
-        { return; }
-
-    OUString TYPES_SET("Types");
-
-    // May be there is no type set ...
-    if (xCfg->hasByName(TYPES_SET))
     {
-        css::uno::Reference< css::container::XNameAccess > xSet;
-        xCfg->getByName(TYPES_SET) >>= xSet;
-        const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
-        const OUString*                      pItems = lItems.getConstArray();
-        for (sal_Int32 i=0; i<lItems.getLength(); ++i)
-            m_lTypes[pItems[i]] = impl_readOldItem(xSet, E_TYPE, pItems[i]);
-    }
-
-    OUString FILTER_SET("Filters");
-    // May be there is no filter set ...
-    if (xCfg->hasByName(FILTER_SET))
-    {
-        css::uno::Reference< css::container::XNameAccess > xSet;
-        xCfg->getByName(FILTER_SET) >>= xSet;
-        const css::uno::Sequence< OUString > lItems = xSet->getElementNames();
-        const OUString*                      pItems = lItems.getConstArray();
-        for (sal_Int32 i=0; i<lItems.getLength(); ++i)
-            m_lFilters[pItems[i]] = impl_readOldItem(xSet, E_FILTER, pItems[i]);
     }
 }
-
-
 
 CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                               EItemType                                           eType,

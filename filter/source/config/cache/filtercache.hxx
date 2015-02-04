@@ -905,13 +905,8 @@ class FilterCache : public BaseLock
                                    const CacheItem&                                           rItem)
             throw(css::uno::Exception);
 
-
-
         /** TODO */
-        void impl_readOldFormat()
-            throw(css::uno::Exception);
-
-
+        void impl_readOldFormat();
 
         /** TODO */
         CacheItem impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
