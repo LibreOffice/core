@@ -771,7 +771,7 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
 
     }
 
-    throw css::uno::Exception("unknown sub container requested.",
+    throw css::uno::RuntimeException("unknown sub container requested.",
                                             css::uno::Reference< css::uno::XInterface >());
     // <- SAFE ----------------------------------
 }
