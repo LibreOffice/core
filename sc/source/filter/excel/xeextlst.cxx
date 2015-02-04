@@ -14,7 +14,6 @@
 #include "xename.hxx"
 #include "xecontent.hxx"
 #include "tokenarray.hxx"
-#include <oox/export/utils.hxx>
 
 using namespace ::oox;
 
@@ -151,7 +150,7 @@ void XclExpExtDataBar::SaveXml( XclExpXmlStream& rStrm )
                                 XML_minLength, OString::number(0).getStr(),
                                 XML_maxLength, OString::number(100).getStr(),
                                 XML_axisPosition, getAxisPosition(meAxisPosition),
-                                XML_gradient, BS(mbGradient),
+                                XML_gradient, XclXmlUtils::ToPsz(mbGradient),
                                 FSEND );
 
     mpLowerLimit->SaveXml( rStrm );
