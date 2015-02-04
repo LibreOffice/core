@@ -41,6 +41,10 @@ void ScCalcConfig::setOpenCLConfigToDefault()
 
     // Keep in order of opcode value, is that clearest? (Random order,
     // at least, would make no sense at all.)
+    maOpenCLSubsetOpCodes.insert(ocAdd);
+    maOpenCLSubsetOpCodes.insert(ocSub);
+    maOpenCLSubsetOpCodes.insert(ocMul);
+    maOpenCLSubsetOpCodes.insert(ocDiv);
     maOpenCLSubsetOpCodes.insert(ocRandom);
     maOpenCLSubsetOpCodes.insert(ocSin);
     maOpenCLSubsetOpCodes.insert(ocCos);
