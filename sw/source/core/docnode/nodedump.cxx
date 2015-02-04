@@ -373,18 +373,6 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
     }
 }
 
-void SwNumRule::dumpAsXml(xmlTextWriterPtr w) const
-{
-     WriterHelper writer(w);
-     writer.startElement("swnumrule");
-     OString aName = OUStringToOString(GetName(), RTL_TEXTENCODING_UTF8);
-     writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-     writer.writeFormatAttribute("isautorule", TMP_FORMAT, IsAutoRule() ? 1 : 0);
-     if (GetPoolFmtId() != USHRT_MAX)
-         writer.writeFormatAttribute("poolfmtid", TMP_FORMAT, GetPoolFmtId());
-     writer.endElement();
-}
-
 void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr w) const
 {
     if (!empty())

@@ -46,6 +46,7 @@
 
 #include <algorithm>
 #include <unordered_map>
+#include <libxml/xmlwriter.h>
 
 #include <unotools/saveopt.hxx>
 
@@ -1035,6 +1036,15 @@ void SwNumRule::RemoveParagraphStyle( SwTxtFmtColl& rTxtFmtColl )
     {
         maParagraphStyleList.erase( aIter );
     }
+}
+
+void SwNumRule::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swNumRule"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("msName"), BAD_CAST(msName.toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mnPoolFmtId"), BAD_CAST(OString::number(mnPoolFmtId).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("mbAutoRuleFlag"), BAD_CAST(OString::boolean(mbAutoRuleFlag).getStr()));
+    xmlTextWriterEndElement(pWriter);
 }
 
 void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
