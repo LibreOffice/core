@@ -1687,9 +1687,8 @@ void MenuBarManager::FillMenu(
                         if ( xDispatchProvider.is() )
                         {
                             // Use attributes struct to transport special dispatch provider
-                            MenuConfiguration::Attributes* pAttributes = new MenuConfiguration::Attributes;
-                            pAttributes->xDispatchProvider = xDispatchProvider;
-                            pMenu->SetUserValue( nId, reinterpret_cast<sal_uIntPtr>( pAttributes ));
+                            sal_uIntPtr nAttributePtr = MenuConfiguration::Attributes::CreateAttribute(xDispatchProvider);
+                            pMenu->SetUserValue(nId, nAttributePtr, MenuConfiguration::Attributes::ReleaseAttribute);
                         }
 
                         // Use help command to transport module identifier

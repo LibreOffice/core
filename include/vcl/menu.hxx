@@ -108,6 +108,8 @@ struct MenuLogo
     Color       aEndColor;
 };
 
+typedef void (*MenuUserDataReleaseFunction)(sal_uLong);
+
 class VCL_DLLPUBLIC Menu : public Resource
 {
     friend class MenuBar;
@@ -263,8 +265,8 @@ public:
     void                SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits        GetItemBits( sal_uInt16 nItemId ) const;
 
-    void                SetUserValue( sal_uInt16 nItemId, sal_uLong nValue );
-    sal_uLong           GetUserValue( sal_uInt16 nItemId ) const;
+    void                SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleaseFunction aFunc=0);
+    sal_uLong           GetUserValue(sal_uInt16 nItemId) const;
 
     void                SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
     PopupMenu*          GetPopupMenu( sal_uInt16 nItemId ) const;

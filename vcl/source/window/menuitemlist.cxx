@@ -32,6 +32,8 @@ using namespace vcl;
 
 MenuItemData::~MenuItemData()
 {
+    if (aUserValueReleaseFunc)
+        aUserValueReleaseFunc(nUserValue);
     if( pAutoSubMenu )
     {
         static_cast<PopupMenu*>(pAutoSubMenu)->pRefAutoSubMenu = NULL;

@@ -58,10 +58,7 @@ AddonMenu::~AddonMenu()
     {
         if ( GetItemType( i ) != MenuItemType::SEPARATOR )
         {
-            // delete user attributes created with new!
             sal_uInt16 nId = GetItemId( i );
-            MenuConfiguration::Attributes* pUserAttributes = reinterpret_cast<MenuConfiguration::Attributes*>(GetUserValue( nId ));
-            delete pUserAttributes;
             delete GetPopupMenu( nId );
         }
     }
@@ -333,7 +330,8 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!
-            pCurrentMenu->SetUserValue( nId, sal_uIntPtr( new MenuConfiguration::Attributes( aTarget, aImageId )) );
+            sal_uIntPtr nAttributePtr = MenuConfiguration::Attributes::CreateAttribute(aTarget, aImageId);
+            pCurrentMenu->SetUserValue(nId, nAttributePtr, MenuConfiguration::Attributes::ReleaseAttribute);
             pCurrentMenu->SetItemCommand( nId, aURL );
 
             if ( pSubMenu )

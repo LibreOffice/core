@@ -83,9 +83,10 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
                 bool        bImageSet( false );
                 OUString aImageId;
 
-                AddInfoForId::const_iterator pInfo = m_aAddInfoForItem.find( nItemId );
-                if ( pInfo != m_aAddInfoForItem.end() )
-                    aImageId = pInfo->second->aImageId; // Retrieve image id for menu item
+                sal_uIntPtr nAttributePtr = pPopupMenu->GetUserValue(sal::static_int_cast<sal_uInt16>(i));
+                MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(nAttributePtr);
+                if (pAttributes)
+                    aImageId = pAttributes->aImageId;
 
                 if ( !aImageId.isEmpty() )
                 {
@@ -345,13 +346,12 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
             if (( nItemId != 0 ) &&
                 ( pSubMenu->GetItemType( nItemId ) != MenuItemType::SEPARATOR ))
             {
-                MenuConfiguration::Attributes* pBmkAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pSubMenu->GetUserValue( nItemId ));
-                if ( pBmkAttributes != 0 )
+                sal_uIntPtr nAttributePtr = pSubMenu->GetUserValue(nItemId);
+                if (nAttributePtr)
                 {
-                    auto result = m_aAddInfoForItem.insert(
-                        std::make_pair(nItemId, std::unique_ptr<AddInfo>(new AddInfo(*pBmkAttributes))));
-                    MenuConfiguration::Attributes *pNewInfo = result.first->second.get();
-                    pVCLPopupMenu->SetUserValue(nItemId, reinterpret_cast<sal_uIntPtr>(pNewInfo));
+                    MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(nAttributePtr);
+                    pAttributes->acquire();
+                    pVCLPopupMenu->SetUserValue(nItemId, nAttributePtr, MenuConfiguration::Attributes::ReleaseAttribute);
                 }
             }
         }
@@ -405,21 +405,22 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
         VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( xPopupMenu ));
         if ( pPopupMenu )
         {
+            OUString aTargetFrame( m_aTargetFrame );
+
             {
                 SolarMutexGuard aSolarMutexGuard;
                 PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
-                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand( rEvent.MenuId );
+                aTargetURL.Complete = pVCLPopupMenu->GetItemCommand(rEvent.MenuId);
+                sal_uIntPtr nAttributePtr = pVCLPopupMenu->GetUserValue(rEvent.MenuId);
+                MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(nAttributePtr);
+                if (pAttributes)
+                    aTargetFrame = pAttributes->aTargetFrame;
             }
 
             xURLTransformer->parseStrict( aTargetURL );
 
             aArgsList[0].Name = "Referer";
             aArgsList[0].Value = makeAny( OUString( "private:user" ));
-
-            OUString aTargetFrame( m_aTargetFrame );
-            AddInfoForId::const_iterator pItem = m_aAddInfoForItem.find( rEvent.MenuId );
-            if ( pItem != m_aAddInfoForItem.end() )
-                aTargetFrame = pItem->second->aTargetFrame;
 
             xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTargetFrame, 0 );
         }

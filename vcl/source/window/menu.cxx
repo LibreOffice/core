@@ -758,11 +758,16 @@ MenuItemBits Menu::GetItemBits( sal_uInt16 nItemId ) const
     return nBits;
 }
 
-void Menu::SetUserValue( sal_uInt16 nItemId, sal_uLong nValue )
+void Menu::SetUserValue(sal_uInt16 nItemId, sal_uLong nValue, MenuUserDataReleaseFunction aFunc)
 {
-    MenuItemData* pData = pItemList->GetData( nItemId );
-    if ( pData )
+    MenuItemData* pData = pItemList->GetData(nItemId);
+    if (pData)
+    {
+        if (pData->aUserValueReleaseFunc)
+            pData->aUserValueReleaseFunc(pData->nUserValue);
+        pData->aUserValueReleaseFunc = aFunc;
         pData->nUserValue = nValue;
+    }
 }
 
 sal_uLong Menu::GetUserValue( sal_uInt16 nItemId ) const

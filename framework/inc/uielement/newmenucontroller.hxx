@@ -81,9 +81,6 @@ namespace framework
 
         private:
             virtual void impl_setPopupMenu() SAL_OVERRIDE;
-            typedef MenuConfiguration::Attributes AddInfo;
-
-            typedef std::unordered_map< int, std::unique_ptr<AddInfo> > AddInfoForId;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
@@ -99,7 +96,6 @@ namespace framework
                                 m_bNewMenu    : 1,
                                 m_bModuleIdentified : 1,
                                 m_bAcceleratorCfg : 1;
-            AddInfoForId        m_aAddInfoForItem;
             OUString       m_aTargetFrame;
             OUString       m_aModuleIdentifier;
             OUString       m_aEmptyDocURL;

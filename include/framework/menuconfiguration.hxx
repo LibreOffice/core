@@ -61,22 +61,46 @@ class FWE_DLLPUBLIC MenuConfiguration
     public:
         struct Attributes
         {
-            Attributes()
-                : nStyle(0)
-            {
-            }
+        private:
+            oslInterlockedCount refCount;
 
-            Attributes( const OUString& aFrame, const OUString& aImageIdStr )
-                : aTargetFrame(aFrame)
-                , aImageId(aImageIdStr)
+            Attributes(const OUString& rFrame, const OUString& rImageIdStr)
+                : refCount(0)
+                , aTargetFrame(rFrame)
+                , aImageId(rImageIdStr)
                 , nStyle(0)
             {
             }
 
+            Attributes(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
+                : refCount(0)
+                , xDispatchProvider(rDispatchProvider)
+                , nStyle(0)
+            {
+            }
+
+            Attributes(const Attributes&);  //not-implemented
+
+        public:
             OUString aTargetFrame;
             OUString aImageId;
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
+            css::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
             sal_Int16 nStyle;
+
+            static sal_uIntPtr CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
+            static sal_uIntPtr CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
+            static void ReleaseAttribute(sal_uIntPtr nAttributePtr);
+
+            void acquire()
+            {
+                osl_atomic_increment(&refCount);
+            }
+
+            void release()
+            {
+                if (!osl_atomic_decrement(&refCount))
+                    delete this;
+            }
         };
 
         MenuConfiguration(
