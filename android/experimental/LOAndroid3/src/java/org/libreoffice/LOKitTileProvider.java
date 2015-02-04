@@ -395,6 +395,10 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
                     TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
                     textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, underSelection);
                     textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+
+                    TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
+                    textCursorLayer.positionCursor(rect);
+                    textCursorLayer.showCursor();
                 }
                 break;
             }

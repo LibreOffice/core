@@ -48,6 +48,7 @@ public class LibreOfficeMainActivity extends LOAbout {
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
     private TextSelection mTextSelection;
+    private TextCursorLayer mTextCursorLayer;
 
     public LibreOfficeMainActivity() {
         super(/*newActivity=*/false);
@@ -126,6 +127,7 @@ public class LibreOfficeMainActivity extends LOAbout {
         }
 
         mTextSelection = new TextSelection(mAppContext);
+        mTextCursorLayer = new TextCursorLayer(mAppContext);
 
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
@@ -236,6 +238,10 @@ public class LibreOfficeMainActivity extends LOAbout {
 
     public TextSelection getTextSelection() {
         return mTextSelection;
+    }
+
+    public TextCursorLayer getTextCursorLayer() {
+        return mTextCursorLayer;
     }
 
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {

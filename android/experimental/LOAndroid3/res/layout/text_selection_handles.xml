@@ -26,4 +26,11 @@
                                            android:src="@drawable/handle_end_level"
                                            android:visibility="gone"
                                            gecko:handleType="end"/>
+
+    <org.libreoffice.TextCursorView android:id="@+id/text_cursor_view"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:src="@drawable/text_cursor"
+                                    android:visibility="gone"/>
+
 </merge>
