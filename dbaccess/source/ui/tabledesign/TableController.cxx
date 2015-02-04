@@ -643,17 +643,6 @@ void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(R
         OTableController_BASE::disposing( _rSource );
 }
 
-void OTableController::Save(const Reference< XObjectOutputStream>& _rxOut)
-{
-    OStreamSection aSection(_rxOut.get());
-
-}
-
-void OTableController::Load(const Reference< XObjectInputStream>& _rxIn)
-{
-    OStreamSection aSection(_rxIn.get());
-}
-
 void OTableController::losingConnection( )
 {
     // let the base class do it's reconnect

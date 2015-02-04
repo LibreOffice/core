@@ -206,11 +206,6 @@ dbaui::OPropEditCtrl::SetSpecialReadOnly(bool)
 dbaui::OPropListBoxCtrl::SetSpecialReadOnly(bool)
 dbaui::OQueryViewSwitch::resizeDocumentView(Rectangle&)
 dbaui::OQueryViewSwitch::setReadOnly(bool)
-dbaui::OTableController::Load(com::sun::star::uno::Reference<com::sun::star::io::XObjectInputStream> const&)
-dbaui::OTableController::Save(com::sun::star::uno::Reference<com::sun::star::io::XObjectOutputStream> const&)
-dbaui::OTableEditorCtrl::Redo()
-dbaui::OTableEditorCtrl::Undo()
-dbaui::OTableEditorCtrl::UpdateAll()
 dbaui::OTableRowView::SetUpdatable(bool)
 dbaui::OTableWindowAccess::isEditable() const
 dbtools::FormattedColumnValue::getColumnUpdate() const

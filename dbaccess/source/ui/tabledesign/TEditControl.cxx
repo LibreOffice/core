@@ -129,15 +129,6 @@ void OTableEditorCtrl::Init()
     RowInserted(0, m_pRowList->size(), true);
 }
 
-void OTableEditorCtrl::UpdateAll()
-{
-    RowRemoved(0, GetRowCount(), false);
-    m_nDataPos = 0;
-
-    InvalidateFeatures();
-    Invalidate();
-}
-
 OTableEditorCtrl::OTableEditorCtrl(vcl::Window* pWindow)
     :OTableRowView(pWindow)
     ,pNameCell(NULL)
@@ -714,17 +705,6 @@ void OTableEditorCtrl::InvalidateFeatures()
     GetView()->getController().InvalidateFeature(SID_UNDO);
     GetView()->getController().InvalidateFeature(SID_REDO);
     GetView()->getController().InvalidateFeature(SID_SAVEDOC);
-}
-
-void OTableEditorCtrl::Undo()
-{
-
-    InvalidateFeatures();
-}
-
-void OTableEditorCtrl::Redo()
-{
-    InvalidateFeatures();
 }
 
 void OTableEditorCtrl::CopyRows()

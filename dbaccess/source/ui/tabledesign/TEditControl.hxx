@@ -100,8 +100,6 @@ namespace dbaui
         virtual void CellModified() SAL_OVERRIDE;
         virtual bool SaveModified() SAL_OVERRIDE; // is called before changing a cell (false prevents change)
 
-        void Undo();
-        void Redo();
         virtual OUString GetCellText(long nRow, sal_uInt16 nColId) const SAL_OVERRIDE;
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId) SAL_OVERRIDE;
 
@@ -125,7 +123,6 @@ namespace dbaui
         OTableEditorCtrl(vcl::Window* pParentWin);
         virtual ~OTableEditorCtrl();
         virtual bool CursorMoving(long nNewRow, sal_uInt16 nNewCol) SAL_OVERRIDE;
-        void UpdateAll();
         SfxUndoManager& GetUndoManager() const;
 
         void SetDescrWin( OTableFieldDescWin* pWin )

@@ -133,10 +133,6 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-
-        void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
-        void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
-
     protected:
         void startTableListening();
         void stopTableListening();
