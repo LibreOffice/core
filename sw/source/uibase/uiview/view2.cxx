@@ -900,7 +900,10 @@ void SwView::Execute(SfxRequest &rReq)
                 pCh = pVFrame->GetChildWindow( SID_NAVIGATOR );
 
             }
+            if (pCh)
+            {
                 static_cast<SwNavigationPI*>( pCh->GetContextWindow(SW_MOD()))->GotoPage();
+            }
         }
         break;
         case  FN_EDIT_CURRENT_TOX:
