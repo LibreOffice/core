@@ -110,14 +110,21 @@ public:
     DECL_LINK(PopupHdl, PopupMenu*);
 };
 
+class SwScrollNaviPopup;
+
 class SwScrollNaviToolBox : public ToolBox
 {
+    SwScrollNaviPopup *m_pNaviPopup;
+
     virtual void    MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
-    public:
-        SwScrollNaviToolBox(vcl::Window* pParent, WinBits nWinStyle ) :
-            ToolBox(pParent, nWinStyle ) {}
+public:
+    SwScrollNaviToolBox(vcl::Window* pParent, SwScrollNaviPopup* pNaviPopup, WinBits nWinStyle)
+        : ToolBox(pParent, nWinStyle)
+        , m_pNaviPopup(pNaviPopup)
+    {
+    }
 };
 
 class SwScrollNaviPopup : public SfxPopupWindow
