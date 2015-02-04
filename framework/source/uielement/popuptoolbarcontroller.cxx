@@ -431,7 +431,7 @@ throw ( css::uno::RuntimeException, std::exception )
     if ( m_xPopupMenu.is() )
     {
         // TODO investigate how to wrap Get/SetUserValue in css::awt::XMenu
-        MenuConfiguration::Attributes* pMenuAttributes( 0 );
+        MenuAttributes* pMenuAttributes( 0 );
         VCLXPopupMenu*  pTkPopupMenu =
             static_cast<VCLXPopupMenu *>( VCLXMenu::GetImplementation( m_xPopupMenu ) );
 
@@ -440,7 +440,7 @@ throw ( css::uno::RuntimeException, std::exception )
             dynamic_cast< PopupMenu * >( pTkPopupMenu->GetMenu() ) : NULL;
 
         if ( pVCLPopupMenu )
-            pMenuAttributes = reinterpret_cast< MenuConfiguration::Attributes* >(
+            pMenuAttributes = reinterpret_cast< MenuAttributes* >(
                 pVCLPopupMenu->GetUserValue( pVCLPopupMenu->GetCurItemId() ) );
 
         if ( pMenuAttributes )

@@ -56,53 +56,53 @@ const sal_uInt16 ITEMID_ADDONHELP           = FWK_SID_ADDONHELP;
 namespace framework
 {
 
+struct FWE_DLLPUBLIC MenuAttributes
+{
+private:
+    oslInterlockedCount refCount;
+
+    MenuAttributes(const OUString& rFrame, const OUString& rImageIdStr)
+        : refCount(0)
+        , aTargetFrame(rFrame)
+        , aImageId(rImageIdStr)
+        , nStyle(0)
+    {
+    }
+
+    MenuAttributes(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
+        : refCount(0)
+        , xDispatchProvider(rDispatchProvider)
+        , nStyle(0)
+    {
+    }
+
+    MenuAttributes(const MenuAttributes&);  //not-implemented
+
+public:
+    OUString aTargetFrame;
+    OUString aImageId;
+    css::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
+    sal_Int16 nStyle;
+
+    static sal_uIntPtr CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
+    static sal_uIntPtr CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
+    static void ReleaseAttribute(sal_uIntPtr nAttributePtr);
+
+    void acquire()
+    {
+        osl_atomic_increment(&refCount);
+    }
+
+    void release()
+    {
+        if (!osl_atomic_decrement(&refCount))
+            delete this;
+    }
+};
+
 class FWE_DLLPUBLIC MenuConfiguration
 {
     public:
-        struct Attributes
-        {
-        private:
-            oslInterlockedCount refCount;
-
-            Attributes(const OUString& rFrame, const OUString& rImageIdStr)
-                : refCount(0)
-                , aTargetFrame(rFrame)
-                , aImageId(rImageIdStr)
-                , nStyle(0)
-            {
-            }
-
-            Attributes(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
-                : refCount(0)
-                , xDispatchProvider(rDispatchProvider)
-                , nStyle(0)
-            {
-            }
-
-            Attributes(const Attributes&);  //not-implemented
-
-        public:
-            OUString aTargetFrame;
-            OUString aImageId;
-            css::uno::WeakReference<css::frame::XDispatchProvider> xDispatchProvider;
-            sal_Int16 nStyle;
-
-            static sal_uIntPtr CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr);
-            static sal_uIntPtr CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider);
-            static void ReleaseAttribute(sal_uIntPtr nAttributePtr);
-
-            void acquire()
-            {
-                osl_atomic_increment(&refCount);
-            }
-
-            void release()
-            {
-                if (!osl_atomic_decrement(&refCount))
-                    delete this;
-            }
-        };
-
         MenuConfiguration(
             // use const when giving a uno reference by reference
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );

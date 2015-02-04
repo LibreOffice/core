@@ -352,8 +352,8 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                     {
                         bool        bImageSet = false;
                         OUString aImageId;
-                        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                            reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pMenu->GetUserValue( nItemId ));
+                        ::framework::MenuAttributes* pMenuAttributes =
+                            reinterpret_cast< ::framework::MenuAttributes*>(pMenu->GetUserValue( nItemId ));
 
                         if ( pMenuAttributes )
                             aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -438,8 +438,8 @@ sal_IntPtr Select_Impl( void* /*pHdl*/, void* pVoid )
     else
     {
         OUString aTargetFrame( "_blank" );
-        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-            reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pMenu->GetUserValue( pMenu->GetCurItemId() ));
+        ::framework::MenuAttributes* pMenuAttributes =
+            reinterpret_cast< ::framework::MenuAttributes*>(pMenu->GetUserValue( pMenu->GetCurItemId() ));
 
         if ( pMenuAttributes )
             aTargetFrame = pMenuAttributes->aTargetFrame;

@@ -330,8 +330,8 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!
-            sal_uIntPtr nAttributePtr = MenuConfiguration::Attributes::CreateAttribute(aTarget, aImageId);
-            pCurrentMenu->SetUserValue(nId, nAttributePtr, MenuConfiguration::Attributes::ReleaseAttribute);
+            sal_uIntPtr nAttributePtr = MenuAttributes::CreateAttribute(aTarget, aImageId);
+            pCurrentMenu->SetUserValue(nId, nAttributePtr, MenuAttributes::ReleaseAttribute);
             pCurrentMenu->SetItemCommand( nId, aURL );
 
             if ( pSubMenu )

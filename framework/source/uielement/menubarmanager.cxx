@@ -1255,7 +1255,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                 Reference< XDispatchProvider > xPopupMenuDispatchProvider( rDispatchProvider );
 
                 // Retrieve possible attributes struct
-                MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pMenu->GetUserValue( nItemId ));
+                MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(pMenu->GetUserValue( nItemId ));
                 if ( pAttributes )
                     xPopupMenuDispatchProvider = pAttributes->xDispatchProvider;
 
@@ -1325,8 +1325,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     Image           aImage;
                     OUString   aImageId;
 
-                    MenuConfiguration::Attributes* pMenuAttributes =
-                        reinterpret_cast<MenuConfiguration::Attributes*>(pMenu->GetUserValue( nItemId ));
+                    MenuAttributes* pMenuAttributes =
+                        reinterpret_cast<MenuAttributes*>(pMenu->GetUserValue( nItemId ));
 
                     if ( pMenuAttributes && !pMenuAttributes->aImageId.isEmpty() )
                     {
@@ -1687,8 +1687,8 @@ void MenuBarManager::FillMenu(
                         if ( xDispatchProvider.is() )
                         {
                             // Use attributes struct to transport special dispatch provider
-                            sal_uIntPtr nAttributePtr = MenuConfiguration::Attributes::CreateAttribute(xDispatchProvider);
-                            pMenu->SetUserValue(nId, nAttributePtr, MenuConfiguration::Attributes::ReleaseAttribute);
+                            sal_uIntPtr nAttributePtr = MenuAttributes::CreateAttribute(xDispatchProvider);
+                            pMenu->SetUserValue(nId, nAttributePtr, MenuAttributes::ReleaseAttribute);
                         }
 
                         // Use help command to transport module identifier
@@ -1944,7 +1944,7 @@ void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMen
         {
             if ( pAddonMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
-                MenuConfiguration::Attributes* pAddonAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(pAddonMenu->GetUserValue( nItemId ));
+                MenuAttributes* pAddonAttributes = reinterpret_cast<MenuAttributes *>(pAddonMenu->GetUserValue( nItemId ));
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, xStatusListener, xDispatch );
 
                 if ( pAddonAttributes )

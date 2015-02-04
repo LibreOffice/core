@@ -84,7 +84,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
                 OUString aImageId;
 
                 sal_uIntPtr nAttributePtr = pPopupMenu->GetUserValue(sal::static_int_cast<sal_uInt16>(i));
-                MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(nAttributePtr);
+                MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aImageId = pAttributes->aImageId;
 
@@ -349,9 +349,9 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
                 sal_uIntPtr nAttributePtr = pSubMenu->GetUserValue(nItemId);
                 if (nAttributePtr)
                 {
-                    MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(nAttributePtr);
+                    MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
                     pAttributes->acquire();
-                    pVCLPopupMenu->SetUserValue(nItemId, nAttributePtr, MenuConfiguration::Attributes::ReleaseAttribute);
+                    pVCLPopupMenu->SetUserValue(nItemId, nAttributePtr, MenuAttributes::ReleaseAttribute);
                 }
             }
         }
@@ -412,7 +412,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
                 PopupMenu* pVCLPopupMenu = static_cast<PopupMenu *>(pPopupMenu->GetMenu());
                 aTargetURL.Complete = pVCLPopupMenu->GetItemCommand(rEvent.MenuId);
                 sal_uIntPtr nAttributePtr = pVCLPopupMenu->GetUserValue(rEvent.MenuId);
-                MenuConfiguration::Attributes* pAttributes = reinterpret_cast<MenuConfiguration::Attributes *>(nAttributePtr);
+                MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aTargetFrame = pAttributes->aTargetFrame;
             }

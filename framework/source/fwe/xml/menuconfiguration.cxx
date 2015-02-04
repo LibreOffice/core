@@ -139,25 +139,25 @@ void MenuConfiguration::StoreMenuBarConfigurationToXML(
     }
 }
 
-sal_uIntPtr MenuConfiguration::Attributes::CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr)
+sal_uIntPtr MenuAttributes::CreateAttribute(const OUString& rFrame, const OUString& rImageIdStr)
 {
-    Attributes* pAttributes = new Attributes(rFrame, rImageIdStr);
+    MenuAttributes* pAttributes = new MenuAttributes(rFrame, rImageIdStr);
     pAttributes->acquire();
     return reinterpret_cast<sal_uIntPtr>(pAttributes);
 }
 
-sal_uIntPtr MenuConfiguration::Attributes::CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
+sal_uIntPtr MenuAttributes::CreateAttribute(const css::uno::WeakReference<css::frame::XDispatchProvider>& rDispatchProvider)
 {
-    Attributes* pAttributes = new Attributes(rDispatchProvider);
+    MenuAttributes* pAttributes = new MenuAttributes(rDispatchProvider);
     pAttributes->acquire();
     return reinterpret_cast<sal_uIntPtr>(pAttributes);
 }
 
-void MenuConfiguration::Attributes::ReleaseAttribute(sal_uIntPtr nAttributePtr)
+void MenuAttributes::ReleaseAttribute(sal_uIntPtr nAttributePtr)
 {
     if (!nAttributePtr)
         return;
-    Attributes* pAttributes = reinterpret_cast<Attributes*>(nAttributePtr);
+    MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes*>(nAttributePtr);
     pAttributes->release();
 }
 

@@ -438,8 +438,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         {
                             OUString aImageId;
 
-                            ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                                reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pSVMenu->GetUserValue( nSlotId ));
+                            ::framework::MenuAttributes* pMenuAttributes =
+                                reinterpret_cast< ::framework::MenuAttributes*>(pSVMenu->GetUserValue( nSlotId ));
 
                             if ( pMenuAttributes )
                                 aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -510,8 +510,8 @@ IMPL_LINK_NOARG(SfxVirtualMenu, SettingsChanged)
                     OUString aCmd( pSVMenu->GetItemCommand( nSlotId ) );
                     OUString aImageId;
 
-                    ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                        reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pSVMenu->GetUserValue( nSlotId ));
+                    ::framework::MenuAttributes* pMenuAttributes =
+                        reinterpret_cast< ::framework::MenuAttributes*>(pSVMenu->GetUserValue( nSlotId ));
 
                     if ( pMenuAttributes )
                         aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
@@ -578,8 +578,8 @@ void SfxVirtualMenu::UpdateImages( Menu* pMenu )
             {
                 OUString aImageId;
 
-                ::framework::MenuConfiguration::Attributes* pMenuAttributes =
-                    reinterpret_cast< ::framework::MenuConfiguration::Attributes*>(pMenu->GetUserValue( nSlotId ));
+                ::framework::MenuAttributes* pMenuAttributes =
+                    reinterpret_cast< ::framework::MenuAttributes*>(pMenu->GetUserValue( nSlotId ));
 
                 if ( pMenuAttributes )
                     aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
