@@ -322,8 +322,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
 
 void ButtonDialog::RemoveButton( sal_uInt16 nId )
 {
-    btn_iterator it;
-    for (it = maItemList.begin(); it != maItemList.end(); ++it)
+    for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
         if (it->mnId == nId)
         {
@@ -333,12 +332,11 @@ void ButtonDialog::RemoveButton( sal_uInt16 nId )
                 delete it->mpPushButton;
 
             maItemList.erase(it);
-            break;
+            return;
         }
     }
 
-    if (it == maItemList.end())
-        SAL_WARN( "vcl.window", "ButtonDialog::RemoveButton(): ButtonId invalid" );
+    SAL_WARN( "vcl.window", "ButtonDialog::RemoveButton(): ButtonId invalid" );
 }
 
 void ButtonDialog::Clear()
