@@ -298,6 +298,7 @@ public:
             :   mnFlags(nFlags), mnCharPos(nCharPos),
                 mnOrigWidth(nOrigWidth), mnNewWidth(nOrigWidth),
                 mnXOffset(0),
+                mnYOffset(0),
                 maGlyphId(aGlyphId), maLinearPos(rLinearPos)
             {}
 
