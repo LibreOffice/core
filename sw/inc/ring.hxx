@@ -43,7 +43,7 @@ namespace sw
             typedef RingContainer<value_type> ring_container;
             typedef RingContainer<const_value_type> const_ring_container;
             virtual ~Ring()
-                { algo::unlink(static_cast< value_type* >(this)); };
+                { algo::unlink(this); };
             /**
              * Removes this item from its current ring container and adds it to
              * another ring container. If the item was not alone in the original
@@ -65,8 +65,8 @@ namespace sw
              * are alone in one.
              */
             Ring()
-                : pNext(static_cast< value_type* >(this))
-                , pPrev(static_cast< value_type* >(this))
+                : pNext(this)
+                , pPrev(this)
                 { }
             /**
              * Creates a new item and add it to an existing ring container.
@@ -76,16 +76,16 @@ namespace sw
             Ring( value_type* pRing );
             /** @return the next item in the ring container */
             value_type* GetNextInRing()
-                { return pNext; }
+                { return static_cast<value_type *>(pNext); }
             /** @return the previous item in the ring container */
             value_type* GetPrevInRing()
-                { return pPrev; }
+                { return static_cast<value_type *>(pPrev); }
             /** @return the next item in the ring container */
             const_value_type* GetNextInRing() const
-                { return pNext; }
+                { return static_cast<value_type *>(pNext); }
             /** @return the previous item in the ring container */
             const_value_type* GetPrevInRing() const
-                { return pPrev; }
+                { return static_cast<value_type *>(pPrev); }
             /** @return true if and only if this item is alone in its ring */
             bool unique() const
                 { return algo::unique(static_cast< const_value_type* >(this)); }
@@ -94,12 +94,12 @@ namespace sw
             /** internal implementation class -- not for external use */
             struct Ring_node_traits
             {
-                typedef value_type node;
-                typedef value_type* node_ptr;
-                typedef const value_type* const_node_ptr;
-                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetNextInRing(); };
+                typedef Ring node;
+                typedef Ring* node_ptr;
+                typedef const Ring* const_node_ptr;
+                static node_ptr get_next(const_node_ptr n) { return const_cast<node_ptr>(n)->pNext; };
                 static void set_next(node_ptr n, node_ptr next) { n->pNext = next; };
-                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(static_cast<const_node_ptr>(n))->GetPrevInRing(); };
+                static node_ptr get_previous(const_node_ptr n) { return const_cast<node_ptr>(n)->pPrev; };
                 static void set_previous(node_ptr n, node_ptr previous) { n->pPrev = previous; };
             };
 #if !defined(__clang__) && defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 7)
@@ -116,14 +116,14 @@ namespace sw
 #endif
             friend class boost::iterator_core_access;
             typedef boost::intrusive::circular_list_algorithms<Ring_node_traits> algo;
-            value_type* pNext;
-            value_type* pPrev;
+            Ring* pNext;
+            Ring* pPrev;
     };
 
     template <typename value_type>
     inline Ring<value_type>::Ring( value_type* pObj )
-        : pNext(static_cast< value_type* >(this))
-        , pPrev(static_cast< value_type* >(this))
+        : pNext(this)
+        , pPrev(this)
     {
         if( pObj )
         {
