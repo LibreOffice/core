@@ -12,6 +12,7 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
 
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
@@ -45,15 +46,22 @@ private:
     SvSimpleTableContainer* m_pPrefCtrl;
     PushButton* m_pResetBtn;
     PushButton* m_pEditBtn;
+    PushButton* m_pSearchBtn;
+    Edit* m_pSearchEdit;
 
     std::vector< boost::shared_ptr< Prop_Impl > > m_vectorOfModified;
     boost::scoped_ptr< SvSimpleTable > m_pPrefBox;
+
+     //for search
+    ::com::sun::star::util::SearchOptions m_options;
+    SvTreeListEntries m_prefBoxEntries;
 
     void AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp );
     std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
 
     DECL_LINK( StandardHdl_Impl, void * );
     DECL_LINK( ResetBtnHdl_Impl, void * );
+    DECL_LINK( SearchHdl_Impl, void* );
 
 public:
    CuiAboutConfigTabPage(vcl::Window* pParent);
