@@ -29,6 +29,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     }
 
     private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId, boolean forceRedraw) {
+        if (mTileProvider == null)
+            return;
+
         if (composedTileLayer.isStillValid(tileId)) {
             CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
             if (image != null) {
@@ -44,6 +47,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     }
 
     private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
+        if (mTileProvider == null)
+            return;
+
         if (composedTileLayer.isStillValid(tile.id) && !tile.markedForRemoval) {
             mLayerClient.beginDrawing();
             mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
@@ -102,7 +108,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         LOKitShell.hideProgressSpinner();
     }
 
-    private boolean loadDocument(String filename) {
+    private void loadDocument(String filename) {
         if (mApplication == null) {
             mApplication = LibreOfficeMainActivity.mAppContext;
         }
@@ -110,19 +116,21 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         mLayerClient = mApplication.getLayerClient();
 
         mTileProvider = TileProviderFactory.create(mLayerClient, filename);
-        boolean isReady = mTileProvider.isReady();
-        if (isReady) {
+
+        if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner();
             mTileProvider.registerInvalidationCallback(this);
             refresh();
             LOKitShell.hideProgressSpinner();
+        } else {
+            closeDocument();
         }
-        return isReady;
     }
 
     public void closeDocument() {
         if (mTileProvider != null) {
             mTileProvider.close();
+            mTileProvider = null;
         }
     }
 

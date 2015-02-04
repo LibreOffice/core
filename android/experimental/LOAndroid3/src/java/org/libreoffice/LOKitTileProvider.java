@@ -78,6 +78,9 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
             postLoad();
             mIsReady = true;
         }
+        else {
+            mIsReady = false;
+        }
     }
 
     public void postLoad() {
@@ -152,7 +155,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         } else {
             ret = resetDocumentSize();
             if (!ret) {
-                error = "Document returned an invalid size or the document is empty!";
+                error = "Document returned an invalid size or the document is empty.";
             }
         }
 
