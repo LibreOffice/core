@@ -1465,7 +1465,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                     {
                         SvxIMapDlg *pDlg = GetIMapDlg(GetView());
-                        if( pDlg->GetEditingObject() != rSh.GetIMapInventor() )
+                        if (pDlg && pDlg->GetEditingObject() != rSh.GetIMapInventor())
                             lcl_UpdateIMapDlg( rSh );
                     }
                 }
