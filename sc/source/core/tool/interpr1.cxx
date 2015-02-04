@@ -476,10 +476,13 @@ void ScInterpreter::ScChooseJump()
                     GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(
                                 pCur, xNew));
                 }
-                PushTempToken( xNew.get());
-                // set endpoint of path for main code line
-                aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
-                bHaveJump = true;
+                if (xNew.get())
+                {
+                    PushTempToken( xNew.get());
+                    // set endpoint of path for main code line
+                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                    bHaveJump = true;
+                }
             }
         }
         break;
