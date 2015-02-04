@@ -3766,7 +3766,7 @@ bool ScFormulaCell::InterpretFormulaGroup()
     if (mxGroup->meCalcState == sc::GroupCalcDisabled)
         return false;
 
-    if (GetSharedLength() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
+    if (GetWeight() < ScInterpreter::GetGlobalConfig().mnOpenCLMinimumFormulaGroupSize)
     {
         mxGroup->meCalcState = sc::GroupCalcDisabled;
         return false;
@@ -4142,6 +4142,17 @@ SCROW ScFormulaCell::GetSharedTopRow() const
 SCROW ScFormulaCell::GetSharedLength() const
 {
     return mxGroup ? mxGroup->mnLength : 0;
+}
+
+sal_Int32 ScFormulaCell::GetWeight() const
+{
+#if 0
+    if (!mxGroup)
+        return pCode->GetWeight();
+    return GetSharedLength() * GetSharedCode()->GetWeight();
+#else
+    return GetSharedLength();
+#endif
 }
 
 ScTokenArray* ScFormulaCell::GetSharedCode()
