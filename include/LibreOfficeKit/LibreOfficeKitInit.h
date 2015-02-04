@@ -17,7 +17,7 @@ extern "C"
 {
 #endif
 
-#if defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) || defined(_WIN32)
+#if defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) || defined(_WIN32) || defined(__APPLE__)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -117,9 +117,11 @@ typedef LibreOfficeKit *(HookFunction)( const char *install_path);
 static LibreOfficeKit *lok_init( const char *install_path )
 {
     char *imp_lib;
-    size_t partial_length;
     void *dlhandle;
     HookFunction *pSym;
+
+#if !(defined(__APPLE__) && defined(__arm__))
+    size_t partial_length;
 
     if (!install_path)
         return NULL;
@@ -154,6 +156,10 @@ static LibreOfficeKit *lok_init( const char *install_path )
             return NULL;
         }
     }
+#else
+    imp_lib = strdup("the app executable");
+    dlhandle = RTLD_MAIN_ONLY;
+#endif
 
     pSym = (HookFunction *) _dlsym( dlhandle, "libreofficekit_hook" );
     if (!pSym)
@@ -168,7 +174,7 @@ static LibreOfficeKit *lok_init( const char *install_path )
     return pSym( install_path );
 }
 
-#endif // defined(__linux__) || defined(_AIX)
+#endif // defined(__linux__) || defined (__FreeBSD_kernel__) || defined(_AIX) || defined(_WIN32) || defined(__APPLE__)
 
 #ifdef __cplusplus
 }
