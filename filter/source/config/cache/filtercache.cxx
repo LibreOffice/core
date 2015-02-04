@@ -1258,8 +1258,6 @@ void FilterCache::impl_validateAndOptimize()
     // <- SAFE
 }
 
-
-
 void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                                          const OUString& sItem)
     throw(css::uno::Exception)
@@ -1283,15 +1281,13 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                 pList = &m_lChangedContentHandlers;
                 break;
 
-        default : throw css::uno::Exception("unsupported item type", 0);
+        default : throw css::uno::RuntimeException("unsupported item type", 0);
     }
 
     OUStringList::const_iterator pItem = ::std::find(pList->begin(), pList->end(), sItem);
     if (pItem == pList->end())
         pList->push_back(sItem);
 }
-
-
 
 FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                                                      const CacheItemList&                                      rList,
