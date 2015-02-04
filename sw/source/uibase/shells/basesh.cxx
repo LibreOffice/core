@@ -1263,9 +1263,10 @@ IMPL_LINK_NOARG(SwBaseShell, GraphicArrivedHdl)
                 if( !bProtect )
                 {
                     sal_uInt16 nId = SvxContourDlgChildWindow::GetChildWindowId();
-                    SvxIMapDlg *pDlg = pVFrame->HasChildWindow( nId ) ?
-                        static_cast<SvxIMapDlg*>( pVFrame->GetChildWindow( nId )
-                                            ->GetWindow()) : 0;
+                    SfxChildWindow *pChildWindow = pVFrame->HasChildWindow(nId) ?
+                        pVFrame->GetChildWindow(nId) : 0;
+                    SvxIMapDlg *pDlg = pChildWindow ?
+                        static_cast<SvxIMapDlg*>(pChildWindow->GetWindow()) : 0;
                     if( pDlg && pDlg->GetEditingObject() !=
                                 rSh.GetIMapInventor() )
                         lcl_UpdateContourDlg( rSh, nsSelectionType::SEL_GRF );
