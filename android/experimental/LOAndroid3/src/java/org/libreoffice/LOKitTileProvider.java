@@ -71,6 +71,9 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
         Log.i(LOGTAG, "====> mDocument = " + mDocument);
 
+        if (mDocument != null)
+            mDocument.initializeForRendering();
+
         if (checkDocument()) {
             postLoad();
             mIsReady = true;
@@ -78,7 +81,6 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     }
 
     public void postLoad() {
-        mDocument.initializeForRendering();
         mDocument.setMessageCallback(this);
 
         int parts = mDocument.getParts();
