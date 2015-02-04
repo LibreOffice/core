@@ -29,9 +29,11 @@ public class TextCursorView extends ImageView {
 
     private int mWidth;
     private int mHeight;
+    private int mAlpha = 0;
 
     public TextCursorView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        postDelayed(cursorAnimation, 500);
     }
 
     public void changePosition(RectF position) {
@@ -57,7 +59,6 @@ public class TextCursorView extends ImageView {
         mTop = Math.round(scaled.centerY() - y);
 
         setScaleY(scaled.height());
-
         setLayoutPosition();
     }
 
@@ -76,4 +77,13 @@ public class TextCursorView extends ImageView {
 
         setLayoutParams(mLayoutParams);
     }
+
+    private Runnable cursorAnimation = new Runnable() {
+        public void run() {
+            mAlpha = mAlpha == 0 ? 0xFF : 0;
+            getDrawable().setAlpha(mAlpha);
+            invalidate();
+            postDelayed(cursorAnimation, 500);
+        }
+    };
 }
