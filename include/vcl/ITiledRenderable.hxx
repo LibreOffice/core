@@ -84,6 +84,10 @@ public:
         (void) ePartMode;
     }
 
+    /**
+     * Setup various document properties that are needed for the document to
+     * be renderable via tiled rendering.
+     */
     virtual void initializeForTiledRendering()
     {
     }
