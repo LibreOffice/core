@@ -240,6 +240,9 @@ public:
     virtual OUString getPartName( int nPart ) SAL_OVERRIDE;
     virtual void setPartMode( LibreOfficeKitPartMode ePartMode ) SAL_OVERRIDE;
 
+    /// @see ITiledRenderable::initializeForTiledRendering().
+    virtual void initializeForTiledRendering() SAL_OVERRIDE;
+
     // XComponent
 
     /** This dispose implementation releases the resources held by the
