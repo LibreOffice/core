@@ -103,7 +103,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo ) const
     return GetNumStr( nNo, rLang.getLocale() );
 }
 
-OUString SvxNumberType::GetNumStr( sal_uLong nNo, const Locale& rLocale ) const
+OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const
 {
     lcl_getFormatter(xFormatter);
     if(!xFormatter.is())
