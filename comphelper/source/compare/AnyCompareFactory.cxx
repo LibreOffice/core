@@ -41,13 +41,13 @@ using namespace com::sun::star::i18n;
 
 class AnyCompare : public ::cppu::WeakImplHelper1< XAnyCompare >
 {
-    Reference< XCollator > m_rCollator;
+    Reference< XCollator > m_xCollator;
 
 public:
     AnyCompare( Reference< XComponentContext > xContext, const Locale& rLocale )
     {
-        m_rCollator = Collator::create( xContext );
-        m_rCollator->loadDefaultCollator( rLocale,
+        m_xCollator = Collator::create( xContext );
+        m_xCollator->loadDefaultCollator( rLocale,
                                           0 ); //???
     }
 
@@ -56,12 +56,12 @@ public:
 
 class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
-    Reference< XAnyCompare >            m_rAnyCompare;
-    Reference< XComponentContext >      m_rContext;
+    Reference< XAnyCompare >            m_xAnyCompare;
+    Reference< XComponentContext >      m_xContext;
     Locale                              m_Locale;
 
 public:
-    AnyCompareFactory( Reference< XComponentContext > xContext ) : m_rContext( xContext )
+    AnyCompareFactory( Reference< XComponentContext > xContext ) : m_xContext( xContext )
     {}
 
     // XAnyCompareFactory
@@ -92,7 +92,7 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
     any1 >>= aStr1;
     any2 >>= aStr2;
 
-    aResult = ( sal_Int16 )m_rCollator->compareString( aStr1, aStr2 );
+    aResult = static_cast<sal_Int16>(m_xCollator->compareString(aStr1, aStr2));
 
     return aResult;
 }
@@ -103,7 +103,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     // so no check for the property name is done
 
     if( aPropertyName == "Title" )
-        return m_rAnyCompare;
+        return m_xAnyCompare;
 
     return Reference< XAnyCompare >();
 }
@@ -114,7 +114,7 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
     {
         if( aArguments[0] >>= m_Locale )
         {
-            m_rAnyCompare = new AnyCompare( m_rContext, m_Locale );
+            m_xAnyCompare = new AnyCompare( m_xContext, m_Locale );
             return;
         }
     }
