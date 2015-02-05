@@ -181,7 +181,7 @@ namespace svxform
     }
 
 
-    sal_Int32 OStaticDataAccessTools::getDefaultNumberFormat( const Reference< XPropertySet >& _xColumn, const Reference< XNumberFormatTypes >& _xTypes, const Locale& _rLocale )
+    sal_Int32 OStaticDataAccessTools::getDefaultNumberFormat( const Reference< XPropertySet >& _xColumn, const Reference< XNumberFormatTypes >& _xTypes, const css::lang::Locale& _rLocale )
     {
         sal_Int32 nReturn = 0;
         if ( ensureLoaded() )
@@ -219,7 +219,7 @@ namespace svxform
     }
 
     void OStaticDataAccessTools::TransferFormComponentProperties(const Reference< XPropertySet>& _rxOld,
-        const Reference< XPropertySet>& _rxNew, const Locale& _rLocale) const
+        const Reference< XPropertySet>& _rxNew, const css::lang::Locale& _rLocale) const
     {
         if ( ensureLoaded() )
             m_xDataAccessTools->TransferFormComponentProperties(_rxOld, _rxNew, _rLocale);
