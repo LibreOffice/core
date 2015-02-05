@@ -279,12 +279,87 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
     return *this;
 }
 
+static bool lcl_IsOnBlacklist(OUString& rShapeType)
+{
+    OUString aBlacklist[] = {
+            "ring",
+            "can",
+            "cube",
+            "paper",
+            "frame",
+            "smiley",
+            "sun",
+            "flower",
+            "forbidden",
+            "bracket-pair",
+            "brace-pair",
+            "col-60da8460",
+            "col-502ad400",
+            "quad-bevel",
+            "cloud-callout",
+            "line-callout-1",
+            "line-callout-2",
+            "line-callout-3",
+            "paper",
+            "vertical-scroll",
+            "horizontal-scroll",
+            "mso-spt34",
+            "mso-spt75",
+            "mso-spt164",
+            "mso-spt180",
+            "flowchart-process",
+            "flowchart-alternate-process",
+            "flowchart-decision",
+            "flowchart-data",
+            "flowchart-predefined-process",
+            "flowchart-internal-storage",
+            "flowchart-document",
+            "flowchart-multidocument",
+            "flowchart-terminator",
+            "flowchart-preparation",
+            "flowchart-manual-input",
+            "flowchart-manual-operation",
+            "flowchart-connector",
+            "flowchart-off-page-connector",
+            "flowchart-card",
+            "flowchart-punched-tape",
+            "flowchart-summing-junction",
+            "flowchart-or",
+            "flowchart-collate",
+            "flowchart-sort",
+            "flowchart-extract",
+            "flowchart-merge",
+            "flowchart-stored-data",
+            "flowchart-delay",
+            "flowchart-sequential-access",
+            "flowchart-magnetic-disk",
+            "flowchart-direct-access-storage",
+            "flowchart-display"
+    };
+    std::vector<OUString> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+
+    return std::find(vBlacklist.begin(), vBlacklist.end(), rShapeType) != vBlacklist.end();
+}
+
+static bool lcl_IsOnWhitelist(OUString& rShapeType)
+{
+    OUString aWhitelist[] = {
+            "heart",
+            "puzzle"
+    };
+    std::vector<OUString> vWhitelist(aWhitelist, aWhitelist + SAL_N_ELEMENTS(aWhitelist));
+
+    return std::find(vWhitelist.begin(), vWhitelist.end(), rShapeType) != vWhitelist.end();
+}
+
+
 ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 {
     DBG(fprintf(stderr, "write custom shape\n"));
 
     Reference< XPropertySet > rXPropSet( xShape, UNO_QUERY );
     bool bPredefinedHandlesUsed = true;
+    bool bHasHandles = false;
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( xShape, nMirrorFlags, sShapeType );
@@ -315,6 +390,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
                 if ( rProp.Name == "AdjustmentValues" )
                     nAdjustmentValuesIndex = i;
                 else if ( rProp.Name == "Handles" ) {
+                    bHasHandles = true;
                     if( !bIsDefaultObject )
                         bPredefinedHandlesUsed = false;
                     // TODO: update nAdjustmentsWhichNeedsToBeConverted here
@@ -347,11 +423,40 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
 
     // visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
-    WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false);
+    // moon is flipped in MSO, and mso-spt89 (right up arrow) is mapped to leftUpArrow
+    if ( sShapeType == "moon" || sShapeType == "mso-spt89" )
+        WriteShapeTransformation( xShape, XML_a, !bFlipH, bFlipV, false);
+    else
+        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false);
 
-    if( sShapeType == "ooxml-non-primitive" ) // non-primitiv -> custom geometry
+    // we export non-primitive shapes to custom geometry
+    // we also export non-ooxml shapes which have handles/equations to custom geometry, because
+    // we cannot convert ODF equations to DrawingML equations. TODO: see what binary DOC export filter does.
+    // but our WritePolyPolygon() function is incomplete, therefore we use a blacklist
+    // we use a whitelist for shapes where mapping to MSO preset shape is not optimal
+    bool bCustGeom = true;
+    if( sShapeType == "ooxml-non-primitive" )
+        bCustGeom = true;
+    else if( sShapeType.startsWith("ooxml") )
+        bCustGeom = false;
+    else if( lcl_IsOnWhitelist(sShapeType) )
+        bCustGeom = true;
+    else if( lcl_IsOnBlacklist(sShapeType) )
+        bCustGeom = false;
+    else if( bHasHandles )
+        bCustGeom = true;
+
+    if( bCustGeom )
     {
-        WritePolyPolygon( EscherPropertyContainer::GetPolyPolygon( xShape ) );
+        basegfx::B2DPolyPolygon aB2DPolyPolygon = pShape->GetLineGeometry(true);
+        tools::PolyPolygon aPolyPolygon;
+        for( sal_uInt32 i = 0; i < aB2DPolyPolygon.count(); ++i )
+        {
+            basegfx::B2DPolygon aB2DPolygon = aB2DPolyPolygon.getB2DPolygon(i);
+            aPolyPolygon.Insert( Polygon( aB2DPolygon ), POLYPOLY_APPEND );
+        }
+
+        WritePolyPolygon( aPolyPolygon );
     }
     else // preset geometry
     {
