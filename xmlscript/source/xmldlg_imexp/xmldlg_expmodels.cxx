@@ -419,6 +419,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
     readImageURLAttr( "ImageURL", XMLNS_DIALOGS_PREFIX ":image-src" );
     readImagePositionAttr( "ImagePosition", XMLNS_DIALOGS_PREFIX ":image-position" );
     readBoolAttr( "MultiLine", XMLNS_DIALOGS_PREFIX ":multiline" );
+    readStringAttr( "GroupName", XMLNS_DIALOGS_PREFIX ":group-name" );
 
     sal_Int16 nState = 0;
     if (readProp( "State" ) >>= nState)

@@ -1159,9 +1159,11 @@ namespace xmloff
         {
             static const sal_Int32 nStringPropertyAttributeIds[] =
             {   // attribute flags
+                SCA_GROUP_NAME
             };
             static const OUString pStringPropertyNames[] =
             {   // property names
+                OUString(PROPERTY_GROUP_NAME)
             };
 
             static const sal_Int32 nIdCount = sizeof( nStringPropertyAttributeIds ) / sizeof( nStringPropertyAttributeIds[0] );
@@ -1657,6 +1659,8 @@ namespace xmloff
                 }
                 if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_IMAGE_POSITION ) )
                     m_nIncludeSpecial |= SCA_IMAGE_POSITION;
+                if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_GROUP_NAME ) )
+                    m_nIncludeSpecial |= SCA_GROUP_NAME;
                 m_nIncludeDatabase = DA_DATA_FIELD | DA_INPUT_REQUIRED;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;
