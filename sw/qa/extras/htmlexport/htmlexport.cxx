@@ -233,6 +233,15 @@ DECLARE_HTMLEXPORT_TEST(testExportCheckboxRadioButtonState, "checkbox-radiobutto
     assertXPathNoAttribute(pDoc, "/html/body/form/p[4]/input", "checked");
 }
 
+DECLARE_HTMLEXPORT_TEST(testExportUrlEncoding, "tdf76291.odt")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+    
+    // Test URI encoded hyperlink with Chinese characters
+    assertXPath(pDoc, "/html/body/p/a", "href", "http://www.youtube.com/results?search_query=%E7%B2%B5%E8%AA%9Emv&sm=12");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
