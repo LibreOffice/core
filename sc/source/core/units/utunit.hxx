@@ -19,6 +19,10 @@
 namespace sc {
 namespace units {
 
+namespace test {
+    class UnitsTest;
+}
+
 /*
  * Convenience shared_ptr wrapper for ut_unit, which takes
  * care of dealing with the necessary custom deleter.
@@ -29,6 +33,8 @@ namespace units {
  * wrapper.
  */
 class UtUnit {
+    friend class test::UnitsTest;
+
 private:
     ::boost::shared_ptr< ut_unit > mpUnit;
 

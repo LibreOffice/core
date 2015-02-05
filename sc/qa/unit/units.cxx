@@ -8,6 +8,7 @@
  */
 
 #include "unitsimpl.hxx"
+#include "utunit.hxx"
 
 #include "formulacell.hxx"
 
@@ -37,10 +38,12 @@ public:
 
     ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
 
+    void testUTUnit();
     void testStringExtraction();
     void testUnitVerification();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
+    CPPUNIT_TEST(testUTUnit);
     CPPUNIT_TEST(testStringExtraction);
     CPPUNIT_TEST(testUnitVerification);
     CPPUNIT_TEST_SUITE_END();
@@ -67,6 +70,21 @@ void UnitsTest::setUp() {
 void UnitsTest::tearDown() {
     m_xDocShRef.Clear();
     BootstrapFixture::tearDown();
+}
+
+void UnitsTest::testUTUnit() {
+    // Test that we can create units.
+    UtUnit aDimensionless;
+    CPPUNIT_ASSERT(UtUnit::createUnit("", aDimensionless, mpUnitsImpl->mpUnitSystem));
+    // And test that an empty string does in fact map to the dimensionless unit one.
+    // The documentation states that ut_is_dimensionless returns zero for dimensionless
+    // units, however the sources (and udunits2's unit tests) suggest that zero is returned
+    // for a unit WITH dimensions (as the method name would suggest).
+    CPPUNIT_ASSERT(ut_is_dimensionless(aDimensionless.mpUnit.get()) != 0);
+
+    // Test that we can't create garbage units
+    UtUnit aGarbage;
+    CPPUNIT_ASSERT(!UtUnit::createUnit("garbage", aGarbage, mpUnitsImpl->mpUnitSystem));
 }
 
 void UnitsTest::testStringExtraction() {
