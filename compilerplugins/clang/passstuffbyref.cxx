@@ -16,6 +16,12 @@
 // It's not very efficient, because we generally end up copying it twice - once into the parameter and
 // again into the destination.
 // They should rather be passed by reference.
+//
+// Generally recommending lambda capture by-ref rather than by-copy is even more
+// problematic than with function parameters, as a lambda instance can easily
+// outlive a referrenced variable.  So once lambdas start to get used in more
+// sophisticated ways than passing them into standard algorithms, this plugin's
+// advice, at least for explicit captures, will need to be revisited.
 
 namespace {
 
@@ -28,6 +34,11 @@ public:
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
     bool VisitFunctionDecl(const FunctionDecl * decl);
+
+    bool VisitLambdaExpr(const LambdaExpr * expr);
+
+private:
+    bool isFat(QualType type, std::string * name);
 };
 
 bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
@@ -49,39 +60,56 @@ bool PassStuffByRef::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     unsigned n = functionDecl->getNumParams();
     for (unsigned i = 0; i != n; ++i) {
         const ParmVarDecl * pvDecl = functionDecl->getParamDecl(i);
-        QualType t1 { pvDecl->getType() };
-        if (!t1->isClassType()) {
-            continue;
-        }
-        string typeName = t1.getUnqualifiedType().getCanonicalType().getAsString();
-
-        bool bFound = false;
-        if (typeName == "class rtl::OUString" ||
-            typeName == "class rtl::OString" ||
-            typeName.find("class com::sun::star::uno::Sequence") == 0) {
-            bFound = true;
-        }
-
-        if (!bFound && !t1->isIncompleteType()) {
-            const clang::Type* type = t1.getTypePtrOrNull();
-            if (type != nullptr) {
-                clang::CharUnits size =  compiler.getASTContext().getTypeSizeInChars(type);
-                if (size.getQuantity() > 64) {
-                    bFound = true;
-                }
-            }
-        }
-
-        if (bFound) {
+        std::string name;
+        if (isFat(pvDecl->getType(), &name)) {
             report(
                 DiagnosticsEngine::Warning,
-                "passing " + typeName + " by value, rather pass by reference .e.g. 'const " + typeName + "&'",
-                pvDecl->getSourceRange().getBegin())
-              << pvDecl->getSourceRange();
+                ("passing '%0' by value, rather pass by reference, e.g., '%0"
+                 " const &'"),
+                pvDecl->getLocation())
+                << name << pvDecl->getSourceRange();
         }
-
     }
     return true;
+}
+
+bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
+    if (ignoreLocation(expr)) {
+        return true;
+    }
+    for (auto const & i: expr->captures()) {
+        if (i.getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
+            std::string name;
+            if (isFat(i.getCapturedVar()->getType(), &name)) {
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("%0 capture of '%1' variable by copy, rather use capture"
+                     " by reference---UNLESS THE LAMBDA OUTLIVES THE VARIABLE"),
+                    i.getLocation())
+                    << (i.isImplicit() ? "implicit" : "explicit") << name
+                    << expr->getSourceRange();
+            }
+        }
+    }
+    return true;
+}
+
+bool PassStuffByRef::isFat(QualType type, std::string * name) {
+    if (!type->isClassType()) {
+        return false;
+    }
+    *name = type.getUnqualifiedType().getCanonicalType().getAsString();
+    if (*name == "class rtl::OUString" || *name == "class rtl::OString"
+        || name->find("class com::sun::star::uno::Sequence") == 0)
+    {
+        return true;
+    }
+    if (type->isIncompleteType()) {
+        return false;
+    }
+    Type const * t2 = type.getTypePtrOrNull();
+    return t2 != nullptr
+        && compiler.getASTContext().getTypeSizeInChars(t2).getQuantity() > 64;
 }
 
 loplugin::Plugin::Registration< PassStuffByRef > X("passstuffbyref");

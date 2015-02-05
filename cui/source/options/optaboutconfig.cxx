@@ -670,7 +670,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
         m_pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
         //update m_prefBoxEntries
         SvTreeListEntries::iterator it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
-          [sPropertyPath, sPropertyName](SvTreeListEntry &entry) -> bool
+          [&sPropertyPath, &sPropertyName](SvTreeListEntry &entry) -> bool
           {
               return static_cast< SvLBoxString* >( entry.GetItem(1) )->GetText().equals( sPropertyPath ) &&
                       static_cast< SvLBoxString* >( entry.GetItem(2) )->GetText().equals( sPropertyName );
