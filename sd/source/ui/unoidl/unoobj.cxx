@@ -19,7 +19,7 @@
 
 #include <sal/config.h>
 
-#include <map>
+#include <utility>
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
@@ -338,24 +338,24 @@ uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     else
     {
         sal_uInt32 nObjId = mpShape->getShapeKind();
-        uno::Sequence< uno::Type >* pTypes;
+        uno::Sequence< uno::Type > aTypes;
         SdTypesCache& gImplTypesCache = SD_MOD()->gImplTypesCache;
         SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
         if( aIter == gImplTypesCache.end() )
         {
-            pTypes = new uno::Sequence< uno::Type >( mpShape->_getTypes() );
-            sal_uInt32 nCount = pTypes->getLength();
-            pTypes->realloc( nCount+1 );
-            (*pTypes)[nCount] = cppu::UnoType<lang::XTypeProvider>::get();
+            aTypes = mpShape->_getTypes();
+            sal_uInt32 nCount = aTypes.getLength();
+            aTypes.realloc( nCount+1 );
+            aTypes[nCount] = cppu::UnoType<lang::XTypeProvider>::get();
 
-            gImplTypesCache.insert(nObjId, pTypes);
+            gImplTypesCache.insert(std::make_pair(nObjId, aTypes));
         }
         else
         {
             // use the already computed implementation id
-            pTypes = (*aIter).second;
+            aTypes = (*aIter).second;
         }
-        return *pTypes;
+        return aTypes;
     }
 }
 
@@ -422,7 +422,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     throw(::com::sun::star::uno::RuntimeException)
 {
     sal_uIntPtr nObjId = reinterpret_cast<sal_uIntPtr>(mpShape->getPropertyMapEntries());
-    SfxExtItemPropertySetInfo* pInfo = NULL;
+    rtl::Reference<SfxExtItemPropertySetInfo> pInfo;
 
     SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?
         SD_MOD()->gImplImpressPropertySetInfoCache : SD_MOD()->gImplDrawPropertySetInfoCache;
@@ -432,9 +432,8 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     {
         uno::Reference< beans::XPropertySetInfo > xInfo( mpShape->_getPropertySetInfo() );
         pInfo = new SfxExtItemPropertySetInfo( mpMap, xInfo->getProperties() );
-        pInfo->acquire();
 
-        rCache.insert(nObjId, pInfo);
+        rCache.insert(std::make_pair(nObjId, pInfo));
     }
     else
     {
@@ -442,8 +441,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
         pInfo = (*aIter).second;
     }
 
-    uno::Reference< beans::XPropertySetInfo > xInfo( pInfo );
-    return pInfo;
+    return pInfo.get();
 }
 
 void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )

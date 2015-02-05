@@ -23,6 +23,7 @@
 #include "glob.hxx"
 #include "pres.hxx"
 
+#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 #include <tools/shl.hxx>
 #include "sddllapi.h"
@@ -32,7 +33,7 @@
 #include <sfx2/module.hxx>
 #include <vcl/vclevent.hxx>
 #include <sal/types.h>
-#include <boost/ptr_container/ptr_map.hpp>
+#include <map>
 #include <memory>
 
 class SdOptions;
@@ -60,8 +61,8 @@ enum SdOptionStreamMode
     SD_OPTION_STORE = 1
 };
 
-typedef boost::ptr_map< sal_uIntPtr, SfxExtItemPropertySetInfo > SdExtPropertySetInfoCache;
-typedef boost::ptr_map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache;
+typedef std::map< sal_uIntPtr, rtl::Reference<SfxExtItemPropertySetInfo> > SdExtPropertySetInfoCache;
+typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache;
 
 /*
 
