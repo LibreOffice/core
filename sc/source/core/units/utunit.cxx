@@ -13,6 +13,21 @@
 
 using namespace sc::units;
 
+bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem) {
+    OString sUnitStringUTF8 = OUStringToOString(rUnitString, RTL_TEXTENCODING_UTF8);
+
+    UtUnit pParsedUnit(ut_parse(pUTSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
+
+    if (pParsedUnit) {
+        rUnitOut = pParsedUnit;
+        return true;
+    } else {
+        SAL_INFO("sc.units", "error encountered parsing unit \"" << rUnitString << "\": " << getUTStatus());
+        return false;
+    }
+}
+
+
 OUString UtUnit::getString() const {
     char aBuf[200];
     int nChars = ut_format(mpUnit.get(), aBuf, 200, UT_UTF8);
