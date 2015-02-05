@@ -55,7 +55,6 @@
 #include <string.h>
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/static_assert.hpp>
 #include <algorithm>
 #include <functional>
 #include <rtl/ustrbuf.hxx>
@@ -1343,7 +1342,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             s_xLocaleData = LocaleData::create(m_xContext);
 
         // reset to UNKNOWN_RULE
-        BOOST_STATIC_ASSERT(OSQLParseNode::UNKNOWN_RULE==0);
+        static_assert(OSQLParseNode::UNKNOWN_RULE==0, "UNKNOWN_RULE must be 0 for memset to 0 to work");
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs));
 
         struct

@@ -24,7 +24,6 @@
 #include "odbc/OConnection.hxx"
 #include "diagnose_ex.h"
 #include <rtl/ustrbuf.hxx>
-#include <boost/static_assert.hpp>
 
 #include <appendsqlwchars.hxx>
 
@@ -416,12 +415,12 @@ OUString OTools::getStringValue(OConnection* _pConnection,
     case SQL_WLONGVARCHAR:
     {
         SQLWCHAR waCharArray[2048];
-        BOOST_STATIC_ASSERT(sizeof(waCharArray) % sizeof(SQLWCHAR) == 0);
-        BOOST_STATIC_ASSERT(sizeof(SQLWCHAR) == 2 || sizeof(SQLWCHAR) == 4);
+        static_assert(sizeof(waCharArray) % sizeof(SQLWCHAR) == 0, "must fit in evenly");
+        static_assert(sizeof(SQLWCHAR) == 2 || sizeof(SQLWCHAR) == 4, "must be 2 or 4");
         // Size == number of bytes, Len == number of UTF-16 or UCS4 code units
         const SQLLEN nMaxSize = sizeof(waCharArray);
         const SQLLEN nMaxLen  = sizeof(waCharArray) / sizeof(SQLWCHAR);
-        BOOST_STATIC_ASSERT(nMaxLen * sizeof(SQLWCHAR) == nMaxSize);
+        static_assert(nMaxLen * sizeof(SQLWCHAR) == nMaxSize, "sizes must match");
 
         // read the unicode data
         SQLLEN pcbValue = SQL_NO_TOTAL;

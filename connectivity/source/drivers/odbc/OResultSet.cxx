@@ -36,7 +36,6 @@
 #include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include "diagnose_ex.h"
-#include <boost/static_assert.hpp>
 
 #include <o3tl/compat_functional.hxx>
 
@@ -54,10 +53,10 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 
 #define ODBC_SQL_NOT_DEFINED    99UL
-BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_OFF );
-BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_ON );
-BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_FIXED );
-BOOST_STATIC_ASSERT( ODBC_SQL_NOT_DEFINED != SQL_UB_VARIABLE );
+static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_OFF, "ODBC_SQL_NOT_DEFINED must be unique");
+static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_ON, "ODBC_SQL_NOT_DEFINED must be unique");
+static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_FIXED, "ODBC_SQL_NOT_DEFINED must be unique");
+static_assert(ODBC_SQL_NOT_DEFINED != SQL_UB_VARIABLE, "ODBC_SQL_NOT_DEFINED must be unique");
 
 namespace
 {
@@ -838,7 +837,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException, st
 
     SQLLEN nRealLen = 0;
     Sequence<sal_Int8> aBookmark(nMaxBookmarkLen);
-    BOOST_STATIC_ASSERT(static_cast<size_t>(nMaxBookmarkLen) >= sizeof(SQLLEN));
+    static_assert(static_cast<size_t>(nMaxBookmarkLen) >= sizeof(SQLLEN), "must be larger");
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
                                 0,

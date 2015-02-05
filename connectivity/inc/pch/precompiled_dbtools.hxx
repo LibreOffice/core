@@ -21,7 +21,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/spirit/include/classic_core.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <boost/static_assert.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 
@@ -23,7 +22,7 @@ void appendSQLWCHARs(OUStringBuffer & s, const sal_Unicode* d, sal_Int32 n)
 }
 
 #if defined SAL_UNICODE_NOTEQUAL_WCHAR_T
-BOOST_STATIC_ASSERT(sizeof (wchar_t) == 4);
+static_assert(sizeof (wchar_t) == 4, "sizeof wchar_t must be 4 for this to work");
 void appendSQLWCHARs(OUStringBuffer & s, const wchar_t* d, sal_Int32 n)
 {
     const wchar_t * const end = d + n;

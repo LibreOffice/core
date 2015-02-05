@@ -27,7 +27,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <boost/type_traits.hpp>
-#include <boost/static_assert.hpp>
 
 using namespace ::dbtools;
 using namespace ::com::sun::star::sdbc;
