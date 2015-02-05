@@ -1155,6 +1155,36 @@ namespace xmloff
             }
         }
 
+        // the string properties
+        {
+            static const sal_Int32 nStringPropertyAttributeIds[] =
+            {   // attribute flags
+            };
+            static const OUString pStringPropertyNames[] =
+            {   // property names
+            };
+
+            static const sal_Int32 nIdCount = sizeof( nStringPropertyAttributeIds ) / sizeof( nStringPropertyAttributeIds[0] );
+        #if OSL_DEBUG_LEVEL > 0
+            static const sal_Int32 nNameCount = sizeof( pStringPropertyNames ) / sizeof( pStringPropertyNames[0] );
+            OSL_ENSURE( ( nIdCount == nNameCount ),
+                "OControlExport::exportSpecialAttributes: somebody tampered with the maps (2)!" );
+        #endif
+            for ( i = 0; i < nIdCount; ++i )
+                if ( nStringPropertyAttributeIds[i] & m_nIncludeSpecial )
+                {
+                    exportStringPropertyAttribute(
+                        OAttributeMetaData::getSpecialAttributeNamespace( nStringPropertyAttributeIds[i] ),
+                        OAttributeMetaData::getSpecialAttributeName( nStringPropertyAttributeIds[i] ),
+                        pStringPropertyNames[i]
+                    );
+            #if OSL_DEBUG_LEVEL > 0
+                //  reset the bit for later checking
+                m_nIncludeSpecial = m_nIncludeSpecial & ~nStringPropertyAttributeIds[i];
+            #endif
+                }
+        }
+
         if ((SCA_MIN_VALUE | SCA_MAX_VALUE) & m_nIncludeSpecial)
         {
             // need to export the min value and the max value as attributes
