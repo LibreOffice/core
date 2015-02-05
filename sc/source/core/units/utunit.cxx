@@ -20,7 +20,7 @@ bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boo
 
     UtUnit pParsedUnit(ut_parse(pUTSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
 
-    if (pParsedUnit) {
+    if (pParsedUnit.isValid()) {
         rUnitOut = pParsedUnit;
         return true;
     } else {
