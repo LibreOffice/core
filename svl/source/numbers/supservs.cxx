@@ -87,7 +87,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
         SetNumberFormatter(m_pOwnFormatter);
     }
 
-    Type aExpectedArgType = ::cppu::UnoType<Locale>::get();
+    Type aExpectedArgType = ::cppu::UnoType<css::lang::Locale>::get();
     LanguageType eNewFormatterLanguage = LANGUAGE_ENGLISH_US;
         // the default
 
@@ -96,7 +96,7 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
     {
         if (pArgs->getValueType().equals(aExpectedArgType))
         {
-            Locale aLocale;
+            css::lang::Locale aLocale;
             *pArgs >>= aLocale;
             eNewFormatterLanguage = LanguageTag::convertToLanguageType( aLocale, false);
         }
@@ -159,7 +159,7 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
     {
         // get the office's UI locale
         SvtSysLocale aSysLocale;
-        Locale aOfficeLocale = aSysLocale.GetLocaleData().getLanguageTag().getLocale();
+        css::lang::Locale aOfficeLocale = aSysLocale.GetLocaleData().getLanguageTag().getLocale();
 
         // initi with this locale
         Sequence< Any > aFakedInitProps( 1 );
