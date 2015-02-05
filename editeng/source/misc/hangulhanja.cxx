@@ -49,11 +49,11 @@ namespace editeng
 {
 
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::i18n;
     using namespace ::com::sun::star::i18n::TextConversionOption;
     using namespace ::com::sun::star::i18n::TextConversionType;
-    using namespace ::com::sun::star::lang;
 
     class HangulHanjaConversion_Impl
     {
@@ -74,7 +74,7 @@ namespace editeng
                                 m_xContext;             // the service factory to use
         Reference< XExtendedTextConversion >
                                 m_xConverter;           // the text conversion service
-        Locale                  m_aSourceLocale;        // the locale we're working with
+        lang::Locale            m_aSourceLocale;        // the locale we're working with
 
         // additions for Chinese simplified / traditional conversion
         HHC::ConversionType     m_eConvType;        // conversion type (Hangul/Hanja, simplified/traditional Chinese,...)
@@ -121,8 +121,8 @@ namespace editeng
         HangulHanjaConversion_Impl(
             vcl::Window* _pUIParent,
             const Reference< XComponentContext >& rxContext,
-            const Locale& _rSourceLocale,
-            const Locale& _rTargetLocale,
+            const lang::Locale& _rSourceLocale,
+            const lang::Locale& _rTargetLocale,
             const vcl::Font* _pTargetFont,
             sal_Int32 _nConvOptions,
             bool _bIsInteractive,
@@ -231,8 +231,8 @@ namespace editeng
 
     HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( vcl::Window* _pUIParent,
                                                             const Reference< XComponentContext >& rxContext,
-                                                            const Locale& _rSourceLocale,
-                                                            const Locale& _rTargetLocale,
+                                                            const lang::Locale& _rSourceLocale,
+                                                            const lang::Locale& _rTargetLocale,
                                                             const vcl::Font* _pTargetFont,
                                                             sal_Int32 _nOptions,
                                                             bool _bIsInteractive,
@@ -967,7 +967,7 @@ namespace editeng
 
     HangulHanjaConversion::HangulHanjaConversion( vcl::Window* _pUIParent,
         const Reference< XComponentContext >& rxContext,
-        const Locale& _rSourceLocale, const Locale& _rTargetLocale,
+        const lang::Locale& _rSourceLocale, const lang::Locale& _rTargetLocale,
         const vcl::Font* _pTargetFont,
         sal_Int32 _nOptions, bool _bIsInteractive)
         :m_pImpl( new HangulHanjaConversion_Impl( _pUIParent, rxContext, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
