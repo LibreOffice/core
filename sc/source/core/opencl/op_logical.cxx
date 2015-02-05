@@ -76,7 +76,6 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
             else{
             ss << "0; i < " << nCurWindowSize << "; i++) {\n";
             }
-#ifdef ISNAN
             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                 {
             ss <<"    if(isNan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
@@ -91,7 +90,6 @@ void OpAnd::GenSlidingWindowFunction(std::stringstream &ss,
             ss <<")\n";
             ss <<"        tmp = 1;\n    else\n";
                 }
-#endif
             ss <<"        tmp = ";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp"<<j<<" = tmp"<<j<<" && tmp;\n";
@@ -128,7 +126,6 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
         FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
         if(tmpCur0->GetType() == formula::svSingleVectorRef)
         {
-#ifdef ISNAN
         const formula::SingleVectorRefToken*pCurDVR= static_cast<const
             formula::SingleVectorRefToken *>(tmpCur0);
         ss<< "    int buffer_len"<<j<<" = "<<pCurDVR->GetArrayLength();
@@ -137,7 +134,6 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
         ss <<vSubArguments[j]->GenSlidingWindowDeclRef();
         ss <<"))\n";
         ss <<"        tmp = 0;\n    else\n";
-#endif
         ss <<"        tmp = ";
         ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
         ss <<"    tmp"<<j<<" = tmp"<<j<<" || tmp;\n";
@@ -165,7 +161,6 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
             else{
             ss << "0; i < " << nCurWindowSize << "; i++) {\n";
             }
-#ifdef ISNAN
             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                 {
             ss <<"    if(isNan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
@@ -180,7 +175,6 @@ void OpOr::GenSlidingWindowFunction(std::stringstream &ss,
             ss <<")\n";
             ss <<"        tmp = 0;\n    else\n";
                 }
-#endif
             ss <<"        tmp = ";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp"<<j<<" = tmp"<<j<<" || tmp;\n";
@@ -208,14 +202,12 @@ void OpNot::GenSlidingWindowFunction(std::stringstream &ss,
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     if(tmpCur0->GetType() == formula::svSingleVectorRef)
     {
-#ifdef ISNAN
         const formula::SingleVectorRefToken*pCurDVR= static_cast<const
             formula::SingleVectorRefToken *>(tmpCur0);
         ss <<"    if(gid0 >= "<<pCurDVR->GetArrayLength()<<" || isNan(";
         ss <<vSubArguments[0]->GenSlidingWindowDeclRef();
         ss <<"))\n";
         ss <<"        tmp = 0;\n    else\n";
-#endif
         ss <<"        tmp = ";
         ss <<vSubArguments[0]->GenSlidingWindowDeclRef()<<";\n";
         ss <<"    tmp = (tmp == 0.0);\n";
@@ -250,14 +242,12 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
         FormulaToken *tmpCur0 = vSubArguments[j]->GetFormulaToken();
         if(tmpCur0->GetType() == formula::svSingleVectorRef)
         {
-#ifdef ISNAN
             const formula::SingleVectorRefToken*pCurDVR= static_cast<const
                 formula::SingleVectorRefToken *>(tmpCur0);
             ss <<"    if(gid0 >= "<<pCurDVR->GetArrayLength()<<" || isNan(";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef();
             ss <<"))\n";
             ss <<"        tmp = 0;\n    else\n";
-#endif
             ss <<"        tmp = ";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp0 = (tmp != 0);\n";
@@ -287,7 +277,6 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
             else{
             ss << "0; i < " << nCurWindowSize << "; i++) {\n";
             }
-#ifdef ISNAN
             if(!pCurDVR->IsStartFixed() && !pCurDVR->IsEndFixed())
                 {
             ss <<"    if(isNan("<<vSubArguments[j]->GenSlidingWindowDeclRef();
@@ -302,7 +291,6 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
             ss <<")\n";
             ss <<"        tmp = 0;\n    else\n";
                 }
-#endif
             ss <<"        tmp = ";
             ss <<vSubArguments[j]->GenSlidingWindowDeclRef()<<";\n";
             ss <<"    tmp0 = (tmp != 0);\n";

@@ -345,7 +345,6 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
         return;
     }
 
-#ifdef ISNAN
     ss << "    tmp";
     ss << i;
     ss << "= fsum(";
@@ -357,20 +356,6 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
             formula::svSingleVectorRef)
         ss << "[get_group_id(1)]";
     ss << ", 0);\n";
-#else
-    ss << "    tmp";
-    ss << i;
-    ss << "=";
-    vSubArguments[i]->GenDeclRef(ss);
-    if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-            formula::svDoubleVectorRef)
-        ss << "[" << p.c_str() << "]";
-    else  if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-            formula::svSingleVectorRef)
-        ss << "[get_group_id(1)]";
-
-    ss << ";\n";
-#endif
 }
 
 void CheckVariables::CheckAllSubArgumentIsNan(

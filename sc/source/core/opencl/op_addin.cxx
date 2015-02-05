@@ -50,17 +50,13 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
         {
             const formula::SingleVectorRefToken*tmpCurSVR0 =
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
-#ifdef  ISNAN
             ss << "    if (gid0 < " << tmpCurSVR0->GetArrayLength() << ")\n";
             ss << "    {\n";
-#endif
             ss << "        x = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-#ifdef  ISNAN
             ss << "        if (isNan(x))\n";
             ss << "            x = 0.0;\n";
             ss << "    }\n";
-#endif
         }
         else if(tmpCur0->GetType() == formula::svDouble)
         {
@@ -86,17 +82,13 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
         {
             const formula::SingleVectorRefToken*tmpCurSVR1 =
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur1);
-#ifdef  ISNAN
             ss << "    if (gid0 < " << tmpCurSVR1->GetArrayLength() << ")\n";
             ss << "    {\n";
-#endif
             ss << "        N = ";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
-#ifdef  ISNAN
             ss << "        if (isNan(N))\n";
             ss << "            N = 0.0;\n";
             ss << "    }\n";
-#endif
         }
         else if(tmpCur1->GetType() == formula::svDouble)
         {
@@ -220,25 +212,18 @@ void OpGestep::GenSlidingWindowFunction(
         assert(pCur);
         if (pCur->GetType() == formula::svSingleVectorRef)
         {
-#ifdef  ISNAN
             const formula::SingleVectorRefToken& rSVR =
             dynamic_cast< const formula::SingleVectorRefToken& >(*pCur);
             ss << "    if (gid0 < " << rSVR.GetArrayLength() << ")\n";
             ss << "    {\n";
-#endif
         }
         else if (pCur->GetType() == formula::svDouble)
         {
-#ifdef  ISNAN
             ss << "    {\n";
-#endif
         }
         else
         {
-#ifdef  ISNAN
-#endif
         }
-#ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        if (isNan(";
@@ -255,7 +240,6 @@ void OpGestep::GenSlidingWindowFunction(
             ss << "tmp"<<i<<" ="<<vSubArguments[i]->GenSlidingWindowDeclRef();
             ss <<";\n";
         }
-#endif
     }
     ss << "    tmp =tmp0 >= tmp1 ? 1 : 0;\n";
     ss << "    return tmp;\n";

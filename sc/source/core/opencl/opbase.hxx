@@ -19,7 +19,6 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <set>
-#define ISNAN
 
 namespace sc { namespace opencl {
 

@@ -49,14 +49,12 @@ void OpCos::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    arg0 = ";
                 ss << vSubArguments[0]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(";
                 ss << vSubArguments[0]->GenSlidingWindowDeclRef();
                 ss << ")||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "    { arg0 = 0.0f; }\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svDouble)
             {
@@ -91,12 +89,10 @@ void OpSec::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    int gid0=get_global_id(0);\n";
     ss <<"    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
-#ifdef ISNAN
     ss<<"    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-#endif
     ss << "    return pow(cos(arg0),-1 );\n";
     ss << "}";
 }
@@ -124,12 +120,10 @@ void OpSecH::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    int gid0=get_global_id(0);\n";
     ss <<"    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss <<";\n";
-#ifdef ISNAN
     ss<<"    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-#endif
     ss << "    return pow(cosh(arg0),-1 );\n";
     ss << "}";
 }
@@ -157,25 +151,17 @@ void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
         assert(pCur);
         if (pCur->GetType() == formula::svSingleVectorRef)
         {
-#ifdef  ISNAN
             const formula::SingleVectorRefToken* pSVR =
                 static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-#else
-#endif
         }
         else if (pCur->GetType() == formula::svDouble)
         {
-#ifdef  ISNAN
             ss << "{\n";
-#endif
         }
         else
         {
-#ifdef  ISNAN
-#endif
         }
-#ifdef  ISNAN
         if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
             ss << "        tmp=";
@@ -192,10 +178,6 @@ void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
             ss<<"    arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
             ss<<";\n";
         }
-#else
-        ss<<"arg"<<i<<"="<<vSubArguments[i]->GenSlidingWindowDeclRef();
-        ss<<";\n";
-#endif
     }
     ss<<"    if(arg1==0)\n";
     ss<<"        return arg1;\n";
@@ -221,12 +203,10 @@ void OpCosh::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
     ss<< "    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-#endif
     ss << "    double tmp=local_cosh(arg0);\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -259,14 +239,12 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -310,12 +288,10 @@ void OpCoth::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
     ss<< "    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-#endif
     ss << "    double tmp=local_coth(arg0);\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -351,7 +327,6 @@ void OpCombinA::GenSlidingWindowFunction(std::stringstream &ss,
         ss << ";\n";
         if(pCur->GetType() == formula::svSingleVectorRef)
         {
-#ifdef ISNAN
             const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "    if(isNan(arg" << i <<")||(gid0 >= ";
@@ -364,7 +339,6 @@ void OpCombinA::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    if(isNan(arg" << i <<"))\n";
             ss << "        arg" << i << " = 0;\n";
         }
-#endif
     }
     ss << "    arg0 = trunc(arg0);\n";
     ss << "    arg1 = trunc(arg1);\n";
@@ -402,12 +376,10 @@ void OpEven::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
     ss<< "    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-#endif
     ss << "    double tmp;\n";
     ss << "    tmp = fabs(arg0 / 2);\n";
     ss << "    if ( trunc(tmp) == tmp )\n";
@@ -477,7 +449,6 @@ void OpLog::GenSlidingWindowFunction(std::stringstream &ss,
         ss << ";\n";
         if(pCur->GetType() == formula::svSingleVectorRef)
         {
-#ifdef ISNAN
             const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "    if(isNan(arg" << i <<")||(gid0 >= ";
@@ -496,7 +467,6 @@ void OpLog::GenSlidingWindowFunction(std::stringstream &ss,
             else if ( i == 1)
                 ss << "        arg1 = 10;\n";
         }
-#endif
     }
     if (vSubArguments.size() < 2)
         ss << "    arg1 = 10;\n";
@@ -522,12 +492,10 @@ void OpCsc::GenSlidingWindowFunction(
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
-#ifdef ISNAN
     ss<< "if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n\t\t";
     ss<<"arg0 = 0;\n\t";
-#endif
     ss << "double tmp=1/sin(arg0);\n\t";
     ss << "return tmp;\n";
     ss << "}";
@@ -816,12 +784,10 @@ void OpCscH::GenSlidingWindowFunction(
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
-#ifdef ISNAN
     ss<< "if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n\t\t";
     ss<<"arg0 = 0;\n\t";
-#endif
     ss << "double tmp=1/sinh(arg0);\n\t";
     ss << "return tmp;\n";
     ss << "}";
@@ -852,14 +818,12 @@ void OpExp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -954,12 +918,10 @@ void OpLog10::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"int gid0=get_global_id(0);\n\t";
     ss << "double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n\t";
-#ifdef ISNAN
     ss<< "if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n\t\t";
     ss<<"arg0 = 0;\n\t";
-#endif
     ss << "double tmp=log10(arg0);\n\t";
     ss << "return tmp;\n";
     ss << "}";
@@ -1013,14 +975,12 @@ void OpSin::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -1052,7 +1012,6 @@ void OpAbs::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0=
         static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1063,7 +1022,6 @@ void OpAbs::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << "))\n";
     ss << "        tmp = " << GetBottom() << ";\n    else \n";
-#endif
     ss << "        tmp = ";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
@@ -1089,7 +1047,6 @@ void OpArcCos::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0=
         static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1098,7 +1055,6 @@ void OpArcCos::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef()<< "))\n";
     ss << "        tmp = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    tmp = ";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef()<< ";\n";
     ss << "    return arctan2(sqrt(1.0 - pow(tmp, 2)), tmp);\n";
@@ -1125,13 +1081,11 @@ void OpArcCosHyp::GenSlidingWindowFunction(std::stringstream &ss,
         {
             const formula::SingleVectorRefToken*tmpCurDVR0=
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
-#ifdef ISNAN
             ss << "    int buffer_len = "<<tmpCurDVR0->GetArrayLength()<<";\n";
             ss << "    if((gid0)>=buffer_len || isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
             ss << "        tmp = " << GetBottom() << ";\n";
             ss << "    else \n    ";
-#endif
             ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
         }
@@ -1175,14 +1129,12 @@ void OpTan::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -1218,12 +1170,10 @@ void OpTanH::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = "<< vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
     ss << "    if(isNan(arg0)||(gid0>=";
     ss << tmpCurDVR->GetArrayLength();
     ss << "))\n";
     ss << "        arg0 = 0;\n";
-#endif
     ss << "    double tmp=tanh(arg0);\n";
     ss << "    return tmp;\n";
     ss << "}";
@@ -1258,14 +1208,12 @@ void OpPower::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    arg["<<i<<"] = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(arg["<<i;
                 ss << "])||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svSingleVectorRef)
             {
@@ -1275,14 +1223,12 @@ void OpPower::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    arg["<<i<<"] = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(arg["<<i;
                 ss << "])||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svDouble)
             {
@@ -1327,14 +1273,12 @@ void OpSqrt::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -1364,7 +1308,6 @@ void OpArcCot::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0=
         static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1373,7 +1316,6 @@ void OpArcCot::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        tmp = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() <<";\n";
     ss << "    return M_PI_2 - atan(tmp);\n";
     ss << "}";
@@ -1404,14 +1346,12 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -1447,7 +1387,6 @@ void OpArcSin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0=
         static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1456,7 +1395,6 @@ void OpArcSin::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        tmp = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return arctan2(tmp, sqrt(1.0 - pow(tmp, 2)));\n";
     ss << "}";
@@ -1482,13 +1420,11 @@ void OpArcSinHyp::GenSlidingWindowFunction(std::stringstream &ss,
         {
             const formula::SingleVectorRefToken*tmpCurDVR0=
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
-#ifdef ISNAN
             ss << "    int buffer_len = "<<tmpCurDVR0->GetArrayLength()<<";\n";
             ss << "    if((gid0)>=buffer_len || isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
             ss << "        tmp = " << GetBottom() << ";\n";
             ss << "    else \n    ";
-#endif
             ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
         }
@@ -1525,7 +1461,6 @@ void OpArcTan2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double x_num = " << GetBottom() << ";\n";
     ss << "    double y_num = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *iXNum = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVRX=
         static_cast<const formula::SingleVectorRefToken *>(iXNum);
@@ -1538,14 +1473,11 @@ void OpArcTan2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        x_num = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    x_num = "<< vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-#ifdef ISNAN
     ss << "    if((gid0)>=buffer_y_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        y_num = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    y_num = "<< vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return arctan2(y_num, x_num);\n";
     ss << "}";
@@ -1576,14 +1508,12 @@ void OpArcTan::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -1612,7 +1542,6 @@ void OpArcTanH::GenSlidingWindowFunction(std::stringstream &ss,
     ss << ") {\n";
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double tmp = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken*tmpCurDVR0=
         static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1621,7 +1550,6 @@ void OpArcTanH::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        tmp = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    double a = 1.0 + tmp;\n";
     ss << "    double b = 1.0 - tmp;\n";
@@ -1642,7 +1570,6 @@ void OpBitAnd::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num1 = " << GetBottom() << ";\n";
     ss << "    double num2 = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *iNum1 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken* tmpCurDVRNum1=
         static_cast<const formula::SingleVectorRefToken *>(iNum1);
@@ -1655,14 +1582,11 @@ void OpBitAnd::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num1 = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    num1 = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-#ifdef ISNAN
     ss << "    if((gid0)>=buffer_num2_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num2 = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    num2 = " << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return (long)num1 & (long)num2;\n";
     ss << "}";
@@ -1918,12 +1842,10 @@ void OpOdd::GenSlidingWindowFunction(
     ss << "    double tmp=0;\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
     ss<< "    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg0 = 0;\n";
-#endif
     ss << "    if (arg0 > 0.0 ){\n";
     ss << "        tmp=Intg(arg0);\n";
     ss << "        if(tmp-trunc(tmp/2)*2 == 0)\n";
@@ -1965,12 +1887,10 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    varb = ";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(varb)||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "        varb = 0;\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -1997,54 +1917,32 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    for (int i = ";
             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "gid0; i < " << pDVR->GetArrayLength();
                 ss << " && i < " << nCurWindowSize  << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "gid0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "0; i < " << pDVR->GetArrayLength();
                 ss << " && i < gid0+"<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
                 ss << " &&  i < "<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else
             {
-#ifdef  ISNAN
                 ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             ss << "        vara = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef  ISNAN
             ss << "        if (isNan(vara))\n";
             ss << "            continue;\n";
-#endif
             ss << "        (vara == varb) && varc++;\n";
             ss << "    }\n";
         }
@@ -2056,13 +1954,11 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    vara = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(vara)||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "        return 0;\n";
             ss << "    (vara == varb) && varc++;\n";
-#endif
         }
     }
     ss << "    return varc;\n";
@@ -2096,12 +1992,10 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    varb = ";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(varb)||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "        varb = 0;\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -2128,61 +2022,37 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    for (int i = ";
             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "gid0; i < " << pDVR->GetArrayLength();
                 ss << " && i < " << nCurWindowSize  << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "gid0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "0; i < " << pDVR->GetArrayLength();
                 ss << " && i < gid0+"<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
                 ss << " &&  i < "<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else
             {
-#ifdef  ISNAN
                 ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             ss << "        vara = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef  ISNAN
             ss << "        if (isNan(vara))\n";
             ss << "            continue;\n";
-#endif
             ss << "        varc = ";
             ss << vSubArguments[flag]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef  ISNAN
             ss << "        if (isNan(varc))\n";
             ss << "            varc = 0.0f;\n";
-#endif
             ss << "        (vara == varb)&&(sum = sum + varc);\n";
             ss << "    }\n";
         }
@@ -2194,22 +2064,18 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    vara = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(vara)||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "        return 0;\n";
-#endif
             ss << "    int i = 0;\n";
             ss << "    varc = ";
             ss << vSubArguments[flag]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(varc)||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "        varc = 0.0f;\n";
-#endif
 
             ss << "        (vara == varb)&&(sum = sum + varc);\n";
 
@@ -2248,14 +2114,12 @@ void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    arg["<<i<<"] = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(arg["<<i;
                 ss << "])||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svSingleVectorRef)
             {
@@ -2265,14 +2129,12 @@ void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    arg["<<i<<"] = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(arg["<<i;
                 ss << "])||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svDouble)
             {
@@ -2349,7 +2211,6 @@ void OpBitOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0   = get_global_id(0);\n";
     ss << "    double num1 = " << GetBottom() << ";\n";
     ss << "    double num2 = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *iNum1 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken* tmpCurDVRNum1=
         static_cast<const formula::SingleVectorRefToken *>(iNum1);
@@ -2362,15 +2223,12 @@ void OpBitOr::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num1 = " << GetBottom() << ";\n";
     ss << "    else \n    ";
-#endif
     ss << "    num1 = floor(" << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ");\n";
-#ifdef ISNAN
     ss << "    if((gid0)>=buffer_num2_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num2 = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    num2 = floor(" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ");\n";
     ss << "    return (long)num1 | (long)num2;\n";
@@ -2390,7 +2248,6 @@ void OpBitXor::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num1 = " << GetBottom() << ";\n";
     ss << "    double num2 = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *iNum1 = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken* tmpCurDVRNum1=
         static_cast<const formula::SingleVectorRefToken *>(iNum1);
@@ -2404,15 +2261,12 @@ void OpBitXor::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num1 = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    num1 = floor(" << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ");\n";
-#ifdef ISNAN
     ss << "    if((gid0)>=buffer_num2_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num2 = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    num2 = floor(" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ");\n";
     ss << "    return (long)num1 ^ (long)num2;\n";
@@ -2432,7 +2286,6 @@ void OpBitLshift::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double shift_amount = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken* tmpCurDVRNum=
         static_cast<const formula::SingleVectorRefToken*>(iNum);
@@ -2446,15 +2299,12 @@ void OpBitLshift::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    num = floor(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
-#ifdef ISNAN
     ss << "    if((gid0)>=buffer_shift_amount_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        shift_amount = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    shift_amount = floor(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
     ss << "    return floor(shift_amount >= 0 ? ";
@@ -2476,7 +2326,6 @@ void OpBitRshift::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double shift_amount = " << GetBottom() << ";\n";
-#ifdef ISNAN
     FormulaToken *iNum = vSubArguments[0]->GetFormulaToken();
     const formula::SingleVectorRefToken* tmpCurDVRNum=
         static_cast<const formula::SingleVectorRefToken*>(iNum);
@@ -2492,15 +2341,12 @@ void OpBitRshift::GenSlidingWindowFunction(std::stringstream &ss,
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    num = floor(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
-#ifdef ISNAN
     ss << "    if((gid0)>=buffer_shift_amount_len || isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        shift_amount = " <<GetBottom()<< ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    shift_amount = floor(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
     ss << "    return floor(";
@@ -2537,54 +2383,32 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    for (int i = ";
                 if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
                 {
-#ifdef  ISNAN
                     ss << "gid0; i < " << pDVR->GetArrayLength();
                     ss << " && i < " << nCurWindowSize  << "; ++i)\n";
                     ss << "    {\n";
-#else
-                    ss << "gid0; i < "<< nCurWindowSize << "; ++i)\n";
-                    ss << "    {\n";
-#endif
                 }
                 else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
                 {
-#ifdef  ISNAN
                     ss << "0; i < " << pDVR->GetArrayLength();
                     ss << " && i < gid0+"<< nCurWindowSize << "; ++i)\n";
                     ss << "    {\n";
-#else
-                    ss << "0; i < gid0+"<< nCurWindowSize << "; ++i)\n";
-                    ss << "    {\n";
-#endif
                 }
                 else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
                 {
-#ifdef  ISNAN
                     ss << "0; i + gid0 < " << pDVR->GetArrayLength();
                     ss << " &&  i < "<< nCurWindowSize << "; ++i)\n";
                     ss << "    {\n";
-#else
-                    ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                    ss << "    {\n";
-#endif
                 }
                 else
                 {
-#ifdef  ISNAN
                     ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
                     ss << "    {\n";
-#else
-                    ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                    ss << "    {\n";
-#endif
                 }
                 ss << "        arg = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef  ISNAN
                 ss << "        if (isNan(arg))\n";
                 ss << "            continue;\n";
-#endif
                 ss << "        sum += pown(arg, 2);\n";
                 ss << "    }\n";
             }
@@ -2596,13 +2420,11 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    arg = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(arg)||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        arg = 0.0f;\n";
                 ss << "    sum += pown(arg, 2);\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svDouble)
             {
@@ -2649,14 +2471,12 @@ void OpSqrtPi::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -2689,24 +2509,19 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double num = " << GetBottom() << ";\n";
     ss << "    double significance = " << GetBottom() << ";\n";
     ss << "    double bAbs = 0;\n";
-#ifdef ISNAN
     ss << "    if(isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num = " << GetBottom() << ";\n";
     ss << "    else\n    ";
-#endif
     ss << "    num = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-#ifdef ISNAN
     ss << "    if(isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        return 0.0;\n";
     ss << "    else\n    ";
-#endif
     ss << "    significance = ";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     if (vSubArguments.size() > 2)
     {
-#ifdef ISNAN
         FormulaToken *bAbs = vSubArguments[2]->GetFormulaToken();
         if(bAbs->GetType() == formula::svSingleVectorRef)
         {
@@ -2728,7 +2543,6 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
         ss << vSubArguments[2]->GenSlidingWindowDeclRef() << "))\n";
         ss << "        bAbs = 0;\n";
         ss << "    else\n    ";
-#endif
         ss << "    bAbs = "<<vSubArguments[2]->GenSlidingWindowDeclRef()<<";\n";
     }
     ss << "    if(significance == 0.0)\n";
@@ -2763,20 +2577,16 @@ void OpCombin::GenSlidingWindowFunction(std::stringstream &ss,
         if(iNum->GetType() == formula::svSingleVectorRef &&
             iNumChosen->GetType() == formula::svSingleVectorRef)
         {
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
             ss << "        num = " << GetBottom() << ";\n";
             ss << "    else\n    ";
-#endif
             ss << "    num = floor(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ");\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
             ss << "        num_chosen = " << GetBottom() << ";\n";
             ss << "    else\n    ";
-#endif
             ss << "    num_chosen = floor(";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
         }
@@ -2869,7 +2679,6 @@ void OpConvert::GenSlidingWindowFunction(
     ss << ";\n";
     ss << "    double arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
     ss<< "    if(isNan(arg0)||(gid0>=";
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
@@ -2882,7 +2691,6 @@ void OpConvert::GenSlidingWindowFunction(
     ss<<tmpCurDVR->GetArrayLength();
     ss<<"))\n";
     ss<<"        arg2 = 0;\n";
-#endif
     ss<<"    if(arg1==5584U&&arg2==108U)\n";
     ss<<"        return arg0*1000.0;\n";
     ss<<"    else if(arg1==108U&&arg2==3385U)\n";
@@ -3154,14 +2962,12 @@ void OpDeg::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    arg0 = ";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ")||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
-#endif
         }
         else if(tmpCur->GetType() == formula::svDouble)
         {
@@ -3198,19 +3004,14 @@ void OpFact::GenSlidingWindowFunction(std::stringstream& ss,
     assert(pCur);
     if (pCur->GetType() == formula::svSingleVectorRef)
     {
-#ifdef  ISNAN
         const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
         ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
-#endif
     }
     else if (pCur->GetType() == formula::svDouble)
     {
-#ifdef  ISNAN
         ss << "    {\n";
-#endif
     }
-#ifdef  ISNAN
     if(ocPush==vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
         ss << "        if (isNan(";
@@ -3243,10 +3044,6 @@ void OpFact::GenSlidingWindowFunction(std::stringstream& ss,
         ss << "    arg0 = ";
         ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
     }
-#else
-    ss << "    arg0 = ";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-#endif
     ss << "    return arg0;\n";
     ss << "}";
 }
@@ -3264,19 +3061,15 @@ void OpQuotient::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int gid0 = get_global_id(0);\n";
     ss << "    double num1 = 1.0;\n";
     ss << "    double num2 = 1.0;\n";
-#ifdef ISNAN
     ss << "    if(isNan(";
     ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num1 = 1.0;\n";
     ss << "    else \n    ";
-#endif
     ss << "    num1 = " << vSubArguments[0]->GenSlidingWindowDeclRef() << ";\n";
-#ifdef ISNAN
     ss << "    if(isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef() << "))\n";
     ss << "        num2 = 1.0;\n";
     ss << "    else \n    ";
-#endif
     ss << "    num2 = " << vSubArguments[1]->GenSlidingWindowDeclRef() << ";\n";
     ss << "    return trunc(num1/num2);\n";
     ss << "}";
@@ -3312,12 +3105,10 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "    var["<<i<<"] = ";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
                 ss << ";\n";
-#ifdef ISNAN
                 ss << "    if(isNan(var["<<i<<"])||(gid0>=";
                 ss << tmpCurDVR->GetArrayLength();
                 ss << "))\n";
                 ss << "        var["<<i<<"] = 0;\n";
-#endif
             }
             else if(tmpCur->GetType() == formula::svDouble)
             {
@@ -3346,54 +3137,32 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    for (int i = ";
             if (!pDVR->IsStartFixed() && pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "gid0; i < " << pDVR->GetArrayLength();
                 ss << " && i < " << nCurWindowSize  << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "gid0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else if (pDVR->IsStartFixed() && !pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "0; i < " << pDVR->GetArrayLength();
                 ss << " && i < gid0+"<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < gid0+"<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else if (!pDVR->IsStartFixed() && !pDVR->IsEndFixed())
             {
-#ifdef  ISNAN
                 ss << "0; i + gid0 < " << pDVR->GetArrayLength();
                 ss << " &&  i < "<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             else
             {
-#ifdef  ISNAN
                 ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
                 ss << "    {\n";
-#else
-                ss << "0; i < "<< nCurWindowSize << "; ++i)\n";
-                ss << "    {\n";
-#endif
             }
             ss << "        coeff = ";
             ss << vSubArguments[3]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef  ISNAN
             ss << "        if (isNan(coeff))\n";
             ss << "            continue;\n";
-#endif
             ss << "        res = res + coeff * pow(var[0],";
             ss << " var[1] + j * var[2]);\n";
             ss << "        ++j;\n";
@@ -3407,12 +3176,10 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    coeff = ";
             ss << vSubArguments[3]->GenSlidingWindowDeclRef();
             ss << ";\n";
-#ifdef ISNAN
             ss << "    if(isNan(coeff)||(gid0>=";
             ss << tmpCurDVR->GetArrayLength();
             ss << "))\n";
             ss << "        return 0;\n";
-#endif
         }
     }
     ss << "    return res;\n";
