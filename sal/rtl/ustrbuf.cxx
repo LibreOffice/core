@@ -33,6 +33,8 @@ void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
                                                        const sal_Unicode * value,
                                                        sal_Int32 count)
 {
+    assert(newStr);
+    assert(count >= 0);
     if (!value)
     {
         rtl_uString_new_WithLength( newStr, 16 );
@@ -56,6 +58,8 @@ rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString * pThis )
 rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear( rtl_uString ** ppThis,
                                                              sal_Int32 *nCapacity )
 {
+    assert(ppThis);
+    assert(nCapacity);
     // avoid an un-necessary atomic ref/unref pair
     rtl_uString *pStr = *ppThis;
     *ppThis = NULL;
@@ -72,6 +76,9 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
                                                           sal_Int32 capacity,
                                                           rtl_uString * oldStr )
 {
+    assert(newStr);
+    assert(capacity >= 0);
+    assert(oldStr);
     sal_Int32 newCapacity = capacity;
 
     if (newCapacity < oldStr->length)
@@ -90,6 +97,9 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
 void SAL_CALL rtl_uStringbuffer_ensureCapacity
     (rtl_uString ** This, sal_Int32* capacity, sal_Int32 minimumCapacity)
 {
+    assert(This);
+    assert(capacity && *capacity >= 0);
+    assert(minimumCapacity >= 0);
     if (minimumCapacity > *capacity)
     {
         rtl_uString * pTmp = *This;
@@ -116,6 +126,11 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
                                         const sal_Unicode * str,
                                         sal_Int32 len)
 {
+    assert(This);
+    assert(capacity && *capacity >= 0);
+    assert(offset >= 0 && offset <= (**This).length);
+    assert(len == 0 || str != nullptr);
+    assert(len >= 0);
     sal_Int32 nOldLen;
     sal_Unicode * pBuf;
     sal_Int32 n;
@@ -174,6 +189,11 @@ void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
                                                 const sal_Char * str,
                                                 sal_Int32 len)
 {
+    assert(This);
+    assert(capacity && *capacity >= 0);
+    assert(offset >= 0 && offset <= (**This).length);
+    assert(len == 0 || str != nullptr);
+    assert(len >= 0);
     sal_Int32 nOldLen;
     sal_Unicode * pBuf;
     sal_Int32 n;
@@ -214,6 +234,9 @@ void SAL_CALL rtl_uStringbuffer_remove( rtl_uString ** This,
                                        sal_Int32 start,
                                        sal_Int32 len )
 {
+    assert(This);
+    assert(start >= 0 && start <= (**This).length);
+    assert(len >= 0);
     sal_Int32 nTailLen;
     sal_Unicode * pBuf;
 

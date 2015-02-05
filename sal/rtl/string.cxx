@@ -88,6 +88,7 @@ static rtl_String const aImplEmpty_rtl_String =
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
+    assert(pStr);
     rtl_String * pResult = NULL;
     sal_Int32 nLen;
     rtl_math_doubleToString(
@@ -104,6 +105,7 @@ sal_Int32 SAL_CALL rtl_str_valueOfFloat(sal_Char * pStr, float f)
 sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
+    assert(pStr);
     rtl_String * pResult = NULL;
     sal_Int32 nLen;
     rtl_math_doubleToString(
@@ -119,12 +121,14 @@ sal_Int32 SAL_CALL rtl_str_valueOfDouble(sal_Char * pStr, double d)
 
 float SAL_CALL rtl_str_toFloat(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
+    assert(pStr);
     return (float) rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr),
                                            '.', 0, 0, 0);
 }
 
 double SAL_CALL rtl_str_toDouble(sal_Char const * pStr) SAL_THROW_EXTERN_C()
 {
+    assert(pStr);
     return rtl_math_stringToDouble(pStr, pStr + rtl_str_getLength(pStr), '.', 0,
                                    0, 0);
 }
@@ -192,10 +196,10 @@ bool SAL_CALL rtl_impl_convertUStringToString(rtl_String ** pTarget,
                                                   sal_uInt32 nFlags,
                                                   bool bCheckErrors)
 {
-    OSL_ASSERT(pTarget != NULL
-               && (pSource != NULL || nLength == 0)
-               && nLength >= 0
-               && (nLength == 0 || rtl_isOctetTextEncoding(nEncoding)));
+    assert(pTarget != nullptr);
+    assert(pSource != nullptr || nLength == 0);
+    assert(nLength >= 0);
+    OSL_ASSERT(nLength == 0 || rtl_isOctetTextEncoding(nEncoding));
 
     if ( !nLength )
         rtl_string_new( pTarget );

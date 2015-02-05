@@ -457,8 +457,6 @@ public:
      */
     OUStringBuffer & append( const sal_Unicode * str, sal_Int32 len)
     {
-        assert( len >= 0 );
-        assert( len == 0 || str != 0 );
         rtl_uStringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -537,7 +535,6 @@ public:
      */
     OUStringBuffer & appendAscii( const sal_Char * str, sal_Int32 len)
     {
-        assert( len >= 0 );
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -734,7 +731,6 @@ public:
        @since LibreOffice 4.4
     */
     sal_Unicode * appendUninitialized(sal_Int32 length) {
-        assert(length >= 0);
         sal_Int32 n = getLength();
         rtl_uStringbuffer_insert(&pData, &nCapacity, n, 0, length);
         return pData->buffer + n;
@@ -802,9 +798,6 @@ public:
      */
     OUStringBuffer & insert( sal_Int32 offset, const sal_Unicode * str, sal_Int32 len)
     {
-        assert( offset >= 0 && offset <= pData->length );
-        assert( len >= 0 );
-        assert( len == 0 || str != 0 );
         rtl_uStringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }
@@ -1048,8 +1041,6 @@ public:
      */
     OUStringBuffer & remove( sal_Int32 start, sal_Int32 len )
     {
-        assert( start >= 0 && start <= pData->length );
-        assert( len >= 0 );
         rtl_uStringbuffer_remove( &pData, start, len );
         return *this;
     }
@@ -1066,7 +1057,6 @@ public:
      */
     OUStringBuffer & truncate( sal_Int32 start = 0 )
     {
-        assert( start >= 0 && start <= pData->length );
         rtl_uStringbuffer_remove( &pData, start, getLength() - start );
         return *this;
     }
@@ -1353,7 +1343,6 @@ public:
     */
     OUStringBuffer copy( sal_Int32 beginIndex ) const
     {
-        assert(beginIndex >= 0 && beginIndex <= getLength());
         return copy( beginIndex, getLength() - beginIndex );
     }
 

@@ -29,6 +29,8 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
                                                       const sal_Char * value,
                                                       sal_Int32 count )
 {
+    assert(newStr);
+    assert(count >= 0);
     if (!value)
     {
         rtl_string_new_WithLength( newStr, 16 );
@@ -48,6 +50,9 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
                                                          sal_Int32 capacity,
                                                          rtl_String * oldStr )
 {
+    assert(newStr);
+    assert(oldStr);
+    assert(capacity >= 0);
     sal_Int32 newCapacity = capacity;
 
     if (newCapacity < oldStr->length)
@@ -67,6 +72,9 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
 void SAL_CALL rtl_stringbuffer_ensureCapacity
     (rtl_String ** This, sal_Int32* capacity, sal_Int32 minimumCapacity)
 {
+    assert(This);
+//    assert(capacity && *capacity >= 0);
+//    assert(minimumCapacity >= 0);
     if (minimumCapacity > *capacity)
     {
         rtl_String * pTmp = *This;
@@ -94,6 +102,11 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
                                        const sal_Char * str,
                                        sal_Int32 len )
 {
+    assert(This);
+    assert(capacity && *capacity >= 0);
+    assert(offset >= 0 && offset <= (**This).length);
+    assert(len == 0 || str != nullptr);
+    assert(len >= 0);
     sal_Int32 nOldLen;
     sal_Char * pBuf;
     sal_Int32 n;
@@ -134,6 +147,9 @@ void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
                                        sal_Int32 start,
                                        sal_Int32 len )
 {
+    assert(This);
+    assert(start >= 0 && start <= (**This).length);
+    assert(len >= 0);
     sal_Int32 nTailLen;
     sal_Char * pBuf;
 
