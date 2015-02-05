@@ -2306,8 +2306,7 @@ void XclImpOptionButtonObj::DoProcessControl( ScfPropertySet& rPropSet ) const
                 ScfPropertySet aProps( xCtrlModel );
                 OUString sGroupName = OUString::number( pLeader->GetDffShapeId() );
 
-                // for radio buttons, "Name" is the group name
-                aProps.SetStringProperty( "Name", sGroupName );
+                aProps.SetStringProperty( "GroupName", sGroupName );
                 aProps.SetStringProperty( "RefValue", OUString::number( nRefVal++ ) );
                 if ( pLeader->HasCellLink() && !pTbxObj->HasCellLink() )
                 {

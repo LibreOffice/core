@@ -76,11 +76,9 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     // string properties which are exported as attributes
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
-    // map invalid "group-name" attribute to "name"
-    // (since radio buttons are grouped by name)
     m_aAttributeMetaData.addStringProperty(
-            OAttributeMetaData::getSpecialAttributeName(SCA_GROUP_NAME), PROPERTY_NAME);
-    m_aAttributeMetaData.addStringProperty(
+            OAttributeMetaData::getSpecialAttributeName(SCA_GROUP_NAME), PROPERTY_GROUP_NAME);
+        m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_IMAGE_DATA), PROPERTY_IMAGEURL);
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_LABEL), PROPERTY_LABEL);
