@@ -75,7 +75,7 @@ class ThesDummy_Impl :
     public cppu::WeakImplHelper1< XThesaurus >
 {
     uno::Reference< XThesaurus >     xThes;      // the real one...
-    Sequence< Locale >         *pLocaleSeq;
+    Sequence< lang::Locale >         *pLocaleSeq;
 
     void GetCfgLocales();
 
@@ -121,8 +121,8 @@ void ThesDummy_Impl::GetCfgLocales()
         Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
         const OUString *pNodeNames = aNodeNames.getConstArray();
         sal_Int32 nLen = aNodeNames.getLength();
-        pLocaleSeq = new Sequence< Locale >( nLen );
-        Locale *pLocale = pLocaleSeq->getArray();
+        pLocaleSeq = new Sequence< lang::Locale >( nLen );
+        lang::Locale *pLocale = pLocaleSeq->getArray();
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             pLocale[i] = LanguageTag::convertToLocaleWithFallback( pNodeNames[i] );
@@ -171,8 +171,8 @@ sal_Bool SAL_CALL
         GetCfgLocales();
     bool bFound = false;
     sal_Int32 nLen = pLocaleSeq->getLength();
-    const Locale *pLocale = pLocaleSeq->getConstArray();
-    const Locale *pEnd = pLocale + nLen;
+    const lang::Locale *pLocale = pLocaleSeq->getConstArray();
+    const lang::Locale *pEnd = pLocale + nLen;
     for ( ;  pLocale < pEnd  &&  !bFound;  ++pLocale)
     {
         bFound = pLocale->Language == rLocale.Language  &&
