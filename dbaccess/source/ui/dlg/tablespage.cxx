@@ -79,6 +79,7 @@ namespace dbaui
         get(m_pTables, "TablesFilterPage");
 
         get(m_pTablesList, "treeview");
+        m_pTablesList->init(true);
         m_pTablesList->set_width_request(56 * m_pTablesList->approximate_char_width());
         m_pTablesList->set_height_request(12 * m_pTablesList->GetTextHeight());
 
