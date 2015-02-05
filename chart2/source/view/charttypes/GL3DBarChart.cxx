@@ -24,6 +24,8 @@
 #include <windows.h>
 #endif
 
+#include <boost/math/constants/constants.hpp>
+
 #define CALC_POS_EVENT_ID 1
 #define SHAPE_START_ID 10
 #define FPS_TIME 500
@@ -827,10 +829,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         maDefaultCameraPosition = glm::vec3(maDefaultCameraDirection.x, maDefaultCameraDirection.y - mnDistance, DEFAULT_CAMERA_HEIGHT * 2);
         mnCornerId = 0;
         mbCameraInit = true;
-        float pi = 3.1415926f;
-        float nAngleX = -pi / 6.5f;
-        float nAngleZ = -pi / 8.0f;
-        glm::mat4 aDefaultRotateMatrix = glm::eulerAngleYXZ(0.0f, nAngleX, nAngleZ);
+        static const float fAngleX = -boost::math::float_constants::pi / 6.5f;
+        static const float fAngleZ = -boost::math::float_constants::pi / 8.0f;
+        glm::mat4 aDefaultRotateMatrix = glm::eulerAngleYXZ(0.0f, fAngleX, fAngleZ);
         maDefaultCameraPosition = glm::vec3(aDefaultRotateMatrix * glm::vec4(maDefaultCameraPosition, 1.0f));
         maCameraPosition = maDefaultCameraPosition;
         maCameraDirection = maDefaultCameraDirection;
@@ -1060,27 +1061,27 @@ void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, s
 
 glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
 {
-    float pi = 3.1415926f;
+    static const double fPi4 = boost::math::double_constants::pi / 4;
     switch(nId)
     {
         case 0:
         {
-            return glm::vec3(mnMaxX / 2 - mnDistance * sin(pi / 4), mnMaxY / 2 - mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
+            return glm::vec3(mnMaxX / 2 - mnDistance * sin(fPi4), mnMaxY / 2 - mnDistance * cos(fPi4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         case 1:
         {
-            return glm::vec3(mnMaxX / 2 + mnDistance * sin(pi / 4), mnMaxY / 2 - mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
+            return glm::vec3(mnMaxX / 2 + mnDistance * sin(fPi4), mnMaxY / 2 - mnDistance * cos(fPi4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         case 2:
         {
-            return glm::vec3(mnMaxX / 2 + mnDistance * sin(pi / 4), mnMaxY / 2 + mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
+            return glm::vec3(mnMaxX / 2 + mnDistance * sin(fPi4), mnMaxY / 2 + mnDistance * cos(fPi4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         case 3:
         {
-            return glm::vec3(mnMaxX / 2 - mnDistance * sin(pi / 4), mnMaxY / 2 + mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
+            return glm::vec3(mnMaxX / 2 - mnDistance * sin(fPi4), mnMaxY / 2 + mnDistance * cos(fPi4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         default:

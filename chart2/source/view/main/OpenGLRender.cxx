@@ -36,6 +36,7 @@
 #include <vcl/svapp.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <boost/math/constants/constants.hpp>
 
 #include "CommonConverters.hxx"
 
@@ -46,8 +47,6 @@ using namespace com::sun::star;
 #if DEBUG_PNG
 #include <vcl/pngwrite.hxx>
 #endif
-
-#define GL_PI 3.14159f
 
 #define Z_STEP 0.001f
 
@@ -378,7 +377,6 @@ void OpenGLRender::SetColor(sal_uInt32 color, sal_uInt8 nAlpha)
 
 int OpenGLRender::Create2DCircle(int detail)
 {
-    float angle;
     if (detail <= 0)
     {
         return -1;
@@ -387,7 +385,8 @@ int OpenGLRender::Create2DCircle(int detail)
     m_Bubble2DCircle.reserve(2 * (detail + 3));
     m_Bubble2DCircle.push_back(0);
     m_Bubble2DCircle.push_back(0);
-    for(angle = 2.0f * GL_PI; angle > -(2.0f * GL_PI / detail); angle -= (2.0f * GL_PI / detail))
+    float fD = boost::math::float_constants::two_pi / detail;
+    for(float angle = boost::math::float_constants::two_pi; angle > -fD; angle -= fD)
     {
         m_Bubble2DCircle.push_back(sin(angle));
         m_Bubble2DCircle.push_back(cos(angle));
@@ -685,7 +684,7 @@ int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixel
     long bmpHeight = aPixelSize.Height();
 
     TextInfo aTextInfo;
-    aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;
+    aTextInfo.rotation = -(double)rotation / 360.0 * boost::math::double_constants::two_pi;
     aTextInfo.vertex[0] = -aSize.Width / 2;
     aTextInfo.vertex[1] = -aSize.Height / 2;
     aTextInfo.vertex[2] = m_fZStep;
@@ -953,8 +952,8 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
     }
     for(double nAngle = nAngleStart; nAngle <= nAngleStart + nAngleWidth; nAngle += nAngleStep)
     {
-        float xVal = sin(nAngle/360*2*GL_PI);
-        float yVal = cos(nAngle/360*2*GL_PI);
+        float xVal = sin(nAngle/360*boost::math::double_constants::two_pi);
+        float yVal = cos(nAngle/360*boost::math::double_constants::two_pi);
         aPointList.push_back(fOutterRadius * xVal);
         aPointList.push_back(fOutterRadius * yVal);
         aPointList.push_back(m_fZStep);
