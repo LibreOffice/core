@@ -1163,29 +1163,29 @@ void TitledBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     {
-    ControlImportContext ctx(_pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlGroupBoxModel" );
-    Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        ControlImportContext ctx(_pImport, getControlId( _xAttributes ), "com.sun.star.awt.UnoControlGroupBoxModel" );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
-    if (xStyle.is())
-    {
-        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
-        pStyle->importTextColorStyle( xControlModel );
-        pStyle->importTextLineColorStyle( xControlModel );
-        pStyle->importFontStyle( xControlModel );
-    }
+        Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
+        if (xStyle.is())
+        {
+            StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+            pStyle->importTextColorStyle( xControlModel );
+            pStyle->importTextLineColorStyle( xControlModel );
+            pStyle->importFontStyle( xControlModel );
+        }
 
-    ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
+        ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
 
-    if (!_label.isEmpty())
-    {
-        xControlModel->setPropertyValue( "Label", makeAny( _label ) );
-    }
+        if (!_label.isEmpty())
+        {
+            xControlModel->setPropertyValue( "Label", makeAny( _label ) );
+        }
 
-    ctx.importEvents( _events );
-    // avoid ring-reference:
-    // vector< event elements > holding event elements holding this (via _pParent)
-    _events.clear();
+        ctx.importEvents( _events );
+        // avoid ring-reference:
+        // vector< event elements > holding event elements holding this (via _pParent)
+        _events.clear();
 
         ctx.finish();
     }
