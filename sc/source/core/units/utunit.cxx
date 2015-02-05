@@ -14,7 +14,9 @@
 using namespace sc::units;
 
 bool UtUnit::createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem) {
-    OString sUnitStringUTF8 = OUStringToOString(rUnitString, RTL_TEXTENCODING_UTF8);
+    // ut_parse requires the string to be trimmed of whitespace, it's
+    // simplest just to do this during conversion:
+    OString sUnitStringUTF8 = OUStringToOString(rUnitString.trim(), RTL_TEXTENCODING_UTF8);
 
     UtUnit pParsedUnit(ut_parse(pUTSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
 
