@@ -2857,6 +2857,8 @@ if test $_os = Darwin; then
             MACOSX_CODESIGNING_IDENTITY=$identity
             pretty_name=`security find-identity -p codesigning -v | grep "$MACOSX_CODESIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
             AC_MSG_RESULT([yes, using the identity $MACOSX_CODESIGNING_IDENTITY for $pretty_name])
+        else
+            AC_MSG_ERROR([cannot determine identity to use])
         fi
     elif test -n "$enable_macosx_code_signing" -a "$enable_macosx_code_signing" != no ; then
         MACOSX_CODESIGNING_IDENTITY=$enable_macosx_code_signing
