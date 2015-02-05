@@ -1815,7 +1815,11 @@ static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
     const SwRect aFrm( pFrm->Frm() );
 
     // first move the current frame
-    pFrm->Frm().Pos() += rOffset;
+    Point &rPoint = pFrm->Frm().Pos();
+    if (rPoint.X() != FAR_AWAY)
+        rPoint.X() += rOffset.X();
+    if (rPoint.Y() != FAR_AWAY)
+        rPoint.Y() += rOffset.Y();
 
     // Don't forget accessibility:
     if( pFrm->IsAccessibleFrm() )
