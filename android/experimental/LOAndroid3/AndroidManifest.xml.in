@@ -16,7 +16,9 @@
         android:icon="@drawable/main"
         android:label="@string/app_name"
         android:hardwareAccelerated="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:largeHeap="false">
+
         <!-- Viewer Activity -->
         <activity
             android:name=".LibreOfficeMainActivity"
@@ -27,6 +29,9 @@
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="android.intent.action.PICK" />
                 <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
 
                 <!-- Please keep this in sync with FileUtilities.java. -->
 
@@ -83,6 +88,7 @@
 
             </intent-filter>
         </activity>
+
         <!-- Document Browser Activity -->
         <activity android:name=".ui.LibreOfficeUIActivity"
                   android:label="@string/app_name">
@@ -91,6 +97,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
