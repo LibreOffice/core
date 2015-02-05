@@ -124,6 +124,11 @@ OUString XmlChar2OUString( const XML_Char *p )
             pThis->bRTExceptionWasThrown = true; \
             pImpl->rtexception = e; \
         }\
+        catch( const com::sun::star::uno::Exception &e ) {\
+            pThis->bExceptionWasThrown = true; \
+            pThis->bRTExceptionWasThrown = true; \
+            pImpl->rtexception = WrappedTargetRuntimeException("Non-runtime UNO exception caught during parse", e.Context, makeAny(e)); \
+        }\
     }\
     ((void)0)
 
