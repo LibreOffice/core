@@ -477,6 +477,7 @@ bool GalleryTheme::RemoveObject( size_t nPos )
         Broadcast( GalleryHint( GALLERY_HINT_CLOSE_OBJECT, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< sal_uIntPtr >( pEntry ) ) );
         delete pEntry;
+        pEntry = NULL;
 
         ImplSetModified( true );
         ImplBroadcast( nPos );
