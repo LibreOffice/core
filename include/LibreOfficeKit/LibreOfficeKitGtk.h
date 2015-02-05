@@ -46,6 +46,10 @@ struct _LOKDocView
     GdkRectangle m_aVisibleCursor;
     /// Cursor is visible or hidden (for blinking).
     gboolean m_bCursorVisible;
+    /// Time of the last button press.
+    guint32 m_nLastButtonPressTime;
+    /// Time of the last button release.
+    guint32 m_nLastButtonReleaseTime;
 };
 
 struct _LOKDocViewClass

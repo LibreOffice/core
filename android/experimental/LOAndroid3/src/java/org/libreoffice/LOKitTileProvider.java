@@ -316,7 +316,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
-        mDocument.postMouseEvent(type, x, y);
+        mDocument.postMouseEvent(type, x, y, 1);
     }
 
     @Override

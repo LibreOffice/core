@@ -103,8 +103,9 @@ public class Document {
      * @param type - mouse event type
      * @param x - x coordinate
      * @param y - y coordinate
+     * @param count - number of events
      */
-    public native void postMouseEvent(int type, int x, int y);
+    public native void postMouseEvent(int type, int x, int y, int count);
 
     /**
      * Callback to retrieve messages from LOK

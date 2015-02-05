@@ -414,7 +414,7 @@ public:
      */
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::postMouseEvent().
-    virtual void postMouseEvent(int nType, int nX, int nY) SAL_OVERRIDE;
+    virtual void postMouseEvent(int nType, int nX, int nY, int nCount) SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);

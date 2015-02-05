@@ -50,11 +50,23 @@ void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* 
     switch (pEvent->type)
     {
     case GDK_BUTTON_PRESS:
-        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+    {
+        int nCount = 1;
+        if ((pEvent->time - pDocView->m_nLastButtonPressTime) < 250)
+            nCount++;
+        pDocView->m_nLastButtonPressTime = pEvent->time;
+        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
         break;
+    }
     case GDK_BUTTON_RELEASE:
-        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y));
+    {
+        int nCount = 1;
+        if ((pEvent->time - pDocView->m_nLastButtonReleaseTime) < 250)
+            nCount++;
+        pDocView->m_nLastButtonReleaseTime = pEvent->time;
+        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
         break;
+    }
     default:
         break;
     }
@@ -116,6 +128,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_bEdit = FALSE;
     memset(&pDocView->m_aVisibleCursor, 0, sizeof(pDocView->m_aVisibleCursor));
     pDocView->m_bCursorVisible = FALSE;
+    pDocView->m_nLastButtonPressTime = 0;
+    pDocView->m_nLastButtonReleaseTime = 0;
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );

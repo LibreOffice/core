@@ -106,7 +106,7 @@ public:
      *
      * @see lok::Document::postMouseEvent().
      */
-    virtual void postMouseEvent(int /*nType*/, int /*nX*/, int /*nY*/) { }
+    virtual void postMouseEvent(int /*nType*/, int /*nX*/, int /*nY*/, int /*nCount*/) { }
 };
 
 } // namespace vcl

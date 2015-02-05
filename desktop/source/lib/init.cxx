@@ -205,7 +205,8 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
 static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nType,
                                 int nX,
-                                int nY);
+                                int nY,
+                                int nCount);
 
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
@@ -659,7 +660,7 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     pDoc->registerCallback(pCallback, pData);
 }
 
-static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
+static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -668,7 +669,7 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
         return;
     }
 
-    pDoc->postMouseEvent(nType, nX, nY);
+    pDoc->postMouseEvent(nType, nX, nY, nCount);
 }
 
 

@@ -111,10 +111,11 @@ public:
      * @param nType Event type, like down, move or up.
      * @param nX horizontal position in document coordinates
      * @param nY vertical position in document coordinates
+     * @param nCount number of clicks: 1 for single click, 2 for double click
      */
-    inline void postMouseEvent(int nType, int nX, int nY)
+    inline void postMouseEvent(int nType, int nX, int nY, int nCount)
     {
-        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY);
+        mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount);
     }
 #endif // LOK_USE_UNSTABLE_API
 };

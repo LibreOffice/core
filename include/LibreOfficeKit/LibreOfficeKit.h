@@ -175,7 +175,8 @@ struct _LibreOfficeKitDocumentClass
   void (*postMouseEvent)(LibreOfficeKitDocument* pThis,
                          int nType,
                          int nX,
-                         int nY);
+                         int nY,
+                         int nCount);
 #endif // LOK_USE_UNSTABLE_API
 };
 
