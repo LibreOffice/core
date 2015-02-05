@@ -35,7 +35,6 @@
 #include <vcl/i18nhelp.hxx>
 
 using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
@@ -73,9 +72,9 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
 //  misc local helper functions
 
 
-static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
+static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< css::lang::Locale > &rSeq )
 {
-    const Locale *pLocale = rSeq.getConstArray();
+    const css::lang::Locale *pLocale = rSeq.getConstArray();
     sal_Int32 nCount = rSeq.getLength();
 
     Sequence< sal_Int16 >   aLangs( nCount );
@@ -201,7 +200,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         Reference< XAvailableLocales > xAvail( LinguMgr::GetLngSvcMgr(), UNO_QUERY );
         if (xAvail.is())
         {
-            Sequence< Locale > aTmp;
+            Sequence< css::lang::Locale > aTmp;
 
             if (LANG_LIST_SPELL_AVAIL & nLangList)
             {
@@ -229,7 +228,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         {
             Reference< XHyphenator > xTmp( SvxGetHyphenator() );
             if (xTmp.is()) {
-                Sequence < Locale > aLocaleSequence( xTmp->getLocales() );
+                Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
                 aHyphUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
             }
         }
@@ -237,7 +236,7 @@ void SvxLanguageBoxBase::SetLanguageList( sal_Int16 nLangList,
         {
             Reference< XThesaurus > xTmp( SvxGetThesaurus() );
             if (xTmp.is()) {
-                Sequence < Locale > aLocaleSequence( xTmp->getLocales() );
+                Sequence < css::lang::Locale > aLocaleSequence( xTmp->getLocales() );
                 aThesUsedLang = lcl_LocaleSeqToLangSeq( aLocaleSequence );
             }
         }
