@@ -197,7 +197,7 @@ short Compare( const OUString &sInput1, const OUString &sInput2,
         if ( nNum1 != nNum2 )
         {
             if ( nNum1 < nNum2 ) return -1;
-            return static_cast<short>( nNum1 > nNum2 );
+            return (nNum1 > nNum2) ? 1 : 0;
         }
 
         // The prefix and the first numerical elements are equal, but the suffix

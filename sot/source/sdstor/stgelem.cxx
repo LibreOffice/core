@@ -350,13 +350,12 @@ void StgEntry::GetName( OUString& rName ) const
 
 // Compare two entries. Do this case-insensitive.
 
-short StgEntry::Compare( const StgEntry& r ) const
+sal_Int32 StgEntry::Compare( const StgEntry& r ) const
 {
-    sal_Int32 nRes = r.nNameLen - nNameLen;
-    if( !nRes )
-        nRes = r.aName.compareTo( aName );
-
-    return (short)nRes;
+    if (r.nNameLen != nNameLen)
+        return r.nNameLen > nNameLen ? 1 : -1;
+    else
+        return r.aName.compareTo(aName);
 }
 
 // These load/store operations are a bit more complicated,

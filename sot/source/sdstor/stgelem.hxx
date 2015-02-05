@@ -128,7 +128,7 @@ public:
     bool        SetName( const OUString& );   // store a name (ASCII, up to 32 chars)
     void        GetName( OUString& rName ) const;
                                         // fill in the name
-    short       Compare( const StgEntry& ) const;   // compare two entries
+    sal_Int32   Compare( const StgEntry& ) const;   // compare two entries
     bool        Load( const void* pBuffer, sal_uInt32 nBufSize );
     void        Store( void* );
     StgEntryType GetType() const            { return (StgEntryType) cType;  }

@@ -1286,7 +1286,7 @@ sal_IntPtr SortedResultSet::FindPos( SortListData *pEntry,
         nCompare = Compare( pEntry, pMid );
 
         if ( !nCompare )
-            nCompare = reinterpret_cast<sal_IntPtr>(pEntry) - reinterpret_cast<sal_IntPtr>(pMid);
+            nCompare = (pEntry != pMid) ? ((pEntry < pMid) ? -1 : 1) : 0;
 
         if ( nCompare < 0 ) // pEntry < pMid
             nEnd = nMid - 1;
