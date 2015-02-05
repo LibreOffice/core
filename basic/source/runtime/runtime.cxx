@@ -1713,7 +1713,7 @@ void SbiRuntime::StepPUT()
     // store on its own method (inside a function)?
     bool bFlagsChanged = false;
     SbxFlagBits n = SBX_NONE;
-    if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
+    if( refVar.get() == pMeth )
     {
         bFlagsChanged = true;
         n = refVar->GetFlags();
@@ -1865,7 +1865,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     {
         bool bFlagsChanged = false;
         SbxFlagBits n = SBX_NONE;
-        if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
+        if( refVar.get() == pMeth )
         {
             bFlagsChanged = true;
             n = refVar->GetFlags();
@@ -2066,7 +2066,7 @@ void SbiRuntime::StepLSET()
     else
     {
         SbxFlagBits n = refVar->GetFlags();
-        if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
+        if( refVar.get() == pMeth )
         {
             refVar->SetFlag( SBX_WRITE );
         }
@@ -2102,7 +2102,7 @@ void SbiRuntime::StepRSET()
     else
     {
         SbxFlagBits n = refVar->GetFlags();
-        if( refVar.get() == static_cast<SbxVariable*>(pMeth) )
+        if( refVar.get() == pMeth )
         {
             refVar->SetFlag( SBX_WRITE );
         }
