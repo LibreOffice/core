@@ -39,13 +39,14 @@ public:
     ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
 
     void testUTUnit();
-    void testStringExtraction();
     void testUnitVerification();
+
+    void testUnitFromFormatStringExtraction();
 
     CPPUNIT_TEST_SUITE(UnitsTest);
     CPPUNIT_TEST(testUTUnit);
-    CPPUNIT_TEST(testStringExtraction);
     CPPUNIT_TEST(testUnitVerification);
+    CPPUNIT_TEST(testUnitFromFormatStringExtraction);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -96,11 +97,6 @@ void UnitsTest::testUTUnit() {
 
     CPPUNIT_ASSERT(aM_S*aS == aM);
     CPPUNIT_ASSERT(aM/aS == aM_S);
-}
-
-void UnitsTest::testStringExtraction() {
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
-    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
 }
 
 void UnitsTest::testUnitVerification() {
@@ -206,6 +202,11 @@ void UnitsTest::testUnitVerification() {
     pCell = mpDoc->GetFormulaCell(address);
     pTokens = pCell->GetCode();
     CPPUNIT_ASSERT(!mpUnitsImpl->verifyFormula(pTokens, address, mpDoc));
+}
+
+void UnitsTest::testUnitFromFormatStringExtraction() {
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
+    CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
