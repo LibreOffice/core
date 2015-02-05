@@ -139,7 +139,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
             if (pFirstUnit == pSecondUnit) {
                 // The two units are identical, hence we can return either.
                 pOut = pFirstUnit;
-                SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit.getString());
+                SAL_INFO("sc.units", "verified equality for unit " << pFirstUnit);
             } else {
                 // TODO: notify/link UI.
             }
