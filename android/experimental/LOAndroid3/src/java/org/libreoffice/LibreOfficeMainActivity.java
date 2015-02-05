@@ -2,6 +2,7 @@ package org.libreoffice;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -24,6 +25,13 @@ import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.LayerView;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +53,7 @@ public class LibreOfficeMainActivity extends LOAbout {
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
+    private File mTempFile = null;
 
     public LibreOfficeMainActivity() {
         super(/*newActivity=*/false);
@@ -96,7 +105,15 @@ public class LibreOfficeMainActivity extends LOAbout {
         LayoutInflater.from(this).setFactory(ViewFactory.getInstance());
 
         if (getIntent().getData() != null) {
-            mInputFile = getIntent().getData().getPath();
+            if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+                if (copyFileToTemp() && mTempFile != null) {
+                    mInputFile = mTempFile.getPath();
+                } else {
+                    // TODO: can't open the file
+                }
+            } else if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_FILE)) {
+                mInputFile = getIntent().getData().getPath();
+            }
         } else {
             mInputFile = DEFAULT_DOC_PATH;
         }
@@ -131,6 +148,35 @@ public class LibreOfficeMainActivity extends LOAbout {
         mLayerClient.notifyReady();
     }
 
+    private boolean copyFileToTemp() {
+        ContentResolver contentResolver = getContentResolver();
+        InputStream inputStream = null;
+        try {
+            inputStream = contentResolver.openInputStream(getIntent().getData());
+            mTempFile = File.createTempFile("LibreOffice", null, this.getCacheDir());
+
+            OutputStream outputStream = new FileOutputStream(mTempFile);
+            byte[] buffer = new byte[4096];
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, len);
+            }
+            inputStream.close();
+            outputStream.close();
+            return true;
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -162,6 +208,12 @@ public class LibreOfficeMainActivity extends LOAbout {
         Log.i(LOGTAG, "onDestroy..");
         mLayerClient.destroy();
         super.onDestroy();
+
+        if (isFinishing()) { // Not an orientation change
+            if (mTempFile != null) {
+                mTempFile.delete();
+            }
+        }
     }
 
     public LOKitThread getLOKitThread() {
