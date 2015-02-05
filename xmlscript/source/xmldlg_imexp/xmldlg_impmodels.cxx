@@ -1178,9 +1178,7 @@ void TitledBoxElement::endElement()
         ctx.importImageURLProperty( "ImageURL" ,  "image-src" , _xAttributes );
         ctx.importImagePositionProperty( "ImagePosition", "image-position", xAttributes );
         ctx.importBooleanProperty( "MultiLine", "multiline", xAttributes );
-        // map invalid "group-name" attribute to "name"
-        // (since radio buttons are grouped by name)
-        ctx.importStringProperty( "Name", "group-name", xAttributes );
+        ctx.importStringProperty( "GroupName", "group-name", xAttributes );
 
         sal_Int16 nVal = 0;
         sal_Bool bChecked = sal_False;
@@ -1275,9 +1273,7 @@ void RadioGroupElement::endElement()
         ctx.importImageURLProperty( "ImageURL" , "image-src" , xAttributes );
         ctx.importImagePositionProperty( "ImagePosition", "image-position", xAttributes );
         ctx.importBooleanProperty( "MultiLine", "multiline", xAttributes );
-        // map invalid "group-name" attribute to "name"
-        // (since radio buttons are grouped by name)
-        ctx.importStringProperty( "Name", "group-name", xAttributes );
+        ctx.importStringProperty( "GroupName", "group-name", xAttributes );
         sal_Int16 nVal = 0;
         sal_Bool bChecked = sal_False;
         if (getBoolAttr( &bChecked, "checked", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bChecked)
