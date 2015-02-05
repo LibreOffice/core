@@ -43,7 +43,7 @@ void SvxUnoForbiddenCharsTable::onChange()
 {
 }
 
-ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Locale& rLocale )
+ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const lang::Locale& rLocale )
     throw(NoSuchElementException, RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -59,7 +59,7 @@ ForbiddenCharacters SvxUnoForbiddenCharsTable::getForbiddenCharacters( const Loc
     return *pForbidden;
 }
 
-sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocale )
+sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const lang::Locale& rLocale )
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -73,7 +73,7 @@ sal_Bool SvxUnoForbiddenCharsTable::hasForbiddenCharacters( const Locale& rLocal
     return NULL != pForbidden;
 }
 
-void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
+void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const lang::Locale& rLocale, const ForbiddenCharacters& rForbiddenCharacters )
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -87,7 +87,7 @@ void SvxUnoForbiddenCharsTable::setForbiddenCharacters(const Locale& rLocale, co
     onChange();
 }
 
-void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale )
+void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const lang::Locale& rLocale )
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -102,17 +102,17 @@ void SvxUnoForbiddenCharsTable::removeForbiddenCharacters( const Locale& rLocale
 }
 
 // XSupportedLocales
-Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
+Sequence< lang::Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     const sal_Int32 nCount = mxForbiddenChars.is() ? mxForbiddenChars->GetMap().size() : 0;
 
-    Sequence< Locale > aLocales( nCount );
+    Sequence< lang::Locale > aLocales( nCount );
     if( nCount )
     {
-        Locale* pLocales = aLocales.getArray();
+        lang::Locale* pLocales = aLocales.getArray();
 
         for( SvxForbiddenCharactersTable::Map::iterator it = mxForbiddenChars->GetMap().begin();
              it != mxForbiddenChars->GetMap().end(); ++it )
@@ -125,7 +125,7 @@ Sequence< Locale > SAL_CALL SvxUnoForbiddenCharsTable::getLocales()
     return aLocales;
 }
 
-sal_Bool SAL_CALL SvxUnoForbiddenCharsTable::hasLocale( const Locale& aLocale )
+sal_Bool SAL_CALL SvxUnoForbiddenCharsTable::hasLocale( const lang::Locale& aLocale )
     throw(RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
