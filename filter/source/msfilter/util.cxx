@@ -697,6 +697,7 @@ struct CustomShapeTypeTranslationTable
 static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
 {
     // { "non-primitive", mso_sptMin },
+    { "frame", "frame" },
     { "rectangle", "rect" },
     { "round-rectangle", "roundRect" },
     { "ellipse", "ellipse" },
