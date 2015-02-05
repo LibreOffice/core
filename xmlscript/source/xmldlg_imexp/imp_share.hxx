@@ -38,6 +38,8 @@
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/diagnose.h>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -495,10 +497,21 @@ public:
         {}
     inline ~ControlImportContext()
     {
-        _pImport->_xDialogModel->insertByName(
-            _aId, css::uno::makeAny(
-                css::uno::Reference<css::awt::XControlModel>::query(
-                    _xControlModel ) ) );
+    }
+
+    inline void finish() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception)
+    {
+        try
+        {
+            _pImport->_xDialogModel->insertByName(
+                _aId, css::uno::makeAny(
+                    css::uno::Reference<css::awt::XControlModel>::query(
+                        _xControlModel ) ) );
+        }
+        catch(const css::container::ElementExistException &e)
+        {
+            throw css::lang::WrappedTargetRuntimeException("", e.Context, makeAny(e));
+        }
     }
 };
 

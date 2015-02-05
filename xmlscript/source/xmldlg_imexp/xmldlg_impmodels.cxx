@@ -101,6 +101,8 @@ void Frame::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 
@@ -156,6 +158,8 @@ void MultiPage::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 Reference< xml::input::XElement > Page::startChildElement(
@@ -208,6 +212,8 @@ void Page::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // progessmeter
@@ -252,6 +258,8 @@ void ProgressBarElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // scrollbar
@@ -302,6 +310,8 @@ void ScrollBarElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // spinbutton
@@ -350,6 +360,8 @@ void SpinButtonElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // fixedline
@@ -390,6 +402,8 @@ void FixedLineElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // patternfield
@@ -438,6 +452,8 @@ void PatternFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // formattedfield
@@ -566,6 +582,8 @@ void FormattedFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // timefield
@@ -620,6 +638,8 @@ void TimeFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // numericfield
@@ -674,6 +694,8 @@ void NumericFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // datefield
@@ -729,6 +751,8 @@ void DateFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // currencyfield
@@ -785,6 +809,8 @@ void CurrencyFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // filecontrol
@@ -829,6 +855,8 @@ void FileControlElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // treecontrol
@@ -875,6 +903,8 @@ void TreeControlElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // imagecontrol
@@ -917,6 +947,8 @@ void ImageControlElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // textfield
@@ -964,6 +996,8 @@ void TextElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // FixedHyperLink
@@ -1013,6 +1047,8 @@ void FixedHyperLinkElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // edit
@@ -1076,6 +1112,8 @@ void TextFieldElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // titledbox
@@ -1148,6 +1186,8 @@ void TitledBoxElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+        ctx.finish();
     }
 
     // create radios AFTER group box!
@@ -1194,6 +1234,8 @@ void TitledBoxElement::endElement()
         // avoid ring-reference:
         // vector< event elements > holding event elements holding this (via _pParent)
         radioEvents.clear();
+
+        ctx.finish();
     }
     // avoid ring-reference:
     // vector< radio elements > holding radio elements holding this (via _pParent)
@@ -1290,6 +1332,8 @@ void RadioGroupElement::endElement()
         // avoid ring-reference:
         // vector< event elements > holding event elements holding this (via _pParent)
         radioEvents.clear();
+
+        ctx.finish();
     }
     // avoid ring-reference:
     // vector< radio elements > holding radio elements holding this (via _pParent)
@@ -1415,6 +1459,8 @@ void MenuListElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // combobox
@@ -1482,6 +1528,8 @@ void ComboBoxElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // checkbox
@@ -1548,6 +1596,8 @@ void CheckBoxElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // button
@@ -1612,6 +1662,8 @@ void ButtonElement::endElement()
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
     _events.clear();
+
+    ctx.finish();
 }
 
 // bulletinboard

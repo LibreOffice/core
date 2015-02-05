@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
