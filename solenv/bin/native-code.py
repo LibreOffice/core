@@ -119,8 +119,12 @@ core_constructor_list = [
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
+    "stardiv_Toolkit_UnoComboBoxControl_get_implementation",
+    "stardiv_Toolkit_UnoControlComboBoxModel_get_implementation",
     "stardiv_Toolkit_UnoControlContainer_get_implementation",
     "stardiv_Toolkit_UnoControlContainerModel_get_implementation",
+    "stardiv_Toolkit_UnoDateFieldControl_get_implementation",
+    "stardiv_Toolkit_UnoControlDateFieldModel_get_implementation",
     "stardiv_Toolkit_VCLXPointer_get_implementation",
     "stardiv_Toolkit_VCLXToolkit_get_implementation",
 # uui/util/uui.component
@@ -166,6 +170,7 @@ draw_constructor_list = [
     ]
 
 writer_factory_list = [
+    ("libfrmlo.a", "frm_component_getFactory"),
     ("libsblo.a", "sb_component_getFactory"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
