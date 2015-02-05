@@ -203,12 +203,12 @@ class ElementBase
     : public ::cppu::WeakImplHelper1< css::xml::input::XElement >
 {
 protected:
-    DialogImport * _pImport;
-    ElementBase * _pParent;
+    DialogImport * const _pImport;
+    ElementBase * const _pParent;
 
-    sal_Int32 _nUid;
-    OUString _aLocalName;
-    css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
+    const sal_Int32 _nUid;
+    const OUString _aLocalName;
+    const css::uno::Reference< css::xml::input::XAttributes > _xAttributes;
 
 public:
     ElementBase(
@@ -381,9 +381,9 @@ public:
 class ImportContext
 {
 protected:
-    DialogImport * _pImport;
-    css::uno::Reference< css::beans::XPropertySet > _xControlModel;
-    OUString _aId;
+    DialogImport * const _pImport;
+    const css::uno::Reference< css::beans::XPropertySet > _xControlModel;
+    const OUString _aId;
 
 public:
     inline ImportContext(
