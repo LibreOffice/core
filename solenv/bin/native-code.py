@@ -52,6 +52,7 @@ core_factory_list = [
     ("libunoxmllo.a", "unoxml_component_getFactory"),
     ("libutllo.a", "utl_component_getFactory"),
     ("libxmlsecurity.a", "xmlsecurity_component_getFactory"),
+    ("libxoflo.a", "xof_component_getFactory"),
     ("libxolo.a", "xo_component_getFactory"),
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
