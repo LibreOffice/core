@@ -263,7 +263,6 @@ using namespace ::com::sun::star::form::binding;
 using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::script;
@@ -760,7 +759,7 @@ Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(RuntimeE
 }
 //  EventListener
 
-void SAL_CALL FmXFormShell::disposing(const EventObject& e) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( RuntimeException, std::exception )
 {
 
     if (m_xActiveController == e.Source)
@@ -863,7 +862,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 }
 
 
-void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFormShell::formActivated(const lang::EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     if ( impl_checkDisposed() )
         return;
@@ -874,7 +873,7 @@ void SAL_CALL FmXFormShell::formActivated(const EventObject& rEvent) throw( Runt
 }
 
 
-void SAL_CALL FmXFormShell::formDeactivated(const EventObject& rEvent) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFormShell::formDeactivated(const lang::EventObject& rEvent) throw( RuntimeException, std::exception )
 {
     if ( impl_checkDisposed() )
         return;
@@ -1145,14 +1144,14 @@ bool FmXFormShell::executeControlConversionSlot( const Reference< XFormComponent
                 return false;
 
             Reference< XControlModel> xOldModel( pFormObject->GetUnoControlModel() );
-            Reference< XServiceInfo> xModelInfo(xOldModel, UNO_QUERY);
+            Reference< lang::XServiceInfo> xModelInfo(xOldModel, UNO_QUERY);
 
             // Properties uebertragen
             Reference< XPropertySet> xOldSet(xOldModel, UNO_QUERY);
             Reference< XPropertySet> xNewSet(xNewModel, UNO_QUERY);
 
 
-            Locale aNewLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
+            lang::Locale aNewLanguage = Application::GetSettings().GetUILanguageTag().getLocale();
             TransferFormComponentProperties(xOldSet, xNewSet, aNewLanguage);
 
             Sequence< ::com::sun::star::script::ScriptEventDescriptor> aOldScripts;
@@ -1308,7 +1307,7 @@ bool FmXFormShell::canConvertCurrentSelectionToControl( sal_Int16 nConversionSlo
         return false;
 
     InterfaceBag::const_iterator aCheck = m_aCurrentSelection.begin();
-    Reference< XServiceInfo > xElementInfo( *aCheck, UNO_QUERY );
+    Reference< lang::XServiceInfo > xElementInfo( *aCheck, UNO_QUERY );
     if ( !xElementInfo.is() )
         // no service info -> cannot determine this
         return false;
@@ -2675,7 +2674,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
 }
 
 
-void FmXFormShell::selectionChanged(const EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
+void FmXFormShell::selectionChanged(const lang::EventObject& rEvent) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( impl_checkDisposed() )
         return;
@@ -3354,7 +3353,7 @@ void FmXFormShell::CreateExternalView()
                             sColumnType = FM_COL_TEXTFIELD;
                             // we know at least two different controls which are TextFields : the basic edit field and the formatted
                             // field. we distinguish them by their service name
-                            Reference< XServiceInfo> xInfo(xCurrentModelSet, UNO_QUERY);
+                            Reference< lang::XServiceInfo> xInfo(xCurrentModelSet, UNO_QUERY);
                             if (xInfo.is())
                             {
                                 sal_Int16 nObjectType = getControlTypeByObject(xInfo);
