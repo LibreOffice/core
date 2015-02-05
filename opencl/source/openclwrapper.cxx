@@ -854,6 +854,64 @@ void setOpenCLCmdQueuePosition( int nPos )
     gpuEnv.mnCmdQueuePos = nPos;
 }
 
+const char* errorString(cl_int nError)
+{
+#define CASE(val) case CL_##val: return #val
+    switch (nError)
+    {
+        CASE(SUCCESS);
+        CASE(DEVICE_NOT_FOUND);
+        CASE(DEVICE_NOT_AVAILABLE);
+        CASE(COMPILER_NOT_AVAILABLE);
+        CASE(MEM_OBJECT_ALLOCATION_FAILURE);
+        CASE(OUT_OF_RESOURCES);
+        CASE(OUT_OF_HOST_MEMORY);
+        CASE(PROFILING_INFO_NOT_AVAILABLE);
+        CASE(MEM_COPY_OVERLAP);
+        CASE(IMAGE_FORMAT_MISMATCH);
+        CASE(IMAGE_FORMAT_NOT_SUPPORTED);
+        CASE(BUILD_PROGRAM_FAILURE);
+        CASE(MAP_FAILURE);
+        CASE(INVALID_VALUE);
+        CASE(INVALID_DEVICE_TYPE);
+        CASE(INVALID_PLATFORM);
+        CASE(INVALID_DEVICE);
+        CASE(INVALID_CONTEXT);
+        CASE(INVALID_QUEUE_PROPERTIES);
+        CASE(INVALID_COMMAND_QUEUE);
+        CASE(INVALID_HOST_PTR);
+        CASE(INVALID_MEM_OBJECT);
+        CASE(INVALID_IMAGE_FORMAT_DESCRIPTOR);
+        CASE(INVALID_IMAGE_SIZE);
+        CASE(INVALID_SAMPLER);
+        CASE(INVALID_BINARY);
+        CASE(INVALID_BUILD_OPTIONS);
+        CASE(INVALID_PROGRAM);
+        CASE(INVALID_PROGRAM_EXECUTABLE);
+        CASE(INVALID_KERNEL_NAME);
+        CASE(INVALID_KERNEL_DEFINITION);
+        CASE(INVALID_KERNEL);
+        CASE(INVALID_ARG_INDEX);
+        CASE(INVALID_ARG_VALUE);
+        CASE(INVALID_ARG_SIZE);
+        CASE(INVALID_KERNEL_ARGS);
+        CASE(INVALID_WORK_DIMENSION);
+        CASE(INVALID_WORK_GROUP_SIZE);
+        CASE(INVALID_WORK_ITEM_SIZE);
+        CASE(INVALID_GLOBAL_OFFSET);
+        CASE(INVALID_EVENT_WAIT_LIST);
+        CASE(INVALID_EVENT);
+        CASE(INVALID_OPERATION);
+        CASE(INVALID_GL_OBJECT);
+        CASE(INVALID_BUFFER_SIZE);
+        CASE(INVALID_MIP_LEVEL);
+        CASE(INVALID_GLOBAL_WORK_SIZE);
+        default:
+            return "Unknown OpenCL error code";
+    }
+#undef CASE
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

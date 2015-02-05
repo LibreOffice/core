@@ -79,6 +79,12 @@ OPENCL_DLLPUBLIC void getOpenCLDeviceInfo(size_t& rDeviceId, size_t& rPlatformId
  */
 OPENCL_DLLPUBLIC void setOpenCLCmdQueuePosition( int nPos );
 
+/**
+ * Return a textual representation of an OpenCL error code.
+ * (Currently the symbolic name sans the CL_ prefix.)
+ */
+OPENCL_DLLPUBLIC const char* errorString(cl_int nError);
+
 }
 
 #endif

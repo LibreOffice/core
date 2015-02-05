@@ -41,9 +41,6 @@ public:
 /// Failed in marshaling
 class OpenCLError
 {
-private:
-    const char* strerror( cl_int i ) const;
-
 public:
     OpenCLError( cl_int err, const std::string& fn, int ln );
 
