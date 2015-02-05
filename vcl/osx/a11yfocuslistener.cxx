@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <salhelper/refobj.hxx>
-
 #include "osx/a11yfocustracker.hxx"
 #include "osx/a11yfactory.h"
 

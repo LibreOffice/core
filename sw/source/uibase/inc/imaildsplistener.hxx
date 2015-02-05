@@ -21,7 +21,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_IMAILDSPLISTENER_HXX
 
 #include <com/sun/star/mail/XMailMessage.hpp>
-#include <salhelper/refobj.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 class MailDispatcher;
 
@@ -33,7 +33,7 @@ class MailDispatcher;
 
     @see MailDispatcher
 */
-class IMailDispatcherListener : public ::salhelper::ReferenceObject
+class IMailDispatcherListener : public salhelper::SimpleReferenceObject
 {
 public:
     /**

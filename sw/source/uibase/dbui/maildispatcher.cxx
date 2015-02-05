@@ -22,6 +22,8 @@
 
 #include <algorithm>
 
+#include <osl/diagnose.h>
+
 using namespace ::com::sun::star;
 
 typedef std::list< ::rtl::Reference<IMailDispatcherListener> > MailDispatcherListenerContainer_t;

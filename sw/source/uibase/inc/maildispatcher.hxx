@@ -25,7 +25,7 @@
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
-#include <salhelper/refobj.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include <list>
 
@@ -41,7 +41,7 @@ class IMailDispatcherListener;
     thread should create an own instance of this class.
 */
 class SW_DLLPUBLIC MailDispatcher
-    : public ::salhelper::ReferenceObject
+    : public salhelper::SimpleReferenceObject
     , private ::osl::Thread
 {
 public:

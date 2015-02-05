@@ -28,7 +28,6 @@
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #include <rtl/instance.hxx>
-#include <salhelper/refobj.hxx>
 
 #include "updateinfo.hxx"
 #include "updatecheckconfiglistener.hxx"

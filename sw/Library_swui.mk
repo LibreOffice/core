@@ -55,6 +55,7 @@ $(eval $(call gb_Library_use_libraries,swui,\
     i18nutil \
     msfilter \
     sal \
+    salhelper \
     sfx \
     sot \
     svl \
