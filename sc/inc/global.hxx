@@ -28,7 +28,6 @@
 #include "scdllapi.h"
 #include <rtl/ustring.hxx>
 
-#include <boost/static_assert.hpp>
 #include <vector>
 
 class ImageList;
@@ -211,8 +210,8 @@ inline InsertDeleteFlags operator~ (const InsertDeleteFlags& rhs)
     return IDF_ALL_USED_BITS & InsertDeleteFlags::fromInt(~rhs.val());
 }
 
-// boost can't cope with this at the moment, perhaps when we have constexpr we can modify InsertDeleteFlags to make it work.
-//BOOST_STATIC_ASSERT((IDF_ATTRIB & IDF_CONTENTS) == IDF_NONE);
+// This doesnt work at the moment, perhaps when we have constexpr we can modify InsertDeleteFlags to make it work.
+//static_assert((IDF_ATTRIB & IDF_CONTENTS) == IDF_NONE, "these must match");
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
 const InsertDeleteFlags IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);

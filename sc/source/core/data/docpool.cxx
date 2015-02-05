@@ -19,7 +19,6 @@
 
 #include "scitems.hxx"
 
-#include <boost/static_assert.hpp>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
 #include <vcl/outdev.hxx>
@@ -186,8 +185,8 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_SCALETO
     { 0,                            SFX_ITEM_POOLABLE }     // ATTR_HIDDEN
 };
-BOOST_STATIC_ASSERT(
-    SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1);
+static_assert(
+    SAL_N_ELEMENTS(aItemInfos) == ATTR_ENDINDEX - ATTR_STARTINDEX + 1, "these must match");
 
 ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
 

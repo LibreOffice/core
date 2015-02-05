@@ -49,7 +49,6 @@
 
 #include "boost/noncopyable.hpp"
 #include <boost/scoped_array.hpp>
-#include "boost/static_assert.hpp"
 
 namespace {
 
@@ -69,7 +68,7 @@ rtl::OUString getArgument(sal_Int32 index) {
 
 std::string convertLazy(rtl::OUString const & s16) {
     rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
-    BOOST_STATIC_ASSERT(sizeof (sal_Int32) <= sizeof (std::string::size_type));
+    static_assert(sizeof (sal_Int32) <= sizeof (std::string::size_type), "must be at least the same size");
         // ensure following cast is legitimate
     return std::string(
         s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));

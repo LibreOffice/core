@@ -22,8 +22,6 @@
 #include <salgdi.hxx>
 #include <scrptrun.h>
 
-#include <boost/static_assert.hpp>
-
 #include <i18nlangtag/mslangid.hxx>
 
 #include <vcl/svapp.hxx>

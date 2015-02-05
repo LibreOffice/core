@@ -39,9 +39,7 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
 
-// If these ever dispersed we'd need a solution.
-BOOST_STATIC_ASSERT((LISTBOX_APPEND == COMBOBOX_APPEND) && (LISTBOX_ENTRY_NOTFOUND == COMBOBOX_ENTRY_NOTFOUND));
-
+static_assert((LISTBOX_APPEND == COMBOBOX_APPEND) && (LISTBOX_ENTRY_NOTFOUND == COMBOBOX_ENTRY_NOTFOUND), "If these ever dispersed we'd need a solution");
 
 OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg )
 {

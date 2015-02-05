@@ -23,7 +23,6 @@
 #include "sal/config.h"
 #include "salhelper/simplereferenceobject.hxx"
 
-#include "boost/static_assert.hpp"
 #include "sal/types.h"
 
 #include "rtl/alloc.h"
@@ -425,7 +424,7 @@ struct PageData
      */
     static const size_t     theSize     = sizeof(G) + sizeof(D) + 2 * sizeof(L);
     static const sal_uInt16 thePageSize = theSize;
-    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
+    static_assert(STORE_MINIMUM_PAGESIZE >= thePageSize, "must be at least thePageSize");
 
     /** location.
      */

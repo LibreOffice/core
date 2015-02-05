@@ -31,9 +31,6 @@
 #include "assign.hxx"
 #include "eq.hxx"
 
-#include "boost/static_assert.hpp"
-
-
 using namespace ::cppu;
 using namespace ::osl;
 
@@ -488,10 +485,10 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
-    BOOST_STATIC_ASSERT( ((sal_Bool) true) == sal_True &&
-                         (1 != 0) == sal_True );
-    BOOST_STATIC_ASSERT( ((sal_Bool) false) == sal_False &&
-                         (1 == 0) == sal_False );
+    static_assert( ((sal_Bool) true) == sal_True &&
+                         (1 != 0) == sal_True, "must be binary compatible" );
+    static_assert( ((sal_Bool) false) == sal_False &&
+                         (1 == 0) == sal_False, "must be binary compatible" );
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
     BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 4 );

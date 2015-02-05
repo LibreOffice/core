@@ -24,8 +24,6 @@
 #include <cassert>
 #include <cstddef>
 
-#include <boost/static_assert.hpp>
-
 #include "rtl/textenc.h"
 #include "sal/types.h"
 
@@ -261,9 +259,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT ImplTextEncodingData const *
             &aImplPT154TextEncodingData, /* PT154 */
             &adobeDingbatsEncodingData }; /* ADOBE_DINGBATS */
 
-    //update table above if a new encoding is added
-    BOOST_STATIC_ASSERT(
-        SAL_N_ELEMENTS(aData) == RTL_TEXTENCODING_ADOBE_DINGBATS + 1);
+    static_assert(
+        SAL_N_ELEMENTS(aData) == RTL_TEXTENCODING_ADOBE_DINGBATS + 1,
+        "update table above if a new encoding is added");
 
     return
         nEncoding < SAL_N_ELEMENTS(aData) ? aData[nEncoding] : NULL;

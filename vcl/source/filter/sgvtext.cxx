@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include <boost/static_assert.hpp>
 #include <osl/thread.h>
 #include <rtl/math.h>
 #include <comphelper/string.hxx>
@@ -606,10 +605,8 @@ sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
     }
     else
     {
-         // with MaxChar == 255 c cannot be greater than MaxChar
-         // assert if MaxChar is ever changed
-        BOOST_STATIC_ASSERT( MaxChar == 255 );
-        BOOST_STATIC_ASSERT(sizeof(UCHAR) == 1);
+        static_assert(MaxChar == 255, "with MaxChar == 255 c cannot be greater than MaxChar");
+        static_assert(sizeof(UCHAR) == 1, "assert if MaxChar type is ever changed");
         if (c>=MinChar /*&& c<=MaxChar*/)
         {
             ChrWidth=(sal_uInt16)rOut.GetTextWidth(OUString(reinterpret_cast<sal_Char*>(&c), 1, RTL_TEXTENCODING_IBM_437));

@@ -21,7 +21,6 @@
 
 #include <dlfcn.h>
 
-#include <boost/static_assert.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
@@ -48,8 +47,8 @@ struct Fake_type_info {
     char const * name;
 };
 
-BOOST_STATIC_ASSERT(
-    sizeof (Fake_type_info) == sizeof (std::type_info));
+static_assert(
+    sizeof (Fake_type_info) == sizeof (std::type_info), "must be the same size");
 
 struct Fake_class_type_info: Fake_type_info {};
 

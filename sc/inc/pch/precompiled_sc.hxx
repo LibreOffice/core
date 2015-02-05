@@ -45,7 +45,6 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/static_assert.hpp>
 #include <cassert>
 #include <climits>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>

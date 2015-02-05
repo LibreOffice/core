@@ -27,7 +27,6 @@
 
 #include <dlfcn.h>
 
-#include "boost/static_assert.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/genfunc.hxx"
 #include <sal/log.hxx>

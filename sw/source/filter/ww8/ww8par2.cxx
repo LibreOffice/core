@@ -21,7 +21,6 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/static_assert.hpp>
 #include <comphelper/string.hxx>
 #include <tools/solar.h>
 #include <vcl/vclenum.hxx>
@@ -1278,7 +1277,7 @@ void WW8TabBandDesc::ProcessSprmTTableBorders(int nBrcVer, const sal_uInt8* pPar
     }
     else if ( nBrcVer == 8 )
     {
-        BOOST_STATIC_ASSERT(sizeof (WW8_BRC) == 4);
+        static_assert(sizeof (WW8_BRC) == 4, "this has to match the msword size");
         for( int i = 0; i < 6; ++i )
             aDefBrcs[i] = reinterpret_cast<WW8_BRC const *>(pParams)[i];
     }

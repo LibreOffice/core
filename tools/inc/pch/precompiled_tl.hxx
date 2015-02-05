@@ -26,7 +26,6 @@
 #include <boost/checked_delete.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/rational.hpp>
-#include <boost/static_assert.hpp>
 #include <cassert>
 #include <cmath>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>

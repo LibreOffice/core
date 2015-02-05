@@ -20,7 +20,6 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
-#include "boost/static_assert.hpp"
 
 #include "storcach.hxx"
 
@@ -230,7 +229,7 @@ class PageCache_Impl :
 {
     // Representation
     static size_t const theTableSize = 32;
-    BOOST_STATIC_ASSERT(STORE_IMPL_ISP2(theTableSize));
+    static_assert(STORE_IMPL_ISP2(theTableSize), "must be the case");
 
     Entry **     m_hash_table;
     Entry *      m_hash_table_0[theTableSize];
@@ -291,7 +290,7 @@ PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
       m_nMissed      (0)
 {
     static size_t const theSize = SAL_N_ELEMENTS(m_hash_table_0);
-    BOOST_STATIC_ASSERT(theSize == theTableSize);
+    static_assert(theSize == theTableSize, "must be equal");
     memset(m_hash_table_0, 0, sizeof(m_hash_table_0));
 }
 

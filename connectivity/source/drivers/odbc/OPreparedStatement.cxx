@@ -333,7 +333,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
          *
          * Our internal OUString storage is always UTF-16, so no conversion to do here.
          */
-        BOOST_STATIC_ASSERT(sizeof (SQLWCHAR) == 2 || sizeof (SQLWCHAR) == 4);
+        static_assert(sizeof (SQLWCHAR) == 2 || sizeof (SQLWCHAR) == 4, "must be 2 or 4");
         if (sizeof (SQLWCHAR) == 2)
         {
             nCharLen = _sData.getLength();
@@ -414,16 +414,11 @@ void SAL_CALL OPreparedStatement::setByte( const sal_Int32 parameterIndex, const
     setScalarParameter(parameterIndex, DataType::TINYINT, 3, x);
 }
 
-// For older compilers (that do not support partial specialisation of class templates)
-// uncomment if necessary (safe also on compilers that *do* support partial specialisation)
-//BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(DATE_STRUCT);
-//BOOST_STATIC_ASSERT((boost::is_same<DATE_STRUCT, boost::remove_reference<DATE_STRUCT&>::type>::value));
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException, std::exception)
 {
     DATE_STRUCT x(OTools::DateToOdbcDate(aData));
     setScalarParameter<DATE_STRUCT&>(parameterIndex, DataType::DATE, 10, x);
 }
-
 
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& aVal ) throw(SQLException, RuntimeException, std::exception)
 {

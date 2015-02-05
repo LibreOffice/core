@@ -1456,7 +1456,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         const size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         // added a new rule? Adjust this map!
         // +1 for UNKNOWN_RULE
-        BOOST_STATIC_ASSERT( nRuleMapCount + 1 == static_cast<size_t>(OSQLParseNode::rule_count) );
+        static_assert(nRuleMapCount + 1 == static_cast<size_t>(OSQLParseNode::rule_count), "must be equal");
 
         for ( size_t mapEntry = 0; mapEntry < nRuleMapCount; ++mapEntry )
         {

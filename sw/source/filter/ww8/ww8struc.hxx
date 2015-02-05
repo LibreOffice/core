@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <boost/static_assert.hpp>
 #include <osl/endian.h>
 #include <rtl/ustring.hxx>
 
@@ -190,7 +189,7 @@ struct WW8_STD
     // char grupe[];
 };
 
-BOOST_STATIC_ASSERT(sizeof (WW8_STD) == 10);
+static_assert(sizeof (WW8_STD) == 10, "this has to match the msword size");
 
 /** Basis zum Einlesen UND zum Arbeiten (wird jeweils unter schiedlich beerbt)
 */
@@ -210,7 +209,7 @@ struct WW8_FFN_BASE     // Font Descriptor
     sal_uInt8    ibszAlt;        //  0x5     index into ffn.szFfn to the name of the alternate font
 };
 
-BOOST_STATIC_ASSERT(sizeof (WW8_FFN_BASE) == 6);
+static_assert(sizeof (WW8_FFN_BASE) == 6, "this has to match the msword size");
 
 /** Hiermit arbeiten wir im Parser (und Dumper)
 */
@@ -449,7 +448,7 @@ struct WW8_DOGRID
                                                     // margins and ignore xaGrid and yaGrid.
 };
 
-BOOST_STATIC_ASSERT(sizeof (WW8_DOGRID) == 10);
+static_assert(sizeof (WW8_DOGRID) == 10, "this has to match the msword size");
 
 struct WW8_PIC
 {
@@ -521,7 +520,7 @@ struct WW8_PIC_SHADOW
 //  sal_uInt8 rgb[];            // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
 };
 
-BOOST_STATIC_ASSERT(sizeof (WW8_PIC_SHADOW) == 0x2E);
+static_assert(sizeof (WW8_PIC_SHADOW) == 0x2E, "this has to match the msword size");
     // "0x2E": cf. SwWW8ImplReader::PicRead pDataStream->Read call
 
 struct WW8_TBD
@@ -958,7 +957,7 @@ struct WW8_FSPA_SHADOW  // alle Member an gleicher Position und Groesse,
     SVBT32 nTxbx;
 };
 
-BOOST_STATIC_ASSERT(sizeof (WW8_FSPA_SHADOW) == 26);
+static_assert(sizeof (WW8_FSPA_SHADOW) == 26, "this has to match the msword size");
     // "26": cf. WW8ScannerBase ctor case 8 creation of pMainFdoa and pHdFtFdoa
 
 struct WW8_TXBXS

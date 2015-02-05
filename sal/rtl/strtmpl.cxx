@@ -30,7 +30,6 @@
 #include <wchar.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
-#include <boost/static_assert.hpp>
 
 /*
 inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
@@ -957,7 +956,7 @@ namespace {
     template<typename T, typename U> static inline T IMPL_RTL_STRNAME( toInt )( const IMPL_RTL_STRCODE* pStr,
                                                                      sal_Int16 nRadix )
     {
-        BOOST_STATIC_ASSERT(std::numeric_limits<T>::is_signed);
+        static_assert(std::numeric_limits<T>::is_signed, "is signed");
         bool    bNeg;
         sal_Int16   nDigit;
         U           n = 0;
@@ -1045,7 +1044,7 @@ namespace {
     template <typename T> static inline T IMPL_RTL_STRNAME( toUInt )( const IMPL_RTL_STRCODE* pStr,
                                                                       sal_Int16 nRadix )
     {
-        BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+        static_assert(!std::numeric_limits<T>::is_signed, "is not signed");
         sal_Int16   nDigit;
         T           n = 0;
 

@@ -21,7 +21,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <boost/static_assert.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

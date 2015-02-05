@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/static_assert.hpp>
-
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 
 #include <i18nlangtag/lang.h>

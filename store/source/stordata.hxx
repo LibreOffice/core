@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-#include "boost/static_assert.hpp"
 #include "sal/types.h"
 #include "sal/macros.h"
 
@@ -58,7 +57,7 @@ struct OStoreDataPageData : public store::OStorePageData
     */
     static const size_t     theSize     = 0;
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    static_assert(STORE_MINIMUM_PAGESIZE >= self::thePageSize, "got to be at least equal in size");
 
     /** capacity.
     */
@@ -148,7 +147,7 @@ struct OStoreIndirectionPageData : public store::OStorePageData
      */
     static const size_t     theSize     = sizeof(G);
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    static_assert(STORE_MINIMUM_PAGESIZE >= self::thePageSize, "got to be at least equal in size");
 
     /** capacity.
     */
@@ -573,7 +572,7 @@ struct OStoreDirectoryPageData : public store::OStorePageData
      */
     static const size_t     theSize     = NameBlock::theSize + DataBlock::theSize;
     static const sal_uInt16 thePageSize = base::theSize + self::theSize;
-    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= self::thePageSize);
+    static_assert(STORE_MINIMUM_PAGESIZE >= self::thePageSize, "got to be at least equal in size");
 
     /** capacity.
     */

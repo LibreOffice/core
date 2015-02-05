@@ -24,7 +24,6 @@
 #include "codemaker/options.hxx"
 #include "codemaker/unotype.hxx"
 
-#include "boost/static_assert.hpp"
 #include "osl/diagnose.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -96,9 +95,9 @@ void writeU4(FileStream & file, sal_uInt32 data) {
 void writeStream(FileStream & file, std::vector< unsigned char > const & stream)
 {
     std::vector< unsigned char >::size_type n = stream.size();
-    BOOST_STATIC_ASSERT(
+    static_assert(
         sizeof (std::vector< unsigned char >::size_type)
-        <= sizeof (sal_uInt64));
+        <= sizeof (sal_uInt64), "must be at most equal in size");
         // both unsigned integral, so sizeof is a practically sufficient
         // approximation of std::numeric_limits<T1>::max() <=
         // std::numeric_limits<T2>::max()

@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include "boost/noncopyable.hpp"
-#include "boost/static_assert.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "cppuhelper/exc_hlp.hxx"
@@ -39,7 +38,7 @@ namespace {
 // Best effort conversion:
 std::string convert(OUString const & s16) {
     OString s8(OUStringToOString(s16, osl_getThreadTextEncoding()));
-    BOOST_STATIC_ASSERT(sizeof (sal_Int32) <= sizeof (std::string::size_type));
+    static_assert(sizeof (sal_Int32) <= sizeof (std::string::size_type), "got to be at least equal");
         // ensure following cast is legitimate
     return std::string(
         s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));

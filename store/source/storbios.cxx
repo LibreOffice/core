@@ -19,8 +19,6 @@
 
 #include "sal/config.h"
 
-#include "boost/static_assert.hpp"
-
 #include "storbios.hxx"
 
 #include "sal/types.h"
@@ -166,7 +164,7 @@ struct SuperBlockPage
      */
     static const size_t     theSize     = 2 * SuperBlock::theSize;
     static const sal_uInt16 thePageSize = theSize;
-    BOOST_STATIC_ASSERT(STORE_MINIMUM_PAGESIZE >= thePageSize);
+    static_assert(STORE_MINIMUM_PAGESIZE >= thePageSize, "must be at least thePageSize");
 
     /** Allocation.
      */

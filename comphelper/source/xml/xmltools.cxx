@@ -9,7 +9,6 @@
 
 #include <comphelper/xmltools.hxx>
 #include <rtl/random.h>
-#include <boost/static_assert.hpp>
 #include <vector>
 
 using namespace com::sun::star;
@@ -60,7 +59,7 @@ namespace
 
     void encodeChaff(std::vector<sal_uInt8> &rChaff)
     {
-        BOOST_STATIC_ASSERT(sizeof(aChaffEncoder) == 256);
+        static_assert(sizeof(aChaffEncoder) == 256, "this has to cover all chars");
 
         for (std::vector<sal_uInt8>::iterator aI = rChaff.begin(), aEnd = rChaff.end();
             aI != aEnd; ++aI)

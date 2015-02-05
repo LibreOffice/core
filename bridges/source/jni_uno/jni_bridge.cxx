@@ -25,7 +25,6 @@
 #include "jni_bridge.h"
 #include "jniunoenvironmentdata.hxx"
 
-#include <boost/static_assert.hpp>
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/strbuf.hxx"
@@ -64,7 +63,7 @@ void SAL_CALL Mapping_map_to_uno(
     uno_Interface ** ppUnoI = (uno_Interface **)ppOut;
     jobject javaI = (jobject) pIn;
 
-    BOOST_STATIC_ASSERT( sizeof (void *) == sizeof (jobject) );
+    static_assert(sizeof (void *) == sizeof (jobject), "must be the same size");
     assert(ppUnoI != 0);
     assert(td != 0);
 
@@ -123,7 +122,7 @@ void SAL_CALL Mapping_map_to_java(
     jobject * ppJavaI = (jobject *) ppOut;
     uno_Interface * pUnoI = (uno_Interface *)pIn;
 
-    BOOST_STATIC_ASSERT( sizeof (void *) == sizeof (jobject) );
+    static_assert(sizeof (void *) == sizeof (jobject), "must be the same size");
     assert(ppJavaI != 0);
     assert(td != 0);
 
@@ -524,16 +523,16 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         *ppMapping = 0;
     }
 
-    BOOST_STATIC_ASSERT( JNI_FALSE == sal_False );
-    BOOST_STATIC_ASSERT( JNI_TRUE == sal_True );
-    BOOST_STATIC_ASSERT( sizeof (jboolean) == sizeof (sal_Bool) );
-    BOOST_STATIC_ASSERT( sizeof (jchar) == sizeof (sal_Unicode) );
-    BOOST_STATIC_ASSERT( sizeof (jdouble) == sizeof (double) );
-    BOOST_STATIC_ASSERT( sizeof (jfloat) == sizeof (float) );
-    BOOST_STATIC_ASSERT( sizeof (jbyte) == sizeof (sal_Int8) );
-    BOOST_STATIC_ASSERT( sizeof (jshort) == sizeof (sal_Int16) );
-    BOOST_STATIC_ASSERT( sizeof (jint) == sizeof (sal_Int32) );
-    BOOST_STATIC_ASSERT( sizeof (jlong) == sizeof (sal_Int64) );
+    static_assert(JNI_FALSE == sal_False, "must be equal");
+    static_assert(JNI_TRUE == sal_True, "must be equal");
+    static_assert(sizeof (jboolean) == sizeof (sal_Bool), "must be the same size");
+    static_assert(sizeof (jchar) == sizeof (sal_Unicode), "must be the same size");
+    static_assert(sizeof (jdouble) == sizeof (double), "must be the same size");
+    static_assert(sizeof (jfloat) == sizeof (float), "must be the same size");
+    static_assert(sizeof (jbyte) == sizeof (sal_Int8), "must be the same size");
+    static_assert(sizeof (jshort) == sizeof (sal_Int16), "must be the same size");
+    static_assert(sizeof (jint) == sizeof (sal_Int32), "must be the same size");
+    static_assert(sizeof (jlong) == sizeof (sal_Int64), "must be the same size");
 
     OUString const & from_env_typename =
         OUString::unacquired( &pFrom->pTypeName );
