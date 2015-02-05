@@ -85,6 +85,17 @@ void UnitsTest::testUTUnit() {
     // Test that we can't create garbage units
     UtUnit aGarbage;
     CPPUNIT_ASSERT(!UtUnit::createUnit("garbage", aGarbage, mpUnitsImpl->mpUnitSystem));
+
+    // Do some addition, subtraction, comparison tests.
+    UtUnit aM;
+    UtUnit::createUnit("m", aM, mpUnitsImpl->mpUnitSystem);
+    UtUnit aS;
+    UtUnit::createUnit("s", aS, mpUnitsImpl->mpUnitSystem);
+    UtUnit aM_S;
+    UtUnit::createUnit("m/s", aM_S, mpUnitsImpl->mpUnitSystem);
+
+    CPPUNIT_ASSERT(aM_S*aS == aM);
+    CPPUNIT_ASSERT(aM/aS == aM_S);
 }
 
 void UnitsTest::testStringExtraction() {
