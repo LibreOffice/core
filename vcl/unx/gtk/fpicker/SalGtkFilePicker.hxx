@@ -164,12 +164,6 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         virtual void SAL_CALL cancel( )
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // XEventListener
-
-        using cppu::WeakComponentImplHelperBase::disposing;
-        void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
-            throw(::com::sun::star::uno::RuntimeException);
-
         // FilePicker Event functions
 
     private:

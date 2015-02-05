@@ -24,9 +24,6 @@
 #include "svtools/treelistentry.hxx"
 #include "svtools/viewdataentry.hxx"
 
-
-
-
 SvLBoxFontString::SvLBoxFontString()
     : SvLBoxString()
     , mbUseColor(false)
@@ -130,11 +127,6 @@ sal_uLong SvxFontListBox::GetSelectEntryPos() const
 {
     SvTreeListEntry* pSvLBoxEntry = FirstSelected();
     return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : TREELIST_ENTRY_NOTFOUND;
-}
-
-OUString SvxFontListBox::GetSelectEntry() const
-{
-    return GetEntryText(GetSelectEntryPos());
 }
 
 void SvxFontListBox::InitEntry(

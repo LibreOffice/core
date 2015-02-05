@@ -300,18 +300,6 @@ void SAL_CALL SalGtkFilePicker::removeFilePickerListener( const uno::Reference<X
     m_xListener.clear();
 }
 
-// XEventListener
-
-void SAL_CALL SalGtkFilePicker::disposing( const lang::EventObject& aEvent ) throw( uno::RuntimeException )
-{
-    // no member access => no mutex needed
-
-    uno::Reference<XFilePickerListener> xFilePickerListener( aEvent.Source, ::com::sun::star::uno::UNO_QUERY );
-
-    if( xFilePickerListener.is() )
-        removeFilePickerListener( xFilePickerListener );
-}
-
 // FilePicker Event functions
 
 void SalGtkFilePicker::impl_fileSelectionChanged( FilePickerEvent aEvent )

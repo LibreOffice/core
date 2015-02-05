@@ -40,9 +40,6 @@ namespace dbaui
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
-
-        void SetSpecialReadOnly(bool _bReadOnly);
-
     };
 
     class OPropEditCtrl :   public Edit
@@ -58,8 +55,6 @@ namespace dbaui
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
-
-        void SetSpecialReadOnly(bool _bReadOnly);
     };
 
     class OPropNumericEditCtrl : public NumericField
@@ -76,7 +71,6 @@ namespace dbaui
         OUString GetHelp() const { return m_strHelpText; }
 
         void SetSpecialReadOnly(bool _bReadOnly);
-
     };
 
     class OPropListBoxCtrl : public ListBox
@@ -91,9 +85,6 @@ namespace dbaui
 
         short GetPos() const { return m_nPos; }
         OUString GetHelp() const { return m_strHelpText; }
-
-        void SetSpecialReadOnly(bool _bReadOnly);
-
     };
 
 }

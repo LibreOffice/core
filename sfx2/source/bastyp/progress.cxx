@@ -217,24 +217,6 @@ void SfxProgress::Stop()
         pImp->Enable_Impl(true);
 }
 
-
-
-void SfxProgress::SetText( const OUString&  /*      new Text */)
-
-/*  [Description]
-
-    Changes the text that appears to the left next to progress bar.
-*/
-
-{
-    if( pImp->pActiveProgress ) return;
-    if ( pImp->xStatusInd.is() )
-    {
-        pImp->xStatusInd->reset();
-        pImp->xStatusInd->start( pImp->aText, pImp->nMax );
-    }
-}
-
 bool SfxProgress::SetStateText
 (
     sal_uLong       nNewVal,     /* New value for the progress-bar */
@@ -246,8 +228,6 @@ bool SfxProgress::SetStateText
     pImp->aStateText = rNewVal;
     return SetState( nNewVal, nNewRange );
 }
-
-
 
 bool SfxProgress::SetState
 (

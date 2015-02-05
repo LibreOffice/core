@@ -47,27 +47,11 @@ OPropColumnEditCtrl::OPropColumnEditCtrl(vcl::Window* pParent,
     m_strHelpText = ModuleRes(nHelpId);
 }
 
-void
-OPropColumnEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
-{
-    SetReadOnly(_bReadOnly);
-    lcl_setSpecialReadOnly(_bReadOnly,this);
-}
-
-
-
 OPropEditCtrl::OPropEditCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, short nPosition, WinBits nWinStyle)
     :Edit(pParent, nWinStyle)
     ,m_nPos(nPosition)
 {
     m_strHelpText = ModuleRes(nHelpId);
-}
-
-void
-OPropEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
-{
-    SetReadOnly(_bReadOnly);
-    lcl_setSpecialReadOnly(_bReadOnly,this);
 }
 
 void
@@ -90,13 +74,6 @@ OPropListBoxCtrl::OPropListBoxCtrl(vcl::Window* pParent, sal_uInt16 nHelpId, sho
     ,m_nPos(nPosition)
 {
     m_strHelpText = ModuleRes(nHelpId);
-}
-
-void
-OPropListBoxCtrl::SetSpecialReadOnly(bool _bReadOnly)
-{
-    SetReadOnly(_bReadOnly);
-    lcl_setSpecialReadOnly(_bReadOnly,this);
 }
 
 } // end namespace dbaui

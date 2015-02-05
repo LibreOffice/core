@@ -24,21 +24,21 @@ Primitive2dXmlDump::filterActionType(unsigned short, bool)
 Primitive2dXmlDump::filterAllActionTypes()
 Printer::Error()
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
-SalGtkFilePicker::disposing(com::sun::star::lang::EventObject const&)
-SalGtkFolderPicker::disposing(com::sun::star::lang::EventObject const&)
 ScBroadcastAreaSlotMachine::AreaBroadcastInRange(ScRange const&, ScHint const&) const
 ScCellValue::set(ScRefCellValue const&)
 ScCondFormatManagerDlg::IsInRefMode() const
 ScDocument::CreateFormatTable() const
 ScDocument::EndAllListeners(ScRange const&)
+ScImportExport::ImportData(rtl::OUString const&, com::sun::star::uno::Any const&)
+ScImportExport::ScImportExport(ScDocument*, rtl::OUString const&)
 ScPrivatSplit::GetDeltaX()
 ScTbxInsertCtrl::Select(bool)
+ScTokenArray::GetWeight() const
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 SdrUndoObjList::SetOrdNum(unsigned int)
 SecurityEnvironment_NssImpl::getCertificate(rtl::OUString const&, rtl::OUString const&)
 SfxAppMenuControl_Impl::RegisterControl(unsigned short, SfxModule*)
-SfxProgress::SetText(rtl::OUString const&)
 SotObject::GetInterface(SvGlobalName const&)
 StylePool::getCount() const
 StyleSettings::SetAlternatingRowColor(Color const&)
@@ -53,7 +53,6 @@ SvpSalFrame::enableDamageTracker(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtListener::IsListening(SvtBroadcaster&) const
 SvxColorTabPage::GetPropertyList(XPropertyListType)
-SvxFontListBox::GetSelectEntry() const
 SvxOpenGLObject::getRenderer()
 SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
 Test::testCopyPasteSkipEmptyConditionalFormatting()
@@ -189,9 +188,7 @@ connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiType
 connectivity::odbc::appendSQLWCHARs(rtl::OUStringBuffer&, wchar_t const*, int)
 connectivity::sdbcx::OGroup::OGroup(bool)
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, bool)
-connectivity::sdbcx::OView::disposing()
 dbaccess::OBookmarkContainer::dispose()
-dbaccess::ODatabaseDocument::disposing(com::sun::star::lang::EventObject const&)
 dbaccess::StorageInputStream::close()
 dbaui::OConnectionLineAccess::contains(com::sun::star::awt::Point const&)
 dbaui::OConnectionLineAccess::isEditable() const
@@ -201,9 +198,6 @@ dbaui::OConnectionLineAccess::isVisible()
 dbaui::OGenericUnoController::InvalidateFeature(rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::frame::XStatusListener> const&, bool)
 dbaui::OJoinDesignViewAccess::isEditable() const
 dbaui::OJoinTableView::StartDrag(signed char, Point const&)
-dbaui::OPropColumnEditCtrl::SetSpecialReadOnly(bool)
-dbaui::OPropEditCtrl::SetSpecialReadOnly(bool)
-dbaui::OPropListBoxCtrl::SetSpecialReadOnly(bool)
 dbaui::OQueryViewSwitch::resizeDocumentView(Rectangle&)
 dbaui::OQueryViewSwitch::setReadOnly(bool)
 dbaui::OTableRowView::SetUpdatable(bool)

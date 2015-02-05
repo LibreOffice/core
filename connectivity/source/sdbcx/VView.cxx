@@ -75,13 +75,6 @@ void OView::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CHECKOPTION),     PROPERTY_ID_CHECKOPTION,nAttrib,&m_CheckOption, ::cppu::UnoType<sal_Int32>::get());
 }
 
-void OView::disposing(void)
-{
-    OPropertySetHelper::disposing();
-
-    ::osl::MutexGuard aGuard(m_aMutex);
-}
-
 Sequence< Type > SAL_CALL OView::getTypes(  ) throw(RuntimeException, std::exception)
 {
     return ::comphelper::concatSequences(ODescriptor::getTypes(),OView_BASE::getTypes());

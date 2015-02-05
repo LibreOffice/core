@@ -1997,12 +1997,6 @@ Reference< XNameReplace > SAL_CALL ODatabaseDocument::getEvents(  ) throw (Runti
     return m_pEventContainer;
 }
 
-void SAL_CALL ODatabaseDocument::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
-{
-    if ( m_pImpl.is() )
-        m_pImpl->disposing(Source);
-}
-
 Reference< XInterface > ODatabaseDocument::getThis() const
 {
     return *const_cast< ODatabaseDocument* >( this );

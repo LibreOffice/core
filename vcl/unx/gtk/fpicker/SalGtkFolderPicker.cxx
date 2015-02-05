@@ -63,13 +63,6 @@ SalGtkFolderPicker::SalGtkFolderPicker( const uno::Reference< uno::XComponentCon
     gtk_file_chooser_set_select_multiple( GTK_FILE_CHOOSER( m_pDialog ), false );
 }
 
-// XEventListener
-
-void SAL_CALL SalGtkFolderPicker::disposing( const lang::EventObject& )
-    throw( uno::RuntimeException )
-{
-}
-
 void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirectory )
     throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {

@@ -46,7 +46,6 @@ public:
                                          bool bWait = true );
     virtual                 ~SfxProgress();
 
-    void            SetText( const OUString& rText );
     bool                    SetStateText( sal_uIntPtr nVal, const rtl::OUString &rVal, sal_uIntPtr nNewRange = 0 );
     bool                    SetState( sal_uIntPtr nVal, sal_uIntPtr nNewRange = 0 );
     sal_uIntPtr             GetState() const { return nVal; }
