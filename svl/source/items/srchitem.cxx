@@ -33,9 +33,9 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 using namespace utl;
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::i18n;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
@@ -108,7 +108,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                         SearchFlags::LEV_RELAXED,
                         OUString(),
                         OUString(),
-                          Locale(),
+                        lang::Locale(),
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE ),
     eFamily         ( SFX_STYLE_FAMILY_PARA ),
