@@ -37,6 +37,8 @@ private:
     }
 
 public:
+    static bool createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem);
+
     UtUnit(ut_unit* pUnit = 0):
         mpUnit(pUnit, &freeUt)
     {}
