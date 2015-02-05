@@ -3828,7 +3828,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                 if ( aPathCoordinatesProp >>= aCoordinates )
                 {
                     // creating the vertices
-                    if ( (sal_uInt16)aCoordinates.getLength() )
+                    if (aCoordinates.getLength() > 0)
                     {
                         sal_uInt16 j, nElements = (sal_uInt16)aCoordinates.getLength();
                         sal_uInt16 nElementSize = 8;
