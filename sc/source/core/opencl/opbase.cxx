@@ -19,10 +19,14 @@ UnhandledToken::UnhandledToken(
     formula::FormulaToken* t, const char* m, const std::string& fn, int ln ) :
     mToken(t), mMessage(m), mFile(fn), mLineNumber(ln) {}
 
-OpenCLError::OpenCLError( cl_int err, const std::string& fn, int ln ) :
-    mError(err), mFile(fn), mLineNumber(ln)
+OpenCLError::OpenCLError( const std::string function, cl_int error, const std::string& file, int line ) :
+    mFunction(function), mError(error), mFile(file), mLineNumber(line)
 {
-    SAL_INFO("sc.opencl", "OpenCL error: " << ::opencl::errorString(mError));
+    // Not sure if this SAL_INFO() is useful; the place in
+    // CLInterpreterContext::launchKernel() where OpenCLError is
+    // caught already uses SAL_WARN() to display it.
+
+    // SAL_INFO("sc.opencl", "OpenCL error: " << ::opencl::errorString(mError));
 }
 
 Unhandled::Unhandled( const std::string& fn, int ln ) :

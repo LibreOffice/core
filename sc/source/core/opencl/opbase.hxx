@@ -42,8 +42,9 @@ public:
 class OpenCLError
 {
 public:
-    OpenCLError( cl_int err, const std::string& fn, int ln );
+    OpenCLError( const std::string function, cl_int error, const std::string& file, int line );
 
+    std::string mFunction;
     cl_int mError;
     std::string mFile;
     int mLineNumber;
