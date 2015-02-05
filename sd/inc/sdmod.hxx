@@ -23,7 +23,6 @@
 #include "glob.hxx"
 #include "pres.hxx"
 
-#include <rtl/ref.hxx>
 #include <sot/storage.hxx>
 #include <tools/shl.hxx>
 #include "sddllapi.h"
@@ -61,7 +60,7 @@ enum SdOptionStreamMode
     SD_OPTION_STORE = 1
 };
 
-typedef std::map< sal_uIntPtr, rtl::Reference<SfxExtItemPropertySetInfo> > SdExtPropertySetInfoCache;
+typedef std::map< sal_uIntPtr, css::uno::Reference<css::beans::XPropertySetInfo> > SdExtPropertySetInfoCache;
 typedef std::map< sal_uInt32, css::uno::Sequence< css::uno::Type> > SdTypesCache;
 
 /*

@@ -422,7 +422,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
     throw(::com::sun::star::uno::RuntimeException)
 {
     sal_uIntPtr nObjId = reinterpret_cast<sal_uIntPtr>(mpShape->getPropertyMapEntries());
-    rtl::Reference<SfxExtItemPropertySetInfo> pInfo;
+    css::uno::Reference<css::beans::XPropertySetInfo> pInfo;
 
     SdExtPropertySetInfoCache& rCache = (mpModel && mpModel->IsImpressDocument()) ?
         SD_MOD()->gImplImpressPropertySetInfoCache : SD_MOD()->gImplDrawPropertySetInfoCache;
@@ -441,7 +441,7 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
         pInfo = (*aIter).second;
     }
 
-    return pInfo.get();
+    return pInfo;
 }
 
 void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
