@@ -971,9 +971,9 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
         else
             OSL_FAIL("SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
     }
-    catch (const Exception&)
+    catch (const Exception& e)
     {
-        OSL_FAIL("SbaGridControl::getField Exception occurred!");
+        SAL_WARN("dbaccess", "SbaGridControl::getField Exception occurred: " << e.Message);
     }
 
     return xEmptyReturn;
@@ -984,25 +984,33 @@ bool SbaGridControl::IsReadOnlyDB() const
     // assume yes if anything fails
     bool bDBIsReadOnly = true;
 
-    // the db is the implemented by the parent of the grid control's model ...
-    Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
-    if (xColumns.is())
+    try
     {
-        Reference< XRowSet >  xDataSource(xColumns->getParent(), UNO_QUERY);
-        ::dbtools::ensureRowSetConnection( xDataSource, getContext(), false ); // NOT SURE ABOUT FALSE
-        Reference< XChild >  xConn(::dbtools::getConnection(xDataSource),UNO_QUERY);
-        if (xConn.is())
+        // the db is the implemented by the parent of the grid control's model ...
+        Reference< XChild >  xColumns(GetPeer()->getColumns(), UNO_QUERY);
+        if (xColumns.is())
         {
-            // ... and the RO-flag simply is implemented by a property
-            Reference< XPropertySet >  xDbProps(xConn->getParent(), UNO_QUERY);
-            if (xDbProps.is())
+            Reference< XRowSet >  xDataSource(xColumns->getParent(), UNO_QUERY);
+            ::dbtools::ensureRowSetConnection( xDataSource, getContext(), false ); // NOT SURE ABOUT FALSE
+            Reference< XChild >  xConn(::dbtools::getConnection(xDataSource),UNO_QUERY);
+            if (xConn.is())
             {
-                Reference< XPropertySetInfo >  xInfo = xDbProps->getPropertySetInfo();
-                if (xInfo->hasPropertyByName(PROPERTY_ISREADONLY))
-                    bDBIsReadOnly = ::comphelper::getBOOL(xDbProps->getPropertyValue(PROPERTY_ISREADONLY));
+                // ... and the RO-flag simply is implemented by a property
+                Reference< XPropertySet >  xDbProps(xConn->getParent(), UNO_QUERY);
+                if (xDbProps.is())
+                {
+                    Reference< XPropertySetInfo >  xInfo = xDbProps->getPropertySetInfo();
+                    if (xInfo->hasPropertyByName(PROPERTY_ISREADONLY))
+                        bDBIsReadOnly = ::comphelper::getBOOL(xDbProps->getPropertyValue(PROPERTY_ISREADONLY));
+                }
             }
         }
     }
+    catch (const Exception& e)
+    {
+        SAL_WARN("dbaccess", "SbaGridControl::IsReadOnlyDB Exception occurred: " << e.Message);
+    }
+
     return bDBIsReadOnly;
 }
 
