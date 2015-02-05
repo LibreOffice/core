@@ -3568,7 +3568,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
         LocaleDataWrapper::getInstalledLocaleNames();
     sal_Int32 nLocaleCount = xLoc.getLength();
     SAL_INFO( "svl.numbers", "number of locales: \"" << nLocaleCount << "\"" );
-    Locale const * const pLocales = xLoc.getConstArray();
+    css::lang::Locale const * const pLocales = xLoc.getConstArray();
     NfCurrencyTable &rCurrencyTable = theCurrencyTable::get();
     NfCurrencyTable &rLegacyOnlyCurrencyTable = theLegacyOnlyCurrencyTable::get();
     NfInstalledLocales &rInstalledLocales = theInstalledLocales::get();
