@@ -330,24 +330,27 @@ static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
 {
     GdkRectangle aRet;
     gchar** ppCoordinates;
+    gchar** ppCoordinate;
 
     aRet.width = aRet.height = aRet.x = aRet.y = 0;
     ppCoordinates = g_strsplit(pPayload, ", ", 4);
-    if (!*ppCoordinates)
+    ppCoordinate = ppCoordinates;
+    if (!*ppCoordinate)
         return aRet;
-    aRet.width = atoi(*ppCoordinates);
-    ++ppCoordinates;
-    if (!*ppCoordinates)
+    aRet.width = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
         return aRet;
-    aRet.height = atoi(*ppCoordinates);
-    ++ppCoordinates;
-    if (!*ppCoordinates)
+    aRet.height = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
         return aRet;
-    aRet.x = atoi(*ppCoordinates);
-    ++ppCoordinates;
-    if (!*ppCoordinates)
+    aRet.x = atoi(*ppCoordinate);
+    ++ppCoordinate;
+    if (!*ppCoordinate)
         return aRet;
-    aRet.y = atoi(*ppCoordinates);
+    aRet.y = atoi(*ppCoordinate);
+    g_strfreev(ppCoordinates);
     return aRet;
 }
 
