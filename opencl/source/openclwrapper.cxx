@@ -44,6 +44,13 @@
 #define DRIVER_VERSION_LENGTH 1024
 #define PLATFORM_VERSION_LENGTH 1024
 
+#define CHECK_OPENCL(status,name) \
+if( status != CL_SUCCESS )  \
+{ \
+    SAL_WARN( "opencl", "OpenCL error code " << status << " at " SAL_DETAIL_WHERE " from " name ); \
+    return false; \
+}
+
 using namespace std;
 
 namespace opencl {
@@ -762,6 +769,8 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     cps[1] = reinterpret_cast<cl_context_properties>(platformId);
     cps[2] = 0;
     cl_context context = clCreateContext( cps, 1, &pDeviceId, NULL, NULL, &nState );
+    if (nState != CL_SUCCESS)
+        SAL_WARN("opencl", "clCreateContext failed: " << nState);
 
     if(nState != CL_SUCCESS || context == NULL)
     {
@@ -771,12 +780,15 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
         SAL_WARN("opencl", "failed to set/switch opencl device");
         return false;
     }
+    SAL_INFO("opencl", "Created context " << context << " for platform " << platformId << ", device " << pDeviceId);
 
     cl_command_queue command_queue[OPENCL_CMDQUEUE_SIZE];
     for (int i = 0; i < OPENCL_CMDQUEUE_SIZE; ++i)
     {
         command_queue[i] = clCreateCommandQueue(
             context, pDeviceId, CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE, &nState);
+        if (nState != CL_SUCCESS)
+            SAL_WARN("opencl", "clCreateCommandQueue failed: " << nState);
 
         if (command_queue[i] == NULL || nState != CL_SUCCESS)
         {
@@ -794,6 +806,8 @@ bool switchOpenCLDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
             SAL_WARN("opencl", "failed to set/switch opencl device");
             return false;
         }
+
+        SAL_INFO("opencl", "Created command queue " << command_queue[i] << " for context " << context);
     }
 
     setOpenCLCmdQueuePosition(0); // Call this just to avoid the method being deleted from unused function deleter.

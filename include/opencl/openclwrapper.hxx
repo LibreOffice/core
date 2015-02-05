@@ -24,14 +24,6 @@
 #include <osl/file.hxx>
 #include <rtl/string.hxx>
 
-
-#define CHECK_OPENCL(status,name)    \
-if( status != CL_SUCCESS )    \
-{    \
-    printf ("OpenCL error code is %d at " SAL_DETAIL_WHERE " when %s .\n", status, name);    \
-    return false;    \
-}
-
 #define MAX_CLFILE_NUM 50
 #define OPENCL_CMDQUEUE_SIZE 1 // number of command queues per OpenCL device.
 
