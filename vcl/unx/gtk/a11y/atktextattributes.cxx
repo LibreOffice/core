@@ -1235,7 +1235,7 @@ attribute_set_new_from_extended_attributes(
 
         pSet = attribute_set_prepend( pSet,
                                       atk_text_attribute_register( sPropertyName.getStr() ),
-                                      g_strdup_printf( sPropertyValue.getStr() ) );
+                                      g_strdup_printf( "%s", sPropertyValue.getStr() ) );
     }
     while ( nIndex >= 0 && nIndex < sExtendedAttrs.getLength() );
 
