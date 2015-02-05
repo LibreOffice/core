@@ -28,8 +28,10 @@
 namespace salhelper
 {
 
+/** A base implementation for reference-counted objects.
 
-
+    @deprecated use salhelper::SimpleReferenceObject instead
+*/
 class ReferenceObject
 {
     /** Representation.
