@@ -220,6 +220,7 @@ friend class ScDocumentImport;
 friend class sc::DocumentStreamAccess;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
+friend class sc::FormulaGroupAreaListener;
 
 public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,

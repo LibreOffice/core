@@ -79,6 +79,7 @@ struct SetFormulaDirtyContext;
 class RefMovedHint;
 struct SortUndoParam;
 struct ReorderParam;
+class FormulaGroupAreaListener;
 
 }
 
@@ -266,6 +267,7 @@ friend class ScDocumentImport;
 friend class sc::DocumentStreamAccess;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
+friend class sc::FormulaGroupAreaListener;
 
     typedef ::std::vector<ScTable*> TableContainer;
 private:

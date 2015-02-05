@@ -2708,7 +2708,7 @@ void ScColumn::SetNumberFormat( SCROW nRow, sal_uInt32 nNumberFormat )
     ApplyAttr(nRow, SfxUInt32Item(ATTR_VALUE_FORMAT, nNumberFormat));
 }
 
-const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const
+ScFormulaCell * const * ScColumn::GetFormulaCellBlockAddress( SCROW nRow ) const
 {
     if (!ValidRow(nRow))
         return NULL;
@@ -2722,7 +2722,13 @@ const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const
         // Not a formula cell.
         return NULL;
 
-    return sc::formula_block::at(*it->data, aPos.second);
+    return &sc::formula_block::at(*it->data, aPos.second);
+}
+
+const ScFormulaCell* ScColumn::FetchFormulaCell( SCROW nRow ) const
+{
+    ScFormulaCell const * const * pp = GetFormulaCellBlockAddress( nRow );
+    return pp ? *pp : NULL;
 }
 
 void ScColumn::FindDataAreaPos(SCROW& rRow, bool bDown) const

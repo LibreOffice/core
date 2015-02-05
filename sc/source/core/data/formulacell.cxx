@@ -565,7 +565,7 @@ sc::FormulaGroupAreaListener* ScFormulaCellGroup::getAreaListener(
         // Insert a new one.
         it = mpImpl->maAreaListeners.insert(
             it, aKey, new sc::FormulaGroupAreaListener(
-                rRange, ppTopCell, mnLength, bStartFixed, bEndFixed));
+                rRange, *(*ppTopCell)->GetDocument(), (*ppTopCell)->aPos, mnLength, bStartFixed, bEndFixed));
     }
 
     return it->second;

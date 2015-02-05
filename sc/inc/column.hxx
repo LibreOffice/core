@@ -361,6 +361,7 @@ public:
     void        GetFormula( SCROW nRow, OUString& rFormula ) const;
     const ScFormulaCell* GetFormulaCell( SCROW nRow ) const;
     ScFormulaCell* GetFormulaCell( SCROW nRow );
+    ScFormulaCell * const * GetFormulaCellBlockAddress( SCROW nRow ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const;
     sal_uInt32 GetWeightedCount() const;

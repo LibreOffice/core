@@ -16,6 +16,8 @@
 #include <svl/listener.hxx>
 
 class ScFormulaCell;
+class ScDocument;
+class ScColumn;
 
 namespace sc {
 
@@ -24,7 +26,8 @@ class BulkDataHint;
 class FormulaGroupAreaListener : public SvtListener
 {
     ScRange maRange;
-    ScFormulaCell** mppTopCell;
+    const ScColumn* mpColumn;
+    SCROW mnTopCellRow;
     SCROW mnGroupLen;
     bool mbStartFixed;
     bool mbEndFixed;
@@ -33,8 +36,8 @@ class FormulaGroupAreaListener : public SvtListener
 
 public:
 
-    FormulaGroupAreaListener(
-        const ScRange& rRange, ScFormulaCell** ppTopCell, SCROW nGroupLen, bool bStartFixed, bool bEndFixed );
+    FormulaGroupAreaListener( const ScRange& rRange, const ScDocument& rDocument,
+            const ScAddress& rTopCellPos, SCROW nGroupLen, bool bStartFixed, bool bEndFixed );
 
     virtual ~FormulaGroupAreaListener();
 
@@ -64,6 +67,7 @@ public:
 private:
     void notifyCellChange( const SfxHint& rHint, const ScAddress& rPos );
     void notifyBulkChange( const BulkDataHint& rHint );
+    const ScFormulaCell* getTopCell() const;
 };
 
 }
