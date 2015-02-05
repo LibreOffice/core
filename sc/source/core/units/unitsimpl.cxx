@@ -89,7 +89,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
 
         if (!(rUnitStack.size() >= 1)) {
             SAL_WARN("sc.units", "no units on stack for unary operation");
-            return 0;
+            return UtUnit();
         }
 
         UtUnit pUnit = rUnitStack.top();
@@ -97,8 +97,8 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
 
         switch (rOpCode) {
         case ocNot:
-            if (!ut_is_dimensionless(pUnit.get())) {
-                return 0;
+            if (!pUnit.isDimensionless()) {
+                return UtUnit();
             }
             // We just keep the same unit (in this case no unit) so can
             // fall through.
@@ -123,7 +123,7 @@ UtUnit UnitsImpl::getOutputUnitsForOpCode(stack< UtUnit >& rUnitStack, const OpC
             SAL_WARN("sc.units", "less than two units on stack when attempting binary operation");
             // TODO: what should we be telling the user in this case? Can this even happen (i.e.
             // should we just be asserting here?)
-            return 0;
+            return UtUnit();
         }
 
         UtUnit pSecondUnit = rUnitStack.top();
@@ -212,31 +212,14 @@ UtUnit UnitsImpl::getUnitForRef(FormulaToken* pToken, const ScAddress& rFormulaA
     // by adding the current address to the relative formula address).
     ScAddress aInputAddress = pRef->toAbs( rFormulaAddress );
 
-    // udunits requires strings to be trimmed before parsing -- it's easiest to do this
-    // using the OUString utils (as opposed to using ut_trim once we have a c string.
-    OUString sUnitString = extractUnitStringForCell(aInputAddress, pDoc).trim();
+    OUString sUnitString = extractUnitStringForCell(aInputAddress, pDoc);
 
-    // empty string == dimensionless unit. ut_parse returns an error for an empty string
-    // hence we need to manually detect that case and return the dimensionless unit.
-    if (sUnitString.getLength() == 0) {
-        SAL_INFO("sc.units", "empty unit string: returning dimensionless unit");
-        return UtUnit(ut_get_dimensionless_unit_one(mpUnitSystem.get()));
-    }
-
-    SAL_INFO("sc.units", "got unit string [" << sUnitString << "]");
-    OString sUnitStringUTF8 = OUStringToOString(sUnitString, RTL_TEXTENCODING_UTF8);
-
-    // TODO: we should probably have a cache of unit strings here to save reparsing
-    // on every run?
-
-    UtUnit pUnit(ut_parse(mpUnitSystem.get(), sUnitStringUTF8.getStr(), UT_UTF8));
-
-    if (!pUnit) {
+    UtUnit aUnit;
+    if (!UtUnit::createUnit(sUnitString, aUnit, mpUnitSystem)) {
         SAL_INFO("sc.units", "no unit obtained for token at cell " << aInputAddress.GetColRowString());
-        SAL_INFO("sc.units", "error encountered: " << getUTStatus());
     }
 
-    return pUnit;
+    return aUnit;
 }
 
 // getUnitForRef: check format -> if not in format, use more complicated method? (Format overrides header definition)
@@ -255,7 +238,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
         {
             UtUnit pUnit(getUnitForRef(pToken, rFormulaAddress, pDoc));
 
-            if (!pUnit) {
+            if (!pUnit.isValid()) {
                 SAL_INFO("sc.units", "no unit returned for scSingleRef, ut_status: " << getUTStatus());
 
                 // This only happens in case of parsing (or system) errors.
@@ -275,7 +258,7 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
 
             // A null unit indicates either invalid units and/or other erronous input
             // i.e. is an indication that getOutputUnitsForOpCode failed.
-            if (pOut) {
+            if (pOut.isValid()) {
                 aUnitStack.push(pOut);
             } else {
                 return false;
