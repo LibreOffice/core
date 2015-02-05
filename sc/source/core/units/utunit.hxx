@@ -42,29 +42,40 @@ private:
         ut_free(pUnit);
     }
 
-public:
-    static bool createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem);
-
-    UtUnit(ut_unit* pUnit = 0):
+    UtUnit(ut_unit* pUnit):
         mpUnit(pUnit, &freeUt)
-    {}
-
-    UtUnit(const UtUnit& rUnit):
-        mpUnit(rUnit.mpUnit)
     {}
 
     void reset(ut_unit* pUnit) {
         mpUnit.reset(pUnit, &freeUt);
     }
 
-    OUString getString() const;
-
     ut_unit* get() const {
         return mpUnit.get();
     }
 
-    explicit operator bool() const {
-        return mpUnit.operator bool();
+public:
+    static bool createUnit(const OUString& rUnitString, UtUnit& rUnitOut, const boost::shared_ptr< ut_system >& pUTSystem);
+
+    /*
+     * Default constructor returns an empty/invalid unit.
+     * (Note: this is different from the dimensionless unit which is valid.)
+     */
+    UtUnit() {};
+
+    UtUnit(const UtUnit& rUnit):
+        mpUnit(rUnit.mpUnit)
+    {}
+
+    OUString getString() const;
+
+    bool isValid() {
+        // We use a null pointer/empty unit to indicate an invalid unit.
+        return mpUnit.get() != 0;
+    }
+
+    bool isDimensionless() const {
+        return ut_is_dimensionless(this->get());
     }
 
     bool operator==(const UtUnit& rUnit) {
