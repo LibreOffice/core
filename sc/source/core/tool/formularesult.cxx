@@ -167,7 +167,7 @@ void ScFormulaResult::SetToken( const formula::FormulaToken* p )
         {
             const ScMatrixFormulaCellToken* pNewMatFormula =
                 dynamic_cast<const ScMatrixFormulaCellToken*>(pMatResult);
-            if (pNewMatFormula)
+            if (pNewMatFormula && (pMatFormula->GetMatCols() <= 0 || pMatFormula->GetMatRows() <= 0))
             {
                 SAL_WARN( "sc", "ScFormulaResult::SetToken: pNewMatFormula and pMatFormula, overriding matrix formula dimension; intended?");
                 pMatFormula->SetMatColsRows( pNewMatFormula->GetMatCols(),
