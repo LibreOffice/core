@@ -762,8 +762,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
 static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
-    assert(pOld); //we cannot proceed without the old NumRule
-    if (!pOld)
+    if (!pOld) //we cannot proceed without the old NumRule
         return;
 
     sal_uInt16 nChgFmtLevel = 0;
@@ -855,12 +854,12 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     else if ( rRule != *pNewOrChangedNumRule )
     {
         // change existing numbering rule
-        if( pUndo != NULL )
+        if (pUndo)
         {
             pUndo->SaveOldNumRule( *pNewOrChangedNumRule );
         }
         ::lcl_ChgNumRule( *this, rRule );
-        if( pUndo != NULL )
+        if (pUndo)
         {
             pUndo->SetLRSpaceEndPos();
         }
@@ -1060,9 +1059,10 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule )
             GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
         ::lcl_ChgNumRule( *this, rRule );
-
-        if( pUndo )
+        if (pUndo)
+        {
             pUndo->SetLRSpaceEndPos();
+        }
 
         getIDocumentState().SetModified();
     }
