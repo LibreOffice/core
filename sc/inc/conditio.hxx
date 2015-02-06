@@ -281,8 +281,7 @@ private:
     mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;
 };
 
-//  single entry for conditional formatting
-
+//  single condition entry for conditional formatting
 class SC_DLLPUBLIC ScCondFormatEntry : public ScConditionEntry
 {
     OUString                  aStyleName;
@@ -375,7 +374,6 @@ private:
 };
 
 //  complete conditional formatting
-
 class SC_DLLPUBLIC ScConditionalFormat: private boost::noncopyable
 {
     ScDocument*         pDoc;
@@ -433,7 +431,7 @@ public:
 
     bool            MarkUsedExternalReferences() const;
 
-    //  sorted (via PTRARR) by Index
+    //  sorted (via boost::ptr_set) by Index
     //  operator== only for sorting
     bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
     bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
@@ -442,8 +440,7 @@ public:
     void endRendering();
 };
 
-//  List of areas and formats:
-
+//  List of all conditional formats in a sheet
 class SC_DLLPUBLIC ScConditionalFormatList
 {
 private:
