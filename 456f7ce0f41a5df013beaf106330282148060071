@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_f9d77721",
+        "filename": "sfx2/source/dialog/mgetempl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-06T23:36:47Z",
+      "side": 1,
+      "message": "this won\u0027t work - the string is actually translated so you need a different way to check if it\u0027s \"none\", presumably the first entry is always \"none\"?",
+      "revId": "456f7ce0f41a5df013beaf106330282148060071",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
