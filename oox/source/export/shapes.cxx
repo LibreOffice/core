@@ -281,7 +281,7 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
 
 static bool lcl_IsOnBlacklist(OUString& rShapeType)
 {
-    OUString aBlacklist[] = {
+    static const std::vector<OUString> vBlacklist = {
             "ring",
             "can",
             "cube",
@@ -336,18 +336,16 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
             "flowchart-direct-access-storage",
             "flowchart-display"
     };
-    std::vector<OUString> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
     return std::find(vBlacklist.begin(), vBlacklist.end(), rShapeType) != vBlacklist.end();
 }
 
 static bool lcl_IsOnWhitelist(OUString& rShapeType)
 {
-    OUString aWhitelist[] = {
+    static const std::vector<OUString> vWhitelist = {
             "heart",
             "puzzle"
     };
-    std::vector<OUString> vWhitelist(aWhitelist, aWhitelist + SAL_N_ELEMENTS(aWhitelist));
 
     return std::find(vWhitelist.begin(), vWhitelist.end(), rShapeType) != vWhitelist.end();
 }
