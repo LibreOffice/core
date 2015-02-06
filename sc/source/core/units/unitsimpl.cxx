@@ -282,5 +282,40 @@ bool UnitsImpl::verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAdd
     return true;
 }
 
+bool IsDigit(sal_Unicode c) {
+    return (c>= '0' && c <= '9');
+}
+
+bool UnitsImpl::splitUnitsFromInputString(const OUString& rInput, OUString& rValueOut, OUString& rUnitOut) {
+    int nPos = rInput.getLength();
+
+    while (nPos) {
+        if (IsDigit(rInput[nPos-1])) {
+            break;
+        }
+        nPos--;
+    }
+
+    rUnitOut = rInput.copy(nPos);
+
+    UtUnit aUnit;
+    // If the entire input is a string (nPos == 0) then treating it as a unit
+    // makes little sense as there is no numerical value associated with it.
+    // Hence it makes sense to skip testing in this case.
+    // We also need to specifically ignore the no unit case (nPos == rInput.getLength())
+    // as otherwise we are obtaining the unit for "" which is a valid unit
+    // (the dimensionless) unit, even though in reality we should obtain no unit
+    // and return false.
+    if ((nPos < rInput.getLength())
+        && (nPos > 0)
+        && UtUnit::createUnit(rUnitOut, aUnit, mpUnitSystem)) {
+        rValueOut = rInput.copy(0, nPos);
+        return true;
+    } else {
+        rValueOut = rInput;
+        rUnitOut.clear();
+        return false;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
