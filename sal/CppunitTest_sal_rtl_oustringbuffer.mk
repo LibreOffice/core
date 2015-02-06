@@ -11,6 +11,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sal_rtl_oustringbuffer))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl_oustringbuffer,\
     sal/qa/rtl/oustringbuffer/test_oustringbuffer_appendchar \
+    sal/qa/rtl/oustringbuffer/test_oustringbuffer_appenduninitialized \
     sal/qa/rtl/oustringbuffer/test_oustringbuffer_noadditional \
     sal/qa/rtl/oustringbuffer/test_oustringbuffer_tostring \
     sal/qa/rtl/oustringbuffer/test_oustringbuffer_utf32 \

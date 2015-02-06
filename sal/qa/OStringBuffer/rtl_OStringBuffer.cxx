@@ -15967,6 +15967,50 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_035 );
         CPPUNIT_TEST_SUITE_END();
     };
+
+    class AppendUninitialized: public CppUnit::TestFixture {
+    private:
+        void testEmpty();
+
+        void testNonEmpty();
+
+        void testZero();
+
+        CPPUNIT_TEST_SUITE(AppendUninitialized);
+        CPPUNIT_TEST(testEmpty);
+        CPPUNIT_TEST(testNonEmpty);
+        CPPUNIT_TEST(testZero);
+        CPPUNIT_TEST_SUITE_END();
+    };
+
+    void AppendUninitialized::testEmpty() {
+        OStringBuffer s;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), s.getLength());
+        char * p = s.appendUninitialized(5);
+        CPPUNIT_ASSERT_EQUAL(
+            static_cast<void const *>(s.getStr()),
+            static_cast<void const *>(p));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5), s.getLength());
+    }
+
+    void AppendUninitialized::testNonEmpty() {
+        OStringBuffer s("ab");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), s.getLength());
+        char * p = s.appendUninitialized(5);
+        CPPUNIT_ASSERT_EQUAL(
+            static_cast<void const *>(s.getStr() + 2),
+            static_cast<void const *>(p));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
+    }
+
+    void AppendUninitialized::testZero() {
+        OStringBuffer s;
+        char * p = s.appendUninitialized(0);
+        CPPUNIT_ASSERT_EQUAL(
+            static_cast<void const *>(s.getStr()),
+            static_cast<void const *>(p));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), s.getLength());
+    }
 } // namespace rtl_OStringBuffer
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ctors);
@@ -15996,6 +16040,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_float);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_008_Float_Negative);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_double);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::append_009_Double_Negative);
+CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::AppendUninitialized);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::remove);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
