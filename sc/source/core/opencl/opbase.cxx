@@ -107,7 +107,9 @@ VectorRef::~VectorRef()
 {
     if (mpClmem)
     {
-        clReleaseMemObject(mpClmem);
+        cl_int err;
+        err = clReleaseMemObject(mpClmem);
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
     }
 }
 

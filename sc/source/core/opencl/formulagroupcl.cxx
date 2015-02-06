@@ -1062,7 +1062,9 @@ public:
     {
         if (mpClmem2)
         {
-            clReleaseMemObject(mpClmem2);
+            cl_int err;
+            err = clReleaseMemObject(mpClmem2);
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
             mpClmem2 = NULL;
         }
     }
@@ -1571,7 +1573,8 @@ public:
                 SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
             if (mpClmem2)
             {
-                clReleaseMemObject(mpClmem2);
+                err = clReleaseMemObject(mpClmem2);
+                SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
                 mpClmem2 = NULL;
             }
             mpClmem2 = clCreateBuffer(kEnv.mpkContext,
@@ -1592,7 +1595,9 @@ public:
     {
         if (mpClmem2)
         {
-            clReleaseMemObject(mpClmem2);
+            cl_int err;
+            err = clReleaseMemObject(mpClmem2);
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
             mpClmem2 = NULL;
         }
     }
@@ -2314,10 +2319,14 @@ public:
                     global_work_size, local_work_size, 0, NULL, NULL);
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clEnqueueNDRangeKernel", err, __FILE__, __LINE__);
+
                 err = clFinish(kEnv.mpkCmdQueue);
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clFinish", err, __FILE__, __LINE__);
-                clReleaseKernel(redKernel);
+
+                err = clReleaseKernel(redKernel);
+                SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << ::opencl::errorString(err));
+
                 // Pass mpClmem2 to the "real" kernel
                 SAL_INFO("sc.opencl", "Kernel " << k << " arg " << argno << ": cl_mem: " << mpClmem2);
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&mpClmem2);
@@ -2431,7 +2440,9 @@ public:
     {
         if (mpClmem2)
         {
-            clReleaseMemObject(mpClmem2);
+            cl_int err;
+            err = clReleaseMemObject(mpClmem2);
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
             mpClmem2 = NULL;
         }
     }
@@ -3597,13 +3608,16 @@ DynamicKernel::DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize ) :
 
 DynamicKernel::~DynamicKernel()
 {
+    cl_int err;
     if (mpResClmem)
     {
-        clReleaseMemObject(mpResClmem);
+        err = clReleaseMemObject(mpResClmem);
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseMemObject failed: " << ::opencl::errorString(err));
     }
     if (mpKernel)
     {
-        clReleaseKernel(mpKernel);
+        err = clReleaseKernel(mpKernel);
+        SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << ::opencl::errorString(err));
     }
     // mpProgram is not going to be released here -- it's cached.
 }
@@ -3706,7 +3720,8 @@ void DynamicKernel::CreateKernel()
 
         if (lastSecondProgram)
         {
-            clReleaseProgram(lastSecondProgram);
+            err = clReleaseProgram(lastSecondProgram);
+            SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseProgram failed: " << ::opencl::errorString(err));
         }
         if (::opencl::buildProgramFromBinary("",
                 &::opencl::gpuEnv, KernelHash.c_str(), 0))
