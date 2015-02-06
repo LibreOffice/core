@@ -333,12 +333,14 @@ void SheetDataBuffer::setStandardNumFmt( const CellAddress& rCellAddr, sal_Int16
     }
 }
 
-void addIfNotInMyMap( StylesBuffer& rStyles, std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ApiCellRangeList& rRangeList )
+typedef std::pair<sal_Int32, sal_Int32> FormatKeyPair;
+
+void addIfNotInMyMap( StylesBuffer& rStyles, std::map< FormatKeyPair, ApiCellRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ApiCellRangeList& rRangeList )
 {
     Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
     if ( pXf1 )
     {
-        for ( std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rMap.begin(), it_end = rMap.end(); it != it_end; ++it )
+        for ( std::map< FormatKeyPair, ApiCellRangeList >::iterator it = rMap.begin(), it_end = rMap.end(); it != it_end; ++it )
         {
             if ( it->first.second == nFormatId )
             {
@@ -353,7 +355,7 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< std::pair< sal_Int32, sal
                 }
             }
         }
-        rMap[ std::pair<sal_Int32, sal_Int32>( nXfId, nFormatId ) ] = rRangeList;
+        rMap[ FormatKeyPair( nXfId, nFormatId ) ] = rRangeList;
     }
 }
 
@@ -433,13 +435,13 @@ void SheetDataBuffer::finalizeImport()
     // write default formatting of remaining row range
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
 
-    std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
+    std::map< FormatKeyPair, ApiCellRangeList > rangeStyleListMap;
     for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
     {
         addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
     }
     // gather all ranges that have the same style and apply them in bulk
-    for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
+    for (  std::map< FormatKeyPair, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
     {
         const ApiCellRangeList& rRanges( it->second );
         for ( ::std::vector< CellRangeAddress >::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
