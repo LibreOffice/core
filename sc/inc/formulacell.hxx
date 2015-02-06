@@ -376,7 +376,12 @@ public:
 
     svl::SharedString GetResultString() const;
 
-    void            SetErrCode( sal_uInt16 n );
+    /* Sets the shared code array to error state in addition to the cell result */
+    void SetErrCode( sal_uInt16 n );
+
+    /* Sets just the result to error */
+    void SetResultError( sal_uInt16 n );
+
     bool IsHyperLinkCell() const;
     EditTextObject* CreateURLObject();
     void GetURLResult( OUString& rURL, OUString& rCellText );

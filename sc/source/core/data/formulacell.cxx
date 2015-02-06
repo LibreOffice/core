@@ -2249,6 +2249,11 @@ void ScFormulaCell::SetErrCode( sal_uInt16 n )
     aResult.SetResultError( n );
 }
 
+void ScFormulaCell::SetResultError( sal_uInt16 n )
+{
+    aResult.SetResultError( n );
+}
+
 void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 {
     if ( (nBits & RECALCMODE_EMASK) != RECALCMODE_NORMAL )
