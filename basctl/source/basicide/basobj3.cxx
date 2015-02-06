@@ -362,6 +362,8 @@ void InvalidateDebuggerSlots()
         pBindings->Update( SID_BASICIDE_TOGGLEBRKPNT );
         pBindings->Invalidate( SID_BASICIDE_STAT_POS );
         pBindings->Update( SID_BASICIDE_STAT_POS );
+        pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
+        pBindings->Update( SID_BASICIDE_STAT_TITLE );
     }
 }
 

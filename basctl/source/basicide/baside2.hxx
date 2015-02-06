@@ -156,6 +156,8 @@ public:
     bool            CanModify() { return ImpCanModify(); }
 
     void            UpdateSyntaxHighlighting ();
+
+    bool            GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName);
 };
 
 
