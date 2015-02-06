@@ -694,12 +694,10 @@ void SmMathConfig::SaveFontFormatList()
     OUString aDelim( "/" );
     for (size_t i = 0;  i < nCount;  ++i)
     {
-        OUString aFntFmtId( rFntFmtList.GetFontFormatId( i ) );
-        const SmFontFormat *pFntFmt = rFntFmtList.GetFontFormat( aFntFmtId );
+        OUString aFntFmtId(rFntFmtList.GetFontFormatId(i));
+        const SmFontFormat *pFntFmt = rFntFmtList.GetFontFormat(i);
         assert(pFntFmt);
-        if (!pFntFmt)
-            continue;
-        const SmFontFormat aFntFmt( *pFntFmt );
+        const SmFontFormat aFntFmt(*pFntFmt);
 
         OUString  aNodeNameDelim( FONT_FORMAT_LIST );
         aNodeNameDelim += aDelim;
