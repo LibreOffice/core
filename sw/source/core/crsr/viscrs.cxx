@@ -314,6 +314,20 @@ void SwSelPaintRects::Show()
             }
         }
 
+        if (GetShell()->isTiledRendering())
+        {
+            std::stringstream ss;
+            for (size_type i = 0; i < size(); ++i)
+            {
+                const SwRect& rRect = (*this)[i];
+                if (i)
+                    ss << "; ";
+                ss << rRect.Width() << ", " << rRect.Height() << ", " << rRect.Left() << ", " << rRect.Top();
+            }
+            OString sRect = ss.str().c_str();
+            GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());
+        }
+
         HighlightInputFld();
 #else
 

@@ -57,7 +57,7 @@ typedef enum
      * Any tiles which are over the rectangle described in the payload are no
      * longer valid.
      *
-     * Rectangle format: "width,height,x,y", where all numbers are document
+     * Rectangle format: "width, height, x, y", where all numbers are document
      * coordinates, in twips.
      */
     LOK_CALLBACK_INVALIDATE_TILES,
@@ -66,7 +66,16 @@ typedef enum
      *
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
-    LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR
+    LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR,
+    /**
+     * The list of rectangles representing the current text selection changed.
+     *
+     * List format is "rectangle1[; rectangle2[; ...]]" (without quotes and
+     * brackets), where rectangleN has the same format as
+     * LOK_CALLBACK_INVALIDATE_TILES. When there is no selection, an empty
+     * string is provided.
+     */
+    LOK_CALLBACK_TEXT_SELECTION
 }
 LibreOfficeKitCallbackType;
 

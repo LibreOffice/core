@@ -2007,8 +2007,12 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
 
     SwViewShell *pSh = GetCurrShell();
 
+    bool bIgnoreVisArea = false;
+    if (pSh)
+        bIgnoreVisArea = pSh->GetViewOptions()->IsPDFExport() || pSh->isTiledRendering();
+
     // #i12836# enhanced pdf
-    SwRegionRects aRegion( pSh && !pSh->GetViewOptions()->IsPDFExport() ?
+    SwRegionRects aRegion( !bIgnoreVisArea ?
                            pSh->VisArea() :
                            Frm() );
     if( !pStartPos->nNode.GetNode().IsCntntNode() ||
