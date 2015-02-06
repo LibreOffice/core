@@ -38,15 +38,22 @@ public:
 
     ::boost::shared_ptr< UnitsImpl > mpUnitsImpl;
 
+
     void testUTUnit();
     void testUnitVerification();
 
     void testUnitFromFormatStringExtraction();
+    void testUnitValueStringSplitting();
+
 
     CPPUNIT_TEST_SUITE(UnitsTest);
+
     CPPUNIT_TEST(testUTUnit);
     CPPUNIT_TEST(testUnitVerification);
+
     CPPUNIT_TEST(testUnitFromFormatStringExtraction);
+    CPPUNIT_TEST(testUnitValueStringSplitting);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -207,6 +214,45 @@ void UnitsTest::testUnitVerification() {
 void UnitsTest::testUnitFromFormatStringExtraction() {
     CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("\"weight: \"0.0\"kg\"") == "kg");
     CPPUNIT_ASSERT(mpUnitsImpl->extractUnitStringFromFormat("#\"cm\"") == "cm");
+}
+
+void UnitsTest::testUnitValueStringSplitting() {
+    OUString sValue, sUnit;
+
+    OUString sEmptyString = "";
+    CPPUNIT_ASSERT(!mpUnitsImpl->splitUnitsFromInputString(sEmptyString, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue.isEmpty());
+    CPPUNIT_ASSERT(sUnit.isEmpty());
+
+    OUString sNumberOnlyString = "10";
+    CPPUNIT_ASSERT(!mpUnitsImpl->splitUnitsFromInputString(sNumberOnlyString, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue == "10");
+    CPPUNIT_ASSERT(sUnit.isEmpty());
+
+    OUString sTextOnlyString = "hello world";
+    CPPUNIT_ASSERT(!mpUnitsImpl->splitUnitsFromInputString(sTextOnlyString, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue == "hello world");
+    CPPUNIT_ASSERT(sUnit.isEmpty());
+
+    OUString sDeceptiveInput = "30garbage";
+    CPPUNIT_ASSERT(!mpUnitsImpl->splitUnitsFromInputString(sDeceptiveInput, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue == "30garbage");
+    CPPUNIT_ASSERT(sUnit.isEmpty());
+
+    OUString sUnitOnly = "cm";
+    CPPUNIT_ASSERT(!mpUnitsImpl->splitUnitsFromInputString(sUnitOnly, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue == "cm");
+    CPPUNIT_ASSERT(sUnit.isEmpty());
+
+    OUString sSimpleUnitedValue = "20m/s";
+    CPPUNIT_ASSERT(mpUnitsImpl->splitUnitsFromInputString(sSimpleUnitedValue, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue == "20");
+    CPPUNIT_ASSERT(sUnit == "m/s");
+
+    OUString sMultipleTokens = "40E-4kg";
+    CPPUNIT_ASSERT(mpUnitsImpl->splitUnitsFromInputString(sMultipleTokens, sValue, sUnit));
+    CPPUNIT_ASSERT(sValue == "40E-4");
+    CPPUNIT_ASSERT(sUnit == "kg");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UnitsTest);
