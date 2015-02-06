@@ -256,8 +256,6 @@ const char* lcl_getSpaces( int nSpaceCount )
 
 static OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
 {
-    static sal_Char Buffer[1000];
-
     OString aOStr = OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US );
     const sal_Char* pStr = aOStr.getStr();
 
@@ -269,11 +267,7 @@ static OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
         c = *pStr;
     }
 
-    int nLen = strlen( pStr );
-    strncpy( Buffer, pStr, nLen );
-    Buffer[nLen] = 0;
-
-    OString aORetStr( Buffer );
+    OString aORetStr( pStr, strlen(pStr) );
     return aORetStr;
 }
 
