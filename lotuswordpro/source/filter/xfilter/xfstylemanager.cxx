@@ -116,8 +116,6 @@ IXFStyleRet XFStyleManager::AddStyle(IXFStyle *pStyle)
     assert(pStyle);
     OUString   name;
 
-    if( !pStyle )
-        return aRet;
     name = pStyle->GetStyleName();
 
     if( pStyle->GetStyleFamily() == enumXFStyleText )
