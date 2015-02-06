@@ -23,6 +23,7 @@
 #include <vcl/settings.hxx>
 
 #include <sal/macros.h>
+#include <officecfg/Office/Math.hxx>
 #include "cfgitem.hxx"
 
 #include "starmath.hrc"
@@ -57,22 +58,6 @@ static Sequence< OUString > lcl_GetSymbolPropertyNames()
                         "Set",
                         "Predefined",
                         "FontFormatId"
-                    };
-}
-
-static Sequence< OUString > lcl_GetMathPropertyNames()
-{
-    return Sequence< OUString > {
-                        "Print/Title",
-                        "Print/FormulaText",
-                        "Print/Frame",
-                        "Print/Size",
-                        "Print/ZoomFactor",
-                        "LoadSave/IsSaveOnlyUsedSymbols",
-                        "Misc/IgnoreSpacesRight",
-                        "View/ToolboxVisible",
-                        "View/AutoRedraw",
-                        "View/FormulaCursor"
                     };
 }
 
@@ -790,62 +775,17 @@ void SmMathConfig::LoadOther()
     if (!pOther)
         pOther = new SmCfgOther;
 
-    Sequence< OUString > aNames = lcl_GetMathPropertyNames();
-    sal_Int32 nProps = aNames.getLength();
-
-    Sequence< Any > aValues( GetProperties( aNames ) );
-    if (nProps  &&  aValues.getLength() == nProps)
-    {
-        const Any *pValues = aValues.getConstArray();
-        const Any *pVal = pValues;
-
-        sal_Int16   nTmp16 = 0;
-        bool    bTmp = false;
-
-        // Print/Title
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bPrintTitle = bTmp;
-        ++pVal;
-        // Print/FormulaText
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bPrintFormulaText = bTmp;
-        ++pVal;
-        // Print/Frame
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bPrintFrame = bTmp;
-        ++pVal;
-        // Print/Size
-        if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-            pOther->ePrintSize = (SmPrintSize) nTmp16;
-        ++pVal;
-        // Print/ZoomFactor
-        if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
-            pOther->nPrintZoomFactor = nTmp16;
-        ++pVal;
-        // LoadSave/IsSaveOnlyUsedSymbols
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bIsSaveOnlyUsedSymbols = bTmp;
-        ++pVal;
-        // Misc/IgnoreSpacesRight
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bIgnoreSpacesRight = bTmp;
-        ++pVal;
-        // View/ToolboxVisible
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bToolboxVisible = bTmp;
-        ++pVal;
-        // View/AutoRedraw
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bAutoRedraw = bTmp;
-        ++pVal;
-        // View/FormulaCursor
-        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
-            pOther->bFormulaCursor = bTmp;
-        ++pVal;
-
-        OSL_ENSURE( pVal - pValues == nProps, "property mismatch" );
-        SetOtherModified( false );
-    }
+    pOther->bPrintTitle = officecfg::Office::Math::Print::Title::get();
+    pOther->bPrintFormulaText = officecfg::Office::Math::Print::FormulaText::get();
+    pOther->bPrintFrame = officecfg::Office::Math::Print::Frame::get();
+    pOther->ePrintSize = static_cast<SmPrintSize>(officecfg::Office::Math::Print::Size::get());
+    pOther->nPrintZoomFactor = officecfg::Office::Math::Print::ZoomFactor::get();
+    pOther->bIsSaveOnlyUsedSymbols = officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::get();
+    pOther->bIgnoreSpacesRight = officecfg::Office::Math::Misc::IgnoreSpacesRight::get();
+    pOther->bToolboxVisible = officecfg::Office::Math::View::ToolboxVisible::get();
+    pOther->bAutoRedraw = officecfg::Office::Math::View::AutoRedraw::get();
+    pOther->bFormulaCursor = officecfg::Office::Math::View::FormulaCursor::get();
+    SetOtherModified( false );
 }
 
 
@@ -854,37 +794,20 @@ void SmMathConfig::SaveOther()
     if (!pOther || !IsOtherModified())
         return;
 
-    const Sequence< OUString > aNames = lcl_GetMathPropertyNames();
-    sal_Int32 nProps = aNames.getLength();
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-    Sequence< Any > aValues( nProps );
-    Any *pValues = aValues.getArray();
-    Any *pValue  = pValues;
+    officecfg::Office::Math::Print::Title::set(pOther->bPrintTitle, batch);
+    officecfg::Office::Math::Print::FormulaText::set(pOther->bPrintFormulaText, batch);
+    officecfg::Office::Math::Print::Frame::set(pOther->bPrintFrame, batch);
+    officecfg::Office::Math::Print::Size::set(pOther->ePrintSize, batch);
+    officecfg::Office::Math::Print::ZoomFactor::set(pOther->nPrintZoomFactor, batch);
+    officecfg::Office::Math::LoadSave::IsSaveOnlyUsedSymbols::set(pOther->bIsSaveOnlyUsedSymbols, batch);
+    officecfg::Office::Math::Misc::IgnoreSpacesRight::set(pOther->bIgnoreSpacesRight, batch);
+    officecfg::Office::Math::View::ToolboxVisible::set(pOther->bToolboxVisible, batch);
+    officecfg::Office::Math::View::AutoRedraw::set(pOther->bAutoRedraw, batch);
+    officecfg::Office::Math::View::FormulaCursor::set(pOther->bFormulaCursor, batch);
 
-    // Print/Title
-    *pValue++ <<= pOther->bPrintTitle;
-    // Print/FormulaText
-    *pValue++ <<= pOther->bPrintFormulaText;
-    // Print/Frame
-    *pValue++ <<= pOther->bPrintFrame;
-    // Print/Size
-    *pValue++ <<= (sal_Int16) pOther->ePrintSize;
-    // Print/ZoomFactor
-    *pValue++ <<= (sal_Int16) pOther->nPrintZoomFactor;
-    // LoadSave/IsSaveOnlyUsedSymbols
-    *pValue++ <<= pOther->bIsSaveOnlyUsedSymbols;
-    // Misc/IgnoreSpacesRight
-    *pValue++ <<= pOther->bIgnoreSpacesRight;
-    // View/ToolboxVisible
-    *pValue++ <<= pOther->bToolboxVisible;
-    // View/AutoRedraw
-    *pValue++ <<= pOther->bAutoRedraw;
-    // View/FormulaCursor
-    *pValue++ <<= pOther->bFormulaCursor;
-
-    OSL_ENSURE( pValue - pValues == nProps, "property mismatch" );
-    PutProperties( aNames , aValues );
-
+    batch->commit();
     SetOtherModified( false );
 }
 
