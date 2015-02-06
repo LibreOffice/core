@@ -223,7 +223,7 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const OUString& sDirectory)
         comphelper::getComponentContext(m_xSMGR));
     if (bChanged )
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create(
                 comphelper::getComponentContext(m_xSMGR)));
         officecfg::Office::Common::Path::Info::WorkPathChanged::set(
