@@ -61,6 +61,7 @@ public:
     virtual ~UnitsImpl();
 
     virtual bool verifyFormula(ScTokenArray* pArray, const ScAddress& rFormulaAddress, ScDocument* pDoc) SAL_OVERRIDE;
+    virtual bool splitUnitsFromInputString(const OUString& rInput, OUString& rValue, OUString& rUnit) SAL_OVERRIDE;
 
 private:
     UtUnit getOutputUnitsForOpCode(std::stack< UtUnit >& rUnitStack, const OpCode& rOpCode);
