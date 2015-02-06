@@ -1441,4 +1441,12 @@ namespace numfunc
     }
 }
 
+void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swNumRuleTbl"));
+    for (SwNumRule* pNumRule : *this)
+        pNumRule->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

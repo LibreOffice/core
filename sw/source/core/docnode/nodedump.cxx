@@ -373,18 +373,6 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
     }
 }
 
-void SwNumRuleTbl::dumpAsXml(xmlTextWriterPtr w) const
-{
-    if (!empty())
-    {
-        WriterHelper writer(w);
-        writer.startElement("swnumruletbl");
-        for (size_t i = 0; i < size(); ++i)
-            operator[](i)->dumpAsXml(w);
-        writer.endElement();
-    }
-}
-
 void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
