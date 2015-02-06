@@ -457,6 +457,7 @@ public:
      */
     OUStringBuffer & append( const sal_Unicode * str, sal_Int32 len)
     {
+        assert( len == 0 || str != 0 ); // cannot assert that in rtl_uStringbuffer_insert
         rtl_uStringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -798,6 +799,7 @@ public:
      */
     OUStringBuffer & insert( sal_Int32 offset, const sal_Unicode * str, sal_Int32 len)
     {
+        assert( len == 0 || str != 0 ); // cannot assert that in rtl_uStringbuffer_insert
         rtl_uStringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }

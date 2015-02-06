@@ -473,6 +473,7 @@ public:
      */
     OStringBuffer & append( const sal_Char * str, sal_Int32 len)
     {
+        assert( len == 0 || str != 0 ); // cannot assert that in rtl_stringbuffer_insert
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
         return *this;
     }
@@ -731,6 +732,7 @@ public:
      */
     OStringBuffer & insert( sal_Int32 offset, const sal_Char * str, sal_Int32 len)
     {
+        assert( len == 0 || str != 0 ); // cannot assert that in rtl_stringbuffer_insert
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, str, len );
         return *this;
     }
