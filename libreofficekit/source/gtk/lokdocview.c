@@ -130,6 +130,7 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_bCursorVisible = FALSE;
     pDocView->m_nLastButtonPressTime = 0;
     pDocView->m_nLastButtonReleaseTime = 0;
+    pDocView->m_pTextSelectionRectangles = NULL;
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -202,6 +203,20 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
                         twipToPixel(pDocView->m_aVisibleCursor.width),
                         twipToPixel(pDocView->m_aVisibleCursor.height));
         cairo_fill(pCairo);
+    }
+
+    if (pDocView->m_pTextSelectionRectangles)
+    {
+        GList* i;
+
+        for (i = pDocView->m_pTextSelectionRectangles; i != NULL; i = i->next)
+        {
+            GdkRectangle* pRectangle = i->data;
+            // Blue with 75% transparency.
+            cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
+            cairo_rectangle(pCairo, twipToPixel(pRectangle->x), twipToPixel(pRectangle->y), twipToPixel(pRectangle->width), twipToPixel(pRectangle->height));
+            cairo_fill(pCairo);
+        }
     }
 
     cairo_destroy(pCairo);
@@ -354,6 +369,24 @@ static GdkRectangle lcl_payloadToRectangle(const char* pPayload)
     return aRet;
 }
 
+/// Returns the GdkRectangle list of a w,h,x,y;w2,h2,x2,y2;... string.
+static GList* lcl_payloadToRectangles(const char* pPayload)
+{
+    GList* pRet = NULL;
+    gchar** ppRectangles;
+    gchar** ppRectangle;
+
+    ppRectangles = g_strsplit(pPayload, "; ", 0);
+    for (ppRectangle = ppRectangles; *ppRectangle; ++ppRectangle)
+    {
+        GdkRectangle aRect = lcl_payloadToRectangle(*ppRectangle);
+        GdkRectangle* pRect = g_new0(GdkRectangle, 1);
+        *pRect = aRect;
+        pRet = g_list_prepend(pRet, pRect);
+    }
+    g_strfreev(ppRectangles);
+    return pRet;
+}
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
 {
@@ -376,6 +409,15 @@ static gboolean lok_docview_callback(gpointer pData)
     {
         pCallback->m_pDocView->m_aVisibleCursor = lcl_payloadToRectangle(pCallback->m_pPayload);
         pCallback->m_pDocView->m_bCursorVisible = TRUE;
+        gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
+    }
+    break;
+    case LOK_CALLBACK_TEXT_SELECTION:
+    {
+        GList* pRectangles = lcl_payloadToRectangles(pCallback->m_pPayload);
+        if (pCallback->m_pDocView->m_pTextSelectionRectangles)
+            g_list_free_full(pCallback->m_pDocView->m_pTextSelectionRectangles, g_free);
+        pCallback->m_pDocView->m_pTextSelectionRectangles = pRectangles;
         gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
     }
     break;

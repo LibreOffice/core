@@ -50,6 +50,8 @@ struct _LOKDocView
     guint32 m_nLastButtonPressTime;
     /// Time of the last button release.
     guint32 m_nLastButtonReleaseTime;
+    /// Rectangles of the current text selection.
+    GList* m_pTextSelectionRectangles;
 };
 
 struct _LOKDocViewClass
