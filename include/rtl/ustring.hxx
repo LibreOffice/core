@@ -67,7 +67,8 @@ This class is not part of public API and is meant to be used only in LibreOffice
 struct SAL_WARN_UNUSED OUStringLiteral
 {
     template< int N >
-    explicit OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str ) { assert( strlen( str ) == N - 1 ); }
+    explicit SAL_CONSTEXPR OUStringLiteral( const char (&str)[ N ] ) : size( N - 1 ), data( str )
+    { /* only C++14 constexpr: assert( strlen( str ) == N - 1 ); */ }
     int size;
     const char* data;
 };
@@ -1303,6 +1304,89 @@ public:
         assert( strlen( literal ) == libreoffice_internal::ConstCharArrayDetector< T >::size - 1 );
         return !string.equalsAsciiL( literal, libreoffice_internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
+
+#if defined LIBO_INTERNAL_ONLY
+    /// @cond INTERNAL
+
+    /* Comparison between OUString and OUStringLiteral.
+
+       @since LibreOffice 4.5
+    */
+
+    friend bool operator ==(OUString const & lhs, OUStringLiteral const & rhs) {
+        return lhs.equalsAsciiL(rhs.data, rhs.size);
+    }
+
+    friend bool operator !=(OUString const & lhs, OUStringLiteral const & rhs) {
+        return !lhs.equalsAsciiL(rhs.data, rhs.size);
+    }
+
+    friend bool operator <(OUString const & lhs, OUStringLiteral const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            < 0;
+    }
+
+    friend bool operator <=(OUString const & lhs, OUStringLiteral const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            <= 0;
+    }
+
+    friend bool operator >(OUString const & lhs, OUStringLiteral const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            > 0;
+    }
+
+    friend bool operator >=(OUString const & lhs, OUStringLiteral const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                lhs.pData->buffer, lhs.pData->length, rhs.data))
+            >= 0;
+    }
+
+    friend bool operator ==(OUStringLiteral const & lhs, OUString const & rhs) {
+        return rhs.equalsAsciiL(lhs.data, lhs.size);
+    }
+
+    friend bool operator !=(OUStringLiteral const & lhs, OUString const & rhs) {
+        return !rhs.equalsAsciiL(lhs.data, lhs.size);
+    }
+
+    friend bool operator <(OUStringLiteral const & lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                rhs.pData->buffer, rhs.pData->length, lhs.data))
+            >= 0;
+    }
+
+    friend bool operator <=(OUStringLiteral const & lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                rhs.pData->buffer, rhs.pData->length, lhs.data))
+            > 0;
+    }
+
+    friend bool operator >(OUStringLiteral const & lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                rhs.pData->buffer, rhs.pData->length, lhs.data))
+            <= 0;
+    }
+
+    friend bool operator >=(OUStringLiteral const & lhs, OUString const & rhs) {
+        return
+            (rtl_ustr_ascii_compare_WithLength(
+                rhs.pData->buffer, rhs.pData->length, lhs.data))
+            < 0;
+    }
+
+    /// @endcond
+#endif
 
     /**
       Returns a hashcode for this string.

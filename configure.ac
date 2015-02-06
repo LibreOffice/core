@@ -6189,6 +6189,23 @@ if test "$perfect_forwarding" = yes; then
     AC_DEFINE([HAVE_CXX11_PERFECT_FORWARDING])
 fi
 
+AC_MSG_CHECKING([whether $CXX supports C++11 constexpr])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+    struct S {
+        int n_;
+        constexpr S(int n): n_(n) {}
+    };
+    ]])], [cxx11_constexpr=yes], [cxx11_constexpr=no])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$cxx11_constexpr])
+if test "$cxx11_constexpr" = yes; then
+    AC_DEFINE([HAVE_CXX11_CONSTEXPR])
+fi
+
 HAVE_GCC_PRAGMA_OPERATOR=
 dnl _Pragma support (may require C++11)
 if test "$GCC" = "yes"; then
