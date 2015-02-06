@@ -222,7 +222,7 @@ sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::set<const SwFrmFmt*>& r
 
 uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<const SwFrmFmt*>& rTextBoxes) throw(lang::IndexOutOfBoundsException)
 {
-    if (nIndex < 0 || nIndex >= getCount(pPage, rTextBoxes))
+    if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
     SdrObject* pRet = 0;
@@ -238,8 +238,11 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::set<
         }
         ++nCount;
     }
-    assert(pRet);
-    return pRet ? uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY)) : uno::Any();
+
+    if (!pRet)
+        throw lang::IndexOutOfBoundsException();
+
+    return uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
 }
 
 sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject, std::set<const SwFrmFmt*>& rTextBoxes)
