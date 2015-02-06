@@ -105,7 +105,6 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
     assert(This);
     assert(capacity && *capacity >= 0);
     assert(offset >= 0 && offset <= (**This).length);
-    assert(len == 0 || str != nullptr);
     assert(len >= 0);
     sal_Int32 nOldLen;
     sal_Char * pBuf;
