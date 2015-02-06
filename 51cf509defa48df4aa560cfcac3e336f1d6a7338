@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_59e78312",
+        "filename": "sw/source/ui/chrdlg/numpara.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-06T23:54:47Z",
+      "side": 1,
+      "message": "this doesn\u0027t work - \"None\" is translated too, i see \"Aucun(e)\" in LC_ALL\u003dfr_FR",
+      "revId": "51cf509defa48df4aa560cfcac3e336f1d6a7338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
