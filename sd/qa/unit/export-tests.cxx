@@ -531,7 +531,7 @@ void SdExportTest::testSwappedOutImageExport()
     };
 
     // Set cache size to a very small value to make sure one of the images is swapped out
-    boost::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr< comphelper::ConfigurationChanges > xBatch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), xBatch);
     xBatch->commit();
 
@@ -657,7 +657,7 @@ void SdExportTest::testImageWithSpecialID()
     };
 
     // Trigger swap out mechanism to test swapped state factor too.
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), batch);
     batch->commit();
 

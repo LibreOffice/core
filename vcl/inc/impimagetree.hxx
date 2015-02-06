@@ -22,10 +22,10 @@
 
 #include "sal/config.h"
 
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/ustring.hxx"
 #include "salhelper/singletonref.hxx"
@@ -95,7 +95,7 @@ private:
 
     void loadImageLinks();
 
-    void parseLinkFile(boost::shared_ptr< SvStream > stream);
+    void parseLinkFile(std::shared_ptr<SvStream> stream);
 
     /// Return name of a real .png according to links.txt.
     OUString const & getRealImageName(OUString const & name);

@@ -288,7 +288,7 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
     if ( apClient->mPin.equals( aPin ) )
     {
         // Save in settings first
-        boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
+        std::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
         Reference< XNameContainer > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
 
         Reference<XSingleServiceFactory> xChildFactory (
@@ -353,7 +353,7 @@ void RemoteServer::deauthoriseClient( ::boost::shared_ptr< ClientInfo > pClient 
         return;
     }
 
-    boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
+    std::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
     Reference< XNameContainer > const xConfig =
         officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
 

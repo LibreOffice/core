@@ -187,7 +187,7 @@ OpenCLConfig OpenCLConfig::get()
 
 void OpenCLConfig::set()
 {
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     officecfg::Office::Common::Misc::UseOpenCL::set(mbUseOpenCL, batch);
     officecfg::Office::Common::Misc::OpenCLBlackList::set(SetOfImplMatcherToStringSequence(maBlackList), batch);

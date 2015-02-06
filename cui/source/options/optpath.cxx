@@ -517,7 +517,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 
             // Set configuration flag to notify file picker that it's necessary
             // to take over the path provided.
-            boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            std::shared_ptr< comphelper::ConfigurationChanges > batch(
                 comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Path::Info::WorkPathChanged::set(
                 true, batch);

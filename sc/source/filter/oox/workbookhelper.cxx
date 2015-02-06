@@ -673,7 +673,7 @@ void WorkbookGlobals::recalcFormulaCells()
             if (aBox.GetCheckBoxState())
             {
                 // Always perform selected action in the future.
-                boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
                 officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
                 ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
                 aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);

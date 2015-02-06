@@ -338,7 +338,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     for (std::vector<SizeGroup>::iterator aI = m_pParserState->m_aSizeGroups.begin(),
         aEnd = m_pParserState->m_aSizeGroups.end(); aI != aEnd; ++aI)
     {
-        boost::shared_ptr< VclSizeGroup > xGroup(new VclSizeGroup);
+        std::shared_ptr<VclSizeGroup> xGroup(std::make_shared<VclSizeGroup>());
 
         for (stringmap::iterator aP = aI->m_aProperties.begin(),
             aEndP = aI->m_aProperties.end(); aP != aEndP; ++aP)

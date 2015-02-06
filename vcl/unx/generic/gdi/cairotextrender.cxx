@@ -113,11 +113,11 @@ void ImplServerFontEntry::HandleFontOptions( void )
     {
         // get and cache the font options
         mbGotFontOptions = true;
-        mpFontOptions.reset(GetFCFontOptions( *maFontSelData.mpFontData,
+        mxFontOptions.reset(GetFCFontOptions( *maFontSelData.mpFontData,
             maFontSelData.mnHeight ));
     }
     // apply the font options
-    mpServerFont->SetFontOptions( mpFontOptions );
+    mpServerFont->SetFontOptions(mxFontOptions);
 }
 
 CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;

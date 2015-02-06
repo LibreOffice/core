@@ -32,7 +32,7 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class CollatorWrapper;
 class LocaleDataWrapper;
@@ -70,7 +70,7 @@ class VCL_DLLPUBLIC MouseSettings
 {
 private:
     void                            CopyData();
-    boost::shared_ptr<ImplMouseData>                  mpData;
+    std::shared_ptr<ImplMouseData>  mxData;
 
 public:
                                     MouseSettings();
@@ -201,7 +201,7 @@ class VCL_DLLPUBLIC StyleSettings
     void                            CopyData();
 
 private:
-    boost::shared_ptr<ImplStyleData>                  mpData;
+    std::shared_ptr<ImplStyleData>  mxData;
 
 public:
                                     StyleSettings();
@@ -573,7 +573,7 @@ class VCL_DLLPUBLIC MiscSettings
     void                            CopyData();
 
 private:
-    boost::shared_ptr<ImplMiscData>                   mpData;
+    std::shared_ptr<ImplMiscData>   mxData;
 
 public:
                                     MiscSettings();
@@ -598,7 +598,7 @@ public:
 class VCL_DLLPUBLIC HelpSettings
 {
     void                            CopyData();
-    boost::shared_ptr<ImplHelpData>                   mpData;
+    std::shared_ptr<ImplHelpData>   mxData;
 
 public:
                                     HelpSettings();
@@ -632,7 +632,7 @@ class VCL_DLLPUBLIC AllSettings
 private:
     void                                    CopyData();
 
-    boost::shared_ptr<ImplAllSettingsData>                    mpData;
+    std::shared_ptr<ImplAllSettingsData>    mxData;
 
 public:
                                             AllSettings();

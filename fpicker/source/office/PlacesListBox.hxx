@@ -11,13 +11,13 @@
 
 #include <iodlg.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <svtools/place.hxx>
 #include <svtools/svtabbx.hxx>
 
+#include <memory>
 #include <vector>
 
-typedef boost::shared_ptr< Place > PlacePtr;
+typedef std::shared_ptr< Place > PlacePtr;
 
 class PlacesListBox;
 class PlacesListBox_Impl : public SvHeaderTabListBox

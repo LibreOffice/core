@@ -468,7 +468,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
             sUrl = aDlg.GetDisplayDirectory();
             // Write out configuration
             {
-                boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
                 officecfg::Office::Impress::Pictures::Path::set(sUrl, batch);
                 batch->commit();

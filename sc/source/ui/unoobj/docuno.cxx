@@ -2351,7 +2351,7 @@ sal_Bool ScModelObj::isOpenCLEnabled()
 void ScModelObj::enableOpenCL(sal_Bool bEnable)
     throw (uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::UseOpenCL::set(bEnable, batch);
     batch->commit();
 
@@ -2470,7 +2470,7 @@ namespace {
 void setOpcodeSubsetTest(bool bFlag)
     throw (uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Calc::Formula::Calculation::OpenCLSubsetOnly::set(bFlag, batch);
     batch->commit();
 }
@@ -2498,7 +2498,7 @@ sal_Bool ScModelObj::isOpcodeSubsetTested()
 void ScModelObj::setFormulaCellNumberLimit( sal_Int32 number )
     throw (uno::RuntimeException, std::exception)
 {
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Calc::Formula::Calculation::OpenCLMinimumDataSize::set(number, batch);
     batch->commit();
 }

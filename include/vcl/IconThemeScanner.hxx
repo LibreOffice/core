@@ -15,7 +15,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 // forward declaration of unit test class. Required for friend relationship.
@@ -39,8 +39,7 @@ public:
     /** Factory method to create the object.
      * Provide a path to search for IconThemes.
      */
-    static boost::shared_ptr<IconThemeScanner>
-    Create(const OUString &path);
+    static std::shared_ptr<IconThemeScanner> Create(const OUString &path);
 
     /** This method will return the standard path where icon themes are located.
      */

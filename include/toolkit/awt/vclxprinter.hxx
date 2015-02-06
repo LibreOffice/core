@@ -56,7 +56,7 @@ class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
                                 ,public ::cppu::OPropertySetHelper
 {
 protected:
-    boost::shared_ptr<Printer>                      mpPrinter;
+    std::shared_ptr<Printer>                      mxPrinter;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  mxPrnDevice;
 
     sal_Int16                   mnOrientation;
@@ -65,7 +65,7 @@ public:
     VCLXPrinterPropertySet( const OUString& rPrinterName );
     virtual ~VCLXPrinterPropertySet();
 
-    Printer*                    GetPrinter() const { return mpPrinter.get(); }
+    Printer*                    GetPrinter() const { return mxPrinter.get(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  GetDevice();
 
     // ::com::sun::star::uno::XInterface
@@ -107,8 +107,8 @@ typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
                                         >   VCLXPrinter_Base;
 class VCLXPrinter:  public VCLXPrinter_Base
 {
-    boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
-    JobSetup                                        maInitJobSetup;
+    std::shared_ptr<vcl::OldStylePrintAdaptor>    mxListener;
+    JobSetup                                      maInitJobSetup;
 public:
                     VCLXPrinter( const OUString& rPrinterName );
                     virtual ~VCLXPrinter();

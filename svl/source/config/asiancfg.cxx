@@ -63,7 +63,7 @@ struct SvxAsianConfig::Impl: private boost::noncopyable {
 
     css::uno::Reference< css::uno::XComponentContext > context;
 
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch;
+    std::shared_ptr< comphelper::ConfigurationChanges > batch;
 };
 
 SvxAsianConfig::SvxAsianConfig(): impl_(new Impl) {}

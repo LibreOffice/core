@@ -55,8 +55,6 @@ using namespace ::com::sun::star;
 #include "svdata.hxx"
 #include "impimagetree.hxx"
 
-#include <boost/make_shared.hpp>
-
 struct ImplMouseData
 {
                                     ImplMouseData();
@@ -174,9 +172,9 @@ struct ImplStyleData
     bool                            mnUseFlatBorders;
     bool                            mbPreferredUseImagesInMenus;
     long                            mnMinThumbSize;
-    boost::shared_ptr<vcl::IconThemeScanner>
+    std::shared_ptr<vcl::IconThemeScanner>
                                     mIconThemeScanner;
-    boost::shared_ptr<vcl::IconThemeSelector>
+    std::shared_ptr<vcl::IconThemeSelector>
                                     mIconThemeSelector;
 
     rtl::OUString                   mIconTheme;
@@ -294,179 +292,179 @@ void
 MouseSettings::SetOptions(sal_uLong nOptions)
 {
     CopyData();
-    mpData->mnOptions = nOptions;
+    mxData->mnOptions = nOptions;
 }
 
 sal_uLong
 MouseSettings::GetOptions() const
 {
-    return mpData->mnOptions;
+    return mxData->mnOptions;
 }
 
 void
 MouseSettings::SetDoubleClickTime( sal_uLong nDoubleClkTime )
 {
     CopyData();
-    mpData->mnDoubleClkTime = nDoubleClkTime;
+    mxData->mnDoubleClkTime = nDoubleClkTime;
 }
 
 sal_uLong
 MouseSettings::GetDoubleClickTime() const
 {
-    return mpData->mnDoubleClkTime;
+    return mxData->mnDoubleClkTime;
 }
 
 void
 MouseSettings::SetDoubleClickWidth( long nDoubleClkWidth )
 {
     CopyData();
-    mpData->mnDoubleClkWidth = nDoubleClkWidth;
+    mxData->mnDoubleClkWidth = nDoubleClkWidth;
 }
 
 long
 MouseSettings::GetDoubleClickWidth() const
 {
-    return mpData->mnDoubleClkWidth;
+    return mxData->mnDoubleClkWidth;
 }
 
 void
 MouseSettings::SetDoubleClickHeight( long nDoubleClkHeight )
 {
     CopyData();
-    mpData->mnDoubleClkHeight = nDoubleClkHeight;
+    mxData->mnDoubleClkHeight = nDoubleClkHeight;
 }
 
 long
 MouseSettings::GetDoubleClickHeight() const
 {
-    return mpData->mnDoubleClkHeight;
+    return mxData->mnDoubleClkHeight;
 }
 
 void
 MouseSettings::SetStartDragWidth( long nDragWidth )
 {
     CopyData();
-    mpData->mnStartDragWidth = nDragWidth;
+    mxData->mnStartDragWidth = nDragWidth;
 }
 
 long
 MouseSettings::GetStartDragWidth() const
 {
-    return mpData->mnStartDragWidth;
+    return mxData->mnStartDragWidth;
 }
 
 void
 MouseSettings::SetStartDragHeight( long nDragHeight )
 {
     CopyData();
-    mpData->mnStartDragHeight = nDragHeight;
+    mxData->mnStartDragHeight = nDragHeight;
 }
 
 long
 MouseSettings::GetStartDragHeight() const
 {
-    return mpData->mnStartDragHeight;
+    return mxData->mnStartDragHeight;
 }
 
 sal_uInt16
 MouseSettings::GetStartDragCode() const
 {
-    return mpData->mnStartDragCode;
+    return mxData->mnStartDragCode;
 }
 
 sal_uInt16
 MouseSettings::GetContextMenuCode() const
 {
-    return mpData->mnContextMenuCode;
+    return mxData->mnContextMenuCode;
 }
 
 sal_uInt16
 MouseSettings::GetContextMenuClicks() const
 {
-    return mpData->mnContextMenuClicks;
+    return mxData->mnContextMenuClicks;
 }
 
 sal_uLong
 MouseSettings::GetScrollRepeat() const
 {
-    return mpData->mnScrollRepeat;
+    return mxData->mnScrollRepeat;
 }
 
 sal_uLong
 MouseSettings::GetButtonStartRepeat() const
 {
-    return mpData->mnButtonStartRepeat;
+    return mxData->mnButtonStartRepeat;
 }
 
 void
 MouseSettings::SetButtonRepeat( sal_uLong nRepeat )
 {
     CopyData();
-    mpData->mnButtonRepeat = nRepeat;
+    mxData->mnButtonRepeat = nRepeat;
 }
 
 sal_uLong
 MouseSettings::GetButtonRepeat() const
 {
-    return mpData->mnButtonRepeat;
+    return mxData->mnButtonRepeat;
 }
 
 sal_uLong
 MouseSettings::GetActionDelay() const
 {
-    return mpData->mnActionDelay;
+    return mxData->mnActionDelay;
 }
 
 void
 MouseSettings::SetMenuDelay( sal_uLong nDelay )
 {
     CopyData();
-    mpData->mnMenuDelay = nDelay;
+    mxData->mnMenuDelay = nDelay;
 }
 
 sal_uLong
 MouseSettings::GetMenuDelay() const
 {
-    return mpData->mnMenuDelay;
+    return mxData->mnMenuDelay;
 }
 
 void
 MouseSettings::SetFollow( sal_uLong nFollow )
 {
     CopyData();
-    mpData->mnFollow = nFollow;
+    mxData->mnFollow = nFollow;
 }
 
 sal_uLong
 MouseSettings::GetFollow() const
 {
-    return mpData->mnFollow;
+    return mxData->mnFollow;
 }
 
 void
 MouseSettings::SetMiddleButtonAction( sal_uInt16 nAction )
 {
     CopyData();
-    mpData->mnMiddleButtonAction = nAction;
+    mxData->mnMiddleButtonAction = nAction;
 }
 
 sal_uInt16
 MouseSettings::GetMiddleButtonAction() const
 {
-    return mpData->mnMiddleButtonAction;
+    return mxData->mnMiddleButtonAction;
 }
 
 void
 MouseSettings::SetWheelBehavior( sal_uInt16 nBehavior )
 {
     CopyData();
-    mpData->mnWheelBehavior = nBehavior;
+    mxData->mnWheelBehavior = nBehavior;
 }
 
 sal_uInt16
 MouseSettings::GetWheelBehavior() const
 {
-    return mpData->mnWheelBehavior;
+    return mxData->mnWheelBehavior;
 }
 
 bool
@@ -476,7 +474,7 @@ MouseSettings::operator !=( const MouseSettings& rSet ) const
 }
 
 MouseSettings::MouseSettings()
-: mpData(boost::make_shared<ImplMouseData>())
+    : mxData(std::make_shared<ImplMouseData>())
 {
 }
 
@@ -487,33 +485,33 @@ MouseSettings::~MouseSettings()
 void MouseSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mpData.unique() ) {
-        mpData = boost::make_shared<ImplMouseData>(*mpData);
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplMouseData>(*mxData);
     }
 }
 
 bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 {
-    if ( mpData == rSet.mpData )
+    if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mpData->mnOptions             == rSet.mpData->mnOptions)              &&
-         (mpData->mnDoubleClkTime       == rSet.mpData->mnDoubleClkTime)        &&
-         (mpData->mnDoubleClkWidth      == rSet.mpData->mnDoubleClkWidth)       &&
-         (mpData->mnDoubleClkHeight     == rSet.mpData->mnDoubleClkHeight)      &&
-         (mpData->mnStartDragWidth      == rSet.mpData->mnStartDragWidth)       &&
-         (mpData->mnStartDragHeight     == rSet.mpData->mnStartDragHeight)      &&
-         (mpData->mnStartDragCode       == rSet.mpData->mnStartDragCode)        &&
-         (mpData->mnContextMenuCode     == rSet.mpData->mnContextMenuCode)      &&
-         (mpData->mnContextMenuClicks   == rSet.mpData->mnContextMenuClicks)    &&
-         (mpData->mnMiddleButtonAction  == rSet.mpData->mnMiddleButtonAction)   &&
-         (mpData->mnScrollRepeat        == rSet.mpData->mnScrollRepeat)         &&
-         (mpData->mnButtonStartRepeat   == rSet.mpData->mnButtonStartRepeat)    &&
-         (mpData->mnButtonRepeat        == rSet.mpData->mnButtonRepeat)         &&
-         (mpData->mnActionDelay         == rSet.mpData->mnActionDelay)          &&
-         (mpData->mnMenuDelay           == rSet.mpData->mnMenuDelay)            &&
-         (mpData->mnFollow              == rSet.mpData->mnFollow)               &&
-         (mpData->mnWheelBehavior       == rSet.mpData->mnWheelBehavior ) )
+    if ( (mxData->mnOptions             == rSet.mxData->mnOptions)              &&
+         (mxData->mnDoubleClkTime       == rSet.mxData->mnDoubleClkTime)        &&
+         (mxData->mnDoubleClkWidth      == rSet.mxData->mnDoubleClkWidth)       &&
+         (mxData->mnDoubleClkHeight     == rSet.mxData->mnDoubleClkHeight)      &&
+         (mxData->mnStartDragWidth      == rSet.mxData->mnStartDragWidth)       &&
+         (mxData->mnStartDragHeight     == rSet.mxData->mnStartDragHeight)      &&
+         (mxData->mnStartDragCode       == rSet.mxData->mnStartDragCode)        &&
+         (mxData->mnContextMenuCode     == rSet.mxData->mnContextMenuCode)      &&
+         (mxData->mnContextMenuClicks   == rSet.mxData->mnContextMenuClicks)    &&
+         (mxData->mnMiddleButtonAction  == rSet.mxData->mnMiddleButtonAction)   &&
+         (mxData->mnScrollRepeat        == rSet.mxData->mnScrollRepeat)         &&
+         (mxData->mnButtonStartRepeat   == rSet.mxData->mnButtonStartRepeat)    &&
+         (mxData->mnButtonRepeat        == rSet.mxData->mnButtonRepeat)         &&
+         (mxData->mnActionDelay         == rSet.mxData->mnActionDelay)          &&
+         (mxData->mnMenuDelay           == rSet.mxData->mnMenuDelay)            &&
+         (mxData->mnFollow              == rSet.mxData->mnFollow)               &&
+         (mxData->mnWheelBehavior       == rSet.mxData->mnWheelBehavior ) )
         return true;
     else
         return false;
@@ -758,7 +756,7 @@ void ImplStyleData::SetStandardStyles()
 }
 
 StyleSettings::StyleSettings()
-: mpData(boost::make_shared<ImplStyleData>())
+    : mxData(std::make_shared<ImplStyleData>())
 {
 }
 
@@ -770,1232 +768,1232 @@ void
 StyleSettings::SetFaceColor( const Color& rColor )
 {
     CopyData();
-    mpData->maFaceColor = rColor;
+    mxData->maFaceColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFaceColor() const
 {
-    return mpData->maFaceColor;
+    return mxData->maFaceColor;
 }
 
 void
 StyleSettings::SetCheckedColor( const Color& rColor )
 {
     CopyData();
-    mpData->maCheckedColor = rColor;
+    mxData->maCheckedColor = rColor;
 }
 
 const Color&
 StyleSettings::GetCheckedColor() const
 {
-    return mpData->maCheckedColor;
+    return mxData->maCheckedColor;
 }
 
 void
 StyleSettings::SetLightColor( const Color& rColor )
 {
     CopyData();
-    mpData->maLightColor = rColor;
+    mxData->maLightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLightColor() const
 {
-    return mpData->maLightColor;
+    return mxData->maLightColor;
 }
 
 void
 StyleSettings::SetLightBorderColor( const Color& rColor )
 {
     CopyData();
-    mpData->maLightBorderColor = rColor;
+    mxData->maLightBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLightBorderColor() const
 {
-    return mpData->maLightBorderColor;
+    return mxData->maLightBorderColor;
 }
 
 void
 StyleSettings::SetShadowColor( const Color& rColor )
 {
     CopyData();
-    mpData->maShadowColor = rColor;
+    mxData->maShadowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetShadowColor() const
 {
-    return mpData->maShadowColor;
+    return mxData->maShadowColor;
 }
 
 void
 StyleSettings::SetDarkShadowColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDarkShadowColor = rColor;
+    mxData->maDarkShadowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDarkShadowColor() const
 {
-    return mpData->maDarkShadowColor;
+    return mxData->maDarkShadowColor;
 }
 
 void
 StyleSettings::SetButtonTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maButtonTextColor = rColor;
+    mxData->maButtonTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetButtonTextColor() const
 {
-    return mpData->maButtonTextColor;
+    return mxData->maButtonTextColor;
 }
 
 void
 StyleSettings::SetButtonRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maButtonRolloverTextColor = rColor;
+    mxData->maButtonRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetButtonRolloverTextColor() const
 {
-    return mpData->maButtonRolloverTextColor;
+    return mxData->maButtonRolloverTextColor;
 }
 
 void
 StyleSettings::SetRadioCheckTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maRadioCheckTextColor = rColor;
+    mxData->maRadioCheckTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetRadioCheckTextColor() const
 {
-    return mpData->maRadioCheckTextColor;
+    return mxData->maRadioCheckTextColor;
 }
 
 void
 StyleSettings::SetGroupTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maGroupTextColor = rColor;
+    mxData->maGroupTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetGroupTextColor() const
 {
-    return mpData->maGroupTextColor;
+    return mxData->maGroupTextColor;
 }
 
 void
 StyleSettings::SetLabelTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maLabelTextColor = rColor;
+    mxData->maLabelTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLabelTextColor() const
 {
-    return mpData->maLabelTextColor;
+    return mxData->maLabelTextColor;
 }
 
 void
 StyleSettings::SetInfoTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maInfoTextColor = rColor;
+    mxData->maInfoTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetInfoTextColor() const
 {
-    return mpData->maInfoTextColor;
+    return mxData->maInfoTextColor;
 }
 
 void
 StyleSettings::SetWindowColor( const Color& rColor )
 {
     CopyData();
-    mpData->maWindowColor = rColor;
+    mxData->maWindowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWindowColor() const
 {
-    return mpData->maWindowColor;
+    return mxData->maWindowColor;
 }
 
 void
 StyleSettings::SetWindowTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maWindowTextColor = rColor;
+    mxData->maWindowTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWindowTextColor() const
 {
-    return mpData->maWindowTextColor;
+    return mxData->maWindowTextColor;
 }
 
 void
 StyleSettings::SetDialogColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDialogColor = rColor;
+    mxData->maDialogColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDialogColor() const
 {
-    return mpData->maDialogColor;
+    return mxData->maDialogColor;
 }
 
 void
 StyleSettings::SetDialogTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDialogTextColor = rColor;
+    mxData->maDialogTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDialogTextColor() const
 {
-    return mpData->maDialogTextColor;
+    return mxData->maDialogTextColor;
 }
 
 void
 StyleSettings::SetWorkspaceColor( const Color& rColor )
 {
     CopyData();
-    mpData->maWorkspaceColor = rColor;
+    mxData->maWorkspaceColor = rColor;
 }
 
 const Color&
 StyleSettings::GetWorkspaceColor() const
 {
-    return mpData->maWorkspaceColor;
+    return mxData->maWorkspaceColor;
 }
 
 void
 StyleSettings::SetFieldColor( const Color& rColor )
 {
     CopyData();
-    mpData->maFieldColor = rColor;
+    mxData->maFieldColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFieldColor() const
 {
-    return mpData->maFieldColor;
+    return mxData->maFieldColor;
 }
 
 void
 StyleSettings::SetFieldTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maFieldTextColor = rColor;
+    mxData->maFieldTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFieldTextColor() const
 {
-    return mpData->maFieldTextColor;
+    return mxData->maFieldTextColor;
 }
 
 void
 StyleSettings::SetFieldRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maFieldRolloverTextColor = rColor;
+    mxData->maFieldRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFieldRolloverTextColor() const
 {
-    return mpData->maFieldRolloverTextColor;
+    return mxData->maFieldRolloverTextColor;
 }
 
 void
 StyleSettings::SetActiveColor( const Color& rColor )
 {
     CopyData();
-    mpData->maActiveColor = rColor;
+    mxData->maActiveColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveColor() const
 {
-    return mpData->maActiveColor;
+    return mxData->maActiveColor;
 }
 
 void
 StyleSettings::SetActiveTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maActiveTextColor = rColor;
+    mxData->maActiveTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveTextColor() const
 {
-    return mpData->maActiveTextColor;
+    return mxData->maActiveTextColor;
 }
 
 void
 StyleSettings::SetActiveBorderColor( const Color& rColor )
 {
     CopyData();
-    mpData->maActiveBorderColor = rColor;
+    mxData->maActiveBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveBorderColor() const
 {
-    return mpData->maActiveBorderColor;
+    return mxData->maActiveBorderColor;
 }
 
 void
 StyleSettings::SetDeactiveColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDeactiveColor = rColor;
+    mxData->maDeactiveColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDeactiveColor() const
 {
-    return mpData->maDeactiveColor;
+    return mxData->maDeactiveColor;
 }
 
 void
 StyleSettings::SetDeactiveTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDeactiveTextColor = rColor;
+    mxData->maDeactiveTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDeactiveTextColor() const
 {
-    return mpData->maDeactiveTextColor;
+    return mxData->maDeactiveTextColor;
 }
 
 void
 StyleSettings::SetDeactiveBorderColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDeactiveBorderColor = rColor;
+    mxData->maDeactiveBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDeactiveBorderColor() const
 {
-    return mpData->maDeactiveBorderColor;
+    return mxData->maDeactiveBorderColor;
 }
 
 void
 StyleSettings::SetHighlightColor( const Color& rColor )
 {
     CopyData();
-    mpData->maHighlightColor = rColor;
+    mxData->maHighlightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHighlightColor() const
 {
-    return mpData->maHighlightColor;
+    return mxData->maHighlightColor;
 }
 
 void
 StyleSettings::SetHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maHighlightTextColor = rColor;
+    mxData->maHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHighlightTextColor() const
 {
-    return mpData->maHighlightTextColor;
+    return mxData->maHighlightTextColor;
 }
 
 void
 StyleSettings::SetDisableColor( const Color& rColor )
 {
     CopyData();
-    mpData->maDisableColor = rColor;
+    mxData->maDisableColor = rColor;
 }
 
 const Color&
 StyleSettings::GetDisableColor() const
 {
-    return mpData->maDisableColor;
+    return mxData->maDisableColor;
 }
 
 void
 StyleSettings::SetHelpColor( const Color& rColor )
 {
     CopyData();
-    mpData->maHelpColor = rColor;
+    mxData->maHelpColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHelpColor() const
 {
-    return mpData->maHelpColor;
+    return mxData->maHelpColor;
 }
 
 void
 StyleSettings::SetHelpTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maHelpTextColor = rColor;
+    mxData->maHelpTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetHelpTextColor() const
 {
-    return mpData->maHelpTextColor;
+    return mxData->maHelpTextColor;
 }
 
 void
 StyleSettings::SetMenuColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuColor = rColor;
+    mxData->maMenuColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuColor() const
 {
-    return mpData->maMenuColor;
+    return mxData->maMenuColor;
 }
 
 void
 StyleSettings::SetMenuBarColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuBarColor = rColor;
+    mxData->maMenuBarColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarColor() const
 {
-    return mpData->maMenuBarColor;
+    return mxData->maMenuBarColor;
 }
 
 void
 StyleSettings::SetMenuBarRolloverColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuBarRolloverColor = rColor;
+    mxData->maMenuBarRolloverColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarRolloverColor() const
 {
-    return mpData->maMenuBarRolloverColor;
+    return mxData->maMenuBarRolloverColor;
 }
 
 void
 StyleSettings::SetMenuBorderColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuBorderColor = rColor;
+    mxData->maMenuBorderColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBorderColor() const
 {
-    return mpData->maMenuBorderColor;
+    return mxData->maMenuBorderColor;
 }
 
 void
 StyleSettings::SetMenuTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuTextColor = rColor;
+    mxData->maMenuTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuTextColor() const
 {
-    return mpData->maMenuTextColor;
+    return mxData->maMenuTextColor;
 }
 
 void
 StyleSettings::SetMenuBarTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuBarTextColor = rColor;
+    mxData->maMenuBarTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarTextColor() const
 {
-    return mpData->maMenuBarTextColor;
+    return mxData->maMenuBarTextColor;
 }
 
 void
 StyleSettings::SetMenuBarRolloverTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuBarRolloverTextColor = rColor;
+    mxData->maMenuBarRolloverTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuBarRolloverTextColor() const
 {
-    return mpData->maMenuBarRolloverTextColor;
+    return mxData->maMenuBarRolloverTextColor;
 }
 
 void
 StyleSettings::SetMenuHighlightColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuHighlightColor = rColor;
+    mxData->maMenuHighlightColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuHighlightColor() const
 {
-    return mpData->maMenuHighlightColor;
+    return mxData->maMenuHighlightColor;
 }
 
 void
 StyleSettings::SetMenuHighlightTextColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMenuHighlightTextColor = rColor;
+    mxData->maMenuHighlightTextColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMenuHighlightTextColor() const
 {
-    return mpData->maMenuHighlightTextColor;
+    return mxData->maMenuHighlightTextColor;
 }
 
 void
 StyleSettings::SetLinkColor( const Color& rColor )
 {
     CopyData();
-    mpData->maLinkColor = rColor;
+    mxData->maLinkColor = rColor;
 }
 
 const Color&
 StyleSettings::GetLinkColor() const
 {
-    return mpData->maLinkColor;
+    return mxData->maLinkColor;
 }
 
 void
 StyleSettings::SetVisitedLinkColor( const Color& rColor )
 {
     CopyData();
-    mpData->maVisitedLinkColor = rColor;
+    mxData->maVisitedLinkColor = rColor;
 }
 
 const Color&
 StyleSettings::GetVisitedLinkColor() const
 {
-    return mpData->maVisitedLinkColor;
+    return mxData->maVisitedLinkColor;
 }
 
 const Color&
 StyleSettings::GetHighlightLinkColor() const
 {
-    return mpData->maHighlightLinkColor;
+    return mxData->maHighlightLinkColor;
 }
 
 void
 StyleSettings::SetMonoColor( const Color& rColor )
 {
     CopyData();
-    mpData->maMonoColor = rColor;
+    mxData->maMonoColor = rColor;
 }
 
 const Color&
 StyleSettings::GetMonoColor() const
 {
-    return mpData->maMonoColor;
+    return mxData->maMonoColor;
 }
 
 void
 StyleSettings::SetActiveTabColor( const Color& rColor )
 {
     CopyData();
-    mpData->maActiveTabColor = rColor;
+    mxData->maActiveTabColor = rColor;
 }
 
 const Color&
 StyleSettings::GetActiveTabColor() const
 {
-    return mpData->maActiveTabColor;
+    return mxData->maActiveTabColor;
 }
 
 void
 StyleSettings::SetInactiveTabColor( const Color& rColor )
 {
     CopyData();
-    mpData->maInactiveTabColor = rColor;
+    mxData->maInactiveTabColor = rColor;
 }
 
 const Color&
 StyleSettings::GetInactiveTabColor() const
 {
-    return mpData->maInactiveTabColor;
+    return mxData->maInactiveTabColor;
 }
 
 void
 StyleSettings::SetAlternatingRowColor( const Color& rColor )
 {
     CopyData();
-    mpData->maAlternatingRowColor = rColor;
+    mxData->maAlternatingRowColor = rColor;
 }
 
 const Color&
 StyleSettings::GetAlternatingRowColor() const
 {
-    return mpData->maAlternatingRowColor;
+    return mxData->maAlternatingRowColor;
 }
 
 void
 StyleSettings::SetUseSystemUIFonts( bool bUseSystemUIFonts )
 {
     CopyData();
-    mpData->mbUseSystemUIFonts = bUseSystemUIFonts;
+    mxData->mbUseSystemUIFonts = bUseSystemUIFonts;
 }
 
 bool
 StyleSettings::GetUseSystemUIFonts() const
 {
-    return mpData->mbUseSystemUIFonts;
+    return mxData->mbUseSystemUIFonts;
 }
 
 void
 StyleSettings::SetUseFlatBorders( bool bUseFlatBorders )
 {
     CopyData();
-    mpData->mnUseFlatBorders = bUseFlatBorders;
+    mxData->mnUseFlatBorders = bUseFlatBorders;
 }
 
 bool
 StyleSettings::GetUseFlatBorders() const
 {
-    return (bool) mpData->mnUseFlatBorders;
+    return (bool) mxData->mnUseFlatBorders;
 }
 
 void
 StyleSettings::SetUseFlatMenus( bool bUseFlatMenus )
 {
     CopyData();
-    mpData->mnUseFlatMenus = bUseFlatMenus;
+    mxData->mnUseFlatMenus = bUseFlatMenus;
 }
 
 bool
 StyleSettings::GetUseFlatMenus() const
 {
-    return (bool) mpData->mnUseFlatMenus;
+    return (bool) mxData->mnUseFlatMenus;
 }
 
 void
 StyleSettings::SetUseImagesInMenus( TriState eUseImagesInMenus )
 {
     CopyData();
-    mpData->meUseImagesInMenus = eUseImagesInMenus;
+    mxData->meUseImagesInMenus = eUseImagesInMenus;
 }
 
 void
 StyleSettings::SetPreferredUseImagesInMenus( bool bPreferredUseImagesInMenus )
 {
     CopyData();
-    mpData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus;
+    mxData->mbPreferredUseImagesInMenus = bPreferredUseImagesInMenus;
 }
 
 bool
 StyleSettings::GetPreferredUseImagesInMenus() const
 {
-    return mpData->mbPreferredUseImagesInMenus;
+    return mxData->mbPreferredUseImagesInMenus;
 }
 
 void
 StyleSettings::SetSkipDisabledInMenus( bool bSkipDisabledInMenus )
 {
     CopyData();
-    mpData->mbSkipDisabledInMenus = bSkipDisabledInMenus;
+    mxData->mbSkipDisabledInMenus = bSkipDisabledInMenus;
 }
 
 bool
 StyleSettings::GetSkipDisabledInMenus() const
 {
-    return mpData->mbSkipDisabledInMenus;
+    return mxData->mbSkipDisabledInMenus;
 }
 
 void
 StyleSettings::SetHideDisabledMenuItems( bool bHideDisabledMenuItems )
 {
     CopyData();
-    mpData->mbHideDisabledMenuItems = bHideDisabledMenuItems;
+    mxData->mbHideDisabledMenuItems = bHideDisabledMenuItems;
 }
 
 bool
 StyleSettings::GetHideDisabledMenuItems() const
 {
-    return mpData->mbHideDisabledMenuItems;
+    return mxData->mbHideDisabledMenuItems;
 }
 
 void
 StyleSettings::SetAcceleratorsInContextMenus( bool bAcceleratorsInContextMenus )
 {
     CopyData();
-    mpData->mbAcceleratorsInContextMenus = bAcceleratorsInContextMenus;
+    mxData->mbAcceleratorsInContextMenus = bAcceleratorsInContextMenus;
 }
 
 bool
 StyleSettings::GetAcceleratorsInContextMenus() const
 {
-    return mpData->mbAcceleratorsInContextMenus;
+    return mxData->mbAcceleratorsInContextMenus;
 }
 
 void
 StyleSettings::SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider )
 {
     CopyData();
-    mpData->mbPrimaryButtonWarpsSlider = bPrimaryButtonWarpsSlider;
+    mxData->mbPrimaryButtonWarpsSlider = bPrimaryButtonWarpsSlider;
 }
 
 bool
 StyleSettings::GetPrimaryButtonWarpsSlider() const
 {
-    return mpData->mbPrimaryButtonWarpsSlider;
+    return mxData->mbPrimaryButtonWarpsSlider;
 }
 
 void
 StyleSettings::SetCairoFontOptions( const void *pOptions )
 {
     CopyData();
-    mpData->mpFontOptions = pOptions;
+    mxData->mpFontOptions = pOptions;
 }
 
 const void*
 StyleSettings::GetCairoFontOptions() const
 {
-    return mpData->mpFontOptions;
+    return mxData->mpFontOptions;
 }
 
 void
 StyleSettings::SetAppFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maAppFont = rFont;
+    mxData->maAppFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetAppFont() const
 {
-    return mpData->maAppFont;
+    return mxData->maAppFont;
 }
 
 void
 StyleSettings::SetHelpFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maHelpFont = rFont;
+    mxData->maHelpFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetHelpFont() const
 {
-    return mpData->maHelpFont;
+    return mxData->maHelpFont;
 }
 
 void
 StyleSettings::SetTitleFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maTitleFont = rFont;
+    mxData->maTitleFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetTitleFont() const
 {
-    return mpData->maTitleFont;
+    return mxData->maTitleFont;
 }
 
 void
 StyleSettings::SetFloatTitleFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maFloatTitleFont = rFont;
+    mxData->maFloatTitleFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetFloatTitleFont() const
 {
-    return mpData->maFloatTitleFont;
+    return mxData->maFloatTitleFont;
 }
 
 void
 StyleSettings::SetMenuFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maMenuFont = rFont;
+    mxData->maMenuFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetMenuFont() const
 {
-    return mpData->maMenuFont;
+    return mxData->maMenuFont;
 }
 
 void
 StyleSettings::SetToolFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maToolFont = rFont;
+    mxData->maToolFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetToolFont() const
 {
-    return mpData->maToolFont;
+    return mxData->maToolFont;
 }
 
 void
 StyleSettings::SetGroupFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maGroupFont = rFont;
+    mxData->maGroupFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetGroupFont() const
 {
-    return mpData->maGroupFont;
+    return mxData->maGroupFont;
 }
 
 void
 StyleSettings::SetLabelFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maLabelFont = rFont;
+    mxData->maLabelFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetLabelFont() const
 {
-    return mpData->maLabelFont;
+    return mxData->maLabelFont;
 }
 
 void
 StyleSettings::SetInfoFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maInfoFont = rFont;
+    mxData->maInfoFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetInfoFont() const
 {
-    return mpData->maInfoFont;
+    return mxData->maInfoFont;
 }
 
 void
 StyleSettings::SetRadioCheckFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maRadioCheckFont = rFont;
+    mxData->maRadioCheckFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetRadioCheckFont() const
 {
-    return mpData->maRadioCheckFont;
+    return mxData->maRadioCheckFont;
 }
 
 void
 StyleSettings::SetPushButtonFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maPushButtonFont = rFont;
+    mxData->maPushButtonFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetPushButtonFont() const
 {
-    return mpData->maPushButtonFont;
+    return mxData->maPushButtonFont;
 }
 
 void
 StyleSettings::SetFieldFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maFieldFont = rFont;
+    mxData->maFieldFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetFieldFont() const
 {
-    return mpData->maFieldFont;
+    return mxData->maFieldFont;
 }
 
 void
 StyleSettings::SetIconFont( const vcl::Font& rFont )
 {
     CopyData();
-    mpData->maIconFont = rFont;
+    mxData->maIconFont = rFont;
 }
 
 const vcl::Font&
 StyleSettings::GetIconFont() const
 {
-    return mpData->maIconFont;
+    return mxData->maIconFont;
 }
 
 long
 StyleSettings::GetBorderSize() const
 {
-    return mpData->mnBorderSize;
+    return mxData->mnBorderSize;
 }
 
 void
 StyleSettings::SetTitleHeight( long nSize )
 {
     CopyData();
-    mpData->mnTitleHeight = nSize;
+    mxData->mnTitleHeight = nSize;
 }
 
 long
 StyleSettings::GetTitleHeight() const
 {
-    return mpData->mnTitleHeight;
+    return mxData->mnTitleHeight;
 }
 
 void
 StyleSettings::SetFloatTitleHeight( long nSize )
 {
     CopyData();
-    mpData->mnFloatTitleHeight = nSize;
+    mxData->mnFloatTitleHeight = nSize;
 }
 
 long
 StyleSettings::GetFloatTitleHeight() const
 {
-    return mpData->mnFloatTitleHeight;
+    return mxData->mnFloatTitleHeight;
 }
 
 long
 StyleSettings::GetTearOffTitleHeight() const
 {
-    return mpData->mnTearOffTitleHeight;
+    return mxData->mnTearOffTitleHeight;
 }
 
 void
 StyleSettings::SetScrollBarSize( long nSize )
 {
     CopyData();
-    mpData->mnScrollBarSize = nSize;
+    mxData->mnScrollBarSize = nSize;
 }
 
 long
 StyleSettings::GetScrollBarSize() const
 {
-    return mpData->mnScrollBarSize;
+    return mxData->mnScrollBarSize;
 }
 
 void
 StyleSettings::SetMinThumbSize( long nSize )
 {
     CopyData();
-    mpData->mnMinThumbSize = nSize;
+    mxData->mnMinThumbSize = nSize;
 }
 
 long
 StyleSettings::GetMinThumbSize() const
 {
-    return mpData->mnMinThumbSize;
+    return mxData->mnMinThumbSize;
 }
 
 void
 StyleSettings::SetSpinSize( long nSize )
 {
     CopyData();
-    mpData->mnSpinSize = nSize;
+    mxData->mnSpinSize = nSize;
 }
 
 long
 StyleSettings::GetSpinSize() const
 {
-    return mpData->mnSpinSize;
+    return mxData->mnSpinSize;
 }
 
 long
 StyleSettings::GetSplitSize() const
 {
-    return mpData->mnSplitSize;
+    return mxData->mnSplitSize;
 }
 
 void
 StyleSettings::SetCursorSize( long nSize )
 {
     CopyData();
-    mpData->mnCursorSize = nSize;
+    mxData->mnCursorSize = nSize;
 }
 
 long
 StyleSettings::GetCursorSize() const
 {
-    return mpData->mnCursorSize;
+    return mxData->mnCursorSize;
 }
 
 void
 StyleSettings::SetCursorBlinkTime( long nBlinkTime )
 {
     CopyData();
-    mpData->mnCursorBlinkTime = nBlinkTime;
+    mxData->mnCursorBlinkTime = nBlinkTime;
 }
 
 long
 StyleSettings::GetCursorBlinkTime() const
 {
-    return (long) mpData->mnCursorBlinkTime;
+    return (long) mxData->mnCursorBlinkTime;
 }
 
 void
 StyleSettings::SetScreenZoom( sal_uInt16 nPercent )
 {
     CopyData();
-    mpData->mnScreenZoom = nPercent;
+    mxData->mnScreenZoom = nPercent;
 }
 
 sal_uInt16
 StyleSettings::GetScreenZoom() const
 {
-    return mpData->mnScreenZoom;
+    return mxData->mnScreenZoom;
 }
 
 void
 StyleSettings::SetScreenFontZoom( sal_uInt16 nPercent )
 {
     CopyData();
-    mpData->mnScreenFontZoom = nPercent;
+    mxData->mnScreenFontZoom = nPercent;
 }
 
 sal_uInt16
 StyleSettings::GetScreenFontZoom() const
 {
-    return mpData->mnScreenFontZoom;
+    return mxData->mnScreenFontZoom;
 }
 
 void
 StyleSettings::SetDragFullOptions( sal_uLong nOptions )
 {
     CopyData();
-    mpData->mnDragFullOptions = nOptions;
+    mxData->mnDragFullOptions = nOptions;
 }
 
 sal_uLong
 StyleSettings::GetDragFullOptions() const
 {
-    return mpData->mnDragFullOptions;
+    return mxData->mnDragFullOptions;
 }
 
 void
 StyleSettings::SetSelectionOptions( sal_uLong nOptions )
 {
     CopyData();
-    mpData->mnSelectionOptions = nOptions;
+    mxData->mnSelectionOptions = nOptions;
 }
 
 sal_uLong
 StyleSettings::GetSelectionOptions() const
 {
-    return mpData->mnSelectionOptions;
+    return mxData->mnSelectionOptions;
 }
 
 void
 StyleSettings::SetDisplayOptions( sal_uLong nOptions )
 {
     CopyData();
-    mpData->mnDisplayOptions = nOptions;
+    mxData->mnDisplayOptions = nOptions;
 }
 
 sal_uLong
 StyleSettings::GetDisplayOptions() const
 {
-    return mpData->mnDisplayOptions;
+    return mxData->mnDisplayOptions;
 }
 
 void
 StyleSettings::SetAntialiasingMinPixelHeight( long nMinPixel )
 {
     CopyData();
-    mpData->mnAntialiasedMin = nMinPixel;
+    mxData->mnAntialiasedMin = nMinPixel;
 }
 
 sal_uLong
 StyleSettings::GetAntialiasingMinPixelHeight() const
 {
-    return mpData->mnAntialiasedMin;
+    return mxData->mnAntialiasedMin;
 }
 
 void
 StyleSettings::SetOptions( sal_uLong nOptions )
 {
     CopyData();
-    mpData->mnOptions = nOptions;
+    mxData->mnOptions = nOptions;
 }
 
 void
 StyleSettings::SetAutoMnemonic( bool bAutoMnemonic )
 {
     CopyData();
-    mpData->mbAutoMnemonic = bAutoMnemonic;
+    mxData->mbAutoMnemonic = bAutoMnemonic;
 }
 
 bool
 StyleSettings::GetAutoMnemonic() const
 {
-    return mpData->mbAutoMnemonic;
+    return mxData->mbAutoMnemonic;
 }
 
 void
 StyleSettings::SetFontColor( const Color& rColor )
 {
     CopyData();
-    mpData->maFontColor = rColor;
+    mxData->maFontColor = rColor;
 }
 
 const Color&
 StyleSettings::GetFontColor() const
 {
-    return mpData->maFontColor;
+    return mxData->maFontColor;
 }
 
 void
 StyleSettings::SetToolbarIconSize( sal_uLong nSize )
 {
     CopyData();
-    mpData->mnToolbarIconSize = nSize;
+    mxData->mnToolbarIconSize = nSize;
 }
 
 sal_uLong
 StyleSettings::GetToolbarIconSize() const
 {
-    return mpData->mnToolbarIconSize;
+    return mxData->mnToolbarIconSize;
 }
 
 const DialogStyle&
 StyleSettings::GetDialogStyle() const
 {
-    return mpData->maDialogStyle;
+    return mxData->maDialogStyle;
 }
 
 void
 StyleSettings::SetDialogStyle( const DialogStyle& rStyle )
 {
     CopyData();
-    mpData->maDialogStyle = rStyle;
+    mxData->maDialogStyle = rStyle;
 }
 
 const FrameStyle&
 StyleSettings::GetFrameStyle() const
 {
-    return mpData->maFrameStyle;
+    return mxData->maFrameStyle;
 }
 
 void
 StyleSettings::SetFrameStyle( const FrameStyle& rStyle )
 {
     CopyData();
-    mpData->maFrameStyle = rStyle;
+    mxData->maFrameStyle = rStyle;
 }
 
 void
 StyleSettings::SetEdgeBlending(sal_uInt16 nCount)
 {
     CopyData();
-    mpData->mnEdgeBlending = nCount;
+    mxData->mnEdgeBlending = nCount;
 }
 
 sal_uInt16
 StyleSettings::GetEdgeBlending() const
 {
-    return mpData->mnEdgeBlending;
+    return mxData->mnEdgeBlending;
 }
 
 const Color&
 StyleSettings::GetEdgeBlendingTopLeftColor() const
 {
-    return mpData->maEdgeBlendingTopLeftColor;
+    return mxData->maEdgeBlendingTopLeftColor;
 }
 
 const Color&
 StyleSettings::GetEdgeBlendingBottomRightColor() const
 {
-    return mpData->maEdgeBlendingBottomRightColor;
+    return mxData->maEdgeBlendingBottomRightColor;
 }
 
 void
 StyleSettings::SetListBoxMaximumLineCount(sal_uInt16 nCount)
 {
     CopyData();
-    mpData->mnListBoxMaximumLineCount = nCount;
+    mxData->mnListBoxMaximumLineCount = nCount;
 }
 
 sal_uInt16
 StyleSettings::GetListBoxMaximumLineCount() const
 {
-    return mpData->mnListBoxMaximumLineCount;
+    return mxData->mnListBoxMaximumLineCount;
 }
 
 void
 StyleSettings::SetColorValueSetColumnCount(sal_uInt16 nCount)
 {
     CopyData();
-    mpData->mnColorValueSetColumnCount = nCount;
+    mxData->mnColorValueSetColumnCount = nCount;
 }
 
 sal_uInt16
 StyleSettings::GetColorValueSetColumnCount() const
 {
-    return mpData->mnColorValueSetColumnCount;
+    return mxData->mnColorValueSetColumnCount;
 }
 
 sal_uInt16
 StyleSettings::GetColorValueSetMaximumRowCount() const
 {
-    return mpData->mnColorValueSetMaximumRowCount;
+    return mxData->mnColorValueSetMaximumRowCount;
 }
 
 sal_uInt16
 StyleSettings::GetListBoxPreviewDefaultLineWidth() const
 {
-    return mpData->mnListBoxPreviewDefaultLineWidth;
+    return mxData->mnListBoxPreviewDefaultLineWidth;
 }
 
 void
 StyleSettings::SetPreviewUsesCheckeredBackground(bool bNew)
 {
     CopyData();
-    mpData->mbPreviewUsesCheckeredBackground = bNew;
+    mxData->mbPreviewUsesCheckeredBackground = bNew;
 }
 
 bool
 StyleSettings::GetPreviewUsesCheckeredBackground() const
 {
-    return mpData->mbPreviewUsesCheckeredBackground;
+    return mxData->mbPreviewUsesCheckeredBackground;
 }
 
 bool
@@ -2006,43 +2004,43 @@ StyleSettings::operator !=( const StyleSettings& rSet ) const
 
 const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
 {
-    if(0 == mpData->maListBoxPreviewDefaultPixelSize.Width() || 0 == mpData->maListBoxPreviewDefaultPixelSize.Height())
+    if(0 == mxData->maListBoxPreviewDefaultPixelSize.Width() || 0 == mxData->maListBoxPreviewDefaultPixelSize.Height())
     {
-        const_cast< StyleSettings* >(this)->mpData->maListBoxPreviewDefaultPixelSize =
-            Application::GetDefaultDevice()->LogicToPixel(mpData->maListBoxPreviewDefaultLogicSize, MAP_APPFONT);
+        const_cast< StyleSettings* >(this)->mxData->maListBoxPreviewDefaultPixelSize =
+            Application::GetDefaultDevice()->LogicToPixel(mxData->maListBoxPreviewDefaultLogicSize, MAP_APPFONT);
     }
 
-    return mpData->maListBoxPreviewDefaultPixelSize;
+    return mxData->maListBoxPreviewDefaultPixelSize;
 }
 
 void StyleSettings::Set3DColors( const Color& rColor )
 {
     CopyData();
-    mpData->maFaceColor         = rColor;
-    mpData->maLightBorderColor  = rColor;
-    mpData->maMenuBorderColor   = rColor;
-    mpData->maDarkShadowColor   = Color( COL_BLACK );
+    mxData->maFaceColor         = rColor;
+    mxData->maLightBorderColor  = rColor;
+    mxData->maMenuBorderColor   = rColor;
+    mxData->maDarkShadowColor   = Color( COL_BLACK );
     if ( rColor != Color( COL_LIGHTGRAY ) )
     {
-        mpData->maLightColor    = rColor;
-        mpData->maShadowColor   = rColor;
-        mpData->maDarkShadowColor=rColor;
-        mpData->maLightColor.IncreaseLuminance( 64 );
-        mpData->maShadowColor.DecreaseLuminance( 64 );
-        mpData->maDarkShadowColor.DecreaseLuminance( 100 );
-        sal_uLong   nRed    = mpData->maLightColor.GetRed();
-        sal_uLong   nGreen  = mpData->maLightColor.GetGreen();
-        sal_uLong   nBlue   = mpData->maLightColor.GetBlue();
-        nRed   += (sal_uLong)(mpData->maShadowColor.GetRed());
-        nGreen += (sal_uLong)(mpData->maShadowColor.GetGreen());
-        nBlue  += (sal_uLong)(mpData->maShadowColor.GetBlue());
-        mpData->maCheckedColor = Color( (sal_uInt8)(nRed/2), (sal_uInt8)(nGreen/2), (sal_uInt8)(nBlue/2) );
+        mxData->maLightColor    = rColor;
+        mxData->maShadowColor   = rColor;
+        mxData->maDarkShadowColor=rColor;
+        mxData->maLightColor.IncreaseLuminance( 64 );
+        mxData->maShadowColor.DecreaseLuminance( 64 );
+        mxData->maDarkShadowColor.DecreaseLuminance( 100 );
+        sal_uLong   nRed    = mxData->maLightColor.GetRed();
+        sal_uLong   nGreen  = mxData->maLightColor.GetGreen();
+        sal_uLong   nBlue   = mxData->maLightColor.GetBlue();
+        nRed   += (sal_uLong)(mxData->maShadowColor.GetRed());
+        nGreen += (sal_uLong)(mxData->maShadowColor.GetGreen());
+        nBlue  += (sal_uLong)(mxData->maShadowColor.GetBlue());
+        mxData->maCheckedColor = Color( (sal_uInt8)(nRed/2), (sal_uInt8)(nGreen/2), (sal_uInt8)(nBlue/2) );
     }
     else
     {
-        mpData->maCheckedColor  = Color( 0x99, 0x99, 0x99 );
-        mpData->maLightColor    = Color( COL_WHITE );
-        mpData->maShadowColor   = Color( COL_GRAY );
+        mxData->maCheckedColor  = Color( 0x99, 0x99, 0x99 );
+        mxData->maLightColor    = Color( COL_WHITE );
+        mxData->maShadowColor   = Color( COL_GRAY );
     }
 }
 
@@ -2051,20 +2049,20 @@ void StyleSettings::SetCheckedColorSpecialCase( )
     CopyData();
     // Light gray checked color special case
     if ( GetFaceColor() == COL_LIGHTGRAY )
-        mpData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
+        mxData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
     else
     {
-        sal_uInt8 nRed   = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetRed()   + (sal_uInt16)mpData->maLightColor.GetRed())/2);
-        sal_uInt8 nGreen = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetGreen() + (sal_uInt16)mpData->maLightColor.GetGreen())/2);
-        sal_uInt8 nBlue  = (sal_uInt8)(((sal_uInt16)mpData->maFaceColor.GetBlue()  + (sal_uInt16)mpData->maLightColor.GetBlue())/2);
-        mpData->maCheckedColor = Color( nRed, nGreen, nBlue );
+        sal_uInt8 nRed   = (sal_uInt8)(((sal_uInt16)mxData->maFaceColor.GetRed()   + (sal_uInt16)mxData->maLightColor.GetRed())/2);
+        sal_uInt8 nGreen = (sal_uInt8)(((sal_uInt16)mxData->maFaceColor.GetGreen() + (sal_uInt16)mxData->maLightColor.GetGreen())/2);
+        sal_uInt8 nBlue  = (sal_uInt8)(((sal_uInt16)mxData->maFaceColor.GetBlue()  + (sal_uInt16)mxData->maLightColor.GetBlue())/2);
+        mxData->maCheckedColor = Color( nRed, nGreen, nBlue );
     }
 }
 
 bool StyleSettings::GetUseImagesInMenus() const
 {
     // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
-    switch (mpData->meUseImagesInMenus) {
+    switch (mxData->meUseImagesInMenus) {
     case TRISTATE_FALSE:
         return false;
     case TRISTATE_TRUE:
@@ -2161,7 +2159,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
     if( rHeaderFooterBitmap.IsEmpty() )
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Misc::Persona::set( "no", batch );
         officecfg::Office::Common::Misc::PersonaSettings::set( "", batch );
         batch->commit();
@@ -2170,26 +2168,26 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
 const BitmapEx StyleSettings::GetPersonaHeader() const
 {
-    setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap, mpData->maPersonaMenuBarTextColor );
-    return mpData->maPersonaHeaderBitmap;
+    setupPersonaHeaderFooter( PERSONA_HEADER, mxData->maPersonaHeaderFooter, mxData->maPersonaHeaderBitmap, mxData->maPersonaMenuBarTextColor );
+    return mxData->maPersonaHeaderBitmap;
 }
 
 const BitmapEx StyleSettings::GetPersonaFooter() const
 {
-    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->maPersonaFooterBitmap, mpData->maPersonaMenuBarTextColor );
-    return mpData->maPersonaFooterBitmap;
+    setupPersonaHeaderFooter( PERSONA_FOOTER, mxData->maPersonaHeaderFooter, mxData->maPersonaFooterBitmap, mxData->maPersonaMenuBarTextColor );
+    return mxData->maPersonaFooterBitmap;
 }
 
 const boost::optional<Color>& StyleSettings::GetPersonaMenuBarTextColor() const
 {
     GetPersonaHeader();
-    return mpData->maPersonaMenuBarTextColor;
+    return mxData->maPersonaMenuBarTextColor;
 }
 
 void StyleSettings::SetStandardStyles()
 {
     CopyData();
-    mpData->SetStandardStyles();
+    mxData->SetStandardStyles();
 }
 
 Color StyleSettings::GetFaceGradientColor() const
@@ -2217,120 +2215,120 @@ Color StyleSettings::GetSeparatorColor() const
 void StyleSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mpData.unique() ) {
-        mpData = boost::make_shared<ImplStyleData>(*mpData);
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplStyleData>(*mxData);
     }
 }
 
 bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 {
-    if ( mpData == rSet.mpData )
+    if ( mxData == rSet.mxData )
         return true;
 
-    if (mpData->mIconTheme != rSet.mpData->mIconTheme) {
+    if (mxData->mIconTheme != rSet.mxData->mIconTheme) {
         return false;
     }
 
-    if (*mpData->mIconThemeSelector != *rSet.mpData->mIconThemeSelector) {
+    if (*mxData->mIconThemeSelector != *rSet.mxData->mIconThemeSelector) {
         return false;
     }
 
-    if ( (mpData->mnOptions                 == rSet.mpData->mnOptions)                  &&
-         (mpData->mbAutoMnemonic            == rSet.mpData->mbAutoMnemonic)             &&
-         (mpData->mnDragFullOptions         == rSet.mpData->mnDragFullOptions)          &&
-         (mpData->mnSelectionOptions        == rSet.mpData->mnSelectionOptions)         &&
-         (mpData->mnDisplayOptions          == rSet.mpData->mnDisplayOptions)           &&
-         (mpData->mnCursorSize              == rSet.mpData->mnCursorSize)               &&
-         (mpData->mnCursorBlinkTime         == rSet.mpData->mnCursorBlinkTime)          &&
-         (mpData->mnBorderSize              == rSet.mpData->mnBorderSize)               &&
-         (mpData->mnTitleHeight             == rSet.mpData->mnTitleHeight)              &&
-         (mpData->mnFloatTitleHeight        == rSet.mpData->mnFloatTitleHeight)         &&
-         (mpData->mnTearOffTitleHeight      == rSet.mpData->mnTearOffTitleHeight)       &&
-         (mpData->mnScrollBarSize           == rSet.mpData->mnScrollBarSize)            &&
-         (mpData->mnMinThumbSize            == rSet.mpData->mnMinThumbSize)             &&
-         (mpData->mnSplitSize               == rSet.mpData->mnSplitSize)                &&
-         (mpData->mnSpinSize                == rSet.mpData->mnSpinSize)                 &&
-         (mpData->mnAntialiasedMin          == rSet.mpData->mnAntialiasedMin)           &&
-         (mpData->mnScreenZoom              == rSet.mpData->mnScreenZoom)               &&
-         (mpData->mnScreenFontZoom          == rSet.mpData->mnScreenFontZoom)           &&
-         (mpData->mbHighContrast            == rSet.mpData->mbHighContrast)             &&
-         (mpData->mbUseSystemUIFonts        == rSet.mpData->mbUseSystemUIFonts)         &&
-         (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
-         (mpData->mnUseFlatMenus            == rSet.mpData->mnUseFlatMenus)             &&
-         (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
-         (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
-         (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
-         (mpData->maLightBorderColor        == rSet.mpData->maLightBorderColor)         &&
-         (mpData->maShadowColor             == rSet.mpData->maShadowColor)              &&
-         (mpData->maDarkShadowColor         == rSet.mpData->maDarkShadowColor)          &&
-         (mpData->maButtonTextColor         == rSet.mpData->maButtonTextColor)          &&
-         (mpData->maRadioCheckTextColor     == rSet.mpData->maRadioCheckTextColor)      &&
-         (mpData->maGroupTextColor          == rSet.mpData->maGroupTextColor)           &&
-         (mpData->maLabelTextColor          == rSet.mpData->maLabelTextColor)           &&
-         (mpData->maInfoTextColor           == rSet.mpData->maInfoTextColor)            &&
-         (mpData->maWindowColor             == rSet.mpData->maWindowColor)              &&
-         (mpData->maWindowTextColor         == rSet.mpData->maWindowTextColor)          &&
-         (mpData->maDialogColor             == rSet.mpData->maDialogColor)              &&
-         (mpData->maDialogTextColor         == rSet.mpData->maDialogTextColor)          &&
-         (mpData->maWorkspaceColor          == rSet.mpData->maWorkspaceColor)           &&
-         (mpData->maMonoColor               == rSet.mpData->maMonoColor)                &&
-         (mpData->maFieldColor              == rSet.mpData->maFieldColor)               &&
-         (mpData->maFieldTextColor          == rSet.mpData->maFieldTextColor)           &&
-         (mpData->maActiveColor             == rSet.mpData->maActiveColor)              &&
-         (mpData->maActiveTextColor         == rSet.mpData->maActiveTextColor)          &&
-         (mpData->maActiveBorderColor       == rSet.mpData->maActiveBorderColor)        &&
-         (mpData->maDeactiveColor           == rSet.mpData->maDeactiveColor)            &&
-         (mpData->maDeactiveTextColor       == rSet.mpData->maDeactiveTextColor)        &&
-         (mpData->maDeactiveBorderColor     == rSet.mpData->maDeactiveBorderColor)      &&
-         (mpData->maMenuColor               == rSet.mpData->maMenuColor)                &&
-         (mpData->maMenuBarColor            == rSet.mpData->maMenuBarColor)             &&
-         (mpData->maMenuBarRolloverColor    == rSet.mpData->maMenuBarRolloverColor)     &&
-         (mpData->maMenuBorderColor         == rSet.mpData->maMenuBorderColor)          &&
-         (mpData->maMenuTextColor           == rSet.mpData->maMenuTextColor)            &&
-         (mpData->maMenuBarTextColor        == rSet.mpData->maMenuBarTextColor)         &&
-         (mpData->maMenuBarRolloverTextColor == rSet.mpData->maMenuBarRolloverTextColor) &&
-         (mpData->maMenuHighlightColor      == rSet.mpData->maMenuHighlightColor)       &&
-         (mpData->maMenuHighlightTextColor  == rSet.mpData->maMenuHighlightTextColor)   &&
-         (mpData->maHighlightColor          == rSet.mpData->maHighlightColor)           &&
-         (mpData->maHighlightTextColor      == rSet.mpData->maHighlightTextColor)       &&
-         (mpData->maActiveTabColor          == rSet.mpData->maActiveTabColor)           &&
-         (mpData->maInactiveTabColor        == rSet.mpData->maInactiveTabColor)         &&
-         (mpData->maDisableColor            == rSet.mpData->maDisableColor)             &&
-         (mpData->maHelpColor               == rSet.mpData->maHelpColor)                &&
-         (mpData->maHelpTextColor           == rSet.mpData->maHelpTextColor)            &&
-         (mpData->maLinkColor               == rSet.mpData->maLinkColor)                &&
-         (mpData->maVisitedLinkColor        == rSet.mpData->maVisitedLinkColor)         &&
-         (mpData->maHighlightLinkColor      == rSet.mpData->maHighlightLinkColor)       &&
-         (mpData->maAppFont                 == rSet.mpData->maAppFont)                  &&
-         (mpData->maHelpFont                == rSet.mpData->maHelpFont)                 &&
-         (mpData->maTitleFont               == rSet.mpData->maTitleFont)                &&
-         (mpData->maFloatTitleFont          == rSet.mpData->maFloatTitleFont)           &&
-         (mpData->maMenuFont                == rSet.mpData->maMenuFont)                 &&
-         (mpData->maToolFont                == rSet.mpData->maToolFont)                 &&
-         (mpData->maGroupFont               == rSet.mpData->maGroupFont)                &&
-         (mpData->maLabelFont               == rSet.mpData->maLabelFont)                &&
-         (mpData->maInfoFont                == rSet.mpData->maInfoFont)                 &&
-         (mpData->maRadioCheckFont          == rSet.mpData->maRadioCheckFont)           &&
-         (mpData->maPushButtonFont          == rSet.mpData->maPushButtonFont)           &&
-         (mpData->maFieldFont               == rSet.mpData->maFieldFont)                &&
-         (mpData->maIconFont                == rSet.mpData->maIconFont)                 &&
-         (mpData->meUseImagesInMenus        == rSet.mpData->meUseImagesInMenus)         &&
-         (mpData->mbPreferredUseImagesInMenus == rSet.mpData->mbPreferredUseImagesInMenus) &&
-         (mpData->mbSkipDisabledInMenus     == rSet.mpData->mbSkipDisabledInMenus)      &&
-         (mpData->mbHideDisabledMenuItems   == rSet.mpData->mbHideDisabledMenuItems)    &&
-         (mpData->mbAcceleratorsInContextMenus  == rSet.mpData->mbAcceleratorsInContextMenus)&&
-         (mpData->mbPrimaryButtonWarpsSlider == rSet.mpData->mbPrimaryButtonWarpsSlider) &&
-         (mpData->maFontColor               == rSet.mpData->maFontColor)                &&
-         (mpData->mnEdgeBlending                    == rSet.mpData->mnEdgeBlending)                     &&
-         (mpData->maEdgeBlendingTopLeftColor        == rSet.mpData->maEdgeBlendingTopLeftColor)         &&
-         (mpData->maEdgeBlendingBottomRightColor    == rSet.mpData->maEdgeBlendingBottomRightColor)     &&
-         (mpData->mnListBoxMaximumLineCount         == rSet.mpData->mnListBoxMaximumLineCount)          &&
-         (mpData->mnColorValueSetColumnCount        == rSet.mpData->mnColorValueSetColumnCount)         &&
-         (mpData->mnColorValueSetMaximumRowCount    == rSet.mpData->mnColorValueSetMaximumRowCount)     &&
-         (mpData->maListBoxPreviewDefaultLogicSize  == rSet.mpData->maListBoxPreviewDefaultLogicSize)   &&
-         (mpData->maListBoxPreviewDefaultPixelSize  == rSet.mpData->maListBoxPreviewDefaultPixelSize)   &&
-         (mpData->mnListBoxPreviewDefaultLineWidth  == rSet.mpData->mnListBoxPreviewDefaultLineWidth)   &&
-         (mpData->mbPreviewUsesCheckeredBackground == rSet.mpData->mbPreviewUsesCheckeredBackground))
+    if ( (mxData->mnOptions                 == rSet.mxData->mnOptions)                  &&
+         (mxData->mbAutoMnemonic            == rSet.mxData->mbAutoMnemonic)             &&
+         (mxData->mnDragFullOptions         == rSet.mxData->mnDragFullOptions)          &&
+         (mxData->mnSelectionOptions        == rSet.mxData->mnSelectionOptions)         &&
+         (mxData->mnDisplayOptions          == rSet.mxData->mnDisplayOptions)           &&
+         (mxData->mnCursorSize              == rSet.mxData->mnCursorSize)               &&
+         (mxData->mnCursorBlinkTime         == rSet.mxData->mnCursorBlinkTime)          &&
+         (mxData->mnBorderSize              == rSet.mxData->mnBorderSize)               &&
+         (mxData->mnTitleHeight             == rSet.mxData->mnTitleHeight)              &&
+         (mxData->mnFloatTitleHeight        == rSet.mxData->mnFloatTitleHeight)         &&
+         (mxData->mnTearOffTitleHeight      == rSet.mxData->mnTearOffTitleHeight)       &&
+         (mxData->mnScrollBarSize           == rSet.mxData->mnScrollBarSize)            &&
+         (mxData->mnMinThumbSize            == rSet.mxData->mnMinThumbSize)             &&
+         (mxData->mnSplitSize               == rSet.mxData->mnSplitSize)                &&
+         (mxData->mnSpinSize                == rSet.mxData->mnSpinSize)                 &&
+         (mxData->mnAntialiasedMin          == rSet.mxData->mnAntialiasedMin)           &&
+         (mxData->mnScreenZoom              == rSet.mxData->mnScreenZoom)               &&
+         (mxData->mnScreenFontZoom          == rSet.mxData->mnScreenFontZoom)           &&
+         (mxData->mbHighContrast            == rSet.mxData->mbHighContrast)             &&
+         (mxData->mbUseSystemUIFonts        == rSet.mxData->mbUseSystemUIFonts)         &&
+         (mxData->mnUseFlatBorders          == rSet.mxData->mnUseFlatBorders)           &&
+         (mxData->mnUseFlatMenus            == rSet.mxData->mnUseFlatMenus)             &&
+         (mxData->maFaceColor               == rSet.mxData->maFaceColor)                &&
+         (mxData->maCheckedColor            == rSet.mxData->maCheckedColor)             &&
+         (mxData->maLightColor              == rSet.mxData->maLightColor)               &&
+         (mxData->maLightBorderColor        == rSet.mxData->maLightBorderColor)         &&
+         (mxData->maShadowColor             == rSet.mxData->maShadowColor)              &&
+         (mxData->maDarkShadowColor         == rSet.mxData->maDarkShadowColor)          &&
+         (mxData->maButtonTextColor         == rSet.mxData->maButtonTextColor)          &&
+         (mxData->maRadioCheckTextColor     == rSet.mxData->maRadioCheckTextColor)      &&
+         (mxData->maGroupTextColor          == rSet.mxData->maGroupTextColor)           &&
+         (mxData->maLabelTextColor          == rSet.mxData->maLabelTextColor)           &&
+         (mxData->maInfoTextColor           == rSet.mxData->maInfoTextColor)            &&
+         (mxData->maWindowColor             == rSet.mxData->maWindowColor)              &&
+         (mxData->maWindowTextColor         == rSet.mxData->maWindowTextColor)          &&
+         (mxData->maDialogColor             == rSet.mxData->maDialogColor)              &&
+         (mxData->maDialogTextColor         == rSet.mxData->maDialogTextColor)          &&
+         (mxData->maWorkspaceColor          == rSet.mxData->maWorkspaceColor)           &&
+         (mxData->maMonoColor               == rSet.mxData->maMonoColor)                &&
+         (mxData->maFieldColor              == rSet.mxData->maFieldColor)               &&
+         (mxData->maFieldTextColor          == rSet.mxData->maFieldTextColor)           &&
+         (mxData->maActiveColor             == rSet.mxData->maActiveColor)              &&
+         (mxData->maActiveTextColor         == rSet.mxData->maActiveTextColor)          &&
+         (mxData->maActiveBorderColor       == rSet.mxData->maActiveBorderColor)        &&
+         (mxData->maDeactiveColor           == rSet.mxData->maDeactiveColor)            &&
+         (mxData->maDeactiveTextColor       == rSet.mxData->maDeactiveTextColor)        &&
+         (mxData->maDeactiveBorderColor     == rSet.mxData->maDeactiveBorderColor)      &&
+         (mxData->maMenuColor               == rSet.mxData->maMenuColor)                &&
+         (mxData->maMenuBarColor            == rSet.mxData->maMenuBarColor)             &&
+         (mxData->maMenuBarRolloverColor    == rSet.mxData->maMenuBarRolloverColor)     &&
+         (mxData->maMenuBorderColor         == rSet.mxData->maMenuBorderColor)          &&
+         (mxData->maMenuTextColor           == rSet.mxData->maMenuTextColor)            &&
+         (mxData->maMenuBarTextColor        == rSet.mxData->maMenuBarTextColor)         &&
+         (mxData->maMenuBarRolloverTextColor == rSet.mxData->maMenuBarRolloverTextColor) &&
+         (mxData->maMenuHighlightColor      == rSet.mxData->maMenuHighlightColor)       &&
+         (mxData->maMenuHighlightTextColor  == rSet.mxData->maMenuHighlightTextColor)   &&
+         (mxData->maHighlightColor          == rSet.mxData->maHighlightColor)           &&
+         (mxData->maHighlightTextColor      == rSet.mxData->maHighlightTextColor)       &&
+         (mxData->maActiveTabColor          == rSet.mxData->maActiveTabColor)           &&
+         (mxData->maInactiveTabColor        == rSet.mxData->maInactiveTabColor)         &&
+         (mxData->maDisableColor            == rSet.mxData->maDisableColor)             &&
+         (mxData->maHelpColor               == rSet.mxData->maHelpColor)                &&
+         (mxData->maHelpTextColor           == rSet.mxData->maHelpTextColor)            &&
+         (mxData->maLinkColor               == rSet.mxData->maLinkColor)                &&
+         (mxData->maVisitedLinkColor        == rSet.mxData->maVisitedLinkColor)         &&
+         (mxData->maHighlightLinkColor      == rSet.mxData->maHighlightLinkColor)       &&
+         (mxData->maAppFont                 == rSet.mxData->maAppFont)                  &&
+         (mxData->maHelpFont                == rSet.mxData->maHelpFont)                 &&
+         (mxData->maTitleFont               == rSet.mxData->maTitleFont)                &&
+         (mxData->maFloatTitleFont          == rSet.mxData->maFloatTitleFont)           &&
+         (mxData->maMenuFont                == rSet.mxData->maMenuFont)                 &&
+         (mxData->maToolFont                == rSet.mxData->maToolFont)                 &&
+         (mxData->maGroupFont               == rSet.mxData->maGroupFont)                &&
+         (mxData->maLabelFont               == rSet.mxData->maLabelFont)                &&
+         (mxData->maInfoFont                == rSet.mxData->maInfoFont)                 &&
+         (mxData->maRadioCheckFont          == rSet.mxData->maRadioCheckFont)           &&
+         (mxData->maPushButtonFont          == rSet.mxData->maPushButtonFont)           &&
+         (mxData->maFieldFont               == rSet.mxData->maFieldFont)                &&
+         (mxData->maIconFont                == rSet.mxData->maIconFont)                 &&
+         (mxData->meUseImagesInMenus        == rSet.mxData->meUseImagesInMenus)         &&
+         (mxData->mbPreferredUseImagesInMenus == rSet.mxData->mbPreferredUseImagesInMenus) &&
+         (mxData->mbSkipDisabledInMenus     == rSet.mxData->mbSkipDisabledInMenus)      &&
+         (mxData->mbHideDisabledMenuItems   == rSet.mxData->mbHideDisabledMenuItems)    &&
+         (mxData->mbAcceleratorsInContextMenus  == rSet.mxData->mbAcceleratorsInContextMenus)&&
+         (mxData->mbPrimaryButtonWarpsSlider == rSet.mxData->mbPrimaryButtonWarpsSlider) &&
+         (mxData->maFontColor               == rSet.mxData->maFontColor)                &&
+         (mxData->mnEdgeBlending                    == rSet.mxData->mnEdgeBlending)                     &&
+         (mxData->maEdgeBlendingTopLeftColor        == rSet.mxData->maEdgeBlendingTopLeftColor)         &&
+         (mxData->maEdgeBlendingBottomRightColor    == rSet.mxData->maEdgeBlendingBottomRightColor)     &&
+         (mxData->mnListBoxMaximumLineCount         == rSet.mxData->mnListBoxMaximumLineCount)          &&
+         (mxData->mnColorValueSetColumnCount        == rSet.mxData->mnColorValueSetColumnCount)         &&
+         (mxData->mnColorValueSetMaximumRowCount    == rSet.mxData->mnColorValueSetMaximumRowCount)     &&
+         (mxData->maListBoxPreviewDefaultLogicSize  == rSet.mxData->maListBoxPreviewDefaultLogicSize)   &&
+         (mxData->maListBoxPreviewDefaultPixelSize  == rSet.mxData->maListBoxPreviewDefaultPixelSize)   &&
+         (mxData->mnListBoxPreviewDefaultLineWidth  == rSet.mxData->mnListBoxPreviewDefaultLineWidth)   &&
+         (mxData->mbPreviewUsesCheckeredBackground == rSet.mxData->mbPreviewUsesCheckeredBackground))
         return true;
     else
         return false;
@@ -2355,7 +2353,7 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 }
 
 MiscSettings::MiscSettings()
-: mpData(boost::make_shared<ImplMiscData>())
+    : mxData(std::make_shared<ImplMiscData>())
 {
 }
 
@@ -2366,19 +2364,19 @@ MiscSettings::~MiscSettings()
 void MiscSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mpData.unique() ) {
-        mpData = boost::make_shared<ImplMiscData>(*mpData);
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplMiscData>(*mxData);
     }
 }
 
 bool MiscSettings::operator ==( const MiscSettings& rSet ) const
 {
-    if ( mpData == rSet.mpData )
+    if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mpData->mnEnableATT           == rSet.mpData->mnEnableATT ) &&
-         (mpData->mnDisablePrinting     == rSet.mpData->mnDisablePrinting ) &&
-         (mpData->mbEnableLocalizedDecimalSep == rSet.mpData->mbEnableLocalizedDecimalSep ) )
+    if ( (mxData->mnEnableATT           == rSet.mxData->mnEnableATT ) &&
+         (mxData->mnDisablePrinting     == rSet.mxData->mnDisablePrinting ) &&
+         (mxData->mbEnableLocalizedDecimalSep == rSet.mxData->mbEnableLocalizedDecimalSep ) )
         return true;
     else
         return false;
@@ -2392,23 +2390,23 @@ MiscSettings::operator !=( const MiscSettings& rSet ) const
 
 bool MiscSettings::GetDisablePrinting() const
 {
-    if( mpData->mnDisablePrinting == TRISTATE_INDET )
+    if( mxData->mnDisablePrinting == TRISTATE_INDET )
     {
         OUString aEnable =
             vcl::SettingsConfigItem::get()->
             getValue( OUString( "DesktopManagement"  ),
                       OUString( "DisablePrinting"  ) );
-        mpData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
+        mxData->mnDisablePrinting = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 
-    return mpData->mnDisablePrinting != TRISTATE_FALSE;
+    return mxData->mnDisablePrinting != TRISTATE_FALSE;
 }
 
 bool MiscSettings::GetEnableATToolSupport() const
 {
 
 #ifdef WNT
-    if( mpData->mnEnableATT == TRISTATE_INDET )
+    if( mxData->mnEnableATT == TRISTATE_INDET )
     {
         // Check in the Windows registry if an AT tool wants Accessibility support to
         // be activated ..
@@ -2428,18 +2426,18 @@ bool MiscSettings::GetEnableATToolSupport() const
                 switch (dwType)
                 {
                     case REG_SZ:
-                        mpData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
+                        mxData->mnEnableATT = ((0 == stricmp((const char *) Data, "1")) || (0 == stricmp((const char *) Data, "true"))) ? TRISTATE_TRUE : TRISTATE_FALSE;
                         break;
                     case REG_DWORD:
                         switch (((DWORD *) Data)[0]) {
                         case 0:
-                            mpData->mnEnableATT = TRISTATE_FALSE;
+                            mxData->mnEnableATT = TRISTATE_FALSE;
                             break;
                         case 1:
-                            mpData->mnEnableATT = TRISTATE_TRUE;
+                            mxData->mnEnableATT = TRISTATE_TRUE;
                             break;
                         default:
-                            mpData->mnEnableATT = TRISTATE_INDET;
+                            mxData->mnEnableATT = TRISTATE_INDET;
                                 //TODO: or TRISTATE_TRUE?
                             break;
                         }
@@ -2455,7 +2453,7 @@ bool MiscSettings::GetEnableATToolSupport() const
     }
 #endif
 
-    if( mpData->mnEnableATT == TRISTATE_INDET )
+    if( mxData->mnEnableATT == TRISTATE_INDET )
     {
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
         if( !pEnv || !*pEnv )
@@ -2464,21 +2462,21 @@ bool MiscSettings::GetEnableATToolSupport() const
                 vcl::SettingsConfigItem::get()->
                 getValue( OUString( "Accessibility"  ),
                           OUString( "EnableATToolSupport"  ) );
-            mpData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
+            mxData->mnEnableATT = aEnable.equalsIgnoreAsciiCase("true") ? TRISTATE_TRUE : TRISTATE_FALSE;
         }
         else
         {
-            mpData->mnEnableATT = TRISTATE_TRUE;
+            mxData->mnEnableATT = TRISTATE_TRUE;
         }
     }
 
-    return mpData->mnEnableATT != TRISTATE_FALSE;
+    return mxData->mnEnableATT != TRISTATE_FALSE;
 }
 
 #ifdef WNT
 void MiscSettings::SetEnableATToolSupport( bool bEnable )
 {
-    if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mpData->mnEnableATT )
+    if ( (bEnable ? TRISTATE_TRUE : TRISTATE_FALSE) != mxData->mnEnableATT )
     {
         if( bEnable && !ImplInitAccessBridge() )
             return;
@@ -2523,7 +2521,7 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
             setValue( OUString( "Accessibility"  ),
                       OUString( "EnableATToolSupport"  ),
                       bEnable ? OUString("true") : OUString("false" ) );
-        mpData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
+        mxData->mnEnableATT = bEnable ? TRISTATE_TRUE : TRISTATE_FALSE;
     }
 }
 #endif
@@ -2531,17 +2529,17 @@ void MiscSettings::SetEnableATToolSupport( bool bEnable )
 void MiscSettings::SetEnableLocalizedDecimalSep( bool bEnable )
 {
     CopyData();
-    mpData->mbEnableLocalizedDecimalSep = bEnable;
+    mxData->mbEnableLocalizedDecimalSep = bEnable;
 }
 
 bool MiscSettings::GetEnableLocalizedDecimalSep() const
 {
-    return mpData->mbEnableLocalizedDecimalSep;
+    return mxData->mbEnableLocalizedDecimalSep;
 }
 
 bool MiscSettings::GetPseudoHeadless() const
 {
-    return mpData->mbPseudoHeadless;
+    return mxData->mbPseudoHeadless;
 }
 
 ImplHelpData::ImplHelpData()
@@ -2559,7 +2557,7 @@ ImplHelpData::ImplHelpData( const ImplHelpData& rData )
 }
 
 HelpSettings::HelpSettings()
-: mpData(boost::make_shared<ImplHelpData>())
+    : mxData(std::make_shared<ImplHelpData>())
 {
 }
 
@@ -2570,19 +2568,19 @@ HelpSettings::~HelpSettings()
 void HelpSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mpData.unique() ) {
-        mpData = boost::make_shared<ImplHelpData>(*mpData);
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplHelpData>(*mxData);
     }
 }
 
 bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 {
-    if ( mpData == rSet.mpData )
+    if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mpData->mnTipDelay        == rSet.mpData->mnTipDelay ) &&
-         (mpData->mnTipTimeout      == rSet.mpData->mnTipTimeout ) &&
-         (mpData->mnBalloonDelay    == rSet.mpData->mnBalloonDelay ) )
+    if ( (mxData->mnTipDelay        == rSet.mxData->mnTipDelay ) &&
+         (mxData->mnTipTimeout      == rSet.mxData->mnTipTimeout ) &&
+         (mxData->mnBalloonDelay    == rSet.mxData->mnBalloonDelay ) )
         return true;
     else
         return false;
@@ -2591,26 +2589,26 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 sal_uLong
 HelpSettings::GetTipDelay() const
 {
-    return mpData->mnTipDelay;
+    return mxData->mnTipDelay;
 }
 
 void
 HelpSettings::SetTipTimeout( sal_uLong nTipTimeout )
 {
     CopyData();
-    mpData->mnTipTimeout = nTipTimeout;
+    mxData->mnTipTimeout = nTipTimeout;
 }
 
 sal_uLong
 HelpSettings::GetTipTimeout() const
 {
-    return mpData->mnTipTimeout;
+    return mxData->mnTipTimeout;
 }
 
 sal_uLong
 HelpSettings::GetBalloonDelay() const
 {
-    return mpData->mnBalloonDelay;
+    return mxData->mnBalloonDelay;
 }
 
 bool
@@ -2654,20 +2652,18 @@ ImplAllSettingsData::~ImplAllSettingsData()
 {
     delete mpLocaleDataWrapper;
     delete mpUILocaleDataWrapper;
-    if ( mpI18nHelper )
-        delete mpI18nHelper;
-    if ( mpUII18nHelper )
-        delete mpUII18nHelper;
+    delete mpI18nHelper;
+    delete mpUII18nHelper;
 }
 
 AllSettings::AllSettings()
-: mpData(boost::make_shared<ImplAllSettingsData>())
+    : mxData(std::make_shared<ImplAllSettingsData>())
 {
 }
 
 AllSettings::AllSettings( const AllSettings& rSet )
 {
-    mpData = rSet.mpData;
+    mxData = rSet.mxData;
 }
 
 AllSettings::~AllSettings()
@@ -2677,8 +2673,8 @@ AllSettings::~AllSettings()
 void AllSettings::CopyData()
 {
     // copy if other references exist
-    if ( ! mpData.unique() ) {
-        mpData = boost::make_shared<ImplAllSettingsData>(*mpData);
+    if ( ! mxData.unique() ) {
+        mxData = std::make_shared<ImplAllSettingsData>(*mxData);
     }
 
 }
@@ -2690,29 +2686,29 @@ AllSettingsFlags AllSettings::Update( AllSettingsFlags nFlags, const AllSettings
 
     if ( nFlags & AllSettingsFlags::STYLE )
     {
-        if ( mpData->maStyleSettings != rSet.mpData->maStyleSettings )
+        if ( mxData->maStyleSettings != rSet.mxData->maStyleSettings )
         {
             CopyData();
-            mpData->maStyleSettings = rSet.mpData->maStyleSettings;
+            mxData->maStyleSettings = rSet.mxData->maStyleSettings;
             nChangeFlags |= AllSettingsFlags::STYLE;
         }
     }
 
     if ( nFlags & AllSettingsFlags::MISC )
     {
-        if ( mpData->maMiscSettings != rSet.mpData->maMiscSettings )
+        if ( mxData->maMiscSettings != rSet.mxData->maMiscSettings )
         {
             CopyData();
-            mpData->maMiscSettings = rSet.mpData->maMiscSettings;
+            mxData->maMiscSettings = rSet.mxData->maMiscSettings;
             nChangeFlags |= AllSettingsFlags::MISC;
         }
     }
 
     if ( nFlags & AllSettingsFlags::LOCALE )
     {
-        if ( mpData->maLocale != rSet.mpData->maLocale )
+        if ( mxData->maLocale != rSet.mxData->maLocale )
         {
-            SetLanguageTag( rSet.mpData->maLocale );
+            SetLanguageTag( rSet.mxData->maLocale );
             nChangeFlags |= AllSettingsFlags::LOCALE;
         }
     }
@@ -2725,13 +2721,13 @@ AllSettingsFlags AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 
     AllSettingsFlags nChangeFlags = AllSettingsFlags::NONE;
 
-    if ( mpData->maStyleSettings != rSet.mpData->maStyleSettings )
+    if ( mxData->maStyleSettings != rSet.mxData->maStyleSettings )
         nChangeFlags |= AllSettingsFlags::STYLE;
 
-    if ( mpData->maMiscSettings != rSet.mpData->maMiscSettings )
+    if ( mxData->maMiscSettings != rSet.mxData->maMiscSettings )
         nChangeFlags |= AllSettingsFlags::MISC;
 
-    if ( mpData->maLocale != rSet.mpData->maLocale )
+    if ( mxData->maLocale != rSet.mxData->maLocale )
         nChangeFlags |= AllSettingsFlags::LOCALE;
 
     return nChangeFlags;
@@ -2739,40 +2735,39 @@ AllSettingsFlags AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 
 bool AllSettings::operator ==( const AllSettings& rSet ) const
 {
-
-    if ( mpData == rSet.mpData )
+    if ( mxData == rSet.mxData )
         return true;
 
-    if ( (mpData->maMouseSettings           == rSet.mpData->maMouseSettings)        &&
-         (mpData->maStyleSettings           == rSet.mpData->maStyleSettings)        &&
-         (mpData->maMiscSettings            == rSet.mpData->maMiscSettings)         &&
-         (mpData->maHelpSettings            == rSet.mpData->maHelpSettings)         &&
-         (mpData->maLocale                  == rSet.mpData->maLocale)               &&
-         (mpData->mnWindowUpdate            == rSet.mpData->mnWindowUpdate) )
+    if ( (mxData->maMouseSettings           == rSet.mxData->maMouseSettings)        &&
+         (mxData->maStyleSettings           == rSet.mxData->maStyleSettings)        &&
+         (mxData->maMiscSettings            == rSet.mxData->maMiscSettings)         &&
+         (mxData->maHelpSettings            == rSet.mxData->maHelpSettings)         &&
+         (mxData->maLocale                  == rSet.mxData->maLocale)               &&
+         (mxData->mnWindowUpdate            == rSet.mxData->mnWindowUpdate) )
     {
         return true;
     }
-    else
-        return false;
+
+    return false;
 }
 
 void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
-    if (mpData->maLocale != rLanguageTag)
+    if (mxData->maLocale != rLanguageTag)
     {
         CopyData();
 
-        mpData->maLocale = rLanguageTag;
+        mxData->maLocale = rLanguageTag;
 
-        if ( mpData->mpLocaleDataWrapper )
+        if ( mxData->mpLocaleDataWrapper )
         {
-            delete mpData->mpLocaleDataWrapper;
-            mpData->mpLocaleDataWrapper = NULL;
+            delete mxData->mpLocaleDataWrapper;
+            mxData->mpLocaleDataWrapper = NULL;
         }
-        if ( mpData->mpI18nHelper )
+        if ( mxData->mpI18nHelper )
         {
-            delete mpData->mpI18nHelper;
-            mpData->mpI18nHelper = NULL;
+            delete mxData->mpI18nHelper;
+            mxData->mpI18nHelper = NULL;
         }
     }
 }
@@ -2844,53 +2839,53 @@ bool AllSettings::GetMathLayoutRTL() const
 const LanguageTag& AllSettings::GetLanguageTag() const
 {
     // SYSTEM locale means: use settings from SvtSysLocale that is resolved
-    if ( mpData->maLocale.isSystemLocale() )
-        mpData->maLocale = mpData->maSysLocale.GetLanguageTag();
+    if ( mxData->maLocale.isSystemLocale() )
+        mxData->maLocale = mxData->maSysLocale.GetLanguageTag();
 
-    return mpData->maLocale;
+    return mxData->maLocale;
 }
 
 const LanguageTag& AllSettings::GetUILanguageTag() const
 {
     // the UILocale is never changed
-    if ( mpData->maUILocale.isSystemLocale() )
-        mpData->maUILocale = mpData->maSysLocale.GetUILanguageTag();
+    if ( mxData->maUILocale.isSystemLocale() )
+        mxData->maUILocale = mxData->maSysLocale.GetUILanguageTag();
 
-    return mpData->maUILocale;
+    return mxData->maUILocale;
 }
 
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
-    if ( !mpData->mpLocaleDataWrapper )
-        ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper(
+    if ( !mxData->mpLocaleDataWrapper )
+        ((AllSettings*)this)->mxData->mpLocaleDataWrapper = new LocaleDataWrapper(
             comphelper::getProcessComponentContext(), GetLanguageTag() );
-    return *mpData->mpLocaleDataWrapper;
+    return *mxData->mpLocaleDataWrapper;
 }
 
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
-    if ( !mpData->mpUILocaleDataWrapper )
-        ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper(
+    if ( !mxData->mpUILocaleDataWrapper )
+        ((AllSettings*)this)->mxData->mpUILocaleDataWrapper = new LocaleDataWrapper(
             comphelper::getProcessComponentContext(), GetUILanguageTag() );
-    return *mpData->mpUILocaleDataWrapper;
+    return *mxData->mpUILocaleDataWrapper;
 }
 
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
-    if ( !mpData->mpI18nHelper ) {
-        ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper(
+    if ( !mxData->mpI18nHelper ) {
+        ((AllSettings*)this)->mxData->mpI18nHelper = new vcl::I18nHelper(
             comphelper::getProcessComponentContext(), GetLanguageTag() );
     }
-    return *mpData->mpI18nHelper;
+    return *mxData->mpI18nHelper;
 }
 
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {
-    if ( !mpData->mpUII18nHelper ) {
-        ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper(
+    if ( !mxData->mpUII18nHelper ) {
+        ((AllSettings*)this)->mxData->mpUII18nHelper = new vcl::I18nHelper(
             comphelper::getProcessComponentContext(), GetUILanguageTag() );
     }
-    return *mpData->mpUII18nHelper;
+    return *mxData->mpUII18nHelper;
 }
 
 void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
@@ -2899,7 +2894,7 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
     if ( nHint & SYSLOCALEOPTIONS_HINT_DECSEP )
     {
         MiscSettings aMiscSettings = aAllSettings.GetMiscSettings();
-        bool bIsDecSepAsLocale = aAllSettings.mpData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
+        bool bIsDecSepAsLocale = aAllSettings.mxData->maSysLocale.GetOptions().IsDecimalSeparatorAsLocale();
         if ( aMiscSettings.GetEnableLocalizedDecimalSep() != bIsDecSepAsLocale )
         {
             aMiscSettings.SetEnableLocalizedDecimalSep( bIsDecSepAsLocale );
@@ -2908,7 +2903,7 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
     }
 
     if ( (nHint & SYSLOCALEOPTIONS_HINT_LOCALE) )
-        aAllSettings.SetLanguageTag( aAllSettings.mpData->maSysLocale.GetOptions().GetLanguageTag() );
+        aAllSettings.SetLanguageTag( aAllSettings.mxData->maSysLocale.GetOptions().GetLanguageTag() );
 
     Application::SetSettings( aAllSettings );
 }
@@ -2916,27 +2911,27 @@ void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 const StyleSettings&
 AllSettings::GetStyleSettings() const
 {
-    return mpData->maStyleSettings;
+    return mxData->maStyleSettings;
 }
 
 sal_uLong
 StyleSettings::GetOptions() const
 {
-    return mpData->mnOptions;
+    return mxData->mnOptions;
 }
 
 std::vector<vcl::IconThemeInfo>
 StyleSettings::GetInstalledIconThemes() const
 {
-    return mpData->mIconThemeScanner->GetFoundIconThemes();
+    return mxData->mIconThemeScanner->GetFoundIconThemes();
 }
 
 /*static*/ OUString
 StyleSettings::GetAutomaticallyChosenIconTheme() const
 {
     OUString desktopEnvironment = Application::GetDesktopEnvironment();
-    OUString themeName = mpData->mIconThemeSelector->SelectIconThemeForDesktopEnvironment(
-            mpData->mIconThemeScanner->GetFoundIconThemes(),
+    OUString themeName = mxData->mIconThemeSelector->SelectIconThemeForDesktopEnvironment(
+            mxData->mIconThemeScanner->GetFoundIconThemes(),
             desktopEnvironment
             );
     return themeName;
@@ -2946,15 +2941,15 @@ void
 StyleSettings::SetIconTheme(const OUString& theme)
 {
     CopyData();
-    mpData->mIconTheme = theme;
+    mxData->mIconTheme = theme;
 }
 
 OUString
 StyleSettings::DetermineIconTheme() const
 {
-    OUString r = mpData->mIconThemeSelector->SelectIconTheme(
-                        mpData->mIconThemeScanner->GetFoundIconThemes(),
-                        mpData->mIconTheme
+    OUString r = mxData->mIconThemeSelector->SelectIconTheme(
+                        mxData->mIconThemeScanner->GetFoundIconThemes(),
+                        mxData->mIconTheme
                         );
     return r;
 }
@@ -2962,77 +2957,77 @@ StyleSettings::DetermineIconTheme() const
 void
 StyleSettings::SetHighContrastMode(bool bHighContrast )
 {
-    if (mpData->mbHighContrast == bHighContrast) {
+    if (mxData->mbHighContrast == bHighContrast) {
         return;
     }
 
     CopyData();
-    mpData->mbHighContrast = bHighContrast;
-    mpData->mIconThemeSelector->SetUseHighContrastTheme(bHighContrast);
+    mxData->mbHighContrast = bHighContrast;
+    mxData->mIconThemeSelector->SetUseHighContrastTheme(bHighContrast);
 }
 
 bool
 StyleSettings::GetHighContrastMode() const
 {
-    return mpData->mbHighContrast;
+    return mxData->mbHighContrast;
 }
 
 void
 StyleSettings::SetPreferredIconTheme(const OUString& theme)
 {
-    mpData->mIconThemeSelector->SetPreferredIconTheme(theme);
+    mxData->mIconThemeSelector->SetPreferredIconTheme(theme);
 }
 
 void
 AllSettings::SetMouseSettings( const MouseSettings& rSet )
 {
     CopyData();
-    mpData->maMouseSettings = rSet;
+    mxData->maMouseSettings = rSet;
 }
 
 const MouseSettings&
 AllSettings::GetMouseSettings() const
 {
-    return mpData->maMouseSettings;
+    return mxData->maMouseSettings;
 }
 
 void
 AllSettings::SetStyleSettings( const StyleSettings& rSet )
 {
     CopyData();
-    mpData->maStyleSettings = rSet;
+    mxData->maStyleSettings = rSet;
 }
 
 void
 AllSettings::SetMiscSettings( const MiscSettings& rSet )
 {
     CopyData();
-    mpData->maMiscSettings = rSet;
+    mxData->maMiscSettings = rSet;
 }
 
 const MiscSettings&
 AllSettings::GetMiscSettings() const
 {
-    return mpData->maMiscSettings;
+    return mxData->maMiscSettings;
 }
 
 void
 AllSettings::SetHelpSettings( const HelpSettings& rSet )
 {
     CopyData();
-    mpData->maHelpSettings = rSet;
+    mxData->maHelpSettings = rSet;
 }
 
 const HelpSettings&
 AllSettings::GetHelpSettings() const
 {
-    return mpData->maHelpSettings;
+    return mxData->maHelpSettings;
 }
 
 AllSettingsFlags
 AllSettings::GetWindowUpdate() const
 {
-    return mpData->mnWindowUpdate;
+    return mxData->mnWindowUpdate;
 }
 
 bool
@@ -3044,7 +3039,7 @@ AllSettings::operator !=( const AllSettings& rSet ) const
 SvtSysLocale&
 AllSettings::GetSysLocale()
 {
-    return mpData->maSysLocale;
+    return mxData->maSysLocale;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

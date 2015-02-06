@@ -69,7 +69,7 @@ void SvxBasicIDEOptionsPage::LoadConfig()
 bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 {
     bool bModified = false;
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
     if( pAutocloseProcChk->IsValueChangedFromSaved() )
     {
@@ -80,7 +80,7 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 
     if( pCodeCompleteChk->IsValueChangedFromSaved() )
     {
-        //boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+        //std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
         officecfg::Office::BasicIDE::Autocomplete::CodeComplete::set( pCodeCompleteChk->IsChecked(), batch );
         CodeCompleteOptions::SetCodeCompleteOn( pCodeCompleteChk->IsChecked() );
         bModified = true;

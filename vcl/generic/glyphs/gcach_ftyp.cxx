@@ -93,7 +93,7 @@ static FT_Library aLibFT = 0;
 // enable linking with old FT versions
 static int nFTVERSION = 0;
 
-typedef std::unordered_map<const char*, boost::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
+typedef std::unordered_map<const char*, std::shared_ptr<FtFontFile>, rtl::CStringHash, rtl::CStringEqual> FontFileList;
 
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
@@ -558,14 +558,14 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-void ServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions)
+void ServerFont::SetFontOptions(std::shared_ptr<ImplFontOptions> xFontOptions)
 {
-    mpFontOptions = pFontOptions;
+    mxFontOptions = xFontOptions;
 
-    if (!mpFontOptions)
+    if (!mxFontOptions)
         return;
 
-    FontAutoHint eHint = mpFontOptions->GetUseAutoHint();
+    FontAutoHint eHint = mxFontOptions->GetUseAutoHint();
     if( eHint == AUTOHINT_DONTKNOW )
         eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
 
@@ -576,11 +576,11 @@ void ServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-    if( mpFontOptions->DontUseAntiAlias() )
+    if (mxFontOptions->DontUseAntiAlias())
       mnPrioAntiAlias = 0;
-    if( mpFontOptions->DontUseEmbeddedBitmaps() )
+    if (mxFontOptions->DontUseEmbeddedBitmaps())
       mnPrioEmbedded = 0;
-    if( mpFontOptions->DontUseHinting() )
+    if (mxFontOptions->DontUseHinting())
       mnPrioAutoHint = 0;
 
     if( mnPrioAutoHint <= 0 )
@@ -590,7 +590,7 @@ void ServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING) )
     {
        mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
-       switch( mpFontOptions->GetHintStyle() )
+       switch (mxFontOptions->GetHintStyle())
        {
            case HINT_NONE:
                 mnLoadFlags |= FT_LOAD_NO_HINTING;
@@ -611,9 +611,9 @@ void ServerFont::SetFontOptions( boost::shared_ptr<ImplFontOptions> pFontOptions
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
-boost::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
+std::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
 {
-    return mpFontOptions;
+    return mxFontOptions;
 }
 
 const OString& ServerFont::GetFontFileName() const

@@ -291,7 +291,7 @@ bool shouldLaunchQuickstart()
 
 void SetRestartState() {
     try {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Setup::Office::OfficeRestartInProgress::set(true, batch);
         batch->commit();
@@ -304,7 +304,7 @@ void DoRestartActionsIfNecessary(bool quickstart) {
     if (quickstart) {
         try {
             if (officecfg::Setup::Office::OfficeRestartInProgress::get()) {
-                boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+                std::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
                 officecfg::Setup::Office::OfficeRestartInProgress::set(
                     false, batch);
@@ -2848,7 +2848,7 @@ void Desktop::CheckFirstRun( )
         }
 #endif
 
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Misc::FirstRun::set(false, batch);
         batch->commit();

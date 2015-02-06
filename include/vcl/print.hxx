@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <set>
 #include <unordered_map>
 
@@ -238,7 +238,7 @@ private:
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup&, bool bMatchNearest );
 
-    SAL_DLLPRIVATE bool StartJob( const OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
+    SAL_DLLPRIVATE bool StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController>& );
 
     static SAL_DLLPRIVATE sal_uLong ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
@@ -386,7 +386,7 @@ public:
         starts a print job asynchronously (that is will return
 
     */
-    static void                 PrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
+    static void                 PrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
                                           const JobSetup& i_rInitSetup );
 
     virtual bool                HasMirroredGraphics() const SAL_OVERRIDE;
@@ -407,7 +407,7 @@ public:
 
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
-    static void SAL_DLLPRIVATE  ImplPrintJob( const boost::shared_ptr<vcl::PrinterController>& i_pController,
+    static void SAL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
                                               const JobSetup& i_rInitSetup );
 };
 
@@ -419,7 +419,7 @@ class VCL_DLLPUBLIC PrinterController
 {
     ImplPrinterControllerData* mpImplData;
 protected:
-    PrinterController( const boost::shared_ptr<Printer>& );
+    PrinterController( const std::shared_ptr<Printer>& );
 public:
     enum NupOrderType
     { LRTB, TBLR, TBRL, RLTB };
@@ -462,7 +462,7 @@ public:
 
     virtual ~PrinterController();
 
-    const boost::shared_ptr<Printer>& getPrinter() const;
+    const std::shared_ptr<Printer>& getPrinter() const;
     /* for implementations: get current job properties as changed by e.g. print dialog
        this gets the current set of properties initially told to Printer::PrintJob
 
@@ -543,7 +543,7 @@ public:
     SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     VCL_PLUGIN_PUBLIC void printFilteredPage( int i_nPage );
-    SAL_DLLPRIVATE void setPrinter( const boost::shared_ptr<Printer>& );
+    SAL_DLLPRIVATE void setPrinter( const std::shared_ptr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
     VCL_PLUGIN_PUBLIC void createProgressDialog();
     VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;

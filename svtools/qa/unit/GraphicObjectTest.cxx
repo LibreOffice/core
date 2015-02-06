@@ -146,7 +146,7 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
 {
     // Set cache size to a very small value to check what happens
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > aBatch(comphelper::ConfigurationChanges::create());
+        std::shared_ptr< comphelper::ConfigurationChanges > aBatch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Cache::GraphicManager::TotalCacheSize::set(sal_Int32(1), aBatch);
         aBatch->commit();
     }

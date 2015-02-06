@@ -119,7 +119,7 @@ IMPL_LINK_NOARG(CertPathDialog, OKHdl_Impl)
 {
     try
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::Security::Scripting::CertDir::set(
             getDirectory(), batch);

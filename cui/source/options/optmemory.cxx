@@ -147,20 +147,16 @@ OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 {
 }
 
-
-
 SfxTabPage* OfaMemoryOptionsPage::Create( vcl::Window* pParent, const SfxItemSet* rAttrSet )
 {
     return new OfaMemoryOptionsPage( pParent, *rAttrSet );
 }
 
-
-
 bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
 
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
 
     if ( m_pUndoEdit->IsValueChangedFromSaved() )

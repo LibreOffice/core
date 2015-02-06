@@ -430,7 +430,7 @@ SvtFileDialog::~SvtFileDialog()
             }
         }
 
-        boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
         officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch, m_context);
         officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch, m_context);
         batch->commit();

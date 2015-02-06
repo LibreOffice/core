@@ -170,7 +170,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
     if(pConfig->IsModified())
         pConfig->Commit();
     pConfig->Apply();
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
     if(m_pFontHeightLB->IsValueChangedFromSaved())
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::set(

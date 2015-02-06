@@ -29,7 +29,7 @@ namespace vcl
     {
         ImplOldStyleAdaptorData*    mpData;
     public:
-        OldStylePrintAdaptor( const boost::shared_ptr< Printer >& );
+        OldStylePrintAdaptor(const std::shared_ptr<Printer>&);
         virtual ~OldStylePrintAdaptor();
 
         void StartPage();

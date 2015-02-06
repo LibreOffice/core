@@ -143,7 +143,7 @@ OpenGLCfg::~OpenGLCfg()
 {
     if (mbModified)
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::VCL::UseOpenGL::set(mbUseOpenGL, batch);
         officecfg::Office::Common::VCL::ForceOpenGL::set(mbForceOpenGL, batch);
         batch->commit();
@@ -318,7 +318,7 @@ SfxTabPage* OfaMiscTabPage::Create( vcl::Window* pParent, const SfxItemSet* rAtt
 bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     SvtHelpOptions aHelpOptions;
     if ( m_pToolTipsCB->IsValueChangedFromSaved() )

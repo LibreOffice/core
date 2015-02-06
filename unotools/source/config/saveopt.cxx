@@ -736,7 +736,7 @@ void SvtSaveOptions_Impl::Commit()
     aValues.realloc(nRealCount);
     PutProperties( aNames, aValues );
 
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
     comphelper::ConfigurationChanges::create());
     officecfg::Office::Recovery::AutoSave::TimeIntervall::set(nAutoSaveTime, batch);
     officecfg::Office::Recovery::AutoSave::Enabled::set(bAutoSave, batch);

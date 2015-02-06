@@ -201,7 +201,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 
     if( m_pWordCountED->IsValueChangedFromSaved() )
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::AdditionalSeparators::set(m_pWordCountED->GetText(), batch);
         batch->commit();
@@ -210,7 +210,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_pShowStandardizedPageCount->GetState() != m_pShowStandardizedPageCount->GetSavedValue())
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::ShowStandardizedPageCount::set(
           m_pShowStandardizedPageCount->IsChecked(),
@@ -221,7 +221,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 
     if (m_pStandardizedPageSizeNF->GetText() != m_pStandardizedPageSizeNF->GetSavedValue())
     {
-        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+        std::shared_ptr< comphelper::ConfigurationChanges > batch(
             comphelper::ConfigurationChanges::create());
         officecfg::Office::Writer::WordCount::StandardizedPageSize::set(
           m_pStandardizedPageSizeNF->GetValue(),

@@ -21,7 +21,7 @@
 #include <svtools/inettbc.hxx>
 #include <svtools/place.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 class SVT_DLLPUBLIC PlaceEditDialog : public ModalDialog
@@ -30,7 +30,7 @@ private :
 
     Edit*      m_pEDServerName;
     ListBox*   m_pLBServerType;
-    boost::shared_ptr< DetailsContainer > m_pCurrentDetails;
+    std::shared_ptr< DetailsContainer > m_xCurrentDetails;
 
     Edit*         m_pEDUsername;
     OKButton*     m_pBTOk;
@@ -44,16 +44,16 @@ private :
         the m_aDetailsContainer[0] will be shown for the type corresponding to entry 0
         in the listbox.
       */
-    std::vector< boost::shared_ptr< DetailsContainer > > m_aDetailsContainers;
+    std::vector< std::shared_ptr< DetailsContainer > > m_aDetailsContainers;
 
 public :
 
      PlaceEditDialog( vcl::Window* pParent);
-     PlaceEditDialog(vcl::Window* pParent, const boost::shared_ptr<Place> &pPlace );
+     PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place> &rPlace );
      virtual ~PlaceEditDialog();
 
      // Returns a place instance with given information
-     boost::shared_ptr<Place> GetPlace();
+     std::shared_ptr<Place> GetPlace();
 
     OUString GetServerName() { return m_pEDServerName->GetText(); }
      OUString GetServerUrl();

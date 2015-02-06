@@ -39,7 +39,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class VirtualDevice;
 struct ImplDelData;
@@ -1396,7 +1396,7 @@ public:
      * Adds this widget to the xGroup VclSizeGroup
      *
      */
-    void add_to_size_group(boost::shared_ptr< VclSizeGroup > xGroup);
+    void add_to_size_group(std::shared_ptr<VclSizeGroup> xGroup);
     void remove_from_all_size_groups();
 
     /*

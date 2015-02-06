@@ -121,7 +121,7 @@ SfxTabPage* SvxOpenCLTabPage::Create( vcl::Window* pParent, const SfxItemSet* rA
 bool SvxOpenCLTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     if (mpUseOpenCL->IsValueChangedFromSaved())
         maConfig.mbUseOpenCL = mpUseOpenCL->IsChecked();

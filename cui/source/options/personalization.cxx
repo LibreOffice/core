@@ -319,7 +319,7 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
     }
 
     // write
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
+    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
     if( aPersona == "no" )
         m_aPersonaSettings.clear();
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );

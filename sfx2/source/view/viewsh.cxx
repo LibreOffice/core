@@ -1640,22 +1640,18 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
     }
 }
 
-
-
 bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
-    if (!pImp->m_pAccExec.get())
+    if (!pImp->m_xAccExec.get())
     {
-        pImp->m_pAccExec.reset(
+        pImp->m_xAccExec.reset(
             ::svt::AcceleratorExecute::createAcceleratorHelper() );
-        pImp->m_pAccExec->init(::comphelper::getProcessComponentContext(),
+        pImp->m_xAccExec->init(::comphelper::getProcessComponentContext(),
             pFrame->GetFrame().GetFrameInterface());
     }
 
-    return pImp->m_pAccExec->execute(aKey.GetKeyCode());
+    return pImp->m_xAccExec->execute(aKey.GetKeyCode());
 }
-
-
 
 bool SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 

@@ -611,9 +611,9 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
 
         if (dlg.Execute())
         {
-            boost::shared_ptr<Place> pPlace = dlg.GetPlace();
+            std::shared_ptr<Place> xPlace = dlg.GetPlace();
 
-            if (insertRepository(pPlace->GetName(),pPlace->GetUrl()))
+            if (insertRepository(xPlace->GetName(), xPlace->GetUrl()))
             {
                 // update repository list menu.
                 createRepositoryMenu();
@@ -621,7 +621,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
             else
             {
                 OUString aMsg(SfxResId(STR_MSG_ERROR_REPOSITORY_NAME).toString());
-                aMsg = aMsg.replaceFirst("$1",pPlace->GetName());
+                aMsg = aMsg.replaceFirst("$1", xPlace->GetName());
                 MessageDialog(this, aMsg).Execute();
             }
         }
@@ -1659,7 +1659,7 @@ void SfxTemplateManagerDlg::syncRepositories() const
     if (!mbIsSynced)
     {
         uno::Reference < uno::XComponentContext > pContext(comphelper::getProcessComponentContext());
-        boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(pContext));
 
         size_t nSize = maRepositories.size();
         uno::Sequence<OUString> aUrls(nSize);

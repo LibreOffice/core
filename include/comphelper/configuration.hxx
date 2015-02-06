@@ -14,12 +14,12 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/types.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace configuration { class XReadWriteAccess; }
@@ -45,7 +45,7 @@ namespace detail { class ConfigurationWrapper; }
 /// directly.
 class COMPHELPER_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
 public:
-    static boost::shared_ptr< ConfigurationChanges > create(
+    static std::shared_ptr<ConfigurationChanges> create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext());
 
@@ -94,7 +94,7 @@ public:
     com::sun::star::uno::Any getPropertyValue(OUString const & path) const;
 
     void setPropertyValue(
-        boost::shared_ptr< ConfigurationChanges > const & batch,
+        std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path, com::sun::star::uno::Any const & value)
         const;
 
@@ -102,7 +102,7 @@ public:
         OUString const & path) const;
 
     void setLocalizedPropertyValue(
-        boost::shared_ptr< ConfigurationChanges > const & batch,
+        std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path, com::sun::star::uno::Any const & value)
         const;
 
@@ -113,7 +113,7 @@ public:
     com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
     getGroupReadWrite(
-        boost::shared_ptr< ConfigurationChanges > const & batch,
+        std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path) const;
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
@@ -121,10 +121,10 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
     getSetReadWrite(
-        boost::shared_ptr< ConfigurationChanges > const & batch,
+        std::shared_ptr< ConfigurationChanges > const & batch,
         OUString const & path) const;
 
-    boost::shared_ptr< ConfigurationChanges > createChanges() const;
+    std::shared_ptr< ConfigurationChanges > createChanges() const;
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -199,7 +199,7 @@ template< typename T, typename U > struct ConfigurationProperty:
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
-        boost::shared_ptr< ConfigurationChanges > const & batch,
+        std::shared_ptr< ConfigurationChanges > const & batch,
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
@@ -245,7 +245,7 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     /// For nillable properties, U is of type boost::optional<U'>.
     static void set(
         U const & value,
-        boost::shared_ptr< ConfigurationChanges > const & batch,
+        std::shared_ptr< ConfigurationChanges > const & batch,
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
@@ -278,7 +278,7 @@ template< typename T > struct ConfigurationGroup: private boost::noncopyable {
     /// modifications via the given changes batch.
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameReplace >
-    get(boost::shared_ptr< ConfigurationChanges > const & batch,
+    get(std::shared_ptr< ConfigurationChanges > const & batch,
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {
@@ -311,7 +311,7 @@ template< typename T > struct ConfigurationSet: private boost::noncopyable {
     /// modifications via the given changes batch.
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >
-    get(boost::shared_ptr< ConfigurationChanges > const & batch,
+    get(std::shared_ptr< ConfigurationChanges > const & batch,
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context = comphelper::getProcessComponentContext())
     {

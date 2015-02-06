@@ -504,7 +504,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     SvtHelpOptions aHelpOptions;
     SvtSecurityOptions aSecurityOptions;
     SvtMiscOptions aMiscOptions;
-    boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+    std::shared_ptr< comphelper::ConfigurationChanges > batch(
         comphelper::ConfigurationChanges::create());
     if ( SfxItemState::SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), true, &pItem) )
     {

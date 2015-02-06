@@ -36,7 +36,7 @@
 #include "vcl/tabpage.hxx"
 #include "vcl/virdev.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <map>
 
 namespace vcl
@@ -186,7 +186,7 @@ namespace vcl
 
         VclBuilder*                             mpCustomOptionsUIBuilder;
 
-        boost::shared_ptr< PrinterController >  maPController;
+        std::shared_ptr<PrinterController>      maPController;
         TabControl*                             mpTabCtrl;
         NUpTabPage                              maNUpPage;
         JobTabPage                              maJobPage;
@@ -258,7 +258,7 @@ namespace vcl
         DECL_LINK( UIOption_ModifyHdl, Edit* );
 
     public:
-        PrintDialog( vcl::Window*, const boost::shared_ptr< PrinterController >& );
+        PrintDialog( vcl::Window*, const std::shared_ptr< PrinterController >& );
         virtual ~PrintDialog();
 
         bool isPrintToFile();

@@ -1070,14 +1070,14 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
     boost::shared_ptr<vcl::PDFWriter> pWriter;
     std::vector< PDFPrintFile > aPDFFiles;
-    boost::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
+    std::shared_ptr<Printer> xPrinter(i_rController.getPrinter());
     int nAllPages = i_rController.getFilteredPageCount();
     i_rController.createProgressDialog();
     bool bAborted = false;
     PDFNewJobParameters aLastParm;
 
-    aContext.DPIx = pPrinter->GetDPIX();
-    aContext.DPIy = pPrinter->GetDPIY();
+    aContext.DPIx = xPrinter->GetDPIX();
+    aContext.DPIy = xPrinter->GetDPIY();
     for( int nPage = 0; nPage < nAllPages && ! bAborted; nPage++ )
     {
         if( nPage == nAllPages-1 )
@@ -1098,9 +1098,9 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
         }
         else
         {
-            pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
-            pPrinter->SetPaperSizeUser( aPageSize.aSize, true );
-            PDFNewJobParameters aNewParm( pPrinter->GetPaperSize(), pPrinter->GetPaperBin() );
+            xPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+            xPrinter->SetPaperSizeUser( aPageSize.aSize, true );
+            PDFNewJobParameters aNewParm(xPrinter->GetPaperSize(), xPrinter->GetPaperBin());
 
             // create PDF writer on demand
             // either on first page
@@ -1162,7 +1162,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     {
         if( bCollate )
         {
-            if( aPDFFiles.size() == 1 && pPrinter->HasSupport( SUPPORT_COLLATECOPY ) )
+            if (aPDFFiles.size() == 1 && xPrinter->HasSupport(SUPPORT_COLLATECOPY))
             {
                 m_aJobData.setCollate( true );
                 m_aJobData.m_nCopies = nCopies;
@@ -1219,7 +1219,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                         m_aJobData.setPaperBin( aPDFFiles[i].maParameters.mnPaperBin );
 
                         // spool current file
-                        FILE* fp = PrinterInfoManager::get().startSpool( pPrinter->GetName(), i_rController.isDirectPrint() );
+                        FILE* fp = PrinterInfoManager::get().startSpool(xPrinter->GetName(), i_rController.isDirectPrint());
                         if( fp )
                         {
                             sal_uInt64 nBytesRead = 0;
@@ -1242,7 +1242,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                                 aBuf.append( sal_Int32( i + nCurJob * aPDFFiles.size() ) );
                             }
                             bSuccess &=
-                            PrinterInfoManager::get().endSpool( pPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob, sFaxNumber );
+                            PrinterInfoManager::get().endSpool(xPrinter->GetName(), aBuf.makeStringAndClear(), fp, m_aJobData, bFirstJob, sFaxNumber);
                             bFirstJob = false;
                         }
                     }

@@ -141,7 +141,7 @@ bool prepareLocale() {
         if (locale.isEmpty()) {
             // Selected language is not/no longer installed:
             try {
-                boost::shared_ptr<comphelper::ConfigurationChanges> batch(
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(
                     comphelper::ConfigurationChanges::create());
                 officecfg::Office::Linguistic::General::UILocale::set(
                     "", batch);
@@ -184,7 +184,7 @@ bool prepareLocale() {
         css::uno::UNO_QUERY_THROW)->setLocale(tag.getLocale(false));
     if (!cmdLanguage) {
         try {
-            boost::shared_ptr<comphelper::ConfigurationChanges> batch(
+            std::shared_ptr<comphelper::ConfigurationChanges> batch(
                 comphelper::ConfigurationChanges::create());
             officecfg::Setup::L10N::ooLocale::set(locale, batch);
             batch->commit();

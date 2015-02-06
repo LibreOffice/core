@@ -26,8 +26,6 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
-#include <boost/shared_ptr.hpp>
-
 #include <basebmp/bitmapdevice.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <tools/gen.hxx>
@@ -176,8 +174,8 @@ public:
     bool                    TestFont() const { return mbFaceOk;}
     FT_Face                 GetFtFace() const;
     int                     GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
-    void                    SetFontOptions( boost::shared_ptr<ImplFontOptions> );
-    boost::shared_ptr<ImplFontOptions> GetFontOptions() const;
+    void                    SetFontOptions(std::shared_ptr<ImplFontOptions>);
+    std::shared_ptr<ImplFontOptions> GetFontOptions() const;
     bool                    NeedsArtificialBold() const { return mbArtBold; }
     bool                    NeedsArtificialItalic() const { return mbArtItalic; }
 
@@ -255,7 +253,7 @@ private:
     FT_FaceRec_*            maFaceFT;
     FT_SizeRec_*            maSizeFT;
 
-    boost::shared_ptr<ImplFontOptions> mpFontOptions;
+    std::shared_ptr<ImplFontOptions> mxFontOptions;
 
     bool                    mbFaceOk;
     bool                    mbArtItalic;
@@ -280,7 +278,7 @@ public:
 
 private:
     ServerFont*             mpServerFont;
-    boost::shared_ptr<ImplFontOptions> mpFontOptions;
+    std::shared_ptr<ImplFontOptions> mxFontOptions;
     bool                    mbGotFontOptions;
 
 };

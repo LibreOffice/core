@@ -186,9 +186,9 @@ bool OutputDevice::HitTestNativeControl( ControlType nType,
         rIsInside, this ) );
 }
 
-static boost::shared_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
+static std::shared_ptr< ImplControlValue > TransformControlValue( const ImplControlValue& rVal, const OutputDevice& rDev )
 {
-    boost::shared_ptr< ImplControlValue > aResult;
+    std::shared_ptr< ImplControlValue > aResult;
     switch( rVal.getType() )
     {
     case CTRL_SLIDER:
@@ -291,7 +291,7 @@ bool OutputDevice::DrawNativeControl( ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
+    std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     vcl::Region aTestRegion( GetActiveClipRegion() );
@@ -322,7 +322,7 @@ bool OutputDevice::GetNativeControlRegion(  ControlType nType,
 
     // Convert the coordinates from relative to Window-absolute, so we draw
     // in the correct place in platform code
-    boost::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
+    std::shared_ptr< ImplControlValue > aScreenCtrlValue( TransformControlValue( aValue, *this ) );
     Rectangle screenRegion( ImplLogicToDevicePixel( rControlRegion ) );
 
     bool bRet = mpGraphics->GetNativeControlRegion(nType, nPart, screenRegion, nState, *aScreenCtrlValue,

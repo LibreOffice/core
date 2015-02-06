@@ -10,8 +10,8 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
@@ -66,13 +66,12 @@ OUString extendLocalizedPath(OUString const & path, OUString const & locale) {
 
 }
 
-boost::shared_ptr< comphelper::ConfigurationChanges >
+std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::ConfigurationChanges::create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
     return TheConfigurationWrapper::get(context).createChanges();
 }
-
 
 comphelper::ConfigurationChanges::~ConfigurationChanges() {}
 
@@ -129,7 +128,7 @@ css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(
-    boost::shared_ptr< ConfigurationChanges > const & batch,
+    std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path, com::sun::star::uno::Any const & value) const
 {
     assert(batch.get() != 0);
@@ -145,7 +144,7 @@ comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(
 }
 
 void comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(
-    boost::shared_ptr< ConfigurationChanges > const & batch,
+    std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path, com::sun::star::uno::Any const & value) const
 {
     assert(batch.get() != 0);
@@ -165,7 +164,7 @@ comphelper::detail::ConfigurationWrapper::getGroupReadOnly(
 
 css::uno::Reference< css::container::XHierarchicalNameReplace >
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(
-    boost::shared_ptr< ConfigurationChanges > const & batch,
+    std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path) const
 {
     assert(batch.get() != 0);
@@ -185,16 +184,16 @@ comphelper::detail::ConfigurationWrapper::getSetReadOnly(
 
 css::uno::Reference< css::container::XNameContainer >
 comphelper::detail::ConfigurationWrapper::getSetReadWrite(
-    boost::shared_ptr< ConfigurationChanges > const & batch,
+    std::shared_ptr< ConfigurationChanges > const & batch,
     OUString const & path) const
 {
     assert(batch.get() != 0);
     return batch->getSet(path);
 }
 
-boost::shared_ptr< comphelper::ConfigurationChanges >
+std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::detail::ConfigurationWrapper::createChanges() const {
-    return boost::shared_ptr< ConfigurationChanges >(
+    return std::shared_ptr< ConfigurationChanges >(
         new ConfigurationChanges(context_));
 }
 

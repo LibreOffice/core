@@ -70,7 +70,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXPrinterPropertySet, VCLXPrinterPropertySet
 
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
-    , mpPrinter( new Printer( rPrinterName ) )
+    , mxPrinter(std::make_shared<Printer>(rPrinterName))
 {
     SolarMutexGuard aSolarGuard;
 
@@ -81,7 +81,7 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
 VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 {
     SolarMutexGuard aSolarGuard;
-    mpPrinter.reset();
+    mxPrinter.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  VCLXPrinterPropertySet::GetDevice()
@@ -280,10 +280,10 @@ sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/
     ::osl::MutexGuard aGuard( Mutex );
 
     bool bDone = true;
-    if ( mpPrinter.get() )
+    if (mxPrinter.get())
     {
-        maInitJobSetup = mpPrinter->GetJobSetup();
-        mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
+        maInitJobSetup = mxPrinter->GetJobSetup();
+        mxListener.reset(new vcl::OldStylePrintAdaptor(mxPrinter));
     }
 
     return bDone;
@@ -293,10 +293,10 @@ void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if ( mpListener.get() )
+    if (mxListener.get())
     {
-        Printer::PrintJob( mpListener, maInitJobSetup );
-        mpListener.reset();
+        Printer::PrintJob(mxListener, maInitJobSetup);
+        mxListener.reset();
     }
 }
 
@@ -304,16 +304,16 @@ void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException, s
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    mpListener.reset();
+    mxListener.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXPrinter::startPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if ( mpListener.get() )
+    if (mxListener.get())
     {
-        mpListener->StartPage();
+        mxListener->StartPage();
     }
     return GetDevice();
 }
@@ -322,9 +322,9 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    if ( mpListener.get() )
+    if (mxListener.get())
     {
-        mpListener->EndPage();
+        mxListener->EndPage();
     }
 }
 

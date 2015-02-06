@@ -154,10 +154,10 @@ IconThemeScanner::IconThemeIsInstalled(const OUString& themeId) const
     return IconThemeInfo::IconThemeIsInVector(mFoundIconThemes, themeId);
 }
 
-/*static*/ boost::shared_ptr<IconThemeScanner>
+/*static*/ std::shared_ptr<IconThemeScanner>
 IconThemeScanner::Create(const OUString &path)
 {
-    boost::shared_ptr<IconThemeScanner> retval(new IconThemeScanner);
+    std::shared_ptr<IconThemeScanner> retval(new IconThemeScanner);
     retval->ScanDirectoryForIconThemes(path);
     return retval;
 }

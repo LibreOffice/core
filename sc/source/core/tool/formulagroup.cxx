@@ -26,8 +26,6 @@
 #endif
 #include <rtl/bootstrap.hxx>
 
-#include <boost/scoped_array.hpp>
-
 #include <cstdio>
 #include <unordered_map>
 #include <vector>
@@ -549,7 +547,7 @@ void FormulaGroupInterpreter::getOpenCLDeviceInfo(sal_Int32& rDeviceId, sal_Int3
 
 void FormulaGroupInterpreter::enableOpenCL_UnitTestsOnly()
 {
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::UseOpenCL::set(true, batch);
     batch->commit();
 

@@ -58,10 +58,10 @@ struct SfxViewShell_Impl
     bool                        m_bGotFrameOwnership;
     sal_uInt16                      m_nFamily;
     ::rtl::Reference<SfxBaseController> m_pController;
-    ::std::unique_ptr< ::svt::AcceleratorExecute >    m_pAccExec;
+    std::unique_ptr< ::svt::AcceleratorExecute > m_xAccExec;
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aPrintOpts;
     ::rtl::Reference< SfxClipboardChangeListener > xClipboardListener;
-    ::boost::shared_ptr< vcl::PrinterController > m_pPrinterController;
+    std::shared_ptr< vcl::PrinterController > m_xPrinterController;
 
     mutable SfxInPlaceClientList* mpIPClientList;
 

@@ -14,11 +14,9 @@
 #include <svtools/svtresid.hxx>
 #include <vcl/msgbox.hxx>
 
-using namespace boost;
-
-PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent ) :
-    ModalDialog( pParent, "PlaceEditDialog", "svt/ui/placeedit.ui" ),
-    m_pCurrentDetails( )
+PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent)
+    : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
+    , m_xCurrentDetails()
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -42,9 +40,9 @@ PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent ) :
     InitDetails( );
 }
 
-PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent, const boost::shared_ptr<Place>& pPlace ) :
-    ModalDialog( pParent, "PlaceEditDialog", "svt/ui/placeedit.ui" ),
-    m_pCurrentDetails( )
+PlaceEditDialog::PlaceEditDialog(vcl::Window* pParent, const std::shared_ptr<Place>& rPlace)
+    : ModalDialog(pParent, "PlaceEditDialog", "svt/ui/placeedit.ui")
+    , m_xCurrentDetails( )
 {
     get( m_pEDServerName, "name" );
     get( m_pLBServerType, "type" );
@@ -61,13 +59,13 @@ PlaceEditDialog::PlaceEditDialog( vcl::Window* pParent, const boost::shared_ptr<
 
     InitDetails( );
 
-    m_pEDServerName->SetText( pPlace->GetName() );
+    m_pEDServerName->SetText(rPlace->GetName());
 
     // Fill the boxes with the URL parts
     bool bSuccess = false;
-    for ( size_t i = 0 ; i < m_aDetailsContainers.size( ) && !bSuccess; ++i )
+    for (size_t i = 0 ; i < m_aDetailsContainers.size( ) && !bSuccess; ++i)
     {
-        INetURLObject& rUrl = pPlace->GetUrlObject( );
+        INetURLObject& rUrl = rPlace->GetUrlObject();
         bSuccess = m_aDetailsContainers[i]->setUrl( rUrl );
         if ( bSuccess )
         {
@@ -88,9 +86,9 @@ PlaceEditDialog::~PlaceEditDialog()
 OUString PlaceEditDialog::GetServerUrl()
 {
     OUString sUrl;
-    if ( m_pCurrentDetails.get( ) )
+    if (m_xCurrentDetails.get())
     {
-        INetURLObject aUrl = m_pCurrentDetails->getUrl();
+        INetURLObject aUrl = m_xCurrentDetails->getUrl();
         OUString sUsername = OUString( m_pEDUsername->GetText( ) ).trim( );
         if ( !sUsername.isEmpty( ) )
             aUrl.SetUser( sUsername );
@@ -101,36 +99,35 @@ OUString PlaceEditDialog::GetServerUrl()
     return sUrl;
 }
 
-boost::shared_ptr<Place> PlaceEditDialog::GetPlace()
+std::shared_ptr<Place> PlaceEditDialog::GetPlace()
 {
-    boost::shared_ptr<Place> newPlace( new Place( m_pEDServerName->GetText(), GetServerUrl(), true ) );
-    return newPlace;
+    return std::make_shared<Place>(m_pEDServerName->GetText(), GetServerUrl(), true);
 }
 
 void PlaceEditDialog::InitDetails( )
 {
     // Create WebDAV / FTP / SSH details control
-    shared_ptr< DetailsContainer > pDavDetails( new DavDetailsContainer( this ) );
-    pDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back( pDavDetails );
+    std::shared_ptr<DetailsContainer> xDavDetails(std::make_shared<DavDetailsContainer>(this));
+    xDavDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xDavDetails);
 
-    shared_ptr< DetailsContainer > pFtpDetails( new HostDetailsContainer( this, 21, "ftp" ) );
-    pFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back( pFtpDetails );
+    std::shared_ptr<DetailsContainer> xFtpDetails(std::make_shared<HostDetailsContainer>(this, 21, "ftp"));
+    xFtpDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xFtpDetails);
 
-    shared_ptr< DetailsContainer > pSshDetails( new HostDetailsContainer( this, 22, "ssh" ) );
-    pSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back( pSshDetails );
+    std::shared_ptr<DetailsContainer> xSshDetails(std::make_shared<HostDetailsContainer>(this, 22, "ssh"));
+    xSshDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xSshDetails);
 
     // Create Windows Share control
-    shared_ptr< DetailsContainer > pSmbDetails( new SmbDetailsContainer( this ) );
-    pSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back( pSmbDetails );
+    std::shared_ptr<DetailsContainer> xSmbDetails(std::make_shared<SmbDetailsContainer>(this));
+    xSmbDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xSmbDetails);
 
     // Create CMIS control
-    shared_ptr< DetailsContainer > pCmisDetails( new CmisDetailsContainer( this ) );
-    pCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
-    m_aDetailsContainers.push_back( pCmisDetails );
+    std::shared_ptr<DetailsContainer> xCmisDetails(std::make_shared<CmisDetailsContainer>(this));
+    xCmisDetails->setChangeHdl( LINK( this, PlaceEditDialog, EditHdl ) );
+    m_aDetailsContainers.push_back(xCmisDetails);
 
     // Set default to first value
     m_pLBServerType->SelectEntryPos( 0 );
@@ -160,7 +157,7 @@ IMPL_LINK ( PlaceEditDialog, EditHdl, void *, EMPTYARG )
 
 IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )
 {
-    for ( std::vector< boost::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
+    for ( std::vector< std::shared_ptr< DetailsContainer > >::iterator it = m_aDetailsContainers.begin( );
             it != m_aDetailsContainers.end( ); ++it )
     {
         ( *it )->setUsername( OUString( m_pEDUsername->GetText() ) );
@@ -170,13 +167,13 @@ IMPL_LINK ( PlaceEditDialog, EditUsernameHdl, void *, EMPTYARG )
 
 IMPL_LINK( PlaceEditDialog, SelectTypeHdl, void*, EMPTYARG )
 {
-    if ( m_pCurrentDetails.get( ) )
-        m_pCurrentDetails->show( false );
+    if (m_xCurrentDetails.get())
+        m_xCurrentDetails->show(false);
 
     sal_uInt16 nPos = m_pLBServerType->GetSelectEntryPos( );
-    m_pCurrentDetails = m_aDetailsContainers[nPos];
+    m_xCurrentDetails = m_aDetailsContainers[nPos];
 
-    m_pCurrentDetails->show( true );
+    m_xCurrentDetails->show(true);
 
     SetSizePixel(GetOptimalSize());
     return 0;

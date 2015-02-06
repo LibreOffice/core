@@ -130,7 +130,7 @@ Status create(OUString const & uri) {
         return ERROR_OTHER;
     }
 #endif
-    boost::shared_ptr<comphelper::ConfigurationChanges> batch(
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(
         comphelper::ConfigurationChanges::create());
     officecfg::Setup::Office::ooSetupInstCompleted::set(true, batch);
     batch->commit();

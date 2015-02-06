@@ -21,8 +21,6 @@
 
 #include "sal/config.h"
 
-#include <boost/shared_ptr.hpp>
-
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/lang/Locale.hpp"
@@ -56,14 +54,14 @@ static OUString createPath(OUString const & name, sal_Int32 pos, OUString const 
     return name.copy(0, pos + 1) + locale + name.copy(pos);
 }
 
-static boost::shared_ptr< SvStream > wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
+static std::shared_ptr<SvStream> wrapStream(css::uno::Reference< css::io::XInputStream > const & stream)
 {
     // This could use SvInputStream instead if that did not have a broken
     // SeekPos implementation for an XInputStream that is not also XSeekable
     // (cf. "@@@" at tags/DEV300_m37/svtools/source/misc1/strmadpt.cxx@264807
     // l. 593):
     OSL_ASSERT(stream.is());
-    boost::shared_ptr< SvStream > s(new SvMemoryStream);
+    std::shared_ptr<SvStream> s(std::make_shared<SvMemoryStream>());
     for (;;)
     {
         sal_Int32 const size = 2048;
@@ -77,17 +75,17 @@ static boost::shared_ptr< SvStream > wrapStream(css::uno::Reference< css::io::XI
     return s;
 }
 
-static void loadImageFromStream(boost::shared_ptr< SvStream > pStream, OUString const & rPath, BitmapEx & rBitmap)
+static void loadImageFromStream(std::shared_ptr<SvStream> xStream, OUString const & rPath, BitmapEx & rBitmap)
 {
     if (rPath.endsWith(".png"))
     {
-        vcl::PNGReader aPNGReader( *pStream );
+        vcl::PNGReader aPNGReader(*xStream);
         aPNGReader.SetIgnoreGammaChunk( true );
         rBitmap = aPNGReader.Read();
     }
     else
     {
-        ReadDIBBitmapEx(rBitmap, *pStream);
+        ReadDIBBitmapEx(rBitmap, *xStream);
     }
 }
 
@@ -288,12 +286,12 @@ void ImplImageTree::loadImageLinks()
     }
 }
 
-void ImplImageTree::parseLinkFile(boost::shared_ptr< SvStream > pStream)
+void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> xStream)
 {
     OString aLine;
     OUString aLink, aOriginal;
     int nLineNo = 0;
-    while ( pStream->ReadLine( aLine ) )
+    while (xStream->ReadLine(aLine))
     {
         ++nLineNo;
         if ( aLine.isEmpty() )
