@@ -428,6 +428,7 @@ void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
         if (SfxBindings* pBindings = GetBindingsPtr())
         {
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+            pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
         }
     }
 }
@@ -567,8 +568,12 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
         if (SfxBindings* pBindings = GetBindingsPtr())
         {
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+            pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
             if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
+            {
                 pBindings->Update( SID_BASICIDE_STAT_POS );
+                pBindings->Update( SID_BASICIDE_STAT_TITLE );
+            }
             if ( !bWasModified && pEditEngine->IsModified() )
             {
                 pBindings->Invalidate( SID_SAVEDOC );
@@ -729,42 +734,19 @@ void EditorWindow::HandleAutoCloseDoubleQuotes()
 
 void EditorWindow::HandleProcedureCompletion()
 {
+
     TextSelection aSel = GetEditView()->GetSelection();
     sal_uLong nLine = aSel.GetStart().GetPara();
     OUString aLine( pEditEngine->GetText( nLine ) );
 
-    std::vector<HighlightPortion> aPortions;
-    aHighlighter.getHighlightPortions( aLine, aPortions );
-
-    if( aPortions.empty() )
-        return;
-
+    bool bFoundName = false;
     OUString sProcType;
     OUString sProcName;
-    bool bFoundType = false;
-    bool bFoundName = false;
 
-    for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
-         i != aPortions.end(); ++i)
-    {
-        OUString sTokStr = aLine.copy(i->nBegin, i->nEnd - i->nBegin);
+    bFoundName = GetProcedureName(aLine, sProcType, sProcName);
 
-        if( i->tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
-            || sTokStr.equalsIgnoreAsciiCase("function")) )
-        {
-            sProcType = sTokStr;
-            bFoundType = true;
-        }
-        if( i->tokenType == 1 && bFoundType )
-        {
-            sProcName = sTokStr;
-            bFoundName = true;
-            break;
-        }
-    }
-
-    if( !bFoundType || !bFoundName )
-        return;// no sub/function keyword or there is no identifier
+    if (!bFoundName)
+      return;
 
     OUString sText("\nEnd ");
     aSel = GetEditView()->GetSelection();
@@ -805,6 +787,43 @@ void EditorWindow::HandleProcedureCompletion()
             }
         }
     }
+}
+
+bool EditorWindow::GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName)
+{
+    std::vector<HighlightPortion> aPortions;
+    aHighlighter.getHighlightPortions(rLine, aPortions);
+
+    if( aPortions.empty() )
+        return false;
+
+    bool bFoundType = false;
+    bool bFoundName = false;
+
+    for (std::vector<HighlightPortion>::iterator i(aPortions.begin());
+         i != aPortions.end(); ++i)
+    {
+        OUString sTokStr = rLine.copy(i->nBegin, i->nEnd - i->nBegin);
+
+        if( i->tokenType == 9 && ( sTokStr.equalsIgnoreAsciiCase("sub")
+            || sTokStr.equalsIgnoreAsciiCase("function")) )
+        {
+            rProcType = sTokStr;
+            bFoundType = true;
+        }
+        if( i->tokenType == 1 && bFoundType )
+        {
+            rProcName = sTokStr;
+            bFoundName = true;
+            break;
+        }
+    }
+
+    if( !bFoundType || !bFoundName )
+        return false;// no sub/function keyword or there is no identifier
+
+    return true;
+
 }
 
 void EditorWindow::HandleCodeCompletion()
@@ -1003,7 +1022,10 @@ void EditorWindow::CreateEditEngine()
     InitScrollBars();
 
     if (SfxBindings* pBindings = GetBindingsPtr())
+    {
         pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+        pBindings->Invalidate( SID_BASICIDE_STAT_TITLE );
+    }
 
     DBG_ASSERT( rModulWindow.GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
 
