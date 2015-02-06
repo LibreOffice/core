@@ -3965,13 +3965,6 @@ public:
             mpResBuf = NULL;
             return;
         }
-
-        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, NULL, NULL);
-        if (err != CL_SUCCESS)
-        {
-            SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
-            mpResBuf = NULL;
-        }
     }
 
     bool pushResultToDocument( ScDocument& rDoc, const ScAddress& rTopPos )
@@ -3980,6 +3973,20 @@ public:
             return false;
 
         rDoc.SetFormulaResults(rTopPos, mpResBuf, mnGroupLength);
+
+        // Obtain cl context
+        ::opencl::KernelEnv kEnv;
+        ::opencl::setKernelEnv(&kEnv);
+
+        cl_int err;
+        err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpCLResBuf, mpResBuf, 0, NULL, NULL);
+
+        if (err != CL_SUCCESS)
+        {
+            SAL_WARN("sc.opencl", "clEnqueueUnmapMemObject failed: " << ::opencl::errorString(err));
+            return false;
+        }
+
         return true;
     }
 };
