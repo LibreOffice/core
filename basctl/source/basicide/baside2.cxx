@@ -1118,6 +1118,37 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                 }
             }
             break;
+            case SID_BASICIDE_STAT_TITLE:
+            {
+                TextView* pView = GetEditView();
+                if ( pView )
+                {
+                    TextSelection aSel = pView->GetSelection();
+                    OUString aTitle = CreateQualifiedName();
+
+                    // search for current procedure name (Sub or Function)
+                    OUString sProcName = "";
+                    OUString sProcType = "";
+                    bool bFound = false;
+
+                    long nLine = aSel.GetStart().GetPara();
+
+                    OUString aCurrLine;
+
+                    for( long i = nLine; i >= 0 && !bFound; --i )
+                    {
+                        aCurrLine = GetEditEngine()->GetText( i );
+                        bFound = GetEditorWindow().GetProcedureName(aCurrLine, sProcType, sProcName);
+                    }
+
+                    if (sProcName != "")
+                        aTitle += "." + sProcName;
+
+                    SfxStringItem aTitleItem( SID_BASICIDE_STAT_TITLE, aTitle );
+                    rSet.Put( aTitleItem );
+                }
+            }
+            break;
             case SID_ATTR_INSERT:
             {
                 TextView* pView = GetEditView();
