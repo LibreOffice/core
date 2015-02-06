@@ -2671,7 +2671,11 @@ void ScColumn::SetFormulaResults( SCROW nRow, const double* pResults, size_t nLe
     for (; pResults != pResEnd; ++pResults, ++itCell)
     {
         ScFormulaCell& rCell = **itCell;
-        rCell.SetResultDouble(*pResults);
+        sal_uInt16 nErr = GetDoubleErrorValue(*pResults);
+        if (nErr != 0)
+            rCell.SetResultError(nErr);
+        else
+            rCell.SetResultDouble(*pResults);
         rCell.ResetDirty();
         rCell.SetChanged(true);
     }
