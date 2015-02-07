@@ -33,7 +33,6 @@ Module gid_Module_Prg_Calc_Bin
     MOD_NAME_DESC ( MODULE_PRG_CALC_BIN );
     ParentID = gid_Module_Prg_Calc;
     Sortkey = "100";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_calc_ALL,
@@ -57,7 +56,6 @@ Module gid_Module_Brand_Prg_Calc
     ParentID = gid_Module_Prg_Calc;
     Sortkey = "100";
     InstallOrder = "1040";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_calc_brand_ALL);
@@ -80,7 +78,6 @@ Module gid_Module_Prg_Calc_MSO_Reg
     Name = "gid_Module_Prg_Calc_MSO_Reg";
     Description = "gid_Module_Prg_Calc_MSO_Reg";
     Styles = (HIDDEN_ROOT);
-    Minimal = YES;
     Default = YES;
 End
 
@@ -89,7 +86,6 @@ Module gid_Module_Prg_Calc_Other_Reg
     Name = "gid_Module_Prg_Calc_Other_Reg";
     Description = "gid_Module_Prg_Calc_Other_Reg";
     Styles = (HIDDEN_ROOT);
-    Minimal = YES;
     Default = YES;
 End
 

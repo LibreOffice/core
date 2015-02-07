@@ -30,7 +30,6 @@ Module gid_Module_Optional_Winexplorerext
     MOD_NAME_DESC ( MODULE_OPTIONAL_WINDOWS_EXPLORER_EXTENSIONS );
     Sortkey = "1205";
     Default = YES;
-    Minimal = YES;
     ParentID = gid_Module_Optional;
     Dirs = (gid_Dir_Shlxthdl);
     Files = (auto_winexplorerextbinarytable_ALL,

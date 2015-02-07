@@ -27,7 +27,6 @@ Module gid_Module_Optional_Activexcontrol
     MOD_NAME_DESC ( MODULE_OPTIONAL_ACTIVEXCONTROL );
     Sortkey = "1000";
     Default = NO;
-    Minimal = NO;
     ParentID = gid_Module_Optional;
     Files = (auto_activexbinarytable_ALL,
         auto_activex_ALL,
