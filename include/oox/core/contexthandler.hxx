@@ -102,7 +102,7 @@ protected:
 #endif
 
 private:
-    ContextHandler&     operator=( const ContextHandler& );
+    ContextHandler&     operator=( const ContextHandler& ) SAL_DELETED_FUNCTION;
 
 private:
     FragmentBaseDataRef mxBaseData;         ///< Base data of the fragment.

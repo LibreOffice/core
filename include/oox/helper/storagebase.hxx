@@ -138,8 +138,8 @@ protected:
     explicit            StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName, bool bReadOnly );
 
 private:
-                        StorageBase( const StorageBase& );
-    StorageBase&        operator=( const StorageBase& );
+                        StorageBase( const StorageBase& ) SAL_DELETED_FUNCTION;
+    StorageBase&        operator=( const StorageBase& ) SAL_DELETED_FUNCTION;
 
     /** Returns true, if the object represents a valid storage. */
     virtual bool        implIsStorage() const = 0;

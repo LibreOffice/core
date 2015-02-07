@@ -34,16 +34,11 @@ namespace core {
 
 
 
-class OOX_DLLPUBLIC CodecHelper
+namespace CodecHelper
 {
-public:
     /** Returns the password hash if it is in the required 16-bit limit. */
-    static sal_uInt16   getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement );
-
-private:
-                        CodecHelper();
-                        ~CodecHelper();
-};
+    OOX_DLLPUBLIC sal_uInt16   getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement );
+}
 
 
 

@@ -100,34 +100,33 @@ struct StdHlinkInfo
 
 
 /** Static helper functions for OLE import/export. */
-class OOX_DLLPUBLIC OleHelper
+namespace OleHelper
 {
-public:
     /** Returns the UNO RGB color from the passed encoded OLE color.
 
         @param bDefaultColorBgr
             True = OLE default color type is treated as BGR color.
             False = OLE default color type is treated as palette color.
      */
-    static sal_Int32    decodeOleColor(
+    OOX_DLLPUBLIC sal_Int32    decodeOleColor(
                             const GraphicHelper& rGraphicHelper,
                             sal_uInt32 nOleColor,
                             bool bDefaultColorBgr = true );
 
     /** Returns the OLE color from the passed UNO RGB color.
      */
-    static sal_uInt32   encodeOleColor( sal_Int32 nRgbColor );
+    OOX_DLLPUBLIC sal_uInt32   encodeOleColor( sal_Int32 nRgbColor );
 
     /** Imports a GUID from the passed binary stream and returns its string
         representation (in uppercase characters).
      */
-    static OUString importGuid( BinaryInputStream& rInStrm );
-    static void exportGuid( BinaryOutputStream& rOutStrm, const SvGlobalName& rId );
+    OOX_DLLPUBLIC OUString importGuid( BinaryInputStream& rInStrm );
+    OOX_DLLPUBLIC void exportGuid( BinaryOutputStream& rOutStrm, const SvGlobalName& rId );
 
     /** Imports an OLE StdFont font structure from the current position of the
         passed binary stream.
      */
-    static bool         importStdFont(
+    OOX_DLLPUBLIC bool         importStdFont(
                             StdFontInfo& orFontInfo,
                             BinaryInputStream& rInStrm,
                             bool bWithGuid );
@@ -135,15 +134,11 @@ public:
     /** Imports an OLE StdPic picture from the current position of the passed
         binary stream.
      */
-    static bool         importStdPic(
+    OOX_DLLPUBLIC bool         importStdPic(
                             StreamDataSequence& orGraphicData,
                             BinaryInputStream& rInStrm,
                             bool bWithGuid );
-
-private:
-                        OleHelper();        // not implemented
-                        ~OleHelper();       // not implemented
-};
+}
 
 // ideally it would be great to get rid of SvxMSConvertOCXControls
 // however msfilter/source/msfilter/svdfppt.cxx still uses

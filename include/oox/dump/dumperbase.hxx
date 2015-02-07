@@ -1103,8 +1103,8 @@ public:
     explicit            IndentGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.incIndent(); }
                         ~IndentGuard() { mrOut.decIndent(); }
 private:
-                        IndentGuard( const IndentGuard& );
-    IndentGuard&        operator=( const IndentGuard& );
+                        IndentGuard( const IndentGuard& ) SAL_DELETED_FUNCTION;
+    IndentGuard&        operator=( const IndentGuard& ) SAL_DELETED_FUNCTION;
 private:
     Output&             mrOut;
 };
@@ -1127,8 +1127,8 @@ public:
     void                tab() { mrOut.tab(); }
     void                tab( size_t nCol ) { mrOut.tab( nCol ); }
 private:
-                        TableGuard( const TableGuard& );
-    TableGuard&         operator=( const TableGuard& );
+                        TableGuard( const TableGuard& ) SAL_DELETED_FUNCTION;
+    TableGuard&         operator=( const TableGuard& ) SAL_DELETED_FUNCTION;
 private:
     Output&             mrOut;
 };
@@ -1143,8 +1143,8 @@ public:
                         ~ItemGuard() { mrOut.endItem(); }
     void                cont() { mrOut.contItem(); }
 private:
-                        ItemGuard( const ItemGuard& );
-    ItemGuard&          operator=( const ItemGuard& );
+                        ItemGuard( const ItemGuard& ) SAL_DELETED_FUNCTION;
+    ItemGuard&          operator=( const ItemGuard& ) SAL_DELETED_FUNCTION;
 private:
     Output&             mrOut;
 };
@@ -1157,8 +1157,8 @@ public:
     explicit            MultiItemsGuard( const OutputRef& rxOut ) : mrOut( *rxOut ) { mrOut.startMultiItems(); }
                         ~MultiItemsGuard() { mrOut.endMultiItems(); }
 private:
-                        MultiItemsGuard( const MultiItemsGuard& );
-    MultiItemsGuard&    operator=( const MultiItemsGuard& );
+                        MultiItemsGuard( const MultiItemsGuard& ) SAL_DELETED_FUNCTION;
+    MultiItemsGuard&    operator=( const MultiItemsGuard& ) SAL_DELETED_FUNCTION;
 private:
     Output&             mrOut;
 };

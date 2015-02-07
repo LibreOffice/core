@@ -139,8 +139,8 @@ public:
     virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ShapeContextHandler(ShapeContextHandler &); // not defined
-    void operator =(ShapeContextHandler &); // not defined
+    ShapeContextHandler(ShapeContextHandler &) SAL_DELETED_FUNCTION;
+    void operator =(ShapeContextHandler &) SAL_DELETED_FUNCTION;
 
     ::sal_uInt32 mnStartToken;
     css::awt::Point maPosition;

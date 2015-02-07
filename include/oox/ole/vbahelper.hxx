@@ -52,9 +52,8 @@ const sal_uInt16 VBA_ID_PROJECTVERSION          = 0x0009;
 
 
 /** Static helper functions for the VBA filters. */
-class VbaHelper
+namespace VbaHelper
 {
-public:
     /** Reads the next record from the VBA directory stream 'dir'.
 
         @param rnRecId  (out parameter) The record identifier of the new record.
@@ -64,7 +63,7 @@ public:
         @return  True = next record successfully read. False on any error, or
             if the stream is EOF.
      */
-    static bool         readDirRecord(
+    bool         readDirRecord(
                             sal_uInt16& rnRecId,
                             StreamDataSequence& rRecData,
                             BinaryInputStream& rInStrm );
@@ -78,15 +77,11 @@ public:
         @return  True = Equality sign separator found, and the returned key and
             value are not empty. False otherwise.
      */
-    static bool         extractKeyValue(
+    bool         extractKeyValue(
                             OUString& rKey,
                             OUString& rValue,
                             const OUString& rKeyValue );
-
-private:
-                        VbaHelper();
-                        ~VbaHelper();
-};
+}
 
 
 

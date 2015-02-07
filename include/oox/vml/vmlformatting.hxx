@@ -44,19 +44,18 @@ typedef ::std::pair< double, double >       DoublePair;
 
 
 
-class OOX_DLLPUBLIC ConversionHelper
+namespace ConversionHelper
 {
-public:
     /** Returns two values contained in rValue separated by cSep.
      */
-    static bool         separatePair(
+    OOX_DLLPUBLIC bool         separatePair(
                             OUString& orValue1, OUString& orValue2,
                             const OUString& rValue, sal_Unicode cSep );
 
     /** Returns the boolean value from the passed string of a VML attribute.
         Supported values: 'f', 't', 'false', 'true'. False for anything else.
      */
-    static bool         decodeBool( const OUString& rValue );
+    OOX_DLLPUBLIC bool         decodeBool( const OUString& rValue );
 
     /** Converts the passed VML percentage measure string to a normalized
         floating-point value.
@@ -67,7 +66,7 @@ public:
             is present, the value will be divided by 100. If the 'f' sign is present,
             the value will be divided by 65536.
      */
-    static double       decodePercent(
+    OOX_DLLPUBLIC double       decodePercent(
                             const OUString& rValue,
                             double fDefValue );
 
@@ -89,7 +88,7 @@ public:
         @param bDefaultAsPixel  Set to true if omitted measure unit means
             pixel. Set to false if omitted measure unit means EMU.
      */
-    static sal_Int64    decodeMeasureToEmu(
+    OOX_DLLPUBLIC sal_Int64    decodeMeasureToEmu(
                             const GraphicHelper& rGraphicHelper,
                             const OUString& rValue,
                             sal_Int32 nRefValue,
@@ -104,7 +103,7 @@ public:
         @param bPixelX  See above.
         @param bDefaultAsPixel  See above.
      */
-    static sal_Int32    decodeMeasureToHmm(
+    OOX_DLLPUBLIC sal_Int32    decodeMeasureToHmm(
                             const GraphicHelper& rGraphicHelper,
                             const OUString& rValue,
                             sal_Int32 nRefValue,
@@ -133,7 +132,7 @@ public:
 
         @return  The resulting DrawingML color.
      */
-    static ::oox::drawingml::Color decodeColor(
+    OOX_DLLPUBLIC ::oox::drawingml::Color decodeColor(
                             const GraphicHelper& rGraphicHelper,
                             const OptValue< OUString >& roVmlColor,
                             const OptValue< double >& roVmlOpacity,
@@ -152,15 +151,11 @@ public:
 
         @param rGraphicHelper  See above.
     */
-    static void         decodeVmlPath(
+    OOX_DLLPUBLIC void         decodeVmlPath(
                             ::std::vector< ::std::vector< ::com::sun::star::awt::Point > >& rPoints,
                             ::std::vector< ::std::vector< ::com::sun::star::drawing::PolygonFlags > >& rFlags,
                             const OUString& rPath );
-
-private:
-                        ConversionHelper();
-                        ~ConversionHelper();
-};
+}
 
 
 

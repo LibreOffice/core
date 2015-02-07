@@ -155,8 +155,8 @@ protected:
     void                finalizeImport();
 
 private:
-                        VbaProject( const VbaProject& );
-    VbaProject&         operator=( const VbaProject& );
+                        VbaProject( const VbaProject& ) SAL_DELETED_FUNCTION;
+    VbaProject&         operator=( const VbaProject& ) SAL_DELETED_FUNCTION;
 
     /** Returns the Basic or dialog library container. */
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
