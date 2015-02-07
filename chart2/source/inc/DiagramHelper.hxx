@@ -345,8 +345,7 @@ public:
         , bool bConvertAlsoFromAutoPositioning );
 
 private:
-    // not implemented
-    DiagramHelper();
+    DiagramHelper() SAL_DELETED_FUNCTION;
 
 };
 

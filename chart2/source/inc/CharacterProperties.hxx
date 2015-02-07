@@ -35,9 +35,8 @@ namespace chart
 //   com.sun.star.style.CharacterProperties
 //   com.sun.star.style.CharacterPropertiesAsian
 //   com.sun.star.style.CharacterPropertiesComplex
-class OOO_DLLPUBLIC_CHARTTOOLS CharacterProperties
+namespace CharacterProperties
 {
-public:
     // FastProperty Ids for properties
     enum
     {
@@ -121,20 +120,16 @@ public:
         FAST_PROPERTY_ID_END_CHAR_PROP
     };
 
-    static void AddPropertiesToVector(
+    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
         ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    static bool IsCharacterPropertyHandle( sal_Int32 nHandle );
+    OOO_DLLPUBLIC_CHARTTOOLS bool IsCharacterPropertyHandle( sal_Int32 nHandle );
 
-    static ::com::sun::star::awt::FontDescriptor createFontDescriptorFromPropertySet(
+    OOO_DLLPUBLIC_CHARTTOOLS ::com::sun::star::awt::FontDescriptor createFontDescriptorFromPropertySet(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet > & xMultiPropSet );
-
-private:
-    // not implemented
-    CharacterProperties();
-};
+}
 
 } //  namespace chart
 

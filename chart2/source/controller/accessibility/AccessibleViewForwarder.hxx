@@ -44,8 +44,8 @@ public:
     virtual Size PixelToLogic( const Size& rSize ) const SAL_OVERRIDE;
 
 private:
-    AccessibleViewForwarder( AccessibleViewForwarder& );
-    AccessibleViewForwarder& operator=( AccessibleViewForwarder& );
+    AccessibleViewForwarder( AccessibleViewForwarder& ) SAL_DELETED_FUNCTION;
+    AccessibleViewForwarder& operator=( AccessibleViewForwarder& ) SAL_DELETED_FUNCTION;
 
     AccessibleChartView* m_pAccChartView;
     vcl::Window* m_pWindow;

@@ -30,9 +30,8 @@ namespace chart
 {
 
 // implements service LineProperties
-class LinePropertiesHelper
+namespace LinePropertiesHelper
 {
-public:
     // FastProperty Ids for properties
     enum
     {
@@ -46,22 +45,18 @@ public:
         PROP_LINE_JOINT
     };
 
-    OOO_DLLPUBLIC_CHARTTOOLS static void AddPropertiesToVector(
+    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
         ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    OOO_DLLPUBLIC_CHARTTOOLS static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    SAL_DLLPRIVATE static bool IsLineVisible( const ::com::sun::star::uno::Reference<
+    bool IsLineVisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
-    SAL_DLLPRIVATE static void SetLineVisible( const ::com::sun::star::uno::Reference<
+    void SetLineVisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
-    static void SetLineInvisible( const ::com::sun::star::uno::Reference<
+    void SetLineInvisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
-
-private:
-    // not implemented
-    LinePropertiesHelper();
-};
+}
 
 } //  namespace chart
 

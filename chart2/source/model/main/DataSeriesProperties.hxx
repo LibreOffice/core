@@ -28,9 +28,8 @@
 namespace chart
 {
 
-class DataSeriesProperties
+namespace DataSeriesProperties
 {
-public:
     enum
     {
         PROP_DATASERIES_ATTRIBUTED_DATA_POINTS = FAST_PROPERTY_ID_START_DATA_SERIES,
@@ -39,15 +38,11 @@ public:
         PROP_DATASERIES_ATTACHED_AXIS_INDEX
     };
 
-    static void AddPropertiesToVector(
+    void AddPropertiesToVector(
         ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( tPropertyValueMap & rOutMap );
-
-private:
-    // not implemented
-    DataSeriesProperties();
-};
+    void AddDefaultsToMap( tPropertyValueMap & rOutMap );
+}
 
 } //  namespace chart
 

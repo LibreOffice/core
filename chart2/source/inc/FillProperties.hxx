@@ -30,9 +30,8 @@ namespace chart
 {
 
 // implements service FillProperties
-class OOO_DLLPUBLIC_CHARTTOOLS FillProperties
+namespace FillProperties
 {
-public:
     // FastProperty Ids for properties
     enum
     {
@@ -64,15 +63,11 @@ public:
         , PROP_FILL_BACKGROUND
     };
 
-    static void AddPropertiesToVector(
+    OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
         ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
-
-private:
-    // not implemented
-    FillProperties();
-};
+    OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+}
 
 } //  namespace chart
 

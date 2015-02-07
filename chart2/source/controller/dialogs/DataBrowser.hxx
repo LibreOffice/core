@@ -185,8 +185,7 @@ private:
     DECL_LINK( SeriesHeaderGotFocus, impl::SeriesHeaderEdit* );
     DECL_LINK( SeriesHeaderChanged,  impl::SeriesHeaderEdit* );
 
-    /// not implemented: inhibit copy construction
-    DataBrowser( const DataBrowser & );
+    DataBrowser( const DataBrowser & ) SAL_DELETED_FUNCTION;
 };
 
 } // namespace chart

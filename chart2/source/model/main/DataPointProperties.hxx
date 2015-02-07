@@ -29,9 +29,8 @@ namespace chart
 {
 
 // implements service DataPointProperties
-class DataPointProperties
+namespace DataPointProperties
 {
-public:
     // FastProperty Ids for properties
     enum
     {
@@ -85,15 +84,11 @@ public:
         // additionally some properites from ::chart::LineProperties
     };
 
-    static void AddPropertiesToVector(
+    void AddPropertiesToVector(
         ::std::vector< ::com::sun::star::beans::Property > & rOutProperties );
 
-    static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
-
-private:
-    // not implemented
-    DataPointProperties();
-};
+    void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
+}
 
 } //  namespace chart
 

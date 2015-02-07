@@ -41,8 +41,7 @@ public:
         const ::com::sun::star::awt::Size & rNewReferenceSize );
 
 private:
-    // not implemented
-    RelativeSizeHelper();
+    RelativeSizeHelper() SAL_DELETED_FUNCTION;
 };
 
 } //  namespace chart

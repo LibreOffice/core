@@ -43,8 +43,7 @@ public:
     SAL_DLLPRIVATE void stopListening();
 
 private: //methods
-    SAL_DLLPRIVATE ModifyListenerCallBack();
-    SAL_DLLPRIVATE ModifyListenerCallBack( const ModifyListenerCallBack& );
+    ModifyListenerCallBack( const ModifyListenerCallBack& ) SAL_DELETED_FUNCTION;
 
 private: //member
     ModifyListenerCallBack_impl* pModifyListener_impl;

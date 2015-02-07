@@ -59,10 +59,8 @@ private:
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const SAL_OVERRIDE;
 
-    //no default constructor
-    ChartTypeUnoDlg();
-    ChartTypeUnoDlg(const ChartTypeUnoDlg&); // no defined
-    void operator =(const ChartTypeUnoDlg&); // no defined
+    ChartTypeUnoDlg(const ChartTypeUnoDlg&) SAL_DELETED_FUNCTION;
+    void operator =(const ChartTypeUnoDlg&) SAL_DELETED_FUNCTION;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >           m_xChartModel;
 };

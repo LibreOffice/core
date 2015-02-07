@@ -27,17 +27,10 @@ class ResMgr;
 namespace chart
 {
 
-class ResourceManager
+namespace ResourceManager
 {
-public:
-    static ::ResMgr &  getResourceManager();
-
-private:
-    // not implemented -- avoid instantiation
-    ResourceManager();
-
-    static ::ResMgr *  m_pResourceManager;
-};
+    ::ResMgr &  getResourceManager();
+}
 
 } //  namespace chart
 

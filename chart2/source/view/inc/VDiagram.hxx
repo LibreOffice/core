@@ -78,7 +78,7 @@ private: //methods
     void    adjustAspectRatio3d( const ::com::sun::star::awt::Size& rAvailableSize );
 
 private: //members
-    VDiagram(const VDiagram& rD);
+    VDiagram(const VDiagram& rD) SAL_DELETED_FUNCTION;
 
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >                    m_xTarget;

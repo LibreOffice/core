@@ -203,10 +203,8 @@ private:
     bool            m_bLongLastingCallRegistered;
 
 private:
-    // these make no sense
-    LifeTimeGuard( ::osl::Mutex& rMutex );
-    LifeTimeGuard( const LifeTimeGuard& );
-    LifeTimeGuard& operator= ( const LifeTimeGuard& );
+    LifeTimeGuard( const LifeTimeGuard& ) SAL_DELETED_FUNCTION;
+    LifeTimeGuard& operator= ( const LifeTimeGuard& ) SAL_DELETED_FUNCTION;
 };
 
 template<class T>

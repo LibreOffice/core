@@ -49,8 +49,8 @@ class ShapeToolbarController : public ::svt::ToolboxController
     TToolbarHelper  m_pToolbarController;
     sal_uInt16      m_nToolBoxId;
     sal_uInt16      m_nSlotId;
-    ShapeToolbarController( const ShapeToolbarController& );
-    void operator =( const ShapeToolbarController& );
+    ShapeToolbarController( const ShapeToolbarController& ) SAL_DELETED_FUNCTION;
+    void operator =( const ShapeToolbarController& ) SAL_DELETED_FUNCTION;
 
 public:
     ShapeToolbarController( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );

@@ -27,9 +27,8 @@
 namespace chart
 {
 
-class VLegendSymbolFactory
+namespace VLegendSymbolFactory
 {
-public:
     enum tPropertyType
     {
         PROP_TYPE_FILLED_SERIES,
@@ -39,7 +38,7 @@ public:
         PROP_TYPE_FILL_AND_LINE
     };
 
-    static ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape >
         createSymbol(
             const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
@@ -52,10 +51,7 @@ public:
                 ::com::sun::star::beans::XPropertySet > & xLegendEntryProperties,
             tPropertyType ePropertyType,
             const ::com::sun::star::uno::Any& rExplicitSymbol /*should contain a ::com::sun::star::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
-
-private:
-     VLegendSymbolFactory();
-};
+}
 
 } //  namespace chart
 

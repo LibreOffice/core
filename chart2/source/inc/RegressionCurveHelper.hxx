@@ -35,26 +35,25 @@
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS RegressionCurveHelper
+namespace RegressionCurveHelper
 {
-public:
     /// returns a model mean-value line
-    SAL_DLLPRIVATE static css::uno::Reference<css::chart2::XRegressionCurve>
+    css::uno::Reference<css::chart2::XRegressionCurve>
         createMeanValueLine(const css::uno::Reference<css::uno::XComponentContext> & xContext );
 
     /// returns a model regression curve
-    SAL_DLLPRIVATE static css::uno::Reference<css::chart2::XRegressionCurve>
+    css::uno::Reference<css::chart2::XRegressionCurve>
         createRegressionCurveByServiceName(
             const css::uno::Reference<css::uno::XComponentContext> & xContext,
             const OUString& aServiceName );
 
-    static bool hasMeanValueLine(
+    OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
 
-    static bool isMeanValueLine(
+    OOO_DLLPUBLIC_CHARTTOOLS bool isMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurve> & xRegCurve );
 
-    static css::uno::Reference<css::chart2::XRegressionCurve>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         getMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
 
@@ -63,24 +62,24 @@ public:
          @param xSeriesProp
              If set, this property-set will be used to apply a line color
      */
-    static void addMeanValueLine(
+    OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt,
         const css::uno::Reference<css::uno::XComponentContext>& xContext,
         const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
-    static void removeMeanValueLine(
+    OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegCnt );
 
     /** Returns the first regression curve found that is not of type
         mean-value line
      */
-    static css::uno::Reference<com::sun::star::chart2::XRegressionCurve>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<com::sun::star::chart2::XRegressionCurve>
         getFirstCurveNotMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
     /** Returns the regression curve found at the index provided.
      */
-    static css::uno::Reference<css::chart2::XRegressionCurve>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         getRegressionCurveAtIndex(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
             sal_Int32 aIndex);
@@ -88,10 +87,10 @@ public:
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
-    static SvxChartRegress getFirstRegressTypeNotMeanValueLine(
+    OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getFirstRegressTypeNotMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
-    static SvxChartRegress getRegressionType(
+    OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getRegressionType(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /** @param xPropertySource is taken as source to copy all properties from if
@@ -99,7 +98,7 @@ public:
         @param xEquationProperties is set at the new regression curve as
                equation properties if not null
     */
-    static css::uno::Reference<css::chart2::XRegressionCurve>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         addRegressionCurve(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
@@ -109,13 +108,13 @@ public:
             const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
                     css::uno::Reference<css::beans::XPropertySet>() );
 
-    static bool removeAllExceptMeanValueLine(
+    OOO_DLLPUBLIC_CHARTTOOLS bool removeAllExceptMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
-    static void removeEquations(
+    OOO_DLLPUBLIC_CHARTTOOLS void removeEquations(
         css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
 
-    static css::uno::Reference<css::chart2::XRegressionCurve>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         changeRegressionCurveType(
             SvxChartRegress eType,
             css::uno::Reference<css::chart2::XRegressionCurveContainer>& xRegressionCurveContainer,
@@ -123,7 +122,7 @@ public:
             const css::uno::Reference<css::uno::XComponentContext>& xContext );
 
     /// returns a calculator object for regression curves (used by the view)
-    static css::uno::Reference<css::chart2::XRegressionCurveCalculator>
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurveCalculator>
         createRegressionCurveCalculatorByServiceName( const OUString& aServiceName );
 
     /** recalculates the regression parameters according to the data given in
@@ -141,7 +140,7 @@ public:
             If false, the sequence (1, 2, 3, ...) will always be used, even if
             there is a data-sequence with role "values-x"
      */
-    SAL_DLLPRIVATE static void initializeCurveCalculator(
+    void initializeCurveCalculator(
         const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
         const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
         bool bUseXValuesIfAvailable = true );
@@ -151,41 +150,37 @@ public:
         necessary that the data::XDataSource is an XDataSeries, thus this parameter
         also changed.
      */
-    static void initializeCurveCalculator(
+    OOO_DLLPUBLIC_CHARTTOOLS void initializeCurveCalculator(
         const css::uno::Reference<css::chart2::XRegressionCurveCalculator>& xOutCurveCalculator,
         const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
         const css::uno::Reference<css::frame::XModel>& xModel );
 
-    static OUString getUINameForRegressionCurve(
+    OOO_DLLPUBLIC_CHARTTOOLS OUString getUINameForRegressionCurve(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static OUString getRegressionCurveName(
+    OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static OUString getRegressionCurveGenericName(
+    OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveGenericName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static OUString getRegressionCurveSpecificName(
+    OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveSpecificName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static std::vector<css::uno::Reference<css::chart2::XRegressionCurve> >
+    OOO_DLLPUBLIC_CHARTTOOLS std::vector<css::uno::Reference<css::chart2::XRegressionCurve> >
         getAllRegressionCurvesNotMeanValueLine(
                 const css::uno::Reference<css::chart2::XDiagram>& xDiagram );
 
-    static void resetEquationPosition(
+    OOO_DLLPUBLIC_CHARTTOOLS void resetEquationPosition(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
     /// @return the index of the given curve in the given container. -1 if not contained
-    static sal_Int32 getRegressionCurveIndex(
+    OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getRegressionCurveIndex(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xContainer,
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    static bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
-
-private:
-    // instatiation not allowed
-    RegressionCurveHelper();
-};
+    OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+}
 
 } //  namespace chart
 

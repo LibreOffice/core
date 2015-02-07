@@ -24,15 +24,14 @@
 namespace chart
 {
 
-ResMgr * ResourceManager::m_pResourceManager = 0;
-
 ResMgr & ResourceManager::getResourceManager()
 {
     // not threadsafe
-    if( ! m_pResourceManager )
-        m_pResourceManager = ResMgr::CreateResMgr("chartcontroller");
-    OSL_ASSERT( m_pResourceManager );
-    return *m_pResourceManager;
+    static ResMgr * pResourceManager = 0;
+    if( ! pResourceManager )
+        pResourceManager = ResMgr::CreateResMgr("chartcontroller");
+    OSL_ASSERT( pResourceManager );
+    return *pResourceManager;
 }
 
 } //  namespace chart
