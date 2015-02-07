@@ -12338,7 +12338,7 @@ if echo "$host_os" | grep -q linux-android ; then
     ANDROID_PACKAGE_NAME=
     AC_MSG_CHECKING([for Android package name])
     if test -z "$with_android_package_name" -o "$with_android_package_name" = "no"; then
-        if test -n "$ENABLE_DBGUTIL"; then
+        if test -n "$ENABLE_DEBUG"; then
             # Default to the package name that makes ndk-gdb happy.
             ANDROID_PACKAGE_NAME="org.libreoffice"
         else
