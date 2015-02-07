@@ -197,8 +197,8 @@ class SbUnoProperty : public SbxProperty
     SbxDataType mRealType;
     virtual ~SbUnoProperty();
     bool mbUnoStruct;
-    SbUnoProperty( const SbUnoProperty&);
-    SbUnoProperty& operator = ( const SbUnoProperty&);
+    SbUnoProperty( const SbUnoProperty&) SAL_DELETED_FUNCTION;
+    SbUnoProperty& operator = ( const SbUnoProperty&) SAL_DELETED_FUNCTION;
 public:
 
     TYPEINFO_OVERRIDE();
@@ -401,7 +401,7 @@ private:
     VBAConstantsHash aConstHash;
     bool isInited;
     VBAConstantHelper():isInited( false ) {}
-    VBAConstantHelper(const VBAConstantHelper&);
+    VBAConstantHelper(const VBAConstantHelper&) SAL_DELETED_FUNCTION;
     void init();
 public:
     static VBAConstantHelper& instance();
