@@ -80,9 +80,8 @@ class EDITENG_DLLPUBLIC LinguMgr
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    GetChangeAll();
 
-    // disallow access to copy-constructor and assignment-operator
-    LinguMgr(const LinguMgr &);
-    LinguMgr & operator = (const LinguMgr &);
+    LinguMgr(const LinguMgr &) SAL_DELETED_FUNCTION;
+    LinguMgr & operator = (const LinguMgr &) SAL_DELETED_FUNCTION;
 
 public:
 
@@ -146,9 +145,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSearchableDictionaryList >    xDicList;
 
-    // disallow access to copy-constructor and assignment-operator
-    EDITENG_DLLPRIVATE SvxDicListChgClamp(const SvxDicListChgClamp &);
-    EDITENG_DLLPRIVATE SvxDicListChgClamp & operator = (const SvxDicListChgClamp &);
+    SvxDicListChgClamp(const SvxDicListChgClamp &) SAL_DELETED_FUNCTION;
+    SvxDicListChgClamp & operator = (const SvxDicListChgClamp &) SAL_DELETED_FUNCTION;
 
 public:
     SvxDicListChgClamp( ::com::sun::star::uno::Reference<

@@ -135,8 +135,8 @@ class EDITENG_DLLPUBLIC SvxAutocorrWordList
     struct Impl;
     Impl* mpImpl;
 
-    SvxAutocorrWordList( const SvxAutocorrWordList& ); // disabled
-    const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ); // disabled
+    SvxAutocorrWordList( const SvxAutocorrWordList& ) SAL_DELETED_FUNCTION;
+    const SvxAutocorrWordList& operator= ( const SvxAutocorrWordList& ) SAL_DELETED_FUNCTION;
 
     const SvxAutocorrWord* WordMatches(const SvxAutocorrWord *pFnd,
                                        const OUString &rTxt,

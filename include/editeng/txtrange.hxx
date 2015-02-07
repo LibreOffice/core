@@ -57,7 +57,7 @@ class EDITENG_DLLPUBLIC TextRanger
                             // FALSE: Objekt flow (StarWriter);
     bool       bVertical :1;// for vertical writing mode
 
-    TextRanger( const TextRanger& ); // not implemented
+    TextRanger( const TextRanger& ) SAL_DELETED_FUNCTION;
     const Rectangle& _GetBoundRect();
 public:
     TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon,

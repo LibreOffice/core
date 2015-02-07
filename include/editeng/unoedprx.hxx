@@ -156,9 +156,8 @@ public:
     bool        IsValid() const { return mbEditSourceValid;}
 
 private:
-    // declared, but not defined
-    SvxEditSourceAdapter( const SvxEditSourceAdapter& );
-    SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& );
+    SvxEditSourceAdapter( const SvxEditSourceAdapter& ) SAL_DELETED_FUNCTION;
+    SvxEditSourceAdapter& operator= ( const SvxEditSourceAdapter& ) SAL_DELETED_FUNCTION;
 
     ::std::unique_ptr< SvxEditSource >    mpAdaptee;
 

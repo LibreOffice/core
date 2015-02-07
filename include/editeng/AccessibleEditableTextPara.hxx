@@ -286,10 +286,8 @@ namespace accessibility
         void TextChanged();
 
     private:
-
-        // declared, but not defined
-        AccessibleEditableTextPara( const AccessibleEditableTextPara& );
-        AccessibleEditableTextPara& operator= ( const AccessibleEditableTextPara& );
+        AccessibleEditableTextPara( const AccessibleEditableTextPara& ) SAL_DELETED_FUNCTION;
+        AccessibleEditableTextPara& operator= ( const AccessibleEditableTextPara& ) SAL_DELETED_FUNCTION;
 
         /** Calculate character range of similar attributes
 

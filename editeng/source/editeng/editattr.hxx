@@ -363,7 +363,7 @@ class EditCharAttribField: public EditCharAttrib
     Color*          pTxtColor;
     Color*          pFldColor;
 
-    EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) const;
+    EditCharAttribField& operator = ( const EditCharAttribField& rAttr ) SAL_DELETED_FUNCTION;
 
 public:
     EditCharAttribField( const SvxFieldItem& rAttr, sal_uInt16 nPos );

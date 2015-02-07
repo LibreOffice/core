@@ -50,8 +50,7 @@ private:
     sal_uInt16              nStart;
     sal_uInt16              nEnd;
 
-                        XEditAttribute();
-                        XEditAttribute( const XEditAttribute& rCopyFrom );
+                        XEditAttribute( const XEditAttribute& rCopyFrom ) SAL_DELETED_FUNCTION;
 
 public:
     XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );

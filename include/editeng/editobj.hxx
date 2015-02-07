@@ -63,7 +63,7 @@ class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
 
     EditTextObjectImpl* mpImpl;
 
-    EDITENG_DLLPRIVATE EditTextObject&      operator=( const EditTextObject& );
+    EditTextObject&      operator=( const EditTextObject& ) SAL_DELETED_FUNCTION;
 
     EditTextObject(); // disabled
 

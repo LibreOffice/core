@@ -106,11 +106,8 @@ namespace accessibility
         virtual ~AccessibleStaticTextBase();
 
     private:
-
-        // declared, but not defined
-        EDITENG_DLLPRIVATE AccessibleStaticTextBase( const AccessibleStaticTextBase& );
-        // declared, but not defined
-        EDITENG_DLLPRIVATE AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& );
+        AccessibleStaticTextBase( const AccessibleStaticTextBase& ) SAL_DELETED_FUNCTION;
+        AccessibleStaticTextBase& operator= ( const AccessibleStaticTextBase& ) SAL_DELETED_FUNCTION;
 
     public:
 

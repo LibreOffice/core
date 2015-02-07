@@ -148,10 +148,8 @@ namespace accessibility
         void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
 
     private:
-
-        // declared, but not defined
-        AccessibleImageBullet( const AccessibleImageBullet& );
-        AccessibleImageBullet& operator= ( const AccessibleImageBullet& );
+        AccessibleImageBullet( const AccessibleImageBullet& ) SAL_DELETED_FUNCTION;
+        AccessibleImageBullet& operator= ( const AccessibleImageBullet& ) SAL_DELETED_FUNCTION;
 
         // syntactic sugar for FireEvent
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
@@ -199,8 +197,6 @@ namespace accessibility
 
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > mxStateSet;
-
-        mutable osl::Mutex  maMutex;
 
         /// The shape we're the accessible for (unguarded)
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxParent;

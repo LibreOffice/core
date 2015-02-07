@@ -120,7 +120,7 @@ private:
     friend class OutlinerUndoCheckPara;
     friend class OutlinerUndoChangeParaFlags;
 
-    Paragraph& operator=(const Paragraph& rPara );
+    Paragraph& operator=(const Paragraph& rPara ) SAL_DELETED_FUNCTION;
 
     sal_uInt16          nFlags;
     OUString           aBulText;
@@ -134,7 +134,7 @@ private:
     const OUString& GetText() const { return aBulText; }
 
                         Paragraph( sal_Int16 nDepth );
-                        Paragraph( const Paragraph& );
+                        Paragraph( const Paragraph& ) SAL_DELETED_FUNCTION;
                         Paragraph( const ParagraphData& );
                         ~Paragraph();
 
@@ -482,8 +482,7 @@ private:
     sal_Int32           nPos;
     bool                bSimpleClick;
 
-                        EditFieldInfo();
-                        EditFieldInfo( const EditFieldInfo& );
+                        EditFieldInfo( const EditFieldInfo& ) SAL_DELETED_FUNCTION;
 
     SdrPage*            mpSdrPage;
 

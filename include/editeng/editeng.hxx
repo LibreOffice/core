@@ -140,8 +140,8 @@ public:
 private:
     ImpEditEngine*  pImpEditEngine;
 
-    EDITENG_DLLPRIVATE                 EditEngine( const EditEngine& );
-    EDITENG_DLLPRIVATE EditEngine&     operator=( const EditEngine& );
+                                       EditEngine( const EditEngine& ) SAL_DELETED_FUNCTION;
+                       EditEngine&     operator=( const EditEngine& ) SAL_DELETED_FUNCTION;
     EDITENG_DLLPRIVATE bool            PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pView, vcl::Window* pFrameWin = NULL );
 
     EDITENG_DLLPRIVATE void CursorMoved(ContentNode* pPrevNode);
