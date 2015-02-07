@@ -278,8 +278,8 @@ public:
     }
 
 private:
-    Writer(Writer &); // not implemented
-    void operator =(Writer); // not implemented
+    Writer(Writer &) SAL_DELETED_FUNCTION;
+    void operator =(Writer) SAL_DELETED_FUNCTION;
 
     void * m_handle;
 };

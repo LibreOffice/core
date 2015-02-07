@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+#include <sal/types.h>
+
 namespace registry
 {
 namespace tools
@@ -31,8 +33,8 @@ class Options
 {
     std::string m_program;
 
-    Options (Options const &);
-    Options & operator= (Options const &);
+    Options (Options const &) SAL_DELETED_FUNCTION;
+    Options & operator= (Options const &) SAL_DELETED_FUNCTION;
 
 public:
     explicit Options (char const * program);
