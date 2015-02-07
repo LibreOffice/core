@@ -13,6 +13,7 @@
 #include <config_features.h>
 
 #include "address.hxx"
+#include "calcconfig.hxx"
 #include "types.hxx"
 #include "stlalgorithm.hxx"
 
@@ -120,11 +121,17 @@ public:
 class SC_DLLPUBLIC FormulaGroupInterpreter
 {
     static FormulaGroupInterpreter *msInstance;
- protected:
+
+protected:
+    ScCalcConfig maCalcConfig;
+
     FormulaGroupInterpreter() {}
     virtual ~FormulaGroupInterpreter() {}
 
- public:
+    /// Merge global and document specific settings.
+    void MergeCalcConfig(const ScDocument& rDoc);
+
+public:
     static FormulaGroupInterpreter *getStatic();
 #if HAVE_FEATURE_OPENCL
     static void fillOpenCLInfo(std::vector<OpenCLPlatformInfo>& rPlatforms);
