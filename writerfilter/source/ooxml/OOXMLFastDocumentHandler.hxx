@@ -88,8 +88,8 @@ public:
     void setIsSubstream( bool bSubstream );
 
 private:
-    OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &); // not defined
-    void operator =(OOXMLFastDocumentHandler &); // not defined
+    OOXMLFastDocumentHandler(OOXMLFastDocumentHandler &) SAL_DELETED_FUNCTION;
+    void operator =(OOXMLFastDocumentHandler &) SAL_DELETED_FUNCTION;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
