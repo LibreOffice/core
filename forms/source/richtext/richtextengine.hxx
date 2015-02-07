@@ -63,9 +63,8 @@ namespace frm
         RichTextEngine( SfxItemPool* _pPool );
 
     private:
-        RichTextEngine( );                                  // never implemented
-        RichTextEngine( const RichTextEngine& );            // never implemented
-        RichTextEngine& operator=( const RichTextEngine& ); // never implemented
+        RichTextEngine( const RichTextEngine& ) SAL_DELETED_FUNCTION;
+        RichTextEngine& operator=( const RichTextEngine& ) SAL_DELETED_FUNCTION;
 
     private:
         DECL_LINK( EditEngineStatusChanged, EditStatus* );

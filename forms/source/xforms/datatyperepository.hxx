@@ -68,8 +68,8 @@ namespace xforms
         virtual sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        ODataTypeRepository( const ODataTypeRepository& );              // never implemented
-        ODataTypeRepository& operator=( const ODataTypeRepository& );   // never implemented
+        ODataTypeRepository( const ODataTypeRepository& ) SAL_DELETED_FUNCTION;
+        ODataTypeRepository& operator=( const ODataTypeRepository& ) SAL_DELETED_FUNCTION;
 
     private:
         /** locates the type with the given name in our repository, or throws an exception if there is no such type

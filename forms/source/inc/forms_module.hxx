@@ -52,8 +52,7 @@ namespace FORMS_MODULE_NAMESPACE
     class OFormsModule
     {
     private:
-        OFormsModule();
-            // not implemented. OFormsModule is a static class
+        OFormsModule() SAL_DELETED_FUNCTION; //TODO: get rid of this class
 
     protected:
         // auto registration administration

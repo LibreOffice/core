@@ -144,9 +144,8 @@ namespace frm
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   m_aNewValues;
 
     private:
-        ControlModelLock();                                     // never implemented
-        ControlModelLock( const ControlModelLock& );            // never implemented
-        ControlModelLock& operator=( const ControlModelLock& ); // never implemented
+        ControlModelLock( const ControlModelLock& ) SAL_DELETED_FUNCTION;
+        ControlModelLock& operator=( const ControlModelLock& ) SAL_DELETED_FUNCTION;
     };
 
 

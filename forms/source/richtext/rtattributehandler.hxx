@@ -76,17 +76,10 @@ namespace frm
         virtual ~AttributeHandler();
     };
 
-    class AttributeHandlerFactory
+    namespace AttributeHandlerFactory
     {
-    public:
-        static ::rtl::Reference< IAttributeHandler > getHandlerFor( AttributeId _nAttributeId, const SfxItemPool& _rEditEnginePool );
-
-    private:
-        AttributeHandlerFactory();                                              // never implemented
-        AttributeHandlerFactory( const AttributeHandlerFactory& );              // never implemented
-        AttributeHandlerFactory& operator=( const AttributeHandlerFactory& );   // never implemented
-        ~AttributeHandlerFactory();                                             // never implemented
-    };
+        ::rtl::Reference< IAttributeHandler > getHandlerFor( AttributeId _nAttributeId, const SfxItemPool& _rEditEnginePool );
+    }
 
     class ParaAlignmentHandler : public AttributeHandler
     {

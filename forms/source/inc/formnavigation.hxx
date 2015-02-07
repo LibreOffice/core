@@ -213,9 +213,8 @@ namespace frm
         sal_Int16   getFeatureId( const OUString& _rCompleteURL );
 
     private:
-        OFormNavigationMapper( );                                           // never implemented
-        OFormNavigationMapper( const OFormNavigationMapper& );              // never implemented
-        OFormNavigationMapper& operator=( const OFormNavigationMapper& );   // never implemented
+        OFormNavigationMapper( const OFormNavigationMapper& ) SAL_DELETED_FUNCTION;
+        OFormNavigationMapper& operator=( const OFormNavigationMapper& ) SAL_DELETED_FUNCTION;
     };
 
 

@@ -72,8 +72,8 @@ namespace frm
         virtual ~ElementDescription();
 
     private:
-        ElementDescription( const ElementDescription& );            // never implemented
-        ElementDescription& operator=( const ElementDescription& ); // never implemented
+        ElementDescription( const ElementDescription& ) SAL_DELETED_FUNCTION;
+        ElementDescription& operator=( const ElementDescription& ) SAL_DELETED_FUNCTION;
     };
 
 typedef std::vector<InterfaceRef> OInterfaceArray;

@@ -345,9 +345,8 @@ namespace frm
         };
 
     private:
-        FormOperations();                                   // never implemented
-        FormOperations( const FormOperations& );            // never implemented
-        FormOperations& operator=( const FormOperations& ); // never implemented
+        FormOperations( const FormOperations& ) SAL_DELETED_FUNCTION;
+        FormOperations& operator=( const FormOperations& ) SAL_DELETED_FUNCTION;
 
     public:
         class MethodGuard

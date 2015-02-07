@@ -74,9 +74,8 @@ namespace xforms
                     getName() const         { return m_sName; }
 
     private:
-        OXSDDataType( );                                    // never implemented
-        OXSDDataType( const OXSDDataType& );                // never implemented
-        OXSDDataType& operator=( const OXSDDataType& );     // never implemented
+        OXSDDataType( const OXSDDataType& ) SAL_DELETED_FUNCTION;
+        OXSDDataType& operator=( const OXSDDataType& ) SAL_DELETED_FUNCTION;
 
     protected:
         // create basic data type

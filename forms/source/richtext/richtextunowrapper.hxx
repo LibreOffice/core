@@ -46,9 +46,8 @@ namespace frm
 
 
     private:
-        ORichTextUnoWrapper();                                          // never implemented
-        ORichTextUnoWrapper( const ORichTextUnoWrapper& );              // never implemented
-        ORichTextUnoWrapper& operator=( const ORichTextUnoWrapper& );   // never implemented
+        ORichTextUnoWrapper( const ORichTextUnoWrapper& ) SAL_DELETED_FUNCTION;
+        ORichTextUnoWrapper& operator=( const ORichTextUnoWrapper& ) SAL_DELETED_FUNCTION;
     };
 
     class RichTextEditSource : public SvxEditSource
@@ -70,9 +69,8 @@ namespace frm
         virtual ~RichTextEditSource();
 
     private:
-        RichTextEditSource( );                                      // never implemented
-        RichTextEditSource( const RichTextEditSource& _rSource );   // never implemented
-        RichTextEditSource& operator=( const RichTextEditSource& ); // never implemented
+        RichTextEditSource( const RichTextEditSource& _rSource ) SAL_DELETED_FUNCTION;
+        RichTextEditSource& operator=( const RichTextEditSource& ) SAL_DELETED_FUNCTION;
     };
 
 

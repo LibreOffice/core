@@ -171,9 +171,8 @@ namespace frm
         static  ::com::sun::star::uno::Sequence< sal_Int8 > getEditEngineTunnelId();
 
     private:
-        ORichTextModel();                                   // never implemented
-        ORichTextModel( const ORichTextModel& );            // never implemented
-        ORichTextModel& operator=( const ORichTextModel& ); // never implemented
+        ORichTextModel( const ORichTextModel& ) SAL_DELETED_FUNCTION;
+        ORichTextModel& operator=( const ORichTextModel& ) SAL_DELETED_FUNCTION;
     };
 
 

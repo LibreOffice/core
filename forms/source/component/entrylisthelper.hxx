@@ -174,9 +174,8 @@ namespace frm
         void        impl_lock_refreshList( ControlModelLock& _rInstanceLock );
 
     private:
-        OEntryListHelper();                                     // never implemented
-        OEntryListHelper( const OEntryListHelper& );            // never implemented
-        OEntryListHelper& operator=( const OEntryListHelper& ); // never implemented
+        OEntryListHelper( const OEntryListHelper& ) SAL_DELETED_FUNCTION;
+        OEntryListHelper& operator=( const OEntryListHelper& ) SAL_DELETED_FUNCTION;
     };
 
 
