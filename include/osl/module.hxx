@@ -28,8 +28,8 @@ namespace osl
 
 class Module
 {
-    Module( const Module&);
-    Module& operator = ( const Module&);
+    Module( const Module&) SAL_DELETED_FUNCTION;
+    Module& operator = ( const Module&) SAL_DELETED_FUNCTION;
 
 public:
     static bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl) {

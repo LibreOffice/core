@@ -46,8 +46,8 @@ extern "C" inline void SAL_CALL threadFunc( void* param);
  */
 class Thread
 {
-    Thread( const Thread& );
-    Thread& operator= ( const Thread& );
+    Thread( const Thread& ) SAL_DELETED_FUNCTION;
+    Thread& operator= ( const Thread& ) SAL_DELETED_FUNCTION;
 public:
     // these are here to force memory de/allocation to sal lib.
     inline static void * SAL_CALL operator new( size_t nSize )
@@ -187,8 +187,8 @@ extern "C" inline void SAL_CALL threadFunc( void* param)
 
 class ThreadData
 {
-    ThreadData( const ThreadData& );
-    ThreadData& operator= (const ThreadData& );
+    ThreadData( const ThreadData& ) SAL_DELETED_FUNCTION;
+    ThreadData& operator= (const ThreadData& ) SAL_DELETED_FUNCTION;
 public:
      /// Create a thread specific local data key
     ThreadData( oslThreadKeyCallbackFunction pCallback= 0 )

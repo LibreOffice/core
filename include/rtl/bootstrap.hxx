@@ -27,8 +27,8 @@ namespace rtl
     {
         void * _handle;
 
-        inline Bootstrap( Bootstrap const & ); // not impl
-        inline Bootstrap & operator = ( Bootstrap const & ); // not impl
+        Bootstrap( Bootstrap const & ) SAL_DELETED_FUNCTION;
+        Bootstrap & operator = ( Bootstrap const & ) SAL_DELETED_FUNCTION;
 
     public:
         /**

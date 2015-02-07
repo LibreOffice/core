@@ -94,25 +94,12 @@ namespace osl
         constructed Mutex may work on an already destructed oslMutex object.
 
         */
-        Mutex(const Mutex&);
+        Mutex(const Mutex&) SAL_DELETED_FUNCTION;
 
-        /** The underlying oslMutex has no reference count.
-
-        When destructed, the Mutex object destroys the undelying oslMutex,
-        which might cause severe problems in case it's a temporary object.
-
-        */
-        Mutex(oslMutex Mutex);
-
-        /** This assignment operator is private for the same reason as
+        /** This assignment operator is deleted for the same reason as
             the copy constructor.
         */
-        Mutex& operator= (const Mutex&);
-
-        /** This assignment operator is private for the same reason as
-            the constructor taking a oslMutex argument.
-        */
-        Mutex& operator= (oslMutex);
+        Mutex& operator= (const Mutex&) SAL_DELETED_FUNCTION;
     };
 
     /** A helper class for mutex objects and interfaces.
@@ -121,8 +108,8 @@ namespace osl
     class Guard
     {
     private:
-        Guard( const Guard& );
-        const Guard& operator = ( const Guard& );
+        Guard( const Guard& ) SAL_DELETED_FUNCTION;
+        const Guard& operator = ( const Guard& ) SAL_DELETED_FUNCTION;
 
     protected:
         T * pT;
@@ -155,8 +142,9 @@ namespace osl
     class ClearableGuard
     {
     private:
-        ClearableGuard( const ClearableGuard& );
-        const ClearableGuard& operator = ( const ClearableGuard& );
+        ClearableGuard( const ClearableGuard& ) SAL_DELETED_FUNCTION;
+        const ClearableGuard& operator = ( const ClearableGuard& )
+            SAL_DELETED_FUNCTION;
     protected:
         T * pT;
     public:
@@ -201,8 +189,8 @@ namespace osl
     class ResettableGuard : public ClearableGuard< T >
     {
     private:
-        ResettableGuard(ResettableGuard &); // not defined
-        void operator =(ResettableGuard &); // not defined
+        ResettableGuard(ResettableGuard &) SAL_DELETED_FUNCTION;
+        void operator =(ResettableGuard &) SAL_DELETED_FUNCTION;
 
     protected:
         T* pResetT;

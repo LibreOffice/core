@@ -65,17 +65,13 @@ public:
         rtl::OUString const & rBaseUriRef, rtl::OUString const & rRelUriRef);
 
 private:
-    /** not implemented */
-    Uri();
+    Uri() SAL_DELETED_FUNCTION;
 
-    /** not implemented */
-    Uri(Uri &);
+    Uri(Uri &) SAL_DELETED_FUNCTION;
 
-    /** not implemented */
-    ~Uri();
+    ~Uri() SAL_DELETED_FUNCTION;
 
-    /** not implemented */
-    void operator =(Uri);
+    void operator =(Uri) SAL_DELETED_FUNCTION;
 };
 
 inline rtl::OUString Uri::encode(rtl::OUString const & rText,

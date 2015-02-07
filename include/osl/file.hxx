@@ -419,12 +419,12 @@ class VolumeInfo
     /** Copy constructor.
     */
 
-    VolumeInfo( VolumeInfo& );
+    VolumeInfo( VolumeInfo& ) SAL_DELETED_FUNCTION;
 
     /** Assginment operator.
     */
 
-    VolumeInfo& operator = ( VolumeInfo& );
+    VolumeInfo& operator = ( VolumeInfo& ) SAL_DELETED_FUNCTION;
 
 public:
 
@@ -657,12 +657,12 @@ class FileStatus
     /** Copy constructor.
     */
 
-    FileStatus( FileStatus& );
+    FileStatus( FileStatus& ) SAL_DELETED_FUNCTION;
 
     /** Assignment operator.
     */
 
-    FileStatus& operator = ( FileStatus& );
+    FileStatus& operator = ( FileStatus& ) SAL_DELETED_FUNCTION;
 
 public:
 
@@ -911,12 +911,12 @@ class File: public FileBase
     /** Copy constructor.
     */
 
-    File( File& );
+    File( File& ) SAL_DELETED_FUNCTION;
 
     /** Assginment operator.
     */
 
-    File& operator = ( File& );
+    File& operator = ( File& ) SAL_DELETED_FUNCTION;
 
 public:
 
@@ -1654,12 +1654,12 @@ class Directory: public FileBase
     /** Copy constructor.
     */
 
-    Directory( Directory& );
+    Directory( Directory& ) SAL_DELETED_FUNCTION;
 
     /**  Assignment operator.
     */
 
-    Directory& operator = ( Directory& );
+    Directory& operator = ( Directory& ) SAL_DELETED_FUNCTION;
 
 public:
 

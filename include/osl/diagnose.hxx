@@ -136,9 +136,8 @@ public:
     }
 
 private:
-    // not impl:
-    ObjectRegistry( ObjectRegistry const& );
-    ObjectRegistry const& operator=( ObjectRegistry const& );
+    ObjectRegistry( ObjectRegistry const& ) SAL_DELETED_FUNCTION;
+    ObjectRegistry const& operator=( ObjectRegistry const& ) SAL_DELETED_FUNCTION;
 
     ObjectRegistryData m_data;
 };

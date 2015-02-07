@@ -97,25 +97,12 @@ namespace osl
         constructed Condition may work on an already destructed oslCondition object.
 
         */
-        Condition(const Condition&);
+        Condition(const Condition&) SAL_DELETED_FUNCTION;
 
-        /** The underlying oslCondition has no reference count.
-
-        When destructed, the Condition object destroys the undelying oslCondition,
-        which might cause severe problems in case it's a temporary object.
-
-        */
-        Condition(oslCondition condition);
-
-        /** This assignment operator is private for the same reason as
+        /** This assignment operator is deleted for the same reason as
             the copy constructor.
         */
-        Condition& operator= (const Condition&);
-
-        /** This assignment operator is private for the same reason as
-            the constructor taking a oslCondition argument.
-        */
-        Condition& operator= (oslCondition);
+        Condition& operator= (const Condition&) SAL_DELETED_FUNCTION;
     };
 
 }
