@@ -112,8 +112,7 @@ private:
     DECL_LINK(  SignatureVerifyResultListener, XMLSignatureVerifyResult* );
     DECL_LINK(  StartVerifySignatureElement, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >* );
 
-    // Not allowed:
-    XMLSignatureHelper(const XMLSignatureHelper&);
+    XMLSignatureHelper(const XMLSignatureHelper&) SAL_DELETED_FUNCTION;
 
 public:
     XMLSignatureHelper(const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& mrCtx );
