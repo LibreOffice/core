@@ -259,8 +259,8 @@ void RtfSdrExport::Commit(EscherPropertyContainer& rProps, const Rectangle& rRec
             EscherPropSortStruct aSegments;
 
             if (rProps.GetOpt(ESCHER_Prop_pVertices, aVertices) &&
-                rProps.GetOpt(ESCHER_Prop_pSegmentInfo, aSegments) &&
-                aVertices.nPropSize >= 6 && aSegments.nPropSize >= 6)
+                    rProps.GetOpt(ESCHER_Prop_pSegmentInfo, aSegments) &&
+                    aVertices.nPropSize >= 6 && aSegments.nPropSize >= 6)
             {
                 const sal_uInt8* pVerticesIt = aVertices.pBuf + 6;
                 sal_Size nVerticesPos = 6;

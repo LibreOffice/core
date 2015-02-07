@@ -4285,19 +4285,19 @@ bool DocxAttributeOutput::WriteOLEChart( const SdrObject* pSdrObj, const Size& r
  */
 void DocxAttributeOutput::WritePostponedChart()
 {
-       if(m_postponedChart == NULL)
-                return;
-       uno::Reference< chart2::XChartDocument > xChartDoc;
-       uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
-       if( xShape.is() )
-       {
-            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-            if( xPropSet.is() )
-                xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
-       }
+    if(m_postponedChart == NULL)
+        return;
+    uno::Reference< chart2::XChartDocument > xChartDoc;
+    uno::Reference< drawing::XShape > xShape( const_cast<SdrObject*>(m_postponedChart)->getUnoShape(), uno::UNO_QUERY );
+    if( xShape.is() )
+    {
+        uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+        if( xPropSet.is() )
+            xChartDoc.set( xPropSet->getPropertyValue( "Model" ), uno::UNO_QUERY );
+    }
 
-       if( xChartDoc.is() )
-       {
+    if( xChartDoc.is() )
+    {
         OSL_TRACE("DocxAttributeOutput::WriteOLE2Obj: export chart ");
         m_pSerializer->startElementNS( XML_w, XML_drawing,
             FSEND );
@@ -4360,8 +4360,7 @@ void DocxAttributeOutput::WritePostponedChart()
         m_pSerializer->endElementNS( XML_w, XML_drawing );
 
     }
-        m_postponedChart = NULL;
-    return;
+    m_postponedChart = NULL;
 }
 
 bool DocxAttributeOutput::WriteOLEMath( const SdrObject*, const SwOLENode& rOLENode, const Size& )
