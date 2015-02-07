@@ -65,9 +65,8 @@ class SalGtkFolderPicker :
             throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        // prevent copy and assignment
-        SalGtkFolderPicker( const SalGtkFolderPicker& );
-        SalGtkFolderPicker& operator=( const SalGtkFolderPicker& );
+        SalGtkFolderPicker( const SalGtkFolderPicker& ) SAL_DELETED_FUNCTION;
+        SalGtkFolderPicker& operator=( const SalGtkFolderPicker& ) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_UNX_GTK_FPICKER_SALGTKFOLDERPICKER_HXX

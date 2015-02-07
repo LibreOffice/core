@@ -43,9 +43,8 @@ private:
     /// Command URL (like .uno:Save) in case the button should handle it.
     OUString maCommand;
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE                  Button (const Button &);
-    SAL_DLLPRIVATE                  Button & operator= (const Button &);
+                                    Button (const Button &) SAL_DELETED_FUNCTION;
+                                    Button & operator= (const Button &) SAL_DELETED_FUNCTION;
 public:
     SAL_DLLPRIVATE sal_uInt16       ImplGetButtonState() const;
     SAL_DLLPRIVATE sal_uInt16&      ImplGetButtonState();
@@ -219,9 +218,8 @@ protected:
 private:
     SAL_DLLPRIVATE void            ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE                 OKButton (const OKButton &);
-    SAL_DLLPRIVATE                 OKButton & operator= (const OKButton &);
+                                   OKButton (const OKButton &) SAL_DELETED_FUNCTION;
+                                   OKButton & operator= (const OKButton &) SAL_DELETED_FUNCTION;
 
 public:
     explicit        OKButton( vcl::Window* pParent, WinBits nStyle = WB_DEFBUTTON );
@@ -237,9 +235,8 @@ protected:
 private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE      CancelButton (const CancelButton &);
-    SAL_DLLPRIVATE      CancelButton & operator= (const CancelButton &);
+                        CancelButton (const CancelButton &) SAL_DELETED_FUNCTION;
+                        CancelButton & operator= (const CancelButton &) SAL_DELETED_FUNCTION;
 
 public:
     explicit        CancelButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -265,9 +262,8 @@ protected:
 private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE      HelpButton( const HelpButton & );
-    SAL_DLLPRIVATE      HelpButton & operator= ( const HelpButton & );
+                        HelpButton( const HelpButton & ) SAL_DELETED_FUNCTION;
+                        HelpButton & operator= ( const HelpButton & ) SAL_DELETED_FUNCTION;
 
 public:
     explicit        HelpButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -310,9 +306,8 @@ private:
     SAL_DLLPRIVATE Size     ImplGetRadioImageSize() const;
     SAL_DLLPRIVATE long     ImplGetImageToTextDistance() const;
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE          RadioButton(const RadioButton &);
-    SAL_DLLPRIVATE          RadioButton& operator= (const RadioButton &);
+                            RadioButton(const RadioButton &) SAL_DELETED_FUNCTION;
+                            RadioButton& operator= (const RadioButton &) SAL_DELETED_FUNCTION;
 
 protected:
     using Control::ImplInitSettings;
@@ -437,9 +432,8 @@ private:
     SAL_DLLPRIVATE long         ImplGetImageToTextDistance() const;
     SAL_DLLPRIVATE Size         ImplGetCheckImageSize() const;
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE              CheckBox(const CheckBox &);
-    SAL_DLLPRIVATE              CheckBox& operator= (const CheckBox &);
+                                CheckBox(const CheckBox &) SAL_DELETED_FUNCTION;
+                                CheckBox& operator= (const CheckBox &) SAL_DELETED_FUNCTION;
 
 protected:
     using Control::ImplInitSettings;
@@ -523,9 +517,8 @@ protected:
 private:
     SAL_DLLPRIVATE void     ImplInitStyle();
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE          ImageButton( const ImageButton & );
-    SAL_DLLPRIVATE          ImageButton & operator= ( const ImageButton & );
+                            ImageButton( const ImageButton & ) SAL_DELETED_FUNCTION;
+                            ImageButton & operator= ( const ImageButton & ) SAL_DELETED_FUNCTION;
 
 public:
                     ImageButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -535,9 +528,8 @@ public:
 
 class VCL_DLLPUBLIC ImageRadioButton : public RadioButton
 {
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE  ImageRadioButton( const ImageRadioButton & );
-    SAL_DLLPRIVATE  ImageRadioButton & operator= ( const ImageRadioButton & );
+                    ImageRadioButton( const ImageRadioButton & ) SAL_DELETED_FUNCTION;
+                    ImageRadioButton & operator= ( const ImageRadioButton & ) SAL_DELETED_FUNCTION;
 
 public:
     explicit        ImageRadioButton( vcl::Window* pParent, WinBits nStyle = 0 );
@@ -546,9 +538,8 @@ public:
 
 class VCL_DLLPUBLIC TriStateBox : public CheckBox
 {
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE  TriStateBox( const TriStateBox & );
-    SAL_DLLPRIVATE  TriStateBox & operator= ( const TriStateBox & );
+                    TriStateBox( const TriStateBox & ) SAL_DELETED_FUNCTION;
+                    TriStateBox & operator= ( const TriStateBox & ) SAL_DELETED_FUNCTION;
 
 public:
     explicit        TriStateBox( vcl::Window* pParent, WinBits nStyle = 0 );

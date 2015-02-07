@@ -167,9 +167,8 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         // FilePicker Event functions
 
     private:
-        // prevent copy and assignment
-        SalGtkFilePicker( const SalGtkFilePicker& );
-        SalGtkFilePicker& operator=( const SalGtkFilePicker& );
+        SalGtkFilePicker( const SalGtkFilePicker& ) SAL_DELETED_FUNCTION;
+        SalGtkFilePicker& operator=( const SalGtkFilePicker& ) SAL_DELETED_FUNCTION;
 
         bool FilterNameExists( const OUString& rTitle );
         bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
@@ -205,7 +204,6 @@ class SalGtkFilePicker : public SalGtkPicker, public SalGtkFilePicker_Base
         GtkWidget  *m_pToggles[ TOGGLE_LAST ];
 
         bool mbToggleVisibility[TOGGLE_LAST];
-        bool mbToggleChecked[TOGGLE_LAST];
 
         enum {
             PLAY,

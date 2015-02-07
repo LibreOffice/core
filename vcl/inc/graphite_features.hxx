@@ -57,7 +57,7 @@ namespace grutils
         size_t numFeatures() const { return mnNumSettings; }
         gr_feature_val * values() const { return mpSettings; };
     private:
-        GrFeatureParser(const GrFeatureParser & copy);
+        GrFeatureParser(const GrFeatureParser & copy) SAL_DELETED_FUNCTION;
         void setLang(const gr_face * face, const OString & lang);
         bool isCharId(const OString & id, size_t offset, size_t length);
         gr_uint32 getCharId(const OString & id, size_t offset, size_t length);

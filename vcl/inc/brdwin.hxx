@@ -111,9 +111,8 @@ private:
                                       WinBits nStyle, sal_uInt16 nTypeStyle,
                                       const ::com::sun::star::uno::Any& );
 
-                            // Copy assignment is forbidden and not implemented.
-                            ImplBorderWindow (const ImplBorderWindow &);
-                            ImplBorderWindow& operator= (const ImplBorderWindow &);
+                            ImplBorderWindow (const ImplBorderWindow &) SAL_DELETED_FUNCTION;
+                            ImplBorderWindow& operator= (const ImplBorderWindow &) SAL_DELETED_FUNCTION;
 
 public:
                             ImplBorderWindow( vcl::Window* pParent,

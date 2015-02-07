@@ -297,8 +297,8 @@ public:
     sal_Int32           Count() const { return mnLines; }
 
 private:
-                            ImplMultiTextLineInfo( const ImplMultiTextLineInfo& );
-    ImplMultiTextLineInfo&  operator=( const ImplMultiTextLineInfo& );
+                            ImplMultiTextLineInfo( const ImplMultiTextLineInfo& ) SAL_DELETED_FUNCTION;
+    ImplMultiTextLineInfo&  operator=( const ImplMultiTextLineInfo& ) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_INC_OUTFONT_HXX

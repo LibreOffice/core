@@ -72,9 +72,8 @@ protected:
     SAL_DLLPRIVATE long ImplGetButtonSize();
 
 private:
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE      ButtonDialog( const ButtonDialog & );
-    SAL_DLLPRIVATE      ButtonDialog& operator=( const ButtonDialog& );
+                        ButtonDialog( const ButtonDialog & ) SAL_DELETED_FUNCTION;
+                        ButtonDialog& operator=( const ButtonDialog& ) SAL_DELETED_FUNCTION;
 
 private:
     boost::ptr_vector<ImplBtnDlgItem> maItemList;

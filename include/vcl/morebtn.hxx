@@ -39,9 +39,8 @@ private:
     MapUnit             meUnit;
     bool                mbState;
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE      MoreButton( const MoreButton & );
-    SAL_DLLPRIVATE      MoreButton& operator=( const MoreButton & );
+                        MoreButton( const MoreButton & ) SAL_DELETED_FUNCTION;
+                        MoreButton& operator=( const MoreButton & ) SAL_DELETED_FUNCTION;
     SAL_DLLPRIVATE void ShowState();
 
 protected:

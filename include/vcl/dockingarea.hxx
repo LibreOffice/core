@@ -31,9 +31,8 @@ class VCL_DLLPUBLIC DockingAreaWindow : public vcl::Window
 private:
     ImplData*       mpImplData;
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE  DockingAreaWindow (const DockingAreaWindow &);
-    SAL_DLLPRIVATE  DockingAreaWindow & operator= (const DockingAreaWindow &);
+                    DockingAreaWindow (const DockingAreaWindow &) SAL_DELETED_FUNCTION;
+                    DockingAreaWindow & operator= (const DockingAreaWindow &) SAL_DELETED_FUNCTION;
 
 public:
     explicit        DockingAreaWindow( vcl::Window* pParent );

@@ -271,9 +271,8 @@ private:
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
     DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE         DockingWindow (const DockingWindow &);
-    SAL_DLLPRIVATE         DockingWindow & operator= (const DockingWindow &);
+                           DockingWindow (const DockingWindow &) SAL_DELETED_FUNCTION;
+                           DockingWindow & operator= (const DockingWindow &) SAL_DELETED_FUNCTION;
 
 protected:
     using Window::ImplInit;

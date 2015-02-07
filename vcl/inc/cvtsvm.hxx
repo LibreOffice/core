@@ -89,9 +89,8 @@ public:
                         ~SVMConverter() {}
 
 private:
-                        // Not implemented
-                        SVMConverter( const SVMConverter& );
-    SVMConverter&       operator=( const SVMConverter& );
+                        SVMConverter( const SVMConverter& ) SAL_DELETED_FUNCTION;
+    SVMConverter&       operator=( const SVMConverter& ) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_INC_CVTSVM_HXX

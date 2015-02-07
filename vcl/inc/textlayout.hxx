@@ -97,9 +97,8 @@ namespace vcl
                               MetricVector* _pVector = NULL, OUString* _pDisplayText = NULL );
 
     private:
-        ControlTextRenderer();                                                  // never implemented
-        ControlTextRenderer( const ControlTextRenderer& );              // never implemented
-        ControlTextRenderer& operator=( const ControlTextRenderer& );   // never implemented
+        ControlTextRenderer( const ControlTextRenderer& ) SAL_DELETED_FUNCTION;
+        ControlTextRenderer& operator=( const ControlTextRenderer& ) SAL_DELETED_FUNCTION;
 
     private:
         ::std::unique_ptr< ReferenceDeviceTextLayout >   m_pImpl;

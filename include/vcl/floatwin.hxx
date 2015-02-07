@@ -95,9 +95,8 @@ private:
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
     DECL_DLLPRIVATE_LINK(  ImplEndPopupModeHdl, void* );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE         FloatingWindow (const FloatingWindow &);
-    SAL_DLLPRIVATE         FloatingWindow & operator= (const FloatingWindow &);
+                           FloatingWindow (const FloatingWindow &) SAL_DELETED_FUNCTION;
+                           FloatingWindow & operator= (const FloatingWindow &) SAL_DELETED_FUNCTION;
 
 protected:
     using Window::ImplInit;

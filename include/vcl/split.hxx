@@ -53,9 +53,8 @@ private:
     SAL_DLLPRIVATE void      ImplRestoreSplitter();
     SAL_DLLPRIVATE void      ImplInitHorVer(bool bNew);
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE           Splitter (const Splitter &);
-    SAL_DLLPRIVATE           Splitter& operator= (const Splitter &);
+                             Splitter (const Splitter &) SAL_DELETED_FUNCTION;
+                             Splitter& operator= (const Splitter &) SAL_DELETED_FUNCTION;
 
 protected:
     using Window::ImplInit;

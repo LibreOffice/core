@@ -46,9 +46,8 @@ private:
 
     SAL_DLLPRIVATE void     ImplInitControlData();
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE          Control (const Control &);
-    SAL_DLLPRIVATE          Control & operator= (const Control &);
+                            Control (const Control &) SAL_DELETED_FUNCTION;
+                            Control & operator= (const Control &) SAL_DELETED_FUNCTION;
 
 protected:
                     Control( WindowType nType );

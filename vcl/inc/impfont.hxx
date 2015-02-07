@@ -168,9 +168,8 @@ private:
     friend void intrusive_ptr_add_ref(ImplFontCharMap* pImplFontCharMap);
     friend void intrusive_ptr_release(ImplFontCharMap* pImplFontCharMap);
 
-    // prevent assignment and copy construction
-    explicit            ImplFontCharMap( const ImplFontCharMap& );
-    void                operator=( const ImplFontCharMap& );
+                        ImplFontCharMap( const ImplFontCharMap& ) SAL_DELETED_FUNCTION;
+    void                operator=( const ImplFontCharMap& ) SAL_DELETED_FUNCTION;
 
     static ImplFontCharMapPtr getDefaultMap( bool bSymbols=false);
     bool                isDefaultMap() const;

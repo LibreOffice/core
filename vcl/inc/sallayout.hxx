@@ -208,9 +208,8 @@ protected:
     static int      CalcAsianKerning( sal_UCS4, bool bLeft, bool bVertical );
 
 private:
-    // enforce proper copy semantic
-    SAL_DLLPRIVATE  SalLayout( const SalLayout& );
-    SAL_DLLPRIVATE  SalLayout& operator=( const SalLayout& );
+                    SalLayout( const SalLayout& ) SAL_DELETED_FUNCTION;
+                    SalLayout& operator=( const SalLayout& ) SAL_DELETED_FUNCTION;
 
 protected:
     int             mnMinCharPos;
@@ -257,9 +256,8 @@ private:
     virtual void    DropGlyph( int ) SAL_OVERRIDE {}
     virtual void    Simplify( bool ) SAL_OVERRIDE {}
 
-    // enforce proper copy semantic
-    SAL_DLLPRIVATE  MultiSalLayout( const MultiSalLayout& );
-    SAL_DLLPRIVATE  MultiSalLayout& operator=( const MultiSalLayout& );
+                    MultiSalLayout( const MultiSalLayout& ) SAL_DELETED_FUNCTION;
+                    MultiSalLayout& operator=( const MultiSalLayout& ) SAL_DELETED_FUNCTION;
 
 private:
     SalLayout*      mpLayouts[ MAX_FALLBACK ];
@@ -363,9 +361,8 @@ protected:
 private:
     mutable Point   maBasePoint;
 
-    // enforce proper copy semantic
-    SAL_DLLPRIVATE  GenericSalLayout( const GenericSalLayout& );
-    SAL_DLLPRIVATE  GenericSalLayout& operator=( const GenericSalLayout& );
+                    GenericSalLayout( const GenericSalLayout& ) SAL_DELETED_FUNCTION;
+                    GenericSalLayout& operator=( const GenericSalLayout& ) SAL_DELETED_FUNCTION;
 };
 
 #undef SalGraphics

@@ -80,9 +80,8 @@ namespace vcl
         bool bEnabled;
 
     private:
-        QuickSelectionEngine();                                         // never implemented
-        QuickSelectionEngine( const QuickSelectionEngine& );            // never implemented
-        QuickSelectionEngine& operator=( const QuickSelectionEngine& ); // never implemented
+        QuickSelectionEngine( const QuickSelectionEngine& ) SAL_DELETED_FUNCTION;
+        QuickSelectionEngine& operator=( const QuickSelectionEngine& ) SAL_DELETED_FUNCTION;
     };
 
 

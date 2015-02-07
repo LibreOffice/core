@@ -53,8 +53,8 @@ private:
     SAL_DLLPRIVATE void ImplInit( vcl::Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken );
 
 private:
-    SAL_DLLPRIVATE              WorkWindow( const WorkWindow& rWin );
-    SAL_DLLPRIVATE WorkWindow&  operator =( const WorkWindow& rWin );
+    WorkWindow( const WorkWindow& rWin ) SAL_DELETED_FUNCTION;
+    WorkWindow&  operator =( const WorkWindow& rWin ) SAL_DELETED_FUNCTION;
 
 protected:
     explicit        WorkWindow( WindowType nType );

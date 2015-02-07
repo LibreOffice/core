@@ -47,9 +47,8 @@ private:
     SAL_DLLPRIVATE void    ImplInitMenuButtonData();
     DECL_DLLPRIVATE_LINK(  ImplMenuTimeoutHdl, void* );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE         MenuButton( const MenuButton & );
-    SAL_DLLPRIVATE         MenuButton& operator=( const MenuButton & );
+                           MenuButton( const MenuButton & ) SAL_DELETED_FUNCTION;
+                           MenuButton& operator=( const MenuButton & ) SAL_DELETED_FUNCTION;
 
 protected:
     using Window::ImplInit;

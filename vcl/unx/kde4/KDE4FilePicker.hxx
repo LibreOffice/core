@@ -219,9 +219,8 @@ Q_SIGNALS:
     void checkProtocolSignal();
 
 private:
-    // prevent copy and assignment
-    KDE4FilePicker( const KDE4FilePicker& );
-    KDE4FilePicker& operator=( const KDE4FilePicker& );
+    KDE4FilePicker( const KDE4FilePicker& ) SAL_DELETED_FUNCTION;
+    KDE4FilePicker& operator=( const KDE4FilePicker& ) SAL_DELETED_FUNCTION;
 
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);

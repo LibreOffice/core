@@ -162,8 +162,8 @@ class VCL_DLLPUBLIC GraphicDescriptor
     bool            ImpDetectEMF( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectSVG( SvStream& rStm, bool bExtendedInfo );
     bool            ImpDetectMOV( SvStream& rStm, bool bExtendedInfo );
-    GraphicDescriptor( const GraphicDescriptor& );
-    GraphicDescriptor& operator=( const GraphicDescriptor& );
+    GraphicDescriptor( const GraphicDescriptor& ) SAL_DELETED_FUNCTION;
+    GraphicDescriptor& operator=( const GraphicDescriptor& ) SAL_DELETED_FUNCTION;
 
 public:
 

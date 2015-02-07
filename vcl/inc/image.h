@@ -49,9 +49,9 @@ private:
     void        ImplUpdateDisplayBmp( OutputDevice* pOutDev );
     void        ImplUpdateDisabledBmpEx( int nPos );
 
-private:    // prevent assignment and copy construction
-    ImplImageBmp( const ImplImageBmp& );
-    void operator=( const ImplImageBmp& );
+private:
+    ImplImageBmp( const ImplImageBmp& ) SAL_DELETED_FUNCTION;
+    void operator=( const ImplImageBmp& ) SAL_DELETED_FUNCTION;
 };
 
 // - ImageTypes -
@@ -137,9 +137,9 @@ struct ImplImage
                     ImplImage();
                     ~ImplImage();
 
-private:    // prevent assignment and copy construction
-            ImplImage( const ImplImage&);
-    void    operator=( const ImplImage&);
+private:
+            ImplImage( const ImplImage&) SAL_DELETED_FUNCTION;
+    void    operator=( const ImplImage&) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_INC_IMAGE_H

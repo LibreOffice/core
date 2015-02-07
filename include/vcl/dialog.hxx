@@ -53,9 +53,8 @@ private:
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE         Dialog (const Dialog &);
-    SAL_DLLPRIVATE         Dialog & operator= (const Dialog &);
+    SAL_DLLPRIVATE         Dialog (const Dialog &) SAL_DELETED_FUNCTION;
+    SAL_DLLPRIVATE         Dialog & operator= (const Dialog &) SAL_DELETED_FUNCTION;
 
     DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void* );
 
@@ -126,9 +125,8 @@ public:
 // - ModelessDialog -
 class VCL_DLLPUBLIC ModelessDialog : public Dialog
 {
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE         ModelessDialog (const ModelessDialog &);
-    SAL_DLLPRIVATE         ModelessDialog & operator= (const ModelessDialog &);
+                    ModelessDialog (const ModelessDialog &) SAL_DELETED_FUNCTION;
+                    ModelessDialog & operator= (const ModelessDialog &) SAL_DELETED_FUNCTION;
 
 public:
     explicit        ModelessDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription );
@@ -149,9 +147,8 @@ protected:
 
 private:
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE         ModalDialog (const ModalDialog &);
-    SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &);
+    SAL_DLLPRIVATE         ModalDialog (const ModalDialog &) SAL_DELETED_FUNCTION;
+    SAL_DLLPRIVATE         ModalDialog & operator= (const ModalDialog &) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_DIALOG_HXX

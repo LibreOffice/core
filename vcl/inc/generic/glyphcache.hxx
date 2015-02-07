@@ -303,9 +303,8 @@ private:
     ServerFont&             mrServerFont;
     com::sun::star::uno::Reference<com::sun::star::i18n::XBreakIterator> mxBreak;
 
-    // enforce proper copy semantic
-    SAL_DLLPRIVATE          ServerFontLayout( const ServerFontLayout& );
-    SAL_DLLPRIVATE          ServerFontLayout& operator=( const ServerFontLayout& );
+                            ServerFontLayout( const ServerFontLayout& ) SAL_DELETED_FUNCTION;
+                            ServerFontLayout& operator=( const ServerFontLayout& ) SAL_DELETED_FUNCTION;
 
 };
 

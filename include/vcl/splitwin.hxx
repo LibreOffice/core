@@ -66,8 +66,6 @@ private:
                         mbCalc:1,
                         mbRecalc:1,
                         mbInvalidate:1,
-                        mbSizeable:1,
-                        mbBorder:1,
                         mbAutoHide:1,
                         mbFadeIn:1,
                         mbFadeOut:1,
@@ -121,9 +119,8 @@ private:
                                                 long& rMouseOff, ImplSplitSet** ppFoundSet, sal_uInt16& rFoundPos );
     static SAL_DLLPRIVATE void ImplDrawSplitTracking( SplitWindow* pThis, const Point& rPos );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE      SplitWindow (const SplitWindow &);
-    SAL_DLLPRIVATE      SplitWindow & operator= (const SplitWindow &);
+                        SplitWindow (const SplitWindow &) SAL_DELETED_FUNCTION;
+                        SplitWindow & operator= (const SplitWindow &) SAL_DELETED_FUNCTION;
 public:
                         SplitWindow( vcl::Window* pParent, WinBits nStyle = 0 );
                         virtual ~SplitWindow();

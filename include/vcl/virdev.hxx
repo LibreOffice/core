@@ -50,9 +50,8 @@ private:
                                                 const basebmp::RawMemorySharedArray &pBuffer,
                                                 const bool bTopDown );
 
-    // Copy assignment is forbidden and not implemented.
-    VirtualDevice (const VirtualDevice &);
-    VirtualDevice & operator= (const VirtualDevice &);
+    VirtualDevice (const VirtualDevice &) SAL_DELETED_FUNCTION;
+    VirtualDevice & operator= (const VirtualDevice &) SAL_DELETED_FUNCTION;
 
     /** Used for alpha VDev, to set areas to opaque
 

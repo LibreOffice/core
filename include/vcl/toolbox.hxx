@@ -240,9 +240,8 @@ private:
     DECL_DLLPRIVATE_LINK(          ImplCustomMenuListener, VclMenuEvent* );
     DECL_DLLPRIVATE_LINK(          ImplDropdownLongClickHdl, void* );
 
-    // Copy assignment is forbidden and not implemented.
-    SAL_DLLPRIVATE                 ToolBox (const ToolBox &);
-    SAL_DLLPRIVATE        ToolBox& operator= (const ToolBox &);
+                                   ToolBox (const ToolBox &) SAL_DELETED_FUNCTION;
+                          ToolBox& operator= (const ToolBox &) SAL_DELETED_FUNCTION;
 
 public:
     SAL_DLLPRIVATE void            ImplFloatControl( bool bStart, FloatingWindow* pWindow = NULL );

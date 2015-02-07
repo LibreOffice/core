@@ -1513,8 +1513,8 @@ private:
 class VCL_DLLPUBLIC SolarMutexGuard
 {
     private:
-        SolarMutexGuard( const SolarMutexGuard& );
-        const SolarMutexGuard& operator = ( const SolarMutexGuard& );
+        SolarMutexGuard( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
+        const SolarMutexGuard& operator = ( const SolarMutexGuard& ) SAL_DELETED_FUNCTION;
         comphelper::SolarMutex& m_solarMutex;
 
     public:
@@ -1536,8 +1536,8 @@ class VCL_DLLPUBLIC SolarMutexGuard
 
 class VCL_DLLPUBLIC SolarMutexClearableGuard SAL_FINAL
 {
-    SolarMutexClearableGuard( const SolarMutexClearableGuard& );
-    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& );
+    SolarMutexClearableGuard( const SolarMutexClearableGuard& ) SAL_DELETED_FUNCTION;
+    const SolarMutexClearableGuard& operator = ( const SolarMutexClearableGuard& ) SAL_DELETED_FUNCTION;
     bool m_bCleared;
 public:
     /** Acquires mutex
@@ -1573,8 +1573,8 @@ protected:
 
 class VCL_DLLPUBLIC SolarMutexResettableGuard SAL_FINAL
 {
-    SolarMutexResettableGuard( const SolarMutexResettableGuard& );
-    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& );
+    SolarMutexResettableGuard( const SolarMutexResettableGuard& ) SAL_DELETED_FUNCTION;
+    const SolarMutexResettableGuard& operator = ( const SolarMutexResettableGuard& ) SAL_DELETED_FUNCTION;
     bool m_bCleared;
 public:
     /** Acquires mutex
