@@ -207,7 +207,7 @@ bool isEmptyString( const OUString& rStr )
 /** Convert string content to numeric value.
 
     Depending on the string conversion configuration different approaches are
-    taken. For ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS if the string is not
+    taken. For ScCalcConfig::StringConversion::UNAMBIGUOUS if the string is not
     empty the following conversion rules are applied:
 
     Converted are only integer numbers including exponent, and ISO 8601 dates
@@ -240,7 +240,7 @@ bool isEmptyString( const OUString& rStr )
 
 double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 {
-    // We keep ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT default until
+    // We keep ScCalcConfig::StringConversion::LOCALE default until
     // we provide a friendly way to convert string numbers into numbers in the UI.
 
     double fValue = 0.0;
@@ -253,19 +253,19 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 
     switch (maCalcConfig.meStringConversion)
     {
-        case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+        case ScCalcConfig::StringConversion::ERROR:
             SetError( mnStringNoValueError);
             return fValue;
-        case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+        case ScCalcConfig::StringConversion::ZERO:
             return fValue;
-        case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+        case ScCalcConfig::StringConversion::LOCALE:
             {
                 if (maCalcConfig.mbEmptyStringAsZero)
                 {
                     // The number scanner does not accept empty strings or strings
                     // containing only spaces, be on par in these cases with what was
                     // accepted in OOo and is in AOO (see also the
-                    // STRING_CONVERSION_UNAMBIGUOUS branch) and convert to 0 to prevent
+                    // StringConversion::UNAMBIGUOUS branch) and convert to 0 to prevent
                     // interoperability nightmares.
 
                     if (isEmptyString( rStr))
@@ -281,7 +281,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
                 return fValue;
             }
             break;
-        case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
+        case ScCalcConfig::StringConversion::UNAMBIGUOUS:
             {
                 if (!maCalcConfig.mbEmptyStringAsZero)
                 {

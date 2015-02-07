@@ -387,16 +387,16 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                         switch (nIntVal)
                         {
                             case 0:
-                                eConv = ScCalcConfig::STRING_CONVERSION_AS_ERROR;
+                                eConv = ScCalcConfig::StringConversion::ERROR;
                             break;
                             case 1:
-                                eConv = ScCalcConfig::STRING_CONVERSION_AS_ZERO;
+                                eConv = ScCalcConfig::StringConversion::ZERO;
                             break;
                             case 2:
-                                eConv = ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS;
+                                eConv = ScCalcConfig::StringConversion::UNAMBIGUOUS;
                             break;
                             case 3:
-                                eConv = ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT;
+                                eConv = ScCalcConfig::StringConversion::LOCALE;
                             break;
                             default:
                                 SAL_WARN("sc", "unknown string conversion option!");
@@ -558,10 +558,10 @@ void ScFormulaCfg::Commit()
                 sal_Int32 nVal = 3;
                 switch (GetCalcConfig().meStringConversion)
                 {
-                    case ScCalcConfig::STRING_CONVERSION_AS_ERROR:          nVal = 0; break;
-                    case ScCalcConfig::STRING_CONVERSION_AS_ZERO:           nVal = 1; break;
-                    case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:       nVal = 2; break;
-                    case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:  nVal = 3; break;
+                case ScCalcConfig::StringConversion::ERROR:       nVal = 0; break;
+                case ScCalcConfig::StringConversion::ZERO:        nVal = 1; break;
+                case ScCalcConfig::StringConversion::UNAMBIGUOUS: nVal = 2; break;
+                case ScCalcConfig::StringConversion::LOCALE:      nVal = 3; break;
                 }
                 pValues[nProp] <<= nVal;
             }

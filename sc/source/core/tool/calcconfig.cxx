@@ -22,7 +22,7 @@
 
 ScCalcConfig::ScCalcConfig() :
     meStringRefAddressSyntax(formula::FormulaGrammar::CONV_UNSPECIFIED),
-    meStringConversion(STRING_CONVERSION_LOCALE_DEPENDENT),     // old LibreOffice behavior
+    meStringConversion(StringConversion::LOCALE),     // old LibreOffice behavior
     mbEmptyStringAsZero(false)
 {
     setOpenCLConfigToDefault();
@@ -105,10 +105,10 @@ std::string StringConversionToString(ScCalcConfig::StringConversion eConv)
 {
     switch (eConv)
     {
-    case ScCalcConfig::STRING_CONVERSION_AS_ERROR: return "ERROR";
-    case ScCalcConfig::STRING_CONVERSION_AS_ZERO: return "ZERO";
-    case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS: return "UNAMBIGUOUS";
-    case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT: return "LOCALE";
+    case ScCalcConfig::StringConversion::ERROR: return "ERROR";
+    case ScCalcConfig::StringConversion::ZERO: return "ZERO";
+    case ScCalcConfig::StringConversion::UNAMBIGUOUS: return "UNAMBIGUOUS";
+    case ScCalcConfig::StringConversion::LOCALE: return "LOCALE";
     default: return std::to_string((int) eConv);
     }
 }

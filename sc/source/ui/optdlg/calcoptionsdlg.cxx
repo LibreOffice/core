@@ -71,7 +71,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(vcl::Window* pParent, const ScCalcConfi
     get(mpFtMemory, "memory");
 
     get(mpConversion,"comboConversion");
-    mpConversion->SelectEntryPos(rConfig.meStringConversion, true);
+    mpConversion->SelectEntryPos(static_cast<sal_Int32>(rConfig.meStringConversion), true);
     mpConversion->SetSelectHdl(LINK(this, ScCalcOptionsDialog, ConversionModifiedHdl));
 
     get(mpEmptyAsZero,"checkEmptyAsZero");
@@ -168,18 +168,18 @@ IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
   maConfig.meStringConversion = (ScCalcConfig::StringConversion)pConv->GetSelectEntryPos();
     switch (maConfig.meStringConversion)
     {
-         case ScCalcConfig::STRING_CONVERSION_AS_ERROR:
+         case ScCalcConfig::StringConversion::ERROR:
                     maConfig.mbEmptyStringAsZero = false;
                     mpEmptyAsZero->Check(false);
                     mpEmptyAsZero->Enable(false);
          break;
-         case ScCalcConfig::STRING_CONVERSION_AS_ZERO:
+         case ScCalcConfig::StringConversion::ZERO:
                     maConfig.mbEmptyStringAsZero = true;
                     mpEmptyAsZero->Check(true);
                     mpEmptyAsZero->Enable(false);
          break;
-         case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS:
-         case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT:
+         case ScCalcConfig::StringConversion::UNAMBIGUOUS:
+         case ScCalcConfig::StringConversion::LOCALE:
                     // Reset to the value the user selected before.
                     maConfig.mbEmptyStringAsZero = mbSelectedEmptyStringAsZero;
                     mpEmptyAsZero->Enable(true);
