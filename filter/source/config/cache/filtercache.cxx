@@ -1545,7 +1545,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (!(aVal >>= xUIName) && !xUIName.is())
         return;
 
-    const ::std::vector< OUString >                 lLocales(comphelper::sequenceToContainer<::std::vector< OUString >>(
+    const ::std::vector< OUString >                 lLocales(comphelper::sequenceToContainer< ::std::vector< OUString >>(
                                                                 xUIName->getElementNames()));
           ::std::vector< OUString >::const_iterator pLocale ;
           ::comphelper::SequenceAsHashMap                                   lUINames;

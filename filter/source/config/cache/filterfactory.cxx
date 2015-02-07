@@ -143,7 +143,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aFilter >> lConfig;
 
-        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer<::std::vector< css::uno::Any > >(lArguments));
+        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< css::uno::Any > >(lArguments));
         stlArguments.insert(stlArguments.begin(), css::uno::makeAny(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));
