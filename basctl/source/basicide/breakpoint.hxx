@@ -23,6 +23,8 @@
 #include <cstddef>
 #include <vector>
 
+#include <sal/types.h>
+
 class SbModule;
 
 namespace basctl
@@ -42,7 +44,7 @@ struct BreakPoint
 class BreakPointList
 {
 private:
-    void operator =(BreakPointList); // not implemented
+    void operator =(BreakPointList) SAL_DELETED_FUNCTION;
     ::std::vector<BreakPoint*> maBreakPoints;
 
 public:

@@ -304,10 +304,8 @@ bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::sc
 
 class ModuleInfoHelper
 {
-    // non-constructible class
-    ModuleInfoHelper ();
-    ModuleInfoHelper (const ModuleInfoHelper&);
-    ModuleInfoHelper& operator = (const ModuleInfoHelper&);
+    ModuleInfoHelper (const ModuleInfoHelper&) SAL_DELETED_FUNCTION;
+    ModuleInfoHelper& operator = (const ModuleInfoHelper&) SAL_DELETED_FUNCTION;
 public:
     static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName );
     static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const OUString& rModName );
