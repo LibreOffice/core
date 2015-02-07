@@ -50,8 +50,8 @@ public:
         return *pPool;
     }
 private:
-    ScriptingConstantsPool( const ScriptingConstantsPool & );
-    ScriptingConstantsPool& operator = ( const ScriptingConstantsPool & );
+    ScriptingConstantsPool( const ScriptingConstantsPool & ) SAL_DELETED_FUNCTION;
+    ScriptingConstantsPool& operator = ( const ScriptingConstantsPool & ) SAL_DELETED_FUNCTION;
     ScriptingConstantsPool()
         : DOC_REF( "SCRIPTING_DOC_REF" ),
         DOC_STORAGE_ID( "SCRIPTING_DOC_STORAGE_ID" ),
