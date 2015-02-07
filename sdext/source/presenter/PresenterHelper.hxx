@@ -24,43 +24,36 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/presentation/XSlideShowController.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <boost/noncopyable.hpp>
 
 namespace sdext { namespace presenter {
 
 /** Collection of helper functions that do not fit in anywhere else.
     Provide access to frequently used strings of the drawing framework.
 */
-class PresenterHelper
-    : ::boost::noncopyable
+namespace PresenterHelper
 {
-public:
-    static const OUString msPaneURLPrefix;
-    static const OUString msCenterPaneURL;
-    static const OUString msFullScreenPaneURL;
+    extern const OUString msPaneURLPrefix;
+    extern const OUString msCenterPaneURL;
+    extern const OUString msFullScreenPaneURL;
 
-    static const OUString msViewURLPrefix;
-    static const OUString msPresenterScreenURL;
-    static const OUString msSlideSorterURL;
+    extern const OUString msViewURLPrefix;
+    extern const OUString msPresenterScreenURL;
+    extern const OUString msSlideSorterURL;
 
-    static const OUString msResourceActivationEvent;
-    static const OUString msResourceDeactivationEvent;
+    extern const OUString msResourceActivationEvent;
+    extern const OUString msResourceDeactivationEvent;
 
-    static const OUString msDefaultPaneStyle;
-    static const OUString msDefaultViewStyle;
+    extern const OUString msDefaultPaneStyle;
+    extern const OUString msDefaultViewStyle;
 
     /** Return the slide show controller of a running presentation that has
         the same document as the given framework controller.
         @return
             When no presentation is running this method returns an empty reference.
     */
-    static css::uno::Reference<css::presentation::XSlideShowController> GetSlideShowController (
+    css::uno::Reference<css::presentation::XSlideShowController> GetSlideShowController (
         const css::uno::Reference<css::frame::XController>& rxController);
-
-private:
-    PresenterHelper (void);
-    ~PresenterHelper (void);
-};
+}
 
 } } // end of namespace presenter
 
