@@ -949,8 +949,6 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
     if ( len < 256 )
     { // try various optimisations
         sal_Int32 ulen;
-        if ( len < 0 )
-            len = strlen( str );
         if ( eTextEncoding == RTL_TEXTENCODING_ASCII_US )
         {
             int i;
