@@ -105,10 +105,10 @@ OUString StringConversionToString(ScCalcConfig::StringConversion eConv)
 {
     switch (eConv)
     {
-    case ScCalcConfig::StringConversion::ILLEGAL: return "ILLEGAL";
-    case ScCalcConfig::StringConversion::ZERO: return "ZERO";
-    case ScCalcConfig::StringConversion::UNAMBIGUOUS: return "UNAMBIGUOUS";
-    case ScCalcConfig::StringConversion::LOCALE: return "LOCALE";
+    case ScCalcConfig::StringConversion::ILLEGAL: return OUString("ILLEGAL");
+    case ScCalcConfig::StringConversion::ZERO: return OUString("ZERO");
+    case ScCalcConfig::StringConversion::UNAMBIGUOUS: return OUString("UNAMBIGUOUS");
+    case ScCalcConfig::StringConversion::LOCALE: return OUString("LOCALE");
     default: return OUString::number((int) eConv);
     }
 }
