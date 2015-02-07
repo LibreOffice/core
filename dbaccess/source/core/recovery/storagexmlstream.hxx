@@ -54,9 +54,8 @@ namespace dbaccess
         void    characters( const OUString& i_rCharacters ) const;
 
     private:
-        StorageXMLOutputStream();                                           // never implemented
-        StorageXMLOutputStream( const StorageXMLOutputStream& );            // never implemented
-        StorageXMLOutputStream& operator=( const StorageXMLOutputStream& ); // never implemented
+        StorageXMLOutputStream( const StorageXMLOutputStream& ) SAL_DELETED_FUNCTION;
+        StorageXMLOutputStream& operator=( const StorageXMLOutputStream& ) SAL_DELETED_FUNCTION;
 
     private:
         ::std::unique_ptr< StorageXMLOutputStream_Data >   m_pData;
@@ -79,9 +78,8 @@ namespace dbaccess
                 );
 
     private:
-        StorageXMLInputStream();                                            // never implemented
-        StorageXMLInputStream( const StorageXMLInputStream& );              // never implemented
-        StorageXMLInputStream& operator=( const StorageXMLInputStream& );   // never implemented
+        StorageXMLInputStream( const StorageXMLInputStream& ) SAL_DELETED_FUNCTION;
+        StorageXMLInputStream& operator=( const StorageXMLInputStream& ) SAL_DELETED_FUNCTION;
 
     private:
         ::std::unique_ptr< StorageXMLInputStream_Data >   m_pData;

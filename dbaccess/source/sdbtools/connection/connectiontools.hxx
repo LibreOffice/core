@@ -80,9 +80,8 @@ namespace sdbtools
         virtual ~ConnectionTools();
 
     private:
-        ConnectionTools();                                      // never implemented
-        ConnectionTools( const ConnectionTools& );              // never implemented
-        ConnectionTools& operator=( const ConnectionTools& );   // never implemented
+        ConnectionTools( const ConnectionTools& ) SAL_DELETED_FUNCTION;
+        ConnectionTools& operator=( const ConnectionTools& ) SAL_DELETED_FUNCTION;
     };
 
 } // namespace sdbtools

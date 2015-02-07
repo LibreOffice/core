@@ -70,9 +70,8 @@ namespace sdbtools
         virtual ~ObjectNames();
 
     private:
-        ObjectNames();                                  // never implemented
-        ObjectNames( const ObjectNames& );              // never implemented
-        ObjectNames& operator=( const ObjectNames& );   // never implemented
+        ObjectNames( const ObjectNames& ) SAL_DELETED_FUNCTION;
+        ObjectNames& operator=( const ObjectNames& ) SAL_DELETED_FUNCTION;
     };
 
 } // namespace sdbtools

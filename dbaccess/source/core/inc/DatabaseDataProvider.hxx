@@ -207,8 +207,8 @@ private:
     virtual double SAL_CALL getNotANumber()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isNotANumber(double nNumber )throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
-    DatabaseDataProvider(DatabaseDataProvider &); // not defined
-    void operator =(DatabaseDataProvider &); // not defined
+    DatabaseDataProvider(DatabaseDataProvider &) SAL_DELETED_FUNCTION;
+    void operator =(DatabaseDataProvider &) SAL_DELETED_FUNCTION;
 
     virtual ~DatabaseDataProvider() {}
 

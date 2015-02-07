@@ -64,9 +64,8 @@ namespace sdbtools
         virtual ~DataSourceMetaData();
 
     private:
-        DataSourceMetaData();                                  // never implemented
-        DataSourceMetaData( const DataSourceMetaData& );              // never implemented
-        DataSourceMetaData& operator=( const DataSourceMetaData& );   // never implemented
+        DataSourceMetaData( const DataSourceMetaData& ) SAL_DELETED_FUNCTION;
+        DataSourceMetaData& operator=( const DataSourceMetaData& ) SAL_DELETED_FUNCTION;
     };
 
 } // namespace sdbtools
