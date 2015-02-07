@@ -86,7 +86,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
 void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
 {
     SwFrmFmts& rFmts = *rRg.aStart.GetNode().GetDoc()->GetSpzFrmFmts();
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( SwFrmFmts::size_type n = 0; n < rFmts.size(); ++n )
     {
         SwFrmFmt *const pFmt = rFmts[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -125,7 +125,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 
     const SwNodeIndex* pCntntIdx;
 
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( SwFrmFmts::size_type n = 0; n < rFmts.size(); ++n )
     {
         pFmt = (SwFrmFmt*)rFmts[n];
         pAnchor = &pFmt->GetAnchor();
@@ -177,7 +177,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
     SwFrmFmts& rTbl = *pDoc->GetSpzFrmFmts();
-    for ( sal_uInt16 i = rTbl.size(); i; )
+    for ( auto i = rTbl.size(); i; )
     {
         SwFrmFmt *pFmt = rTbl[--i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
@@ -268,7 +268,7 @@ void _SaveRedlEndPosForRestore::_Restore()
     if( pNode )
     {
         SwPosition aPos( *pSavIdx, SwIndex( pNode, nSavCntnt ));
-        for( sal_uInt16 n = pSavArr->size(); n; )
+        for( auto n = pSavArr->size(); n; )
             *(*pSavArr)[ --n ] = aPos;
     }
 }
@@ -457,10 +457,10 @@ static void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::Proofreading
         return;
     SwGrammarMarkUp* pWrong = rTxtNode.GetGrammarCheck();
     linguistic2::SingleProofreadingError* pArray = rResult.aErrors.getArray();
-    sal_uInt16 i, j = 0;
+    sal_uInt16 j = 0;
     if( pWrong )
     {
-        for( i = 0; i < rResult.aErrors.getLength(); ++i )
+        for( sal_Int32 i = 0; i < rResult.aErrors.getLength(); ++i )
         {
             const linguistic2::SingleProofreadingError &rError = rResult.aErrors[i];
             const sal_Int32 nStart = rConversionMap.ConvertToModelPosition( rError.nErrorStart ).mnPos;
