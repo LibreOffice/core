@@ -51,8 +51,8 @@ public:
 private:
     class RetryContinuation;
 
-    InteractionRequest(InteractionRequest &); // not implemented
-    void operator =(const InteractionRequest&); // not implemented
+    InteractionRequest(InteractionRequest &) SAL_DELETED_FUNCTION;
+    void operator =(const InteractionRequest&) SAL_DELETED_FUNCTION;
 
     virtual ~InteractionRequest();
 
