@@ -627,8 +627,8 @@ public:
     static bool         skipRecordBlock( BiffInputStream& rStrm, sal_uInt16 nEndRecId );
 
 private:
-                        BiffHelper();   // not implemented
-                        ~BiffHelper();  // not implemented
+                        BiffHelper() SAL_DELETED_FUNCTION;
+                        ~BiffHelper() SAL_DELETED_FUNCTION;
 };
 
 /** BIFF12 stream operator for an OUString, reads 32-bit string length and Unicode array. */

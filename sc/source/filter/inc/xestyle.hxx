@@ -129,33 +129,28 @@ class SvxFont;
 
 const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
 
-/** Static helper functions for font export. */
-class XclExpFontHelper
+/** Helper functions for font export. */
+namespace XclExpFontHelper
 {
-public:
     /** Returns the script type of the first font item found in the item set and its parents. */
-    static sal_Int16    GetFirstUsedScript(
+    sal_Int16    GetFirstUsedScript(
                             const XclExpRoot& rRoot,
                             const SfxItemSet& rItemSet );
 
     /** Returns a VCL font object filled from the passed item set. */
-    static vcl::Font    GetFontFromItemSet(
+    vcl::Font    GetFontFromItemSet(
                             const XclExpRoot& rRoot,
                             const SfxItemSet& rItemSet,
                             sal_Int16 nScript );
 
     /** Returns true, if at least one font related item is set in the passed item set.
         @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItems(
+    bool         CheckItems(
                             const XclExpRoot& rRoot,
                             const SfxItemSet& rItemSet,
                             sal_Int16 nScript,
                             bool bDeep );
-
-private:
-                            XclExpFontHelper();
-                            ~XclExpFontHelper();
-};
+}
 
 /** Stores all data of an Excel font and provides export of FONT records. */
 class XclExpFont : public XclExpRecord, protected XclExpRoot

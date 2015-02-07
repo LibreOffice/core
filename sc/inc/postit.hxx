@@ -142,8 +142,8 @@ public:
     void                UpdateCaptionPos( const ScAddress& rPos );
 
 private:
-                        ScPostIt( const ScPostIt& );
-    ScPostIt&           operator=( const ScPostIt& );
+                        ScPostIt( const ScPostIt& ) SAL_DELETED_FUNCTION;
+    ScPostIt&           operator=( const ScPostIt& ) SAL_DELETED_FUNCTION;
 
     /** Creates the caption object from initial caption data if existing. */
     void                CreateCaptionFromInitData( const ScAddress& rPos ) const;

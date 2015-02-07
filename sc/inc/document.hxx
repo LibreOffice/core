@@ -1866,7 +1866,7 @@ public:
     std::vector<Color> GetDocColors();
 
 private:
-    ScDocument(const ScDocument& r); // disabled with no definition
+    ScDocument(const ScDocument& r) SAL_DELETED_FUNCTION;
 
     void                FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
                                         SCCOL nX1, SCCOL nX2 ) const;

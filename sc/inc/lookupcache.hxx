@@ -74,9 +74,7 @@ public:
                 delete mpStr;
         }
 
-        // prevent usage
-        QueryCriteria();
-        QueryCriteria & operator=( const QueryCriteria & r );
+        QueryCriteria & operator=( const QueryCriteria & r ) SAL_DELETED_FUNCTION;
 
     public:
 
@@ -200,9 +198,8 @@ private:
     ScRange         maRange;
     ScDocument *    mpDoc;
 
-    // prevent usage
-    ScLookupCache( const ScLookupCache & );
-    ScLookupCache & operator=( const ScLookupCache & );
+    ScLookupCache( const ScLookupCache & ) SAL_DELETED_FUNCTION;
+    ScLookupCache & operator=( const ScLookupCache & ) SAL_DELETED_FUNCTION;
 
 };
 

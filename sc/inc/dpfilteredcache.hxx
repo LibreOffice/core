@@ -150,8 +150,7 @@ public:
 #endif
 
 private:
-    ScDPFilteredCache();
-    ScDPFilteredCache(const ScDPFilteredCache&);
+    ScDPFilteredCache(const ScDPFilteredCache&) SAL_DELETED_FUNCTION;
 
     /**
      * Check if a given row meets all specified criteria.

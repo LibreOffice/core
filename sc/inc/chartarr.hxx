@@ -39,7 +39,7 @@ class ScMemChart
     OUString* pColText;
     OUString* pRowText;
 
-    ScMemChart(const ScMemChart& rMemChart);      // not implemented
+    ScMemChart(const ScMemChart& rMemChart) SAL_DELETED_FUNCTION;
 
 public:
     ScMemChart(SCCOL nCols, SCROW nRows);

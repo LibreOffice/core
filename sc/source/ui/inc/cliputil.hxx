@@ -18,17 +18,14 @@ class ScDocument;
 class ScMarkData;
 class ScRangeList;
 
-class ScClipUtil
+namespace ScClipUtil
 {
-    ScClipUtil();
-    ~ScClipUtil();
-public:
-    static void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
+    void PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
 
-    static bool CheckDestRanges(
+    bool CheckDestRanges(
         ScDocument* pDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark,
         const ScRangeList& rDest);
-};
+}
 
 #endif
 

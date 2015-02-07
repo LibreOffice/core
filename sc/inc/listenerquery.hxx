@@ -52,8 +52,8 @@ class QueryRange : public SvtListener::QueryBase
     struct Impl;
     Impl* mpImpl;
 
-    QueryRange( const QueryRange& ); // disabled
-    QueryRange& operator= ( const QueryRange& ); // disabled
+    QueryRange( const QueryRange& ) SAL_DELETED_FUNCTION;
+    QueryRange& operator= ( const QueryRange& ) SAL_DELETED_FUNCTION;
 
 public:
     QueryRange();

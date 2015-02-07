@@ -37,8 +37,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-using ::oox::core::CodecHelper;
-
 namespace {
 
 const sal_uInt8 BIFF12_SHEETPR_FILTERMODE       = 0x01;
@@ -110,7 +108,7 @@ void WorksheetSettings::importOutlinePr( const AttributeList& rAttribs )
 
 void WorksheetSettings::importSheetProtection( const AttributeList& rAttribs )
 {
-    maSheetProt.mnPasswordHash     = CodecHelper::getPasswordHash( rAttribs, XML_password );
+    maSheetProt.mnPasswordHash     = oox::core::CodecHelper::getPasswordHash( rAttribs, XML_password );
     maSheetProt.mbSheet            = rAttribs.getBool( XML_sheet, false );
     maSheetProt.mbObjects          = rAttribs.getBool( XML_objects, false );
     maSheetProt.mbScenarios        = rAttribs.getBool( XML_scenarios, false );
@@ -173,7 +171,7 @@ void WorksheetSettings::importProtectedRange( const AttributeList& rAttribs )
 
 void WorksheetSettings::importChartProtection( const AttributeList& rAttribs )
 {
-    maSheetProt.mnPasswordHash = CodecHelper::getPasswordHash( rAttribs, XML_password );
+    maSheetProt.mnPasswordHash = oox::core::CodecHelper::getPasswordHash( rAttribs, XML_password );
     maSheetProt.mbSheet        = rAttribs.getBool( XML_content, false );
     maSheetProt.mbObjects      = rAttribs.getBool( XML_objects, false );
 }

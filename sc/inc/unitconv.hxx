@@ -27,8 +27,7 @@ class ScUnitConverterData
 {
     OUString maIndexString;
     double mfValue;
-                            // not implemented
-    ScUnitConverterData& operator=( const ScUnitConverterData& );
+    ScUnitConverterData& operator=( const ScUnitConverterData& ) SAL_DELETED_FUNCTION;
 
 public:
     ScUnitConverterData( const OUString& rFromUnit,

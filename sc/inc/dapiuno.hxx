@@ -419,7 +419,7 @@ protected:
     ScFieldIdentifier   maFieldId;
 
 private:
-    ScDataPilotChildObjBase& operator=( const ScDataPilotChildObjBase& );
+    ScDataPilotChildObjBase& operator=( const ScDataPilotChildObjBase& ) SAL_DELETED_FUNCTION;
 };
 
 typedef ::cppu::WeakImplHelper4

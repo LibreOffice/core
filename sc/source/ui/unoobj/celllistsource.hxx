@@ -143,9 +143,8 @@ namespace calc
         void    notifyModified();
 
     private:
-        OCellListSource();                                      // never implemented
-        OCellListSource( const OCellListSource& );              // never implemented
-        OCellListSource& operator=( const OCellListSource& );   // never implemented
+        OCellListSource( const OCellListSource& ) SAL_DELETED_FUNCTION;
+        OCellListSource& operator=( const OCellListSource& ) SAL_DELETED_FUNCTION;
     };
 
 }   // namespace calc

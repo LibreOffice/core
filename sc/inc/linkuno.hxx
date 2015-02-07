@@ -516,8 +516,7 @@ public:
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScExternalSheetCacheObj();
-    ScExternalSheetCacheObj(const ScExternalSheetCacheObj&);
+    ScExternalSheetCacheObj(const ScExternalSheetCacheObj&) SAL_DELETED_FUNCTION;
 
 private:
     ScDocShell* mpDocShell;
@@ -611,8 +610,7 @@ public:
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScExternalDocLinksObj();
-    ScExternalDocLinksObj(const ScExternalDocLinksObj&);
+    ScExternalDocLinksObj(const ScExternalDocLinksObj&) SAL_DELETED_FUNCTION;
 
 private:
     ScDocShell*                         mpDocShell;

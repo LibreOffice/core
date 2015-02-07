@@ -285,9 +285,8 @@ private:
     private:
         ScBroadcastAreaSlot**   ppSlots;
 
-        // prevent usage
-        TableSlots( const TableSlots& );
-        TableSlots& operator=( const TableSlots& );
+        TableSlots( const TableSlots& ) SAL_DELETED_FUNCTION;
+        TableSlots& operator=( const TableSlots& ) SAL_DELETED_FUNCTION;
     };
 
     typedef ::std::map< SCTAB, TableSlots* > TableSlotsMap;

@@ -140,9 +140,8 @@ class ScFontToSubsFontConverter_AutoPtr
                                             DestroyFontToSubsFontConverter( h );
                                     }
 
-                                /// prevent usage
-                                ScFontToSubsFontConverter_AutoPtr( const ScFontToSubsFontConverter_AutoPtr& );
-    ScFontToSubsFontConverter_AutoPtr& operator=( const ScFontToSubsFontConverter_AutoPtr& );
+                                ScFontToSubsFontConverter_AutoPtr( const ScFontToSubsFontConverter_AutoPtr& ) SAL_DELETED_FUNCTION;
+    ScFontToSubsFontConverter_AutoPtr& operator=( const ScFontToSubsFontConverter_AutoPtr& ) SAL_DELETED_FUNCTION;
 
 public:
                                 ScFontToSubsFontConverter_AutoPtr()

@@ -48,9 +48,8 @@ class ScChartPositionMap
                                     );
                                 ~ScChartPositionMap();  //! deletes all ScAddress*
 
-                                // not implemented
-                                ScChartPositionMap( const ScChartPositionMap& );
-            ScChartPositionMap& operator=( const ScChartPositionMap& );
+                                ScChartPositionMap( const ScChartPositionMap& ) SAL_DELETED_FUNCTION;
+            ScChartPositionMap& operator=( const ScChartPositionMap& ) SAL_DELETED_FUNCTION;
 
 public:
 

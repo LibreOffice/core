@@ -89,9 +89,8 @@ class ScJumpMatrix
     /** Flush different types or non-consecutive buffers. */
     void FlushBufferOtherThan( BufferType eType, SCSIZE nC, SCSIZE nR );
 
-    // not implemented, prevent usage
-    ScJumpMatrix( const ScJumpMatrix& );
-    ScJumpMatrix& operator=( const ScJumpMatrix& );
+    ScJumpMatrix( const ScJumpMatrix& ) SAL_DELETED_FUNCTION;
+    ScJumpMatrix& operator=( const ScJumpMatrix& ) SAL_DELETED_FUNCTION;
 
 public:
     ScJumpMatrix( SCSIZE nColsP, SCSIZE nRowsP );

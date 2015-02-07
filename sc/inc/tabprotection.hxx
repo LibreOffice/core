@@ -37,23 +37,18 @@ enum ScPasswordHash
     PASSHASH_UNSPECIFIED
 };
 
-class ScPassHashHelper
+namespace ScPassHashHelper
 {
-public:
     /** Check for the compatibility of all password hashes.  If there is at
      * least one hash that needs to be regenerated, it returns true.  If all
      * hash values are compatible with the specified hash type, then it
      * returns false. */
-    static bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
+    bool needsPassHashRegen(const ScDocument& rDoc, ScPasswordHash eHash1, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED);
 
-    static OUString getHashURI(ScPasswordHash eHash);
+    OUString getHashURI(ScPasswordHash eHash);
 
-    static ScPasswordHash getHashTypeFromURI(const OUString& rURI);
-
-private:
-    ScPassHashHelper();
-    ~ScPassHashHelper();
-};
+    ScPasswordHash getHashTypeFromURI(const OUString& rURI);
+}
 
 class SAL_NO_VTABLE ScPassHashProtectable
 {

@@ -44,8 +44,7 @@ private:
     std::vector< ::com::sun::star::uno::WeakReference<
         ::com::sun::star::frame::XModel > > maChartModels;
 
-    ScChartLockGuard();
-    ScChartLockGuard( const ScChartLockGuard& );
+    ScChartLockGuard( const ScChartLockGuard& ) SAL_DELETED_FUNCTION;
 };
 
 /** Use this to lock all charts in the calc for a little time.
@@ -69,8 +68,7 @@ private:
 
     DECL_LINK(TimeoutHdl, void *);
 
-    ScTemporaryChartLock();
-    ScTemporaryChartLock( const ScTemporaryChartLock& );
+    ScTemporaryChartLock( const ScTemporaryChartLock& ) SAL_DELETED_FUNCTION;
 };
 
 #endif

@@ -56,10 +56,8 @@ struct CompareOptions
 
     CompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
 private:
-    // Not implemented, prevent usage.
-    CompareOptions();
-    CompareOptions( const CompareOptions & );
-    CompareOptions& operator=( const CompareOptions & );
+    CompareOptions( const CompareOptions & ) SAL_DELETED_FUNCTION;
+    CompareOptions& operator=( const CompareOptions & ) SAL_DELETED_FUNCTION;
 };
 
 /** @param pOptions

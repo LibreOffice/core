@@ -96,9 +96,8 @@ class ScChangeAction;
 
 class ScChangeActionLinkEntry
 {
-    // not implemented, prevent usage
-    ScChangeActionLinkEntry( const ScChangeActionLinkEntry& );
-    ScChangeActionLinkEntry& operator=( const ScChangeActionLinkEntry& );
+    ScChangeActionLinkEntry( const ScChangeActionLinkEntry& ) SAL_DELETED_FUNCTION;
+    ScChangeActionLinkEntry& operator=( const ScChangeActionLinkEntry& ) SAL_DELETED_FUNCTION;
 
 protected:
 
@@ -223,9 +222,8 @@ class ScChangeAction
     friend class ScChangeActionMove;
     friend class ScChangeActionContent;
 
-    // not implemented, prevent usage
-    ScChangeAction( const ScChangeAction& );
-    ScChangeAction& operator=( const ScChangeAction& );
+    ScChangeAction( const ScChangeAction& ) SAL_DELETED_FUNCTION;
+    ScChangeAction& operator=( const ScChangeAction& ) SAL_DELETED_FUNCTION;
 
 protected:
 
@@ -944,9 +942,8 @@ class ScChangeTrack : public utl::ConfigurationListener
     bool bUseFixDateTime:1;
     bool bTimeNanoSeconds:1;
 
-    // not implemented, prevent usage
-    ScChangeTrack( const ScChangeTrack& );
-    ScChangeTrack& operator=( const ScChangeTrack& );
+    ScChangeTrack( const ScChangeTrack& ) SAL_DELETED_FUNCTION;
+    ScChangeTrack& operator=( const ScChangeTrack& ) SAL_DELETED_FUNCTION;
 
     static  SCROW               InitContentRowsPerSlot();
 

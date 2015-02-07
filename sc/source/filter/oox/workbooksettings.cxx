@@ -40,8 +40,6 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-using ::oox::core::CodecHelper;
-
 namespace {
 
 const sal_uInt32 BIFF12_WORKBOOKPR_DATE1904     = 0x00000001;
@@ -108,7 +106,7 @@ WorkbookSettings::WorkbookSettings( const WorkbookHelper& rHelper ) :
 void WorkbookSettings::importFileSharing( const AttributeList& rAttribs )
 {
     maFileSharing.maUserName          = rAttribs.getXString( XML_userName, OUString() );
-    maFileSharing.mnPasswordHash      = CodecHelper::getPasswordHash( rAttribs, XML_reservationPassword );
+    maFileSharing.mnPasswordHash      = oox::core::CodecHelper::getPasswordHash( rAttribs, XML_reservationPassword );
     maFileSharing.mbRecommendReadOnly = rAttribs.getBool( XML_readOnlyRecommended, false );
 }
 

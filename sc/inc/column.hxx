@@ -157,8 +157,8 @@ friend class sc::EditTextIterator;
 friend class sc::CellValues;
 friend class sc::TableValues;
 
-    ScColumn(const ScColumn&); // disabled
-    ScColumn& operator= (const ScColumn&); // disabled
+    ScColumn(const ScColumn&) SAL_DELETED_FUNCTION;
+    ScColumn& operator= (const ScColumn&) SAL_DELETED_FUNCTION;
 
     bool ParseString(
         ScCellValue& rCell,

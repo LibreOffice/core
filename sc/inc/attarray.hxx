@@ -95,10 +95,8 @@ friend class ScHorizontalAttrIterator;
     void RemoveCellCharAttribs( SCROW nStartRow, SCROW nEndRow,
                               const ScPatternAttr* pPattern, ScEditDataArray* pDataArray );
 
-    // prevent the copy c'tor and operator=
-    // this is just to prevent accidental use
-    ScAttrArray(const ScAttrArray&);
-    ScAttrArray& operator=(const ScAttrArray&);
+    ScAttrArray(const ScAttrArray&) SAL_DELETED_FUNCTION;
+    ScAttrArray& operator=(const ScAttrArray&) SAL_DELETED_FUNCTION;
 
 public:
             ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc );

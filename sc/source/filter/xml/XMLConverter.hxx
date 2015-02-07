@@ -132,23 +132,18 @@ struct ScXMLConditionParseResult
     sal_Int32           mnEndIndex;         /// Index of first character following the condition.
 };
 
-class ScXMLConditionHelper
+namespace ScXMLConditionHelper
 {
-public:
     /** Parses the next condition in a 'condition' attribute value of e.g.
         conditional formatting or data validation.
      */
-    static void         parseCondition(
+    void         parseCondition(
                             ScXMLConditionParseResult& rParseResult,
                             const OUString& rAttribute,
                             sal_Int32 nStartIndex );
 
-    static OUString getExpression(const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar );
-
-private:
-                        ScXMLConditionHelper();
-                        ~ScXMLConditionHelper();
-};
+    OUString getExpression(const sal_Unicode*& rpcString, const sal_Unicode* pcEnd, sal_Unicode cEndChar );
+}
 
 #endif
 

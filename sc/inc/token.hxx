@@ -368,9 +368,8 @@ class SingleDoubleRefModifier
     ScSingleRefData*  pS;
     ScComplexRefData*   pD;
 
-                // not implemented, prevent usage
-                SingleDoubleRefModifier( const SingleDoubleRefModifier& );
-        SingleDoubleRefModifier& operator=( const SingleDoubleRefModifier& );
+                SingleDoubleRefModifier( const SingleDoubleRefModifier& ) SAL_DELETED_FUNCTION;
+        SingleDoubleRefModifier& operator=( const SingleDoubleRefModifier& ) SAL_DELETED_FUNCTION;
 
 public:
         SingleDoubleRefModifier( formula::FormulaToken& rT )

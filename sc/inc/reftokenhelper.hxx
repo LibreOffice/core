@@ -28,45 +28,39 @@ class ScDocument;
 class ScRange;
 class ScRangeList;
 
-class ScRefTokenHelper
+namespace ScRefTokenHelper
 {
-private:
-    ScRefTokenHelper();
-    ScRefTokenHelper(const ScRefTokenHelper&);
-    ~ScRefTokenHelper();
-
-public:
     /**
      * Compile an array of reference tokens from a data source range string.
      * The source range may consist of multiple ranges separated by ';'s.
      */
-    static void compileRangeRepresentation(
+    void compileRangeRepresentation(
         ::std::vector<ScTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc,
         const sal_Unicode cSep, ::formula::FormulaGrammar::Grammar eGrammar, bool bOnly3DRef = false);
 
-    static bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
+    bool getRangeFromToken(ScRange& rRange, const ScTokenRef& pToken, const ScAddress& rPos, bool bExternal = false);
 
-    static void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens, const ScAddress& rPos);
+    void getRangeListFromTokens(ScRangeList& rRangeList, const ::std::vector<ScTokenRef>& pTokens, const ScAddress& rPos);
 
     /**
      * Create a double reference token from a range object.
      */
-    static void getTokenFromRange(ScTokenRef& pToken, const ScRange& rRange);
+    void getTokenFromRange(ScTokenRef& pToken, const ScRange& rRange);
 
-    static void getTokensFromRangeList(::std::vector<ScTokenRef>& pTokens, const ScRangeList& rRanges);
+    void getTokensFromRangeList(::std::vector<ScTokenRef>& pTokens, const ScRangeList& rRanges);
 
-    static bool SC_DLLPUBLIC isRef(const ScTokenRef& pToken);
-    static bool SC_DLLPUBLIC isExternalRef(const ScTokenRef& pToken);
+    bool SC_DLLPUBLIC isRef(const ScTokenRef& pToken);
+    bool SC_DLLPUBLIC isExternalRef(const ScTokenRef& pToken);
 
-    static bool SC_DLLPUBLIC intersects(
+    bool SC_DLLPUBLIC intersects(
         const ::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
-    static void SC_DLLPUBLIC join(::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
+    void SC_DLLPUBLIC join(::std::vector<ScTokenRef>& rTokens, const ScTokenRef& pToken, const ScAddress& rPos);
 
-    static bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken);
+    bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScTokenRef& pToken);
 
-    static ScTokenRef createRefToken(const ScAddress& rAddr);
-    static ScTokenRef createRefToken(const ScRange& rRange);
+    ScTokenRef createRefToken(const ScAddress& rAddr);
+    ScTokenRef createRefToken(const ScRange& rRange);
 };
 
 #endif
