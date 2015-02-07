@@ -39,9 +39,8 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
     sal_Int32                   nInitialTlFlags;
     SvxJSearchOptionsPage  *pPage;
 
-    // disallow copy-constructor and assignment-operator for now
-    SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & );
-    SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
+    SvxJSearchOptionsDialog( const SvxJSearchOptionsDialog & ) SAL_DELETED_FUNCTION;
+    SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & ) SAL_DELETED_FUNCTION;
 
 public:
     SvxJSearchOptionsDialog(vcl::Window *pParent,

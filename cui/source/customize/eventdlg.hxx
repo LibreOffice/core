@@ -39,9 +39,8 @@ class SvxEventConfigPage : public _SvxMacroTabPage
 
     DECL_LINK(      SelectHdl_Impl, ListBox* );
 
-    // Forbidden and not implemented.
-    SvxEventConfigPage (const SvxEventConfigPage &);
-    SvxEventConfigPage & operator= (const SvxEventConfigPage &);
+    SvxEventConfigPage (const SvxEventConfigPage &) SAL_DELETED_FUNCTION;
+    SvxEventConfigPage & operator= (const SvxEventConfigPage &) SAL_DELETED_FUNCTION;
 
 public:
 

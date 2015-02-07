@@ -34,12 +34,10 @@ class SvxThesaurusDialog;
 class LookUpComboBox : public ComboBox
 {
     Idle                        m_aModifyIdle;
-    Selection                   m_aSelection;
     SvxThesaurusDialog*         m_pDialog;
 
-    /// disable copy ctor and assignment operator
-    LookUpComboBox( const LookUpComboBox & );
-    LookUpComboBox& operator = ( const LookUpComboBox & );
+    LookUpComboBox( const LookUpComboBox & ) SAL_DELETED_FUNCTION;
+    LookUpComboBox& operator = ( const LookUpComboBox & ) SAL_DELETED_FUNCTION;
 
 public:
     LookUpComboBox(vcl::Window *pParent);
@@ -78,9 +76,8 @@ class ThesaurusAlternativesCtrl
     typedef std::map< const SvTreeListEntry *, AlternativesExtraData >  UserDataMap_t;
     UserDataMap_t           m_aUserData;
 
-    /// disable copy ctor and assignment operator
-    ThesaurusAlternativesCtrl( const ThesaurusAlternativesCtrl & );
-    ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & );
+    ThesaurusAlternativesCtrl( const ThesaurusAlternativesCtrl & ) SAL_DELETED_FUNCTION;
+    ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & ) SAL_DELETED_FUNCTION;
 
 public:
     ThesaurusAlternativesCtrl(vcl::Window* pParent);
@@ -103,9 +100,8 @@ class ReplaceEdit : public Edit
 {
     Button *                    m_pBtn;
 
-    /// disable copy ctor and assignment operator
-    ReplaceEdit( const ReplaceEdit & );
-    ReplaceEdit & operator = ( const ReplaceEdit & );
+    ReplaceEdit( const ReplaceEdit & ) SAL_DELETED_FUNCTION;
+    ReplaceEdit & operator = ( const ReplaceEdit & ) SAL_DELETED_FUNCTION;
 
 public:
     ReplaceEdit(vcl::Window *pParent);

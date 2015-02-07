@@ -32,9 +32,8 @@ class PasswordToOpenModifyDialog : public SfxModalDialog
 {
     std::unique_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
 
-    // disallow use of copy c-tor and assignment operator
-    PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & );
-    PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & );
+    PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & ) SAL_DELETED_FUNCTION;
+    PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & ) SAL_DELETED_FUNCTION;
 
 public:
     PasswordToOpenModifyDialog( vcl::Window * pParent, sal_uInt16 nMinPasswdLen,
