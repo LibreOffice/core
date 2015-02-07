@@ -104,7 +104,7 @@ protected:
     LwpCharacterBorderOverride(LwpCharacterBorderOverride const& rOther);
 
 private:
-    LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther); // not implemented
+    LwpCharacterBorderOverride& operator=(LwpCharacterBorderOverride const& rOther) SAL_DELETED_FUNCTION;
 
 private:
     LwpBorderStuff* m_pBorderStuff;
