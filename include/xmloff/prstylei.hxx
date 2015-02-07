@@ -54,8 +54,8 @@ private:
     static OldFillStyleDefinitionSet maFooterSet;
     static OldFillStyleDefinitionSet maParaSet;
 
-    SAL_DLLPRIVATE XMLPropStyleContext(XMLPropStyleContext &); // not defined
-    SAL_DLLPRIVATE void operator =(XMLPropStyleContext &); // not defined
+    XMLPropStyleContext(XMLPropStyleContext &) SAL_DELETED_FUNCTION;
+    void operator =(XMLPropStyleContext &) SAL_DELETED_FUNCTION;
 
 protected:
 

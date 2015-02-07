@@ -186,8 +186,8 @@ class XMLOFF_DLLPUBLIC SvXMLStylesContext : public SvXMLImportContext
 
     SAL_DLLPRIVATE const SvXMLTokenMap& GetStyleStylesElemTokenMap();
 
-    SAL_DLLPRIVATE SvXMLStylesContext(SvXMLStylesContext &); // not defined
-    SAL_DLLPRIVATE void operator =(SvXMLStylesContext &); // not defined
+    SvXMLStylesContext(SvXMLStylesContext &) SAL_DELETED_FUNCTION;
+    void operator =(SvXMLStylesContext &) SAL_DELETED_FUNCTION;
 
 protected:
 

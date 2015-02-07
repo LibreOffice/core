@@ -41,8 +41,8 @@ class XMLOFF_DLLPUBLIC XMLPropertyHandlerFactory : public salhelper::SimpleRefer
     struct Impl;
     Impl* mpImpl;
 
-    XMLPropertyHandlerFactory( const XMLPropertyHandlerFactory& ); // disabled
-    XMLPropertyHandlerFactory& operator= ( const XMLPropertyHandlerFactory& ); // disabled
+    XMLPropertyHandlerFactory( const XMLPropertyHandlerFactory& ) SAL_DELETED_FUNCTION;
+    XMLPropertyHandlerFactory& operator= ( const XMLPropertyHandlerFactory& ) SAL_DELETED_FUNCTION;
 
 public:
     XMLPropertyHandlerFactory();

@@ -672,7 +672,7 @@ public:
     void PopTextListsHelper();
 
 private:
-        XMLTextParagraphExport(XMLTextParagraphExport &); // private copy-ctor because of explicit copy-ctor of unique_ptr
+        XMLTextParagraphExport(XMLTextParagraphExport &) SAL_DELETED_FUNCTION;
 };
 
 inline const XMLTextListAutoStylePool&

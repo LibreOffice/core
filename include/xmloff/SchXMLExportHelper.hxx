@@ -56,9 +56,8 @@ public:
     void SetDestinationShellID( const OUString& rShellID );
 
 private:
-    SchXMLExportHelper(); // not defined
-    SchXMLExportHelper(SchXMLExportHelper &); // not defined
-    void operator =(SchXMLExportHelper &); // not defined
+    SchXMLExportHelper(SchXMLExportHelper &) SAL_DELETED_FUNCTION;
+    void operator =(SchXMLExportHelper &) SAL_DELETED_FUNCTION;
 
 private:
     SchXMLExportHelper_Impl* m_pImpl;
