@@ -68,8 +68,8 @@ public:
     bool                IsPersistenceEnabled() const { return mbPersistence; }
 
 private:
-    TOOLS_DLLPRIVATE    Config( const Config& rConfig );
-    TOOLS_DLLPRIVATE Config&            operator = ( const Config& rConfig );
+                        Config( const Config& rConfig ) SAL_DELETED_FUNCTION;
+    Config&             operator = ( const Config& rConfig ) SAL_DELETED_FUNCTION;
 };
 
 #endif

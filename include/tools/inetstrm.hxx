@@ -38,9 +38,8 @@ enum INetStreamStatus
 
 class TOOLS_DLLPUBLIC INetIStream
 {
-    // Not implemented.
-    INetIStream (const INetIStream& rStrm);
-    INetIStream& operator= (const INetIStream& rStrm);
+    INetIStream (const INetIStream& rStrm) SAL_DELETED_FUNCTION;
+    INetIStream& operator= (const INetIStream& rStrm) SAL_DELETED_FUNCTION;
 
 protected:
     virtual int GetData (sal_Char *pData, sal_uIntPtr nSize) = 0;
@@ -54,9 +53,8 @@ public:
 
 class INetOStream
 {
-    // Not implemented.
-    INetOStream (const INetOStream& rStrm);
-    INetOStream& operator= (const INetOStream& rStrm);
+    INetOStream (const INetOStream& rStrm) SAL_DELETED_FUNCTION;
+    INetOStream& operator= (const INetOStream& rStrm) SAL_DELETED_FUNCTION;
 
 protected:
     virtual int PutData (
@@ -98,9 +96,8 @@ class INetMessageIStream : public INetIStream
 
     virtual int GetData (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
-    // Not implemented.
-    INetMessageIStream (const INetMessageIStream& rStrm);
-    INetMessageIStream& operator= (const INetMessageIStream& rStrm);
+    INetMessageIStream (const INetMessageIStream& rStrm) SAL_DELETED_FUNCTION;
+    INetMessageIStream& operator= (const INetMessageIStream& rStrm) SAL_DELETED_FUNCTION;
 
 protected:
     virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize);
@@ -128,9 +125,8 @@ class INetMessageOStream : public INetOStream
 
     virtual int PutData (const sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
-    // Not implemented.
-    INetMessageOStream (const INetMessageOStream& rStrm);
-    INetMessageOStream& operator= (const INetMessageOStream& rStrm);
+    INetMessageOStream (const INetMessageOStream& rStrm) SAL_DELETED_FUNCTION;
+    INetMessageOStream& operator= (const INetMessageOStream& rStrm) SAL_DELETED_FUNCTION;
 
 protected:
     virtual int PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize);
@@ -150,9 +146,8 @@ class INetMessageIOStream
     : public INetMessageIStream,
       public INetMessageOStream
 {
-    // Not implemented.
-    INetMessageIOStream (const INetMessageIOStream& rStrm);
-    INetMessageIOStream& operator= (const INetMessageIOStream& rStrm);
+    INetMessageIOStream (const INetMessageIOStream& rStrm) SAL_DELETED_FUNCTION;
+    INetMessageIOStream& operator= (const INetMessageIOStream& rStrm) SAL_DELETED_FUNCTION;
 
 public:
     INetMessageIOStream (sal_uIntPtr nBufferSize = 2048);
@@ -184,9 +179,8 @@ class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
     static INetMessageEncoding GetMsgEncoding (
         const OUString& rContentType);
 
-    // Not implemented.
-    INetMIMEMessageStream (const INetMIMEMessageStream& rStrm);
-    INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm);
+    INetMIMEMessageStream (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
+    INetMIMEMessageStream& operator= (const INetMIMEMessageStream& rStrm) SAL_DELETED_FUNCTION;
 
 protected:
     virtual int GetMsgLine (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;

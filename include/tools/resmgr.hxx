@@ -122,9 +122,8 @@ private:
 
     static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
 
-    // no copying
-    ResMgr(const ResMgr&);
-    ResMgr& operator=(const ResMgr&);
+    ResMgr(const ResMgr&) SAL_DELETED_FUNCTION;
+    ResMgr& operator=(const ResMgr&) SAL_DELETED_FUNCTION;
 
 public:
     static void         DestroyAllResMgr();  ///< Called upon app shutdown
