@@ -138,10 +138,8 @@ private:
     bool                            mbIsUnoObj                  : 1;
     ::std::vector<boost::shared_ptr<UserData> > maUserData;
 
-                                    // not available
-                                    SdTransferable();
-                                    SdTransferable( const SdTransferable& );
-    SdTransferable&                 operator=( const SdTransferable& );
+                                    SdTransferable( const SdTransferable& ) SAL_DELETED_FUNCTION;
+    SdTransferable&                 operator=( const SdTransferable& ) SAL_DELETED_FUNCTION;
 
     void                            CreateObjectReplacement( SdrObject* pObj );
     void                            CreateData();

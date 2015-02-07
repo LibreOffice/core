@@ -320,10 +320,10 @@ private:
         mxDisposeListener;
 
     FrameworkHelper (ViewShellBase& rBase);
-    FrameworkHelper (const FrameworkHelper& rHelper); // Not implemented.
+    FrameworkHelper (const FrameworkHelper& rHelper) SAL_DELETED_FUNCTION;
     virtual ~FrameworkHelper (void);
     class Deleter; friend class Deleter;
-    FrameworkHelper& operator= (const FrameworkHelper& rHelper); // Not implemented.
+    FrameworkHelper& operator= (const FrameworkHelper& rHelper) SAL_DELETED_FUNCTION;
 
     void Initialize (void);
 

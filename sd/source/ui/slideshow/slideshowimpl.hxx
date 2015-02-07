@@ -229,8 +229,8 @@ public:
     void mouseButtonUp(const MouseEvent& rMEvt);
 
 private:
-    SlideshowImpl(SlideshowImpl &); // not defined
-    void operator =(SlideshowImpl &); // not defined
+    SlideshowImpl(SlideshowImpl &) SAL_DELETED_FUNCTION;
+    void operator =(SlideshowImpl &) SAL_DELETED_FUNCTION;
 
     virtual ~SlideshowImpl();
 

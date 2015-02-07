@@ -65,10 +65,8 @@ private:
     FontProvider (void);
     virtual ~FontProvider (void);
 
-    // Copy constructor is not implemented.
-    FontProvider (const FontProvider&);
-    // Assignment operator is not implemented.
-    FontProvider& operator= (const FontProvider&);
+    FontProvider (const FontProvider&) SAL_DELETED_FUNCTION;
+    FontProvider& operator= (const FontProvider&) SAL_DELETED_FUNCTION;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

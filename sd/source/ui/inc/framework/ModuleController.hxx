@@ -97,8 +97,7 @@ private:
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         throw (std::exception);
-    ModuleController (void); // Not implemented.
-    ModuleController (const ModuleController&); // Not implemented.
+    ModuleController (const ModuleController&) SAL_DELETED_FUNCTION;
     virtual ~ModuleController (void) throw();
 
     /** Load a list of URL to service mappings from the

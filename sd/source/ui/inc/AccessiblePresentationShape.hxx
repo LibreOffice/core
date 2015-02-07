@@ -58,16 +58,9 @@ public:
     OUString GetStyle() SAL_OVERRIDE;
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that
-        takes the original shape and the parent as arguments instead.
-    */
-    AccessiblePresentationShape (void);
+    AccessiblePresentationShape (const AccessiblePresentationShape&) SAL_DELETED_FUNCTION;
 
-    /// Don't use the constructor.  Not yet implemented.
-    AccessiblePresentationShape (const AccessiblePresentationShape&);
-
-    /// Don't use the assignment operator.  Not yet implemented.
-    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&);
+    AccessiblePresentationShape& operator= (const AccessiblePresentationShape&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility

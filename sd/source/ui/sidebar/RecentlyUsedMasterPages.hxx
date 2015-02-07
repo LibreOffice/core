@@ -98,11 +98,9 @@ private:
     */
     void LateInit (void);
 
-    /// The copy constructor is not implemented.  Do not use!
-    RecentlyUsedMasterPages (const RecentlyUsedMasterPages&);
+    RecentlyUsedMasterPages (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
 
-    /// The assignment operator is not implemented.  Do not use!
-    RecentlyUsedMasterPages& operator= (const RecentlyUsedMasterPages&);
+    RecentlyUsedMasterPages& operator= (const RecentlyUsedMasterPages&) SAL_DELETED_FUNCTION;
 
     void SendEvent (void);
     DECL_LINK(MasterPageChangeListener, MasterPageObserverEvent*);

@@ -135,12 +135,9 @@ private:
     bool mbIsMouseOver : 1;
     bool mbHasTransition : 1;
 
-    // Do not use the copy constructor operator.  It is not implemented.
-    PageDescriptor (const PageDescriptor& rDescriptor);
+    PageDescriptor (const PageDescriptor& rDescriptor) SAL_DELETED_FUNCTION;
 
-    // Do not use the assignment operator.  It is not implemented
-    // (mrPage can not be assigned).
-    PageDescriptor& operator= (const PageDescriptor& rDescriptor);
+    PageDescriptor& operator= (const PageDescriptor& rDescriptor) SAL_DELETED_FUNCTION;
 };
 
 } } } // end of namespace ::sd::slidesorter::model

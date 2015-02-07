@@ -80,11 +80,9 @@ private:
     MasterPageObserver (void);
     virtual ~MasterPageObserver (void);
 
-    /// The copy constructor is not implemented.  Do not use!
-    MasterPageObserver (const MasterPageObserver&);
+    MasterPageObserver (const MasterPageObserver&) SAL_DELETED_FUNCTION;
 
-    /// The assignment operator is not implemented.  Do not use!
-    MasterPageObserver& operator= (const MasterPageObserver&);
+    MasterPageObserver& operator= (const MasterPageObserver&) SAL_DELETED_FUNCTION;
 };
 
 /** Objects of this class are sent to listeners of the MasterPageObserver

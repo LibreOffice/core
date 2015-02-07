@@ -197,9 +197,8 @@ private:
     void CreateController( ViewShell* pViewSh, ::sd::View* pView, ::vcl::Window* pParentWindow );
     WorkWindow *GetWorkWindow();
 
-    // default: disabled copy/assignment
-    SlideShow(const SlideShow&);
-    SlideShow& operator=( const SlideShow& );
+    SlideShow(const SlideShow&) SAL_DELETED_FUNCTION;
+    SlideShow& operator=( const SlideShow& ) SAL_DELETED_FUNCTION;
 
     SvxItemPropertySet  maPropSet;
 

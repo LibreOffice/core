@@ -118,8 +118,8 @@ protected:
     OutputDevice& mrDevice;
 
 private:
-    AccessibleViewForwarder (AccessibleViewForwarder&);
-    AccessibleViewForwarder& operator= (AccessibleViewForwarder&);
+    AccessibleViewForwarder (AccessibleViewForwarder&) SAL_DELETED_FUNCTION;
+    AccessibleViewForwarder& operator= (AccessibleViewForwarder&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility

@@ -40,9 +40,8 @@ class SD_DLLPUBLIC SdOpenSoundFileDialog
 {
     const std::unique_ptr< SdFileDialog_Imp > mpImpl;
 
-    // forbidden and not implemented
-    SdOpenSoundFileDialog (const SdOpenSoundFileDialog &);
-    SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &);
+    SdOpenSoundFileDialog (const SdOpenSoundFileDialog &) SAL_DELETED_FUNCTION;
+    SdOpenSoundFileDialog & operator= (const SdOpenSoundFileDialog &) SAL_DELETED_FUNCTION;
 
 public:
                             SdOpenSoundFileDialog();

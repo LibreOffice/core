@@ -78,25 +78,13 @@ protected:
 private:
     oslInterlockedCount m_nCount;
 
-    /** not implemented
-        @internal
-     */
-    SimpleReferenceComponent(SimpleReferenceComponent &);
+    SimpleReferenceComponent(SimpleReferenceComponent &) SAL_DELETED_FUNCTION;
 
-    /** not implemented
-        @internal
-     */
-    void operator =(SimpleReferenceComponent);
+    void operator =(SimpleReferenceComponent) SAL_DELETED_FUNCTION;
 
-    /** not implemented (see general class documentation)
-        @internal
-     */
-    static void * operator new[](std::size_t);
+    static void * operator new[](std::size_t) SAL_DELETED_FUNCTION;
 
-    /** not implemented (see general class documentation)
-        @internal
-     */
-    static void operator delete[](void * pPtr);
+    static void operator delete[](void * pPtr) SAL_DELETED_FUNCTION;
 
     bool mbDisposed;
 };

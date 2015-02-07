@@ -113,11 +113,9 @@ private:
     /// The document rendered in the output devices.
     SdDrawDocument* mpDocument;
 
-    /// Copy constructor not supported.
-    WindowUpdater (const WindowUpdater& rUpdater);
+    WindowUpdater (const WindowUpdater& rUpdater) SAL_DELETED_FUNCTION;
 
-    /// Assignment operator not supported.
-    WindowUpdater operator= (const WindowUpdater& rUpdater);
+    WindowUpdater operator= (const WindowUpdater& rUpdater) SAL_DELETED_FUNCTION;
 
     /** Type and data member for a list of devices that have to be kept
         up-to-date.

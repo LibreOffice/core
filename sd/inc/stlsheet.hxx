@@ -149,7 +149,7 @@ protected:
     boost::scoped_ptr< ModifyListenerForewarder > mpModifyListenerForewarder;
 
 private:
-    SdStyleSheet& operator=( const SdStyleSheet& ); // not implemented
+    SdStyleSheet& operator=( const SdStyleSheet& ) SAL_DELETED_FUNCTION;
 };
 
 typedef rtl::Reference< SdStyleSheet > SdStyleSheetRef;

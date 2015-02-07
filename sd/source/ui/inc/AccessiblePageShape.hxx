@@ -150,14 +150,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XDrawPage> mxPage;
 
-    /** Don't use the default constructor.  Use the public constructor that
-        takes the original shape and the parent as arguments instead.
-    */
-    explicit AccessiblePageShape (void);
-    /// Don't use the copy constructor.  Is there any use for it?
-    explicit AccessiblePageShape (const AccessiblePageShape&);
-    /// Don't use the assignment operator.  Do we need this?
-    AccessibleShape& operator= (const AccessiblePageShape&);
+    AccessiblePageShape (const AccessiblePageShape&) SAL_DELETED_FUNCTION;
+    AccessibleShape& operator= (const AccessiblePageShape&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility
