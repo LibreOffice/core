@@ -28,8 +28,8 @@ namespace rptui
      */
     class OEndMarker : public OColorListener
     {
-        OEndMarker(OEndMarker&);
-        void operator =(OEndMarker&);
+        OEndMarker(OEndMarker&) SAL_DELETED_FUNCTION;
+        void operator =(OEndMarker&) SAL_DELETED_FUNCTION;
     protected:
         virtual void ImplInitSettings() SAL_OVERRIDE;
     public:

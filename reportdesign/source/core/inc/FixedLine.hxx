@@ -52,8 +52,8 @@ namespace reportdesign
         ::sal_Int32             m_LineWidth;
 
     private:
-        OFixedLine(const OFixedLine&);
-        OFixedLine& operator=(const OFixedLine&);
+        OFixedLine(const OFixedLine&) SAL_DELETED_FUNCTION;
+        OFixedLine& operator=(const OFixedLine&) SAL_DELETED_FUNCTION;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

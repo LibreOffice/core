@@ -139,8 +139,8 @@ namespace rptui
         void collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection,bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize);
         void impl_resizeSectionWindow(OSectionWindow& _rSectionWindow,Point& _rStartPoint,bool _bSet);
 
-        OViewsWindow(OViewsWindow&);
-        void operator =(OViewsWindow&);
+        OViewsWindow(OViewsWindow&) SAL_DELETED_FUNCTION;
+        void operator =(OViewsWindow&) SAL_DELETED_FUNCTION;
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
         // Window overrides

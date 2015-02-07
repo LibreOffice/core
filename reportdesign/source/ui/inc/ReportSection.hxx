@@ -55,7 +55,6 @@ namespace rptui
 
         DlgEdMode                   m_eMode;
         bool                        m_bDialogModelChanged;
-        bool                    m_bInDrag;
 
         /** fills the section with all control from the report section
         */
@@ -64,8 +63,8 @@ namespace rptui
         */
         void impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_Int32 i_nLeftMargin,sal_Int32 i_nRightMargin);
 
-        OReportSection(OReportSection&);
-        void operator =(OReportSection&);
+        OReportSection(OReportSection&) SAL_DELETED_FUNCTION;
+        void operator =(OReportSection&) SAL_DELETED_FUNCTION;
     protected:
         // DropTargetHelper overridables
         virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt ) SAL_OVERRIDE;

@@ -37,8 +37,8 @@ namespace rptxml
         sal_Int32       m_nCurrentCount;
         bool            m_bContainsShape;
 
-        OXMLSubDocument(const OXMLSubDocument&);
-        void operator =(const OXMLSubDocument&);
+        OXMLSubDocument(const OXMLSubDocument&) SAL_DELETED_FUNCTION;
+        void operator =(const OXMLSubDocument&) SAL_DELETED_FUNCTION;
 
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
                     const OUString& rLocalName,

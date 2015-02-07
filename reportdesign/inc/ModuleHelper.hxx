@@ -37,8 +37,7 @@ namespace rptui
         friend class OModuleClient;
 
     private:
-        OModule();
-            // not implemented. OModule is a static class
+        OModule() SAL_DELETED_FUNCTION; //TODO: get rid of this class
 
     protected:
         static sal_Int32    s_nClients;     /// number of registered clients

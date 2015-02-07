@@ -40,8 +40,8 @@ namespace rptxml
 
         ORptFilter& GetOwnImport();
         ::com::sun::star::uno::Any convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters);
-        OXMLControlProperty(const OXMLControlProperty&);
-        void operator =(const OXMLControlProperty&);
+        OXMLControlProperty(const OXMLControlProperty&) SAL_DELETED_FUNCTION;
+        void operator =(const OXMLControlProperty&) SAL_DELETED_FUNCTION;
     public:
 
         OXMLControlProperty( ORptFilter& rImport

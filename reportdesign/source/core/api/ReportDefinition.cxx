@@ -548,24 +548,6 @@ struct OReportDefinitionImpl
     ,m_bSetModifiedEnabled( true )
     {}
 
-    OReportDefinitionImpl(::osl::Mutex& _aMutex,const OReportDefinitionImpl& _aCopy)
-    :m_aStorageChangeListeners(_aMutex)
-    ,m_aCloseListener(_aMutex)
-    ,m_aModifyListeners(_aMutex)
-    ,m_aDocEventListeners(_aMutex)
-    ,m_sMimeType(_aCopy.m_sMimeType)
-    ,m_sIdentifier(_aCopy.m_sIdentifier)
-    ,m_aVisualAreaSize(_aCopy.m_aVisualAreaSize)
-    ,m_nAspect(_aCopy.m_nAspect)
-    ,m_nGroupKeepTogether(_aCopy.m_nGroupKeepTogether)
-    ,m_nPageHeaderOption(_aCopy.m_nPageHeaderOption)
-    ,m_nPageFooterOption(_aCopy.m_nPageFooterOption)
-    ,m_nCommandType(_aCopy.m_nCommandType)
-    ,m_bControllersLocked(_aCopy.m_bControllersLocked)
-    ,m_bModified(_aCopy.m_bModified)
-    ,m_bEscapeProcessing(_aCopy.m_bEscapeProcessing)
-    ,m_bSetModifiedEnabled(_aCopy.m_bSetModifiedEnabled)
-    {}
     ~OReportDefinitionImpl();
 };
 
@@ -607,35 +589,6 @@ OReportDefinition::OReportDefinition(uno::Reference< uno::XComponentContext > co
         m_pImpl->m_xGroups = new OGroups(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
         m_pImpl->m_xDetail->setName(RPT_RESSTRING(RID_STR_DETAIL,m_aProps->m_xContext->getServiceManager()));
-    }
-    osl_atomic_decrement( &m_refCount );
-}
-
-OReportDefinition::OReportDefinition(const OReportDefinition& _rCopy)
-: cppu::BaseMutex()
-,ReportDefinitionBase(m_aMutex)
-,ReportDefinitionPropertySet(_rCopy.m_aProps->m_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),uno::Sequence< OUString >())
-,comphelper::IEmbeddedHelper()
-,m_aProps(new OReportComponentProperties(*_rCopy.m_aProps))
-,m_pImpl(new OReportDefinitionImpl(m_aMutex,*_rCopy.m_pImpl))
-{
-    osl_atomic_increment(&m_refCount);
-    {
-        init();
-        OGroups* pGroups = new OGroups(this,m_aProps->m_xContext);
-        m_pImpl->m_xGroups = pGroups;
-        pGroups->copyGroups(_rCopy.m_pImpl->m_xGroups);
-        m_pImpl->m_xDetail = OSection::createOSection(this,m_aProps->m_xContext);
-        OSection::lcl_copySection(_rCopy.m_pImpl->m_xDetail,m_pImpl->m_xDetail);
-
-        setPageHeaderOn(_rCopy.m_pImpl->m_xPageHeader.is());
-        setPageFooterOn(_rCopy.m_pImpl->m_xPageFooter.is());
-        setReportHeaderOn(_rCopy.m_pImpl->m_xReportHeader.is());
-        setReportFooterOn(_rCopy.m_pImpl->m_xReportFooter.is());
-        OSection::lcl_copySection(_rCopy.m_pImpl->m_xPageHeader,m_pImpl->m_xPageHeader);
-        OSection::lcl_copySection(_rCopy.m_pImpl->m_xPageFooter,m_pImpl->m_xPageFooter);
-        OSection::lcl_copySection(_rCopy.m_pImpl->m_xReportHeader,m_pImpl->m_xReportHeader);
-        OSection::lcl_copySection(_rCopy.m_pImpl->m_xReportFooter,m_pImpl->m_xReportFooter);
     }
     osl_atomic_decrement( &m_refCount );
 }

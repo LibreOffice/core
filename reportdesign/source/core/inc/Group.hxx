@@ -51,8 +51,8 @@ namespace reportdesign
         ::rptshared::GroupProperties                                                    m_aProps;
 
     private:
-        OGroup& operator=(const OGroup&);
-        OGroup(const OGroup&);
+        OGroup& operator=(const OGroup&) SAL_DELETED_FUNCTION;
+        OGroup(const OGroup&) SAL_DELETED_FUNCTION;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

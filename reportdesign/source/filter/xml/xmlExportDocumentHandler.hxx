@@ -74,8 +74,8 @@ private:
 
     void exportTableRows();
 private:
-    ExportDocumentHandler(ExportDocumentHandler &); // not defined
-    void operator =(ExportDocumentHandler &); // not defined
+    ExportDocumentHandler(ExportDocumentHandler &) SAL_DELETED_FUNCTION;
+    void operator =(ExportDocumentHandler &) SAL_DELETED_FUNCTION;
 
     virtual ~ExportDocumentHandler();
 
@@ -88,7 +88,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >        m_xModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
     ::com::sun::star::uno::Sequence< OUString >                                  m_aColumns;
-    sal_Int32                                                                           m_nCurrentCellIndex;
     sal_Int32                                                                           m_nColumnCount;
     bool m_bTableRowsStarted;
     bool m_bFirstRowExported;

@@ -100,9 +100,8 @@ namespace rptui
         static size_t  getKnownConditionalExpressions( ConditionalExpressions& _out_rCondExp );
 
     private:
-        ConditionalExpressionFactory();                                                 // never implemented
-        ConditionalExpressionFactory( const ConditionalExpressionFactory& );            // never implemented
-        ConditionalExpressionFactory& operator=( const ConditionalExpressionFactory& ); // never implemented
+        ConditionalExpressionFactory( const ConditionalExpressionFactory& ) SAL_DELETED_FUNCTION;
+        ConditionalExpressionFactory& operator=( const ConditionalExpressionFactory& ) SAL_DELETED_FUNCTION;
     };
 
 } // namespace rptui

@@ -37,8 +37,8 @@ namespace rptxml
         bool            m_bContainsShape;
 
         ORptFilter& GetOwnImport();
-        OXMLCell(const OXMLCell&);
-        OXMLCell& operator =(const OXMLCell&);
+        OXMLCell(const OXMLCell&) SAL_DELETED_FUNCTION;
+        OXMLCell& operator =(const OXMLCell&) SAL_DELETED_FUNCTION;
     public:
 
         OXMLCell( ORptFilter& rImport

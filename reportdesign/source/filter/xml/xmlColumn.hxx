@@ -32,8 +32,8 @@ namespace rptxml
         ORptFilter& GetOwnImport();
 
         void fillStyle(const OUString& _sStyleName);
-        OXMLRowColumn(const OXMLRowColumn&);
-        void operator =(const OXMLRowColumn&);
+        OXMLRowColumn(const OXMLRowColumn&) SAL_DELETED_FUNCTION;
+        void operator =(const OXMLRowColumn&) SAL_DELETED_FUNCTION;
     public:
 
         OXMLRowColumn( ORptFilter& rImport

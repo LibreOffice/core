@@ -40,19 +40,15 @@ namespace rptxml
     {
         OUString             m_sDataStyleName;
         OUString             sPageStyle;
-        const OUString         sNumberFormat;
         SvXMLStylesContext*         pStyles;
         //  std::vector<ScXMLMapContent>    aMaps;
-        com::sun::star::uno::Any    aConditionalFormat;
         sal_Int32                   m_nNumberFormat;
         ORptFilter&                 m_rImport;
-        bool                    bConditionalFormatCreated : 1;
-        bool                    bParentSet : 1;
 
         ORptFilter& GetOwnImport() const { return m_rImport;}
 
-        OControlStyleContext(const OControlStyleContext&);
-        void operator =(const OControlStyleContext&);
+        OControlStyleContext(const OControlStyleContext&) SAL_DELETED_FUNCTION;
+        void operator =(const OControlStyleContext&) SAL_DELETED_FUNCTION;
     protected:
 
         virtual void SetAttribute( sal_uInt16 nPrefixKey,
@@ -108,8 +104,8 @@ namespace rptxml
 
         ORptFilter& GetOwnImport() const { return m_rImport;}
 
-        OReportStylesContext(const OReportStylesContext&);
-        void operator =(const OReportStylesContext&);
+        OReportStylesContext(const OReportStylesContext&) SAL_DELETED_FUNCTION;
+        void operator =(const OReportStylesContext&) SAL_DELETED_FUNCTION;
     protected:
 
         // Create a style context.

@@ -88,7 +88,6 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 ,m_nPaintEntranceCount(0)
 ,m_eMode(RPTUI_SELECT)
 ,m_bDialogModelChanged(false)
-,m_bInDrag(false)
 {
     //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);

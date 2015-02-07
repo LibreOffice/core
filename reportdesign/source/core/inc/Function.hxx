@@ -48,8 +48,8 @@ namespace reportdesign
         bool     m_bPreEvaluated;
         bool     m_bDeepTraversing;
     private:
-        OFunction(const OFunction&);
-        OFunction& operator=(const OFunction&);
+        OFunction(const OFunction&) SAL_DELETED_FUNCTION;
+        OFunction& operator=(const OFunction&) SAL_DELETED_FUNCTION;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

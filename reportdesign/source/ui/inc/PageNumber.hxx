@@ -50,8 +50,8 @@ class OPageNumberDialog :   public ModalDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>
                                             m_xHoldAlive;
 
-    OPageNumberDialog(const OPageNumberDialog&);
-    void operator =(const OPageNumberDialog&);
+    OPageNumberDialog(const OPageNumberDialog&) SAL_DELETED_FUNCTION;
+    void operator =(const OPageNumberDialog&) SAL_DELETED_FUNCTION;
 public:
     OPageNumberDialog( vcl::Window* pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xHoldAlive

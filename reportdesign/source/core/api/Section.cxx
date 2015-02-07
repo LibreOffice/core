@@ -119,8 +119,6 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 ,m_nForceNewPage(report::ForceNewPage::NONE)
 ,m_nNewRowOrCol(report::ForceNewPage::NONE)
 ,m_bKeepTogether(false)
-,m_bCanGrow(false)
-,m_bCanShrink(false)
 ,m_bRepeatSection(false)
 ,m_bVisible(true)
 ,m_bBacktransparent(true)

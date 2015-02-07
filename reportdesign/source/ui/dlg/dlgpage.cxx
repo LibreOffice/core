@@ -41,7 +41,6 @@ ORptPageDialog::ORptPageDialog( vcl::Window* pParent, const SfxItemSet* pAttr, c
     : SfxTabDialog (pParent, rDialog, "modules/dbreport/ui/" +
         rDialog.toAsciiLowerCase() +
         ".ui", pAttr)
-    , rOutAttrs(*pAttr)
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     assert(pFact && "Dialog creation failed!");

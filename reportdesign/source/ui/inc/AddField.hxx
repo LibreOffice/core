@@ -73,8 +73,8 @@ class  OAddFieldWindow  :public FloatingWindow
     DECL_LINK( OnSelectHdl,      void* );
     DECL_LINK( OnSortAction,     ToolBox* );
 
-    OAddFieldWindow(const OAddFieldWindow&);
-    void operator =(const OAddFieldWindow&);
+    OAddFieldWindow(const OAddFieldWindow&) SAL_DELETED_FUNCTION;
+    void operator =(const OAddFieldWindow&) SAL_DELETED_FUNCTION;
 public:
     OAddFieldWindow(vcl::Window* pParent
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xRowSet);

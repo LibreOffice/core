@@ -38,8 +38,8 @@ namespace rptxml
 {
     class OPropertyHandlerFactory : public ::xmloff::OControlPropertyHandlerFactory
     {
-        OPropertyHandlerFactory(const OPropertyHandlerFactory&);
-        void operator =(const OPropertyHandlerFactory&);
+        OPropertyHandlerFactory(const OPropertyHandlerFactory&) SAL_DELETED_FUNCTION;
+        void operator =(const OPropertyHandlerFactory&) SAL_DELETED_FUNCTION;
     protected:
         mutable ::std::unique_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
         mutable ::std::unique_ptr<XMLPropertyHandler>             m_pTextAlignHandler;

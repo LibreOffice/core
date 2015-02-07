@@ -57,8 +57,8 @@ namespace reportdesign
                                                                         m_CustomShapeGeometry;
 
     private:
-        OShape(const OShape&);
-        OShape& operator=(const OShape&);
+        OShape(const OShape&) SAL_DELETED_FUNCTION;
+        OShape& operator=(const OShape&) SAL_DELETED_FUNCTION;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

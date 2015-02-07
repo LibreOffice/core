@@ -38,8 +38,8 @@ class OSectionView;
 
 class DlgEdFunc /* : public LinkHdl */
 {
-    DlgEdFunc(const DlgEdFunc&);
-    void operator =(const DlgEdFunc&);
+    DlgEdFunc(const DlgEdFunc&) SAL_DELETED_FUNCTION;
+    void operator =(const DlgEdFunc&) SAL_DELETED_FUNCTION;
 protected:
     OReportSection* m_pParent;
     OSectionView&   m_rView;

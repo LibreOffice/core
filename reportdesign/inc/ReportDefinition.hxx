@@ -96,8 +96,8 @@ namespace reportdesign
         ::boost::shared_ptr<OReportDefinitionImpl>                                  m_pImpl;
 
     private:
-        OReportDefinition(const OReportDefinition&);
-        OReportDefinition& operator=(const OReportDefinition&);
+        OReportDefinition(const OReportDefinition&) SAL_DELETED_FUNCTION;
+        OReportDefinition& operator=(const OReportDefinition&) SAL_DELETED_FUNCTION;
 
         void setSection(     const OUString& _sProperty
                             ,const bool& _bOn

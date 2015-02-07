@@ -31,10 +31,8 @@ namespace rptui
 class ORptPageDialog : public SfxTabDialog
 {
 private:
-    const SfxItemSet&   rOutAttrs;
-
-    ORptPageDialog(const ORptPageDialog&);
-    void operator =(const ORptPageDialog&);
+    ORptPageDialog(const ORptPageDialog&) SAL_DELETED_FUNCTION;
+    void operator =(const ORptPageDialog&) SAL_DELETED_FUNCTION;
 public:
 
     ORptPageDialog(vcl::Window* pParent, const SfxItemSet* pAttr, const OUString &rDialog);

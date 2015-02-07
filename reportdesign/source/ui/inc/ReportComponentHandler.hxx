@@ -83,8 +83,8 @@ namespace rptui
     protected:
         virtual ~ReportComponentHandler() {}
     private:
-        ReportComponentHandler(ReportComponentHandler &); // not defined
-        void operator =(ReportComponentHandler &); // not defined
+        ReportComponentHandler(ReportComponentHandler &) SAL_DELETED_FUNCTION;
+        void operator =(ReportComponentHandler &) SAL_DELETED_FUNCTION;
 
 
 

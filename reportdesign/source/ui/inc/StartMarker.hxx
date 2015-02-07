@@ -45,8 +45,8 @@ namespace rptui
         void initDefaultNodeImages();
         void setColor();
         virtual void ImplInitSettings() SAL_OVERRIDE;
-        OStartMarker(OStartMarker&);
-        void operator =(OStartMarker&);
+        OStartMarker(OStartMarker&) SAL_DELETED_FUNCTION;
+        void operator =(OStartMarker&) SAL_DELETED_FUNCTION;
     public:
         OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry);
         virtual ~OStartMarker();

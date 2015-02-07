@@ -27,8 +27,8 @@ namespace rptxml
     class ORptFilter;
     class OXMLFormattedField : public OXMLReportElementBase
     {
-        OXMLFormattedField(const OXMLFormattedField&);
-        void operator =(const OXMLFormattedField&);
+        OXMLFormattedField(const OXMLFormattedField&) SAL_DELETED_FUNCTION;
+        void operator =(const OXMLFormattedField&) SAL_DELETED_FUNCTION;
     public:
 
         OXMLFormattedField( ORptFilter& rImport

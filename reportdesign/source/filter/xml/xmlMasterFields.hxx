@@ -27,8 +27,8 @@ namespace rptxml
     class OXMLMasterFields : public SvXMLImportContext
     {
         IMasterDetailFieds* m_pReport;
-        OXMLMasterFields(const OXMLMasterFields&);
-        void operator =(const OXMLMasterFields&);
+        OXMLMasterFields(const OXMLMasterFields&) SAL_DELETED_FUNCTION;
+        void operator =(const OXMLMasterFields&) SAL_DELETED_FUNCTION;
     public:
 
         OXMLMasterFields( ORptFilter& rImport, sal_uInt16 nPrfx,

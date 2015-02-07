@@ -67,8 +67,6 @@ namespace reportdesign
         ::sal_Int16                                                                         m_nForceNewPage;
         ::sal_Int16                                                                         m_nNewRowOrCol;
         bool                                                                                m_bKeepTogether;
-        bool                                                                                m_bCanGrow;
-        bool                                                                                m_bCanShrink;
         bool                                                                                m_bRepeatSection;
         bool                                                                                m_bVisible;
         bool                                                                                m_bBacktransparent;
@@ -76,8 +74,8 @@ namespace reportdesign
         bool                                                                                m_bInInsertNotify;
 
     private:
-        OSection(const OSection&);
-        OSection& operator=(const OSection&);
+        OSection(const OSection&) SAL_DELETED_FUNCTION;
+        OSection& operator=(const OSection&) SAL_DELETED_FUNCTION;
 
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value

@@ -52,8 +52,8 @@ namespace reportdesign
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >             m_xActiveConnection;
         ::sal_Int32                                                                         m_nMaxRows;
     private:
-        OReportEngineJFree(const OReportEngineJFree&);
-        OReportEngineJFree& operator=(const OReportEngineJFree&);
+        OReportEngineJFree(const OReportEngineJFree&) SAL_DELETED_FUNCTION;
+        OReportEngineJFree& operator=(const OReportEngineJFree&) SAL_DELETED_FUNCTION;
         template <typename T> void set(  const OUString& _sProperty
                                         ,const T& _Value
                                         ,T& _member)

@@ -30,11 +30,10 @@ namespace rptxml
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >              m_xSection;
-        bool                                                                            m_bPageHeader;
         ORptFilter& GetOwnImport();
 
-        OXMLSection(const OXMLSection&);
-        void operator =(const OXMLSection&);
+        OXMLSection(const OXMLSection&) SAL_DELETED_FUNCTION;
+        void operator =(const OXMLSection&) SAL_DELETED_FUNCTION;
     public:
 
         OXMLSection( ORptFilter& rImport

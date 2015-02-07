@@ -62,8 +62,8 @@ namespace rptui
         void ImplInitSettings();
         void impl_initScrollBar( ScrollBar& _rScrollBar ) const;
 
-        OScrollWindowHelper(OScrollWindowHelper&);
-        void operator =(OScrollWindowHelper&);
+        OScrollWindowHelper(OScrollWindowHelper&) SAL_DELETED_FUNCTION;
+        void operator =(OScrollWindowHelper&) SAL_DELETED_FUNCTION;
     protected:
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
         // window

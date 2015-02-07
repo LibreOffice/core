@@ -58,7 +58,6 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                 ,bool _bPageHeader)
 :SvXMLImportContext( rImport, nPrfx, _sLocalName )
 ,m_xSection(_xSection)
-,m_bPageHeader(_bPageHeader)
 {
 
     OSL_ENSURE(_xAttrList.is(),"Attribute list is NULL!");

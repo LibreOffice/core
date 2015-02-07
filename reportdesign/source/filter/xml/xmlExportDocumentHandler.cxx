@@ -73,7 +73,6 @@ void lcl_correctCellAddress(const OUString & _sName, const uno::Reference< xml::
 
 ExportDocumentHandler::ExportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
     m_xContext(context)
-    ,m_nCurrentCellIndex(0)
     ,m_nColumnCount(0)
     ,m_bTableRowsStarted(false)
     ,m_bFirstRowExported(false)

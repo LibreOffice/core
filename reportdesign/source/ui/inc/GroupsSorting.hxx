@@ -135,8 +135,8 @@ private:
     *
     */
     void fillColumns();
-    OGroupsSortingDialog(OGroupsSortingDialog&);
-    void operator =(OGroupsSortingDialog&);
+    OGroupsSortingDialog(OGroupsSortingDialog&) SAL_DELETED_FUNCTION;
+    void operator =(OGroupsSortingDialog&) SAL_DELETED_FUNCTION;
 protected:
     // OPropertyChangeListener
     virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;

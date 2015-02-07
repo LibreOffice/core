@@ -30,8 +30,8 @@ namespace rptui
     {
         OModuleClient       m_aModuleClient;
         ::std::unique_ptr<ONavigatorImpl> m_pImpl;
-        ONavigator(const ONavigator&);
-        void operator =(const ONavigator&);
+        ONavigator(const ONavigator&) SAL_DELETED_FUNCTION;
+        void operator =(const ONavigator&) SAL_DELETED_FUNCTION;
     public:
            ONavigator( vcl::Window* pParent
                     ,OReportController& _rController);

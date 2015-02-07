@@ -38,8 +38,8 @@ class OObjectListener: public TPropertyChangeListenerHelper
 {
 private:
     OObjectBase*        m_pObject;
-    OObjectListener(const OObjectListener&);
-    void operator =(const OObjectListener&);
+    OObjectListener(const OObjectListener&) SAL_DELETED_FUNCTION;
+    void operator =(const OObjectListener&) SAL_DELETED_FUNCTION;
 protected:
     virtual ~OObjectListener();
 public:
