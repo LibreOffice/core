@@ -40,6 +40,7 @@ class GraphicObjectTest: public test::BootstrapFixture, public unotest::MacrosTe
 public:
     void testSwap();
     void testSizeBasedAutoSwap();
+    void testTdf88836();
 
 
     virtual void setUp() SAL_OVERRIDE
@@ -56,6 +57,7 @@ private:
     CPPUNIT_TEST_SUITE(GraphicObjectTest);
     CPPUNIT_TEST(testSwap);
     CPPUNIT_TEST(testSizeBasedAutoSwap);
+    CPPUNIT_TEST(testTdf88836);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -226,6 +228,15 @@ void GraphicObjectTest::testSizeBasedAutoSwap()
     }
 
     xComponent->dispose();
+}
+
+void GraphicObjectTest::testTdf88836()
+{
+    // Construction with empty bitmap -> type should be GRAPHIC_NONE
+    Graphic aGraphic = Bitmap();
+    CPPUNIT_ASSERT_EQUAL(GRAPHIC_NONE, aGraphic.GetType());
+    aGraphic = Graphic(BitmapEx());
+    CPPUNIT_ASSERT_EQUAL(GRAPHIC_NONE, aGraphic.GetType());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphicObjectTest);
