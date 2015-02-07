@@ -44,9 +44,8 @@
 namespace slideshow {
 namespace internal {
 
-class ActivitiesFactory : private ::boost::noncopyable
+namespace ActivitiesFactory
 {
-public:
     /// Collection of common factory parameters
     struct CommonParameters
     {
@@ -147,7 +146,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const NumberAnimationSharedPtr&                rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -170,7 +169,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const EnumAnimationSharedPtr&                  rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -193,7 +192,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const ColorAnimationSharedPtr&                 rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -216,7 +215,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                            rParms,
         const HSLColorAnimationSharedPtr&                  rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -239,7 +238,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const PairAnimationSharedPtr&                  rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -262,7 +261,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const StringAnimationSharedPtr&                rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -285,7 +284,7 @@ public:
         @param xNode
         The SMIL animation node to animate
     */
-    static AnimationActivitySharedPtr createAnimateActivity(
+    AnimationActivitySharedPtr createAnimateActivity(
         const CommonParameters&                        rParms,
         const BoolAnimationSharedPtr&                  rAnimator,
         const ::com::sun::star::uno::Reference<
@@ -308,16 +307,11 @@ public:
         If true, the activity goes 'forward', i.e. from 0 to
         1. With false, the direction is reversed.
     */
-    static AnimationActivitySharedPtr createSimpleActivity(
+    AnimationActivitySharedPtr createSimpleActivity(
         const CommonParameters&         rParms,
         const NumberAnimationSharedPtr& rAnimator,
         bool                            bDirectionForward );
-
-private:
-    // default: constructor/destructor disabed
-    ActivitiesFactory();
-    ~ActivitiesFactory();
-};
+}
 
 } // namespace internal
 } // namespace presentation

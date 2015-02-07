@@ -22,7 +22,6 @@
 
 #include <com/sun/star/animations/TargetProperties.hpp>
 
-#include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <comphelper/sequence.hxx>
@@ -33,16 +32,10 @@ namespace slideshow
 {
     namespace internal
     {
-        class TargetPropertiesCreator : public ::comphelper::OBaseMutex
+        namespace TargetPropertiesCreator
         {
-            public:
-                static uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode );
-
-            private:
-                // default: disabled copy/assignment
-                TargetPropertiesCreator(const TargetPropertiesCreator&);
-                TargetPropertiesCreator& operator=( const TargetPropertiesCreator& );
-        };
+            uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode );
+        }
 
     } // namespace internal
 } // namespace slideshow

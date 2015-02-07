@@ -31,7 +31,6 @@
 #include "activitiesqueue.hxx"
 #include "usereventqueue.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <vector>
 
 
@@ -41,29 +40,23 @@ namespace slideshow
     {
         /* Definition of AnimationNodeFactory class */
 
-        class AnimationNodeFactory : private boost::noncopyable
+        namespace AnimationNodeFactory
         {
-        public:
             /** Create an AnimatioNode for the given XAnimationNode
              */
-            static AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference<
+            AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference<
                                                                        ::com::sun::star::animations::XAnimationNode >& xNode,
                                                                const ::basegfx::B2DVector&                          rSlideSize,
                                                                const SlideShowContext&                              rContext );
 
 
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
-            static void showTree( AnimationNodeSharedPtr& pRootNode );
+            void showTree( AnimationNodeSharedPtr& pRootNode );
 # define SHOW_NODE_TREE(a) AnimationNodeFactory::showTree(a)
 #else
 # define SHOW_NODE_TREE(a)
 #endif
-
-        private:
-            // default: constructor/destructor disabled
-            AnimationNodeFactory();
-            ~AnimationNodeFactory();
-        };
+        }
     }
 }
 

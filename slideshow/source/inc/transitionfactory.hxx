@@ -131,8 +131,8 @@ namespace slideshow
                 sal_Int16                                               nTransitionSubType );
 
             // static factory
-            TransitionFactory();
-            ~TransitionFactory();
+            TransitionFactory() SAL_DELETED_FUNCTION; //TODO: get rid of this class
+            ~TransitionFactory() SAL_DELETED_FUNCTION;
         };
     }
 }

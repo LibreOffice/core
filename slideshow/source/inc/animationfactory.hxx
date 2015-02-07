@@ -32,11 +32,6 @@
 #include "shapeattributelayer.hxx"
 #include "shapemanager.hxx"
 
-#include <boost/noncopyable.hpp>
-
-
-
-
 /* Definition of AnimationFactory class */
 
 namespace slideshow
@@ -50,9 +45,8 @@ namespace slideshow
             appropriate Animation object from that, which will modify
             the attribute as specified.
          */
-        class AnimationFactory : private boost::noncopyable
+        namespace AnimationFactory
         {
-        public:
             /** Classifies the attribute name.
 
                 This enum maps names to appropriate factory methods.
@@ -73,7 +67,7 @@ namespace slideshow
                 CLASS_BOOL_PROPERTY
             };
 
-            static AttributeClass classifyAttributeName( const OUString& rAttrName );
+            AttributeClass classifyAttributeName( const OUString& rAttrName );
 
             /// Collection of flags common to all factory methods
             enum FactoryFlags
@@ -85,19 +79,19 @@ namespace slideshow
                 FLAG_NO_SPRITE = 1
             };
 
-            static NumberAnimationSharedPtr createNumberPropertyAnimation( const OUString&               rAttrName,
+            NumberAnimationSharedPtr createNumberPropertyAnimation( const OUString&               rAttrName,
                                                                            const AnimatableShapeSharedPtr&      rShape,
                                                                            const ShapeManagerSharedPtr&         rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
                                                                            int                                  nFlags=0 );
 
-            static EnumAnimationSharedPtr createEnumPropertyAnimation( const OUString&                   rAttrName,
+            EnumAnimationSharedPtr createEnumPropertyAnimation( const OUString&                   rAttrName,
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags=0 );
 
-            static ColorAnimationSharedPtr  createColorPropertyAnimation( const OUString&                rAttrName,
+            ColorAnimationSharedPtr  createColorPropertyAnimation( const OUString&                rAttrName,
                                                                           const AnimatableShapeSharedPtr&       rShape,
                                                                           const ShapeManagerSharedPtr&          rShapeManager,
                                                                           const ::basegfx::B2DVector&           rSlideSize,
@@ -110,35 +104,31 @@ namespace slideshow
                 animations::AnimationTransformType::TRANSLATE or
                 animations::AnimationTransformType::SCALE.
              */
-            static PairAnimationSharedPtr   createPairPropertyAnimation( const AnimatableShapeSharedPtr&        rShape,
+            PairAnimationSharedPtr   createPairPropertyAnimation( const AnimatableShapeSharedPtr&        rShape,
                                                                          const ShapeManagerSharedPtr&           rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
                                                                          sal_Int16                              nTransformType,
                                                                          int                                    nFlags=0 );
 
-            static StringAnimationSharedPtr createStringPropertyAnimation( const OUString&               rAttrName,
+            StringAnimationSharedPtr createStringPropertyAnimation( const OUString&               rAttrName,
                                                                            const AnimatableShapeSharedPtr&      rShape,
                                                                            const ShapeManagerSharedPtr&         rShapeManager,
                                                                            const ::basegfx::B2DVector&          rSlideSize,
                                                                            int                                  nFlags=0 );
 
-            static BoolAnimationSharedPtr   createBoolPropertyAnimation( const OUString&                 rAttrName,
+            BoolAnimationSharedPtr   createBoolPropertyAnimation( const OUString&                 rAttrName,
                                                                          const AnimatableShapeSharedPtr&        rShape,
                                                                          const ShapeManagerSharedPtr&           rShapeManager,
                                                                          const ::basegfx::B2DVector&            rSlideSize,
                                                                          int                                    nFlags=0 );
 
-            static NumberAnimationSharedPtr createPathMotionAnimation( const OUString&                   rSVGDPath,
+            NumberAnimationSharedPtr createPathMotionAnimation( const OUString&                   rSVGDPath,
                                                                        sal_Int16                                nAdditive,
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
                                                                        int                                      nFlags=0);
-        private:
-            // default: constructor/destructor disabed
-            AnimationFactory();
-            ~AnimationFactory();
-        };
+        }
     }
 }
 

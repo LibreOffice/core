@@ -21,7 +21,6 @@
 #define INCLUDED_SLIDESHOW_SOURCE_ENGINE_TRANSITIONS_PARAMETRICPOLYPOLYGONFACTORY_HXX
 
 #include "parametricpolypolygon.hxx"
-#include <boost/noncopyable.hpp>
 
 namespace slideshow
 {
@@ -29,17 +28,11 @@ namespace slideshow
     {
         /* Definition of Transitionfactory class */
 
-        class ParametricPolyPolygonFactory : private boost::noncopyable
+        namespace ParametricPolyPolygonFactory
         {
-        public:
-            static ParametricPolyPolygonSharedPtr createClipPolyPolygon( sal_Int16 nTransitionType,
+            ParametricPolyPolygonSharedPtr createClipPolyPolygon( sal_Int16 nTransitionType,
                                                                          sal_Int16 nTransitionSubType );
-
-        private:
-            // static factory
-            ParametricPolyPolygonFactory();
-            ~ParametricPolyPolygonFactory();
-        };
+        }
     }
 }
 
