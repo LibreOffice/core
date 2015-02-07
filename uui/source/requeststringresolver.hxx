@@ -49,8 +49,8 @@ public:
 private:
     UUIInteractionHelper * m_pImpl;
 
-    UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &); // not implemented
-    void operator =(UUIInteractionRequestStringResolver); // not implemented
+    UUIInteractionRequestStringResolver(UUIInteractionRequestStringResolver &) SAL_DELETED_FUNCTION;
+    void operator =(UUIInteractionRequestStringResolver) SAL_DELETED_FUNCTION;
 
     UUIInteractionRequestStringResolver(
         com::sun::star::uno::Reference<
