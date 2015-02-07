@@ -76,7 +76,7 @@ friend class BindDispatch_Impl;
     bool                bItemDirty;     // Validity of pLastItem
 
 private:
-                            SfxStateCache( const SfxStateCache& rOrig ); // inward
+                            SfxStateCache( const SfxStateCache& rOrig ) SAL_DELETED_FUNCTION;
     void                    SetState_Impl( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );
 
 public:

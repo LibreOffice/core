@@ -46,9 +46,8 @@ public:
     OUString                GetCurrentFilter() const;
     void                    SetCurrentFilter(const OUString&);
 private:
-    // disable copy and assignment
-    SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
-    SFX2_DLLPRIVATE SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
+    SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&) SAL_DELETED_FUNCTION;
+    SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & ) SAL_DELETED_FUNCTION;
 
     const std::unique_ptr< SvxOpenGrf_Impl >  mpImpl;
 };

@@ -86,9 +86,8 @@ private:
     // if we don't delete the pointer that got created in SfxPopupMenuManager::Popup
     static PopupMenu *  pStaticThesSubMenu;
 
-    // only declared, but not defined: don't allow copying
-    SfxPopupMenuManager( const SfxPopupMenuManager& );
-    SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
+    SfxPopupMenuManager( const SfxPopupMenuManager& ) SAL_DELETED_FUNCTION;
+    SfxPopupMenuManager& operator=( const SfxPopupMenuManager& ) SAL_DELETED_FUNCTION;
 
 public:
                         SfxPopupMenuManager( PopupMenu*, SfxBindings& );

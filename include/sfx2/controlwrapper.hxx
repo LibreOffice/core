@@ -162,9 +162,8 @@ public:
     virtual void        SetControlDontKnow( bool bSet ) = 0;
 
 private:
-    /* Disable copy c'tor and assignment. */
-                        ControlWrapperBase( const ControlWrapperBase& );
-    ControlWrapperBase& operator=( const ControlWrapperBase& );
+                        ControlWrapperBase( const ControlWrapperBase& ) SAL_DELETED_FUNCTION;
+    ControlWrapperBase& operator=( const ControlWrapperBase& ) SAL_DELETED_FUNCTION;
 };
 
 

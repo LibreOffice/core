@@ -33,10 +33,8 @@ class SfxThesSubMenuHelper
     css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:
-
-    // don't use copy constructor and assignment operator
-    SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
-    SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
+    SfxThesSubMenuHelper( const SfxThesSubMenuHelper & ) SAL_DELETED_FUNCTION;
+    SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & ) SAL_DELETED_FUNCTION;
 
 public:
     SfxThesSubMenuHelper();

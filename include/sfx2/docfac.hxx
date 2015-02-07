@@ -85,9 +85,8 @@ public:
     SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const;
 
 private:
-    // Kopieren verboten
-    SAL_DLLPRIVATE SfxObjectFactory(const SfxObjectFactory&);
-    SAL_DLLPRIVATE const SfxObjectFactory& operator=(const SfxObjectFactory &);
+    SfxObjectFactory(const SfxObjectFactory&) SAL_DELETED_FUNCTION;
+    const SfxObjectFactory& operator=(const SfxObjectFactory &) SAL_DELETED_FUNCTION;
 };
 
 #define SFX_DECL_OBJECTFACTORY()                                            \

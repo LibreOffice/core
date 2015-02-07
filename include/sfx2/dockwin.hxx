@@ -46,8 +46,8 @@ private:
     SfxChildWindow*         pMgr;
     SfxDockingWindow_Impl*  pImp;
 
-    SAL_DLLPRIVATE SfxDockingWindow(SfxDockingWindow &); // not defined
-    SAL_DLLPRIVATE void operator =(SfxDockingWindow &); // not defined
+    SfxDockingWindow(SfxDockingWindow &) SAL_DELETED_FUNCTION;
+    void operator =(SfxDockingWindow &) SAL_DELETED_FUNCTION;
 
 protected:
     SfxChildAlignment   CalcAlignment(const Point& rPos, Rectangle& rRect );

@@ -60,8 +60,8 @@ class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
     SfxItemSet*             pOutputSet;
 
 private:
-    SAL_DLLPRIVATE SfxModalDialog(SfxModalDialog &); // not defined
-    SAL_DLLPRIVATE void operator =(SfxModalDialog &); // not defined
+    SfxModalDialog(SfxModalDialog &) SAL_DELETED_FUNCTION;
+    void operator =(SfxModalDialog &) SAL_DELETED_FUNCTION;
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();
@@ -93,8 +93,8 @@ class SFX2_DLLPUBLIC SfxModelessDialog: public ModelessDialog
     Size                    aSize;
     SfxModelessDialog_Impl* pImp;
 
-    SAL_DLLPRIVATE SfxModelessDialog(SfxModelessDialog &); // not defined
-    SAL_DLLPRIVATE void operator =(SfxModelessDialog &); // not defined
+    SfxModelessDialog(SfxModelessDialog &) SAL_DELETED_FUNCTION;
+    void operator =(SfxModelessDialog &) SAL_DELETED_FUNCTION;
 
     void Init(SfxBindings *pBindinx, SfxChildWindow *pCW);
 
@@ -126,8 +126,8 @@ class SFX2_DLLPUBLIC SfxFloatingWindow: public FloatingWindow
     Size                    aSize;
     SfxFloatingWindow_Impl* pImp;
 
-    SAL_DLLPRIVATE SfxFloatingWindow(SfxFloatingWindow &); // not defined
-    SAL_DLLPRIVATE void operator =(SfxFloatingWindow &); // not defined
+    SfxFloatingWindow(SfxFloatingWindow &) SAL_DELETED_FUNCTION;
+    void operator =(SfxFloatingWindow &) SAL_DELETED_FUNCTION;
 
 protected:
                             SfxFloatingWindow( SfxBindings *pBindings,

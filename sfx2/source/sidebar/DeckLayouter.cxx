@@ -35,6 +35,64 @@ namespace sfx2 { namespace sidebar {
 
 namespace {
     static const sal_Int32 MinimalPanelHeight (25);
+
+    enum LayoutMode
+    {
+        MinimumOrLarger,
+        PreferredOrLarger,
+        Preferred
+    };
+    class LayoutItem
+    {
+    public:
+        SharedPanel mpPanel;
+        css::ui::LayoutSize maLayoutSize;
+        sal_Int32 mnDistributedHeight;
+        sal_Int32 mnWeight;
+        sal_Int32 mnPanelIndex;
+        bool mbShowTitleBar;
+
+        LayoutItem (void)
+            : mpPanel(),maLayoutSize(0,0,0),mnDistributedHeight(0),mnWeight(0),mnPanelIndex(0),mbShowTitleBar(true)
+        {}
+    };
+    Rectangle LayoutPanels (
+        const Rectangle aContentArea,
+        sal_Int32& rMinimalWidth,
+        ::std::vector<LayoutItem>& rLayoutItems,
+        vcl::Window& rScrollClipWindow,
+        vcl::Window& rScrollContainer,
+        ScrollBar& pVerticalScrollBar,
+        const bool bShowVerticalScrollBar);
+    void GetRequestedSizes (
+        ::std::vector<LayoutItem>& rLayoutItem,
+        sal_Int32& rAvailableHeight,
+        sal_Int32& rMinimalWidth,
+        const Rectangle& rContentBox);
+    void DistributeHeights (
+        ::std::vector<LayoutItem>& rLayoutItems,
+        const sal_Int32 nHeightToDistribute,
+        const sal_Int32 nContainerHeight,
+        const bool bMinimumHeightIsBase);
+    sal_Int32 PlacePanels (
+        ::std::vector<LayoutItem>& rLayoutItems,
+        const sal_Int32 nWidth,
+        const LayoutMode eMode,
+        vcl::Window& rScrollContainer);
+    Rectangle PlaceDeckTitle (
+        vcl::Window& rTittleBar,
+        const Rectangle& rAvailableSpace);
+    Rectangle PlaceVerticalScrollBar (
+        ScrollBar& rVerticalScrollBar,
+        const Rectangle& rAvailableSpace,
+        const bool bShowVerticalScrollBar);
+    void SetupVerticalScrollBar(
+        ScrollBar& rVerticalScrollBar,
+        const sal_Int32 nContentHeight,
+        const sal_Int32 nVisibleHeight);
+    void UpdateFiller (
+        vcl::Window& rFiller,
+        const Rectangle& rBox);
 }
 
 #define IterateLayoutItems(iterator_name,container)                     \
@@ -82,10 +140,9 @@ void DeckLayouter::LayoutDeck (
     UpdateFiller(rFiller, aBox);
 }
 
+namespace {
 
-
-
-Rectangle DeckLayouter::LayoutPanels (
+Rectangle LayoutPanels (
     const Rectangle aContentArea,
     sal_Int32& rMinimalWidth,
     ::std::vector<LayoutItem>& rLayoutItems,
@@ -193,7 +250,7 @@ Rectangle DeckLayouter::LayoutPanels (
 
 
 
-sal_Int32 DeckLayouter::PlacePanels (
+sal_Int32 PlacePanels (
     ::std::vector<LayoutItem>& rLayoutItems,
     const sal_Int32 nWidth,
     const LayoutMode eMode,
@@ -288,7 +345,7 @@ sal_Int32 DeckLayouter::PlacePanels (
 
 
 
-void DeckLayouter::GetRequestedSizes (
+void GetRequestedSizes (
     ::std::vector<LayoutItem>& rLayoutItems,
     sal_Int32& rAvailableHeight,
     sal_Int32& rMinimalWidth,
@@ -343,7 +400,7 @@ void DeckLayouter::GetRequestedSizes (
 
 
 
-void DeckLayouter::DistributeHeights (
+void DistributeHeights (
     ::std::vector<LayoutItem>& rLayoutItems,
     const sal_Int32 nHeightToDistribute,
     const sal_Int32 nContainerHeight,
@@ -428,7 +485,7 @@ void DeckLayouter::DistributeHeights (
 
 
 
-Rectangle DeckLayouter::PlaceDeckTitle (
+Rectangle PlaceDeckTitle (
     vcl::Window& rDeckTitleBar,
     const Rectangle& rAvailableSpace)
 {
@@ -458,7 +515,7 @@ Rectangle DeckLayouter::PlaceDeckTitle (
 
 
 
-Rectangle DeckLayouter::PlaceVerticalScrollBar (
+Rectangle PlaceVerticalScrollBar (
     ScrollBar& rVerticalScrollBar,
     const Rectangle& rAvailableSpace,
     const bool bShowVerticalScrollBar)
@@ -488,7 +545,7 @@ Rectangle DeckLayouter::PlaceVerticalScrollBar (
 
 
 
-void DeckLayouter::SetupVerticalScrollBar(
+void SetupVerticalScrollBar(
     ScrollBar& rVerticalScrollBar,
     const sal_Int32 nContentHeight,
     const sal_Int32 nVisibleHeight)
@@ -503,7 +560,7 @@ void DeckLayouter::SetupVerticalScrollBar(
 
 
 
-void DeckLayouter::UpdateFiller (
+void UpdateFiller (
     vcl::Window& rFiller,
     const Rectangle& rBox)
 {
@@ -521,7 +578,7 @@ void DeckLayouter::UpdateFiller (
     }
 }
 
-
+}
 
 } } // end of namespace sfx2::sidebar
 

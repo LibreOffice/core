@@ -108,7 +108,7 @@ public:
     void                ForgetAllArgs();
 
 private:
-    const SfxRequest&   operator=(const SfxRequest &); // n.i.!!
+    const SfxRequest&   operator=(const SfxRequest &) SAL_DELETED_FUNCTION;
 };
 
 

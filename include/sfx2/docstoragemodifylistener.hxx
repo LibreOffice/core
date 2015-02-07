@@ -73,9 +73,8 @@ namespace sfx2
         virtual ~DocumentStorageModifyListener();
 
     private:
-        DocumentStorageModifyListener();                                                    // never implemented
-        DocumentStorageModifyListener( const DocumentStorageModifyListener& );              // never implemented
-        DocumentStorageModifyListener& operator=( const DocumentStorageModifyListener& );   // never implemented
+        DocumentStorageModifyListener( const DocumentStorageModifyListener& ) SAL_DELETED_FUNCTION;
+        DocumentStorageModifyListener& operator=( const DocumentStorageModifyListener& ) SAL_DELETED_FUNCTION;
     };
 
 

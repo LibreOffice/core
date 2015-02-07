@@ -42,9 +42,8 @@ class SFX2_DLLPUBLIC SfxQueryStatus
         SfxItemState QueryState( SfxPoolItem*& pPoolItem );
 
     private:
-        SfxQueryStatus( const SfxQueryStatus& );
-        SfxQueryStatus();
-        SfxQueryStatus& operator=( const SfxQueryStatus& );
+        SfxQueryStatus( const SfxQueryStatus& ) SAL_DELETED_FUNCTION;
+        SfxQueryStatus& operator=( const SfxQueryStatus& ) SAL_DELETED_FUNCTION;
 
         com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener >   m_xStatusListener;
         SfxQueryStatus_Impl*                                                       m_pSfxQueryStatusImpl;

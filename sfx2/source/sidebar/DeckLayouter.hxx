@@ -35,13 +35,12 @@ namespace sfx2 { namespace sidebar {
 class Panel;
 
 
-/** Helper class for layouting the direct and indirect children of a
+/** Helper for layouting the direct and indirect children of a
     deck like title bars, panels, and scroll bars.
 */
-class DeckLayouter
+namespace DeckLayouter
 {
-public:
-    static void LayoutDeck (
+    void LayoutDeck (
         const Rectangle aContentArea,
         sal_Int32& rMinimalWidth,
         SharedPanelContainer& rPanels,
@@ -50,70 +49,7 @@ public:
         vcl::Window& pScrollContainer,
         vcl::Window& pFiller,
         ScrollBar& pVerticalScrollBar);
-
-private:
-    // Do not use constructor or destructor.
-    DeckLayouter (void);
-    ~DeckLayouter (void);
-
-    enum LayoutMode
-    {
-        MinimumOrLarger,
-        PreferredOrLarger,
-        Preferred
-    };
-    class LayoutItem
-    {
-    public:
-        SharedPanel mpPanel;
-        css::ui::LayoutSize maLayoutSize;
-        sal_Int32 mnDistributedHeight;
-        sal_Int32 mnWeight;
-        sal_Int32 mnPanelIndex;
-        bool mbShowTitleBar;
-
-        LayoutItem (void)
-            : mpPanel(),maLayoutSize(0,0,0),mnDistributedHeight(0),mnWeight(0),mnPanelIndex(0),mbShowTitleBar(true)
-        {}
-    };
-    static Rectangle LayoutPanels (
-        const Rectangle aContentArea,
-        sal_Int32& rMinimalWidth,
-        ::std::vector<LayoutItem>& rLayoutItems,
-        vcl::Window& rScrollClipWindow,
-        vcl::Window& rScrollContainer,
-        ScrollBar& pVerticalScrollBar,
-        const bool bShowVerticalScrollBar);
-    static void GetRequestedSizes (
-        ::std::vector<LayoutItem>& rLayoutItem,
-        sal_Int32& rAvailableHeight,
-        sal_Int32& rMinimalWidth,
-        const Rectangle& rContentBox);
-    static void DistributeHeights (
-        ::std::vector<LayoutItem>& rLayoutItems,
-        const sal_Int32 nHeightToDistribute,
-        const sal_Int32 nContainerHeight,
-        const bool bMinimumHeightIsBase);
-    static sal_Int32 PlacePanels (
-        ::std::vector<LayoutItem>& rLayoutItems,
-        const sal_Int32 nWidth,
-        const LayoutMode eMode,
-        vcl::Window& rScrollContainer);
-    static Rectangle PlaceDeckTitle (
-        vcl::Window& rTittleBar,
-        const Rectangle& rAvailableSpace);
-    static Rectangle PlaceVerticalScrollBar (
-        ScrollBar& rVerticalScrollBar,
-        const Rectangle& rAvailableSpace,
-        const bool bShowVerticalScrollBar);
-    static void SetupVerticalScrollBar(
-        ScrollBar& rVerticalScrollBar,
-        const sal_Int32 nContentHeight,
-        const sal_Int32 nVisibleHeight);
-    static void UpdateFiller (
-        vcl::Window& rFiller,
-        const Rectangle& rBox);
-};
+}
 
 
 } } // end of namespace sfx2::sidebar

@@ -38,7 +38,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper1 < com::sun::star::xml:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > m_aResultSeq;
     ::com::sun::star::uno::Sequence< OUString > m_aElementsSeq; // stack of elements being parsed
 
-    DocTemplLocaleHelper(); // must not be created directly
+    DocTemplLocaleHelper();
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > GetParsingResult();
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const OUString& aStringID, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )

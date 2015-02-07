@@ -70,9 +70,8 @@ class SFX2_DLLPUBLIC SfxStatusListener : public ::cppu::WeakImplHelper2<
         virtual void SAL_CALL statusChanged(const ::com::sun::star::frame::FeatureStateEvent& Event) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     private:
-        SfxStatusListener( const SfxStatusListener& );
-        SfxStatusListener();
-        SfxStatusListener& operator=( const SfxStatusListener& );
+        SfxStatusListener( const SfxStatusListener& ) SAL_DELETED_FUNCTION;
+        SfxStatusListener& operator=( const SfxStatusListener& ) SAL_DELETED_FUNCTION;
 
         sal_uInt16                                                                          m_nSlotID;
         ::com::sun::star::util::URL                                                     m_aCommand;

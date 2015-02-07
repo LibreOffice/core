@@ -113,8 +113,8 @@ class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusList
 private:
     SfxFrameStatusListener* GetOrCreateStatusListener();
 
-    SAL_DLLPRIVATE SfxPopupWindow(SfxPopupWindow &); // not defined
-    SAL_DLLPRIVATE void operator =(SfxPopupWindow &); // not defined
+    SfxPopupWindow(SfxPopupWindow &) SAL_DELETED_FUNCTION;
+    void operator =(SfxPopupWindow &) SAL_DELETED_FUNCTION;
     void Delete();
 
 protected:

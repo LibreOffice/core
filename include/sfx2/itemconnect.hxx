@@ -214,9 +214,8 @@ protected:
     TriState            GetShowState( bool bKnown ) const;
 
 private:
-    /* Disable copy c'tor and assignment. */
-                        ItemConnectionBase( const ItemConnectionBase& );
-    ItemConnectionBase& operator=( const ItemConnectionBase& );
+                        ItemConnectionBase( const ItemConnectionBase& ) SAL_DELETED_FUNCTION;
+    ItemConnectionBase& operator=( const ItemConnectionBase& ) SAL_DELETED_FUNCTION;
 
     ItemConnFlags       mnFlags;    /// Flags for additional options.
 };
