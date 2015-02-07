@@ -101,9 +101,8 @@ public:
         throw(::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    // prevent copy and assignment
-    SalAquaFolderPicker( const SalAquaFolderPicker& );
-    SalAquaFolderPicker& operator=( const SalAquaFolderPicker& );
+    SalAquaFolderPicker( const SalAquaFolderPicker& ) SAL_DELETED_FUNCTION;
+    SalAquaFolderPicker& operator=( const SalAquaFolderPicker& ) SAL_DELETED_FUNCTION;
 
     // to instantiate own services
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;

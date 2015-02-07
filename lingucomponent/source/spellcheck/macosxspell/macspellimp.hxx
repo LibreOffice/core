@@ -73,9 +73,8 @@ class MacSpellChecker :
     linguistic::PropertyHelper_Spell *      pPropHelper;
     bool                                    bDisposing;
 
-    // disallow copy-constructor and assignment-operator for now
-    MacSpellChecker(const MacSpellChecker &);
-    MacSpellChecker & operator = (const MacSpellChecker &);
+    MacSpellChecker(const MacSpellChecker &) SAL_DELETED_FUNCTION;
+    MacSpellChecker & operator = (const MacSpellChecker &) SAL_DELETED_FUNCTION;
 
     linguistic::PropertyHelper_Spell &  GetPropHelper_Impl();
     linguistic::PropertyHelper_Spell &  GetPropHelper()

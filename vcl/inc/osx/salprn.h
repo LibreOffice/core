@@ -109,8 +109,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     void setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation );
 
     private:
-    AquaSalInfoPrinter( const AquaSalInfoPrinter& );
-    AquaSalInfoPrinter& operator=(const AquaSalInfoPrinter&);
+    AquaSalInfoPrinter( const AquaSalInfoPrinter& ) SAL_DELETED_FUNCTION;
+    AquaSalInfoPrinter& operator=(const AquaSalInfoPrinter&) SAL_DELETED_FUNCTION;
 };
 
 // - AquaSalPrinter -
@@ -143,8 +143,8 @@ class AquaSalPrinter : public SalPrinter
     virtual sal_uLong               GetErrorCode() SAL_OVERRIDE;
 
     private:
-    AquaSalPrinter( const AquaSalPrinter& );
-    AquaSalPrinter& operator=(const AquaSalPrinter&);
+    AquaSalPrinter( const AquaSalPrinter& ) SAL_DELETED_FUNCTION;
+    AquaSalPrinter& operator=(const AquaSalPrinter&) SAL_DELETED_FUNCTION;
 };
 
 const double fPtTo100thMM = 35.27777778;

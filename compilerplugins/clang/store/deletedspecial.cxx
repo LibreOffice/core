@@ -105,17 +105,21 @@ bool DeletedSpecial::VisitCXXMethodDecl(CXXMethodDecl const * decl) {
         } else if (ctor != nullptr && ctor->isDefaultConstructor()
                    && std::distance(cls->ctor_begin(), cls->ctor_end()) == 1)
         {
-            if (whitelist(decl, "DocTemplLocaleHelper", "sfx2/source/doc/doctemplateslocal.hxx")
+            if (whitelist(decl, "AquaA11yFocusListener", "vcl/osx/a11yfocuslistener.hxx")
+                || whitelist(decl, "DocTemplLocaleHelper", "sfx2/source/doc/doctemplateslocal.hxx")
                 || whitelist(decl, "ScViewDataTable", "sc/source/filter/excel/../../ui/inc/viewdata.hxx")
                 || whitelist(decl, "ScViewDataTable", "sc/source/ui/inc/viewdata.hxx")
                 || whitelist(decl, "SwLineInfo", "sw/source/core/text/inftxt.hxx")
                 || whitelist(decl, "XRenderPeer", "vcl/unx/generic/gdi/xrender_peer.hxx")
+                || whitelist(decl, "desktop::DispatchWatcher", "desktop/source/app/dispatchwatcher.hxx")
                 || whitelist(decl, "desktop::OfficeIPCThread", "desktop/source/app/officeipcthread.hxx")
                 || whitelist(decl, "desktop::OfficeIPCThread", "desktop/source/lib/../app/officeipcthread.hxx")
                 || whitelist(decl, "sd::DiscoveryService", "sd/source/ui/remotecontrol/DiscoveryService.hxx")
                 || whitelist(decl, "sd::IconCache", "sd/source/ui/inc/tools/IconCache.hxx")
+                || whitelist(decl, "sd::RemoteServer", "sd/source/ui/inc/RemoteServer.hxx")
                 || whitelist(decl, "sd::slidesorter::cache::PageCacheManager", "sd/source/ui/slidesorter/inc/cache/SlsPageCacheManager.hxx")
                 || whitelist(decl, "sfx2::sidebar::CommandInfoProvider", "include/sfx2/sidebar/CommandInfoProvider.hxx")
+                || whitelist(decl, "vcl::SettingsConfigItem", "include/vcl/configsettings.hxx")
                 || whitelist(decl, "writerfilter::ooxml::OOXMLFactory", "writerfilter/source/ooxml/OOXMLFactory.hxx"))
             {
                 return true;

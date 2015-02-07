@@ -202,9 +202,8 @@ public:
  private: // data
     static AquaSalFrame*                   s_pCaptureFrame;
 
-    // make AquaSalFrame non copyable
-    AquaSalFrame( const AquaSalFrame& );
-    AquaSalFrame& operator=(const AquaSalFrame&);
+    AquaSalFrame( const AquaSalFrame& ) SAL_DELETED_FUNCTION;
+    AquaSalFrame& operator=(const AquaSalFrame&) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_VCL_INC_OSX_SALFRAME_H

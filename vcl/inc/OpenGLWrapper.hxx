@@ -10,19 +10,11 @@
 #include "AppKit/NSOpenGLView.h"
 #include "AppKit/NSOpenGL.h"
 
-class OpenGLWrapper
+namespace OpenGLWrapper
 {
-private:
-
-    OpenGLWrapper();
-    OpenGLWrapper(const OpenGLWrapper&);
-    OpenGLWrapper& operator=(const OpenGLWrapper&);
-
-public:
-
-    static void swapBuffers(NSOpenGLView* pView);
-    static void makeCurrent(NSOpenGLView* pView);
-    static void resetCurrent();
-};
+    void swapBuffers(NSOpenGLView* pView);
+    void makeCurrent(NSOpenGLView* pView);
+    void resetCurrent();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

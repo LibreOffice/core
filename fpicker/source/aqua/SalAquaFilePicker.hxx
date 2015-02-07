@@ -192,9 +192,8 @@ public:
    }
 
 private:
-    // prevent copy and assignment
-    SalAquaFilePicker( const SalAquaFilePicker& );
-    SalAquaFilePicker& operator=( const SalAquaFilePicker& );
+    SalAquaFilePicker( const SalAquaFilePicker& ) SAL_DELETED_FUNCTION;
+    SalAquaFilePicker& operator=( const SalAquaFilePicker& ) SAL_DELETED_FUNCTION;
 
     virtual void ensureFilterHelper();
 
