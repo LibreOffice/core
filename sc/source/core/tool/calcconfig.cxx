@@ -101,7 +101,7 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
 
 namespace {
 
-std::string StringConversionToString(ScCalcConfig::StringConversion eConv)
+OUString StringConversionToString(ScCalcConfig::StringConversion eConv)
 {
     switch (eConv)
     {
@@ -109,7 +109,7 @@ std::string StringConversionToString(ScCalcConfig::StringConversion eConv)
     case ScCalcConfig::StringConversion::ZERO: return "ZERO";
     case ScCalcConfig::StringConversion::UNAMBIGUOUS: return "UNAMBIGUOUS";
     case ScCalcConfig::StringConversion::LOCALE: return "LOCALE";
-    default: return std::to_string((int) eConv);
+    default: return OUString::number((int) eConv);
     }
 }
 
