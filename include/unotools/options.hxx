@@ -81,8 +81,8 @@ public:
     virtual ~Options() = 0;
 
 private:
-    UNOTOOLS_DLLPRIVATE Options(Options &); // not defined
-    UNOTOOLS_DLLPRIVATE void operator =(Options &); // not defined
+    Options(Options &) SAL_DELETED_FUNCTION;
+    void operator =(Options &) SAL_DELETED_FUNCTION;
 
 protected:
     virtual void ConfigurationChanged( ::utl::ConfigurationBroadcaster* p, sal_uInt32 nHint=0 ) SAL_OVERRIDE;

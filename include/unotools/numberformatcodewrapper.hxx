@@ -34,9 +34,8 @@ class UNOTOOLS_DLLPUBLIC NumberFormatCodeWrapper
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNumberFormatCode >   xNFC;
     ::com::sun::star::lang::Locale          aLocale;
 
-                                // not implemented, prevent usage
-                                NumberFormatCodeWrapper( const NumberFormatCodeWrapper& );
-            NumberFormatCodeWrapper&    operator=( const NumberFormatCodeWrapper& );
+                                NumberFormatCodeWrapper( const NumberFormatCodeWrapper& ) SAL_DELETED_FUNCTION;
+            NumberFormatCodeWrapper&    operator=( const NumberFormatCodeWrapper& ) SAL_DELETED_FUNCTION;
 
 public:
                                 NumberFormatCodeWrapper(

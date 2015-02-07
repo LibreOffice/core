@@ -36,8 +36,8 @@ namespace utl
         friend class OEventListenerImpl;
 
     private:
-        UNOTOOLS_DLLPRIVATE OEventListenerAdapter( const OEventListenerAdapter& _rSource ); // never implemented
-        UNOTOOLS_DLLPRIVATE const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource );    // never implemented
+        OEventListenerAdapter( const OEventListenerAdapter& _rSource ) SAL_DELETED_FUNCTION;
+        const OEventListenerAdapter& operator=( const OEventListenerAdapter& _rSource ) SAL_DELETED_FUNCTION;
 
     protected:
         OEventListenerAdapterImpl*  m_pImpl;

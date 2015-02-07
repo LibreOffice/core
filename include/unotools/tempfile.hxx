@@ -50,11 +50,8 @@ class UNOTOOLS_DLLPUBLIC TempFile
     bool        bIsDirectory;
     bool        bKillingFileEnabled;
 
-    // prevent copy c'tor
-    TempFile( const TempFile& );
-    TempFile& operator=(const TempFile&);
-
-protected:
+    TempFile( const TempFile& ) SAL_DELETED_FUNCTION;
+    TempFile& operator=(const TempFile&) SAL_DELETED_FUNCTION;
 
 public:
                     /**

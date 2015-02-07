@@ -105,7 +105,7 @@ class UcbLockBytes : public virtual SvLockBytes
 
     DECL_LINK(              DataAvailHdl, void * );
 
-                            UcbLockBytes( UcbLockBytesHandler* pHandler=NULL );
+                            UcbLockBytes( UcbLockBytesHandler* pHandler );
 protected:
     virtual                 ~UcbLockBytes (void);
 

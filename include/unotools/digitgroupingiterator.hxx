@@ -115,10 +115,8 @@ class DigitGroupingIterator
         setDigits();
     }
 
-    // not implemented, prevent usage
-    DigitGroupingIterator();
-    DigitGroupingIterator( const DigitGroupingIterator & );
-    DigitGroupingIterator & operator=( const DigitGroupingIterator & );
+    DigitGroupingIterator( const DigitGroupingIterator & ) SAL_DELETED_FUNCTION;
+    DigitGroupingIterator & operator=( const DigitGroupingIterator & ) SAL_DELETED_FUNCTION;
 
 public:
 

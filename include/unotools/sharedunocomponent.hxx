@@ -64,9 +64,8 @@ namespace utl
         ~DisposableComponent();
 
     private:
-        DisposableComponent();                                          // never implemented
-        DisposableComponent( const DisposableComponent& );              // never implemented
-        DisposableComponent& operator=( const DisposableComponent& );   // never implemented
+        DisposableComponent( const DisposableComponent& ) SAL_DELETED_FUNCTION;
+        DisposableComponent& operator=( const DisposableComponent& ) SAL_DELETED_FUNCTION;
     };
 
     //= CloseableComponent
@@ -105,9 +104,8 @@ namespace utl
         ~CloseableComponent();
 
     private:
-        CloseableComponent();                                           // never implemented
-        CloseableComponent( const CloseableComponent& );                // never implemented
-        CloseableComponent& operator=( const CloseableComponent& );     // never implemented
+        CloseableComponent( const CloseableComponent& ) SAL_DELETED_FUNCTION;
+        CloseableComponent& operator=( const CloseableComponent& ) SAL_DELETED_FUNCTION;
     };
 
     //= SharedUNOComponent

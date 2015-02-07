@@ -43,21 +43,17 @@ namespace utl
     /** a class which allows non-UNO components to observe the desktop (aka application)
         for it's shutdown
     */
-    class UNOTOOLS_DLLPUBLIC DesktopTerminationObserver
+    namespace DesktopTerminationObserver
     {
-    public:
         /** registers a listener which should be notified when the desktop terminates
             (which means the application is shutting down)
         */
-        static void    registerTerminationListener( ITerminationListener* _pListener );
+        UNOTOOLS_DLLPUBLIC void    registerTerminationListener( ITerminationListener* _pListener );
 
         /** revokes a termination listener
         */
-        static void    revokeTerminationListener( ITerminationListener* _pListener );
-
-    private:
-        DesktopTerminationObserver();   // never implemented, only static methods
-    };
+        UNOTOOLS_DLLPUBLIC void    revokeTerminationListener( ITerminationListener* _pListener );
+    }
 
 } // namespace utl
 

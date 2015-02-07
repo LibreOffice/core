@@ -154,9 +154,8 @@ class UNOTOOLS_DLLPUBLIC SvtLinguConfig: public utl::detail::Options
 
     OUString GetVendorImageUrl_Impl( const OUString &rServiceImplName, const OUString &rImageName ) const;
 
-    // disallow copy-constructor and assignment-operator for now
-    SvtLinguConfig( const SvtLinguConfig & );
-    SvtLinguConfig & operator = ( const SvtLinguConfig & );
+    SvtLinguConfig( const SvtLinguConfig & ) SAL_DELETED_FUNCTION;
+    SvtLinguConfig & operator = ( const SvtLinguConfig & ) SAL_DELETED_FUNCTION;
 
 public:
     SvtLinguConfig();

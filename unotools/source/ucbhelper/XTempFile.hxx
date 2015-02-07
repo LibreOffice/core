@@ -135,7 +135,7 @@ public:
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleComponentFactory > createServiceFactory_Static();
 
 private:
-    OTempFileService( OTempFileService & );
+    OTempFileService( OTempFileService & ) SAL_DELETED_FUNCTION;
     virtual ~OTempFileService ();
 
 };

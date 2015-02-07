@@ -28,11 +28,8 @@ class UNOTOOLS_DLLPUBLIC SvtSearchOptions
 {
     SvtSearchOptions_Impl   *pImpl;
 
-    // disallow copy-constructor and assignment-operator for now
-    SvtSearchOptions( const SvtSearchOptions & );
-    SvtSearchOptions & operator = ( const SvtSearchOptions & );
-
-protected:
+    SvtSearchOptions( const SvtSearchOptions & ) SAL_DELETED_FUNCTION;
+    SvtSearchOptions & operator = ( const SvtSearchOptions & ) SAL_DELETED_FUNCTION;
 
 public:
     SvtSearchOptions();

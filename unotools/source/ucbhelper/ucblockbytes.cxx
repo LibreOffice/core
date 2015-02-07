@@ -1515,7 +1515,7 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     if( !xInputStream.is() )
         return NULL;
 
-    UcbLockBytesRef xLockBytes = new UcbLockBytes();
+    UcbLockBytesRef xLockBytes = new UcbLockBytes(nullptr);
     xLockBytes->setDontClose_Impl();
     xLockBytes->setInputStream_Impl( xInputStream );
     xLockBytes->terminate_Impl();
@@ -1527,7 +1527,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStre
     if( !xStream.is() )
         return NULL;
 
-    UcbLockBytesRef xLockBytes = new UcbLockBytes();
+    UcbLockBytesRef xLockBytes = new UcbLockBytes(nullptr);
     xLockBytes->setDontClose_Impl();
     xLockBytes->setStream_Impl( xStream );
     xLockBytes->terminate_Impl();

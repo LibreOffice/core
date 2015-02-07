@@ -42,9 +42,8 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
     sal_uInt32 nType;
     mutable bool bFirstCall;
 
-                                // not implemented, prevent usage
-    TransliterationWrapper( const TransliterationWrapper& );
-    TransliterationWrapper& operator=( const TransliterationWrapper& );
+    TransliterationWrapper( const TransliterationWrapper& ) SAL_DELETED_FUNCTION;
+    TransliterationWrapper& operator=( const TransliterationWrapper& ) SAL_DELETED_FUNCTION;
 
     void loadModuleImpl() const;
     void setLanguageLocaleImpl( sal_uInt16 nLang );
