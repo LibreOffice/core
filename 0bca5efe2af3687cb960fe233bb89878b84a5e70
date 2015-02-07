@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_d9dcf31a",
+        "filename": "writerperfect/source/impress/KeynoteImportFilter.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2015-02-07T21:38:13Z",
+      "side": 1,
+      "message": "You have not implemented doDetectFormat().",
+      "revId": "0bca5efe2af3687cb960fe233bb89878b84a5e70",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
