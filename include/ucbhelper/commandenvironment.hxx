@@ -39,8 +39,8 @@ class UCBHELPER_DLLPUBLIC CommandEnvironment :
     CommandEnvironment_Impl* m_pImpl;
 
 private:
-    UCBHELPER_DLLPRIVATE CommandEnvironment( const CommandEnvironment& );               // n.i.
-    UCBHELPER_DLLPRIVATE CommandEnvironment& operator=( const CommandEnvironment& );    // n.i.
+    CommandEnvironment( const CommandEnvironment& ) SAL_DELETED_FUNCTION;
+    CommandEnvironment& operator=( const CommandEnvironment& ) SAL_DELETED_FUNCTION;
 
 public:
     /**
