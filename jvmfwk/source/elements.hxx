@@ -263,8 +263,8 @@ public:
 class MergedSettings
 {
 private:
-    const MergedSettings& operator = (MergedSettings&);
-    MergedSettings(MergedSettings&);
+    const MergedSettings& operator = (MergedSettings&) SAL_DELETED_FUNCTION;
+    MergedSettings(MergedSettings&) SAL_DELETED_FUNCTION;
 
     void merge(const NodeJava & share, const NodeJava & user);
 

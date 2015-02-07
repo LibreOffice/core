@@ -28,8 +28,8 @@ namespace jfw
 class CXPathObjectPtr
 {
     xmlXPathObject* _object;
-    CXPathObjectPtr & operator = (const CXPathObjectPtr&);
-    CXPathObjectPtr(const CXPathObjectPtr&);
+    CXPathObjectPtr & operator = (const CXPathObjectPtr&) SAL_DELETED_FUNCTION;
+    CXPathObjectPtr(const CXPathObjectPtr&) SAL_DELETED_FUNCTION;
 public:
     CXPathObjectPtr();
     ~CXPathObjectPtr();
@@ -45,8 +45,8 @@ class CXPathContextPtr
 {
     xmlXPathContext* _object;
 
-    CXPathContextPtr(const jfw::CXPathContextPtr&);
-    CXPathContextPtr & operator = (const CXPathContextPtr&);
+    CXPathContextPtr(const jfw::CXPathContextPtr&) SAL_DELETED_FUNCTION;
+    CXPathContextPtr & operator = (const CXPathContextPtr&) SAL_DELETED_FUNCTION;
 public:
     CXPathContextPtr();
     CXPathContextPtr(xmlXPathContextPtr aContext);
@@ -61,7 +61,7 @@ class CXmlDocPtr
 {
     xmlDoc* _object;
 
-    CXmlDocPtr(const CXmlDocPtr&);
+    CXmlDocPtr(const CXmlDocPtr&) SAL_DELETED_FUNCTION;
 
 public:
     CXmlDocPtr & operator = (const CXmlDocPtr&);
@@ -80,8 +80,8 @@ class CXmlCharPtr
 {
     xmlChar* _object;
 
-    CXmlCharPtr(const CXmlCharPtr&);
-    CXmlCharPtr & operator = (const CXmlCharPtr&);
+    CXmlCharPtr(const CXmlCharPtr&) SAL_DELETED_FUNCTION;
+    CXmlCharPtr & operator = (const CXmlCharPtr&) SAL_DELETED_FUNCTION;
 public:
     CXmlCharPtr();
     CXmlCharPtr(xmlChar* aDoc);
