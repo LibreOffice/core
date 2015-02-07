@@ -219,10 +219,8 @@ private:
     storeError saveObjectAt_Impl (
         OStorePageObject & rPage, sal_uInt32 nAddr);
 
-    /** Not implemented.
-     */
-    OStorePageBIOS (const OStorePageBIOS&);
-    OStorePageBIOS& operator= (const OStorePageBIOS&);
+    OStorePageBIOS (const OStorePageBIOS&) SAL_DELETED_FUNCTION;
+    OStorePageBIOS& operator= (const OStorePageBIOS&) SAL_DELETED_FUNCTION;
 };
 
 inline OStorePageBIOS::operator osl::Mutex& (void) const

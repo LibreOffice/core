@@ -134,10 +134,8 @@ private:
 
     bool m_bWriteable;
 
-    /** Not implemented.
-     */
-    OStoreLockBytes (const OStoreLockBytes&);
-    OStoreLockBytes& operator= (const OStoreLockBytes&);
+    OStoreLockBytes (const OStoreLockBytes&) SAL_DELETED_FUNCTION;
+    OStoreLockBytes& operator= (const OStoreLockBytes&) SAL_DELETED_FUNCTION;
 };
 
 template<> inline OStoreLockBytes*

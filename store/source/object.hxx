@@ -64,7 +64,7 @@ class OStoreObject : public store::IStoreHandle
 public:
     /** Construction.
      */
-    OStoreObject() : m_nRefCount(0) {}
+    OStoreObject() {}
 
     /** IStoreHandle.
      */
@@ -79,15 +79,8 @@ private:
     /** The IStoreHandle TypeId.
      */
     static const sal_uInt32 m_nTypeId;
-
-    /** Representation.
-     */
-    oslInterlockedCount m_nRefCount;
-
-    /** Not implemented.
-     */
-    OStoreObject (const OStoreObject&);
-    OStoreObject& operator= (const OStoreObject&);
+    OStoreObject (const OStoreObject&) SAL_DELETED_FUNCTION;
+    OStoreObject& operator= (const OStoreObject&) SAL_DELETED_FUNCTION;
 };
 
 /** Template function specialization as dynamic_cast replacement.

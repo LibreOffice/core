@@ -184,10 +184,8 @@ private:
     */
     storeError remove_Impl (entry & rEntry);
 
-    /** Not implemented.
-    */
-    OStorePageManager (const OStorePageManager&);
-    OStorePageManager& operator= (const OStorePageManager&);
+    OStorePageManager (const OStorePageManager&) SAL_DELETED_FUNCTION;
+    OStorePageManager& operator= (const OStorePageManager&) SAL_DELETED_FUNCTION;
 };
 
 inline bool OStorePageManager::isValid (void) const
