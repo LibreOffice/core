@@ -197,7 +197,7 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
-    SfxPoolItem&             operator=( const SfxPoolItem& );    // not implemented!!
+    SfxPoolItem&             operator=( const SfxPoolItem& ) SAL_DELETED_FUNCTION;
 };
 
 
@@ -260,7 +260,7 @@ inline bool IsInvalidItem(const SfxPoolItem *pItem)
 
 class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
 {
-    SfxVoidItem & operator=( const SfxVoidItem& ); // not implemented.
+    SfxVoidItem & operator=( const SfxVoidItem& ) SAL_DELETED_FUNCTION;
 public:
                             TYPEINFO_OVERRIDE();
                             explicit SfxVoidItem( sal_uInt16 nWhich );
@@ -287,7 +287,7 @@ class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
 {
     SfxItemSet              *pSet;
 
-    SfxSetItem & operator=( const SfxSetItem& ); // not implemented.
+    SfxSetItem & operator=( const SfxSetItem& ) SAL_DELETED_FUNCTION;
 
 public:
                             TYPEINFO_OVERRIDE();

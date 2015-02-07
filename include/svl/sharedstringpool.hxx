@@ -29,9 +29,8 @@ class SVL_DLLPUBLIC SharedStringPool
     struct Impl;
     Impl* mpImpl;
 
-    SharedStringPool(); // disabled
-    SharedStringPool( const SharedStringPool& ); // disabled
-    SharedStringPool& operator=( const SharedStringPool& ); // disabled
+    SharedStringPool( const SharedStringPool& ) SAL_DELETED_FUNCTION;
+    SharedStringPool& operator=( const SharedStringPool& ) SAL_DELETED_FUNCTION;
 
 public:
     SharedStringPool( const CharClass* pCharClass );

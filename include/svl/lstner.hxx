@@ -34,7 +34,7 @@ class SVL_DLLPUBLIC SfxListener
     Impl* mpImpl;
 
 private:
-    const SfxListener&  operator=(const SfxListener &); // n.i., ist verboten
+    const SfxListener&  operator=(const SfxListener &) SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO();

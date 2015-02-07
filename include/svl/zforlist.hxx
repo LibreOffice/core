@@ -232,10 +232,8 @@ class SVL_DLLPUBLIC NfCurrencyEntry
     sal_uInt16      nDigits;            /// count of decimal digits
     sal_Unicode     cZeroChar;          /// which character is used for zeros as last decimal digits
 
-                        /// not implemented, prevent usage
-                        NfCurrencyEntry( const NfCurrencyEntry& );
-                        /// not implemented, prevent usage
-    NfCurrencyEntry&    operator=( const NfCurrencyEntry& );
+                        NfCurrencyEntry( const NfCurrencyEntry& ) SAL_DELETED_FUNCTION;
+    NfCurrencyEntry&    operator=( const NfCurrencyEntry& ) SAL_DELETED_FUNCTION;
 
 private:
 

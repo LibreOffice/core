@@ -34,7 +34,7 @@ public:
     typedef std::vector<SvtListener*> ListenersType;
 
 private:
-    const SvtBroadcaster&   operator=(const SvtBroadcaster &); // verboten
+    const SvtBroadcaster&   operator=(const SvtBroadcaster &) SAL_DELETED_FUNCTION;
 
     /**
      * Ensure that the container doesn't contain any duplicated listener

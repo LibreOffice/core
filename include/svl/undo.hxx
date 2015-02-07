@@ -74,8 +74,8 @@ public:
     virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
-    SfxUndoAction( const SfxUndoAction& ); // disabled
-    SfxUndoAction& operator=( const SfxUndoAction& ); // disabled
+    SfxUndoAction( const SfxUndoAction& ) SAL_DELETED_FUNCTION;
+    SfxUndoAction& operator=( const SfxUndoAction& ) SAL_DELETED_FUNCTION;
 };
 
 

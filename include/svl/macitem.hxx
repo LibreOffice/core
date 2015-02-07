@@ -151,7 +151,7 @@ private:
     SvxMacroTableDtor aMacroTable;
 
     inline SvxMacroItem( const SvxMacroItem& );
-    SvxMacroItem &operator=( const SvxMacroItem & );
+    SvxMacroItem &operator=( const SvxMacroItem & ) SAL_DELETED_FUNCTION;
 };
 
 inline SvxMacroItem::SvxMacroItem( const sal_uInt16 nId )
