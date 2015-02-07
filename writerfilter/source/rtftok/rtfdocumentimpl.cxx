@@ -4628,8 +4628,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             rDrawingObject.nPolyLineCount--;
             if (rDrawingObject.nPolyLineCount == 0)
             {
-                uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence(1);
-                aPointSequenceSequence[0] = comphelper::containerToSequence(rDrawingObject.aPolyLinePoints);
+                uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence =
+                {
+                    comphelper::containerToSequence(rDrawingObject.aPolyLinePoints)
+                };
                 rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon", uno::Any(aPointSequenceSequence));
             }
         }
