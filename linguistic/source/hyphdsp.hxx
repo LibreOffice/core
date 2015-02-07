@@ -60,9 +60,8 @@ class HyphenatorDispatcher :
 
     LngSvcMgr      &rMgr;
 
-    // disallow copy-constructor and assignment-operator for now
-    HyphenatorDispatcher(const HyphenatorDispatcher &);
-    HyphenatorDispatcher & operator = (const HyphenatorDispatcher &);
+    HyphenatorDispatcher(const HyphenatorDispatcher &) SAL_DELETED_FUNCTION;
+    HyphenatorDispatcher & operator = (const HyphenatorDispatcher &) SAL_DELETED_FUNCTION;
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguProperties >

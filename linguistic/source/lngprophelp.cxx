@@ -74,23 +74,6 @@ PropertyChgHelper::PropertyChgHelper(
     SetDefaultValues();
 }
 
-
-PropertyChgHelper::PropertyChgHelper( const PropertyChgHelper &rHelper ) :
-    PropertyChgHelperBase(),
-    aLngSvcEvtListeners (GetLinguMutex())
-{
-    RemoveAsPropListener();
-    aPropNames  = rHelper.aPropNames;
-    xMyEvtObj   = rHelper.xMyEvtObj;
-    xPropSet    = rHelper.xPropSet;
-    nEvtFlags   = rHelper.nEvtFlags;
-    AddAsPropListener();
-
-    SetDefaultValues();
-    GetCurrentValues();
-}
-
-
 PropertyChgHelper::~PropertyChgHelper()
 {
 }

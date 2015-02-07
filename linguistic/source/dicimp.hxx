@@ -59,9 +59,8 @@ class DictionaryNeo :
     bool                                                        bIsActive;
     bool                                                        bIsReadonly;
 
-    // disallow copy-constructor and assignment-operator for now
-    DictionaryNeo(const DictionaryNeo &);
-    DictionaryNeo & operator = (const DictionaryNeo &);
+    DictionaryNeo(const DictionaryNeo &) SAL_DELETED_FUNCTION;
+    DictionaryNeo & operator = (const DictionaryNeo &) SAL_DELETED_FUNCTION;
 
     void                    launchEvent(sal_Int16 nEvent,
         ::com::sun::star::uno::Reference<
@@ -189,9 +188,8 @@ class DicEntry :
                     aReplacement;   // including hyphen positions represented by "="
     bool            bIsNegativ;
 
-    // disallow copy-constructor and assignment-operator for now
-    DicEntry(const DicEntry &);
-    DicEntry & operator = (const DicEntry &);
+    DicEntry(const DicEntry &) SAL_DELETED_FUNCTION;
+    DicEntry & operator = (const DicEntry &) SAL_DELETED_FUNCTION;
 
     void            splitDicFileWord(const OUString &rDicFileWord,
                                      OUString &rDicWord,

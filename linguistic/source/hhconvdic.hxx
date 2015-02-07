@@ -34,9 +34,8 @@
 class HHConvDic :
     public ConvDic
 {
-    // disallow copy-constructor and assignment-operator for now
-    HHConvDic(const HHConvDic &);
-    HHConvDic & operator = (const HHConvDic &);
+    HHConvDic(const HHConvDic &) SAL_DELETED_FUNCTION;
+    HHConvDic & operator = (const HHConvDic &) SAL_DELETED_FUNCTION;
 
 public:
     HHConvDic( const OUString &rName, const OUString &rMainURL );

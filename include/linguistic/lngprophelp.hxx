@@ -75,10 +75,8 @@ class PropertyChgHelper :
     bool    bResIsIgnoreControlCharacters;
     bool    bResIsUseDictionaryList;
 
-
-    // disallow use of copy-constructor and assignment-operator
-    PropertyChgHelper( const PropertyChgHelper & );
-    PropertyChgHelper & operator = ( const PropertyChgHelper & );
+    PropertyChgHelper( const PropertyChgHelper & ) SAL_DELETED_FUNCTION;
+    PropertyChgHelper & operator = ( const PropertyChgHelper & ) SAL_DELETED_FUNCTION;
 
 protected:
     virtual void    SetDefaultValues();
@@ -151,9 +149,8 @@ public:
 class PropertyHelper_Thes :
     public PropertyChgHelper
 {
-    // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Thes( const PropertyHelper_Thes & );
-    PropertyHelper_Thes & operator = ( const PropertyHelper_Thes & );
+    PropertyHelper_Thes( const PropertyHelper_Thes & ) SAL_DELETED_FUNCTION;
+    PropertyHelper_Thes & operator = ( const PropertyHelper_Thes & ) SAL_DELETED_FUNCTION;
 
 public:
     PropertyHelper_Thes(
@@ -205,10 +202,8 @@ class LNG_DLLPUBLIC PropertyHelper_Spell :
     bool        bResIsSpellWithDigits;
     bool        bResIsSpellCapitalization;
 
-
-    // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Spell( const PropertyHelper_Spell & );
-    PropertyHelper_Spell & operator = ( const PropertyHelper_Spell & );
+    PropertyHelper_Spell( const PropertyHelper_Spell & ) SAL_DELETED_FUNCTION;
+    PropertyHelper_Spell & operator = ( const PropertyHelper_Spell & ) SAL_DELETED_FUNCTION;
 
 protected:
     // PropertyChgHelper
@@ -288,9 +283,8 @@ class PropertyHelper_Hyphen :
             nResHyphMinTrailing,
             nResHyphMinWordLength;
 
-    // disallow use of copy-constructor and assignment-operator
-    PropertyHelper_Hyphen( const PropertyHelper_Hyphen & );
-    PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & );
+    PropertyHelper_Hyphen( const PropertyHelper_Hyphen & ) SAL_DELETED_FUNCTION;
+    PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & ) SAL_DELETED_FUNCTION;
 
 protected:
     // PropertyChgHelper

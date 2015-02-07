@@ -108,9 +108,8 @@ class LngSvcMgr :
 
     bool bDisposing;
 
-    // disallow copy-constructor and assignment-operator for now
-    LngSvcMgr(const LngSvcMgr &);
-    LngSvcMgr & operator = (const LngSvcMgr &);
+    LngSvcMgr(const LngSvcMgr &) SAL_DELETED_FUNCTION;
+    LngSvcMgr & operator = (const LngSvcMgr &) SAL_DELETED_FUNCTION;
 
     void    GetAvailableSpellSvcs_Impl();
     void    GetAvailableGrammarSvcs_Impl();

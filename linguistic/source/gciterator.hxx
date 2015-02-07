@@ -109,7 +109,6 @@ class GrammarCheckingIterator:
     OUString m_aCurCheckedDocId;
     bool        m_bGCServicesChecked;
     sal_Int32       m_nDocIdCounter;
-    sal_Int32       m_nLastEndOfSentencePos;
     osl::Condition  m_aWakeUpThread;
     oslThread       m_thread;
 
@@ -142,9 +141,8 @@ class GrammarCheckingIterator:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesBatch >   GetUpdateAccess() const;
 
-    // disallow use of copy c-tor and assignment operator
-    GrammarCheckingIterator( const GrammarCheckingIterator & );
-    GrammarCheckingIterator & operator = ( const GrammarCheckingIterator & );
+    GrammarCheckingIterator( const GrammarCheckingIterator & ) SAL_DELETED_FUNCTION;
+    GrammarCheckingIterator & operator = ( const GrammarCheckingIterator & ) SAL_DELETED_FUNCTION;
 
 public:
 

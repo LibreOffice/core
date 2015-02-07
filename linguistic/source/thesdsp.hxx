@@ -59,9 +59,8 @@ class ThesaurusDispatcher :
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguProperties >     xPropSet;
 
-    // disallow copy-constructor and assignment-operator for now
-    ThesaurusDispatcher(const ThesaurusDispatcher &);
-    ThesaurusDispatcher & operator = (const ThesaurusDispatcher &);
+    ThesaurusDispatcher(const ThesaurusDispatcher &) SAL_DELETED_FUNCTION;
+    ThesaurusDispatcher & operator = (const ThesaurusDispatcher &) SAL_DELETED_FUNCTION;
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguProperties >

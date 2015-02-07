@@ -63,9 +63,8 @@ class FlushListener :
         ::com::sun::star::linguistic2::XLinguProperties >             xPropSet;
     Flushable                                              *pFlushObj;
 
-    // don't allow to use copy-constructor and assignment-operator
-    FlushListener(const FlushListener &);
-    FlushListener & operator = (const FlushListener &);
+    FlushListener(const FlushListener &) SAL_DELETED_FUNCTION;
+    FlushListener & operator = (const FlushListener &) SAL_DELETED_FUNCTION;
 
 public:
     FlushListener( Flushable *pFO );
@@ -99,9 +98,8 @@ class SpellCache :
     typedef std::map< LanguageType, WordList_t >    LangWordList_t;
     LangWordList_t  aWordLists;
 
-    // don't allow to use copy-constructor and assignment-operator
-    SpellCache(const SpellCache &);
-    SpellCache & operator = (const SpellCache &);
+    SpellCache(const SpellCache &) SAL_DELETED_FUNCTION;
+    SpellCache & operator = (const SpellCache &) SAL_DELETED_FUNCTION;
 
 public:
     SpellCache();

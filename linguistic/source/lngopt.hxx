@@ -87,9 +87,8 @@ class LinguProps :
 
     bool                                        bDisposing;
 
-    // disallow copy-constructor and assignment-operator for now
-    LinguProps(const LinguProps &);
-    LinguProps & operator = (const LinguProps &);
+    LinguProps(const LinguProps &) SAL_DELETED_FUNCTION;
+    LinguProps & operator = (const LinguProps &) SAL_DELETED_FUNCTION;
 
     void    launchEvent( const ::com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 

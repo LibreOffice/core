@@ -64,9 +64,8 @@ class ConvDicList :
 
     bool                                    bDisposing;
 
-    // disallow copy-constructor and assignment-operator for now
-    ConvDicList( const ConvDicList & );
-    ConvDicList & operator = (const ConvDicList &);
+    ConvDicList( const ConvDicList & ) SAL_DELETED_FUNCTION;
+    ConvDicList & operator = (const ConvDicList &) SAL_DELETED_FUNCTION;
 
     ConvDicNameContainer &  GetNameContainer();
 

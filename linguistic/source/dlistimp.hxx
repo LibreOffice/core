@@ -71,9 +71,8 @@ class DicList :
     bool    bDisposing;
     bool    bInCreation;
 
-    // disallow copy-constructor and assignment-operator for now
-    DicList( const DicList & );
-    DicList & operator = (const DicList &);
+    DicList( const DicList & ) SAL_DELETED_FUNCTION;
+    DicList & operator = (const DicList &) SAL_DELETED_FUNCTION;
 
     void                _CreateDicList();
     DictionaryVec_t &   GetOrCreateDicList()

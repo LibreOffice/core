@@ -67,9 +67,8 @@ class SpellCheckerDispatcher :
     mutable linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
     CharClass                   * pCharClass;
 
-    // disallow copy-constructor and assignment-operator for now
-    SpellCheckerDispatcher(const SpellCheckerDispatcher &);
-    SpellCheckerDispatcher & operator = (const SpellCheckerDispatcher &);
+    SpellCheckerDispatcher(const SpellCheckerDispatcher &) SAL_DELETED_FUNCTION;
+    SpellCheckerDispatcher & operator = (const SpellCheckerDispatcher &) SAL_DELETED_FUNCTION;
 
     inline linguistic::SpellCache &  GetCache() const;
 
