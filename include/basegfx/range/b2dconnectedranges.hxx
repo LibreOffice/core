@@ -235,9 +235,8 @@ namespace basegfx
         }
 
     private:
-        // default: disabled copy/assignment
-        B2DConnectedRanges(const B2DConnectedRanges&);
-        B2DConnectedRanges& operator=( const B2DConnectedRanges& );
+        B2DConnectedRanges(const B2DConnectedRanges&) SAL_DELETED_FUNCTION;
+        B2DConnectedRanges& operator=( const B2DConnectedRanges& ) SAL_DELETED_FUNCTION;
 
         /** Current list of disjunct sets of connected components
 

@@ -36,9 +36,8 @@ namespace basegfx
     class BPixelRaster
     {
     private:
-        // do not allow copy constructor and assignment operator
-        BPixelRaster(const BPixelRaster&);
-        BPixelRaster& operator=(const BPixelRaster&);
+        BPixelRaster(const BPixelRaster&) SAL_DELETED_FUNCTION;
+        BPixelRaster& operator=(const BPixelRaster&) SAL_DELETED_FUNCTION;
 
     protected:
         sal_uInt32                  mnWidth;
