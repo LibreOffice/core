@@ -111,10 +111,10 @@ public:
     }
 
 private:
-    ClassPath(); // not defined
-    ClassPath(ClassPath &); // not defined
-    ~ClassPath(); // not defined
-    void operator =(ClassPath &); // not defined
+    ClassPath() SAL_DELETED_FUNCTION; //TODO: get rid of this class
+    ClassPath(ClassPath &) SAL_DELETED_FUNCTION;
+    ~ClassPath() SAL_DELETED_FUNCTION;
+    void operator =(ClassPath &) SAL_DELETED_FUNCTION;
 
     // Functions that replace JNIEnv, jobjectArray, and jclass with void *, so
     // that their mangled C++ names do not depend on the JDK version used at

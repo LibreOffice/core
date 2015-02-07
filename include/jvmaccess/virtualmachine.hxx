@@ -82,8 +82,8 @@ public:
         inline JNIEnv * getEnvironment() const { return m_pEnvironment; }
 
     private:
-        AttachGuard(AttachGuard &); // not implemented
-        void operator =(AttachGuard); // not implemented
+        AttachGuard(AttachGuard &) SAL_DELETED_FUNCTION;
+        void operator =(AttachGuard) SAL_DELETED_FUNCTION;
 
         rtl::Reference< VirtualMachine > m_xMachine;
         JNIEnv * m_pEnvironment;
@@ -128,8 +128,8 @@ public:
                    JNIEnv * pMainThreadEnv);
 
 private:
-    VirtualMachine(VirtualMachine &); // not implemented
-    void operator =(VirtualMachine); // not implemented
+    VirtualMachine(VirtualMachine &) SAL_DELETED_FUNCTION;
+    void operator =(VirtualMachine) SAL_DELETED_FUNCTION;
 
     virtual ~VirtualMachine();
 

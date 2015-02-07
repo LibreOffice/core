@@ -88,8 +88,8 @@ public:
     void * getClassLoader() const { return m_classLoader;}
 
 private:
-    UnoVirtualMachine(UnoVirtualMachine &); // not defined
-    void operator =(UnoVirtualMachine &); // not defined
+    UnoVirtualMachine(UnoVirtualMachine &) SAL_DELETED_FUNCTION;
+    void operator =(UnoVirtualMachine &) SAL_DELETED_FUNCTION;
 
     virtual ~UnoVirtualMachine();
 
