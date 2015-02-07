@@ -283,9 +283,8 @@ protected:
     }
 
 private:
-    AccessibleBrowseBoxAccess();                                                // never implemented
-    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& );              // never implemented
-    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& );   // never implemented
+    AccessibleBrowseBoxAccess( const AccessibleBrowseBoxAccess& ) SAL_DELETED_FUNCTION;
+    AccessibleBrowseBoxAccess& operator=( const AccessibleBrowseBoxAccess& ) SAL_DELETED_FUNCTION;
 };
 
 

@@ -352,9 +352,8 @@ protected:
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
 private:
-    GridControlAccessibleElement();                                             // never implemented
-    GridControlAccessibleElement( const GridControlAccessibleElement& );        // never implemented
-    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ); // never implemented
+    GridControlAccessibleElement( const GridControlAccessibleElement& ) SAL_DELETED_FUNCTION;
+    GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ) SAL_DELETED_FUNCTION;
 };
 
 // inlines --------------------------------------------------------------------

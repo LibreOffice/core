@@ -75,9 +75,8 @@ namespace accessibility
         DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     private:
-        ListBoxAccessibleBase( );                                           // never implemented
-        ListBoxAccessibleBase( const ListBoxAccessibleBase& );              // never implemented
-        ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& );   // never implemented
+        ListBoxAccessibleBase( const ListBoxAccessibleBase& ) SAL_DELETED_FUNCTION;
+        ListBoxAccessibleBase& operator=( const ListBoxAccessibleBase& ) SAL_DELETED_FUNCTION;
     };
 
 

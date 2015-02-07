@@ -65,9 +65,8 @@ namespace accessibility
         virtual ~AccessibleBrowseBoxCell();
 
     private:
-        AccessibleBrowseBoxCell();                                                  // never implemented
-        AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& );              // never implemented
-        AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& );   // never implemented
+        AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& ) SAL_DELETED_FUNCTION;
+        AccessibleBrowseBoxCell& operator=( const AccessibleBrowseBoxCell& ) SAL_DELETED_FUNCTION;
     };
 
 

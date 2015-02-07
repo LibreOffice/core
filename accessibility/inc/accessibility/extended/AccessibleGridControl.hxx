@@ -269,9 +269,8 @@ protected:
     }
 
 private:
-    AccessibleGridControlAccess();                                              // never implemented
-    AccessibleGridControlAccess( const AccessibleGridControlAccess& );      // never implemented
-    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& );   // never implemented
+    AccessibleGridControlAccess( const AccessibleGridControlAccess& ) SAL_DELETED_FUNCTION;
+    AccessibleGridControlAccess& operator=( const AccessibleGridControlAccess& ) SAL_DELETED_FUNCTION;
 };
 
 

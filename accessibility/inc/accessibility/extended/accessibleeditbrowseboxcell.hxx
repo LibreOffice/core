@@ -88,9 +88,8 @@ namespace accessibility
         void notifyTranslatedEvent( const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
     private:
-        EditBrowseBoxTableCell();                                           // never implemented
-        EditBrowseBoxTableCell( const EditBrowseBoxTableCell& );            // never implemented
-        EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ); // never implemented
+        EditBrowseBoxTableCell( const EditBrowseBoxTableCell& ) SAL_DELETED_FUNCTION;
+        EditBrowseBoxTableCell& operator=( const EditBrowseBoxTableCell& ) SAL_DELETED_FUNCTION;
     };
 
 
@@ -136,9 +135,8 @@ namespace accessibility
         virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     private:
-        EditBrowseBoxTableCellAccess();                                                 // never implemented
-        EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& );            // never implemented
-        EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ); // never implemented
+        EditBrowseBoxTableCellAccess( const EditBrowseBoxTableCellAccess& ) SAL_DELETED_FUNCTION;
+        EditBrowseBoxTableCellAccess& operator=( const EditBrowseBoxTableCellAccess& ) SAL_DELETED_FUNCTION;
     };
 }
 
