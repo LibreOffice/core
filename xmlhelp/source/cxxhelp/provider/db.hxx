@@ -31,9 +31,8 @@ namespace helpdatafileproxy {
     {
         class Noncopyable
         {
-            // not implemented
-            Noncopyable(const Noncopyable&);
-            void operator=(const Noncopyable&);
+            Noncopyable(const Noncopyable&) SAL_DELETED_FUNCTION;
+            void operator=(const Noncopyable&) SAL_DELETED_FUNCTION;
         protected:
             Noncopyable() {}
             ~Noncopyable() {}
