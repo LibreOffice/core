@@ -73,6 +73,14 @@ namespace svxform
 
     namespace
     {
+        ::utl::OConfigurationNode getLayoutSettings( DocumentType _eDocType )
+        {
+            OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/";
+            sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
+            return OConfigurationTreeRoot::createWithComponentContext(
+                ::comphelper::getProcessComponentContext(),    // TODO
+                sConfigName );
+        }
 
         template< class INTERFACE_TYPE >
         Reference< INTERFACE_TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
@@ -278,17 +286,6 @@ namespace svxform
             OSL_FAIL( "ControlLayouter::initializeControlLayout: caught an exception!" );
         }
     }
-
-
-    ::utl::OConfigurationNode ControlLayouter::getLayoutSettings( DocumentType _eDocType )
-    {
-        OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/";
-        sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
-        return OConfigurationTreeRoot::createWithComponentContext(
-            ::comphelper::getProcessComponentContext(),    // TODO
-            sConfigName );
-    }
-
 
     bool ControlLayouter::useDynamicBorderColor( DocumentType _eDocType )
     {

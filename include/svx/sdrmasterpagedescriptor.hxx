@@ -51,8 +51,7 @@ namespace sdr
         // ViewContact part
         sdr::contact::ViewContact*                      mpViewContact;
 
-        // assignment operator defined, but not implemented
-        void operator=(const MasterPageDescriptor& rCandidate);
+        void operator=(const MasterPageDescriptor& rCandidate) SAL_DELETED_FUNCTION;
 
     protected:
         sdr::contact::ViewContact* CreateObjectSpecificViewContact();

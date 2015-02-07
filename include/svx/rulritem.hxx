@@ -43,7 +43,7 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
 private:
-    SVX_DLLPRIVATE const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
+    const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &) SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -76,7 +76,7 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
 private:
-    SVX_DLLPRIVATE const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
+    const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &) SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO_OVERRIDE();
@@ -108,7 +108,7 @@ protected:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
 
 private:
-    SVX_DLLPRIVATE const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &); // n.i.
+    const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &) SAL_DELETED_FUNCTION;
 public:
     TYPEINFO_OVERRIDE();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
@@ -234,7 +234,7 @@ protected:
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
 private:
-    SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
+    const SvxObjectItem &operator=(const SvxObjectItem &) SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO_OVERRIDE();

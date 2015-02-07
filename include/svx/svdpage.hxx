@@ -326,8 +326,8 @@ public:
 class SVX_DLLPUBLIC SdrPageGridFrameList {
     std::vector<SdrPageGridFrame*> aList;
 private:
-    SVX_DLLPRIVATE SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList);      // never implemented
-    SVX_DLLPRIVATE void           operator=(const SdrPageGridFrameList& rSrcList);  // never implemented
+    SdrPageGridFrameList(const SdrPageGridFrameList& rSrcList) SAL_DELETED_FUNCTION;
+    void           operator=(const SdrPageGridFrameList& rSrcList) SAL_DELETED_FUNCTION;
 protected:
     SdrPageGridFrame* GetObject(sal_uInt16 i) const { return aList[i]; }
 public:
@@ -374,8 +374,7 @@ private:
     void ImpRemoveStyleSheet();
     void ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet);
 
-    // not implemented
-    SdrPageProperties& operator=(const SdrPageProperties& rCandidate);
+    SdrPageProperties& operator=(const SdrPageProperties& rCandidate) SAL_DELETED_FUNCTION;
 
 public:
     // construct/destruct

@@ -113,8 +113,8 @@ public:
     //declare event notification method
     void NotifySelection( const CellPos& firstPos, const CellPos& lastPos, const CellPos& newPos );
 private:
-    SvxTableController(SvxTableController &); // not defined
-    void operator =(SvxTableController &); // not defined
+    SvxTableController(SvxTableController &) SAL_DELETED_FUNCTION;
+    void operator =(SvxTableController &) SAL_DELETED_FUNCTION;
 
     // internals
     SVX_DLLPRIVATE void ApplyBorderAttr( const SfxItemSet& rAttr );

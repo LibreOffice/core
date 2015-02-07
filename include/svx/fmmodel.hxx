@@ -42,8 +42,8 @@ private:
     bool            m_bOpenInDesignMode : 1;
     bool            m_bAutoControlFocus : 1;
 
-    SVX_DLLPRIVATE FmFormModel( const FmFormModel& );   // never implemented
-    SVX_DLLPRIVATE void operator=(const FmFormModel& rSrcModel);   // never implemented
+    FmFormModel( const FmFormModel& ) SAL_DELETED_FUNCTION;
+    void operator=(const FmFormModel& rSrcModel) SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO_OVERRIDE();

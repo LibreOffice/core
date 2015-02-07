@@ -215,9 +215,8 @@ namespace svx
         }
 
     private:
-        FormControllerHelper();                                         // never implemented
-        FormControllerHelper( const FormControllerHelper& );            // never implemented
-        FormControllerHelper& operator=( const FormControllerHelper& ); // never implemented
+        FormControllerHelper( const FormControllerHelper& ) SAL_DELETED_FUNCTION;
+        FormControllerHelper& operator=( const FormControllerHelper& ) SAL_DELETED_FUNCTION;
     };
 
 

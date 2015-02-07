@@ -95,10 +95,8 @@ private:
     const ::GalleryObject*      implGetObject() const { return mpGalleryObject;}
     void                        implSetInvalid();
 
-                                // not available
-                                GalleryItem();
-                                GalleryItem( const GalleryItem& );
-                                GalleryItem& operator=( const GalleryItem& );
+                                GalleryItem( const GalleryItem& ) SAL_DELETED_FUNCTION;
+                                GalleryItem& operator=( const GalleryItem& ) SAL_DELETED_FUNCTION;
 };
 
 

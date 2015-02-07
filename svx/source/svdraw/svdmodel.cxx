@@ -306,19 +306,6 @@ SdrModel::~SdrModel()
     delete mpImpl;
 }
 
-
-// not yet implemented
-void SdrModel::operator=(const SdrModel&)
-{
-    OSL_FAIL("SdrModel::operator=() is not yet implemented.");
-}
-
-bool SdrModel::operator==(const SdrModel&) const
-{
-    OSL_FAIL("SdrModel::operator==() is not yet implemented");
-    return false;
-}
-
 void SdrModel::SetSwapGraphics( bool bSwap )
 {
     bSwapGraphics = bSwap;

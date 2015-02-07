@@ -69,9 +69,8 @@ namespace svxform
         DECL_LINK( OnCall, void* );
 
     private:
-        DelayedEvent();                                  // never implemented
-        DelayedEvent( const DelayedEvent& );              // never implemented
-        DelayedEvent& operator=( const DelayedEvent& );   // never implemented
+        DelayedEvent( const DelayedEvent& ) SAL_DELETED_FUNCTION;
+        DelayedEvent& operator=( const DelayedEvent& ) SAL_DELETED_FUNCTION;
     };
 
 

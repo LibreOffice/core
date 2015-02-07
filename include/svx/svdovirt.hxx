@@ -35,7 +35,7 @@
 
 class SVX_DLLPUBLIC SdrVirtObj : public SdrObject
 {
-    SdrVirtObj( const SdrVirtObj& ); // disabled
+    SdrVirtObj( const SdrVirtObj& ) SAL_DELETED_FUNCTION;
 public:
     virtual sdr::properties::BaseProperties& GetProperties() const SAL_OVERRIDE;
 

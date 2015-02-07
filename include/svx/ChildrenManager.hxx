@@ -197,10 +197,8 @@ protected:
     ChildrenManagerImpl* mpImpl;
 
 private:
-    // Don't use the copy constructor or the assignment operator.  They are
-    // not implemented (and are not intended to be).
-    SVX_DLLPRIVATE ChildrenManager (const ChildrenManager&);
-    SVX_DLLPRIVATE ChildrenManager& operator= (const ChildrenManager&);
+    ChildrenManager (const ChildrenManager&) SAL_DELETED_FUNCTION;
+    ChildrenManager& operator= (const ChildrenManager&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility

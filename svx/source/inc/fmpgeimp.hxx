@@ -146,9 +146,8 @@ private:
         impl_createControlShapeMap_nothrow();
 
 private:
-    FmFormPageImpl();                                   // never implemented
-    FmFormPageImpl( const FmFormPageImpl& );            // never implemented
-    FmFormPageImpl& operator=( const FmFormPageImpl& ); // never implemented
+    FmFormPageImpl( const FmFormPageImpl& ) SAL_DELETED_FUNCTION;
+    FmFormPageImpl& operator=( const FmFormPageImpl& ) SAL_DELETED_FUNCTION;
 };
 
 

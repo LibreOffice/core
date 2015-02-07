@@ -363,10 +363,8 @@ private:
     */
     sal_Int32 mnNewNameIndex;
 
-    // Don't use the copy constructor or the assignment operator.  They are
-    // not implemented (and are not intended to be).
-    ChildrenManagerImpl (const ChildrenManagerImpl&);
-    ChildrenManagerImpl& operator= (const ChildrenManagerImpl&);
+    ChildrenManagerImpl (const ChildrenManagerImpl&) SAL_DELETED_FUNCTION;
+    ChildrenManagerImpl& operator= (const ChildrenManagerImpl&) SAL_DELETED_FUNCTION;
 
     /** This member points to the currently focused shape.  It is NULL when
         there is no focused shape.

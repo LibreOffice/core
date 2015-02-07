@@ -194,9 +194,9 @@ protected:
     sal_uInt16                      nVersion;
 
 private:
-    SVX_DLLPRIVATE void operator=(const SdrObjUserData& rData);        // not implemented
-    SVX_DLLPRIVATE bool operator==(const SdrObjUserData& rData) const; // not implemented
-    SVX_DLLPRIVATE bool operator!=(const SdrObjUserData& rData) const; // not implemented
+    void operator=(const SdrObjUserData& rData) SAL_DELETED_FUNCTION;
+    bool operator==(const SdrObjUserData& rData) const SAL_DELETED_FUNCTION;
+    bool operator!=(const SdrObjUserData& rData) const SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO();
@@ -273,7 +273,7 @@ private:
     struct Impl;
     Impl* mpImpl;
 
-    SdrObject( const SdrObject& ); // disabled
+    SdrObject( const SdrObject& ) SAL_DELETED_FUNCTION;
 
 public:
     void AddObjectUser(sdr::ObjectUser& rNewUser);

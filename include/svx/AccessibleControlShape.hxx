@@ -193,16 +193,9 @@ private:
     bool        m_bWaitingForControl    : 1;    // if we are created before our control exists, we need to wait for it to appear ...
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that
-        takes the original shape and the parent as arguments instead.
-    */
-    AccessibleControlShape( );
+    AccessibleControlShape(const AccessibleControlShape&) SAL_DELETED_FUNCTION;
 
-    /// Don't use the constructor. not implemented.
-    AccessibleControlShape(const AccessibleControlShape&);
-
-    /// Don't use the assignment operator. not implemented.
-    AccessibleControlShape& operator= (const AccessibleControlShape&);
+    AccessibleControlShape& operator= (const AccessibleControlShape&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility

@@ -195,9 +195,8 @@ private:
     // supposed to be a singleton
     FunctionParser();
 
-    // default: disabled copy/assignment
-    FunctionParser(const FunctionParser&);
-    FunctionParser& operator=( const FunctionParser& );
+    FunctionParser(const FunctionParser&) SAL_DELETED_FUNCTION;
+    FunctionParser& operator=( const FunctionParser& ) SAL_DELETED_FUNCTION;
 };
 
 }

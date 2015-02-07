@@ -99,16 +99,9 @@ protected:
         throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that
-        takes the original shape and the parent as arguments instead.
-    */
-    SVX_DLLPRIVATE AccessibleGraphicShape (void);
+    AccessibleGraphicShape (const AccessibleGraphicShape&) SAL_DELETED_FUNCTION;
 
-    /// Don't use the constructor.  Not yet implemented.
-    SVX_DLLPRIVATE AccessibleGraphicShape (const AccessibleGraphicShape&);
-
-    /// Don't use the assignment operator.  Not yet implemented.
-    SVX_DLLPRIVATE AccessibleGraphicShape& operator= (const AccessibleGraphicShape&);
+    AccessibleGraphicShape& operator= (const AccessibleGraphicShape&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility

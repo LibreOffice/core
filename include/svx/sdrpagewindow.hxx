@@ -51,8 +51,8 @@ class SVX_DLLPUBLIC SdrPageWindow
 
     Impl* mpImpl;
 
-    SdrPageWindow( const SdrPageWindow& ); // disabled
-    SdrPageWindow& operator= ( const SdrPageWindow& ); // disabled
+    SdrPageWindow( const SdrPageWindow& ) SAL_DELETED_FUNCTION;
+    SdrPageWindow& operator= ( const SdrPageWindow& ) SAL_DELETED_FUNCTION;
 
 public:
     SdrPageWindow(SdrPageView& rNewPageView, SdrPaintWindow& rPaintWindow);

@@ -91,9 +91,7 @@ public:
 
     AccessibleShapeInfo (const AccessibleShapeInfo&);
 private:
-    // Don't use these three methods.
-    SVX_DLLPRIVATE explicit AccessibleShapeInfo (void);
-    SVX_DLLPRIVATE AccessibleShapeInfo& operator= (const AccessibleShapeInfo&);
+    AccessibleShapeInfo& operator= (const AccessibleShapeInfo&) SAL_DELETED_FUNCTION;
 };
 
 } // end of namespace accessibility

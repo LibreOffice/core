@@ -29,24 +29,23 @@
 namespace svxform
 {
 
-    class ControlLayouter
+    namespace ControlLayouter
     {
-    public:
         /** initializes the layout of a newly created form control (model)
         */
-        static void initializeControlLayout(
+        void initializeControlLayout(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
                         DocumentType _eDocType
                     );
 
         /** determines whether for the given document type, dynamic control border coloring is enabled
         */
-        static bool useDynamicBorderColor( DocumentType _eDocType );
+        bool useDynamicBorderColor( DocumentType _eDocType );
 
         /** determines whether for the given document type, form controls should use the document's reference device
             for text rendering
         */
-        static bool useDocumentReferenceDevice( DocumentType _eDocType );
+        bool useDocumentReferenceDevice( DocumentType _eDocType );
 
         /** gets the "default" style in a document which can be used if some default text format is needed
 
@@ -56,18 +55,9 @@ namespace svxform
             @param _rxModel
                 a form component.
         */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                     getDefaultDocumentTextStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
-
-    private:
-        ControlLayouter();    // never implemented
-
-    private:
-        static ::utl::OConfigurationNode
-            getLayoutSettings(
-                DocumentType _eDocType
-            );
-    };
+    }
 
 
 } // namespace svxform

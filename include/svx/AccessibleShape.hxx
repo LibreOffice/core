@@ -459,14 +459,8 @@ protected:
     void UpdateStates (void);
 
 private:
-    /** Don't use the default constructor.  Use the public constructor that
-        takes the original shape and the parent as arguments instead.
-    */
-    SVX_DLLPRIVATE explicit AccessibleShape (void);
-    /// Don't use the copy constructor.  Is there any use for it?
-    SVX_DLLPRIVATE explicit AccessibleShape (const AccessibleShape&);
-    /// Don't use the assignment operator.  Do we need this?
-    SVX_DLLPRIVATE AccessibleShape& operator= (const AccessibleShape&);
+    AccessibleShape (const AccessibleShape&) SAL_DELETED_FUNCTION;
+    AccessibleShape& operator= (const AccessibleShape&) SAL_DELETED_FUNCTION;
     //Old accessible name
     OUString aAccName;
 

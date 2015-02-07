@@ -100,9 +100,8 @@ namespace sdr { namespace contact {
         void impl_onControlChangedOrModified();
 
     private:
-        ViewObjectContactOfUnoControl();                                                    // never implemented
-        ViewObjectContactOfUnoControl( const ViewObjectContactOfUnoControl& );              // never implemented
-        ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& );   // never implemented
+        ViewObjectContactOfUnoControl( const ViewObjectContactOfUnoControl& ) SAL_DELETED_FUNCTION;
+        ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& ) SAL_DELETED_FUNCTION;
     };
 
     class SVX_DLLPRIVATE UnoControlPrintOrPreviewContact : public ViewObjectContactOfUnoControl
@@ -112,9 +111,8 @@ namespace sdr { namespace contact {
         virtual ~UnoControlPrintOrPreviewContact();
 
     private:
-        UnoControlPrintOrPreviewContact();                                                 // never implemented
-        UnoControlPrintOrPreviewContact( const UnoControlPrintOrPreviewContact& );            // never implemented
-        UnoControlPrintOrPreviewContact& operator=( const UnoControlPrintOrPreviewContact& ); // never implemented
+        UnoControlPrintOrPreviewContact( const UnoControlPrintOrPreviewContact& ) SAL_DELETED_FUNCTION;
+        UnoControlPrintOrPreviewContact& operator=( const UnoControlPrintOrPreviewContact& ) SAL_DELETED_FUNCTION;
 
         virtual drawinglayer::primitive2d::Primitive2DSequence createPrimitive2DSequence(const DisplayInfo& rDisplayInfo ) const SAL_OVERRIDE;
     };
