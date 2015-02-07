@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_39c5ef5a",
+        "filename": "include/svx/zoomsliderctrl.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-07T00:03:58Z",
+      "side": 1,
+      "message": "this class contains an \"mpImpl\" that is supposed to contain all its members, please don\u0027t add members directly to the class.",
+      "revId": "bfc0ff209bf1d8df0836f4abf0a8a6947fc6a65a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
