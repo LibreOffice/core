@@ -65,9 +65,8 @@ namespace cppcanvas
                 ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const SAL_OVERRIDE;
 
         private:
-            // default: disabled copy/assignment
-            ImplPolyPolygon(const ImplPolyPolygon&);
-            ImplPolyPolygon& operator= ( const ImplPolyPolygon& );
+            ImplPolyPolygon(const ImplPolyPolygon&) SAL_DELETED_FUNCTION;
+            ImplPolyPolygon& operator= ( const ImplPolyPolygon& ) SAL_DELETED_FUNCTION;
 
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >   mxPolyPoly;
 

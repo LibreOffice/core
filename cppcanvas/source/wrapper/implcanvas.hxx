@@ -78,8 +78,7 @@ namespace cppcanvas
             //ImplCanvas(const ImplCanvas&);
 
         private:
-            // default: disabled assignment
-            ImplCanvas& operator=( const ImplCanvas& );
+            ImplCanvas& operator=( const ImplCanvas& ) SAL_DELETED_FUNCTION;
 
             mutable ::com::sun::star::rendering::ViewState                                  maViewState;
             boost::optional<basegfx::B2DPolyPolygon>                                        maClipPolyPolygon;

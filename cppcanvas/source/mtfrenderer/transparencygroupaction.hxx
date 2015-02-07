@@ -35,7 +35,7 @@ class GDIMetaFile;
 class Gradient;
 
 
-/* Definition of internal::TransparencyGroupActionFactory class */
+/* Definition of internal::TransparencyGroupActionFactory */
 
 namespace cppcanvas
 {
@@ -59,9 +59,8 @@ namespace cppcanvas
             handling, since a lot of the internal state (e.g. fonts,
             text layout) is Canvas-dependent.
          */
-        class TransparencyGroupActionFactory
+        namespace TransparencyGroupActionFactory
         {
-        public:
             /** Create new transparency group action.
 
                 @param rGroupMtf
@@ -83,21 +82,14 @@ namespace cppcanvas
                 Size of the transparency group object, in current
                 state coordinate system.
              */
-            static ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
+            ActionSharedPtr createTransparencyGroupAction( MtfAutoPtr&&                  rGroupMtf,
                                                                   GradientAutoPtr&&             rAlphaGradient,
                                                                   const Renderer::Parameters&   rParms,
                                                                   const ::basegfx::B2DPoint&    rDstPoint,
                                                                   const ::basegfx::B2DVector&   rDstSize,
                                                                   const CanvasSharedPtr&        rCanvas,
                                                                   const OutDevState&            rState );
-
-        private:
-            // static factory, disable big four
-            TransparencyGroupActionFactory();
-            ~TransparencyGroupActionFactory();
-            TransparencyGroupActionFactory(const TransparencyGroupActionFactory&);
-            TransparencyGroupActionFactory& operator=( const TransparencyGroupActionFactory& );
-        };
+        }
     }
 }
 

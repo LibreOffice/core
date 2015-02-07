@@ -57,9 +57,8 @@ namespace cppcanvas
                 ::com::sun::star::rendering::XBitmap >  getUNOBitmap() const SAL_OVERRIDE;
 
         private:
-            // default: disabled copy/assignment
-            ImplBitmap(const ImplBitmap&);
-            ImplBitmap& operator=( const ImplBitmap& );
+            ImplBitmap(const ImplBitmap&) SAL_DELETED_FUNCTION;
+            ImplBitmap& operator=( const ImplBitmap& ) SAL_DELETED_FUNCTION;
 
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >  mxBitmap;
             BitmapCanvasSharedPtr                                                                   mpBitmapCanvas;

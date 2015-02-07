@@ -76,9 +76,8 @@ namespace cppcanvas
         // singleton
         BaseGfxFactory();
 
-        // default: disabled copy/assignment
-        BaseGfxFactory(const BaseGfxFactory&);
-        BaseGfxFactory& operator=( const BaseGfxFactory& );
+        BaseGfxFactory(const BaseGfxFactory&) SAL_DELETED_FUNCTION;
+        BaseGfxFactory& operator=( const BaseGfxFactory& ) SAL_DELETED_FUNCTION;
     };
 
 }

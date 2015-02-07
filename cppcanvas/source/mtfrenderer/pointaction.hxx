@@ -28,7 +28,7 @@ namespace basegfx {
     class B2DPoint;
 }
 
-/* Definition of internal::PointActionFactory class */
+/* Definition of internal::PointActionFactory */
 
 namespace cppcanvas
 {
@@ -43,27 +43,19 @@ namespace cppcanvas
             handling, since a lot of the internal state (e.g. fonts,
             text layout) is Canvas-dependent.
          */
-        class PointActionFactory
+        namespace PointActionFactory
         {
-        public:
             /// Point in current color
-            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
+            ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
                                                       const CanvasSharedPtr&,
                                                       const OutDevState& );
 
             /// Point in given color
-            static ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
+            ActionSharedPtr createPointAction( const ::basegfx::B2DPoint&,
                                                       const CanvasSharedPtr&,
                                                       const OutDevState&,
                                                       const ::Color&        );
-
-        private:
-            // static factory, disable big four
-            PointActionFactory();
-            ~PointActionFactory();
-            PointActionFactory(const PointActionFactory&);
-            PointActionFactory& operator=( const PointActionFactory& );
-        };
+        }
     }
 }
 

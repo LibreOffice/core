@@ -61,9 +61,8 @@ namespace cppcanvas
                 ::com::sun::star::rendering::XSprite >  getUNOSprite() const SAL_OVERRIDE;
 
         private:
-            // default: disabled copy/assignment
-            ImplSprite(const ImplSprite&);
-            ImplSprite& operator=( const ImplSprite& );
+            ImplSprite(const ImplSprite&) SAL_DELETED_FUNCTION;
+            ImplSprite& operator=( const ImplSprite& ) SAL_DELETED_FUNCTION;
 
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >          mxSprite;

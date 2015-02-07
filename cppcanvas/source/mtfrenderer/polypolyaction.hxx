@@ -34,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace rendering
 } } } }
 
 
-/* Definition of internal::PolyPolyActionFactory class */
+/* Definition of internal::PolyPolyActionFactory */
 
 namespace cppcanvas
 {
@@ -49,44 +49,36 @@ namespace cppcanvas
             handling, since a lot of the internal state (e.g. fonts,
             text layout) is Canvas-dependent.
          */
-        class PolyPolyActionFactory
+        namespace PolyPolyActionFactory
         {
-        public:
             /// Create polygon, fill/stroke according to state
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
+            ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&     );
 
             /// Create texture-filled polygon
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
+            ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
                                                          const ::com::sun::star::rendering::Texture& );
 
             /// Create line polygon (always stroked, not filled)
-            static ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,
+            ActionSharedPtr createLinePolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                              const CanvasSharedPtr&,
                                                              const OutDevState& );
 
             /// Create stroked polygon
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
+            ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
                                                          const ::com::sun::star::rendering::StrokeAttributes& );
 
             /// For transparent painting of the given polygon (normally, we take the colors always opaque)
-            static ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
+            ActionSharedPtr createPolyPolyAction( const ::basegfx::B2DPolyPolygon&,
                                                          const CanvasSharedPtr&,
                                                          const OutDevState&,
                                                          int nTransparency );
-
-        private:
-            // static factory, disable big four
-            PolyPolyActionFactory();
-            ~PolyPolyActionFactory();
-            PolyPolyActionFactory(const PolyPolyActionFactory&);
-            PolyPolyActionFactory& operator=( const PolyPolyActionFactory& );
-        };
+        }
     }
 }
 

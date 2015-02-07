@@ -48,9 +48,8 @@ namespace cppcanvas
             virtual CanvasSharedPtr getContentCanvas() const SAL_OVERRIDE;
 
         private:
-            // default: disabled copy/assignment
-            ImplCustomSprite(const ImplCustomSprite&);
-            ImplCustomSprite& operator=( const ImplCustomSprite& );
+            ImplCustomSprite(const ImplCustomSprite&) SAL_DELETED_FUNCTION;
+            ImplCustomSprite& operator=( const ImplCustomSprite& ) SAL_DELETED_FUNCTION;
 
             mutable CanvasSharedPtr                                                                         mpLastCanvas;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCustomSprite >    mxCustomSprite;

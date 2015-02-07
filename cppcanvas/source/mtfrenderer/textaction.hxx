@@ -33,7 +33,7 @@ class Size;
 class Color;
 
 
-/* Definition of internal::TextActionFactory class */
+/* Definition of internal::TextActionFactory */
 
 namespace cppcanvas
 {
@@ -48,9 +48,8 @@ namespace cppcanvas
             handling, since a lot of the internal state (e.g. fonts,
             text layout) is Canvas-dependent.
          */
-        class TextActionFactory
+        namespace TextActionFactory
         {
-        public:
             /** Create text action, optionally shadow/relief effect
 
                 Note that this method accepts all coordinates in
@@ -65,7 +64,7 @@ namespace cppcanvas
                 subsettable (Action::render( Subset ) works on
                 characters)
              */
-            static ActionSharedPtr createTextAction( const ::Point&                 rStartPoint,
+            ActionSharedPtr createTextAction( const ::Point&                 rStartPoint,
                                                      const ::Size&                  rReliefOffset,
                                                      const ::Color&                 rReliefColor,
                                                      const ::Size&                  rShadowOffset,
@@ -79,14 +78,7 @@ namespace cppcanvas
                                                      const OutDevState&             rState,
                                                      const Renderer::Parameters&    rParms,
                                                      bool                           bSubsettable );
-
-        private:
-            // static factory, disable big four
-            TextActionFactory();
-            ~TextActionFactory();
-            TextActionFactory(const TextActionFactory&);
-            TextActionFactory& operator=( const TextActionFactory& );
-        };
+        }
     }
 }
 

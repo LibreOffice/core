@@ -80,8 +80,7 @@ namespace cppcanvas
             typedef ::boost::shared_ptr< TransformationArbiter > TransformationArbiterSharedPtr;
 
         private:
-            // default: disabled assignment
-            ImplSpriteCanvas& operator=( const ImplSpriteCanvas& );
+            ImplSpriteCanvas& operator=( const ImplSpriteCanvas& ) SAL_DELETED_FUNCTION;
 
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSpriteCanvas >    mxSpriteCanvas;
             TransformationArbiterSharedPtr                                                          mpTransformArbiter;

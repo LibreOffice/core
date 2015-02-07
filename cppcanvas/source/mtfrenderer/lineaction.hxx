@@ -28,7 +28,7 @@ namespace basegfx {
 }
 
 
-/* Definition of internal::LineActionFactory class */
+/* Definition of internal::LineActionFactory */
 
 namespace cppcanvas
 {
@@ -43,22 +43,14 @@ namespace cppcanvas
             handling, since a lot of the internal state (e.g. fonts,
             text layout) is Canvas-dependent.
          */
-        class LineActionFactory
+        namespace LineActionFactory
         {
-        public:
             /// Plain hair line from point 1 to point 2
-            static ActionSharedPtr createLineAction( const ::basegfx::B2DPoint&,
+            ActionSharedPtr createLineAction( const ::basegfx::B2DPoint&,
                                                      const ::basegfx::B2DPoint&,
                                                      const CanvasSharedPtr&,
                                                      const OutDevState& );
-
-        private:
-            // static factory, disable big four
-            LineActionFactory();
-            ~LineActionFactory();
-            LineActionFactory(const LineActionFactory&);
-            LineActionFactory& operator=( const LineActionFactory& );
-        };
+        }
     }
 }
 

@@ -29,7 +29,7 @@ namespace basegfx {
 }
 class BitmapEx;
 
-/* Definition of internal::BitmapActionFactory class */
+/* Definition of internal::BitmapActionFactory */
 
 namespace cppcanvas
 {
@@ -44,29 +44,21 @@ namespace cppcanvas
             handling, since a lot of the internal state (e.g. fonts,
             text layout) is Canvas-dependent.
          */
-        class BitmapActionFactory
+        namespace BitmapActionFactory
         {
-        public:
             /// Unscaled bitmap action, only references destination point
-            static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+            ActionSharedPtr createBitmapAction( const ::BitmapEx&,
                                                        const ::basegfx::B2DPoint& rDstPoint,
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
 
             /// Scaled bitmap action, dest point and dest size
-            static ActionSharedPtr createBitmapAction( const ::BitmapEx&,
+            ActionSharedPtr createBitmapAction( const ::BitmapEx&,
                                                        const ::basegfx::B2DPoint&  rDstPoint,
                                                        const ::basegfx::B2DVector& rDstSize,
                                                        const CanvasSharedPtr&,
                                                        const OutDevState& );
-
-        private:
-            // static factory, disable big four
-            BitmapActionFactory();
-            ~BitmapActionFactory();
-            BitmapActionFactory(const BitmapActionFactory&);
-            BitmapActionFactory& operator=( const BitmapActionFactory& );
-        };
+        }
     }
 }
 

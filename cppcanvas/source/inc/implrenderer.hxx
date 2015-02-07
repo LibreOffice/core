@@ -228,9 +228,8 @@ static float GetSwapFloat( SvStream& rSt )
             void GraphicStatePop (GraphicStateMap& map, sal_Int32 index, OutDevState& rState);
 
         private:
-            // default: disabled copy/assignment
-            ImplRenderer(const ImplRenderer&);
-            ImplRenderer& operator=( const ImplRenderer& );
+            ImplRenderer(const ImplRenderer&) SAL_DELETED_FUNCTION;
+            ImplRenderer& operator=( const ImplRenderer& ) SAL_DELETED_FUNCTION;
 
             void updateClipping( const ::basegfx::B2DPolyPolygon&   rClipPoly,
                                  const ActionFactoryParameters&     rParms,

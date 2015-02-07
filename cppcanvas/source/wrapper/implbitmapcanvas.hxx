@@ -50,8 +50,7 @@ namespace cppcanvas
             //ImplBitmapCanvas(const ImplBitmapCanvas&);
 
         private:
-            // default: disabled assignment
-            ImplBitmapCanvas& operator=( const ImplBitmapCanvas& );
+            ImplBitmapCanvas& operator=( const ImplBitmapCanvas& ) SAL_DELETED_FUNCTION;
 
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas >    mxBitmapCanvas;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >          mxBitmap;
