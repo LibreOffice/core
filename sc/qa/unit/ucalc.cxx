@@ -1614,7 +1614,7 @@ void Test::testFuncParam()
     CPPUNIT_ASSERT_MESSAGE("incorrect result", val == 3);
 
     // With "Generate #VALUE! error" ("Empty string as zero" is ignored).
-    aConfig.meStringConversion = ScCalcConfig::StringConversion::ERROR;
+    aConfig.meStringConversion = ScCalcConfig::StringConversion::ILLEGAL;
     aConfig.mbEmptyStringAsZero = false;
     m_pDoc->SetCalcConfig(aConfig);
     m_pDoc->CalcAll();

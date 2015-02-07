@@ -387,7 +387,7 @@ void ScFormulaCfg::UpdateFromProperties( const Sequence<OUString>& aNames )
                         switch (nIntVal)
                         {
                             case 0:
-                                eConv = ScCalcConfig::StringConversion::ERROR;
+                                eConv = ScCalcConfig::StringConversion::ILLEGAL;
                             break;
                             case 1:
                                 eConv = ScCalcConfig::StringConversion::ZERO;
@@ -558,7 +558,7 @@ void ScFormulaCfg::Commit()
                 sal_Int32 nVal = 3;
                 switch (GetCalcConfig().meStringConversion)
                 {
-                case ScCalcConfig::StringConversion::ERROR:       nVal = 0; break;
+                case ScCalcConfig::StringConversion::ILLEGAL:     nVal = 0; break;
                 case ScCalcConfig::StringConversion::ZERO:        nVal = 1; break;
                 case ScCalcConfig::StringConversion::UNAMBIGUOUS: nVal = 2; break;
                 case ScCalcConfig::StringConversion::LOCALE:      nVal = 3; break;

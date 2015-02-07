@@ -253,7 +253,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
 
     switch (maCalcConfig.meStringConversion)
     {
-        case ScCalcConfig::StringConversion::ERROR:
+        case ScCalcConfig::StringConversion::ILLEGAL:
             SetError( mnStringNoValueError);
             return fValue;
         case ScCalcConfig::StringConversion::ZERO:

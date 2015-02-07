@@ -105,7 +105,7 @@ std::string StringConversionToString(ScCalcConfig::StringConversion eConv)
 {
     switch (eConv)
     {
-    case ScCalcConfig::StringConversion::ERROR: return "ERROR";
+    case ScCalcConfig::StringConversion::ILLEGAL: return "ILLEGAL";
     case ScCalcConfig::StringConversion::ZERO: return "ZERO";
     case ScCalcConfig::StringConversion::UNAMBIGUOUS: return "UNAMBIGUOUS";
     case ScCalcConfig::StringConversion::LOCALE: return "LOCALE";

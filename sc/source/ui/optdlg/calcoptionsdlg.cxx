@@ -168,7 +168,7 @@ IMPL_LINK(ScCalcOptionsDialog, ConversionModifiedHdl, ListBox*, pConv )
   maConfig.meStringConversion = (ScCalcConfig::StringConversion)pConv->GetSelectEntryPos();
     switch (maConfig.meStringConversion)
     {
-         case ScCalcConfig::StringConversion::ERROR:
+         case ScCalcConfig::StringConversion::ILLEGAL:
                     maConfig.mbEmptyStringAsZero = false;
                     mpEmptyAsZero->Check(false);
                     mpEmptyAsZero->Enable(false);

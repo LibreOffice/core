@@ -35,7 +35,7 @@ struct SC_DLLPUBLIC ScCalcConfig
     // from most stringent to most relaxed
     enum class StringConversion
     {
-        ERROR,            ///<  =1+"1" or =1+"x" give #VALUE!
+        ILLEGAL,          ///<  =1+"1" or =1+"x" give #VALUE!
         ZERO,             ///<  =1+"1" or =1+"x" give 1
         UNAMBIGUOUS,      ///<  =1+"1" gives 2, but =1+"1.000" or =1+"x" give #VALUE!
         LOCALE            ///<  =1+"1.000" may be 2 or 1001 ... =1+"x" gives #VALUE!
