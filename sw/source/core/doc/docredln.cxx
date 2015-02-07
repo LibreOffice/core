@@ -52,13 +52,13 @@ using namespace com::sun::star;
 
     void sw_DebugRedline( const SwDoc* pDoc )
     {
-        static sal_uInt16 nWatch = 0;
+        static SwRedlineTbl::size_type nWatch = 0;
         const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-        for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
+        for( SwRedlineTbl::size_type n = 0; n < rTbl.size(); ++n )
         {
-            sal_uInt16 nDummy = 0;
+            SwRedlineTbl::size_type nDummy = 0;
             const SwRangeRedline* pCurrent = rTbl[ n ];
-            const SwRangeRedline* pNext = n+1 < (sal_uInt16)rTbl.size() ? rTbl[ n+1 ] : 0;
+            const SwRangeRedline* pNext = n+1 < rTbl.size() ? rTbl[ n+1 ] : 0;
             if( pCurrent == pNext )
                 ++nDummy;
             if( n == nWatch )
@@ -1104,7 +1104,7 @@ void SwRangeRedline::MoveToSection()
             // In order to not move other Redlines' indices, we set them
             // to the end (is exclusive)
             const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-            for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
+            for( SwRedlineTbl::size_type n = 0; n < rTbl.size(); ++n )
             {
                 SwRangeRedline* pRedl = rTbl[ n ];
                 if( pRedl->GetBound(true) == *pStt )
@@ -1254,7 +1254,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
             // In order to not move other Redlines' indices, we set them
             // to the end (is exclusive)
             const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-            for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
+            for( SwRedlineTbl::size_type n = 0; n < rTbl.size(); ++n )
             {
                 SwRangeRedline* pRedl = rTbl[ n ];
                 if( pRedl->GetBound(true) == *pStt )
@@ -1334,7 +1334,7 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         std::vector<SwPosition*> aBeforeArr, aBehindArr;
         OSL_ENSURE( this, "this is not in the array?" );
         bool bBreak = false;
-        sal_uInt16 n;
+        SwRedlineTbl::size_type n;
 
         for( n = nMyPos+1; !bBreak && n < rTbl.size(); ++n )
         {
