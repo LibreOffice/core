@@ -192,9 +192,8 @@ namespace pcr
         void    callback_inspectorUIChanged_throw();
 
     private:
-        ComposedPropertyUIUpdate();                                             // never implemented
-        ComposedPropertyUIUpdate( const ComposedPropertyUIUpdate& );            // never implemented
-        ComposedPropertyUIUpdate& operator=( const ComposedPropertyUIUpdate& ); // never implemented
+        ComposedPropertyUIUpdate( const ComposedPropertyUIUpdate& ) SAL_DELETED_FUNCTION;
+        ComposedPropertyUIUpdate& operator=( const ComposedPropertyUIUpdate& ) SAL_DELETED_FUNCTION;
     };
 
 

@@ -62,8 +62,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
         friend class OModuleResourceClient;
 
     private:
-        OModule();
-            // not implemented. OModule is a static class
+        OModule() SAL_DELETED_FUNCTION; //TODO: get rid of this class
 
     protected:
         // resource administration

@@ -246,9 +246,8 @@ namespace pcr
             impl_toggleBindingPropertyListening_throw( bool _bDoListen, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );
 
     private:
-        EFormsHelper();                                 // never implemented
-        EFormsHelper( const EFormsHelper& );            // never implemented
-        EFormsHelper& operator=( const EFormsHelper& ); // never implemented
+        EFormsHelper( const EFormsHelper& ) SAL_DELETED_FUNCTION;
+        EFormsHelper& operator=( const EFormsHelper& ) SAL_DELETED_FUNCTION;
     };
 
 

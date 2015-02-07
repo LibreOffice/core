@@ -180,9 +180,8 @@ namespace pcr
         void    impl_setCommandPropertyValue_nothrow( const OUString& _rCommand ) const;
 
     private:
-        SQLCommandDesigner();                                       // never implemented
-        SQLCommandDesigner( const SQLCommandDesigner& );            // never implemented
-        SQLCommandDesigner& operator=( const SQLCommandDesigner& ); // never implemented
+        SQLCommandDesigner( const SQLCommandDesigner& ) SAL_DELETED_FUNCTION;
+        SQLCommandDesigner& operator=( const SQLCommandDesigner& ) SAL_DELETED_FUNCTION;
     };
 
 

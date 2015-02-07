@@ -117,9 +117,8 @@ namespace pcr
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     private:
-        DialogController();                                     // never implemented
-        DialogController( const DialogController& );            // never implemented
-        DialogController& operator=( const DialogController& ); // never implemented
+        DialogController( const DialogController& ) SAL_DELETED_FUNCTION;
+        DialogController& operator=( const DialogController& ) SAL_DELETED_FUNCTION;
     };
 
 } // namespace pcr

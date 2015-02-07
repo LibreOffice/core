@@ -136,9 +136,8 @@ namespace pcr
                 impl_getEnumConverter( const ::com::sun::star::uno::Type& _rEnumType );
 
     private:
-        GenericPropertyHandler();                                           // never implemented
-        GenericPropertyHandler( const GenericPropertyHandler& );            // never implemented
-        GenericPropertyHandler& operator=( const GenericPropertyHandler& ); // never implemented
+        GenericPropertyHandler( const GenericPropertyHandler& ) SAL_DELETED_FUNCTION;
+        GenericPropertyHandler& operator=( const GenericPropertyHandler& ) SAL_DELETED_FUNCTION;
     };
 
 

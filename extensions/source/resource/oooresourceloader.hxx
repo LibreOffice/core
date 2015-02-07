@@ -63,9 +63,8 @@ namespace extensions { namespace resource
         virtual  ::com::sun::star::uno::Reference<  ::com::sun::star::resource::XResourceBundle> SAL_CALL loadBundle( const OUString& abaseName, const ::com::sun::star::lang::Locale& aLocale ) throw (::com::sun::star::resource::MissingResourceException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        OpenOfficeResourceLoader();                                             // never implemented
-        OpenOfficeResourceLoader( const OpenOfficeResourceLoader& );            // never implemented
-        OpenOfficeResourceLoader& operator=( const OpenOfficeResourceLoader& ); // never implemented
+        OpenOfficeResourceLoader( const OpenOfficeResourceLoader& ) SAL_DELETED_FUNCTION;
+        OpenOfficeResourceLoader& operator=( const OpenOfficeResourceLoader& ) SAL_DELETED_FUNCTION;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
         ::osl::Mutex m_aMutex;
         ResourceBundleCache m_aBundleCache;

@@ -242,9 +242,8 @@ namespace pcr
         bool    impl_filterMethod_nothrow( const EventDescription& _rEvent ) const;
 
     private:
-        EventHandler();                                 // never implemented
-        EventHandler( const EventHandler& );            // never implemented
-        EventHandler& operator=( const EventHandler& ); // never implemented
+        EventHandler( const EventHandler& ) SAL_DELETED_FUNCTION;
+        EventHandler& operator=( const EventHandler& ) SAL_DELETED_FUNCTION;
     };
 
 

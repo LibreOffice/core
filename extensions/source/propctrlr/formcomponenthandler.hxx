@@ -434,9 +434,8 @@ namespace pcr
         DECL_LINK( OnDesignerClosed, void* );
 
     private:
-        FormComponentPropertyHandler();                                                 // never implemented
-        FormComponentPropertyHandler( const FormComponentPropertyHandler& );            // never implemented
-        FormComponentPropertyHandler& operator=( const FormComponentPropertyHandler& ); // never implemented
+        FormComponentPropertyHandler( const FormComponentPropertyHandler& ) SAL_DELETED_FUNCTION;
+        FormComponentPropertyHandler& operator=( const FormComponentPropertyHandler& ) SAL_DELETED_FUNCTION;
 
     private:
         using ::comphelper::OPropertyContainer::addPropertyChangeListener;

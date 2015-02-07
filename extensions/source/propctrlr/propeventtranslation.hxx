@@ -61,9 +61,8 @@ namespace pcr
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        PropertyEventTranslation();                                             // never implemented
-        PropertyEventTranslation( const PropertyEventTranslation& );            // never implemented
-        PropertyEventTranslation& operator=( const PropertyEventTranslation& ); // never implemented
+        PropertyEventTranslation( const PropertyEventTranslation& ) SAL_DELETED_FUNCTION;
+        PropertyEventTranslation& operator=( const PropertyEventTranslation& ) SAL_DELETED_FUNCTION;
     };
 
 
