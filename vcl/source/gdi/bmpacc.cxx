@@ -426,7 +426,7 @@ BitmapWriteAccess::~BitmapWriteAccess()
 
 void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc )
 {
-    DBG_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
+    assert(nY >= 0 && nY < mpBuffer->mnHeight && "y-coordinate in destination out of range!");
     DBG_ASSERT( nY < rReadAcc.Height(), "y-coordinate in source out of range!" );
     DBG_ASSERT( ( HasPalette() && rReadAcc.HasPalette() ) || ( !HasPalette() && !rReadAcc.HasPalette() ), "No copying possible between palette bitmap and TC bitmap!" );
 
@@ -446,7 +446,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
 {
     const sal_uLong nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
 
-    DBG_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
+    assert(nY >= 0 && nY < mpBuffer->mnHeight && "y-coordinate in destination out of range!");
     DBG_ASSERT( ( HasPalette() && nFormat <= BMP_FORMAT_8BIT_PAL ) ||
                 ( !HasPalette() && nFormat > BMP_FORMAT_8BIT_PAL ),
                 "No copying possible between palette and non palette scanlines!" );
