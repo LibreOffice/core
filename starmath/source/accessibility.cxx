@@ -118,17 +118,6 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
     OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
 }
 
-
-SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
-    SmGraphicAccessibleBaseClass(),
-    aAccName            (SM_RESSTR(RID_DOCUMENTSTR)),
-    nClientId           (0)
-{
-    pWin = rSmAcc.pWin;
-    OSL_ENSURE( pWin, "SmGraphicAccessible: window missing" );
-}
-
-
 SmGraphicAccessible::~SmGraphicAccessible()
 {
 }
@@ -1625,16 +1614,6 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
     pTextHelper         (0),
     pWin                (pEditWin)
 {
-    OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
-}
-
-
-SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc )
-    : SmEditAccessibleBaseClass()
-    , aAccName(SM_RESSTR(STR_CMDBOXWINDOW))
-    , pTextHelper(NULL)
-{
-    pWin = rSmAcc.pWin;
     OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
 }
 

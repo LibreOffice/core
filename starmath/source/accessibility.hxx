@@ -67,16 +67,14 @@ SmGraphicAccessibleBaseClass;
 class SmGraphicAccessible :
     public SmGraphicAccessibleBaseClass
 {
-    osl::Mutex                          aListenerMutex;
     OUString                            aAccName;
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          nClientId;
 
     SmGraphicWindow     *pWin;
 
-    // disallow copy-ctor and assignment-operator for now
-    SmGraphicAccessible( const SmGraphicAccessible & );
-    SmGraphicAccessible & operator = ( const SmGraphicAccessible & );
+    SmGraphicAccessible( const SmGraphicAccessible & ) SAL_DELETED_FUNCTION;
+    SmGraphicAccessible & operator = ( const SmGraphicAccessible & ) SAL_DELETED_FUNCTION;
 
 protected:
     SmDocShell *    GetDoc_Impl();
@@ -166,9 +164,8 @@ class SmViewForwarder :
 {
     SmEditAccessible &          rEditAcc;
 
-    // disallow copy-ctor and assignment-operator for now
-    SmViewForwarder( const SmViewForwarder & );
-    SmViewForwarder & operator = ( const SmViewForwarder & );
+    SmViewForwarder( const SmViewForwarder & ) SAL_DELETED_FUNCTION;
+    SmViewForwarder & operator = ( const SmViewForwarder & ) SAL_DELETED_FUNCTION;
 
 public:
                         SmViewForwarder( SmEditAccessible &rAcc );
@@ -189,9 +186,8 @@ class SmTextForwarder :     /* analog to SvxEditEngineForwarder */
 
     DECL_LINK( NotifyHdl, EENotify * );
 
-    // disallow copy-ctor and assignment-operator for now
-    SmTextForwarder( const SmTextForwarder & );
-    SmTextForwarder & operator = ( const SmTextForwarder & );
+    SmTextForwarder( const SmTextForwarder & ) SAL_DELETED_FUNCTION;
+    SmTextForwarder & operator = ( const SmTextForwarder & ) SAL_DELETED_FUNCTION;
 
 public:
     SmTextForwarder( SmEditAccessible& rAcc, SmEditSource & rSource );
@@ -256,9 +252,8 @@ class SmEditViewForwarder :     /* analog to SvxEditEngineViewForwarder */
 {
     SmEditAccessible&       rEditAcc;
 
-    // disallow copy-ctor and assignment-operator for now
-    SmEditViewForwarder( const SmEditViewForwarder & );
-    SmEditViewForwarder & operator = ( const SmEditViewForwarder & );
+    SmEditViewForwarder( const SmEditViewForwarder & ) SAL_DELETED_FUNCTION;
+    SmEditViewForwarder & operator = ( const SmEditViewForwarder & ) SAL_DELETED_FUNCTION;
 
 public:
                         SmEditViewForwarder( SmEditAccessible& rAcc );
@@ -288,9 +283,8 @@ class SmEditSource :
 
     SmEditAccessible&       rEditAcc;
 
-    // disallow copy-ctor and assignment-operator for now
     SmEditSource( const SmEditSource &rSrc );
-    SmEditSource & operator = ( const SmEditSource & );
+    SmEditSource & operator = ( const SmEditSource & ) SAL_DELETED_FUNCTION;
 
 public:
             SmEditSource( SmEditWindow *pWin, SmEditAccessible &rAcc );
@@ -321,14 +315,12 @@ SmEditAccessibleBaseClass;
 class SmEditAccessible :
     public SmEditAccessibleBaseClass
 {
-    osl::Mutex                              aListenerMutex;
     OUString                                aAccName;
     ::accessibility::AccessibleTextHelper    *pTextHelper;
     SmEditWindow                           *pWin;
 
-    // disallow copy-ctor and assignment-operator for now
-    SmEditAccessible( const SmEditAccessible & );
-    SmEditAccessible & operator = ( const SmEditAccessible & );
+    SmEditAccessible( const SmEditAccessible & ) SAL_DELETED_FUNCTION;
+    SmEditAccessible & operator = ( const SmEditAccessible & ) SAL_DELETED_FUNCTION;
 
 public:
     SmEditAccessible( SmEditWindow *pEditWin );
