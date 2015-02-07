@@ -87,8 +87,8 @@ private:
 
     static void _UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum );
 
-    SwNodeNum( const SwNodeNum& );              // no copy constructor
-    SwNodeNum& operator=( const SwNodeNum& );   // no assignment operator
+    SwNodeNum( const SwNodeNum& ) SAL_DELETED_FUNCTION;
+    SwNodeNum& operator=( const SwNodeNum& ) SAL_DELETED_FUNCTION;
 
     virtual bool IsCountPhantoms() const SAL_OVERRIDE;
 

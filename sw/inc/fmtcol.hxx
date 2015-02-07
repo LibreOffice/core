@@ -44,10 +44,8 @@ protected:
     { SetAuto( false ); }
 
 private:
-
-    /// For now don't copy and don't assign.
-    SwFmtColl(const SwFmtColl & );
-    const SwFmtColl &operator=(const SwFmtColl &);
+    SwFmtColl(const SwFmtColl & ) SAL_DELETED_FUNCTION;
+    const SwFmtColl &operator=(const SwFmtColl &) SAL_DELETED_FUNCTION;
 };
 
 /// Represents the style of a paragraph.
@@ -56,7 +54,7 @@ class SW_DLLPUBLIC SwTxtFmtColl: public SwFmtColl
     friend class SwDoc;
     friend class ::sw::DocumentStylePoolManager;
 
-    SwTxtFmtColl(const SwTxtFmtColl & rRef);
+    SwTxtFmtColl(const SwTxtFmtColl & rRef) SAL_DELETED_FUNCTION;
 
     bool mbStayAssignedToListLevelOfOutlineStyle;
 
@@ -194,7 +192,7 @@ public:
     SwCollCondition( const SwCollCondition& rCpy );
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwCollCondition & operator= (const SwCollCondition &);
+    SwCollCondition & operator= (const SwCollCondition &) SAL_DELETED_FUNCTION;
 public:
 
     bool operator==( const SwCollCondition& rCmp ) const;

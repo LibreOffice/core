@@ -380,9 +380,8 @@ class SwDrawContact : public SwContact
 
         void _InvalidateObjs( const bool _bUpdateSortedObjsList = false );
 
-        /// no copy-constructor and no assignment operator
-        SwDrawContact( const SwDrawContact& );
-        SwDrawContact& operator=( const SwDrawContact& );
+        SwDrawContact( const SwDrawContact& ) SAL_DELETED_FUNCTION;
+        SwDrawContact& operator=( const SwDrawContact& ) SAL_DELETED_FUNCTION;
 
     protected:
         /// virtuelle Methoden von SwClient

@@ -126,9 +126,8 @@ class SwXMailMerge :
 
     void    launchEvent( const com::sun::star::beans::PropertyChangeEvent &rEvt ) const;
 
-    // disallow use of copy-constructor and assignment-operator for now
-    SwXMailMerge( const SwXMailMerge & );
-    SwXMailMerge & operator = ( const SwXMailMerge & );
+    SwXMailMerge( const SwXMailMerge & ) SAL_DELETED_FUNCTION;
+    SwXMailMerge & operator = ( const SwXMailMerge & ) SAL_DELETED_FUNCTION;
 protected:
     virtual ~SwXMailMerge();
 public:

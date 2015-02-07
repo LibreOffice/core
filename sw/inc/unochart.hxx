@@ -79,9 +79,8 @@ class SwChartLockController_Helper
     Timer   aUnlockTimer;   // timer to unlock chart controllers
     bool    bIsLocked;
 
-    // disallow use of d-tor, copy c-tor and assignment operator
-    SwChartLockController_Helper( const SwChartLockController_Helper & );
-    SwChartLockController_Helper & operator = ( const SwChartLockController_Helper & );
+    SwChartLockController_Helper( const SwChartLockController_Helper & ) SAL_DELETED_FUNCTION;
+    SwChartLockController_Helper & operator = ( const SwChartLockController_Helper & ) SAL_DELETED_FUNCTION;
 
     void LockUnlockAllCharts( bool bLock );
     void LockAllCharts()    { LockUnlockAllCharts( true ); };
@@ -142,9 +141,8 @@ class SwChartDataProvider :
     const SwDoc *                           pDoc;
     bool                                bDisposed;
 
-    // disallow use of c-tor and assignment operator
-    SwChartDataProvider( const SwChartDataProvider & );
-    SwChartDataProvider & operator = ( const SwChartDataProvider & );
+    SwChartDataProvider( const SwChartDataProvider & ) SAL_DELETED_FUNCTION;
+    SwChartDataProvider & operator = ( const SwChartDataProvider & ) SAL_DELETED_FUNCTION;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments, bool bTestOnly = false )
         throw (::com::sun::star::lang::IllegalArgumentException,
@@ -223,9 +221,8 @@ class SwChartDataSource :
         com::sun::star::uno::Reference<
             com::sun::star::chart2::data::XLabeledDataSequence > > aLDS;
 
-    // disallow use of c-tor and assignment operator
-    SwChartDataSource( const SwChartDataSource & );
-    SwChartDataSource & operator = ( const SwChartDataSource & );
+    SwChartDataSource( const SwChartDataSource & ) SAL_DELETED_FUNCTION;
+    SwChartDataSource & operator = ( const SwChartDataSource & ) SAL_DELETED_FUNCTION;
 
 public:
     SwChartDataSource( const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::chart2::data::XLabeledDataSequence > > &rLDS );
@@ -278,9 +275,8 @@ class SwChartDataSequence :
 
     bool    bDisposed;
 
-    // disallow use of c-tor and assignment operator
     SwChartDataSequence( const SwChartDataSequence &rObj );
-    SwChartDataSequence & operator = ( const SwChartDataSequence & );
+    SwChartDataSequence & operator = ( const SwChartDataSequence & ) SAL_DELETED_FUNCTION;
 
 protected:
     //SwClient
@@ -381,9 +377,8 @@ class SwChartLabeledDataSequence :
 
     bool    bDisposed;
 
-    // disallow use of c-tor and assignment operator
-    SwChartLabeledDataSequence( const SwChartLabeledDataSequence & );
-    SwChartLabeledDataSequence & operator = ( const SwChartLabeledDataSequence & );
+    SwChartLabeledDataSequence( const SwChartLabeledDataSequence & ) SAL_DELETED_FUNCTION;
+    SwChartLabeledDataSequence & operator = ( const SwChartLabeledDataSequence & ) SAL_DELETED_FUNCTION;
 
     void    SetDataSequence( ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxDest, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& rxSource );
 

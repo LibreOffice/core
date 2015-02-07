@@ -943,9 +943,8 @@ public:
     virtual ~SwEditShell();
 
 private:
-    /// For METWARE: no copying and no assignment.
-    SwEditShell(const SwEditShell &);
-    const SwEditShell &operator=(const SwEditShell &);
+    SwEditShell(const SwEditShell &) SAL_DELETED_FUNCTION;
+    const SwEditShell &operator=(const SwEditShell &) SAL_DELETED_FUNCTION;
 };
 
 inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const

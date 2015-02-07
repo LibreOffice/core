@@ -34,8 +34,7 @@ class SwFmtFlyCnt : public SfxPoolItem
     friend class SwTxtFlyCnt;
     SwTxtFlyCnt* pTxtAttr;
     SwFrmFmt* pFmt; ///< My Fly/DrawFrame-format.
-    /// protected CopyCtor
-    SwFmtFlyCnt& operator=(const SwFmtFlyCnt& rFlyCnt);
+    SwFmtFlyCnt& operator=(const SwFmtFlyCnt& rFlyCnt) SAL_DELETED_FUNCTION;
 
 public:
     SwFmtFlyCnt( SwFrmFmt *pFrmFmt );

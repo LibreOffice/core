@@ -872,7 +872,6 @@ namespace sw
         class DrawingOLEAdaptor
         {
         private:
-            OUString msOrigPersistName;
             com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxIPRef;
             SfxObjectShell& mrPers;
             const Graphic* mpGraphic;
@@ -908,10 +907,8 @@ namespace sw
             */
             bool TransferToDoc(OUString &rName);
         private:
-            /// No assigning allowed
-            DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&);
-            /// No copying allowed
-            DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
+            DrawingOLEAdaptor& operator=(const DrawingOLEAdaptor&) SAL_DELETED_FUNCTION;
+            DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc) SAL_DELETED_FUNCTION;
         };
     }
 }

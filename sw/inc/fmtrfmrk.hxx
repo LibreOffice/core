@@ -40,8 +40,7 @@ class SwFmtRefMark
     friend class SwTxtRefMark;
     SwTxtRefMark* pTxtAttr;
 
-    /// Protected CopyCtor.
-    SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
+    SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark) SAL_DELETED_FUNCTION;
     OUString aRefName;
 
     css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;

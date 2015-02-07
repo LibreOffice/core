@@ -53,9 +53,8 @@ class SwList
         bool IsListLevelMarked( const int nListLevel ) const;
 
     private:
-        // no copy constructor and no assignment operator
-        SwList( const SwList& );
-        SwList& operator=( const SwList& );
+        SwList( const SwList& ) SAL_DELETED_FUNCTION;
+        SwList& operator=( const SwList& ) SAL_DELETED_FUNCTION;
 
         SwListImpl* mpListImpl;
 };

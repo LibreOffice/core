@@ -364,8 +364,7 @@ namespace sw
             explicit SetInDocAndDelete(SwDoc &rDoc) : mrDoc(rDoc) {}
             void operator()(SwFltStackEntry *pEntry);
         private:
-            //No assignment
-            SetInDocAndDelete& operator=(const SetInDocAndDelete&);
+            SetInDocAndDelete& operator=(const SetInDocAndDelete&) SAL_DELETED_FUNCTION;
         };
 
         /**
@@ -384,8 +383,7 @@ namespace sw
                     pEntry->SetEndPos(mrPos);
             }
         private:
-            //No assignment
-            SetEndIfOpen& operator=(const SetEndIfOpen&);
+            SetEndIfOpen& operator=(const SetEndIfOpen&) SAL_DELETED_FUNCTION;
         };
 
         /**

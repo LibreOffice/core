@@ -64,10 +64,8 @@ private:
     // and that re-creation of fly frames is necessary.
     bool mbAnchorNodeChanged;
 
-    // no copy-constructor
-    SwHandleAnchorNodeChg( const SwHandleAnchorNodeChg& );
-    // no assignment-operator
-    void operator=( const SwHandleAnchorNodeChg );
+    SwHandleAnchorNodeChg( const SwHandleAnchorNodeChg& ) SAL_DELETED_FUNCTION;
+    void operator=( const SwHandleAnchorNodeChg ) SAL_DELETED_FUNCTION;
 };
 #endif
 

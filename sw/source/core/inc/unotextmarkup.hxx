@@ -68,8 +68,8 @@ public:
     virtual void SAL_CALL commitMultiTextMarkup( const ::com::sun::star::uno::Sequence< ::com::sun::star::text::TextMarkupDescriptor >& aMarkups ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    SwXTextMarkup( const SwXTextMarkup & ); // not defined
-    SwXTextMarkup & operator =( const SwXTextMarkup & ); // not defined
+    SwXTextMarkup( const SwXTextMarkup & ) SAL_DELETED_FUNCTION;
+    SwXTextMarkup & operator =( const SwXTextMarkup & ) SAL_DELETED_FUNCTION;
 
 protected:
     //SwClient
@@ -97,8 +97,8 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getValueByIndex(::sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
 
 private:
-    SwXStringKeyMap(SwXStringKeyMap &); // not defined
-    void operator =(SwXStringKeyMap &); // not defined
+    SwXStringKeyMap(SwXStringKeyMap &) SAL_DELETED_FUNCTION;
+    void operator =(SwXStringKeyMap &) SAL_DELETED_FUNCTION;
 
     virtual ~SwXStringKeyMap() {}
 

@@ -68,7 +68,7 @@ public:
     SwFmtDrop( const SwFmtDrop & );
 private:
     // @@@ public copy ctor, but no copy assignment?
-    SwFmtDrop & operator= (const SwFmtDrop &);
+    SwFmtDrop & operator= (const SwFmtDrop &) SAL_DELETED_FUNCTION;
 
 protected:
    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* ) SAL_OVERRIDE;

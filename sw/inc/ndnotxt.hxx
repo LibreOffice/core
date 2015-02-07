@@ -41,8 +41,8 @@ class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
     // graphics-attributes (only called by SwCntntNode).
     virtual void NewAttrSet( SwAttrPool& ) SAL_OVERRIDE;
 
-    SwNoTxtNode( const SwNoTxtNode& );              // Not allowed.
-    SwNoTxtNode &operator=( const SwNoTxtNode& );   // Not allowed.
+    SwNoTxtNode( const SwNoTxtNode& ) SAL_DELETED_FUNCTION;
+    SwNoTxtNode &operator=( const SwNoTxtNode& ) SAL_DELETED_FUNCTION;
 
 protected:
     SwNoTxtNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,

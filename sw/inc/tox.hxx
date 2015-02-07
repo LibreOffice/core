@@ -167,7 +167,7 @@ private:
     TOXTypes        eType;
 
     // @@@ public copy ctor, but no copy assignment?
-    SwTOXType & operator= (const SwTOXType &);
+    SwTOXType & operator= (const SwTOXType &) SAL_DELETED_FUNCTION;
 };
 
 // Structure of the index lines

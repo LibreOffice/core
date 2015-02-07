@@ -414,8 +414,7 @@ private:
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
     SwFmt* FindFmtByName( const SwFmtsBase& rFmtArr, const OUString& rName ) const;
 
-    // gcc: aFtnInfo::CopyCtor is private, therefore we too have to protect ourselves.
-    SwDoc( const SwDoc &);
+    SwDoc( const SwDoc &) SAL_DELETED_FUNCTION;
 
     // Database fields:
     void AddUsedDBToList( std::vector<OUString>& rDBNameList,

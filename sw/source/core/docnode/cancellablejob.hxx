@@ -38,8 +38,8 @@ public:
     virtual void SAL_CALL cancel() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    CancellableJob( CancellableJob& ); // not defined
-    void operator =( CancellableJob& ); // not defined
+    CancellableJob( CancellableJob& ) SAL_DELETED_FUNCTION;
+    void operator =( CancellableJob& ) SAL_DELETED_FUNCTION;
 
     ::rtl::Reference< ObservableThread > mrThread;
 };

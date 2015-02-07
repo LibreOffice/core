@@ -55,8 +55,8 @@ class SwCTB : public TBBase
     sal_Int32 cCtls;
     std::vector< SwTBC > rTBC;
 
-    SwCTB(const SwCTB&);
-    SwCTB& operator = ( const SwCTB&);
+    SwCTB(const SwCTB&) SAL_DELETED_FUNCTION;
+    SwCTB& operator = ( const SwCTB&) SAL_DELETED_FUNCTION;
 
 public:
     SwCTB();
@@ -103,8 +103,8 @@ class Tcg255SubStruct : public TBBase
     friend class Tcg255;
 
     bool mbReadId;
-    Tcg255SubStruct(const Tcg255SubStruct&);
-    Tcg255SubStruct& operator = ( const Tcg255SubStruct&);
+    Tcg255SubStruct(const Tcg255SubStruct&) SAL_DELETED_FUNCTION;
+    Tcg255SubStruct& operator = ( const Tcg255SubStruct&) SAL_DELETED_FUNCTION;
 
 protected:
     sal_uInt8 ch;
@@ -162,8 +162,8 @@ class SwCTBWrapper : public Tcg255SubStruct
     std::vector< SwTBC > rtbdc;
     std::vector< Customization > rCustomizations; // array of Customizations
     std::vector< sal_Int16 > dropDownMenuIndices; // array of indexes of Customization toolbars that are dropped by a menu
-    SwCTBWrapper(const SwCTBWrapper&);
-    SwCTBWrapper& operator = ( const SwCTBWrapper&);
+    SwCTBWrapper(const SwCTBWrapper&) SAL_DELETED_FUNCTION;
+    SwCTBWrapper& operator = ( const SwCTBWrapper&) SAL_DELETED_FUNCTION;
 
 public:
     SwCTBWrapper( bool bReadId = true );
@@ -206,8 +206,8 @@ class PlfMcd : public Tcg255SubStruct
 {
     sal_Int32 iMac;
     std::vector<MCD> rgmcd; // array of MCD's
-    PlfMcd(const PlfMcd&);
-    PlfMcd& operator = ( const PlfMcd&);
+    PlfMcd(const PlfMcd&) SAL_DELETED_FUNCTION;
+    PlfMcd& operator = ( const PlfMcd&) SAL_DELETED_FUNCTION;
 
 public:
     PlfMcd( bool bReadId = true );
@@ -221,8 +221,8 @@ class Acd : public TBBase
 {
     sal_Int16 ibst;
     sal_uInt16 fciBasedOnABC; //  fciBasedOn(13 bits) A(1bit)B(1bit)C(1Bit)
-    Acd(const Acd&);
-    Acd& operator = ( const Acd&);
+    Acd(const Acd&) SAL_DELETED_FUNCTION;
+    Acd& operator = ( const Acd&) SAL_DELETED_FUNCTION;
 
 public:
     Acd();
@@ -237,8 +237,8 @@ class PlfAcd: public Tcg255SubStruct
 {
     sal_Int32 iMac;
     Acd* rgacd;
-    PlfAcd(const PlfAcd&);
-    PlfAcd& operator = ( const PlfAcd&);
+    PlfAcd(const PlfAcd&) SAL_DELETED_FUNCTION;
+    PlfAcd& operator = ( const PlfAcd&) SAL_DELETED_FUNCTION;
 
 public:
     PlfAcd( bool bReadId = true );
@@ -258,8 +258,8 @@ class Kme : public TBBase
     sal_uInt16 kt; //A Kt that specifies the type of action to be taken when the key combination is pressed.
     sal_uInt32 param; //The meaning of this field depends on the value of kt
 
-    Kme(const Kme&);
-    Kme& operator = ( const Kme&);
+    Kme(const Kme&) SAL_DELETED_FUNCTION;
+    Kme& operator = ( const Kme&) SAL_DELETED_FUNCTION;
 
 public:
     Kme();
@@ -274,8 +274,8 @@ class PlfKme : public Tcg255SubStruct
 {
     sal_Int32 iMac;
     Kme* rgkme;
-    PlfKme(const PlfKme&);
-    PlfKme& operator = ( const PlfKme&);
+    PlfKme(const PlfKme&) SAL_DELETED_FUNCTION;
+    PlfKme& operator = ( const PlfKme&) SAL_DELETED_FUNCTION;
 
 public:
     PlfKme( bool bReadId = true );
@@ -300,8 +300,8 @@ class TcgSttbfCore : public TBBase
     sal_uInt16 cData;
     sal_uInt16 cbExtra;
     SBBItem* dataItems;
-    TcgSttbfCore(const TcgSttbfCore&);
-    TcgSttbfCore& operator = ( const TcgSttbfCore&);
+    TcgSttbfCore(const TcgSttbfCore&) SAL_DELETED_FUNCTION;
+    TcgSttbfCore& operator = ( const TcgSttbfCore&) SAL_DELETED_FUNCTION;
 
 public:
     TcgSttbfCore();
@@ -315,8 +315,8 @@ public:
 class TcgSttbf : public Tcg255SubStruct
 {
     TcgSttbfCore sttbf;
-    TcgSttbf(const TcgSttbf&);
-    TcgSttbf& operator = ( const TcgSttbf&);
+    TcgSttbf(const TcgSttbf&) SAL_DELETED_FUNCTION;
+    TcgSttbf& operator = ( const TcgSttbf&) SAL_DELETED_FUNCTION;
 
 public:
     TcgSttbf( bool bReadId = true );
@@ -332,8 +332,8 @@ class Xstz : public TBBase
     Xst xst; //An Xst specifying the string with its pre-pended length.
     sal_uInt16 chTerm;
 
-    Xstz(const Xstz&);
-    Xstz& operator = ( const Xstz&);
+    Xstz(const Xstz&) SAL_DELETED_FUNCTION;
+    Xstz& operator = ( const Xstz&) SAL_DELETED_FUNCTION;
 
 public:
     Xstz();
@@ -348,8 +348,8 @@ class MacroName : public TBBase
 {
     sal_uInt16 ibst; //An unsigned integer that specifies the index of the current entry in the macro name table. MUST NOT be the same as the index of any other entry.
     Xstz xstz;
-    MacroName(const MacroName&);
-    MacroName& operator = ( const MacroName&);
+    MacroName(const MacroName&) SAL_DELETED_FUNCTION;
+    MacroName& operator = ( const MacroName&) SAL_DELETED_FUNCTION;
 
 public:
     MacroName();
@@ -365,8 +365,8 @@ class MacroNames : public Tcg255SubStruct
     sal_uInt16 iMac; //An unsigned integer that specifies the number of MacroName structures in rgNames.
     MacroName* rgNames;
 
-    MacroNames(const MacroNames&);
-    MacroNames& operator = ( const MacroNames&);
+    MacroNames(const MacroNames&) SAL_DELETED_FUNCTION;
+    MacroNames& operator = ( const MacroNames&) SAL_DELETED_FUNCTION;
 
 public:
     MacroNames( bool bReadId = true );
@@ -380,8 +380,8 @@ public:
 class Tcg255 : public TBBase
 {
     std::vector< Tcg255SubStruct* > rgtcgData; // array of sub structures
-    Tcg255(const Tcg255&);
-    Tcg255& operator = ( const Tcg255&);
+    Tcg255(const Tcg255&) SAL_DELETED_FUNCTION;
+    Tcg255& operator = ( const Tcg255&) SAL_DELETED_FUNCTION;
     bool processSubStruct( sal_uInt8 nId, SvStream& );
 
 public:
@@ -398,8 +398,8 @@ class Tcg: public TBBase
 {
     sal_Int8 nTcgVer;
     std::unique_ptr< Tcg255 > tcg;
-    Tcg(const Tcg&);
-    Tcg& operator = ( const Tcg&);
+    Tcg(const Tcg&) SAL_DELETED_FUNCTION;
+    Tcg& operator = ( const Tcg&) SAL_DELETED_FUNCTION;
 
 public:
     Tcg();

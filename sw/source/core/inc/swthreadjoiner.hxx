@@ -22,19 +22,12 @@
 #include <com/sun/star/util/XJobManager.hpp>
 
 /** Testing */
-class SwThreadJoiner
+namespace SwThreadJoiner
 {
-    public:
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& GetThreadJoiner();
 
-        static ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager >& GetThreadJoiner();
-
-        static void ReleaseThreadJoiner();
-
-    private:
-        static ::com::sun::star::uno::Reference< ::com::sun::star::util::XJobManager > mpThreadJoiner;
-
-        SwThreadJoiner();
-};
+    void ReleaseThreadJoiner();
+}
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,8 +35,8 @@ class SwView;
 
 class SW_DLLPUBLIC SwRedlineExtraData
 {
-    SwRedlineExtraData( const SwRedlineExtraData& );
-    SwRedlineExtraData& operator=( const SwRedlineExtraData& );
+    SwRedlineExtraData( const SwRedlineExtraData& ) SAL_DELETED_FUNCTION;
+    SwRedlineExtraData& operator=( const SwRedlineExtraData& ) SAL_DELETED_FUNCTION;
 
 protected:
     SwRedlineExtraData() {}

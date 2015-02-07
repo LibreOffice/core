@@ -36,8 +36,8 @@ class SwParaChangeTrackingInfo
         const SwWrongList* getChangeTrackingTextMarkupList( const sal_Int32 nTextMarkupType );
 
     private:
-        SwParaChangeTrackingInfo( const SwParaChangeTrackingInfo& );
-        SwParaChangeTrackingInfo& operator=( const SwParaChangeTrackingInfo& );
+        SwParaChangeTrackingInfo( const SwParaChangeTrackingInfo& ) SAL_DELETED_FUNCTION;
+        SwParaChangeTrackingInfo& operator=( const SwParaChangeTrackingInfo& ) SAL_DELETED_FUNCTION;
 
         const SwTxtFrm& mrTxtFrm;
 

@@ -859,8 +859,6 @@ WW8_WrPlcPn::WW8_WrPlcPn(WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc)
     : rWrt(rWr)
     , nFkpStartPage(0)
     , ePlc(ePl)
-    , bWrtWW8(true)
-    , nMark(0)
 {
     WW8_WrFkp* pF = new WW8_WrFkp( ePlc, nStartFc, rWrt.bWrtWW8 );
     aFkps.push_back( pF );

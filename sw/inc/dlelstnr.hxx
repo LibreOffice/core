@@ -57,9 +57,8 @@ class SwLinguServiceEventListener :
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
 
-    /// disallow use of copy-constructor and assignment operator
-    SwLinguServiceEventListener(const SwLinguServiceEventListener &);
-    SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &);
+    SwLinguServiceEventListener(const SwLinguServiceEventListener &) SAL_DELETED_FUNCTION;
+    SwLinguServiceEventListener & operator = (const SwLinguServiceEventListener &) SAL_DELETED_FUNCTION;
 
 public:
     SwLinguServiceEventListener();

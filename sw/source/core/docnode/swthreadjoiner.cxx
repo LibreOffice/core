@@ -28,28 +28,28 @@
 
 using namespace ::com::sun::star;
 
-uno::Reference< util::XJobManager > SwThreadJoiner::mpThreadJoiner;
-
 namespace
 {
     class theJoinerMutex : public rtl::Static<osl::Mutex, theJoinerMutex> {};
+
+    uno::Reference< util::XJobManager > pThreadJoiner;
 }
 
 uno::Reference< util::XJobManager >& SwThreadJoiner::GetThreadJoiner()
 {
     osl::MutexGuard aGuard(theJoinerMutex::get());
 
-    if ( !mpThreadJoiner.is() )
+    if ( !pThreadJoiner.is() )
     {
-        mpThreadJoiner = util::JobManager::create( comphelper::getProcessComponentContext() );
+        pThreadJoiner = util::JobManager::create( comphelper::getProcessComponentContext() );
     }
 
-    return mpThreadJoiner;
+    return pThreadJoiner;
 }
 
 void SwThreadJoiner::ReleaseThreadJoiner()
 {
-    mpThreadJoiner.clear();
+    pThreadJoiner.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

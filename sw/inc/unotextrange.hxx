@@ -45,7 +45,7 @@ class SW_DLLPUBLIC SwUnoInternalPaM
 {
 
 private:
-    SwUnoInternalPaM(const SwUnoInternalPaM&);
+    SwUnoInternalPaM(const SwUnoInternalPaM&) SAL_DELETED_FUNCTION;
 
 public:
     SwUnoInternalPaM(SwDoc& rDoc);

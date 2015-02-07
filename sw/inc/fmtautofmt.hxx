@@ -37,7 +37,7 @@ public:
     SwFmtAutoFmt( const SwFmtAutoFmt& rAttr );
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwFmtAutoFmt & operator= (const SwFmtAutoFmt &);
+    SwFmtAutoFmt & operator= (const SwFmtAutoFmt &) SAL_DELETED_FUNCTION;
 public:
 
     TYPEINFO_OVERRIDE();

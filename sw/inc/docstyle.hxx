@@ -229,9 +229,8 @@ public:
 protected:
     virtual ~SwDocStyleSheetPool();
 
-    /// For not-so-clever compilers.
 private:
-    SwDocStyleSheetPool( const SwDocStyleSheetPool& );
+    SwDocStyleSheetPool( const SwDocStyleSheetPool& ) SAL_DELETED_FUNCTION;
 };
 
 #endif

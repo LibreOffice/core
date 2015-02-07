@@ -180,9 +180,8 @@ private:
         WW8aCFmt& aCharFmt, bool& bNewCharFmtCreated,
         const OUString& aPrefix = OUString());
 
-    //No copying
-    WW8ListManager(const WW8ListManager&);
-    WW8ListManager& operator=(const WW8ListManager&);
+    WW8ListManager(const WW8ListManager&) SAL_DELETED_FUNCTION;
+    WW8ListManager& operator=(const WW8ListManager&) SAL_DELETED_FUNCTION;
     sal_uInt16 nLastLFOPosition;
 };
 
@@ -365,9 +364,8 @@ private:
     SwWW8ImplReader& rReader;
     sal_uInt16 nToggleAttrFlags;
     sal_uInt16 nToggleBiDiAttrFlags;
-    //No copying
-    SwWW8FltControlStack(const SwWW8FltControlStack&);
-    SwWW8FltControlStack& operator=(const SwWW8FltControlStack&);
+    SwWW8FltControlStack(const SwWW8FltControlStack&) SAL_DELETED_FUNCTION;
+    SwWW8FltControlStack& operator=(const SwWW8FltControlStack&) SAL_DELETED_FUNCTION;
     const SwNumFmt* GetNumFmtFromStack(const SwPosition &rPos,
         const SwTxtNode &rTxtNode);
 protected:
@@ -427,9 +425,8 @@ public:
     void AddAnchor(const SwPosition& rPos,SwFrmFmt *pFmt);
     void Flush();
 private:
-    //No copying
-    SwWW8FltAnchorStack(const SwWW8FltAnchorStack&);
-    SwWW8FltAnchorStack& operator=(const SwWW8FltAnchorStack&);
+    SwWW8FltAnchorStack(const SwWW8FltAnchorStack&) SAL_DELETED_FUNCTION;
+    SwWW8FltAnchorStack& operator=(const SwWW8FltAnchorStack&) SAL_DELETED_FUNCTION;
 };
 
 //For fields whose handling cannot be fully resolved until we hit the end of
@@ -444,8 +441,7 @@ public:
     Position(const SwPaM &rPaM);
     Position(const Position &rEntry);
 private:
-    //No assignment
-    Position& operator=(const Position&);
+    Position& operator=(const Position&) SAL_DELETED_FUNCTION;
 };
 
 namespace SwWW8
@@ -493,9 +489,8 @@ protected:
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry& rEntry) SAL_OVERRIDE;
 private:
-    //No copying
-    SwWW8FltRefStack(const SwWW8FltRefStack&);
-    SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
+    SwWW8FltRefStack(const SwWW8FltRefStack&) SAL_DELETED_FUNCTION;
+    SwWW8FltRefStack& operator=(const SwWW8FltRefStack&) SAL_DELETED_FUNCTION;
 };
 
 template< typename Type >
@@ -693,9 +688,8 @@ public:
 class WW8FormulaCheckBox : public WW8FormulaControl
 {
 private:
-    //No copying
-    WW8FormulaCheckBox(const WW8FormulaCheckBox&);
-    WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&);
+    WW8FormulaCheckBox(const WW8FormulaCheckBox&) SAL_DELETED_FUNCTION;
+    WW8FormulaCheckBox& operator=(const WW8FormulaCheckBox&) SAL_DELETED_FUNCTION;
 
 public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR);
@@ -710,9 +704,8 @@ public:
 class WW8FormulaListBox : public WW8FormulaControl
 {
 private:
-    //No copying
-    WW8FormulaListBox(const WW8FormulaListBox&);
-    WW8FormulaListBox& operator=(const WW8FormulaListBox&);
+    WW8FormulaListBox(const WW8FormulaListBox&) SAL_DELETED_FUNCTION;
+    WW8FormulaListBox& operator=(const WW8FormulaListBox&) SAL_DELETED_FUNCTION;
 
 public:
     WW8FormulaListBox(SwWW8ImplReader &rR);
@@ -727,9 +720,8 @@ public:
 class WW8FormulaEditBox : public WW8FormulaControl
 {
 private:
-    //No copying
-    WW8FormulaEditBox(const WW8FormulaEditBox&);
-    WW8FormulaEditBox& operator=(const WW8FormulaEditBox&);
+    WW8FormulaEditBox(const WW8FormulaEditBox&) SAL_DELETED_FUNCTION;
+    WW8FormulaEditBox& operator=(const WW8FormulaEditBox&) SAL_DELETED_FUNCTION;
 public:
     WW8FormulaEditBox(SwWW8ImplReader &rR);
     //no real implementation, return false
@@ -780,9 +772,8 @@ private:
                                   const int _nCalledByGroup,
                                   sal_Int64 nAspect ) const SAL_OVERRIDE;
 
-    //No copying
-    SwMSDffManager(const SwMSDffManager&);
-    SwMSDffManager& operator=(const SwMSDffManager&);
+    SwMSDffManager(const SwMSDffManager&) SAL_DELETED_FUNCTION;
+    SwMSDffManager& operator=(const SwMSDffManager&) SAL_DELETED_FUNCTION;
 public:
     static sal_uInt32 GetFilterFlags();
     static sal_Int32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
@@ -894,9 +885,8 @@ private:
     SwFmtPageDesc SetSwFmtPageDesc(mySegIter &rIter, mySegIter &rStart,
         bool bIgnoreCols);
 
-    //No copying
-    wwSectionManager(const wwSectionManager&);
-    wwSectionManager& operator=(const wwSectionManager&);
+    wwSectionManager(const wwSectionManager&) SAL_DELETED_FUNCTION;
+    wwSectionManager& operator=(const wwSectionManager&) SAL_DELETED_FUNCTION;
 public:
     wwSectionManager(SwWW8ImplReader &rReader) : mrReader(rReader), mnDesc(0)
         {};
@@ -964,9 +954,8 @@ private:
     const SwDoc &mrDoc;
     OUString msFileLinkSeed;
     int mnFileSectionNo;
-    //No copying
-    wwSectionNamer(const wwSectionNamer&);
-    wwSectionNamer& operator=(const wwSectionNamer&);
+    wwSectionNamer(const wwSectionNamer&) SAL_DELETED_FUNCTION;
+    wwSectionNamer& operator=(const wwSectionNamer&) SAL_DELETED_FUNCTION;
 public:
     OUString UniqueName();
     wwSectionNamer(const SwDoc &rDoc, const OUString &rSeed)
@@ -1706,9 +1695,8 @@ private:
     // determine object attribute "Layout in Table Cell"
     bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
     bool ReadGlobalTemplateSettings( const OUString& sCreatedFrom, const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xPrjNameMap );
-    //No copying
-    SwWW8ImplReader(const SwWW8ImplReader &);
-    SwWW8ImplReader& operator=(const SwWW8ImplReader&);
+    SwWW8ImplReader(const SwWW8ImplReader &) SAL_DELETED_FUNCTION;
+    SwWW8ImplReader& operator=(const SwWW8ImplReader&) SAL_DELETED_FUNCTION;
 public:     // eigentlich private, geht aber leider nur public
     sal_uInt16 GetToggleAttrFlags() const;
     sal_uInt16 GetToggleBiDiAttrFlags() const;

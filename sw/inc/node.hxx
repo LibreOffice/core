@@ -288,9 +288,8 @@ public:
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
 
 private:
-    /// Private constructor because copying is never allowed!!
-    SwNode( const SwNode & rNodes );
-    SwNode & operator= ( const SwNode & rNodes );
+    SwNode( const SwNode & rNodes ) SAL_DELETED_FUNCTION;
+    SwNode & operator= ( const SwNode & rNodes ) SAL_DELETED_FUNCTION;
 };
 
 /// Starts a section of nodes in the document model.
@@ -321,9 +320,8 @@ public:
     virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) const SAL_OVERRIDE;
 
 private:
-    /// Private constructor because copying is never allowed!!
-    SwStartNode( const SwStartNode & rNode );
-    SwStartNode & operator= ( const SwStartNode & rNode );
+    SwStartNode( const SwStartNode & rNode ) SAL_DELETED_FUNCTION;
+    SwStartNode & operator= ( const SwStartNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
 /// Ends a section of nodes in the document model.
@@ -342,9 +340,8 @@ protected:
     DECL_FIXEDMEMPOOL_NEWDEL(SwEndNode)
 
 private:
-    /// Private constructor because copying is never allowed!!
-    SwEndNode( const SwEndNode & rNode );
-    SwEndNode & operator= ( const SwEndNode & rNode );
+    SwEndNode( const SwEndNode & rNode ) SAL_DELETED_FUNCTION;
+    SwEndNode & operator= ( const SwEndNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
 // SwCntntNode
@@ -484,9 +481,8 @@ public:
     virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
 private:
-    /// Private constructor because copying is never allowed!!
-    SwCntntNode( const SwCntntNode & rNode );
-    SwCntntNode & operator= ( const SwCntntNode & rNode );
+    SwCntntNode( const SwCntntNode & rNode ) SAL_DELETED_FUNCTION;
+    SwCntntNode & operator= ( const SwCntntNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
 // SwTableNode
@@ -523,9 +519,8 @@ public:
     void RemoveRedlines();
 
 private:
-    /// Private constructor because copying is never allowed!!
-    SwTableNode( const SwTableNode & rNode );
-    SwTableNode & operator= ( const SwTableNode & rNode );
+    SwTableNode( const SwTableNode & rNode ) SAL_DELETED_FUNCTION;
+    SwTableNode & operator= ( const SwTableNode & rNode ) SAL_DELETED_FUNCTION;
 };
 
 class SwSectionNode

@@ -31,7 +31,7 @@ class SW_DLLPUBLIC SwFmtCntnt: public SfxPoolItem
 {
     SwNodeIndex *pStartNode;
 
-    SwFmtCntnt &operator=( const SwFmtCntnt & ); ///< Copying not allowed.
+    SwFmtCntnt &operator=( const SwFmtCntnt & ) SAL_DELETED_FUNCTION;
 
 public:
     SwFmtCntnt( const SwStartNode* pStartNode = 0 );

@@ -280,11 +280,9 @@ public:
     void SetFS(::sax_fastparser::FSHelperPtr mpFS);
 
 private:
-    /// No copying.
-    DocxExport( const DocxExport& );
+    DocxExport( const DocxExport& ) SAL_DELETED_FUNCTION;
 
-    /// No copying.
-    DocxExport& operator=( const DocxExport& );
+    DocxExport& operator=( const DocxExport& ) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXEXPORT_HXX

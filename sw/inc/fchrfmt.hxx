@@ -46,7 +46,7 @@ protected:
 
 private:
     /// @@@ public copy ctor, but no copy assignment?
-    SwFmtCharFmt & operator= (const SwFmtCharFmt &);
+    SwFmtCharFmt & operator= (const SwFmtCharFmt &) SAL_DELETED_FUNCTION;
 public:
 
     TYPEINFO_OVERRIDE();

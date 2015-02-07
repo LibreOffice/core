@@ -41,8 +41,7 @@ class SW_DLLPUBLIC SwOLEObj
     svt::EmbeddedObjectRef xOLERef;
     OUString aName;
 
-    SwOLEObj( const SwOLEObj& rObj );   /// Not allowed.
-    SwOLEObj();
+    SwOLEObj( const SwOLEObj& rObj ) SAL_DELETED_FUNCTION;
 
     void SetNode( SwOLENode* pNode );
 
@@ -89,8 +88,7 @@ class SW_DLLPUBLIC SwOLENode: public SwNoTxtNode
                 SwGrfFmtColl *pGrfColl,
                 SwAttrSet* pAutoAttr = 0 );
 
-    /// aOLEObj has a private Copy-Ctor. We need one too:
-    SwOLENode( const SwOLENode & );
+    SwOLENode( const SwOLENode & ) SAL_DELETED_FUNCTION;
 
     using SwNoTxtNode::GetGraphic;
 

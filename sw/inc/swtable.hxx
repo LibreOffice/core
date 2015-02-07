@@ -143,7 +143,7 @@ public:
     SwTable( const SwTable& rTable );       // no copy of the lines !!
 private:
     // @@@ public copy ctor, but no copy assignment?
-    SwTable & operator= (const SwTable &);
+    SwTable & operator= (const SwTable &) SAL_DELETED_FUNCTION;
     // no default ctor.
     SwTable();
     bool OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
@@ -383,9 +383,8 @@ class SW_DLLPUBLIC SwTableBox: public SwClient      //Client of FrmFmt.
     friend void DelBoxNode(SwTableSortBoxes&);  // Delete StartNode* !
     friend class SwXMLTableContext;
 
-    // Not implemented (any more).
-    SwTableBox( const SwTableBox & );
-    SwTableBox &operator=( const SwTableBox &); // Does not exist.
+    SwTableBox( const SwTableBox & ) SAL_DELETED_FUNCTION;
+    SwTableBox &operator=( const SwTableBox &) SAL_DELETED_FUNCTION;
 
     SwTableLines aLines;
     const SwStartNode * pSttNd;

@@ -46,7 +46,7 @@ class SW_DLLPUBLIC SwNumRulesWithName
         sal_uInt16 nCharPoolId;
         _SwNumFmtsAttrs aItems;
 
-        _SwNumFmtGlobal& operator=( const _SwNumFmtGlobal& );
+        _SwNumFmtGlobal& operator=( const _SwNumFmtGlobal& ) SAL_DELETED_FUNCTION;
 
     public:
         _SwNumFmtGlobal( const SwNumFmt& rFmt );

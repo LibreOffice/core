@@ -292,8 +292,7 @@ namespace sw
 
         DrawingOLEAdaptor::DrawingOLEAdaptor(SdrOle2Obj &rObj,
             SfxObjectShell &rPers)
-            : msOrigPersistName(rObj.GetPersistName()),
-            mxIPRef(rObj.GetObjRef()), mrPers(rPers),
+            : mxIPRef(rObj.GetObjRef()), mrPers(rPers),
             mpGraphic( rObj.GetGraphic() )
         {
             rObj.AbandonObject();

@@ -47,9 +47,8 @@ class SW_DLLPUBLIC SwFmtFtn
 
     css::uno::WeakReference<css::text::XFootnote> m_wXFootnote;
 
-    /// Protected CopyCtor.
-    SwFmtFtn& operator=(const SwFmtFtn& rFtn);
-    SwFmtFtn( const SwFmtFtn& );
+    SwFmtFtn& operator=(const SwFmtFtn& rFtn) SAL_DELETED_FUNCTION;
+    SwFmtFtn( const SwFmtFtn& ) SAL_DELETED_FUNCTION;
 
 public:
     SwFmtFtn( bool bEndNote = false );

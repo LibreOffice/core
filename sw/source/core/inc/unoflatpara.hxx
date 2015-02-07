@@ -134,8 +134,8 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    SwXFlatParagraph( const SwXFlatParagraph & ); // not defined
-    SwXFlatParagraph & operator = ( const SwXFlatParagraph & ); // not defined
+    SwXFlatParagraph( const SwXFlatParagraph & ) SAL_DELETED_FUNCTION;
+    SwXFlatParagraph & operator = ( const SwXFlatParagraph & ) SAL_DELETED_FUNCTION;
 
     OUString maExpandText;
 };
@@ -163,8 +163,8 @@ protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) SAL_OVERRIDE;
 
 private:
-    SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ); // not defined
-    SwXFlatParagraphIterator & operator =(const SwXFlatParagraphIterator & ); // not defined
+    SwXFlatParagraphIterator( const SwXFlatParagraphIterator & ) SAL_DELETED_FUNCTION;
+    SwXFlatParagraphIterator & operator =(const SwXFlatParagraphIterator & ) SAL_DELETED_FUNCTION;
 
     // container to hold the 'hard' references as long as necessary and valid
     std::set< css::uno::Reference< css::text::XFlatParagraph > >    m_aFlatParaList;

@@ -61,10 +61,8 @@ class SW_DLLPUBLIC SwTOXDescription
     //TODO: TemplateNames
     //const String* pTemplateName = 0, ???
 
-    // forbidden and not implemented.
-    SwTOXDescription();
-    SwTOXDescription(SwTOXDescription&);
-    SwTOXDescription & operator= (SwTOXDescription&);
+    SwTOXDescription(SwTOXDescription&) SAL_DELETED_FUNCTION;
+    SwTOXDescription & operator= (SwTOXDescription&) SAL_DELETED_FUNCTION;
 
 public:
     // single argument ctors shall be explicit.
@@ -188,10 +186,8 @@ class SwTOXMarkDescription
     OUString*   pPhoneticReadingOfPrimKey;
     OUString*   pPhoneticReadingOfSecKey;
 
-    // forbidden and not implemented.
-    SwTOXMarkDescription();
-    SwTOXMarkDescription(SwTOXMarkDescription&);
-    SwTOXMarkDescription & operator= (SwTOXMarkDescription&);
+    SwTOXMarkDescription(SwTOXMarkDescription&) SAL_DELETED_FUNCTION;
+    SwTOXMarkDescription & operator= (SwTOXMarkDescription&) SAL_DELETED_FUNCTION;
 
 public:
     // single argument ctors shall be explicit.
