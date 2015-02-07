@@ -38,10 +38,8 @@ class ReferenceObject
      */
     oslInterlockedCount m_nReferenceCount;
 
-    /** Not implemented.
-     */
-    ReferenceObject (const ReferenceObject&);
-    ReferenceObject& operator= (const ReferenceObject&);
+    ReferenceObject (const ReferenceObject&) SAL_DELETED_FUNCTION;
+    ReferenceObject& operator= (const ReferenceObject&) SAL_DELETED_FUNCTION;
 
 public:
     /** Allocation.

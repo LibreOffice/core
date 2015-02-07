@@ -212,13 +212,13 @@ protected:
 
 private:
 
-    /** Copy constructor disabled.
+    /** Copy constructor deleted.
      */
-    SALHELPER_DLLPRIVATE Timer( const Timer& rTimer );
+    Timer( const Timer& rTimer ) SAL_DELETED_FUNCTION;
 
-    /** Assignment operator disabled.
+    /** Copy assignment operator deleted.
      */
-    SALHELPER_DLLPRIVATE void SAL_CALL operator=( const Timer& rTimer );
+    void SAL_CALL operator=( const Timer& rTimer ) SAL_DELETED_FUNCTION;
 
     friend class TimerManager;
 };

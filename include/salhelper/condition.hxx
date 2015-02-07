@@ -50,8 +50,8 @@ namespace salhelper
 
 
     private:
-        SALHELPER_DLLPRIVATE Condition(Condition &); // not defined
-        SALHELPER_DLLPRIVATE void operator =(Condition &); // not defined
+        Condition(Condition &) SAL_DELETED_FUNCTION;
+        void operator =(Condition &) SAL_DELETED_FUNCTION;
 
         osl::Mutex&  m_aMutex;
         oslCondition m_aCondition;
@@ -69,8 +69,8 @@ namespace salhelper
 
 
     private:
-        SALHELPER_DLLPRIVATE ConditionModifier(ConditionModifier &); // not defined
-        SALHELPER_DLLPRIVATE void operator =(ConditionModifier &); // not defined
+        ConditionModifier(ConditionModifier &) SAL_DELETED_FUNCTION;
+        void operator =(ConditionModifier &) SAL_DELETED_FUNCTION;
 
         Condition& m_aCond;
     };
@@ -103,8 +103,8 @@ namespace salhelper
 
 
     private:
-        SALHELPER_DLLPRIVATE ConditionWaiter(ConditionWaiter &); // not defined
-        SALHELPER_DLLPRIVATE void operator =(ConditionWaiter &); // not defined
+        ConditionWaiter(ConditionWaiter &) SAL_DELETED_FUNCTION;
+        void operator =(ConditionWaiter &) SAL_DELETED_FUNCTION;
 
         Condition& m_aCond;
     };

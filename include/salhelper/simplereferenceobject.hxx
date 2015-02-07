@@ -96,11 +96,11 @@ private:
 
     /** not implemented
      */
-    SALHELPER_DLLPRIVATE SimpleReferenceObject(SimpleReferenceObject &);
+    SimpleReferenceObject(SimpleReferenceObject &) SAL_DELETED_FUNCTION;
 
     /** not implemented
      */
-    SALHELPER_DLLPRIVATE void operator =(SimpleReferenceObject);
+    void operator =(SimpleReferenceObject) SAL_DELETED_FUNCTION;
 
     /// @cond INTERNAL
 
