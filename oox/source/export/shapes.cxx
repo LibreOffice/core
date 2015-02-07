@@ -446,7 +446,7 @@ ShapeExport& ShapeExport::WriteCustomShape( Reference< XShape > xShape )
     else if( bHasHandles )
         bCustGeom = true;
 
-    if( bCustGeom )
+    if (bCustGeom && pShape)
     {
         basegfx::B2DPolyPolygon aB2DPolyPolygon = pShape->GetLineGeometry(true);
         tools::PolyPolygon aPolyPolygon;
