@@ -510,6 +510,12 @@ public:
 
 FormulaGroupInterpreter *FormulaGroupInterpreter::msInstance = NULL;
 
+void FormulaGroupInterpreter::MergeCalcConfig(const ScDocument& rDoc)
+{
+    maCalcConfig = ScInterpreter::GetGlobalConfig();
+    maCalcConfig.MergeDocumentSpecific(rDoc.GetCalcConfig());
+}
+
 /// load and/or configure the correct formula group interpreter
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 {
