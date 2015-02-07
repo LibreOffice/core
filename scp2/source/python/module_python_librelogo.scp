@@ -18,7 +18,6 @@ Module gid_Module_Optional_Pyuno_LibreLogo
     Files = (gid_File_LibreLogo,
              gid_File_LibreLogoProperties,
              gid_File_Share_Registry_LibreLogo_Xcd);
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End

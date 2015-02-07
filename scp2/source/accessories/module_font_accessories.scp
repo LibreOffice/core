@@ -15,7 +15,6 @@ Module gid_Module_Optional_Accessories_Fonts
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_FONTS);
     ParentID = gid_Module_Optional_Accessories;
     Files = ( gid_File_Fnt_Extra );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End

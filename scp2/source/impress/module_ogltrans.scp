@@ -24,7 +24,6 @@ Module gid_Module_Optional_OGLTrans
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Optional;
     Files = ( auto_ogltrans_ALL, gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml, gid_File_Share_Registry_Ogltrans_Xcd );
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
 End

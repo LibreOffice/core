@@ -23,7 +23,6 @@ Module gid_Module_Optional_Extensions
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
     ParentID = gid_Module_Optional;
     Files = ( );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -41,7 +40,6 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_MediaWiki );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -58,7 +56,6 @@ Module gid_Module_Optional_Extensions_NumberText
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT);
     ParentID = gid_Module_Optional_Extensions;
     Files = (auto_extensions_numbertext_ALL);
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -73,7 +70,6 @@ Module gid_Module_Optional_Extensions_HunArt
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_HunArt );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -88,7 +84,6 @@ Module gid_Module_Optional_Extensions_Typo
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Typo );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -105,7 +100,6 @@ Module gid_Module_Optional_Extensions_CT2N
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_CT2N);
     ParentID = gid_Module_Optional_Extensions;
     Files = (auto_extensions_ct2n_ALL);
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -120,7 +114,6 @@ Module gid_Module_Optional_Extensions_Watch_Window
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Watch_Window );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -135,7 +128,6 @@ Module gid_Module_Optional_Extensions_Diagram
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Diagram );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -150,7 +142,6 @@ Module gid_Module_Optional_Extensions_Validator
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Validator );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -165,7 +156,6 @@ Module gid_Module_Optional_Extensions_Barcode
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Barcode );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -180,7 +170,6 @@ Module gid_Module_Optional_Extensions_Google_Docs
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_Google_Docs );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -195,7 +184,6 @@ Module gid_Module_Optional_Extensions_NLPSolver
     ParentID = gid_Module_Optional_Extensions;
     Files = (
         gid_File_Oxt_NLPSolver );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -210,7 +198,6 @@ Module gid_Module_Optional_Extensions_LanguageTool
  ParentID = gid_Module_Optional_Extensions;
  Files = (
  gid_File_Oxt_LanguageTool );
- Minimal = NO;
  Default = YES;
  Styles = ( );
 End
@@ -225,7 +212,6 @@ Module gid_Module_Optional_Extensions_MySQLConnector
  ParentID = gid_Module_Optional_Extensions;
  Files = (
  gid_File_Oxt_MySQLConnector );
- Minimal = NO;
  Default = YES;
  Styles = ( );
 End
@@ -237,7 +223,6 @@ End
 Module gid_Module_Optional_Extensions_Sun_Template_Pack
     ParentID = gid_Module_Optional_Extensions;
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SUN_TEMPLATE_PACK);
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -255,7 +240,6 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_BS
     ParentID = gid_Module_Optional_Extensions;
     Files = (auto_extensions_bsh_ALL,
         gid_File_Rdb_Scriptproviderforbeanshell );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -274,7 +258,6 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_JS
     ParentID = gid_Module_Optional_Extensions;
     Files = (auto_extensions_rhino_ALL,
         gid_File_Rdb_Scriptproviderforjavascript );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End

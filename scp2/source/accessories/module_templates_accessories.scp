@@ -13,7 +13,6 @@
 Module gid_Module_Optional_Accessories_Templates
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_TEMPLATES);
     ParentID = gid_Module_Optional_Accessories;
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -48,7 +47,6 @@ Module gid_Module_Optional_Accessories_Tem_Template
         gid_File_Extra_Templates_NONFREE_Officorr_Accessories,
         gid_File_Extra_Templates_NONFREE_Offimisc_Accessories,
         gid_File_Extra_Templates_NONFREE_Personal_Accessories );
-    Minimal = NO;
     Default = YES;
 End
 
@@ -69,7 +67,6 @@ Module gid_Module_Optional_Accessories_Tem_Common
         gid_File_Extra_Templates_Common_Officorr,
         gid_File_Extra_Templates_Common_Offimisc,
         gid_File_Extra_Templates_Common_Personal );
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End

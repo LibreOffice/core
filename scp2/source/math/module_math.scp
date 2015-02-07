@@ -33,7 +33,6 @@ Module gid_Module_Prg_Math_Bin
     MOD_NAME_DESC ( MODULE_PRG_MATH_BIN );
     ParentID = gid_Module_Prg_Math;
     Sortkey = "100";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_math_ALL,
@@ -49,7 +48,6 @@ Module gid_Module_Brand_Prg_Math
     ParentID = gid_Module_Prg_Math;
     Sortkey = "100";
     InstallOrder = "1040";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_math_brand_ALL);

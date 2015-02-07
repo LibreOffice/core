@@ -16,7 +16,6 @@ Module gid_Module_Reportbuilder
     MOD_NAME_DESC(MODULE_OPTIONAL_REPORTDESIGN); 
     ParentID = gid_Module_Optional;
     Styles = ( );
-    Minimal = NO;
     Default = YES; 
     Dirs = (gid_Dir_Share_Reportbuilder);
     Files = (auto_reportbuilder_ALL,

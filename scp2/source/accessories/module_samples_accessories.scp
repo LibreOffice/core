@@ -13,7 +13,6 @@
 Module gid_Module_Optional_Accessories_Advertisement
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_ADVERTISEMENT);
     ParentID = gid_Module_Optional_Accessories;
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -21,7 +20,6 @@ End
 Module gid_Module_Optional_Accessories_Documentations
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_DOCUMENTATIONS);
     ParentID = gid_Module_Optional_Accessories;
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -29,7 +27,6 @@ End
 Module gid_Module_Optional_Accessories_Samples
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_SAMPLES);
     ParentID = gid_Module_Optional_Accessories;
-    Minimal = NO;
     Default = YES;
     Styles = ( );
 End
@@ -44,7 +41,6 @@ Module gid_Module_Optional_Accessories_Adv_Template
     Files = (
         gid_File_Extra_Samples_Advertisement_Accessories,
         gid_File_Extra_Samples_NONFREE_Advertisement_Accessories );
-    Minimal = NO;
     Default = YES;
 End
 
@@ -56,7 +52,6 @@ Module gid_Module_Optional_Accessories_Doc_Template
     Files = (
         gid_File_Extra_Samples_Documentations_Accessories,
         gid_File_Extra_Samples_NONFREE_Documentations_Accessories );
-    Minimal = YES;
     Default = YES;
 End
 
@@ -68,7 +63,6 @@ Module gid_Module_Optional_Accessories_Sam_Template
     Files = (
         gid_File_Extra_Samples_Accessories,
         gid_File_Extra_Samples_NONFREE_Accessories  );
-    Minimal = NO;
     Default = YES;
 End
 

@@ -32,7 +32,6 @@ Module gid_Module_Prg_Draw_Bin
     MOD_NAME_DESC ( MODULE_PRG_DRAW_BIN );
     ParentID = gid_Module_Prg_Draw;
     Sortkey = "100";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Extra_Urldesktop_Draw,gid_File_Extra_Urlnew_Draw,gid_File_Extra_Urlstart_Draw,gid_File_Extra_Urltasks_Draw,
@@ -47,7 +46,6 @@ Module gid_Module_Brand_Prg_Draw
     ParentID = gid_Module_Prg_Draw;
     Sortkey = "100";
     InstallOrder = "1040";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_draw_brand_ALL);
@@ -66,7 +64,6 @@ Module gid_Module_Prg_Draw_MSO_Reg
     Name = "gid_Module_Prg_Draw_MSO_Reg";
     Description = "gid_Module_Prg_Draw_MSO_Reg";
     Styles = (HIDDEN_ROOT);
-    Minimal = YES;
     Default = YES;
 End
 
@@ -75,7 +72,6 @@ Module gid_Module_Prg_Draw_Other_Reg
     Name = "gid_Module_Prg_Draw_Other_Reg";
     Description = "gid_Module_Prg_Draw_Other_Reg";
     Styles = (HIDDEN_ROOT);
-    Minimal = YES;
     Default = YES;
 End
 

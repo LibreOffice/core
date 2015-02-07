@@ -21,7 +21,6 @@ Module gid_Module_Optional_PostgresqlSdbc
              gid_File_PostgresqlSdbc_Ini,
              gid_File_PostgresqlSdbc_Rdb,
              gid_File_PostgresqlSdbc_Xcd);
-    Minimal = NO;
     Default = YES;
     Styles = ();
 End

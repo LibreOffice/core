@@ -15,7 +15,6 @@ Module gid_Module_Optional_Accessories
     Files = (
   ); 
     Sortkey = "300";
-    Minimal = NO;
     Default = YES;
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES);
 End

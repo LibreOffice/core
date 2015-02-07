@@ -33,7 +33,6 @@ Module gid_Module_Prg_Impress_Bin
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS_BIN );
     ParentID = gid_Module_Prg_Impress;
     Sortkey = "100";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_impress_ALL,
@@ -50,7 +49,6 @@ Module gid_Module_Brand_Prg_Impress
     ParentID = gid_Module_Prg_Impress;
     Sortkey = "100";
     InstallOrder = "1040";
-    Minimal = YES;
     Default = YES;
     Styles = (HIDDEN_ROOT);
     Files = (auto_impress_brand_ALL);
@@ -69,7 +67,6 @@ Module gid_Module_Prg_Impress_MSO_Reg
     Name = "gid_Module_Prg_Impress_MSO_Reg";
     Description = "gid_Module_Prg_Impress_MSO_Reg";
     Styles = (HIDDEN_ROOT);
-    Minimal = YES;
     Default = YES;
 End
 
@@ -78,7 +75,6 @@ Module gid_Module_Prg_Impress_Other_Reg
     Name = "gid_Module_Prg_Impress_Other_Reg";
     Description = "gid_Module_Prg_Impress_Other_Reg";
     Styles = (HIDDEN_ROOT);
-    Minimal = YES;
     Default = YES;
 End
 
