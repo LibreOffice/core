@@ -1286,20 +1286,20 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                 const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
                 sal_uInt16 n = nMyPos;
                 OSL_ENSURE( n != USHRT_MAX, "How strange. We don't exist!" );
-                for( bool bBreak = false; !bBreak && n > 0; )
+                while ( n > 0 )
                 {
                     --n;
-                    bBreak = true;
                     if( rTbl[ n ]->GetBound(true) == *aPam.GetPoint() )
                     {
                         rTbl[ n ]->GetBound(true) = *pEnd;
-                        bBreak = false;
+                        continue;
                     }
                     if( rTbl[ n ]->GetBound(false) == *aPam.GetPoint() )
                     {
                         rTbl[ n ]->GetBound(false) = *pEnd;
-                        bBreak = false;
+                        continue;
                     }
+                    break;
                 }
 
                 SwPosition aEnd( *pEnd );
@@ -1333,41 +1333,39 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
         const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
         std::vector<SwPosition*> aBeforeArr, aBehindArr;
         OSL_ENSURE( this, "this is not in the array?" );
-        bool bBreak = false;
-        SwRedlineTbl::size_type n;
 
-        for( n = nMyPos+1; !bBreak && n < rTbl.size(); ++n )
+        for( SwRedlineTbl::size_type n = nMyPos+1; n < rTbl.size(); ++n )
         {
-            bBreak = true;
             if( rTbl[ n ]->GetBound(true) == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBehindArr.push_back(&pRedl->GetBound(true));
-                bBreak = false;
+                continue;
             }
             if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBehindArr.push_back(&pRedl->GetBound(false));
-                bBreak = false;
+                continue;
             }
+            break;
         }
-        for( bBreak = false, n = nMyPos; !bBreak && n ; )
+        for( SwRedlineTbl::size_type n = nMyPos; n ; )
         {
             --n;
-            bBreak = true;
             if( rTbl[ n ]->GetBound(true) == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBeforeArr.push_back(&pRedl->GetBound(true));
-                bBreak = false;
+                continue;
             }
             if( rTbl[ n ]->GetBound(false) == *GetPoint() )
             {
                 SwRangeRedline* pRedl = rTbl[n];
                 aBeforeArr.push_back(&pRedl->GetBound(false));
-                bBreak = false;
+                continue;
             }
+            break;
         }
 
         const SwNode* pKeptCntntSectNode( &pCntntSect->GetNode() ); // #i95711#
@@ -1436,10 +1434,10 @@ void SwRangeRedline::MoveFromSection(size_t nMyPos)
 
         // adjustment of redline table positions must take start and
         // end into account, not point and mark.
-        for( n = 0; n < aBeforeArr.size(); ++n )
-            *aBeforeArr[ n ] = *Start();
-        for( n = 0; n < aBehindArr.size(); ++n )
-            *aBehindArr[ n ] = *End();
+        for( auto& pItem : aBeforeArr )
+            *pItem = *Start();
+        for( auto& pItem : aBehindArr )
+            *pItem = *End();
     }
     else
         InvalidateRange();
