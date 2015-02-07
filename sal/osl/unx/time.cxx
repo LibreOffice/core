@@ -25,7 +25,6 @@
 #include <osl/diagnose.h>
 #include <osl/time.h>
 #include <time.h>
-#include <assert.h>
 #include <unistd.h>
 
 #ifdef __MACH__
@@ -269,14 +268,11 @@ void sal_initGlobalTimer(void)
   clock_get_time(cclock, &startTime);
   mach_port_deallocate(mach_task_self(), cclock);
 #else /* ! (MACOSX || IOS) */
-  int res;
 #if defined(USE_CLOCK_GETTIME)
-  res = clock_gettime(CLOCK_REALTIME, &startTime);
+  clock_gettime(CLOCK_REALTIME, &startTime);
 #else /* Ndef USE_CLOCK_GETTIME */
-  res = gettimeofday( &startTime, NULL );
+  gettimeofday( &startTime, NULL );
 #endif /* NDef USE_CLOCK_GETTIME */
-  assert(res == 0);
-  (void) res;
 #endif /* ! (MACOSX || IOS) */
 }
 
@@ -296,17 +292,12 @@ sal_uInt32 SAL_CALL osl_getGlobalTimer()
     nSeconds = ( nSeconds * 1000 ) + (long) (( currentTime.tv_nsec - startTime.tv_nsec) / 1000000 );
 #else
     osl_time_t currentTime;
-    int res;
 
 #if defined(USE_CLOCK_GETTIME)
-    res = clock_gettime(CLOCK_REALTIME, &currentTime);
+    clock_gettime(CLOCK_REALTIME, &currentTime);
 #else
-    res = gettimeofday( &currentTime, NULL );
+    gettimeofday( &currentTime, NULL );
 #endif
-    assert(res == 0);
-
-    if (res != 0)
-        return 0;
 
     nSeconds = (sal_uInt32)( currentTime.tv_sec - startTime.tv_sec );
 #if defined(USE_CLOCK_GETTIME)
