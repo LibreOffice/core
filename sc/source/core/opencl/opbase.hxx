@@ -21,6 +21,8 @@
 #include <set>
 #define ISNAN
 
+#include "calcconfig.hxx"
+
 namespace sc { namespace opencl {
 
 class FormulaTreeNode;
@@ -86,7 +88,7 @@ private:
 class DynamicKernelArgument : boost::noncopyable
 {
 public:
-    DynamicKernelArgument( const std::string& s, FormulaTreeNodeRef ft );
+    DynamicKernelArgument( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft );
     virtual ~DynamicKernelArgument() {}
 
     /// Generate declaration
@@ -125,6 +127,7 @@ public:
     virtual bool NeedParallelReduction() const;
 
 protected:
+    const ScCalcConfig& mCalcConfig;
     std::string mSymName;
     FormulaTreeNodeRef mFormulaTree;
 };
@@ -137,7 +140,7 @@ protected:
 class VectorRef : public DynamicKernelArgument
 {
 public:
-    VectorRef( const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
+    VectorRef( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
     virtual ~VectorRef();
 
     /// Generate declaration
