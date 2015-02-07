@@ -118,25 +118,20 @@ public:
 };
 
 
-class ScVbaControlFactory
+namespace ScVbaControlFactory
 {
-public:
-    static css::uno::Reference< ov::msforms::XControl > createShapeControl(
+    css::uno::Reference< ov::msforms::XControl > createShapeControl(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::drawing::XControlShape >& xControlShape,
         const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 
-    static css::uno::Reference< ov::msforms::XControl > createUserformControl(
+    css::uno::Reference< ov::msforms::XControl > createUserformControl(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xControl,
         const css::uno::Reference< css::awt::XControl >& xDialog,
         const css::uno::Reference< css::frame::XModel >& xModel,
         double fOffsetX, double fOffsetY ) throw (css::uno::RuntimeException);
-
-private:
-    ScVbaControlFactory();
-    ~ScVbaControlFactory();
-};
+}
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX
 
