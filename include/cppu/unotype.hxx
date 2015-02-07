@@ -268,9 +268,9 @@ public:
     }
 
 private:
-    UnoType(UnoType &); // not defined
-    ~UnoType(); // not defined
-    void operator =(UnoType &); // not defined
+    UnoType(UnoType &) SAL_DELETED_FUNCTION;
+    ~UnoType() SAL_DELETED_FUNCTION;
+    void operator =(UnoType &) SAL_DELETED_FUNCTION;
 };
 
 /**

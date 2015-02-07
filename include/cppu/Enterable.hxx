@@ -59,8 +59,8 @@ public:
     inline int  isValid (rtl::OUString * pReason) {return m_isValid(this, &pReason->pData);}
 
 private:
-    Enterable(Enterable const &);
-    Enterable & operator = (Enterable const &);
+    Enterable(Enterable const &) SAL_DELETED_FUNCTION;
+    Enterable & operator = (Enterable const &) SAL_DELETED_FUNCTION;
 };
 
 extern "C" inline void Enterable_call_enter (void * context) { ((Enterable *)context)->v_enter(); }
