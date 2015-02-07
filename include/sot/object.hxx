@@ -127,9 +127,8 @@ public:
     bool                IsInClose() const { return bInClose; }
 
 private:
-    // copying and assigning this object type is not allowed
-    SOT_DLLPRIVATE SotObject & operator = ( const SotObject & );
-    SOT_DLLPRIVATE SotObject( const SotObject & );
+    SotObject & operator = ( const SotObject & ) SAL_DELETED_FUNCTION;
+    SotObject( const SotObject & ) SAL_DELETED_FUNCTION;
 };
 
 //==================class SotObjectRef======================================

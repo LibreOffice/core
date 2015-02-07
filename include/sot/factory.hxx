@@ -68,8 +68,8 @@ public:
                         }
 
 private:
-                        SOT_DLLPRIVATE SotFactory( const SotFactory & );
-    SOT_DLLPRIVATE SotFactory &        operator = ( const SotFactory & );
+                        SotFactory( const SotFactory & ) SAL_DELETED_FUNCTION;
+    SotFactory &        operator = ( const SotFactory & ) SAL_DELETED_FUNCTION;
 };
 
 #endif // _FACTORY_HXX
