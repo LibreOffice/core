@@ -27,11 +27,14 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
     scp2/source/impress/file_impress \
 ))
 
-$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/impress,\
-    scp2/source/impress/module_impress \
+$(eval $(call gb_InstallModule_add_scpfiles,scp2/impress,\
 	$(if $(filter TRUE,$(ENABLE_OPENGL)),\
 		scp2/source/impress/module_ogltrans \
 	) \
+))
+
+$(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/impress,\
+    scp2/source/impress/module_impress \
 ))
 
 # vim: set shiftwidth=4 tabstop=4 noexpandtab:
