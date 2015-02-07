@@ -327,7 +327,6 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
         return NULL;
     }
 
-
     try
     {
         uno::Reference<lang::XComponent> xComponent;
@@ -339,6 +338,7 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
         {
             pLib->maLastExceptionMsg = "loadComponentFromURL returned an empty reference";
             SAL_INFO("lok", "Document can't be loaded - " << pLib->maLastExceptionMsg);
+            return NULL;
         }
 
         return new LibLODocument_Impl(xComponent);
