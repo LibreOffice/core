@@ -99,11 +99,27 @@ bool ScCalcConfig::operator!= (const ScCalcConfig& r) const
     return !operator==(r);
 }
 
+namespace {
+
+std::string StringConversionToString(ScCalcConfig::StringConversion eConv)
+{
+    switch (eConv)
+    {
+    case ScCalcConfig::STRING_CONVERSION_AS_ERROR: return "ERROR";
+    case ScCalcConfig::STRING_CONVERSION_AS_ZERO: return "ZERO";
+    case ScCalcConfig::STRING_CONVERSION_UNAMBIGUOUS: return "UNAMBIGUOUS";
+    case ScCalcConfig::STRING_CONVERSION_LOCALE_DEPENDENT: return "LOCALE";
+    default: return std::to_string((int) eConv);
+    }
+}
+
+} // anonymous namespace
+
 std::ostream& operator<<(std::ostream& rStream, const ScCalcConfig& rConfig)
 {
     rStream << "{"
         "StringRefAddressSyntax=" << rConfig.meStringRefAddressSyntax << ","
-        "StringConversion=" << rConfig.meStringConversion << ","
+        "StringConversion=" << StringConversionToString(rConfig.meStringConversion) << ","
         "EmptyStringAsZero=" << (rConfig.mbEmptyStringAsZero?"Y":"N") << ","
         "OpenCLSubsetOnly=" << (rConfig.mbOpenCLSubsetOnly?"Y":"N") << ","
         "OpenCLAutoSelect=" << (rConfig.mbOpenCLAutoSelect?"Y":"N") << ","
