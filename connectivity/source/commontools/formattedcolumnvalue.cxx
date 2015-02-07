@@ -242,19 +242,6 @@ namespace dbtools
         clear();
     }
 
-
-    sal_Int32 FormattedColumnValue::getFormatKey() const
-    {
-        return m_pData->m_nFormatKey;
-    }
-
-
-    sal_Int32 FormattedColumnValue::getFieldType() const
-    {
-        return m_pData->m_nFieldType;
-    }
-
-
     sal_Int16 FormattedColumnValue::getKeyType() const
     {
         return m_pData->m_nKeyType;
@@ -265,13 +252,6 @@ namespace dbtools
     {
         return m_pData->m_xColumn;
     }
-
-
-    const Reference< XColumnUpdate >& FormattedColumnValue::getColumnUpdate() const
-    {
-        return m_pData->m_xColumnUpdate;
-    }
-
 
     bool FormattedColumnValue::setFormattedValue( const OUString& _rFormattedStringValue ) const
     {
