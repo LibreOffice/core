@@ -57,8 +57,8 @@ class JNI_context
     JNIEnv *         m_env;
     jobject          m_class_loader;
 
-    JNI_context( JNI_context & ); // not impl
-    void operator = ( JNI_context ); // not impl
+    JNI_context( JNI_context & ) SAL_DELETED_FUNCTION;
+    void operator = ( JNI_context ) SAL_DELETED_FUNCTION;
 
     void java_exc_occurred() const;
 public:
@@ -120,8 +120,8 @@ class JNI_guarded_context
     : private ::jvmaccess::VirtualMachine::AttachGuard,
       public JNI_context
 {
-    JNI_guarded_context( JNI_guarded_context & ); // not impl
-    void operator = ( JNI_guarded_context ); // not impl
+    JNI_guarded_context( JNI_guarded_context & ) SAL_DELETED_FUNCTION;
+    void operator = ( JNI_guarded_context ) SAL_DELETED_FUNCTION;
 
 public:
     inline explicit JNI_guarded_context(
@@ -236,8 +236,8 @@ class TypeDescr
 {
     typelib_TypeDescription * m_td;
 
-    TypeDescr( TypeDescr & ); // not impl
-    void operator = ( TypeDescr ); // not impl
+    TypeDescr( TypeDescr & ) SAL_DELETED_FUNCTION;
+    void operator = ( TypeDescr ) SAL_DELETED_FUNCTION;
 
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );

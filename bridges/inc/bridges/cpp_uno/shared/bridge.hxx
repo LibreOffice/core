@@ -77,8 +77,8 @@ public:
     uno_Mapping * getUno2Cpp() { return &aUno2Cpp; }
 
 private:
-    Bridge(Bridge &); // not implemented
-    void operator =(const Bridge&); // not implemented
+    Bridge(Bridge &) SAL_DELETED_FUNCTION;
+    void operator =(const Bridge&) SAL_DELETED_FUNCTION;
 
     Bridge(
         uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,
