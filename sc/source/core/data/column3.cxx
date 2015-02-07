@@ -1672,6 +1672,33 @@ bool ScColumn::ParseString(
         {
             if (aParam.mbDetectNumberFormat)
             {
+#ifdef ENABLE_CALC_UNITVERIFICATION
+                OUString sValue, sUnit;
+                boost::shared_ptr< sc::units::Units > pUnits = sc::units::Units::GetUnits();
+                if (pUnits->splitUnitsFromInputString(rString, sValue, sUnit)) {
+                    // TODO we should check whether a suitable format already exists.
+                    // We also want to ideally preserve whatever format would be used
+                    // for the actual numbers (e.g. 1E4 is preserved as 1E4 unless we
+                    // now set the number format as #"foo" in which case the raw number is
+                    // displayed i.e. 1000foo)
+
+                    // I.e. it may be more sensible to extract the unit here, continue processing as normal
+                    // and then at the end add the unit to the format. In fact we should probably ALWAYS
+                    // remove the unit whenever doing any format processing (i.e. everywhere), and reappend it after?
+                    // But in that case it would make sense to actually store units independently of number format.
+
+                    // (This is all just a dirty hack for now...)
+                    OUString sNewFormat = "#\"" + sUnit + "\"";
+                    sal_uInt32 nFormatKey;
+                    short nType = css::util::NumberFormat::DEFINED;
+                    sal_Int32 nErrorPosition; // Unused, because we should be creating working number formats.
+
+                    aParam.mpNumFormatter->PutEntry(sNewFormat, nErrorPosition, nType, nFormatKey);
+                    SetNumberFormat(nRow, nFormatKey);
+
+                    nIndex = nFormatKey;
+                }
+#endif
                 if (!aParam.mpNumFormatter->IsNumberFormat(rString, nIndex, nVal))
                     break;
 
