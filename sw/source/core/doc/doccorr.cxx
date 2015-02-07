@@ -180,7 +180,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     // fix redlines
     {
         SwRedlineTbl& rTbl = getIDocumentRedlineAccess().GetRedlineTbl();
-        for (sal_uInt16 n = 0; n < rTbl.size(); )
+        for (SwRedlineTbl::size_type n = 0; n < rTbl.size(); )
         {
             // is on position ??
             SwRangeRedline *const pRedline( rTbl[ n ] );
@@ -306,7 +306,7 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     { // fix the Redlines
         SwRedlineTbl& rTbl = getIDocumentRedlineAccess().GetRedlineTbl();
         SwPosition aNewPos(rNewPos);
-        for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
+        for( SwRedlineTbl::size_type n = 0; n < rTbl.size(); ++n )
         {
             // lies on the position ??
             lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );

@@ -415,7 +415,7 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
         // If the numbering scheme has changed we could have QuoVadis/ErgoSum texts
         // that refer to a changed page, so we invalidate foot notes.
         SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
+        for( SwFtnIdxs::size_type nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -582,7 +582,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         }
     }
 
-    for ( sal_uInt16 j = 0; j < maPageDescs.size(); ++j )
+    for ( SwPageDescs::size_type j = 0; j < maPageDescs.size(); ++j )
     {
         if ( maPageDescs[j].GetFollow() == pDel )
         {
@@ -689,7 +689,7 @@ SwPageDesc* SwDoc::FindPageDesc(const OUString& rName, sal_uInt16* pPos)
     SwPageDesc* pRet = NULL;
     if( pPos ) *pPos = USHRT_MAX;
 
-    for( sal_uInt16 n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
+    for( SwPageDescs::size_type n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
     {
         if( maPageDescs[ n ].HasName( rName ) )
         {
@@ -750,7 +750,7 @@ void SwDoc::PrtOLENotify( bool bAll )
                              0, pNodes->size(), GetDocShell());
             getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
 
-            for( sal_uInt16 i = 0; i < pNodes->size(); ++i )
+            for( SwOLENodes::size_type i = 0; i < pNodes->size(); ++i )
             {
                 ::SetProgressState( i, GetDocShell() );
 
@@ -770,7 +770,7 @@ void SwDoc::PrtOLENotify( bool bAll )
                 }
 
                 bool bFound = false;
-                for ( sal_uInt16 j = 0;
+                for ( std::vector<SvGlobalName*>::size_type j = 0;
                       j < pGlobalOLEExcludeList->size() && !bFound;
                       ++j )
                 {
@@ -808,7 +808,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
             getIDocumentLayoutAccess().GetCurrentLayout()->StartAllAction();
             SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
 
-            for( sal_uInt16 i = 0; i < pNodes->size(); ++i )
+            for( SwOLENodes::size_type i = 0; i < pNodes->size(); ++i )
             {
                 ::SetProgressState( i, GetDocShell() );
 
