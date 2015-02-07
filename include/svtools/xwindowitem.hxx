@@ -35,8 +35,7 @@ class SVT_DLLPUBLIC XWindowItem : public SfxPoolItem
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xWin;
 
-    // disallow use assignment operator
-    XWindowItem & operator = ( const XWindowItem & );
+    XWindowItem & operator = ( const XWindowItem & ) SAL_DELETED_FUNCTION;
 
 public:
     TYPEINFO_OVERRIDE();

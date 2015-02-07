@@ -82,16 +82,6 @@ AcceleratorExecute::AcceleratorExecute()
 {
 }
 
-
-AcceleratorExecute::AcceleratorExecute(const AcceleratorExecute&)
-    : TMutexInit      (                                                     )
-    , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
-{
-    // copy construction sint supported in real ...
-    // but we need this ctor to init our async callback ...
-}
-
-
 AcceleratorExecute::~AcceleratorExecute()
 {
     // does nothing real

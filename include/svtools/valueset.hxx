@@ -270,9 +270,8 @@ private:
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
     DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
 
-    // Forbidden and not implemented.
-    ValueSet (const ValueSet &);
-    ValueSet & operator= (const ValueSet &);
+    ValueSet (const ValueSet &) SAL_DELETED_FUNCTION;
+    ValueSet & operator= (const ValueSet &) SAL_DELETED_FUNCTION;
 
 protected:
 

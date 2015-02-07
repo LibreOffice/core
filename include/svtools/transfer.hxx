@@ -406,10 +406,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
 
-                        // not available
-                        DragSourceHelper();
-    DragSourceHelper&   operator=( const DragSourceHelper& rDragSourceHelper );
-    bool                operator==( const DragSourceHelper& rDragSourceHelper ) const;
+    DragSourceHelper&   operator=( const DragSourceHelper& rDragSourceHelper ) SAL_DELETED_FUNCTION;
+    bool                operator==( const DragSourceHelper& rDragSourceHelper ) const SAL_DELETED_FUNCTION;
 
 public:
 
@@ -458,10 +456,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
     DataFlavorExVector*                                                                             mpFormats;
 
-                        // not available
-                        DropTargetHelper();
-    DropTargetHelper&   operator=( const DropTargetHelper& rDropTargetHelper );
-    bool                operator==( const DropTargetHelper& rDropTargetHelper ) const;
+                        DropTargetHelper() SAL_DELETED_FUNCTION;
+    DropTargetHelper&   operator=( const DropTargetHelper& rDropTargetHelper ) SAL_DELETED_FUNCTION;
+    bool                operator==( const DropTargetHelper& rDropTargetHelper ) const SAL_DELETED_FUNCTION;
 
     void                ImplConstruct();
 

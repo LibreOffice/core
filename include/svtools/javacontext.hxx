@@ -63,9 +63,8 @@ namespace svt
             throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        SVT_DLLPRIVATE JavaContext(); //not implemented
-        SVT_DLLPRIVATE JavaContext(JavaContext&); //not implemented
-        SVT_DLLPRIVATE JavaContext& operator = (JavaContext&); //not implemented
+        JavaContext(JavaContext&) SAL_DELETED_FUNCTION;
+        JavaContext& operator = (JavaContext&) SAL_DELETED_FUNCTION;
 
         oslInterlockedCount m_aRefCount;
 

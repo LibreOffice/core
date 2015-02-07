@@ -137,7 +137,6 @@ private:
     OUString                maMapBoth;
     OUString                maMapPrinterOnly;
     OUString                maMapScreenOnly;
-    OUString                maMapSizeNotAvailable;
     OUString                maMapStyleNotAvailable;
     mutable OUString        maMapNotAvailable;
     OUString                maLight;
@@ -197,8 +196,8 @@ public:
     static const sal_IntPtr* GetStdSizeAry();
 
 private:
-                            FontList( const FontList& );
-    FontList&               operator =( const FontList& );
+                            FontList( const FontList& ) SAL_DELETED_FUNCTION;
+    FontList&               operator =( const FontList& ) SAL_DELETED_FUNCTION;
 };
 
 class SVT_DLLPUBLIC FontSizeNames

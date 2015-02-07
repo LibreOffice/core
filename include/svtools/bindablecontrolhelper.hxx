@@ -34,14 +34,10 @@ namespace svt
     /** helper class for obtaining streams (which also can be used with the ImageProducer)
         from a resource
     */
-    class BindableControlHelper
+    namespace BindableControlHelper
     {
-    private:
-        BindableControlHelper();    // never implemented
-
-    public:
-        SVT_DLLPUBLIC static  void ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
-    };
+        SVT_DLLPUBLIC void ApplyListSourceAndBindableData( const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel, const com::sun::star::uno::Reference< com::sun::star::uno::XInterface >& rObj, const OUString& rsCtrlSource, const OUString& rsRowSource, sal_uInt16 nRefTab = 0 );
+    }
 
 
 } // namespace svt

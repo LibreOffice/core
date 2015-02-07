@@ -198,9 +198,8 @@ public:
     }
 
 private:
-    // declared as private because some compilers would generate the default functions
-                    ColorListBox( const ColorListBox& );
-    ColorListBox&   operator =( const ColorListBox& );
+                    ColorListBox( const ColorListBox& ) SAL_DELETED_FUNCTION;
+    ColorListBox&   operator =( const ColorListBox& ) SAL_DELETED_FUNCTION;
 
     void            SetEntryData( sal_Int32  nPos, void* pNewData );
     void*           GetEntryData( sal_Int32  nPos ) const;
@@ -359,9 +358,8 @@ protected:
     Color   GetColorDist( sal_Int32  nPos = 0 );
 
 private:
-    // declared as private because some compilers would generate the default methods
-                    LineListBox( const LineListBox& );
-    LineListBox&    operator =( const LineListBox& );
+                    LineListBox( const LineListBox& ) SAL_DELETED_FUNCTION;
+    LineListBox&    operator =( const LineListBox& ) SAL_DELETED_FUNCTION;
     void            SetEntryData( sal_Int32  nPos, void* pNewData );
     void*           GetEntryData( sal_Int32  nPos ) const;
 };
@@ -418,9 +416,8 @@ public:
 private:
     void            InitFontMRUEntriesFile();
 
-    // declared as private because some compilers would generate the default functions
-                    FontNameBox( const FontNameBox& );
-    FontNameBox&    operator =( const FontNameBox& );
+                    FontNameBox( const FontNameBox& ) SAL_DELETED_FUNCTION;
+    FontNameBox&    operator =( const FontNameBox& ) SAL_DELETED_FUNCTION;
 };
 
 class SVT_DLLPUBLIC FontStyleBox : public ComboBox
@@ -444,9 +441,8 @@ public:
     void            Fill( const OUString& rName, const FontList* pList );
 
 private:
-    // declared as private because some compilers would generate the default functions
-                    FontStyleBox( const FontStyleBox& );
-    FontStyleBox&   operator =( const FontStyleBox& );
+                    FontStyleBox( const FontStyleBox& ) SAL_DELETED_FUNCTION;
+    FontStyleBox&   operator =( const FontStyleBox& ) SAL_DELETED_FUNCTION;
 };
 
 inline void FontStyleBox::SetText( const OUString& rText )
@@ -502,9 +498,8 @@ public:
     virtual sal_Int64   GetValue() const SAL_OVERRIDE;
 
 private:
-    // declared as private because some compilers would generate the default functions
-                    FontSizeBox( const FontSizeBox& );
-    FontSizeBox&    operator =( const FontSizeBox& );
+                    FontSizeBox( const FontSizeBox& ) SAL_DELETED_FUNCTION;
+    FontSizeBox&    operator =( const FontSizeBox& ) SAL_DELETED_FUNCTION;
 };
 
 #endif // INCLUDED_SVTOOLS_CTRLBOX_HXX

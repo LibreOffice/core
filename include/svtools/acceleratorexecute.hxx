@@ -222,8 +222,8 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
          */
         SVT_DLLPRIVATE AcceleratorExecute();
 
-        AcceleratorExecute(const AcceleratorExecute& rCopy);
-        void operator=(const AcceleratorExecute&) {};
+        AcceleratorExecute(const AcceleratorExecute& rCopy) SAL_DELETED_FUNCTION;
+        void operator=(const AcceleratorExecute&)  SAL_DELETED_FUNCTION;
 
         /** TODO document me */
         SVT_DLLPRIVATE OUString impl_ts_findCommand(const css::awt::KeyEvent& aKey);

@@ -37,16 +37,12 @@ namespace svt
     /** helper class for obtaining streams (which also can be used with the ImageProducer)
         from a resource
     */
-    class GraphicAccess
+    namespace GraphicAccess
     {
-    private:
-        GraphicAccess();    // never implemented
-
-    public:
         /** determines whether the given URL denotes an image within a resource
          ( or an image specified by a vnd.sun.star.GraphicObject scheme URL )
         */
-        SVT_DLLPUBLIC static  bool        isSupportedURL( const OUString& _rURL );
+        SVT_DLLPUBLIC bool        isSupportedURL( const OUString& _rURL );
 
         /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
             an SvStream for this image.
@@ -57,7 +53,7 @@ namespace svt
             the image must be copied), so you are strongly encouraged to only use it
             when you know that the image is small enough.
         */
-        SVT_DLLPUBLIC static  SvStream*   getImageStream(
+        SVT_DLLPUBLIC SvStream*   getImageStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const OUString& _rImageResourceURL
                 );
@@ -65,12 +61,12 @@ namespace svt
         /** for a given URL of an image within a resource ( or an image specified by a vnd.sun.star.GraphicObject scheme URL ), this method retrieves
             an com::sun::star::io::XInputStream for this image.
         */
-        SVT_DLLPUBLIC static  ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+        SVT_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
                 getImageXStream(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                     const OUString& _rImageResourceURL
                 );
-    };
+    }
 
 
 } // namespace svt

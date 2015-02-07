@@ -204,9 +204,8 @@ namespace svt { namespace table
         DECL_DLLPRIVATE_LINK( ImplSelectHdl, void* );
 
     private:
-        TableControl();                                 // never implemented
-        TableControl( const TableControl& );            // never implemented
-        TableControl& operator=( const TableControl& ); // never implemented
+        TableControl( const TableControl& ) SAL_DELETED_FUNCTION;
+        TableControl& operator=( const TableControl& ) SAL_DELETED_FUNCTION;
     };
 
 

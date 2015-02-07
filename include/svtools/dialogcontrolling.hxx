@@ -120,8 +120,8 @@ namespace svt
         DECL_LINK( OnWindowEvent, const VclWindowEvent* );
 
     private:
-        DialogController( const DialogController& );            // never implemented
-        DialogController& operator=( const DialogController& ); // never implemented
+        DialogController( const DialogController& ) SAL_DELETED_FUNCTION;
+        DialogController& operator=( const DialogController& ) SAL_DELETED_FUNCTION;
     };
     typedef ::boost::shared_ptr< DialogController > PDialogController;
 
@@ -181,8 +181,8 @@ namespace svt
         void    addController( const PDialogController& _pController );
 
     private:
-        ControlDependencyManager( const ControlDependencyManager& );            // never implemented
-        ControlDependencyManager& operator=( const ControlDependencyManager& ); // never implemented
+        ControlDependencyManager( const ControlDependencyManager& ) SAL_DELETED_FUNCTION;
+        ControlDependencyManager& operator=( const ControlDependencyManager& ) SAL_DELETED_FUNCTION;
     };
 
 

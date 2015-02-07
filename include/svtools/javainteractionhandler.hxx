@@ -57,8 +57,8 @@ public:
 
 private:
     oslInterlockedCount m_aRefCount;
-    SVT_DLLPRIVATE JavaInteractionHandler(JavaInteractionHandler const&); //not implemented
-    SVT_DLLPRIVATE JavaInteractionHandler& operator = (JavaInteractionHandler const &); //not implemented
+    JavaInteractionHandler(JavaInteractionHandler const&) SAL_DELETED_FUNCTION;
+    JavaInteractionHandler& operator = (JavaInteractionHandler const &) SAL_DELETED_FUNCTION;
     SVT_DLLPRIVATE virtual ~JavaInteractionHandler();
     bool m_bShowErrorsOnce;
     bool m_bJavaDisabled_Handled;

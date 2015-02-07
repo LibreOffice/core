@@ -112,9 +112,9 @@ private:
     bool                    mbAlpha;
     bool                    mbAnimated;
 
-    GraphicDescriptor( const GraphicDescriptor& rDescriptor );
+    GraphicDescriptor( const GraphicDescriptor& rDescriptor ) SAL_DELETED_FUNCTION;
 
-    GraphicDescriptor& operator=( const GraphicDescriptor& );
+    GraphicDescriptor& operator=( const GraphicDescriptor& ) SAL_DELETED_FUNCTION;
 
     void implCreate( SvStream& rIStm, const OUString* pPath );
 };

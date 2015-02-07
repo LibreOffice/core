@@ -65,9 +65,8 @@ class SVT_DLLPUBLIC ContextMenuHelper
         // asynchronous link to prevent destruction while on stack
         DECL_STATIC_LINK( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo* );
 
-        // no copy-ctor and operator=
-        ContextMenuHelper( const ContextMenuHelper& );
-        const ContextMenuHelper& operator=( const ContextMenuHelper& );
+        ContextMenuHelper( const ContextMenuHelper& ) SAL_DELETED_FUNCTION;
+        const ContextMenuHelper& operator=( const ContextMenuHelper& ) SAL_DELETED_FUNCTION;
 
         // show context menu and dispatch command automatically
         void            executePopupMenu( const Point& aPos, PopupMenu* pMenu );
@@ -99,7 +98,6 @@ class SVT_DLLPUBLIC ContextMenuHelper
         }
 
         ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XFrame >         m_xWeakFrame;
-        OUString                                                                 m_aModuleIdentifier;
         OUString                                                                 m_aSelf;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >     m_xURLTransformer;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >       m_aDefaultArgs;

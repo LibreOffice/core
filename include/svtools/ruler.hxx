@@ -719,9 +719,8 @@ private:
 
     DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
 
-    // Forbidden and not implemented.
-    Ruler (const Ruler &);
-    Ruler& operator= (const Ruler &);
+    Ruler (const Ruler &) SAL_DELETED_FUNCTION;
+    Ruler& operator= (const Ruler &) SAL_DELETED_FUNCTION;
 
 protected:
     long            GetRulerVirHeight() const { return mnVirHeight;}
