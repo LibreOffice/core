@@ -94,9 +94,7 @@ class FormulaTokenArray;
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
     OpCode                      eOp;
-    // not implemented, prevent usage
-            FormulaToken();
-            FormulaToken&            operator=( const FormulaToken& );
+            FormulaToken&            operator=( const FormulaToken& ) SAL_DELETED_FUNCTION;
 protected:
 
             const StackVar      eType;          // type of data

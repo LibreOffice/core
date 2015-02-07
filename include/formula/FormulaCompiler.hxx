@@ -83,9 +83,8 @@ public:
         bool                    mbCore      : 1;            /// If mapping was setup by core, not filters
         bool                    mbEnglish   : 1;            /// If English symbols and external names
 
-        OpCodeMap();                              // prevent usage
-        OpCodeMap( const OpCodeMap& );            // prevent usage
-        OpCodeMap& operator=( const OpCodeMap& ); // prevent usage
+        OpCodeMap( const OpCodeMap& ) SAL_DELETED_FUNCTION;
+        OpCodeMap& operator=( const OpCodeMap& ) SAL_DELETED_FUNCTION;
 
     public:
 
@@ -362,9 +361,8 @@ private:
     {
         FormulaTokenRef  pPrevFac;
         FormulaCompiler* pCompiler;
-        // not implemented
-        CurrentFactor( const CurrentFactor& );
-        CurrentFactor& operator=( const CurrentFactor& );
+        CurrentFactor( const CurrentFactor& ) SAL_DELETED_FUNCTION;
+        CurrentFactor& operator=( const CurrentFactor& ) SAL_DELETED_FUNCTION;
     public:
         explicit CurrentFactor( FormulaCompiler* pComp )
             : pPrevFac( pComp->pCurrentFactorToken )
