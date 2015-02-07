@@ -122,8 +122,8 @@ protected:
     sal_Size            mnOffset;       /// Key offset.
 
 private:
-                        MSFILTER_DLLPRIVATE MSCodec_Xor95( const MSCodec_Xor95& );
-    MSFILTER_DLLPRIVATE MSCodec_Xor95&      operator=( const MSCodec_Xor95& );
+                        MSCodec_Xor95( const MSCodec_Xor95& ) SAL_DELETED_FUNCTION;
+    MSCodec_Xor95&      operator=( const MSCodec_Xor95& ) SAL_DELETED_FUNCTION;
 
     sal_uInt16          mnKey;          /// Base key from password.
     sal_uInt16          mnHash;         /// Hash value from password.
@@ -352,8 +352,8 @@ private:
 
 
 private:
-                        MSFILTER_DLLPRIVATE MSCodec_Std97( const MSCodec_Std97& );
-    MSFILTER_DLLPRIVATE MSCodec_Std97&      operator=( const MSCodec_Std97& );
+                        MSCodec_Std97( const MSCodec_Std97& ) SAL_DELETED_FUNCTION;
+    MSCodec_Std97&      operator=( const MSCodec_Std97& ) SAL_DELETED_FUNCTION;
 
     rtlCipher           m_hCipher;
     rtlDigest           m_hDigest;

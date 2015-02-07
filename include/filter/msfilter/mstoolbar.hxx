@@ -121,8 +121,8 @@ class MSFILTER_DLLPUBLIC TBCExtraInfo : public TBBase
     sal_Int8 tbcu;
     sal_Int8 tbmg;
 
-    TBCExtraInfo(const TBCExtraInfo&);
-    TBCExtraInfo& operator = ( const TBCExtraInfo&);
+    TBCExtraInfo(const TBCExtraInfo&) SAL_DELETED_FUNCTION;
+    TBCExtraInfo& operator = ( const TBCExtraInfo&) SAL_DELETED_FUNCTION;
 public:
     TBCExtraInfo();
     virtual ~TBCExtraInfo(){}
@@ -288,8 +288,8 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
     TBCHeader rHeader;
     TBCGeneralInfo controlGeneralInfo;
     boost::shared_ptr< TBBase > controlSpecificInfo; // can be one of TBCBSpecific, TBCMenuSpecific or TBCComboDropdow nSpecific depending on the control type specified by TBCHeader.tct
-    TBCData(const TBCData&);
-    TBCData& operator = ( const TBCData&);
+    TBCData(const TBCData&) SAL_DELETED_FUNCTION;
+    TBCData& operator = ( const TBCData&) SAL_DELETED_FUNCTION;
 public:
     TBCData( const TBCHeader& Header );
     virtual ~TBCData(){}

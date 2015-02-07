@@ -266,7 +266,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     {   return nShapeId < rEntry.nShapeId;  }
 
 private:
-    SvxMSDffImportRec &operator=(const SvxMSDffImportRec&);
+    SvxMSDffImportRec &operator=(const SvxMSDffImportRec&) SAL_DELETED_FUNCTION;
 };
 
 /** list of all SvxMSDffImportRec instances of/for a group */

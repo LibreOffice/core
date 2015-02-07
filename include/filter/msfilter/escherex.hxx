@@ -1335,8 +1335,8 @@ public:
     sal_uInt16 GetHellLayerId() const           { return mnHellLayerId; }
 
 private:
-                        EscherEx( const EscherEx& );
-    EscherEx&           operator=( const EscherEx& );
+                        EscherEx( const EscherEx& ) SAL_DELETED_FUNCTION;
+    EscherEx&           operator=( const EscherEx& ) SAL_DELETED_FUNCTION;
 
     // prevent C-style cast to former base class EscherGraphicProvider
     operator EscherGraphicProvider&();
