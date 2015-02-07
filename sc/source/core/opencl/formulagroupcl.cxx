@@ -2578,7 +2578,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                                     ts, ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpNumericArray &&
-                        pCodeGen->takeNumeric())
+                        pCodeGen->takeNumeric() &&
+                        (!pSVR->GetArray().mpStringArray || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO))
                     {
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
