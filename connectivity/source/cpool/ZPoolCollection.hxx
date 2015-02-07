@@ -77,9 +77,8 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop2>               m_xDesktop;
 
     private:
-        OPoolCollection();                          // never implemented
-        OPoolCollection(const OPoolCollection&);    // never implemented
-        int operator= (const OPoolCollection&);         // never implemented
+        OPoolCollection(const OPoolCollection&) SAL_DELETED_FUNCTION;
+        int operator= (const OPoolCollection&) SAL_DELETED_FUNCTION;
 
         OPoolCollection(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);

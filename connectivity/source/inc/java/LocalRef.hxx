@@ -80,8 +80,8 @@ namespace connectivity { namespace jdbc
         bool    is()  const { return m_object != NULL; }
 
     private:
-        LocalRef(LocalRef &); // not defined
-        void operator =(LocalRef &); // not defined
+        LocalRef(LocalRef &) SAL_DELETED_FUNCTION;
+        void operator =(LocalRef &) SAL_DELETED_FUNCTION;
 
     protected:
         JNIEnv& m_environment;

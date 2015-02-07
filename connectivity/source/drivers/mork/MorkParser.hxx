@@ -164,8 +164,8 @@ protected: // Data
     enum { NPColumns, NPValues, NPRows } nowParsing_;
 
 private:
-    MorkParser(const MorkParser &);
-    MorkParser &operator=(const MorkParser &);
+    MorkParser(const MorkParser &) SAL_DELETED_FUNCTION;
+    MorkParser &operator=(const MorkParser &) SAL_DELETED_FUNCTION;
 
 };
 

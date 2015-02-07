@@ -129,8 +129,7 @@ namespace connectivity
 
 
       private:
-        OSQLParseTreeIterator();                                        // never implemented
-        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter);     // never implemented
+        OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter) SAL_DELETED_FUNCTION;
 
       public:
         OSQLParseTreeIterator(

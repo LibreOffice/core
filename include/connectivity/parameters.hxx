@@ -402,9 +402,8 @@ namespace dbtools
         void    cacheConnectionInfo();
 
     private:
-        ParameterManager();                                      // never implemented
-        ParameterManager( const ParameterManager& );              // never implemented
-        ParameterManager& operator=( const ParameterManager& );   // never implemented
+        ParameterManager( const ParameterManager& ) SAL_DELETED_FUNCTION;
+        ParameterManager& operator=( const ParameterManager& ) SAL_DELETED_FUNCTION;
     };
 
 
