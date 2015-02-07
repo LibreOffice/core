@@ -47,13 +47,8 @@ namespace ftp {
 
 
     private:
-
-        /** Don't enable assignment and copy construction.
-         *  Not defined:
-         */
-
-        FTPLoaderThread(const FTPLoaderThread&);
-        FTPLoaderThread& operator=(const FTPLoaderThread&);
+        FTPLoaderThread(const FTPLoaderThread&) SAL_DELETED_FUNCTION;
+        FTPLoaderThread& operator=(const FTPLoaderThread&) SAL_DELETED_FUNCTION;
 
         oslThreadKey m_threadKey;
 

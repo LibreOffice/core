@@ -161,7 +161,7 @@ private:
 
     static com::sun::star::uno::Any m_aEmptyAny;
 
-    ContentProperties & operator=( const ContentProperties & ); // n.i.
+    ContentProperties & operator=( const ContentProperties & ) SAL_DELETED_FUNCTION;
 
     const PropertyValue * get( const OUString & rName ) const;
 };
@@ -171,8 +171,8 @@ class CachableContentProperties
 private:
     ContentProperties m_aProps;
 
-    CachableContentProperties & operator=( const CachableContentProperties & ); // n.i.
-    CachableContentProperties( const CachableContentProperties & ); // n.i.
+    CachableContentProperties & operator=( const CachableContentProperties & ) SAL_DELETED_FUNCTION;
+    CachableContentProperties( const CachableContentProperties & ) SAL_DELETED_FUNCTION;
 
 public:
     CachableContentProperties( const ContentProperties & rProps );

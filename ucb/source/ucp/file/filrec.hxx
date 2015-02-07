@@ -33,9 +33,9 @@ class ReconnectingFile
 
     bool        m_bDisconnect;
 
-    ReconnectingFile( ReconnectingFile& );
+    ReconnectingFile( ReconnectingFile& ) SAL_DELETED_FUNCTION;
 
-    ReconnectingFile& operator=( ReconnectingFile& );
+    ReconnectingFile& operator=( ReconnectingFile& ) SAL_DELETED_FUNCTION;
 
 public:
 

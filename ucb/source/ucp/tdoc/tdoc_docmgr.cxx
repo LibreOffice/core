@@ -45,10 +45,6 @@
 
 using namespace com::sun::star;
 using namespace tdoc_ucp;
-using ::comphelper::DocumentInfo;
-
-
-
 
 // OfficeDocumentsCloseListener Implementation.
 
@@ -227,7 +223,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                 OSL_ENSURE( xStorage.is(), "Got no document storage!" );
 
                 rtl:: OUString aDocId = getDocumentId( Event.Source );
-                rtl:: OUString aTitle = DocumentInfo::getDocumentTitle(
+                rtl:: OUString aTitle = comphelper::DocumentInfo::getDocumentTitle(
                     uno::Reference< frame::XModel >( Event.Source, uno::UNO_QUERY ) );
 
                 m_aDocs[ aDocId ] = StorageInfo( aTitle, xStorage, xModel );
@@ -366,7 +362,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                     (*it).second.xStorage = xStorage;
 
                     // Adjust title.
-                    (*it).second.aTitle = DocumentInfo::getDocumentTitle( xModel );
+                    (*it).second.aTitle = comphelper::DocumentInfo::getDocumentTitle( xModel );
                     break;
                 }
                 ++it;
@@ -392,7 +388,7 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
                 if ( (*it).second.xModel == xModel )
                 {
                     // Adjust title.
-                    rtl:: OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
+                    rtl:: OUString aTitle = comphelper::DocumentInfo::getDocumentTitle( xModel );
                     (*it).second.aTitle = aTitle;
 
                     // Adjust storage.
@@ -484,7 +480,7 @@ void OfficeDocumentsManager::buildDocumentsList()
                     {
                         // new document
                         OUString aDocId = getDocumentId( xModel );
-                        OUString aTitle = DocumentInfo::getDocumentTitle( xModel );
+                        OUString aTitle = comphelper::DocumentInfo::getDocumentTitle( xModel );
 
                         uno::Reference< document::XStorageBasedDocument >
                                 xDoc( xModel, uno::UNO_QUERY );
