@@ -57,59 +57,53 @@ struct ReferencePathInfo
     RPResultInfo       eResult;
 };
 
-class MenuBarMerger
+namespace MenuBarMerger
 {
-    public:
-        static bool       IsCorrectContext( const OUString& aContext, const OUString& aModuleIdentifier );
+        bool       IsCorrectContext( const OUString& aContext, const OUString& aModuleIdentifier );
 
-        static void       RetrieveReferencePath( const OUString&,
+        void       RetrieveReferencePath( const OUString&,
                                                  std::vector< OUString >& aReferencePath );
-        static ReferencePathInfo FindReferencePath( const std::vector< OUString >& aReferencePath, Menu* pMenu );
-        static sal_uInt16 FindMenuItem( const OUString& rCmd,
+        ReferencePathInfo FindReferencePath( const std::vector< OUString >& aReferencePath, Menu* pMenu );
+        sal_uInt16 FindMenuItem( const OUString& rCmd,
                                         Menu* pMenu );
-        static void       GetMenuEntry( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rAddonMenuEntry,
+        void       GetMenuEntry( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rAddonMenuEntry,
                                         AddonMenuItem& aAddonMenu );
-        static void       GetSubMenu( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSubMenuEntries,
+        void       GetSubMenu( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSubMenuEntries,
                                       AddonMenuContainer& rSubMenu );
-        static bool       ProcessMergeOperation( Menu*                     pMenu,
+        bool       ProcessMergeOperation( Menu*                     pMenu,
                                                  sal_uInt16                nPos,
                                                  sal_uInt16&               rItemId,
                                                  const OUString&    rMergeCommand,
                                                  const OUString&    rMergeCommandParameter,
                                                  const OUString&    rModuleIdentifier,
                                                  const AddonMenuContainer& rAddonMenuItems );
-        static bool       ProcessFallbackOperation( const ReferencePathInfo&                aRefPathInfo,
+        bool       ProcessFallbackOperation( const ReferencePathInfo&                aRefPathInfo,
                                                     sal_uInt16&                             rItemId,
                                                     const OUString&                  rMergeCommand,
                                                     const OUString&                  rMergeFallback,
                                                     const ::std::vector< OUString >& rReferencePath,
                                                     const OUString&                  rModuleIdentifier,
                                                     const AddonMenuContainer&               rAddonMenuItems );
-        static bool       ProcessFallbackOperation();
-        static bool       MergeMenuItems( Menu*                     pMenu,
+        bool       ProcessFallbackOperation();
+        bool       MergeMenuItems( Menu*                     pMenu,
                                           sal_uInt16                nPos,
                                           sal_uInt16                nModIndex,
                                           sal_uInt16&               rItemId,
                                           const OUString&    rModuleIdentifier,
                                           const AddonMenuContainer& rAddonMenuItems );
-        static bool       ReplaceMenuItem( Menu*                     pMenu,
+        bool       ReplaceMenuItem( Menu*                     pMenu,
                                            sal_uInt16                nPos,
                                            sal_uInt16&               rItemId,
                                            const OUString&    rModuleIdentifier,
                                            const AddonMenuContainer& rAddonMenuItems );
-        static bool       RemoveMenuItems( Menu*                     pMenu,
+        bool       RemoveMenuItems( Menu*                     pMenu,
                                            sal_uInt16                nPos,
                                            const OUString&    rMergeCommandParameter );
-        static bool       CreateSubMenu( Menu*                     pSubMenu,
+        bool       CreateSubMenu( Menu*                     pSubMenu,
                                          sal_uInt16&               nItemId,
                                          const OUString&    rModuleIdentifier,
                                          const AddonMenuContainer& rAddonSubMenu );
-
-    private:
-        MenuBarMerger();
-        MenuBarMerger( const MenuBarMerger& );
-        MenuBarMerger& operator=( const MenuBarMerger& );
-};
+}
 
 } // namespace framework
 

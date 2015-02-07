@@ -143,9 +143,8 @@ class ToolBarMerger
                                        const AddonToolbarItem& rAddonToolbarItem );
 
     private:
-        ToolBarMerger();
-        ToolBarMerger( const ToolBarMerger& );
-        ToolBarMerger& operator=( const ToolBarMerger& );
+        ToolBarMerger( const ToolBarMerger& ) SAL_DELETED_FUNCTION;
+        ToolBarMerger& operator=( const ToolBarMerger& ) SAL_DELETED_FUNCTION;
 };
 
 } // namespace framework

@@ -82,8 +82,7 @@ class ShareGuard
         }
 
     private:
-        ShareGuard();
-        ShareGuard& operator=( const ShareGuard& );
+        ShareGuard& operator=( const ShareGuard& ) SAL_DELETED_FUNCTION;
 
         ShareableMutex& m_rShareMutex;
 };

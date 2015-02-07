@@ -63,9 +63,8 @@ class GlobalSettings
         bool GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue );
 
     private:
-        GlobalSettings();
-        GlobalSettings(const GlobalSettings&);
-        GlobalSettings& operator=(const GlobalSettings& );
+        GlobalSettings(const GlobalSettings&) SAL_DELETED_FUNCTION;
+        GlobalSettings& operator=(const GlobalSettings& ) SAL_DELETED_FUNCTION;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 };

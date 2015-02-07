@@ -43,19 +43,18 @@ struct AddonStatusbarItem
 
 typedef ::std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;
 
-class StatusbarMerger
+namespace StatusbarMerger
 {
-public:
-    static bool IsCorrectContext( const ::rtl::OUString& aContext,
+    bool IsCorrectContext( const ::rtl::OUString& aContext,
                                   const ::rtl::OUString& aModuleIdentifier );
 
-    static bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
+    bool ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                        AddonStatusbarItemContainer& rContainer );
 
-    static sal_uInt16 FindReferencePos( StatusBar* pStatusbar,
+    sal_uInt16 FindReferencePos( StatusBar* pStatusbar,
                                         const ::rtl::OUString& rReferencePoint );
 
-    static bool ProcessMergeOperation( StatusBar* pStatusbar,
+    bool ProcessMergeOperation( StatusBar* pStatusbar,
                                        sal_uInt16 nPos,
                                        sal_uInt16& rItemId,
                                        const ::rtl::OUString& rModuleIdentifier,
@@ -63,19 +62,14 @@ public:
                                        const ::rtl::OUString& rMergeCommandParameter,
                                        const AddonStatusbarItemContainer& rItems );
 
-    static bool ProcessMergeFallback( StatusBar* pStatusbar,
+    bool ProcessMergeFallback( StatusBar* pStatusbar,
                                       sal_uInt16 nPos,
                                       sal_uInt16& rItemId,
                                       const ::rtl::OUString& rModuleIdentifier,
                                       const ::rtl::OUString& rMergeCommand,
                                       const ::rtl::OUString& rMergeFallback,
                                       const AddonStatusbarItemContainer& rItems );
-
-private:
-    StatusbarMerger();
-    StatusbarMerger( const StatusbarMerger& );
-    StatusbarMerger& operator=( const StatusbarMerger& );
-};
+}
 
 }
 
