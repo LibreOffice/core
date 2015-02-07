@@ -1637,7 +1637,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
         if (!(aVal >>= xItem) || !xItem.is())
         {
             OUString sMsg("found corrupted item \"" + sItem + "\".");
-            throw css::uno::Exception(sMsg, css::uno::Reference< css::uno::XInterface >());
+            throw css::uno::RuntimeException(sMsg, css::uno::Reference< css::uno::XInterface >());
         }
     #ifdef WORKAROUND_EXCEPTION_PROBLEM
     }
