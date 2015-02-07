@@ -48,8 +48,8 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    CurrentContextChecker(CurrentContextChecker &); // not defined
-    void operator =(CurrentContextChecker &); // not defined
+    CurrentContextChecker(CurrentContextChecker &) SAL_DELETED_FUNCTION;
+    void operator =(CurrentContextChecker &) SAL_DELETED_FUNCTION;
 
     bool performCheck(
         ::com::sun::star::uno::Reference<
