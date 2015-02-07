@@ -50,9 +50,8 @@ namespace shell { namespace sessioninstall
                 { throw ::com::sun::star::uno::RuntimeException(); } // not implemented
 
         private:
-            SyncDbusSessionHelper(); // never implemented
-            SyncDbusSessionHelper( const SyncDbusSessionHelper& ); // never implemented
-            SyncDbusSessionHelper& operator=( const SyncDbusSessionHelper& ); // never implemented
+            SyncDbusSessionHelper( const SyncDbusSessionHelper& ) SAL_DELETED_FUNCTION;
+            SyncDbusSessionHelper& operator=( const SyncDbusSessionHelper& ) SAL_DELETED_FUNCTION;
     };
 }}
 

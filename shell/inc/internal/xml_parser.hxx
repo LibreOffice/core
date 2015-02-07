@@ -23,6 +23,7 @@
 #include <expat.h>
 #include <stdexcept>
 
+#include <sal/types.h>
 
 class xml_parser_exception : public std::runtime_error
 {
@@ -111,10 +112,9 @@ private:
     i_xml_parser_event_handler* document_handler_;
     XML_Parser xml_parser_;
 
-// prevent copy and assignment
 private:
-    xml_parser(const xml_parser&);
-    xml_parser& operator=(const xml_parser&);
+    xml_parser(const xml_parser&) SAL_DELETED_FUNCTION;
+    xml_parser& operator=(const xml_parser&) SAL_DELETED_FUNCTION;
 };
 
 #endif

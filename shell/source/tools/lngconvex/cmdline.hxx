@@ -20,6 +20,10 @@
 #ifndef INCLUDED_SHELL_SOURCE_TOOLS_LNGCONVEX_CMDLINE_HXX
 #define INCLUDED_SHELL_SOURCE_TOOLS_LNGCONVEX_CMDLINE_HXX
 
+#include <sal/config.h>
+
+#include <sal/types.h>
+
 #include "defs.hxx"
 
 
@@ -70,8 +74,8 @@ private:
 
 // prevent copy and assignment
 private:
-    CommandLine(const CommandLine&);
-    CommandLine& operator=(const CommandLine&);
+    CommandLine(const CommandLine&) SAL_DELETED_FUNCTION;
+    CommandLine& operator=(const CommandLine&) SAL_DELETED_FUNCTION;
 };
 
 #endif
