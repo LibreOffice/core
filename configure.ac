@@ -12637,6 +12637,17 @@ fi
 AC_SUBST(ICECREAM_RUN)
 
 dnl ===================================================================
+dnl Setup the ICECC_VERSION for the build the same way it was set for
+dnl configure, so that CC/CXX and ICECC_VERSION are in sync
+dnl ===================================================================
+x_ICECC_VERSION=[\#]
+if test -n "$ICECC_VERSION" ; then
+    x_ICECC_VERSION=
+fi
+AC_SUBST(x_ICECC_VERSION)
+AC_SUBST(ICECC_VERSION)
+
+dnl ===================================================================
 
 AC_MSG_CHECKING([MPL subset])
 MPL_SUBSET=
