@@ -46,7 +46,19 @@ know. But don't seem to be necessary on a real device anyway?
 
 * Debugging
 
-	Install the .apk to the device, and:
+	First of all, you need to configure the build with --enable-debug or
+--enable-dbgutil.  You may want to provide --enable-selective-debuginfo too,
+like --enable-selective-debuginfo="sw/" or so, in order to fit into the memory
+during linking.
+
+	You also want to avoid --with-android-package-name (or when you use
+that, you must set it to "org.libreoffice"), otherwise ndk-gdb will complain
+that
+
+ERROR: Could not extract package's data directory. Are you sure that
+       your installed application is debuggable?
+
+	When you have all this, install the .apk to the device, and:
 
 	cd android/experimental/LOAndroid3
 	<android-ndk-r10d>/ndk-gdb --adb=<android-sdk-linux>/platform-tools/adb --start
@@ -54,22 +66,6 @@ know. But don't seem to be necessary on a real device anyway?
 	It seems that the "have to start the app before gdb can connect to it"
 and the "pending breakpoints do not work" problems are now resolved with the
 current NDK.
-
-* Getting the symbols
-
-In order to be able to debug, you also need the symbols.  Currently they are
-stripped using a $(STRIP) call in android/Bootstrap/Makefile.shared ; make
-sure you change it only to 'cp'.
-
-But then you need to limit the size of the resulting binary by other means,
-that is strip most of the symbols (but the interesting ones) already during
-the build.  For that, use something like
-
---enable-dbgutil
---enable-selective-debuginfo="sal/"
-
-in your autogen.input (but of course limit the --enable-selective-debuginfo
-only to directories / libraries that are interesting to you).
 
 * Common Errors / Gotchas
 
