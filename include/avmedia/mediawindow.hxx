@@ -111,10 +111,8 @@ namespace avmedia
         static BitmapEx getEmptyLogo();
 
     private:
-
-                    // default: disabled copy/assignment
-        AVMEDIA_DLLPRIVATE MediaWindow(const MediaWindow&);
-        AVMEDIA_DLLPRIVATE MediaWindow& operator =( const MediaWindow& );
+        MediaWindow(const MediaWindow&) SAL_DELETED_FUNCTION;
+        MediaWindow& operator =( const MediaWindow& ) SAL_DELETED_FUNCTION;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >   mxIFace;
         std::unique_ptr<priv::MediaWindowImpl> mpImpl;
