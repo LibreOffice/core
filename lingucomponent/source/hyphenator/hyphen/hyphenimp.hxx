@@ -75,9 +75,8 @@ class Hyphenator :
     linguistic::PropertyHelper_Hyphenation* pPropHelper;
     bool                                    bDisposing;
 
-    // disallow copy-constructor and assignment-operator for now
-    Hyphenator(const Hyphenator &);
-    Hyphenator & operator = (const Hyphenator &);
+    Hyphenator(const Hyphenator &) SAL_DELETED_FUNCTION;
+    Hyphenator & operator = (const Hyphenator &) SAL_DELETED_FUNCTION;
 
     linguistic::PropertyHelper_Hyphenation& GetPropHelper_Impl();
     linguistic::PropertyHelper_Hyphenation& GetPropHelper()

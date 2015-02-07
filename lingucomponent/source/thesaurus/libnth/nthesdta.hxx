@@ -34,19 +34,17 @@ class Meaning :
 {
     ::com::sun::star::uno::Sequence< OUString >  aSyn;   // list of synonyms, may be empty.
     OUString         aTerm;
-    sal_Int16                   nLanguage;
 
 #if 0
         // this is for future use by a German thesaurus
         sal_Bool                bIsGermanPreReform;
 #endif
 
-    // disallow copy-constructor and assignment-operator for now
-    Meaning(const Meaning &);
-    Meaning & operator = (const Meaning &);
+    Meaning(const Meaning &) SAL_DELETED_FUNCTION;
+    Meaning & operator = (const Meaning &) SAL_DELETED_FUNCTION;
 
 public:
-    Meaning(const OUString &rTerm, sal_Int16 nLang);
+    Meaning(const OUString &rTerm);
     virtual ~Meaning();
 
     // XMeaning

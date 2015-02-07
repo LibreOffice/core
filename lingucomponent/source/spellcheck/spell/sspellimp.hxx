@@ -66,9 +66,8 @@ class SpellChecker :
     linguistic::PropertyHelper_Spelling*    pPropHelper;
     bool                                    bDisposing;
 
-    // disallow copy-constructor and assignment-operator for now
-    SpellChecker(const SpellChecker &);
-    SpellChecker & operator = (const SpellChecker &);
+    SpellChecker(const SpellChecker &) SAL_DELETED_FUNCTION;
+    SpellChecker & operator = (const SpellChecker &) SAL_DELETED_FUNCTION;
 
     linguistic::PropertyHelper_Spelling&  GetPropHelper_Impl();
     linguistic::PropertyHelper_Spelling&  GetPropHelper()

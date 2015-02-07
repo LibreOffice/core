@@ -443,7 +443,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     OUString aAlt( cTerm + catst);
                     pStr[i] = aAlt;
                 }
-                Meaning * pMn = new Meaning(rTerm,nLanguage);
+                Meaning * pMn = new Meaning(rTerm);
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );
                 pMn->SetMeaning(dTerm);
                 pMn->SetSynonyms(aStr);

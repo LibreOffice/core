@@ -82,9 +82,8 @@ class Thesaurus :
     OUString  prevTerm;
     sal_Int16 prevLocale;
 
-    // disallow copy-constructor and assignment-operator for now
-    Thesaurus(const Thesaurus &);
-    Thesaurus & operator = (const Thesaurus &);
+    Thesaurus(const Thesaurus &) SAL_DELETED_FUNCTION;
+    Thesaurus & operator = (const Thesaurus &) SAL_DELETED_FUNCTION;
 
     linguistic::PropertyHelper_Thesaurus&   GetPropHelper_Impl();
     linguistic::PropertyHelper_Thesaurus&   GetPropHelper()

@@ -35,11 +35,10 @@ namespace linguistic
 {
 
 Meaning::Meaning(
-            const OUString &rTerm, sal_Int16 nLang) :
+            const OUString &rTerm) :
 
     aSyn        ( Sequence< OUString >(1) ),
-    aTerm       (rTerm),
-    nLanguage   (nLang)
+    aTerm       (rTerm)
 
 {
 #if 0
