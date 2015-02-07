@@ -33,7 +33,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/paperinf.hxx>
-#include <numrule.hxx>
 #include <lineinfo.hxx>
 #include <swmodule.hxx>
 #include <IDocumentLayoutAccess.hxx>
