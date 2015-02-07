@@ -20,6 +20,8 @@
 #include <boost/noncopyable.hpp>
 #include <set>
 
+#include "calcconfig.hxx"
+
 namespace sc { namespace opencl {
 
 class FormulaTreeNode;
@@ -83,7 +85,7 @@ private:
 class DynamicKernelArgument : boost::noncopyable
 {
 public:
-    DynamicKernelArgument( const std::string& s, FormulaTreeNodeRef ft );
+    DynamicKernelArgument( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft );
     virtual ~DynamicKernelArgument() {}
 
     /// Generate declaration
@@ -122,6 +124,7 @@ public:
     virtual bool NeedParallelReduction() const;
 
 protected:
+    const ScCalcConfig& mCalcConfig;
     std::string mSymName;
     FormulaTreeNodeRef mFormulaTree;
 };
@@ -136,7 +139,7 @@ typedef boost::shared_ptr<DynamicKernelArgument> DynamicKernelArgumentRef;
 class VectorRef : public DynamicKernelArgument
 {
 public:
-    VectorRef( const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
+    VectorRef( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft, int index = 0 );
     virtual ~VectorRef();
 
     /// Generate declaration

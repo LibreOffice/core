@@ -32,9 +32,9 @@ OpenCLError::OpenCLError( const std::string function, cl_int error, const std::s
 Unhandled::Unhandled( const std::string& fn, int ln ) :
     mFile(fn), mLineNumber(ln) {}
 
-DynamicKernelArgument::DynamicKernelArgument( const std::string& s,
+DynamicKernelArgument::DynamicKernelArgument( const ScCalcConfig& config, const std::string& s,
     FormulaTreeNodeRef ft ) :
-    mSymName(s), mFormulaTree(ft) { }
+    mCalcConfig(config), mSymName(s), mFormulaTree(ft) { }
 
 std::string DynamicKernelArgument::GenDoubleSlidingWindowDeclRef( bool ) const
 {
@@ -92,8 +92,8 @@ bool DynamicKernelArgument::NeedParallelReduction() const
     return false;
 }
 
-VectorRef::VectorRef( const std::string& s, FormulaTreeNodeRef ft, int idx ) :
-    DynamicKernelArgument(s, ft), mpClmem(NULL), mnIndex(idx)
+VectorRef::VectorRef( const ScCalcConfig& config, const std::string& s, FormulaTreeNodeRef ft, int idx ) :
+    DynamicKernelArgument(config, s, ft), mpClmem(NULL), mnIndex(idx)
 {
     if (mnIndex)
     {

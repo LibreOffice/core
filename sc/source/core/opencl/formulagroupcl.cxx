@@ -213,9 +213,9 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
 class ConstStringArgument : public DynamicKernelArgument
 {
 public:
-    ConstStringArgument( const std::string& s,
+    ConstStringArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft ) :
-        DynamicKernelArgument(s, ft) { }
+        DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
@@ -270,9 +270,9 @@ public:
 class DynamicKernelConstantArgument : public DynamicKernelArgument
 {
 public:
-    DynamicKernelConstantArgument( const std::string& s,
+    DynamicKernelConstantArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft ) :
-        DynamicKernelArgument(s, ft) { }
+        DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
@@ -319,9 +319,9 @@ public:
 class DynamicKernelPiArgument : public DynamicKernelArgument
 {
 public:
-    DynamicKernelPiArgument( const std::string& s,
+    DynamicKernelPiArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft ) :
-        DynamicKernelArgument(s, ft) { }
+        DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
@@ -359,9 +359,9 @@ public:
 class DynamicKernelRandomArgument : public DynamicKernelArgument
 {
 public:
-    DynamicKernelRandomArgument( const std::string& s,
+    DynamicKernelRandomArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft ) :
-        DynamicKernelArgument(s, ft) { }
+        DynamicKernelArgument(config, s, ft) { }
     /// Generate declaration
     virtual void GenDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
@@ -720,9 +720,9 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
 class DynamicKernelStringArgument : public VectorRef
 {
 public:
-    DynamicKernelStringArgument( const std::string& s,
+    DynamicKernelStringArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, int index = 0 ) :
-        VectorRef(s, ft, index) { }
+        VectorRef(config, s, ft, index) { }
 
     virtual void GenSlidingWindowFunction( std::stringstream& ) SAL_OVERRIDE { }
     /// Generate declaration
@@ -830,9 +830,9 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
 class DynamicKernelMixedArgument : public VectorRef
 {
 public:
-    DynamicKernelMixedArgument( const std::string& s,
+    DynamicKernelMixedArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft ) :
-        VectorRef(s, ft), mStringArgument(s + "s", ft) { }
+        VectorRef(config, s, ft), mStringArgument(config, s + "s", ft) { }
     virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
         VectorRef::GenSlidingWindowDecl(ss);
@@ -904,10 +904,10 @@ template<class Base>
 class DynamicKernelSlidingArgument : public Base
 {
 public:
-    DynamicKernelSlidingArgument( const std::string& s,
+    DynamicKernelSlidingArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
-        Base(s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
+        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -1090,12 +1090,12 @@ protected:
 class DynamicKernelMixedSlidingArgument : public VectorRef
 {
 public:
-    DynamicKernelMixedSlidingArgument( const std::string& s,
+    DynamicKernelMixedSlidingArgument( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
-        VectorRef(s, ft),
-        mDoubleArgument(s, ft, CodeGen, index),
-        mStringArgument(s + "s", ft, CodeGen, index) { }
+        VectorRef(config, s, ft),
+        mDoubleArgument(mCalcConfig, s, ft, CodeGen, index),
+        mStringArgument(mCalcConfig, s + "s", ft, CodeGen, index) { }
     virtual void GenSlidingWindowDecl( std::stringstream& ss ) const SAL_OVERRIDE
     {
         mDoubleArgument.GenSlidingWindowDecl(ss);
@@ -1167,7 +1167,7 @@ public:
     typedef std::list<DynamicKernelArgumentRef> ArgumentList;
     SymbolTable() : mCurId(0) { }
     template<class T>
-    const DynamicKernelArgument* DeclRefArg( FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen, int nResultSize );
+    const DynamicKernelArgument* DeclRefArg( const ScCalcConfig& config, FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen, int nResultSize );
     /// Used to generate sliding window helpers
     void DumpSlidingWindowFunctions( std::stringstream& ss )
     {
@@ -1204,10 +1204,10 @@ template<class Base>
 class ParallelReductionVectorRef : public Base
 {
 public:
-    ParallelReductionVectorRef( const std::string& s,
+    ParallelReductionVectorRef( const ScCalcConfig& config, const std::string& s,
         FormulaTreeNodeRef ft, boost::shared_ptr<SlidingFunctionBase>& CodeGen,
         int index = 0 ) :
-        Base(s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
+        Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(NULL)
     {
         FormulaToken* t = ft->GetFormulaToken();
         if (t->GetType() != formula::svDoubleVectorRef)
@@ -2169,7 +2169,7 @@ class DynamicKernelSoPArguments : public DynamicKernelArgument
 public:
     typedef std::vector<DynamicKernelArgumentRef> SubArgumentsType;
 
-    DynamicKernelSoPArguments(
+    DynamicKernelSoPArguments( const ScCalcConfig& config,
         const std::string& s, const FormulaTreeNodeRef& ft,
         SlidingFunctionBase* pCodeGen, int nResultSize );
 
@@ -2453,15 +2453,15 @@ private:
     cl_mem mpClmem2;
 };
 
-DynamicKernelArgumentRef SoPHelper(
+DynamicKernelArgumentRef SoPHelper( const ScCalcConfig& config,
     const std::string& ts, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen,
     int nResultSize )
 {
-    return DynamicKernelArgumentRef(new DynamicKernelSoPArguments(ts, ft, pCodeGen, nResultSize));
+    return DynamicKernelArgumentRef(new DynamicKernelSoPArguments(config, ts, ft, pCodeGen, nResultSize));
 }
 
 template<class Base>
-DynamicKernelArgument* VectorRefFactory( const std::string& s,
+DynamicKernelArgument* VectorRefFactory( const ScCalcConfig& config, const std::string& s,
     const FormulaTreeNodeRef& ft,
     boost::shared_ptr<SlidingFunctionBase>& pCodeGen,
     int index )
@@ -2471,29 +2471,29 @@ DynamicKernelArgument* VectorRefFactory( const std::string& s,
     if (dynamic_cast<OpSumIfs*>(pCodeGen.get()))
     {
         if (index == 0) // the first argument of OpSumIfs cannot be strings anyway
-            return new DynamicKernelSlidingArgument<VectorRef>(s, ft, pCodeGen, index);
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+            return new DynamicKernelSlidingArgument<VectorRef>(config, s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
     }
     // AVERAGE is not supported yet
     //Average has been supported by reduction kernel
     /*else if (dynamic_cast<OpAverage*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
     }*/
     // MUL is not supported yet
     else if (dynamic_cast<OpMul*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
     }
     // Sub is not a reduction per se
     else if (dynamic_cast<OpSub*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
     }
     // Only child class of Reduction is supported
     else if (!dynamic_cast<Reduction*>(pCodeGen.get()))
     {
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
     }
 
     const formula::DoubleVectorRefToken* pDVR =
@@ -2501,17 +2501,17 @@ DynamicKernelArgument* VectorRefFactory( const std::string& s,
         ft->GetFormulaToken());
     // Window being too small to justify a parallel reduction
     if (pDVR->GetRefRowSize() < REDUCE_THRESHOLD)
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
     if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) ||
         (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
-        return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
+        return new ParallelReductionVectorRef<Base>(config, s, ft, pCodeGen, index);
     else // Other cases are not supported as well
-        return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
+        return new DynamicKernelSlidingArgument<Base>(config, s, ft, pCodeGen, index);
 }
 
-DynamicKernelSoPArguments::DynamicKernelSoPArguments(
+DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
     const std::string& s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen, int nResultSize ) :
-    DynamicKernelArgument(s, ft), mpCodeGen(pCodeGen), mpClmem2(NULL)
+    DynamicKernelArgument(config, s, ft), mpCodeGen(pCodeGen), mpClmem2(NULL)
 {
     size_t nChildren = ft->Children.size();
 
@@ -2547,20 +2547,20 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                             {
                                 mvSubArguments.push_back(
                                     DynamicKernelArgumentRef(
-                                        new DynamicKernelMixedSlidingArgument(
+                                        new DynamicKernelMixedSlidingArgument(mCalcConfig,
                                             ts, ft->Children[i], mpCodeGen, j)));
                             }
                             else
                             {
                                 mvSubArguments.push_back(
-                                    DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(
+                                    DynamicKernelArgumentRef(VectorRefFactory<VectorRef>(mCalcConfig,
                                             ts, ft->Children[i], mpCodeGen, j)));
                             }
                         }
                         else
                             mvSubArguments.push_back(
                                 DynamicKernelArgumentRef(VectorRefFactory
-                                    <DynamicKernelStringArgument>(
+                                    <DynamicKernelStringArgument>(mCalcConfig,
                                         ts, ft->Children[i], mpCodeGen, j)));
                     }
                 }
@@ -2574,21 +2574,21 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                         pCodeGen->takeString())
                     {
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new DynamicKernelMixedArgument(
+                            DynamicKernelArgumentRef(new DynamicKernelMixedArgument(mCalcConfig,
                                     ts, ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric())
                     {
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new VectorRef(ts,
+                            DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
                                     ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpStringArray &&
                         pCodeGen->takeString())
                     {
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new DynamicKernelStringArgument(
+                            DynamicKernelArgumentRef(new DynamicKernelStringArgument(mCalcConfig,
                                     ts, ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpStringArray == NULL &&
@@ -2596,7 +2596,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     {
                         // Push as an array of NANs
                         mvSubArguments.push_back(
-                            DynamicKernelArgumentRef(new VectorRef(ts,
+                            DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
                                     ft->Children[i])));
                     }
                     else
@@ -2606,14 +2606,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 else if (pChild->GetType() == formula::svDouble)
                 {
                     mvSubArguments.push_back(
-                        DynamicKernelArgumentRef(new DynamicKernelConstantArgument(ts,
+                        DynamicKernelArgumentRef(new DynamicKernelConstantArgument(mCalcConfig, ts,
                                 ft->Children[i])));
                 }
                 else if (pChild->GetType() == formula::svString
                     && pCodeGen->takeString())
                 {
                     mvSubArguments.push_back(
-                        DynamicKernelArgumentRef(new ConstStringArgument(ts,
+                        DynamicKernelArgumentRef(new ConstStringArgument(mCalcConfig, ts,
                                 ft->Children[i])));
                 }
                 else
@@ -2622,931 +2622,931 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 }
                 break;
             case ocDiv:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDiv(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDiv(nResultSize), nResultSize));
                 break;
             case ocMul:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMul(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMul(nResultSize), nResultSize));
                 break;
             case ocSub:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSub(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSub(nResultSize), nResultSize));
                 break;
             case ocAdd:
             case ocSum:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSum(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSum(nResultSize), nResultSize));
                 break;
             case ocAverage:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAverage(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpAverage(nResultSize), nResultSize));
                 break;
             case ocMin:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMin(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMin(nResultSize), nResultSize));
                 break;
             case ocMax:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMax(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMax(nResultSize), nResultSize));
                 break;
             case ocCount:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCount(nResultSize), nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCount(nResultSize), nResultSize));
                 break;
             case ocSumProduct:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSumProduct, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSumProduct, nResultSize));
                 break;
             case ocIRR:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIRR, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpIRR, nResultSize));
                 break;
             case ocMIRR:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpMIRR, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpMIRR, nResultSize));
                 break;
             case ocPMT:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPMT, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPMT, nResultSize));
                 break;
             case ocRate:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpIntrate, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpIntrate, nResultSize));
                 break;
             case ocRRI:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRRI, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpRRI, nResultSize));
                 break;
             case ocPpmt:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPPMT, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPPMT, nResultSize));
                 break;
             case ocFisher:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisher, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFisher, nResultSize));
                 break;
             case ocFisherInv:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFisherInv, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFisherInv, nResultSize));
                 break;
             case ocGamma:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGamma, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGamma, nResultSize));
                 break;
             case ocSLN:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSLN, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSLN, nResultSize));
                 break;
             case ocGammaLn:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGammaLn, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGammaLn, nResultSize));
                 break;
             case ocGauss:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGauss, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGauss, nResultSize));
                 break;
             /*case ocGeoMean:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGeoMean));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGeoMean));
                 break;*/
             case ocHarMean:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpHarMean, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpHarMean, nResultSize));
                 break;
             case ocLessEqual:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLessEqual, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpLessEqual, nResultSize));
                 break;
             case ocLess:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLess, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpLess, nResultSize));
                 break;
             case ocEqual:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEqual, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpEqual, nResultSize));
                 break;
             case ocGreater:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpGreater, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpGreater, nResultSize));
                 break;
             case ocSYD:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpSYD, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpSYD, nResultSize));
                 break;
             case ocCorrel:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCorrel, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCorrel, nResultSize));
                 break;
             case ocCos:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCos, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCos, nResultSize));
                 break;
             case ocNegBinomVert :
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNegbinomdist, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpNegbinomdist, nResultSize));
                 break;
             case ocPearson:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPearson, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPearson, nResultSize));
                 break;
             case ocRSQ:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpRsq, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpRsq, nResultSize));
                 break;
             case ocCosecant:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCsc, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCsc, nResultSize));
                 break;
             case ocISPMT:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpISPMT, nResultSize));
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpISPMT, nResultSize));
                 break;
             case ocDuration:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDuration, nResultSize));
                 break;
             case ocSinHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSinh, nResultSize));
                 break;
             case ocAbs:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpAbs, nResultSize));
                 break;
             case ocPV:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpPV, nResultSize));
                 break;
             case ocSin:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSin, nResultSize));
                 break;
             case ocTan:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpTan, nResultSize));
                 break;
             case ocTanHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpTanH, nResultSize));
                 break;
             case ocStandard:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpStandard, nResultSize));
                 break;
             case ocWeibull:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpWeibull, nResultSize));
                 break;
             /*case ocMedian:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpMedian));
                 break;*/
             case ocDDB:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDDB, nResultSize));
                 break;
             case ocFV:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpFV, nResultSize));
                 break;
             case ocSumIfs:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSumIfs, nResultSize));
                 break;
                 /*case ocVBD:
-                    mvSubArguments.push_back(SoPHelper(ts,
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                              ft->Children[i],new OpVDB));
                      break;*/
             case ocKurt:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpKurt, nResultSize));
                 break;
                 /*case ocNper:
-                    mvSubArguments.push_back(SoPHelper(ts,
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpNper));
                      break;*/
             case ocNormDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNormdist, nResultSize));
                 break;
             case ocArcCos:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcCos, nResultSize));
                 break;
             case ocSqrt:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSqrt, nResultSize));
                 break;
             case ocArcCosHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcCosHyp, nResultSize));
                 break;
             case ocNPV:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNPV, nResultSize));
                 break;
             case ocStdNormDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNormsdist, nResultSize));
                 break;
             case ocNormInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNorminv, nResultSize));
                 break;
             case ocSNormInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNormsinv, nResultSize));
                 break;
             case ocPermut:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpPermut, nResultSize));
                 break;
             case ocPermutationA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpPermutationA, nResultSize));
                 break;
             case ocPhi:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpPhi, nResultSize));
                 break;
             case ocIpmt:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpIPMT, nResultSize));
                 break;
             case ocConfidence:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpConfidence, nResultSize));
                 break;
             case ocIntercept:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpIntercept, nResultSize));
                 break;
             case ocDB:
-                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                         new OpDB, nResultSize));
                 break;
             case ocLogInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpLogInv, nResultSize));
                 break;
             case ocArcCot:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcCot, nResultSize));
                 break;
             case ocCosHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCosh, nResultSize));
                 break;
             case ocCritBinom:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCritBinom, nResultSize));
                 break;
             case ocArcCotHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcCotHyp, nResultSize));
                 break;
             case ocArcSin:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcSin, nResultSize));
                 break;
             case ocArcSinHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcSinHyp, nResultSize));
                 break;
             case ocArcTan:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcTan, nResultSize));
                 break;
             case ocArcTanHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcTanH, nResultSize));
                 break;
             case ocBitAnd:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBitAnd, nResultSize));
                 break;
             case ocForecast:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpForecast, nResultSize));
                 break;
             case ocLogNormDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpLogNormDist, nResultSize));
                 break;
             /*case ocGammaDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i], new OpGammaDist));
                 break;*/
             case ocLn:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpLn, nResultSize));
                 break;
             case ocRound:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpRound, nResultSize));
                 break;
             case ocCot:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCot, nResultSize));
                 break;
             case ocCotHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCoth, nResultSize));
                 break;
             case ocFDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpFdist, nResultSize));
                 break;
             case ocVar:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpVar, nResultSize));
                 break;
             /*case ocChiDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpChiDist));
                 break;*/
             case ocPow:
             case ocPower:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpPower, nResultSize));
                 break;
             case ocOdd:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpOdd, nResultSize));
                 break;
             /*case ocChiSqDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpChiSqDist));
                 break;
             case ocChiSqInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpChiSqInv));
                 break;
             case ocGammaInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i], new OpGammaInv));
                 break;*/
             case ocFloor:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpFloor, nResultSize));
                 break;
             /*case ocFInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i], new OpFInv));
                 break;*/
             case ocFTest:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpFTest, nResultSize));
                 break;
             case ocB:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpB, nResultSize));
                 break;
             case ocBetaDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBetaDist, nResultSize));
                 break;
             case ocCosecantHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCscH, nResultSize));
                 break;
             case ocExp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpExp, nResultSize));
                 break;
             case ocLog10:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpLog10, nResultSize));
                 break;
             case ocExpDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpExponDist, nResultSize));
                 break;
             case ocAverageIfs:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpAverageIfs, nResultSize));
                 break;
             case ocCountIfs:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCountIfs, nResultSize));
                 break;
             case ocCombinA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCombinA, nResultSize));
                 break;
             case ocEven:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpEven, nResultSize));
                 break;
             case ocLog:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpLog, nResultSize));
                 break;
             case ocMod:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpMod, nResultSize));
                 break;
             case ocTrunc:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpTrunc, nResultSize));
                 break;
             case ocSkew:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSkew, nResultSize));
                 break;
             case ocArcTan2:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpArcTan2, nResultSize));
                 break;
             case ocBitOr:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBitOr, nResultSize));
                 break;
             case ocBitLshift:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBitLshift, nResultSize));
                 break;
             case ocBitRshift:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBitRshift, nResultSize));
                 break;
             case ocBitXor:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBitXor, nResultSize));
                 break;
             /*case ocChiInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpChiInv));
                 break;*/
             case ocPoissonDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpPoisson, nResultSize));
                 break;
             case ocSumSQ:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSumSQ, nResultSize));
                 break;
             case ocSkewp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSkewp, nResultSize));
                 break;
             case ocBinomDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpBinomdist, nResultSize));
                 break;
             case ocVarP:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpVarP, nResultSize));
                 break;
             case ocCeil:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCeil, nResultSize));
                 break;
             case ocCombin:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCombin, nResultSize));
                 break;
             case ocDevSq:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDevSq, nResultSize));
                 break;
             case ocStDev:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpStDev, nResultSize));
                 break;
             case ocSlope:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSlope, nResultSize));
                 break;
             case ocSTEYX:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSTEYX, nResultSize));
                 break;
             case ocZTest:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpZTest, nResultSize));
                 break;
             case ocPi:
                 mvSubArguments.push_back(
-                    DynamicKernelArgumentRef(new DynamicKernelPiArgument(ts,
+                    DynamicKernelArgumentRef(new DynamicKernelPiArgument(mCalcConfig, ts,
                             ft->Children[i])));
                 break;
             case ocRandom:
                 mvSubArguments.push_back(
-                    DynamicKernelArgumentRef(new DynamicKernelRandomArgument(ts,
+                    DynamicKernelArgumentRef(new DynamicKernelRandomArgument(mCalcConfig, ts,
                             ft->Children[i])));
                 break;
             case ocProduct:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpProduct, nResultSize));
                 break;
             /*case ocHypGeomDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpHypGeomDist));
                 break;*/
             case ocSumX2MY2:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSumX2MY2, nResultSize));
                 break;
             case ocSumX2DY2:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSumX2PY2, nResultSize));
                 break;
             /*case ocBetaInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i],new OpBetainv));
                  break;*/
             case ocTTest:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpTTest, nResultSize));
                 break;
             case ocTDist:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpTDist, nResultSize));
                 break;
             /*case ocTInv:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                          ft->Children[i], new OpTInv));
                  break;*/
             case ocSumXMY2:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSumXMY2, nResultSize));
                 break;
             case ocStDevP:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpStDevP, nResultSize));
                 break;
             case ocCovar:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCovar, nResultSize));
                 break;
             case ocAnd:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpAnd, nResultSize));
                 break;
             case ocVLookup:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpVLookup, nResultSize));
                 break;
             case ocOr:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpOr, nResultSize));
                 break;
             case ocNot:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNot, nResultSize));
                 break;
             case ocXor:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpXor, nResultSize));
                 break;
             case ocDBMax:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDmax, nResultSize));
                 break;
             case ocDBMin:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDmin, nResultSize));
                 break;
             case ocDBProduct:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDproduct, nResultSize));
                 break;
             case ocDBAverage:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDaverage, nResultSize));
                 break;
             case ocDBStdDev:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDstdev, nResultSize));
                 break;
             case ocDBStdDevP:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDstdevp, nResultSize));
                 break;
             case ocDBSum:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDsum, nResultSize));
                 break;
             case ocDBVar:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDvar, nResultSize));
                 break;
             case ocDBVarP:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDvarp, nResultSize));
                 break;
             case ocAverageIf:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpAverageIf, nResultSize));
                 break;
             case ocDBCount:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDcount, nResultSize));
                 break;
             case ocDBCount2:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDcount2, nResultSize));
                 break;
             case ocDeg:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpDeg, nResultSize));
                 break;
             case ocRoundUp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpRoundUp, nResultSize));
                 break;
             case ocRoundDown:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpRoundDown, nResultSize));
                 break;
             case ocInt:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpInt, nResultSize));
                 break;
             case ocRad:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpRadians, nResultSize));
                 break;
             case ocCountIf:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCountIf, nResultSize));
                 break;
             case ocIsEven:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpIsEven, nResultSize));
                 break;
             case ocIsOdd:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpIsOdd, nResultSize));
                 break;
             case ocFact:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpFact, nResultSize));
                 break;
             case ocMinA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpMinA, nResultSize));
                 break;
             case ocCount2:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpCountA, nResultSize));
                 break;
             case ocMaxA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpMaxA, nResultSize));
                 break;
             case ocAverageA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpAverageA, nResultSize));
                 break;
             case ocVarA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpVarA, nResultSize));
                 break;
             case ocVarPA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpVarPA, nResultSize));
                 break;
             case ocStDevA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpStDevA, nResultSize));
                 break;
             case ocStDevPA:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpStDevPA, nResultSize));
                 break;
             case ocSecant:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSec, nResultSize));
                 break;
             case ocSecantHyp:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSecH, nResultSize));
                 break;
             case ocSumIf:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpSumIf, nResultSize));
                 break;
             case ocNegSub:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpNegSub, nResultSize));
                 break;
             case ocAveDev:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpAveDev, nResultSize));
                 break;
             case ocIf:
-                mvSubArguments.push_back(SoPHelper(ts,
+                mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                         ft->Children[i], new OpIf, nResultSize));
                 break;
             case ocExternal:
                 if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getEffect"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEffective, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpEffective, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCumipmt"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumipmt, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCumipmt, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getNominal"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpNominal, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpNominal, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCumprinc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCumprinc, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCumprinc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getXnpv"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpXNPV, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpXNPV, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getPricemat"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpPriceMat, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpPriceMat, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getReceived"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpReceived, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpReceived, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getTbilleq"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbilleq, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbilleq, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getTbillprice"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillprice, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbillprice, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getTbillyield"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpTbillyield, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpTbillyield, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getFvschedule"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpFvschedule, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpFvschedule, nResultSize));
                 }
                 /*else if ( !(pChild->GetExternal().compareTo(OUString(
                     "com.sun.star.sheet.addin.Analysis.getYield"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYield));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYield));
                 }*/
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getYielddisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYielddisc, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYielddisc, nResultSize));
                 }
                 else    if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getYieldmat"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpYieldmat, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpYieldmat, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAccrintm"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpAccrintm, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpAccrintm, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupdaybs"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaybs, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdaybs, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getDollarde"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarde, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDollarde, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getDollarfr"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDollarfr, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDollarfr, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupdays"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdays, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdays, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupdaysnc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpCoupdaysnc, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpCoupdaysnc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getDisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpDISC, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDISC, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getIntrate"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpINTRATE, nResultSize));
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i], new OpINTRATE, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getPrice"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts,
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpPrice, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupnum"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpCoupnum, nResultSize));
                 }
                 /*else if ( !(pChild->GetExternal().compareTo(OUString(
                    "com.sun.star.sheet.addin.Analysis.getDuration"))))
                 {
                     mvSubArguments.push_back(
-                        SoPHelper(ts, ft->Children[i], new OpDuration_ADD));
+                        SoPHelper(mCalcConfig, ts, ft->Children[i], new OpDuration_ADD));
                 }*/
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAmordegrc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAmordegrc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAmorlinc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAmorlinc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getMduration"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpMDuration, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getXirr"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpXirr, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getOddlprice"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts,
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpOddlprice, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getOddlyield"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpOddlyield, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getPricedisc"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts,
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts,
                             ft->Children[i], new OpPriceDisc, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCouppcd"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpCouppcd, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getCoupncd"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpCoupncd, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getAccrint"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpAccrint, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getSqrtpi"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpSqrtPi, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getConvert"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpConvert, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getIseven"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpIsEven, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getIsodd"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpIsOdd, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getMround"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpMROUND, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getQuotient"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpQuotient, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getSeriessum"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpSeriesSum, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getBesselj"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpBesselj, nResultSize));
                 }
                 else if (!(pChild->GetExternal().compareTo(OUString(
                                 "com.sun.star.sheet.addin.Analysis.getGestep"))))
                 {
-                    mvSubArguments.push_back(SoPHelper(ts, ft->Children[i],
+                    mvSubArguments.push_back(SoPHelper(mCalcConfig, ts, ft->Children[i],
                             new OpGestep, nResultSize));
                 }
                 else
@@ -3562,10 +3562,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
 class DynamicKernel : public CompiledFormula
 {
 public:
-    DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize );
+    DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize );
     virtual ~DynamicKernel();
 
-    static DynamicKernel* create( ScTokenArray& rCode, int nResultSize );
+    static DynamicKernel* create( const ScCalcConfig& config, ScTokenArray& rCode, int nResultSize );
 
     /// OpenCL code generation
     void CodeGen();
@@ -3585,7 +3585,7 @@ public:
     cl_mem GetResultBuffer() const { return mpResClmem; }
 
 private:
-
+    ScCalcConfig mCalcConfig;
     FormulaTreeNodeRef mpRoot;
     SymbolTable mSyms;
     std::string mKernelSignature, mKernelHash;
@@ -3599,7 +3599,8 @@ private:
     int mnResultSize;
 };
 
-DynamicKernel::DynamicKernel( const FormulaTreeNodeRef& r, int nResultSize ) :
+DynamicKernel::DynamicKernel( const ScCalcConfig& config, const FormulaTreeNodeRef& r, int nResultSize ) :
+    mCalcConfig(config),
     mpRoot(r),
     mpProgram(NULL),
     mpKernel(NULL),
@@ -3625,7 +3626,7 @@ DynamicKernel::~DynamicKernel()
 void DynamicKernel::CodeGen()
 {
     // Travese the tree of expression and declare symbols used
-    const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mpRoot, new OpNop(mnResultSize), mnResultSize);
+    const DynamicKernelArgument* DK = mSyms.DeclRefArg<DynamicKernelSoPArguments>(mCalcConfig, mpRoot, new OpNop(mnResultSize), mnResultSize);
 
     std::stringstream decl;
     if (::opencl::gpuEnv.mnKhrFp64Flag)
@@ -3834,7 +3835,7 @@ void DynamicKernel::Launch( size_t nr )
 // kernel with argument with unique name and return so.
 // The template argument T must be a subclass of DynamicKernelArgument
 template<typename T>
-const DynamicKernelArgument* SymbolTable::DeclRefArg(
+const DynamicKernelArgument* SymbolTable::DeclRefArg( const ScCalcConfig& config,
     FormulaTreeNodeRef t, SlidingFunctionBase* pCodeGen, int nResultSize )
 {
     FormulaToken* ref = t->GetFormulaToken();
@@ -3844,7 +3845,7 @@ const DynamicKernelArgument* SymbolTable::DeclRefArg(
         // Allocate new symbols
         std::stringstream ss;
         ss << "tmp" << mCurId++;
-        DynamicKernelArgumentRef new_arg(new T(ss.str(), t, pCodeGen, nResultSize));
+        DynamicKernelArgumentRef new_arg(new T(config, ss.str(), t, pCodeGen, nResultSize));
         mSymbols[ref] = new_arg;
         mParams.push_back(new_arg);
         return new_arg.get();
@@ -3865,7 +3866,7 @@ ScMatrixRef FormulaGroupInterpreterOpenCL::inverseMatrix( const ScMatrix& )
     return NULL;
 }
 
-DynamicKernel* DynamicKernel::create( ScTokenArray& rCode, int nResultSize )
+DynamicKernel* DynamicKernel::create( const ScCalcConfig& rConfig, ScTokenArray& rCode, int nResultSize )
 {
     // Constructing "AST"
     FormulaTokenIterator aCode(rCode);
@@ -3906,7 +3907,7 @@ DynamicKernel* DynamicKernel::create( ScTokenArray& rCode, int nResultSize )
     FormulaTreeNodeRef Root = FormulaTreeNodeRef(new FormulaTreeNode(NULL));
     Root->Children.push_back(aHashMap[aTokenList.back()]);
 
-    DynamicKernel* pDynamicKernel = new DynamicKernel(Root, nResultSize);
+    DynamicKernel* pDynamicKernel = new DynamicKernel(rConfig, Root, nResultSize);
 
     if (!pDynamicKernel)
         return NULL;
@@ -3934,7 +3935,7 @@ DynamicKernel* DynamicKernel::create( ScTokenArray& rCode, int nResultSize )
 CompiledFormula* FormulaGroupInterpreterOpenCL::createCompiledFormula(
     ScFormulaCellGroup& rGroup, ScTokenArray& rCode )
 {
-    return DynamicKernel::create(rCode, rGroup.mnLength);
+    return DynamicKernel::create(maCalcConfig, rCode, rGroup.mnLength);
 }
 
 namespace {
@@ -4071,7 +4072,7 @@ public:
 };
 
 
-CLInterpreterContext createCLInterpreterContext(
+CLInterpreterContext createCLInterpreterContext( const ScCalcConfig& rConfig,
     ScFormulaCellGroupRef& xGroup, ScTokenArray& rCode )
 {
     CLInterpreterContext aCxt(xGroup->mnLength);
@@ -4092,10 +4093,10 @@ CLInterpreterContext createCLInterpreterContext(
     else
     {
         assert(xGroup->meCalcState == sc::GroupCalcRunning);
-        aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rCode, xGroup->mnLength)));
+        aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rConfig, rCode, xGroup->mnLength)));
     }
 #else
-    aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rCode, xGroup->mnLength)));
+    aCxt.setManagedKernel(static_cast<DynamicKernel*>(DynamicKernel::create(rConfig, rCode, xGroup->mnLength)));
 #endif
 
     return aCxt;
@@ -4129,9 +4130,11 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     const ScAddress& rTopPos, ScFormulaCellGroupRef& xGroup,
     ScTokenArray& rCode )
 {
+    MergeCalcConfig(rDoc);
+
     genRPNTokens(rDoc, rTopPos, rCode);
 
-    CLInterpreterContext aCxt = createCLInterpreterContext(xGroup, rCode);
+    CLInterpreterContext aCxt = createCLInterpreterContext(maCalcConfig, xGroup, rCode);
     if (!aCxt.isValid())
         return false;
 
