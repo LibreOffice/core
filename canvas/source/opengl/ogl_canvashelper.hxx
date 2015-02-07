@@ -205,8 +205,7 @@ namespace oglcanvas
                                    o3tl::ThreadSafeRefCountingPolicy > RecordVectorT;
 
     private:
-        // declared, but not defined
-        CanvasHelper( const CanvasHelper& );
+        CanvasHelper( const CanvasHelper& ) SAL_DELETED_FUNCTION;
 
         void setupGraphicsState( Action&                                         o_action,
                                  const ::com::sun::star::rendering::ViewState&   viewState,

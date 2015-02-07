@@ -196,8 +196,8 @@ namespace canvas
         void visibilityUpdated() const { mbVisibilityDirty=false; }
 
     private:
-        CanvasCustomSpriteHelper( const CanvasCustomSpriteHelper& );
-        CanvasCustomSpriteHelper& operator=( const CanvasCustomSpriteHelper& );
+        CanvasCustomSpriteHelper( const CanvasCustomSpriteHelper& ) SAL_DELETED_FUNCTION;
+        CanvasCustomSpriteHelper& operator=( const CanvasCustomSpriteHelper& ) SAL_DELETED_FUNCTION;
 
         /** Called to convert an API polygon to a basegfx polygon
 

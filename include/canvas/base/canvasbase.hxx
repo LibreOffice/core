@@ -464,8 +464,8 @@ namespace canvas
         mutable bool        mbSurfaceDirty;
 
     private:
-        CanvasBase( const CanvasBase& );
-        CanvasBase& operator=( const CanvasBase& );
+        CanvasBase( const CanvasBase& ) SAL_DELETED_FUNCTION;
+        CanvasBase& operator=( const CanvasBase& ) SAL_DELETED_FUNCTION;
     };
 }
 
