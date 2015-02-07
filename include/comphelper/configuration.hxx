@@ -143,8 +143,8 @@ template< typename T > struct Convert: private boost::noncopyable {
     { return value.get< T >(); }
 
 private:
-    Convert(); // not defined
-    ~Convert(); // not defined
+    Convert() SAL_DELETED_FUNCTION;
+    ~Convert() SAL_DELETED_FUNCTION;
 };
 
 /// @internal
@@ -164,8 +164,8 @@ template< typename T > struct Convert< boost::optional< T > >:
     }
 
 private:
-    Convert(); // not defined
-    ~Convert(); // not defined
+    Convert() SAL_DELETED_FUNCTION;
+    ~Convert() SAL_DELETED_FUNCTION;
 };
 
 }
@@ -208,8 +208,8 @@ template< typename T, typename U > struct ConfigurationProperty:
     }
 
 private:
-    ConfigurationProperty(); // not defined
-    ~ConfigurationProperty(); // not defined
+    ConfigurationProperty() SAL_DELETED_FUNCTION;
+    ~ConfigurationProperty() SAL_DELETED_FUNCTION;
 };
 
 /// A type-safe wrapper around a localized configuration property.
@@ -254,8 +254,8 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     }
 
 private:
-    ConfigurationLocalizedProperty(); // not defined
-    ~ConfigurationLocalizedProperty(); // not defined
+    ConfigurationLocalizedProperty() SAL_DELETED_FUNCTION;
+    ~ConfigurationLocalizedProperty() SAL_DELETED_FUNCTION;
 };
 
 /// A type-safe wrapper around a configuration group.
@@ -287,8 +287,8 @@ template< typename T > struct ConfigurationGroup: private boost::noncopyable {
     }
 
 private:
-    ConfigurationGroup(); // not defined
-    ~ConfigurationGroup(); // not defined
+    ConfigurationGroup() SAL_DELETED_FUNCTION;
+    ~ConfigurationGroup() SAL_DELETED_FUNCTION;
 };
 
 /// A type-safe wrapper around a configuration set.
@@ -320,8 +320,8 @@ template< typename T > struct ConfigurationSet: private boost::noncopyable {
     }
 
 private:
-    ConfigurationSet(); // not defined
-    ~ConfigurationSet(); // not defined
+    ConfigurationSet() SAL_DELETED_FUNCTION;
+    ~ConfigurationSet() SAL_DELETED_FUNCTION;
 };
 
 }

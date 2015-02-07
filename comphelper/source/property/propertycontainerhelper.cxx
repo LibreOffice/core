@@ -66,7 +66,6 @@ namespace
 
 
 OPropertyContainerHelper::OPropertyContainerHelper()
-    :m_bUnused(false)
 {
 }
 

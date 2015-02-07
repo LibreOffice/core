@@ -110,9 +110,8 @@ namespace comphelper
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        OProxyAggregation( );                                       // never implemented
-        OProxyAggregation( const OProxyAggregation& );              // never implemented
-        OProxyAggregation& operator=( const OProxyAggregation& );   // never implemented
+        OProxyAggregation( const OProxyAggregation& ) SAL_DELETED_FUNCTION;
+        OProxyAggregation& operator=( const OProxyAggregation& ) SAL_DELETED_FUNCTION;
     };
 
 
@@ -171,9 +170,8 @@ namespace comphelper
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException, std::exception ) = 0;
 
     private:
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( );                                                  // never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& );          // never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& );   // never implemented
+        OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) SAL_DELETED_FUNCTION;
+        OComponentProxyAggregationHelper& operator=( const OComponentProxyAggregationHelper& ) SAL_DELETED_FUNCTION;
     };
 
 
@@ -210,9 +208,8 @@ namespace comphelper
         void implEnsureDisposeInDtor( );
 
     private:
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( );                                                // never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregation( const OComponentProxyAggregation& );          // never implemented
-        COMPHELPER_DLLPRIVATE OComponentProxyAggregation& operator=( const OComponentProxyAggregation& );   // never implemented
+        OComponentProxyAggregation( const OComponentProxyAggregation& ) SAL_DELETED_FUNCTION;
+        OComponentProxyAggregation& operator=( const OComponentProxyAggregation& ) SAL_DELETED_FUNCTION;
     };
 
 

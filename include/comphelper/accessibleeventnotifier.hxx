@@ -44,8 +44,8 @@ namespace comphelper
         ~AccessibleEventNotifier( );    // never implemented
 
     private:
-        COMPHELPER_DLLPRIVATE AccessibleEventNotifier( const AccessibleEventNotifier& );                // never implemented!
-        COMPHELPER_DLLPRIVATE AccessibleEventNotifier& operator=( const AccessibleEventNotifier& ); // never implemented!
+        AccessibleEventNotifier( const AccessibleEventNotifier& ) SAL_DELETED_FUNCTION;
+        AccessibleEventNotifier& operator=( const AccessibleEventNotifier& ) SAL_DELETED_FUNCTION;
 
     public:
         /** registers a client of this class, means a broadcaster of AccessibleEvents

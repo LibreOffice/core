@@ -31,16 +31,12 @@ namespace comphelper {
 
     //= DocumentInfo
 
-    class COMPHELPER_DLLPUBLIC DocumentInfo
+    namespace  DocumentInfo
     {
-    public:
         /** retrieves the UI title of the given document
         */
-        static OUString  getDocumentTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
-
-    private:
-        DocumentInfo(); // never implemented
-    };
+        COMPHELPER_DLLPUBLIC OUString  getDocumentTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocument );
+    }
 
 
 }   // namespace comphelper

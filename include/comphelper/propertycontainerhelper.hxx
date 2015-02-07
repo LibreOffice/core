@@ -85,8 +85,6 @@ private:
     typedef Properties::const_iterator              ConstPropertiesIterator;
     Properties      m_aProperties;
 
-    bool        m_bUnused;
-
 protected:
     OPropertyContainerHelper();
     ~OPropertyContainerHelper();
@@ -188,8 +186,8 @@ private:
     COMPHELPER_DLLPRIVATE PropertiesIterator    searchHandle(sal_Int32 _nHandle);
 
 private:
-    COMPHELPER_DLLPRIVATE OPropertyContainerHelper( const OPropertyContainerHelper& );            // never implemented
-    COMPHELPER_DLLPRIVATE OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ); // never implemented
+    OPropertyContainerHelper( const OPropertyContainerHelper& ) SAL_DELETED_FUNCTION;
+    OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ) SAL_DELETED_FUNCTION;
 };
 
 

@@ -117,9 +117,8 @@ namespace comphelper
         virtual ~OAccessibleWrapper( );
 
     private:
-        COMPHELPER_DLLPRIVATE OAccessibleWrapper( );                                        // never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleWrapper( const OAccessibleWrapper& );          // never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleWrapper& operator=( const OAccessibleWrapper& );   // never implemented
+        OAccessibleWrapper( const OAccessibleWrapper& ) SAL_DELETED_FUNCTION;
+        OAccessibleWrapper& operator=( const OAccessibleWrapper& ) SAL_DELETED_FUNCTION;
     };
 
 
@@ -312,9 +311,8 @@ namespace comphelper
         virtual ~OAccessibleContextWrapper();
 
     private:
-        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper();                                              // never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper( const OAccessibleContextWrapper& );                // never implemented
-        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ); // never implemented
+        OAccessibleContextWrapper( const OAccessibleContextWrapper& ) SAL_DELETED_FUNCTION;
+        OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ) SAL_DELETED_FUNCTION;
     };
 
 
@@ -400,9 +398,8 @@ namespace comphelper
         virtual ~OWrappedAccessibleChildrenManager( );
 
     private:
-        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( );                                                     // never implemented
-        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& );                // never implemented
-        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ); // never implemented
+        OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& ) SAL_DELETED_FUNCTION;
+        OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ) SAL_DELETED_FUNCTION;
     };
 
 
