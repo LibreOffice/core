@@ -35,10 +35,8 @@ namespace desktop {
 class  UnxSplashScreen : public ::cppu::WeakImplHelper3< css::task::XStatusIndicator, css::lang::XInitialization, css::lang::XServiceInfo >
 {
 private:
-    // don't allow anybody but ourselves to create instances of this class
-    UnxSplashScreen( const UnxSplashScreen& );
-    UnxSplashScreen( void );
-    UnxSplashScreen operator =( const UnxSplashScreen& );
+    UnxSplashScreen( const UnxSplashScreen& ) SAL_DELETED_FUNCTION;
+    UnxSplashScreen operator =( const UnxSplashScreen& ) SAL_DELETED_FUNCTION;
 
     virtual ~UnxSplashScreen();
 

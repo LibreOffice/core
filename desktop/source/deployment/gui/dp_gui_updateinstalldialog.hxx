@@ -65,8 +65,8 @@ public:
     virtual short Execute() SAL_OVERRIDE;
 
 private:
-    UpdateInstallDialog(UpdateInstallDialog &); // not defined
-    void operator =(UpdateInstallDialog &); // not defined
+    UpdateInstallDialog(UpdateInstallDialog &) SAL_DELETED_FUNCTION;
+    void operator =(UpdateInstallDialog &) SAL_DELETED_FUNCTION;
 
     class Thread;
     friend class Thread;
@@ -94,7 +94,6 @@ private:
     //Signals that an error occurred during download and installation
     bool m_bError;
     bool m_bNoEntry;
-    bool m_bActivated;
 
     OUString m_sInstalling;
     OUString m_sFinished;

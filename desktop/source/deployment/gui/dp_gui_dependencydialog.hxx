@@ -41,8 +41,8 @@ public:
     virtual ~DependencyDialog();
 
 private:
-    DependencyDialog(DependencyDialog &); // not defined
-    void operator =(DependencyDialog &); // not defined
+    DependencyDialog(DependencyDialog &) SAL_DELETED_FUNCTION;
+    void operator =(DependencyDialog &) SAL_DELETED_FUNCTION;
 
     ListBox*  m_list;
 };

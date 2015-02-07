@@ -56,9 +56,8 @@
         Context * m_pContext;
         InteractionHandler m_xHandler;
     private:
-        // not implemented - suppress copy
-        ConfigurationErrorHandler(const ConfigurationErrorHandler&);
-        void operator=(const ConfigurationErrorHandler&);
+        ConfigurationErrorHandler(const ConfigurationErrorHandler&) SAL_DELETED_FUNCTION;
+        void operator=(const ConfigurationErrorHandler&) SAL_DELETED_FUNCTION;
     };
 
 

@@ -95,8 +95,8 @@ public:
         com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< OUString > > &rItemList );
 
 private:
-    UpdateDialog(UpdateDialog &); // not defined
-    void operator =(UpdateDialog &); // not defined
+    UpdateDialog(UpdateDialog &) SAL_DELETED_FUNCTION;
+    void operator =(UpdateDialog &) SAL_DELETED_FUNCTION;
 
     struct DisabledUpdate;
     struct SpecificError;
@@ -116,8 +116,8 @@ private:
         sal_uInt16 getItemCount() const;
 
     private:
-        CheckListBox(UpdateDialog::CheckListBox &); // not defined
-        void operator =(UpdateDialog::CheckListBox &); // not defined
+        CheckListBox(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
+        void operator =(UpdateDialog::CheckListBox &) SAL_DELETED_FUNCTION;
 
         virtual void MouseButtonDown(MouseEvent const & event) SAL_OVERRIDE;
         virtual void MouseButtonUp(MouseEvent const & event) SAL_OVERRIDE;

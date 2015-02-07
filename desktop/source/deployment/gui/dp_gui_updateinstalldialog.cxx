@@ -211,7 +211,6 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_xComponentContext(xCtx),
         m_bError(false),
         m_bNoEntry(true),
-        m_bActivated(false),
         m_sInstalling(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_INSTALLING)),
         m_sFinished(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_FINISHED)),
         m_sNoErrors(DPGUI_RESSTR(RID_DLG_UPDATE_INSTALL_NO_ERRORS)),

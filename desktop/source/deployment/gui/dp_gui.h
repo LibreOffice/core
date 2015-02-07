@@ -76,8 +76,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> getPackage() const { return m_xPackage; }
 
 private:
-    SelectedPackage(SelectedPackage &); // not defined
-    void operator =(SelectedPackage &); // not defined
+    SelectedPackage(SelectedPackage &) SAL_DELETED_FUNCTION;
+    void operator =(SelectedPackage &) SAL_DELETED_FUNCTION;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
 };
