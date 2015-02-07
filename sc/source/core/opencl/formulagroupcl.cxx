@@ -2573,14 +2573,29 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         pSVR->GetArray().mpStringArray &&
                         pCodeGen->takeString())
                     {
+                        // Function takes numbers or strings, there are both
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new DynamicKernelMixedArgument(mCalcConfig,
                                     ts, ft->Children[i])));
                     }
                     else if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric() &&
-                        (!pSVR->GetArray().mpStringArray || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO))
+                        (pSVR->GetArray().mpStringArray == NULL || mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO))
                     {
+                        // Function takes numbers, and either there
+                        // are no strings, or there are strings but
+                        // they are to be treated as zero
+                        mvSubArguments.push_back(
+                            DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
+                                    ft->Children[i])));
+                    }
+                    else if (pSVR->GetArray().mpNumericArray == NULL &&
+                        pCodeGen->takeNumeric() &&
+                        pSVR->GetArray().mpStringArray &&
+                        mCalcConfig.meStringConversion == ScCalcConfig::StringConversion::ZERO)
+                    {
+                        // Function takes numbers, and there are only
+                        // strings, but they are to be treated as zero
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
                                     ft->Children[i])));
@@ -2588,6 +2603,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     else if (pSVR->GetArray().mpStringArray &&
                         pCodeGen->takeString())
                     {
+                        // There are strings, and the function takes
+                        // strings.
+
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new DynamicKernelStringArgument(mCalcConfig,
                                     ts, ft->Children[i])));
@@ -2595,7 +2613,8 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                     else if (pSVR->GetArray().mpStringArray == NULL &&
                         pSVR->GetArray().mpNumericArray == NULL)
                     {
-                        // Push as an array of NANs
+                        // There are only empty cells. Push as an
+                        // array of NANs
                         mvSubArguments.push_back(
                             DynamicKernelArgumentRef(new VectorRef(mCalcConfig, ts,
                                     ft->Children[i])));
