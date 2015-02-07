@@ -46,11 +46,7 @@
 #endif
 #include <svx/xflclit.hxx>
 
-using ::editeng::SvxBorderLine;
-using namespace ::comphelper;
 using namespace ::com::sun::star;
-
-using sw::mark::IMark;
 
 // the default text encoding for the export, if it doesn't fit unicode will
 // be used
@@ -116,7 +112,7 @@ void RtfExport::AppendBookmarks(const SwTxtNode& rNode, sal_Int32 nAktPos, sal_I
         for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
                 it != end; ++it)
         {
-            IMark* pMark = (*it);
+            sw::mark::IMark* pMark = (*it);
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
@@ -153,7 +149,7 @@ void RtfExport::AppendAnnotationMarks(const SwTxtNode& rNode, sal_Int32 nAktPos,
         for (IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
                 it != end; ++it)
         {
-            IMark* pMark = (*it);
+            sw::mark::IMark* pMark = (*it);
             const sal_Int32 nStart = pMark->GetMarkStart().nContent.GetIndex();
             const sal_Int32 nEnd = pMark->GetMarkEnd().nContent.GetIndex();
 
@@ -921,7 +917,7 @@ void RtfExport::InsColor(const Color& rCol)
 
 void RtfExport::InsColorLine(const SvxBoxItem& rBox)
 {
-    const SvxBorderLine* pLine = 0;
+    const editeng::SvxBorderLine* pLine = 0;
 
     if (rBox.GetTop())
         InsColor((pLine = rBox.GetTop())->GetColor());
