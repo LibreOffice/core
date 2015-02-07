@@ -102,8 +102,9 @@ protected:
     /// @endcond
 
 private:
-    inline OComponentHelper( const OComponentHelper & );
-    inline OComponentHelper & operator = ( const OComponentHelper & );
+    OComponentHelper( const OComponentHelper & ) SAL_DELETED_FUNCTION;
+    OComponentHelper & operator = ( const OComponentHelper & )
+        SAL_DELETED_FUNCTION;
 };
 
 }

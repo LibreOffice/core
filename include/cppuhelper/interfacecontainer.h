@@ -106,8 +106,10 @@ private:
 
     sal_Int32                   nRemain;
 
-    OInterfaceIteratorHelper( const OInterfaceIteratorHelper & );
-    OInterfaceIteratorHelper &  operator = ( const OInterfaceIteratorHelper & );
+    OInterfaceIteratorHelper( const OInterfaceIteratorHelper & )
+        SAL_DELETED_FUNCTION;
+    OInterfaceIteratorHelper &  operator = ( const OInterfaceIteratorHelper & )
+        SAL_DELETED_FUNCTION;
 };
 
 
@@ -240,8 +242,10 @@ friend class OInterfaceIteratorHelper;
     /** TRUE -> aData.pAsSequence is of type Sequence< XInterfaceSequence >. */
     sal_Bool                bIsList;
 
-    OInterfaceContainerHelper( const OInterfaceContainerHelper & );
-    OInterfaceContainerHelper & operator = ( const OInterfaceContainerHelper & );
+    OInterfaceContainerHelper( const OInterfaceContainerHelper & )
+        SAL_DELETED_FUNCTION;
+    OInterfaceContainerHelper & operator = ( const OInterfaceContainerHelper & )
+        SAL_DELETED_FUNCTION;
 
     /*
       Dulicate content of the conaitner and release the old one without destroying.
@@ -407,8 +411,8 @@ private:
         return iter;
     }
 
-    inline OMultiTypeInterfaceContainerHelperVar( const OMultiTypeInterfaceContainerHelperVar & );
-    inline OMultiTypeInterfaceContainerHelperVar & operator = ( const OMultiTypeInterfaceContainerHelperVar & );
+    OMultiTypeInterfaceContainerHelperVar( const OMultiTypeInterfaceContainerHelperVar & ) SAL_DELETED_FUNCTION;
+    OMultiTypeInterfaceContainerHelperVar & operator = ( const OMultiTypeInterfaceContainerHelperVar & ) SAL_DELETED_FUNCTION;
 };
 
 
@@ -590,8 +594,8 @@ private:
     void *m_pMap;
     ::osl::Mutex &  rMutex;
 
-    inline OMultiTypeInterfaceContainerHelper( const OMultiTypeInterfaceContainerHelper & );
-    inline OMultiTypeInterfaceContainerHelper & operator = ( const OMultiTypeInterfaceContainerHelper & );
+    OMultiTypeInterfaceContainerHelper( const OMultiTypeInterfaceContainerHelper & ) SAL_DELETED_FUNCTION;
+    OMultiTypeInterfaceContainerHelper & operator = ( const OMultiTypeInterfaceContainerHelper & ) SAL_DELETED_FUNCTION;
 };
 
 typedef OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper , OMultiTypeInterfaceContainerHelper::keyType > OBroadcastHelper;

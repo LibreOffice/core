@@ -158,8 +158,8 @@ protected:
         void notify() const;
 
     private:
-        BoundListeners( const BoundListeners&); // not defined
-        void operator=( const BoundListeners&); // not defined
+        BoundListeners( const BoundListeners&) SAL_DELETED_FUNCTION;
+        void operator=( const BoundListeners&) SAL_DELETED_FUNCTION;
 
         class Impl;
         Impl * m_impl;
@@ -382,8 +382,8 @@ protected:
             com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    PropertySetMixinImpl( const PropertySetMixinImpl&); // not defined
-    void operator=( const PropertySetMixinImpl&); // not defined
+    PropertySetMixinImpl( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
+    void operator=( const PropertySetMixinImpl&) SAL_DELETED_FUNCTION;
 
     PropertySetMixinImpl(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -474,8 +474,8 @@ protected:
     ~PropertySetMixin() {}
 
 private:
-    PropertySetMixin( const PropertySetMixin&); // not defined
-    void operator=( const PropertySetMixin&); // not defined
+    PropertySetMixin( const PropertySetMixin&) SAL_DELETED_FUNCTION;
+    void operator=( const PropertySetMixin&) SAL_DELETED_FUNCTION;
 };
 #if defined __GNUC__ && !defined __clang__
 #pragma GCC diagnostic pop

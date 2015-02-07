@@ -94,8 +94,9 @@ protected:
     */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:
-    OWeakAggObject( const OWeakAggObject & rObj );
-    OWeakAggObject & operator = ( const OWeakAggObject & rObj );
+    OWeakAggObject( const OWeakAggObject & rObj ) SAL_DELETED_FUNCTION;
+    OWeakAggObject & operator = ( const OWeakAggObject & rObj )
+        SAL_DELETED_FUNCTION;
 };
 
 }
