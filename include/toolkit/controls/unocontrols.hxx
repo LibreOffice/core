@@ -244,7 +244,7 @@ protected:
     ::com::sun::star::uno::Any ImplGetDefaultValue( sal_uInt16 nPropId ) const SAL_OVERRIDE;
 
 private:
-        GraphicControlModel& operator=( const GraphicControlModel& );   // never implemented
+        GraphicControlModel& operator=( const GraphicControlModel& ) SAL_DELETED_FUNCTION;
 };
 
 
