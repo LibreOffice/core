@@ -363,11 +363,8 @@ void ScDocument::StartAnimations( SCTAB nTab, vcl::Window* pWin )
 
 bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {
-    //  Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
-    //  betroffen sind?
-    //  (fuer Drawing-Optimierung, vor dem Hintergrund braucht dann nicht geloescht
-    //   zu werden)
-
+    //  Are there objects in the background layer who are (partly) affected by rMMRect
+    //  (for Drawing optimization, no deletion in front of the background
     if (!pDrawLayer)
         return false;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
@@ -391,10 +388,8 @@ bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 
 bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {
-    //  Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
-    //  betroffen sind?
-    //  (um leere Seiten beim Drucken zu erkennen)
-
+    //  Are there any objects at all who are (partly) affected by rMMRect?
+    //  (To detect blank pages when printing)
     if (!pDrawLayer)
         return false;
     SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
@@ -424,8 +419,7 @@ void ScDocument::EnsureGraphicNames()
 
 SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
-    //  fuer Drag&Drop auf Zeichenobjekt
-
+    //  for Drag&Drop on draw object
     SdrObject* pFound = NULL;
     if (pDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
     {
@@ -439,9 +433,8 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
             {
                 if ( pObject->GetCurrentBoundRect().IsInside(rPos) )
                 {
-                    //  Intern interessiert gar nicht
-                    //  Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
-
+                    // Intern is of no interest
+                    // Only object form background layer, when no object form another layer is found
                     SdrLayerID nLayer = pObject->GetLayer();
                     if ( (nLayer != SC_LAYER_INTERN) && (nLayer != SC_LAYER_HIDDEN) )
                     {
@@ -452,8 +445,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
                         }
                     }
                 }
-                //  weitersuchen -> letztes (oberstes) getroffenes Objekt nehmen
-
+                //  Continue search -> take last (on top) found object
                 pObject = aIter.Next();
             }
         }
@@ -515,10 +507,10 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         ScDocument* pThis = const_cast<ScDocument*>(this);
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            false );      // kein Refresh, incl. Attrs
+                            false );      // no Refresh, incl. Attrs
 
         OutputDevice* pDev = pThis->GetPrinter();
-        pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
+        pDev->SetMapMode( MAP_PIXEL );              // Important for GetNeededSize
         ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
         if ( nExtendCol >= nStartCol )
             return false;
@@ -573,11 +565,11 @@ bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
 
 void ScDocument::UpdateFontCharSet()
 {
-    //  In alten Versionen (bis incl. 4.0 ohne SP) wurden beim Austausch zwischen
-    //  Systemen die CharSets in den Font-Attributen nicht angepasst.
-    //  Das muss fuer Dokumente bis incl SP2 nun nachgeholt werden:
-    //  Alles, was nicht SYMBOL ist, wird auf den System-CharSet umgesetzt.
-    //  Bei neuen Dokumenten (Version SC_FONTCHARSET) sollte der CharSet stimmen.
+    // In old versions (until 4.0 without SP), when switching between systems,
+    // the Font attribute was not adjusted.
+    // This has to be redone for Documents until SP2:
+    // Everything that is not SYMBOL is set to system CharSet.
+    // CharSet should be correct for new documents (version SC_FONTCHARSET)
 
     bool bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
 
