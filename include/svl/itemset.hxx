@@ -136,6 +136,7 @@ public:
     bool                        operator==(const SfxItemSet &) const;
     sal_Int32                   getHash() const;
     OString                     stringify() const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )

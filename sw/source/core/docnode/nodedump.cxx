@@ -99,8 +99,6 @@ static const char* TMP_FORMAT_I32 = "%" SAL_PRIdINT32;
 
 }
 
-void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet);
-
 void SwDoc::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
@@ -256,23 +254,11 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w ) const
     if (IsTableNode())
     {
         writer.startElement("attrset");
-        const SwAttrSet& rAttrSet = GetTableNode()->GetTable().GetFrmFmt()->GetAttrSet();
-        lcl_dumpSfxItemSet(writer, &rAttrSet);
+        GetTableNode()->GetTable().GetFrmFmt()->GetAttrSet().dumpAsXml(writer);
         writer.endElement();
     }
 
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
-}
-
-void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
-{
-    SfxItemIter aIter(*pSet);
-    const SfxPoolItem* pItem = aIter.FirstItem();
-    while (pItem)
-    {
-        pItem->dumpAsXml(writer);
-        pItem = aIter.NextItem();
-    }
 }
 
 void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName) const
@@ -310,8 +296,7 @@ void SwFrmFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (pWhich)
         xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
 
-    WriterHelper w(pWriter);
-    lcl_dumpSfxItemSet(w, &GetAttrSet());
+    GetAttrSet().dumpAsXml(pWriter);
 
     xmlTextWriterEndElement(pWriter);
 }
@@ -329,7 +314,7 @@ void SwCharFmts::dumpAsXml(xmlTextWriterPtr w) const
             OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
 
-            lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
+            pFmt->GetAttrSet().dumpAsXml(w);
             writer.endElement();
         }
         writer.endElement();
@@ -346,7 +331,7 @@ void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w) const
         {
             const SwSectionFmt* pFmt = GetFmt(i);
             writer.startElement("swsectionfmt");
-            lcl_dumpSfxItemSet(writer, &pFmt->GetAttrSet());
+            pFmt->GetAttrSet().dumpAsXml(w);
             writer.endElement();
         }
         writer.endElement();
@@ -366,7 +351,7 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
             OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
 
-            lcl_dumpSfxItemSet(writer, &pColl->GetAttrSet());
+            pColl->GetAttrSet().dumpAsXml(w);
             writer.endElement();
         }
         writer.endElement();
@@ -399,8 +384,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
     if (HasSwAttrSet())
     {
         writer.startElement("attrset");
-        const SwAttrSet& rAttrSet = GetSwAttrSet();
-        lcl_dumpSfxItemSet(writer, &rAttrSet);
+        GetSwAttrSet().dumpAsXml(writer);
         writer.endElement();
     }
 
@@ -451,7 +435,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
             {
                 boost::shared_ptr<SfxItemSet> const pSet(pHint->GetAutoFmt().GetStyleHandle());
                 writer.startElement("autofmt");
-                lcl_dumpSfxItemSet(writer, pSet.get());
+                pSet->dumpAsXml(writer);
                 writer.endElement();
             }
 
