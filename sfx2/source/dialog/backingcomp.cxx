@@ -328,7 +328,7 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
 /**
     attach this component to a target frame.
 
-    We has to use the container window of this frame as parent window of our own component window.
+    We have to use the container window of this frame as parent window of our own component window.
     But it's not allowed to work with it really. May another component used it too.
     Currently we need it only to create our child component window and support it's
     interfaces inside our queryInterface() method. The user of us must have e.g. the

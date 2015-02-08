@@ -1463,7 +1463,7 @@ void SAL_CALL Frame::contextChanged() throw( css::uno::RuntimeException, std::ex
 
 /*-****************************************************************************************************
     @short      set new component inside the frame
-    @descr      A frame is a container for a component. Use this method to set, change or realease it!
+    @descr      A frame is a container for a component. Use this method to set, change or release it!
                 We accept null references! The xComponentWindow will be a child of our container window
                 and get all window events from us.
 

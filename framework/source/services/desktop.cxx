@@ -1044,7 +1044,7 @@ void SAL_CALL Desktop::disposing()
     // So nobody can use us any longer.
     // Exception: Only removing of listener will work ... and this code can't be dangerous.
 
-    // First we has to kill all listener connections.
+    // First we have to kill all listener connections.
     // They might rely on our member and can hinder us on releasing them.
     css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject                      aEvent( xThis );

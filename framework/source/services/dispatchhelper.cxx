@@ -158,7 +158,7 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
     m_xBroadcaster.clear();
 }
 
-/** we has to realease our broadcaster reference.
+/** we have to release our broadcaster reference.
 
     @param aEvent
                 describe the source of this event and MUST be our save broadcaster!
