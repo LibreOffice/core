@@ -159,7 +159,7 @@ published interface XRegistryKey: com::sun::star::uno::XInterface
 
     // DOCUMENTATION CHANGED FOR XRegistryKey::getAsciiListValue
     /** @returns
-        a sequence of ascii strings if the key contains an asci list value.
+        a sequence of ascii strings if the key contains an ascii list value.
 
          @throws InvalidRegistryException
          if the registry is not open.
