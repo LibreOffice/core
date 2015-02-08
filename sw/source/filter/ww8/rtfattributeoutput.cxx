@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cstring>
 #include "rtfattributeoutput.hxx"
+#include <cstring>
 #include "rtfsdrexport.hxx"
 #include "writerwordglue.hxx"
 #include "ww8par.hxx"

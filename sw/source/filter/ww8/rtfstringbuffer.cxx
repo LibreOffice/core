@@ -6,8 +6,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "rtfattributeoutput.hxx"
 #include "rtfstringbuffer.hxx"
+#include "rtfattributeoutput.hxx"
 
 RtfStringBufferValue::RtfStringBufferValue()
     : m_aBuffer(),

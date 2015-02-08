@@ -11,7 +11,12 @@
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 
 #include <boost/shared_ptr.hpp>
+
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <rtl/strbuf.hxx>
+#include <sax/fshelper.hxx>
+#include <tools/solar.h>
+
 namespace oox
 {
 namespace drawingml
@@ -22,6 +27,7 @@ class DrawingML;
 class Size;
 class Point;
 class SdrObject;
+class SvxBoxItem;
 
 namespace sw
 {
