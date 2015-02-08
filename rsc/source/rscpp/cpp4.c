@@ -320,7 +320,7 @@ void doundef()
  */
 void textput(char* text)
 {
-    int size;
+    size_t size;
 
     size = strlen(text) + 1;
     if ((parmp + size) >= &parm[NPARMWORK])
@@ -531,7 +531,7 @@ FILE_LOCAL void expstuff(DEFBUF* tokenp)
     int c;                      /* Current character    */
     char* inp;                  /* -> repl string       */
     char* defp;                 /* -> macro output buff */
-    int size;                   /* Actual parm. size    */
+    size_t size;                   /* Actual parm. size    */
     char* defend;               /* -> output buff end   */
     int string_magic;           /* String formal hack   */
     FILEINFO* file;             /* Funny #include       */
