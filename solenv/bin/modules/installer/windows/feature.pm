@@ -134,12 +134,6 @@ sub get_feature_level
         $level = "200";             # deselected in default installation, base is 100
     }
 
-    # special handling for Java and Ada
-    if ( $onefeature->{'Name'} )
-    {
-        if ( $onefeature->{'Name'} =~ /java/i ) { $level = $level + 40; }
-    }
-
     # if FeatureLevel is defined in scp, this will be used
 
     if ( $onefeature->{'FeatureLevel'} ) { $level = $onefeature->{'FeatureLevel'}; }
