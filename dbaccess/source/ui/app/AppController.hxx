@@ -253,7 +253,7 @@ namespace dbaui
         ::std::unique_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
 
         /// returns the query definitions of the active data source.
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> getQueryDefintions() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer> getQueryDefinitions() const;
 
         /** pastes a special format from the system clipboard to the currently selected object types
             @param  _nFormatId

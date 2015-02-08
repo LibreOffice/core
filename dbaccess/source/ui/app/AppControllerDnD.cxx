@@ -456,7 +456,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
 
         case E_QUERY:
         {
-            xElements.set( getQueryDefintions(), UNO_QUERY_THROW );
+            xElements.set( getQueryDefinitions(), UNO_QUERY_THROW );
         }
         break;
 
@@ -624,7 +624,7 @@ bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccess
                         OUString sDefaultName = OUString( ModuleRes( STR_QRY_TITLE ) );
                         sDefaultName = sDefaultName.getToken( 0, ' ' );
 
-                        Reference< XNameAccess > xQueries( getQueryDefintions(), UNO_QUERY_THROW );
+                        Reference< XNameAccess > xQueries( getQueryDefinitions(), UNO_QUERY_THROW );
                         sTargetName = ::dbtools::createUniqueName( xQueries, sDefaultName, false );
                     }
                 }
@@ -665,7 +665,7 @@ bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccess
                     }
                 }
 
-                Reference< XNameContainer > xDestQueries(getQueryDefintions(), UNO_QUERY);
+                Reference< XNameContainer > xDestQueries(getQueryDefinitions(), UNO_QUERY);
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
                 {
@@ -762,7 +762,7 @@ bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccess
     return false;
 }
 
-Reference<XNameContainer> OApplicationController::getQueryDefintions() const
+Reference<XNameContainer> OApplicationController::getQueryDefinitions() const
 {
     Reference<XQueryDefinitionsSupplier> xSet(m_xDataSource,UNO_QUERY);
     Reference<XNameContainer> xNames;
