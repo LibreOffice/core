@@ -992,7 +992,7 @@ function writeBatFile(fdir, file)
         "REM Set environment for C++ compiler tools, if necessary.\n" +
         "if defined OO_SDK_CPP_HOME call \"%OO_SDK_CPP_HOME%\\VCVARS32.bat\"\n" +
         "\n" +
-        "REM Set tilte to identify the prepared shell.\n" +
+        "REM Set title to identify the prepared shell.\n" +
         "title Shell prepared for SDK\n" +
         "\nREM Prepare shell with all necessary environment variables.\n" +
         "echo.\n" +
