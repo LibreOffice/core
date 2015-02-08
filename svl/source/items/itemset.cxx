@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <cstdarg>
+#include <libxml/xmlwriter.h>
 
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
@@ -1918,6 +1919,15 @@ OString SfxItemSet::stringify() const
     aStream.Flush();
     return OString(
         static_cast<char const *>(aStream.GetData()), aStream.GetEndOfData());
+}
+
+void SfxItemSet::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("sfxItemSet"));
+    SfxItemIter aIter(*this);
+    for (const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
+         pItem->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
