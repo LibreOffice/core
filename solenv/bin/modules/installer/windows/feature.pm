@@ -134,10 +134,6 @@ sub get_feature_level
         $level = "200";             # deselected in default installation, base is 100
     }
 
-    # if FeatureLevel is defined in scp, this will be used
-
-    if ( $onefeature->{'FeatureLevel'} ) { $level = $onefeature->{'FeatureLevel'}; }
-
     return $level
 }
 
