@@ -19,6 +19,11 @@
 
 $(eval $(call gb_Library_Library,wpftimpress))
 
+$(eval $(call gb_Library_set_include,wpftimpress,\
+       -I$(SRCDIR)/writerperfect/inc \
+       $$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_set_componentfile,wpftimpress,writerperfect/source/impress/wpftimpress))
 
 $(eval $(call gb_Library_use_sdk_api,wpftimpress))
@@ -48,7 +53,6 @@ $(eval $(call gb_Library_use_externals,wpftimpress,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,wpftimpress,\
-	writerperfect/source/impress/ImportFilterBase \
 	writerperfect/source/impress/KeynoteImportFilter \
 	writerperfect/source/impress/MWAWPresentationImportFilter \
 	writerperfect/source/impress/wpftimpress_genericfilter \
