@@ -155,7 +155,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
         short   eFamDummy;
         pStr = new OUString;
         *pStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-        rStream.ReadInt16( eFamDummy ); // wg. altem Dateiformat
+        rStream.ReadInt16( eFamDummy ); // due to old data format
     }
     else
         pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
@@ -177,13 +177,13 @@ SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */)
 
     if ( pStyle )
         rStream.WriteUniOrByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
-    else if ( pName )                   // wenn Style geloescht ist/war
+    else if ( pName )                   // when style is/was deleted
         rStream.WriteUniOrByteString( *pName, rStream.GetStreamCharSet() );
     else
         rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                                     rStream.GetStreamCharSet() );
 
-    rStream.WriteInt16( SFX_STYLE_FAMILY_PARA );  // wg. altem Dateiformat
+    rStream.WriteInt16( SFX_STYLE_FAMILY_PARA );  // due to old data format
 
     GetItemSet().Store( rStream );
 
@@ -221,7 +221,7 @@ void ScPatternAttr::GetFont(
         const SfxItemSet* pCondSet, sal_uInt8 nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
-    //  Items auslesen
+    // Read items
 
     const SvxFontItem* pFontAttr;
     sal_uInt32 nFontHeight;
@@ -324,7 +324,7 @@ void ScPatternAttr::GetFont(
             pItem = &rItemSet.Get( nLangId );
         eLang = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
     }
-    else    // alles aus rItemSet
+    else    // Everything from rItemSet
     {
         pFontAttr = &static_cast<const SvxFontItem&>(rItemSet.Get( nFontId ));
         nFontHeight = static_cast<const SvxFontHeightItem&>(
@@ -356,7 +356,7 @@ void ScPatternAttr::GetFont(
     }
     OSL_ENSURE(pFontAttr,"Oops?");
 
-    //  auswerten
+    //  Evaluate
 
     //  FontItem:
 
@@ -371,7 +371,7 @@ void ScPatternAttr::GetFont(
 
     rFont.SetLanguage(eLang);
 
-    //  Groesse
+    //  Size
 
     if ( pOutDev != NULL )
     {
@@ -491,7 +491,7 @@ void ScPatternAttr::GetFont(
 
 void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )
 {
-    //  Items auslesen
+    //  Read Items
 
     SvxColorItem    aColorItem(EE_CHAR_COLOR);              // use item as-is
     SvxFontItem     aFontItem(EE_CHAR_FONTINFO);            // use item as-is
@@ -616,7 +616,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
             pItem = &rSrcSet.Get( ATTR_WRITINGDIR );
         eDirection = (SvxFrameDirection)static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue();
     }
-    else        // alles direkt aus Pattern
+    else        // Everything directly from Pattern
     {
         aColorItem = static_cast<const SvxColorItem&>( rSrcSet.Get( ATTR_FONT_COLOR ) );
         aFontItem = static_cast<const SvxFontItem&>( rSrcSet.Get( ATTR_FONT ) );
@@ -668,7 +668,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
                         rSrcSet.Get( ATTR_WRITINGDIR )).GetValue();
     }
 
-    // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72, und runden
+    // Expect to be compatible to LogicToLogic, ie. 2540/1440 = 127/72, and round
 
     long nHeight = TwipsToHMM(nTHeight);
     long nCjkHeight = TwipsToHMM(nCjkTHeight);
@@ -811,9 +811,8 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         switch ( static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
         {
             case SVX_ADJUST_LEFT:
-                // EditEngine Default ist bei dem GetAttribs() ItemSet
-                // immer gesetzt!
-                // ob links oder rechts entscheiden wir selbst bei Text/Zahl
+                // EditEngine Default is always set in the GetAttribs() ItemSet !
+                // whether left or right, is decided in text / number
                 eVal = SVX_HOR_JUSTIFY_STANDARD;
                 break;
             case SVX_ADJUST_RIGHT:
@@ -847,8 +846,8 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 {
-    //  in GetFromEditItemSet schon dabei, in FillEditItemSet aber nicht
-    //  Hor. Ausrichtung Standard wird immer als "links" umgesetzt
+    //  already there in GetFromEditItemSet, but not in FillEditItemSet
+    //  Default horizontal alignmnet is always implemented as left
 
     const SfxItemSet& rMySet = GetItemSet();
 
@@ -955,7 +954,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
             }
         }
 
-        // ggF. abgeleitete Styles erzeugen, wenn nicht vorhanden:
+        // if necessary create derivative Styles, if not available:
 
         if ( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != aStrParent &&
              aStrSrcStyle != aStrParent &&
@@ -978,14 +977,14 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
     ScPatternAttr* pDestPattern = new ScPatternAttr(pDestDoc->GetPool());
     SfxItemSet* pDestSet = &pDestPattern->GetItemSet();
 
-    // Zellformatvorlage in anderes Dokument kopieren:
+    // Copy cell pattern style to other document:
 
     if ( pDestDoc != pSrcDoc )
     {
         OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
 
-        // wenn Vorlage im DestDoc vorhanden, dieses benutzen, sonst Style
-        // mit Parent-Vorlagen kopieren/ggF. erzeugen und dem DestDoc hinzufuegen
+        // if pattern in DestDoc is available, use this, otherwise copy
+        // parent style to style or create if necessary and attach DestDoc
 
         SfxStyleSheetBase* pStyleCpy = lcl_CopyStyleToPool( pStyle,
                                                             pSrcDoc->GetStyleSheetPool(),
@@ -1005,7 +1004,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
             if ( nAttrId == ATTR_VALIDDATA )
             {
-                //  Gueltigkeit ins neue Dokument kopieren
+                // Copy validity to the new document
 
                 sal_uLong nNewIndex = 0;
                 ScValidationDataList* pSrcList = pSrcDoc->GetValidationList();
@@ -1020,7 +1019,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
             }
             else if ( nAttrId == ATTR_VALUE_FORMAT && pDestDoc->GetFormatExchangeList() )
             {
-                //  Zahlformate nach Exchange-Liste
+                //  Number format to Exchange List
 
                 sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
                 SvNumberFormatterIndexTable::const_iterator it = pDestDoc->GetFormatExchangeList()->find(nOldFormat);
@@ -1166,7 +1165,7 @@ void ScPatternAttr::UpdateStyleSheet(ScDocument* pDoc)
 
 void ScPatternAttr::StyleToName()
 {
-    // Style wurde geloescht, Namen merken:
+    // Style was deleted, remember name:
 
     if ( pStyle )
     {
@@ -1196,13 +1195,13 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
     LanguageType eLang =
         static_cast<const SvxLanguageItem*>(&GetItemSet().Get( ATTR_LANGUAGE_FORMAT ))->GetLanguage();
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
-        ;       // es bleibt wie es ist
+        ;       // it remains as it is
     else if ( pFormatter )
         nFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nFormat, eLang );
     return nFormat;
 }
 
-//  dasselbe, wenn bedingte Formatierung im Spiel ist:
+// the same if conditional formatting is in play:
 
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
@@ -1235,7 +1234,7 @@ const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nSubWhich, const SfxItemSe
     return GetItem( nSubWhich, GetItemSet(), pCondSet );
 }
 
-//  GetRotateVal testet vorher ATTR_ORIENTATION
+//  GetRotateVal is tested before ATTR_ORIENTATION
 
 long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
 {
@@ -1267,7 +1266,7 @@ sal_uInt8 ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
             nRet = SC_ROTDIR_CENTER;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
-            long nRot180 = nAttrRotate % 18000;     // 1/100 Grad
+            long nRot180 = nAttrRotate % 18000;     // 1/100 degrees
             if ( nRot180 == 9000 )
                 nRet = SC_ROTDIR_CENTER;
             else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||

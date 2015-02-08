@@ -57,7 +57,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace {
 
-sal_uInt16 nFuncStrIds[12] =     // passend zum enum ScSubTotalFunc
+sal_uInt16 nFuncStrIds[12] =     // matching enum ScSubTotalFunc
 {
     0,                              // SUBTOTAL_FUNC_NONE
     STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE

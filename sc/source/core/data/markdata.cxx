@@ -146,7 +146,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         pMultiSel[nCol].SetMarkArea( nStartRow, nEndRow, bMark );
 
-    if ( bMultiMarked )                 // aMultiRange updaten
+    if ( bMultiMarked )                 // Update aMultiRange
     {
         if ( nStartCol < aMultiRange.aStart.Col() )
             aMultiRange.aStart.SetCol( nStartCol );
@@ -159,7 +159,7 @@ void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark )
     }
     else
     {
-        aMultiRange = rRange;           // neu
+        aMultiRange = rRange;           // new
         bMultiMarked = true;
     }
 }
@@ -260,7 +260,7 @@ void ScMarkData::MarkToSimple()
         while ( nStartCol < nEndCol && !pMultiSel[nEndCol].HasMarks() )
             --nEndCol;
 
-        //  Zeilen werden nur aus MarkArray genommen
+        // Rows are only taken from MarkArray
         SCROW nStartRow, nEndRow;
         if ( pMultiSel[nStartCol].HasOneMark( nStartRow, nEndRow ) )
         {
@@ -531,7 +531,7 @@ bool ScMarkData::HasAnyMultiMarks() const
         if ( pMultiSel[nCol].HasMarks() )
             return true;
 
-    return false;       // nix
+    return false;       // no
 }
 
 void ScMarkData::InsertTab( SCTAB nTab )
