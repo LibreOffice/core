@@ -485,7 +485,8 @@ char* savestring(char* text)
 {
     char* result;
 
-    result = getmem(strlen(text) + 1);
+    size_t size = strlen(text) + 1;
+    result = getmem(size);
     strcpy(result, text);
     return (result);
 }
@@ -493,10 +494,10 @@ char* savestring(char* text)
 /*
  * Common FILEINFO buffer initialization for a new file or macro.
  */
-FILEINFO* getfile(int bufsize, char* name)
+FILEINFO* getfile(size_t bufsize, char* name)
 {
     FILEINFO* file;
-    int size;
+    size_t size;
 
     size = strlen(name);                    /* File/macro name      */
     file = (FILEINFO*) getmem(sizeof (FILEINFO) + bufsize + size);
@@ -518,7 +519,7 @@ FILEINFO* getfile(int bufsize, char* name)
 /*
  * Get a block of free memory.
  */
-char* getmem(int size)
+char* getmem(size_t size)
 {
     char* result;
 
