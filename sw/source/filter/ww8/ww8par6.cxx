@@ -3791,12 +3791,6 @@ void SwWW8ImplReader::Read_CharShadow(  sal_uInt16, const sal_uInt8* pData, shor
     if( nLen <= 0 )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
-        if( bCharShdTxtCol )
-        {
-            // Zeichenfarbe auch
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bCharShdTxtCol = false;
-        }
     }
     else
     {
@@ -3813,12 +3807,6 @@ void SwWW8ImplReader::Read_TxtBackColor(sal_uInt16, const sal_uInt8* pData, shor
     if( nLen <= 0 )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
-        if( bCharShdTxtCol )
-        {
-            // Zeichenfarbe auch
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );
-            bCharShdTxtCol = false;
-        }
     }
     else
     {
@@ -3835,11 +3823,6 @@ void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, sho
     if( nLen <= 0 )
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
-        if( bCharShdTxtCol )
-        {
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_COLOR );  // Zeichenfarbe auch
-            bCharShdTxtCol = false;
-        }
     }
     else
     {

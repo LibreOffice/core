@@ -1315,7 +1315,6 @@ private:
     bool bWasTabCellEnd;    // table: Cell End Mark
 
     bool bShdTxtCol;        // Textfarbe indirekt gesetzt ( Hintergrund sw )
-    bool bCharShdTxtCol;    // Textfarbe indirekt gesetzt ( Zeichenhintergrund sw )
     bool bAnl;              // Nummerierung in Bearbeitung
                                 // Anl heisst Autonumber level
 

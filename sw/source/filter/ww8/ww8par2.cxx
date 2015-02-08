@@ -3818,8 +3818,7 @@ void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
 {
     // Reset attribute flags, because there are no style-ends.
 
-    pIo->bHasBorder = pIo->bShdTxtCol = pIo->bCharShdTxtCol
-        = pIo->bSpec = pIo->bObj = pIo->bSymbol = false;
+    pIo->bHasBorder = pIo->bShdTxtCol = pIo->bSpec = pIo->bObj = pIo->bSymbol = false;
     pIo->nCharFmt = -1;
 
     // If Style basiert auf Nichts oder Basis ignoriert
