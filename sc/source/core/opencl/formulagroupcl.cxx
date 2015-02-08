@@ -143,6 +143,9 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     {
         const formula::SingleVectorRefToken* pSVR =
             static_cast<const formula::SingleVectorRefToken*>(ref);
+
+        SAL_INFO("sc.opencl", "SingleVectorRef len=" << pSVR->GetArrayLength() << " mpNumericArray=" << pSVR->GetArray().mpNumericArray << " (mpStringArray=" << pSVR->GetArray().mpStringArray << ")");
+
         pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
         szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
     }
@@ -150,6 +153,9 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     {
         const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken*>(ref);
+
+        SAL_INFO("sc.opencl", "DoubleVectorRef index=" << mnIndex << " len=" << pDVR->GetArrayLength() << " mpNumericArray=" << pDVR->GetArrays()[mnIndex].mpNumericArray << " (mpStringArray=" << pDVR->GetArrays()[mnIndex].mpStringArray << ")");
+
         pHostBuffer = const_cast<double*>(
             pDVR->GetArrays()[mnIndex].mpNumericArray);
         szHostBuffer = pDVR->GetArrayLength() * sizeof(double);
@@ -2534,8 +2540,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 {
                     const formula::DoubleVectorRefToken* pDVR =
                         static_cast<const formula::DoubleVectorRefToken*>(pChild);
+
                     for (size_t j = 0; j < pDVR->GetArrays().size(); ++j)
                     {
+                        SAL_INFO("sc.opencl", "j=" << j << " mpNumericArray=" << pDVR->GetArrays()[j].mpNumericArray <<
+                                 " mpStringArray=" << pDVR->GetArrays()[j].mpStringArray <<
+                                 " takeNumeric=" << (pCodeGen->takeNumeric()?"YES":"NO") <<
+                                 " takeString=" << (pCodeGen->takeString()?"YES":"NO"));
+
                         if (pDVR->GetArrays()[j].mpNumericArray ||
                             (pDVR->GetArrays()[j].mpNumericArray == NULL &&
                                 pDVR->GetArrays()[j].mpStringArray == NULL))
@@ -2568,6 +2580,12 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 {
                     const formula::SingleVectorRefToken* pSVR =
                         static_cast<const formula::SingleVectorRefToken*>(pChild);
+
+                    SAL_INFO("sc.opencl", "mpNumericArray=" << pSVR->GetArray().mpNumericArray <<
+                             " mpStringArray=" << pSVR->GetArray().mpStringArray <<
+                             " takeNumeric=" << (pCodeGen->takeNumeric()?"YES":"NO") <<
+                             " takeString=" << (pCodeGen->takeString()?"YES":"NO"));
+
                     if (pSVR->GetArray().mpNumericArray &&
                         pCodeGen->takeNumeric() &&
                         pSVR->GetArray().mpStringArray &&
