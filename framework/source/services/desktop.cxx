@@ -145,7 +145,7 @@ void Desktop::constructorInit()
 
     @param      "xFactory" is the multi service manager, which create this instance.
                 The value must be different from NULL!
-    @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
+    @onerror    We throw an ASSERT in debug version or do nothing in release version.
 *//*-*************************************************************************************************************/
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   TransactionBase         (                                               )

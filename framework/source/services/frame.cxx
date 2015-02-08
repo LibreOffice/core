@@ -486,7 +486,7 @@ DEFINE_XTYPEPROVIDER_21             (   Frame                                   
 
     @param      xContext is the multi service manager, which creates this instance.
                     The value must be different from NULL!
-    @onerror    ASSERT in debug version or nothing in relaese version.
+    @onerror    ASSERT in debug version or nothing in release version.
 *//*-*****************************************************************************************************/
 Frame::Frame( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   TransactionBase             (                                                   )

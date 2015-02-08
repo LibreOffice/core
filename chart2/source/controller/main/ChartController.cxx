@@ -879,7 +879,7 @@ void SAL_CALL ChartController::notifyClosing(
     const lang::EventObject& rSource )
         throw(uno::RuntimeException, std::exception)
 {
-    //Listener should deregister himself and relaese all references to the closing object.
+    //Listener should deregister himself and release all references to the closing object.
 
     TheModelRef aModelRef( m_aModel, m_aModelMutex);
     if( impl_releaseThisModel( rSource.Source ) )
