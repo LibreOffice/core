@@ -94,7 +94,7 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
 bool ScSortParam::operator==( const ScSortParam& rOther ) const
 {
     bool bEqual = false;
-    // Anzahl der Sorts gleich?
+    // Number of Sorts the same?
     sal_uInt16 nLast      = 0;
     sal_uInt16 nOtherLast = 0;
     sal_uInt16 nSortSize = GetSortKeyCount();
@@ -156,7 +156,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 {
     sal_uInt16 i;
 
-    //  zuerst die Gruppen aus den Teilergebnissen
+    //  first the groups from the partial results
     if (rSub.bDoSort)
         for (i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
@@ -168,7 +168,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
                 maKeyState.push_back(key);
             }
 
-    //  dann dahinter die alten Einstellungen
+    //  then the old settings
     for (i=0; i < rOld.GetSortKeyCount(); i++)
         if (rOld.maKeyState[i].bDoSort)
         {
@@ -177,7 +177,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             for (sal_uInt16 j = 0; j < GetSortKeyCount(); j++)
                 if ( maKeyState[j].nField == nThisField )
                     bDouble = true;
-            if (!bDouble)               // ein Feld nicht zweimal eintragen
+            if (!bDouble)               // do not enter a field twice
             {
                 ScSortKeyState key;
                 key.bDoSort = true;
