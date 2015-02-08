@@ -10,12 +10,14 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_SDTHELPER_HXX
 
-#include <boost/optional.hpp>
 #include <vector>
+
+#include <boost/optional.hpp>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <rtl/ustrbuf.hxx>
 
+#include <DomainMapper_Impl.hxx>
 
 namespace com
 {

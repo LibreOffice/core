@@ -20,11 +20,12 @@
 #ifndef INCLUDED_WRITERFILTER_SOURCE_FILTER_RTFFILTER_HXX
 #define INCLUDED_WRITERFILTER_SOURCE_FILTER_RTFFILTER_HXX
 
+#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase.hxx>
 

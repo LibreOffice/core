@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <tools/stream.hxx>
 #include <rtflookahead.hxx>
+#include <tools/stream.hxx>
 
 using namespace com::sun::star;
 

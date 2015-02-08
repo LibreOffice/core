@@ -7,6 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <rtfsdrimport.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -26,7 +27,6 @@
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/sequence.hxx>
-#include <rtfsdrimport.hxx>
 #include <rtfreferenceproperties.hxx>
 #include <oox/vml/vmlformatting.hxx>
 #include <oox/helper/modelobjecthelper.hxx>

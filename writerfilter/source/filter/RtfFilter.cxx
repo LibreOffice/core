@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <cppuhelper/implementationentry.hxx>
 #include <RtfFilter.hxx>
+#include <cppuhelper/implementationentry.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <dmapper/DomainMapperFactory.hxx>

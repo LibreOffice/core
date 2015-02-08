@@ -7,13 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <SdtHelper.hxx>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <editeng/unoprnms.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/datetime.hxx>
 #include <DomainMapper_Impl.hxx>
-#include <SdtHelper.hxx>
 #include <comphelper/sequence.hxx>
 
 namespace writerfilter

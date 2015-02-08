@@ -12,8 +12,10 @@
 
 #include <stack>
 
-#include <rtfdocumentimpl.hxx>
+#include <com/sun/star/drawing/XShapes.hpp>
+
 #include <dmapper/GraphicZOrderHelper.hxx>
+#include <rtfdocumentimpl.hxx>
 
 namespace writerfilter
 {

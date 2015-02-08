@@ -7,11 +7,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <rtftokenizer.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <rtl/strbuf.hxx>
-#include <rtftokenizer.hxx>
 #include <rtfskipdestination.hxx>
 #include <com/sun/star/io/BufferSizeExceededException.hpp>
 

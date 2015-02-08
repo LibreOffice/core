@@ -11,7 +11,11 @@
 #define INCLUDED_WRITERFILTER_SOURCE_RTFTOK_RTFTOKENIZER_HXX
 
 #include <rtflistener.hxx>
+
+#include <vector>
+
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class SvStream;
 
