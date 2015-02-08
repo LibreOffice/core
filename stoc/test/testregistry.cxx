@@ -212,13 +212,13 @@ void test_SimpleRegistry(
         xSubKey->setLongValue(123456789);
 
         xSubKey = xKey->createKey(OUString( "SecondSubKey" ));
-        xSubKey->setAsciiValue(OUString( "ich bin ein acsii value" ));
+        xSubKey->setAsciiValue(OUString( "I'm an ascii value" ));
 
         xSubKey = xKey->createKey(OUString( "ThirdSubKey" ));
-        xSubKey->setStringValue(OUString( "ich bin ein unicode value" ));
+        xSubKey->setStringValue(OUString( "I'm an Unicode value" ));
 
         xSubKey = xKey->createKey(OUString( "FourthSubKey" ));
-        Sequence<sal_Int8> aSeq((sal_Int8*)"ich bin ein binary value", 25);
+        Sequence<sal_Int8> aSeq((sal_Int8*)"I'm a binary value", 25);
         xSubKey->setBinaryValue(aSeq);
 
         Sequence<OUString> seqNames = xKey->getKeyNames();
@@ -237,18 +237,18 @@ void test_SimpleRegistry(
             } else
             if (name == "/FirstKey/SecondSubKey" )
             {
-                OSL_ENSURE( xSubKey->getAsciiValue() == "ich bin ein acsii value",
+                OSL_ENSURE( xSubKey->getAsciiValue() == "I'm an ascii value",
                             "test_SimpleRegistry error 11" );
             } else
             if (name == "/FirstKey/ThirdSubKey" )
             {
-                OSL_ENSURE( xSubKey->getStringValue() == "ich bin ein unicode value",
+                OSL_ENSURE( xSubKey->getStringValue() == "I'm an Unicode value",
                             "test_SimpleRegistry error 12" );
             } else
             if (name == "/FirstKey/FourthSubKey" )
             {
                 Sequence<sal_Int8> seqByte = xSubKey->getBinaryValue();
-                OSL_ENSURE(!strcmp(((const char*)seqByte.getArray()), "ich bin ein binary value"),
+                OSL_ENSURE(!strcmp(((const char*)seqByte.getArray()), "I'm a binary value"),
                             "test_SimpleRegistry error 13" );
             }
 

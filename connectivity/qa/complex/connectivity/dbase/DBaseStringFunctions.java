@@ -67,7 +67,7 @@ public class DBaseStringFunctions extends SubTestCase
         }
         try
         {
-            acsii(xRowRes);
+            ascii(xRowRes);
         }
         catch (SQLException ex)
         {
@@ -222,10 +222,10 @@ public class DBaseStringFunctions extends SubTestCase
         where = temp;
     }
 
-    private void acsii(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
+    private void ascii(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "ASCII('2') ");
-        assure("acsii('2') failed!", row.getInt(1) == 50);
+        assure("ascii('2') failed!", row.getInt(1) == 50);
     }
 
     private void char_length(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
