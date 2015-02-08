@@ -52,9 +52,20 @@ namespace beans = com::sun::star::beans;
 namespace container = com::sun::star::container;
 namespace ucb = com::sun::star::ucb;
 
-bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGPresentationInterface &rGenerator)
+bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &)
 {
     return libetonyek::EtonyekDocument::parse(&rInput, &rGenerator);
+}
+
+bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName)
+{
+    if (libetonyek::EtonyekDocument::isSupported(&rInput))
+    {
+        rTypeName = "impress_Keynote_Document";
+        return true;
+    }
+
+    return false;
 }
 
 // XExtendedFilterDetection

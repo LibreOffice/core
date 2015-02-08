@@ -11,17 +11,19 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "ImportFilterBase.hxx"
+#include "writerperfect/ImportFilter.hxx"
+#include "DocumentHandlerForOdp.hxx"
+
 #include <stdio.h>
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class KeynoteImportFilter : public writerperfect::presentation::ImportFilterBase
+class KeynoteImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
     KeynoteImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
-        : writerperfect::presentation::ImportFilterBase(rxContext) {}
+        : writerperfect::ImportFilter<OdpGenerator>(rxContext) {}
     virtual ~KeynoteImportFilter() {}
 
     //XExtendedFilterDetection
@@ -37,7 +39,8 @@ public:
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGPresentationInterface &rGenerator) SAL_OVERRIDE;
+    virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
 };
 
 OUString KeynoteImportFilter_getImplementationName()
