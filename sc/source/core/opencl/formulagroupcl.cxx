@@ -36,6 +36,27 @@
 #define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
 
 static const char* publicFunc =
+ "\n"
+ "#define errIllegalFPOperation 503 // #NUM!\n"
+ "#define errNoValue 519 // #VALUE!\n"
+ "#define errDivisionByZero 532 // #DIV/0!\n"
+ "\n"
+ "double CreateDoubleError(ulong nErr)\n"
+ "{\n"
+ "    return nan(nErr);\n"
+ "}\n"
+ "\n"
+ "uint GetDoubleErrorValue(double fVal)\n"
+ "{\n"
+ "    if (isfinite(fVal))\n"
+ "        return 0;\n"
+ "    if (isinf(fVal))\n"
+ "        return errIllegalFPOperation; // normal INF\n"
+ "    if (as_ulong(fVal) & 0XFFFF0000u)\n"
+ "        return errNoValue;            // just a normal NAN\n"
+ "    return (as_ulong(fVal) & 0XFFFF); // any other error\n"
+ "}\n"
+ "\n"
  "int isNan(double a) { return isnan(a); }\n"
  "double fsum_count(double a, double b, __private int *p) {\n"
  "    bool t = isNan(a);\n"
@@ -2118,7 +2139,7 @@ public:
     virtual std::string GetBottom() SAL_OVERRIDE { return "1.0"; }
     virtual std::string Gen2( const std::string& lhs, const std::string& rhs ) const SAL_OVERRIDE
     {
-        return "(" + lhs + "/" + rhs + ")";
+        return "(" + rhs + "==0 ? CreateDoubleError(errDivisionByZero) : (" + lhs + "/" + rhs + ") )";
     }
     virtual std::string BinFuncName() const SAL_OVERRIDE { return "fdiv"; }
 };
