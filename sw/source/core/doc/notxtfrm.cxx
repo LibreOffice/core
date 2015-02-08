@@ -808,7 +808,7 @@ void paintGraphicUsingPrimitivesHelper(OutputDevice & rOutputDevice,
     {
         aContent[0] = new drawinglayer::primitive2d::GraphicPrimitive2D(
             aTargetTransform,
-            rGrfObj.GetGraphic(),
+            rGrfObj,
             rGraphicAttr);
     }
 
