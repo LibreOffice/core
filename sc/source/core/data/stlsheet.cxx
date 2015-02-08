@@ -129,9 +129,9 @@ SfxItemSet& ScStyleSheet::GetItemSet()
         {
             case SFX_STYLE_FAMILY_PAGE:
                 {
-                    // Seitenvorlagen sollen nicht ableitbar sein,
-                    // deshalb werden an dieser Stelle geeignete
-                    // Werte eingestellt. (==Standard-Seitenvorlage)
+                    // Page templates should not be derivable,
+                    // therefore suitable values are set at this point.
+                    // (== Standard page template)
 
                     SfxItemPool& rItemPool = GetPool().GetPool();
                     pSet = new SfxItemSet( rItemPool,
@@ -142,15 +142,15 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                            ATTR_USERDEF, ATTR_USERDEF,
                                            0 );
 
-                    //  Wenn gerade geladen wird, wird auch der Set hinterher aus der Datei
-                    //  gefuellt, es brauchen also keine Defaults gesetzt zu werden.
-                    //  GetPrinter wuerde dann auch einen neuen Printer anlegen, weil der
-                    //  gespeicherte Printer noch nicht geladen ist!
+                    //  If being loaded also the set is then filled in from the file,
+                    //  so the defaults do not need to be set.
+                    //  GetPrinter would then also create a new printer,
+                    //  because the stored Printer is not loaded yet!
 
                     ScDocument* pDoc = static_cast<ScStyleSheetPool&>(GetPool()).GetDocument();
                     if ( pDoc )
                     {
-                        // Setzen von sinnvollen Default-Werten:
+                        // Setting reasonable default values:
                         SvxPageItem     aPageItem( ATTR_PAGE );
                         SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
@@ -159,7 +159,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                                             rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) ));
 
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
-                        SvxSizeItem     aHFSizeItem( // 0,5 cm + Abstand
+                        SvxSizeItem     aHFSizeItem( // 0,5 cm + distance
                                             ATTR_PAGE_SIZE,
                                             Size( 0, (long)( 500 / HMM_PER_TWIPS ) + HFDIST_CM ) );
 
@@ -186,12 +186,13 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         rHFSet.Put( aBoxInfoItem );
                         rHFSet.Put( aHFSizeItem );
                         rHFSet.Put( aHFDistItem );
-                        rHFSet.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); // Rand auf Null setzen
+                        rHFSet.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); // Set border to Null
 
                         pSet->Put( aHFSetItem, ATTR_PAGE_HEADERSET );
                         pSet->Put( aHFSetItem, ATTR_PAGE_FOOTERSET );
-                        pSet->Put( aBoxInfoItem ); // PoolDefault wg. Formatvorlagen
-                                                   // nicht ueberschreiben!
+                        pSet->Put( aBoxInfoItem ); // Do not overwrite PoolDefault
+                                                   // due to format templates
+
 
                         //  Writing direction: not as pool default because the default for cells
                         //  must remain FRMDIR_ENVIRONMENT, and each page style's setting is
@@ -260,8 +261,8 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
         GetItemSet().SetParent( NULL );
 }
 
-//  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
-//  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
+// Dirty tricks, to always save the default template as "standard"
+// even though when shown to the user it is renamed:
 
 const OUString& ScStyleSheet::GetName() const
 {

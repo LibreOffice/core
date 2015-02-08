@@ -181,7 +181,7 @@ void ScSubTotalParam::SetSubTotals( sal_uInt16 nGroup,
 
     if ( ptrSubTotals && ptrFunctions && (nCount > 0) && (nGroup <= MAXSUBTOTAL) )
     {
-        // 0 wird als 1 aufgefasst, sonst zum Array-Index dekrementieren
+        // 0 is interpreted as 1, otherwise decrementing the array index
         if (nGroup != 0)
             nGroup--;
 
