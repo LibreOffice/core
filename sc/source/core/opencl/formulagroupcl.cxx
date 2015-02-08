@@ -415,6 +415,10 @@ public:
         // of course. Only the code that calculates the counter-based
         // random number and what it needs is left.
         ss << "\
+\n\
+#ifndef DEFINED_RANDOM123_STUFF\n\
+#define DEFINED_RANDOM123_STUFF\n\
+\n\
 /*\n\
 Copyright 2010-2011, D. E. Shaw Research.\n\
 All rights reserved.\n\
@@ -712,6 +716,7 @@ threefry2x32 (threefry2x32_ctr_t in, threefry2x32_key_t k)\n\
 {\n\
   return threefry2x32_R (threefry2x32_rounds, in, k);\n\
 }\n\
+#endif\n\
 \n\
 ";
         ss << "double " << mSymName << "_Random (int seed)\n\
