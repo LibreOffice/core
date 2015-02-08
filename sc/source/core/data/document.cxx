@@ -566,8 +566,7 @@ bool ScDocument::InsertTabs( SCTAB nPos, const std::vector<OUString>& rNames,
     SCTAB   nNewSheets = static_cast<SCTAB>(rNames.size());
     SCTAB    nTabCount = static_cast<SCTAB>(maTabs.size());
     bool    bValid = bNamesValid || ValidTab(nTabCount+nNewSheets);
-//    if ( !bExternalDocument )    // else test rName == "'Doc'!Tab" first
-//        bValid = (bValid && ValidNewTabName(rNames));
+
     if (bValid)
     {
         if (nPos == SC_TAB_APPEND || nPos >= nTabCount)
@@ -1269,9 +1268,8 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                             0, static_cast<SCsROW>(nSize), 0 );
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
-        {   // durch Restaurierung von Referenzen auf geloeschte Bereiche ist
-            // ein neues Listening faellig, bisherige Listener wurden in
-            // FormulaCell UpdateReference abgehaengt
+        {   // A new Listening is needed when references to deleted ranges are restored,
+            // previous Listeners were removed in FormulaCell UpdateReference.
             StartAllListeners();
         }
         else
@@ -1476,9 +1474,8 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
                 maTabs[i]->InsertCol(aCxt.maRegroupCols, nStartCol, nStartRow, nEndRow, nSize);
 
         if ( pChangeTrack && pChangeTrack->IsInDeleteUndo() )
-        {   // durch Restaurierung von Referenzen auf geloeschte Bereiche ist
-            // ein neues Listening faellig, bisherige Listener wurden in
-            // FormulaCell UpdateReference abgehaengt
+        {   // A new Listening is needed when references to deleted ranges are restored,
+            // previous Listeners were removed in FormulaCell UpdateReference.
             StartAllListeners();
         }
         else
@@ -1596,8 +1593,8 @@ void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, bool
                pRefUndoDoc, pUndoOutline );
 }
 
-//  fuer Area-Links: Zellen einuegen/loeschen, wenn sich der Bereich veraendert
-//  (ohne Paint)
+//  for Area-Links: Insert/delete cells, when the range is changed.
+//  (without Paint)
 
 static void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
                             ScRange& rColRange, bool& rInsCol, bool& rDelCol,
@@ -1615,32 +1612,32 @@ static void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
     SCROW nNewEndY = rNew.aEnd.Row();
     SCTAB nTab = rOld.aStart.Tab();
 
-    //  wenn es mehr Zeilen werden, werden Spalten auf der alten Hoehe eingefuegt/geloescht
+    // if more rows, columns are inserted/deleted at the old height.
     bool bGrowY = ( nNewEndY > nOldEndY );
     SCROW nColEndY = bGrowY ? nOldEndY : nNewEndY;
     SCCOL nRowEndX = bGrowY ? nNewEndX : nOldEndX;
 
-    //  Spalten
+    // Columns
 
-    if ( nNewEndX > nOldEndX )          // Spalten einfuegen
+    if ( nNewEndX > nOldEndX )          // Insert columns
     {
         rColRange = ScRange( nOldEndX+1, nStartY, nTab, nNewEndX, nColEndY, nTab );
         rInsCol = true;
     }
-    else if ( nNewEndX < nOldEndX )     // Spalten loeschen
+    else if ( nNewEndX < nOldEndX )     // Delete columns
     {
         rColRange = ScRange( nNewEndX+1, nStartY, nTab, nOldEndX, nColEndY, nTab );
         rDelCol = true;
     }
 
-    //  Zeilen
+    // Rows
 
-    if ( nNewEndY > nOldEndY )          // Zeilen einfuegen
+    if ( nNewEndY > nOldEndY )          // Insert rows
     {
         rRowRange = ScRange( nStartX, nOldEndY+1, nTab, nRowEndX, nNewEndY, nTab );
         rInsRow = true;
     }
-    else if ( nNewEndY < nOldEndY )     // Zeilen loeschen
+    else if ( nNewEndY < nOldEndY )     // Delete rows
     {
         rRowRange = ScRange( nStartX, nNewEndY+1, nTab, nRowEndX, nOldEndY, nTab );
         rDelRow = true;
@@ -1725,9 +1722,9 @@ bool ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
     ScRange aColRange,aRowRange;
     lcl_GetInsDelRanges( rOld, rNew, aColRange,bInsCol,bDelCol, aRowRange,bInsRow,bDelRow );
 
-    if ( bInsCol && !CanInsertCol( aColRange ) )            // Zellen am Rand ?
+    if ( bInsCol && !CanInsertCol( aColRange ) )            // Cells at the edge ?
         bOk = false;
-    if ( bInsRow && !CanInsertRow( aRowRange ) )            // Zellen am Rand ?
+    if ( bInsRow && !CanInsertRow( aRowRange ) )            // Cells at the edge ?
         bOk = false;
 
     if ( bInsCol || bDelCol )
@@ -1756,16 +1753,16 @@ void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear
     lcl_GetInsDelRanges( rOld, rNew, aColRange,bInsCol,bDelCol, aRowRange,bInsRow,bDelRow );
 
     if ( bInsCol )
-        InsertCol( aColRange );         // Spalten zuerst einfuegen
+        InsertCol( aColRange );         // First insert columns
     if ( bInsRow )
         InsertRow( aRowRange );
 
     if ( bDelRow )
-        DeleteRow( aRowRange );         // Zeilen zuerst loeschen
+        DeleteRow( aRowRange );         // First delete rows
     if ( bDelCol )
         DeleteCol( aColRange );
 
-    //  Referenzen um eingefuegte Zeilen erweitern
+    // Expand references to inserted rows
 
     if ( bInsCol || bInsRow )
     {
@@ -2226,12 +2223,12 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
     OSL_ENSURE( bIsClip && pTransClip && pTransClip->bIsClip,
                     "TransposeClip with wrong Document" );
 
-        //  initialisieren
-        //  -> pTransClip muss vor dem Original-Dokument geloescht werden!
+        // initialize
+        // -> pTransClip has to be delted before the original document!
 
-    pTransClip->ResetClip(this, (ScMarkData*)NULL);     // alle
+    pTransClip->ResetClip(this, (ScMarkData*)NULL);     // all
 
-        //  Bereiche uebernehmen
+        // Take over range
 
     if (pRangeName)
     {
@@ -2285,7 +2282,7 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags
         OSL_TRACE("TransposeClip: Too big");
     }
 
-        //  Dies passiert erst beim Einfuegen...
+    // This happens only when inserting...
 
     GetClipParam().mbCutMode = false;
 }
@@ -2861,7 +2858,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
     bInsertingFromOtherDoc = false;
 
-    // Listener aufbauen nachdem alles inserted wurde
+    // Create Listener after everything has been inserted
     StartListeningFromClip( nAllCol1, nAllRow1, nAllCol2, nAllRow2, rMark, nInsFlag );
 
     {
@@ -2898,7 +2895,7 @@ void ScDocument::CopyMultiRangeFromClip(
     ScRange aDestRange;
     rMark.GetMarkArea(aDestRange);
 
-    bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
+    bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
     SCCOL nCol1 = rDestPos.Col();
     SCROW nRow1 = rDestPos.Row();
@@ -2948,10 +2945,10 @@ void ScDocument::CopyMultiRangeFromClip(
 
     bInsertingFromOtherDoc = false;
 
-    // Listener aufbauen nachdem alles inserted wurde
+    // Create Listener after everything has been inserted
     StartListeningFromClip(aDestRange.aStart.Col(), aDestRange.aStart.Row(),
                            aDestRange.aEnd.Col(), aDestRange.aEnd.Row(), rMark, nInsFlag );
-    // nachdem alle Listener aufgebaut wurden, kann gebroadcastet werden
+    // Re-broadcast after all Listener have been created
     SetDirtyFromClip(
         aDestRange.aStart.Col(), aDestRange.aStart.Row(), aDestRange.aEnd.Col(), aDestRange.aEnd.Row(),
         rMark, nInsFlag, aBroadcastSpans);
@@ -3091,7 +3088,7 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
 {
     InsertDeleteFlags nDelFlags = nFlags;
     if (nDelFlags & IDF_CONTENTS)
-        nDelFlags |= IDF_CONTENTS;          // immer alle Inhalte oder keine loeschen!
+        nDelFlags |= IDF_CONTENTS;          // Either all contents or delete nothing!
 
     SCTAB nSrcTab = rSrcArea.aStart.Tab();
 
@@ -3154,7 +3151,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
 {
     InsertDeleteFlags nDelFlags = nFlags;
     if (nDelFlags & IDF_CONTENTS)
-        nDelFlags |= IDF_CONTENTS;          // immer alle Inhalte oder keine loeschen!
+        nDelFlags |= IDF_CONTENTS;          // Either all contents or delete nothing!
 
     if (ValidTab(nSrcTab) && nSrcTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab])
     {
@@ -3613,7 +3610,7 @@ bool ScDocument::HasValueData( const ScAddress& rPos ) const
 
 bool ScDocument::HasStringCells( const ScRange& rRange ) const
 {
-    //  true, wenn String- oder Editzellen im Bereich
+    //  true, if String- or Edit cells in range
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -3644,7 +3641,7 @@ bool ScDocument::HasSelectionData( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 {
     bool bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = false;      // keine Mehrfachberechnung
+    bAutoCalc = false;      // no mulitple calculations
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM());
         TableContainer::iterator it = maTabs.begin();
@@ -3653,9 +3650,9 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
                 (*it)->SetAllFormulasDirty(rCxt);
     }
 
-    //  Charts werden zwar auch ohne AutoCalc im Tracking auf Dirty gesetzt,
-    //  wenn alle Formeln dirty sind, werden die Charts aber nicht mehr erwischt
-    //  (#45205#) - darum alle Charts nochmal explizit
+    // Allthough Charts are also set to dirty in Tracking without AutoCalc
+    // if all formulas are dirty, the charts can no longer be caught
+    //  (#45205#) - that is why all Charts have to be explicitly handled again
     if (pChartListenerCollection)
         pChartListenerCollection->SetDirty();
 
@@ -3665,7 +3662,7 @@ void ScDocument::SetAllFormulasDirty( const sc::SetFormulaDirtyContext& rCxt )
 void ScDocument::SetDirty( const ScRange& rRange, bool bIncludeEmptyCells )
 {
     bool bOldAutoCalc = GetAutoCalc();
-    bAutoCalc = false;      // keine Mehrfachberechnung
+    bAutoCalc = false;      // no mulitple calculations
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( GetBASM());
         SCTAB nTab2 = rRange.aEnd.Tab();
@@ -3834,8 +3831,8 @@ bool ScDocument::CompileErrorCells(sal_uInt16 nErrCode)
 
 void ScDocument::CalcAfterLoad( bool bStartListening )
 {
-    if (bIsClip)    // Excel-Dateien werden aus dem Clipboard in ein Clip-Doc geladen
-        return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
+    if (bIsClip)    // Excel data is loaded from the Clipboard to a Clip-Doc
+        return;     // the clculation is then only perfromed when inserting into the real document
 
     bCalcingAfterLoad = true;
     sc::CompileFormulaContext aCxt(this);
@@ -3850,7 +3847,7 @@ void ScDocument::CalcAfterLoad( bool bStartListening )
     }
     bCalcingAfterLoad = false;
 
-    SetDetectiveDirty(false);   // noch keine wirklichen Aenderungen
+    SetDetectiveDirty(false);   // No real changes yet
 
     // #i112436# If formula cells are already dirty, they don't broadcast further changes.
     // So the source ranges of charts must be interpreted even if they are not visible,
@@ -3885,7 +3882,7 @@ void ScDocument::ResetChanged( const ScRange& rRange )
             maTabs[nTab]->ResetChanged(rRange);
 }
 
-//  Spaltenbreiten / Zeilenhoehen   --------------------------------------
+// Column widths / Row heights   --------------------------------------
 
 void ScDocument::SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth )
 {
@@ -4100,7 +4097,7 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
         }
 }
 
-//  Spalten-/Zeilen-Flags   ----------------------------------------------
+// Column/Row - Flags   ----------------------------------------------
 
 void ScDocument::ShowCol(SCCOL nCol, SCTAB nTab, bool bShow)
 {
@@ -4719,7 +4716,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
                 if (bFound)
                 {
                     if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                        bEqual = false;                                             // unterschiedliche
+                        bEqual = false;                            // different
                     pStyle = pNewStyle;
                 }
             }
@@ -4737,7 +4734,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
                 if (bFound)
                 {
                     if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                        bEqual = false;                                             // unterschiedliche
+                        bEqual = false;                                // different
                     pStyle = pNewStyle;
                 }
             }
@@ -4854,7 +4851,7 @@ ScPatternAttr* ScDocument::CreateSelectionPattern( const ScMarkData& rMark, bool
             if (maTabs[*itr])
                 maTabs[*itr]->MergeSelectionPattern( aState, rMark, bDeep );
     }
-    if ( rMark.IsMarked() )                                     // simle selection
+    if ( rMark.IsMarked() )                                     // single selection
     {
         ScRange aRange;
         rMark.GetMarkArea(aRange);
@@ -4914,7 +4911,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
                                           aRange.aEnd.Col(),   aRange.aEnd.Row() );
     }
 
-        //  Don't care Status auswerten
+        // Evaluate don't care Status
 
     rLineInner.SetValid( VALID_LEFT,   ( aFlags.nLeft != SC_LINE_DONTCARE ) );
     rLineInner.SetValid( VALID_RIGHT,  ( aFlags.nRight != SC_LINE_DONTCARE ) );
@@ -4929,8 +4926,8 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 {
     if ( nMask & HASATTR_ROTATE )
     {
-        //  Attribut im Dokument ueberhaupt verwendet?
-        //  (wie in fillinfo)
+        //  Is attribute used in document?
+        //  (as in fillinfo)
 
         ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
@@ -5381,9 +5378,7 @@ bool ScDocument::ExtendMerge( ScRange& rRange, bool bRefresh )
 
 bool ScDocument::ExtendTotalMerge( ScRange& rRange ) const
 {
-    //  Bereich genau dann auf zusammengefasste Zellen erweitern, wenn
-    //  dadurch keine neuen nicht-ueberdeckten Zellen getroffen werden
-
+    // Extend range to merged cells without including any new non-overlapped cells
     bool bRet = false;
     ScRange aExt = rRange;
     // ExtendMerge() is non-const, but called withouth refresh.
@@ -5452,11 +5447,11 @@ bool ScDocument::RefreshAutoFilter( SCCOL nStartCol, SCROW nStartRow,
     SCCOL nDBEndCol;
     SCROW nDBEndRow;
 
-    //      Autofilter loeschen
+    //      Delete Autofilter
 
     bool bChange = RemoveFlagsTab( nStartCol,nStartRow, nEndCol,nEndRow, nTab, SC_MF_AUTO );
 
-    //      Autofilter setzen
+    //      Set Autofilter
 
     const ScDBData* pData = NULL;
     ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
@@ -5687,7 +5682,7 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX,
         maTabs[nTab]->GetNextPos( rCol, rRow, nMovX, nMovY, bMarked, bUnprotected, aCopyMark );
 }
 
-//  Datei-Operationen
+//  Data operations
 
 void ScDocument::UpdStlShtPtrsFrmNms()
 {
@@ -5917,9 +5912,8 @@ void ScDocument::RestorePrintRanges( const ScPrintRangeSaver& rSaver )
 
 bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
 {
-    //  Die Seitennummern-Zaehlung faengt bei einer Tabelle neu an, wenn eine
-    //  andere Vorlage als bei der vorherigen gesetzt ist (nur Namen vergleichen)
-    //  und eine Seitennummer angegeben ist (nicht 0)
+    // The page number count restarts at a sheet, if another template is set at
+    // the preseding one (oly compare names) and if a pagenumber is specified (not 0)
 
     if ( nTab + 1 < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab+1] )
     {
@@ -5932,12 +5926,12 @@ bool ScDocument::NeedPageResetAfterTab( SCTAB nTab ) const
                 const SfxItemSet& rSet = pStyle->GetItemSet();
                 sal_uInt16 nFirst = static_cast<const SfxUInt16Item&>(rSet.Get(ATTR_PAGE_FIRSTPAGENO)).GetValue();
                 if ( nFirst != 0 )
-                    return true;        // Seitennummer in neuer Vorlage angegeben
+                    return true;        // Specify page number in new template
             }
         }
     }
 
-    return false;       // sonst nicht
+    return false;       // otherwise not
 }
 
 SfxUndoManager* ScDocument::GetUndoManager()
