@@ -867,7 +867,7 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
         }
     }
 
-    // We have'nt found this topic ... return a nonvalid pointer.
+    // We haven't found this topic… return a nonvalid pointer.
     return NULL;
 }
 
