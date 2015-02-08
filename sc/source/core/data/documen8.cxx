@@ -169,7 +169,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
 
 void ScDocument::SetPrintOptions()
 {
-    if ( !pPrinter ) GetPrinter(); // setzt pPrinter
+    if ( !pPrinter ) GetPrinter(); // this sets pPrinter
     OSL_ENSURE( pPrinter, "Error in printer creation :-/" );
 
     if ( pPrinter )
@@ -270,11 +270,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                     eNewLang = pFormatter->GetEntry( nNewFormat )->GetLanguage();
                 }
 
-                // Bedeutung der Items in rChanges:
-                //  Item gesetzt    - Aenderung uebernehmen
-                //  Dontcare        - Default setzen
-                //  Default         - keine Aenderung
-                // ("keine Aenderung" geht nicht mit PutExtended, darum Schleife)
+                // Explanation to Items in rChanges:
+                //  Set Item        - take over change
+                //  Dontcare        - Set Default
+                //  Default         - No change
+                // ("no change" is not possible with PutExtended, thus the loop)
                 for (sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; nWhich++)
                 {
                     const SfxPoolItem* pItem;
@@ -283,7 +283,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                         rSet.Put( *pItem );
                     else if ( eState == SfxItemState::DONTCARE )
                         rSet.ClearItem( nWhich );
-                    // bei Default nichts
+                    // when Default nothing
                 }
 
                 if ( eNewLang != eOldLang )
@@ -453,7 +453,7 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
     }
 }
 
-#define CALCMAX                 1000    // Berechnungen
+#define CALCMAX                 1000    // Calculations
 
 namespace {
 
@@ -532,7 +532,7 @@ public:
 
 }
 
-bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder versuchen
+bool ScDocument::IdleCalcTextWidth()            // true = try next again
 {
     // #i75610# if a printer hasn't been set or created yet, don't create one for this
     if (!mbIdleEnabled || IsInLinkUpdate() || GetPrinter(false) == NULL)
@@ -594,7 +594,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                 {
                     pDev = GetPrinter();
                     aScope.setOldMapMode(pDev->GetMapMode());
-                    pDev->SetMapMode( MAP_PIXEL );  // wichtig fuer GetNeededSize
+                    pDev->SetMapMode( MAP_PIXEL );  // Important for GetNeededSize
 
                     Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
                     nPPTX = aPix1000.X() / 1000.0;
@@ -714,13 +714,13 @@ void ScDocument::RepaintRange( const ScRangeList& rRange )
 
 void ScDocument::SaveDdeLinks(SvStream& rStream) const
 {
-    //  bei 4.0-Export alle mit Modus != DEFAULT weglassen
+    //  when 4.0-Export, remove all with mode != DEFAULT
     bool bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
 
     const ::sfx2::SvBaseLinks& rLinks = GetLinkManager()->GetLinks();
     sal_uInt16 nCount = rLinks.size();
 
-    //  erstmal zaehlen...
+    // Count them first
 
     sal_uInt16 nDdeCount = 0;
     sal_uInt16 i;
@@ -737,7 +737,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     ScMultipleWriteHeader aHdr( rStream );
     rStream.WriteUInt16( nDdeCount );
 
-    //  Links speichern
+    // Save links
 
     for (i=0; i<nCount; i++)
     {
@@ -871,7 +871,7 @@ void ScDocument::UpdateExternalRefLinks(vcl::Window* pWin)
 
 void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
 {
-    if (bIsClip)        // aus Stream erzeugen
+    if (bIsClip)        // Create from Stream
     {
         if (pClipData)
         {

@@ -76,7 +76,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
             TrackFormulas( rHint.GetId() );
     }
 
-    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    // Repaint for conditional formats with relative references:
     for(SCTAB nTab = 0; nTab < static_cast<SCTAB>(maTabs.size()); ++nTab)
     {
         if(!maTabs[nTab])
@@ -133,7 +133,7 @@ void ScDocument::BroadcastCells( const ScRange& rRange, sal_uLong nHint, bool bB
             TrackFormulas(nHint);
     }
 
-    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    // Repaint for conditional formats with relative references:
     for (SCTAB nTab = nTab1; nTab <= nTab2; ++nTab)
     {
         ScTable* pTab = FetchTable(nTab);
@@ -336,11 +336,11 @@ void ScDocument::PutInFormulaTree( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "PutInFormulaTree: pCell Null" );
     RemoveFromFormulaTree( pCell );
-    // anhaengen
+    // append
     if ( pEOFormulaTree )
         pEOFormulaTree->SetNext( pCell );
     else
-        pFormulaTree = pCell;               // kein Ende, kein Anfang..
+        pFormulaTree = pCell;               // No end, no beginning..
     pCell->SetPrevious( pEOFormulaTree );
     pCell->SetNext( 0 );
     pEOFormulaTree = pCell;
@@ -423,20 +423,20 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         while ( pCell )
         {
             if ( pCell->GetDirty() )
-                pCell = pCell->GetNext();       // alles klar
+                pCell = pCell->GetNext();       // all clear
             else
             {
                 if ( pCell->GetCode()->IsRecalcModeAlways() )
                 {
-                    // pCell wird im SetDirty neu angehaengt!
+                    // pCell is set to Dirty again!
                     ScFormulaCell* pNext = pCell->GetNext();
                     pCell->SetDirty();
-                    // falls pNext==0 und neue abhaengige hinten angehaengt
-                    // wurden, so macht das nichts, da die alle bDirty sind
+                    // if pNext==0 and new dependencies were appended at the end,
+                    // this does not matter since they all are bDirty
                     pCell = pNext;
                 }
                 else
-                {   // andere simpel berechnen
+                {   // calculate the other single
                     if( bSetAllDirty )
                         pCell->SetDirtyVar();
                     pCell = pCell->GetNext();
@@ -451,8 +451,8 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
         ScFormulaCell* pLastNoGood = 0;
         while ( pCell )
         {
-            // Interpret setzt bDirty zurueck und callt Remove, auch der referierten!
-            // bei RECALCMODE_ALWAYS bleibt die Zelle
+            // Interpret resets bDirty and calls Remove, also the referenced!
+            // the Cell remains when RECALCMODE_ALWAYS.
             if ( bOnlyForced )
             {
                 if ( pCell->GetCode()->IsRecalcModeForced() )
@@ -463,7 +463,7 @@ void ScDocument::CalcFormulaTree( bool bOnlyForced, bool bProgressBar, bool bSet
                 pCell->Interpret();
             }
             if ( pCell->GetPrevious() || pCell == pFormulaTree )
-            {   // (IsInFormulaTree(pCell)) kein Remove gewesen => next
+            {   // (IsInFormulaTree(pCell)) no Remove was called => next
                 pLastNoGood = pCell;
                 pCell = pCell->GetNext();
             }
@@ -524,13 +524,13 @@ void ScDocument::ClearFormulaTree()
 void ScDocument::AppendToFormulaTrack( ScFormulaCell* pCell )
 {
     OSL_ENSURE( pCell, "AppendToFormulaTrack: pCell Null" );
-    // Zelle kann nicht in beiden Listen gleichzeitig sein
+    // The cell can not be in both lists at the same time
     RemoveFromFormulaTrack( pCell );
     RemoveFromFormulaTree( pCell );
     if ( pEOFormulaTrack )
         pEOFormulaTrack->SetNextTrack( pCell );
     else
-        pFormulaTrack = pCell;              // kein Ende, kein Anfang..
+        pFormulaTrack = pCell;              // No end, no beginning..
     pCell->SetPreviousTrack( pEOFormulaTrack );
     pCell->SetNextTrack( 0 );
     pEOFormulaTrack = pCell;
@@ -577,10 +577,10 @@ bool ScDocument::IsInFormulaTrack( ScFormulaCell* pCell ) const
 }
 
 /*
-    Der erste wird gebroadcastet,
-    die dadurch entstehenden werden durch das Notify an den Track gehaengt.
-    Der nachfolgende broadcastet wieder usw.
-    View stoesst Interpret an.
+    The first is broadcasted,
+    the ones that are created through this are appended to the Track by Notify.
+    The next is broadcasted again, and so on.
+    View initiates Interpret.
  */
 void ScDocument::TrackFormulas( sal_uLong nHintId )
 {
@@ -599,7 +599,7 @@ void ScDocument::TrackFormulas( sal_uLong nHintId )
             if (pBC)
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
-            //  Repaint fuer bedingte Formate mit relativen Referenzen:
+            // Repaint for conditional formats with relative references:
             TableContainer::iterator itr = maTabs.begin();
             for(; itr != maTabs.end(); ++itr)
             {
