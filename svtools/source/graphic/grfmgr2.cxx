@@ -167,12 +167,13 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
     {
         if ( *it == &rObj ) {
             maObjList.erase( it );
+
+            if( !rObj.IsSwappedOut() )
+                mnUsedSize -= rObj.GetSizeBytes();
             return;
         }
     }
     assert(false); // surely it should have been registered?
-    if( !rObj.IsSwappedOut() )
-        mnUsedSize -= rObj.GetSizeBytes();
 }
 
 void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
