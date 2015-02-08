@@ -489,7 +489,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
                 aReturn = OJoinController::GetState( _nId );
             break;
 
-        case ID_BROWSER_ESACPEPROCESSING:
+        case ID_BROWSER_ESCAPEPROCESSING:
             aReturn.bChecked = !m_bEscapeProcessing;
             aReturn.bEnabled = ( m_pSqlIterator != NULL ) && !m_bGraphicalDesign;
             break;
@@ -569,7 +569,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
 {
     switch(_nId)
     {
-        case ID_BROWSER_ESACPEPROCESSING:
+        case ID_BROWSER_ESCAPEPROCESSING:
             setEscapeProcessing_fireEvent( !m_bEscapeProcessing );
             if ( !editingView() )
                 setModified(sal_True);
@@ -1131,7 +1131,7 @@ void OQueryController::describeSupportedFeatures()
 {
     OJoinController::describeSupportedFeatures();
     implDescribeSupportedFeature( ".uno:SaveAs",            ID_BROWSER_SAVEASDOC,       CommandGroup::DOCUMENT );
-    implDescribeSupportedFeature( ".uno:SbaNativeSql",      ID_BROWSER_ESACPEPROCESSING,CommandGroup::FORMAT );
+    implDescribeSupportedFeature( ".uno:SbaNativeSql",      ID_BROWSER_ESCAPEPROCESSING,CommandGroup::FORMAT );
     implDescribeSupportedFeature( ".uno:DBViewFunctions",   SID_QUERY_VIEW_FUNCTIONS,   CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewTableNames",  SID_QUERY_VIEW_TABLES,      CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBViewAliases",     SID_QUERY_VIEW_ALIASES,     CommandGroup::VIEW );

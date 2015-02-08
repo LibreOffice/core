@@ -143,7 +143,7 @@ namespace dbaui
         virtual void impl_onModifyChanged() SAL_OVERRIDE;
 
         // should the statement be parsed by our own sql parser
-        bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
+        bool        isEscapeProcessing()    const { return m_bEscapeProcessing; }
         bool        isGraphicalDesign()     const { return m_bGraphicalDesign; }
         bool        isDistinct()            const { return m_bDistinct; }
         sal_Int64       getLimit()              const { return m_nLimit; }

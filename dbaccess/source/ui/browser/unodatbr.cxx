@@ -3089,7 +3089,7 @@ void SbaTableQueryBrowser::impl_initialize()
 
     OUString aTableName, aCatalogName, aSchemaName;
 
-    bool bEsacpeProcessing = true;
+    bool bEscapeProcessing = true;
     sal_Int32 nInitialDisplayCommandType = CommandType::COMMAND;
     OUString sInitialDataSourceName;
     OUString sInitialCommand;
@@ -3103,7 +3103,7 @@ void SbaTableQueryBrowser::impl_initialize()
     rArguments.get_ensureType( OUString(PROPERTY_UPDATE_CATALOGNAME), aCatalogName );
     rArguments.get_ensureType( OUString(PROPERTY_UPDATE_SCHEMANAME), aSchemaName );
     rArguments.get_ensureType( OUString(PROPERTY_UPDATE_TABLENAME), aTableName );
-    rArguments.get_ensureType( OUString(PROPERTY_ESCAPE_PROCESSING), bEsacpeProcessing );
+    rArguments.get_ensureType( OUString(PROPERTY_ESCAPE_PROCESSING), bEscapeProcessing );
     rArguments.get_ensureType( "Frame", xFrame );
     rArguments.get_ensureType( OUString(PROPERTY_SHOWMENU), m_bShowMenu );
 
@@ -3230,7 +3230,7 @@ void SbaTableQueryBrowser::impl_initialize()
         m_aDocScriptSupport = ::boost::optional< bool >( Reference< XEmbeddedScripts >( xDocument, UNO_QUERY ).is() );
     }
 
-    if ( implSelect( sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing, xConnection, true ) )
+    if ( implSelect( sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEscapeProcessing, xConnection, true ) )
     {
         try
         {

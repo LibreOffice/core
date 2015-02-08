@@ -93,7 +93,7 @@
 #define ID_BROWSER_QUERY_EXECUTE            SID_FM_EXECUTE
 
 #define ID_BROWSER_CLOSE                    SID_CLOSEWIN
-#define ID_BROWSER_ESACPEPROCESSING         SID_FM_NATIVESQL
+#define ID_BROWSER_ESCAPEPROCESSING         SID_FM_NATIVESQL
 
 #define ID_QUERY_FUNCTION                   (SID_SBA_START + 41) // Funktionen anzeigen
 #define ID_QUERY_TABLENAME                  (SID_SBA_START + 42) // Tabellennamen anzeigen

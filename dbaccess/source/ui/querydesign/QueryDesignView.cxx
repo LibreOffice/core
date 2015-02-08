@@ -1936,7 +1936,7 @@ namespace
                 break;
             }
 
-            if ( !rController.isEsacpeProcessing() ) // not allowed in this mode
+            if ( !rController.isEscapeProcessing() ) // not allowed in this mode
             {
                 eErrorCode = eNativeMode;
                 break;
