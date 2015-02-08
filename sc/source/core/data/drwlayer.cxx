@@ -193,7 +193,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     bAdjustEnabled( true ),
     bHyphenatorSet( false )
 {
-    pGlobalDrawPersist = NULL;          // nur einmal benutzen
+    pGlobalDrawPersist = NULL;          // Only use once
 
     SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : NULL;
     XColorListRef pXCol = XColorList::GetStdColorList();
@@ -239,7 +239,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     rAdmin.NewLayer(OUString("hidden"),   SC_LAYER_HIDDEN);
     // "Controls" is new - must also be created when loading
 
-    //  Link fuer URL-Fields setzen
+    // Set link for URL-Fields
     ScModule* pScMod = SC_MOD();
     Outliner& rOutliner = GetDrawOutliner();
     rOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
@@ -267,7 +267,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
     if( pDoc )
         EnableUndo( pDoc->IsUndoEnabled() );
 
-    //  URL-Buttons haben keinen Handler mehr, machen alles selber
+    //  URL-Buttons have no handler anymore, all is done by themselves
 
     if( !nInst++ )
     {
@@ -352,11 +352,11 @@ void ScDrawLayer::ScRemovePage( SCTAB nTab )
     if (bRecording)
     {
         SdrPage* pPage = GetPage(static_cast<sal_uInt16>(nTab));
-        AddCalcUndo(new SdrUndoDelPage(*pPage));        // Undo-Action wird Owner der Page
-        RemovePage( static_cast<sal_uInt16>(nTab) );                            // nur austragen, nicht loeschen
+        AddCalcUndo(new SdrUndoDelPage(*pPage));        // Undo-Action becomes the page owner
+        RemovePage( static_cast<sal_uInt16>(nTab) );    // just deliver, not deleting
     }
     else
-        DeletePage( static_cast<sal_uInt16>(nTab) );                            // einfach weg damit
+        DeletePage( static_cast<sal_uInt16>(nTab) );    // just get rid of it
 
     ResetTab(nTab, pDoc->GetTableCount()-1);
 }
@@ -383,7 +383,7 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos)
     SdrPage* pOldPage = GetPage(nOldPos);
     SdrPage* pNewPage = GetPage(nNewPos);
 
-    // kopieren
+    // Copying
 
     if (pOldPage && pNewPage)
     {
@@ -513,9 +513,9 @@ void ScDrawLayer::SetPageSize( sal_uInt16 nPageNo, const Size& rSize, bool bUpda
             Broadcast( ScTabSizeChangedHint( static_cast<SCTAB>(nPageNo) ) );   // SetWorkArea() an den Views
         }
 
-        // Detektivlinien umsetzen (an neue Hoehen/Breiten anpassen)
-        //  auch wenn Groesse gleich geblieben ist
-        //  (einzelne Zeilen/Spalten koennen geaendert sein)
+        // Implement Detective lines (adjust to new heights / widths)
+        //  even if size is still the same
+        //  (individual rows/columns can have been changed))
 
         bool bNegativePage = pDoc && pDoc->IsNegativePage( static_cast<SCTAB>(nPageNo) );
 
@@ -640,7 +640,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         TwipsToMM( aPos.X() );
         TwipsToMM( aPos.Y() );
 
-        //  Berechnung und Werte wie in detfunc.cxx
+        // Calculations and values as in detfunc.cxx
 
         Size aSize( (long)( TwipsToHmm( pDoc->GetColWidth( nCol1, nTab1) ) ),
                     (long)( TwipsToHmm( pDoc->GetRowHeight( nRow1, nTab1) ) ) );
@@ -880,7 +880,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     long nStartX = LONG_MAX;
     long nStartY = LONG_MAX;
 
-    // Grenzen ausrechnen
+    // Calculate borders
 
     if (!bSetHor)
     {
@@ -957,7 +957,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
 
     if (bAny)
     {
-        OSL_ENSURE( nStartX<=nEndX && nStartY<=nEndY, "Start/End falsch in ScDrawLayer::GetPrintArea" );
+        OSL_ENSURE( nStartX<=nEndX && nStartY<=nEndY, "Start/End wrong in ScDrawLayer::GetPrintArea" );
 
         if (bSetHor)
         {
@@ -1065,7 +1065,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
     if ( bNegativePage )
         aMove.X() = -aMove.X();
 
-    Point aTopLeft = aRect.TopLeft();       // Anfang beim Verkleinern
+    Point aTopLeft = aRect.TopLeft();       // Beginning when zoomed out
     if (bInsDel)
     {
         if ( aMove.X() != 0 && nDx < 0 )    // nDx counts cells, sign is independent of RTL
@@ -1074,7 +1074,7 @@ void ScDrawLayer::MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCR
             aTopLeft.Y() += aMove.Y();
     }
 
-        //      Detektiv-Pfeile: Zellpositionen anpassen
+        //      Detectiv arrows: Adjust cell position
 
     MoveCells( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy, bUpdateNoteCaptionPos );
 }
@@ -1205,7 +1205,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
             if (nObjCount)
             {
                 size_t nDelCount = 0;
-                //  Rechteck um die ganze Selektion
+                //  Rectangle around the whole selection
                 Rectangle aMarkBound = pDoc->GetMMRect(
                             aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                             aMarkRange.aEnd.Col(), aMarkRange.aEnd.Row(), nTab );
@@ -1232,7 +1232,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                     pObject = aIter.Next();
                 }
 
-                //  Objekte loeschen (rueckwaerts)
+                //  Delete objects (backwards)
 
                 if (bRecording)
                     for (size_t i=1; i<=nDelCount; ++i)
@@ -1950,21 +1950,21 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
         Graphic     aGraphic;
         bool        bObjSupported = false;
 
-        if ( pObj->ISA( SdrGrafObj )  ) // einfaches Grafik-Objekt
+        if ( pObj->ISA( SdrGrafObj )  ) // Simple Graphics object
         {
             const SdrGrafObj*   pGrafObj = static_cast<const SdrGrafObj*>( pObj );
             const GeoStat&      rGeo = pGrafObj->GetGeoStat();
             const Graphic&      rGraphic = pGrafObj->GetGraphic();
 
-            // Drehung rueckgaengig
+            // Reverse rotation
             if ( rGeo.nRotationAngle )
                 RotatePoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nSin, rGeo.nCos );
 
-            // Spiegelung rueckgaengig
+            // Reverse mirroring
             if ( static_cast<const SdrGrafObjGeoData*>( pGrafObj->GetGeoData() )->bMirrored )
                 aRelPoint.X() = aLogRect.Right() + aLogRect.Left() - aRelPoint.X();
 
-            // ggf. Unshear:
+            // Possible Unshear:
             if ( rGeo.nShearAngle )
                 ShearPoint( aRelPoint, aLogRect.TopLeft(), -rGeo.nTan );
 
@@ -1978,17 +1978,17 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
 
             bObjSupported = true;
         }
-        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
+        else if ( pObj->ISA( SdrOle2Obj ) ) // OLE object
         {
             // TODO/LEAN: working with visual area needs running state
             aGraphSize = static_cast<const SdrOle2Obj*>(pObj)->GetOrigObjSize();
             bObjSupported = true;
         }
 
-        // hat alles geklappt, dann HitTest ausfuehren
+        // If everything has worked out, then perform HitTest
         if ( bObjSupported )
         {
-            // relativen Mauspunkt berechnen
+            // Calculate relative mouse point
             aRelPoint -= aLogRect.TopLeft();
             pIMapObj = rImageMap.GetHitIMapObject( aGraphSize, aLogRect.GetSize(), aRelPoint );
         }
@@ -2026,7 +2026,7 @@ sal_Int32 ScDrawLayer::GetHyperlinkCount(SdrObject* pObj)
     sal_Int32 nHLCount = 0;
     ScMacroInfo* pMacroInfo = GetMacroInfo(pObj, false);
     if (pMacroInfo)
-        // MT IA2: GetHlink*( doesn|t exist in DEV300 anymore...
+        // MT IA2: GetHlink*( doesn't exist in DEV300 anymore...
         nHLCount = 0; // pMacroInfo->GetHlink().getLength() > 0 ? 1 : 0;
     return nHLCount;
 }
@@ -2046,7 +2046,7 @@ void ScDrawLayer::SetChanged( bool bFlg /* = true */ )
 
 SdrLayerID ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
 {
-    //  Layer fuer Export von Form-Controls in Versionen vor 5.0 - immer SC_LAYER_FRONT
+    //  Layer for export of Form-Controls in Versions before 5.0 - always SC_LAYER_FRONT
     return SC_LAYER_FRONT;
 }
 
