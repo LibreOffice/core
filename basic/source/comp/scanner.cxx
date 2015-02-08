@@ -417,17 +417,14 @@ bool SbiScanner::NextSym()
     else if(nCol < aLine.getLength() && aLine[nCol] == '&')
     {
         ++pLine; ++nCol;
-        sal_Unicode cmp1[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F', 0 };
-        sal_Unicode cmp2[] = { '0', '1', '2', '3', '4', '5', '6', '7', 0 };
-        sal_Unicode *cmp = cmp1;
         sal_Unicode base = 16;
-        sal_Unicode ndig = 8;
-        sal_Unicode xch  = aLine[nCol] & 0xFF;
+        sal_Unicode xch  = aLine[nCol];
         ++pLine; ++nCol;
-        switch( toupper( xch ) )
+        switch( rtl::toAsciiUpperCase( xch ) )
         {
             case 'O':
-                cmp = cmp2; base = 8; ndig = 11; break;
+                base = 8;
+                break;
             case 'H':
                 break;
             default :
@@ -439,40 +436,34 @@ bool SbiScanner::NextSym()
         bNumber = true;
         // Hex literals are signed Integers ( as defined by basic
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
-        sal_uInt32 lu = 0;
-        bool bBufOverflow = false;
-        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol] & 0xFF, bCompatible))
+        sal_uInt64 lu = 0;
+        bool bOverflow = false;
+        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol], bCompatible))
         {
-            sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
-                toupper(aLine[nCol] & 0xFF));
+            sal_Unicode ch = rtl::toAsciiUpperCase(aLine[nCol]);
             ++pLine; ++nCol;
-            // from 4.1.1996: buffer full, go on scanning empty
-            if( (p-buf) == (BUF_SIZE-1) )
-                bBufOverflow = true;
-            else if( OUString( cmp ).indexOf( ch ) != -1 )
-                *p++ = ch;
+            if( ((base == 16 ) && rtl::isAsciiHexDigit( ch ) ) ||
+                     ((base == 8) && rtl::isAsciiOctalDigit( ch )))
+            {
+                int i = ch  - '0';
+                if( i > 9 ) i -= 7;
+                lu = ( lu * base ) + i;
+                if( lu > SAL_MAX_UINT32 )
+                {
+                    bOverflow = true;
+                }
+            }
             else
             {
                 aError = OUString(ch);
                 GenError( SbERR_BAD_CHAR_IN_NUMBER );
             }
         }
-        *p = 0;
-        for( p = buf; *p; ++p )
-        {
-            int i = (*p & 0xFF) - '0';
-            if( i > 9 ) i -= 7;
-            lu = ( lu * base ) + i;
-            if( !ndig-- )
-            {
-                GenError( SbERR_MATH_OVERFLOW ); break;
-            }
-        }
         if(nCol < aLine.getLength() && aLine[nCol] == '&') ++pLine, ++nCol;
         sal_Int32 ls = static_cast<sal_Int32>(lu);
         nVal = (double) ls;
         eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
-        if( bBufOverflow )
+        if( bOverflow )
             GenError( SbERR_MATH_OVERFLOW );
     }
 
