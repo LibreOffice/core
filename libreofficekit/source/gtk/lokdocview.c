@@ -184,6 +184,7 @@ static gboolean lcl_handleTimeout(gpointer pData)
 
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
 {
+#if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
     LOKDocView* pDocView = pData;
     cairo_t* pCairo;
 
@@ -220,6 +221,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     }
 
     cairo_destroy(pCairo);
+#endif
     return FALSE;
 }
 
@@ -390,6 +392,7 @@ static GList* lcl_payloadToRectangles(const char* pPayload)
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
 {
+#if GLIB_CHECK_VERSION(2,28,0) // we need g_list_free_full()
     LOKDocViewCallbackData* pCallback = pData;
 
     switch (pCallback->m_nType)
@@ -427,6 +430,7 @@ static gboolean lok_docview_callback(gpointer pData)
 
     g_free(pCallback->m_pPayload);
     g_free(pCallback);
+#endif
     return G_SOURCE_REMOVE;
 }
 
