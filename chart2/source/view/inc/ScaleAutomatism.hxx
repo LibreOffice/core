@@ -28,7 +28,15 @@ namespace chart
 {
 
 /** This class implements the calculation of automatic axis limits.
-*/
+ *
+ *  This class is used for calculating axis scales and increments in the form
+ *  of instances of `ExplicitScaleData` and `ExplicitIncrementData` classes.
+ *  When a `ScaleAutomatism` instance is created a `ScaleData` object is passed
+ *  to the constructor. Objects of `ScaleData` type are initialized by
+ *  the `createCoordinateSystem` method of some chart type (e.g.
+ *  the `PieChartType` class) and belong to some `Axis` object, they can be
+ *  accessed through the `XAxis` interface (`XAxis::getScaleData`).
+ */
 class ScaleAutomatism
 {
 public:
@@ -36,7 +44,14 @@ public:
                             const ::com::sun::star::chart2::ScaleData& rSourceScale, const Date& rNullDate );
     virtual             ~ScaleAutomatism();
 
-    /** Expands own value range with the passed minimum and maximum. */
+    /** Expands own value range with the passed minimum and maximum.
+     *
+     *  It allows to set up the `m_fValueMinimum` and the `m_fValueMaximum`
+     *  parameters which are used by the `calculateExplicitScaleAndIncrement`
+     *  method for initializing the `Minimum` and `Maximum` properties of the
+     *  explicit scale when the same properties of the `ScaleData` object are
+     *  undefined (that is empty `uno::Any` objects).
+     */
     void                expandValueRange( double fMinimum, double fMaximum );
 
     /** Sets additional auto scaling options.
@@ -68,7 +83,14 @@ public:
     */
     void setAutomaticTimeResolution( sal_Int32 nTimeResolution );
 
-    /** Fills the passed scale data and increment data according to the own settings. */
+    /** Fills the passed scale data and increment data according to the own settings.
+     *
+     *  It performs the initialization of the passed explicit scale and
+     *  explicit increment parameters, mainly the initialization is achieved by
+     *  using the `ScaleData` object as data source. However other parameters
+     *  which affect the behavior of this method can be set through
+     *  the `setAutoScalingOptions` and the `expandValueRange` methods.
+     */
     void                calculateExplicitScaleAndIncrement(
                             ExplicitScaleData& rExplicitScale,
                             ExplicitIncrementData& rExplicitIncrement ) const;

@@ -86,6 +86,20 @@ public:
     bool hasMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
     void clearMinimumAndMaximumSupplierList();
 
+    /**
+     * It sets the scaling parameters for the passed `ScaleAutomatism` object.
+     * Especially it sets the `m_fValueMinimum` and the `m_fValueMaximum`
+     * parameters (see `ScaleAutomatism::expandValueRange`).
+     * The value to be assigned to these two parameters is retrieved by
+     * invoking the `getMinimum` and `getMaximum` methods of the minimum-maximum
+     * supplier object that belongs to the given coordinate system.
+     * The minimum-maximum supplier object is set in the
+     * `SeriesPlotterContainer::initializeCooSysAndSeriesPlotter` method to the
+     * series plotter which is based on the coordinate system (see notes for
+     * the method). For instance for a pie chart the `m_fValueMinimum` and the
+     * `m_fValueMaximum` parameters are initialized by the `PieChart::getMinimum`
+     * and `PieChart::getMaximum` methods.
+     */
     void prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
 
     void setExplicitScaleAndIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex

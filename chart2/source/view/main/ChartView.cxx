@@ -133,6 +133,15 @@ class theExplicitValueProviderUnoTunnelId  : public rtl::Static<UnoTunnelIdInit,
 typedef std::pair< sal_Int32, sal_Int32 > tFullAxisIndex; //first index is the dimension, second index is the axis index that indicates whether this is a main or secondary axis
 typedef std::map< VCoordinateSystem*, tFullAxisIndex > tCoordinateSystemMap;
 
+/** This class handles a collection of coordinate systems and is used for
+ *  executing some action on all coordinate systems such as
+ *  `prepareAutomaticAxisScaling` and `setExplicitScaleAndIncrement`.
+ *  Moreover it contains the `aAutoScaling` object that is an instance of
+ *  the `ScaleAutomatism` class. The initialization of `aAutoScaling` is
+ *  performed in the `SeriesPlotterContainer::initAxisUsageList` method and is
+ *  used in the `SeriesPlotterContainer::doAutoScaling` for calculating explicit
+ *  scale and increment objects (see `SeriesPlotterContainer::doAutoScaling`).
+ */
 struct AxisUsage
 {
     AxisUsage();
@@ -241,13 +250,45 @@ void AxisUsage::setExplicitScaleAndIncrement(
 
 typedef boost::ptr_vector<VSeriesPlotter> SeriesPlottersType;
 
+/** This class is a container of `SeriesPlotter` objects (such as `PieChart`
+ *  instances). It is used for initializing coordinate systems, axes and scales
+ *  of all series plotters which belongs to the container.
+ */
 class SeriesPlotterContainer
 {
 public:
     SeriesPlotterContainer( std::vector< VCoordinateSystem* >& rVCooSysList );
     ~SeriesPlotterContainer();
 
+    /** It is used to set coordinate systems (`m_rVCooSysList`), this method
+     *  is invoked by `ChartView::createShapes2D` before of
+     *  `ChartView::impl_createDiagramAndContent`.
+     *  Coordinate systems are retrieved through the `XCoordinateSystemContainer`
+     *  interface implemented by a diagram object which is provided by the
+     *  `ChartModel` object passed to the method (`rChartModel.getFirstDiagram()`).
+     *
+     *  It is used for creating series plotters and appending them
+     *  to `m_aSeriesPlotterList`. The created series plotters are initialized
+     *  through data (number formats supplier, color scheme, data series),
+     *  extracted from the chart model or the diagram objects. An exception is
+     *  the explicit category provider that is retrieved through the
+     *  `VCoordinateSystem` object used by the series plotter.
+     *
+     *  It sets the minimum-maximum supplier for a coordinate system:
+     *  this supplier is the series plotter itself which utilizes the given
+     *  coordinate system. In fact `VSeriesPlotter` has `MinimumMaximumSupplier`
+     *  as one of its base classes.
+     *  Hence, for instance, a `PieChart`, which is a series plotter, is
+     *  a `MinimumMaximumSupplier`, too.
+     */
     void initializeCooSysAndSeriesPlotter( ChartModel& rModel );
+
+    /** This method is invoked by `ChartView::impl_createDiagramAndContent`.
+     *  It iterates on every axis of every coordinate systems, and if the axis
+     *  is not yet present in `m_aAxisUsageList` it creates a new `AxisUsage`
+     *  object and initialize its `aAutoScaling` member to the `ScaleData`
+     *  object of the current axis.
+     */
     void initAxisUsageList(const Date& rNullDate);
 
     /**
@@ -258,6 +299,21 @@ public:
      * The new axis scaling data will be stored in the VCoordinateSystem
      * objects.  The label alignment direction for each axis will also get
      * determined during this process, and stored in VAxis.
+     *
+     * This method is invoked by `ChartView::impl_createDiagramAndContent`
+     * soon after `initAxisUsageList`.
+     * It initializes explicit scale and increment objects for all coordinate
+     * systems in `m_rVCooSysList`.
+     * This action is achieved by iterating on the `m_aAxisUsageList` container,
+     * and performing 3 steps:
+     *   1- call `VCoordinateSystem::prepareAutomaticAxisScaling` for setting
+     *      scaling parameters of the `aAutoScaling` member (a `ScaleAutomatism`
+     *      object) for the current `AxisUsage` instance
+     *      (see `VCoordinateSystem::prepareAutomaticAxisScaling`);
+     *   2- calculate the explicit scale and increment objects
+     *      (see ScaleAutomatism::calculateExplicitScaleAndIncrement);
+     *   3- set the explicit scale and increment objects for each coordinate
+     *      system.
      */
     void doAutoScaling( ChartModel& rModel );
 
@@ -286,8 +342,17 @@ public:
         const chart2::ScaleData& rSourceScale, bool bHasComplexCategories ) const;
 
 private:
+    /** A vector of series plotters.
+     */
     SeriesPlottersType m_aSeriesPlotterList;
+
+    /** A vector of coordinate systems.
+     */
     std::vector< VCoordinateSystem* >& m_rVCooSysList;
+
+    /** A map whose key is a `XAxis` interface and the related value is
+     *  an object of `AxisUsage` type.
+     */
     ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
 
     /**
