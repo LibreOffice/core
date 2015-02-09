@@ -24,6 +24,9 @@
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
 #endif
 
+// Cursor bitmaps from the Android app.
+#define CURSOR_HANDLE_DIR "android/experimental/LOAndroid3/res/drawable/"
+
 static void lok_docview_class_init( LOKDocViewClass* pClass );
 static void lok_docview_init( LOKDocView* pDocView );
 static float pixelToTwip(float nInput);
@@ -204,6 +207,32 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
                         twipToPixel(pDocView->m_aVisibleCursor.width),
                         twipToPixel(pDocView->m_aVisibleCursor.height));
         cairo_fill(pCairo);
+
+    }
+
+    if (!lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
+    {
+        // Have a cursor, but no selection: we need the middle handle.
+        GdkPoint aCursorBottom;
+        cairo_surface_t* pSurface;
+        int nHandleWidth, nHandleHeight;
+        double fHandleScale;
+
+        pSurface = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
+        nHandleWidth = cairo_image_surface_get_width(pSurface);
+        nHandleHeight = cairo_image_surface_get_height(pSurface);
+        // We want to scale down the handle, so that its height is the same as the cursor caret.
+        fHandleScale = twipToPixel(pDocView->m_aVisibleCursor.height) / nHandleHeight;
+        // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
+        aCursorBottom.x = twipToPixel(pDocView->m_aVisibleCursor.x) + twipToPixel(pDocView->m_aVisibleCursor.width) / 2 - (nHandleWidth * fHandleScale) / 2;
+        aCursorBottom.y = twipToPixel(pDocView->m_aVisibleCursor.y) + twipToPixel(pDocView->m_aVisibleCursor.height);
+        cairo_save(pCairo);
+        cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
+        cairo_scale(pCairo, fHandleScale, fHandleScale);
+        cairo_set_source_surface(pCairo, pSurface, 0, 0);
+        cairo_paint(pCairo);
+        cairo_surface_destroy(pSurface);
+        cairo_restore(pCairo);
     }
 
     if (pDocView->m_pTextSelectionRectangles)
