@@ -449,6 +449,11 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
         //prepare legend symbol
 
+        // get the font size for the label through the "CharHeight" property
+        // attached to the passed data series entry.
+        // (By tracing font height values it results that for pie chart the
+        // font size is not the same for all labels, but here no font size
+        // modification occurs).
         float fViewFontSize( 10.0 );
         {
             uno::Reference< beans::XPropertySet > xProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
@@ -457,6 +462,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             // pt -> 1/100th mm
             fViewFontSize *= (2540.0f / 72.0f);
         }
+
+        // the font height is used for computing the size of an optional legend
+        // symbol to be prepended to the text label.
         Reference< drawing::XShape > xSymbol;
         if(pLabel->ShowLegendSymbol)
         {
@@ -485,6 +493,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             if(xPointProps.is())
             {
                 xPointProps->getPropertyValue( "LabelSeparator" ) >>= aSeparator;
+                // Extract the optional text rotation through the
+                // "TextRotation" property attached to the passed data point.
                 xPointProps->getPropertyValue( "TextRotation" ) >>= fRotationDegrees;
             }
         }
@@ -492,6 +502,11 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         {
             ASSERT_EXCEPTION( e );
         }
+
+        // check if data series entry percent value and absolute value have to
+        // be appended to the text label, and what should be the separator
+        // character (comma, space, new line). In case it is a new line we get
+        // a multi-line label.
         bool bMultiLineLabel = aSeparator == "\n";
         sal_Int32 nLineCountForSymbolsize = 0;
         {
@@ -543,6 +558,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         tAnySequence* pPropValues;
         if( !rDataSeries.getTextLabelMultiPropertyLists( nPointIndex, pPropNames, pPropValues ) )
             return xTextShape;
+
+        // set text alignment for the text shape to be created.
         LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );
 
         //create text shape
@@ -553,6 +570,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         if( !xTextShape.is() )
             return xTextShape;
 
+        // in case text is rotated, the transformation property of the text
+        // shape is modified.
         const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
         if( fRotationDegrees != 0.0 )
         {
@@ -563,6 +582,8 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
+        // in case legend symbol has to be displayed, text shape position is
+        // slightly changed.
         if( xSymbol.is() )
         {
             const awt::Point aOldTextPos( xTextShape->getPosition() );

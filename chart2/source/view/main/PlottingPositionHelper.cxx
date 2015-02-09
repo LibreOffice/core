@@ -452,6 +452,10 @@ double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValu
     return fWidthAngleDegree;
 }
 
+//This method does a lot of computation for understanding which scale to
+//utilize and if reverse orientation should be used. Indeed, for a pie or donut,
+//the final result is as simple as multiplying by 360 and adding
+//`m_fAngleDegreeOffset`.
 double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOnAngleAxis, bool bDoScaling ) const
 {
     double fRet=0.0;
@@ -503,6 +507,75 @@ double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOn
     return fRet;
 }
 
+/*
+ * Given a value in the radius axis scale range, it returns, in the simplest
+ * case (that is when `m_fRadiusOffset` is zero), the normalized value; when
+ * `m_fRadiusOffset` is not zero (e.g. as in the case of a donut), the interval
+ * used for normalization is extended by `m_fRadiusOffset`: if the axis
+ * orientation is not reversed the new interval becomes
+ * [scale.Minimum - m_fRadiusOffset, scale.Maximum] else it becomes
+ * [scale.Minimum, scale.Maximum + m_fRadiusOffset].
+ * Pay attention here! For the latter case, since the axis orientation is
+ * reversed, the normalization is reversed too. Indeed, we have
+ * `transformToRadius(scale.Maximum + m_fRadiusOffset) = 0` and
+ * `transformToRadius(scale.Minimum) = 1`.
+ *
+ * For a pie chart the radius axis scale range is initialized by the
+ * `getMinimum` and `getMaximum` methods of the `PieChart` object (see notes
+ * for `VCoordinateSystem::prepareAutomaticAxisScaling`).
+ * So we have scale.Minimum = 0.5 (always constant!) and
+ * scale.Maximum = 0.5 + number_of_rings + max_offset
+ * (see notes for `PieChart::getMaxOffset`).
+ * Hence we get the following general formulas for computing normalized inner
+ * and outer radius:
+ *
+ *    1- transformToRadius(inner_radius) =
+ *               (number_of_rings - (ring_index + 1) + m_fRadiusOffset)
+ *                   / (number_of_rings + max_offset + m_fRadiusOffset)
+ *
+ *    2- transformToRadius(outer_radius) =
+ *               (1 + number_of_rings - (ring_index + 1) + m_fRadiusOffset)
+ *                   / (number_of_rings + max_offset + m_fRadiusOffset).
+ *
+ * Here you have to take into account that values for inner and outer radius
+ * are swapped since the radius axis is reversed (See notes for
+ * `PiePositionHelper::getInnerAndOuterRadius`). So indeed inner_radius is
+ * the outer and outer_radius is the inner. Anyway still because of the reverse
+ * orientation, the normalization performed by `transformToRadius` is reversed
+ * too, as we have seen above. Hence `transformToRadius(inner_radius)` is
+ * really the normalized inner radius and  `transformToRadius(outer_radius)` is
+ * really the normalized outer radius.
+ *
+ * Some basic examples where we apply the above formulas:
+ *    1- For a non-exploded pie chart we have:
+ *         `transformToRadius(inner_radius) = 0`,
+ *         `transformToRadius(outer_radius) = 1`.
+ *    2- For a non-exploded donut with a single ring we have:
+ *         `transformToRadius(inner_radius) =
+ *                 m_fRadiusOffset/(1 + m_fRadiusOffset)`,
+ *         `transformToRadius(outer_radius) =
+ *                 (1 + m_fRadiusOffset)/(1 + m_fRadiusOffset) = 1`.
+ *    3- For an exploded pie chart we have:
+ *         `transformToRadius(inner_radius) = 0/(1 + max_offset) = 0`,
+ *         `transformToRadius(outer_radius) = 1/(1 + max_offset)`.
+ *
+ *  The third example needs some remark. Both the logical inner and outer
+ *  radius passed to `transformToRadius` are offset by `max_offset`.
+ *  However the returned normalized values do not contain any (normalized)
+ *  offset term at all, otherwise the returned values would be
+ *  `max_offset/(1 + max_offset)` and `1`. Hence, for exploded pie/donut,
+ *  `transformToRadius` returns the normalized value of radii without any
+ *  offset term. These values are smaller than in the non-exploded case by an
+ *  amount equals to the value of the normalized maximum offset
+ *  (`max_offset/(1 + max_offset)` in the example above). That is due to the
+ *  fact that the normalization keeps into account the space needed for the
+ *  offset. This is the correct behavior, in fact the offset for the current
+ *  slice could be different from the maximum offset.
+ *  These remarks should clarify why the `PieChart::createDataPoint` and
+ *  `PieChart::createTextLabelShape` methods add the normalized offset (for the
+ *  current slice) to the normalized radii in order to achieve the correct
+ *  placement of slice and text shapes.
+ */
 double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiusAxis, bool bDoScaling ) const
 {
     double fNormalRadius = 0.0;

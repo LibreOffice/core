@@ -41,13 +41,38 @@ namespace chart {
 
 struct PieChart::ShapeParam
 {
+    // the start angle of the slice
     double mfUnitCircleStartAngleDegree;
+
+    // the angle width of the slice
     double mfUnitCircleWidthAngleDegree;
+
+    // the normalized outer radius of the ring the slice belongs to.
     double mfUnitCircleOuterRadius;
+
+    // the normalized inner radius of the ring the slice belongs to
     double mfUnitCircleInnerRadius;
+
+    // relative distance offset of a slice from the pie center;
+    // this parameter is used for instance when the user performs manual
+    // dragging of a slice (the drag operation is possible only for slices that
+    // belong to the outer ring and only along the ray bisecting the slice);
+    // the value for the given entry in the data series is obtained by the
+    // `Offset` property attached to each entry; note that the value
+    // provided by the `Offset` property is used both as a logical value in
+    // `PiePositionHelper::getInnerAndOuterRadius` and as a percentage value in
+    // the `PieChart::createDataPoint` and `PieChart::createTextLabelShape`
+    // methods; since the logical height of a ring is always 1, this duality
+    // does not cause any incorrect behavior.
     double mfExplodePercentage;
-    double mfLogicYSum; // sum of all Y values in a single series.
+
+    // sum of all Y values in a single series.
+    double mfLogicYSum;
+
+    // for 3D pie chart: label z coordinate
     double mfLogicZ;
+
+    // for 3D pie chart: height
     double mfDepth;
 
     ShapeParam() :
@@ -86,6 +111,18 @@ PiePositionHelper::~PiePositionHelper()
 {
 }
 
+/* Compute the outer and the inner radius for the current ring (not for the
+ * whole donut!), in general it is:
+ *     inner_radius = (ring_index + 1) - 0.5 + max_offset,
+ *     outer_radius = (ring_index + 1) + 0.5 + max_offset.
+ * When orientation for the radius axis is reversed these values are swapped.
+ * (Indeed the the orientation for the radius axis is always reversed!
+ * See `PieChartTypeTemplate::adaptScales`.)
+ * The maximum relative offset (see notes for P`ieChart::getMaxOffset`) is
+ * added to both the inner and the outer radius.
+ * It returns true if the ring is visible (that is not out of the radius
+ * axis scale range).
+ */
 bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
                                                , double& fLogicInnerRadius, double& fLogicOuterRadius
                                                , bool bUseRings, double fMaxOffset ) const
@@ -230,6 +267,10 @@ void PieChart::createTextLabelShape(
         // There is no text label for this data point.  Nothing to do.
         return;
 
+    //by using the `mfExplodePercentage` parameter a normalized offset is added
+    // to both normalized radii. (See notes for
+    // `PolarPlottingPositionHelper::transformToRadius`, especially example 3,
+    // and related comments).
     if (!rtl::math::approxEqual(rParam.mfExplodePercentage, 0.0))
     {
         double fExplodeOffset = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
@@ -237,6 +278,8 @@ void PieChart::createTextLabelShape(
         rParam.mfUnitCircleOuterRadius += fExplodeOffset;
     }
 
+    //get the required label placement type. Available placements are
+    //`AVOID_OVERLAP`, `CENTER`, `OUTSIDE` and `INSIDE`.
     sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
         nPointIndex, m_xChartTypeModel, m_nDimension, m_pPosHelper->isSwapXAndY());
 
@@ -249,6 +292,12 @@ void PieChart::createTextLabelShape(
         // does.
         nLabelPlacement = ::com::sun::star::chart::DataLabelPlacement::CENTER;
 
+    //for `OUTSIDE` (`INSIDE`) label placements an offset of 150 (-150), in the
+    //radius direction, is added to the final screen position of the label
+    //anchor point. This is required in order to ensure that the label is
+    //completely outside (inside) the related slice. Indeed this value should
+    //depend on the font height.
+    Pay attention: 150 is not a big offset, in fact the screen position coordinates for label anchor points are in the 10000-20000 range, hence these are coordinates of a virtual screen and 150 is a small value.
     LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
     sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
     if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
@@ -256,12 +305,16 @@ void PieChart::createTextLabelShape(
     else if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::INSIDE )
         nScreenValueOffsetInRadiusDirection = (3!=m_nDimension) ? -150 : 0;//todo maybe calculate this font height dependent
 
+    //the scene position of the label anchor point is calculated (see notes for
+    //`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),
+    //and immediately transformed into the screen position.
     PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
     awt::Point aScreenPosition2D(
         aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
         , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
         , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ+0.5, 0 ));
 
+    //the screen position of the pie/donut center is calculated.
     PieLabelInfo aPieLabelInfo;
     aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
     awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, rParam.mfLogicZ+1.0 ) ) );
@@ -276,10 +329,13 @@ void PieChart::createTextLabelShape(
         aScreenPosition2D.Y += aDirection.getY();
     }
 
+    //the text shape for the label is created
     double nVal = rSeries.getYValue(nPointIndex);
     aPieLabelInfo.xTextShape = createDataLabel(
         xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum, aScreenPosition2D, eAlignment);
 
+    //a new `PieLabelInfo` instance is initialized with all the info related to
+    //the current label in order to simplify later label position rearrangement.
     uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
     if( xChild.is() )
         aPieLabelInfo.xLabelGroupShape = uno::Reference<drawing::XShape>( xChild->getParent(), uno::UNO_QUERY );

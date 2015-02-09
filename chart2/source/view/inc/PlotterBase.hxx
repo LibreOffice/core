@@ -39,6 +39,10 @@ namespace chart
 class AbstractShapeFactory;
 class PlottingPositionHelper;
 
+/** This class provides methods for setting axis scales and for performing
+ *  scene to screen transformations. It is used as the base class for all
+ *  plotter classes.
+ */
 class PlotterBase
 {
 public:

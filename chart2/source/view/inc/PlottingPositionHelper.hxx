@@ -160,10 +160,25 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const SAL_OVERRIDE;
 
-    //the resulting values should be used for input to the transformation
-    //received with 'getTransformationScaledLogicToScene'
+    //the resulting values provided by the following 3 methods should be used
+    //for input to the transformation received with
+    //'getTransformationScaledLogicToScene'
+
+    /** Given a value in the radius axis scale range, it returns the normalized
+     *  value.
+     */
     double  transformToRadius( double fLogicValueOnRadiusAxis, bool bDoScaling=true ) const;
+
+    /** Given a value in the angle axis scale range (e.g. [0,1] for pie charts)
+     *  this method returns the related angle in degree.
+     */
     double  transformToAngleDegree( double fLogicValueOnAngleAxis, bool bDoScaling=true ) const;
+
+    /** Given 2 values in the angle axis scale range (e.g. [0,1] for pie charts)
+     *  this method returns the angle between the 2 values keeping into account
+     *  the correct axis orientation; (for instance, this method is used for
+     *  computing the angle width of a pie slice).
+     */
     double  getWidthAngleDegree( double& fStartLogicValueOnAngleAxis, double& fEndLogicValueOnAngleAxis ) const;
 
     virtual ::com::sun::star::drawing::Position3D
@@ -172,6 +187,11 @@ public:
             transformScaledLogicToScene( double fX, double fY, double fZ, bool bClip ) const SAL_OVERRIDE;
     ::com::sun::star::drawing::Position3D
             transformAngleRadiusToScene( double fLogicValueOnAngleAxis, double fLogicValueOnRadiusAxis, double fLogicZ, bool bDoScaling=true ) const;
+
+    /** It returns the scene coordinates of the passed point: this point is
+     *  described through a normalized cylindrical coordinate system.
+     *  (For a pie chart the origin of the coordinate system is the pie center).
+     */
     ::com::sun::star::drawing::Position3D
             transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius, double fLogicZ, bool bDoScaling=true ) const;
 
@@ -182,9 +202,18 @@ public:
     inline bool isMathematicalOrientationAngle() const;
     inline bool isMathematicalOrientationRadius() const;
 public:
+    //m_bSwapXAndY (inherited): by default the X axis (scale[0]) represents
+    //the angle axis and the Y axis (scale[1]) represents the radius axis;
+    //when this parameter is true, the opposite happens (this is the case for
+    //pie charts).
+
     //Offset for radius axis in absolute logic scaled values (1.0 == 1 category)
+    //For a donut, it represents the non-normalized inner radius (see notes for
+    //transformToRadius)
     double      m_fRadiusOffset;
-    //Offset for angle axis in real degree
+    //Offset for angle axis in real degree.
+    //For a pie it represents the angle offset at which the first slice have to
+    //start;
     double      m_fAngleDegreeOffset;
 
 private:

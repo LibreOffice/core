@@ -179,6 +179,9 @@ public:
     void getMinimumAndMaximiumX( double& rfMinimum, double& rfMaximum ) const;
     void getMinimumAndMaximiumYInContinuousXRange( double& rfMinY, double& rfMaxY, double fMinX, double fMaxX, sal_Int32 nAxisIndex ) const;
 
+
+    // Methods for handling legends and legend entries.
+
     virtual std::vector< ViewLegendEntry > createLegendEntries(
             const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
@@ -225,12 +228,15 @@ public:
 
     ::std::vector< VDataSeries* > getAllSeries();
 
+    // This method creates a series plotter of the requested type; e.g. : return new PieChart ....
     static VSeriesPlotter* createSeriesPlotter( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XChartType >& xChartTypeModel
                                 , sal_Int32 nDimensionCount
                                 , bool bExcludingPositioning = false /*for pie and donut charts labels and exploded segments are excluded from the given size*/);
 
     sal_Int32 getPointCount() const;
+
+    // Methods for number formats and color schemes
 
     void setNumberFormatsSupplier( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::util::XNumberFormatsSupplier > & xNumFmtSupplier );
@@ -270,6 +276,8 @@ protected:
                 , sal_Int32 nDimensionCount
                 , bool bCategoryXAxis=true );
 
+    // Methods for group shapes.
+
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getSeriesGroupShape( VDataSeries* pDataSeries
             , const::com::sun::star:: uno::Reference<
@@ -287,6 +295,8 @@ protected:
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
+    /// This method creates a 2D group shape for containing all text shapes
+    /// needed for this series; the group is added to the text target;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getLabelsGroupShape( VDataSeries& rDataSeries
             , const::com::sun::star:: uno::Reference<
@@ -297,6 +307,29 @@ protected:
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget, bool bYError );
 
+    /** This method creates a text shape for a label related to a data point
+     *  and append it to the root text shape group (xTarget).
+     *
+     *  @param xTarget
+     *      the main root text shape group.
+     *  @param rDataSeries
+     *      the data series, the data point belongs to.
+     *  @param nPointIndex
+     *      the index of the data point the label is related to.
+     *  @param fValue
+     *      the value of the data point.
+     *  @param fSumValue
+     *      the sum of all data point values in the data series.
+     *  @param rScreenPosition2D
+     *      the anchor point position for the label.
+     *  @param eAlignment
+     *      the required alignment of the label.
+     *  @param offset
+     *      an optional offset depending on the label alignment.
+     *
+     *  @return
+     *      a reference to the created text shape.
+     */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createDataLabel( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >& xTarget
@@ -308,6 +341,8 @@ protected:
                 , LabelAlignment eAlignment=LABEL_ALIGN_CENTER
                 , sal_Int32 nOffset=0 );
 
+    /// This method returns a text string representation of the passed numeric
+    /// value by exploiting a NumberFormatterWrapper object.
     OUString getLabelTextForValue( VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
                 , double fValue

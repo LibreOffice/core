@@ -75,6 +75,18 @@ private: //methods
         const css::uno::Reference<css::drawing::XShapes>& xTextTarget,
         VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam );
 
+    /** This method sets `m_fMaxOffset` to the maximum `Offset` property and
+     *  returns it. There is a `Offset` property for each entry in a data
+     *  series, moreover there exists a shared `Offset` property attached to
+     *  the whole data series. The `Offset` property represents the
+     *  relative distance offset of a slice from the pie center.
+     *  The shared property is used for exploded pie chart, while the property
+     *  attached to single data series entries is used for manual dragging of
+     *  a slice.
+     *  `m_fMaxOffset` is used by `PiePositionHelper::getInnerAndOuterRadius`.
+     *  Note that only the `Offset` properties of the first (x slot) data series
+     *  and its entries are utilized for computing the maximum offset.
+     */
     double              getMaxOffset();
     bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do
     void                resetLabelPositionsToPreviousState();

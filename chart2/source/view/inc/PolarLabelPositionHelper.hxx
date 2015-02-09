@@ -48,6 +48,17 @@ public:
                         , double fLogicZ
                         , sal_Int32 nScreenValueOffsetInRadiusDirection=0 ) const;
 
+    /** Calculate the anchor point position for a text label.
+     *  When the requested label placement is of `INSIDE` or `OUTSIDE` type the
+     *  returned anchor point for the text label is the middle point of the
+     *  outer arc for the given slice; when the requested label placement is of
+     *  `CENTER` type the returned anchor point for the text label is the
+     *  middle point of the line segment bisecting the slice.
+     *  The text alignment is always centered when the requested label
+     *  placement is of `CENTER` type else it is dependent on the value of the
+     *  angle defined by the horizontal axis and the ray bisecting the slice.
+     *
+     */
     ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForUnitCircleValues(
                         LabelAlignment& rAlignment, sal_Int32 nLabelPlacement /*see ::com::sun::star::chart::DataLabelPlacement*/
                         , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
