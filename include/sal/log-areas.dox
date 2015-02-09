@@ -179,6 +179,10 @@ certain functionality.
 @li @c filter.pict
 @li @c filter.tiff
 @li @c filter.xslt - xslt import/export
+
+@section oox
+
+@li @c oox
 @li @c oox.cscode - see oox/source/drawingml/customshapes/README
 @li @c oox.csdata - see oox/source/drawingml/customshapes/README
 @li @c oox.drawingml - DrawingML
@@ -489,7 +493,6 @@ certain functionality.
 @li @c helpcompiler
 @li @c linguistic
 @li @c mysqlc
-@li @c oox
 @li @c postprocess.cppunit
 @li @c registry
 @li @c reportdesign
