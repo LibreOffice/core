@@ -575,7 +575,6 @@ SwZoomBox_Impl::SwZoomBox_Impl(
 
     for(sal_uInt16 i = 0; i < 3; i++)
         InsertEntry(sZoomValues[i]);
-
 }
 
 SwZoomBox_Impl::~SwZoomBox_Impl()
@@ -587,6 +586,7 @@ void    SwZoomBox_Impl::Select()
     {
         OUString sEntry(comphelper::string::remove(GetText(), '%'));
         SvxZoomItem aZoom(SVX_ZOOM_PERCENT,100);
+
         if(sEntry == "Page Width")
             aZoom.SetType(SVX_ZOOM_PAGEWIDTH);
         else if(sEntry == "Optimal view")
