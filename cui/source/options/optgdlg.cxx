@@ -627,7 +627,18 @@ OfaViewTabPage::OfaViewTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pUseHardwareAccell, "useaccel");
     get(m_pUseAntiAliase, "useaa");
     get(m_pUseOpenGL, "useopengl");
+
     get(m_pForceOpenGL, "forceopengl");
+    //fdo#87876 , we need height-for-width support here, but for now we can
+    //bodge it
+    Size aPrefSize(m_pForceOpenGL->get_preferred_size());
+    Size aSize(m_pForceOpenGL->CalcMinimumSize(40*approximate_char_width()));
+    if (aPrefSize.Width() > aSize.Width())
+    {
+        m_pForceOpenGL->set_width_request(aSize.Width());
+        m_pForceOpenGL->set_height_request(aSize.Height());
+    }
+
     get(m_pMousePosLB, "mousepos");
     get(m_pMouseMiddleLB, "mousemiddle");
     // #i97672#
