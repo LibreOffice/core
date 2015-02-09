@@ -79,7 +79,7 @@ using namespace com::sun::star;
 // The checkForUniqueItem method then finds a unique name for the item's value.
 #define SC_LINEEND_NAME     EMPTY_OUSTRING
 
-enum DetInsertResult {              // Return-Werte beim Einfuegen in einen Level
+enum DetInsertResult {              // return-values for inserting in one level
             DET_INS_CONTINUE,
             DET_INS_INSERTED,
             DET_INS_EMPTY,
@@ -144,8 +144,8 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aBoxSet.Put( XLineColorItem( EMPTY_OUSTRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
     aBoxSet.Put( XFillStyleItem( drawing::FillStyle_NONE ) );
 
-    //  Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
-    //  um von den konfigurierten Linienenden unabhaengig zu sein
+    //  create default line endings (like XLineEndList::Create)
+    //  to be independent from the configured line endings
 
     basegfx::B2DPolygon aTriangle;
     aTriangle.append(basegfx::B2DPoint(10.0, 0.0));
@@ -592,12 +592,12 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     return true;
 }
 
-//  DrawEntry:      Formel auf dieser Tabelle,
-//                  Referenz auf dieser oder anderer
-//  DrawAlienEntry: Formel auf anderer Tabelle,
-//                  Referenz auf dieser
+//  DrawEntry:      formula from this spreadsheet,
+//                  reference on this or other
+//  DrawAlienEntry: formula from other spreadsheet,
+//                  reference on this
 
-//      return FALSE: da war schon ein Pfeil
+//      return FALSE: there was already an arrow
 
 bool ScDetectiveFunc::DrawEntry( SCCOL nCol, SCROW nRow,
                                     const ScRange& rRef,
@@ -681,7 +681,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
             if ( pObject->GetLayer()==SC_LAYER_INTERN &&
                     pObject->IsPolyObj() && pObject->GetPointCount()==2 )
             {
-                if (aRect.IsInside(pObject->GetPoint(bDestPnt ? 1 : 0))) // Start/Zielpunkt
+                if (aRect.IsInside(pObject->GetPoint(bDestPnt ? 1 : 0))) // start/destinationpoint
                     ppObj[nDelCount++] = pObject;
             }
 
@@ -700,7 +700,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, bool bDestPnt )
     }
 }
 
-        //      Box um Referenz loeschen
+        //      delete box around reference
 
 #define SC_DET_TOLERANCE    50
 
@@ -811,7 +811,7 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
         return DET_INS_CIRCULAR;
 
     if (pFCell->GetDirty())
-        pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+        pFCell->Interpret();                // can't be called after SetRunning
     pFCell->SetRunning(true);
 
     sal_uInt16 nResult = DET_INS_EMPTY;
@@ -822,11 +822,11 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
     {
         if (DrawEntry( nCol, nRow, aRef, rData ))
         {
-            nResult = DET_INS_INSERTED;         //  neuer Pfeil eingetragen
+            nResult = DET_INS_INSERTED;         // insert new arrow
         }
         else
         {
-            //  weiterverfolgen
+            //  continue
 
             if ( nLevel < rData.GetMaxLevel() )
             {
@@ -851,10 +851,10 @@ sal_uInt16 ScDetectiveFunc::InsertPredLevel( SCCOL nCol, SCROW nRow, ScDetective
                         if (nResult == DET_INS_EMPTY)
                             nResult = DET_INS_CIRCULAR;
                         break;
-                    // DET_INS_EMPTY: unveraendert lassen
+                    // DET_INS_EMPTY: no change
                 }
             }
-            else                                    //  nMaxLevel erreicht
+            else                                    //  nMaxLevel reached
                 if (nResult != DET_INS_INSERTED)
                     nResult = DET_INS_CONTINUE;
         }
@@ -884,7 +884,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevelArea( const ScRange& rRef,
     return nResult;
 }
 
-                                            //  nDeleteLevel != 0   -> loeschen
+                                            //  nDeleteLevel != 0   -> delete
 
 sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nLevel, sal_uInt16 nDeleteLevel )
 {
@@ -900,7 +900,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
         return nLevel;
 
     if (pFCell->GetDirty())
-        pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+        pFCell->Interpret();                // can't be called after SetRunning
     pFCell->SetRunning(true);
 
     sal_uInt16 nResult = nLevel;
@@ -908,7 +908,7 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
 
     if ( bDelete )
     {
-        DeleteArrowsAt( nCol, nRow, true );                 // Pfeile, die hierher zeigen
+        DeleteArrowsAt( nCol, nRow, true );                 // arrows, that are pointing here
     }
 
     ScDetectiveRefIter aIter(pFCell);
@@ -917,14 +917,14 @@ sal_uInt16 ScDetectiveFunc::FindPredLevel( SCCOL nCol, SCROW nRow, sal_uInt16 nL
     {
         bool bArea = ( aRef.aStart != aRef.aEnd );
 
-        if ( bDelete )                  // Rahmen loeschen ?
+        if ( bDelete )                  // delete frame ?
         {
             if (bArea)
             {
                 DeleteBox( aRef.aStart.Col(), aRef.aStart.Row(), aRef.aEnd.Col(), aRef.aEnd.Row() );
             }
         }
-        else                            // weitersuchen
+        else                            // continue searching
         {
             if ( HasArrow( aRef.aStart, nCol,nRow,nTab ) )
             {
@@ -958,7 +958,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
         return DET_INS_CIRCULAR;
 
     if (pFCell->GetDirty())
-        pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+        pFCell->Interpret();                // can't be called after SetRunning
     pFCell->SetRunning(true);
 
     sal_uInt16 nResult = DET_INS_EMPTY;
@@ -975,9 +975,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
             if (DrawEntry( nCol, nRow, ScRange( aErrorPos), rData ))
                 nResult = DET_INS_INSERTED;
 
-            //  und weiterverfolgen
-
-            if ( nLevel < rData.GetMaxLevel() )         // praktisch immer
+            if ( nLevel < rData.GetMaxLevel() )         // hits most of the time
             {
                 if (InsertErrorLevel( aErrorPos.Col(), aErrorPos.Row(),
                                                         rData, nLevel+1 ) == DET_INS_INSERTED)
@@ -988,7 +986,7 @@ sal_uInt16 ScDetectiveFunc::InsertErrorLevel( SCCOL nCol, SCROW nRow, ScDetectiv
 
     pFCell->SetRunning(false);
 
-                                                    // Blaetter ?
+                                                    // leaves ?
     if (!bHasError)
         if (InsertPredLevel( nCol, nRow, rData, rData.GetMaxLevel() ) == DET_INS_INSERTED)
             nResult = DET_INS_INSERTED;
@@ -1012,7 +1010,7 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
         bool bRunning = pFCell->IsRunning();
 
         if (pFCell->GetDirty())
-            pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+            pFCell->Interpret();                // can't be called after SetRunning
         pFCell->SetRunning(true);
 
         ScDetectiveRefIter aIter(pFCell);
@@ -1034,7 +1032,7 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
                                                 aRef, rData );
                     if (bDrawRet)
                     {
-                        nResult = DET_INS_INSERTED;         //  neuer Pfeil eingetragen
+                        nResult = DET_INS_INSERTED;         //  insert new arrow
                     }
                     else
                     {
@@ -1045,7 +1043,6 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
                         }
                         else
                         {
-                                    //  weiterverfolgen
 
                             if ( nLevel < rData.GetMaxLevel() )
                             {
@@ -1066,10 +1063,10 @@ sal_uInt16 ScDetectiveFunc::InsertSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCo
                                         if (nResult == DET_INS_EMPTY)
                                             nResult = DET_INS_CIRCULAR;
                                         break;
-                                    // DET_INS_EMPTY: unveraendert lassen
+                                    // DET_INS_EMPTY: leave unchanged
                                 }
                             }
-                            else                                    //  nMaxLevel erreicht
+                            else                                    //  nMaxLevel reached
                                 if (nResult != DET_INS_INSERTED)
                                     nResult = DET_INS_CONTINUE;
                         }
@@ -1101,7 +1098,7 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
         bool bRunning = pFCell->IsRunning();
 
         if (pFCell->GetDirty())
-            pFCell->Interpret();                // nach SetRunning geht's nicht mehr!
+            pFCell->Interpret();                // can't be called after SetRunning
         pFCell->SetRunning(true);
 
         ScDetectiveRefIter aIter(pFCell);
@@ -1114,7 +1111,7 @@ sal_uInt16 ScDetectiveFunc::FindSuccLevel( SCCOL nCol1, SCROW nRow1, SCCOL nCol2
                         aRef.aStart.Col(),aRef.aStart.Row(),
                         aRef.aEnd.Col(),aRef.aEnd.Row() ))
                 {
-                    if ( bDelete )                          // Pfeile, die hier anfangen
+                    if ( bDelete )                          // arrows, that are starting here
                     {
                         if (aRef.aStart != aRef.aEnd)
                         {
@@ -1210,7 +1207,7 @@ bool ScDetectiveFunc::DeleteSucc( SCCOL nCol, SCROW nRow )
 
     sal_uInt16 nLevelCount = FindSuccLevel( nCol, nRow, nCol, nRow, 0, 0 );
     if ( nLevelCount )
-        FindSuccLevel( nCol, nRow, nCol, nRow, 0, nLevelCount );            // loeschen
+        FindSuccLevel( nCol, nRow, nCol, nRow, 0, nLevelCount );            // delete
 
     return ( nLevelCount != 0 );
 }
@@ -1223,7 +1220,7 @@ bool ScDetectiveFunc::DeletePred( SCCOL nCol, SCROW nRow )
 
     sal_uInt16 nLevelCount = FindPredLevel( nCol, nRow, 0, 0 );
     if ( nLevelCount )
-        FindPredLevel( nCol, nRow, 0, nLevelCount );            // loeschen
+        FindPredLevel( nCol, nRow, 0, nLevelCount );            // delete
 
     return ( nLevelCount != 0 );
 }
@@ -1256,9 +1253,9 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                 {
                     bool bCircle = ( pObject->ISA(SdrCircObj) );
                     bool bCaption = ScDrawLayer::IsNoteCaption( pObject );
-                    if ( eWhat == SC_DET_DETECTIVE )        // Detektiv, aus Menue
-                        bDoThis = !bCaption;                // auch Kreise
-                    else if ( eWhat == SC_DET_CIRCLES )     // Kreise, wenn neue erzeugt werden
+                    if ( eWhat == SC_DET_DETECTIVE )        // detektive, from menue
+                        bDoThis = !bCaption;                // also circles
+                    else if ( eWhat == SC_DET_CIRCLES )     // circles, if new created
                         bDoThis = bCircle;
                     else if ( eWhat == SC_DET_ARROWS )      // DetectiveRefresh
                         bDoThis = !bCaption && !bCircle;    // don't include circles
@@ -1295,13 +1292,12 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
     if (!pModel)
         return false;
 
-    bool bDeleted = DeleteAll( SC_DET_CIRCLES );        // nur die Kreise
+    bool bDeleted = DeleteAll( SC_DET_CIRCLES );        // just circles
 
     ScDetectiveData aData( pModel );
     long nInsCount = 0;
 
-    //  Stellen suchen, wo Gueltigkeit definiert ist
-
+    //  search for valid places
     ScDocAttrIterator aAttrIter( pDoc, nTab, 0,0,MAXCOL,MAXROW );
     SCCOL nCol;
     SCROW nRow1;
@@ -1315,7 +1311,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
             const ScValidationData* pData = pDoc->GetValidationEntry( nIndex );
             if ( pData )
             {
-                //  Zellen in dem Bereich durchgehen
+                //  pass cells in this area
 
                 bool bMarkEmpty = !pData->IsIgnoreBlank();
                 SCROW nNextRow = nRow1;
