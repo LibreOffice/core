@@ -52,7 +52,12 @@ class TextFilterAutoConvert : public TextFilter
 {
 private:
     OUString m_sLastGoodText;
+    OUString m_sNone;
 public:
+    TextFilterAutoConvert(const OUString &rNone)
+        : m_sNone(rNone)
+    {
+    }
     virtual OUString filter(const OUString &rText) SAL_OVERRIDE;
 };
 
@@ -60,6 +65,7 @@ class SwCaptionDialog : public SvxStandardDialog
 {
     Edit*        m_pTextEdit;
     ComboBox*    m_pCategoryBox;
+    OUString     m_sNone;
     TextFilterAutoConvert m_aTextFilter;
     FixedText*   m_pFormatText;
     ListBox*     m_pFormatBox;
@@ -75,8 +81,6 @@ class SwCaptionDialog : public SvxStandardDialog
     PushButton*  m_pOptionButton;
 
     SwCaptionPreview* m_pPreview;
-
-    OUString     m_sNone;
 
     SwView       &rView; // search per active, avoid View
     SwFldMgr     *pMgr;      // pointer to save the include
