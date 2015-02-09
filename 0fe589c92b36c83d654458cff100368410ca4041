@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_7cc11580",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-09T15:59:09Z",
+      "side": 1,
+      "message": "\"independent\"\n\n\"configured\"",
+      "revId": "0fe589c92b36c83d654458cff100368410ca4041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_fc3be59a",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-09T15:59:09Z",
+      "side": 1,
+      "message": "should be singular \"this\"\n\nsounds like the reference is \"on\" this or \"from\" this, but not \"to\" this",
+      "revId": "0fe589c92b36c83d654458cff100368410ca4041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_1cbed9ff",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 598,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-09T15:59:09Z",
+      "side": 1,
+      "message": "should be singular \"this\"",
+      "revId": "0fe589c92b36c83d654458cff100368410ca4041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_dc3621b4",
+        "filename": "sc/source/core/tool/detfunc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-09T15:59:09Z",
+      "side": 1,
+      "message": "isn\u0027t it more like \"delete box around reference\"?",
+      "revId": "0fe589c92b36c83d654458cff100368410ca4041",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
