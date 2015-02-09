@@ -25,7 +25,7 @@ gb_Executable_FILENAMES := $(foreach group,$(gb_Executable_VALIDGROUPS),\
 ifneq (,$(filter-out MACOSX WNT,$(OS)))
 gb_Executable_FILENAMES := $(patsubst uno:uno,uno:uno.bin,$(gb_Executable_FILENAMES))
 endif
-gb_Executable_FILENAMES := $(patsubst unopkg_bin:unopkg_bin%,unopkg_bin:unopkg.bin,$(gb_Executable_FILENAMES))
+gb_Executable_FILENAMES := $(patsubst unopkg_bin:unopkg_bin%,unopkg_bin:unopkg$(if $(filter-out MACOSX,$(OS)),.bin),$(gb_Executable_FILENAMES))
 gb_Executable_FILENAMES := $(patsubst unopkg_com:unopkg_com%,unopkg_com:unopkg.com,$(gb_Executable_FILENAMES))
 gb_Executable_FILENAMES := $(patsubst gengal:gengal,gengal:gengal.bin,$(gb_Executable_FILENAMES))
 

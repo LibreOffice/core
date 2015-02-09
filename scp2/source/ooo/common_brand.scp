@@ -86,9 +86,6 @@ Module gid_Module_Root_Brand
 	     git_License_Odt,
 	     gid_Credits_Odt,
 	     gid_Apache_Notice);
-#if defined MACOSX
-    Unixlinks = (gid_Brand_Unixlink_Unopkg);
-#endif
 End
 
 // Language specific brand module
@@ -529,16 +526,6 @@ File gid_Brand_File_Script_Unopkg
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "unopkg";
-End
-#endif
-
-#if defined MACOSX
-Unixlink gid_Brand_Unixlink_Unopkg
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "unopkg";
-    Target = "unopkg.bin";
-    Styles = ();
 End
 #endif
 
