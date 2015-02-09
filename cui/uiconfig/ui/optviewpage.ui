@@ -97,11 +97,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="forceopengl:wrap">
-                        <property name="label" translatable="yes">Force OpenGL even if blacklisted (might expose driver bugs)</property>
+                      <object class="GtkCheckButton" id="forceopengl">
+                        <property name="label" translatable="yes">Force OpenGL even if blacklisted</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Enabling this may expose driver bugs</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
                       </object>
