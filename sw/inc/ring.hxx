@@ -127,8 +127,7 @@ namespace sw
     {
         if( pObj )
         {
-            value_type* pThis = static_cast< value_type* >(this);
-            algo::link_before(pObj, pThis);
+            algo::link_before(pObj, this);
         }
     }
 
