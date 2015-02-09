@@ -862,12 +862,12 @@ IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, b
 
         if ( pSearchItem->sTopic == rTopic )
         {
-            // We have found this topic ... return a valid pointer.
+            // We have found this topic... return a valid pointer.
             return pSearchItem;
         }
     }
 
-    // We have'nt found this topic ... return a nonvalid pointer.
+    // We haven't found this topic... return a nonvalid pointer.
     return NULL;
 }
 

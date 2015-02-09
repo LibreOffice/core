@@ -680,7 +680,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::getActiveFrame() throw
     @seealso    method getActiveFrame()
 
     @param      "xFrame", reference to new active child. It must be an already existing child!
-    @onerror    An assertion is thrown and element is ignored, if given frame is'nt already a child of us.
+    @onerror    An assertion is thrown and element is ignored, if given frame isn't already a child of us.
 *//*-*****************************************************************************************************/
 void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception )
 {
@@ -702,7 +702,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     aWriteLock.clear();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
-    // Don't work, if "new" active frame is'nt different from current one!
+    // Don't work, if "new" active frame isn't different from current one!
     // (xFrame==NULL is allowed to UNSET it!)
     if( xActiveChild != xFrame )
     {

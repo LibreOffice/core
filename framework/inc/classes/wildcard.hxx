@@ -28,7 +28,7 @@ namespace framework{
     @short          implement wildcard-mechanism for unicode
     @descr          This class can be used to get information about the matching of a pattern to a given text.
                     It's suitable for 8-Bit- AND 16-Bit-strings!
-    @ATTENTION      This class is'nt threadsafe!
+    @ATTENTION      This class isn't threadsafe!
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
