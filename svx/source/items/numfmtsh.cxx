@@ -145,8 +145,7 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
 
     if ( bUndoAddList )
     {
-        // Hinzugefuegte Formate sind nicht gueltig:
-        // => wieder entfernen:
+        // Added formats are invalid => remove them
 
         for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); it != aAddList.end(); ++it )
             pFormatter->DeleteEntry( *it );
@@ -166,7 +165,7 @@ void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt3
 {
     const size_t nListSize = aDelList.size();
 
-    DBG_ASSERT( pDelArray && ( nSize == nListSize ), "Array nicht initialisiert!" );
+    DBG_ASSERT( pDelArray && ( nSize == nListSize ), "Array not initialised!" );
 
     if ( pDelArray && ( nSize == nListSize ) )
         for (std::vector<sal_uInt32>::const_iterator it(aDelList.begin()); it != aDelList.end(); ++it )
@@ -236,7 +235,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
     bool        bInserted   = false;
     sal_uInt32  nAddKey     = pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
-    if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // bereits vorhanden?
+    if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // exists already?
     {
         ::std::vector<sal_uInt32>::iterator nAt = GetRemoved_Impl( nAddKey );
         if ( nAt != aDelList.end() )
@@ -246,10 +245,10 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
         }
         else
         {
-            OSL_FAIL( "Doppeltes Format!" );
+            OSL_FAIL( "duplicate format!" );
         }
     }
-    else // neues Format
+    else // new format
     {
         sal_Int32 nPos;
         bInserted = pFormatter->PutEntry( rFormat, nPos,
@@ -273,27 +272,27 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
         }
     }
 
-    if ( bInserted ) // eingefuegt
+    if ( bInserted )
     {
         nCurFormatKey = nAddKey;
-        DBG_ASSERT( !IsAdded_Impl( nCurFormatKey ), "Doppeltes Format!" );
+        DBG_ASSERT( !IsAdded_Impl( nCurFormatKey ), "duplicate format!" );
         aAddList.push_back( nCurFormatKey );
 
-        // aktuelle Tabelle holen
+        // get current table
         pCurFmtTable = &(pFormatter->GetEntryTable( nCurCategory,
                                                     nCurFormatKey,
                                                     eCurLanguage ));
-        nCurCategory=pFormatter->GetType(nAddKey); //@@ ???
+        nCurCategory=pFormatter->GetType(nAddKey);
         CategoryToPos_Impl( nCurCategory, rCatLbSelPos );
         rFmtSelPos = FillEntryList_Impl( rFmtEntries );
     }
-    else if ( rErrPos != 0 ) // Syntaxfehler
+    else if ( rErrPos != 0 ) // syntax error
     {
         ;
     }
-    else // Doppelt einfuegen nicht moeglich
+    else // insert twice not possible
     {
-        OSL_FAIL( "Doppeltes Format!" ); // oder doch?
+        OSL_FAIL( "duplicate format!" );
     }
 
     return bInserted;
@@ -308,8 +307,8 @@ bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
 {
     sal_uInt32 nDelKey = pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
-    DBG_ASSERT( nDelKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "Eintrag nicht gefunden!" );
-    DBG_ASSERT( !IsRemoved_Impl( nDelKey ), "Eintrag bereits geloescht!" );
+    DBG_ASSERT( nDelKey != NUMBERFORMAT_ENTRY_NOT_FOUND, "entry not found!" );
+    DBG_ASSERT( !IsRemoved_Impl( nDelKey ), "entry already removed!" );
 
     if ( (nDelKey != NUMBERFORMAT_ENTRY_NOT_FOUND) && !IsRemoved_Impl( nDelKey ) )
     {
@@ -512,7 +511,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             Color*&   rpPrevColor )
 {
 
-    // Vorbedingung: Zahlenformatierer gefunden
+    // precondition: number formater found
     DBG_ASSERT( pFormatter != NULL, "Zahlenformatierer nicht gefunden!" );
 
     short                   nSelPos     = SELPOS_NONE;

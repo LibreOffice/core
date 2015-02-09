@@ -168,7 +168,7 @@ SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
     return new SvxNumberInfoItem( *this );
 }
 
-// Laden/Speichern wird nicht gebraucht!
+// Load/Save is unused!
 
 
 SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) const

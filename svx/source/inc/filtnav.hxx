@@ -248,7 +248,7 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
 
     AutoTimer           m_aDropActionTimer;
     unsigned short      m_aTimerCounter;
-    Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
+    Point               m_aTimerTriggered;      // position, where DropTimer was started
     DROP_ACTION         m_aDropActionType;
 
 public:

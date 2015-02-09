@@ -40,7 +40,7 @@ TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTA
 
 
 
-//  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
+//  SvxRotateModeItem - orientation with turned text
 
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
@@ -75,7 +75,7 @@ bool SvxRotateModeItem::GetPresentation(
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText += "...: ";
-//          break; // DURCHFALLEN!!!
+//          break; // FALL THROUGH!!!
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += OUString( GetValue() );
