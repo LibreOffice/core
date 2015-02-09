@@ -77,16 +77,16 @@ bool PassStuffByRef::VisitLambdaExpr(const LambdaExpr * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    for (auto const & i: expr->captures()) {
-        if (i.getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
+    for (auto i(expr->capture_begin()); i != expr->capture_end(); ++i) {
+        if (i->getCaptureKind() == LambdaCaptureKind::LCK_ByCopy) {
             std::string name;
-            if (isFat(i.getCapturedVar()->getType(), &name)) {
+            if (isFat(i->getCapturedVar()->getType(), &name)) {
                 report(
                     DiagnosticsEngine::Warning,
                     ("%0 capture of '%1' variable by copy, rather use capture"
                      " by reference---UNLESS THE LAMBDA OUTLIVES THE VARIABLE"),
-                    i.getLocation())
-                    << (i.isImplicit() ? "implicit" : "explicit") << name
+                    i->getLocation())
+                    << (i->isImplicit() ? "implicit" : "explicit") << name
                     << expr->getSourceRange();
             }
         }
