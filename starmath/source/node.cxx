@@ -1283,7 +1283,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
                         const Point &rDiagPoint, double fAngleDeg) const
 
 {
-    const double  fPi   = 3.1415926535897932384626433;
+    static const double  fPi   = 3.1415926535897932384626433;
     double  fAngleRad   = fAngleDeg / 180.0 * fPi;
     long    nRectLeft   = GetItalicLeft(),
             nRectRight  = GetItalicRight(),
