@@ -163,8 +163,7 @@ bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList
                 // ignore
                 break;
             default:
-                DBG_WARNING( "Unknown token at import fill bitmap style" )
-                ;
+                SAL_INFO("xmloff.style", "Unknown token at import fill bitmap style");
         }
     }
 

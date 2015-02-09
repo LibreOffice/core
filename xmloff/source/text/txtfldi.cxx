@@ -959,7 +959,7 @@ void XMLPageNumberImportContext::PrepareField(
                 nPageAdjust++;
                 break;
             default:
-                DBG_WARNING("unknown page number type");
+                SAL_WARN("xmloff.text", "unknown page number type");
         }
         aAny <<= nPageAdjust;
         xPropertySet->setPropertyValue(sPropertyOffset, aAny);

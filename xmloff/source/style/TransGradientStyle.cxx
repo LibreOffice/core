@@ -189,8 +189,7 @@ bool XMLTransGradientStyleImport::importXML(
             break;
 
         default:
-            DBG_WARNING( "Unknown token at import transparency gradient style" )
-            ;
+            SAL_INFO("xmloff.style", "Unknown token at import transparency gradient style");
         }
     }
 

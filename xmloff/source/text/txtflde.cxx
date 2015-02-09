@@ -2887,7 +2887,7 @@ bool XMLTextFieldExport::ExplodeFieldMasterName(
     // '.' found?
     if (nSeparator <= nLength) {
         nSeparator = sMasterName.getLength();
-        DBG_WARNING("no field var name!");
+        SAL_WARN("xmloff.text", "no field var name!");
         bReturn = false;
     }
     else
@@ -3278,7 +3278,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapSenderFieldName(
             eName = XML_SENDER_STATE_OR_PROVINCE;
             break;
         default:
-            DBG_WARNING("unknown sender type");
+            SAL_WARN("xmloff.text", "unknown sender type");
             eName = XML_TOKEN_INVALID;
             break;
     }
@@ -3339,7 +3339,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapDocInfoFieldName(
             eElement = XML_CREATOR;
             break;
         default:
-            DBG_WARNING("unknown docinfo field type!");
+            SAL_WARN("xmloff.text", "unknown docinfo field type!");
             eElement = XML_TOKEN_INVALID;
             break;
     }

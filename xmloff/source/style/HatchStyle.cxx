@@ -146,8 +146,7 @@ bool XMLHatchStyleImport::importXML(
                 break;
 
             default:
-                DBG_WARNING( "Unknown token at import hatch style" )
-                ;
+                SAL_INFO("xmloff.style", "Unknown token at import hatch style");
         }
     }
 
