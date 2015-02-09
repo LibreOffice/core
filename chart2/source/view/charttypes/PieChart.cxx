@@ -297,7 +297,7 @@ void PieChart::createTextLabelShape(
     //anchor point. This is required in order to ensure that the label is
     //completely outside (inside) the related slice. Indeed this value should
     //depend on the font height.
-    Pay attention: 150 is not a big offset, in fact the screen position coordinates for label anchor points are in the 10000-20000 range, hence these are coordinates of a virtual screen and 150 is a small value.
+    //Pay attention: 150 is not a big offset, in fact the screen position coordinates for label anchor points are in the 10000-20000 range, hence these are coordinates of a virtual screen and 150 is a small value.
     LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
     sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
     if( nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
