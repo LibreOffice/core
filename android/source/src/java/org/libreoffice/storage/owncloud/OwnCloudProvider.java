@@ -10,6 +10,7 @@ import org.libreoffice.storage.IFile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
@@ -24,8 +25,10 @@ import com.owncloud.android.lib.resources.files.RemoteFile;
 /**
  * Implementation of IDocumentProvider for ownCloud servers.
  */
-public class OwnCloudProvider implements IDocumentProvider {
+public class OwnCloudProvider implements IDocumentProvider,
+        OnSharedPreferenceChangeListener {
 
+    private Context context;
     private OwnCloudClient client;
     private File cacheDir;
 
@@ -34,6 +37,8 @@ public class OwnCloudProvider implements IDocumentProvider {
     private String password;
 
     public OwnCloudProvider(Context context) {
+        this.context = context;
+
         // read preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         serverUrl = preferences.getString(
@@ -43,11 +48,7 @@ public class OwnCloudProvider implements IDocumentProvider {
         password = preferences.getString(
                 DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_PASSWORD, "");
 
-        Uri serverUri = Uri.parse(serverUrl);
-        client = OwnCloudClientFactory.createOwnCloudClient(serverUri,
-                context, true);
-        client.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
-                userName, password));
+        setupClient();
 
         // make sure cache directory exists, and clear it
         // TODO: probably we should do smarter cache management
@@ -56,6 +57,14 @@ public class OwnCloudProvider implements IDocumentProvider {
             deleteRecursive(cacheDir);
         }
         cacheDir.mkdirs();
+    }
+
+    private void setupClient() {
+        Uri serverUri = Uri.parse(serverUrl);
+        client = OwnCloudClientFactory.createOwnCloudClient(serverUri, context,
+                true);
+        client.setCredentials(OwnCloudCredentialsFactory.newBasicCredentials(
+                userName, password));
     }
 
     @Override
@@ -115,5 +124,26 @@ public class OwnCloudProvider implements IDocumentProvider {
                 deleteRecursive(child);
         }
         file.delete();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences preferences,
+            String key) {
+        boolean changed = false;
+        if (key.equals(DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_SERVER)) {
+            serverUrl = preferences.getString(key, "");
+            changed = true;
+        }
+        else if (key.equals(DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_USER_NAME)) {
+            userName = preferences.getString(key, "");
+            changed = true;
+        }
+        else if (key.equals(DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_PASSWORD)) {
+            password = preferences.getString(key, "");
+            changed = true;
+        }
+
+        if (changed)
+            setupClient();
     }
 }
