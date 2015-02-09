@@ -9,11 +9,15 @@
 
 package org.libreoffice.storage;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.libreoffice.storage.local.LocalDocumentsDirectoryProvider;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
 import org.libreoffice.storage.owncloud.OwnCloudProvider;
 
 import android.content.Context;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 /**
  * Keeps the instances of the available IDocumentProviders in the system.
@@ -102,5 +106,15 @@ public final class DocumentProviderFactory {
      */
     public IDocumentProvider getDefaultProvider() {
         return providers[0];
+    }
+
+    public Set<OnSharedPreferenceChangeListener> getChangeListeners() {
+        Set<OnSharedPreferenceChangeListener> listeners =
+                new HashSet<OnSharedPreferenceChangeListener>();
+        for (IDocumentProvider provider : providers) {
+            if (provider instanceof OnSharedPreferenceChangeListener)
+                listeners.add((OnSharedPreferenceChangeListener) provider);
+        }
+        return listeners;
     }
 }
