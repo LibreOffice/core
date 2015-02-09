@@ -179,7 +179,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
     DBG_ASSERT( xNormalized.is(), "getElementPos: invalid element!" );
     if ( xNormalized.is() )
     {
-        // Feststellen an welcher Position sich das Kind befindet
+        // find child position
         nIndex = xCont->getCount();
         while (nIndex--)
         {

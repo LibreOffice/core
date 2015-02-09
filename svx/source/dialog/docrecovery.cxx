@@ -711,9 +711,9 @@ void SaveProgressDialog::stepNext(TURLInfo* )
 {
     /* TODO
 
-        wenn die m_pCore noch ein Member m_nCurrentItem haette
-        koennte man dort erkennen, wer gerade drann war, wer demnaechst
-        dran ist ... Diese Info kann man dann in unserem Progress FixText anzeigen ...
+       if m_pCore would have a member m_mCurrentItem, you could see,
+       who is current, who is next ... You can show this information
+       in progress report FixText
     */
 }
 

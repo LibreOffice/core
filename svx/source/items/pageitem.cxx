@@ -33,7 +33,6 @@ using namespace ::com::sun::star;
 
 TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 
-// Konstruktor
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_ARABIC ),
@@ -42,7 +41,7 @@ SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 {
 }
 
-// Copy-Konstruktor
+// Copy-Ctor
 SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     : SfxPoolItem( rItem )
 {
@@ -51,13 +50,13 @@ SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     eUse        = rItem.eUse;
 }
 
-// Clonen
+// Clone
 SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
 {
     return new SvxPageItem( *this );
 }
 
-// Abfrage auf Gleichheit
+// Test for equality
 bool SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -147,7 +146,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_PAGE_NUMTYPE:
         {
-            //! die Konstanten sind nicht mehr in den IDLs ?!?
+            //! constants aren't in IDLs any more ?!?
             rVal <<= (sal_Int16)( eNumType );
         }
         break;
@@ -165,7 +164,7 @@ bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 case SVX_PAGE_ALL   : eRet = style::PageStyleLayout_ALL;       break;
                 case SVX_PAGE_MIRROR: eRet = style::PageStyleLayout_MIRRORED; break;
                 default:
-                    OSL_FAIL("was fuer ein Layout ist das?");
+                    OSL_FAIL("what layout is this?");
                     return false;
             }
             rVal <<= eRet;
