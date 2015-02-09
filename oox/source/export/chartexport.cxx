@@ -784,7 +784,7 @@ void ChartExport::exportExternalData( Reference< ::com::sun::star::chart::XChart
         }
         catch( beans::UnknownPropertyException & )
         {
-            DBG_WARNING( "Required property not found in ChartDocument" );
+            SAL_WARN("oox", "Required property not found in ChartDocument");
         }
     }
     if(!externalDataPath.isEmpty())
@@ -844,7 +844,7 @@ void ChartExport::exportChart( Reference< ::com::sun::star::chart::XChartDocumen
         }
         catch( beans::UnknownPropertyException & )
         {
-            DBG_WARNING( "Required property not found in ChartDocument" );
+            SAL_WARN("oox", "Required property not found in ChartDocument");
         }
     } // if( xDocPropSet.is())
 
@@ -921,7 +921,7 @@ void ChartExport::exportLegend( Reference< ::com::sun::star::chart::XChartDocume
         }
         catch( beans::UnknownPropertyException & )
         {
-            DBG_WARNING( "Property Align not found in ChartLegend" );
+            SAL_WARN("oox", "Property Align not found in ChartLegend");
         }
 
         const char* strPos = NULL;
