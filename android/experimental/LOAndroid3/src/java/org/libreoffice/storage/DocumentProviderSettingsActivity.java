@@ -16,6 +16,11 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 public class DocumentProviderSettingsActivity extends Activity {
+
+    public static final String KEY_PREF_OWNCLOUD_SERVER = "pref_server_url";
+    public static final String KEY_PREF_OWNCLOUD_USER_NAME = "pref_user_name";
+    public static final String KEY_PREF_OWNCLOUD_PASSWORD = "pref_password";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
