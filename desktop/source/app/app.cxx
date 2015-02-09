@@ -1866,7 +1866,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
     StyleSettings hStyleSettings   = rSettings.GetStyleSettings();
     MouseSettings hMouseSettings = rSettings.GetMouseSettings();
 
-    sal_uInt32 nDragFullOptions = hStyleSettings.GetDragFullOptions();
+    sal_uLong nDragFullOptions = hStyleSettings.GetDragFullOptions();
 
     SvtTabAppearanceCfg aAppearanceCfg;
     sal_uInt16 nDragMode = aAppearanceCfg.GetDragMode();
@@ -1876,7 +1876,7 @@ void Desktop::OverrideSystemSettings( AllSettings& rSettings )
         nDragFullOptions |= DRAGFULL_OPTION_ALL;
         break;
     case DragFrame:
-        nDragFullOptions &= ((sal_uInt32)~DRAGFULL_OPTION_ALL);
+        nDragFullOptions &= ~DRAGFULL_OPTION_ALL;
         break;
     case DragSystemDep:
     default:
