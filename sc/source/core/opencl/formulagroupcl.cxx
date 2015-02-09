@@ -1661,6 +1661,11 @@ public:
     typedef DynamicKernelSlidingArgument<DynamicKernelStringArgument> StringRange;
     typedef ParallelReductionVectorRef<VectorRef> ParallelNumericRange;
 
+    virtual bool HandleNaNArgument( std::stringstream&, unsigned, SubArguments& ) const
+    {
+        return false;
+    }
+
     virtual void GenSlidingWindowFunction( std::stringstream& ss,
         const std::string& sSymName, SubArguments& vSubArguments ) SAL_OVERRIDE
     {
@@ -1724,18 +1729,25 @@ public:
             }
             if (ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
             {
+                bool bNanHandled = HandleNaNArgument(ss, i, vSubArguments);
+
                 ss << "tmpBottom = " << GetBottom() << ";\n";
-                ss << "if (isNan(";
-                ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << "))\n";
-                if (ZeroReturnZero())
-                    ss << "    return 0;\n";
-                else
+
+                if (!bNanHandled)
                 {
-                    ss << "    tmp = ";
-                    ss << Gen2("tmpBottom", "tmp") << ";\n";
+                    ss << "if (isNan(";
+                    ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+                    ss << "))\n";
+                    if (ZeroReturnZero())
+                        ss << "    return 0;\n";
+                    else
+                    {
+                        ss << "    tmp = ";
+                        ss << Gen2("tmpBottom", "tmp") << ";\n";
+                    }
+                    ss << "else\n";
                 }
-                ss << "else{\n";
+                ss << "{";
                 ss << "        tmp = ";
                 ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
                 ss << ";\n";
@@ -2147,6 +2159,32 @@ public:
         return "(" + rhs + "==0 ? CreateDoubleError(errDivisionByZero) : (" + lhs + "/" + rhs + ") )";
     }
     virtual std::string BinFuncName() const SAL_OVERRIDE { return "fdiv"; }
+
+    virtual bool HandleNaNArgument( std::stringstream& ss, unsigned argno, SubArguments& vSubArguments ) const SAL_OVERRIDE
+    {
+        if (argno == 1)
+        {
+            ss <<
+                "if (isnan(" << vSubArguments[argno]->GetName() << "[gid0])) {\n"
+                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GetName() << "[gid0]) == errNoValue)\n"
+                "        return CreateDoubleError(errDivisionByZero);\n"
+                "}\n";
+            return true;
+        }
+        else if (argno == 0)
+        {
+            ss <<
+                "if (isnan(" << vSubArguments[argno]->GetName() << "[gid0])) {\n"
+                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GetName() << "[gid0]) == errNoValue) {\n"
+                "        if (" << vSubArguments[1]->GetName() << "[gid0] == 0)\n"
+                "            return CreateDoubleError(errDivisionByZero);\n"
+                "        return 0;\n"
+                "    }\n"
+                "}\n";
+        }
+        return false;
+    }
+
 };
 
 class OpMin : public Reduction
