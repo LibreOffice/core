@@ -281,7 +281,6 @@ sal_uInt64 FileHandle_Impl::getPos() const
 
 oslFileError FileHandle_Impl::setPos (sal_uInt64 uPos)
 {
-    SAL_INFO("sal.file", "FileHandle_Impl::setPos(" << m_fd << ", " << getPos() << ") => " << uPos);
     m_fileptr = sal::static_int_cast< off_t >(uPos);
     return osl_File_E_None;
 }
@@ -377,7 +376,6 @@ oslFileError FileHandle_Impl::readAt (
     if (-1 == nBytes)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
-    SAL_INFO("sal.file", "FileHandle_Impl::readAt(" << m_fd << ", " << nOffset << ", " << nBytes << ")");
     *pBytesRead = nBytes;
     return osl_File_E_None;
 }
@@ -400,7 +398,6 @@ oslFileError FileHandle_Impl::writeAt (
     if (-1 == nBytes)
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
-    SAL_INFO("sal.file", "FileHandle_Impl::writeAt(" << m_fd << ", " << nOffset << ", " << nBytes << ")");
     m_size = std::max (m_size, sal::static_int_cast< sal_uInt64 >(nOffset + nBytes));
 
     *pBytesWritten = nBytes;
