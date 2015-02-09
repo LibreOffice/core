@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ This file is part of the LibreOffice project.
+ This Source Code Form is subject to the terms of the Mozilla Public
+ License, v. 2.0. If a copy of the MPL was not distributed with this
+ file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/owncloud_settings"
+        android:key="pref_key_owncloud_settings">
+        <EditTextPreference
+            android:key="pref_server_url"
+            android:title="@string/server_url"
+            android:summary="@string/server_url_and_port"
+            android:defaultValue="http://" />
+        <EditTextPreference
+            android:key="pref_user_name"
+            android:title="@string/user_name"
+            android:defaultValue="" />
+        <EditTextPreference
+            android:key="pref_password"
+            android:title="@string/password"
+            android:defaultValue="" />
+    </PreferenceCategory>
+</PreferenceScreen>

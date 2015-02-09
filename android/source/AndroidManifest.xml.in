@@ -106,6 +106,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Document Provider Settings Activity -->
+        <activity android:name=".storage.DocumentProviderSettingsActivity"
+                  android:label="@string/storage_provider_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
