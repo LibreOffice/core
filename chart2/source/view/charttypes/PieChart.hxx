@@ -38,6 +38,8 @@ public:
             , sal_Int32 nDimensionCount, bool bExcludingPositioning );
     virtual ~PieChart();
 
+    /** This method creates all shapes needed for representing the pie chart.
+     */
     virtual void createShapes() SAL_OVERRIDE;
     virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize ) SAL_OVERRIDE;
 
@@ -71,6 +73,17 @@ private: //methods
             tPropertyNameValueMap* pOverWritePropertiesMap,
             const ShapeParam& rParam );
 
+    /** This method creates a text shape for a label of a data point.
+     *
+     *  @param xTextTarget
+     *      where to append the new created text shape.
+     *  @param rSeries
+     *      the data series, the data point belongs to.
+     *  @param nPointIndex
+     *      the index of the data point the label is related to.
+     *  @param rParam
+     *      ShapeParam object.
+     */
     void createTextLabelShape(
         const css::uno::Reference<css::drawing::XShapes>& xTextTarget,
         VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam );

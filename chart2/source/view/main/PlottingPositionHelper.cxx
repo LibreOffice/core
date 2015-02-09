@@ -507,7 +507,7 @@ double PolarPlottingPositionHelper::transformToAngleDegree( double fLogicValueOn
     return fRet;
 }
 
-/*
+/**
  * Given a value in the radius axis scale range, it returns, in the simplest
  * case (that is when `m_fRadiusOffset` is zero), the normalized value; when
  * `m_fRadiusOffset` is not zero (e.g. as in the case of a donut), the interval

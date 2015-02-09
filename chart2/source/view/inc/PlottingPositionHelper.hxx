@@ -202,18 +202,18 @@ public:
     inline bool isMathematicalOrientationAngle() const;
     inline bool isMathematicalOrientationRadius() const;
 public:
-    //m_bSwapXAndY (inherited): by default the X axis (scale[0]) represents
-    //the angle axis and the Y axis (scale[1]) represents the radius axis;
-    //when this parameter is true, the opposite happens (this is the case for
-    //pie charts).
+    ///m_bSwapXAndY (inherited): by default the X axis (scale[0]) represents
+    ///the angle axis and the Y axis (scale[1]) represents the radius axis;
+    ///when this parameter is true, the opposite happens (this is the case for
+    ///pie charts).
 
-    //Offset for radius axis in absolute logic scaled values (1.0 == 1 category)
-    //For a donut, it represents the non-normalized inner radius (see notes for
-    //transformToRadius)
+    ///Offset for radius axis in absolute logic scaled values (1.0 == 1 category)
+    ///For a donut, it represents the non-normalized inner radius (see notes for
+    ///transformToRadius)
     double      m_fRadiusOffset;
-    //Offset for angle axis in real degree.
-    //For a pie it represents the angle offset at which the first slice have to
-    //start;
+    ///Offset for angle axis in real degree.
+    ///For a pie it represents the angle offset at which the first slice have to
+    ///start;
     double      m_fAngleDegreeOffset;
 
 private:
