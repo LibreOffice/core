@@ -1055,7 +1055,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
             SwRect aBoth( VisArea() );
             aBoth.Union( aPrevArea );
             const SwTwips nBottom = aBoth.Bottom();
-            SwTwips nMinLeft = LONG_MAX;
+            SwTwips nMinLeft = SAL_MAX_INT32;
             SwTwips nMaxRight= 0;
 
             const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
