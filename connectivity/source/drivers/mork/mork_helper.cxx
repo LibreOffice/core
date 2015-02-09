@@ -14,12 +14,12 @@ bool openAddressBook(const std::string& path)
         return false;
     }
     const int defaultScope = 0x80;
-    MorkTableMap::iterator tableIter;
+    MorkTableMap::Map::iterator tableIter;
     MorkTableMap *Tables = mork.getTables( defaultScope );
     if ( Tables )
     {
         // Iterate all tables
-        for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
+        for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
         {
             if ( 0 == tableIter->first ) continue;
             SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);

@@ -213,22 +213,22 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
         std::string listTable = oStringTable.getStr();
         xMork->getRecordKeysForListTable(listTable, listRecords);
     }
-    MorkTableMap::iterator tableIter;
+    MorkTableMap::Map::iterator tableIter;
     MorkTableMap *Tables = xMork->getTables( 0x80 );
     if (!Tables)
         return -1;
     MorkRowMap *Rows = 0;
-    MorkRowMap::iterator rowIter;
+    MorkRowMap::Map::iterator rowIter;
 
     // Iterate all tables
-    for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
+    for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
     {
         if (tableIter->first != 1) break;
         Rows = xMork->getRows( 0x80, &tableIter->second );
         if ( Rows )
         {
             // Iterate all rows
-            for ( rowIter = Rows->begin(); rowIter != Rows->end(); ++rowIter )
+            for ( rowIter = Rows->map.begin(); rowIter != Rows->map.end(); ++rowIter )
             {
                 // list specific table
                 // only retrieve rowIds that belong to that list table.

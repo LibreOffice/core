@@ -49,10 +49,10 @@
 
 typedef std::map< int, std::string > MorkDict;
 typedef std::map< int, int > MorkCells;               // ColumnId : ValueId
-typedef std::map< int, MorkCells > MorkRowMap;        // Row id
-typedef std::map< int, MorkRowMap > RowScopeMap;      // Row scope
-typedef std::map< int, RowScopeMap > MorkTableMap;    // Table id
-typedef std::map< int, MorkTableMap > TableScopeMap;  // Table Scope
+struct MorkRowMap { typedef std::map< int, MorkCells > Map; Map map; }; // Row id
+struct RowScopeMap { typedef std::map< int, MorkRowMap > Map; Map map; }; // Row scope
+struct MorkTableMap { typedef std::map< int, RowScopeMap > Map; Map map; }; // Table id
+struct TableScopeMap { typedef std::map< int, MorkTableMap > Map; Map map; }; // Table Scope
 
 // Error codes
 enum MorkErrors

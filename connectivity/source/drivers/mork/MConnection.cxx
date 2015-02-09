@@ -159,11 +159,11 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
     // check that we can retrieve the tables:
     MorkTableMap *Tables = m_pBook->getTables( defaultScope );
-    MorkTableMap::iterator tableIter;
+    MorkTableMap::Map::iterator tableIter;
     if (Tables)
     {
         // Iterate all tables
-        for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
+        for ( tableIter = Tables->map.begin(); tableIter != Tables->map.end(); ++tableIter )
         {
             if ( 0 == tableIter->first ) continue;
             SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);
@@ -174,7 +174,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     if (Tables_hist)
     {
         // Iterate all tables
-        for ( tableIter = Tables_hist->begin(); tableIter != Tables_hist->end(); ++tableIter )
+        for ( tableIter = Tables_hist->map.begin(); tableIter != Tables_hist->map.end(); ++tableIter )
         {
             if ( 0 == tableIter->first ) continue;
             SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);

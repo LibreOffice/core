@@ -486,7 +486,7 @@ inline void MorkParser::setCurrentRow( int TableScope, int TableId, int RowScope
         TableId = defaultTableId_;
     }
 
-    currentCells_ = &( mork_[ abs( TableScope ) ][ abs( TableId ) ][ abs( RowScope ) ][ abs( RowId ) ] );
+    currentCells_ = &( mork_.map[ abs( TableScope ) ].map[ abs( TableId ) ].map[ abs( RowScope ) ].map[ abs( RowId ) ] );
 }
 
 bool MorkParser::parseRow( int TableId, int TableScope )
@@ -556,10 +556,10 @@ bool MorkParser::parseMeta( char c )
 
 MorkTableMap *MorkParser::getTables( int TableScope )
 {
-    TableScopeMap::iterator iter;
-    iter = mork_.find( TableScope );
+    TableScopeMap::Map::iterator iter;
+    iter = mork_.map.find( TableScope );
 
-    if ( iter == mork_.end() )
+    if ( iter == mork_.map.end() )
     {
         return 0;
     }
@@ -569,10 +569,10 @@ MorkTableMap *MorkParser::getTables( int TableScope )
 
 MorkRowMap *MorkParser::getRows( int RowScope, RowScopeMap *table )
 {
-    RowScopeMap::iterator iter;
-    iter = table->find( RowScope );
+    RowScopeMap::Map::iterator iter;
+    iter = table->map.find( RowScope );
 
-    if ( iter == table->end() )
+    if ( iter == table->map.end() )
     {
         return 0;
     }
@@ -613,8 +613,8 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
-    for (MorkTableMap::iterator TableIter = tables->begin();
-         TableIter != tables->end(); ++TableIter )
+    for (MorkTableMap::Map::iterator TableIter = tables->map.begin();
+         TableIter != tables->map.end(); ++TableIter )
     {
 #ifdef VERBOSE
         std::cout    << "\t Table:"
@@ -623,8 +623,8 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 #endif
         MorkRowMap* rows = getRows( defaultListScope_, &TableIter->second );
         if (!rows) return;
-        for ( MorkRowMap::iterator RowIter = rows->begin();
-             RowIter != rows->end(); ++RowIter )
+        for ( MorkRowMap::Map::iterator RowIter = rows->map.begin();
+             RowIter != rows->map.end(); ++RowIter )
         {
 #ifdef VERBOSE
             std::cout    << "\t\t\t Row Id:"
@@ -655,8 +655,8 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
 
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
-    for (MorkTableMap::iterator TableIter = tables->begin();
-         TableIter != tables->end(); ++TableIter )
+    for (MorkTableMap::Map::iterator TableIter = tables->map.begin();
+         TableIter != tables->map.end(); ++TableIter )
     {
 #ifdef VERBOSE
         std::cout    << "\t Table:"
@@ -665,8 +665,8 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
 #endif
         MorkRowMap* rows = getRows( 0x81, &TableIter->second );
         if (!rows) return;
-        for ( MorkRowMap::iterator RowIter = rows->begin();
-             RowIter != rows->end(); ++RowIter )
+        for ( MorkRowMap::Map::iterator RowIter = rows->map.begin();
+             RowIter != rows->map.end(); ++RowIter )
         {
 #ifdef VERBOSE
             std::cout    << "\t\t\t Row Id:"
@@ -739,26 +739,26 @@ void MorkParser::dump()
               << std::endl << std::endl;
 
     //// Mork data
-    for ( TableScopeMap::iterator iter = mork_.begin();
-          iter != mork_.end(); ++iter )
+    for ( TableScopeMap::Map::iterator iter = mork_.map.begin();
+          iter != mork_.map.end(); ++iter )
     {
         std::cout << "\r\n Scope:" << iter->first << std::endl;
 
-        for ( MorkTableMap::iterator TableIter = iter->second.begin();
-              TableIter != iter->second.end(); ++TableIter )
+        for ( MorkTableMap::Map::iterator TableIter = iter->second.map.begin();
+              TableIter != iter->second.map.end(); ++TableIter )
         {
             std::cout << "\t Table:"
                       << ( ( int ) TableIter->first < 0 ? "-" : " " )
                       << TableIter->first << std::endl;
 
-            for (RowScopeMap::iterator RowScopeIter = TableIter->second.begin();
-                 RowScopeIter != TableIter->second.end(); ++RowScopeIter )
+            for (RowScopeMap::Map::iterator RowScopeIter = TableIter->second.map.begin();
+                 RowScopeIter != TableIter->second.map.end(); ++RowScopeIter )
             {
                 std::cout << "\t\t RowScope:"
                           << RowScopeIter->first << std::endl;
 
-                for (MorkRowMap::iterator RowIter = RowScopeIter->second.begin();
-                     RowIter != RowScopeIter->second.end(); ++RowIter )
+                for (MorkRowMap::Map::iterator RowIter = RowScopeIter->second.map.begin();
+                     RowIter != RowScopeIter->second.map.end(); ++RowIter )
                 {
                     std::cout << "\t\t\t Row Id:"
                               << ((int) RowIter->first < 0 ? "-" : " ")
