@@ -52,7 +52,8 @@ namespace grutils { class GrFeatureParser; }
 class GraphiteFaceWrapper
 {
 public:
-    typedef std::map<int, gr_font*> GrFontMap;
+    typedef std::pair<int, int> GrFontMapKey;
+    typedef std::map<GrFontMapKey, gr_font*> GrFontMap;
     GraphiteFaceWrapper(gr_face * pFace) : m_pFace(pFace) {}
     ~GraphiteFaceWrapper()
     {
@@ -63,18 +64,21 @@ public:
         gr_face_destroy(m_pFace);
     }
     const gr_face * face() const { return m_pFace; }
-    gr_font * font(int ppm) const
+    gr_font * font(int ppm, bool isBold, bool isItalic) const
     {
-        GrFontMap::const_iterator i = m_fonts.find(ppm);
+        int styleKey = int(isBold) | (int(isItalic) << 1);
+        GrFontMap::const_iterator i = m_fonts.find(GrFontMapKey(ppm, styleKey));
         if (i != m_fonts.end())
             return i->second;
         return NULL;
     };
-    void addFont(int ppm, gr_font * pFont)
+    void addFont(int ppm, gr_font * pFont, bool isBold, bool isItalic)
     {
-        if (m_fonts[ppm])
-            gr_font_destroy(m_fonts[ppm]);
-        m_fonts[ppm] = pFont;
+        int styleKey = int(isBold) | (int(isItalic) << 1);
+        GrFontMapKey key(ppm, styleKey);
+        if (m_fonts[key])
+            gr_font_destroy(m_fonts[key]);
+        m_fonts[key] = pFont;
     }
 private:
     gr_face * m_pFace;

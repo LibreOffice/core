@@ -48,7 +48,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
     , mpFeatures(NULL)
     , mpStr(NULL)
 {
-    gr_font * pFont = rServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight);
+    gr_font * pFont = rServerFont.GetGraphiteFace()->font(rServerFont.GetFontSelData().mnHeight, rServerFont.NeedsArtificialBold(), rServerFont.NeedsArtificialItalic());
     if (!pFont)
     {
         pFont = gr_make_font_with_advance_fn(
@@ -57,7 +57,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
                &rServerFont,
                freetypeServerFontAdvance,
                rServerFont.GetGraphiteFace()->face());
-        rServerFont.GetGraphiteFace()->addFont(rServerFont.GetFontSelData().mnHeight, pFont);
+        rServerFont.GetGraphiteFace()->addFont(rServerFont.GetFontSelData().mnHeight, pFont, rServerFont.NeedsArtificialBold(), rServerFont.NeedsArtificialItalic());
     }
     maImpl.SetFont(pFont);
     OString aLang("");

@@ -97,7 +97,7 @@ private:
     FixedText*          m_pEastFontSizeFT;
     FontSizeBox*        m_pEastFontSizeLB;
     FixedText*          m_pEastFontLanguageFT;
-    SvxLanguageBox*     m_pEastFontLanguageLB;
+    SvxLanguageComboBox*     m_pEastFontLanguageLB;
     FixedText*          m_pEastFontTypeFT;
 
     VclContainer*       m_pCTLFrame;
@@ -108,7 +108,7 @@ private:
     FixedText*          m_pCTLFontSizeFT;
     FontSizeBox*        m_pCTLFontSizeLB;
     FixedText*          m_pCTLFontLanguageFT;
-    SvxLanguageBox*     m_pCTLFontLanguageLB;
+    SvxLanguageComboBox*     m_pCTLFontLanguageLB;
     FixedText*          m_pCTLFontTypeFT;
 
     SvxCharNamePage_Impl*   m_pImpl;
