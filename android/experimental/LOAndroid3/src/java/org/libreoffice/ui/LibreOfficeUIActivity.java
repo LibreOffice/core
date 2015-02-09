@@ -13,6 +13,7 @@ import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.LOAbout;
 import org.libreoffice.storage.DocumentProviderFactory;
+import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
 import org.libreoffice.storage.local.LocalDocumentsProvider;
@@ -444,6 +445,10 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             case R.id.action_about:
                 showAbout();
                 return true;
+        case R.id.menu_storage_preferences:
+            startActivity(new Intent(this, DocumentProviderSettingsActivity.class));;
+            break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
