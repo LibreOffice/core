@@ -4,11 +4,14 @@ import java.io.File;
 import java.net.URI;
 
 import org.libreoffice.R;
+import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
 import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
@@ -26,12 +29,20 @@ public class OwnCloudProvider implements IDocumentProvider {
     private OwnCloudClient client;
     private File cacheDir;
 
-    // TODO: these must be configurable
-    final private String serverUrl = "http://10.0.2.2/owncloud"; //emulator host machine
-    final private String userName = "admin";
-    final private String password = "admin";
+    private String serverUrl;
+    private String userName;
+    private String password;
 
     public OwnCloudProvider(Context context) {
+        // read preferences
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        serverUrl = preferences.getString(
+                DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_SERVER, "");
+        userName = preferences.getString(
+                DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_USER_NAME, "");
+        password = preferences.getString(
+                DocumentProviderSettingsActivity.KEY_PREF_OWNCLOUD_PASSWORD, "");
+
         Uri serverUri = Uri.parse(serverUrl);
         client = OwnCloudClientFactory.createOwnCloudClient(serverUri,
                 context, true);
