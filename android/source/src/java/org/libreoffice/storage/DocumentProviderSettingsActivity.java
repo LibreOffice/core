@@ -9,17 +9,23 @@
 
 package org.libreoffice.storage;
 
+import java.util.Set;
+
 import org.libreoffice.R;
 
 import android.app.Activity;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 
 public class DocumentProviderSettingsActivity extends Activity {
 
     public static final String KEY_PREF_OWNCLOUD_SERVER = "pref_server_url";
     public static final String KEY_PREF_OWNCLOUD_USER_NAME = "pref_user_name";
     public static final String KEY_PREF_OWNCLOUD_PASSWORD = "pref_password";
+
+    private Set<OnSharedPreferenceChangeListener> listeners;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,27 @@ public class DocumentProviderSettingsActivity extends Activity {
         // Display the fragment as the main content.
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment()).commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        listeners = DocumentProviderFactory.getInstance().getChangeListeners();
+        for (OnSharedPreferenceChangeListener listener : listeners) {
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .registerOnSharedPreferenceChangeListener(listener);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        for (OnSharedPreferenceChangeListener listener : listeners) {
+            PreferenceManager.getDefaultSharedPreferences(this)
+                    .unregisterOnSharedPreferenceChangeListener(listener);
+        }
     }
 
     public static class SettingsFragment extends PreferenceFragment {
