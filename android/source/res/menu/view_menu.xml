@@ -10,6 +10,8 @@
           android:title="@string/menu_sort_az"/>
     <item android:id="@+id/menu_sort_modified"
           android:title="@string/menu_sort_modified"/>
+    <item android:id="@+id/menu_storage_preferences"
+          android:title="@string/storage_provider_settings"/>
     <item android:id="@+id/action_about"
           android:title="@string/action_about"
           android:orderInCategory="100"/>
