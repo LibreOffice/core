@@ -85,7 +85,7 @@ OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
 //Resolves: fdo#47427 disallow typing *or* pasting content into the category box
 OUString TextFilterAutoConvert::filter(const OUString &rText)
 {
-    if (!SwCalc::IsValidVarName(rText))
+    if (rText != m_sNone && !SwCalc::IsValidVarName(rText))
         return m_sLastGoodText;
     m_sLastGoodText = rText;
     return rText;
@@ -94,6 +94,7 @@ OUString TextFilterAutoConvert::filter(const OUString &rText)
 SwCaptionDialog::SwCaptionDialog( vcl::Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
     m_sNone( SW_RESSTR(SW_STR_NONE) ),
+    m_aTextFilter(m_sNone),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
     bCopyAttributes( false ),
@@ -282,7 +283,7 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
 {
     OUString sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == m_sNone)
-        sFldTypeName.clear();
+        sFldTypeName = OUString();
     SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
     aDlg.SetApplyBorderAndShadow(bCopyAttributes);
     aDlg.SetCharacterStyle( sCharacterStyle );
@@ -318,6 +319,8 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
     SwFieldType* pType = (bCorrectFldName && !bNone)
                     ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
                     : 0;
+    fprintf(stderr, "pType is %p\n", pType);
+    fprintf(stderr, "bCorrectFldName is %d\n", bCorrectFldName);
     m_pOKButton->Enable( bCorrectFldName &&
                         (!pType ||
                             static_cast<SwSetExpFieldType*>(pType)->GetType() == nsSwGetSetExpType::GSE_SEQ) );
