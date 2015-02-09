@@ -57,4 +57,12 @@
     <string name="action_keyboard">Show keyboard</string>
     <string name="action_save">Save</string>
 
+    <!-- Document provider settings -->
+    <string name="storage_provider_settings">Storage provider settings</string>
+    <string name="owncloud_settings">ownCloud settings</string>
+    <string name="server_url">Server URL</string>
+    <string name="server_url_and_port">URL and port of the ownCloud server.</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+
 </resources>
