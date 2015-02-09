@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the LibreOffice project.
  *
@@ -46,7 +46,7 @@
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>
-
+#include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
 
 // Size check
@@ -394,7 +394,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         "modules/swriter/ui/floatingnavigation.ui", rFrame),
     aIList(SW_RES(IL_VALUES))
 {
-    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), this, 0);
+    m_pToolBox = new SwScrollNaviToolBox(get<vcl::Window>("box"), 0);
     get(m_pInfoField, "label");
 
     sal_uInt16 i;
@@ -502,8 +502,8 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
 void SwScrollNaviToolBox::MouseButtonUp( const MouseEvent& rMEvt )
 {
     ToolBox::MouseButtonUp(rMEvt);
-    if (m_pNaviPopup->IsInPopupMode())
-        m_pNaviPopup->EndPopupMode(FLOATWIN_POPUPMODEEND_CLOSEALL);
+    if ( static_cast<SwScrollNaviPopup*>(GetParent())->IsInPopupMode() )
+        static_cast<SwScrollNaviPopup*>(GetParent())->EndPopupMode( FLOATWIN_POPUPMODEEND_CLOSEALL );
 }
 
 void  SwScrollNaviToolBox::RequestHelp( const HelpEvent& rHEvt )
@@ -570,6 +570,11 @@ SwZoomBox_Impl::SwZoomBox_Impl(
             Application::GetSettings().GetUILanguageTag());
         InsertEntry(sEntry);
     }
+    OUString TextZoomValues[] =
+        {"Page Width", "Optimal view", "Entire Page"};
+
+    for(sal_uInt16 i = 0; i < 3; i++)
+        InsertEntry(TextZoomValues[i]);
 }
 
 SwZoomBox_Impl::~SwZoomBox_Impl()
@@ -580,25 +585,26 @@ void    SwZoomBox_Impl::Select()
     if ( !IsTravelSelect() )
     {
         OUString sEntry(comphelper::string::remove(GetText(), '%'));
-        sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
-        if(nZoom < MINZOOM)
-            nZoom = MINZOOM;
-        if(nZoom > MAXZOOM)
-            nZoom = MAXZOOM;
+        SvxZoomItem aZoom(SVX_ZOOM_PERCENT,100);
+        if(sEntry == "Page Width")
+            aZoom.SetType(SVX_ZOOM_PAGEWIDTH);
+        else if(sEntry == "Optimal view")
+            aZoom.SetType(SVX_ZOOM_OPTIMAL);
+        else if(sEntry == "Entire Page")
+            aZoom.SetType(SVX_ZOOM_WHOLEPAGE);
+        else
+            {
+            sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
+            if(nZoom < MINZOOM)
+                nZoom = MINZOOM;
+            if(nZoom > MAXZOOM)
+                nZoom = MAXZOOM;
+            aZoom.SetValue(nZoom);
+            }
 
-        SfxUInt16Item aItem( nSlotId, nZoom );
-        if ( FN_PREVIEW_ZOOM == nSlotId )
-        {
-            Any a;
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = "PreviewZoom";
-            aItem.QueryValue( a );
-            aArgs[0].Value = a;
-            SfxToolBoxControl::Dispatch(
-                m_xDispatchProvider,
-                OUString( ".uno:PreviewZoom" ),
-                aArgs );
-        }
+        SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+
+        pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, &aZoom, 0L);
 
         ReleaseFocus();
     }
