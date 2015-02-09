@@ -387,9 +387,9 @@ void SvxShape::impl_initFromSdrObject()
 
         switch(mpImpl->mnObjId)
         {
-        case OBJ_CCUT:          // Kreisabschnitt
-        case OBJ_CARC:          // Kreisbogen
-        case OBJ_SECT:          // Kreissektor
+        case OBJ_CCUT:          // segment of circle
+        case OBJ_CARC:          // arc of circle
+        case OBJ_SECT:          // sector
             mpImpl->mnObjId = OBJ_CIRC;
             break;
 
@@ -616,22 +616,22 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
                 uno::Any* pUsrAny = rPropSet.GetUsrAnyForID(aSrcIt->nWID);
                 if(pUsrAny)
                 {
-                    // Aequivalenten Eintrag in pDst suchen
+                    // search for equivalent entry in pDst
                     const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( aSrcIt->sName );
                     if(pEntry)
                     {
                         // entry found
                         if(pEntry->nWID >= OWN_ATTR_VALUE_START && pEntry->nWID <= OWN_ATTR_VALUE_END)
                         {
-                            // Special ID im PropertySet, kann nur direkt am
-                            // Objekt gesetzt werden+
+                            // special ID in PropertySet, can only be set
+                            // directly at the object
                             xSet->setPropertyValue( aSrcIt->sName, *pUsrAny);
                         }
                         else
                         {
                             if(SfxItemPool::IsWhich(pEntry->nWID))
                                 rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
-                            // setzen
+                            // set
                             SvxItemPropertySet_setPropertyValue(rPropSet, pEntry, *pUsrAny, rSet);
                         }
                     }
@@ -1166,7 +1166,7 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
             Point aLocalPos( Position.X, Position.Y );
             ForceMetricToItemPoolMetric(aLocalPos);
 
-            // Position ist absolut, relativ zum Anker stellen
+            // Position is absolut, so recalc to position relativ to anchor
             if( mpModel->IsWriter() )
                 aLocalPos += mpObj->GetAnchorPos();
 
@@ -1711,14 +1711,14 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
         {
             if(bIsNotPersist)
             {
-                // Not-Persistent Attribute, hole diese extra
+                // not-persistent attribute, get those extra
                 mpObj->TakeNotPersistAttr(*pSet, false);
             }
         }
 
         if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
         {
-            // Default aus ItemPool holen
+            // get default from ItemPool
             if(SfxItemPool::IsWhich(pMap->nWID))
                 pSet->Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
         }
@@ -1731,7 +1731,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
 
     if(bIsNotPersist)
     {
-        // Not-Persist Attribute extra setzen
+        // set not-persistent attribute extra
         mpObj->ApplyNotPersistAttr( *pSet );
         delete pSet;
     }
@@ -1789,14 +1789,14 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             {
                 if(pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST)
                 {
-                    // Not-Persistent Attribute, hole diese extra
+                    // not-persistent attribute, get those extra
                     mpObj->TakeNotPersistAttr(aSet, false);
                 }
             }
 
             if(!aSet.Count())
             {
-                // Default aus ItemPool holen
+                // get default from ItemPool
                 if(SfxItemPool::IsWhich(pMap->nWID))
                     aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
             }
@@ -1987,16 +1987,16 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
             drawing::CircleKind eKind;
             switch(mpObj->GetObjIdentifier())
             {
-            case OBJ_CIRC:          // Kreis, Ellipse
+            case OBJ_CIRC:          // circle, ellipse
                 eKind = drawing::CircleKind_FULL;
                 break;
-            case OBJ_CCUT:          // Kreisabschnitt
+            case OBJ_CCUT:          // segment of circle
                 eKind = drawing::CircleKind_CUT;
                 break;
-            case OBJ_CARC:          // Kreisbogen
+            case OBJ_CARC:          // arc of circle
                 eKind = drawing::CircleKind_ARC;
                 break;
-            case OBJ_SECT:          // Kreissektor
+            case OBJ_SECT:          // sector
                 eKind = drawing::CircleKind_SECTION;
                 break;
             }
@@ -2006,7 +2006,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
     }
     default:
     {
-        // Hole Wert aus ItemSet
+        // get value form ItemSet
         aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pMap, aSet );
 
         if( pMap->aType != aAny.getValueType() )
@@ -3079,7 +3079,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
         return getPropertyValue( aPropertyName );
     }
 
-    // Default aus ItemPool holen
+    // get default from ItemPool
     if(!SfxItemPool::IsWhich(pMap->nWID))
         throw beans::UnknownPropertyException();
 

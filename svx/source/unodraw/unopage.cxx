@@ -66,14 +66,14 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 , mpPage( pInPage )
 , mpModel( 0 )
 {
-    // Am Broadcaster anmelden
+    // register at broadcaster
     if( mpPage )
         mpModel = mpPage->GetModel();
     if( mpModel )
         StartListening( *mpModel );
 
 
-    // Erzeugen der (hidden) View
+    // create (hidden) view
     mpView = new SdrView( mpModel );
     if( mpView )
         mpView->SetDesignMode(true);
@@ -390,12 +390,12 @@ namespace
     }
 }
 
-// ACHTUNG: _SelectObjectsInView selektiert die ::com::sun::star::drawing::Shapes nur in der angegebennen
-//         SdrPageView. Dies muss nicht die sichtbare SdrPageView sein.
+// ATTENTION: _SelectObjectsInView selects the ::com::sun::star::drawing::Shapes
+// only in the given SdrPageView. It hasn't to be the visible SdrPageView.
 void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
 {
-    DBG_ASSERT(pPageView,"SdrPageView ist NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView ist NULL! [CL]");
+    DBG_ASSERT(pPageView,"SdrPageView is NULL! [CL]");
+    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
 
     if(pPageView!=NULL && mpView!=NULL)
     {
@@ -412,12 +412,12 @@ void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aS
     }
 }
 
-// ACHTUNG: _SelectObjectInView selektiert das Shape *nur* in der angegebennen
-//         SdrPageView. Dies muss nicht die sichtbare SdrPageView sein.
+// ATTENTION: _SelectObjectInView selects the shape only in the given SdrPageView.
+// It hasn't to be the visible SdrPageView.
 void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
 {
-    DBG_ASSERT(pPageView,"SdrPageView ist NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView ist NULL! [CL]");
+    DBG_ASSERT(pPageView,"SdrPageView is NULL! [CL]");
+    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
 
     if(pPageView!=NULL && mpView != NULL)
     {
@@ -434,8 +434,8 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    DBG_ASSERT(mpPage,"SdrPage ist NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView ist NULL! [CL]");
+    DBG_ASSERT(mpPage,"SdrPage is NULL! [CL]");
+    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
 
     Reference< ::com::sun::star::drawing::XShapeGroup >  xShapeGroup;
     if(mpPage==NULL||mpView==NULL||!xShapes.is())
@@ -472,8 +472,8 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    DBG_ASSERT(mpPage,"SdrPage ist NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView ist NULL! [CL]");
+    DBG_ASSERT(mpPage,"SdrPage is NULL! [CL]");
+    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
 
     if(mpPage==NULL||mpView==NULL||!aGroup.is())
         return;
@@ -512,7 +512,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject(const Reference< drawing::XShape > & xS
 
     if( pNewObj->ISA(E3dPolyScene))
     {
-        // Szene initialisieren
+        // initialise scene
         E3dScene* pScene = static_cast<E3dScene*>(pNewObj);
 
         double fW = (double)aSize.Width;
@@ -630,7 +630,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case E3D_POLYGONOBJ_ID :
                     pRet = new Svx3DPolygonObject( pObj );
                     break;
-                default: // unbekanntes 3D-Objekt auf der Page
+                default: // unknown 3D-object on page
                     pRet = new SvxShape( pObj );
                     break;
             }
@@ -782,14 +782,14 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_OPENGL:
                     pRet = new SvxOpenGLObject( pObj );
                     break;
-                default: // unbekanntes 2D-Objekt auf der Page
-                    OSL_FAIL("Nicht implementierter Starone-Shape erzeugt! [CL]");
+                default: // unknown 2D-object on page
+                    OSL_FAIL("Not implemented Starone-Shape created! [CL]");
                     pRet = new SvxShapeText( pObj );
                     break;
             }
             break;
         }
-        default: // Unbekannter Inventor
+        default: // unknown inventor
         {
             OSL_FAIL("AW: Unknown Inventor in SvxDrawPage::_CreateShape()");
             break;
@@ -805,9 +805,9 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 
         switch(nObjId)
         {
-        case OBJ_CCUT:          // Kreisabschnitt
-        case OBJ_CARC:          // Kreisbogen
-        case OBJ_SECT:          // Kreissektor
+        case OBJ_CCUT:          // segment of circle
+        case OBJ_CARC:          // arc of circle
+        case OBJ_SECT:          // sector
             nObjId = OBJ_CIRC;
             break;
 
