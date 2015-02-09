@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_fc6205ad",
+        "filename": "svx/source/items/rotmodit.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-09T16:18:29Z",
+      "side": 1,
+      "message": "not sure if \"turned\" is the right word here...",
+      "revId": "bd905fee22eb1f9e016308465631ef96e8f8f7fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
