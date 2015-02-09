@@ -108,7 +108,10 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
         DocumentProviderFactory.initialize(this);
         documentProviderFactory = DocumentProviderFactory.getInstance();
 
+        PreferenceManager.setDefaultValues(this, R.xml.documentprovider_preferences, false);
+
         readPreferences();
+
         // init UI and populate with contents from the provider
         createUI();
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
