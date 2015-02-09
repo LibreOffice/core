@@ -53,6 +53,7 @@ import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.SettingsActivity;
 import org.libreoffice.storage.DocumentProviderFactory;
+import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
 import org.libreoffice.storage.IFile;
 
@@ -461,6 +462,10 @@ public class LibreOfficeUIActivity extends ActionBarActivity implements ActionBa
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
+            case R.id.menu_storage_preferences:
+                startActivity(new Intent(this, DocumentProviderSettingsActivity.class));;
+                break;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
