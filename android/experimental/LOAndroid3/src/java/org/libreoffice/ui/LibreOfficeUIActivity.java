@@ -112,6 +112,8 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         DocumentProviderFactory.initialize(this);
         documentProviderFactory = DocumentProviderFactory.getInstance();
 
+        PreferenceManager.setDefaultValues(this, R.xml.documentprovider_preferences, false);
+
         // init UI and populate with contents from the provider
         createUI();
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
