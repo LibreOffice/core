@@ -224,7 +224,10 @@ class UnoInProcess:
         desktop = smgr.createInstanceWithContext("com.sun.star.frame.Desktop", self.getContext())
         props = [("Hidden", True), ("ReadOnly", False), ("AsTemplate", False)]
         loadProps = tuple([mkPropertyValue(name, value) for (name, value) in props])
-        url = "file://" + file
+        if os.name == "nt":
+            url = "file:///" + file
+        else:
+            url = "file://" + file
         self.xDoc = desktop.loadComponentFromURL(url, "_blank", 0, loadProps)
         assert(self.xDoc)
         return self.xDoc
