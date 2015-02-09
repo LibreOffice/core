@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_993afbe6",
+        "filename": "UnoControls/source/controls/progressmonitor.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 870,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-02-09T07:21:17Z",
+      "side": 1,
+      "message": "Can you please only use ASCII characters?\n\nReplacing ... with … is not a good move, IMHO.",
+      "revId": "c6d79aaa2be995fbb40d186ec68cd96dba6a58a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
