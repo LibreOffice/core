@@ -29,6 +29,8 @@ endif
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8-
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8@2>:
 
+liborcus_patches += liborcus_0.7.0-configure.gcc5.patch.0
+
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	$(foreach patch,$(liborcus_patches),external/liborcus/$(patch)) \
 ))
