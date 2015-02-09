@@ -22,6 +22,7 @@ import xml.etree.ElementTree as ET
 
 core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
+    ("libevtattlo.a", "evtatt_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
     ("libstocserviceslo.a", "stocservices_component_getFactory"),
     ("libchartcorelo.a", "chartcore_component_getFactory"),
@@ -64,6 +65,9 @@ core_factory_list = [
 core_constructor_list = [
 # chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
+# forms/util/frm.component
+    "com_sun_star_comp_forms_ODatabaseForm_get_implementation",
+    "com_sun_star_form_OFormsCollection_get_implementation",
 # framework/util/fwk.component
     "com_sun_star_comp_framework_AutoRecovery_get_implementation",
     "com_sun_star_comp_framework_Desktop_get_implementation",
@@ -119,6 +123,7 @@ core_constructor_list = [
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_UnoComboBoxControl_get_implementation",
+    "stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation",
     "stardiv_Toolkit_UnoControlComboBoxModel_get_implementation",
     "stardiv_Toolkit_UnoControlContainer_get_implementation",
     "stardiv_Toolkit_UnoControlContainerModel_get_implementation",
