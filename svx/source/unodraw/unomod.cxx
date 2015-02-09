@@ -120,34 +120,34 @@ bool SvxUnoDrawMSFactory::createEvent( const SdrModel* pDoc, const SdrHint* pSdr
 
     switch( pSdrHint->GetKind() )
     {
-//              case HINT_LAYERCHG:             // Layerdefinition geaendert
-//              case HINT_LAYERORDERCHG:        // Layerreihenfolge geaendert (Insert/Remove/ChangePos)
-//              case HINT_LAYERSETCHG:          // Layerset geaendert
-//              case HINT_LAYERSETORDERCHG:     // Layersetreihenfolge geaendert (Insert/Remove/ChangePos)
+//              case HINT_LAYERCHG:             // layer definition changed
+//              case HINT_LAYERORDERCHG:        // layer order changed (Insert/Remove/ChangePos)
+//              case HINT_LAYERSETCHG:          // layer set changed
+//              case HINT_LAYERSETORDERCHG:     // layer set order changed (Insert/Remove/ChangePos)
 
 // #115423#
-//      case HINT_PAGECHG:              // Page geaendert
+//      case HINT_PAGECHG:              // page changed
 //          aEvent.EventName = "PageModified";
 //          pPage = pSdrHint->GetPage();
 //          break;
-        case HINT_PAGEORDERCHG:         // Reihenfolge der Seiten (Zeichenseiten oder Masterpages) geaendert (Insert/Remove/ChangePos)
+        case HINT_PAGEORDERCHG:         // draw or master page order changed (Insert/Remove/ChangePos)
             aEvent.EventName = "PageOrderModified";
             pPage = pSdrHint->GetPage();
             break;
-        case HINT_OBJCHG:               // Objekt geaendert
+        case HINT_OBJCHG:               // object changed
             aEvent.EventName = "ShapeModified";
             pObj = pSdrHint->GetObject();
             break;
-        case HINT_OBJINSERTED:          // Neues Zeichenobjekt eingefuegt
+        case HINT_OBJINSERTED:          // add new draw object
             aEvent.EventName = "ShapeInserted";
             pObj = pSdrHint->GetObject();
             break;
-        case HINT_OBJREMOVED:           // Zeichenobjekt aus Liste entfernt
+        case HINT_OBJREMOVED:           // removed draw object from list
             aEvent.EventName = "ShapeRemoved";
             pObj = pSdrHint->GetObject();
             break;
-//                HINT_DEFAULTTABCHG,   // Default Tabulatorweite geaendert
-//                HINT_DEFFONTHGTCHG,   // Default FontHeight geaendert
+//                HINT_DEFAULTTABCHG,   // default tab width changed
+//                HINT_DEFFONTHGTCHG,   // default FontHeight changed
 //                HINT_SWITCHTOPAGE,    // #94278# UNDO/REDO at an object evtl. on another page
 //                HINT_OBJLISTCLEAR     // Is called before an SdrObjList will be cleared
         default:
@@ -649,8 +649,8 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
 
 // XDrawPages
 
-// Erzeugt eine neue Seite mit Model an der angegebennen Position und gibt die
-// dazugehoerige SdDrawPage zurueck.
+// create a new page with model at given position
+// and return corresponding SdDrawPage
 uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
     throw(uno::RuntimeException, std::exception)
 {
@@ -682,7 +682,7 @@ void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDra
     sal_uInt16 nPageCount = mrModel.mpDoc->GetPageCount();
     if( nPageCount > 1 )
     {
-        // pPage von xPage besorgen und dann die Id (nPos )ermitteln
+        // get pPage from xPage and get Id (nPos)
         SvxDrawPage* pSvxPage = SvxDrawPage::getImplementation( xPage );
         if( pSvxPage )
         {

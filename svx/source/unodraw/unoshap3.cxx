@@ -310,7 +310,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformationsmatrix in das Objekt packen
+        // pach transformation matrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
@@ -427,7 +427,7 @@ bool Svx3DSceneObject::getPropertyValueImpl(const OUString& rName, const SfxItem
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Objekt in eine homogene 4x4 Matrix packen
+        // pach object to a homogeneous 4x4 matrix
         ConvertObjectToHomogenMatric( static_cast< E3dObject* >( mpObj.get() ), rValue );
         break;
     }
@@ -491,14 +491,14 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformationsmatrix in das Objekt packen
+        // pack transformationmatrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
     }
     case OWN_ATTR_3D_VALUE_POSITION:
     {
-        // Position in das Objekt packen
+        // pack position to the object
         drawing::Position3D aUnoPos;
         if( rValue >>= aUnoPos )
         {
@@ -510,7 +510,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
     }
     case OWN_ATTR_3D_VALUE_SIZE:
     {
-        // Groesse in das Objekt packen
+        // pack size to the object
         drawing::Direction3D aDirection;
         if( rValue >>= aDirection )
         {
@@ -523,7 +523,7 @@ bool Svx3DCubeObject::setPropertyValueImpl( const OUString& rName, const SfxItem
     case OWN_ATTR_3D_VALUE_POS_IS_CENTER:
     {
         bool bNew = false;
-        // sal_Bool bPosIsCenter in das Objekt packen
+        // pack sal_Bool bPosIsCenter to the object
         if( rValue >>= bNew )
         {
             static_cast< E3dCubeObj* >( mpObj.get() )->SetPosIsCenter(bNew);
@@ -546,13 +546,13 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformation in eine homogene Matrix packen
+        // pack transformation to a homogeneous matrix
         ConvertObjectToHomogenMatric( static_cast< E3dObject* >( mpObj.get() ), rValue );
         break;
     }
     case OWN_ATTR_3D_VALUE_POSITION:
     {
-        // Position packen
+        // pack position
         const basegfx::B3DPoint& rPos = static_cast<E3dCubeObj*>(mpObj.get())->GetCubePos();
         drawing::Position3D aPos;
 
@@ -565,7 +565,7 @@ bool Svx3DCubeObject::getPropertyValueImpl( const OUString& rName, const SfxItem
     }
     case OWN_ATTR_3D_VALUE_SIZE:
     {
-        // Groesse packen
+        // pack size
         const basegfx::B3DVector& rSize = static_cast<E3dCubeObj*>(mpObj.get())->GetCubeSize();
         drawing::Direction3D aDir;
 
@@ -615,7 +615,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxIt
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformationsmatrix in das Objekt packen
+        // pack transformation matrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
@@ -623,7 +623,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxIt
 
     case OWN_ATTR_3D_VALUE_POSITION:
     {
-        // Position in das Objekt packen
+        // pack position to the object
         drawing::Position3D aUnoPos;
         if( rValue >>= aUnoPos )
         {
@@ -636,7 +636,7 @@ bool Svx3DSphereObject::setPropertyValueImpl( const OUString& rName, const SfxIt
 
     case OWN_ATTR_3D_VALUE_SIZE:
     {
-        // Groesse in das Objekt packen
+        // pack size to the object
         drawing::Direction3D aDir;
         if( rValue >>= aDir )
         {
@@ -661,13 +661,13 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformation in eine homogene Matrix packen
+        // pack transformation to a homogeneous matrix
         ConvertObjectToHomogenMatric( static_cast< E3dObject* >( mpObj.get() ), rValue );
         break;
     }
     case OWN_ATTR_3D_VALUE_POSITION:
     {
-        // Position packen
+        // pack position
         const basegfx::B3DPoint& rPos = static_cast<E3dSphereObj*>(mpObj.get())->Center();
         drawing::Position3D aPos;
 
@@ -680,7 +680,7 @@ bool Svx3DSphereObject::getPropertyValueImpl( const OUString& rName, const SfxIt
     }
     case OWN_ATTR_3D_VALUE_SIZE:
     {
-        // Groesse packen
+        // pack size
         const basegfx::B3DVector& rSize = static_cast<E3dSphereObj*>(mpObj.get())->Size();
         drawing::Direction3D aDir;
 
@@ -813,14 +813,14 @@ bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformationsmatrix in das Objekt packen
+        // pack transformation matrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
     }
     case OWN_ATTR_3D_VALUE_POLYPOLYGON3D:
     {
-        // Polygondefinition in das Objekt packen
+        // pack polygon definition to the object
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
 
         // #i101520# Probably imported
@@ -831,7 +831,7 @@ bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             // item here and re-set after setting the polygon.
             const sal_uInt32 nPrevVerticalSegs(static_cast<E3dLatheObj*>(mpObj.get())->GetVerticalSegments());
 
-            // Polygon setzen
+            // set polygon
             const basegfx::B3DHomMatrix aIdentity;
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
             static_cast<E3dLatheObj*>(mpObj.get())->SetPolyPoly2D(aB2DPolyPolygon);
@@ -860,7 +860,7 @@ bool Svx3DLatheObject::getPropertyValueImpl( const OUString& rName, const SfxIte
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformation in eine homogene Matrix packen
+        // pack transformation to a homogeneous matrix
         drawing::HomogenMatrix aHomMat;
         basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform();
 
@@ -927,7 +927,7 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxI
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformationsmatrix in das Objekt packen
+        // pack transformation matrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
@@ -935,13 +935,13 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const OUString& rName, const SfxI
 
     case OWN_ATTR_3D_VALUE_POLYPOLYGON3D:
     {
-        // Polygondefinition in das Objekt packen
+        // pack polygon definition to the object
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
 
         // #i101520# Probably imported
         if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, true ) )
         {
-            // Polygon setzen
+            // set polygon
             const basegfx::B3DHomMatrix aIdentity;
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
             static_cast<E3dExtrudeObj*>(mpObj.get())->SetExtrudePolygon(aB2DPolyPolygon);
@@ -964,7 +964,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformation in eine homogene Matrix packen
+        // pack transformation to a homogeneous matrix
         drawing::HomogenMatrix aHomMat;
         basegfx::B3DHomMatrix aMat = static_cast<E3dObject*>(mpObj.get())->GetTransform();
 
@@ -992,7 +992,7 @@ bool Svx3DExtrudeObject::getPropertyValueImpl( const OUString& rName, const SfxI
 
     case OWN_ATTR_3D_VALUE_POLYPOLYGON3D:
     {
-        // Polygondefinition packen
+        // pack polygon definition
         const basegfx::B2DPolyPolygon& rPolyPoly = static_cast<E3dExtrudeObj*>(mpObj.get())->GetExtrudePolygon();
         const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 
@@ -1032,7 +1032,7 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
     {
     case OWN_ATTR_3D_VALUE_TRANSFORM_MATRIX:
     {
-        // Transformationsmatrix in das Objekt packen
+        // pack transformation matrix to the object
         if( ConvertHomogenMatrixToObject( static_cast< E3dObject* >( mpObj.get() ), rValue ) )
             return true;
         break;
@@ -1040,13 +1040,13 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
 
     case OWN_ATTR_3D_VALUE_POLYPOLYGON3D:
     {
-        // Polygondefinition in das Objekt packen
+        // pack polygon definition to the object
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
 
         // #i101520# Direct API data (e.g. from chart)
         if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, false ) )
         {
-            // Polygon setzen
+            // set polygon
             static_cast<E3dPolygonObj*>(mpObj.get())->SetPolyPolygon3D(aNewB3DPolyPolygon);
             return true;
         }
@@ -1054,13 +1054,13 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
     }
     case OWN_ATTR_3D_VALUE_NORMALSPOLYGON3D:
     {
-        // Normalendefinition in das Objekt packen
+        // pack perpendicular definition to the object
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
 
         // #i101520# Direct API data (e.g. from chart)
         if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, false ) )
         {
-            // Polygon setzen
+            // set polygon
             static_cast<E3dPolygonObj*>(mpObj.get())->SetPolyNormals3D(aNewB3DPolyPolygon);
             return true;
         }
@@ -1068,13 +1068,13 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const OUString& rName, const SfxI
     }
     case OWN_ATTR_3D_VALUE_TEXTUREPOLYGON3D:
     {
-        // Texturdefinition in das Objekt packen
+        // pack texture definition to the object
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
 
         // #i101520# Direct API data (e.g. from chart)
         if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, false ) )
         {
-            // Polygon setzen
+            // set polygon
             const basegfx::B3DHomMatrix aIdentity;
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(aNewB3DPolyPolygon, aIdentity));
             static_cast<E3dPolygonObj*>(mpObj.get())->SetPolyTexture2D(aB2DPolyPolygon);
@@ -1124,7 +1124,7 @@ bool Svx3DPolygonObject::getPropertyValueImpl( const OUString& rName, const SfxI
 
     case OWN_ATTR_3D_VALUE_TEXTUREPOLYGON3D:
     {
-        // Texturdefinition packen
+        // pack texture definition
         const basegfx::B2DPolyPolygon& rPolyPoly = static_cast<E3dPolygonObj*>(mpObj.get())->GetPolyTexture2D();
         const basegfx::B3DPolyPolygon aB3DPolyPolygon(basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(rPolyPoly));
 

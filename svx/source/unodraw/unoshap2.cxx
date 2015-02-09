@@ -1024,16 +1024,16 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
 {
     basegfx::B2DPolyPolygon aRetval;
 
-    // Zeiger auf innere sequences holen
+    // get pointer to internal sequences
     const drawing::PointSequence* pInnerSequence = pOuterSequence->getConstArray();
     const drawing::PointSequence* pInnerSeqEnd   = pInnerSequence + pOuterSequence->getLength();
 
     for(;pInnerSequence != pInnerSeqEnd; ++pInnerSequence)
     {
-        // Neues Polygon vorbereiten
+        // prepare new polygon
         basegfx::B2DPolygon aNewPolygon;
 
-        // Zeiger auf Arrays holen
+        // get pointer to arrays
         const awt::Point* pArray    = pInnerSequence->getConstArray();
         const awt::Point* pArrayEnd = pArray + pInnerSequence->getLength();
 
@@ -1045,7 +1045,7 @@ basegfx::B2DPolyPolygon SAL_CALL ImplSvxPointSequenceSequenceToB2DPolyPolygon( c
         // check for closed state flag
         basegfx::tools::checkClosed(aNewPolygon);
 
-        // Neues Teilpolygon einfuegen
+        // add new subpolygon
         aRetval.append(aNewPolygon);
     }
 
@@ -1091,11 +1091,10 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
         {
             drawing::PointSequence* pSequence = (drawing::PointSequence*)rValue.getValue();
 
-            // Neues Polygon vorbereiten
+            // prepare new polygon
             basegfx::B2DPolygon aNewPolygon;
 
-            // Zeiger auf Arrays holen
-            // Zeiger auf Arrays holen
+            // get pointer to arrays
             const awt::Point* pArray    = pSequence->getConstArray();
             const awt::Point* pArrayEnd = pArray + pSequence->getLength();
 
@@ -1107,7 +1106,7 @@ bool SvxShapePolyPolygon::setPropertyValueImpl( const OUString& rName, const Sfx
             // check for closed state flag
             basegfx::tools::checkClosed(aNewPolygon);
 
-            // Polygon setzen
+            // set polygon
             SetPolygon(basegfx::B2DPolyPolygon(aNewPolygon));
             return true;
         }
@@ -1125,12 +1124,12 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
     if( (sal_uInt32)rRetval.getLength() != rPolyPoly.count() )
         rRetval.realloc( rPolyPoly.count() );
 
-    // Zeiger auf aeussere Arrays holen
+    // get pointer to external arrays
     drawing::PointSequence* pOuterSequence = rRetval.getArray();
 
     for(sal_uInt32 a(0L); a < rPolyPoly.count(); a++)
     {
-        // Einzelpolygon holen
+        // get single polygon
         const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(a));
 
         // #i75974# take closed stae into account, the API polygon still uses the old closed definition
@@ -1139,10 +1138,10 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
         const sal_uInt32 nPointCount(aPoly.count());
         const bool bIsClosed(aPoly.isClosed());
 
-        // Platz in Arrays schaffen
+        // create space in arrays
         pOuterSequence->realloc(bIsClosed ? nPointCount + 1 : nPointCount);
 
-        // Pointer auf arrays holen
+        // get pointer to arrays
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
         for(sal_uInt32 b(0L); b < nPointCount; b++)
@@ -1170,7 +1169,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
     {
     case OWN_ATTR_VALUE_POLYPOLYGON:
     {
-        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
+        // pack a tools::PolyPolygon in a struct tools::PolyPolygon
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PointSequenceSequence aRetval( rPolyPoly.count() );
 
@@ -1195,7 +1194,7 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
     }
     case OWN_ATTR_VALUE_POLYGON:
     {
-        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
+        // pack a tools::PolyPolygon in a struct tools::PolyPolygon
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
 
         sal_Int32 nCount = 0;
@@ -1206,10 +1205,10 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
 
         if( nCount > 0 )
         {
-            // Einzelpolygon holen
+            // get single polygon
             const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(0L));
 
-            // Pointer auf arrays holen
+            // get pointer to arrays
             awt::Point* pSequence = aRetval.getArray();
 
             for(sal_Int32 b=0;b<nCount;b++)
@@ -1331,7 +1330,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
     {
     case OWN_ATTR_VALUE_POLYPOLYGONBEZIER:
     {
-        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
+        // pack a tools::PolyPolygon in a struct tools::PolyPolygon
         const basegfx::B2DPolyPolygon& rPolyPoly = GetPolygon();
         drawing::PolyPolygonBezierCoords aRetval;
         basegfx::unotools::b2DPolyPolygonToPolyPolygonBezier(rPolyPoly, aRetval);
@@ -1341,7 +1340,7 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
     }
     case OWN_ATTR_BASE_GEOMETRY:
     {
-        // tools::PolyPolygon in eine struct tools::PolyPolygon packen
+        // pack a tools::PolyPolygon in a struct tools::PolyPolygon
         basegfx::B2DPolyPolygon aNewPolyPolygon;
         basegfx::B2DHomMatrix aNewHomogenMatrix;
         mpObj.get()->TRGetBaseGeometry(aNewHomogenMatrix, aNewPolyPolygon);
@@ -1448,11 +1447,11 @@ bool SvxGraphicObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             }
             else
             {
-                // Bitmap in das Objekt packen
+                // pack bitmap in the object
                 Reference< awt::XBitmap > xBmp( rValue, UNO_QUERY );
                 if( xBmp.is() )
                 {
-                    // Bitmap einsetzen
+                    // apply bitmap
                     Graphic aGraphic(VCLUnoHelper::GetBitmap( xBmp ));
                     static_cast<SdrGrafObj*>(mpObj.get())->SetGraphic(aGraphic);
                     bOk = true;
@@ -1578,7 +1577,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
         if(rGraphic.GetType() != GRAPHIC_GDIMETAFILE)
         {
-            // Objekt in eine Bitmap packen
+            // pack object in a bitmap
             Reference< ::com::sun::star::awt::XBitmap >  xBitmap( VCLUnoHelper::CreateBitmap(static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphic().GetBitmapEx()) );
             rValue <<= xBitmap;
         }
@@ -1767,7 +1766,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }
-                // Polygon wenden und etwas schieben
+                // turn and move polygon
                 Polygon aPol0(aPol);
                 aPol[0]=aPol0[1];
                 aPol[1]=aPol0[0];
@@ -1789,7 +1788,7 @@ awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, s
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }
-                // Polygon wenden und etwas schieben
+                // turn and move polygon
                 Polygon aPol0(aPol);
                 aPol[0]=aPol0[1];
                 aPol[1]=aPol0[0];
