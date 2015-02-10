@@ -75,7 +75,25 @@ typedef enum
      * LOK_CALLBACK_INVALIDATE_TILES. When there is no selection, an empty
      * string is provided.
      */
-    LOK_CALLBACK_TEXT_SELECTION
+    LOK_CALLBACK_TEXT_SELECTION,
+    /**
+     * The size and/or the position of the cursor rectangle at the text
+     * selection start changed.
+     *
+     * If this callback is emitted, it's always followed by a
+     * LOK_CALLBACK_TEXT_SELECTION one. Rectangle format is the same as
+     * LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_TEXT_SELECTION_START,
+    /**
+     * The size and/or the position of the cursor rectangle at the text
+     * selection end changed.
+     *
+     * If this callback is emitted, it's always followed by a
+     * LOK_CALLBACK_TEXT_SELECTION one. Rectangle format is the same as
+     * LOK_CALLBACK_INVALIDATE_TILES.
+     */
+    LOK_CALLBACK_TEXT_SELECTION_END
 }
 LibreOfficeKitCallbackType;
 

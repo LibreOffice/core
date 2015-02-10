@@ -42,6 +42,7 @@
 #include <wrtsh.hxx>
 #include <comcore.hrc>
 #include <view.hxx>
+#include <IDocumentLayoutAccess.hxx>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -256,6 +257,23 @@ void SwSelPaintRects::Hide()
     SwRects::clear();
 }
 
+/**
+ * Return a layout rectangle (typically with minimal width) that represents a
+ * cursor at rPosition.
+ *
+ * @param rPoint layout position as a hint about what layout frame contains
+ * rPosition (there might be multiple frames for a single node)
+ * @param rPosition the doc model position (paragraph / character index)
+ */
+static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition)
+{
+    const SwCntntNode* pNode = rPosition.nNode.GetNode().GetCntntNode();
+    const SwCntntFrm* pFrm = pNode->getLayoutFrm(pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout(), &rPoint, &rPosition);
+    SwRect aRect;
+    pFrm->GetCharRect(aRect, rPosition);
+    return aRect;
+}
+
 void SwSelPaintRects::Show()
 {
     SdrView* pView = (SdrView*)pCShell->GetDrawView();
@@ -316,6 +334,24 @@ void SwSelPaintRects::Show()
 
         if (GetShell()->isTiledRendering())
         {
+            if (!empty())
+            {
+                // The selection may be a complex polygon, emit the logical
+                // start/end cursor rectangle of the selection as separate
+                // events, if there is a real selection.
+                // This can be used to easily show selection handles on the
+                // client side.
+                const SwShellCrsr* pCursor = GetShell()->getShellCrsr(false);
+                SwRect aStartRect = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
+                std::stringstream ss;
+                ss << aStartRect.Width() << ", " << aStartRect.Height() << ", " << aStartRect.Left() << ", " << aStartRect.Top();
+                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, ss.str().c_str());
+                SwRect aEndRect = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
+                ss.str("");
+                ss << aEndRect.Width() << ", " << aEndRect.Height() << ", " << aEndRect.Left() << ", " << aEndRect.Top();
+                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, ss.str().c_str());
+            }
+
             std::stringstream ss;
             for (size_type i = 0; i < size(); ++i)
             {
