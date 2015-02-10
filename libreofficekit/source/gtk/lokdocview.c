@@ -42,11 +42,58 @@ void lcl_onDestroy( LOKDocView* pDocView, gpointer pData )
     pDocView->pDocument = NULL;
 }
 
+gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
+{
+    (void)pEventBox;
+    if (pDocView->m_bInDragMiddleHandle)
+    {
+        // The user drags the handle, which is below the cursor, but wants to move the cursor accordingly.
+        GdkPoint aCursor, aHandle, aPoint;
+
+        g_info("lcl_signalMotion: dragging the middle handle");
+        // Center of the cursor rectangle: we know that it's above the handle.
+        aCursor.x = pDocView->m_aHandleMiddleRect.x + pDocView->m_aHandleMiddleRect.width / 2;
+        aCursor.y = pDocView->m_aHandleMiddleRect.y - pDocView->m_aHandleMiddleRect.height / 2;
+        // Center of the handle rectangle.
+        aHandle.x = pDocView->m_aHandleMiddleRect.x + pDocView->m_aHandleMiddleRect.width / 2;
+        aHandle.y = pDocView->m_aHandleMiddleRect.y + pDocView->m_aHandleMiddleRect.height / 2;
+        // Our target is the original cursor position + the dragged offset.
+        aPoint.x = aCursor.x + (pEvent->x - aHandle.x);
+        aPoint.y = aCursor.y + (pEvent->y - aHandle.y);
+
+        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y), 1);
+        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y), 1);
+    }
+    return FALSE;
+}
+
 /// Receives a button press event.
-void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
+gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
     g_info("lcl_signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x), (int)pixelToTwip(pEvent->y));
     (void) pEventBox;
+
+    if (pDocView->m_bInDragMiddleHandle && pEvent->type == GDK_BUTTON_RELEASE)
+    {
+        g_info("lcl_signalButton: end of drag middle handle");
+        pDocView->m_bInDragMiddleHandle = FALSE;
+        return FALSE;
+    }
+
+    if (pDocView->m_bEdit)
+    {
+        GdkRectangle aClick;
+        aClick.x = pEvent->x;
+        aClick.y = pEvent->y;
+        aClick.width = 1;
+        aClick.height = 1;
+        if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleMiddleRect, NULL) && pEvent->type == GDK_BUTTON_PRESS)
+        {
+            g_info("lcl_signalButton: start of drag middle handle");
+            pDocView->m_bInDragMiddleHandle = TRUE;
+            return FALSE;
+        }
+    }
 
     lok_docview_set_edit(pDocView, TRUE);
 
@@ -73,6 +120,7 @@ void lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* 
     default:
         break;
     }
+    return FALSE;
 }
 
 SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
@@ -115,8 +163,10 @@ static void lok_docview_init( LOKDocView* pDocView )
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
                                            pDocView->pEventBox );
 
+    gtk_widget_set_events(pDocView->pEventBox, GDK_BUTTON_PRESS_MASK); // So that drag doesn't try to move the whole window.
     gtk_signal_connect(GTK_OBJECT(pDocView->pEventBox), "button-press-event", GTK_SIGNAL_FUNC(lcl_signalButton), pDocView);
     gtk_signal_connect(GTK_OBJECT(pDocView->pEventBox), "button-release-event", GTK_SIGNAL_FUNC(lcl_signalButton), pDocView);
+    gtk_signal_connect(GTK_OBJECT(pDocView->pEventBox), "motion-notify-event", GTK_SIGNAL_FUNC(lcl_signalMotion), pDocView);
 
     gtk_widget_show( pDocView->pEventBox );
 
@@ -139,6 +189,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_pHandleStart = NULL;
     pDocView->m_pHandleMiddle = NULL;
     pDocView->m_pHandleEnd = NULL;
+    memset(&pDocView->m_aHandleMiddleRect, 0, sizeof(pDocView->m_aHandleMiddleRect));
+    pDocView->m_bInDragMiddleHandle = FALSE;
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -191,7 +243,7 @@ static gboolean lcl_handleTimeout(gpointer pData)
 }
 
 /// Renders pHandle below a pCursor rectangle on pCairo.
-static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle)
+static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle, GdkRectangle* pRectangle)
 {
     GdkPoint aCursorBottom;
     int nHandleWidth, nHandleHeight;
@@ -210,6 +262,15 @@ static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surfa
     cairo_set_source_surface(pCairo, pHandle, 0, 0);
     cairo_paint(pCairo);
     cairo_restore(pCairo);
+
+    if (pRectangle)
+    {
+        // Return the rectangle that contains the rendered handle.
+        pRectangle->x = aCursorBottom.x;
+        pRectangle->y = aCursorBottom.y;
+        pRectangle->width = nHandleWidth * fHandleScale;
+        pRectangle->height = nHandleHeight * fHandleScale;
+    }
 }
 
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
@@ -242,7 +303,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
         // Have a cursor, but no selection: we need the middle handle.
         if (!pDocView->m_pHandleMiddle)
             pDocView->m_pHandleMiddle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
-        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor, pDocView->m_pHandleMiddle);
+        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor, pDocView->m_pHandleMiddle, &pDocView->m_aHandleMiddleRect);
     }
 
     if (pDocView->m_pTextSelectionRectangles)
@@ -264,14 +325,14 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
             // Have a start position: we need a start handle.
             if (!pDocView->m_pHandleStart)
                 pDocView->m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pDocView->m_pHandleStart);
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pDocView->m_pHandleStart, NULL);
         }
         if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
             if (!pDocView->m_pHandleEnd)
                 pDocView->m_pHandleEnd = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd, pDocView->m_pHandleEnd);
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd, pDocView->m_pHandleEnd, NULL);
         }
     }
 
