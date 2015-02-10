@@ -18,6 +18,7 @@ import com.owncloud.android.lib.common.OwnCloudClient;
 import com.owncloud.android.lib.common.OwnCloudClientFactory;
 import com.owncloud.android.lib.common.OwnCloudCredentialsFactory;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
+import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.files.FileUtils;
 import com.owncloud.android.lib.resources.files.ReadRemoteFileOperation;
 import com.owncloud.android.lib.resources.files.RemoteFile;
@@ -78,8 +79,7 @@ public class OwnCloudProvider implements IDocumentProvider,
                 uri.getPath());
         RemoteOperationResult result = refreshOperation.execute(client);
         if (!result.isSuccess()) {
-            throw new RuntimeException(result.getLogMessage(),
-                    result.getException());
+            throw buildRuntimeExceptionForResultCode(result.getCode());
         }
         if (result.getData().size() > 0) {
             return new OwnCloudFile(this, (RemoteFile) result.getData().get(0));
@@ -110,6 +110,29 @@ public class OwnCloudProvider implements IDocumentProvider,
      */
     protected File getCacheDir() {
         return cacheDir;
+    }
+
+    /**
+     * Build the proper RuntimeException for some error result.
+     *
+     * @param code Result code got from some RemoteOperationResult.
+     * @return exception with the proper internationalized error message.
+     */
+    protected RuntimeException buildRuntimeExceptionForResultCode(ResultCode code) {
+        int errorMessage;
+        switch (code) {
+            case WRONG_CONNECTION:  // SocketException
+            case FILE_NOT_FOUND:    // HTTP 404
+                errorMessage = R.string.owncloud_wrong_connection;
+                break;
+            case UNAUTHORIZED:      // wrong user/pass
+                errorMessage = R.string.owncloud_unauthorized;
+                break;
+            default:
+                errorMessage = R.string.owncloud_unspecified_error;
+                break;
+        }
+        return new RuntimeException(context.getString(errorMessage));
     }
 
     /**

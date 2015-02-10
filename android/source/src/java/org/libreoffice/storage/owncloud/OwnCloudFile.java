@@ -69,8 +69,7 @@ public class OwnCloudFile implements IFile {
             RemoteOperationResult result = refreshOperation.execute(provider
                     .getClient());
             if (!result.isSuccess()) {
-                throw new RuntimeException(result.getLogMessage(),
-                        result.getException());
+                throw provider.buildRuntimeExceptionForResultCode(result.getCode());
             }
             for (Object obj : result.getData()) {
                 RemoteFile child = (RemoteFile) obj;
@@ -104,7 +103,10 @@ public class OwnCloudFile implements IFile {
         File downFolder = provider.getCacheDir();
         DownloadRemoteFileOperation operation = new DownloadRemoteFileOperation(
                 file.getRemotePath(), downFolder.getAbsolutePath());
-        operation.execute(provider.getClient());
+        RemoteOperationResult result = operation.execute(provider.getClient());
+        if (!result.isSuccess()) {
+            throw provider.buildRuntimeExceptionForResultCode(result.getCode());
+        }
         return new File(downFolder.getAbsolutePath() + file.getRemotePath());
     }
 
