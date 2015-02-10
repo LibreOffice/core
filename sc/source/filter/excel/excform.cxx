@@ -122,8 +122,13 @@ void ImportExcel::Formula(
             const ScTokenArray* pSharedCode = pFormConv->GetSharedFormula(aRefPos);
             if (pSharedCode)
             {
-                ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, pSharedCode->Clone());
-                pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
+                ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, *pSharedCode);
+                // Do we need to wrap the column or row indices? (tdf#76611)
+                if (pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8, true))
+                {
+                    pCell = new ScFormulaCell(pD, aScPos, pSharedCode->Clone());
+                    pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
+                }
                 rDoc.getDoc().EnsureTable(aScPos.Tab());
                 rDoc.setFormulaCell(aScPos, pCell);
                 pCell->SetNeedNumberFormat(false);

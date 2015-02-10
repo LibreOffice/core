@@ -3994,17 +3994,27 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
 
 namespace {
 
-void wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
+bool wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow, bool bQueryOnly )
 {
+    bool bChanged = false;
     if (rPos.Col() > nMaxCol)
-        rPos.SetCol(rPos.Col() - nMaxCol - 1);
+    {
+        if (!bQueryOnly)
+            rPos.SetCol(rPos.Col() - nMaxCol - 1);
+        bChanged = true;
+    }
     if (rPos.Row() > nMaxRow)
-        rPos.SetRow(rPos.Row() - nMaxRow - 1);
+    {
+        if (!bQueryOnly)
+            rPos.SetRow(rPos.Row() - nMaxRow - 1);
+        bChanged = true;
+    }
+    return bChanged;
 }
 
 }
 
-void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
+bool ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow, bool bQueryNeedWrap)
 {
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -4017,8 +4027,12 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rPos);
-                wrapAddress(aAbs, nMaxCol, nMaxRow);
-                rRef.SetAddress(aAbs, rPos);
+                if (wrapAddress(aAbs, nMaxCol, nMaxRow, bQueryNeedWrap))
+                {
+                    if (bQueryNeedWrap)
+                        return true;
+                    rRef.SetAddress(aAbs, rPos);
+                }
             }
             break;
             case svDoubleRef:
@@ -4026,16 +4040,22 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rPos);
-                wrapAddress(aAbs.aStart, nMaxCol, nMaxRow);
-                wrapAddress(aAbs.aEnd, nMaxCol, nMaxRow);
-                aAbs.PutInOrder();
-                rRef.SetRange(aAbs, rPos);
+                bool bChanged = wrapAddress(aAbs.aStart, nMaxCol, nMaxRow, bQueryNeedWrap);
+                bool bChanged2 = wrapAddress(aAbs.aEnd, nMaxCol, nMaxRow, bQueryNeedWrap);
+                if (bChanged || bChanged2)
+                {
+                    if (bQueryNeedWrap)
+                        return true;
+                    aAbs.PutInOrder();
+                    rRef.SetRange(aAbs, rPos);
+                }
             }
             break;
             default:
                 ;
         }
     }
+    return false;
 }
 
 #if DEBUG_FORMULA_COMPILER

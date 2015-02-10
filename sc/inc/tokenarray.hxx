@@ -239,7 +239,7 @@ public:
      */
     OUString CreateString( sc::TokenStringContext& rCxt, const ScAddress& rPos ) const;
 
-    void WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow );
+    bool WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow, bool bQueryNeedWrap = false);
 
 #if DEBUG_FORMULA_COMPILER
     void Dump() const;
