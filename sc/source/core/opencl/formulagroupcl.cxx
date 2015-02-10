@@ -2169,8 +2169,8 @@ public:
         if (argno == 1)
         {
             ss <<
-                "if (isnan(" << vSubArguments[argno]->GetName() << "[gid0])) {\n"
-                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GetName() << "[gid0]) == errNoValue)\n"
+                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
+                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") == errNoValue)\n"
                 "        return CreateDoubleError(errDivisionByZero);\n"
                 "}\n";
             return true;
@@ -2178,9 +2178,9 @@ public:
         else if (argno == 0)
         {
             ss <<
-                "if (isnan(" << vSubArguments[argno]->GetName() << "[gid0])) {\n"
-                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GetName() << "[gid0]) == errNoValue) {\n"
-                "        if (" << vSubArguments[1]->GetName() << "[gid0] == 0)\n"
+                "if (isnan(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ")) {\n"
+                "    if (GetDoubleErrorValue(" << vSubArguments[argno]->GenSlidingWindowDeclRef() << ") == errNoValue) {\n"
+                "        if (" << vSubArguments[1]->GenSlidingWindowDeclRef() << " == 0)\n"
                 "            return CreateDoubleError(errDivisionByZero);\n"
                 "        return 0;\n"
                 "    }\n"
