@@ -312,6 +312,7 @@ void SwHTMLParser::InsertImage()
     OUString sGrfNm;
     sal_Int16 eVertOri = text::VertOrientation::TOP;
     sal_Int16 eHoriOri = text::HoriOrientation::NONE;
+    bool bWidthProvided=false, bHeightProvided=false;
     long nWidth=0, nHeight=0;
     long nVSpace=0, nHSpace=0;
 
@@ -361,6 +362,7 @@ void SwHTMLParser::InsertImage()
                 bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcWidth && nWidth>100 )
                     nWidth = 100;
+                bWidthProvided = true;
                 break;
             case HTML_O_HEIGHT:
                 // erstmal nur als Pixelwerte merken!
@@ -368,6 +370,7 @@ void SwHTMLParser::InsertImage()
                 bPrcHeight = (rOption.GetString().indexOf('%') != -1);
                 if( bPrcHeight && nHeight>100 )
                     nHeight = 100;
+                bHeightProvided = true;
                 break;
             case HTML_O_VSPACE:
                 nVSpace = rOption.GetNumber();
@@ -459,6 +462,37 @@ IMAGE_SETEVENT:
 
             return;
         }
+    }
+
+    Graphic aGraphic;
+    INetURLObject aGraphicURL( sGrfNm );
+    if( aGraphicURL.GetProtocol() == INET_PROT_DATA )
+    {
+        std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
+        if (pStream)
+        {
+            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *pStream))
+                sGrfNm.clear();
+        }
+    }
+    else if (sBaseURL.isEmpty()) // sBaseURL is empty if the source is clipboard
+    {
+        if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
+            sGrfNm.clear();
+    }
+
+    if (!sGrfNm.isEmpty())
+    {
+        aGraphic.SetDefaultType();
+    }
+
+    if (!bHeightProvided || !bWidthProvided)
+    {
+        Size aPixelSize = aGraphic.GetSizePixel(Application::GetDefaultDevice());
+        if (!bWidthProvided)
+            nWidth = aPixelSize.Width();
+        if (!bHeightProvided)
+            nHeight = aPixelSize.Height();
     }
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
@@ -692,28 +726,6 @@ IMAGE_SETEVENT:
     aFrmSize.SetHeightPercent( nPrcHeight );
     aFrmSet.Put( aFrmSize );
 
-    Graphic aGraphic;
-    INetURLObject aGraphicURL( sGrfNm );
-    if( aGraphicURL.GetProtocol() == INET_PROT_DATA )
-    {
-        std::unique_ptr<SvMemoryStream> const pStream(aGraphicURL.getData());
-        if (pStream)
-        {
-            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *pStream))
-                sGrfNm.clear();
-        }
-    }
-    // sBaseURL is empty if the source is clipboard
-    else if (sBaseURL.isEmpty())
-    {
-        if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
-            sGrfNm.clear();
-    }
-    if (!sGrfNm.isEmpty())
-    {
-        aGraphic.SetDefaultType();
-    }
-
     // passing empty sGrfNm here, means we don't want the graphic to be linked
     SwFrmFmt *pFlyFmt = pDoc->getIDocumentContentOperations().Insert( *pPam, sGrfNm, aEmptyOUStr, &aGraphic,
                                       &aFrmSet, NULL, NULL );
@@ -737,10 +749,10 @@ IMAGE_SETEVENT:
         if( !sAltNm.isEmpty() )
             pGrfNd->SetTitle( sAltNm );
 
-    if( bSetTwipSize )
-        pGrfNd->SetTwipSize( aGrfSz );
+        if( bSetTwipSize )
+            pGrfNd->SetTwipSize( aGrfSz );
 
-    pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
+        pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
 
         if( bSetScaleImageMap )
             pGrfNd->SetScaleImageMap( true );
