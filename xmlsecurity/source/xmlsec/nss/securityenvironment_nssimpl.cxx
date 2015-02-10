@@ -299,22 +299,17 @@ SECKEYPrivateKey* SecurityEnvironment_NssImpl :: getPriKey( unsigned int positio
 void SecurityEnvironment_NssImpl::updateSlots()
 {
     //In case new tokens are present then we can obtain the corresponding slot
-    PK11SlotList * soltList = NULL;
-    PK11SlotListElement * soltEle = NULL;
-    PK11SlotInfo * pSlot = NULL;
-       PK11SymKey * pSymKey = NULL;
-
     osl::MutexGuard guard(m_mutex);
 
     m_Slots.clear();
     m_tSymKeyList.clear();
 
-    soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, NULL ) ;
+    PK11SlotList * soltList = PK11_GetAllTokens( CKM_INVALID_MECHANISM, PR_FALSE, PR_FALSE, NULL ) ;
     if( soltList != NULL )
     {
-        for( soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next )
+        for (PK11SlotListElement* soltEle = soltList->head ; soltEle != NULL; soltEle = soltEle->next)
         {
-            pSlot = soltEle->slot ;
+            PK11SlotInfo * pSlot = soltEle->slot ;
 
             if(pSlot != NULL)
             {
@@ -333,7 +328,7 @@ void SecurityEnvironment_NssImpl::updateSlots()
 //              By doing this, the encryption may fail if a smart card is being used which does not
 //              support this key generation.
 //
-                pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
+                PK11SymKey * pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
 //              if( pSymKey == NULL )
 //              {
 //                  PK11_FreeSlot( pSlot ) ;
@@ -354,9 +349,7 @@ void SecurityEnvironment_NssImpl::updateSlots()
             }// end of if(pSlot != NULL)
         }// end of for
     }// end of if( soltList != NULL )
-
 }
-
 
 Sequence< Reference < XCertificate > >
 SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException , RuntimeException, std::exception )
