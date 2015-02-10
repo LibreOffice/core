@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_bc024d6e",
+        "filename": "include/unotools/localedatawrapper.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-10T14:45:34Z",
+      "side": 1,
+      "message": "Don\u0027t make this static, if it was properly implemented it would depend on the locale.",
+      "revId": "da9bf24fc7850b5832513b7849afc91b433bc060",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

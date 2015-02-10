@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_5cf8d17c",
+        "filename": "include/svl/numuno.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-10T14:45:34Z",
+      "side": 0,
+      "message": "Seeing the comments in the implementation of numuno.cxx these probably should be virtual instead of removed and possibly implemented in a derived class.",
+      "revId": "62969accf9c01b71b738424d4d643db8bfaed182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_fc08c593",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-10T14:45:34Z",
+      "side": 0,
+      "message": "Similar comment as for localedatawrapper.cxx",
+      "revId": "62969accf9c01b71b738424d4d643db8bfaed182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9cfd0971",
+        "filename": "svx/source/svdraw/svdmodel.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1250,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-10T14:45:34Z",
+      "side": 0,
+      "message": "same here",
+      "revId": "62969accf9c01b71b738424d4d643db8bfaed182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_dc038175",
+        "filename": "unotools/source/i18n/localedatawrapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-10T14:45:34Z",
+      "side": 0,
+      "message": "I\u0027m against blindly stripping code just because a function happens to return a constant value, especially if a comment says \"to be implemented\". This obviously changes code flow and in case we\u0027d implement isNumLeadingZero() differently the information was lost. It doesn\u0027t hurt to have a constant inline here.\n\nThis comment is just for a sample taken, there are more cases like this.",
+      "revId": "62969accf9c01b71b738424d4d643db8bfaed182",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
