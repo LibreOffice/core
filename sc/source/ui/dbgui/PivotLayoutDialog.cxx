@@ -604,16 +604,21 @@ void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNa
     return mpListBoxData->PushDataFieldNames(rDataFieldNames);
 }
 
+bool ScPivotLayoutDialog::Close()
+{
+    return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
+}
+
 IMPL_LINK( ScPivotLayoutDialog, OKClicked, PushButton*, /*pButton*/ )
 {
     ApplyChanges();
-    DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
+    Close();
     return 0;
 }
 
 IMPL_LINK( ScPivotLayoutDialog, CancelClicked, PushButton*, /*pButton*/ )
 {
-    DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
+    Close();
     return 0;
 }
 
