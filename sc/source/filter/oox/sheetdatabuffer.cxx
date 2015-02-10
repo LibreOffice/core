@@ -192,7 +192,7 @@ void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
         rModel.maCellAddr, bValue ? OUString("TRUE()") : OUString("FALSE()"));
 
     // #108770# set 'Standard' number format for all Boolean cells
-    setCellFormat( rModel, 0 );
+    setCellFormat( rModel );
 }
 
 void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rErrorCode )
