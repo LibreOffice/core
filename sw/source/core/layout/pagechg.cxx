@@ -534,33 +534,30 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             // If the frame format is changed, several things might also change:
             // 1. columns:
             assert(pOld && pNew); //FMT_CHG Missing Format
-            const SwFmt* pOldFmt = pOld ? static_cast<const SwFmtChg*>(pOld)->pChangedFmt : NULL;
-            const SwFmt* pNewFmt = pNew ? static_cast<const SwFmtChg*>(pNew)->pChangedFmt : NULL;
+            const SwFmt *const pOldFmt = static_cast<const SwFmtChg*>(pOld)->pChangedFmt;
+            const SwFmt *const pNewFmt = static_cast<const SwFmtChg*>(pNew)->pChangedFmt;
             assert(pOldFmt && pNewFmt); //FMT_CHG Missing Format
-            if (pOldFmt && pNewFmt)
+            const SwFmtCol &rOldCol = pOldFmt->GetCol();
+            const SwFmtCol &rNewCol = pNewFmt->GetCol();
+            if( rOldCol != rNewCol )
             {
-                const SwFmtCol &rOldCol = pOldFmt->GetCol();
-                const SwFmtCol &rNewCol = pNewFmt->GetCol();
-                if( rOldCol != rNewCol )
-                {
-                    SwLayoutFrm *pB = FindBodyCont();
-                    OSL_ENSURE( pB, "Seite ohne Body." );
-                    pB->ChgColumns( rOldCol, rNewCol );
-                    rInvFlags |= 0x20;
-                }
-
-                // 2. header and footer:
-                const SwFmtHeader &rOldH = pOldFmt->GetHeader();
-                const SwFmtHeader &rNewH = pNewFmt->GetHeader();
-                if( rOldH != rNewH )
-                    rInvFlags |= 0x08;
-
-                const SwFmtFooter &rOldF = pOldFmt->GetFooter();
-                const SwFmtFooter &rNewF = pNewFmt->GetFooter();
-                if( rOldF != rNewF )
-                    rInvFlags |= 0x10;
-                CheckDirChange();
+                SwLayoutFrm *pB = FindBodyCont();
+                OSL_ENSURE( pB, "Seite ohne Body." );
+                pB->ChgColumns( rOldCol, rNewCol );
+                rInvFlags |= 0x20;
             }
+
+            // 2. header and footer:
+            const SwFmtHeader &rOldH = pOldFmt->GetHeader();
+            const SwFmtHeader &rNewH = pNewFmt->GetHeader();
+            if( rOldH != rNewH )
+                rInvFlags |= 0x08;
+
+            const SwFmtFooter &rOldF = pOldFmt->GetFooter();
+            const SwFmtFooter &rNewF = pNewFmt->GetFooter();
+            if( rOldF != rNewF )
+                rInvFlags |= 0x10;
+            CheckDirChange();
         }
         // no break
         case RES_FRM_SIZE:
