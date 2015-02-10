@@ -2829,12 +2829,14 @@ void XMLTextParagraphExport::exportAnyTextFrame(
 
             bool bIsUICharStyle;
             bool bHasAutoStyle = false;
-            bool bDummy;
 
             OUString sStyle;
 
             if( bAddCharStyles )
-                   sStyle = FindTextStyleAndHyperlink( *pRangePropSet, bDummy, bIsUICharStyle, bHasAutoStyle );
+            {
+                bool bDummy;
+                sStyle = FindTextStyleAndHyperlink( *pRangePropSet, bDummy, bIsUICharStyle, bHasAutoStyle );
+            }
             else
                 bIsUICharStyle = false;
 
