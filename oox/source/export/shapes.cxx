@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <config_global.h>
 #include <unotools/mediadescriptor.hxx>
 #include <filter/msfilter/util.hxx>
 #include "oox/core/xmlfilterbase.hxx"
@@ -283,7 +286,7 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
 
 static bool lcl_IsOnBlacklist(OUString& rShapeType)
 {
-#if !defined __clang__
+#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
     static
 #endif
     const std::initializer_list<OUStringLiteral> vBlacklist = {
@@ -347,7 +350,7 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
 
 static bool lcl_IsOnWhitelist(OUString& rShapeType)
 {
-#if !defined __clang__
+#if !HAVE_BROKEN_STATIC_INITILIZER_LIST
     static
 #endif
     const std::initializer_list<OUStringLiteral> vWhitelist = {

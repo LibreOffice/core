@@ -6225,6 +6225,34 @@ if test "$GCC" = "yes"; then
 fi
 AC_SUBST(HAVE_GCC_PRAGMA_OPERATOR)
 
+AC_MSG_CHECKING([whether $CXX has broken static initializer_list support])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+AC_LANG_PUSH([C++])
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+    // Exit with failure if the static initializer_list is stored on the stack
+    // (as done by Clang < 3.4):
+    #include <initializer_list>
+    struct S {};
+    bool g(void const * p1, void const * p2) {
+        int n;
+        return !((p1 > p2 && p2 > &n) || (p1 < p2 && p2 < &n));
+    }
+    bool f(void const * p1) {
+        static std::initializer_list<S> s { S() };
+        return g(p1, s.begin());
+    }
+    ]],[[
+        int n;
+        return f(&n) ? 0 : 1;
+    ]])], [broken=no], [broken=yes])
+AC_LANG_POP([C++])
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$broken])
+if test "$broken" = yes; then
+    AC_DEFINE([HAVE_BROKEN_STATIC_INITILIZER_LIST])
+fi
+
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
