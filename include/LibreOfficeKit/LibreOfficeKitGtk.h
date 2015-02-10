@@ -66,6 +66,10 @@ struct _LOKDocView
     gboolean m_bInDragMiddleHandle;
     /// Bitmap of the text selection end handle.
     cairo_surface_t* m_pHandleEnd;
+    /// Rectangle of the text selection end handle, to know if the user clicked on it or not
+    GdkRectangle m_aHandleEndRect;
+    /// If we are in the middle of a drag of the text selection end handle.
+    gboolean m_bInDragEndHandle;
 };
 
 struct _LOKDocViewClass
