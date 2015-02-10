@@ -788,7 +788,7 @@
             </node>
             <node oor:name=".uno:InsertFootnote" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Insert Footnote/Endnote Directly</value>
+                    <value xml:lang="en-US">Insert Footnote Directly</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
