@@ -6256,4 +6256,18 @@ void SwEditWin::LogicMouseButtonUp(const MouseEvent& rMouseEvent)
     MouseButtonUp(rMouseEvent);
 }
 
+void SwEditWin::SetCursorLogicPosition(bool bPoint, const Point& rPosition)
+{
+    // Not an SwWrtShell, as that would make SwCrsrShell::GetCrsr() inaccessible.
+    SwEditShell& rShell = m_rView.GetWrtShell();
+    SwMvContext aMvContext(&rShell);
+    // If the mark is to be updated, then exchange the point and mark before
+    // and after, as we can't easily set the mark.
+    if (!bPoint)
+        rShell.GetCrsr()->Exchange();
+    rShell.SetCrsr(rPosition);
+    if (!bPoint)
+        rShell.GetCrsr()->Exchange();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

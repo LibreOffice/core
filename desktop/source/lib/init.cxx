@@ -207,6 +207,10 @@ static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nX,
                                 int nY,
                                 int nCount);
+static void doc_setTextSelection (LibreOfficeKitDocument* pThis,
+                                  int nType,
+                                  int nX,
+                                  int nY);
 
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
@@ -235,6 +239,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
             m_pDocumentClass->registerCallback = doc_registerCallback;
             m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
+            m_pDocumentClass->setTextSelection = doc_setTextSelection;
 
             gDocumentClass = m_pDocumentClass;
         }
@@ -673,6 +678,17 @@ static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX,
     pDoc->postMouseEvent(nType, nX, nY, nCount);
 }
 
+static void doc_setTextSelection(LibreOfficeKitDocument* pThis, int nType, int nX, int nY)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
+
+    pDoc->setTextSelection(nType, nX, nY);
+}
 
 static char* lo_getError (LibreOfficeKit *pThis)
 {

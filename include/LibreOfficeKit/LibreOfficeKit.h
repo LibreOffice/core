@@ -117,6 +117,15 @@ typedef enum
 }
 LibreOfficeKitMouseEventType;
 
+typedef enum
+{
+    /// The start of selection is to be adjusted.
+    LOK_SETTEXTSELECTION_START,
+    /// The end of selection is to be adjusted.
+    LOK_SETTEXTSELECTION_END
+}
+LibreOfficeKitSetTextSelectionType;
+
 typedef void (*LibreOfficeKitCallback)(int nType, const char* pPayload, void* pData);
 #endif // LOK_USE_UNSTABLE_API
 
@@ -204,6 +213,11 @@ struct _LibreOfficeKitDocumentClass
                          int nX,
                          int nY,
                          int nCount);
+  /// @see lok::Document::setTextSelection
+  void (*setTextSelection)(LibreOfficeKitDocument* pThis,
+                         int nType,
+                         int nX,
+                         int nY);
 #endif // LOK_USE_UNSTABLE_API
 };
 

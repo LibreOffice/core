@@ -117,6 +117,18 @@ public:
     {
         mpDoc->pClass->postMouseEvent(mpDoc, nType, nX, nY, nCount);
     }
+
+    /**
+     * Sets the start or end of a text selection.
+     *
+     * @param nType @see LibreOfficeKitSetTextSelectionType
+     * @param nX horizontal position in document coordinates
+     * @param nY vertical position in document coordinates
+     */
+    inline void setTextSelection(int nType, int nX, int nY)
+    {
+        mpDoc->pClass->setTextSelection(mpDoc, nType, nX, nY);
+    }
 #endif // LOK_USE_UNSTABLE_API
 };
 

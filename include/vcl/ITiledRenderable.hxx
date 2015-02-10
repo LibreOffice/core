@@ -107,6 +107,13 @@ public:
      * @see lok::Document::postMouseEvent().
      */
     virtual void postMouseEvent(int /*nType*/, int /*nX*/, int /*nY*/, int /*nCount*/) { }
+
+    /**
+     * Sets the start or end of a text selection.
+     *
+     * @see lok::Document::setTextSelection().
+     */
+    virtual void setTextSelection(int /*nType*/, int /*nX*/, int /*nY*/) { }
 };
 
 } // namespace vcl
