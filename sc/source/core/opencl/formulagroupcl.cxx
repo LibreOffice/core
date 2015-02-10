@@ -3802,6 +3802,7 @@ void DynamicKernel::CreateKernel()
         if (lastSecondProgram)
         {
             clReleaseProgram(lastSecondProgram);
+            lastSecondProgram = NULL;
         }
         if (::opencl::buildProgramFromBinary("",
                 &::opencl::gpuEnv, KernelHash.c_str(), 0))
