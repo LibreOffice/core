@@ -604,8 +604,12 @@ static gboolean lok_docview_callback(gpointer pData)
         if (pRectangles == NULL)
         {
             memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
+            memset(&pDocView->m_aHandleStartRect, 0, sizeof(pDocView->m_aHandleStartRect));
             memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
+            memset(&pDocView->m_aHandleEndRect, 0, sizeof(pDocView->m_aHandleEndRect));
         }
+        else
+            memset(&pDocView->m_aHandleMiddleRect, 0, sizeof(pDocView->m_aHandleMiddleRect));
         gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));
     }
     break;
