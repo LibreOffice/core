@@ -210,7 +210,6 @@ void SwUndo::UndoWithContext(SfxUndoContext & rContext)
     ::sw::UndoRedoContext *const pContext(
             dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
     assert(pContext);
-    if (!pContext) { return; }
     const UndoRedoRedlineGuard aUndoRedoRedlineGuard(*pContext, *this);
     UndoImpl(*pContext);
 }
