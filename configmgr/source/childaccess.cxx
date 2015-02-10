@@ -92,8 +92,9 @@ ChildAccess::ChildAccess(
 }
 
 Path ChildAccess::getAbsolutePath() {
-    assert(getParentAccess().is());
-    Path path(getParentAccess()->getAbsolutePath());
+    rtl::Reference< Access > parent(getParentAccess());
+    assert(parent.is());
+    Path path(parent->getAbsolutePath());
     path.push_back(name_);
     return path;
 }
