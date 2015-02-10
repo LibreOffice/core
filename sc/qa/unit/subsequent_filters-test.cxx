@@ -18,6 +18,9 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
+#include <svl/nfkeytab.hxx>
+//#include <zformat.hxx>
+#include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
 
 #include "drwlayer.hxx"
@@ -86,6 +89,7 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     //ods, xls, xlsx filter tests
+    void testBooleanFormatXLSX();
     void testBasicCellContentODS();
     void testRangeNameXLS();
     void testRangeNameLocalXLS();
@@ -186,6 +190,7 @@ public:
     void testEmbeddedImageXLS();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST(testBooleanFormatXLSX);
     CPPUNIT_TEST(testBasicCellContentODS);
     CPPUNIT_TEST(testRangeNameXLS);
     CPPUNIT_TEST(testRangeNameLocalXLS);
@@ -348,6 +353,27 @@ void ScFiltersTest::testBasicCellContentODS()
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "This cell must be numeric.", CELLTYPE_VALUE, aCell.meType);
     CPPUNIT_ASSERT_EQUAL(0.0, aCell.mfValue);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBooleanFormatXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc("check-boolean.", XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    SvNumberFormatter *pNumFormatter = rDoc.GetFormatTable();
+    const OUString aBooleanTypeStr = "\"TRUE\";\"TRUE\";\"FALSE\"";
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load check-boolean.xlsx", xDocSh.Is());
+    sal_uInt32 nNumberFormat;
+
+    for (SCROW i = 0; i <= 1; i++)
+    {
+         rDoc.GetNumberFormat(0, i, 0, nNumberFormat);
+         const SvNumberformat *pSvnumberFormat = pNumFormatter->GetEntry(nNumberFormat);
+         const OUString &rFormatStr = pSvnumberFormat->GetFormatstring();
+        CPPUNIT_ASSERT_MESSAGE("Number format != boolean", rFormatStr == aBooleanTypeStr);
+    }
 
     xDocSh->DoClose();
 }
