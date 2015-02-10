@@ -52,8 +52,16 @@ struct _LOKDocView
     guint32 m_nLastButtonReleaseTime;
     /// Rectangles of the current text selection.
     GList* m_pTextSelectionRectangles;
+    /// Position and size of the selection start (as if there would be a cursor caret there).
     GdkRectangle m_aTextSelectionStart;
+    /// Position and size of the selection end.
     GdkRectangle m_aTextSelectionEnd;
+    /// Bitmap of the text selection start handle.
+    cairo_surface_t* m_pHandleStart;
+    /// Bitmap of the text selection middle handle.
+    cairo_surface_t* m_pHandleMiddle;
+    /// Bitmap of the text selection end handle.
+    cairo_surface_t* m_pHandleEnd;
 };
 
 struct _LOKDocViewClass

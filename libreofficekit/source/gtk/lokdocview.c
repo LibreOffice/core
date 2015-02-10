@@ -136,6 +136,9 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_pTextSelectionRectangles = NULL;
     memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
     memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
+    pDocView->m_pHandleStart = NULL;
+    pDocView->m_pHandleMiddle = NULL;
+    pDocView->m_pHandleEnd = NULL;
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -237,9 +240,9 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     if (!lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
     {
         // Have a cursor, but no selection: we need the middle handle.
-        cairo_surface_t* pHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
-        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor, pHandle);
-        cairo_surface_destroy(pHandle);
+        if (!pDocView->m_pHandleMiddle)
+            pDocView->m_pHandleMiddle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
+        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor, pDocView->m_pHandleMiddle);
     }
 
     if (pDocView->m_pTextSelectionRectangles)
@@ -259,16 +262,16 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
         if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionStart))
         {
             // Have a start position: we need a start handle.
-            cairo_surface_t* pHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pHandle);
-            cairo_surface_destroy(pHandle);
+            if (!pDocView->m_pHandleStart)
+                pDocView->m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pDocView->m_pHandleStart);
         }
         if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
-            cairo_surface_t* pHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd, pHandle);
-            cairo_surface_destroy(pHandle);
+            if (!pDocView->m_pHandleEnd)
+                pDocView->m_pHandleEnd = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd, pDocView->m_pHandleEnd);
         }
     }
 
