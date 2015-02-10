@@ -3733,7 +3733,9 @@ void DynamicKernel::CodeGen()
     std::stringstream decl;
     if (::opencl::gpuEnv.mnKhrFp64Flag)
     {
+        decl << "#if __OPENCL_VERSION__ < 120\n";
         decl << "#pragma OPENCL EXTENSION cl_khr_fp64: enable\n";
+        decl << "#endif\n";
     }
     else if (::opencl::gpuEnv.mnAmdFp64Flag)
     {
