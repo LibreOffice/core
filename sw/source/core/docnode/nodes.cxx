@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 
+#include <libxml/xmlwriter.h>
+
 #include <node.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -2309,6 +2311,14 @@ SwNode * SwNodes::DocumentSectionEndNode(SwNode * pNode) const
 bool SwNodes::IsDocNodes() const
 {
     return this == &pMyDoc->GetNodes();
+}
+
+void SwNodes::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swNodes"));
+    for (sal_uLong i = 0; i < Count(); ++i)
+        (*this)[i]->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -167,18 +167,6 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
     writer.endElement();
 }
 
-void SwNodes::dumpAsXml( xmlTextWriterPtr w ) const
-{
-    WriterHelper writer( w );
-    writer.startElement( "swnodes" );
-    writer.writeFormatAttribute( "ptr", "%p", this );
-    for( unsigned int i = 0; i < Count(); ++i )
-    {
-        ( *this )[ i ]->dumpAsXml( writer );
-    }
-    writer.endElement();
-}
-
 void SwNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
