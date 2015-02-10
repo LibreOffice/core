@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_5ca3f19e",
+        "filename": "sc/source/core/data/documen7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-02-10T13:24:42Z",
+      "side": 1,
+      "message": "Ain\u0027t it the other way round? i.e. pCell will be appended in SetDirty again?",
+      "revId": "e702e6ca9a1138189a14c13280d90029d101b2dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_7ca03591",
+        "filename": "sc/source/core/data/documen7.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 580,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-02-10T13:24:42Z",
+      "side": 1,
+      "message": "only broadcasted",
+      "revId": "e702e6ca9a1138189a14c13280d90029d101b2dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9caf497d",
+        "filename": "sc/source/core/data/documen8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 740,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-02-10T13:24:42Z",
+      "side": 1,
+      "message": "I think \u0027Links\u0027 in this context means more \u0027Verbindungen\u0027 (like, links to other files, objects etc.) than anything else. Nothing to do with left",
+      "revId": "e702e6ca9a1138189a14c13280d90029d101b2dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
