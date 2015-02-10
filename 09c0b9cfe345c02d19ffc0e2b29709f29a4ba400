@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_1c76d93e",
+        "filename": "writerfilter/source/rtftok/rtfsdrimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 789,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-02-10T12:08:47Z",
+      "side": 1,
+      "message": "Also, can you please avoid introducing windows-like endlines in the source code? They are well visible in https://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dcommitdiff;h\u003d09c0b9cfe345c02d19ffc0e2b29709f29a4ba400",
+      "revId": "09c0b9cfe345c02d19ffc0e2b29709f29a4ba400",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
