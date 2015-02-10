@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_1c9fb960",
+        "filename": "sc/uiconfig/scalc/ui/databaroptions.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-02-10T11:26:34Z",
+      "side": 1,
+      "message": "This guy now collides with http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d39e9e3ee8369eeb00025291e637f0bb2a8f87ed2 from Adolfo JB.\n\nI\u0027ve seen \u0026 merged his patch sooner than I\u0027ve seen yours. Sorry \u0027bout that.",
+      "revId": "c14714829cb6f9518fe78a1fdab7b774e36a7edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_3c9cfd68",
+        "filename": "sc/uiconfig/scalc/ui/databaroptions.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2015-02-10T11:26:34Z",
+      "side": 1,
+      "message": "I used \u0027Color\u0027 here on purpose ...  it is like in shape fill dialog (right-click shape -\u003e Area... -\u003e Area -\u003e Fill -\u003e Color, Gradient, Hatching etc. ), but then again, I (no longer) know much about nice and usable UI :)",
+      "revId": "c14714829cb6f9518fe78a1fdab7b774e36a7edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
