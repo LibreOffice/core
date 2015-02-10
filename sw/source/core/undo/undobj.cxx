@@ -230,7 +230,6 @@ void SwUndo::Repeat(SfxRepeatTarget & rContext)
     ::sw::RepeatContext *const pRepeatContext(
             dynamic_cast< ::sw::RepeatContext * >(& rContext));
     assert(pRepeatContext);
-    if (!pRepeatContext) { return; }
     RepeatImpl(*pRepeatContext);
 }
 
