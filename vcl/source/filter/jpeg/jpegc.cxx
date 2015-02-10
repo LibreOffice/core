@@ -39,8 +39,8 @@ extern "C" {
 
 struct ErrorManagerStruct
 {
-    jmp_buf setjmp_buffer;
     jpeg_error_mgr pub;
+    jmp_buf setjmp_buffer;
 };
 
 extern "C" void errorExit (j_common_ptr cinfo)
