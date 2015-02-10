@@ -137,6 +137,8 @@ public:
     SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                 const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & xAttrList );
+    SwXMLBodyContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList );
     virtual ~SwXMLBodyContext_Impl();
 
     TYPEINFO_OVERRIDE();
@@ -144,12 +146,23 @@ public:
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                 const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
                 sal_uInt16 nPrfx, const OUString& rLName,
                 const Reference< xml::sax::XAttributeList > & /*xAttrList*/ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+SwXMLBodyContext_Impl::SwXMLBodyContext_Impl( SwXMLImport& rImport,
+    sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+:   SvXMLImportContext( rImport )
 {
 }
 
@@ -165,6 +178,13 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
         const Reference< xml::sax::XAttributeList > & /*xAttrList*/ )
 {
     return GetSwImport().CreateBodyContentContext( rLocalName );
+}
+
+Reference< xml::sax::XFastContextHandler > SwXMLBodyContext_Impl::createFastChildContext(
+    sal_Int32 Element, const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    return GetSwImport().CreateBodyContentContext( Element );
 }
 
 // #i69629#

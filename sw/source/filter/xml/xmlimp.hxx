@@ -151,6 +151,7 @@ public:
             const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     SvXMLImportContext *CreateBodyContentContext( const OUString& rLocalName );
+    SvXMLImportContext *CreateBodyContentContext( sal_Int32 Element );
     sal_uInt16 GetStyleFamilyMask() const { return nStyleFamilyMask; }
     bool IsInsertMode() const { return bInsert; }
     bool IsStylesOnlyMode() const { return !bLoadDoc; }

@@ -126,4 +126,17 @@ SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
     return pContext;
 }
 
+SvXMLImportContext *SwXMLImport::CreateBodyContentContext(
+    sal_Int32 Element )
+{
+    SvXMLImportContext *pContext = 0;
+
+    if( !IsStylesOnlyMode() )
+        pContext = new SwXMLBodyContentContext_Impl( *this, Element );
+    else
+        pContext = new SvXMLImportContext( *this );
+
+    return pContext;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
