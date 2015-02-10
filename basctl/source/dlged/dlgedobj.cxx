@@ -35,6 +35,7 @@
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <o3tl/compat_functional.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -1121,7 +1122,7 @@ void DlgEdObj::EndListening(bool bRemoveListener)
     }
 }
 
-void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
 {
     if (isListening())
     {
@@ -1151,7 +1152,17 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
         else if ( evt.PropertyName == DLGED_PROP_NAME )
         {
             if (!dynamic_cast<DlgEdForm*>(this))
-                NameChange(evt);
+            {
+                try
+                {
+                    NameChange(evt);
+                }
+                catch (container::NoSuchElementException const& e)
+                {
+                    throw lang::WrappedTargetRuntimeException("", nullptr,
+                            uno::makeAny(e));
+                }
+            }
         }
         // update step
         else if ( evt.PropertyName == DLGED_PROP_STEP )
