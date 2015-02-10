@@ -54,7 +54,6 @@ import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -321,9 +320,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         File file = filePaths.get(position).getDocument();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         Uri uri = Uri.fromFile(file);
-        String extension = MimeTypeMap.getFileExtensionFromUrl(uri.toString());
-        sharingIntent.setType(MimeTypeMap.getSingleton()
-                .getMimeTypeFromExtension(extension));
+        sharingIntent.setType(FileUtilities.getMimeType(file.getName()));
         sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, uri);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
                 file.getName());

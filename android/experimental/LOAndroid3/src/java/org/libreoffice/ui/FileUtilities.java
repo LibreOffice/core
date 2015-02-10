@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Comparator;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 public class FileUtilities {
     static final int ALL = -1;
@@ -42,6 +43,7 @@ public class FileUtilities {
     static final int SORT_SMALLEST = 5;
 
     private static final Map<String,Integer> mExtnMap = new HashMap<String,Integer>();
+    private static final Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
     static {
         // Please keep this in sync with AndroidManifest.xml
 
@@ -97,6 +99,22 @@ public class FileUtilities {
         mExtnMap.put(".svm",  DRAWING);
         mExtnMap.put(".wmf",  DRAWING);
         mExtnMap.put(".svg",  DRAWING);
+
+        // Some basic MIME types
+        // Android's MimeTypeMap lacks some types that we need
+        extensionToMimeTypeMap.put("odb", "application/vnd.oasis.opendocument.database");
+        extensionToMimeTypeMap.put("odf", "application/vnd.oasis.opendocument.formula");
+        extensionToMimeTypeMap.put("odg", "application/vnd.oasis.opendocument.graphics");
+        extensionToMimeTypeMap.put("otg", "application/vnd.oasis.opendocument.graphics-template");
+        extensionToMimeTypeMap.put("odi", "application/vnd.oasis.opendocument.image");
+        extensionToMimeTypeMap.put("odp", "application/vnd.oasis.opendocument.presentation");
+        extensionToMimeTypeMap.put("otp", "application/vnd.oasis.opendocument.presentation-template");
+        extensionToMimeTypeMap.put("ods", "application/vnd.oasis.opendocument.spreadsheet");
+        extensionToMimeTypeMap.put("ots", "application/vnd.oasis.opendocument.spreadsheet-template");
+        extensionToMimeTypeMap.put("odt", "application/vnd.oasis.opendocument.text");
+        extensionToMimeTypeMap.put("odm", "application/vnd.oasis.opendocument.text-master");
+        extensionToMimeTypeMap.put("ott", "application/vnd.oasis.opendocument.text-template");
+        extensionToMimeTypeMap.put("oth", "application/vnd.oasis.opendocument.text-web");
     }
 
     private static final String getExtension(String filename)
@@ -122,6 +140,18 @@ public class FileUtilities {
         int type = lookupExtension (filename);
         android.util.Log.d("debug", "extn : " + filename + " -> " + type);
         return type;
+    }
+
+    static String getMimeType(String filename)
+    {
+        String extension = MimeTypeMap.getFileExtensionFromUrl(filename);
+        String mime = extensionToMimeTypeMap.get(extension);
+        if(mime == null) {
+            //fallback to Android's MimeTypeMap
+            mime = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    extension);
+        }
+        return mime;
     }
 
     // Filter by mode, and/or in future by filename/wildcard
