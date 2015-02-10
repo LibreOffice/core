@@ -105,6 +105,9 @@ endef
 # as we would need to sign those separately anyway, we do it for the
 # gbuild-built ones, too, after an app bundle has been constructed, in
 # the solenv/bin/macosx-codesign-app-bundle script.
+# And the soffice executable needs to be signed last in
+# macosx-codesign-app-bundle, as codesign would fail complaining that other
+# parts of the app have not yet been signed:
 
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
@@ -133,7 +136,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl $(LAYER) $(1) &&) \
 	$(if $(MACOSX_CODESIGNING_IDENTITY), \
 		$(if $(filter Executable,$(TARGETTYPE)), \
-			(codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) || true) &&)) \
+			$(if $(filter-out $(call gb_Executable_get_target,soffice_bin),$(1)), \
+				codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) &&))) \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		otool -l $(1) | grep -A 5 LC_ID_DYLIB \
 			> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
