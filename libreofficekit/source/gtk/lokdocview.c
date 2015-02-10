@@ -134,6 +134,8 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_nLastButtonPressTime = 0;
     pDocView->m_nLastButtonReleaseTime = 0;
     pDocView->m_pTextSelectionRectangles = NULL;
+    memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
+    memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
 
     gtk_signal_connect( GTK_OBJECT(pDocView), "destroy",
                         GTK_SIGNAL_FUNC(lcl_onDestroy), NULL );
@@ -185,6 +187,28 @@ static gboolean lcl_handleTimeout(gpointer pData)
     return G_SOURCE_CONTINUE;
 }
 
+/// Renders pHandle below a pCursor rectangle on pCairo.
+static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle)
+{
+    GdkPoint aCursorBottom;
+    int nHandleWidth, nHandleHeight;
+    double fHandleScale;
+
+    nHandleWidth = cairo_image_surface_get_width(pHandle);
+    nHandleHeight = cairo_image_surface_get_height(pHandle);
+    // We want to scale down the handle, so that its height is the same as the cursor caret.
+    fHandleScale = twipToPixel(pCursor->height) / nHandleHeight;
+    // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
+    aCursorBottom.x = twipToPixel(pCursor->x) + twipToPixel(pCursor->width) / 2 - (nHandleWidth * fHandleScale) / 2;
+    aCursorBottom.y = twipToPixel(pCursor->y) + twipToPixel(pCursor->height);
+    cairo_save(pCairo);
+    cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
+    cairo_scale(pCairo, fHandleScale, fHandleScale);
+    cairo_set_source_surface(pCairo, pHandle, 0, 0);
+    cairo_paint(pCairo);
+    cairo_restore(pCairo);
+}
+
 static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpointer pData)
 {
 #if GTK_CHECK_VERSION(2,14,0) // we need gtk_widget_get_window()
@@ -213,26 +237,9 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
     if (!lcl_isEmptyRectangle(&pDocView->m_aVisibleCursor) && !pDocView->m_pTextSelectionRectangles)
     {
         // Have a cursor, but no selection: we need the middle handle.
-        GdkPoint aCursorBottom;
-        cairo_surface_t* pSurface;
-        int nHandleWidth, nHandleHeight;
-        double fHandleScale;
-
-        pSurface = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
-        nHandleWidth = cairo_image_surface_get_width(pSurface);
-        nHandleHeight = cairo_image_surface_get_height(pSurface);
-        // We want to scale down the handle, so that its height is the same as the cursor caret.
-        fHandleScale = twipToPixel(pDocView->m_aVisibleCursor.height) / nHandleHeight;
-        // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
-        aCursorBottom.x = twipToPixel(pDocView->m_aVisibleCursor.x) + twipToPixel(pDocView->m_aVisibleCursor.width) / 2 - (nHandleWidth * fHandleScale) / 2;
-        aCursorBottom.y = twipToPixel(pDocView->m_aVisibleCursor.y) + twipToPixel(pDocView->m_aVisibleCursor.height);
-        cairo_save(pCairo);
-        cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
-        cairo_scale(pCairo, fHandleScale, fHandleScale);
-        cairo_set_source_surface(pCairo, pSurface, 0, 0);
-        cairo_paint(pCairo);
-        cairo_surface_destroy(pSurface);
-        cairo_restore(pCairo);
+        cairo_surface_t* pHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
+        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor, pHandle);
+        cairo_surface_destroy(pHandle);
     }
 
     if (pDocView->m_pTextSelectionRectangles)
@@ -246,6 +253,22 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
             cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
             cairo_rectangle(pCairo, twipToPixel(pRectangle->x), twipToPixel(pRectangle->y), twipToPixel(pRectangle->width), twipToPixel(pRectangle->height));
             cairo_fill(pCairo);
+        }
+
+        // Handles
+        if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionStart))
+        {
+            // Have a start position: we need a start handle.
+            cairo_surface_t* pHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pHandle);
+            cairo_surface_destroy(pHandle);
+        }
+        if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionEnd))
+        {
+            // Have a start position: we need an end handle.
+            cairo_surface_t* pHandle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd, pHandle);
+            cairo_surface_destroy(pHandle);
         }
     }
 
@@ -446,11 +469,29 @@ static gboolean lok_docview_callback(gpointer pData)
     break;
     case LOK_CALLBACK_TEXT_SELECTION:
     {
+        LOKDocView* pDocView = pCallback->m_pDocView;
         GList* pRectangles = lcl_payloadToRectangles(pCallback->m_pPayload);
-        if (pCallback->m_pDocView->m_pTextSelectionRectangles)
-            g_list_free_full(pCallback->m_pDocView->m_pTextSelectionRectangles, g_free);
-        pCallback->m_pDocView->m_pTextSelectionRectangles = pRectangles;
-        gtk_widget_queue_draw(GTK_WIDGET(pCallback->m_pDocView->pEventBox));
+        if (pDocView->m_pTextSelectionRectangles)
+            g_list_free_full(pDocView->m_pTextSelectionRectangles, g_free);
+        pDocView->m_pTextSelectionRectangles = pRectangles;
+
+        // In case the selection is empty, then we get no LOK_CALLBACK_TEXT_SELECTION_START/END events.
+        if (pRectangles == NULL)
+        {
+            memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
+            memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
+        }
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView->pEventBox));
+    }
+    break;
+    case LOK_CALLBACK_TEXT_SELECTION_START:
+    {
+        pCallback->m_pDocView->m_aTextSelectionStart = lcl_payloadToRectangle(pCallback->m_pPayload);
+    }
+    break;
+    case LOK_CALLBACK_TEXT_SELECTION_END:
+    {
+        pCallback->m_pDocView->m_aTextSelectionEnd = lcl_payloadToRectangle(pCallback->m_pPayload);
     }
     break;
     default:

@@ -52,6 +52,8 @@ struct _LOKDocView
     guint32 m_nLastButtonReleaseTime;
     /// Rectangles of the current text selection.
     GList* m_pTextSelectionRectangles;
+    GdkRectangle m_aTextSelectionStart;
+    GdkRectangle m_aTextSelectionEnd;
 };
 
 struct _LOKDocViewClass
