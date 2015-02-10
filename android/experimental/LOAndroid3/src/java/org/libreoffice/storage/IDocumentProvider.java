@@ -21,6 +21,7 @@ public interface IDocumentProvider {
      * Provides the content root element for the Document Provider.
      *
      * @return Content root element.
+     * @throws RuntimeException in case of error.
      */
     IFile getRootDirectory();
 
@@ -31,6 +32,7 @@ public interface IDocumentProvider {
      *            URI pointing to some content object that has been previously
      *            retrieved with IFile.getUri().
      * @return IFile object pointing to the content represented by uri.
+     * @throws RuntimeException in case of error.
      */
     IFile createFromUri(URI uri);
 

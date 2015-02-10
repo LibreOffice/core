@@ -64,6 +64,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -232,11 +233,24 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
                 // switch document provider:
                 // these operations may imply network access and must be run in
                 // a different thread
-                documentProvider = provider[0];
-                homeDirectory = documentProvider.getRootDirectory();
-                currentDirectory = homeDirectory;
-                filePaths = currentDirectory.listFiles(FileUtilities
-                        .getFileFilter(filterMode));
+                try {
+                    documentProvider = provider[0];
+                    homeDirectory = documentProvider.getRootDirectory();
+                    currentDirectory = homeDirectory;
+                    filePaths = currentDirectory.listFiles(FileUtilities
+                            .getFileFilter(filterMode));
+                }
+                catch (final RuntimeException e) {
+                    final Activity activity = LibreOfficeUIActivity.this;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.e(tag, e.getMessage(), e.getCause());
+                }
                 return null;
             }
 
@@ -258,8 +272,21 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
                 // this operation may imply network access and must be run in
                 // a different thread
                 currentDirectory = dir[0];
-                filePaths = currentDirectory.listFiles(FileUtilities
-                        .getFileFilter(filterMode));
+                try {
+                    filePaths = currentDirectory.listFiles(FileUtilities
+                            .getFileFilter(filterMode));
+                }
+                catch (final RuntimeException e) {
+                    final Activity activity = LibreOfficeUIActivity.this;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.e(tag, e.getMessage(), e.getCause());
+                }
                 return null;
             }
 
@@ -276,17 +303,33 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
             protected File doInBackground(IFile... document) {
                 // this operation may imply network access and must be run in
                 // a different thread
-                return document[0].getDocument();
+                try {
+                    return document[0].getDocument();
+                }
+                catch (final RuntimeException e) {
+                    final Activity activity = LibreOfficeUIActivity.this;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.e(tag, e.getMessage(), e.getCause());
+                    return null;
+                }
             }
 
             @Override
             protected void onPostExecute(File file) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
-                String packageName = getApplicationContext().getPackageName();
-                ComponentName componentName = new ComponentName(packageName,
-                        LibreOfficeMainActivity.class.getName());
-                i.setComponent(componentName);
-                startActivity(i);
+                if (file != null) {
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+                    String packageName = getApplicationContext().getPackageName();
+                    ComponentName componentName = new ComponentName(packageName,
+                            LibreOfficeMainActivity.class.getName());
+                    i.setComponent(componentName);
+                    startActivity(i);
+                }
             }
         }.execute(document);
     }

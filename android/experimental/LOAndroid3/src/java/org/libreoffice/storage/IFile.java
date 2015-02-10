@@ -71,6 +71,7 @@ public interface IFile {
      *
      * @return list of files contained by this directory, or an empty list if
      *         this is not a directory.
+     * @throws RuntimeException in case of error.
      */
     List<IFile> listFiles();
 
@@ -82,6 +83,7 @@ public interface IFile {
      *            the filter to match names against.
      * @return filtered list of files contained by this directory, or an empty
      *         list if this is not a directory.
+     * @throws RuntimeException in case of error.
      */
     List<IFile> listFiles(FileFilter filter);
 
@@ -97,6 +99,7 @@ public interface IFile {
      * for a directory is not defined.
      *
      * @return local file containing the document wrapped by this object.
+     * @throws RuntimeException in case of error.
      */
     File getDocument();
 }
