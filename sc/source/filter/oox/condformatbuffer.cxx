@@ -1111,9 +1111,6 @@ void ExtCfRule::finalizeImport()
                 pDataBar->meAxisPosition = databar::MIDDLE;
             else
                 pDataBar->meAxisPosition = databar::AUTOMATIC;
-            // TODO: the following line makes very little sense, figure out
-            // how it used to be (XML_negativeBarColorSameAsPositive)
-            pDataBar->mbNeg = !maModel.mbGradient;
             pDataBar->mbGradient = maModel.mbGradient;
             break;
         }
@@ -1171,6 +1168,7 @@ void ExtCfRule::importNegativeFillColor( const AttributeList& rAttribs )
 {
      mnRuleType = NEGATIVEFILLCOLOR;
      maModel.mnNegativeColor = rAttribs.getIntegerHex( XML_rgb, API_RGB_TRANSPARENT );
+     maModel.mbNeg = true;
 }
 
 void ExtCfRule::importAxisColor( const AttributeList& rAttribs )
