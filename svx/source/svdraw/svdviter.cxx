@@ -70,71 +70,62 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject, bool bNoMasterPage)
 
 bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 {
-    if(mpPage)
-    {
-        bool bMaster(mpPage->IsMasterPage());
-        SdrPage* pPg = pPV->GetPage();
+    if(!mpPage)
+        return true;
 
-        if(pPg == mpPage)
+    bool bMaster(mpPage->IsMasterPage());
+    SdrPage* pPg = pPV->GetPage();
+
+    if(pPg == mpPage)
+    {
+        if(mpObject)
         {
-            if(mpObject)
-            {
-                // Looking for an object? First, determine if it visible in
-                // this PageView.
-                SetOfByte aObjLay;
-                mpObject->getMergedHierarchyLayerSet(aObjLay);
-                aObjLay &= pPV->GetVisibleLayers();
-                return !aObjLay.IsEmpty();
-            }
-            else
-            {
-                return true;
-            }
+            // Looking for an object? First, determine if it visible in
+            // this PageView.
+            SetOfByte aObjLay;
+            mpObject->getMergedHierarchyLayerSet(aObjLay);
+            aObjLay &= pPV->GetVisibleLayers();
+            return !aObjLay.IsEmpty();
         }
         else
         {
-            if(!mbNoMasterPage && bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
-            {
-                if(pPg->TRG_HasMasterPage())
-                {
-                    SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
-
-                    if(&rMasterPage == mpPage)
-                    {
-                        // the page we're looking for is a master page in this PageView
-                        if(mpObject)
-                        {
-                            // Looking for an object? First, determine if it visible in
-                            // this PageView.
-                            SetOfByte aObjLay;
-                            mpObject->getMergedHierarchyLayerSet(aObjLay);
-                            aObjLay &= pPV->GetVisibleLayers();
-                            aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
-
-                            if(!aObjLay.IsEmpty())
-                            {
-                                return true;
-                            } // else, look at the next master page of this page...
-                        }
-                        else
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            // master page forbidden or no fitting master page found
-            return false;
+            return true;
         }
     }
-    else
+    else if(!mbNoMasterPage && bMaster && (!mpObject || !mpObject->IsNotVisibleAsMaster()))
     {
-        return true;
+        if(pPg->TRG_HasMasterPage())
+        {
+            SdrPage& rMasterPage = pPg->TRG_GetMasterPage();
+
+            if(&rMasterPage == mpPage)
+            {
+                // the page we're looking for is a master page in this PageView
+                if(mpObject)
+                {
+                    // Looking for an object? First, determine if it visible in
+                    // this PageView.
+                    SetOfByte aObjLay;
+                    mpObject->getMergedHierarchyLayerSet(aObjLay);
+                    aObjLay &= pPV->GetVisibleLayers();
+                    aObjLay &= pPg->TRG_GetMasterPageVisibleLayers();
+
+                    if(!aObjLay.IsEmpty())
+                    {
+                        return true;
+                    } // else, look at the next master page of this page...
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
     }
+
+    // master page forbidden or no fitting master page found
+    return false;
 }
-
-
 
 SdrView* SdrViewIter::ImpFindView()
 {
