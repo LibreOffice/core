@@ -67,20 +67,24 @@ void lcl_getDragPoint(GdkRectangle* pHandle, GdkEventButton* pEvent, GdkPoint* p
 
 gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocView* pDocView)
 {
+    GdkPoint aPoint;
+
     (void)pEventBox;
     if (pDocView->m_bInDragMiddleHandle)
     {
-        GdkPoint aPoint;
-
         g_info("lcl_signalMotion: dragging the middle handle");
         lcl_getDragPoint(&pDocView->m_aHandleMiddleRect, pEvent, &aPoint);
         pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y), 1);
         pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y), 1);
     }
+    else if (pDocView->m_bInDragStartHandle)
+    {
+        g_info("lcl_signalMotion: dragging the start handle");
+        lcl_getDragPoint(&pDocView->m_aHandleStartRect, pEvent, &aPoint);
+        pDocView->pDocument->pClass->setTextSelection(pDocView->pDocument, LOK_SETTEXTSELECTION_START, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+    }
     else if (pDocView->m_bInDragEndHandle)
     {
-        GdkPoint aPoint;
-
         g_info("lcl_signalMotion: dragging the end handle");
         lcl_getDragPoint(&pDocView->m_aHandleEndRect, pEvent, &aPoint);
         pDocView->pDocument->pClass->setTextSelection(pDocView->pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
@@ -94,17 +98,26 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
     g_info("lcl_signalButton: %d, %d (in twips: %d, %d)", (int)pEvent->x, (int)pEvent->y, (int)pixelToTwip(pEvent->x), (int)pixelToTwip(pEvent->y));
     (void) pEventBox;
 
-    if (pDocView->m_bInDragMiddleHandle && pEvent->type == GDK_BUTTON_RELEASE)
+    if (pEvent->type == GDK_BUTTON_RELEASE)
     {
-        g_info("lcl_signalButton: end of drag middle handle");
-        pDocView->m_bInDragMiddleHandle = FALSE;
-        return FALSE;
-    }
-    else if (pDocView->m_bInDragEndHandle && pEvent->type == GDK_BUTTON_RELEASE)
-    {
-        g_info("lcl_signalButton: end of drag end handle");
-        pDocView->m_bInDragEndHandle = FALSE;
-        return FALSE;
+        if (pDocView->m_bInDragStartHandle)
+        {
+            g_info("lcl_signalButton: end of drag start handle");
+            pDocView->m_bInDragStartHandle = FALSE;
+            return FALSE;
+        }
+        else if (pDocView->m_bInDragMiddleHandle)
+        {
+            g_info("lcl_signalButton: end of drag middle handle");
+            pDocView->m_bInDragMiddleHandle = FALSE;
+            return FALSE;
+        }
+        else if (pDocView->m_bInDragEndHandle)
+        {
+            g_info("lcl_signalButton: end of drag end handle");
+            pDocView->m_bInDragEndHandle = FALSE;
+            return FALSE;
+        }
     }
 
     if (pDocView->m_bEdit)
@@ -114,17 +127,26 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         aClick.y = pEvent->y;
         aClick.width = 1;
         aClick.height = 1;
-        if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleMiddleRect, NULL) && pEvent->type == GDK_BUTTON_PRESS)
+        if (pEvent->type == GDK_BUTTON_PRESS)
         {
-            g_info("lcl_signalButton: start of drag middle handle");
-            pDocView->m_bInDragMiddleHandle = TRUE;
-            return FALSE;
-        }
-        else if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleEndRect, NULL) && pEvent->type == GDK_BUTTON_PRESS)
-        {
-            g_info("lcl_signalButton: start of drag end handle");
-            pDocView->m_bInDragEndHandle = TRUE;
-            return FALSE;
+            if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleStartRect, NULL))
+            {
+                g_info("lcl_signalButton: start of drag start handle");
+                pDocView->m_bInDragStartHandle = TRUE;
+                return FALSE;
+            }
+            else if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleMiddleRect, NULL))
+            {
+                g_info("lcl_signalButton: start of drag middle handle");
+                pDocView->m_bInDragMiddleHandle = TRUE;
+                return FALSE;
+            }
+            else if (gdk_rectangle_intersect(&aClick, &pDocView->m_aHandleEndRect, NULL))
+            {
+                g_info("lcl_signalButton: start of drag end handle");
+                pDocView->m_bInDragEndHandle = TRUE;
+                return FALSE;
+            }
         }
     }
 
@@ -219,11 +241,15 @@ static void lok_docview_init( LOKDocView* pDocView )
     pDocView->m_pTextSelectionRectangles = NULL;
     memset(&pDocView->m_aTextSelectionStart, 0, sizeof(pDocView->m_aTextSelectionStart));
     memset(&pDocView->m_aTextSelectionEnd, 0, sizeof(pDocView->m_aTextSelectionEnd));
+
+    // Start/middle/end handle.
     pDocView->m_pHandleStart = NULL;
+    memset(&pDocView->m_aHandleStartRect, 0, sizeof(pDocView->m_aHandleStartRect));
+    pDocView->m_bInDragStartHandle = FALSE;
     pDocView->m_pHandleMiddle = NULL;
-    pDocView->m_pHandleEnd = NULL;
     memset(&pDocView->m_aHandleMiddleRect, 0, sizeof(pDocView->m_aHandleMiddleRect));
     pDocView->m_bInDragMiddleHandle = FALSE;
+    pDocView->m_pHandleEnd = NULL;
     memset(&pDocView->m_aHandleEndRect, 0, sizeof(pDocView->m_aHandleEndRect));
     pDocView->m_bInDragEndHandle = FALSE;
 
@@ -360,7 +386,7 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
             // Have a start position: we need a start handle.
             if (!pDocView->m_pHandleStart)
                 pDocView->m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pDocView->m_pHandleStart, NULL);
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pDocView->m_pHandleStart, &pDocView->m_aHandleStartRect);
         }
         if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionEnd))
         {

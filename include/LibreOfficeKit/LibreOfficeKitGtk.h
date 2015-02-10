@@ -56,8 +56,15 @@ struct _LOKDocView
     GdkRectangle m_aTextSelectionStart;
     /// Position and size of the selection end.
     GdkRectangle m_aTextSelectionEnd;
+
+    /// @name Start/middle/end handle.
+    ///@{
     /// Bitmap of the text selection start handle.
     cairo_surface_t* m_pHandleStart;
+    /// Rectangle of the text selection start handle, to know if the user clicked on it or not
+    GdkRectangle m_aHandleStartRect;
+    /// If we are in the middle of a drag of the text selection end handle.
+    gboolean m_bInDragStartHandle;
     /// Bitmap of the text selection middle handle.
     cairo_surface_t* m_pHandleMiddle;
     /// Rectangle of the text selection middle handle, to know if the user clicked on it or not
@@ -70,6 +77,7 @@ struct _LOKDocView
     GdkRectangle m_aHandleEndRect;
     /// If we are in the middle of a drag of the text selection end handle.
     gboolean m_bInDragEndHandle;
+    ///@}
 };
 
 struct _LOKDocViewClass
