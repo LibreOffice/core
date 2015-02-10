@@ -180,6 +180,7 @@ void KDEXLib::Init()
     m_pApplication = new VCLKDEApplication();
     if( session_manager != NULL )
     {
+        // coverity[tainted_string] - trusted source for setenv
         setenv( "SESSION_MANAGER", session_manager, 1 );
         free( session_manager );
     }
