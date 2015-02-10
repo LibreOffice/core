@@ -1499,6 +1499,8 @@ public:
         cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
         if (err != CL_SUCCESS)
             throw OpenCLError("clCreateKernel", err, __FILE__, __LINE__);
+        SAL_INFO("sc.opencl", "Created kernel " << redKernel << " with name " << kernelName << " in program " << mpProgram);
+
         // set kernel arg of reduction kernel
         // TODO(Wei Wei): use unique name for kernel
         cl_mem buf = Base::GetCLBuffer();
@@ -1556,6 +1558,8 @@ public:
             redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
             if (err != CL_SUCCESS)
                 throw OpenCLError("clCreateKernel", err, __FILE__, __LINE__);
+            SAL_INFO("sc.opencl", "Created kernel " << redKernel << " with name " << kernelName << " in program " << mpProgram);
+
             // set kernel arg of reduction kernel
             buf = Base::GetCLBuffer();
             SAL_INFO("sc.opencl", "Kernel " << redKernel << " arg " << 0 << ": cl_mem: " << buf);
@@ -2281,6 +2285,8 @@ public:
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
                 if (err != CL_SUCCESS)
                     throw OpenCLError("clCreateKernel", err, __FILE__, __LINE__);
+                SAL_INFO("sc.opencl", "Created kernel " << redKernel << " with name " << kernelName << " in program " << pProgram);
+
                 // set kernel arg of reduction kernel
                 for (size_t j = 0; j < vclmem.size(); j++)
                 {
@@ -2352,6 +2358,7 @@ public:
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
                 if (err != CL_SUCCESS)
                     throw OpenCLError("clCreateKernel", err, __FILE__, __LINE__);
+                SAL_INFO("sc.opencl", "Created kernel " << redKernel << " with name " << kernelName << " in program " << pProgram);
 
                 // set kernel arg of reduction kernel
                 for (size_t j = 0; j < vclmem.size(); j++)
@@ -2394,6 +2401,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError("clFinish", err, __FILE__, __LINE__);
 
+                SAL_INFO("sc.opencl", "Relasing kernel " << redKernel);
                 err = clReleaseKernel(redKernel);
                 SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << ::opencl::errorString(err));
 
@@ -3719,6 +3727,7 @@ DynamicKernel::~DynamicKernel()
     }
     if (mpKernel)
     {
+        SAL_INFO("sc.opencl", "Releasing kernel " << mpKernel);
         err = clReleaseKernel(mpKernel);
         SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseKernel failed: " << ::opencl::errorString(err));
     }
@@ -3825,6 +3834,7 @@ void DynamicKernel::CreateKernel()
 
         if (lastSecondProgram)
         {
+            SAL_INFO("sc.opencl", "Releasing program " << lastSecondProgram);
             err = clReleaseProgram(lastSecondProgram);
             SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseProgram failed: " << ::opencl::errorString(err));
         }
@@ -3840,6 +3850,8 @@ void DynamicKernel::CreateKernel()
                 &src, NULL, &err);
             if (err != CL_SUCCESS)
                 throw OpenCLError("clCreateProgramWithSource", err, __FILE__, __LINE__);
+            SAL_INFO("sc.opencl", "Created program " << mpProgram);
+
             err = clBuildProgram(mpProgram, 1,
                 ::opencl::gpuEnv.mpArryDevsID, "", NULL, NULL);
             if (err != CL_SUCCESS)
@@ -3890,6 +3902,8 @@ void DynamicKernel::CreateKernel()
 #endif
                 throw OpenCLError("clBuildProgram", err, __FILE__, __LINE__);
             }
+            SAL_INFO("sc.opencl", "Built program " << mpProgram);
+
             // Generate binary out of compiled kernel.
             ::opencl::generatBinFromKernelSource(mpProgram,
                 (mKernelSignature + GetMD5()).c_str());
@@ -3902,6 +3916,7 @@ void DynamicKernel::CreateKernel()
     mpKernel = clCreateKernel(mpProgram, kname.c_str(), &err);
     if (err != CL_SUCCESS)
         throw OpenCLError("clCreateKernel", err, __FILE__, __LINE__);
+    SAL_INFO("sc.opencl", "Created kernel " << mpKernel << " with name " << kname << " in program " << mpProgram);
 }
 
 void DynamicKernel::Launch( size_t nr )

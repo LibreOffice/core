@@ -442,6 +442,7 @@ bool buildProgramFromBinary(const char* buildOption, GPUEnv* gpuInfo, const char
             // something went wrong, fall back to compiling from source
             return false;
         }
+        SAL_INFO("opencl", "Created program " << gpuInfo->mpArryPrograms[idx] << " from binary");
         for(size_t i = 0; i < numDevices; ++i)
         {
             delete[] pBinary[i];
