@@ -53,7 +53,7 @@
 
 using namespace com::sun::star;
 
-static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
+static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd, const Size &rOrigGrfSize );
 
 TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
@@ -103,6 +103,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     {
         // Only a status change - serve Events?
         OUString sState;
+
         if( rValue.hasValue() && ( rValue >>= sState ))
         {
             sal_uInt16 nEvent = 0;
@@ -128,12 +129,15 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     bool bGraphicArrived = false;
     bool bGraphicPieceArrived = false;
     bool bDontNotify = false;
-    Size aGrfSz, aFrmFmtSz;
+    Size aGrfSz, aOldSz, aFrmFmtSz;
 
-    if( pCntntNode->IsGrfNode() )
+    SwGrfNode* pSwGrfNode = NULL;
+
+    if (pCntntNode->IsGrfNode())
     {
-        SwGrfNode* pSwGrfNode = pCntntNode->GetGrfNode();
-        OSL_ENSURE(pSwGrfNode, "Error, pSwGrfNode expected when node answers IsGrfNode() with true (!)");
+        pSwGrfNode = pCntntNode->GetGrfNode();
+        assert(pSwGrfNode && "Error, pSwGrfNode expected when node answers IsGrfNode() with true (!)");
+        aOldSz = pSwGrfNode->GetTwipSize();
         const GraphicObject& rGrfObj = pSwGrfNode->GetGrfObj();
 
         bDontNotify = pSwGrfNode->IsFrameInPaint();
@@ -143,6 +147,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         pSwGrfNode->SetGraphicArrived( bGraphicArrived );
 
         Graphic aGrf;
+
         if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
             ( GRAPHIC_DEFAULT != aGrf.GetType() ||
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
@@ -159,10 +164,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             {
                 aFrmFmtSz = aGrfSz;
             }
-            Size aSz( pSwGrfNode->GetTwipSize() );
 
             if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
-                ( !aSz.Width() || !aSz.Height() ) )
+                ( !aOldSz.Width() || !aOldSz.Height() ) )
             {
                 // If only a part arrives, but the size is not set
                 // we need to go through bGraphicArrived down there.
@@ -181,9 +185,12 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             {
                 // Always use the correct graphic size
                 if( aGrfSz.Height() && aGrfSz.Width() &&
-                    aSz.Height() && aSz.Width() &&
-                    aGrfSz != aSz )
+                    aOldSz.Height() && aOldSz.Width() &&
+                    aGrfSz != aOldSz )
+                {
                     pSwGrfNode->SetTwipSize( aGrfSz );
+                    aOldSz = aGrfSz;
+                }
             }
         }
         if ( bUpdate && !bGraphicArrived && !bGraphicPieceArrived )
@@ -244,6 +251,8 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                         ( !bSwapIn ||
                             GRAPHIC_DEFAULT == pGrfNd->GetGrfObj().GetType()))
                     {
+                        Size aPreArriveSize(pGrfNd->GetTwipSize());
+
                         pBLink->bIgnoreDataChanged = false;
                         pBLink->DataChanged( rMimeType, rValue );
                         pBLink->bIgnoreDataChanged = true;
@@ -252,13 +261,18 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                                                     IsGraphicArrived() );
 
                         // Adjust the Fly's graphic
-                        if( !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
+                        if (!::SetGrfFlySize(aGrfSz, aFrmFmtSz, pGrfNd, aPreArriveSize))
                             ::lcl_CallModify( *pGrfNd, aMsgHint );
                     }
-                    else if( pBLink == this &&
-                            !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
-                        // Adjust the Fly's graphic
-                        ::lcl_CallModify( *pGrfNd, aMsgHint );
+                    else if (pBLink == this)
+                    {
+                        assert(pGrfNd == pSwGrfNode && "fdo#87083 needs a different fix");
+                        if (!::SetGrfFlySize(aGrfSz, aFrmFmtSz, pGrfNd, aOldSz))
+                        {
+                            // Adjust the Fly's graphic
+                            ::lcl_CallModify( *pGrfNd, aMsgHint );
+                        }
+                    }
                 }
             }
 
@@ -286,7 +300,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     return SUCCESS;
 }
 
-static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
+static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd, const Size& rOrigGrfSize )
 {
     bool bRet = false;
     SwViewShell *pSh = pGrfNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -294,7 +308,7 @@ static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pG
     if ( pGrfNd->GetDoc()->GetEditShell() )
         pCurr = new CurrShell( pSh );
 
-    Size aSz = pGrfNd->GetTwipSize();
+    Size aSz = rOrigGrfSize;
     if ( !(aSz.Width() && aSz.Height()) &&
             rGrfSz.Width() && rGrfSz.Height() )
     {
