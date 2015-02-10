@@ -1540,6 +1540,11 @@ static ScTokenArray* convertToTokenArray(
                         }
                     }
                     break;
+                    // These are handled in batch:
+                    case CELLTYPE_VALUE:
+                    case CELLTYPE_STRING:
+                    case CELLTYPE_EDIT:
+                    break;
                     default:
                         OSL_FAIL("attempted to convert an unknown cell type.");
                 }
