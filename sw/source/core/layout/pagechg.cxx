@@ -542,7 +542,7 @@ void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
             if( rOldCol != rNewCol )
             {
                 SwLayoutFrm *pB = FindBodyCont();
-                OSL_ENSURE( pB, "Seite ohne Body." );
+                assert(pB && "Page without Body.");
                 pB->ChgColumns( rOldCol, rNewCol );
                 rInvFlags |= 0x20;
             }
@@ -948,7 +948,7 @@ void SwPageFrm::PrepareRegisterChg()
  */
 void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** ppPrev )
 {
-    OSL_ENSURE( pStart, "no starting page." );
+    assert(pStart && "no starting page.");
 
     SwViewShell *pSh   = pStart->getRootFrm()->GetCurrShell();
     SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
@@ -1161,7 +1161,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
     if ( !pDesc )
         pDesc = pPrevPage->GetPageDesc()->GetFollow();
 
-    OSL_ENSURE( pDesc, "Missing PageDesc" );
+    assert(pDesc && "Missing PageDesc");
     if( !(bWishedOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt()) )
         bWishedOdd = !bWishedOdd;
     bool const bWishedFirst = pDesc != pPrevPage->GetPageDesc();
@@ -1865,7 +1865,7 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
     }
     else
     {
-        OSL_ENSURE( pViewOpt, "CheckViewLayout required ViewOptions" );
+        assert(pViewOpt && "CheckViewLayout required ViewOptions");
 
         const sal_uInt16 nColumns =  pViewOpt->GetViewLayoutColumns();
         const bool   bBookMode = pViewOpt->IsViewLayoutBookMode();
