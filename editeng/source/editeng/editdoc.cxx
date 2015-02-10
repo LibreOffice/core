@@ -218,6 +218,7 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // EE_CHAR_CASEMAP
         { SID_ATTR_CHAR_GRABBAG, SFX_ITEM_POOLABLE },       // EE_CHAR_GRABBAG
+        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_BKGCOLOR
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
         { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
         { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
