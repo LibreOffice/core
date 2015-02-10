@@ -36,6 +36,10 @@
     <string name="local_file_system">Local file system</string>
     <string name="owncloud">ownCloud</string>
 
+    <string name="owncloud_wrong_connection">Cannot connect to ownCloud server. Check your configuration.</string>
+    <string name="owncloud_unauthorized">Cannot log into ownCloud server. Check your configuration.</string>
+    <string name="owncloud_unspecified_error">Unspecified error connecting to ownCloud server. Check your configuration and/or try later.</string>
+
     <!-- Document provider settings -->
     <string name="storage_provider_settings">Storage provider settings</string>
     <string name="owncloud_settings">ownCloud settings</string>
