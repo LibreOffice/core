@@ -360,15 +360,42 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
     }
 
     private void share(int position) {
-        File file = filePaths.get(position).getDocument();
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        Uri uri = Uri.fromFile(file);
-        sharingIntent.setType(FileUtilities.getMimeType(file.getName()));
-        sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, uri);
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-                file.getName());
-        startActivity(Intent.createChooser(sharingIntent,
-                getString(R.string.share_via)));
+
+        new AsyncTask<IFile, Void, File>() {
+            @Override
+            protected File doInBackground(IFile... document) {
+                // this operation may imply network access and must be run in
+                // a different thread
+                try {
+                    return document[0].getDocument();
+                } catch (final RuntimeException e) {
+                    final Activity activity = LibreOfficeUIActivity.this;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(activity, e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.e(tag, e.getMessage(), e.getCause());
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(File file) {
+                if (file != null) {
+                    Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                    Uri uri = Uri.fromFile(file);
+                    sharingIntent.setType(FileUtilities.getMimeType(file.getName()));
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, uri);
+                    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                            file.getName());
+                    startActivity(Intent.createChooser(sharingIntent,
+                            getString(R.string.share_via)));
+                }
+            }
+        }.execute(filePaths.get(position));
     }
 
     @Override
