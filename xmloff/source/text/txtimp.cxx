@@ -2660,7 +2660,7 @@ bool XMLTextImportHelper::IsInFrame() const
 
     // are we currently in a text frame? yes, if the cursor has a
     // TextFrame property and it's non-NULL
-    Reference<XPropertySet> xPropSet(((XMLTextImportHelper *)this)->GetCursor(), UNO_QUERY);
+    Reference<XPropertySet> xPropSet(const_cast<XMLTextImportHelper*>(this)->GetCursor(), UNO_QUERY);
     if (xPropSet.is())
     {
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(s_TextFrame))

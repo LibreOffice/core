@@ -49,7 +49,7 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         sal_uInt32 nIdx ) const
 {
     XMLTextExportPropertySetMapper *pThis =
-           ((XMLTextExportPropertySetMapper *)this);
+           const_cast<XMLTextExportPropertySetMapper*>(this);
 
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
     {
@@ -133,7 +133,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
         sal_uInt32 nIdx ) const
 {
     XMLTextExportPropertySetMapper *pThis =
-           ((XMLTextExportPropertySetMapper *)this);
+           const_cast<XMLTextExportPropertySetMapper*>(this);
 
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
     {
