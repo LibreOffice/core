@@ -28,12 +28,14 @@
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/XMLTextShapeImportHelper.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -86,6 +88,8 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::xforms;
 using namespace ::xmloff::token;
 using namespace ::std;
+using namespace xmloff;
+using namespace css::xml::sax;
 
 enum SwXMLDocTokens
 {
@@ -103,15 +107,24 @@ enum SwXMLDocTokens
 
 static SvXMLTokenMapEntry aDocTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS  },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES      },
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES    },
-    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES   },
-    { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META        },
-    { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY        },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT      },
-    { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS    },
-    { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS      },
+    { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,     XML_TOK_DOC_FONTDECLS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_font_face_decls) },
+    { XML_NAMESPACE_OFFICE, XML_STYLES,         XML_TOK_DOC_STYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_styles) },
+    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_styles) },
+    { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,   XML_TOK_DOC_MASTERSTYLES,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_master_styles) },
+    { XML_NAMESPACE_OFFICE, XML_META,           XML_TOK_DOC_META,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_meta) },
+    { XML_NAMESPACE_OFFICE, XML_BODY,           XML_TOK_DOC_BODY,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_body) },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,        XML_TOK_DOC_SCRIPT,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_scripts) },
+    { XML_NAMESPACE_OFFICE, XML_SETTINGS,       XML_TOK_DOC_SETTINGS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_settings) },
+    { XML_NAMESPACE_XFORMS, XML_MODEL,          XML_TOK_DOC_XFORMS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_XFORMS | XML_model) },
     XML_TOKEN_MAP_END
 };
 

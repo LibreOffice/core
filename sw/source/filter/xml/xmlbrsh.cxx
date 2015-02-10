@@ -19,6 +19,7 @@
 
 #include "hintids.hxx"
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <editeng/memberids.hrc>
 
 #include <xmloff/nmspmap.hxx>
@@ -26,6 +27,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/unomid.hxx>
 #include <editeng/brushitem.hxx>
@@ -40,6 +42,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
+using namespace xmloff;
 
 enum SvXMLTokenMapAttrs
 {
@@ -55,13 +59,20 @@ enum SvXMLTokenMapAttrs
 
 static SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
-    { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
-    { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
-    { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
-    { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
-    { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
-    { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
+    { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+    { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
+    { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_actuate) },
+    { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_show) },
+    { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_position) },
+    { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_repeat) },
+    { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_filter_name) },
     XML_TOKEN_MAP_END
 };
 

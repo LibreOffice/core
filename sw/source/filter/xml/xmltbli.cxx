@@ -30,6 +30,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -67,6 +69,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 enum SwXMLTableElemTokens
 {
@@ -100,45 +103,66 @@ enum SwXMLTableCellAttrTokens
 
 static SvXMLTokenMapEntry aTableElemTokenMap[] =
 {
-    { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS,
-            XML_TOK_TABLE_HEADER_COLS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS,           XML_TOK_TABLE_COLS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COL },
-    { XML_NAMESPACE_LO_EXT, XML_TABLE_COLUMN,           XML_TOK_TABLE_COL },
-    { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS,
-            XML_TOK_TABLE_HEADER_ROWS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,              XML_TOK_TABLE_ROWS },
-    { XML_NAMESPACE_TABLE, XML_TABLE_ROW,               XML_TOK_TABLE_ROW },
-    { XML_NAMESPACE_LO_EXT, XML_TABLE_ROW,              XML_TOK_TABLE_ROW },
-    { XML_NAMESPACE_OFFICE, XML_DDE_SOURCE,
-            XML_TOK_OFFICE_DDE_SOURCE },
+    { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS, XML_TOK_TABLE_HEADER_COLS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_columns) },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMNS, XML_TOK_TABLE_COLS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_columns) },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN,            XML_TOK_TABLE_COL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column) },
+    { XML_NAMESPACE_LO_EXT, XML_TABLE_COLUMN,           XML_TOK_TABLE_COL,
+        (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_column) },
+    { XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS, XML_TOK_TABLE_HEADER_ROWS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_rows) },
+    { XML_NAMESPACE_TABLE, XML_TABLE_ROWS,              XML_TOK_TABLE_ROWS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_rows) },
+    { XML_NAMESPACE_TABLE, XML_TABLE_ROW,               XML_TOK_TABLE_ROW,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_row) },
+    { XML_NAMESPACE_LO_EXT, XML_TABLE_ROW,              XML_TOK_TABLE_ROW,
+        (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_row) },
+    { XML_NAMESPACE_OFFICE, XML_DDE_SOURCE, XML_TOK_OFFICE_DDE_SOURCE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_source) },
 
     // There are slight differences between <table:table-columns> and
     // <table:table-columns-groups>. However, none of these are
     // supported in Writer (they are Calc-only features), so we
     // support column groups by simply using the <table:table-columns>
     // token for column groups, too.
-    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS },
+    { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column_group) },
 
     XML_TOKEN_MAP_END
 };
 
 static SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XML, XML_ID, XML_TOK_TABLE_XMLID },
-    { XML_NAMESPACE_TABLE, XML_STYLE_NAME, XML_TOK_TABLE_STYLE_NAME },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, XML_TOK_TABLE_NUM_COLS_SPANNED },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, XML_TOK_TABLE_NUM_ROWS_SPANNED },
-    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, XML_TOK_TABLE_NUM_COLS_REPEATED },
-    { XML_NAMESPACE_TABLE, XML_FORMULA, XML_TOK_TABLE_FORMULA },
-    { XML_NAMESPACE_OFFICE, XML_VALUE, XML_TOK_TABLE_VALUE },
-    { XML_NAMESPACE_OFFICE, XML_TIME_VALUE, XML_TOK_TABLE_TIME_VALUE },
-    { XML_NAMESPACE_OFFICE, XML_DATE_VALUE, XML_TOK_TABLE_DATE_VALUE },
-    { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE },
-    { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED },
-    { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
-    { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TABLE_STRING_VALUE },
-    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TABLE_VALUE_TYPE },
+    { XML_NAMESPACE_XML, XML_ID, XML_TOK_TABLE_XMLID,
+        (FastToken::NAMESPACE | XML_NAMESPACE_XML | XML_id) },
+    { XML_NAMESPACE_TABLE, XML_STYLE_NAME, XML_TOK_TABLE_STYLE_NAME,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name) },
+    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, XML_TOK_TABLE_NUM_COLS_SPANNED,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_spanned) },
+    { XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, XML_TOK_TABLE_NUM_ROWS_SPANNED,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_rows_spanned) },
+    { XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, XML_TOK_TABLE_NUM_COLS_REPEATED,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_repeated) },
+    { XML_NAMESPACE_TABLE, XML_FORMULA, XML_TOK_TABLE_FORMULA,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_formula) },
+    { XML_NAMESPACE_OFFICE, XML_VALUE, XML_TOK_TABLE_VALUE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_value) },
+    { XML_NAMESPACE_OFFICE, XML_TIME_VALUE, XML_TOK_TABLE_TIME_VALUE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_time_value) },
+    { XML_NAMESPACE_OFFICE, XML_DATE_VALUE, XML_TOK_TABLE_DATE_VALUE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_date_value) },
+    { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_boolean_value) },
+    { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protected) },
+    { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED,
+        (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_protect) }, // for backwards compatibility with SRC629 (and before)
+    { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TABLE_STRING_VALUE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_string_value) },
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TABLE_VALUE_TYPE,
+        (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_value_type) },
     XML_TOKEN_MAP_END
 };
 
