@@ -2031,7 +2031,6 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         else if (sInternalChild.startsWith("action_area") || sInternalChild.startsWith("messagedialog-action_area"))
                         {
                             vcl::Window *pContentArea = pCurrentChild->GetParent();
-                            assert(pContentArea && pContentArea->GetType() == WINDOW_CONTAINER);
                             if (Dialog *pBoxParent = dynamic_cast<Dialog*>(pContentArea ? pContentArea->GetParent() : NULL))
                             {
                                 pBoxParent->set_action_area(static_cast<VclButtonBox*>(pCurrentChild));
