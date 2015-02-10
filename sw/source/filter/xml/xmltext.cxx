@@ -32,21 +32,34 @@ public:
 
     SwXMLBodyContentContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
                              const OUString& rLName );
+    SwXMLBodyContentContext_Impl( SwXMLImport& rImport, sal_Int32 Element );
     virtual ~SwXMLBodyContentContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     // The body element's text:global attribute can be ignored, because
     // we must have the correct object shell already.
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl( SwXMLImport& rImport,
                                               sal_uInt16 nPrfx,
                                                    const OUString& rLName ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+SwXMLBodyContentContext_Impl::SwXMLBodyContentContext_Impl(
+    SwXMLImport& rImport, sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport )
 {
 }
 
@@ -69,9 +82,32 @@ SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
     return pContext;
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLBodyContentContext_Impl::createFastChildContext(
+    sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext *pContext = 0;
+
+    //TODO
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
 void SwXMLBodyContentContext_Impl::EndElement()
 {
     /* Code moved to SwXMLOmport::endDocument */
+    GetImport().GetTextImport()->SetOutlineStyles( false );
+}
+
+void SAL_CALL SwXMLBodyContentContext_Impl::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    /* Code moved to SwXMLImport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles( false );
 }
 
