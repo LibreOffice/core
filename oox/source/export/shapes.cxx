@@ -283,60 +283,63 @@ ShapeExport& ShapeExport::WriteGroupShape(uno::Reference<drawing::XShape> xShape
 
 static bool lcl_IsOnBlacklist(OUString& rShapeType)
 {
-    static const std::initializer_list<OUString> vBlacklist = {
-        "ring",
-        "can",
-        "cube",
-        "paper",
-        "frame",
-        "smiley",
-        "sun",
-        "flower",
-        "forbidden",
-        "bracket-pair",
-        "brace-pair",
-        "col-60da8460",
-        "col-502ad400",
-        "quad-bevel",
-        "cloud-callout",
-        "line-callout-1",
-        "line-callout-2",
-        "line-callout-3",
-        "paper",
-        "vertical-scroll",
-        "horizontal-scroll",
-        "mso-spt34",
-        "mso-spt75",
-        "mso-spt164",
-        "mso-spt180",
-        "flowchart-process",
-        "flowchart-alternate-process",
-        "flowchart-decision",
-        "flowchart-data",
-        "flowchart-predefined-process",
-        "flowchart-internal-storage",
-        "flowchart-document",
-        "flowchart-multidocument",
-        "flowchart-terminator",
-        "flowchart-preparation",
-        "flowchart-manual-input",
-        "flowchart-manual-operation",
-        "flowchart-connector",
-        "flowchart-off-page-connector",
-        "flowchart-card",
-        "flowchart-punched-tape",
-        "flowchart-summing-junction",
-        "flowchart-or",
-        "flowchart-collate",
-        "flowchart-sort",
-        "flowchart-extract",
-        "flowchart-merge",
-        "flowchart-stored-data",
-        "flowchart-delay",
-        "flowchart-sequential-access",
-        "flowchart-magnetic-disk",
-        "flowchart-direct-access-storage",
-        "flowchart-display"
+#if !defined __clang__
+    static
+#endif
+    const std::initializer_list<OUStringLiteral> vBlacklist = {
+        OUStringLiteral("ring"),
+        OUStringLiteral("can"),
+        OUStringLiteral("cube"),
+        OUStringLiteral("paper"),
+        OUStringLiteral("frame"),
+        OUStringLiteral("smiley"),
+        OUStringLiteral("sun"),
+        OUStringLiteral("flower"),
+        OUStringLiteral("forbidden"),
+        OUStringLiteral("bracket-pair"),
+        OUStringLiteral("brace-pair"),
+        OUStringLiteral("col-60da8460"),
+        OUStringLiteral("col-502ad400"),
+        OUStringLiteral("quad-bevel"),
+        OUStringLiteral("cloud-callout"),
+        OUStringLiteral("line-callout-1"),
+        OUStringLiteral("line-callout-2"),
+        OUStringLiteral("line-callout-3"),
+        OUStringLiteral("paper"),
+        OUStringLiteral("vertical-scroll"),
+        OUStringLiteral("horizontal-scroll"),
+        OUStringLiteral("mso-spt34"),
+        OUStringLiteral("mso-spt75"),
+        OUStringLiteral("mso-spt164"),
+        OUStringLiteral("mso-spt180"),
+        OUStringLiteral("flowchart-process"),
+        OUStringLiteral("flowchart-alternate-process"),
+        OUStringLiteral("flowchart-decision"),
+        OUStringLiteral("flowchart-data"),
+        OUStringLiteral("flowchart-predefined-process"),
+        OUStringLiteral("flowchart-internal-storage"),
+        OUStringLiteral("flowchart-document"),
+        OUStringLiteral("flowchart-multidocument"),
+        OUStringLiteral("flowchart-terminator"),
+        OUStringLiteral("flowchart-preparation"),
+        OUStringLiteral("flowchart-manual-input"),
+        OUStringLiteral("flowchart-manual-operation"),
+        OUStringLiteral("flowchart-connector"),
+        OUStringLiteral("flowchart-off-page-connector"),
+        OUStringLiteral("flowchart-card"),
+        OUStringLiteral("flowchart-punched-tape"),
+        OUStringLiteral("flowchart-summing-junction"),
+        OUStringLiteral("flowchart-or"),
+        OUStringLiteral("flowchart-collate"),
+        OUStringLiteral("flowchart-sort"),
+        OUStringLiteral("flowchart-extract"),
+        OUStringLiteral("flowchart-merge"),
+        OUStringLiteral("flowchart-stored-data"),
+        OUStringLiteral("flowchart-delay"),
+        OUStringLiteral("flowchart-sequential-access"),
+        OUStringLiteral("flowchart-magnetic-disk"),
+        OUStringLiteral("flowchart-direct-access-storage"),
+        OUStringLiteral("flowchart-display")
     };
 
     return std::find(vBlacklist.begin(), vBlacklist.end(), rShapeType) != vBlacklist.end();
@@ -344,9 +347,12 @@ static bool lcl_IsOnBlacklist(OUString& rShapeType)
 
 static bool lcl_IsOnWhitelist(OUString& rShapeType)
 {
-    static const std::initializer_list<OUString> vWhitelist = {
-        "heart",
-        "puzzle"
+#if !defined __clang__
+    static
+#endif
+    const std::initializer_list<OUStringLiteral> vWhitelist = {
+        OUStringLiteral("heart"),
+        OUStringLiteral("puzzle")
     };
 
     return std::find(vWhitelist.begin(), vWhitelist.end(), rShapeType) != vWhitelist.end();
