@@ -42,19 +42,30 @@ find -d "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' \
         -or -name '*.applescript' \) ! -type l | grep -v "LibreOfficePython\.framework" | \
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file"
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
 done
 
 find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
 while read dylib; do \
     id=`basename "$dylib"`; \
     id=`echo $id | sed -e 's/dylib.*/dylib/'`; \
-    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$dylib"; \
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$dylib" || exit 1
 done
 
 # The executables have already been signed by
 # gb_LinkTarget__command_dynamiclink in
-# solenv/gbuild/platform/macosx.mk.
+# solenv/gbuild/platform/macosx.mk, but sign the handful of scripts remaining
+# in MacOS
+# (<https://developer.apple.com/library/mac/technotes/tn2206/_index.html> "OS X
+# Code Signing In Depth" suggests we should get rid of them rather sooner than
+# later, but they appear to be OK for now):
+
+for i in gengal python senddoc unoinfo
+do
+    codesign --verbose --identifier="$MACOSX_BUNDLE_IDENTIFIER.$i" \
+        --sign "$MACOSX_CODESIGNING_IDENTITY" "$APP_BUNDLE/Contents/MacOS/$i" \
+    || exit 1
+done
 
 # Sign frameworks.
 #
@@ -67,32 +78,28 @@ for framework in `find $APP_BUNDLE -name '*.framework' -type d`; do \
     fn=${fn%.*}
     for version in $framework/Versions/*; do \
         if test ! -L $version -a -d $version; then
-            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version/$fn
-            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version/$fn || exit 1
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version || exit 1
         fi; \
     done; \
 done
 
-# Sign the app bundle as a whole which means (re-)signing the
-# CFBundleExecutable from Info.plist, i.e. soffice, plus the contents
+# Sign the app bundle as a whole which means finally signing the
+# CFBundleExecutable from Info.plist, i.e. soffice (which is exempted from the
+# on-the-go executable signing in gb_LinkTarget__command_dynamiclink in
+# solenv/gbuild/platform/macosx.mk), plus the contents
 # of the Resources tree (which unless you used
 # --enable-canonical-installation-tree-structure is not much, far from
 # all of our non-code "resources").
 #
 # At this stage we also attach the entitlements in the sandboxing case
-#
-# Also omit some files from the Bunlde's seal via the resource-rules
-# (bootstraprc and similar that the user might adjust and image files)
-# See also https://developer.apple.com/library/mac/technotes/tn2206/
 
 id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
 
 if test -n "$ENABLE_MACOSX_SANDBOX"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
-else
-    resource_rules="--resource-rules $SRCDIR/setup_native/source/mac/CodesignRules.plist"
 fi
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" $resource_rules --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE || exit 1
 
 exit 0
