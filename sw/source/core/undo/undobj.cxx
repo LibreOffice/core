@@ -236,7 +236,6 @@ bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
     ::sw::RepeatContext *const pRepeatContext(
             dynamic_cast< ::sw::RepeatContext * >(& rContext));
     assert(pRepeatContext);
-    if (!pRepeatContext) { return false; }
     return CanRepeatImpl(*pRepeatContext);
 }
 
