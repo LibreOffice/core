@@ -597,6 +597,7 @@ IMAGE_SETEVENT:
     Size aGrfSz( 0, 0 );
     bool bSetTwipSize = true;       // Twip-Size am Node setzen?
     bool bChangeFrmSize = false;    // Frame-Format nachtraeglich anpassen?
+    bool bRequestGrfNow = false;
     bool bSetScaleImageMap = false;
     sal_uInt8 nPrcWidth = 0, nPrcHeight = 0;
 
@@ -608,6 +609,7 @@ IMAGE_SETEVENT:
         // Tabelle layoutet wird.
         if( pTable!=0 && !nWidth )
         {
+            bRequestGrfNow = true;
             IncGrfsThatResizeTable();
         }
 
@@ -810,6 +812,15 @@ IMAGE_SETEVENT:
 
     if( !aMacroItem.GetMacroTable().empty() )
         pFlyFmt->SetFmtAttr( aMacroItem );
+
+    // tdf#87083 If the graphic has not been loaded yet, then load it now.
+    // Otherwise it may be loaded during the first paint of the object and it
+    // will be too late to adapt the size of the graphic at that point.
+    if (bRequestGrfNow && pGrfNd)
+    {
+        Size aUpdatedSize = pGrfNd->GetTwipSize();  //trigger a swap-in
+        SAL_WARN_IF(!aUpdatedSize.Width() || !aUpdatedSize.Width(), "sw.html", "html image with no width or height");
+    }
 
     // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
     RegisterFlyFrm( pFlyFmt );
