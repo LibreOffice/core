@@ -95,6 +95,7 @@ private:
     DECL_LINK(ToggleSource,           void*);
     DECL_LINK(ToggleDestination,      void*);
     DECL_LINK(SourceEditModified, void*);
+    virtual bool Close() SAL_OVERRIDE;
 
     ScPivotParam maPivotParameters;
 
