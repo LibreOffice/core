@@ -3837,6 +3837,7 @@ void DynamicKernel::CreateKernel()
             SAL_INFO("sc.opencl", "Releasing program " << lastSecondProgram);
             err = clReleaseProgram(lastSecondProgram);
             SAL_WARN_IF(err != CL_SUCCESS, "sc.opencl", "clReleaseProgram failed: " << ::opencl::errorString(err));
+            lastSecondProgram = NULL;
         }
         if (::opencl::buildProgramFromBinary("",
                 &::opencl::gpuEnv, KernelHash.c_str(), 0))
