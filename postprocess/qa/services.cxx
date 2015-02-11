@@ -81,6 +81,7 @@ void ServicesTest::test()
         Reference< XServiceTypeDescription2 > xDesc(
             xTypeManager->getByHierarchicalName(s[i]), UNO_QUERY_THROW);
         Sequence< Reference< XServiceConstructorDescription > > xseq = xDesc->getConstructors();
+        SAL_WARN_IF(xseq.getLength() == 0, "postprocess.cppunit", "not tested because there is no constructor");
         for (sal_Int32 c = 0; c < xseq.getLength(); c++)
             if (!xseq[c]->getParameters().hasElements())
             {
