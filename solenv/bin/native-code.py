@@ -171,7 +171,7 @@ draw_constructor_list = [
 
 writer_factory_list = [
     ("libfrmlo.a", "frm_component_getFactory"),
-    ("libsblo.a", "sb_component_getFactory"),
+    ("libsblo.a", "sb_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
