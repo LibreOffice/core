@@ -1,0 +1,67 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_ConditionFormatOperator_idl__
+#define __com_sun_star_sheet_ConditionFormatOperator_idl__
+
+module com {  module sun {  module star {  module sheet {
+
+constants ConditionFormatOperator
+{
+    const long EQUAL = 0;
+
+    const long LESS = 1;
+
+    const long GREATER = 2;
+
+    const long LESS_EQUAL = 3;
+
+    const long GREATER_EQUAL = 4;
+
+    const long NOT_EQUAL = 5;
+
+    const long BETWEEN = 6;
+
+    const long NOT_BETWEEN = 7;
+
+    const long DUPLICATE = 8;
+
+    const long UNIQUE = 9;
+
+    const long TOP_N_ELEMENTS = 10;
+
+    const long BOTTOM_N_ELEMENTS = 11;
+
+    const long TOP_N_PERCENT = 12;
+
+    const long BOTTOM_N_PERCENT = 13;
+
+    const long ABOVE_AVERAGE = 14;
+
+    const long BELOW_AVERAGE = 15;
+
+    const long ABOVE_EQUAL_AVERAGE = 16;
+
+    const long BELOW_EQUAL_AVERAGE = 17;
+
+    const long ERROR = 18;
+
+    const long NO_ERROR = 19;
+
+    const long CONTAINS = 20;
+
+    const long NOT_CONTAINS = 21;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

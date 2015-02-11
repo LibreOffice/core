@@ -1,0 +1,39 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_XConditionalFormats_idl__
+#define __com_sun_star_sheet_XConditionalFormats_idl__
+
+#include <com/sun/star/sheet/XConditionalFormat.idl>
+#include <com/sun/star/sheet/XSheetCellRanges.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+module com { module sun { module star { module sheet {
+
+interface XConditionalFormats : com::sun::star::uno::XInterface
+{
+    /**
+     * adds a conditional format to the existing list
+     * returns the id of the inserted conditional format
+     */
+    long addByRange( [in] com::sun::star::sheet::XConditionalFormat conditionalFormat, [in] com::sun::star::sheet::XSheetCellRanges range);
+
+    void removeByID( [in] long ID);
+
+    sequence< XConditionalFormat > getConditionalFormats();
+
+    long getLength();
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

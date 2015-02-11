@@ -1,0 +1,32 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_XConditionalFormat_idl__
+#define __com_sun_star_sheet_XConditionalFormat_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/sheet/ConditionEntryType.idl>
+
+module com { module sun { module star { module sheet {
+
+/**
+ * Abstract base interface for any conditional format
+ *
+ * Is extended by any conditional format entry, e.g. color scale, data bar, icon set, date formats, condition formats
+ */
+interface XConditionEntry : com::sun::star::uno::XInterface
+{
+    long getType();
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

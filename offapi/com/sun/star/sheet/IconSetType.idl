@@ -1,0 +1,62 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_IconSetType_idl__
+#define __com_sun_star_sheet_IconSetType_idl__
+
+module com {  module sun {  module star {  module sheet {
+
+constants IconSetType
+{
+    const long ICONSET_3ARROWS = 0;
+
+    const long ICONSET_3ARROWS_GRAY = 1;
+
+    const long ICONSET_3FLAGS = 2;
+
+    const long ICONSET_3TRAFFICLIGHTS1 = 3;
+
+    const long ICONSET_3TRAFFICLIGHTS2 = 4;
+
+    const long ICONSET_3SIGNS = 5;
+
+    const long ICONSET_3SYMBOLS = 6;
+
+    const long ICONSET_3SYMBOLS2 = 7;
+
+    const long ICONSET_3SMILIES = 8;
+
+    const long ICONSET_3COLOR_SIMILIES = 9;
+
+    const long ICONSET_4ARROWS = 10;
+
+    const long ICONSET_4ARROWS_GRAY = 11;
+
+    const long ICONSET_4RED_TO_BLACK = 12;
+
+    const long ICONSET_4RATING = 13;
+
+    const long ICONSET_4TRAFFICLIGHTS = 14;
+
+    const long ICONSET_5ARROWS = 15;
+
+    const long ICONSET_5ARROWS_GRAY = 16;
+
+    const long ICONSET_5RATINGS = 17;
+
+    const long ICONSET_5QUARTERS = 18;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
+
