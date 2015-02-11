@@ -485,7 +485,7 @@ INetMessageEncodeQPStream_Impl::~INetMessageEncodeQPStream_Impl(void)
 
 int INetMessageEncodeQPStream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 {
-    INetRFC822Message* pMsg = GetSourceMessage();
+    INetMIMEMessage* pMsg = GetSourceMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
     if (pMsg->GetDocumentLB() == NULL) return 0;
@@ -693,7 +693,7 @@ INetMessageDecodeQPStream_Impl::~INetMessageDecodeQPStream_Impl(void)
 int INetMessageDecodeQPStream_Impl::PutMsgLine( const sal_Char* pData,
                                                 sal_uIntPtr nSize)
 {
-    INetRFC822Message* pMsg = GetTargetMessage();
+    INetMIMEMessage* pMsg = GetTargetMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
     SvOpenLockBytes* pLB = PTR_CAST(SvOpenLockBytes, pMsg->GetDocumentLB());
@@ -807,7 +807,7 @@ INetMessageEncode64Stream_Impl::~INetMessageEncode64Stream_Impl(void)
 
 int INetMessageEncode64Stream_Impl::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
 {
-    INetRFC822Message* pMsg = GetSourceMessage();
+    INetMIMEMessage* pMsg = GetSourceMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
     if (pMsg->GetDocumentLB() == NULL) return 0;
@@ -993,7 +993,7 @@ INetMessageDecode64Stream_Impl::~INetMessageDecode64Stream_Impl(void)
 int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
                                                sal_uIntPtr nSize)
 {
-    INetRFC822Message* pMsg = GetTargetMessage();
+    INetMIMEMessage* pMsg = GetTargetMessage();
     if (pMsg == NULL) return INETSTREAM_STATUS_ERROR;
 
     SvOpenLockBytes* pLB = PTR_CAST(SvOpenLockBytes, pMsg->GetDocumentLB());

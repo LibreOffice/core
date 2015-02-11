@@ -1638,7 +1638,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     else if( rKV.GetKey().equalsIgnoreAsciiCase( "expires" ) )
     {
         DateTime aDateTime( DateTime::EMPTY );
-        if( INetRFC822Message::ParseDateField( rKV.GetValue(), aDateTime ) )
+        if( INetMIMEMessage::ParseDateField( rKV.GetValue(), aDateTime ) )
         {
             aDateTime.ConvertToLocalTime();
             pDoc->GetMedium()->SetExpired_Impl( aDateTime );

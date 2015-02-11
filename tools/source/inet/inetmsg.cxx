@@ -48,7 +48,7 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
         return ch;
 }
 
-void INetRFC822Message::ListCleanup_Impl()
+void INetMIMEMessage::ListCleanup_Impl()
 {
     // Cleanup.
     sal_uIntPtr i, n = m_aHeaderList.size();
@@ -57,7 +57,7 @@ void INetRFC822Message::ListCleanup_Impl()
     m_aHeaderList.clear();
 }
 
-void INetRFC822Message::ListCopy (const INetRFC822Message &rMsg)
+void INetMIMEMessage::ListCopy (const INetMIMEMessage &rMsg)
 {
     if (!(this == &rMsg))
     {
@@ -74,7 +74,7 @@ void INetRFC822Message::ListCopy (const INetRFC822Message &rMsg)
     }
 }
 
-void INetRFC822Message::SetHeaderField_Impl (
+void INetMIMEMessage::SetHeaderField_Impl (
     INetMIME::HeaderFieldType  eType,
     const OString &rName,
     const OUString &rValue,
@@ -121,42 +121,6 @@ enum _ImplINetRFC822MessageHeaderState
     INETMSG_RFC822_LETTER_S
 };
 
-INetRFC822Message::INetRFC822Message()
-    : m_nDocSize(0)
-{
-    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        m_nIndex[i] = CONTAINER_ENTRY_NOTFOUND;
-}
-
-INetRFC822Message::INetRFC822Message (const INetRFC822Message& rMsg)
-    : m_nDocSize (rMsg.m_nDocSize),
-      m_aDocName (rMsg.m_aDocName),
-      m_xDocLB   (rMsg.m_xDocLB)
-{
-    ListCopy (rMsg);
-    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        m_nIndex[i] = rMsg.m_nIndex[i];
-}
-
-INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
-{
-    if (this != &rMsg)
-    {
-        m_nDocSize = rMsg.m_nDocSize;
-        m_aDocName = rMsg.m_aDocName;
-        m_xDocLB   = rMsg.m_xDocLB;
-        ListCopy (rMsg);
-        for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-            m_nIndex[i] = rMsg.m_nIndex[i];
-    }
-    return *this;
-}
-
-INetRFC822Message::~INetRFC822Message()
-{
-    ListCleanup_Impl();
-}
-
 /* ParseDateField and local helper functions.
  *
  * Parses a String in (implied) GMT format into class Date and tools::Time objects.
@@ -200,7 +164,7 @@ static sal_uInt16 ParseMonth(const OString& rStr, sal_uInt16& nIndex)
     return (i + 1);
 }
 
-bool INetRFC822Message::ParseDateField (
+bool INetMIMEMessage::ParseDateField (
     const OUString& rDateFieldW, DateTime& rDateTime)
 {
     OString aDateField(OUStringToOString(rDateFieldW,
@@ -310,7 +274,7 @@ bool INetRFC822Message::ParseDateField (
 }
 
 // Header Field Parser
-sal_uIntPtr INetRFC822Message::SetHeaderField (
+sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
     OString aName (rHeader.GetName());
@@ -528,8 +492,8 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
                 pData = pStop;
                 SetHeaderField_Impl (
                     INetMessageHeader( ImplINetRFC822MessageHeaderData[nIdx], rHeader.GetValue() ),
-                    m_nIndex[nIdx]);
-                nNewIndex = m_nIndex[nIdx];
+                    m_nRFC822Index[nIdx]);
+                nNewIndex = m_nRFC822Index[nIdx];
                 break;
 
             default: // INETMSG_RFC822_JUNK
@@ -539,57 +503,6 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
         }
     }
     return nNewIndex;
-}
-
-SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
-{
-    rStrm.WriteUInt32( m_nDocSize );
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
-
-    sal_uIntPtr n = m_aHeaderList.size();
-    rStrm.WriteUInt32( n );
-
-    for (sal_uIntPtr i = 0; i < n; i++)
-        WriteINetMessageHeader( rStrm, *( m_aHeaderList[ i ] ) );
-
-    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        rStrm.WriteUInt32( m_nIndex[i] );
-
-    return rStrm;
-}
-
-SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
-{
-    // Cleanup.
-    m_nDocSize = 0;
-    m_xDocLB.Clear();
-    ListCleanup_Impl();
-
-    sal_uInt32 nTemp;
-
-    // Copy.
-    rStrm.ReadUInt32( nTemp );
-    m_nDocSize = nTemp;
-    m_aDocName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
-
-    sal_uIntPtr n = 0;
-    rStrm.ReadUInt32( nTemp );
-    n = nTemp;
-
-    for (sal_uIntPtr i = 0; i < n; i++)
-    {
-        INetMessageHeader *p = new INetMessageHeader();
-        ReadINetMessageHeader( rStrm, *p );
-        m_aHeaderList.push_back( p );
-    }
-
-    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-    {
-        rStrm.ReadUInt32( nTemp );
-        m_nIndex[i] = nTemp;
-    }
-
-    return rStrm;
 }
 
 static const char* ImplINetMIMEMessageHeaderData[] =
@@ -615,18 +528,25 @@ enum _ImplINetMIMEMessageHeaderState
 };
 
 INetMIMEMessage::INetMIMEMessage()
-    : INetRFC822Message (),
-      pParent       (NULL),
-      bHeaderParsed (false)
+    : m_nDocSize(0),
+      pParent(NULL),
+      bHeaderParsed(false)
 {
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+        m_nRFC822Index[i] = CONTAINER_ENTRY_NOTFOUND;
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        m_nIndex[i] = CONTAINER_ENTRY_NOTFOUND;
+        m_nMIMEIndex[i] = CONTAINER_ENTRY_NOTFOUND;
 }
 
 INetMIMEMessage::INetMIMEMessage (const INetMIMEMessage& rMsg)
-    : INetRFC822Message (rMsg)
-    , pParent(NULL)
+    : m_nDocSize(rMsg.m_nDocSize),
+      m_aDocName(rMsg.m_aDocName),
+      m_xDocLB(rMsg.m_xDocLB),
+      pParent(NULL)
 {
+    ListCopy (rMsg);
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+        m_nRFC822Index[i] = rMsg.m_nRFC822Index[i];
     CopyImp (rMsg);
 }
 
@@ -635,9 +555,12 @@ INetMIMEMessage& INetMIMEMessage::operator= (
 {
     if (this != &rMsg)
     {
-        // Assign base.
-        INetRFC822Message::operator= (rMsg);
-
+        m_nDocSize = rMsg.m_nDocSize;
+        m_aDocName = rMsg.m_aDocName;
+        m_xDocLB   = rMsg.m_xDocLB;
+        ListCopy (rMsg);
+        for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+            m_nRFC822Index[i] = rMsg.m_nRFC822Index[i];
         CleanupImp();
         CopyImp (rMsg);
     }
@@ -646,6 +569,7 @@ INetMIMEMessage& INetMIMEMessage::operator= (
 
 INetMIMEMessage::~INetMIMEMessage()
 {
+    ListCleanup_Impl();
     CleanupImp();
 }
 
@@ -663,7 +587,7 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 
     size_t i;
     for (i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        m_nIndex[i] = rMsg.m_nIndex[i];
+        m_nMIMEIndex[i] = rMsg.m_nMIMEIndex[i];
 
     m_aBoundary = rMsg.m_aBoundary;
 
@@ -819,14 +743,13 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
                 pData = pStop;
                 SetHeaderField_Impl (
                     INetMessageHeader( ImplINetMIMEMessageHeaderData[nIdx], rHeader.GetValue()),
-                    m_nIndex[nIdx]);
-                nNewIndex = m_nIndex[nIdx];
+                    m_nMIMEIndex[nIdx]);
+                nNewIndex = m_nMIMEIndex[nIdx];
                 break;
 
             default: // INETMSG_MIME_JUNK
                 pData = pStop;
-                nNewIndex = INetRFC822Message::SetHeaderField (
-                    rHeader, nNewIndex);
+                nNewIndex = SetRFC822HeaderField(rHeader, nNewIndex);
                 break;
         }
     }
@@ -838,7 +761,7 @@ void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData[INETMSG_MIME_VERSION], rVersion,
-        m_nIndex[INETMSG_MIME_VERSION]);
+        m_nMIMEIndex[INETMSG_MIME_VERSION]);
 }
 
 void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
@@ -846,7 +769,7 @@ void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_DISPOSITION], rDisposition,
-        m_nIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
+        m_nMIMEIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
 }
 
 void INetMIMEMessage::SetContentType (const OUString& rType)
@@ -854,7 +777,7 @@ void INetMIMEMessage::SetContentType (const OUString& rType)
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_TYPE], rType,
-        m_nIndex[INETMSG_MIME_CONTENT_TYPE]);
+        m_nMIMEIndex[INETMSG_MIME_CONTENT_TYPE]);
 }
 
 void INetMIMEMessage::SetContentTransferEncoding (
@@ -863,7 +786,7 @@ void INetMIMEMessage::SetContentTransferEncoding (
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
         ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_TRANSFER_ENCODING], rEncoding,
-        m_nIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
+        m_nMIMEIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
 }
 
 OUString INetMIMEMessage::GetDefaultContentType()
@@ -959,31 +882,67 @@ bool INetMIMEMessage::AttachChild(INetMIMEMessage& rChildMsg, bool bOwner)
     return false;
 }
 
-SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
+SvStream& operator <<(SvStream& rStrm, const INetMIMEMessage& rMsg)
 {
-    INetRFC822Message::operator<< (rStrm);
+    rStrm.WriteUInt32( rMsg.m_nDocSize );
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, rMsg.m_aDocName, RTL_TEXTENCODING_UTF8);
+
+    sal_uIntPtr n = rMsg.m_aHeaderList.size();
+    rStrm.WriteUInt32( n );
+
+    for (sal_uIntPtr i = 0; i < n; i++)
+        WriteINetMessageHeader( rStrm, *( rMsg.m_aHeaderList[ i ] ) );
+
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+        rStrm.WriteUInt32( rMsg.m_nRFC822Index[i] );
 
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        rStrm.WriteUInt32( m_nIndex[i] );
+        rStrm.WriteUInt32( rMsg.m_nMIMEIndex[i] );
 
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, m_aBoundary);
-    rStrm.WriteUInt32( aChildren.size() );
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rStrm, rMsg.m_aBoundary);
+    rStrm.WriteUInt32( rMsg.aChildren.size() );
 
     return rStrm;
 }
 
-SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
+SvStream& operator >>(SvStream& rStrm, INetMIMEMessage& rMsg)
 {
-    INetRFC822Message::operator>> (rStrm);
+    // Cleanup.
+    rMsg.m_nDocSize = 0;
+    rMsg.m_xDocLB.Clear();
+    rMsg.ListCleanup_Impl();
 
     sal_uInt32 nTemp;
+
+    // Copy.
+    rStrm.ReadUInt32( nTemp );
+    rMsg.m_nDocSize = nTemp;
+    rMsg.m_aDocName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
+
+    sal_uIntPtr n = 0;
+    rStrm.ReadUInt32( nTemp );
+    n = nTemp;
+
+    for (sal_uIntPtr i = 0; i < n; i++)
+    {
+        INetMessageHeader *p = new INetMessageHeader();
+        ReadINetMessageHeader( rStrm, *p );
+        rMsg.m_aHeaderList.push_back( p );
+    }
+
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+    {
+        rStrm.ReadUInt32( nTemp );
+        rMsg.m_nRFC822Index[i] = nTemp;
+    }
+
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
     {
         rStrm.ReadUInt32( nTemp );
-        m_nIndex[i] = nTemp;
+        rMsg.m_nMIMEIndex[i] = nTemp;
     }
 
-    m_aBoundary = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
+    rMsg.m_aBoundary = read_uInt16_lenPrefixed_uInt8s_ToOString(rStrm);
 
     rStrm.ReadUInt32( nTemp );
 
