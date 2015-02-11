@@ -105,11 +105,6 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
    assert(Condition);
    pCond = (oslConditionImpl*)Condition;
 
-   if ( pCond == 0 )
-   {
-       return sal_False;
-   }
-
    nRet = pthread_mutex_lock(&pCond->m_Lock);
    if ( nRet != 0 )
    {
@@ -149,11 +144,6 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 
     pCond = (oslConditionImpl*)Condition;
 
-    if ( pCond == 0 )
-    {
-        return sal_False;
-    }
-
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     if ( nRet != 0 )
     {
@@ -185,11 +175,6 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition, const Time
     pCond = (oslConditionImpl*)Condition;
 
     SAL_INFO( "sal.osl.condition", "osl_waitCondition(" << pCond << ")" );
-
-    if ( pCond == 0 )
-    {
-        return osl_cond_result_error;
-    }
 
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     if ( nRet != 0 )
@@ -269,11 +254,6 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 
     assert(Condition);
     pCond = (oslConditionImpl*)Condition;
-
-    if ( pCond == 0 )
-    {
-        return sal_False;
-    }
 
     nRet = pthread_mutex_lock(&pCond->m_Lock);
     SAL_WARN_IF( nRet != 0, "sal.osl.condition", "osl_checkCondition(" << pCond << "): pthread_mutex_lock failed: " << strerror(nRet) );
