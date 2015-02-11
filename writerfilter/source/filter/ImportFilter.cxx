@@ -27,6 +27,7 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <unotools/mediadescriptor.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapperFactory.hxx>
@@ -89,9 +90,19 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     if( m_xSrcDoc.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance("com.sun.star.comp.Writer.DocxExport"), uno::UNO_QUERY_THROW);
-        if (!xIfc.is())
-            return sal_False;
+        uno::Reference< uno::XInterface > xIfc;
+        try {
+            xIfc.set(
+                xMSF->createInstance("com.sun.star.comp.Writer.DocxExport"),
+                uno::UNO_QUERY_THROW);
+        } catch (css::uno::RuntimeException &) {
+            throw;
+        } catch (css::uno::Exception & e) {
+            css::uno::Any a(cppu::getCaughtException());
+            throw css::lang::WrappedTargetRuntimeException(
+                "wrapped " + a.getValueTypeName() + ": " + e.Message,
+                css::uno::Reference<css::uno::XInterface>(), a);
+        }
         uno::Reference< document::XExporter > xExprtr(xIfc, uno::UNO_QUERY_THROW);
         uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
         if (!xExprtr.is() || !xFltr.is())
