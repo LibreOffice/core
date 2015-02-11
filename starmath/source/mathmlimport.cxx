@@ -27,6 +27,7 @@ one go*/
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -58,6 +59,7 @@ one go*/
 #include <xmloff/attrlist.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlmetai.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <osl/mutex.hxx>
 
 #include <memory>
@@ -76,6 +78,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 #define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
@@ -1843,106 +1847,165 @@ SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
 
 static const SvXMLTokenMapEntry aPresLayoutElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_SEMANTICS, XML_TOK_SEMANTICS },
-    { XML_NAMESPACE_MATH,   XML_MATH,      XML_TOK_MATH   },
-    { XML_NAMESPACE_MATH,   XML_MSTYLE,    XML_TOK_MSTYLE  },
-    { XML_NAMESPACE_MATH,   XML_MERROR,    XML_TOK_MERROR },
-    { XML_NAMESPACE_MATH,   XML_MPHANTOM,  XML_TOK_MPHANTOM },
-    { XML_NAMESPACE_MATH,   XML_MROW,      XML_TOK_MROW },
-    { XML_NAMESPACE_MATH,   XML_MENCLOSE,  XML_TOK_MENCLOSE },
-    { XML_NAMESPACE_MATH,   XML_MFRAC,     XML_TOK_MFRAC },
-    { XML_NAMESPACE_MATH,   XML_MSQRT,     XML_TOK_MSQRT },
-    { XML_NAMESPACE_MATH,   XML_MROOT,     XML_TOK_MROOT },
-    { XML_NAMESPACE_MATH,   XML_MSUB,      XML_TOK_MSUB },
-    { XML_NAMESPACE_MATH,   XML_MSUP,      XML_TOK_MSUP },
-    { XML_NAMESPACE_MATH,   XML_MSUBSUP,   XML_TOK_MSUBSUP },
-    { XML_NAMESPACE_MATH,   XML_MUNDER,    XML_TOK_MUNDER },
-    { XML_NAMESPACE_MATH,   XML_MOVER,     XML_TOK_MOVER },
-    { XML_NAMESPACE_MATH,   XML_MUNDEROVER,    XML_TOK_MUNDEROVER },
-    { XML_NAMESPACE_MATH,   XML_MMULTISCRIPTS, XML_TOK_MMULTISCRIPTS },
-    { XML_NAMESPACE_MATH,   XML_MTABLE,    XML_TOK_MTABLE },
-    { XML_NAMESPACE_MATH,   XML_MACTION,   XML_TOK_MACTION },
-    { XML_NAMESPACE_MATH,   XML_MFENCED,   XML_TOK_MFENCED },
-    { XML_NAMESPACE_MATH,   XML_MPADDED,   XML_TOK_MPADDED },
+    { XML_NAMESPACE_MATH,   XML_SEMANTICS, XML_TOK_SEMANTICS,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_semantics) },
+    { XML_NAMESPACE_MATH,   XML_MATH,      XML_TOK_MATH,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_math) },
+    { XML_NAMESPACE_MATH,   XML_MSTYLE,    XML_TOK_MSTYLE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mstyle) },
+    { XML_NAMESPACE_MATH,   XML_MERROR,    XML_TOK_MERROR,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_merror) },
+    { XML_NAMESPACE_MATH,   XML_MPHANTOM,  XML_TOK_MPHANTOM,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mphantom) },
+    { XML_NAMESPACE_MATH,   XML_MROW,      XML_TOK_MROW,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mrow) },
+    { XML_NAMESPACE_MATH,   XML_MENCLOSE,  XML_TOK_MENCLOSE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_menclose) },
+    { XML_NAMESPACE_MATH,   XML_MFRAC,     XML_TOK_MFRAC,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mfrac) },
+    { XML_NAMESPACE_MATH,   XML_MSQRT,     XML_TOK_MSQRT,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_msqrt) },
+    { XML_NAMESPACE_MATH,   XML_MROOT,     XML_TOK_MROOT,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mroot) },
+    { XML_NAMESPACE_MATH,   XML_MSUB,      XML_TOK_MSUB,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_msub) },
+    { XML_NAMESPACE_MATH,   XML_MSUP,      XML_TOK_MSUP,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_msup) },
+    { XML_NAMESPACE_MATH,   XML_MSUBSUP,   XML_TOK_MSUBSUP,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_msubsup) },
+    { XML_NAMESPACE_MATH,   XML_MUNDER,    XML_TOK_MUNDER,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_munder) },
+    { XML_NAMESPACE_MATH,   XML_MOVER,     XML_TOK_MOVER,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mover) },
+    { XML_NAMESPACE_MATH,   XML_MUNDEROVER,    XML_TOK_MUNDEROVER,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_munderover) },
+    { XML_NAMESPACE_MATH,   XML_MMULTISCRIPTS, XML_TOK_MMULTISCRIPTS,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mmultiscripts) },
+    { XML_NAMESPACE_MATH,   XML_MTABLE,    XML_TOK_MTABLE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mtable) },
+    { XML_NAMESPACE_MATH,   XML_MACTION,   XML_TOK_MACTION,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_maction) },
+    { XML_NAMESPACE_MATH,   XML_MFENCED,   XML_TOK_MFENCED,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mfenced) },
+    { XML_NAMESPACE_MATH,   XML_MPADDED,   XML_TOK_MPADDED,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mpadded) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aPresLayoutAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_FONTWEIGHT,      XML_TOK_FONTWEIGHT    },
-    { XML_NAMESPACE_MATH,   XML_FONTSTYLE,       XML_TOK_FONTSTYLE     },
-    { XML_NAMESPACE_MATH,   XML_FONTSIZE,        XML_TOK_FONTSIZE      },
-    { XML_NAMESPACE_MATH,   XML_FONTFAMILY,      XML_TOK_FONTFAMILY    },
-    { XML_NAMESPACE_MATH,   XML_COLOR,           XML_TOK_COLOR },
-    { XML_NAMESPACE_MATH,   XML_MATHCOLOR,       XML_TOK_MATHCOLOR },
+    { XML_NAMESPACE_MATH,   XML_FONTWEIGHT,      XML_TOK_FONTWEIGHT,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_fontweight) },
+    { XML_NAMESPACE_MATH,   XML_FONTSTYLE,       XML_TOK_FONTSTYLE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_fontstyle) },
+    { XML_NAMESPACE_MATH,   XML_FONTSIZE,        XML_TOK_FONTSIZE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_fontsize) },
+    { XML_NAMESPACE_MATH,   XML_FONTFAMILY,      XML_TOK_FONTFAMILY,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_fontfamily) },
+    { XML_NAMESPACE_MATH,   XML_COLOR,           XML_TOK_COLOR,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_color) },
+    { XML_NAMESPACE_MATH,   XML_MATHCOLOR,       XML_TOK_MATHCOLOR,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mathcolor) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aFencedAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_OPEN,       XML_TOK_OPEN },
-    { XML_NAMESPACE_MATH,   XML_CLOSE,      XML_TOK_CLOSE },
+    { XML_NAMESPACE_MATH,   XML_OPEN,       XML_TOK_OPEN,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_open) },
+    { XML_NAMESPACE_MATH,   XML_CLOSE,      XML_TOK_CLOSE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_close) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_STRETCHY,      XML_TOK_STRETCHY },
+    { XML_NAMESPACE_MATH,   XML_STRETCHY,      XML_TOK_STRETCHY,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_stretchy) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aAnnotationAttrTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_ENCODING,      XML_TOK_ENCODING },
+    { XML_NAMESPACE_MATH,   XML_ENCODING,      XML_TOK_ENCODING,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_encoding) },
     XML_TOKEN_MAP_END
 };
 
 
 static const SvXMLTokenMapEntry aPresElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_ANNOTATION,    XML_TOK_ANNOTATION },
-    { XML_NAMESPACE_MATH,   XML_MI,    XML_TOK_MI },
-    { XML_NAMESPACE_MATH,   XML_MN,    XML_TOK_MN },
-    { XML_NAMESPACE_MATH,   XML_MO,    XML_TOK_MO },
-    { XML_NAMESPACE_MATH,   XML_MTEXT, XML_TOK_MTEXT },
-    { XML_NAMESPACE_MATH,   XML_MSPACE,XML_TOK_MSPACE },
-    { XML_NAMESPACE_MATH,   XML_MS,    XML_TOK_MS },
-    { XML_NAMESPACE_MATH,   XML_MALIGNGROUP,   XML_TOK_MALIGNGROUP },
+    { XML_NAMESPACE_MATH,   XML_ANNOTATION,    XML_TOK_ANNOTATION,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_annotation) },
+    { XML_NAMESPACE_MATH,   XML_MI,    XML_TOK_MI,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mi) },
+    { XML_NAMESPACE_MATH,   XML_MN,    XML_TOK_MN,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mn) },
+    { XML_NAMESPACE_MATH,   XML_MO,    XML_TOK_MO,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mo) },
+    { XML_NAMESPACE_MATH,   XML_MTEXT, XML_TOK_MTEXT,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mtext) },
+    { XML_NAMESPACE_MATH,   XML_MSPACE,XML_TOK_MSPACE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mspace) },
+    { XML_NAMESPACE_MATH,   XML_MS,    XML_TOK_MS,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_ms) },
+    { XML_NAMESPACE_MATH,   XML_MALIGNGROUP,   XML_TOK_MALIGNGROUP,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_maligngroup) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aPresScriptEmptyElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_MPRESCRIPTS,   XML_TOK_MPRESCRIPTS },
-    { XML_NAMESPACE_MATH,   XML_NONE,  XML_TOK_NONE },
+    { XML_NAMESPACE_MATH,   XML_MPRESCRIPTS,   XML_TOK_MPRESCRIPTS,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mprescripts) },
+    { XML_NAMESPACE_MATH,   XML_NONE,  XML_TOK_NONE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_none) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aPresTableElemTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_MTR,       XML_TOK_MTR },
-    { XML_NAMESPACE_MATH,   XML_MTD,       XML_TOK_MTD },
+    { XML_NAMESPACE_MATH,   XML_MTR,       XML_TOK_MTR,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mtr) },
+    { XML_NAMESPACE_MATH,   XML_MTD,       XML_TOK_MTD,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_mtd) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aColorTokenMap[] =
 {
-    { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK},
-    { XML_NAMESPACE_MATH,   XML_WHITE,        TWHITE},
-    { XML_NAMESPACE_MATH,   XML_RED,          TRED},
-    { XML_NAMESPACE_MATH,   XML_GREEN,        TGREEN},
-    { XML_NAMESPACE_MATH,   XML_BLUE,         TBLUE},
-    { XML_NAMESPACE_MATH,   XML_AQUA,         TAQUA},
-    { XML_NAMESPACE_MATH,   XML_FUCHSIA,      TFUCHSIA},
-    { XML_NAMESPACE_MATH,   XML_YELLOW,       TYELLOW},
-    { XML_NAMESPACE_MATH,   XML_NAVY,         TNAVY},
-    { XML_NAMESPACE_MATH,   XML_TEAL,         TTEAL},
-    { XML_NAMESPACE_MATH,   XML_MAROON,       TMAROON},
-    { XML_NAMESPACE_MATH,   XML_PURPLE,       TPURPLE},
-    { XML_NAMESPACE_MATH,   XML_OLIVE,        TOLIVE},
-    { XML_NAMESPACE_MATH,   XML_GRAY,         TGRAY},
-    { XML_NAMESPACE_MATH,   XML_SILVER,       TSILVER},
-    { XML_NAMESPACE_MATH,   XML_LIME,         TLIME},
+    { XML_NAMESPACE_MATH,   XML_BLACK,        TBLACK,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_black) },
+    { XML_NAMESPACE_MATH,   XML_WHITE,        TWHITE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_white) },
+    { XML_NAMESPACE_MATH,   XML_RED,          TRED,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_red) },
+    { XML_NAMESPACE_MATH,   XML_GREEN,        TGREEN,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_green) },
+    { XML_NAMESPACE_MATH,   XML_BLUE,         TBLUE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_blue) },
+    { XML_NAMESPACE_MATH,   XML_AQUA,         TAQUA,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_aqua) },
+    { XML_NAMESPACE_MATH,   XML_FUCHSIA,      TFUCHSIA,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_fuchsia) },
+    { XML_NAMESPACE_MATH,   XML_YELLOW,       TYELLOW,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_yellow) },
+    { XML_NAMESPACE_MATH,   XML_NAVY,         TNAVY,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_navy) },
+    { XML_NAMESPACE_MATH,   XML_TEAL,         TTEAL,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_teal) },
+    { XML_NAMESPACE_MATH,   XML_MAROON,       TMAROON,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_maroon) },
+    { XML_NAMESPACE_MATH,   XML_PURPLE,       TPURPLE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_purple) },
+    { XML_NAMESPACE_MATH,   XML_OLIVE,        TOLIVE,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_olive) },
+    { XML_NAMESPACE_MATH,   XML_GRAY,         TGRAY,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_gray) },
+    { XML_NAMESPACE_MATH,   XML_SILVER,       TSILVER,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_silver) },
+    { XML_NAMESPACE_MATH,   XML_LIME,         TLIME,
+        (NAMESPACE | XML_NAMESPACE_MATH | XML_lime) },
     XML_TOKEN_MAP_END
 };
 

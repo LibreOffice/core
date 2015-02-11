@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_external,sm,boost_headers))
 $(eval $(call gb_Library_use_custom_headers,sm,\
 	officecfg/registry \
 	oox/generated \
+	xmloff/generated \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,sm))
