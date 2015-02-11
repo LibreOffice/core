@@ -26,6 +26,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -38,6 +39,7 @@
 #include <com/sun/star/xforms/XDataTypeRepository.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
@@ -55,30 +57,31 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::beans::XPropertySetInfo;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 
 
 static const SvXMLTokenMapEntry aAttributes[] =
 {
-    TOKEN_MAP_ENTRY( NONE, BASE ),
+    TOKEN_MAP_ENTRY( NONE, BASE, base ),
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aChildren[] =
 {
-    TOKEN_MAP_ENTRY( XSD, LENGTH         ),
-    TOKEN_MAP_ENTRY( XSD, MINLENGTH      ),
-    TOKEN_MAP_ENTRY( XSD, MAXLENGTH      ),
-    TOKEN_MAP_ENTRY( XSD, MININCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MINEXCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MAXINCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, MAXEXCLUSIVE   ),
-    TOKEN_MAP_ENTRY( XSD, PATTERN        ),
+    TOKEN_MAP_ENTRY( XSD, LENGTH, length ),
+    TOKEN_MAP_ENTRY( XSD, MINLENGTH, minLength ),
+    TOKEN_MAP_ENTRY( XSD, MAXLENGTH, maxLength ),
+    TOKEN_MAP_ENTRY( XSD, MININCLUSIVE, minInclusive ),
+    TOKEN_MAP_ENTRY( XSD, MINEXCLUSIVE, minExclusive ),
+    TOKEN_MAP_ENTRY( XSD, MAXINCLUSIVE, maxInclusive ),
+    TOKEN_MAP_ENTRY( XSD, MAXEXCLUSIVE, maxExclusive ),
+    TOKEN_MAP_ENTRY( XSD, PATTERN, pattern),
     // ??? XML_ENUMERATION
-    TOKEN_MAP_ENTRY( XSD, WHITESPACE     ),
-    TOKEN_MAP_ENTRY( XSD, TOTALDIGITS    ),
-    TOKEN_MAP_ENTRY( XSD, FRACTIONDIGITS ),
+    TOKEN_MAP_ENTRY( XSD, WHITESPACE, whiteSpace ),
+    TOKEN_MAP_ENTRY( XSD, TOTALDIGITS, totalDigits ),
+    TOKEN_MAP_ENTRY( XSD, FRACTIONDIGITS, fractionDigits ),
     XML_TOKEN_MAP_END
 };
 

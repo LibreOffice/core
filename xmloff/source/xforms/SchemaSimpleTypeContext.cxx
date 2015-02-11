@@ -26,11 +26,13 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <osl/diagnose.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
@@ -38,19 +40,20 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::beans::XPropertySet;
 using com::sun::star::xforms::XDataTypeRepository;
 using namespace xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 
 
 static const SvXMLTokenMapEntry aAttributes[] =
 {
-    TOKEN_MAP_ENTRY( NONE, NAME ),
+    TOKEN_MAP_ENTRY( NONE, NAME, name ),
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aChildren[] =
 {
-    TOKEN_MAP_ENTRY( XSD, RESTRICTION ),
+    TOKEN_MAP_ENTRY( XSD, RESTRICTION, restriction ),
     XML_TOKEN_MAP_END
 };
 

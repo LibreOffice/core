@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
 
@@ -37,6 +38,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlerror.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
 
 
 using com::sun::star::uno::Reference;
@@ -52,11 +54,12 @@ using xmloff::token::IsXMLToken;
 using xmloff::token::XML_INSTANCE;
 using xmloff::token::XML_SRC;
 using xmloff::token::XML_ID;
+using css::xml::sax::FastToken::NAMESPACE;
 
 static const SvXMLTokenMapEntry aAttributes[] =
 {
-    TOKEN_MAP_ENTRY( NONE, SRC ),
-    TOKEN_MAP_ENTRY( NONE, ID ),
+    TOKEN_MAP_ENTRY( NONE, SRC, src ),
+    TOKEN_MAP_ENTRY( NONE, ID, id ),
     XML_TOKEN_MAP_END
 };
 

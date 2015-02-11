@@ -28,11 +28,13 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
@@ -44,27 +46,28 @@ using com::sun::star::xforms::XModel2;
 
 using namespace com::sun::star::uno;
 using namespace xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 
 
 static const struct SvXMLTokenMapEntry aAttributeMap[] =
 {
-    TOKEN_MAP_ENTRY( NONE, ID ),
-    TOKEN_MAP_ENTRY( NONE, BIND ),
-    TOKEN_MAP_ENTRY( NONE, REF ),
-    TOKEN_MAP_ENTRY( NONE, ACTION ),
-    TOKEN_MAP_ENTRY( NONE, METHOD ),
-    TOKEN_MAP_ENTRY( NONE, VERSION ),
-    TOKEN_MAP_ENTRY( NONE, INDENT ),
-    TOKEN_MAP_ENTRY( NONE, MEDIATYPE ),
-    TOKEN_MAP_ENTRY( NONE, ENCODING ),
-    TOKEN_MAP_ENTRY( NONE, OMIT_XML_DECLARATION ),
-    TOKEN_MAP_ENTRY( NONE, STANDALONE ),
-    TOKEN_MAP_ENTRY( NONE, CDATA_SECTION_ELEMENTS ),
-    TOKEN_MAP_ENTRY( NONE, REPLACE ),
-    TOKEN_MAP_ENTRY( NONE, SEPARATOR ),
-    TOKEN_MAP_ENTRY( NONE, INCLUDENAMESPACEPREFIXES ),
+    TOKEN_MAP_ENTRY( NONE, ID, id ),
+    TOKEN_MAP_ENTRY( NONE, BIND, bind ),
+    TOKEN_MAP_ENTRY( NONE, REF, ref ),
+    TOKEN_MAP_ENTRY( NONE, ACTION, action ),
+    TOKEN_MAP_ENTRY( NONE, METHOD, method ),
+    TOKEN_MAP_ENTRY( NONE, VERSION, version ),
+    TOKEN_MAP_ENTRY( NONE, INDENT, indent ),
+    TOKEN_MAP_ENTRY( NONE, MEDIATYPE, mediatype ),
+    TOKEN_MAP_ENTRY( NONE, ENCODING, encoding ),
+    TOKEN_MAP_ENTRY( NONE, OMIT_XML_DECLARATION, omit_xml_declaration ),
+    TOKEN_MAP_ENTRY( NONE, STANDALONE, standalone ),
+    TOKEN_MAP_ENTRY( NONE, CDATA_SECTION_ELEMENTS, cdata_section_elements ),
+    TOKEN_MAP_ENTRY( NONE, REPLACE, replace ),
+    TOKEN_MAP_ENTRY( NONE, SEPARATOR, separator ),
+    TOKEN_MAP_ENTRY( NONE, INCLUDENAMESPACEPREFIXES, includenamespaceprefixes ),
     XML_TOKEN_MAP_END
 };
 

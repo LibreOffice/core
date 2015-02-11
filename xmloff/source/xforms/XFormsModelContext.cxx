@@ -31,6 +31,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <osl/diagnose.h>
 
@@ -38,6 +39,7 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using com::sun::star::xml::sax::XAttributeList;
@@ -45,23 +47,24 @@ using com::sun::star::beans::XPropertySet;
 using com::sun::star::util::XUpdatable;
 using namespace com::sun::star::uno;
 using namespace xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 
 
 static const SvXMLTokenMapEntry aAttributes[] =
 {
-    TOKEN_MAP_ENTRY( NONE, ID ),
-    TOKEN_MAP_ENTRY( NONE, SCHEMA ),
+    TOKEN_MAP_ENTRY( NONE, ID, id ),
+    TOKEN_MAP_ENTRY( NONE, SCHEMA, schema ),
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aChildren[] =
 {
-    TOKEN_MAP_ENTRY( XFORMS, INSTANCE ),
-    TOKEN_MAP_ENTRY( XFORMS, BIND ),
-    TOKEN_MAP_ENTRY( XFORMS, SUBMISSION ),
-    TOKEN_MAP_ENTRY( XSD,    SCHEMA ),
+    TOKEN_MAP_ENTRY( XFORMS, INSTANCE, instance ),
+    TOKEN_MAP_ENTRY( XFORMS, BIND, bind ),
+    TOKEN_MAP_ENTRY( XFORMS, SUBMISSION, submission ),
+    TOKEN_MAP_ENTRY( XSD,    SCHEMA, schema ),
     XML_TOKEN_MAP_END
 };
 

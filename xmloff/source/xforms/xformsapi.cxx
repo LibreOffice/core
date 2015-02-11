@@ -30,6 +30,7 @@
 #include <com/sun/star/xforms/XModel2.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
@@ -39,6 +40,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
+#include <xmloff/token/tokens.hxx>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
@@ -58,6 +60,7 @@ using com::sun::star::uno::Exception;
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
 
 Reference<XModel2> xforms_createXFormsModel()
 {
@@ -172,21 +175,21 @@ void xforms_setValue( Reference<XPropertySet>& xPropertySet,
     xPropertySet->setPropertyValue( rName, rAny );
 }
 
-#define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
+#define TOKEN_MAP_ENTRY(NSPACE,TOKEN,FASTTOKEN) { XML_NAMESPACE_##NSPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN, (NAMESPACE | XML_NAMESPACE_##NSPACE | xmloff::XML_##FASTTOKEN) }
 static const SvXMLTokenMapEntry aTypes[] =
 {
-    TOKEN_MAP_ENTRY( XSD, STRING  ),
-    TOKEN_MAP_ENTRY( XSD, DECIMAL ),
-    TOKEN_MAP_ENTRY( XSD, DOUBLE ),
-    TOKEN_MAP_ENTRY( XSD, FLOAT ),
-    TOKEN_MAP_ENTRY( XSD, BOOLEAN ),
-    TOKEN_MAP_ENTRY( XSD, ANYURI ),
-    TOKEN_MAP_ENTRY( XSD, DATETIME_XSD ),
-    TOKEN_MAP_ENTRY( XSD, DATE ),
-    TOKEN_MAP_ENTRY( XSD, TIME ),
-    TOKEN_MAP_ENTRY( XSD, YEAR ),
-    TOKEN_MAP_ENTRY( XSD, MONTH ),
-    TOKEN_MAP_ENTRY( XSD, DAY ),
+    TOKEN_MAP_ENTRY( XSD, STRING, string ),
+    TOKEN_MAP_ENTRY( XSD, DECIMAL, decimal ),
+    TOKEN_MAP_ENTRY( XSD, DOUBLE, double ),
+    TOKEN_MAP_ENTRY( XSD, FLOAT, float ),
+    TOKEN_MAP_ENTRY( XSD, BOOLEAN, boolean ),
+    TOKEN_MAP_ENTRY( XSD, ANYURI, anyURI ),
+    TOKEN_MAP_ENTRY( XSD, DATETIME_XSD, dateTime ),
+    TOKEN_MAP_ENTRY( XSD, DATE, date ),
+    TOKEN_MAP_ENTRY( XSD, TIME, time ),
+    TOKEN_MAP_ENTRY( XSD, YEAR, year ),
+    TOKEN_MAP_ENTRY( XSD, MONTH, month ),
+    TOKEN_MAP_ENTRY( XSD, DAY, day ),
     XML_TOKEN_MAP_END
 };
 

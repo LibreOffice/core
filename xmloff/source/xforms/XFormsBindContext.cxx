@@ -28,9 +28,11 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xforms/XModel2.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
@@ -44,20 +46,21 @@ using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xforms::XModel2;
 using namespace xmloff::token;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 
 
 static const struct SvXMLTokenMapEntry aAttributeMap[] =
 {
-    TOKEN_MAP_ENTRY( NONE, NODESET ),
-    TOKEN_MAP_ENTRY( NONE, ID ),
-    TOKEN_MAP_ENTRY( NONE, READONLY ),
-    TOKEN_MAP_ENTRY( NONE, RELEVANT ),
-    TOKEN_MAP_ENTRY( NONE, REQUIRED ),
-    TOKEN_MAP_ENTRY( NONE, CONSTRAINT ),
-    TOKEN_MAP_ENTRY( NONE, CALCULATE ),
-    TOKEN_MAP_ENTRY( NONE, TYPE ),
+    TOKEN_MAP_ENTRY( NONE, NODESET, nodeset ),
+    TOKEN_MAP_ENTRY( NONE, ID, id ),
+    TOKEN_MAP_ENTRY( NONE, READONLY, readonly ),
+    TOKEN_MAP_ENTRY( NONE, RELEVANT, relevant ),
+    TOKEN_MAP_ENTRY( NONE, REQUIRED, required ),
+    TOKEN_MAP_ENTRY( NONE, CONSTRAINT, constraint ),
+    TOKEN_MAP_ENTRY( NONE, CALCULATE, calculate ),
+    TOKEN_MAP_ENTRY( NONE, TYPE, type ),
     XML_TOKEN_MAP_END
 };
 

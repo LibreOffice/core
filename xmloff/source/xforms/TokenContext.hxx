@@ -29,7 +29,7 @@ namespace com { namespace sun { namespace star {
 
 class SvXMLImport;
 
-#define TOKEN_MAP_ENTRY(NAMESPACE,TOKEN) { XML_NAMESPACE_##NAMESPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN }
+#define TOKEN_MAP_ENTRY(NSPACE,TOKEN,FASTTOKEN) { XML_NAMESPACE_##NSPACE, xmloff::token::XML_##TOKEN, xmloff::token::XML_##TOKEN, (NAMESPACE | XML_NAMESPACE_##NSPACE | xmloff::XML_##FASTTOKEN) }
 
 extern struct SvXMLTokenMapEntry aEmptyMap[1];
 
