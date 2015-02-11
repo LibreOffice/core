@@ -133,7 +133,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         const SfxPoolItem* pItem;
 
         sal_uInt16 const aSavIds[3] = { RES_PAGEDESC, RES_BREAK, RES_PARATR_NUMRULE };
-        for (sal_uInt16 n = 0; n < 3; ++n)
+        for (int n = 0; n < 3; ++n)
         {
             if (SfxItemState::SET == pAttrSetOfNode->GetItemState(aSavIds[n], false, &pItem))
             {
@@ -547,13 +547,12 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SwAttrSet aOld( GetAttrPool(), rSet.GetRanges() ),
             aNew( GetAttrPool(), rSet.GetRanges() );
     SfxItemIter aIter( rSet );
-    sal_uInt16 nWhich;
     const SfxPoolItem* pItem = aIter.GetCurItem();
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
     while( true )
     {
         bool bCheckSdrDflt = false;
-        nWhich = pItem->Which();
+        const sal_uInt16 nWhich = pItem->Which();
         aOld.Put( GetAttrPool().GetDefaultItem( nWhich ) );
         GetAttrPool().SetPoolDefaultItem( *pItem );
         aNew.Put( GetAttrPool().GetDefaultItem( nWhich ) );
@@ -1109,7 +1108,7 @@ SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
     // It's no autoformat, default format or collection format,
     // then search for it.
     if( !rFmt.IsAuto() || !rFmt.GetRegisteredIn() )
-        for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
+        for( size_t n = 0; n < rFmtArr.GetFmtCount(); ++n )
         {
             // Does the Doc already contain the template?
             if( rFmtArr.GetFmt(n)->GetName()==rFmt.GetName() )
@@ -1251,11 +1250,10 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
                         FNCopyFmt fnCopyFmt,
                         SwFmt& rDfltFmt )
 {
-    sal_uInt16 nSrc;
     SwFmt* pSrc, *pDest;
 
     // 1st step: Create all formats (skip the 0th - it's the default one)
-    for( nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
+    for( size_t nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
         pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
         if( pSrc->IsDefault() || pSrc->IsAuto() )
@@ -1272,7 +1270,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
     }
 
     // 2nd step: Copy all attributes, set the right parents
-    for( nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
+    for( size_t nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
         pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
         if( pSrc->IsDefault() || pSrc->IsAuto() )
@@ -1533,8 +1531,6 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     CopyFmtArr( *rSource.mpTxtFmtCollTbl, *mpTxtFmtCollTbl,
                 &SwDoc::_MakeTxtFmtColl, *mpDfltTxtFmtColl );
 
-    sal_uInt16 nCnt;
-
     //To-Do:
     //  a) in rtf export don't export our hideous pgdsctbl
     //  extension to rtf anymore
@@ -1545,7 +1541,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     if (bIncludePageStyles)
     {
         // and now the page templates
-        nCnt = rSource.maPageDescs.size();
+        SwPageDescs::size_type nCnt = rSource.maPageDescs.size();
         if( nCnt )
         {
             // a different Doc -> Number formatter needs to be merged
@@ -1570,11 +1566,11 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
     }
 
     // then there are the numbering templates
-    nCnt = rSource.GetNumRuleTbl().size();
+    const SwPageDescs::size_type nCnt = rSource.GetNumRuleTbl().size();
     if( nCnt )
     {
         const SwNumRuleTbl& rArr = rSource.GetNumRuleTbl();
-        for( sal_uInt16 n = 0; n < nCnt; ++n )
+        for( SwPageDescs::size_type n = 0; n < nCnt; ++n )
         {
             const SwNumRule& rR = *rArr[ n ];
             SwNumRule* pNew = FindNumRulePtr( rR.GetName());
@@ -1609,7 +1605,7 @@ SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
                              const OUString& rName ) const
 {
     SwFmt* pFnd = 0;
-    for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
+    for( size_t n = 0; n < rFmtArr.GetFmtCount(); ++n )
     {
         // Does the Doc already contain the template?
         if( rFmtArr.GetFmt(n)->GetName() == rName )
@@ -1633,8 +1629,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
     }
 
     const SvxTabStopItem& rTabItem = static_cast<const SvxTabStopItem&>(GetDefault( RES_PARATR_TABSTOP ));
-    sal_uInt16 nDefDist = rTabItem.Count() ?
-        static_cast<sal_uInt16>(rTabItem[0].GetTabPos()) : 1134;
+    const sal_Int32 nDefDist = rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134;
     const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
     SwNodeIndex aIdx( rStt.nNode );
     while( aIdx <= rEnd.nNode )
@@ -1956,11 +1951,8 @@ namespace docfunc
         const SwTxtFmtColls* pTxtFmtColls( rDoc.GetTxtFmtColls() );
         if ( pTxtFmtColls )
         {
-            const sal_uInt16 nCount = pTxtFmtColls->size();
-            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            for ( auto pTxtFmtColl : *pTxtFmtColls )
             {
-                SwTxtFmtColl* pTxtFmtColl = (*pTxtFmtColls)[i];
-
                 if ( pTxtFmtColl->IsDefault() ||
                     ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
                 {
