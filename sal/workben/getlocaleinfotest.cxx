@@ -33,7 +33,7 @@ int _cdecl main( int argc, char * argv[] )
     if ( rtlLocale )
         rtlTextEnc = osl_getTextEncodingFromLocale( rtlLocale );
 
-    return(0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

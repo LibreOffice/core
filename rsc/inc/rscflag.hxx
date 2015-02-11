@@ -71,11 +71,11 @@ public:
                                Atom nConstantId );
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool ) SAL_OVERRIDE;
-    sal_uInt32      Size() SAL_OVERRIDE { return( pRefClass->Size() ); };
+    sal_uInt32      Size() SAL_OVERRIDE { return pRefClass->Size(); }
 
                     // Eine Zuweisung an eine Variable
     bool            IsDefault( const RSCINST & rInst ) SAL_OVERRIDE {
-                        return( pRefClass->IsDefault( rInst, nConstId ) );
+                        return pRefClass->IsDefault( rInst, nConstId );
                     };
                     // Als Default setzen
     bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ) SAL_OVERRIDE
@@ -86,15 +86,14 @@ public:
     ERRTYPE         SetBool( const RSCINST & rInst, bool bValue ) SAL_OVERRIDE
                         {
                             if( bValue )
-                                return( pRefClass->SetConst( rInst, nConstId, sal_Int32(bValue) ) );
+                                return pRefClass->SetConst( rInst, nConstId, sal_Int32(bValue) );
                             else
-                                return( pRefClass->
-                                        SetNotConst( rInst, nConstId ) );
+                                return pRefClass->SetNotConst( rInst, nConstId );
                         }
     ERRTYPE         GetBool( const RSCINST & rInst, bool * pB ) SAL_OVERRIDE
                         {
                             *pB = pRefClass->IsSet( rInst, nConstId );
-                            return( ERR_OK );
+                            return ERR_OK;
                         }
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) SAL_OVERRIDE;

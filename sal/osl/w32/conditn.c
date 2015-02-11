@@ -110,13 +110,13 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
                 break;
 
             case WAIT_OBJECT_0:
-                return (osl_cond_result_ok);
+                return osl_cond_result_ok;
 
             case WAIT_TIMEOUT:
-                return (osl_cond_result_timeout);
+                return osl_cond_result_timeout;
 
             default:
-                return (osl_cond_result_error);
+                return osl_cond_result_error;
         }
     }
 }

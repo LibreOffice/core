@@ -94,17 +94,17 @@ int __cdecl main( int argc, char * argv[] )
         if (!Options::checkArgument(args, argv[i], strlen(argv[i])))
         {
             options.printUsage();
-            return (1);
+            return 1;
         }
     }
     if (!options.initOptions(args))
     {
-        return (1);
+        return 1;
     }
     if (args.size() < 3)
     {
         options.printUsage();
-        return (1);
+        return 1;
     }
 
     Registry reg;
@@ -115,7 +115,7 @@ int __cdecl main( int argc, char * argv[] )
         {
             if (options.isVerbose())
                 fprintf(stderr, "open registry \"%s\" failed\n", args[0].c_str());
-            return (-1);
+            return -1;
         }
     }
 
@@ -124,7 +124,7 @@ int __cdecl main( int argc, char * argv[] )
     {
         if (options.isVerbose())
             fprintf(stderr, "open root key of registry \"%s\" failed\n", args[0].c_str());
-        return (-4);
+        return -4;
     }
 
     OUString mergeKeyName( OUString::createFromAscii(args[1].c_str()) );
@@ -145,7 +145,7 @@ int __cdecl main( int argc, char * argv[] )
                 if (options.isVerbose())
                     fprintf(stderr, "ERROR: merging registry \"%s\" under key \"%s\" in registry \"%s\" failed.\n",
                             args[i].c_str(), args[1].c_str(), args[0].c_str());
-                return (-2);
+                return -2;
             }
         }
         else
@@ -161,10 +161,10 @@ int __cdecl main( int argc, char * argv[] )
     {
         if (options.isVerbose())
             fprintf(stderr, "closing registry \"%s\" failed\n", args[0].c_str());
-        return (-5);
+        return -5;
     }
 
-    return(0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

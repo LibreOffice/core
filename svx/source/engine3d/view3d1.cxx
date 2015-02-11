@@ -148,7 +148,7 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
     }
 
     // return ItemSet
-    return(aSet);
+    return aSet;
 }
 
 void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, bool bReplaceAll)

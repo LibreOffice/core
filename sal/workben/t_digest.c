@@ -151,7 +151,7 @@ static char *pt (unsigned char *md, int length)
     for (i=0; i<length; i++)
         sprintf(&(buf[i*2]),"%02x",md[i]);
 
-    return(buf);
+    return buf;
 }
 
 int SAL_CALL main (void)
@@ -360,7 +360,7 @@ int SAL_CALL main (void)
     else
         printf("test (PBKDF2) %d ok\n", 1);
 
-    return (err);
+    return err;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -260,7 +260,7 @@ SwGlossaries* GetGlossaries()
 {
     if (!pGlossaries)
         pGlossaries = new SwGlossaries;
-    return (pGlossaries);
+    return pGlossaries;
 }
 
 bool HasGlossaryList()

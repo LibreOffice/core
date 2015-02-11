@@ -169,7 +169,7 @@ public class QuerySummary extends QueryMetaData
                 sReturn += sSeparator;
             }
         }
-        return (sReturn);
+        return sReturn;
     }
 
     private String combinePartString(int _InitResID, String[][] _FieldNames, int _AlternativeResID, int _BaseStringID, String[] _ReplaceTags)

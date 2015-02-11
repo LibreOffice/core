@@ -180,7 +180,7 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
     if( mpGallery && mpGallery->HasTheme( rName ) )
         bRet = ( mbHiddenThemes || !mpGallery->GetThemeInfo( rName )->IsHidden() );
 
-    return( bRet );
+    return bRet;
 }
 
 

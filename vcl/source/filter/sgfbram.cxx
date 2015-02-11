@@ -358,7 +358,7 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
         } // while(nNext)
     }
     if (rInp.GetError()) bRet=false;
-    return(bRet);
+    return bRet;
 }
 
 // for StarDraw embedded SGF vector
@@ -474,7 +474,7 @@ bool SgfVectFilter(SvStream& rInp, GDIMetaFile& rMtf)
             }
         } // while(nNext)
     }
-    return(bRet);
+    return bRet;
 }
 
 /*************************************************************************

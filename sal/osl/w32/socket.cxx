@@ -365,7 +365,7 @@ static sal_Bool __osl_querySocketDialupImpl (void)
     }
 
     LeaveCriticalSection (&pDialupImpl->m_hMutex);
-    return (result);
+    return result;
 }
 
 /*
@@ -398,7 +398,7 @@ static sal_Bool __osl_attemptSocketDialupImpl (void)
     }
 
     LeaveCriticalSection (&pDialupImpl->m_hMutex);
-    return (result);
+    return result;
 }
 
 /*****************************************************************************/
@@ -560,7 +560,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2
                 if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
                     (pInetAddr1->sin_port == pInetAddr2->sin_port))
-                    return (sal_True);
+                    return sal_True;
             }
 
             default:
@@ -570,7 +570,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr(oslSocketAddr Addr1, oslSocketAddr Addr2
         }
     }
 
-    return (sal_False);
+    return sal_False;
 }
 
 /*****************************************************************************/

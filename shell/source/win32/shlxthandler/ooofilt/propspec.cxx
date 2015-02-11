@@ -104,7 +104,7 @@ CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) :
 }
 inline void * operator new( size_t /*size*/, void * p )
 {
-    return( p );
+    return p;
 }
 //+-------------------------------------------------------------------------
 //  Member:     CFullPropSpec::operator=, public
@@ -158,12 +158,12 @@ BOOL CFullPropSpec::SetProperty( WCHAR const * wcsProperty )
         memcpy( _psProperty.lpwstr,
                 wcsProperty,
                 len );
-        return( TRUE );
+        return TRUE;
     }
     else
     {
         _psProperty.lpwstr = 0;
-        return( FALSE );
+        return FALSE;
     }
 }
 int CFullPropSpec::operator==( CFullPropSpec const & prop ) const
@@ -173,7 +173,7 @@ int CFullPropSpec::operator==( CFullPropSpec const & prop ) const
                  sizeof( _guidPropSet ) ) != 0 ||
          prop._psProperty.ulKind != _psProperty.ulKind )
     {
-        return( 0 );
+        return 0;
     }
     switch( _psProperty.ulKind )
     {
@@ -184,16 +184,16 @@ int CFullPropSpec::operator==( CFullPropSpec const & prop ) const
         return( GetPropertyPropid() == prop.GetPropertyPropid() );
         break;
     default:
-        return( 0 );
+        return 0;
         break;
     }
 }
 int CFullPropSpec::operator!=( CFullPropSpec const & prop ) const
 {
     if (*this == prop)
-        return( 0 );
+        return 0;
     else
-        return( 1 );
+        return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

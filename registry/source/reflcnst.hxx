@@ -212,7 +212,7 @@ inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const sal_Char* v)
 
     memcpy(buffer, v, size);
 
-    return (size);
+    return size;
 }
 
 inline sal_uInt32 readUtf8(const sal_uInt8* buffer, sal_Char* v, sal_uInt32 maxSize)
@@ -227,7 +227,7 @@ inline sal_uInt32 readUtf8(const sal_uInt8* buffer, sal_Char* v, sal_uInt32 maxS
 
     if (size == maxSize) v[size - 1] = '\0';
 
-    return (size);
+    return size;
 }
 
 

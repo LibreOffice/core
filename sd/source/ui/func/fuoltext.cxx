@@ -111,7 +111,7 @@ bool FuOutlineText::MouseButtonDown(const MouseEvent& rMEvt)
         bReturn = FuOutline::MouseButtonDown(rMEvt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
@@ -123,7 +123,7 @@ bool FuOutlineText::MouseMove(const MouseEvent& rMEvt)
         bReturn = FuOutline::MouseMove(rMEvt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
@@ -171,7 +171,7 @@ bool FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
     if( !bReturn )
         bReturn = FuOutline::MouseButtonUp(rMEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 /**
@@ -203,7 +203,7 @@ bool FuOutlineText::KeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 void FuOutlineText::UpdateForKeyPress (const KeyEvent& rEvent)

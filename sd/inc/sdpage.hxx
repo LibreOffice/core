@@ -292,7 +292,7 @@ public:
     void    SetBackgroundFullSize( bool bIn );
     bool    IsBackgroundFullSize() const { return mbBackgroundFullSize; }
 
-    rtl_TextEncoding GetCharSet() { return(meCharSet); }
+    rtl_TextEncoding GetCharSet() { return meCharSet; }
 
     void    SetPaperBin(sal_uInt16 nBin) { mnPaperBin = nBin; }
     sal_uInt16  GetPaperBin() const { return mnPaperBin; }

@@ -2120,7 +2120,7 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
      version C.
      */
     pDataStream->Seek( nOldPos );
-    return(bRet);
+    return bRet;
 }
 
 bool SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula)

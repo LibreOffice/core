@@ -173,7 +173,7 @@ IMPL_LINK(CellLineStyleControl, VSSelectHdl, void *, pControl)
         mrCellAppearancePropertyPanel.EndCellLineStylePopupMode();
     }
 
-    return(0L);
+    return 0L;
 }
 
 IMPL_LINK(CellLineStyleControl, PBClickHdl, PushButton *, pPBtn)

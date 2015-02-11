@@ -343,7 +343,7 @@ IMPL_LINK(ParaPropertyPanel, ClickIndent_IncDec_Hdl_Impl, ToolBox *, pControl)
                 SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
@@ -368,7 +368,7 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
             GetBindings()->GetDispatcher()->Execute( SID_ATTR_PARA_LRSPACE, SfxCallMode::RECORD, &aMargin, 0L);
         }
 
-    return( 0L );
+    return 0L;
 }
 
 // for Paragraph Spacing

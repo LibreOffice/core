@@ -98,7 +98,7 @@ public class sdbcx
             xMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, rXsmgr );
         }
 
-        return ( xMSF );
+        return xMSF;
     }
 
 

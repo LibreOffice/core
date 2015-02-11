@@ -757,7 +757,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     delete[] pHeader;
     rStream.SetEndian(nOldFormat);
     rStream.Seek( nOrigPos );
-    return ( bRetValue );
+    return bRetValue;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

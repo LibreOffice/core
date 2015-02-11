@@ -112,7 +112,7 @@ public class CallTableWizard
         {
             String[] stringSupportedServiceNames = new String[] { __serviceName };
 
-            return (stringSupportedServiceNames);
+            return stringSupportedServiceNames;
         }
 
         /** This method returns true, if the given service will be
@@ -128,7 +128,7 @@ public class CallTableWizard
             {
                 booleanSupportsService = true;
             }
-            return (booleanSupportsService);
+            return booleanSupportsService;
         }
 
         public byte[] getImplementationId()
@@ -141,7 +141,7 @@ public class CallTableWizard
          */
         public java.lang.String getImplementationName()
         {
-            return (TableWizardImplementation.class.getName());
+            return TableWizardImplementation.class.getName();
         }
 
         /** Provides a sequence of all types (usually interface types)
@@ -167,7 +167,7 @@ public class CallTableWizard
                 System.err.println(exception);
             }
 
-            return (typeReturn);
+            return typeReturn;
         }
     }
 }

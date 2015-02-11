@@ -364,7 +364,7 @@ sal_Bool SAL_CALL OConnection::isClosed()
     MutexGuard aGuard(m_aMutex);
 
     // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
-    return (OConnection_BASE::rBHelper.bDisposed);
+    return OConnection_BASE::rBHelper.bDisposed;
 }
 
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
@@ -405,7 +405,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly()
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     // return if your connection to readonly
-    return (m_settings.readOnly);
+    return m_settings.readOnly;
 }
 
 void SAL_CALL OConnection::setCatalog(const rtl::OUString& catalog)
@@ -503,11 +503,8 @@ Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    Reference<XNameAccess > t;
-    {
-        t = m_typeMap;
-    }
-    return (t);
+    Reference<XNameAccess > t = m_typeMap;
+    return t;
 }
 
 void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)

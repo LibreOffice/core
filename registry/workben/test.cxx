@@ -38,7 +38,7 @@ int _cdecl main()
     test_generateMerge2();
     test_merge();
 
-    return(0);
+    return 0;
 }
 
 

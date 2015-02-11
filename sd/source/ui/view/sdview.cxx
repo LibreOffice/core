@@ -525,12 +525,12 @@ void View::MarkListHasChanged()
 bool View::SetAttributes(const SfxItemSet& rSet, bool bReplaceAll)
 {
     bool bOk = FmFormView::SetAttributes(rSet, bReplaceAll);
-    return (bOk);
+    return bOk;
 }
 
 bool View::GetAttributes( SfxItemSet& rTargetSet, bool bOnlyHardAttr ) const
 {
-    return( FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr ) );
+    return FmFormView::GetAttributes( rTargetSet, bOnlyHardAttr );
 }
 
 /**
@@ -597,7 +597,7 @@ bool View::IsPresObjSelected(bool bOnPage, bool bOnMasterPage, bool bCheckPresOb
        delete pMarkList;
     }
 
-    return (bSelected);
+    return bSelected;
 }
 
 void View::SelectAll()
@@ -806,7 +806,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
             pPage->onEndTextEdit( xObj.get() );
     }
 
-    return(eKind);
+    return eKind;
 }
 
 /** restores the default text if the given text object is currently in edit mode and

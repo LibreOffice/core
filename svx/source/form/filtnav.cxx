@@ -1944,12 +1944,12 @@ SfxChildAlignment FmFilterNavigatorWin::CheckAlignment( SfxChildAlignment eActAl
         case SFX_ALIGN_LEFT:
         case SFX_ALIGN_RIGHT:
         case SFX_ALIGN_NOALIGNMENT:
-            return (eAlign);
+            return eAlign;
         default:
             break;
     }
 
-    return (eActAlign);
+    return eActAlign;
 }
 
 

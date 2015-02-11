@@ -294,7 +294,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ChangeRangeHdl)
     aLbDias->Enable( aRbtAtDia->IsChecked() );
     aLbCustomshow->Enable( aRbtCustomshow->IsChecked() );
 
-    return( 0L );
+    return 0L;
 }
 
 /**
@@ -321,7 +321,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
     else
         aCbxAlwaysOnTop->Enable();
 
-    return( 0L );
+    return 0L;
 }
 
 /**
@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
 IMPL_LINK_NOARG(SdStartPresentationDlg, ChangePauseHdl)
 {
     aCbxAutoLogo->Enable( aRbtAuto->IsChecked() && ( aTmfPause->GetTime().GetMSFromTime() > 0 ) );
-    return( 0L );
+    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

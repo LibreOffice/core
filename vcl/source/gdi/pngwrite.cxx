@@ -602,7 +602,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
     }
     else
         mnDeflateInSize = pDest - mpDeflateInBuf;
-    return ( mnDeflateInSize );
+    return mnDeflateInSize;
 }
 
 void PNGWriterImpl::ImplClearFirstScanline()

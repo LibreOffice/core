@@ -364,7 +364,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
         bOk = ::sd::View::SetAttributes(rSet, bReplaceAll);
     }
 
-    return (bOk);
+    return bOk;
 }
 
 /**

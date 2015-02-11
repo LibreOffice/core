@@ -104,12 +104,12 @@ public class CalcAddins {
             com.sun.star.beans.XPropertySet xOptions,
             int intDummy
         ) {
-            return( 2 + intDummy );
+            return 2 + intDummy;
         }
 
         // Implement method from interface XServiceName
         public String getServiceName() {
-            return( __serviceName );
+            return __serviceName;
         }
 
         // Implement methods from interface XServiceInfo
@@ -119,12 +119,12 @@ public class CalcAddins {
         }
 
         public String getImplementationName() {
-            return( _CalcAddins.class.getName() );
+            return _CalcAddins.class.getName();
         }
 
         public String[] getSupportedServiceNames() {
             String[] stringSupportedServiceNames = { ADDIN_SERVICE, __serviceName };
-            return( stringSupportedServiceNames );
+            return stringSupportedServiceNames;
         }
 
         // Implement methods from interface XAddIn
@@ -153,7 +153,7 @@ public class CalcAddins {
                     }
                     break;
             }
-            return( stringReturn );
+            return stringReturn;
         }
 
         public String getDisplayFunctionName(String stringProgrammaticName) {
@@ -171,15 +171,15 @@ public class CalcAddins {
                     break;
             }
 
-            return( stringReturn );
+            return stringReturn;
         }
 
         public String getProgrammaticCategoryName(String p1) {
-            return( "Add-In" );
+            return "Add-In";
         }
 
         public String getDisplayCategoryName(String p1) {
-            return( "Add-In" );
+            return "Add-In";
         }
 
         public String getFunctionDescription(String stringProgrammaticName) {
@@ -197,7 +197,7 @@ public class CalcAddins {
                     break;
             }
 
-            return( stringReturn );
+            return stringReturn;
         }
 
         public String getArgumentDescription(String stringProgrammaticFunctionName,int intArgument) {
@@ -225,16 +225,16 @@ public class CalcAddins {
                     }
                     break;
             }
-            return( stringReturn );
+            return stringReturn;
         }
 
         public String getProgrammaticFuntionName(String p1) {
-            return( "" );
+            return "";
         }
 
         // Implement methods from interface XLocalizable
         public Locale getLocale() {
-            return( aFuncLoc );
+            return aFuncLoc;
         }
 
         public void setLocale(Locale p1) {
@@ -245,11 +245,11 @@ public class CalcAddins {
         private short getFunctionID( String stringProgrammaticName ) {
             for ( int i = 0; i < stringFunctionName.length; i++ ) {
                 if ( stringProgrammaticName.equals( stringFunctionName[ i ] ) ) {
-                    return( ( short ) i );
+                    return ( short ) i;
                 }
             }
 
-            return( -1 );
+            return -1;
         }
     }
 

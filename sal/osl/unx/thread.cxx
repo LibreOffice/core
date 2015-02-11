@@ -155,7 +155,7 @@ Thread_Impl* osl_thread_construct_Impl (void)
         pthread_mutex_init (&(pImpl->m_Lock), PTHREAD_MUTEXATTR_DEFAULT);
         pthread_cond_init  (&(pImpl->m_Cond), PTHREAD_CONDATTR_DEFAULT);
     }
-    return (pImpl);
+    return pImpl;
 }
 
 static void osl_thread_destruct_Impl (Thread_Impl ** ppImpl)
@@ -246,7 +246,7 @@ static void* osl_thread_start_Impl (void* pData)
     }
 
     osl_thread_cleanup_Impl (pImpl);
-    return (0);
+    return 0;
 }
 
 static oslThread osl_thread_create_Impl (
@@ -263,7 +263,7 @@ static oslThread osl_thread_create_Impl (
 
     pImpl = osl_thread_construct_Impl();
     if (!pImpl)
-        return (0); /* ENOMEM */
+        return 0; /* ENOMEM */
 
     pImpl->m_WorkerFunction = pWorker;
     pImpl->m_pData = pThreadData;
@@ -273,7 +273,7 @@ static oslThread osl_thread_create_Impl (
 
 #if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
     if (pthread_attr_init(&attr) != 0)
-        return (0);
+        return 0;
 
 #if defined OPENBSD
     stacksize = 262144;
@@ -284,7 +284,7 @@ static oslThread osl_thread_create_Impl (
 #endif
     if (pthread_attr_setstacksize(&attr, stacksize) != 0) {
         pthread_attr_destroy(&attr);
-        return (0);
+        return 0;
     }
 #endif
 
@@ -306,7 +306,7 @@ static oslThread osl_thread_create_Impl (
         pthread_mutex_unlock (&(pImpl->m_Lock));
         osl_thread_destruct_Impl (&pImpl);
 
-        return (0);
+        return 0;
     }
 
 #if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
@@ -322,7 +322,7 @@ static oslThread osl_thread_create_Impl (
 
     pthread_mutex_unlock (&(pImpl->m_Lock));
 
-    return ((oslThread)(pImpl));
+    return (oslThread)pImpl;
 }
 
 oslThread osl_createThread (
@@ -422,7 +422,7 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     active = ((pImpl->m_Flags & THREADIMPL_FLAGS_ACTIVE) > 0);
     pthread_mutex_unlock (&(pImpl->m_Lock));
 
-    return (active);
+    return active;
 }
 
 void SAL_CALL osl_joinWithThread(oslThread Thread)
@@ -579,14 +579,14 @@ static sal_uInt16 lookupThreadId (pthread_t hThread)
             if (pthread_equal(pEntry->Handle, hThread))
             {
                 pthread_mutex_unlock(&HashLock);
-                return (pEntry->Ident);
+                return pEntry->Ident;
             }
             pEntry = pEntry->Next;
         }
 
     pthread_mutex_unlock(&HashLock);
 
-    return (0);
+    return 0;
 }
 
 static sal_uInt16 insertThreadId (pthread_t hThread)
@@ -627,7 +627,7 @@ static sal_uInt16 insertThreadId (pthread_t hThread)
 
     pthread_mutex_unlock(&HashLock);
 
-    return (pEntry->Ident);
+    return pEntry->Ident;
 }
 
 static void removeThreadId (pthread_t hThread)
@@ -677,7 +677,7 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
             Ident = insertThreadId (current);
     }
 
-    return ((oslThreadIdentifier)(Ident));
+    return (oslThreadIdentifier)Ident;
 }
 
 /*****************************************************************************
@@ -953,7 +953,7 @@ oslThreadKey SAL_CALL osl_createThreadKey( oslThreadKeyCallbackFunction pCallbac
         }
     }
 
-    return ((oslThreadKey)pKey);
+    return (oslThreadKey)pKey;
 }
 
 void SAL_CALL osl_destroyThreadKey(oslThreadKey Key)

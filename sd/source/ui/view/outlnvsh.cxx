@@ -1441,7 +1441,7 @@ bool OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         Invalidate( SID_PREVIEW_STATE );
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 /**
@@ -1832,7 +1832,7 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const OUString& rBaseURL, sal
 
     rOutl.GetUndoManager().Clear();
 
-    return( bRet );
+    return bRet;
 }
 
 void OutlineViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool bBrowse )

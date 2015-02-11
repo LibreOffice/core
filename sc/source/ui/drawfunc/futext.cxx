@@ -359,7 +359,6 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
             rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
     }
 
-//  return (bReturn);
     return true;
 }
 

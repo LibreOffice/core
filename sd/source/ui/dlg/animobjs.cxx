@@ -227,13 +227,13 @@ IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
     m_nCurrentFrame = (m_FrameList.empty()) ? EMPTY_FRAMELIST : 0;
     UpdateControl();
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
 {
     bMovie = false;
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
@@ -352,7 +352,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
     m_pBtnGetAllObjects->Enable( bBtnGetAllObjectsEnabled );
     m_pBtnGetOneObject->Enable( bBtnGetOneObjectEnabled );
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
@@ -361,7 +361,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
         (m_FrameList.empty()) ? EMPTY_FRAMELIST : m_FrameList.size() - 1 ;
     UpdateControl();
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
@@ -385,7 +385,7 @@ IMPL_LINK( AnimationWindow, ClickRbtHdl, void *, p )
         m_pLbLoopCount->Enable();
     }
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
@@ -397,7 +397,7 @@ IMPL_LINK( AnimationWindow, ClickGetObjectHdl, void *, pBtn )
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_ADD, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
@@ -472,7 +472,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 
     UpdateControl();
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
@@ -482,7 +482,7 @@ IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 
     GetBindings().GetDispatcher()->Execute(
         SID_ANIMATOR_CREATE, SfxCallMode::SLOT | SfxCallMode::RECORD, &aItem, 0L );
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
@@ -498,7 +498,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
 
     UpdateControl();
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
@@ -509,7 +509,7 @@ IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 
     *pTime = m_pTimeField->GetTime();
 
-    return( 0L );
+    return 0L;
 }
 
 void AnimationWindow::UpdateControl(bool const bDisableCtrls)

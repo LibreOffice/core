@@ -745,7 +745,7 @@ bool DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             pClient->SetSdrGrafObj(NULL);
     }
 
-    return(bActivated);
+    return bActivated;
 }
 
 /**
@@ -1097,7 +1097,7 @@ bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         mpDrawView->AdjustMarkHdl();
     }
 
-    return (bOK);
+    return bOK;
 }
 
 /**

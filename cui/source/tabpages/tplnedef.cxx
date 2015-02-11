@@ -201,7 +201,7 @@ int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 
@@ -327,7 +327,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 
 SfxTabPage* SvxLineDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return( new SvxLineDefTabPage( pWindow, *rOutAttrs ) );
+    return new SvxLineDefTabPage( pWindow, *rOutAttrs );
 }
 
 
@@ -361,7 +361,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
         if( p )
             *pPageType = 2;
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
     FillDash_Impl();
     m_pCtlPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 IMPL_LINK_NOARG_INLINE_END(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
 
     ChangePreviewHdl_Impl( this );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 
     ChangePreviewHdl_Impl( this );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -483,7 +483,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     }
     SelectTypeHdl_Impl( NULL );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -518,7 +518,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
         }
     }
     ChangePreviewHdl_Impl( p );
-    return( 0L );
+    return 0L;
 }
 
 
@@ -609,7 +609,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -679,7 +679,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
         }
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -716,7 +716,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -789,7 +789,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -836,7 +836,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
         }
     }
 
-    return( 0L );
+    return 0L;
 }
 
 

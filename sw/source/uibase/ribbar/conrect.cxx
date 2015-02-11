@@ -60,7 +60,7 @@ bool ConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
             m_pSh->GetDrawView()->SetFrameDragSingles(m_pView->IsDrawSelMode());
         }
     }
-    return (bReturn);
+    return bReturn;
 }
 
 bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)

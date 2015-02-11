@@ -1325,7 +1325,7 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
         aFormatStr = "General";
     }
 
-    return( aFormatStr );
+    return aFormatStr;
 }
 
 }

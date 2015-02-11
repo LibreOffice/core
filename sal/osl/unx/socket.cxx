@@ -558,7 +558,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
 
     if (pAddr1 == pAddr2)
     {
-        return (sal_True);
+        return sal_True;
     }
 
     if (pAddr1->sa_family == pAddr2->sa_family)
@@ -573,7 +573,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
                 if ((pInetAddr1->sin_family == pInetAddr2->sin_family) &&
                     (pInetAddr1->sin_addr.s_addr == pInetAddr2->sin_addr.s_addr) &&
                     (pInetAddr1->sin_port == pInetAddr2->sin_port))
-                    return (sal_True);
+                    return sal_True;
             }
 
             default:
@@ -583,7 +583,7 @@ sal_Bool SAL_CALL osl_isEqualSocketAddr (
         }
     }
 
-    return (sal_False);
+    return sal_False;
 }
 
 oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
@@ -628,7 +628,7 @@ oslSocketAddr SAL_CALL osl_createInetBroadcastAddr (
         else
         {
             /* No broadcast in class D */
-            return ((oslSocketAddr)NULL);
+            return (oslSocketAddr)NULL;
         }
         nAddr = htonl(nAddr);
     }
@@ -785,21 +785,21 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     sal_Char        *cn;
 
     if ((he == NULL) || (he->h_name == NULL) || (he->h_addr_list[0] == NULL))
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
 
     if (_osl_isFullQualifiedDomainName(he->h_name))
     {
         cn= strdup(he->h_name);
         OSL_ASSERT(cn);
         if (cn == NULL)
-            return ((oslHostAddr)NULL);
+            return (oslHostAddr)NULL;
     }
     else
     {
         cn =_osl_getFullQualifiedDomainName (he->h_name);
         OSL_ASSERT(cn);
         if (cn == NULL)
-            return ((oslHostAddr)NULL);
+            return (oslHostAddr)NULL;
     }
 
     pSockAddr = __osl_createSocketAddr();
@@ -807,7 +807,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     if (pSockAddr == NULL)
     {
         free(cn);
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
     }
 
     pSockAddr->m_sockaddr.sa_family= he->h_addrtype;
@@ -829,7 +829,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
 
         __osl_destroySocketAddr( pSockAddr );
         free (cn);
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
     }
 
     pAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
@@ -838,7 +838,7 @@ static oslHostAddr _osl_hostentToHostAddr (const struct hostent *he)
     {
         __osl_destroySocketAddr( pSockAddr );
         free (cn);
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
     }
 
     pAddr->pHostName= cn;
@@ -884,19 +884,19 @@ oslHostAddr SAL_CALL osl_psz_createHostAddr (
 
     OSL_ASSERT(pszHostname && pAddr);
     if ((pszHostname == NULL) || (pAddr == NULL))
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
 
     cn = strdup(pszHostname);
     OSL_ASSERT(cn);
     if (cn == NULL)
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
 
     pHostAddr= (oslHostAddr) malloc(sizeof(struct oslHostAddrImpl));
     OSL_ASSERT(pHostAddr);
     if (pHostAddr == NULL)
     {
         free (cn);
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
     }
 
     pHostAddr->pHostName= cn;
@@ -951,7 +951,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
     OSL_ASSERT(pAddr);
 
     if (pAddr == NULL)
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
 
     if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
@@ -959,7 +959,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         struct hostent *he;
 
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
-            return ((oslHostAddr)NULL);
+            return (oslHostAddr)NULL;
 
         char const * addr = reinterpret_cast<char const *>(&sin->sin_addr);
             // at least some Androids apparently have a gethostbyaddr with char*
@@ -970,7 +970,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         return _osl_hostentToHostAddr (he);
     }
 
-    return ((oslHostAddr)NULL);
+    return (oslHostAddr)NULL;
 }
 
 oslHostAddr SAL_CALL osl_copyHostAddr (const oslHostAddr pAddr)
@@ -980,7 +980,7 @@ oslHostAddr SAL_CALL osl_copyHostAddr (const oslHostAddr pAddr)
     if (pAddr)
         return osl_psz_createHostAddr (pAddr->pHostName, pAddr->pSockAddr);
     else
-        return ((oslHostAddr)NULL);
+        return (oslHostAddr)NULL;
 }
 
 void SAL_CALL osl_getHostnameOfHostAddr (
@@ -1009,7 +1009,7 @@ oslSocketAddr SAL_CALL osl_getSocketAddrOfHostAddr (const oslHostAddr pAddr)
     OSL_ASSERT(pAddr);
 
     if (pAddr)
-        return ((oslSocketAddr)(pAddr->pSockAddr));
+        return (oslSocketAddr)pAddr->pSockAddr;
     else
         return NULL;
 }
@@ -1129,10 +1129,10 @@ oslSocketAddr SAL_CALL osl_psz_resolveHostname(const sal_Char* pszHostname)
 
         osl_destroyHostAddr(pAddr);
 
-        return (SockAddr);
+        return SockAddr;
     }
 
-    return ((oslSocketAddr)NULL);
+    return (oslSocketAddr)NULL;
 }
 
 sal_Int32 SAL_CALL osl_getServicePort(rtl_uString *ustrServicename, rtl_uString *ustrProtocol)
@@ -1459,12 +1459,12 @@ oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
     oslSocketAddr  pAddr;
 
     if (pSocket == NULL) /* ENOTSOCK */
-        return ((oslSocketAddr)NULL);
+        return (oslSocketAddr)NULL;
 
     AddrLen= sizeof(struct sockaddr);
 
     if (getsockname(pSocket->m_Socket, &Addr, &AddrLen) == OSL_SOCKET_ERROR)
-        return ((oslSocketAddr)NULL);
+        return (oslSocketAddr)NULL;
 
     pAddr = __osl_createSocketAddrFromSystem( &Addr );
     return pAddr;

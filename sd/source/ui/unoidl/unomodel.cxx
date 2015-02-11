@@ -557,7 +557,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
 
     SetModified();
 
-    return( pStandardPage );
+    return pStandardPage;
 }
 
 void SdXImpressDocument::SetModified( bool bModified /* = sal_True */ ) throw()
@@ -2909,7 +2909,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         mpModel->SetModified();
     }
 
-    return( xDrawPage );
+    return xDrawPage;
 }
 
 /**

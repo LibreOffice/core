@@ -524,7 +524,7 @@ Point SvxRectCtl::GetPointFromRP( RECT_POINT _eRP) const
         case RP_MB: return aPtMB;
         case RP_RB: return aPtRB;
     }
-    return( aPtMM ); // default
+    return aPtMM; // default
 }
 
 
@@ -1095,7 +1095,7 @@ void SvxPixelCtl::SetXBitmap( const BitmapEx& rBitmapEx )
 
 sal_uInt16 SvxPixelCtl::GetBitmapPixel( const sal_uInt16 nPixel )
 {
-    return( *( pPixel + nPixel ) );
+    return *( pPixel + nPixel );
 }
 
 // Resets to the original state of the control

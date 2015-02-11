@@ -170,7 +170,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 
 IconChoicePage* SvxHyperlinkMailTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkMailTp( pWindow, pDlg, rItemSet ) );
+    return new SvxHyperlinkMailTp( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************
@@ -253,7 +253,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, Click_SmartProtocol_Impl)
 {
     OUString aScheme = GetSchemeFromButtons();
     SetScheme( aScheme );
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
     if(!aScheme.isEmpty())
         SetScheme( aScheme );
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, ClickAdrBookHdl_Impl)
     }
 
 
-    return( 0L );
+    return 0L;
 }
 
 

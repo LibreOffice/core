@@ -58,7 +58,7 @@ static unsigned __stdcall oslWorkerWrapperFunction(void* pData)
 
     CoUninitialize();
 
-    return (0);
+    return 0;
 }
 
 /*****************************************************************************/
@@ -128,9 +128,9 @@ oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread)
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
 
     if (pThreadImpl != NULL)
-        return ((oslThreadIdentifier)pThreadImpl->m_ThreadId);
+        return (oslThreadIdentifier)pThreadImpl->m_ThreadId;
     else
-        return ((oslThreadIdentifier)GetCurrentThreadId());
+        return (oslThreadIdentifier)GetCurrentThreadId();
 }
 
 /*****************************************************************************/
@@ -492,7 +492,7 @@ oslThreadKey SAL_CALL osl_createThreadKey(oslThreadKeyCallbackFunction pCallback
             AddKeyToList( pTls );
     }
 
-    return ((oslThreadKey)pTls);
+    return (oslThreadKey)pTls;
 }
 
 /*****************************************************************************/
@@ -519,10 +519,10 @@ void* SAL_CALL osl_getThreadKeyData(oslThreadKey Key)
     {
         PTLS    pTls = (PTLS)Key;
 
-        return (TlsGetValue( pTls->dwIndex ));
+        return TlsGetValue( pTls->dwIndex );
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*****************************************************************************/
@@ -547,7 +547,7 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
         return (sal_Bool)(fSuccess != FALSE);
     }
 
-    return (sal_False);
+    return sal_False;
 }
 
 /*****************************************************************************/

@@ -36,7 +36,7 @@ public class RandomGenerator {
     public static int intRangeRandom(int lowLimit, int upLimit) {
         int num = (int) Math
                 .floor(doubleRangeRandom(lowLimit, upLimit + 1) - 1E-10);
-        return (num);
+        return num;
     }
 
     /**
@@ -50,7 +50,7 @@ public class RandomGenerator {
      */
     public static double doubleRangeRandom(double lowLimit, double upLimit) {
         double num = lowLimit + Math.random() * (upLimit - lowLimit);
-        return (num);
+        return num;
     }
 
     public static int[] randomSelection(int maxNum, int times) {

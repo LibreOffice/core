@@ -118,7 +118,7 @@ Any SAL_CALL OPreparedStatement::queryInterface(const Type & rType)
     if (!aRet.hasValue()) {
         aRet = OPreparedStatement_BASE::queryInterface(rType);
     }
-    return (aRet);
+    return aRet;
 }
 
 Sequence< Type > SAL_CALL OPreparedStatement::getTypes()

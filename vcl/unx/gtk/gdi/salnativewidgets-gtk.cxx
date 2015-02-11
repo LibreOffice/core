@@ -958,7 +958,7 @@ bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     if( xPixmap )
         returnVal = NWRenderPixmapToScreen( xPixmap.get(), xMask.get(), aPixmapRect) && returnVal;
 
-    return( returnVal );
+    return returnVal;
 }
 
 
@@ -1333,7 +1333,7 @@ bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         returnVal=true;
     }
 
-    return( returnVal );
+    return returnVal;
 }
 
 /************************************************************************
@@ -1778,7 +1778,7 @@ static Rectangle NWGetButtonArea( SalX11Screen nScreen,
 
     aRect = Rectangle( Point( x, y ), Size( w, h ) );
 
-    return( aRect );
+    return aRect;
 }
 
 static Rectangle NWGetTabItemRect( SalX11Screen nScreen, Rectangle aAreaRect )
@@ -2318,7 +2318,7 @@ static Rectangle NWGetScrollButtonRect(    SalX11Screen nScreen, ControlPart nPa
 
     buttonRect.SetSize( Size( buttonWidth, buttonHeight ) );
 
-    return( buttonRect );
+    return buttonRect;
 }
 
 bool GtkSalGraphics::NWPaintGTKEditBox( GdkDrawable* gdkDrawable,
@@ -2379,7 +2379,7 @@ static Rectangle NWGetEditBoxPixmapRect(SalX11Screen nScreen,
                                   pixmapRect.GetHeight() + (2*(focusWidth)) ) );
     }
 
-    return( pixmapRect );
+    return pixmapRect;
 }
 
 /* Paint a GTK Entry widget into the specified GdkPixmap.
@@ -2493,7 +2493,7 @@ bool GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
         if ( !pSpinVal )
         {
             std::fprintf( stderr, "Tried to draw CTRL_SPINBUTTONS, but the SpinButtons data structure didn't exist!\n" );
-            return( false );
+            return false;
         }
         pixmapRect = pSpinVal->maUpperRect;
         pixmapRect.Union( pSpinVal->maLowerRect );
@@ -2594,7 +2594,7 @@ static Rectangle NWGetSpinButtonRect( SalX11Screen nScreen,
         buttonRect.Bottom() = aAreaRect.Bottom();
     }
 
-    return( buttonRect );
+    return buttonRect;
 }
 
 static void NWPaintOneSpinButton( SalX11Screen nScreen,
@@ -2769,7 +2769,7 @@ static Rectangle NWGetComboBoxButtonRect( SalX11Screen nScreen,
         aButtonRect.SetPos( aEditPos );
     }
 
-    return( aButtonRect );
+    return aButtonRect;
 }
 
 bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
@@ -2801,7 +2801,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
     if ( (nType == CTRL_TAB_ITEM) && (aValue.getType() != CTRL_TAB_ITEM) )
     {
-        return( false );
+        return false;
     }
 
     NWEnsureGTKButton( m_nXScreen );
@@ -3726,7 +3726,7 @@ static Rectangle NWGetListBoxButtonRect( SalX11Screen nScreen,
     if ( pIndicatorSpacing )
         gtk_border_free( pIndicatorSpacing );
 
-    return( aPartRect );
+    return aPartRect;
 }
 
 static Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
@@ -3776,7 +3776,7 @@ static Rectangle NWGetListBoxIndicatorRect( SalX11Screen nScreen,
     if ( pIndicatorSpacing )
         gtk_border_free( pIndicatorSpacing );
 
-    return( aIndicatorRect );
+    return aIndicatorRect;
 }
 
 static Rectangle NWGetToolbarRect(  SalX11Screen nScreen,

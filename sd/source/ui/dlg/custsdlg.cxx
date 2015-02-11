@@ -243,7 +243,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 
     CheckState();
 
-    return( 0L );
+    return 0L;
 }
 
 // StartShow-Hdl
@@ -399,7 +399,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
 
     CheckState();
 
-    return( 0L );
+    return 0L;
 }
 
 /**

@@ -170,7 +170,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
             PutItem( SfxUInt16Item( SID_ATTR_METRIC, nMetric ) );
     }
 
-    return(pOptions);
+    return pOptions;
 }
 
 /**

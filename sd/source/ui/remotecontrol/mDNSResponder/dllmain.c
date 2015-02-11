@@ -32,7 +32,7 @@ BOOL APIENTRY    DllMain( HANDLE inModule, DWORD inReason, LPVOID inReserved )
         case DLL_PROCESS_DETACH:
             break;
     }
-    return( TRUE );
+    return TRUE;
 }
 
 

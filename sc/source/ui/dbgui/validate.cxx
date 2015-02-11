@@ -783,7 +783,7 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
     m_pFtError->Enable( !bMacro );
     m_pEdError->Enable( !bMacro );
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
@@ -802,7 +802,7 @@ IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
         m_pEdtTitle->SetText( aScriptURL );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 bool ScValidationDlg::EnterRefStatus()

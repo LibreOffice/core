@@ -56,7 +56,7 @@ sal_Bool SAL_CALL osl_getSystemTime(TimeValue* pTimeVal)
     pTimeVal->Seconds  = (unsigned long) (Value / 10000000L);
     pTimeVal->Nanosec  = (unsigned long)((Value % 10000000L) * 100);
 
-    return (sal_True);
+    return sal_True;
 }
 
 // osl_getDateTimeFromTimeValue

@@ -88,7 +88,7 @@ int hstrlen(const hchar * s)
 
     while (*s++)
         n++;
-    return (n);
+    return n;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

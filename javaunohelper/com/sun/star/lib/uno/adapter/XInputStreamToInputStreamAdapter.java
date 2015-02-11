@@ -60,7 +60,7 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
             throw newEx;
         }
 
-        return(bytesAvail);
+        return bytesAvail;
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
                 if (tmpInt< 0 ){
                     tmpInt = 256 +tmpInt;
                 }
-                return(tmpInt);
+                return tmpInt;
             }
 
         } catch (Exception e) {
@@ -106,7 +106,7 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
         try {
             bytesRead = xin.readBytes(tmp, b.length);
             if (bytesRead <= 0) {
-                return(-1);
+                return -1;
             } else if (bytesRead < b.length) {
                 System.arraycopy(tmp[0], 0, b, 0, bytesRead);
             } else {
@@ -138,7 +138,7 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
             // must <= len.
 
             if (bytesRead <= 0) {
-                return(-1);
+                return -1;
             } else if (bytesRead < len) {
                 System.arraycopy(tmp[0], 0, b, off, (int)bytesRead);
             } else {
@@ -187,9 +187,9 @@ public final class XInputStreamToInputStreamAdapter extends InputStream {
         } while (tmpLongVal > 0);
 
         if ( avail != 0 && avail < n) {
-            return(avail);
+            return avail;
         } else {
-            return(n);
+            return n;
         }
     }
 

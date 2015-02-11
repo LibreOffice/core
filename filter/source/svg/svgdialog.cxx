@@ -67,7 +67,7 @@ Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames()
 Reference< XInterface > SAL_CALL SVGDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr )
     throw( Exception )
 {
-    return( static_cast< cppu::OWeakObject* >( new SVGDialog( comphelper::getComponentContext(rSMgr) ) ) );
+    return static_cast< cppu::OWeakObject* >( new SVGDialog( comphelper::getComponentContext(rSMgr) ) );
 }
 
 
@@ -98,7 +98,7 @@ Any SAL_CALL SVGDialog::queryInterface( const Type& rType )
                                                  static_cast< XExporter* >( this ) );
     }
 
-    return( aReturn );
+    return aReturn;
 }
 
 
@@ -165,13 +165,13 @@ void SVGDialog::executedDialog( sal_Int16 nExecutionResult )
 Reference< XPropertySetInfo > SAL_CALL SVGDialog::getPropertySetInfo()
     throw(RuntimeException, std::exception)
 {
-    return( Reference< XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) ) );
+    return Reference< XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
 }
 
 
 ::cppu::IPropertyArrayHelper& SVGDialog::getInfoHelper()
 {
-    return( *const_cast< SVGDialog *>(this)->getArrayHelper() );
+    return *const_cast< SVGDialog *>(this)->getArrayHelper();
 }
 
 
@@ -205,7 +205,7 @@ Sequence< PropertyValue > SAL_CALL SVGDialog::getPropertyValues()
 
     maMediaDescriptor[ i ].Value <<= maFilterData;
 
-    return( maMediaDescriptor );
+    return maMediaDescriptor;
 }
 
 

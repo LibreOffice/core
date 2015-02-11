@@ -1051,7 +1051,7 @@ int  SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 void SvxSwPosSizeTabPage::EnableAnchorTypes(sal_uInt16 nAnchorEnable)

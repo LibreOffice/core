@@ -75,7 +75,7 @@ double masch()            /* calculate MACH_EPS machine independence   */
       x = 1.0 + eps;
     }
   eps *= 2.0;
-  return (eps);
+  return eps;
 }
 
 short basis()              /* calculate BASE machine independence     */
@@ -85,7 +85,7 @@ short basis()              /* calculate BASE machine independence     */
   while ( (x + one) - x == one ) x *= 2.0;
   while ( (x + b) == x ) b *= 2.0;
 
-  return ( (short) ((x + b) - x) );
+  return (short) ((x + b) - x);
 }
 
 #define BASIS     basis()           /* base of number representation  */
@@ -205,7 +205,7 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
 
 // double fabs(double);
 
- if ( n < 2 ) return(1);                    /*  n at least 2          */
+ if ( n < 2 ) return 1;                    /*  n at least 2          */
 
                                             /*  if rep = false,       */
                                             /*  determine the         */
@@ -215,13 +215,13 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
    {
      for (i = 1; i < n; i++)
        { if ( fabs(diag[i-1]) < MACH_EPS )  /*  do not decompose      */
-           return(2);                       /*  if one diag[i] = 0    */
+           return 2;                        /*  if one diag[i] = 0    */
          lower[i] /= diag[i-1];
          diag[i] -= lower[i] * upper[i-1];
        }
     }
 
- if ( fabs(diag[n-1]) < MACH_EPS ) return(2);
+ if ( fabs(diag[n-1]) < MACH_EPS ) return 2;
 
  for (i = 1; i < n; i++)                    /* forward elimination    */
     b[i] -= lower[i] * b[i-1];
@@ -231,7 +231,7 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
     i=j;
     b[i] = ( b[i] - upper[i] * b[i+1] ) / diag[i];
  }
- return(0);
+ return 0;
 }
 
 /*-----------------------  END OF TRIDIAGONAL  ------------------------*/
@@ -328,13 +328,13 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
  sal_uInt16 i;
  short  j;
 
- if ( n < 3 ) return(1);
+ if ( n < 3 ) return 1;
 
  if (!rep)                               /*  If rep = false,          */
    {                                     /*  calculate decomposition  */
      lower[0] = upper[n-1] = 0.0;        /*  of the matrix.           */
 
-     if ( fabs (diag[0]) < MACH_EPS ) return(2);
+     if ( fabs (diag[0]) < MACH_EPS ) return 2;
                                          /* Do not decompose if the   */
      temp = 1.0 / diag[0];               /* value of a diagonal       */
      upper[0] *= temp;                   /* element is smaller then   */
@@ -342,14 +342,14 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
      for (i = 1; i < n-2; i++)
        { diag[i] -= lower[i] * upper[i-1];
-         if ( fabs(diag[i]) < MACH_EPS ) return(2);
+         if ( fabs(diag[i]) < MACH_EPS ) return 2;
          temp = 1.0 / diag[i];
          upper[i] *= temp;
          ricol[i] = -lower[i] * ricol[i-1] * temp;
        }
 
      diag[n-2] -= lower[n-2] * upper[n-3];
-     if ( fabs(diag[n-2]) < MACH_EPS ) return(2);
+     if ( fabs(diag[n-2]) < MACH_EPS ) return 2;
 
      for (i = 1; i < n-2; i++)
        lowrow[i] = -lowrow[i-1] * upper[i-1];
@@ -361,7 +361,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
        temp -= lowrow[i] * ricol[i];
      diag[n-1] += temp - lower[n-1] * upper[n-2];
 
-     if ( fabs(diag[n-1]) < MACH_EPS ) return(2);
+     if ( fabs(diag[n-1]) < MACH_EPS ) return 2;
    }
 
  b[0] /= diag[0];                          /* forward elimination    */
@@ -378,7 +378,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
    i=j;
    b[i] -= upper[i] * b[i+1] + ricol[i] * b[n-1];
    }
- return(0);
+ return 0;
 }
 
 /*------------------  END of CYCLIC TRIDIAGONAL  ---------------------*/
@@ -525,7 +525,7 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
         Error=ZyklTriDiagGS(false,n,b,d,c,lowrow.get(),ricol.get(),a.get());
         if ( Error != 0 )
         {
-            return(Error+4);
+            return Error+4;
         }
         for (i=0;i<=nm1;i++) c[i+1]=a[i];
     }
@@ -594,14 +594,14 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
     } // switch MargCond
     if (MargCond==3) {
         Error=PeriodicSpline(n,T,x,bx,cx,dx);
-        if (Error!=0) return(Error+4);
+        if (Error!=0) return Error+4;
         Error=PeriodicSpline(n,T,y,by,cy,dy);
-        if (Error!=0) return(Error+10);
+        if (Error!=0) return Error+10;
     } else {
         Error=NaturalSpline(n,T,x,alphX,betX,MargCond,bx,cx,dx);
-        if (Error!=0) return(Error+4);
+        if (Error!=0) return Error+4;
         Error=NaturalSpline(n,T,y,alphY,betY,MargCond,by,cy,dy);
-        if (Error!=0) return(Error+9);
+        if (Error!=0) return Error+9;
     }
     return 0;
 }

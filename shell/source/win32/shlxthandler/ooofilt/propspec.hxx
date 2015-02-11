@@ -85,11 +85,11 @@ private:
 inline void * CFullPropSpec::operator new( size_t size )
 {
     void * p = CoTaskMemAlloc( size );
-    return( p );
+    return p;
 }
 inline void * CFullPropSpec::operator new( size_t /*size*/, void * p )
 {
-    return( p );
+    return p;
 }
 inline void CFullPropSpec::operator delete( void * p )
 {
@@ -107,27 +107,27 @@ inline void CFullPropSpec::SetPropSet( GUID const & guidPropSet )
 }
 inline GUID const & CFullPropSpec::GetPropSet() const
 {
-    return( _guidPropSet );
+    return _guidPropSet;
 }
 inline PROPSPEC CFullPropSpec::GetPropSpec() const
 {
-    return( _psProperty );
+    return _psProperty;
 }
 inline WCHAR const * CFullPropSpec::GetPropertyName() const
 {
-    return( _psProperty.lpwstr );
+    return _psProperty.lpwstr;
 }
 inline PROPID CFullPropSpec::GetPropertyPropid() const
 {
-    return( _psProperty.propid );
+    return _psProperty.propid;
 }
 inline BOOL CFullPropSpec::IsPropertyName() const
 {
-    return( _psProperty.ulKind == PRSPEC_LPWSTR );
+    return _psProperty.ulKind == PRSPEC_LPWSTR;
 }
 inline BOOL CFullPropSpec::IsPropertyPropid() const
 {
-    return( _psProperty.ulKind == PRSPEC_PROPID );
+    return _psProperty.ulKind == PRSPEC_PROPID;
 }
 
 #endif // INCLUDED_SHELL_SOURCE_WIN32_SHLXTHANDLER_OOOFILT_PROPSPEC_HXX

@@ -39,7 +39,7 @@ bool ConstArc::MouseButtonDown( const MouseEvent& rMEvt )
         if (!nAnzButUp)
             aStartPnt = m_pWin->PixelToLogic(rMEvt.GetPosPixel());
     }
-    return (bReturn);
+    return bReturn;
 }
 
 bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
@@ -68,7 +68,7 @@ bool ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 void ConstArc::Activate(const sal_uInt16 nSlotId)

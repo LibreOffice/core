@@ -822,7 +822,7 @@ sal_uLong ImpGraphic::ImplGetSizeBytes() const
         }
     }
 
-    return( mnSizeBytes );
+    return mnSizeBytes;
 }
 
 void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const

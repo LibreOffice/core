@@ -264,7 +264,7 @@ public class EuroAdaption {
             e.printStackTrace(System.err);
         }
 
-        return( nRetKey );
+        return nRetKey;
     }
 
 

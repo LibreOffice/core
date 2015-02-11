@@ -171,7 +171,7 @@ rtl_cache_hash_insert (
     bufctl->m_next = (*ppHead);
     (*ppHead) = bufctl;
 
-    return (bufctl->m_addr);
+    return bufctl->m_addr;
 }
 
 /** rtl_cache_hash_remove()
@@ -221,7 +221,7 @@ rtl_cache_hash_remove (
         }
     }
 
-    return (bufctl);
+    return bufctl;
 }
 
 /* ================================================================= */
@@ -241,7 +241,7 @@ rtl_cache_slab_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
     QUEUE_START_NAMED(slab, slab_);
     slab->m_ntypes = 0;
 
-    return (1);
+    return 1;
 }
 
 /** rtl_cache_slab_destructor()
@@ -299,7 +299,7 @@ rtl_cache_slab_create (
             rtl_arena_free (cache->m_source, addr, size);
         }
     }
-    return (slab);
+    return slab;
 }
 
 /** rtl_cache_slab_destroy()
@@ -418,7 +418,7 @@ rtl_cache_slab_alloc (
                 {
                     /* out of memory */
                     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
-                    return (0);
+                    return 0;
                 }
 
                 bufctl->m_addr = slab->m_bp;
@@ -463,7 +463,7 @@ rtl_cache_slab_alloc (
     }
 
     RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));
-    return (addr);
+    return addr;
 }
 
 /** rtl_cache_slab_free()
@@ -547,7 +547,7 @@ rtl_cache_magazine_constructor (void * obj, SAL_UNUSED_PARAMETER void *)
     mag->m_mag_size = RTL_CACHE_MAGAZINE_SIZE;
     mag->m_mag_used = 0;
 
-    return (1);
+    return 1;
 }
 
 /** rtl_cache_magazine_destructor()
@@ -632,7 +632,7 @@ rtl_cache_depot_dequeue (
             depot->m_curr_min = depot->m_mag_count;
         }
     }
-    return (mag);
+    return mag;
 }
 
 /** rtl_cache_depot_exchange_alloc()
@@ -659,7 +659,7 @@ rtl_cache_depot_exchange_alloc (
 
     assert((full == 0) || (full->m_mag_used > 0));
 
-    return (full);
+    return full;
 }
 
 /** rtl_cache_depot_exchange_free()
@@ -686,7 +686,7 @@ rtl_cache_depot_exchange_free (
 
     assert((empty == 0) || (empty->m_mag_used == 0));
 
-    return (empty);
+    return empty;
 }
 
 /** rtl_cache_depot_populate()
@@ -742,7 +742,7 @@ rtl_cache_constructor (void * obj)
     /* depot layer */
     (void)RTL_MEMORY_LOCK_INIT(&(cache->m_depot_lock));
 
-    return (1);
+    return 1;
 }
 
 /** rtl_cache_destructor()
@@ -1102,7 +1102,7 @@ try_alloc:
             goto try_alloc;
         }
     }
-    return (result);
+    return result;
 }
 
 /** rtl_cache_destroy()
@@ -1129,7 +1129,7 @@ SAL_CALL rtl_cache_alloc (
     void * obj = 0;
 
     if (cache == 0)
-        return (0);
+        return 0;
 
     if (alloc_mode == AMode_SYSTEM)
     {
@@ -1507,7 +1507,7 @@ rtl_cache_wsupdate_all (void * arg)
     }
     RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
 
-    return (0);
+    return 0;
 }
 
 /* ================================================================= *

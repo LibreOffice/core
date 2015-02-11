@@ -41,7 +41,7 @@ int main (int argc, char ** argv)
     result = osl_getFileURLFromSystemPath (pSystemPath, &pFileUrl);
     rtl_uString_release (pSystemPath), pSystemPath = 0;
     if (result != osl_File_E_None)
-      return (result);
+      return result;
 
     result = osl_openFile (pFileUrl, &hFile, osl_File_OpenFlag_Read);
     rtl_uString_release (pFileUrl), pFileUrl = 0;

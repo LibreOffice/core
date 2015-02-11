@@ -1861,7 +1861,7 @@ BitmapEx GDIMetaFile::ImplBmpConvertFnc( const BitmapEx& rBmpEx, const void* pBm
 
 Color GDIMetaFile::ImplColMonoFnc( const Color&, const void* pColParam )
 {
-    return( ( (const ImplColMonoParam*) pColParam )->aColor );
+    return ( (const ImplColMonoParam*) pColParam )->aColor;
 }
 
 BitmapEx GDIMetaFile::ImplBmpMonoFnc( const BitmapEx& rBmpEx, const void* pBmpParam )
@@ -1896,7 +1896,7 @@ Color GDIMetaFile::ImplColReplaceFnc( const Color& rColor, const void* pColParam
             ( ( (const ImplColReplaceParam*) pColParam )->pMinB[ i ] <= nB ) &&
             ( ( (const ImplColReplaceParam*) pColParam )->pMaxB[ i ] >= nB ) )
         {
-            return( ( (const ImplColReplaceParam*) pColParam )->pDstCols[ i ] );
+            return ( (const ImplColReplaceParam*) pColParam )->pDstCols[ i ];
         }
     }
 
@@ -2738,7 +2738,7 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
         }
     }
 
-    return( nSizeBytes );
+    return nSizeBytes;
 }
 
 SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )

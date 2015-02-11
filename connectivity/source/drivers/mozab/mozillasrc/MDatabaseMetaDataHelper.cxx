@@ -465,7 +465,7 @@ nsresult getTableStringsProxied(const sal_Char* sAbURI, sal_Int32 *nDirectoryTyp
         rv = subDirectories -> Next();
     } while ( rv == NS_OK);
 
-    return( NS_OK );
+    return NS_OK;
 }
 sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                        _pCon,
                                                    ::std::vector< OUString >&   _rStrings,
@@ -482,7 +482,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     if ( ! _pCon->getForceLoadTables() && m_aTableNames.size() > 0 ) {
         _rStrings = m_aTableNames;
         _rTypes   = m_aTableTypes;
-        return( sal_True );
+        return sal_True;
     }
 
     m_aTableNames.clear();
@@ -604,7 +604,7 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     _rTypes   = m_aTableTypes;
 
     _pCon->setForceLoadTables(sal_False);
-    return( sal_True );
+    return sal_True;
 }
 
 sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
@@ -656,7 +656,7 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
     OSL_TRACE( "\tOUT MDatabaseMetaDataHelper::getTables()" );
     _rRows = aRows;
-    return(sal_True);
+    return sal_True;
 }
 
 
@@ -761,7 +761,7 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const OUStri
         m_aError.set( STR_COULD_NOT_CREATE_ADDRESSBOOK, 0, OUString::number( sal_Int32(rv), 16 ) );
     }
     OSL_TRACE( "OUT MDatabaseMetaDataHelper::NewAddressBook()" );
-    return( NS_SUCCEEDED(rv) ? sal_True : sal_False );
+    return NS_SUCCEEDED(rv) ? sal_True : sal_False;
 }
 nsresult NewAddressBook(const OUString * aName)
 {

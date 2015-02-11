@@ -128,7 +128,7 @@ static void* allocate_nothrow (
     }
     catch (std::bad_alloc const &)
     {
-        return (0);
+        return 0;
     }
 }
 

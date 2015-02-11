@@ -306,7 +306,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
         if((iPos >= 1 && iPos <= 8) || (iPos == 9 && mbCustom)) //add
             mrLinePropertyPanel.EndLineWidthPopupMode();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -332,7 +332,7 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         mbCloseByEdit = true;
         mnTmpCustomWidth = nTmp;
     }
-    return( 0L );
+    return 0L;
 }
 
 } } // end of namespace svx::sidebar

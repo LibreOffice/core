@@ -157,7 +157,7 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
 
     gtk_style_context_restore(mpSpinStyle);
 
-    return( buttonRect );
+    return buttonRect;
 }
 
 Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
@@ -242,7 +242,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
 
     buttonRect.SetSize( Size( buttonWidth, buttonHeight ) );
 
-    return( buttonRect );
+    return buttonRect;
 }
 
 void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
@@ -688,7 +688,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
         aButtonRect.SetPos( aEditPos );
     }
 
-    return( aButtonRect );
+    return aButtonRect;
 }
 
 void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,

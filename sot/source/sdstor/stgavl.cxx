@@ -80,7 +80,7 @@ short StgAvlNode::Locate
         }
     }
 
-    return( nRes );
+    return nRes;
 }
 
 // adjust balance factors in AVL tree from pivot down.

@@ -85,8 +85,8 @@ public:
 
     virtual void SelectionHasChanged();
 
-    sal_uInt16  GetSlotID() const { return( nSlotId ); }
-    sal_uInt16  GetSlotValue() const { return( nSlotValue ); }
+    sal_uInt16  GetSlotID() const { return nSlotId; }
+    sal_uInt16  GetSlotValue() const { return nSlotValue; }
 
     void    SetNoScrollUntilInside(bool bNoScroll = true)
             { bNoScrollUntilInside = bNoScroll; }

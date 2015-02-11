@@ -873,7 +873,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
         mpOnlineSearchItem = NULL;
     }
 
-    return(0);
+    return 0;
 }
 
 // Spell object (for OnlineSpelling)
@@ -962,7 +962,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
     sal_uLong nStat = pEditStat->GetStatusWord();
     mbHasOnlineSpellErrors = (nStat & EE_STAT_WRONGWORDCHANGED) != 0;
 
-    return(0);
+    return 0;
 }
 
 // Callback for ExecuteSpellPopup()

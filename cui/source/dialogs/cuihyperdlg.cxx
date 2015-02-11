@@ -260,7 +260,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickOkHdl_Impl)
     Apply();
     Close();
 
-    return ( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl)
 {
     Apply();
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -286,7 +286,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickCloseHdl_Impl)
 {
     Close();
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************

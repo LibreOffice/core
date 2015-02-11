@@ -192,7 +192,7 @@ Reference< XConnection > SAL_CALL OCommonStatement::getConnection()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);
 
-    // just return(our connection here
+    // just return our connection here
     return m_pConnection;
 }
 
@@ -211,7 +211,7 @@ Any SAL_CALL OStatement::queryInterface(const Type & rType)
     if (!aRet.hasValue()) {
         aRet = OCommonStatement::queryInterface(rType);
     }
-    return (aRet);
+    return aRet;
 }
 
 void SAL_CALL OStatement::addBatch(const rtl::OUString& sql)
@@ -278,8 +278,8 @@ sal_Bool SAL_CALL OCommonStatement::getMoreResults()
     checkDisposed(rBHelper.bDisposed);
 
     // if your driver supports more than only one resultset
-    // and has one more at this moment return(true
-    return (sal_False);
+    // and has one more at this moment return true
+    return sal_False;
 }
 
 Any SAL_CALL OCommonStatement::getWarnings()
@@ -327,7 +327,7 @@ void SAL_CALL OCommonStatement::clearWarnings()
 ::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
 {
     OSL_TRACE("OCommonStatement::getInfoHelper");
-    return(*const_cast<OCommonStatement*>(this)->getArrayHelper());
+    return *const_cast<OCommonStatement*>(this)->getArrayHelper();
 }
 
 sal_Bool OCommonStatement::convertFastPropertyValue(
@@ -435,7 +435,7 @@ Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement
     throw(RuntimeException, std::exception)
 {
     OSL_TRACE("OCommonStatement::getPropertySetInfo");
-    return(::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 /*

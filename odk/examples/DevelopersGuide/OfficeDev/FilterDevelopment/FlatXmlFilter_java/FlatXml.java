@@ -76,7 +76,7 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
 
     // --- XServiceName ---
     public String getServiceName() {
-        return( __serviceName );
+        return __serviceName;
     }
 
     // --- XServiceInfo ---
@@ -87,10 +87,10 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
         return false;
     }
     public String getImplementationName() {
-        return( this.getClass().getName() );
+        return this.getClass().getName();
     }
     public String[] getSupportedServiceNames() {
-        return( __supportedServiceNames );
+        return __supportedServiceNames;
     }
 
     public com.sun.star.uno.Type[] getTypes() {
@@ -106,7 +106,7 @@ public class FlatXml implements XImportFilter, XExportFilter, XServiceName,
         } catch( java.lang.Exception exception ) {
             return null;
         }
-        return( typeReturn );
+        return typeReturn;
     }
 
     public boolean importer(PropertyValue[] aSourceData, XDocumentHandler xDocHandler, String[] msUserData)

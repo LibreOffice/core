@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
     printf("osl process test executable ended:\n");
 
-    return (0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

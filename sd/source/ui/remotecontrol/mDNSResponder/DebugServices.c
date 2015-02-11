@@ -367,7 +367,7 @@ DEBUG_EXPORT OSStatus   DebugInitialize( DebugOutputType inType, ... )
 
 exit:
     va_end( args );
-    return( err );
+    return err;
 }
 
 
@@ -419,7 +419,7 @@ DEBUG_EXPORT OSStatus   DebugGetProperty( DebugPropertyTag inTag, ... )
         break;
     }
     va_end( args );
-    return( err );
+    return err;
 }
 
 
@@ -456,7 +456,7 @@ DEBUG_EXPORT OSStatus   DebugSetProperty( DebugPropertyTag inTag, ... )
         break;
     }
     va_end( args );
-    return( err );
+    return err;
 }
 
 #if 0
@@ -484,7 +484,7 @@ DEBUG_EXPORT size_t DebugPrintF( DebugLevel inLevel, const char *inFormat, ... )
     va_end( args );
 
 exit:
-    return( n );
+    return n;
 }
 
 
@@ -506,7 +506,7 @@ DEBUG_EXPORT size_t DebugPrintFVAList( DebugLevel inLevel, const char *inFormat,
     DebugPrint( inLevel, buffer, (size_t) n );
 
 exit:
-    return( n );
+    return n;
 }
 
 
@@ -604,7 +604,7 @@ static OSStatus DebugPrint( DebugLevel inLevel, char *inData, size_t inSize )
     err = kNoErr;
 
 exit:
-    return( err );
+    return err;
 }
 
 
@@ -713,7 +713,7 @@ static OSStatus DebugFPrintFInit( DebugOutputTypeFlags inFlags, const char *inFi
     err = kNoErr;
 
 exit:
-    return( err );
+    return err;
 }
 
 
@@ -774,7 +774,7 @@ exit:
 
     #endif
 
-    return( err );
+    return err;
 }
 
 
@@ -870,7 +870,7 @@ exit:
     {
         CFRelease( bundle );
     }
-    return( err );
+    return err;
 }
 
 // DebugMacOSXLogPrint
@@ -977,7 +977,7 @@ exit:
     {
         RegCloseKey( key );
     }
-    return( err );
+    return err;
 }
 
 
@@ -1097,7 +1097,7 @@ DEBUG_EXPORT size_t DebugSNPrintF(char *sbuffer, size_t buflen, const char *fmt,
     length = DebugSNPrintFVAList(sbuffer, buflen, fmt, ptr);
     va_end(ptr);
 
-    return(length);
+    return length;
 }
 
 
@@ -1120,7 +1120,7 @@ DEBUG_EXPORT size_t DebugSNPrintFVAList(char *sbuffer, size_t buflen, const char
 
     size_t nwritten = 0;
     int c;
-    if (buflen == 0) return(0);
+    if (buflen == 0) return 0;
     buflen--;       // Pre-reserve one space in the buffer for the terminating nul
     if (buflen == 0) goto exit;
 
@@ -1521,7 +1521,7 @@ number:     if (!F.havePrecision)
     }
 exit:
     *sbuffer++ = 0;
-    return(nwritten);
+    return nwritten;
 }
 
 
@@ -1926,7 +1926,7 @@ DEBUG_EXPORT const char *   DebugGetErrorString( int_least32_t inErrorCode, char
         *dst = '\0';
         s = inBuffer;
     }
-    return( s );
+    return s;
 }
 
 
@@ -2285,7 +2285,7 @@ DebugHexDump(
 
     // Note: The "dst - outBuffer" size calculation works even if "outBuffer" is NULL because it's all relative.
 
-    return( (size_t)( dst - outBuffer ) );
+    return (size_t)( dst - outBuffer );
 }
 
 
@@ -2348,7 +2348,7 @@ static char *   DebugNumVersionToString( uint32_t inVersion, char *inString )
         dlog( kDebugLevelError, "invalid NumVersion stage (0x%02X)\n", stage );
         break;
     }
-    return( inString );
+    return inString;
 }
 
 
@@ -2366,7 +2366,7 @@ DEBUG_EXPORT uint32_t   DebugTaskLevel( void )
     }
 #endif
 
-    return( level );
+    return level;
 }
 
 #if ( TARGET_OS_WIN32 && !TARGET_OS_WINDOWS_CE )
@@ -2493,7 +2493,7 @@ DebugWinCharToTCharString(
     {
         *outTCharCount = (size_t)( dst - outTCharString );
     }
-    return( outTCharString );
+    return outTCharString;
 }
 #endif
 
@@ -2972,7 +2972,7 @@ exit:
     {
         DebugPrintF( kDebugLevelMax, "\n\n### TEST FAILED ###\n\n" );
     }
-    return( err );
+    return err;
 }
 
 #endif  // DEBUG

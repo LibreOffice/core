@@ -253,7 +253,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
         pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
     }
 
-    return(pBookmarkDoc);
+    return pBookmarkDoc;
 }
 
 // Opens a bookmark document
@@ -271,7 +271,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile)
         pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
     }
 
-    return(pBookmarkDoc);
+    return pBookmarkDoc;
 }
 
 // Inserts a bookmark (page or object)
@@ -417,7 +417,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
     {
         bContinue = bOK = false;
-        return(bContinue);
+        return bContinue;
     }
 
     // Store the size and some other properties of the first page and notes
@@ -468,7 +468,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
 
             if (!bContinue)
             {
-                return(bContinue);
+                return bContinue;
             }
         }
     }

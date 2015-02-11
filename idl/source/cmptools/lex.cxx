@@ -207,7 +207,7 @@ sal_uLong SvTokenStream::GetNumber()
         }
     }
 
-    return( l );
+    return l;
 }
 
 bool SvTokenStream::MakeToken( SvToken & rToken )

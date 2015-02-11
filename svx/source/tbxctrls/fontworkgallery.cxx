@@ -250,7 +250,7 @@ IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl)
 {
     insertSelectedFontwork();
     EndDialog( RET_OK );
-    return( 0L );
+    return 0L;
 }
 
 

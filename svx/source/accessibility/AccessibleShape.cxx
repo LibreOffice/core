@@ -1109,7 +1109,7 @@ AccessibleShape*
     if( xTunnel.is() )
         pReturn = reinterpret_cast< AccessibleShape* >( xTunnel->getSomething( getUnoTunnelImplementationId() ) );
 
-    return( pReturn );
+    return pReturn;
 }
 
 
@@ -1122,7 +1122,7 @@ sal_Int64 SAL_CALL
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( getUnoTunnelImplementationId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
         nReturn = reinterpret_cast< sal_Int64 >( this );
 
-    return( nReturn );
+    return nReturn;
 }
 
 // IAccessibleViewForwarderListener

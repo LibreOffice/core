@@ -208,7 +208,7 @@ rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
             pObj.clear();
         }
     }
-    return(pObj);
+    return pObj;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

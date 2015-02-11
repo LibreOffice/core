@@ -299,7 +299,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             return NULL;
         }
 
-        return (pPipe);
+        return pPipe;
     }
     else
     {   /* osl_pipe_OPEN */
@@ -307,7 +307,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         {
             if ( connect( pPipe->m_Socket, reinterpret_cast<sockaddr *>(&addr), len) >= 0 )
             {
-                return (pPipe);
+                return pPipe;
             }
 
             SAL_WARN("sal.osl.pipe", "connect() failed: " << strerror(errno));

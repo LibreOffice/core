@@ -40,12 +40,12 @@ int file_image_open (file_image * image, const char * filename)
     void *      p;
 
     if (image == 0)
-        return (EINVAL);
+        return EINVAL;
 
     image->m_base = MAP_FAILED, image->m_size = 0;
 
     if ((fd = open (filename, O_RDONLY)) == -1)
-        return (errno);
+        return errno;
 
     if (fstat (fd, &st) == -1)
     {
@@ -64,7 +64,7 @@ int file_image_open (file_image * image, const char * filename)
 
 cleanup_and_leave:
     close (fd);
-    return (result);
+    return result;
 }
 
 /*
@@ -79,15 +79,15 @@ int file_image_pagein (file_image * image)
     volatile char c = 0;
 
     if (image == 0)
-        return (EINVAL);
+        return EINVAL;
 
     if ((w.m_base = image->m_base) == 0)
-        return (EINVAL);
+        return EINVAL;
     if ((w.m_size = image->m_size) == 0)
-        return (0);
+        return 0;
 
     if (madvise (w.m_base, w.m_size, MADV_WILLNEED) == -1)
-        return (errno);
+        return errno;
 
     if ((s = sysconf (_SC_PAGESIZE)) == -1)
         s = 0x1000;
@@ -104,7 +104,7 @@ int file_image_pagein (file_image * image)
         c ^= ((char*)(w.m_base))[0];
     }
 
-    return (0);
+    return 0;
 }
 
 /*
@@ -113,13 +113,13 @@ int file_image_pagein (file_image * image)
 int file_image_close (file_image * image)
 {
     if (image == 0)
-        return (EINVAL);
+        return EINVAL;
 
     if (munmap (image->m_base, image->m_size) == -1)
-        return (errno);
+        return errno;
 
     image->m_base = 0, image->m_size = 0;
-    return (0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

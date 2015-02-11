@@ -128,11 +128,11 @@ sal_uInt8* LwpObjectStream::AllocBuffer(sal_uInt16 size)
 {
     if(size<=100)
     {
-        return(m_SmallBuffer);
+        return m_SmallBuffer;
     }
     else
     {
-        return (new sal_uInt8[size]);
+        return new sal_uInt8[size];
     }
 }
 /**
@@ -388,7 +388,7 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
             throw BadDecompress();
 
     }
-    return(static_cast<sal_uInt16>(DstSize));
+    return static_cast<sal_uInt16>(DstSize);
 }
 /**
  * @descr  quick read string with 1252

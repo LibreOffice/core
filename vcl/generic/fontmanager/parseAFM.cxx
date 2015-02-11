@@ -274,7 +274,7 @@ static char *token( FileInputStream* stream, int& rLen )
     ident[idx] = 0;
     rLen = idx;
 
-    return(ident);  /* returns pointer to the token */
+    return ident;  /* returns pointer to the token */
 
 } /* token */
 
@@ -302,7 +302,7 @@ static char *linetoken( FileInputStream* stream )
     stream->ungetChar();
     ident[idx] = 0;
 
-    return(ident);  /* returns pointer to the token */
+    return ident;  /* returns pointer to the token */
 
 } /* linetoken */
 
@@ -535,7 +535,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
             } /* switch */
     } /* while */
 
-    return(error);
+    return error;
 
 } /* parseGlobals */
 
@@ -646,7 +646,7 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
             } /* switch */
     } /* while */
 
-    return(error);
+    return error;
 
 } /* parseCharWidths */
 
@@ -847,7 +847,7 @@ static int parseCharMetrics( FileInputStream* fp, FontInfo* fi)
     if ((error == ok) && (count != fi->numOfChars))
         error = parseError;
 
-    return(error);
+    return error;
 
 } /* parseCharMetrics */
 
@@ -953,7 +953,7 @@ static int parseTrackKernData( FileInputStream* fp, FontInfo* fi)
     if (error == ok && tcount != fi->numOfTracks)
         error = parseError;
 
-    return(error);
+    return error;
 
 } /* parseTrackKernData */
 
@@ -1078,7 +1078,7 @@ static int parsePairKernData( FileInputStream* fp, FontInfo* fi)
     if (error == ok && pcount != fi->numOfPairs)
         error = parseError;
 
-    return(error);
+    return error;
 
 } /* parsePairKernData */
 
@@ -1215,7 +1215,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
     if (error == ok && ccount != fi->numOfComps)
         error = parseError;
 
-    return(error);
+    return error;
 
 } /* parseCompCharData */
 
@@ -1253,12 +1253,12 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
     char *keyword; /* used to store a token */
 
     (*fi) = (FontInfo *) calloc(1, sizeof(FontInfo));
-    if ((*fi) == NULL) {error = storageProblem; return(error);}
+    if ((*fi) == NULL) { error = storageProblem; return error; }
 
     if (flags & P_G)
     {
         (*fi)->gfi = (GlobalFontInfo *) calloc(1, sizeof(GlobalFontInfo));
-        if ((*fi)->gfi == NULL) {error = storageProblem; return(error);}
+        if ((*fi)->gfi == NULL) { error = storageProblem; return error; }
     }
 
     /* The AFM file begins with Global Font Information. This section */
@@ -1283,7 +1283,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
         {
             (*fi)->cmi = (CharMetricInfo *)
                 calloc((*fi)->numOfChars, sizeof(CharMetricInfo));
-            if ((*fi)->cmi == NULL) {error = storageProblem; return(error);}
+            if ((*fi)->cmi == NULL) { error = storageProblem; return error; }
             code = parseCharMetrics(&aFile, *fi);
         }
         else
@@ -1294,7 +1294,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                 if ((*fi)->cwi == NULL)
                 {
                     error = storageProblem;
-                    return(error);
+                    return error;
                 }
             }
             /* parse section regardless */
@@ -1336,7 +1336,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                     if ((*fi)->tkd == NULL)
                     {
                         error = storageProblem;
-                        return(error);
+                        return error;
                     }
                 } /* if */
                 code = parseTrackKernData(&aFile, *fi);
@@ -1351,7 +1351,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                     if ((*fi)->pkd == NULL)
                     {
                         error = storageProblem;
-                        return(error);
+                        return error;
                     }
                 } /* if */
                 code = parsePairKernData(&aFile, *fi);
@@ -1366,7 +1366,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
                     if ((*fi)->ccd == NULL)
                     {
                         error = storageProblem;
-                        return(error);
+                        return error;
                     }
                 } /* if */
                 code = parseCompCharData(&aFile, *fi);
@@ -1389,7 +1389,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 
     if ((error != earlyEOF) && (code < 0)) error = code;
 
-    return(error);
+    return error;
 
 } /* parseFile */
 

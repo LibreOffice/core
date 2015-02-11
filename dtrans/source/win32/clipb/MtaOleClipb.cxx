@@ -788,7 +788,7 @@ unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID
 
     CoUninitialize( );
 
-    return ( 0 );
+    return 0;
 }
 
 bool CMtaOleClipboard::WaitForThreadReady( ) const

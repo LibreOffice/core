@@ -43,7 +43,7 @@ struct project1st : public std::binary_function<T1, T2, T1>
 {
     T1 operator()(const T1& y, const T2&) const
     {
-        return (y);
+        return y;
     }
 };
 
@@ -53,7 +53,7 @@ struct project2nd : public std::binary_function<T1, T2, T2>
 {
     T2 operator()(const T1&, const T2& x) const
     {
-        return (x);
+        return x;
     }
 };
 
@@ -63,7 +63,7 @@ struct select1st : public std::unary_function<P, typename P::first_type>
 {
     const typename P::first_type& operator()(const P& y) const
     {
-        return (y.first);
+        return y.first;
     }
 };
 
@@ -73,7 +73,7 @@ struct select2nd : public std::unary_function<P, typename P::second_type>
 {
     const typename P::second_type& operator()(const P& y) const
     {
-        return (y.second);
+        return y.second;
     }
 };
 
@@ -86,7 +86,7 @@ class unary_compose : public std::unary_function<typename F2::argument_type, typ
 
         typename F1::result_type operator()(const typename F2::argument_type& y) const
         {
-            return (ftor1(ftor2(y)));
+            return ftor1(ftor2(y));
         }
 
     protected:
@@ -98,7 +98,7 @@ class unary_compose : public std::unary_function<typename F2::argument_type, typ
 template<class F1, class F2>
 inline unary_compose<F1, F2> compose1(const F1& fnction1, const F2& fnction2)
 {
-    return (unary_compose<F1, F2>(fnction1, fnction2));
+    return unary_compose<F1, F2>(fnction1, fnction2);
 }
 
 }   // namespace o3tl

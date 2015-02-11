@@ -59,7 +59,7 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
             throw new com.sun.star.io.IOException(e);
         }
 
-        return(bytesAvail);
+        return bytesAvail;
     }
 
     public void closeInput() throws
@@ -88,7 +88,7 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
             // must <= len.
 
             if (bytesRead <= 0) {
-                return(0);
+                return 0;
         }
         return ((int)bytesRead);
 
@@ -114,7 +114,7 @@ public final class InputStreamToXInputStreamAdapter implements XInputStream {
             // must <= len.
 
             if (bytesRead <= 0) {
-                return(0);
+                return 0;
         }
         return ((int)bytesRead);
 

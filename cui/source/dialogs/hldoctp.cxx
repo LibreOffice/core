@@ -159,7 +159,7 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 
 IconChoicePage* SvxHyperlinkDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkDocTp( pWindow, pDlg, rItemSet ) );
+    return new SvxHyperlinkDocTp( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
             ModifiedPathHdl_Impl (NULL);
     }
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -241,7 +241,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl)
 
     ShowMarkWnd ();
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -259,7 +259,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
 
     m_pFtFullURL->SetText( maStrURL );
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl)
         LeaveWait();
     }
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -302,7 +302,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl)
 
     m_pFtFullURL->SetText( maStrURL );
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -317,7 +317,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
 
     m_pFtFullURL->SetText( maStrURL );
 
-    return (0L);
+    return 0L;
 }
 
 /*************************************************************************

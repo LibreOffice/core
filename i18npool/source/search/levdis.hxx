@@ -152,11 +152,11 @@ public:
     int CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
                     bool bRelaxed = true );
 
-    inline int GetLimit() const     { return( nLimit ); }   // Limit holen
-    inline int GetReplaceP0() const { return( nRepP0 ); }   // Gewichtungen holen
-    inline int GetInsertQ0() const  { return( nInsQ0 ); }
-    inline int GetDeleteR0() const  { return( nDelR0 ); }
-    inline bool GetSplit() const    { return( bSplitCount ); }
+    inline int GetLimit() const     { return nLimit; }   // Limit holen
+    inline int GetReplaceP0() const { return nRepP0; }   // Gewichtungen holen
+    inline int GetInsertQ0() const  { return nInsQ0; }
+    inline int GetDeleteR0() const  { return nDelR0; }
+    inline bool GetSplit() const    { return bSplitCount; }
     inline int SetLimit( int nNewLimit );       // Limit setzen,
     inline int SetReplaceP0( int nNewP0 );      // Gewichtungen setzen,
     inline int SetInsertQ0( int nNewQ0 );       // returnen bisherigen Wert
@@ -164,7 +164,7 @@ public:
     inline bool SetSplit( bool bNewSplit );
         // SetSplit( TRUE ) macht nur mit Werten nach CalcLPQR() Sinn!
 
-    inline bool IsNormal( sal_Int32 nPos ) const { return( !bpPatIsWild[nPos] ); }
+    inline bool IsNormal( sal_Int32 nPos ) const { return !bpPatIsWild[nPos]; }
 
     // Balance, aus Geschwindigkeitsgruenden ist dieses keine Funktion
     // c == cpPattern[jj] == cString[ii]
@@ -204,35 +204,35 @@ inline int WLevDistance::SetLimit( int nNewLimit )
 {
     int nTmp = nLimit;
     nLimit = nNewLimit;
-    return( nTmp );
+    return nTmp;
 }
 
 inline int WLevDistance::SetReplaceP0( int nNewP0 )
 {
     int nTmp = nRepP0;
     nRepP0 = nNewP0;
-    return( nTmp );
+    return nTmp;
 }
 
 inline int WLevDistance::SetInsertQ0( int nNewQ0 )
 {
     int nTmp = nInsQ0;
     nInsQ0 = nNewQ0;
-    return( nTmp );
+    return nTmp;
 }
 
 inline int WLevDistance::SetDeleteR0( int nNewR0 )
 {
     int nTmp = nDelR0;
     nDelR0 = nNewR0;
-    return( nTmp );
+    return nTmp;
 }
 
 inline bool WLevDistance::SetSplit( bool bNewSplit )
 {
     bool bTmp = bSplitCount;
     bSplitCount = bNewSplit;
-    return( bTmp );
+    return bTmp;
 }
 
 #endif      // _LEVDIS_HXX

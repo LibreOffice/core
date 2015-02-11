@@ -96,7 +96,7 @@ rtl_arena_segment_constructor (void * obj)
     QUEUE_START_NAMED(segment, s);
     QUEUE_START_NAMED(segment, f);
 
-    return (1);
+    return 1;
 }
 
 /** rtl_arena_segment_destructor()
@@ -404,7 +404,7 @@ rtl_arena_hash_remove (
         }
     }
 
-    return (segment);
+    return segment;
 }
 
 /* ================================================================= */
@@ -515,14 +515,14 @@ rtl_arena_segment_create (
                     QUEUE_INSERT_HEAD_NAMED(span, (*ppSegment), s);
 
                     /* report success */
-                    return (1);
+                    return 1;
                 }
                 rtl_arena_segment_put (arena, &span);
             }
             rtl_arena_segment_put (arena, ppSegment);
         }
     }
-    return (0);
+    return 0;
 }
 
 /** rtl_arena_segment_coalesce()
@@ -709,7 +709,7 @@ rtl_arena_activate (
             if (!(arena->m_qcache_ptr))
             {
                 /* out of memory */
-                return (0);
+                return 0;
             }
             for (i = 1; i <= n; i++)
             {
@@ -724,7 +724,7 @@ rtl_arena_activate (
         QUEUE_INSERT_TAIL_NAMED(&(g_arena_list.m_arena_head), arena, arena_);
         RTL_MEMORY_LOCK_RELEASE(&(g_arena_list.m_lock));
     }
-    return (arena);
+    return arena;
 }
 
 /** rtl_arena_deactivate()
@@ -916,7 +916,7 @@ try_alloc:
             goto try_alloc;
         }
     }
-    return (result);
+    return result;
 }
 
 /** rtl_arena_destroy()
@@ -1003,7 +1003,7 @@ SAL_CALL rtl_arena_alloc (
                 (*pSize) = size;
         }
     }
-    return (addr);
+    return addr;
 }
 
 /** rtl_arena_free()
@@ -1151,9 +1151,9 @@ SAL_CALL rtl_machdep_alloc (
         pArena->m_stats.m_mem_alloc += size;
 
         (*pSize) = size;
-        return (addr);
+        return addr;
     }
-    return (NULL);
+    return NULL;
 }
 
 /** rtl_machdep_free()
@@ -1183,14 +1183,14 @@ rtl_machdep_pagesize()
 {
 #if defined(SAL_UNX)
 #if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
-    return ((sal_Size)getpagesize());
+    return (sal_Size)getpagesize();
 #else  /* POSIX */
-    return ((sal_Size)sysconf(_SC_PAGESIZE));
+    return (sal_Size)sysconf(_SC_PAGESIZE);
 #endif /* xBSD || POSIX */
 #elif defined(SAL_W32)
     SYSTEM_INFO info;
     GetSystemInfo (&info);
-    return ((sal_Size)(info.dwPageSize));
+    return (sal_Size)info.dwPageSize;
 #endif /* (SAL_UNX || SAL_W32) */
 }
 

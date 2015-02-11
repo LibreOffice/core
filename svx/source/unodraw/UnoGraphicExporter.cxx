@@ -378,7 +378,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
                 pInfo->SetRepresentation( aPageNumValue );
 
-                return(0);
+                return 0;
             }
         }
     }

@@ -238,7 +238,7 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
     if( ( eDT == NAVIGATOR_DRAGTYPE_LINK ) && ( ( pInfo && !pInfo->HasName() ) || !maTlbObjects.IsLinkableSelected() ) )
         eDT = NAVIGATOR_DRAGTYPE_NONE;
 
-    return( eDT );
+    return eDT;
 }
 
 //Get SdDrawDocShell
@@ -414,7 +414,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
             }
         }
     }
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
@@ -458,7 +458,7 @@ IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
         SetDragImage();
     }
 
-    return( 0L );
+    return 0L;
 }
 
 /**
@@ -493,7 +493,7 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
                 maTlbObjects.SetSelectionMode( MULTIPLE_SELECTION );
         }
     }
-    return( 0 );
+    return 0;
 }
 
 IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
@@ -736,7 +736,7 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, bool bImag
                 return( bImage ? TBI_LINK : STR_DRAGTYPE_LINK );
         default: OSL_FAIL( "No resource for DragType available!" );
     }
-    return( 0 );
+    return 0;
 }
 
 NavDocInfo* SdNavigatorWin::GetDocInfo()
@@ -747,7 +747,7 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
     {
         if( nPos == 0 )
         {
-            return( NULL );
+            return NULL;
         }
         nPos--;
     }
@@ -791,7 +791,7 @@ bool SdNavigatorWin::Notify(NotifyEvent& rNEvt)
     if( !nOK )
         nOK = Window::Notify( rNEvt );
 
-    return( nOK );
+    return nOK;
 }
 
 /**

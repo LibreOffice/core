@@ -61,7 +61,7 @@ SAL_DLLPUBLIC_EXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow
 {
     (void) env; /* avoid warning about unused parameter */
     (void) obj_this; /* avoid warning about unused parameter */
-    return (SYSTEM_XWINDOW);
+    return SYSTEM_XWINDOW;
 }
 
 
@@ -115,7 +115,7 @@ SAL_DLLPUBLIC_EXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindo
     /* Free the drawing surface */
     awt.FreeDrawingSurface(ds);
 
-    return ((jlong)drawable);
+    return (jlong)drawable;
 }
 
 

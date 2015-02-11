@@ -339,14 +339,14 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 SfxTabPage* SvxCaptionTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
-    return( new SvxCaptionTabPage( pWindow, *rOutAttrs ) );
+    return new SvxCaptionTabPage( pWindow, *rOutAttrs );
 }
 
 
 
 const sal_uInt16* SvxCaptionTabPage::GetRanges()
 {
-    return( pCaptionRanges );
+    return pCaptionRanges;
 }
 
 

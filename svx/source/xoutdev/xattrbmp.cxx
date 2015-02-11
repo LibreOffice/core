@@ -98,7 +98,7 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
                 *( pPixelArray + i ) = *( rXBmp.pPixelArray + i );
         }
     }
-    return( *this );
+    return *this;
 }
 
 int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
@@ -110,7 +110,7 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
         aBckgrColor != rXOBitmap.aBckgrColor ||
         bGraphicDirty != rXOBitmap.bGraphicDirty )
     {
-        return( sal_False );
+        return sal_False;
     }
 
     if( pPixelArray && rXOBitmap.pPixelArray )
@@ -119,10 +119,10 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
         for( sal_uInt16 i = 0; i < nCount; i++ )
         {
             if( *( pPixelArray + i ) != *( rXOBitmap.pPixelArray + i ) )
-                return( sal_False );
+                return sal_False;
         }
     }
-    return( sal_True );
+    return sal_True;
 }
 
 Bitmap XOBitmap::GetBitmap() const
@@ -378,7 +378,7 @@ void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
 
 sal_uInt16 XFillBitmapItem::GetVersion(sal_uInt16 /*nFileFormatVersion*/) const
 {
-    return(2);
+    return 2;
 }
 
 bool XFillBitmapItem::GetPresentation(

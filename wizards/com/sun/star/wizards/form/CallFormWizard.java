@@ -107,7 +107,7 @@ public class CallFormWizard
         {
             String[] stringSupportedServiceNames = new String[] { __serviceName };
 
-            return (stringSupportedServiceNames);
+            return stringSupportedServiceNames;
         }
 
         /** This method returns true, if the given service will be
@@ -123,7 +123,7 @@ public class CallFormWizard
             {
                 booleanSupportsService = true;
             }
-            return (booleanSupportsService);
+            return booleanSupportsService;
         }
 
         public byte[] getImplementationId()
@@ -136,7 +136,7 @@ public class CallFormWizard
          */
         public java.lang.String getImplementationName()
         {
-            return (FormWizardImplementation.class.getName());
+            return FormWizardImplementation.class.getName();
         }
 
         /** Provides a sequence of all types (usually interface types)
@@ -162,7 +162,7 @@ public class CallFormWizard
                 System.err.println(exception);
             }
 
-            return (typeReturn);
+            return typeReturn;
         }
     }
 }

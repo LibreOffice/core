@@ -569,7 +569,7 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
         }
     }
 
-    return( bModified );
+    return bModified;
 }
 
 /*************************************************************************
@@ -596,12 +596,12 @@ void SvxMeasurePage::Construct()
 SfxTabPage* SvxMeasurePage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxMeasurePage( pWindow, *rAttrs ) );
+    return new SvxMeasurePage( pWindow, *rAttrs );
 }
 
 const sal_uInt16* SvxMeasurePage::GetRanges()
 {
-    return( pRanges );
+    return pRanges;
 }
 
 void SvxMeasurePage::PointChanged( vcl::Window* pWindow, RECT_POINT /*eRP*/ )
@@ -655,7 +655,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
     }
     ChangeAttrHdl_Impl( p );
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
@@ -786,7 +786,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     m_pCtlPreview->SetAttributes( aAttrSet );
     m_pCtlPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 void SvxMeasurePage::FillUnitLB()

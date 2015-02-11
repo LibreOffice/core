@@ -302,7 +302,7 @@ SvxFieldData* SdFieldPopup::GetField()
             static_cast<SvxAuthorField*>( pNewField )->SetFormat( eFormat );
         }
     }
-    return( pNewField );
+    return pNewField;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

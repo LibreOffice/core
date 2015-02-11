@@ -899,7 +899,7 @@ OUString lclGetDataFieldCaption( const OUString& rFieldName, GeneralFunction eFu
     if( nResIdx )
         aCaption = ScGlobal::GetRscString( nResIdx ) + " - ";
     aCaption += rFieldName;
-    return( aCaption );
+    return aCaption;
 }
 
 } // namespace

@@ -347,11 +347,11 @@ storeError FileLockBytes::initialize_Impl (rtl::Reference< PageData::Allocator >
 {
     storeError result = initSize_Impl (m_nSize);
     if (result != store_E_None)
-        return (result);
+        return result;
 
     result = PageData::Allocator::createInstance (rxAllocator, nPageSize);
     if (result != store_E_None)
-        return (result);
+        return result;
 
     // @see readPageAt_Impl().
     m_xAllocator = rxAllocator;
@@ -844,7 +844,7 @@ FileLockBytes_createInstance (
     ResourceHolder<FileHandle> xFile;
     storeError result = xFile.get().initialize (pFilename, eAccessMode);
     if (result != store_E_None)
-        return (result);
+        return result;
 
     if (eAccessMode == store_AccessReadOnly)
     {

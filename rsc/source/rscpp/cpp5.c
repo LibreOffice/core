@@ -227,7 +227,7 @@ again:
     else if (op == OP_ADD && binop == 0)
         op = OP_PLU;            /* Unary plus       */
     else if (op == OP_FAIL)
-        return (1);             /* Error in evallex */
+        return 1;             /* Error in evallex */
 #ifdef  DEBUG_EVAL
     fprintf( pCppOut, "op = %s, opdope = %03o, binop = %d, skip = %d\n",
         opname[op], opdope[op], binop, opp->skip);
@@ -237,12 +237,12 @@ again:
         if (binop != 0)
         {
             cerror("misplaced constant in #if", NULLST);
-            return (1);
+            return 1;
         }
         else if (valp >= &value[NEXP-1])
         {
             cerror("#if value stack overflow", NULLST);
-            return (1);
+            return 1;
         }
         else
         {
@@ -258,13 +258,13 @@ again:
     else if (op > OP_END)
     {
         cerror("Illegal #if line", NULLST);
-        return (1);
+        return 1;
     }
     prec = opdope[op];
     if (binop != (prec & 1))
     {
         cerror("Operator %s in incorrect context", opname[op]);
-        return (1);
+        return 1;
     }
     binop = (prec & 2) >> 1;
     for (;;)
@@ -288,7 +288,7 @@ again:
             {
                 cerror("expression stack overflow at op \"%s\"",
                        opname[op]);
-                return (1);
+                return 1;
             }
             opp->op = (char)op;
             opp->prec = (char)prec;
@@ -328,14 +328,14 @@ again:
         {
         case OP_END:                /* Stack end marker */
             if (op == OP_EOE)
-                return (valp[-1]);  /* Finished ok.     */
+                return valp[-1];    /* Finished ok.     */
             goto again;             /* Read another op. */
 
         case OP_LPA:                /* ( on stack       */
             if (op != OP_RPA)       /* Matches ) on input   */
             {
                 cerror("unbalanced paren's, op is \"%s\"", opname[op]);
-                return (1);
+                return 1;
             }
             opp--;                  /* Unstack it       */
             /* goto again;          -- Fall through     */
@@ -349,7 +349,7 @@ again:
             {
                 cerror("Misplaced '?' or ':', previous operator is %s",
                        opname[(int)opp->op]);
-                return (1);
+                return 1;
             }
         /*
          * Evaluate op1.
@@ -389,7 +389,7 @@ again:
         if ((c = macroid(c)) == EOF_CHAR || c == '\n')
         {
             unget();
-            return (OP_EOE);        /* End of expression    */
+            return OP_EOE;          /* End of expression    */
         }
     }
     while ((t = type[c]) == LET && catenate());
@@ -402,7 +402,7 @@ again:
             else
                 cierror("illegal character (%d decimal) in #if", c);
         }
-        return (OP_FAIL);
+        return OP_FAIL;
     }
     else if (t == QUO)              /* ' or "       */
     {
@@ -412,10 +412,10 @@ again:
 #ifdef  DEBUG_EVAL
             fprintf( pCppOut, "evalchar returns %d.\n", evalue);
 #endif
-            return (DIG);           /* Return a value   */
+            return DIG;           /* Return a value   */
         }
         cerror("Can't use a string in an #if", NULLST);
-        return (OP_FAIL);
+        return OP_FAIL;
     }
     else if (t == LET)              /* ID must be a macro   */
     {
@@ -430,14 +430,14 @@ again:
                 if (c1 != '(' ||      /* Need to balance  */
                     skipws() == ')')    /* Did we balance?  */
                 {
-                    return (DIG);       /* Parsed ok        */
+                    return DIG;       /* Parsed ok        */
                 }
             }
             cerror("Bad #if ... defined() syntax", NULLST);
-            return (OP_FAIL);
+            return OP_FAIL;
         }
         else if (streq(token, "sizeof"))    /* New sizeof hackery   */
-            return (dosizeof());        /* Gets own routine */
+            return dosizeof();        /* Gets own routine */
         /*
          * The Draft ANSI C Standard says that an undefined symbol
          * in an #if has the value zero.  We are a bit pickier,
@@ -449,7 +449,7 @@ again:
             cwarn("undefined symbol \"%s\" in #if, 0 used", token);
 #endif
         evalue = 0;
-        return (DIG);
+        return DIG;
     }
     else if (t == DIG)              /* Numbers are harder   */
     {
@@ -468,7 +468,7 @@ again:
         {
         case '!':
             if (c1 == '=')
-                return (OP_NE);
+                return OP_NE;
             break;
 
         case '=':
@@ -476,9 +476,9 @@ again:
             {
                 unget();
                 cerror("= not allowed in #if", NULLST);
-                return (OP_FAIL);
+                return OP_FAIL;
             }
-            return (OP_EQ);
+            return OP_EQ;
 
         case '>':
         case '<':
@@ -498,11 +498,11 @@ again:
             if (c1 == '\n')         /* Multi-line if    */
                 goto again;
             cerror("Unexpected \\ in #if", NULLST);
-            return (OP_FAIL);
+            return OP_FAIL;
         }
         unget();
     }
-    return (t);
+    return t;
 }
 
 /*
@@ -560,7 +560,7 @@ FILE_LOCAL int dosizeof()
             if (tp->name == NULLST)
             {
                 cerror("#if sizeof, unknown type \"%s\"", token);
-                return (OP_FAIL);
+                return OP_FAIL;
             }
             typecode |= tp->type;   /* Or in the type bit   */
         }
@@ -580,7 +580,7 @@ FILE_LOCAL int dosizeof()
             if (!bittest(typecode & *testp))
             {
                 cerror("#if ... sizeof: illegal type combination", NULLST);
-                return (OP_FAIL);
+                return OP_FAIL;
             }
         }
         /*
@@ -600,7 +600,7 @@ FILE_LOCAL int dosizeof()
         if ((typecode & ~T_PTR) == 0)
         {
             cerror("#if sizeof() error, no type specified", NULLST);
-            return (OP_FAIL);
+            return OP_FAIL;
         }
         /*
          * Exactly one bit (and possibly T_PTR) may be set.
@@ -611,17 +611,17 @@ FILE_LOCAL int dosizeof()
             {
                 evalue = ((typecode & T_PTR) != 0)
                     ? sizp->psize : sizp->size;
-                return (DIG);
+                return DIG;
             }
         }                   /* We shouldn't fail    */
         cierror("#if ... sizeof: bug, unknown type code 0x%x", typecode);
-        return (OP_FAIL);
+        return OP_FAIL;
     }
 
   nogood:
     unget();
     cerror("#if ... sizeof() syntax error", NULLST);
-    return (OP_FAIL);
+    return OP_FAIL;
 }
 
 /*
@@ -679,7 +679,7 @@ FILE_LOCAL int evalnum(int c)
     if (c == 'u' || c == 'U')   /* Unsigned nonsense        */
         cget();
     unget();
-    return (value);
+    return value;
 }
 
 /*
@@ -779,7 +779,7 @@ FILE_LOCAL int evalchar(int skip)
         value += c;
     }
     instring = FALSE;
-    return (value);
+    return value;
 }
 
 /*
@@ -920,7 +920,7 @@ FILE_LOCAL int * evaleval(int* valp, int op, int skip)
         v1 = 0;
     }
     *valp++ = v1;
-    return (valp);
+    return valp;
 }
 
 #ifdef  DEBUG_EVAL

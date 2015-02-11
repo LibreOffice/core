@@ -288,7 +288,7 @@ char *fcvt(double value, int ndigit, int *decpt, int *sign)
     strcpy(ret,buf);
   }
 
-  return(ret);
+  return ret;
 }
 
 #endif

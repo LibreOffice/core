@@ -88,7 +88,7 @@ oslProcessError SAL_CALL rtl_getAppCommandArg (
          rtl_uString_assign( ppCommandArg, g_ppCommandArgs[nArg] );
         result = osl_Process_E_None;
     }
-    return (result);
+    return result;
 }
 
 sal_uInt32 SAL_CALL rtl_getAppCommandArgCount()

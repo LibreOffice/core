@@ -382,7 +382,7 @@ rtlDigestError SAL_CALL rtl_digest_MD2 (
         result = rtl_digest_getMD2 (&digest, pBuffer, nBufLen);
 
     memset (&digest, 0, sizeof (digest));
-    return (result);
+    return result;
 }
 
 /*
@@ -397,7 +397,7 @@ rtlDigest SAL_CALL rtl_digest_createMD2() SAL_THROW_EXTERN_C()
         pImpl->m_digest = __rtl_digest_MD2;
         __rtl_digest_initMD2 (&(pImpl->m_context));
     }
-    return ((rtlDigest)pImpl);
+    return (rtlDigest)pImpl;
 }
 
 /*
@@ -753,7 +753,7 @@ rtlDigestError SAL_CALL rtl_digest_MD5 (
         result = rtl_digest_getMD5 (&digest, pBuffer, nBufLen);
 
     memset (&digest, 0, sizeof (digest));
-    return (result);
+    return result;
 }
 
 /*
@@ -768,7 +768,7 @@ rtlDigest SAL_CALL rtl_digest_createMD5() SAL_THROW_EXTERN_C()
         pImpl->m_digest = __rtl_digest_MD5;
         __rtl_digest_initMD5 (&(pImpl->m_context));
     }
-    return ((rtlDigest)pImpl);
+    return (rtlDigest)pImpl;
 }
 
 /*
@@ -1237,7 +1237,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA (
         result = rtl_digest_getSHA (&digest, pBuffer, nBufLen);
 
     memset (&digest, 0, sizeof (digest));
-    return (result);
+    return result;
 }
 
 /*
@@ -1252,7 +1252,7 @@ rtlDigest SAL_CALL rtl_digest_createSHA() SAL_THROW_EXTERN_C()
         pImpl->m_digest = __rtl_digest_SHA_0;
         __rtl_digest_initSHA (&(pImpl->m_context), __rtl_digest_updateSHA_0);
     }
-    return ((rtlDigest)pImpl);
+    return (rtlDigest)pImpl;
 }
 
 /*
@@ -1427,7 +1427,7 @@ rtlDigestError SAL_CALL rtl_digest_SHA1 (
         result = rtl_digest_getSHA1 (&digest, pBuffer, nBufLen);
 
     memset (&digest, 0, sizeof (digest));
-    return (result);
+    return result;
 }
 
 /*
@@ -1442,7 +1442,7 @@ rtlDigest SAL_CALL rtl_digest_createSHA1() SAL_THROW_EXTERN_C()
         pImpl->m_digest = __rtl_digest_SHA_1;
         __rtl_digest_initSHA (&(pImpl->m_context), __rtl_digest_updateSHA_1);
     }
-    return ((rtlDigest)pImpl);
+    return (rtlDigest)pImpl;
 }
 
 /*
@@ -1670,7 +1670,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_MD5 (
     }
 
     memset (&digest, 0, sizeof (digest));
-    return (result);
+    return result;
 }
 
 /*
@@ -1685,7 +1685,7 @@ rtlDigest SAL_CALL rtl_digest_createHMAC_MD5() SAL_THROW_EXTERN_C()
         pImpl->m_digest = __rtl_digest_HMAC_MD5;
         __rtl_digest_initHMAC_MD5 (&(pImpl->m_context));
     }
-    return ((rtlDigest)pImpl);
+    return (rtlDigest)pImpl;
 }
 
 /*
@@ -1902,7 +1902,7 @@ rtlDigestError SAL_CALL rtl_digest_HMAC_SHA1 (
     }
 
     memset (&digest, 0, sizeof (digest));
-    return (result);
+    return result;
 }
 
 /*
@@ -1917,7 +1917,7 @@ rtlDigest SAL_CALL rtl_digest_createHMAC_SHA1() SAL_THROW_EXTERN_C()
         pImpl->m_digest = __rtl_digest_HMAC_SHA1;
         __rtl_digest_initHMAC_SHA1 (&(pImpl->m_context));
     }
-    return ((rtlDigest)pImpl);
+    return (rtlDigest)pImpl;
 }
 
 /*

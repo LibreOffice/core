@@ -49,7 +49,7 @@ int _cdecl main( int argc, char * argv[] )
     void test_uuid();
     test_uuid();
 
-    return(0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

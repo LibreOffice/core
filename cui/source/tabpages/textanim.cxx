@@ -436,12 +436,12 @@ bool SvxTextAnimationPage::FillItemSet( SfxItemSet* rAttrs)
         bModified = true;
     }
 
-    return( bModified );
+    return bModified;
 }
 
 const sal_uInt16* SvxTextAnimationPage::GetRanges()
 {
-    return( pRanges );
+    return pRanges;
 }
 
 /*************************************************************************
@@ -453,7 +453,7 @@ const sal_uInt16* SvxTextAnimationPage::GetRanges()
 SfxTabPage* SvxTextAnimationPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxTextAnimationPage( pWindow, *rAttrs ) );
+    return new SvxTextAnimationPage( pWindow, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
@@ -511,7 +511,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
         }
 
     }
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
@@ -531,7 +531,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
             m_pNumFldCount->SetValue( m_pNumFldCount->GetValue() );
         }
     }
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
@@ -548,7 +548,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
         m_pMtrFldDelay->SetValue( m_pMtrFldDelay->GetValue() );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
         m_pMtrFldAmount->SetValue( nValue );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
@@ -597,7 +597,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickDirectionHdl_Impl, ImageButton *, pBtn )
     m_pBtnRight->Check( pBtn == m_pBtnRight );
     m_pBtnDown->Check( pBtn == m_pBtnDown );
 
-    return( 0L );
+    return 0L;
 }
 
 void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
@@ -621,7 +621,7 @@ sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
     else if( m_pBtnDown->IsChecked() )
         nValue = SDRTEXTANI_DOWN;
 
-    return( nValue );
+    return nValue;
 }
 
 

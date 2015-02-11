@@ -300,7 +300,7 @@ public class JavaTools
             retarray = new String[retvector.size()];
             retvector.toArray(retarray);
         }
-        return (retarray);
+        return retarray;
     }
 
     public static String[][] removeOutdatedFields(String[][] baselist, String[] _complist, int _compindex)
@@ -324,7 +324,7 @@ public class JavaTools
                 retvector.toArray(retarray);
             }
         }
-        return (retarray);
+        return retarray;
     }
 
     public static String[][] removeOutdatedFields(String[][] baselist, String[] _complist)

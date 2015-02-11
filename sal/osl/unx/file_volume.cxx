@@ -232,7 +232,7 @@ static oslFileError osl_psz_getVolumeInformation (
         if ((__OSL_STATFS(pszDirectory, &sfs)) < 0)
         {
             oslFileError result = oslTranslateFileError(OSL_FET_ERROR, errno);
-            return (result);
+            return result;
         }
 
         /* FIXME: how to detect the kind of storage (fixed, cdrom, ...) */

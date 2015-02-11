@@ -237,7 +237,7 @@ int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 
@@ -347,7 +347,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
     rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
 
-    return( bModified );
+    return bModified;
 }
 
 
@@ -458,14 +458,14 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 SfxTabPage* SvxShadowTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxShadowTabPage( pWindow, *rAttrs ) );
+    return new SvxShadowTabPage( pWindow, *rAttrs );
 }
 
 
 
 const sal_uInt16* SvxShadowTabPage::GetRanges()
 {
-    return( pShadowRanges );
+    return pShadowRanges;
 }
 
 
@@ -484,7 +484,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 
     ModifyShadowHdl_Impl( NULL );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -527,7 +527,7 @@ IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
     //aCtlXRectPreview.SetFillAttr( aXFillAttr );
     m_pCtlXRectPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 

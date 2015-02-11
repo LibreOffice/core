@@ -234,7 +234,7 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
 
 IconChoicePage* SvxHyperlinkNewDocTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkNewDocTp( pWindow, pDlg, rItemSet ) );
+    return new SvxHyperlinkNewDocTp( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************
@@ -453,7 +453,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 
         m_pCbbPath->SetText ( aStrTmp );
     }
-    return( 0L );
+    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -260,7 +260,7 @@ sal_Int32 SAL_CALL ProgressBar::getValue () throw( RuntimeException, std::except
     // Ready for multithreading
     MutexGuard aGuard (m_aMutex);
 
-    return ( m_nValue );
+    return m_nValue;
 }
 
 //  XWindow

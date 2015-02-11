@@ -234,7 +234,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options
                     rtl_uString_release( name );
                     rtl_uString_release( path );
 
-                    return (pPipe);
+                    return pPipe;
                 }
                 else
                 {
@@ -401,7 +401,7 @@ sal_Int32 SAL_CALL osl_receivePipe(oslPipe pPipe,
         }
     }
 
-    return (nBytes);
+    return nBytes;
 }
 
 /*****************************************************************************/
@@ -432,7 +432,7 @@ sal_Int32 SAL_CALL osl_sendPipe(oslPipe pPipe,
          pPipe->m_Error = osl_Pipe_E_ConnectionAbort;
     }
 
-    return (nBytes);
+    return nBytes;
 }
 
 sal_Int32 SAL_CALL osl_writePipe( oslPipe pPipe, const void *pBuffer , sal_Int32 n )
@@ -502,7 +502,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
     else
         Error = osl_Pipe_E_NotFound;
 
-    return (Error);
+    return Error;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

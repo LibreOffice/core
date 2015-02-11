@@ -170,7 +170,7 @@ int skipws()
     do {                            /* Skip whitespace      */
         c = get();
     } while (type[c] == SPA);
-    return (c);
+    return c;
 }
 
 /*
@@ -213,7 +213,7 @@ int macroid(int c)
         expand(dp);
         c = get();
     }
-    return (c);
+    return c;
 }
 
 /*
@@ -231,7 +231,7 @@ int catenate()
     if (get() != TOK_SEP)                   /* Token concatenation  */
     {
         unget();
-        return (FALSE);
+        return FALSE;
     }
     else
     {
@@ -276,7 +276,7 @@ int catenate()
          */
         free(token1);                       /* Free up memory       */
         ungetstring(work);                  /* Unget the new thing, */
-        return (TRUE);
+        return TRUE;
     }
 }
 
@@ -310,13 +310,13 @@ int scanstring(int delim,
     if (c == delim)
     {
         (*outfun)(c);
-        return (TRUE);
+        return TRUE;
     }
     else
     {
         cerror("Unterminated string", NULLST);
         unget();
-        return (FALSE);
+        return FALSE;
     }
 }
 
@@ -488,7 +488,7 @@ char* savestring(char* text)
     size_t size = strlen(text) + 1;
     result = getmem(size);
     strcpy(result, text);
-    return (result);
+    return result;
 }
 
 /*
@@ -513,7 +513,7 @@ FILEINFO* getfile(size_t bufsize, char* name)
         infile->line = line;                /* Save current line    */
     infile = file;                          /* New current file     */
     line = 1;                               /* Note first line      */
-    return (file);                          /* All done.            */
+    return file;                            /* All done.            */
 }
 
 /*
@@ -525,7 +525,7 @@ char* getmem(size_t size)
 
     if ((result = malloc((unsigned) size)) == NULL)
         cfatal("Out of memory", NULLST);
-    return (result);
+    return result;
 }
 
 /*
@@ -557,7 +557,7 @@ DEFBUF* lookid(int c)
     unget();                                /* Rescan terminator    */
     *np = EOS;                              /* Terminate token      */
     if (isrecurse)                          /* Recursive definition */
-        return (NULL);                      /* undefined just now   */
+        return NULL;                        /* undefined just now   */
     nhash += (np - token);                  /* Fix hash value       */
     dp = symtab[nhash & SBMASK];            /* Starting bucket      */
     while (dp != (DEFBUF*) NULL)           /* Search symbol table  */
@@ -621,7 +621,7 @@ DEFBUF* defendel(char* name, int delete)
         dp->nargs = 0;
         strcpy(dp->name, name);
     }
-    return (dp);
+    return dp;
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -769,7 +769,7 @@ int get()
     popped = 0;
   get_from_file:
     if ((file = infile) == NULL)
-        return (EOF_CHAR);
+        return EOF_CHAR;
   newline:
 
     /*
@@ -833,7 +833,7 @@ int get()
             free(file->progname);           /* free it, too.        */
         free((char*) file);                /* Free file space      */
         if (infile == NULL)                 /* If at end of file    */
-            return (EOF_CHAR);              /* Return end of file   */
+            return EOF_CHAR;                /* Return end of file   */
         line = infile->line;                /* Reset line number    */
         goto get_from_file;                 /* Get from the top.    */
     }
@@ -861,7 +861,7 @@ int get()
     if (c == '\n')                          /* Maintain current     */
         ++line;                             /* line counter         */
     if (instring)                           /* Strings just return  */
-        return (c);                         /* the character.       */
+        return c;                           /* the character.       */
     else if (c == '/')                      /* Comment?             */
     {
         instring = TRUE;                    /* So get() won't loop  */
@@ -871,7 +871,7 @@ int get()
         {
             instring = FALSE;               /* Nope, no comment     */
             unget();                        /* Push the char. back  */
-            return ('/');                   /* Return the slash     */
+            return '/';                     /* Return the slash     */
         }
         if (keepcomments)                   /* If writing comments  */
         {
@@ -894,7 +894,7 @@ int get()
                 {
                 case EOF_CHAR:
                     cerror("EOF in comment", NULLST);
-                    return (EOF_CHAR);
+                    return EOF_CHAR;
 
                 case '/':
                     if ((c = get()) != '*')     /* Don't let comments   */
@@ -928,7 +928,7 @@ int get()
                      */
                     if (*file->bptr == '\n' || type[*file->bptr & 0xFF] == SPA)
                         goto newline;
-                    return ((file->bptr[-1] = ' '));
+                    return (file->bptr[-1] = ' ');
 
                 case '\n':                      /* we'll need a #line   */
                     if (!keepcomments)
@@ -946,11 +946,11 @@ int get()
                 if (keepcomments && c != EOF_CHAR)
                     cput(c);
                 if( EOF_CHAR == c )
-                    return (EOF_CHAR);
+                    return EOF_CHAR;
                 else if( '\n' == c )
                 {
                     instring = FALSE;           /* End of comment,      */
-                    return( c );
+                    return c;
                 }
             }
         }
@@ -965,7 +965,7 @@ int get()
         else                                /* Backslash anything   */
         {
             unget();                        /* Get it later         */
-            return ('\\');                  /* Return the backslash */
+            return '\\';                    /* Return the backslash */
         }
     }
     else if (c == '\f' || c == VT)          /* Form Feed, Vertical  */
@@ -994,7 +994,7 @@ int get()
             return 0xef;
         }
     }
-    return (c);                             /* Just return the char */
+    return c;                             /* Just return the char */
 }
 
 /*
@@ -1039,7 +1039,7 @@ int cget()
         c = get();
     }
     while (c == TOK_SEP);
-    return (c);
+    return c;
 }
 
 /*

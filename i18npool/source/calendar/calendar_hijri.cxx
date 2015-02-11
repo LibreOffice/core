@@ -163,7 +163,7 @@ Calendar_hijri::NewMoon(sal_Int32 n)
     // convert from Ephemeris Time (ET) to (approximate) Universal Time (UT)
     jd += xtra - (0.41 + 1.2053 * t + 0.4992 * t2)/1440;
 
-    return (jd);
+    return jd;
 }
 
 // Get Hijri Date

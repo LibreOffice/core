@@ -465,7 +465,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         mpWindow->ReleaseMouse();
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 void FuDraw::Activate()
@@ -790,7 +790,7 @@ bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
         bReturn = FuPoor::RequestHelp(rHEvt);
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)

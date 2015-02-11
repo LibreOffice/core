@@ -682,7 +682,7 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
         return V_ARRAY(this);
 
     if(isNull())
-        return (0);
+        return 0;
     OLEVariant varDest;
 
     varDest.ChangeType((VT_ARRAY|VT_UI1), this);

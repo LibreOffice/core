@@ -396,7 +396,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
     }
 
-    return(0);
+    return 0;
 }
 
 /**

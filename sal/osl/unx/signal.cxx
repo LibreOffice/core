@@ -500,7 +500,7 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
         return (pHandler);
     }
 
-    return (NULL);
+    return NULL;
 }
 
 sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
@@ -532,7 +532,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 
             free(pHandler);
 
-            return (sal_True);
+            return sal_True;
         }
 
         pPrevious = pHandler;
@@ -541,7 +541,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 
     osl_releaseMutex(SignalListMutex);
 
-    return (sal_False);
+    return sal_False;
 }
 
 oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)

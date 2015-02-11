@@ -113,7 +113,7 @@ SAL_IMPLEMENT_MAIN()
 
     printf("Test Dll ComponentLoader, OK!\n");
 
-    return(0);
+    return 0;
 }
 
 

@@ -89,7 +89,7 @@ ERRTYPE RscString::SetRef( const RSCINST & rInst, const RscId & rRefId )
         reinterpret_cast<RscStringInst *>(rInst.pData)->bDflt  = false;
     }
     else
-        return( ERR_REFNOTALLOWED );
+        return ERR_REFNOTALLOWED;
 
     return ERR_OK;
 }

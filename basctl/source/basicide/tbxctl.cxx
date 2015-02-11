@@ -63,8 +63,8 @@ TbxControls::TbxControls( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 SfxPopupWindowType TbxControls::GetPopupWindowType() const
 {
     if( nLastSlot == USHRT_MAX )
-        return(SFX_POPUPWINDOW_ONCLICK);
-    return(SFX_POPUPWINDOW_ONTIMEOUT);
+        return SFX_POPUPWINDOW_ONCLICK;
+    return SFX_POPUPWINDOW_ONTIMEOUT;
 }
 
 void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
@@ -146,7 +146,7 @@ SfxPopupWindow* TbxControls::CreatePopupWindow()
     if ( GetSlotId() == SID_CHOOSE_CONTROLS )
         createAndPositionSubToolBar( aSubToolBarResName );
 
-    return(0);
+    return 0;
 }
 
 

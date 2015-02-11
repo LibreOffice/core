@@ -93,7 +93,7 @@ cppsetup(line, filep, inc)
     outp=inp;
     value = yyparse();
     *p = savec;
-    return(value);
+    return value;
 }
 
 pperror(tag, x0,x1,x2,x3,x4)

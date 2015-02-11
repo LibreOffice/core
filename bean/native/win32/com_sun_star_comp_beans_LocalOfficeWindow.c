@@ -90,7 +90,7 @@ JNIEXPORT jint JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeW
 {
     (void) env; // unused
     (void) obj_this; // unused
-    return (SYSTEM_WIN32);
+    return SYSTEM_WIN32;
 }
 
 
@@ -156,7 +156,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
-    return ((jlong)hWnd);
+    return (jlong)hWnd;
 }
 
 

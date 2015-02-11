@@ -316,7 +316,7 @@ IMPL_LINK(ParaLineSpacingControl, LineSPDistHdl_Impl, ListBox*, /*pBox*/)
 IMPL_LINK_NOARG( ParaLineSpacingControl, LineSPDistAtHdl_Impl )
 {
     ExecuteLineSpace();
-    return (0L);
+    return 0L;
 }
 
 void ParaLineSpacingControl::ExecuteLineSpace()

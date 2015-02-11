@@ -353,7 +353,7 @@ int MAIN(int argc, char** argv)
     }
     if( pfargv )
         free(pfargv);
-    return( IO_NORMAL );
+    return IO_NORMAL;
 
 }
 

@@ -130,7 +130,7 @@ bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 bool FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
@@ -213,7 +213,7 @@ bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 /**

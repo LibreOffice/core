@@ -38,21 +38,21 @@ public:
                 ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey );
     ObjNode *   DelObjNode( RscTop * pClass, sal_uLong lFileKey );
     sal_uInt32  GetId() const SAL_OVERRIDE;
-    RscId       GetRscId(){ return( aRscId ); }
+    RscId       GetRscId(){ return aRscId; }
     sal_uLong   GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const //< search the index in the b-tree
                     {
-                        return( static_cast<ObjNode *>(IdNode::Search( rName )) );
+                        return static_cast<ObjNode *>(IdNode::Search( rName ));
                     }
     bool        Insert( ObjNode* pTN ) //< insert a new node in the b-tree
 
                     {
-                        return( IdNode::Insert( (IdNode *)pTN ) );
+                        return IdNode::Insert( (IdNode *)pTN );
                     }
     CLASS_DATA  GetRscObj() //< get the Object from this Node
 
                     {
-                        return( pRscObj );
+                        return pRscObj;
                     }
     bool        IsConsistent();
 };
@@ -72,11 +72,11 @@ public:
     sal_uInt32  GetId() const SAL_OVERRIDE;
     RefNode*    Search( Atom typ ) const //< search the index in the b-tree
                     {
-                        return( static_cast<RefNode *>(IdNode::Search( typ )) );
+                        return static_cast<RefNode *>(IdNode::Search( typ ));
                     }
     bool        Insert( RefNode* pTN ) //< insert a new node in the b-tree
                     {
-                        return( IdNode::Insert( (IdNode *)pTN ) );
+                        return IdNode::Insert( (IdNode *)pTN );
                     }
     bool        PutObjNode( ObjNode * pPutObject );
 
@@ -86,7 +86,7 @@ public:
     ObjNode *   GetObjNode()
                     {
                         // hole  pObjBiTree
-                        return( pObjBiTree );
+                        return pObjBiTree;
                     }
 };
 

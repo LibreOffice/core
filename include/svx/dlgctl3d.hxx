@@ -59,7 +59,7 @@ public:
 
     void Reset();
     virtual void SetObjectType(sal_uInt16 nType);
-    sal_uInt16 GetObjectType() const { return( mnObjectType ); }
+    sal_uInt16 GetObjectType() const { return mnObjectType; }
     SfxItemSet Get3DAttributes() const;
     virtual void Set3DAttributes(const SfxItemSet& rAttr);
 };

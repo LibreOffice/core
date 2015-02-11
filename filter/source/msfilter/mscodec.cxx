@@ -377,7 +377,7 @@ bool MSCodec_Std97::VerifyKey (
         (void)memset (pDigest, 0, sizeof(pDigest));
     }
 
-    return (result);
+    return result;
 }
 
 bool MSCodec_Std97::InitCipher (sal_uInt32 nCounter)
@@ -435,7 +435,7 @@ bool MSCodec_Std97::CreateSaltDigest( const sal_uInt8 nSaltData[16], sal_uInt8 n
         (void)memcpy(nSaltDigest, pDigest, 16);
     }
 
-    return (result);
+    return result;
 }
 
 bool MSCodec_Std97::Encode (

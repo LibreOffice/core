@@ -886,7 +886,7 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 bool FuPoor::MouseMove(const MouseEvent& )
@@ -974,7 +974,7 @@ IMPL_LINK_NOARG(FuPoor, DragHdl)
 
 bool FuPoor::Command(const CommandEvent& rCEvt)
 {
-    return( mpView->Command(rCEvt,mpWindow) );
+    return mpView->Command(rCEvt,mpWindow);
 }
 
 /**
@@ -1035,7 +1035,7 @@ bool FuPoor::RequestHelp(const HelpEvent& rHEvt)
         }
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 void FuPoor::Paint(const Rectangle&, ::sd::Window* )
