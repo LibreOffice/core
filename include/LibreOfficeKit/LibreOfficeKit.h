@@ -122,7 +122,9 @@ typedef enum
     /// The start of selection is to be adjusted.
     LOK_SETTEXTSELECTION_START,
     /// The end of selection is to be adjusted.
-    LOK_SETTEXTSELECTION_END
+    LOK_SETTEXTSELECTION_END,
+    /// Both the start and the end of selection is to be adjusted.
+    LOK_SETTEXTSELECTION_RESET
 }
 LibreOfficeKitSetTextSelectionType;
 

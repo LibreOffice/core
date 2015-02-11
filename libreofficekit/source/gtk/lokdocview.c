@@ -74,8 +74,7 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
     {
         g_info("lcl_signalMotion: dragging the middle handle");
         lcl_getDragPoint(&pDocView->m_aHandleMiddleRect, pEvent, &aPoint);
-        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y), 1);
-        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y), 1);
+        pDocView->pDocument->pClass->setTextSelection(pDocView->pDocument, LOK_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
     }
     else if (pDocView->m_bInDragStartHandle)
     {

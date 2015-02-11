@@ -3202,10 +3202,13 @@ void SwXTextDocument::setTextSelection(int nType, int nX, int nY)
     switch (nType)
     {
     case LOK_SETTEXTSELECTION_START:
-        rEditWin.SetCursorLogicPosition(/*bPoint=*/false, Point(nX, nY));
+        rEditWin.SetCursorLogicPosition(Point(nX, nY), /*bPoint=*/false, /*bClearMark=*/false);
         break;
     case LOK_SETTEXTSELECTION_END:
-        rEditWin.SetCursorLogicPosition(/*bPoint=*/true, Point(nX, nY));
+        rEditWin.SetCursorLogicPosition(Point(nX, nY), /*bPoint=*/true, /*bClearMark=*/false);
+        break;
+    case LOK_SETTEXTSELECTION_RESET:
+        rEditWin.SetCursorLogicPosition(Point(nX, nY), /*bPoint=*/true, /*bClearMark=*/true);
         break;
     default:
         assert(false);
