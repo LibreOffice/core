@@ -363,8 +363,8 @@ const SwDBData& SwDoc::GetDBDesc()
 #if HAVE_FEATURE_DBCONNECTIVITY
     if(maDBData.sDataSource.isEmpty())
     {
-        const sal_uInt16 nSize = getIDocumentFieldsAccess().GetFldTypes()->size();
-        for(sal_uInt16 i = 0; i < nSize && maDBData.sDataSource.isEmpty(); ++i)
+        const SwFldTypes::size_type nSize = getIDocumentFieldsAccess().GetFldTypes()->size();
+        for(SwFldTypes::size_type i = 0; i < nSize && maDBData.sDataSource.isEmpty(); ++i)
         {
             SwFieldType& rFldType = *((*getIDocumentFieldsAccess().GetFldTypes())[i]);
             sal_uInt16 nWhich = rFldType.Which();
@@ -442,7 +442,7 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
     }
 
     SwSectionFmts& rArr = GetSections();
-    for (sal_uInt16 n = rArr.size(); n; )
+    for (auto n = rArr.size(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -514,10 +514,9 @@ void SwDoc::GetAllDBNames( std::vector<OUString>& rAllDBNames )
     SwDBManager* pMgr = GetDBManager();
 
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
-    for(sal_uInt16 i = 0; i < rArr.size(); i++)
+    for(const auto &aParam : rArr)
     {
-        const SwDSParam* pParam = &rArr[i];
-        rAllDBNames.push_back(pParam->sDataSource + OUString(DB_DELIM) + pParam->sCommand);
+        rAllDBNames.push_back(aParam.sDataSource + OUString(DB_DELIM) + aParam.sCommand);
     }
 #endif
 }
@@ -533,9 +532,9 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
 #endif
 
     sal_Int32 nPos;
-    for (sal_uInt16 i = 0; i < rAllDBNames.size(); ++i )
+    for (const auto &sItem : rAllDBNames)
     {
-        OUString pStr(rAllDBNames[i]);
+        OUString pStr(sItem);
 
         if( -1 != (nPos = sFormula.indexOf( pStr )) &&
             sFormula[ nPos + pStr.getLength() ] == '.' &&
@@ -558,8 +557,8 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
 void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList,
                              const std::vector<OUString>& rUsedDBNames )
 {
-    for (sal_uInt16 i = 0; i < rUsedDBNames.size(); ++i)
-        AddUsedDBToList( rDBNameList, rUsedDBNames[i] );
+    for ( const auto &sName : rUsedDBNames )
+        AddUsedDBToList( rDBNameList, sName );
 }
 
 void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString& rDBName)
@@ -572,13 +571,13 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString&
         return;
 
 #ifdef UNX
-    for( sal_uInt16 i = 0; i < rDBNameList.size(); ++i )
-        if( rDBName == rDBNameList[i].getToken(0, ';') )
+    for( const auto &sName : rDBNameList )
+        if( rDBName == sName.getToken(0, ';') )
             return;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for( sal_uInt16 i = 0; i < rDBNameList.size(); ++i )
-        if( rSCmp.isEqual( rDBName, rDBNameList[i].getToken(0, ';') ) )
+    for( const auto &sName : rDBNameList )
+        if( rSCmp.isEqual( rDBName, sName.getToken(0, ';') ) )
             return;
 #endif
 
@@ -604,7 +603,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
     aNewDBData.nCommandType = (short)rNewName.getToken(2, DB_DELIM).toInt32();
 
     SwSectionFmts& rArr = GetSections();
-    for (sal_uInt16 n = rArr.size(); n; )
+    for (auto n = rArr.size(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -741,13 +740,13 @@ OUString SwDoc::ReplaceUsedDBs( const std::vector<OUString>& rUsedDBNames,
 bool SwDoc::IsNameInArray( const std::vector<OUString>& rArr, const OUString& rName )
 {
 #ifdef UNX
-    for( sal_uInt16 i = 0; i < rArr.size(); ++i )
-        if( rName == rArr[ i ] )
+    for( const auto &sName : rArr )
+        if( rName == sName )
             return true;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for( sal_uInt16 i = 0; i < rArr.size(); ++i )
-        if( rSCmp.isEqual( rName, rArr[ i] ))
+    for( const auto &sName : rArr )
+        if( rSCmp.isEqual( rName, sName ))
             return true;
 #endif
     return false;
@@ -755,9 +754,9 @@ bool SwDoc::IsNameInArray( const std::vector<OUString>& rArr, const OUString& rN
 
 void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 {
-    const sal_uInt16 nSize = getIDocumentFieldsAccess().GetFldTypes()->size();
+    const SwFldTypes::size_type nSize = getIDocumentFieldsAccess().GetFldTypes()->size();
 
-    for( sal_uInt16 i = INIT_FLDTYPES; i < nSize; ++i )
+    for( SwFldTypes::size_type i = INIT_FLDTYPES; i < nSize; ++i )
     {
         SwFieldType* pFldType = (*getIDocumentFieldsAccess().GetFldTypes())[i];
         if( RES_AUTHORITY  == pFldType->Which() )
@@ -803,7 +802,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
     {
         // look up via the pTxtFld pointer. It is a sorted list, but it's sorted by node
         // position. Until this is found, the search for the pointer is already done.
-        for( sal_uInt16 n = 0; n < pFldSortLst->size(); ++n )
+        for( _SetGetExpFlds::size_type n = 0; n < pFldSortLst->size(); ++n )
             if( &rFld == (*pFldSortLst)[ n ]->GetPointer() )
             {
                 delete (*pFldSortLst)[n];
@@ -845,12 +844,12 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         // In order for the frames to be created the right way, they have to be expanded
         // from top to bottom
         std::vector<sal_uLong> aTmpArr;
+        std::vector<sal_uLong>::size_type nArrStt = 0;
         SwSectionFmts& rArr = rDoc.GetSections();
         SwSectionNode* pSectNd = 0;
-        sal_uInt16 nArrStt = 0;
         sal_uLong nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-        for (sal_uInt16 n = rArr.size(); n; )
+        for (SwSectionFmts::size_type n = rArr.size(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
             if( pSect && pSect->IsHidden() && !pSect->GetCondition().isEmpty() &&
@@ -866,13 +865,13 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
         // Display all first so that we have frames. The BodyAnchor is defined by that.
         // First the ContentArea, then the special areas!
-        for (sal_uInt16 n = nArrStt; n < aTmpArr.size(); ++n)
+        for (std::vector<sal_uLong>::size_type n = nArrStt; n < aTmpArr.size(); ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
             pSectNd->GetSection().SetCondHidden( false );
         }
-        for (sal_uInt16 n = 0; n < nArrStt; ++n)
+        for (std::vector<sal_uLong>::size_type n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             OSL_ENSURE( pSectNd, "Where is my SectionNode" );
@@ -880,9 +879,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         }
 
         // add all to the list so that they are sorted
-        for (sal_uInt16 n = 0; n < aTmpArr.size(); ++n)
+        for (const auto &nId : aTmpArr)
         {
-            GetBodyNode( *rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode() );
+            GetBodyNode( *rDoc.GetNodes()[ nId ]->GetSectionNode() );
         }
     }
 
@@ -892,10 +891,10 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 #if HAVE_FEATURE_DBCONNECTIVITY
     bool bIsDBManager = 0 != rDoc.GetDBManager();
 #endif
-    sal_uInt16 nWhich, n;
+    sal_uInt16 nWhich;
     const SfxPoolItem* pItem;
-    sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
-    for( n = 0; n < nMaxItems; ++n )
+    const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
         if( 0 == (pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )) )
             continue;
@@ -1182,7 +1181,7 @@ SwDocUpdtFld::~SwDocUpdtFld()
 {
     delete pFldSortLst;
 
-    for( sal_uInt16 n = 0; n < TBLSZ; ++n )
+    for( int n = 0; n < TBLSZ; ++n )
         delete aFldTypeTable[n];
 }
 
