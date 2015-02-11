@@ -103,18 +103,18 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         npDistance = aDisMem.NewMem( nArrayLen );
     }
 
-    // calculate start values of the second column(first Pattern-value)
-    // first column (0-Len Pattern) is always zero .. nStringLen * nInsQ0,
+    // Calculate start values of the second column (first pattern value).
+    // First column (0-Len pattern) is always zero .. nStringLen * nInsQ0,
     // therefore the minimum is 0
     if ( nPatternLen == 0 )
     {
-        // Count of deletions, to determine the Pattern
+        // Count of deletions to reach pattern
         for ( sal_Int32 i=0; i <= nStringLen; i++ )
             npDistance[i] = i * nDelR0;
     }
     else if ( cpPattern[0] == '*' && bpPatIsWild[0] )
     {
-        // instead of a  '*' you can fit in anything
+        // instead of a '*' you can fit in anything
         for ( sal_Int32 i=0; i <= nStringLen; i++ )
             npDistance[i] = 0;
     }
@@ -126,7 +126,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         if ( c == '?' && bpPatIsWild[0] )
             nP = 0;     // a '?' could be any character.
         else
-            // Minimum replace and delete +insert  weighting
+            // Minimum of replacement and deletion+insertion weighting
             nP = Min3( nRepP0, nRepP0, nDelR0 + nInsQ0 );
         npDistance[0] = nInsQ0;     // start with simple insert
         npDistance[1] = nInsQ0;
@@ -136,22 +136,22 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         for ( sal_Int32 i=1; i <= nStringLen; i++, nDelCnt += nDelR0 )
         {
             if ( cString[i-1] == c )
-                nP = 0;     // Replace from this position with 0
-            // Deletion to determine the Pattern + Replace
+                nP = 0;     // Replace from this position is 0
+            // Deletions to match pattern + Replace
             npDistance[i] = nDelCnt + nP;
             if ( bSplitCount )
             {
                 if ( nReplacePos < 0 && nP )
-                {   // this Position will be replaced
+                {   // this position will be replaced
                     nRepS++;
                     nReplacePos = i;
                 }
                 else if ( nReplacePos > 0 && !nP )
                 {
-                   // same count  c
+                    // same count of c
                     int nBalance = levdisbalance( 0, i-1, c, cString, nStringLen );
                     if ( !nBalance )
-                    {   // an insert was replaced
+                    {   // one was replaced that was an insertion instead
                         nRepS--;
                         nReplacePos = 0;
                     }
@@ -162,7 +162,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
     }
 
     // calculate distance matrix
-    sal_Int32 j = 0;        //for all columns of the pattern, till limit is not reached
+    sal_Int32 j = 0;        // for all columns of the pattern, till limit is not reached
     while ( (j < nPatternLen-1)
             && nSPMin <= (bSplitCount ? 2 * nLimit : nLimit) )
     {
@@ -177,30 +177,30 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             nP = nRepP0;
         if ( c == '*' && bpPatIsWild[j] )
         {
-            nQ = 0;     // instertion/deletion without penalty
+            nQ = 0;     // instertion and deletion without penalty
             nR = 0;
         }
         else
         {
-            nQ = nInsQ0;    //usual weighting
+            nQ = nInsQ0;    // usual weighting
             nR = nDelR0;
         }
         d2 = npDistance[0];
-        // increase insert count to get from null sting to pattern
+        // increase insert count to get from null string to pattern
         npDistance[0] = npDistance[0] + nQ;
         nSPMin = npDistance[0];
-        int nReplacePos = -1;       // tristate Flag
-        // for each pattern column run though the string
+        int nReplacePos = -1;       // tristate flag
+        // for each pattern column run through the string
         for ( sal_Int32 i=1; i <= nStringLen; i++ )
         {
-            int d1 = d2;                // WLD( X(i-1), Y(j-1) )
+            int d1 = d2;            // WLD( X(i-1), Y(j-1) )
             d2 = npDistance[i];     // WLD( X(i)  , Y(j-1) )
             if ( cString[i-1] == c )
             {
                 nPij = 0;           // p(i,j)
                 if ( nReplacePos < 0 )
                 {
-                    // same quantity c
+                    // same count of c
                     int nBalance = levdisbalance( j, i-1, c, cString, nStringLen );
                     if ( !nBalance )
                         nReplacePos = 0;    // no replacement
@@ -217,7 +217,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             if ( bSplitCount )
             {
                 if ( nReplacePos < 0 && nPij && npDistance[i] == d1 + nPij )
-                {   // this poition will be replaced
+                {   // this position will be replaced
                     nRepS++;
                     nReplacePos = i;
                 }
@@ -225,18 +225,20 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
                 {
                     // character is equal in string and pattern
                     //
-                    //If from this point:
-                    //* pattern and string have the same count of this character
-                    //* and character count is the same before this position
-                    //the replace was none.
+                    // If from this point:
+                    // * pattern and string have the same count of this
+                    //   character
+                    // * and character count is the same before this position
+                    // then the replace was none.
                     //
-                    //Scrambled letters are recognized and the replace is withdrawed.
-                    //Whereby the double limit comes to fuition.
-                    //
-                    //Same quantity c
+                    // Scrambled letters are recognized here and the nRepS
+                    // replacement is withdrawn, whereby the double limit kicks
+                    // in.
+
+                    // Same count of c
                     int nBalance = levdisbalance( j, i-1, c, cString, nStringLen );
                     if ( !nBalance )
-                    {   // insert was replaced
+                    {   // one was replaced that was an insertion instead
                         nRepS--;
                         nReplacePos = 0;
                     }
@@ -262,23 +264,23 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
     }
 }
 
-// Calculating nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
+// Calculating      nLimit,   nReplP0,    nInsQ0,     nDelR0,     bSplitCount
 // from user values           nOtherX,    nShorterY,  nLongerZ,   bRelaxed
 int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 {
     if ( nX < 0 ) nX = 0;       // only positive values
     if ( nY < 0 ) nY = 0;
     if ( nZ < 0 ) nZ = 0;
-    if (0 == Min3( nX, nY, nZ ))     // at least one 0
+    if (0 == Min3( nX, nY, nZ ))                // at least one 0
     {
         int nMid, nMax;
-        nMax = Max3( nX, nY, nZ );      // either 0 for three 0s or Max
-        if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // even two 0
-            nLimit = nMax;  // either 0 or the only one >0
-        else        // one is 0
+        nMax = Max3( nX, nY, nZ );              // either 0 for three 0s or Max
+        if ( 0 == (nMid = Mid3( nX, nY, nZ )) ) // even two 0
+            nLimit = nMax;                      // either 0 or the only one >0
+        else                                    // one is 0
             nLimit = LCM( nMid, nMax );
     }
-    else        // all three of them are not 0
+    else                                        // all three of them are not 0
         nLimit = LCM( LCM( nX, nY ), nZ );
     nRepP0 = ( nX ? nLimit / nX : nLimit + 1 );
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
