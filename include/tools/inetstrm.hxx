@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-class INetMessage;
+class INetRFC822Message;
 class INetMIMEMessage;
 class SvMemoryStream;
 class SvStream;
@@ -81,7 +81,7 @@ enum INetMessageStreamState
 /// Message Generator Interface.
 class INetMessageIStream : public INetIStream
 {
-    INetMessage    *pSourceMsg;
+    INetRFC822Message *pSourceMsg;
     bool            bHeaderGenerated;
 
     sal_uIntPtr           nBufSiz;
@@ -106,8 +106,8 @@ public:
     INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMessageIStream (void);
 
-    INetMessage *GetSourceMessage (void) const { return pSourceMsg; }
-    void SetSourceMessage (INetMessage *pMsg) { pSourceMsg = pMsg; }
+    INetRFC822Message *GetSourceMessage (void) const { return pSourceMsg; }
+    void SetSourceMessage (INetRFC822Message *pMsg) { pSourceMsg = pMsg; }
 
     void GenerateHeader (bool bGen = true) { bHeaderGenerated = !bGen; }
     bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
@@ -116,7 +116,7 @@ public:
 /// Message Parser Interface.
 class INetMessageOStream : public INetOStream
 {
-    INetMessage            *pTargetMsg;
+    INetRFC822Message      *pTargetMsg;
     bool                    bHeaderParsed;
 
     INetMessageStreamState  eOState;
@@ -135,8 +135,8 @@ public:
     INetMessageOStream (void);
     virtual ~INetMessageOStream (void);
 
-    INetMessage *GetTargetMessage (void) const { return pTargetMsg; }
-    void SetTargetMessage (INetMessage *pMsg) { pTargetMsg = pMsg; }
+    INetRFC822Message *GetTargetMessage (void) const { return pTargetMsg; }
+    void SetTargetMessage (INetRFC822Message *pMsg) { pTargetMsg = pMsg; }
 
     void ParseHeader (bool bParse = true) { bHeaderParsed = !bParse; }
     bool IsHeaderParsed (void) const { return bHeaderParsed; }
@@ -193,7 +193,7 @@ public:
     using INetMessageIStream::SetSourceMessage;
     void SetSourceMessage (INetMIMEMessage *pMsg)
     {
-        INetMessageIStream::SetSourceMessage ((INetMessage *)pMsg);
+        INetMessageIStream::SetSourceMessage ((INetRFC822Message *)pMsg);
     }
     INetMIMEMessage *GetSourceMessage (void) const
     {
@@ -203,7 +203,7 @@ public:
     using INetMessageOStream::SetTargetMessage;
     void SetTargetMessage (INetMIMEMessage *pMsg)
     {
-        INetMessageOStream::SetTargetMessage ((INetMessage *)pMsg);
+        INetMessageOStream::SetTargetMessage ((INetRFC822Message *)pMsg);
     }
     INetMIMEMessage *GetTargetMessage (void) const
     {

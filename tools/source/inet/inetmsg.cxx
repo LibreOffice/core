@@ -48,12 +48,7 @@ inline sal_Unicode ascii_toLowerCase( sal_Unicode ch )
         return ch;
 }
 
-INetMessage::~INetMessage()
-{
-    ListCleanup_Impl();
-}
-
-void INetMessage::ListCleanup_Impl()
+void INetRFC822Message::ListCleanup_Impl()
 {
     // Cleanup.
     sal_uIntPtr i, n = m_aHeaderList.size();
@@ -62,7 +57,7 @@ void INetMessage::ListCleanup_Impl()
     m_aHeaderList.clear();
 }
 
-void INetMessage::ListCopy (const INetMessage &rMsg)
+void INetRFC822Message::ListCopy (const INetRFC822Message &rMsg)
 {
     if (!(this == &rMsg))
     {
@@ -79,7 +74,7 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
     }
 }
 
-void INetMessage::SetHeaderField_Impl (
+void INetRFC822Message::SetHeaderField_Impl (
     INetMIME::HeaderFieldType  eType,
     const OString &rName,
     const OUString &rValue,
@@ -90,57 +85,6 @@ void INetMessage::SetHeaderField_Impl (
         aSink, eType, rValue, osl_getThreadTextEncoding(), false);
     SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
-}
-
-sal_uIntPtr INetMessage::SetHeaderField (
-    const INetMessageHeader &rHeader, sal_uIntPtr nIndex)
-{
-    sal_uIntPtr nResult = nIndex;
-    SetHeaderField_Impl (rHeader, nResult);
-    return nResult;
-}
-
-SvStream& INetMessage::operator<< (SvStream& rStrm) const
-{
-    rStrm.WriteUInt32( m_nDocSize );
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
-
-    sal_uIntPtr i, n = m_aHeaderList.size();
-    rStrm.WriteUInt32( n );
-
-    for (i = 0; i < n; i++)
-        WriteINetMessageHeader( rStrm, *( m_aHeaderList[ i ] ) );
-
-    return rStrm;
-}
-
-SvStream& INetMessage::operator>> (SvStream& rStrm)
-{
-    // Cleanup.
-    m_nDocSize = 0;
-    m_xDocLB.Clear();
-    ListCleanup_Impl();
-
-    sal_uInt32 nTemp;
-
-    // Copy.
-    rStrm.ReadUInt32( nTemp );
-    m_nDocSize = nTemp;
-    m_aDocName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
-
-    sal_uIntPtr i, n = 0;
-    rStrm.ReadUInt32( nTemp );
-    n = nTemp;
-
-    for (i = 0; i < n; i++)
-    {
-        INetMessageHeader *p = new INetMessageHeader();
-        ReadINetMessageHeader( rStrm, *p );
-        m_aHeaderList.push_back( p );
-    }
-
-    // Done.
-    return rStrm;
 }
 
 static const char * ImplINetRFC822MessageHeaderData[] =
@@ -178,15 +122,18 @@ enum _ImplINetRFC822MessageHeaderState
 };
 
 INetRFC822Message::INetRFC822Message()
-    : INetMessage()
+    : m_nDocSize(0)
 {
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
         m_nIndex[i] = CONTAINER_ENTRY_NOTFOUND;
 }
 
 INetRFC822Message::INetRFC822Message (const INetRFC822Message& rMsg)
-    : INetMessage (rMsg)
+    : m_nDocSize (rMsg.m_nDocSize),
+      m_aDocName (rMsg.m_aDocName),
+      m_xDocLB   (rMsg.m_xDocLB)
 {
+    ListCopy (rMsg);
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
         m_nIndex[i] = rMsg.m_nIndex[i];
 }
@@ -195,8 +142,10 @@ INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
 {
     if (this != &rMsg)
     {
-        INetMessage::operator= (rMsg);
-
+        m_nDocSize = rMsg.m_nDocSize;
+        m_aDocName = rMsg.m_aDocName;
+        m_xDocLB   = rMsg.m_xDocLB;
+        ListCopy (rMsg);
         for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
             m_nIndex[i] = rMsg.m_nIndex[i];
     }
@@ -205,6 +154,7 @@ INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
 
 INetRFC822Message::~INetRFC822Message()
 {
+    ListCleanup_Impl();
 }
 
 /* ParseDateField and local helper functions.
@@ -584,7 +534,7 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
 
             default: // INETMSG_RFC822_JUNK
                 pData = pStop;
-                nNewIndex = INetMessage::SetHeaderField (rHeader, nNewIndex);
+                SetHeaderField_Impl(rHeader, nNewIndex);
                 break;
         }
     }
@@ -593,7 +543,14 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
 
 SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
 {
-    INetMessage::operator<< (rStrm);
+    rStrm.WriteUInt32( m_nDocSize );
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, m_aDocName, RTL_TEXTENCODING_UTF8);
+
+    sal_uIntPtr n = m_aHeaderList.size();
+    rStrm.WriteUInt32( n );
+
+    for (sal_uIntPtr i = 0; i < n; i++)
+        WriteINetMessageHeader( rStrm, *( m_aHeaderList[ i ] ) );
 
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
         rStrm.WriteUInt32( m_nIndex[i] );
@@ -603,9 +560,29 @@ SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
 
 SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
 {
-    INetMessage::operator>> (rStrm);
+    // Cleanup.
+    m_nDocSize = 0;
+    m_xDocLB.Clear();
+    ListCleanup_Impl();
 
     sal_uInt32 nTemp;
+
+    // Copy.
+    rStrm.ReadUInt32( nTemp );
+    m_nDocSize = nTemp;
+    m_aDocName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
+
+    sal_uIntPtr n = 0;
+    rStrm.ReadUInt32( nTemp );
+    n = nTemp;
+
+    for (sal_uIntPtr i = 0; i < n; i++)
+    {
+        INetMessageHeader *p = new INetMessageHeader();
+        ReadINetMessageHeader( rStrm, *p );
+        m_aHeaderList.push_back( p );
+    }
+
     for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
     {
         rStrm.ReadUInt32( nTemp );

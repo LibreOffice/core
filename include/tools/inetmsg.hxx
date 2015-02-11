@@ -81,7 +81,25 @@ public:
 
 typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
 
-class INetMessage
+#define INETMSG_RFC822_BCC                 0
+#define INETMSG_RFC822_CC                  1
+#define INETMSG_RFC822_COMMENTS            2
+#define INETMSG_RFC822_DATE                3
+#define INETMSG_RFC822_FROM                4
+#define INETMSG_RFC822_IN_REPLY_TO         5
+#define INETMSG_RFC822_KEYWORDS            6
+#define INETMSG_RFC822_MESSAGE_ID          7
+#define INETMSG_RFC822_REFERENCES          8
+#define INETMSG_RFC822_REPLY_TO            9
+#define INETMSG_RFC822_RETURN_PATH        10
+#define INETMSG_RFC822_SENDER             11
+#define INETMSG_RFC822_SUBJECT            12
+#define INETMSG_RFC822_TO                 13
+#define INETMSG_RFC822_X_MAILER           14
+#define INETMSG_RFC822_RETURN_RECEIPT_TO  15
+#define INETMSG_RFC822_NUMHDR             16
+
+class TOOLS_DLLPUBLIC INetRFC822Message
 {
     HeaderList_impl m_aHeaderList;
 
@@ -90,7 +108,9 @@ class INetMessage
     SvLockBytesRef  m_xDocLB;
 
     void ListCleanup_Impl();
-    void ListCopy (const INetMessage& rMsg);
+    void ListCopy (const INetRFC822Message& rMsg);
+
+    sal_uIntPtr m_nIndex[INETMSG_RFC822_NUMHDR];
 
 protected:
     OUString GetHeaderName_Impl (
@@ -139,25 +159,11 @@ protected:
     virtual SvStream& operator>> (SvStream& rStrm);
 
 public:
-    INetMessage() : m_nDocSize(0) {}
-    virtual ~INetMessage();
+    INetRFC822Message();
+    INetRFC822Message (const INetRFC822Message& rMsg);
+    virtual ~INetRFC822Message();
 
-    INetMessage (const INetMessage& rMsg)
-        : m_nDocSize (rMsg.m_nDocSize),
-          m_aDocName (rMsg.m_aDocName),
-          m_xDocLB   (rMsg.m_xDocLB)
-    {
-        ListCopy (rMsg);
-    }
-
-    INetMessage& operator= (const INetMessage& rMsg)
-    {
-        m_nDocSize = rMsg.m_nDocSize;
-        m_aDocName = rMsg.m_aDocName;
-        m_xDocLB   = rMsg.m_xDocLB;
-        ListCopy (rMsg);
-        return *this;
-    }
+    INetRFC822Message& operator= (const INetRFC822Message& rMsg);
 
     sal_uIntPtr GetHeaderCount() const { return m_aHeaderList.size(); }
 
@@ -194,60 +200,8 @@ public:
     SvLockBytes* GetDocumentLB() const { return m_xDocLB; }
     void         SetDocumentLB (SvLockBytes *pDocLB) { m_xDocLB = pDocLB; }
 
-    friend SvStream& WriteINetMessage(
-        SvStream& rStrm, const INetMessage& rMsg)
-    {
-        return rMsg.operator<< (rStrm);
-    }
-
-    friend SvStream& ReadINetMessage (
-        SvStream& rStrm, INetMessage& rMsg)
-    {
-        return rMsg.operator>> (rStrm);
-    }
-};
-
-#define INETMSG_RFC822_BCC                 0
-#define INETMSG_RFC822_CC                  1
-#define INETMSG_RFC822_COMMENTS            2
-#define INETMSG_RFC822_DATE                3
-#define INETMSG_RFC822_FROM                4
-#define INETMSG_RFC822_IN_REPLY_TO         5
-#define INETMSG_RFC822_KEYWORDS            6
-#define INETMSG_RFC822_MESSAGE_ID          7
-#define INETMSG_RFC822_REFERENCES          8
-#define INETMSG_RFC822_REPLY_TO            9
-#define INETMSG_RFC822_RETURN_PATH        10
-#define INETMSG_RFC822_SENDER             11
-#define INETMSG_RFC822_SUBJECT            12
-#define INETMSG_RFC822_TO                 13
-#define INETMSG_RFC822_X_MAILER           14
-#define INETMSG_RFC822_RETURN_RECEIPT_TO  15
-#define INETMSG_RFC822_NUMHDR             16
-
-class TOOLS_DLLPUBLIC INetRFC822Message : public INetMessage
-{
-    sal_uIntPtr m_nIndex[INETMSG_RFC822_NUMHDR];
-
-protected:
-    virtual SvStream& operator<< (SvStream& rStrm) const SAL_OVERRIDE;
-    virtual SvStream& operator>> (SvStream& rStrm) SAL_OVERRIDE;
-
-public:
-    INetRFC822Message();
-    INetRFC822Message (const INetRFC822Message& rMsg);
-    virtual ~INetRFC822Message();
-
-    INetRFC822Message& operator= (const INetRFC822Message& rMsg);
-
     static bool ParseDateField (
         const OUString& rDateField, DateTime& rDateTime);
-
-    using INetMessage::SetHeaderField;
-    virtual sal_uIntPtr SetHeaderField (
-        const INetMessageHeader &rHeader,
-        sal_uIntPtr nIndex = ((sal_uIntPtr)-1)
-    ) SAL_OVERRIDE;
 
     // Header fields.
 
@@ -357,6 +311,18 @@ public:
     }
 
     // Stream operators.
+
+    friend SvStream& WriteINetMessage(
+        SvStream& rStrm, const INetRFC822Message& rMsg)
+    {
+        return rMsg.operator<< (rStrm);
+    }
+
+    friend SvStream& ReadINetMessage (
+        SvStream& rStrm, INetRFC822Message& rMsg)
+    {
+        return rMsg.operator>> (rStrm);
+    }
 
     friend SvStream& operator<< (
         SvStream& rStrm, const INetRFC822Message& rMsg)
