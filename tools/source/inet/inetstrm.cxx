@@ -410,18 +410,6 @@ int INetMessageOStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
     return INETSTREAM_STATUS_OK;
 }
 
-// INetMessageIOStream
-
-INetMessageIOStream::INetMessageIOStream(sal_uIntPtr nBufferSize)
-    : INetMessageIStream (nBufferSize),
-      INetMessageOStream ()
-{
-}
-
-INetMessageIOStream::~INetMessageIOStream(void)
-{
-}
-
 // INetMessageEncodeQPStream_Impl
 
 static const sal_Char hex2pr[16] = {
@@ -1059,7 +1047,7 @@ int INetMessageDecode64Stream_Impl::PutMsgLine(const sal_Char* pData,
 // INetMIMEMessageStream
 
 INetMIMEMessageStream::INetMIMEMessageStream(sal_uIntPtr nBufferSize)
-    : INetMessageIOStream(nBufferSize),
+    : INetMessageIStream(nBufferSize),
       eState      (INETMSG_EOL_BEGIN),
       nChildIndex (0),
       pChildStrm  (NULL),
@@ -1202,7 +1190,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
         }
 
         // Generate the message header.
-        int nRead = INetMessageIOStream::GetMsgLine(pData, nSize);
+        int nRead = INetMessageIStream::GetMsgLine(pData, nSize);
         if (nRead <= 0)
         {
             // Reset state.
@@ -1292,7 +1280,7 @@ int INetMIMEMessageStream::GetMsgLine(sal_Char* pData, sal_uIntPtr nSize)
             if (eEncoding == INETMSG_ENCODING_7BIT)
             {
                 // No Encoding.
-                return INetMessageIOStream::GetMsgLine(pData, nSize);
+                return INetMessageIStream::GetMsgLine(pData, nSize);
             }
 
             // Apply appropriate Encoding.
@@ -1346,7 +1334,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
     if (!IsHeaderParsed())
     {
         // Parse the message header.
-        int nRet = INetMessageIOStream::PutMsgLine(pData, nSize);
+        int nRet = INetMessageOStream::PutMsgLine(pData, nSize);
         return nRet;
     }
     else
@@ -1381,7 +1369,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                         return status;
                 }
 
-                return INetMessageIOStream::PutMsgLine(pData, nSize);
+                return INetMessageOStream::PutMsgLine(pData, nSize);
             }
             else
             {
@@ -1452,7 +1440,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                             else {
                                 SAL_WARN( "tools.stream", "Boundary not found." );
                             }
-                            status = INetMessageIOStream::PutMsgLine(
+                            status = INetMessageOStream::PutMsgLine(
                                 pOldPos, pChar - pOldPos + 1 );
                             if( status != INETSTREAM_STATUS_OK )
                                 return status;
@@ -1487,7 +1475,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
                                 // Initialize control variables.
                             }
                             eState = INETMSG_EOL_BEGIN;
-                            status = INetMessageIOStream::PutMsgLine(
+                            status = INetMessageOStream::PutMsgLine(
                                 pOldPos, pChar - pOldPos + 1 );
                             if( status != INETSTREAM_STATUS_OK )
                                 return status;
@@ -1541,7 +1529,7 @@ int INetMIMEMessageStream::PutMsgLine(const sal_Char* pData, sal_uIntPtr nSize)
             if (eEncoding == INETMSG_ENCODING_7BIT)
             {
                 // No decoding necessary.
-                return INetMessageIOStream::PutMsgLine(pData, nSize);
+                return INetMessageOStream::PutMsgLine(pData, nSize);
             }
             else
             {

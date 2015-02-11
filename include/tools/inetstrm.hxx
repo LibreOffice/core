@@ -110,18 +110,6 @@ public:
     bool IsHeaderParsed (void) const { return bHeaderParsed; }
 };
 
-class INetMessageIOStream
-    : public INetMessageIStream,
-      public INetMessageOStream
-{
-    INetMessageIOStream (const INetMessageIOStream& rStrm) SAL_DELETED_FUNCTION;
-    INetMessageIOStream& operator= (const INetMessageIOStream& rStrm) SAL_DELETED_FUNCTION;
-
-public:
-    INetMessageIOStream (sal_uIntPtr nBufferSize = 2048);
-    virtual ~INetMessageIOStream (void);
-};
-
 enum INetMessageEncoding
 {
     INETMSG_ENCODING_7BIT,
@@ -131,7 +119,9 @@ enum INetMessageEncoding
     INETMSG_ENCODING_BASE64
 };
 
-class TOOLS_DLLPUBLIC INetMIMEMessageStream : public INetMessageIOStream
+class TOOLS_DLLPUBLIC INetMIMEMessageStream
+    : public INetMessageIStream,
+      public INetMessageOStream
 {
     int                    eState;
 
