@@ -1849,6 +1849,11 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
                 PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_LOGICAL;
             }
+            else if ( xMat->IsEmpty( 0, 0))
+            {   // empty or empty cell
+                FormulaTokenRef xRes = new ScEmptyCellToken( false, true);  // not inherited, display empty
+                PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
+            }
             else
             {
                 String aStr( nMatVal.GetString());
