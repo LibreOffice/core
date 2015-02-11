@@ -112,21 +112,6 @@ public:
     virtual ~INetMessageDecode64Stream_Impl(void);
 };
 
-// INetIStream
-
-INetIStream::INetIStream()
-{
-}
-
-INetIStream::~INetIStream(void)
-{
-}
-
-int INetIStream::Read(sal_Char* pData, sal_uIntPtr nSize)
-{
-    return GetData(pData, nSize);
-}
-
 // INetOStream
 
 INetOStream::INetOStream()
@@ -165,7 +150,7 @@ INetMessageIStream::~INetMessageIStream(void)
     delete pMsgStrm;
 }
 
-int INetMessageIStream::GetData(sal_Char* pData, sal_uIntPtr nSize)
+int INetMessageIStream::Read(sal_Char* pData, sal_uIntPtr nSize)
 {
     if (pSourceMsg == NULL) return INETSTREAM_STATUS_ERROR;
 

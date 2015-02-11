@@ -35,21 +35,6 @@ enum INetStreamStatus
     INETSTREAM_STATUS_ERROR      = -1
 };
 
-class TOOLS_DLLPUBLIC INetIStream
-{
-    INetIStream (const INetIStream& rStrm) SAL_DELETED_FUNCTION;
-    INetIStream& operator= (const INetIStream& rStrm) SAL_DELETED_FUNCTION;
-
-protected:
-    virtual int GetData (sal_Char *pData, sal_uIntPtr nSize) = 0;
-
-public:
-    INetIStream ();
-    virtual ~INetIStream (void);
-
-    int Read (sal_Char *pData, sal_uIntPtr nSize);
-};
-
 class INetOStream
 {
     INetOStream (const INetOStream& rStrm) SAL_DELETED_FUNCTION;
@@ -78,7 +63,7 @@ enum INetMessageStreamState
 };
 
 /// Message Generator Interface.
-class INetMessageIStream : public INetIStream
+class INetMessageIStream
 {
     INetMIMEMessage *pSourceMsg;
     bool            bHeaderGenerated;
@@ -93,8 +78,6 @@ class INetMessageIStream : public INetIStream
     sal_Char       *pMsgRead;
     sal_Char       *pMsgWrite;
 
-    virtual int GetData (sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
-
     INetMessageIStream (const INetMessageIStream& rStrm) SAL_DELETED_FUNCTION;
     INetMessageIStream& operator= (const INetMessageIStream& rStrm) SAL_DELETED_FUNCTION;
 
@@ -104,6 +87,8 @@ protected:
 public:
     INetMessageIStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMessageIStream (void);
+
+    TOOLS_DLLPUBLIC int Read (sal_Char *pData, sal_uIntPtr nSize);
 
     INetMIMEMessage *GetSourceMessage (void) const { return pSourceMsg; }
     void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }
