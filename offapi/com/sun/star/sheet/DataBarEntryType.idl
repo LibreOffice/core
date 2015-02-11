@@ -1,0 +1,37 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_sheet_DataBarEntryType_idl__
+#define __com_sun_star_sheet_DataBarEntryType_idl__
+
+module com {  module sun {  module star {  module sheet {
+
+constants DataBarEntryType
+{
+    const long DATABAR_AUTO = 1;
+
+    const long DATABAR_MIN = 1;
+
+    const long DATABAR_MAX = 2;
+
+    const long DATABAR_PERCENTILE = 3;
+
+    const long DATABAR_VALUE = 4;
+
+    const long DATABAR_PERCENT = 5;
+
+    const long DATABAR_FORMULA = 6;
+};
+
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

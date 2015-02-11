@@ -3418,6 +3418,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet,\
 	XCellRangesQuery \
 	XCellSeries \
 	XCompatibilityNames \
+	XConditionalFormat \
+	XConditionalFormats \
+	XConditionEntry \
 	XConsolidatable \
 	XConsolidationDescriptor \
 	XDDELink \
