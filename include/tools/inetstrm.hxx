@@ -108,7 +108,7 @@ public:
     INetMIMEMessage *GetSourceMessage (void) const { return pSourceMsg; }
     void SetSourceMessage (INetMIMEMessage *pMsg) { pSourceMsg = pMsg; }
 
-    void GenerateHeader (bool bGen = true) { bHeaderGenerated = !bGen; }
+    void SetHeaderGenerated() { bHeaderGenerated = true; }
     bool IsHeaderGenerated (void) const { return bHeaderGenerated; }
 };
 

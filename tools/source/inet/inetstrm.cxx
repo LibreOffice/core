@@ -467,7 +467,7 @@ INetMessageEncodeQPStream_Impl::INetMessageEncodeQPStream_Impl( sal_uIntPtr nMsg
       eState     (INETMSG_EOL_SCR),
       bDone      (false)
 {
-    GenerateHeader (false);
+    SetHeaderGenerated();
 
     pMsgBuffer = new sal_Char[nMsgBufSiz];
     pMsgRead = pMsgWrite = pMsgBuffer;
@@ -789,7 +789,7 @@ INetMessageEncode64Stream_Impl::INetMessageEncode64Stream_Impl(
       nTokBufSiz (80),
       bDone      (false)
 {
-    GenerateHeader(false);
+    SetHeaderGenerated();
 
     pMsgBuffer = new sal_uInt8[nMsgBufSiz];
     pMsgRead = pMsgWrite = pMsgBuffer;

@@ -564,7 +564,7 @@ Sequence<sal_Int8> ODatabaseForm::GetDataMultiPartEncoded(const Reference<XContr
     // Create MessageStream for parent
     INetMIMEMessageStream aMessStream;
     aMessStream.SetSourceMessage( &aParent );
-    aMessStream.GenerateHeader( false );
+    aMessStream.SetHeaderGenerated();
 
     // Copy MessageStream to SvStream
     SvMemoryStream aMemStream;
