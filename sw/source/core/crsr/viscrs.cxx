@@ -284,7 +284,7 @@ void SwSelPaintRects::Show()
         SwRects::clear();
         FillRects();
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
         // get new rects
         std::vector< basegfx::B2DRange > aNewRanges;
 
@@ -365,47 +365,6 @@ void SwSelPaintRects::Show()
         }
 
         HighlightInputFld();
-#else
-
-#if 0 // Totally unclear what we want to do here?
-
-        const OutputDevice* pOut = GetShell()->GetWin();
-        if ( ! pOut )
-            pOut = GetShell()->GetOut();
-        SwWrtShell *pWrtShell = dynamic_cast<SwWrtShell*>(const_cast<SwCrsrShell*>(GetShell()));
-        if (!empty())
-        {
-            if (pWrtShell)
-            {
-
-                // Buffer will be deallocated in the UI layer
-                MLORect *rects = (MLORect *) malloc((sizeof(MLORect))*size());
-                for (size_t i = 0; i < size(); ++i)
-                {
-                    Point origin = pOut->LogicToPixel((*this)[i].Pos());
-                    Size ssize = pOut->LogicToPixel((*this)[i].SSize());
-#ifdef IOS
-                    rects[i] = CGRectMake(origin.X(), origin.Y(),
-                                          ssize.Width(), ssize.Height());
-#else
-                    // Not yet implemented
-                    (void) origin;
-                    (void) ssize;
-#endif
-                }
-                // GetShell returns a SwCrsrShell which actually is a SwWrtShell
-
-                // touch_ui_selection_start() was dummy both in TiledLibreOffice (iOS) and for Android
-                // touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
-            }
-        }
-        else
-        {
-            // touch_ui_selection_none was dummy both in TiledLibreOffice (iOS) and for Android
-            // touch_ui_selection_none();
-        }
-#endif
-
 #endif
     }
 }
