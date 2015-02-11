@@ -43,7 +43,7 @@
 
 /*************************************************************************
 |*
-|* Basisklasse fuer alle Drawmodul-spezifischen Funktionen
+|* base class for draw module specific functions
 |*
 \************************************************************************/
 
@@ -57,7 +57,7 @@ FuDraw::FuDraw(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
 
 /*************************************************************************
 |*
-|* Destruktor
+|* destructor
 |*
 \************************************************************************/
 
@@ -67,15 +67,15 @@ FuDraw::~FuDraw()
 
 /*************************************************************************
 |*
-|* Modifier-Tasten auswerten
+|* evaluate modifier keys
 |*
 \************************************************************************/
 
 void FuDraw::DoModifiers(const MouseEvent& rMEvt)
 {
-    //  Shift   = Ortho und AngleSnap
+    //  Shift   = Ortho and AngleSnap
     //  Control = Snap (Toggle)
-    //  Alt     = zentrisch
+    //  Alt     = centric
 
     bool bShift = rMEvt.IsShift();
     bool bAlt   = rMEvt.IsMod2();
@@ -176,10 +176,10 @@ bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Tastaturereignisse bearbeiten
+|* process keyboard events
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* FALSE.
+|* if a keyevent is processed -> returns sal_True
+|*                            -> else  FALSE
 |*
 \************************************************************************/
 
@@ -226,7 +226,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_ESCAPE:
             if ( pViewShell->IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
             {
-                // in normale Draw-Shell, wenn Objekt selektiert, sonst Zeichnen aus
+                // if object selected -> normal draw-shell, else turn off drawing
                 rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SfxCallMode::SLOT | SfxCallMode::RECORD);
                 bReturn = true;
             }
@@ -245,7 +245,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                 else
                     pView->UnmarkAll();
 
-                //  Beim Bezier-Editieren ist jetzt wieder das Objekt selektiert
+                //  while bezier editing, object is selected
                 if (!pView->AreObjectsMarked())
                     pViewShell->SetDrawShell( false );
 
@@ -253,7 +253,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             }
             break;
 
-        case KEY_DELETE:                    //! ueber Accelerator
+        case KEY_DELETE:                    //! via accelerator
             pView->DeleteMarked();
             bReturn = true;
         break;
@@ -434,25 +434,25 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
                 if (nCode == KEY_UP)
                 {
-                    // Scroll nach oben
+                    // scroll up
                     nX = 0;
                     nY =-1;
                 }
                 else if (nCode == KEY_DOWN)
                 {
-                    // Scroll nach unten
+                    // scroll down
                     nX = 0;
                     nY = 1;
                 }
                 else if (nCode == KEY_LEFT)
                 {
-                    // Scroll nach links
+                    // scroll left
                     nX =-1;
                     nY = 0;
                 }
                 else if (nCode == KEY_RIGHT)
                 {
-                    // Scroll nach rechts
+                    // scroll right
                     nX = 1;
                     nY = 0;
                 }
@@ -678,7 +678,7 @@ void FuDraw::SelectionHasChanged()
 
 /*************************************************************************
 |*
-|* Function aktivieren
+|* enable function
 |*
 \************************************************************************/
 
@@ -689,7 +689,7 @@ void FuDraw::Activate()
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* disable function
 |*
 \************************************************************************/
 
@@ -700,7 +700,7 @@ void FuDraw::Deactivate()
 
 /*************************************************************************
 |*
-|* Maus-Pointer umschalten
+|* toggle mouse-pointer
 |*
 \************************************************************************/
 
@@ -748,7 +748,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
         if ( pView->IsTextEdit() )
         {
-            pViewShell->SetActivePointer(Pointer(POINTER_TEXT));        // kann nicht sein ?
+            pViewShell->SetActivePointer(Pointer(POINTER_TEXT));        // can't be ?
         }
         else if ( pHdl )
         {
@@ -762,13 +762,13 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         else if ( !bAlt && ( !pMEvt || !pMEvt->GetButtons() )
                         && lcl_UrlHit( pView, aPosPixel, pWindow ) )
         {
-            //  kann mit ALT unterdrueckt werden
+            //  could be suppressed with ALT
             pWindow->SetPointer( Pointer( POINTER_REFHAND ) );          // Text-URL / ImageMap
         }
         else if ( !bAlt && pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
         {
-            //  kann mit ALT unterdrueckt werden
-            SdrObjMacroHitRec aHitRec;  //! muss da noch irgendwas gesetzt werden ????
+            //  could be suppressed with ALT
+            SdrObjMacroHitRec aHitRec;  //! something missing ????
             pViewShell->SetActivePointer( pObj->GetMacroPointer(aHitRec) );
         }
         else if ( !bAlt && pInfo && (!pInfo->GetMacro().isEmpty() || !pInfo->GetHlink().isEmpty()) )
