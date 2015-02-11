@@ -910,10 +910,10 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     // the attribute.
                     const sal_Int32 nIndx( xOldAsCharAnchorPos->nContent.GetIndex() );
                     SwTxtNode* pTxtNode( xOldAsCharAnchorPos->nNode.GetNode().GetTxtNode() );
-                    OSL_ENSURE( pTxtNode, "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object" );
-                    OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                    assert(pTxtNode && "<SwDoc::ChgAnchor(..)> - missing previous anchor text node for as-character anchored object");
                     SwTxtAttr * const pHnt =
                         pTxtNode->GetTxtAttrForCharAt( nIndx, RES_TXTATR_FLYCNT );
+                    assert(pHnt && "Missing FlyInCnt-Hint.");
                     const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
                     // They are disconnected. We now have to destroy the attribute.
