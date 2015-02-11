@@ -242,6 +242,12 @@ void ScInterpreter::ScIfError( bool bNAonly )
 {
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
+    if ( nJumpCount != 2 )
+    {
+        PushIllegalParameter();
+        return;
+    }
+
     if (!sp)
     {
         PushError( errUnknownStackVariable);
@@ -811,10 +817,10 @@ double ScInterpreter::Compare()
         switch ( GetRawStackType() )
         {
             case svEmptyCell:
+            case svMissing:
                 Pop();
                 rCell.mbEmpty = true;
                 break;
-            case svMissing:
             case svDouble:
                 rCell.mfValue = GetDouble();
                 rCell.mbValue = true;
@@ -904,10 +910,10 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
         switch (GetRawStackType())
         {
             case svEmptyCell:
+            case svMissing:
                 Pop();
                 rCell.mbEmpty = true;
                 break;
-            case svMissing:
             case svDouble:
                 rCell.mfValue = GetDouble();
                 rCell.mbValue = true;
