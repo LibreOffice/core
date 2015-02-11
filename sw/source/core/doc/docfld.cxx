@@ -415,12 +415,9 @@ void SwDoc::SetInitDBFields( bool b )
 /// Get all databases that are used by fields
 static OUString lcl_DBDataToString(const SwDBData& rData)
 {
-    OUString sRet = rData.sDataSource;
-    sRet += OUString(DB_DELIM);
-    sRet += rData.sCommand;
-    sRet += OUString(DB_DELIM);
-    sRet += OUString::number(rData.nCommandType);
-    return sRet;
+    return rData.sDataSource + OUString(DB_DELIM)
+        + rData.sCommand + OUString(DB_DELIM)
+        + OUString::number(rData.nCommandType);
 }
 
 #endif
@@ -448,9 +445,8 @@ void SwDoc::GetAllUsedDB( std::vector<OUString>& rDBNameList,
 
         if( pSect )
         {
-            OUString aCond( pSect->GetCondition() );
             AddUsedDBToList( rDBNameList, FindUsedDBs( *pAllDBNames,
-                                                aCond, aUsedDBNames ) );
+                                                pSect->GetCondition(), aUsedDBNames ) );
             aUsedDBNames.clear();
         }
     }
@@ -526,28 +522,25 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
                                    std::vector<OUString>& rUsedDBNames )
 {
     const CharClass& rCC = GetAppCharClass();
-    OUString  sFormula(rFormula);
 #ifndef UNX
-    sFormula = rCC.uppercase( sFormula );
+    const OUString sFormula(rCC.uppercase( rFormula ));
+#else
+    const OUString sFormula(rFormula);
 #endif
 
     for (const auto &sItem : rAllDBNames)
     {
-        OUString pStr(sItem);
-
-        sal_Int32 nPos = sFormula.indexOf( pStr );
+        sal_Int32 nPos = sFormula.indexOf( sItem );
         if( nPos>=0 &&
-            sFormula[ nPos + pStr.getLength() ] == '.' &&
+            sFormula[ nPos + sItem.getLength() ] == '.' &&
             (!nPos || !rCC.isLetterNumeric( sFormula, nPos - 1 )))
         {
             // Look up table name
-            nPos += pStr.getLength() + 1;
+            nPos += sItem.getLength() + 1;
             const sal_Int32 nEndPos = sFormula.indexOf('.', nPos);
             if( nEndPos>=0 )
             {
-                pStr += OUString( DB_DELIM );
-                pStr += sFormula.copy( nPos, nEndPos - nPos );
-                rUsedDBNames.push_back(pStr);
+                rUsedDBNames.push_back(sItem + OUString( DB_DELIM ) + sFormula.copy( nPos, nEndPos - nPos ));
             }
         }
     }
