@@ -254,6 +254,7 @@ public:
     bool IsString( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmptyCell( SCSIZE nC, SCSIZE nR ) const;
+    bool IsEmptyResult( SCSIZE nC, SCSIZE nR ) const;
     bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
     bool IsValue( SCSIZE nIndex ) const;
     bool IsValue( SCSIZE nC, SCSIZE nR ) const;
@@ -684,8 +685,8 @@ bool ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
 
 bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    // Flag must indicate an empty element instead of an
-    // 'empty path' element.
+    // Flag must indicate an 'empty' or 'empty cell' or 'empty result' element,
+    // but not an 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
         maMatFlag.get<TMatFlag>(nR, nC) != SC_MATFLAG_EMPTYPATH;
@@ -693,11 +694,20 @@ bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 
 bool ScMatrixImpl::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
 {
-    // Flag must indicate an 'empty' element instead of an
-    // 'empty result' or 'empty path' element.
+    // Flag must indicate an 'empty cell' element instead of an
+    // 'empty' or 'empty result' or 'empty path' element.
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
         maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYCELL;
+}
+
+bool ScMatrixImpl::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
+{
+    // Flag must indicate an 'empty result' element instead of an
+    // 'empty' or 'empty cell' or 'empty path' element.
+    ValidColRowReplicated( nC, nR );
+    return maMat.get_type(nR, nC) == mdds::mtm::element_empty &&
+        maMatFlag.get<TMatFlag>(nR, nC) == SC_MATFLAG_EMPTYRESULT;
 }
 
 bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
@@ -2322,6 +2332,11 @@ bool ScMatrix::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 bool ScMatrix::IsEmptyCell( SCSIZE nC, SCSIZE nR ) const
 {
     return pImpl->IsEmptyCell(nC, nR);
+}
+
+bool ScMatrix::IsEmptyResult( SCSIZE nC, SCSIZE nR ) const
+{
+    return pImpl->IsEmptyResult(nC, nR);
 }
 
 bool ScMatrix::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
