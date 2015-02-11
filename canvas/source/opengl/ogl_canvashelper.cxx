@@ -326,23 +326,21 @@ namespace oglcanvas
             return true;
         }
 
-        bool lcl_drawOwnBitmap( const CanvasHelper&              rHelper,
+        bool lcl_drawOwnBitmap( const CanvasHelper&              /*rHelper*/,
                                 const ::basegfx::B2DHomMatrix&   rTransform,
-                                GLenum                           eSrcBlend,
-                                GLenum                           eDstBlend,
+                                GLenum                           /*eSrcBlend*/,
+                                GLenum                           /*eDstBlend*/,
                                 const rendering::ARGBColor&      /*rColor*/,
                                 const CanvasBitmap&              rBitmap )
         {
-            RenderHelper* pRenderHelper = rHelper.getDeviceHelper()->getRenderHelper();
-            pRenderHelper->SetModelAndMVP(setupState(rTransform, eSrcBlend, eDstBlend));
-            return rBitmap.renderRecordedActions();
+            return rBitmap.renderRecordedActions(rTransform);
         }
 
         bool lcl_drawGenericBitmap( const CanvasHelper&              rHelper,
                                     const ::basegfx::B2DHomMatrix&   rTransform,
                                     GLenum                           eSrcBlend,
                                     GLenum                           eDstBlend,
-                                    const rendering::ARGBColor&      rColor,
+                                    const rendering::ARGBColor&      /*rColor*/,
                                     const geometry::IntegerSize2D&   rPixelSize,
                                     const uno::Sequence<sal_Int8>&   rPixelData,
                                     sal_uInt32                       nPixelCrc32)
@@ -553,7 +551,6 @@ namespace oglcanvas
             rAct.maPolyPolys.back().makeUnique(); // own copy, for thread safety
 
             rAct.maFunction = lcl_drawPolyPolygon;
-            // TODO(F2): subdivide&render whole curve
         /*    rAct.maFunction = ::boost::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             geometry::RealPoint2D(
@@ -659,10 +656,8 @@ namespace oglcanvas
                         unoCapeFromCap(strokeAttributes.StartCapType)
                         ));
                 }
-                // Note: the generated stroke poly-polygon is NOT free of
-                // self-intersections. Therefore, if we would render it
-                // via OutDev::DrawPolyPolygon(), on/off fill would
-                // generate off areas on those self-intersections.
+
+                //Render each subpolygon for itself
 
                 const sal_uInt16 nSize( aStrokedPolyPoly.count() );
 
@@ -1163,10 +1158,33 @@ namespace oglcanvas
         return true;
     }
 
+     bool CanvasHelper::renderRecordedActions( const ::basegfx::B2DHomMatrix& rGeneralTransform) const
+    {
+        std::vector<Action>::const_iterator aCurr(mpRecordedActions->begin());
+        const std::vector<Action>::const_iterator aEnd(mpRecordedActions->end());
+        while( aCurr != aEnd )
+        {
+            const ::basegfx::B2DHomMatrix& combinedTransform = rGeneralTransform * aCurr->maTransform;
+            if( !aCurr->maFunction( *this,
+                                    combinedTransform,
+                                    aCurr->meSrcBlendMode,
+                                    aCurr->meDstBlendMode,
+                                    aCurr->maARGBColor,
+                                    aCurr->maPolyPolys ) )
+                return false;
+
+            ++aCurr;
+        }
+
+        return true;
+    }
+
     size_t CanvasHelper::getRecordedActionCount() const
     {
         return mpRecordedActions->size();
     }
+
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

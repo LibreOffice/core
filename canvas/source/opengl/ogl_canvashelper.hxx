@@ -14,10 +14,12 @@
 
 #include <basegfx/vector/b2isize.hxx>
 #include <basegfx/vector/b2dsize.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <o3tl/cow_wrapper.hxx>
 #include <vector>
 #include "ogl_renderHelper.hxx"
+
 
 namespace oglcanvas
 {
@@ -194,6 +196,11 @@ namespace oglcanvas
          */
         bool renderRecordedActions() const;
 
+        /** Write out recorded actions
+            Apply the general transformation for each action
+        */
+        bool renderRecordedActions( const ::basegfx::B2DHomMatrix& rGeneralTransform) const;
+
         /** Retrieve number of recorded actions
          */
         size_t getRecordedActionCount() const;
@@ -204,6 +211,7 @@ namespace oglcanvas
         struct Action;
         typedef o3tl::cow_wrapper< std::vector<Action>,
                                    o3tl::ThreadSafeRefCountingPolicy > RecordVectorT;
+
 
     private:
         CanvasHelper( const CanvasHelper& ) SAL_DELETED_FUNCTION;

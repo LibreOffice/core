@@ -65,6 +65,10 @@ namespace oglcanvas
          */
         bool renderRecordedActions() const;
 
+        /** Write out recorded actions
+            apply transformation for each action
+        */
+        bool renderRecordedActions( const ::basegfx::B2DHomMatrix& rGeneralTransform) const;
     private:
         /** MUST hold here, too, since CanvasHelper only contains a
             raw pointer (without refcounting)

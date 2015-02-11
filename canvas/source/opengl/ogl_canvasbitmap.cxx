@@ -50,6 +50,11 @@ namespace oglcanvas
     {
         return maCanvasHelper.renderRecordedActions();
     }
+
+    bool CanvasBitmap::renderRecordedActions(const ::basegfx::B2DHomMatrix& rGeneralTransform) const
+    {
+        return maCanvasHelper.renderRecordedActions(rGeneralTransform);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
