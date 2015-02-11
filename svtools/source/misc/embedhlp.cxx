@@ -44,6 +44,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
+#include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/implbase4.hxx>
@@ -604,15 +605,21 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
     if ( !xStream.is() )
     {
         SAL_INFO( "svtools.misc", "getting stream from object" );
-        bool bUserAllowsLinkUpdate(true);
+        bool bUpdateAllowed(true);
         const comphelper::EmbeddedObjectContainer* pContainer = GetContainer();
 
         if(pContainer)
         {
-            bUserAllowsLinkUpdate = pContainer->getUserAllowsLinkUpdate();
+            uno::Reference<embed::XLinkageSupport> const xLinkage(
+                    mpImpl->mxObj, uno::UNO_QUERY);
+            if (xLinkage.is() && xLinkage->isLink())
+            {
+                bUpdateAllowed = pContainer->getUserAllowsLinkUpdate();
+
+            }
         }
 
-        if(bUserAllowsLinkUpdate)
+        if (bUpdateAllowed)
         {
             // update wanted or no stream in container storage available
             xStream = GetGraphicReplacementStream(mpImpl->nViewAspect, mpImpl->mxObj, &mpImpl->aMediaType);
