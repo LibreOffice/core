@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_dc494190",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4384,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-11T10:20:49Z",
+      "side": 1,
+      "message": "This can\u0027t happen, or can it? The switch is inside the if(op\u003d\u003docPush) and an svMissing comes with an ocMissing, as the FormulaMissingToken implies. Furthermore we now can\u0027t have an ocMissing/svMissing as a final token but that would already be an ocPush/svEmptyCell instead, due to the change in ScMissing().",
+      "revId": "2622e9fe7fdef35d5538d655a09a422a3a4740b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
