@@ -74,7 +74,8 @@ class SwSortedObjs
 
             @return boolean, indicating success of the update.
         */
-        bool Update( SwAnchoredObject& _rAnchoredObj );
+        bool Update(SwAnchoredObject& _rAnchoredObj);
+        void UpdateAll();
 
         /** Position of object <_rAnchoredObj> in sorted list
 
@@ -85,6 +86,8 @@ class SwSortedObjs
             Number of the list position of object <_rAnchoredObj>
         */
         size_t ListPosOf( const SwAnchoredObject& _rAnchoredObj ) const;
+
+        bool is_sorted() const;
 };
 
 #endif

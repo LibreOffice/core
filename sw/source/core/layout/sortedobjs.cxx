@@ -60,6 +60,18 @@ SwAnchoredObject* SwSortedObjs::operator[]( size_t _nIndex ) const
     return pAnchoredObj;
 }
 
+namespace
+{
+    int GetAnchorWeight(RndStdIds eAnchor)
+    {
+        if (eAnchor == FLY_AT_CHAR)
+            return 0;
+        if (eAnchor == FLY_AS_CHAR)
+            return 1;
+        return 2;
+    }
+}
+
 struct ObjAnchorOrder
 {
     bool operator()( const SwAnchoredObject* _pListedAnchoredObj,
@@ -122,24 +134,23 @@ struct ObjAnchorOrder
         // --> OD 2006-11-29 #???# - objects have to be ordered by anchor node position
         // Thus, compare content anchor node positions and anchor type,
         // if not anchored at-paragraph
-        if ((pAnchorListed->GetAnchorId() != FLY_AT_PARA) &&
-            (pAnchorNew   ->GetAnchorId() != FLY_AT_PARA) &&
-             pCntntAnchorListed && pCntntAnchorNew )
+        if (pCntntAnchorListed && pCntntAnchorNew)
         {
-            if ( pCntntAnchorListed->nContent != pCntntAnchorNew->nContent )
+            sal_Int32 nListedIndex = pAnchorListed->GetAnchorId() != FLY_AT_PARA ?
+                pCntntAnchorListed->nContent.GetIndex() : 0;
+            sal_Int32 nNewIndex = pAnchorNew->GetAnchorId() != FLY_AT_PARA ?
+                pCntntAnchorNew->nContent.GetIndex() : 0;
+            if (nListedIndex != nNewIndex)
             {
-                return pCntntAnchorListed->nContent < pCntntAnchorNew->nContent;
+                return nListedIndex < nNewIndex;
             }
-            else if ((pAnchorListed->GetAnchorId() == FLY_AT_CHAR) &&
-                     (pAnchorNew   ->GetAnchorId() == FLY_AS_CHAR))
-            {
-                return true;
-            }
-            else if ((pAnchorListed->GetAnchorId() == FLY_AS_CHAR) &&
-                     (pAnchorNew   ->GetAnchorId() == FLY_AT_CHAR))
-            {
-                return false;
-            }
+        }
+
+        int nAnchorListedWeight = GetAnchorWeight(pAnchorListed->GetAnchorId());
+        int nAnchorNewWeight = GetAnchorWeight(pAnchorNew->GetAnchorId());
+        if (nAnchorListedWeight != nAnchorNewWeight)
+        {
+            return nAnchorListedWeight < nAnchorNewWeight;
         }
 
         // objects anchored at the same content and at the same content anchor
@@ -192,6 +203,11 @@ struct ObjAnchorOrder
         return pAnchorListed->GetOrder() < pAnchorNew->GetOrder();
     }
 };
+
+bool SwSortedObjs::is_sorted() const
+{
+    return std::is_sorted(maSortedObjLst.begin(), maSortedObjLst.end(), ObjAnchorOrder());
+}
 
 bool SwSortedObjs::Insert( SwAnchoredObject& _rAnchoredObj )
 {
@@ -262,6 +278,11 @@ bool SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
     Insert( _rAnchoredObj );
 
     return Contains( _rAnchoredObj );
+}
+
+void SwSortedObjs::UpdateAll()
+{
+    std::stable_sort(maSortedObjLst.begin(), maSortedObjLst.end(), ObjAnchorOrder());
 }
 
 size_t SwSortedObjs::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) const

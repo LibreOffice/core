@@ -737,7 +737,8 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 _eAnchorType = eOldAnchorType;
 
             SwFmtAnchor aNewAnch( _eAnchorType );
-            Rectangle aObjRect( pContact->GetAnchoredObj( pObj )->GetObjRect().SVRect() );
+            SwAnchoredObject *pAnchoredObj = pContact->GetAnchoredObj(pObj);
+            Rectangle aObjRect(pAnchoredObj->GetObjRect().SVRect());
             const Point aPt( aObjRect.TopLeft() );
 
             switch ( _eAnchorType )
@@ -893,6 +894,10 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                 }
             }
+
+            // we have changed the anchoring attributes, and those are used to
+            // order the object in its sorted list, so update its position
+            pAnchoredObj->UpdateObjInSortedList();
 
             // #i54336#
             if (xOldAsCharAnchorPos)

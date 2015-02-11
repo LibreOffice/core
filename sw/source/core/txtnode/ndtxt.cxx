@@ -82,6 +82,7 @@
 #include <SwNodeNum.hxx>
 #include <svl/intitem.hxx>
 #include <list.hxx>
+#include <sortedobjs.hxx>
 #include <switerator.hxx>
 #include <attrhint.hxx>
 #include <boost/scoped_ptr.hpp>
@@ -1178,6 +1179,13 @@ void SwTxtNode::Update(
     {
         getIDocumentMarkAccess()->assureSortedMarkContainers();
     }
+
+    //Any drawing objects anchored into this text node may be sorted by their
+    //anchor position which may have changed here, so resort them
+    SwCntntFrm* pCntntFrm = getLayoutFrm(GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+    SwSortedObjs* pSortedObjs = pCntntFrm ? pCntntFrm->GetDrawObjs() : NULL;
+    if (pSortedObjs)
+        pSortedObjs->UpdateAll();
 }
 
 void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,

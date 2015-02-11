@@ -2069,6 +2069,8 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
 
 void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
+    assert(!mpDrawObjs || mpDrawObjs->is_sorted());
+
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
         OSL_FAIL( "SwFrm::AppendDrawObj(..) - anchored object of unexpected type -> object not appended" );
@@ -2078,10 +2080,12 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
     if ( !_rNewObj.GetDrawObj()->ISA(SwDrawVirtObj) &&
          _rNewObj.GetAnchorFrm() && _rNewObj.GetAnchorFrm() != this )
     {
+        assert(!mpDrawObjs || mpDrawObjs->is_sorted());
         // perform disconnect from layout, if 'master' drawing object is appended
         // to a new frame.
         static_cast<SwDrawContact*>(::GetUserCall( _rNewObj.GetDrawObj() ))->
                                                 DisconnectFromLayout( false );
+        assert(!mpDrawObjs || mpDrawObjs->is_sorted());
     }
 
     if ( _rNewObj.GetAnchorFrm() != this )
@@ -2136,6 +2140,8 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
         if( pLayout && pLayout->IsAnyShellAccessible() )
         pSh->Imp()->AddAccessibleObj( _rNewObj.GetDrawObj() );
     }
+
+    assert(!mpDrawObjs || mpDrawObjs->is_sorted());
 }
 
 void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
@@ -2159,6 +2165,8 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
         DELETEZ( mpDrawObjs );
 
     _rToRemoveObj.ChgAnchorFrm( 0 );
+
+    assert(!mpDrawObjs || mpDrawObjs->is_sorted());
 }
 
 void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
