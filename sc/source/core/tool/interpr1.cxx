@@ -242,9 +242,11 @@ void ScInterpreter::ScIfError( bool bNAonly )
 {
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
-    if (!sp)
+    if (!sp || nJumpCount != 2)
     {
-        PushError( errUnknownStackVariable);
+        // Reset nGlobalError here to not propagate the old error, if any.
+        nGlobalError = (sp ? errParameterExpected : errUnknownStackVariable);
+        PushError( nGlobalError);
         aCode.Jump( pJump[ nJumpCount  ], pJump[ nJumpCount ] );
         return;
     }
