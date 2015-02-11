@@ -3029,7 +3029,10 @@ void ScInterpreter::ScExternal()
 
 void ScInterpreter::ScMissing()
 {
-    PushTempToken( new FormulaMissingToken );
+    if ( aCode.IsEndOfPath() )
+        PushTempToken( new ScEmptyCellToken( false, false ) );
+    else
+        PushTempToken( new FormulaMissingToken );
 }
 
 #if HAVE_FEATURE_SCRIPTING
@@ -4375,6 +4378,10 @@ StackVar ScInterpreter::Interpret()
                 case svEmptyCell:
                     ;   // nothing
                 break;
+                case svMissing:
+                    Pop();
+                    PushTempToken( new ScEmptyCellToken( false, false ) );
+                    break;
                 case svError:
                     nGlobalError = pCur->GetError();
                 break;
