@@ -22,70 +22,78 @@
 
 #include <rtl/ustring.hxx>
 
-/*
- maximal X Ersetzungen  (User: gefundenes darf X Zeichen anders sein)
- maximal Y Einfuegungen (User: gefundenes darf Y Zeichen kuerzer sein)
- maximal Z Loeschungen  (User: gefundenes darf Z Zeichen laenger sein)
- mathematische WLD oder SplitCount  (User: strikt oder relaxed)
+// Sensible default values for a user interface could be:
+//  LEVDISDEFAULT_XOTHER    2
+//      Maximum X replacements to match query, found data may be different by X
+//      characters from query.
+//  LEVDISDEFAULT_YSHORTER  1
+//      Maximum Y insertions to match query, found data may be Y characters
+//      shorter than query.
+//  LEVDISDEFAULT_ZLONGER   3
+//      Maximum Z deletions to match query, found data may be Z characters
+//      longer than query.
+//  LEVDISDEFAULT_RELAXED   TRUE
+//      Use relaxed SplitCount instead of mathematical WLD.
+//
+// Joker/wildcards ('?' and '*') of course do not count as
+// replacement/insertion/deletion. At a '?' a replacement is not counted, for a
+// '*' the found data may be any number of characters longer than the query.
+//
+// Strict mathematical WLD: EITHER maximum X replacements OR Y characters
+// shorter OR Z characters longer.
+// Relaxed SplitCount: maximum X replacements AND/OR Y character shorter AND/OR
+// Z characters longer. Any combination of actions is valid.
+//
+// The value range for X,Y,Z is 0..33 to keep the limit within a 16 bit signed
+// integer, 31*32*33 is the maximum limit, LCM(31,32,33) == 32736.
+//
+// The corresponding internal default weigh values for these user interface
+// values would be:
+//  LEVDISDEFAULTLIMIT  6
+//      Default nLimit, matches x=2, y=1, z=3, p=3, q=6, r=2
+//  LEVDISDEFAULT_P0    3
+//      Default nRepP0, weight of replacements.
+//  LEVDISDEFAULT_Q0    6
+//      Default nInsQ0, weight of insertions.
+//  LEVDISDEFAULT_R0    2
+//      Default nDelR0, weight of deletions.
 
- Joker ('?' und '*') fallen natuerlich nicht unter diese Bedingungen.
- Bei einem '?' wird eine Ersetzung nicht gezahlt, bei einem '*' darf
- der gefundene String an dieser Stelle beliebig viele Zeichen laenger sein.
+// The transformation of user input values to weighs is done using CalcLPQR().
+// One caveat, if the WLD reaches nLimit due to nDelR0 (i.e. data string is nZ
+// characters longer than pattern) then no character can be replaced any more.
+// This can be circumvented by increasing nX or/and nZ, but of course with the
+// side effect of being less strict then.. or the other solution is to use
+// relaxed SplitCount (see below), which is the default when using CalcLPQR().
+//
+// Attention: shorter = WLD.Insert, longer = WLD.Delete
+//
+// View and counting is always from data string to pattern, a deletion means
+// that something is deleted from data to match pattern.
+//
+// Deletions weigh less in this example because usually less is known than is
+// searched for. Replacements get middle weight, for example because of
+// misspellings. Insertions are expensive.
+//
+// Another example: P0 = 1, Q0 = 4, R0 = 4, Limit = 3
+// Allowed are maximum 4 replacements, no insertion, no deletion.
+// Matches the user interface values X = 3, Y = 0, Z = 0
+//
+// bSplitCount: if TRUE, Rep/Ins/Del are counted differently. The return value
+// of WLD() then isn't necessarily the Levenshtein-Distance, but can be
+// negative (-WLD) if the WLD is greater than nLimit but single values are
+// within the limits.
+// For the above default values that could mean: even if the found string is
+// already 2 characters longer (nLongerZ), 3 replacements (nOtherX) can be made
+// to reach pattern. Additionally, character swaps count as one replacement.
+// Mathematically completely incorrect, but meets user expectations ;-)
+//
+// Explanation: in the real WLD all actions are withdrawn from a common 100%
+// pool, if one gets all there's nothing left for others. With bSplitCount
+// replacements have their own pool.
 
- Strikt: entweder maximal X anders oder Y kuerzer oder Z laenger
- Relaxed: maximal X anders und/oder Y kuerzer und/oder Z laenger
 
- Wertebereich fuer X,Y,Z ist 0..33 um mit Limit sicher unter
- 16-bit-signed-int-max zu bleiben, 31*32*33 gibt das Maximum
- LCM(31,32,33) == 32736
- */
-
-#define LEVDISDEFAULT_XOTHER    2
-#define LEVDISDEFAULT_YSHORTER  1
-#define LEVDISDEFAULT_ZLONGER   3
-#define LEVDISDEFAULT_RELAXED   TRUE
-
-#define LEVDISDEFAULTLIMIT  6       // default nLimit, passt zu x=2, y=1, z=3,
-                                    // p=3, q=6, r=2
-#define LEVDISDEFAULT_P0    3       // default nRepP0, Gewichtung Ersetzen
-#define LEVDISDEFAULT_Q0    6       // default nInsQ0, Gewichtung Einfuegen
-#define LEVDISDEFAULT_R0    2       // default nDelR0, Gewichtung Loeschen
-/*
- Berechnung von angegebenen Userwerten max Ersetzen, Kuerzer, Laenger mittels
- CalcLPQR(). Unschoen: wenn in WLD z.B. nLimit durch nDelR0 erreicht ist
- (String ist nZ laenger als Pattern), kann kein Zeichen mehr ersetzt werden.
- Dies kann durch Erhoehung von nX oder/und nZ vermieden werden, natuerlich
- mit den entsprechenden Seiteneffekten.. oder aber mit SplitCount (s.u.), was
- der Default bei CalcLPQR() ist.
-
- Achtung: Kuerzer = WLD.Insert, Laenger = WLD.Delete
-
- Gezaehlt wird von String nach Pattern (eine Loeschung bedeutet, dass aus
- String etwas geloescht werden muss, um auf Pattern zu kommen)
-
- Loeschungen zaehlen in diesem Beispiel am wenigsten, da meistens weniger
- bekannt ist, als gesucht wird. Ersetzungen erhalten mittlere Gewichtung
- wegen z.B. falscher Schreibweisen. Einfuegungen werden teuer.
-
- Oder z.B.: P0 = 1, Q0 = 4, R0 = 4, Limit = 3
- Erlaubt sind maximal 4 Ersetzungen, keine Einfuegung, keine Loeschung
- Entspricht den Userangaben X = 3, Y = 0, Z = 0
-
- bSplitCount: wenn TRUE, werden Rep/Ins/Del anders gezaehlt.  Der
- Rueckgabewert von WLD ist dann nicht mehr unbedingt die Levenshtein-Distanz,
- sondern kann negativ (-WLD) sein, wenn die WLD groesser als nLimit ist, aber
- die Einzelwerte jeweils innerhalb der Grenzen liegen.
- Bei den Default-Werten hiesse das z.B.: auch wenn der gefundene String 2
- Zeichen laenger ist (nLongerZ), koennen noch 3 Ersetzungen (nOtherX)
- erfolgen.  Zusatz-Gimmick:  Buchstabendreher zaehlen als eine Ersetzung.
- Mathematisch voellig unkorrekt, aber gut fuer den User ;-)
-
- Zur Erlaeuterung: bei der echten WLD schoepfen alle Aktionen aus einem
- gemeinsamen 100%-Pool, wenn einer alles hat, ist fuer die anderen nichts
- mehr da. Mit bSplitCount hat Replace sein eigenes Wildwasser..
- */
-
-class WLevDisPatternMem     // "sichere" Speicheranforderung im cTor
+/** "Safe" memory allocation in ctor */
+class WLevDisPatternMem
 {
     sal_Unicode     *cp;
     bool            *bp;
@@ -112,64 +120,76 @@ public:
                                     }
 };
 
+/** Weighted Levenshtein Distance (WLD)
+
+    For a more detailed explanation see documentation in
+    i18npool/source/search/levdis.hxx
+ */
 class WLevDistance
 {
-    sal_Int32       nPatternLen;    // Laenge des Pattern
-    WLevDisPatternMem   aPatMem;    // Verwaltung des Pattern Arrays
-    sal_Unicode*    cpPattern;      // Pointer auf Pattern Array
-    bool*           bpPatIsWild;    // Pointer auf bool Array, ob Pattern Wildcard ist
-    sal_Int32       nArrayLen;      // Laenge des Distanz Arrays
-    WLevDisDistanceMem  aDisMem;    // Verwaltung des Distanz Arrays
-    int*            npDistance;     // Pointer auf Distanz Array
-    int             nLimit;         // WLD Limit Ersetzungen/Einfuegungen/Loeschungen
-    int             nRepP0;         // Ersetzen Gewichtung
-    int             nInsQ0;         // Einfuegen Gewichtung
-    int             nDelR0;         // Loeschen Gewichtung
-    int             nStars;         // Anzahl '*' Joker im Pattern
-    bool            bSplitCount;    // wenn TRUE, werden Rep/Ins/Del getrennt gezaehlt
+    sal_Int32       nPatternLen;    ///< length of pattern
+    WLevDisPatternMem   aPatMem;    ///< manage allocation of pattern array
+    sal_Unicode*    cpPattern;      ///< pointer to pattern array
+    bool*           bpPatIsWild;    ///< pointer to bool array whether pattern is wildcard
+    sal_Int32       nArrayLen;      ///< length of distance array
+    WLevDisDistanceMem  aDisMem;    ///< manage allocation of distance array
+    int*            npDistance;     ///< pointer to distance array
+    int             nLimit;         ///< WLD limit replacements/insertions/deletions
+    int             nRepP0;         ///< replacement weigh
+    int             nInsQ0;         ///< insertion weigh
+    int             nDelR0;         ///< deletion weigh
+    int             nStars;         ///< count of '*' wildcards in pattern
+    bool            bSplitCount;    ///< if TRUE, Rep/Ins/Del are counted separately
 
-    void InitData( const sal_Unicode* cPattern );       // fuer die CToren
-    inline int Min3( int x, int y, int z );     // inline wegen Schleife
-    int Mid3( int x, int y, int z );
-    int Max3( int x, int y, int z );
-    int GCD( int a, int b );     // Groesster Gemeinsamer Teiler
-    int LCM( int a, int b );     // Kleinstes Gemeinsames Vielfaches
+    void InitData( const sal_Unicode* cPattern );
+    inline int Min3( int x, int y, int z ); ///< minimum value of 3 values
+    int Mid3( int x, int y, int z );        ///< middle value of 3 values
+    int Max3( int x, int y, int z );        ///< maximum value of 3 values
+    int GCD( int a, int b );                ///< Greatest Common Divisor
+    int LCM( int a, int b );                ///< Least Common Multiple
 
 public:
-    // CToren mit Userangaben, danach mit GetLimit() Limit holen
-    // interner Aufruf von CalcLPQR()
-    // die mathematisch unkorrekte Berechnung wird als Default genommen!
+
+    /** CTor with user input. Internally calls CalcLPQR().
+
+        After this, obtain the resulting limit using GetLimit().
+
+        @param  bRelaxed    the mathematically incorrect method is default (TRUE)
+     */
     WLevDistance( const sal_Unicode* cPattern, int nOtherX, int nShorterY,
                     int nLongerZ, bool bRelaxed = true );
 
     WLevDistance( const WLevDistance& rWLD );
     ~WLevDistance();
 
-    // Berechnung der Levenshtein-Distanz von String zu Pattern
+    /** Calculate the Weighted Levenshtein Distance from string to pattern. */
     int WLD( const sal_Unicode* cString, sal_Int32 nStringLen );
 
-    // Berechnung der Gewichtung aus Userangaben, return nLimit
+    /** Calculate the internal weighs corresponding to the user input values.
+        @returns nLimit for later comparison with WLD()
+     */
     int CalcLPQR( int nOtherX, int nShorterY, int nLongerZ,
                     bool bRelaxed = true );
 
-    inline int GetLimit() const     { return( nLimit ); }   // Limit holen
-    inline int GetReplaceP0() const { return( nRepP0 ); }   // Gewichtungen holen
+    inline int GetLimit() const     { return( nLimit ); }
+    inline int GetReplaceP0() const { return( nRepP0 ); }
     inline int GetInsertQ0() const  { return( nInsQ0 ); }
     inline int GetDeleteR0() const  { return( nDelR0 ); }
     inline bool GetSplit() const    { return( bSplitCount ); }
-    inline int SetLimit( int nNewLimit );       // Limit setzen,
-    inline int SetReplaceP0( int nNewP0 );      // Gewichtungen setzen,
-    inline int SetInsertQ0( int nNewQ0 );       // returnen bisherigen Wert
+    inline int SetLimit( int nNewLimit );
+    inline int SetReplaceP0( int nNewP0 );
+    inline int SetInsertQ0( int nNewQ0 );
     inline int SetDeleteR0( int nNewR0 );
+    /** SetSplit(true) makes only sense after having called CalcLPQR() for the
+        internal weighs! */
     inline bool SetSplit( bool bNewSplit );
-        // SetSplit( TRUE ) macht nur mit Werten nach CalcLPQR() Sinn!
 
     inline bool IsNormal( sal_Int32 nPos ) const { return( !bpPatIsWild[nPos] ); }
 
-    // Balance, aus Geschwindigkeitsgruenden ist dieses keine Funktion
+    // Calculate current balance, keep this inline for performance reasons!
     // c == cpPattern[jj] == cString[ii]
-    // erst wird bis Fundstelle gesucht, wenn dort die Balance gleich ist, wird
-    // auch nach der Fundstelle verglichen
+    // First seek up to found place, if the balance is still equal there then
+    // also compare after the found place.
     int levdisbalance(sal_Int32 jj, sal_Int32 ii, sal_Unicode c, const sal_Unicode* cString, sal_Int32 nStringLen)
     {
         int nBalance = 0;
@@ -235,6 +255,6 @@ inline bool WLevDistance::SetSplit( bool bNewSplit )
     return( bTmp );
 }
 
-#endif      // _LEVDIS_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
