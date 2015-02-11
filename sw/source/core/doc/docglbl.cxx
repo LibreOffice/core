@@ -186,7 +186,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         {
             // Look for the 1st level OutlineTemplate
             const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-            for( sal_uInt16 n = rFmtColls.size(); n; )
+            for( SwTxtFmtColls::size_type n = rFmtColls.size(); n; )
                 if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )
                 {
                     pSplitColl = rFmtColls[ n ];
@@ -372,7 +372,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), true);
 
                             // If FlyFrames are still around, delete these too
-                            for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
+                            for( SwFrmFmts::size_type n = 0; n < GetSpzFrmFmts()->size(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
