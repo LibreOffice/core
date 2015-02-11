@@ -123,12 +123,12 @@ typedef ::cppu::ImplHelper1 <   css::io::XSeekable
 /** helper class for wrapping an SvStream into an com.sun.star.io::XOutputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */
-class OSeekableOutputStreamWrapper
+class UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper
                 :public OOutputStreamWrapper
                 ,public OSeekableOutputStreamWrapper_Base
 {
 public:
-    UNOTOOLS_DLLPUBLIC OSeekableOutputStreamWrapper(SvStream& _rStream);
+    OSeekableOutputStreamWrapper(SvStream& _rStream);
 
 private:
     virtual ~OSeekableOutputStreamWrapper();
