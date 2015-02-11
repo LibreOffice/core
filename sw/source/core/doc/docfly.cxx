@@ -970,10 +970,9 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
         return SW_CHAIN_NOT_EMPTY;
     }
 
-    sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
-    for( sal_uInt16 n = 0; n < nArrLen; ++n )
+    for( auto pSpzFrmFm : *GetSpzFrmFmts() )
     {
-        const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
+        const SwFmtAnchor& rAnchor = pSpzFrmFm->GetAnchor();
         sal_uLong nTstSttNd;
         // #i20622# - to-frame anchored objects are allowed.
         if ( ((rAnchor.GetAnchorId() == FLY_AT_PARA) ||
