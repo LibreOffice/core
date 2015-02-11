@@ -113,7 +113,7 @@ public class CallQueryWizard
         {
             String[] stringSupportedServiceNames = new String[] { __serviceName };
 
-            return (stringSupportedServiceNames);
+            return stringSupportedServiceNames;
         }
 
         /** This method returns true, if the given service will be
@@ -129,7 +129,7 @@ public class CallQueryWizard
             {
                 booleanSupportsService = true;
             }
-            return (booleanSupportsService);
+            return booleanSupportsService;
         }
 
         @Override
@@ -143,7 +143,7 @@ public class CallQueryWizard
          */
         public java.lang.String getImplementationName()
         {
-            return (QueryWizardImplementation.class.getName());
+            return QueryWizardImplementation.class.getName();
         }
 
         /** Provides a sequence of all types (usually interface types)
@@ -170,7 +170,7 @@ public class CallQueryWizard
                 System.err.println(exception);
             }
 
-            return (typeReturn);
+            return typeReturn;
         }
     }
 }

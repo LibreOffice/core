@@ -320,7 +320,7 @@ OutlinerView* OutlineView::GetViewByWindow (vcl::Window* pWin) const
             }
         }
     }
-    return (pOlView);
+    return pOlView;
 }
 
 /**
@@ -1072,7 +1072,7 @@ bool OutlineView::SetAttributes(const SfxItemSet& rSet, bool )
 
     mrOutlineViewShell.Invalidate (SID_PREVIEW_STATE);
 
-    return (bOk);
+    return bOk;
 }
 
 /**

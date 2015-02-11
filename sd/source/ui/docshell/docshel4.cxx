@@ -667,7 +667,7 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
 
 SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 {
-    return( (SfxStyleSheetBasePool*) mpDoc->GetStyleSheetPool() );
+    return (SfxStyleSheetBasePool*) mpDoc->GetStyleSheetPool();
 }
 
 bool DrawDocShell::GotoBookmark(const OUString& rBookmark)

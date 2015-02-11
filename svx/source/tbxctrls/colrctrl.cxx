@@ -174,7 +174,7 @@ IMPL_STATIC_LINK(SvxColorValueSet_docking, ExecDragHdl, void*, EMPTYARG)
     // Als Link, damit asynchron ohne ImpMouseMoveMsg auf dem Stack auch die
     // Farbleiste geloescht werden darf
     pThis->DoDrag();
-    return(0);
+    return 0;
 }
 
 SvxColorDockingWindow::SvxColorDockingWindow

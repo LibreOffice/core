@@ -598,7 +598,7 @@ bool FuSelection::MouseMove(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
@@ -890,7 +890,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         FuDraw::MouseButtonUp(rMEvt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 /**
@@ -996,7 +996,7 @@ bool FuSelection::KeyInput(const KeyEvent& rKEvt)
         }
     }
 
-    return(bReturn);
+    return bReturn;
 
 }
 

@@ -591,7 +591,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         }
     }
 
-    return(0);
+    return 0;
 }
 
 // #i62875#

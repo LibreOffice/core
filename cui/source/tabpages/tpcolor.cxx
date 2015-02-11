@@ -481,12 +481,12 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( CheckChanges_Impl() == -1L )
-        return( KEEP_PAGE );
+        return KEEP_PAGE;
 
     if( _pSet )
         FillItemSet( _pSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 
@@ -621,7 +621,7 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 SfxTabPage* SvxColorTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rOutAttrs )
 {
-    return( new SvxColorTabPage( pWindow, *rOutAttrs ) );
+    return new SvxColorTabPage( pWindow, *rOutAttrs );
 }
 
 // is called when the content of the MtrFields is changed for color values
@@ -1085,7 +1085,7 @@ sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
             break;
     }
 
-    return ( nWert );
+    return nWert;
 }
 
 
@@ -1105,7 +1105,7 @@ sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
             break;
     }
 
-    return ( nWert );
+    return nWert;
 }
 
 

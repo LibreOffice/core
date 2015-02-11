@@ -89,7 +89,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
     // more insertions or deletions necessary as the limit? Then leave
     if ( (nLenDiff * nInsQ0 > nLimit)
             || ((nStars == 0) && (nLenDiff * nDelR0 < -nLimit)) )
-        return(LEVDISBIG);
+        return LEVDISBIG;
 
      // comparative String greater than  instantaneous array
     // -> adapt array size
@@ -247,7 +247,7 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
         }
     }
     if ( (nSPMin <= nLimit) && (npDistance[nStringLen] <= nLimit) )
-        return(npDistance[nStringLen]);
+        return npDistance[nStringLen];
     else
     {
         if ( bSplitCount )
@@ -257,10 +257,10 @@ int WLevDistance::WLD( const sal_Unicode* cString, sal_Int32 nStringLen )
             if ( (nSPMin <= 2 * nLimit)
                     && (npDistance[nStringLen] <= 2 * nLimit)
                     && (nRepS * nRepP0 <= nLimit) )
-                return( -npDistance[nStringLen] );
-            return(LEVDISBIG);
+                return -npDistance[nStringLen];
+            return LEVDISBIG;
         }
-        return(LEVDISBIG);
+        return LEVDISBIG;
     }
 }
 
@@ -286,7 +286,7 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
     nDelR0 = ( nZ ? nLimit / nZ : nLimit + 1 );
     bSplitCount = bRelaxed;
-    return( nLimit );
+    return nLimit;
 }
 
 // greatest common divisior according to  Euklid (chaindivision)

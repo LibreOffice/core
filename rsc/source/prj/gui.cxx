@@ -71,9 +71,9 @@ int rsc2_main( int argc, char **argv )
     delete pHS; // wird durch InitRscCompiler erzeugt
 
     if( aError.IsOk() )
-        return( 0 );
+        return 0;
     else
-        return( 1 );
+        return 1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -57,7 +57,7 @@ bool DrawSelection::KeyInput(const KeyEvent& rKEvt)
     if (!bReturn)
         bReturn = SwDrawBase::KeyInput(rKEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 void DrawSelection::Activate(const sal_uInt16 nSlotId)

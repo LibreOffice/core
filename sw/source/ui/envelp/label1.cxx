@@ -214,15 +214,15 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, bool bCont)
     if (!bFound)    // User defined
         pRec = &Recs()[0];
 
-    return(pRec);
+    return pRec;
 }
 
 Printer *SwLabDlg::GetPrt()
 {
     if (pPrtPage)
-        return (pPrtPage->GetPrt());
+        return pPrtPage->GetPrt();
     else
-        return (NULL);
+        return NULL;
 }
 
 SwLabPage::SwLabPage(vcl::Window* pParent, const SfxItemSet& rSet)

@@ -191,7 +191,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
         }
     }
 
-    return( 0L );
+    return 0L;
 }
 
 // check whether to disable the "selection" checkbox

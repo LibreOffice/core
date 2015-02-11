@@ -54,12 +54,12 @@ public:
                 ~RscFileInst();
     bool        IsEof() const { return bEof; }
     void        SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
-    sal_uLong   GetFileIndex()                { return( lFileIndex );  }
-    sal_uLong   GetSrcIndex()                 { return( lSrcIndex );   }
-    void        SetLineNo( sal_uInt32 nLine )     { nLineNo = nLine;       }
-    sal_uInt32  GetLineNo()                   { return( nLineNo );     }
-    sal_uInt32  GetScanPos()                  { return( nScanPos );    }
-    char *      GetLine()                     { return( pLine );       }
+    sal_uLong   GetFileIndex()                { return lFileIndex;  }
+    sal_uLong   GetSrcIndex()                 { return lSrcIndex;   }
+    void        SetLineNo( sal_uInt32 nLine ) { nLineNo = nLine;    }
+    sal_uInt32  GetLineNo()                   { return nLineNo;     }
+    sal_uInt32  GetScanPos()                  { return nScanPos;    }
+    char *      GetLine()                     { return pLine;       }
     int         GetChar();
     int         GetFastChar()
                     {

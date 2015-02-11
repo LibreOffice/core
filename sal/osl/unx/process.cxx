@@ -758,7 +758,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     else
         pProcImpl = NULL;
 
-    return (pProcImpl);
+    return pProcImpl;
 }
 
 void SAL_CALL osl_freeProcessHandle(oslProcess Process)

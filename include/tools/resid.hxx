@@ -69,7 +69,7 @@ public:
     sal_uInt32 GetWinBits() const { return m_nWinBits; }
     void SetWinBits( sal_uInt32 nBits ) const { m_nWinBits = nBits; }
 
-    RESOURCE_TYPE   GetRT() const { return( m_nRT ); }
+    RESOURCE_TYPE   GetRT() const { return m_nRT; }
 
     /** Set the type if not already set. Ask for type with GetRT()
 

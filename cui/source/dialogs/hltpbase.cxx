@@ -48,7 +48,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSvxHyperURLBox(vcl::Wi
 
 sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
-    return( IsDropFormatSupported( FORMAT_STRING ) ? DND_ACTION_COPY : DND_ACTION_NONE );
+    return IsDropFormatSupported( FORMAT_STRING ) ? DND_ACTION_COPY : DND_ACTION_NONE;
 }
 
 sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
@@ -352,7 +352,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         delete pItemSet;
     }
 
-    return( 0L );
+    return 0L;
 }
 
 // Get Macro-Infos
@@ -536,7 +536,7 @@ int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
         _pSet->Put( aItem );
     }
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 bool SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()

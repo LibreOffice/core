@@ -1520,7 +1520,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
     }
 
     ReleaseDC( mhWnd, hDC );
-    return( bRet );
+    return bRet;
 }
 
 void WinSalGraphics::updateSettingsNative( AllSettings& rSettings )

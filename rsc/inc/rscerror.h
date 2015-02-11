@@ -93,7 +93,7 @@ public:
     ERRTYPE( sal_uInt32 nErr )   { nError = nErr; }
     ERRTYPE( const ERRTYPE & rErr ) { nError = rErr.nError; }
     ERRTYPE& operator = ( const ERRTYPE & rError );
-    operator sal_uInt32() const { return( nError ); }
+    operator sal_uInt32() const { return nError; }
     bool IsError() const     { return nError <= ERR_ERROREND; }
     bool IsOk() const        { return !IsError(); }
     bool IsWarning() const   { return nError >= ERR_WARNINGSTART && nError <= ERR_WARNINGEND;}

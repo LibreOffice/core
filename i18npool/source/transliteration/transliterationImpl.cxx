@@ -170,7 +170,7 @@ TransliterationImpl::getType() throw(RuntimeException, std::exception)
     if (numCascade > 1)
         return (TransliterationType::CASCADE|TransliterationType::IGNORE);
     if (numCascade > 0 && bodyCascade[0].is())
-        return(bodyCascade[0]->getType());
+        return bodyCascade[0]->getType();
     throw ERROR;
 }
 

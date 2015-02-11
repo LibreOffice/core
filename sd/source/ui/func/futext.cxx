@@ -441,7 +441,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
         mpViewShell->GetViewFrame()->GetBindings().Invalidate(SidArray);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 bool FuText::MouseMove(const MouseEvent& rMEvt)
@@ -467,7 +467,7 @@ bool FuText::MouseMove(const MouseEvent& rMEvt)
 
     ForcePointer(&rMEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
@@ -658,7 +658,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 mpView->UnmarkAllObj();
                 mpView->MarkObj(pObj,pPV,false,false);
-                return (bReturn);
+                return bReturn;
             }
         }
     }
@@ -883,7 +883,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
     }
     bMBDown = false;
     FuConstruct::MouseButtonUp(rMEvt);
-    return (bReturn);
+    return bReturn;
 }
 
 /**
@@ -960,7 +960,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
         bReturn = FuDraw::KeyInput(aKEvt);
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 void FuText::Activate()
@@ -1153,7 +1153,7 @@ bool FuText::DeleteDefaultText()
         }
     }
 
-    return(bDeleted);
+    return bDeleted;
 }
 
 bool FuText::Command(const CommandEvent& rCEvt)
@@ -1201,7 +1201,7 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         bReturn = FuConstruct::RequestHelp(rHEvt);
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 void FuText::ReceiveRequest(SfxRequest& rReq)

@@ -201,7 +201,7 @@ MQueryHelper::next( )
         m_aMutex.release();
     }
 
-    return( result );
+    return result;
 }
 
 MQueryHelperResultEntry*
@@ -210,7 +210,7 @@ MQueryHelper::getByIndex( sal_uInt32 nRow )
     // Row numbers are from 1 to N, need to ensure this, and then
     // subtract 1
     if ( nRow < 1 ) {
-        return( NULL );
+        return NULL;
     }
 
     do {
@@ -220,19 +220,19 @@ MQueryHelper::getByIndex( sal_uInt32 nRow )
             if ( m_bQueryComplete )
             {
                 m_bAtEnd = sal_True;
-                return( NULL );
+                return NULL;
             }
             else
             {
                 clearResultOrComplete();
                 aGuard.clear();
                 if ( !waitForResultOrComplete( ) )
-                    return( NULL );
+                    return NULL;
             }
         }
         else
         {
-            return( m_aResults[ nRow -1 ] );
+            return m_aResults[ nRow -1 ];
         }
     } while ( true );
 }
@@ -261,7 +261,7 @@ MQueryHelper::waitForQueryComplete(  )
             m_aMutex.release();
             clearResultOrComplete();
             if ( !waitForResultOrComplete( ) )
-                return( sal_False );
+                return sal_False;
             m_aMutex.acquire();
         }
         while ( !m_bQueryComplete );
@@ -269,7 +269,7 @@ MQueryHelper::waitForQueryComplete(  )
 
     m_aMutex.release();
     OSL_TRACE("Out : waitForQueryComplete()");
-    return( sal_True );
+    return sal_True;
 }
 
 sal_Bool
@@ -281,13 +281,13 @@ MQueryHelper::waitForRow( sal_Int32 rowNum )
         m_aMutex.release();
         clearResultOrComplete();
         if ( !waitForResultOrComplete() )
-            return( sal_False );
+            return sal_False;
         m_aMutex.acquire();
     }
     while ( !m_bQueryComplete && m_aResults.size() < (size_t)rowNum );
 
     m_aMutex.release();
-    return( sal_True );
+    return sal_True;
 }
 
 
@@ -395,7 +395,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
 
     notifyResultOrComplete();
 
-    return(NS_OK);
+    return NS_OK;
 }
 
 

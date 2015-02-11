@@ -63,7 +63,7 @@ Sequence< rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames()
     Sequence< rtl::OUString > aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
     aSupported[1] = "com.sun.star.sdbcx.ResultSet";
-    return (aSupported);
+    return aSupported;
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService(const rtl::OUString& _rServiceName)
@@ -1120,7 +1120,7 @@ IPropertyArrayHelper * OResultSet::createArrayHelper() const
 IPropertyArrayHelper & OResultSet::getInfoHelper()
 {
     OSL_TRACE("OResultSet::getInfoHelper");
-    return (*const_cast<OResultSet*>(this)->getArrayHelper());
+    return *const_cast<OResultSet*>(this)->getArrayHelper();
 }
 
 sal_Bool OResultSet::convertFastPropertyValue(Any & /* rConvertedValue */,
@@ -1207,7 +1207,7 @@ void SAL_CALL OResultSet::release()
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     OSL_TRACE("OResultSet::getPropertySetInfo");
-    return (::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper()));
+    return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 void OResultSet::checkColumnIndex(sal_Int32 index)

@@ -144,7 +144,7 @@ struct inclist *inc_path(char *file, char *include, boolean dot, struct Includes
 
     if (!found)
         ip = NULL;
-    return(ip);
+    return ip;
 }
 
 int exists_path(struct IncludesCollection *incCollection, char *path)
@@ -229,15 +229,15 @@ void remove_dotdot(char *path)
 int isdot(char *p)
 {
     if(p && p[0] == '.' && p[1] == '\0')
-        return(TRUE);
-    return(FALSE);
+        return TRUE;
+    return FALSE;
 }
 
 int isdotdot(char *p)
 {
     if(p && p[0] == '.' && p[1] == '.' && p[2] == '\0')
-        return(TRUE);
-    return(FALSE);
+        return TRUE;
+    return FALSE;
 }
 
 int issymbolic(char *dir, char *component)
@@ -249,16 +249,16 @@ int issymbolic(char *dir, char *component)
     sprintf(buf, "%s%s%s", dir, *dir ? "/" : "", component);
     for (pp=notdotdot; *pp; pp++)
         if (strcmp(*pp, buf) == 0)
-            return (TRUE);
+            return TRUE;
     if (lstat(buf, &st) == 0
     && (st.st_mode & S_IFMT) == S_IFLNK) {
         *pp++ = copy(buf);
         if (pp >= &notdotdot[ MAXDIRS ])
             fatalerr("out of .. dirs, increase MAXDIRS\n");
-        return(TRUE);
+        return TRUE;
     }
 #endif
-    return(FALSE);
+    return FALSE;
 }
 
 /*
@@ -281,7 +281,7 @@ struct inclist *newinclude(char *newfile, char *incstring)
     else
         ip->i_incstring = copy(incstring);
 
-    return(ip);
+    return ip;
 }
 
 void included_by(struct inclist *ip, struct inclist *newfile)

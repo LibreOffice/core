@@ -115,7 +115,7 @@ bool FuConstructUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
     if (!bPermanent)
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
 
-    return (bReturn);
+    return bReturn;
 }
 
 /**

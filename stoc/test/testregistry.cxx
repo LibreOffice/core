@@ -668,7 +668,7 @@ SAL_IMPLEMENT_MAIN()
     xSimReg->destroy();
     xSimReg->open( areg2, sal_False, sal_True );
     xSimReg->destroy();
-    return(0);
+    return 0;
 }
 
 

@@ -719,7 +719,7 @@ inline RegError RegistryKeyArray::closeKeyHandles()
         m_phKeys = NULL;
         return ret;
     } else
-        return(REG_INVALID_KEY);
+        return REG_INVALID_KEY;
 }
 
 

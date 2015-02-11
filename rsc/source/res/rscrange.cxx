@@ -179,7 +179,7 @@ bool RscLongRange::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 ERRTYPE RscLongRange::SetNumber( const RSCINST & rInst, sal_Int32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
-        return( ERR_RSCRANGE_OUTDEFSET );
+        return ERR_RSCRANGE_OUTDEFSET;
 
     void * pData = &reinterpret_cast<RscLongRangeInst*>(rInst.pData)->nValue;
     memcpy( pData, &nValue, sizeof( sal_Int32 ) );

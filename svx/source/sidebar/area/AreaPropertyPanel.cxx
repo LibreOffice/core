@@ -1085,7 +1085,7 @@ IMPL_LINK( AreaPropertyPanel, ClickTrGrHdl_Impl, ToolBox*, pToolBox )
     OSL_ASSERT( pToolBox->GetItemCommand(pToolBox->GetCurItemId()) == UNO_SIDEBARGRADIENT);
     maTrGrPopup.Show(*pToolBox);
 
-    return (0L);
+    return 0L;
 }
 
 
@@ -1182,7 +1182,7 @@ IMPL_LINK(AreaPropertyPanel, ChangeTrgrTypeHdl_Impl, void *, EMPTYARG)
     const XFillFloatTransparenceItem aGradientItem(pPool, aTmpGradient, bGradient);
     GetBindings()->GetDispatcher()->Execute( SID_ATTR_FILL_FLOATTRANSPARENCE, SfxCallMode::RECORD, &aGradientItem, 0L );
 
-    return( 0L );
+    return 0L;
 }
 
 

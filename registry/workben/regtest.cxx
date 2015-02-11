@@ -324,7 +324,7 @@ int _cdecl main()
     else
         cout << "47.a). registry \"test4.rdb\" is closed\n";
 
-    return(0);
+    return 0;
 }
 
 

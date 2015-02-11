@@ -353,7 +353,7 @@ EditMode FrameView::GetViewShEditMode(PageKind eKind)
         eMode = meHandoutEditMode;
     }
 
-    return (eMode);
+    return eMode;
 }
 
 void FrameView::SetViewShEditModeOnLoad (EditMode eMode)

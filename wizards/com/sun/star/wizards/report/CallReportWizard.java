@@ -139,7 +139,7 @@ public class CallReportWizard
         {
             String[] stringSupportedServiceNames = new String[] { __serviceName };
 
-            return (stringSupportedServiceNames);
+            return stringSupportedServiceNames;
         }
 
         /** This method returns true, if the given service will be
@@ -155,7 +155,7 @@ public class CallReportWizard
             {
                 booleanSupportsService = true;
             }
-            return (booleanSupportsService);
+            return booleanSupportsService;
         }
 
         public byte[] getImplementationId()
@@ -168,7 +168,7 @@ public class CallReportWizard
          */
         public java.lang.String getImplementationName()
         {
-            return (ReportWizardImplementation.class.getName());
+            return ReportWizardImplementation.class.getName();
         }
 
         /** Provides a sequence of all types (usually interface types)
@@ -197,7 +197,7 @@ public class CallReportWizard
                 Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
             }
 
-            return (typeReturn);
+            return typeReturn;
         }
     }
 }

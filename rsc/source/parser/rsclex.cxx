@@ -143,7 +143,7 @@ int MakeToken( YYSTYPE * pTokenVal )
                 c = pFI->GetFastChar();
             }
             else
-                return( c1 );
+                return c1;
         }
         else
             break;
@@ -152,7 +152,7 @@ int MakeToken( YYSTYPE * pTokenVal )
     // FIXME: wtf is this supposed to do?
     if( (c != 0) == pFI->IsEof() )
     {
-        return( 0 );
+        return 0;
     }
 
     if( bLastInclude )
@@ -169,7 +169,7 @@ int MakeToken( YYSTYPE * pTokenVal )
             }
             c = pFI->GetFastChar();
             pTokenVal->string = const_cast<char*>(pStringContainer->putString( aBuf.getStr() ));
-            return( INCLUDE_STRING );
+            return INCLUDE_STRING;
         }
     }
 
@@ -213,7 +213,7 @@ int MakeToken( YYSTYPE * pTokenVal )
     if (isdigit (c))
     {
         pTokenVal->value = GetNumber();
-        return( NUMBER );
+        return NUMBER;
     }
 
     if( isalpha (c) || (c == '_') )
@@ -419,7 +419,7 @@ ERRTYPE parser( RscFileInst * pFileInst )
     if( pFileInst->pTypCont->pEH->nErrors )
         aError = ERR_ERROR;
     pFileInst->SetError( aError );
-    return( aError );
+    return aError;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

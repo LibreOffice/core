@@ -110,7 +110,7 @@ bool Options::checkArgument (std::vector< std::string > & rArgs, char const * ar
       break;
     }
   }
-  return (result);
+  return result;
 }
 
 // static
@@ -120,7 +120,7 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
     if (fp == 0)
     {
         fprintf(stderr, "ERROR: can't open command file \"%s\"\n", filename);
-        return (false);
+        return false;
     }
 
     std::string buffer;
@@ -147,7 +147,7 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
                   if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
                   {
                       (void) fclose(fp);
-                      return (false);
+                      return false;
                   }
                   buffer.clear();
               }
@@ -165,7 +165,7 @@ bool Options::checkCommandFile (std::vector< std::string > & rArgs, char const *
         if (!Options::checkArgument(rArgs, buffer.c_str(), buffer.size()))
         {
             (void) fclose(fp);
-            return (false);
+            return false;
         }
         buffer.clear();
     }
@@ -188,7 +188,7 @@ bool Options::setOption(char const * option, std::string const & rArg)
   bool result = (0 == strcmp(option, rArg.c_str()));
   if (result)
     m_options[rArg.c_str()] = OString(rArg.c_str(), rArg.size());
-  return (result);
+  return result;
 }
 
 #ifdef WNT
@@ -357,7 +357,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
         }
         {
           (void) fprintf(stdout, "%s", prepareHelp().getStr());
-          return (false);
+          return false;
         }
         // break; // Unreachable
       }
@@ -374,7 +374,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
       return badOption("unknown", option);
     }
   }
-  return (true);
+  return true;
 }
 
 OString Options::prepareHelp()

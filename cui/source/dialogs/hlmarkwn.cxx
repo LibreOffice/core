@@ -555,7 +555,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
         }
     }
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -599,7 +599,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
 
     Close();
 
-    return( 0L );
+    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

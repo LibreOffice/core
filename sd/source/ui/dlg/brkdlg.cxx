@@ -76,7 +76,7 @@ IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
 {
   bCancel = true;
   m_pBtnCancel->Disable();
-  return( 0L );
+  return 0L;
 }
 
 /**

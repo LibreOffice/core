@@ -30,7 +30,7 @@ static char *pt (unsigned char *md, int length)
     for (i=0; i<length; i++)
         sprintf(&(buf[i*2]),"%02x",md[i]);
 
-    return(buf);
+    return buf;
 }
 
 /*
@@ -48,7 +48,7 @@ int SAL_CALL main (void)
         printf ("random: %s\n", pt (buffer, 8));
     }
     rtl_random_destroyPool (pool);
-    return(0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

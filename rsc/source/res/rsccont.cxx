@@ -148,7 +148,7 @@ RSCINST RscBaseCont::SearchElePos( const RSCINST & rInst, const RscId & rEleName
             if( pClassData->pEntries[ i ].aName == rEleName &&
                 pClassData->pEntries[ i ].aInst.pClass == pClass )
             {
-                return( pClassData->pEntries[ i ].aInst );
+                return pClassData->pEntries[ i ].aInst;
             }
         }
     }
@@ -261,7 +261,7 @@ RSCINST RscBaseCont::GetPosEle( const RSCINST & rInst, sal_uInt32 nPos )
     pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     if( nPos < pClassData->nEntries )
-        return( pClassData->pEntries[ nPos ].aInst );
+        return pClassData->pEntries[ nPos ].aInst;
     return RSCINST();
 }
 
@@ -588,7 +588,7 @@ bool RscBaseCont::IsDefault( const RSCINST & rInst )
         if( ! pClassData->pEntries[ i ].aInst.pClass->
             IsDefault( pClassData->pEntries[ i ].aInst ) )
         {
-            return( false );
+            return false;
         }
     }
 

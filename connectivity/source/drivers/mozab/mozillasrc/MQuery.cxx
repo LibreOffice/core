@@ -241,7 +241,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
         else {
             // Should never see this...
             OSL_FAIL("Unknown Expression Type!");
-            return( NS_ERROR_UNEXPECTED );
+            return NS_ERROR_UNEXPECTED;
         }
     }
 
@@ -251,7 +251,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
     else
         queryExpression->SetOperation(nsIAbBooleanOperationTypes::OR);
 
-    return( NS_OK );
+    return NS_OK;
 }
 sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
 {
@@ -422,14 +422,14 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
     // Create a nsIAbDirectory object to initialise the nsIAbDirectoryQuery object.
     nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &rv)) ;
     if (NS_FAILED(rv))
-        return(-1);
+        return -1;
 
     nsCOMPtr<nsIAbDirectory> directory;
     MNameMapper *nmap = _pCon->getNameMapper();
 
 
     if ( nmap->getDir( m_aAddressbook, getter_AddRefs( directory ) ) == sal_False )
-        return( -1 );
+        return -1;
 
 
     //insert ldap bind info to mozilla profile(in memery,none saved),so we can use it in mozilla part codes
@@ -550,7 +550,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
         OSL_TRACE( "****** DoQuery failed");
         OSL_TRACE("\tOUT MQuery::executeQueryProxied()\n");
         m_aQueryHelper->notifyQueryError() ;
-        return(-1);
+        return -1;
     }
 #if OSL_DEBUG_LEVEL > 0
     else {
@@ -560,7 +560,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 
     OSL_TRACE("\tOUT MQuery::executeQueryProxied()");
 
-    return(0);
+    return 0;
 }
 
 
@@ -572,7 +572,7 @@ sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
 sal_Int32
 MQuery::getRowCount()
 {
-    return( m_aQueryHelper->getResultCount() );
+    return m_aQueryHelper->getResultCount();
 }
 
 
@@ -584,7 +584,7 @@ MQuery::getRowCount()
 sal_uInt32
 MQuery::getRealRowCount()
 {
-    return( m_aQueryHelper->getRealCount() );
+    return m_aQueryHelper->getRealCount();
 }
 
 
@@ -594,7 +594,7 @@ MQuery::getRealRowCount()
 sal_Bool
 MQuery::queryComplete( void )
 {
-    return( hadError() || m_aQueryHelper->queryComplete() );
+    return hadError() || m_aQueryHelper->queryComplete();
 }
 
 sal_Bool
@@ -603,7 +603,7 @@ MQuery::waitForQueryComplete( void )
     if( m_aQueryHelper->waitForQueryComplete( ) )
         return sal_True;
     m_aError = m_aQueryHelper->getError();
-    return( sal_False );
+    return sal_False;
 }
 
 
@@ -614,10 +614,10 @@ MQuery::checkRowAvailable( sal_Int32 nDBRow )
     while( !queryComplete() && m_aQueryHelper->getRealCount() <= (sal_uInt32)nDBRow )
         if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
             m_aError = m_aQueryHelper->getError();
-            return( sal_False );
+            return sal_False;
         }
 
-    return( getRowCount() > nDBRow );
+    return getRowCount() > nDBRow;
 }
 
 sal_Bool
@@ -733,7 +733,7 @@ MQuery::createNewCard()
 MNameMapper*
 MQuery::CreateNameMapper()
 {
-    return( new MNameMapper() );
+    return new MNameMapper();
 }
 
 

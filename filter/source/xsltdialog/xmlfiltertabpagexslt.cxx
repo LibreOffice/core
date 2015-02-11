@@ -170,7 +170,7 @@ IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
         SetURL( pURLBox, aURL );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -52,7 +52,7 @@ public:
     std::string const & getRegName1() const { return m_regName1; }
     std::string const & getRegName2() const { return m_regName2; }
 
-    bool isStartKeyValid() const { return (!m_startKey.isEmpty()); }
+    bool isStartKeyValid() const { return !m_startKey.isEmpty(); }
     OUString const & getStartKey() const { return m_startKey; }
     bool matchedWithExcludeKey( const OUString& keyName) const;
 
@@ -1963,12 +1963,12 @@ int _cdecl main( int argc, char * argv[] )
         {
             // failure.
             options.printUsage();
-            return (1);
+            return 1;
         }
     }
     if (!options.initOptions(args))
     {
-        return (1);
+        return 1;
     }
 
     OUString regName1( convertToFileUrl(options.getRegName1().c_str(), options.getRegName1().size()) );
@@ -1979,13 +1979,13 @@ int _cdecl main( int argc, char * argv[] )
     {
         fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
-        return (2);
+        return 2;
     }
     if ( reg2.open(regName2, REG_READONLY) )
     {
         fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());
-        return (3);
+        return 3;
     }
 
     RegistryKey key1, key2;
@@ -1993,13 +1993,13 @@ int _cdecl main( int argc, char * argv[] )
     {
         fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
-        return (4);
+        return 4;
     }
     if ( reg2.openRootKey(key2) )
     {
         fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());
-        return (5);
+        return 5;
     }
 
     if ( options.isStartKeyValid() )
@@ -2008,20 +2008,20 @@ int _cdecl main( int argc, char * argv[] )
         {
             fprintf(stdout, "%s: start key is equal to one of the exclude keys\n",
                     options.getProgramName().c_str());
-            return (6);
+            return 6;
         }
         RegistryKey sk1, sk2;
         if ( key1.openKey(options.getStartKey(), sk1) )
         {
             fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
                     options.getProgramName().c_str(), options.getRegName1().c_str());
-            return (7);
+            return 7;
         }
         if ( key2.openKey(options.getStartKey(), sk2) )
         {
             fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
                     options.getProgramName().c_str(), options.getRegName2().c_str());
-            return (8);
+            return 8;
         }
 
         key1 = sk1;
@@ -2051,13 +2051,13 @@ int _cdecl main( int argc, char * argv[] )
     {
         fprintf(stdout, "%s: closing registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName1().c_str());
-        return (9);
+        return 9;
     }
     if ( reg2.close() )
     {
         fprintf(stdout, "%s: closing registry \"%s\" failed\n",
                 options.getProgramName().c_str(), options.getRegName2().c_str());
-        return (10);
+        return 10;
     }
 
     return ((nError > 0) ? 11 : 0);

@@ -54,7 +54,7 @@ public:
     }
     static void* operator new (size_t, void* p)
     {
-        return (p);
+        return p;
     }
     static void operator delete (void*, void*)
     {}

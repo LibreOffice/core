@@ -129,7 +129,7 @@ try_alloc:
             }
         }
     }
-    return (p);
+    return p;
 }
 
 /* ================================================================= */
@@ -175,7 +175,7 @@ void * SAL_CALL rtl_reallocateMemory_CUSTOM (void * p, sal_Size n) SAL_THROW_EXT
     {
         rtl_freeMemory (p), p = 0;
     }
-    return (p);
+    return p;
 }
 
 #endif
@@ -365,7 +365,7 @@ void * SAL_CALL rtl_allocateZeroMemory (sal_Size n) SAL_THROW_EXTERN_C()
     void * p = rtl_allocateMemory (n);
     if (p != 0)
         memset (p, 0, n);
-    return (p);
+    return p;
 }
 
 /* ================================================================= */

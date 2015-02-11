@@ -48,7 +48,7 @@ namespace comphelper
 
     bool SAL_CALL OCommonAccessibleSelection::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        return( implIsSelected( nChildIndex ) );
+        return implIsSelected( nChildIndex );
     }
 
 
@@ -78,7 +78,7 @@ namespace comphelper
                     ++nRet;
         }
 
-        return( nRet );
+        return nRet;
     }
 
 
@@ -96,7 +96,7 @@ namespace comphelper
                     xRet = xParentContext->getAccessibleChild( i );
         }
 
-        return( xRet );
+        return xRet;
     }
 
 
@@ -121,7 +121,7 @@ namespace comphelper
 
     Reference< XAccessibleContext > OAccessibleSelectionHelper::implGetAccessibleContext() throw ( RuntimeException )
     {
-        return( this );
+        return this;
     }
 
 
@@ -135,7 +135,7 @@ namespace comphelper
     sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
-        return( OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex ) );
+        return OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex );
     }
 
 
@@ -156,14 +156,14 @@ namespace comphelper
     sal_Int32 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
-        return( OCommonAccessibleSelection::getSelectedAccessibleChildCount() );
+        return OCommonAccessibleSelection::getSelectedAccessibleChildCount();
     }
 
 
     Reference< XAccessible > SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
         OExternalLockGuard aGuard( this );
-        return( OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex ) );
+        return OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex );
     }
 
 

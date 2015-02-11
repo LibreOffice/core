@@ -679,7 +679,7 @@ bool ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
         }
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 void ViewShell::SetFrameView (FrameView* pNewFrameView)

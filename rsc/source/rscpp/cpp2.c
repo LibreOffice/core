@@ -70,7 +70,7 @@ int control(int counter)
 
     c = skipws();
     if (c == '\n' || c == EOF_CHAR)
-        return (counter + 1);
+        return counter + 1;
     if (!isdigit(c))
         scanid(c);                  /* Get #word to token[]         */
     else
@@ -131,7 +131,7 @@ int control(int counter)
         case L_assert:                      /*      compiling.      */
         case L_error:                       /* BP 5.3.92, #error */
         dump_line:      skipnl();                       /* Ignore rest of line  */
-            return (counter + 1);
+            return counter + 1;
         }
     }
     /*
@@ -299,7 +299,7 @@ int control(int counter)
             skipnl();
         }
     }
-    return (counter + 1);
+    return counter + 1;
 }
 
 /*
@@ -466,7 +466,7 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
         }
 #endif
         if (openfile(tmpname))
-            return (TRUE);
+            return TRUE;
     }
     /*
      * Look in any directories specified by -I command line
@@ -494,10 +494,10 @@ FILE_LOCAL int openinclude(char* filename, int searchlocal)
                 sprintf(tmpname, "%s%s", *incptr, filename);
 #endif
             if (openfile(tmpname))
-                return (TRUE);
+                return TRUE;
         }
     }
-    return (FALSE);
+    return FALSE;
 }
 
 /*
@@ -511,7 +511,7 @@ FILE_LOCAL int hasdirectory(char* source, char* result, int max)
     char* tp;
 
     if ((tp = strrchr(source, '/')) == NULL)
-        return (FALSE);
+        return FALSE;
     else
     {
         int len = (int)(tp - source);
@@ -524,7 +524,7 @@ FILE_LOCAL int hasdirectory(char* source, char* result, int max)
         {
             cfatal("Filename work buffer overflow", NULLST);
         }
-        return (TRUE);
+        return TRUE;
     }
 #else
     /*
@@ -537,13 +537,13 @@ FILE_LOCAL int hasdirectory(char* source, char* result, int max)
     if ((tp = strrchr(source, ']')) == NULL &&
         (tp = strrchr(source, ':')) == NULL)
     {
-        return (FALSE);
+        return FALSE;
     }
     else
     {
         strncpy(result, source, tp - source + 1);
         result[tp - source + 1] = EOS;
-        return (TRUE);
+        return TRUE;
     }
 #endif
 }

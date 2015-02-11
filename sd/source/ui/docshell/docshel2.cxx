@@ -152,7 +152,7 @@ Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
         }
     }
 
-    return (aVisArea);
+    return aVisArea;
 }
 
 void DrawDocShell::Connect(ViewShell* pViewSh)
@@ -177,7 +177,7 @@ FrameView* DrawDocShell::GetFrameView()
         pFrameView = mpViewShell->GetFrameView();
     }
 
-    return(pFrameView);
+    return pFrameView;
 }
 
 Size DrawDocShell::GetFirstPageSize()
@@ -311,7 +311,7 @@ bool DrawDocShell::CheckPageName (vcl::Window* pWin, OUString& rName )
         }
     }
 
-    return ( bIsNameValid ? sal_True : sal_False );
+    return bIsNameValid;
 }
 
 bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStringIfStandardName /* = false */ )

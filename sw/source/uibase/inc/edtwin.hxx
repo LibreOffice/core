@@ -220,7 +220,7 @@ public:
     void            UpdatePointer(const Point &, sal_uInt16 nButtons = 0);
 
     bool            IsDrawSelMode();
-    bool            IsDrawAction()                  { return (m_bInsDraw); }
+    bool            IsDrawAction()                  { return m_bInsDraw; }
     void            SetDrawAction(bool bFlag)       { m_bInsDraw = bFlag; }
 
     void            SetObjectSelect( bool bVal )    { m_bObjectSelect = bVal; }
@@ -230,7 +230,7 @@ public:
     inline void         SetSdrDrawMode( SdrObjKind eSdrObjectKind ) { m_eDrawMode = eSdrObjectKind; SetObjectSelect( false ); }
     void                StdDrawMode( SdrObjKind eSdrObjectKind, bool bObjSelect );
 
-    bool            IsFrmAction() const             { return (m_bInsFrm); }
+    bool            IsFrmAction() const             { return m_bInsFrm; }
     sal_uInt16      GetBezierMode() const           { return m_eBezierMode; }
     void            SetBezierMode(sal_uInt16 eBezMode)  { m_eBezierMode = eBezMode; }
     void            EnterDrawTextMode(const Point& aDocPos); // turn on DrawTextEditMode

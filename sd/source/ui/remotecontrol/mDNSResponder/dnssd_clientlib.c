@@ -84,9 +84,9 @@ static uint8_t *InternalTXTRecordSearch
         uint8_t *x = p;
         p += 1 + p[0];
         if (p <= e && *keylen <= x[0] && !strncasecmp(key, (char*)x+1, *keylen))
-            if (*keylen == x[0] || x[1+*keylen] == '=') return(x);
+            if (*keylen == x[0] || x[1+*keylen] == '=') return x;
     }
-    return(NULL);
+    return NULL;
 }
 
 /*********************************************************************************************
@@ -210,18 +210,18 @@ DNSServiceErrorType DNSSD_API TXTRecordSetValue
     const char *k;
     unsigned long keysize, keyvalsize;
 
-    for (k = key; *k; k++) if (*k < 0x20 || *k > 0x7E || *k == '=') return(kDNSServiceErr_Invalid);
+    for (k = key; *k; k++) if (*k < 0x20 || *k > 0x7E || *k == '=') return kDNSServiceErr_Invalid;
     keysize = (unsigned long)(k - key);
     keyvalsize = 1 + keysize + (value ? (1 + valueSize) : 0);
-    if (keysize < 1 || keyvalsize > 255) return(kDNSServiceErr_Invalid);
+    if (keysize < 1 || keyvalsize > 255) return kDNSServiceErr_Invalid;
     (void)TXTRecordRemoveValue(txtRecord, key);
     if (txtRec->datalen + keyvalsize > txtRec->buflen)
     {
         unsigned char *newbuf;
         unsigned long newlen = txtRec->datalen + keyvalsize;
-        if (newlen > 0xFFFF) return(kDNSServiceErr_Invalid);
+        if (newlen > 0xFFFF) return kDNSServiceErr_Invalid;
         newbuf = malloc((size_t)newlen);
-        if (!newbuf) return(kDNSServiceErr_NoMemory);
+        if (!newbuf) return kDNSServiceErr_NoMemory;
         memcpy(newbuf, txtRec->buffer, txtRec->datalen);
         if (txtRec->malloced) free(txtRec->buffer);
         txtRec->buffer = newbuf;
@@ -240,7 +240,7 @@ DNSServiceErrorType DNSSD_API TXTRecordSetValue
     }
     *start = (uint8_t)(p - start - 1);
     txtRec->datalen += p - start;
-    return(kDNSServiceErr_NoError);
+    return kDNSServiceErr_NoError;
 }
 
 DNSServiceErrorType DNSSD_API TXTRecordRemoveValue
@@ -251,17 +251,17 @@ DNSServiceErrorType DNSSD_API TXTRecordRemoveValue
 {
     unsigned long keylen, itemlen, remainder;
     uint8_t *item = InternalTXTRecordSearch(txtRec->datalen, txtRec->buffer, key, &keylen);
-    if (!item) return(kDNSServiceErr_NoSuchKey);
+    if (!item) return kDNSServiceErr_NoSuchKey;
     itemlen   = (unsigned long)(1 + item[0]);
     remainder = (unsigned long)((txtRec->buffer + txtRec->datalen) - (item + itemlen));
     // Use memmove because memcpy behaviour is undefined for overlapping regions
     memmove(item, item + itemlen, remainder);
     txtRec->datalen -= itemlen;
-    return(kDNSServiceErr_NoError);
+    return kDNSServiceErr_NoError;
 }
 
-uint16_t DNSSD_API TXTRecordGetLength  (const TXTRecordRef *txtRecord) { return(txtRec->datalen); }
-const void * DNSSD_API TXTRecordGetBytesPtr(const TXTRecordRef *txtRecord) { return(txtRec->buffer); }
+uint16_t DNSSD_API TXTRecordGetLength  (const TXTRecordRef *txtRecord) { return txtRec->datalen; }
+const void * DNSSD_API TXTRecordGetBytesPtr(const TXTRecordRef *txtRecord) { return txtRec->buffer; }
 
 /*********************************************************************************************
 *
@@ -290,7 +290,7 @@ const void * DNSSD_API TXTRecordGetValuePtr
 {
     unsigned long keylen;
     uint8_t *item = InternalTXTRecordSearch(txtLen, txtRecord, key, &keylen);
-    if (!item || item[0] <= keylen) return(NULL);   // If key not found, or found with no value, return NULL
+    if (!item || item[0] <= keylen) return NULL;   // If key not found, or found with no value, return NULL
     *valueLen = (uint8_t)(item[0] - (keylen + 1));
     return (item + 1 + keylen + 1);
 }
@@ -305,7 +305,7 @@ uint16_t DNSSD_API TXTRecordGetCount
     uint8_t *p = (uint8_t*)txtRecord;
     uint8_t *e = p + txtLen;
     while (p<e) { p += 1 + p[0]; count++; }
-    return((p>e) ? (uint16_t)0 : count);
+    return ((p>e) ? (uint16_t)0 : count);
 }
 
 DNSServiceErrorType DNSSD_API TXTRecordGetItemAtIndex
@@ -329,7 +329,7 @@ DNSServiceErrorType DNSSD_API TXTRecordGetItemAtIndex
         unsigned long len = 0;
         e = p + 1 + p[0];
         while (x+len<e && x[len] != '=') len++;
-        if (len >= keyBufLen) return(kDNSServiceErr_NoMemory);
+        if (len >= keyBufLen) return kDNSServiceErr_NoMemory;
         memcpy(key, x, len);
         key[len] = 0;
         if (x+len<e)        // If we found '='
@@ -342,9 +342,9 @@ DNSServiceErrorType DNSSD_API TXTRecordGetItemAtIndex
             *value = NULL;
             *valueLen = 0;
         }
-        return(kDNSServiceErr_NoError);
+        return kDNSServiceErr_NoError;
     }
-    return(kDNSServiceErr_Invalid);
+    return kDNSServiceErr_Invalid;
 }
 
 /*********************************************************************************************

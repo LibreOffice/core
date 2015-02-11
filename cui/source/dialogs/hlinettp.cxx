@@ -189,7 +189,7 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 
 IconChoicePage* SvxHyperlinkInternetTp::Create( vcl::Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkInternetTp( pWindow, pDlg, rItemSet ) );
+    return new SvxHyperlinkInternetTp( pWindow, pDlg, rItemSet );
 }
 
 /*************************************************************************
@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
     maTimer.SetTimeout( 2500 );
     maTimer.Start();
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -231,7 +231,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl)
 {
     RefreshMarkWindow();
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -249,7 +249,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
         ClickAnonymousHdl_Impl(NULL);
     }
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -336,7 +336,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
 {
     OUString aScheme = GetSchemeFromButtons();
     SetScheme(aScheme);
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
     else
         setFTPUser(maStrOldUser, maStrOldPassword);
 
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -378,7 +378,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl)
 {
     RefreshMarkWindow();
-    return (0L);
+    return 0L;
 }
 
 /*************************************************************************
@@ -403,7 +403,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
     static_cast<SvxHpLinkDlg*>(mpDialog)->GetBindings()->Execute( SID_OPENDOC, ppItems, 0, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD );
 
-    return( 0L );
+    return 0L;
 }
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()

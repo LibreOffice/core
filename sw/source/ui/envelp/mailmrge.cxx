@@ -483,7 +483,7 @@ IMPL_LINK( SwMailMergeDlg, FilenameHdl, CheckBox*, pBox )
 IMPL_LINK_NOARG(SwMailMergeDlg, ModifyHdl)
 {
     m_pFromRB->Check();
-    return (0);
+    return 0;
 }
 
 bool SwMailMergeDlg::ExecQryShell()

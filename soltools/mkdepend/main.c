@@ -486,7 +486,7 @@ struct filepointer *getfile(char *file)
         warning("makedepend:  Cannot open file \"%s\"\n", file);
         content->f_p = content->f_base = content->f_end = (char *)malloc(1);
         *content->f_p = '\0';
-        return(content);
+        return content;
     }
     (void)fstat(fd, &st);
 
@@ -501,7 +501,7 @@ struct filepointer *getfile(char *file)
         warning("makedepend:  File \"%s\" is too large.\n", file);
         content->f_p = content->f_base = content->f_end = (char *)malloc(1);
         *content->f_p = '\0';
-        return(content);
+        return content;
     }
 
     content->f_base = (char *)malloc(malloc_size+1);
@@ -517,7 +517,7 @@ struct filepointer *getfile(char *file)
     content->f_end = content->f_base + bytes_read;
     *content->f_end = '\0';
     content->f_line = 0;
-    return(content);
+    return content;
 }
 
 void freefile(struct filepointer *fp)
@@ -531,7 +531,7 @@ char *copy(char *str)
     char   *p = (char *)malloc(strlen(str) + 1);
 
     strcpy(p, str);
-    return(p);
+    return p;
 }
 
 int match(char *str, char **list)
@@ -540,8 +540,8 @@ int match(char *str, char **list)
 
     for (i=0; *list; i++, list++)
         if (strcmp(str, *list) == 0)
-            return(i);
-    return(-1);
+            return i;
+    return -1;
 }
 
 /*
@@ -558,7 +558,7 @@ char *get_line(struct filepointer *filep)
     p = filep->f_p;
     eof = filep->f_end;
     if (p >= eof)
-        return((char *)NULL);
+        return (char *)NULL;
     lineno = filep->f_line;
 
     for(bol = p--; ++p < eof; ) {
@@ -610,7 +610,7 @@ char *get_line(struct filepointer *filep)
 done:
     filep->f_p = p;
     filep->f_line = lineno;
-    return(bol);
+    return bol;
 }
 
 /*
@@ -634,7 +634,7 @@ char *base_name(char *file)
         };
         p--;
     };
-    return(file);
+    return file;
 }
 
 #if defined(USG) && !defined(CRAY) && !defined(SVR4)

@@ -375,7 +375,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
     else
         collator->setStrength(Collator::TERTIARY);
 
-    return(0);
+    return 0;
 }
 
 

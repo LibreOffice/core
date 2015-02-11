@@ -460,7 +460,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         }
     }
 
-    return(bReturn);
+    return bReturn;
 }
 
 void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)

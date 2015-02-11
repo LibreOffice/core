@@ -598,7 +598,7 @@ sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
     if( mrModel.mpDoc )
         nCount = mrModel.mpDoc->GetPageCount();
 
-    return( nCount );
+    return nCount;
 }
 
 uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )

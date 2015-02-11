@@ -176,7 +176,7 @@ IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
     SfxUInt16Item aItem( SID_ATTR_ALIGN_INDENT,  (sal_uInt16)CalcToUnit( nVal,  SFX_MAPUNIT_TWIP ) );
 
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_ALIGN_INDENT, SfxCallMode::RECORD, &aItem, 0L);
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)

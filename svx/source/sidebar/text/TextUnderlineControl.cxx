@@ -215,7 +215,7 @@ IMPL_LINK(TextUnderlineControl, VSSelectHdl, void *, pControl)
         mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_UNDERLINE, SfxCallMode::RECORD, &aLineItem, 0L);
         mrTextPropertyPanel.EndUnderlinePopupMode();
     }
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK(TextUnderlineControl, PBClickHdl, PushButton *, pPBtn)

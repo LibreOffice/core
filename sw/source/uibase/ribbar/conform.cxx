@@ -76,7 +76,7 @@ bool ConstFormControl::MouseButtonDown(const MouseEvent& rMEvt)
     else
         bReturn = SwDrawBase::MouseButtonDown(rMEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 void ConstFormControl::Activate(const sal_uInt16 nSlotId)

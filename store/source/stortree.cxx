@@ -68,7 +68,7 @@ sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
         sal_Int32 const m = ((l + r) >> 1);
 
         if (t.m_aKey == m_pData[m].m_aKey)
-            return ((sal_uInt16)(m));
+            return (sal_uInt16)m;
         if (t.m_aKey < m_pData[m].m_aKey)
             r = m - 1;
         else
@@ -77,9 +77,9 @@ sal_uInt16 OStoreBTreeNodeData::find (const T& t) const
 
     sal_uInt16 const k = ((sal_uInt16)(r));
     if ((k < capacityCount()) && (t.m_aKey < m_pData[k].m_aKey))
-        return(k - 1);
+        return k - 1;
     else
-        return(k);
+        return k;
 }
 
 /*

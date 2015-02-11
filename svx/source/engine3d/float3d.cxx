@@ -2147,7 +2147,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
         // Controls can be disabled during certain circumstances
     }
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2161,7 +2161,7 @@ IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
             SID_3D_ASSIGN, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2271,7 +2271,7 @@ IMPL_LINK( Svx3DWin, ClickViewTypeHdl, void *, pBtn )
         m_pBtnTexture->Check( eViewType == VIEWTYPE_TEXTURE );
         m_pBtnMaterial->Check( eViewType == VIEWTYPE_MATERIAL );
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2429,7 +2429,7 @@ IMPL_LINK( Svx3DWin, ClickHdl, PushButton *, pBtn )
         else if( bUpdatePreview )
             UpdatePreview();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2459,7 +2459,7 @@ IMPL_LINK( Svx3DWin, ClickColorHdl, PushButton *, pBtn )
         if( LBSelectColor( pLb, aColor ) )
             SelectHdl( pLb );
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2561,7 +2561,7 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
         if( bUpdatePreview )
             UpdatePreview();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2592,7 +2592,7 @@ IMPL_LINK( Svx3DWin, ModifyHdl, void*, pField )
         if( bUpdatePreview )
             UpdatePreview();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2627,7 +2627,7 @@ void Svx3DWin::ClickLight(PushButton& rBtn)
 
 IMPL_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
 {
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2699,7 +2699,7 @@ IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
         m_pBtnLightColor->Enable( false );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2728,7 +2728,7 @@ bool Svx3DWin::LBSelectColor( ColorLB* pLb, const Color& rColor )
         pLb->SelectEntryPos( nPos );
         bRet = true;
     }
-    return( bRet );
+    return bRet;
 }
 
 
@@ -2844,7 +2844,7 @@ sal_uInt16 Svx3DWin::GetLightSource( const PushButton* pBtn )
         else if( pBtn == m_pBtnLight8 )
             nLight = 7;
     }
-    return( nLight );
+    return nLight;
 };
 
 
@@ -2890,7 +2890,7 @@ ColorLB* Svx3DWin::GetLbByButton( const PushButton* pBtn )
         else if( pBtn == m_pBtnLight8 )
             pLb = m_pLbLight8;
     }
-    return( pLb );
+    return pLb;
 };
 
 // Derivation from SfxChildWindow as "containers" for effects

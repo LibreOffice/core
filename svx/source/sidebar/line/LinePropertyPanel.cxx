@@ -793,7 +793,7 @@ IMPL_LINK( LinePropertyPanel, ChangeTransparentHdl, void *, EMPTYARG )
     XLineTransparenceItem aItem( nVal );
 
     GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SfxCallMode::RECORD, &aItem, 0L);
-    return( 0L );
+    return 0L;
 }
 
 

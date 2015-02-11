@@ -235,7 +235,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if( pStr )
     {
         printf( "Cannot open response file <%s>\n", pStr );
-        return( 1 );
+        return 1;
     };
 
     ppStr  = (char **)aCmdLine.GetBlock();

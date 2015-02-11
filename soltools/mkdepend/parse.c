@@ -114,7 +114,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
             /*fall-through*/
         case ENDIF:
             if (recursion)
-                return(type);
+                return type;
             /*fall-through*/
         case DEFINE:
             define(line, &symbols);
@@ -159,7 +159,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
             break;
         }
     }
-    return(-1);
+    return -1;
 }
 
 int gobble(struct filepointer *filep,
@@ -189,7 +189,7 @@ int gobble(struct filepointer *filep,
             debug(0,("%s, line %d: #%s\n",
                 file->i_file, filep->f_line,
                 directives[type]));
-            return(type);
+            return type;
         case DEFINE:
         case UNDEF:
         case INCLUDE:
@@ -203,14 +203,14 @@ int gobble(struct filepointer *filep,
         case ELIF:
         case ELIFFALSE:
         case ELIFGUESSFALSE:
-            return(type);
+            return type;
         case -1:
             warning("%s, line %d: unknown directive == \"%s\"\n",
                 file_red->i_file, filep->f_line, line);
             break;
         }
     }
-    return(-1);
+    return -1;
 }
 
 /*
@@ -257,19 +257,19 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
         {
           debug(0,("false...\n"));
           if (ret == IFFALSE)
-              return(ELIFFALSE);
+              return ELIFFALSE;
           else
-              return(ELIFGUESSFALSE);
+              return ELIFGUESSFALSE;
           }
         else
         {
           debug(0,("true...\n"));
-          return(ELIF);
+          return ELIF;
         }
     }
 
     if (ret < 0 || ! parse_it)
-        return(ret);
+        return ret;
 
     /*
      * now decide how to parse the directive, and do it.
@@ -323,7 +323,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
         while (*p && *p != '"' && *p != '<')
             p++;
         if (! *p)
-            return(-2);
+            return -2;
         if (*p++ == '"') {
             ret = INCLUDEDOT;
             while (*p && *p != '"')
@@ -354,7 +354,7 @@ int deftype (char *line, struct filepointer *filep, struct inclist *file_red, st
          */
         break;
     }
-    return(ret);
+    return ret;
 }
 
 /*
@@ -375,9 +375,9 @@ int zero_value(char *exp, struct filepointer *filep, struct inclist *file_red, s
 {
     global_symbols = symbols; /* HACK! see above */
     if (cppsetup(exp, filep, file_red))
-        return(IFFALSE);
+        return IFFALSE;
     else
-        return(IF);
+        return IF;
 }
 
 void define( char *def, struct symhash **symbols )

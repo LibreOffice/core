@@ -693,7 +693,7 @@ bool
         }
     }
 
-    return( bRet );
+    return bRet;
 }
 
 /** Select or delselect the specified shapes.  The corresponding accessible

@@ -229,7 +229,7 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
     if ( !bReturn )
         bReturn = FuDraw::KeyInput(rKEvt);
 
-    return(bReturn);
+    return bReturn;
 }
 
 void FuConstruct::Activate()

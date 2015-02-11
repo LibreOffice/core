@@ -315,14 +315,14 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 
 SfxTabPage* SvxAngleTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet)
 {
-    return(new SvxAngleTabPage(pWindow, *rSet));
+    return new SvxAngleTabPage(pWindow, *rSet);
 }
 
 
 
 const sal_uInt16* SvxAngleTabPage::GetRanges()
 {
-    return(pAngleRanges);
+    return pAngleRanges;
 }
 
 
@@ -488,7 +488,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         rAttrs->Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, false ) );
     }
 
-    return( bModified );
+    return bModified;
 }
 
 
@@ -549,14 +549,14 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
 SfxTabPage* SvxSlantTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return( new SvxSlantTabPage( pWindow, *rOutAttrs ) );
+    return new SvxSlantTabPage( pWindow, *rOutAttrs );
 }
 
 
 
 const sal_uInt16* SvxSlantTabPage::GetRanges()
 {
-    return( pSlantRanges );
+    return pSlantRanges;
 }
 
 
@@ -988,14 +988,14 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
 SfxTabPage* SvxPositionSizeTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return( new SvxPositionSizeTabPage( pWindow, *rOutAttrs ) );
+    return new SvxPositionSizeTabPage( pWindow, *rOutAttrs );
 }
 
 
 
 const sal_uInt16* SvxPositionSizeTabPage::GetRanges()
 {
-    return( pPosSizeRanges );
+    return pPosSizeRanges;
 }
 
 
@@ -1043,7 +1043,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangePosProtectHdl)
     // #106572# Remember user's last choice
     m_pTsbSizeProtect->SetState( m_pTsbPosProtect->GetState() == TRISTATE_TRUE ?  TRISTATE_TRUE : mnProtectSizeState );
     UpdateControlStates();
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1099,7 +1099,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeSizeProtectHdl)
 
     UpdateControlStates();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1438,7 +1438,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl)
         }
     }
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1463,7 +1463,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
         }
     }
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1471,7 +1471,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl)
 IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickSizeProtectHdl)
 {
     UpdateControlStates();
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1484,7 +1484,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ClickAutoHdl)
         mfOldHeight = std::max( (double)GetCoreValue( *m_pMtrHeight, mePoolUnit ), 1.0 );
     }
 
-    return( 0L );
+    return 0L;
 }
 
 

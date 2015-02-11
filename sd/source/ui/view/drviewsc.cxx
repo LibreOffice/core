@@ -245,7 +245,7 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
             nMappedSId = SID_DRAWTBX_CONNECTORS;
         }
     }
-    return( nMappedSId );
+    return nMappedSId;
 }
 
 /**
@@ -301,9 +301,9 @@ sal_uInt16 DrawViewShell::GetMappedSlot( sal_uInt16 nSId )
        would be executed over and over again. The slot is initial available in
        the array in order to show the image correct.  */
     if( nSId == nSlot )
-        return( 0 );
+        return 0;
 
-    return( nSlot );
+    return nSlot;
 }
 
 /**
@@ -314,10 +314,10 @@ sal_uInt16 DrawViewShell::GetArrayId( sal_uInt16 nSId )
     for( sal_uInt16 i = 0; i < SLOTARRAY_COUNT; i += 2 )
     {
         if( mpSlotArray[ i ] == nSId )
-            return( i );
+            return i;
     }
     OSL_FAIL( "Slot in array not found!" );
-    return( USHRT_MAX );
+    return USHRT_MAX;
 }
 
 void DrawViewShell::UpdateIMapDlg( SdrObject* pObj )

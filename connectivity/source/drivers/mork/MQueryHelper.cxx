@@ -130,7 +130,7 @@ MQueryHelper::getByIndex(sal_uInt32 nRow)
     // Row numbers are from 1 to N, need to ensure this, and then
     // subtract 1
     if ( nRow < 1 ) {
-        return( NULL );
+        return NULL;
     }
     return m_aResults[nRow -1];
 }
@@ -156,11 +156,11 @@ bool MQueryHelper::checkRowAvailable( sal_Int32 nDBRow )
     {
         if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
             m_aError = m_aQueryHelper->getError();
-            return( sal_False );
+            return sal_False;
         }
     }
 */
-    return( getResultCount() > nDBRow );
+    return getResultCount() > nDBRow;
 }
 
 

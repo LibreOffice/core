@@ -111,7 +111,7 @@ public class XMergeBridge {
 
             }
 
-            return( typeReturn );
+            return typeReturn;
         }
 
     private String getFileName(String origName)
@@ -538,21 +538,21 @@ public class XMergeBridge {
 
         // Implement method from interface XServiceName
         public String getServiceName() {
-            return( __serviceName );
+            return __serviceName;
         }
 
         // Implement methods from interface XServiceInfo
         public boolean supportsService(String stringServiceName) {
-            return( stringServiceName.equals( __serviceName ) );
+            return stringServiceName.equals( __serviceName );
         }
 
         public String getImplementationName() {
-            return( _XMergeBridge.class.getName() );
+            return _XMergeBridge.class.getName();
         }
 
         public String[] getSupportedServiceNames() {
             String[] stringSupportedServiceNames = { __serviceName };
-            return( stringSupportedServiceNames );
+            return stringSupportedServiceNames;
         }
     }
 

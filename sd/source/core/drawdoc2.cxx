@@ -132,7 +132,7 @@ SdrObject* SdDrawDocument::GetObj(const OUString& rObjName) const
         nPage++;
     }
 
-    return (pObjFound);
+    return pObjFound;
 }
 
 // Find SdPage by name
@@ -679,7 +679,7 @@ bool SdDrawDocument::CreateMissingNotesAndHandoutPages()
         SetChanged(false);
     }
 
-    return(bOK);
+    return bOK;
 }
 
 // + Move selected pages after said page

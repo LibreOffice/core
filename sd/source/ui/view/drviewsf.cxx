@@ -767,7 +767,7 @@ OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
         }
     }
 
-    return (aStrSelection);
+    return aStrSelection;
 }
 
 bool DrawViewShell::HasSelection(bool bText) const

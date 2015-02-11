@@ -870,7 +870,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, const INetURLObject& _aIni
         } // while(nNext)
     }
     delete pSgfFonts;
-    return(bRet);
+    return bRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

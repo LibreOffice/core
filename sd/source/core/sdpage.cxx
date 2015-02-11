@@ -558,7 +558,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         pSdrObj->RecalcBoundRect();
     }
 
-    return(pSdrObj);
+    return pSdrObj;
 }
 
 /*************************************************************************

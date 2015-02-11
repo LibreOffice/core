@@ -202,7 +202,7 @@ namespace connectivity
 
             SDBCAddress::sdbc_address_type getSDBCAddressType() const { return m_eSDBCAddressType;}
 
-            const OColumnAlias & getColumnAlias() const   { return (m_aColumnAlias); }
+            const OColumnAlias & getColumnAlias() const   { return m_aColumnAlias; }
 
             static OUString    getDriverImplementationName();
 

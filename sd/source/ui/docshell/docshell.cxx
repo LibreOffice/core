@@ -433,7 +433,7 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     }
 
     mpDoc->ImpOnlineSpellCallback(pInfo, pObj, pOutl);
-    return(0);
+    return 0;
 }
 
 void DrawDocShell::ClearUndoBuffer()

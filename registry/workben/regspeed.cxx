@@ -250,7 +250,7 @@ int _cdecl main( int argc, char * argv[] )
             cout << "\t41. closing registry \"test.reg\" failed\n";
     }
 
-    return(0);
+    return 0;
 }
 
 

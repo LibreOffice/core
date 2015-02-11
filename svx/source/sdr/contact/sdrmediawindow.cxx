@@ -140,7 +140,7 @@ sal_Int8 SdrMediaWindow::AcceptDrop( const AcceptDropEvent& rEvt )
         }
     }
 
-    return( nRet );
+    return nRet;
 }
 
 
@@ -160,7 +160,7 @@ sal_Int8 SdrMediaWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
     }
 
-    return( nRet );
+    return nRet;
 }
 
 

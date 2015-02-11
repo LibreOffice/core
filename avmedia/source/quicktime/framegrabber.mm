@@ -83,7 +83,7 @@ bool FrameGrabber::create( const ::rtl::OUString& rURL )
 
     [pool release];
 
-    return( bRet );
+    return bRet;
 }
 
 

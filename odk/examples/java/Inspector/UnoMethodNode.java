@@ -190,7 +190,7 @@ public class UnoMethodNode extends UnoNode{
         if ( paramMode == ParamMode.INOUT ) {
             toReturn = "INOUT";
         }
-        return( toReturn );
+        return toReturn;
     }
 
     public TypeClass getTypeClass(){

@@ -232,7 +232,7 @@ bool SwDrawBase::MouseMove(const MouseEvent& rMEvt)
         bRet = true;
     }
 
-    return (bRet);
+    return bRet;
 }
 
 bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
@@ -417,7 +417,7 @@ bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
     if ( bAutoCap )
         m_pView->AutoCaption(FRAME_CAP);   //Can currently only be FRAME, otherwise convert
                                            // to enums
-    return (bReturn);
+    return bReturn;
 }
 
 void SwDrawBase::Activate(const sal_uInt16 nSlot)
@@ -533,7 +533,7 @@ bool SwDrawBase::KeyInput(const KeyEvent& rKEvt)
         break;
     }
 
-    return (bReturn);
+    return bReturn;
 }
 
 // Process keyboard events

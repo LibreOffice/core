@@ -98,7 +98,7 @@ namespace connectivity
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL clearWarnings() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-            const OColumnAlias & getColumnAlias() const   { return (m_aColumnAlias); }
+            const OColumnAlias & getColumnAlias() const   { return m_aColumnAlias; }
 
             static OUString getDriverImplementationName();
 

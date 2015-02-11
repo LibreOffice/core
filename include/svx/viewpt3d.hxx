@@ -96,7 +96,7 @@ class SVX_DLLPUBLIC Viewport3D
 
     void SetProjection(ProjectionType ePrj)
         { eProjection = ePrj; bTfValid = false; }
-    ProjectionType GetProjection() const { return(eProjection); }
+    ProjectionType GetProjection() const { return eProjection; }
 
     void SetAspectMapping(AspectMapType eAsp)
         { eAspectMapping = eAsp; bTfValid = false; }

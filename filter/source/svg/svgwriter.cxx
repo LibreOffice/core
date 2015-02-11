@@ -114,7 +114,7 @@ SVGAttributeWriter::~SVGAttributeWriter()
 
 double SVGAttributeWriter::ImplRound( double fValue, sal_Int32 nDecs )
 {
-      return( floor( fValue * pow( 10.0, (int)nDecs ) + 0.5 ) / pow( 10.0, (int)nDecs ) );
+      return floor( fValue * pow( 10.0, (int)nDecs ) + 0.5 ) / pow( 10.0, (int)nDecs );
 }
 
 void SVGAttributeWriter::ImplGetColorStr( const Color& rColor, OUString& rColorStr )
@@ -1665,7 +1665,7 @@ long SVGActionWriter::ImplMap( sal_Int32 nVal ) const
 {
     Size aSz( nVal, nVal );
 
-    return( ImplMap( aSz, aSz ).Width() );
+    return ImplMap( aSz, aSz ).Width();
 }
 
 Point& SVGActionWriter::ImplMap( const Point& rPt, Point& rDstPt ) const
@@ -1696,7 +1696,7 @@ Polygon& SVGActionWriter::ImplMap( const Polygon& rPoly, Polygon& rDstPoly ) con
         rDstPoly.SetFlags( i, rPoly.GetFlags( i ) );
     }
 
-    return( rDstPoly );
+    return rDstPoly;
 }
 
 tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rDstPolyPoly ) const
@@ -1710,7 +1710,7 @@ tools::PolyPolygon& SVGActionWriter::ImplMap( const tools::PolyPolygon& rPolyPol
         rDstPolyPoly.Insert( ImplMap( rPolyPoly[ i ], aPoly ) );
     }
 
-    return( rDstPolyPoly );
+    return rDstPolyPoly;
 }
 
 OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bool bLine )

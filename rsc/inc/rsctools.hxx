@@ -73,13 +73,11 @@ public:
                     RscPtrPtr();
                     ~RscPtrPtr();
     void            Reset();
-    sal_uInt32  Append( void * );
-    sal_uInt32  Append( char * pStr ){
-                        return( Append( (void *)pStr ) );
-                    };
-    sal_uInt32  GetCount(){ return( nCount ); };
+    sal_uInt32      Append( void * );
+    sal_uInt32      Append( char * pStr ) { return Append( (void *)pStr ); }
+    sal_uInt32      GetCount() { return nCount; }
     void *          GetEntry( sal_uInt32 nEle );
-    void **         GetBlock(){ return( pMem ); };
+    void **         GetBlock() { return pMem; }
 };
 
 class RscWriteRc
@@ -124,7 +122,7 @@ public:
 
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
-    sal_uInt32      Size(){ return( nLen ); };
+    sal_uInt32  Size(){ return nLen; }
     void        Put( sal_uInt64 lVal )
                 {
                     union

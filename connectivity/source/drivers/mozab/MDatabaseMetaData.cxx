@@ -150,7 +150,7 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             }
         }
     }
-    return( aRows );
+    return aRows;
 }
 
 OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )

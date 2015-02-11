@@ -78,7 +78,7 @@ public:
            virtual ~SwLinePortion();
 
     // Access methods
-    inline SwLinePortion *GetPortion() const { return( pPortion ); }
+    inline SwLinePortion *GetPortion() const { return pPortion; }
     inline SwLinePortion &operator=(const SwLinePortion &rPortion);
     inline bool operator==( const SwLinePortion &rPortion ) const;
     inline sal_Int32 GetLen() const { return nLineLength; }

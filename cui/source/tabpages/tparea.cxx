@@ -89,7 +89,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl)
 
     InvalidatePreview( false );
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl)
@@ -102,7 +102,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl)
     rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
     ModifyTransparentHdl_Impl (NULL);
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl)
@@ -115,7 +115,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl)
     rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
     ModifiedTrgrHdl_Impl (NULL);
 
-    return( 0L );
+    return 0L;
 }
 
 void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
@@ -161,7 +161,7 @@ IMPL_LINK(SvxTransparenceTabPage, ModifiedTrgrHdl_Impl, void *, pControl)
 
     InvalidatePreview();
 
-    return( 0L );
+    return 0L;
 }
 
 void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
@@ -177,7 +177,7 @@ void SvxTransparenceTabPage::ActivateGradient(bool bActivate)
 
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ChangeTrgrTypeHdl_Impl)
 {
-    return( 0L );
+    return 0L;
 }
 
 void SvxTransparenceTabPage::SetControlState_Impl(css::awt::GradientStyle eXGS)
@@ -293,12 +293,12 @@ void SvxTransparenceTabPage::Construct()
 
 SfxTabPage* SvxTransparenceTabPage::Create(vcl::Window* pWindow, const SfxItemSet* rAttrs)
 {
-    return(new SvxTransparenceTabPage(pWindow, *rAttrs));
+    return new SvxTransparenceTabPage(pWindow, *rAttrs);
 }
 
 const sal_uInt16* SvxTransparenceTabPage::GetRanges()
 {
-    return(pTransparenceRanges);
+    return pTransparenceRanges;
 }
 
 bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
@@ -485,7 +485,7 @@ int SvxTransparenceTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet( _pSet );
-    return(LEAVE_PAGE);
+    return LEAVE_PAGE;
 }
 
 void SvxTransparenceTabPage::PointChanged(vcl::Window* , RECT_POINT eRcPt)
@@ -988,7 +988,7 @@ int SvxAreaTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 
@@ -1434,7 +1434,7 @@ bool SvxAreaTabPage::FillItemSet( SfxItemSet* rAttrs )
         rAttrs->Put (SfxUInt16Item(SID_TABPAGE_POS,nPos));
     }
 
-    return( bModified );
+    return bModified;
 }
 
 
@@ -1761,14 +1761,14 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 SfxTabPage* SvxAreaTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxAreaTabPage( pWindow, *rAttrs ) );
+    return new SvxAreaTabPage( pWindow, *rAttrs );
 }
 
 
 
 const sal_uInt16* SvxAreaTabPage::GetRanges()
 {
-    return( pAreaRanges );
+    return pAreaRanges;
 }
 
 
@@ -1858,7 +1858,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
     m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1914,7 +1914,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
     m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1970,7 +1970,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchingHdl_Impl)
     m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1995,7 +1995,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyHatchBckgrdColorHdl_Impl)
     m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2020,7 +2020,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
         }
     }
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2100,7 +2100,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyBitmapHdl_Impl)
     m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2131,7 +2131,7 @@ IMPL_LINK( SvxAreaTabPage, ModifyStepCountHdl_Impl, void *, p )
     m_pCtlXRectPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlXRectPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
@@ -2324,7 +2324,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyTileHdl_Impl)
     m_pCtlBitmapPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlBitmapPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -2362,7 +2362,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickScaleHdl_Impl)
 
     ModifyTileHdl_Impl( NULL );
 
-    return( 0L );
+    return 0L;
 }
 
 

@@ -175,7 +175,7 @@ SvxGridTabPage::SvxGridTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
 SfxTabPage* SvxGridTabPage::Create( vcl::Window* pParent, const SfxItemSet& rAttrSet )
 {
-    return ( new SvxGridTabPage( pParent, rAttrSet ) );
+    return new SvxGridTabPage( pParent, rAttrSet );
 }
 
 
@@ -282,7 +282,7 @@ int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( _pSet );
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
     else
         pMtrFldAngle->Disable();
 
-    return( 0L );
+    return 0L;
 }
 
 

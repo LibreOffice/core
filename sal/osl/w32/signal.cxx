@@ -149,10 +149,10 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
     switch ( Action )
     {
         case osl_Signal_ActCallNextHdl:
-            return (EXCEPTION_CONTINUE_SEARCH);
+            return EXCEPTION_CONTINUE_SEARCH;
 
         case osl_Signal_ActAbortApp:
-            return (EXCEPTION_EXECUTE_HANDLER);
+            return EXCEPTION_EXECUTE_HANDLER;
 
         case osl_Signal_ActKillApp:
             SetErrorMode(SEM_NOGPFAULTERRORBOX);
@@ -162,7 +162,7 @@ static long WINAPI SignalHandlerFunction(LPEXCEPTION_POINTERS lpEP)
             break;
     }
 
-    return (EXCEPTION_CONTINUE_EXECUTION);
+    return EXCEPTION_CONTINUE_EXECUTION;
 }
 
 /*****************************************************************************/
@@ -191,10 +191,10 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction Handler,
 
         osl_releaseMutex(SignalListMutex);
 
-        return (pHandler);
+        return pHandler;
     }
 
-    return (NULL);
+    return NULL;
 }
 
 /*****************************************************************************/
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 
             free(pHandler);
 
-            return (sal_True);
+            return sal_True;
         }
 
         pPrevious = pHandler;
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler Handler)
 
     osl_releaseMutex(SignalListMutex);
 
-    return (sal_False);
+    return sal_False;
 }
 
 /*****************************************************************************/
@@ -262,7 +262,7 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 UserSignal, void* UserData)
 
     osl_releaseMutex(SignalListMutex);
 
-    return (Action);
+    return Action;
 }
 
 /*****************************************************************************/

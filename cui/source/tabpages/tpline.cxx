@@ -668,7 +668,7 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 
@@ -954,7 +954,7 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
         }
     }
     rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
-    return( bModified );
+    return bModified;
 }
 
 
@@ -1491,7 +1491,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 SfxTabPage* SvxLineTabPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxLineTabPage( pWindow, *rAttrs ) );
+    return new SvxLineTabPage( pWindow, *rAttrs );
 }
 
 
@@ -1561,7 +1561,7 @@ IMPL_LINK( SvxLineTabPage, ChangePreviewHdl_Impl, void *, pCntrl )
 
     m_pBoxEnd->Enable(bHasLineEnd && bHasLineStyle);
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1580,7 +1580,7 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 
     ChangePreviewHdl_Impl( this );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1590,7 +1590,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
 {
     ChangePreviewHdl_Impl( this );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1600,7 +1600,7 @@ IMPL_LINK( SvxLineTabPage, ChangeCapStyleHdl_Impl, void *, EMPTYARG )
 {
     ChangePreviewHdl_Impl( this );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1637,7 +1637,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
     }
     ChangePreviewHdl_Impl( NULL );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1656,7 +1656,7 @@ IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
 
     ChangePreviewHdl_Impl( this );
 
-    return( 0L );
+    return 0L;
 }
 
 
@@ -1673,7 +1673,7 @@ IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
 
     m_pCtlPreview->Invalidate();
 
-    return( 0L );
+    return 0L;
 }
 
 

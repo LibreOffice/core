@@ -74,7 +74,7 @@ bool Options::checkArgument(std::vector< std::string> & rArgs, char const * arg,
             break;
         }
     }
-    return (result);
+    return result;
 }
 
 // static
@@ -84,7 +84,7 @@ bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * 
     if (fp == 0)
     {
         fprintf(stderr, "ERROR: Can't open command file \"%s\"\n", filename);
-        return (false);
+        return false;
     }
 
     std::string buffer;
@@ -123,7 +123,7 @@ bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * 
             break;
         }
     }
-    return (fclose(fp) == 0);
+    return fclose(fp) == 0;
 }
 
 bool Options::initOptions (std::vector< std::string > & rArgs)

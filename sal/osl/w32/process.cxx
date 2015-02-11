@@ -76,7 +76,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
     else
         pProcImpl = NULL;
 
-    return (pProcImpl);
+    return pProcImpl;
 }
 
 /***************************************************************************/
@@ -229,7 +229,7 @@ oslProcessError bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
         }
     }
 
-    return (result);
+    return result;
 }
 
 }
@@ -296,7 +296,7 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
             }
         }
     }
-    return (ppArgs);
+    return ppArgs;
 
 }
 #ifdef _MSC_VER
@@ -337,7 +337,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount(void)
     }
     osl_releaseMutex (*osl_getGlobalMutex());
 
-    return (result);
+    return result;
 }
 
 /***************************************************************************/
@@ -356,7 +356,7 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
     }
     osl_releaseMutex (*osl_getGlobalMutex());
 
-    return (result);
+    return result;
 }
 
 /***************************************************************************/

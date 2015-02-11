@@ -87,7 +87,7 @@ public class ConvertData {
      */
     public Iterator<Object> getDocumentEnumeration() {
         Iterator<Object> enumerate = v.iterator();
-        return (enumerate);
+        return enumerate;
     }
 
     /**
@@ -96,6 +96,6 @@ public class ConvertData {
      * @return  The number of {@code Document} objects currently stored.
      */
     public int getNumDocuments() {
-        return (v.size());
+        return v.size();
     }
 }

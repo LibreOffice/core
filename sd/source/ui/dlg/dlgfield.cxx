@@ -149,7 +149,7 @@ SvxFieldData* SdModifyFieldDlg::GetField()
         }
     }
 
-    return( pNewField );
+    return pNewField;
 }
 
 void SdModifyFieldDlg::FillFormatList()

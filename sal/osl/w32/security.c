@@ -90,7 +90,7 @@ oslSecurity SAL_CALL osl_getCurrentSecurity(void)
     pSecImpl->m_hToken = NULL;
     pSecImpl->m_hProfile = NULL;
 
-    return ((oslSecurity)pSecImpl);
+    return (oslSecurity)pSecImpl;
 }
 
 oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *strPasswd, oslSecurity *pSecurity )
@@ -269,10 +269,10 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         if ( hImpersonationToken )
             CloseHandle( hImpersonationToken );
 
-        return (bSuccess);
+        return bSuccess;
     }
     else
-        return (sal_False);
+        return sal_False;
 }
 
 void SAL_CALL osl_freeSecurityHandle(oslSecurity Security)
@@ -389,7 +389,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
                 free(pInfoBuffer);
                 free(Ident);
 
-                return (sal_True);
+                return sal_True;
             }
         }
         else
@@ -749,7 +749,7 @@ static sal_Bool GetSpecialFolder(rtl_uString **strPath, int nFolder)
 
     FreeLibrary(hLibrary);
 
-    return (bRet);
+    return bRet;
 }
 
 static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
@@ -848,7 +848,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
 
                 free(pInfoBuffer);
 
-                return (sal_True);
+                return sal_True;
             }
         }
         else
@@ -865,7 +865,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
 
                 if (pNameW)
                     free(pNameW);
-                return (sal_True);
+                return sal_True;
             }
             else
                 if (wcslen(pSecImpl->m_User) > 0)
@@ -875,7 +875,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
                     if (pNameW)
                         free(pNameW);
 
-                    return (sal_True);
+                    return sal_True;
                 }
 
             if (pNameW)

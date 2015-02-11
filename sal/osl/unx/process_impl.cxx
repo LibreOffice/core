@@ -79,7 +79,7 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
         }
     }
 
-    return (result);
+    return result;
 }
 
 }
@@ -111,7 +111,7 @@ oslProcessError SAL_CALL bootstrap_getExecutableFile(rtl_uString ** ppFileURL)
         }
     }
 
-    return (result);
+    return result;
 }
 
 }
@@ -168,7 +168,7 @@ sal_uInt32 SAL_CALL osl_getCommandArgCount (void)
         result = g_command_args.m_nCount - 1;
     pthread_mutex_unlock (&(g_command_args.m_mutex));
 
-    return (result);
+    return result;
 }
 
 /***************************************
@@ -187,7 +187,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
     }
     pthread_mutex_unlock (&(g_command_args.m_mutex));
 
-    return (result);
+    return result;
 }
 
 /***************************************
@@ -280,7 +280,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
         rtl_string_release(pstr_env_var);
     }
 
-    return (result);
+    return result;
 }
 
 /***************************************
@@ -336,7 +336,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
     if (pstr_env_var != 0)
         rtl_string_release(pstr_env_var);
 
-    return (result);
+    return result;
 }
 
 /***************************************
@@ -383,7 +383,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
         rtl_string_release(pstr_env_var);
     }
 
-    return (result);
+    return result;
 }
 
 /***************************************
@@ -412,7 +412,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
         }
     }
 
-    return (result);
+    return result;
 }
 
 /******************************************************************************
@@ -451,7 +451,7 @@ oslProcessError SAL_CALL osl_getProcessLocale( rtl_Locale ** ppLocale )
 
         pthread_mutex_unlock (&(g_process_locale.m_mutex));
     }
-    return (result);
+    return result;
 }
 
 /**********************************************
@@ -471,7 +471,7 @@ oslProcessError SAL_CALL osl_setProcessLocale( rtl_Locale * pLocale )
     }
     pthread_mutex_unlock (&(g_process_locale.m_mutex));
 
-    return (result);
+    return result;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

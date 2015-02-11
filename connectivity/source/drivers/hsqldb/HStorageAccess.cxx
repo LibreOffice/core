@@ -179,7 +179,7 @@ jint read_from_storage_stream( JNIEnv * env, jobject /*obj_this*/, jstring name,
             if ( logger )
                 logger->write( tmpInt );
 #endif
-            return(tmpInt);
+            return tmpInt;
         }
     }
     return -1;

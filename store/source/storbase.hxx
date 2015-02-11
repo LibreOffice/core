@@ -76,11 +76,11 @@ inline sal_uInt16 ntohs (sal_uInt16 n) { return OSL_SWAPWORD(n); }
 inline sal_uInt32 htonl (sal_uInt32 h) { return OSL_SWAPDWORD(h); }
 inline sal_uInt32 ntohl (sal_uInt32 n) { return OSL_SWAPDWORD(n); }
 #else
-inline sal_uInt16 htons (sal_uInt16 h) { return (h); }
-inline sal_uInt16 ntohs (sal_uInt16 n) { return (n); }
+inline sal_uInt16 htons (sal_uInt16 h) { return h; }
+inline sal_uInt16 ntohs (sal_uInt16 n) { return n; }
 
-inline sal_uInt32 htonl (sal_uInt32 h) { return (h); }
-inline sal_uInt32 ntohl (sal_uInt32 n) { return (n); }
+inline sal_uInt32 htonl (sal_uInt32 h) { return h; }
+inline sal_uInt32 ntohl (sal_uInt32 n) { return n; }
 #endif /* OSL_BIGENDIAN */
 
 /** swap.

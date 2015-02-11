@@ -1133,7 +1133,7 @@ int SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
         FillItemSet( pSet_ );
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 void SvxColorOptionsTabPage::UpdateColorConfig()

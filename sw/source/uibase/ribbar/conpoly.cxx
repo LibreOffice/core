@@ -40,7 +40,7 @@ bool ConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     if ((bReturn = SwDrawBase::MouseButtonDown(rMEvt)))
         aLastPos = rMEvt.GetPosPixel();
 
-    return (bReturn);
+    return bReturn;
 }
 
 bool ConstPolygon::MouseMove(const MouseEvent& rMEvt)
@@ -78,7 +78,7 @@ bool ConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     else
         bReturn = SwDrawBase::MouseButtonUp(rMEvt);
 
-    return (bReturn);
+    return bReturn;
 }
 
 void ConstPolygon::Activate(const sal_uInt16 nSlotId)

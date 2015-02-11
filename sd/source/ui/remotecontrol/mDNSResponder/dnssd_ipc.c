@@ -68,7 +68,7 @@ uint32_t get_uint32(const char **ptr, const char *end)
     if (!*ptr || *ptr + sizeof(uint32_t) > end)
     {
         *ptr = NULL;
-        return(0);
+        return 0;
     }
     else
     {
@@ -90,7 +90,7 @@ uint16_t get_uint16(const char **ptr, const char *end)
     if (!*ptr || *ptr + sizeof(uint16_t) > end)
     {
         *ptr = NULL;
-        return(0);
+        return 0;
     }
     else
     {
@@ -121,7 +121,7 @@ int get_string(const char **ptr, const char *const end, char *buffer, int buflen
         while (*ptr < end && buffer < lim)
         {
             char c = *buffer++ = *(*ptr)++;
-            if (c == 0) return(0);      // Success
+            if (c == 0) return 0;      // Success
         }
         if (buffer == lim) buffer--;
         *buffer = 0;                    // Failed, so terminate string,
@@ -141,7 +141,7 @@ const char *get_rdata(const char **ptr, const char *end, int rdlen)
     if (!*ptr || *ptr + rdlen > end)
     {
         *ptr = NULL;
-        return(0);
+        return 0;
     }
     else
     {

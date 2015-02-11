@@ -84,7 +84,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     Count = ++(*pCount);
     pthread_mutex_unlock(&InterLock);
 
-    return (Count);
+    return Count;
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
@@ -95,7 +95,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     Count = --(*pCount);
     pthread_mutex_unlock(&InterLock);
 
-    return (Count);
+    return Count;
 }
 
 #endif /* default */

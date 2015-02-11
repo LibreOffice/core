@@ -677,7 +677,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
         m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
     }
 
-    return(newObj);
+    return newObj;
 }
 /**
  * @descr       query object by object id
@@ -719,7 +719,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::FindObject(const LwpObjectID &objID)
 {
     LwpIdToObjMap::const_iterator it =  m_IdToObjList.find(objID);
     if (it != m_IdToObjList.end()) {
-        return((*it).second);
+        return (*it).second;
     }
     else
     {

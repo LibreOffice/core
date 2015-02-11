@@ -132,7 +132,7 @@ sal_uInt32 SvStringHashTable::HashFunc( const OString& rElement ) const
             nShift += 4;
         pStr++;
     }
-    return( nHash );
+    return nHash;
 }
 
 OString SvStringHashTable::GetNearString( const OString& rName ) const
@@ -179,7 +179,7 @@ SvStringHashEntry * SvStringHashTable::Get( sal_uInt32 nIndex ) const
 {
     if( IsEntry( nIndex ) )
         return pEntries + nIndex;
-    return( NULL );
+    return NULL;
 }
 
 bool SvStringHashTable::equals( const OString& rElement,

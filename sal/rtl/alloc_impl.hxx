@@ -71,7 +71,7 @@ highbit(sal_Size n)
   int k = 1;
 
   if (n == 0)
-    return (0);
+    return 0;
 #if SAL_TYPES_SIZEOFLONG == 8
   if (n & 0xffffffff00000000ul)
     k |= 32, n >>= 32;
@@ -87,7 +87,7 @@ highbit(sal_Size n)
   if (n & 0x02)
     k++;
 
-  return (k);
+  return k;
 }
 
 /** lowbit(): find first bit set
@@ -99,7 +99,7 @@ lowbit(sal_Size n)
   int k = 1;
 
   if (n == 0)
-    return (0);
+    return 0;
 #if SAL_TYPES_SIZEOFLONG == 8
   if (!(n & 0xffffffff))
     k |= 32, n >>= 32;
@@ -114,7 +114,7 @@ lowbit(sal_Size n)
     k |= 2, n >>= 2;
   if (!(n & 0x1))
     k++;
-  return (k);
+  return k;
 }
 
 /** Queue manipulation macros

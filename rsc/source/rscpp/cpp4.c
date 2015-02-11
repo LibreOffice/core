@@ -484,7 +484,7 @@ FILE_LOCAL int expcollect()
             if (c == EOF_CHAR)
             {
                 cerror("end of file within macro argument", NULLST);
-                return (FALSE);             /* Sorry.               */
+                return FALSE;             /* Sorry.               */
             }
             else if (c == '\\')             /* Quote next character */
             {
@@ -520,7 +520,7 @@ FILE_LOCAL int expcollect()
             fprintf( pCppOut, "parm[%d] = \"%s\"\n", nargs, parlist[nargs - 1]);
 #endif
     }                                       /* Collect all args.    */
-    return (TRUE);                          /* Normal return        */
+    return TRUE;                            /* Normal return        */
 }
 
 /*

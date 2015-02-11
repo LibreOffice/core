@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, ModifiedTrgrHdl_Impl)
     sal_uInt8 nStartCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrStartValue.GetValue() * 255) / 100);
     sal_uInt8 nEndCol = (sal_uInt8)(((sal_uInt16)maMtrTrgrEndValue.GetValue() * 255) / 100);
     ExecuteValueModify( nStartCol, nEndCol );
-    return( 0L );
+    return 0L;
 }
 
 
@@ -311,7 +311,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, Left_Click45_Impl)
     aTemp += 45;
     maMtrTrgrAngle.SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
-    return( 0L );
+    return 0L;
 }
 
 
@@ -327,7 +327,7 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, Right_Click45_Impl)
     aTemp -= 45;
     maMtrTrgrAngle.SetValue(aTemp);
     ExecuteValueModify( nStartCol, nEndCol );
-    return( 0L );
+    return 0L;
 }
 
 } } // end of namespace svx::sidebar

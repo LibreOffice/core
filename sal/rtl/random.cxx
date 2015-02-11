@@ -102,7 +102,7 @@ static double __rtl_random_data (RandomData_Impl *pImpl)
               ((double)(pImpl->m_nZ) / 30307.0)   );
 
     random -= ((double)((sal_uInt32)(random)));
-    return (random);
+    return random;
 }
 
 /*
@@ -278,7 +278,7 @@ rtlRandomPool SAL_CALL rtl_random_createPool() SAL_THROW_EXTERN_C()
             pImpl = (RandomPool_Impl*)NULL;
         }
     }
-    return ((rtlRandomPool)pImpl);
+    return (rtlRandomPool)pImpl;
 }
 
 /*

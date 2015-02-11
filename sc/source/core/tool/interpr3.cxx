@@ -629,7 +629,7 @@ double ScInterpreter::GetFDist(double x, double fF1, double fF2)
     double arg = fF2/(fF2+fF1*x);
     double alpha = fF2/2.0;
     double beta = fF1/2.0;
-    return (GetBetaDist(arg, alpha, beta));
+    return GetBetaDist(arg, alpha, beta);
 }
 
 double ScInterpreter::GetTDist( double T, double fDF, int nType )
@@ -2318,7 +2318,7 @@ double ScInterpreter::GetTInv( double fAlpha, double fSize, int nType )
     double fVal = lcl_IterateInverse( aFunc, fSize * 0.5, fSize, bConvError );
     if (bConvError)
         SetError(errNoConvergence);
-    return( fVal );
+    return fVal;
 }
 
 class ScFDistFunction : public ScDistFunc

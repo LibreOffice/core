@@ -371,7 +371,7 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet* rAttrs)
         }
     }
 
-    return( bModified );
+    return bModified;
 }
 
 void SvxConnectionPage::Construct()
@@ -391,12 +391,12 @@ void SvxConnectionPage::Construct()
 SfxTabPage* SvxConnectionPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxConnectionPage( pWindow, *rAttrs ) );
+    return new SvxConnectionPage( pWindow, *rAttrs );
 }
 
 const sal_uInt16* SvxConnectionPage::GetRanges()
 {
-    return( pRanges );
+    return pRanges;
 }
 
 IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
@@ -483,7 +483,7 @@ IMPL_LINK( SvxConnectionPage, ChangeAttrHdl_Impl, void *, p )
 
     }
 
-    return( 0L );
+    return 0L;
 }
 
 void SvxConnectionPage::FillTypeLB()

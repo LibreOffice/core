@@ -29,7 +29,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     for (int i = 1; i < argc; i++)
     {
         if (!Options::checkArgument (args, argv[i], strlen(argv[i])))
-            return (1);
+            return 1;
     }
 
     Options options(argv[0]);
@@ -38,7 +38,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     try
     {
         if (!options.initOptions(args))
-           return (0);
+           return 0;
 
         setIdlc(&options);
 
@@ -156,7 +156,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(stderr, "Illegal argument: %s\n%s",
             e.m_message.getStr(),
             options.prepareVersion().getStr());
-        return (99);
+        return 99;
     }
 
     return nErrors;

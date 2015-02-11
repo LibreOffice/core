@@ -708,7 +708,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
 ::osl::Mutex&
     AccessibleDocumentViewBase::implGetMutex()
 {
-    return( maMutex );
+    return maMutex;
 }
 
 // return ourself as context in default case
@@ -716,7 +716,7 @@ uno::Reference< XAccessibleContext >
     AccessibleDocumentViewBase::implGetAccessibleContext()
     throw (uno::RuntimeException)
 {
-    return( this );
+    return this;
 }
 
 // return sal_False in default case
@@ -724,7 +724,7 @@ bool
     AccessibleDocumentViewBase::implIsSelected( sal_Int32 )
     throw (uno::RuntimeException)
 {
-    return( false );
+    return false;
 }
 
 // return nothing in default case

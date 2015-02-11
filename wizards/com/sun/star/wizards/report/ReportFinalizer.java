@@ -201,7 +201,7 @@ public class ReportFinalizer
                 StoreName = LocStoreName;
             }
         }
-        return (StoreName);
+        return StoreName;
     }
 
     private void changeReportTitle()

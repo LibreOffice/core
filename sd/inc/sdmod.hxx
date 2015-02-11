@@ -103,7 +103,7 @@ public:
     bool                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( bool bWC ) { bWaterCan = bWC; }
 
-    SvxSearchItem*          GetSearchItem() { return (pSearchItem); }
+    SvxSearchItem*          GetSearchItem() { return pSearchItem; }
     void                    SetSearchItem(SvxSearchItem* pItem) { pSearchItem = pItem; }
 
     /** Return the virtual device that can be used for printer independent

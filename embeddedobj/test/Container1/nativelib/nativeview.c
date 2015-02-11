@@ -49,7 +49,7 @@ static LRESULT APIENTRY NativeViewWndProc( HWND , UINT , WPARAM , LPARAM );
 JNIEXPORT jint JNICALL Java_embeddedobj_test_NativeView_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
-    return (SYSTEM_WIN32);
+    return SYSTEM_WIN32;
 }
 
 /*****************************************************************************

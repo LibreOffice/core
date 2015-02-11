@@ -102,7 +102,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 SfxTabPage* SdTpOptionsSnap::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SdTpOptionsSnap( pWindow, *rAttrs ) );
+    return new SdTpOptionsSnap( pWindow, *rAttrs );
 }
 
 /*************************************************************************
@@ -143,7 +143,7 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
         rAttrs->Put( aOptsItem );
         bModified = true;
     }
-    return( bModified );
+    return bModified;
 }
 
 void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
@@ -168,7 +168,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 SfxTabPage* SdTpOptionsContents::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SdTpOptionsContents( pWindow, *rAttrs ) );
+    return new SdTpOptionsContents( pWindow, *rAttrs );
 }
 
 /*************************************************************************
@@ -329,18 +329,18 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
     {
         if( pActiveSet )
             FillItemSet( pActiveSet );
-        return( LEAVE_PAGE );
+        return LEAVE_PAGE;
     }
     WarningBox aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
     short nReturn = aWarnBox.Execute();
 
     if( nReturn == RET_YES )
-        return( KEEP_PAGE );
+        return KEEP_PAGE;
 
     if( pActiveSet )
         FillItemSet( pActiveSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
@@ -407,7 +407,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
         bModified = true;
     }
 
-    return( bModified );
+    return bModified;
 }
 
 void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
@@ -491,7 +491,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 SfxTabPage* SdTpOptionsMisc::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SdTpOptionsMisc( pWindow, *rAttrs ) );
+    return new SdTpOptionsMisc( pWindow, *rAttrs );
 }
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)

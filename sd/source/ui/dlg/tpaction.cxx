@@ -297,7 +297,7 @@ bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
         }
     }
 
-    return( bModified );
+    return bModified;
 }
 
 void SdTPAction::Reset( const SfxItemSet* rAttrs )
@@ -356,13 +356,13 @@ int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
     if( pPageSet )
         FillItemSet( pPageSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 SfxTabPage* SdTPAction::Create( vcl::Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
-    return( new SdTPAction( pWindow, rAttrs ) );
+    return new SdTPAction( pWindow, rAttrs );
 }
 
 void SdTPAction::UpdateTree()
@@ -457,7 +457,7 @@ IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl)
 {
     OpenFileDialog();
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
@@ -631,13 +631,13 @@ IMPL_LINK_NOARG(SdTPAction, ClickActionHdl)
             break;
     }
 
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SdTPAction, SelectTreeHdl)
 {
     m_pEdtBookmark->SetText( m_pLbTree->GetSelectEntry() );
-    return( 0L );
+    return 0L;
 }
 
 IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
@@ -685,7 +685,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
             m_pLbTreeDocument->Hide();
     }
 
-    return( 0L );
+    return 0L;
 }
 
 presentation::ClickAction SdTPAction::GetActualClickAction()
@@ -695,7 +695,7 @@ presentation::ClickAction SdTPAction::GetActualClickAction()
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND && static_cast<size_t>(nPos) < maCurrentActions.size())
         eCA = maCurrentActions[ nPos ];
-    return( eCA );
+    return eCA;
 }
 
 void SdTPAction::SetActualClickAction( presentation::ClickAction eCA )
@@ -799,7 +799,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         }
 
         case presentation::ClickAction_BOOKMARK:
-            return( m_pEdtBookmark->GetText() );
+            return m_pEdtBookmark->GetText();
 
         default:
             break;
@@ -830,7 +830,7 @@ OUString SdTPAction::GetEditText( bool bFullDocDestination )
         }
     }
 
-    return( aStr );
+    return aStr;
 }
 
 sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
@@ -851,7 +851,7 @@ sal_uInt16 SdTPAction::GetClickActionSdResId( presentation::ClickAction eCA )
         case presentation::ClickAction_STOPPRESENTATION: return STR_CLICK_ACTION_STOPPRESENTATION;
         default: OSL_FAIL( "No StringResource for ClickAction available!" );
     }
-    return( 0 );
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

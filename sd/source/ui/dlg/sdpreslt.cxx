@@ -274,7 +274,7 @@ IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
         }
     }
 
-    return( 0 );
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

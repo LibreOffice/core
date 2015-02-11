@@ -58,7 +58,7 @@ public:
                 SdCustomShowDlg( vcl::Window* pWindow, SdDrawDocument& rDrawDoc );
                 virtual ~SdCustomShowDlg();
 
-    bool        IsModified() const { return( bModified ); }
+    bool        IsModified() const { return bModified; }
     bool        IsCustomShow() const;
 };
 
@@ -91,7 +91,7 @@ public:
                             SdDrawDocument& rDrawDoc, SdCustomShow*& rpCS );
                     virtual ~SdDefineCustomShowDlg();
 
-    bool            IsModified() const { return( bModified ); }
+    bool            IsModified() const { return bModified; }
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_CUSTSDLG_HXX

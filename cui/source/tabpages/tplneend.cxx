@@ -179,7 +179,7 @@ int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     if( _pSet )
         FillItemSet( _pSet );
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 
@@ -271,7 +271,7 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 
 SfxTabPage* SvxLineEndDefTabPage::Create( vcl::Window* pWindow, const SfxItemSet* rSet )
 {
-    return( new SvxLineEndDefTabPage( pWindow, *rSet ) );
+    return new SvxLineEndDefTabPage( pWindow, *rSet );
 }
 
 
@@ -298,7 +298,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
         // if there is an entry selected in the ListBox
         *pPageType = 3;
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, SelectLineEndHdl_Impl)
 long SvxLineEndDefTabPage::ChangePreviewHdl_Impl( void* )
 {
     m_pCtlPreview->Invalidate();
-    return( 0L );
+    return 0L;
 }
 
 
@@ -387,7 +387,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickModifyHdl_Impl)
             }
         }
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -413,10 +413,10 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
                 pNewObj = pConvPolyObj = pPolyObj->ConvertToPolyObj( true, false );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
-                    return( 0L ); // cancel, additional safety, which
+                    return 0L; // cancel, additional safety, which
                             // has no use for group objects though.
             }
-            else return( 0L ); // cancel
+            else return 0L; // cancel
         }
 
         basegfx::B2DPolyPolygon aNewPolyPolygon(static_cast<const SdrPathObj*>(pNewObj)->GetPathPoly());
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickAddHdl_Impl)
         m_pBtnDelete->Enable();
         m_pBtnSave->Enable();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -538,7 +538,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickDeleteHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -611,7 +611,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
         m_pBtnDelete->Disable();
         m_pBtnSave->Disable();
     }
-    return( 0L );
+    return 0L;
 }
 
 
@@ -657,7 +657,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl)
                           ,"cui/ui/querynosavefiledialog.ui").Execute();
         }
     }
-    return( 0L );
+    return 0L;
 }
 
 void SvxLineEndDefTabPage::DataChanged( const DataChangedEvent& rDCEvt )

@@ -303,28 +303,28 @@ oslFileError FileHandle_Impl::setSize (sal_uInt64 uSize)
         if (uSize <= getSize())
         {
             /* Failure upon 'shrink'. Return original result */
-            return (result);
+            return result;
         }
 
         /* Save current position */
         off_t const nCurPos = (off_t)lseek (m_fd, (off_t)0, SEEK_CUR);
         if (nCurPos == (off_t)(-1))
-            return (result);
+            return result;
 
         /* Try 'expand' via 'lseek()' and 'write()' */
         if (-1 == lseek (m_fd, (off_t)(nSize - 1), SEEK_SET))
-            return (result);
+            return result;
 
         if (-1 == write (m_fd, (char*)"", (size_t)1))
         {
             /* Failure. Restore saved position */
             (void) lseek (m_fd, (off_t)(nCurPos), SEEK_SET);
-            return (result);
+            return result;
         }
 
         /* Success. Restore saved position */
         if (-1 == lseek (m_fd, (off_t)nCurPos, SEEK_SET))
-            return (result);
+            return result;
     }
 
     SAL_INFO("sal.file", "osl_setFileSize(" << m_fd << ", " << getSize() << ") => " << nSize);
@@ -437,7 +437,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 // flush current buffer
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesRequested >= m_bufsiz)
@@ -446,7 +446,7 @@ oslFileError FileHandle_Impl::readFileAt (
                     sal_uInt64 uDone = 0;
                     result = readAt (nOffset, &(buffer[*pBytesRead]), nBytesRequested, &uDone);
                     if (result != osl_File_E_None)
-                        return (result);
+                        return result;
 
                     *pBytesRead += uDone;
                     return osl_File_E_None;
@@ -456,7 +456,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 sal_uInt64 uDone = 0;
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 m_bufptr = bufptr, m_buflen = uDone;
             }
             if (bufpos >= m_buflen)
@@ -507,7 +507,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 // flush current buffer
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesToWrite >= m_bufsiz)
@@ -516,7 +516,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                     sal_uInt64 uDone = 0;
                     result = writeAt (nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
                     if (result != osl_File_E_None)
-                        return (result);
+                        return result;
                     if (uDone != nBytesToWrite)
                         return osl_File_E_IO;
 
@@ -528,7 +528,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 sal_uInt64 uDone = 0;
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 m_bufptr = bufptr, m_buflen = uDone;
             }
 
@@ -558,13 +558,13 @@ oslFileError FileHandle_Impl::readLineAt (
         /* flush current buffer */
         result = syncFile();
         if (result != osl_File_E_None)
-            return (result);
+            return result;
 
         /* update buffer (pointer) */
         sal_uInt64 uDone = 0;
         result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
         if (result != osl_File_E_None)
-            return (result);
+            return result;
 
         m_bufptr = bufptr, m_buflen = uDone;
     }
@@ -587,7 +587,7 @@ oslFileError FileHandle_Impl::readLineAt (
                 result = writeSequence_Impl (
                     ppSequence, &dstpos, &(m_buffer[bufpos]), curpos - bufpos);
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 *pBytesRead += curpos - bufpos, nOffset += curpos - bufpos;
             }
 
@@ -598,7 +598,7 @@ oslFileError FileHandle_Impl::readLineAt (
                 sal_uInt64 uDone = 0;
                 result = readAt (bufptr, m_buffer, m_bufsiz, &uDone);
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 m_bufptr = bufptr, m_buflen = uDone;
             }
 
@@ -644,7 +644,7 @@ oslFileError FileHandle_Impl::readLineAt (
                 result = writeSequence_Impl (
                     ppSequence, &dstpos, &(m_buffer[bufpos]), curpos - bufpos - 1);
                 if (result != osl_File_E_None)
-                    return (result);
+                    return result;
                 *pBytesRead += curpos - bufpos, nOffset += curpos - bufpos;
             }
             break;
@@ -653,7 +653,7 @@ oslFileError FileHandle_Impl::readLineAt (
 
     result = writeSequence_Impl (ppSequence, &dstpos, 0, 0);
     if (result != osl_File_E_None)
-        return (result);
+        return result;
     if (0 < dstpos)
         return osl_File_E_None;
     if (bufpos >= m_buflen)
@@ -694,12 +694,12 @@ oslFileError FileHandle_Impl::syncFile()
         sal_uInt64 uDone = 0;
         result = writeAt (m_bufptr, m_buffer, m_buflen, &uDone);
         if (result != osl_File_E_None)
-            return (result);
+            return result;
         if (uDone != m_buflen)
             return osl_File_E_IO;
         m_state &= ~STATE_MODIFIED;
     }
-    return (result);
+    return result;
 }
 
 oslFileHandle osl::detail::createFileHandleFromFD( int fd )
@@ -729,7 +729,7 @@ oslFileHandle osl::detail::createFileHandleFromFD( int fd )
     }
 
     SAL_INFO("sal.file", "osl::detail::createFileHandleFromFD(" << pImpl->m_fd << ", writeable) => " << pImpl->m_strFilePath);
-    return (oslFileHandle)(pImpl);
+    return (oslFileHandle)pImpl;
 }
 
 static int osl_file_adjustLockFlags (const char * path, int flags)
@@ -1066,7 +1066,7 @@ SAL_CALL osl_closeFile( oslFileHandle Handle )
 
     (void) pthread_mutex_unlock (&(pImpl->m_mutex));
     delete pImpl;
-    return (result);
+    return result;
 }
 
 oslFileError
@@ -1085,7 +1085,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
     SAL_INFO("sal.file", "osl_syncFile(" << pImpl->m_fd << ")");
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
-        return (result);
+        return result;
     if (-1 == fsync (pImpl->m_fd))
         return oslTranslateFileError (OSL_FET_ERROR, errno);
 
@@ -1249,7 +1249,7 @@ SAL_CALL osl_readLine (
         pImpl->m_fileptr, ppSequence, &uBytesRead);
     if (result == osl_File_E_None)
         pImpl->m_fileptr += uBytesRead;
-    return (result);
+    return result;
 }
 
 oslFileError
@@ -1275,7 +1275,7 @@ SAL_CALL osl_readFile (
         pImpl->m_fileptr, pBuffer, nBytesRequested, pBytesRead);
     if (result == osl_File_E_None)
         pImpl->m_fileptr += *pBytesRead;
-    return (result);
+    return result;
 }
 
 oslFileError
@@ -1303,7 +1303,7 @@ SAL_CALL osl_writeFile (
         pImpl->m_fileptr, pBuffer, nBytesToWrite, pBytesWritten);
     if (result == osl_File_E_None)
         pImpl->m_fileptr += *pBytesWritten;
-    return (result);
+    return result;
 }
 
 oslFileError
@@ -1467,7 +1467,7 @@ SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize )
 
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
-        return (result);
+        return result;
     pImpl->m_bufptr = -1, pImpl->m_buflen = 0;
 
     return pImpl->setSize (uSize);

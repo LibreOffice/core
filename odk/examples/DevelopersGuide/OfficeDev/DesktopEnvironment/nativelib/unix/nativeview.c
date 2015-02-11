@@ -59,7 +59,7 @@
 JNIEXPORT jint JNICALL Java_NativeView_getNativeWindowSystemType
   (JNIEnv * env, jobject obj_this)
 {
-    return (SYSTEM_XWINDOW);
+    return SYSTEM_XWINDOW;
 }
 
 /*****************************************************************************/
@@ -106,7 +106,7 @@ JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
     /* Free the drawing surface */
     awt.FreeDrawingSurface(ds);
 
-    return ((jlong)drawable);
+    return (jlong)drawable;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

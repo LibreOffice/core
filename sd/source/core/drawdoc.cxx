@@ -789,7 +789,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         mpOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()));
     }
 
-    return(mpOutliner);
+    return mpOutliner;
 }
 
 // Internal outliner that is used to create text objects. We don't insert any

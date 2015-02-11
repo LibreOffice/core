@@ -523,12 +523,12 @@ void SvxTextAttrPage::Construct()
 SfxTabPage* SvxTextAttrPage::Create( vcl::Window* pWindow,
                 const SfxItemSet* rAttrs )
 {
-    return( new SvxTextAttrPage( pWindow, *rAttrs ) );
+    return new SvxTextAttrPage( pWindow, *rAttrs );
 }
 
 const sal_uInt16* SvxTextAttrPage::GetRanges()
 {
-    return( pRanges );
+    return pRanges;
 }
 
 /** Check whether we have to uncheck the "Full width" check box.
@@ -627,7 +627,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
             }
         }
     }
-    return( 0L );
+    return 0L;
 }
 
 /*************************************************************************
@@ -678,7 +678,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
     // #83698# enable/disable text anchoring dependent of contour
     m_pFlPosition->Enable(!bContour && !bHorAndVer);
 
-    return( 0L );
+    return 0L;
 }
 
 

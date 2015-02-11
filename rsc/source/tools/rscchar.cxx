@@ -95,7 +95,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         {
                             // value is too big, or more than 3 digits
                             delete [] pOrgStr;
-                            return( NULL );
+                            return NULL;
                         }
                         c = (char)nChar;
                         pStr--;

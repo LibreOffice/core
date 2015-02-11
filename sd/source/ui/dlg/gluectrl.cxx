@@ -164,10 +164,10 @@ vcl::Window* SdTbxCtlGlueEscDir::CreateItemWindow( vcl::Window *pParent )
 {
     if( GetSlotId() == SID_GLUE_ESCDIR )
     {
-        return( new GlueEscDirLB( pParent, m_xFrame ) );
+        return new GlueEscDirLB( pParent, m_xFrame );
     }
 
-    return( NULL );
+    return NULL;
 }
 
 /**
@@ -178,9 +178,9 @@ sal_uInt16 SdTbxCtlGlueEscDir::GetEscDirPos( sal_uInt16 nEscDir )
     for( sal_uInt16 i = 0; i < ESCDIR_COUNT; i++ )
     {
         if( aEscDirArray[ i ] == nEscDir )
-            return( i );
+            return i;
     }
-    return( 99 );
+    return 99;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

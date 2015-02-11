@@ -448,7 +448,7 @@ bool SdPageObjsTLB::SelectEntry( const OUString& rName )
             }
         }
     }
-    return( bFound );
+    return bFound;
 }
 
 /**
@@ -477,7 +477,7 @@ bool SdPageObjsTLB::HasSelectedChildren( const OUString& rName )
             }
         }
     }
-    return( bChildren );
+    return bChildren;
 }
 
 /**
@@ -857,7 +857,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
     }
     // If there are still entries in the listbox,
     // then objects (with names) or pages were deleted
-    return( !pEntry );
+    return !pEntry;
 }
 
 /**
@@ -865,7 +865,7 @@ bool SdPageObjsTLB::IsEqualToDoc( const SdDrawDocument* pInDoc )
  */
 OUString SdPageObjsTLB::GetSelectEntry()
 {
-    return( GetEntryText( GetCurEntry() ) );
+    return GetEntryText( GetCurEntry() );
 }
 
 std::vector<OUString> SdPageObjsTLB::GetSelectEntryList( const sal_uInt16 nDepth ) const
@@ -1010,7 +1010,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
         }
     }
 
-    return( mpBookmarkDoc );
+    return mpBookmarkDoc;
 }
 
 /**

@@ -403,7 +403,7 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             mpDoc->RemoveUnnecessaryMasterPages();
     }
 
-    return (bOK);
+    return bOK;
 }
 
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)

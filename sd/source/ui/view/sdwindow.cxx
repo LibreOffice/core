@@ -497,7 +497,7 @@ long Window::SetZoomRect (const Rectangle& rZoomRect)
         }
     }
 
-    return(nNewZoom);
+    return nNewZoom;
 }
 
 void Window::SetMinZoomAutoCalc (bool bAuto)
