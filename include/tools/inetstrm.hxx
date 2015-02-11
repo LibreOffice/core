@@ -147,26 +147,6 @@ protected:
 public:
     INetMIMEMessageStream (sal_uIntPtr nBufferSize = 2048);
     virtual ~INetMIMEMessageStream (void);
-
-    using INetMessageIStream::SetSourceMessage;
-    void SetSourceMessage (INetMIMEMessage *pMsg)
-    {
-        INetMessageIStream::SetSourceMessage (pMsg);
-    }
-    INetMIMEMessage *GetSourceMessage (void) const
-    {
-        return static_cast<INetMIMEMessage *>(INetMessageIStream::GetSourceMessage());
-    }
-
-    using INetMessageOStream::SetTargetMessage;
-    void SetTargetMessage (INetMIMEMessage *pMsg)
-    {
-        INetMessageOStream::SetTargetMessage (pMsg);
-    }
-    INetMIMEMessage *GetTargetMessage (void) const
-    {
-        return static_cast<INetMIMEMessage *>(INetMessageOStream::GetTargetMessage());
-    }
 };
 
 #endif
