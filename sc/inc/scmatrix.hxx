@@ -321,13 +321,16 @@ public:
     /// @return <TRUE/> if string or empty or empty path, in fact non-value.
     bool IsString( SCSIZE nC, SCSIZE nR ) const;
 
-    /// @return <TRUE/> if empty or empty path.
+    /// @return <TRUE/> if empty or empty cell or empty result, not empty path.
     bool IsEmpty( SCSIZE nC, SCSIZE nR ) const;
 
-    /// @return <TRUE/> if empty, not empty result or empty path.
+    /// @return <TRUE/> if empty cell, not empty or empty result or empty path.
     bool IsEmptyCell( SCSIZE nC, SCSIZE nR ) const;
 
-    /// @return <TRUE/> if empty path.
+    /// @return <TRUE/> if empty result, not empty or empty cell or empty path.
+    bool IsEmptyResult( SCSIZE nC, SCSIZE nR ) const;
+
+    /// @return <TRUE/> if empty path, not empty or empty cell or empty result.
     bool IsEmptyPath( SCSIZE nC, SCSIZE nR ) const;
 
     /// @return <TRUE/> if value or boolean.
