@@ -262,9 +262,11 @@ void SmCursor::Delete(){
     SmStructureNode* pLineParent = pLine->GetParent();
     //Find line offset in parent
     int nLineOffset = pLineParent->IndexOfSubNode(pLine);
-    assert(nLineOffset != -1); //pLine must be a child of its parent!
     if (nLineOffset == -1)
+    {
+        SAL_WARN("starmath", "pLine must be a child of its parent!");
         return;
+    }
 
     //Position after delete
     SmCaretPos PosAfterDelete;
@@ -813,9 +815,11 @@ bool SmCursor::InsertRow() {
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
 
-    assert(nParentIndex != -1); //pLine must be a subnode of pLineParent
     if (nParentIndex == -1)
+    {
+        SAL_WARN("starmath", "pLine must be a subnode of pLineParent!");
         return false;
+    }
 
     //Discover the context of this command
     SmTableNode  *pTable  = NULL;
@@ -934,9 +938,11 @@ void SmCursor::InsertFraction() {
     //Find Parent and offset in parent
     SmStructureNode *pLineParent = pLine->GetParent();
     int nParentIndex = pLineParent->IndexOfSubNode(pLine);
-    assert(nParentIndex != -1); //pLine must be a subnode of pLineParent!
     if (nParentIndex == -1)
+    {
+        SAL_WARN("starmath", "pLine must be a subnode of pLineParent!");
         return;
+    }
 
     //We begin modifying the tree here
     BeginEdit();
