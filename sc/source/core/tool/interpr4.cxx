@@ -3082,7 +3082,10 @@ void ScInterpreter::ScExternal()
 
 void ScInterpreter::ScMissing()
 {
-    PushTempToken( new FormulaMissingToken );
+    if ( aCode.IsEndOfPath() )
+        PushTempToken( new ScEmptyCellToken( false, false ) );
+    else
+        PushTempToken( new FormulaMissingToken );
 }
 
 #ifndef DISABLE_SCRIPTING
