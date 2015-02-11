@@ -1852,6 +1852,16 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_LOGICAL;
             }
+            else if ( xMat->IsEmptyResult( 0, 0))
+            {   // empty formula result
+                FormulaTokenRef xRes = new ScEmptyCellToken( true, true);   // inherited, display empty
+                PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
+            }
+            else if ( xMat->IsEmpty( 0, 0))
+            {   // empty or empty cell
+                FormulaTokenRef xRes = new ScEmptyCellToken( false, true);  // not inherited, display empty
+                PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
+            }
             else
             {
                 svl::SharedString aStr( nMatVal.GetString());
