@@ -52,7 +52,7 @@ SwUndoInsNum::SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
     sReplaceRule( rReplaceRule ), nLRSavePos( 0 )
 {
     // No selection!
-    nEndNode = 0, nEndCntnt = USHRT_MAX;
+    nEndNode = 0, nEndCntnt = COMPLETE_STRING;
     nSttNode = rPos.nNode.GetIndex();
     nSttCntnt = rPos.nContent.GetIndex();
 }
@@ -224,7 +224,7 @@ void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     sal_uLong nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
-    if( nEndNode || USHRT_MAX != nEndCntnt )        // section?
+    if (nEndNode || nEndCntnt != COMPLETE_STRING)        // section?
     {
         if( nNewStt < nSttNode )        // moved forwards
             nEndNode = nEndNode - ( nSttNode - nNewStt );
