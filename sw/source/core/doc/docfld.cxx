@@ -531,19 +531,19 @@ std::vector<OUString>& SwDoc::FindUsedDBs( const std::vector<OUString>& rAllDBNa
     sFormula = rCC.uppercase( sFormula );
 #endif
 
-    sal_Int32 nPos;
     for (const auto &sItem : rAllDBNames)
     {
         OUString pStr(sItem);
 
-        if( -1 != (nPos = sFormula.indexOf( pStr )) &&
+        sal_Int32 nPos = sFormula.indexOf( pStr );
+        if( nPos>=0 &&
             sFormula[ nPos + pStr.getLength() ] == '.' &&
             (!nPos || !rCC.isLetterNumeric( sFormula, nPos - 1 )))
         {
             // Look up table name
-            sal_Int32 nEndPos;
             nPos += pStr.getLength() + 1;
-            if( -1 != (nEndPos = sFormula.indexOf('.', nPos)) )
+            const sal_Int32 nEndPos = sFormula.indexOf('.', nPos);
+            if( nEndPos>=0 )
             {
                 pStr += OUString( DB_DELIM );
                 pStr += sFormula.copy( nPos, nEndPos - nPos );
@@ -613,12 +613,12 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         }
     }
 
-    const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
 
     for (sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) ))
+        const SfxPoolItem* pItem = GetAttrPool().GetItem2( RES_TXTATR_FIELD, n );
+        if( !pItem )
             continue;
 
         SwFmtFld* pFmtFld = const_cast<SwFmtFld*>(static_cast<const SwFmtFld*>(pItem));
@@ -891,12 +891,12 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 #if HAVE_FEATURE_DBCONNECTIVITY
     bool bIsDBManager = 0 != rDoc.GetDBManager();
 #endif
-    sal_uInt16 nWhich;
-    const SfxPoolItem* pItem;
+
     const sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
     for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )) )
+        const SfxPoolItem* pItem = rDoc.GetAttrPool().GetItem2( RES_TXTATR_FIELD, n );
+        if( !pItem )
             continue;
 
         const SwFmtFld* pFmtFld = static_cast<const SwFmtFld*>(pItem);
@@ -906,7 +906,8 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
         OUString sFormula;
         const SwField* pFld = pFmtFld->GetField();
-        switch( nWhich = pFld->GetTyp()->Which() )
+        const sal_uInt16 nWhich = pFld->GetTyp()->Which();
+        switch( nWhich )
         {
             case RES_DBSETNUMBERFLD:
             case RES_GETEXPFLD:
