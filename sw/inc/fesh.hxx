@@ -506,6 +506,7 @@ public:
                                     it is possible that there are groups included. */
 
     bool IsGroupAllowed() const;
+    bool IsUnGroupAllowed() const;
 
     void MirrorSelection( bool bHorizontal );   ///< Vertical if FALSE.
 

@@ -2073,6 +2073,25 @@ bool SwFEShell::IsGroupSelected()
     return false;
 }
 
+namespace
+{
+    bool HasSuitableGroupingAnchor(const SdrObject* pObj)
+    {
+        bool bSuitable = true;
+        SwFrmFmt* pFrmFmt(::FindFrmFmt(const_cast<SdrObject*>(pObj)));
+        if (!pFrmFmt)
+        {
+            OSL_FAIL( "<HasSuitableGroupingAnchor> - missing frame format" );
+            bSuitable = false;
+        }
+        else if (FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId())
+        {
+            bSuitable = false;
+        }
+        return bSuitable;
+    }
+}
+
 // Change return type.
 // Adjustments for drawing objects in header/footer:
 //      allow group, only if all selected objects are in the same header/footer
@@ -2095,18 +2114,7 @@ bool SwFEShell::IsGroupAllowed() const
                 pUpGroup = pObj->GetUpGroup();
 
             if ( bIsGroupAllowed )
-            {
-                SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
-                if ( !pFrmFmt )
-                {
-                    OSL_FAIL( "<SwFEShell::IsGroupAllowed()> - missing frame format" );
-                    bIsGroupAllowed = false;
-                }
-                else if ( FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
-                {
-                    bIsGroupAllowed = false;
-                }
-            }
+                bIsGroupAllowed = HasSuitableGroupingAnchor(pObj);
 
             // check, if all selected objects are in the
             // same header/footer or not in header/footer.
@@ -2143,11 +2151,26 @@ bool SwFEShell::IsGroupAllowed() const
                     }
                 }
             }
-
         }
     }
 
     return bIsGroupAllowed;
+}
+
+bool SwFEShell::IsUnGroupAllowed() const
+{
+    bool bIsUnGroupAllowed = false;
+
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
+    for (size_t i = 0; i < rMrkList.GetMarkCount(); ++i)
+    {
+        const SdrObject* pObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
+        bIsUnGroupAllowed = HasSuitableGroupingAnchor(pObj);
+        if (!bIsUnGroupAllowed)
+            break;
+    }
+
+    return bIsUnGroupAllowed;
 }
 
 // The group gets the anchor and the contactobject of the first in the selection
