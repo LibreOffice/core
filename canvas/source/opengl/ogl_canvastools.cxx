@@ -112,16 +112,14 @@ namespace oglcanvas
                      GLenum                           eSrcBlend,
                      GLenum                           eDstBlend)
     {
-        float aGLTransform[] =
-            {
+        const glm::mat4 aGLTransform = glm::mat4(
                 (float) rTransform.get(0,0), (float) rTransform.get(1,0), 0, 0,
                 (float) rTransform.get(0,1), (float) rTransform.get(1,1), 0, 0,
                 0,                   0,                   1, 0,
-                (float) rTransform.get(0,2), (float) rTransform.get(1,2), 0, 1
-            };
+                (float) rTransform.get(0,2), (float) rTransform.get(1,2), 0, 1);
         glEnable(GL_BLEND);
         glBlendFunc(eSrcBlend, eDstBlend);
-        return glm::make_mat4(aGLTransform);
+        return aGLTransform;
     }
 
     void renderOSD( const std::vector<double>& rNumbers, double scale, RenderHelper *renderHelper)
