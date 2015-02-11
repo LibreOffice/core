@@ -112,21 +112,6 @@ public:
     virtual ~INetMessageDecode64Stream_Impl(void);
 };
 
-// INetOStream
-
-INetOStream::INetOStream()
-{
-}
-
-INetOStream::~INetOStream(void)
-{
-}
-
-int INetOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
-{
-    return PutData(pData, nSize);
-}
-
 // INetMessageIStream
 
 INetMessageIStream::INetMessageIStream(sal_uIntPtr nBufferSize)
@@ -287,7 +272,7 @@ INetMessageOStream::~INetMessageOStream(void)
 }
 
 /// Simple Field Parsing (RFC822, Appendix B)
-int INetMessageOStream::PutData(const sal_Char* pData, sal_uIntPtr nSize)
+int INetMessageOStream::Write(const sal_Char* pData, sal_uIntPtr nSize)
 {
     if (pTargetMsg == NULL) return INETSTREAM_STATUS_ERROR;
 

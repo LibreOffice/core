@@ -35,22 +35,6 @@ enum INetStreamStatus
     INETSTREAM_STATUS_ERROR      = -1
 };
 
-class INetOStream
-{
-    INetOStream (const INetOStream& rStrm) SAL_DELETED_FUNCTION;
-    INetOStream& operator= (const INetOStream& rStrm) SAL_DELETED_FUNCTION;
-
-protected:
-    virtual int PutData (
-        const sal_Char *pData, sal_uIntPtr nSize) = 0;
-
-public:
-    INetOStream ();
-    virtual ~INetOStream (void);
-
-    int Write (const sal_Char *pData, sal_uIntPtr nSize);
-};
-
 enum INetMessageStreamState
 {
     INETMSG_EOL_BEGIN,
@@ -98,7 +82,7 @@ public:
 };
 
 /// Message Parser Interface.
-class INetMessageOStream : public INetOStream
+class INetMessageOStream
 {
     INetMIMEMessage        *pTargetMsg;
     bool                    bHeaderParsed;
@@ -106,8 +90,6 @@ class INetMessageOStream : public INetOStream
     INetMessageStreamState  eOState;
 
     SvMemoryStream         *pMsgBuffer;
-
-    virtual int PutData (const sal_Char *pData, sal_uIntPtr nSize) SAL_OVERRIDE;
 
     INetMessageOStream (const INetMessageOStream& rStrm) SAL_DELETED_FUNCTION;
     INetMessageOStream& operator= (const INetMessageOStream& rStrm) SAL_DELETED_FUNCTION;
@@ -118,6 +100,8 @@ protected:
 public:
     INetMessageOStream (void);
     virtual ~INetMessageOStream (void);
+
+    int Write (const sal_Char *pData, sal_uIntPtr nSize);
 
     INetMIMEMessage *GetTargetMessage (void) const { return pTargetMsg; }
     void SetTargetMessage (INetMIMEMessage *pMsg) { pTargetMsg = pMsg; }
