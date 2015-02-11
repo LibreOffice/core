@@ -414,12 +414,6 @@ public:
         INetMessageContainerType eType = INETMSG_MULTIPART_MIXED);
     bool AttachChild (
         INetMIMEMessage& rChildMsg, bool bOwner = true );
-
-    // Stream operators.
-
-    friend SvStream& operator <<(SvStream& rStrm, const INetMIMEMessage& rMsg);
-
-    friend SvStream& operator >>(SvStream& rStrm, INetMIMEMessage& rMsg);
 };
 
 #endif
