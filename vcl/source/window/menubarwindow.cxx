@@ -60,7 +60,7 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void DecoToolBox::calcMinSize()
 {
-    ToolBox aTbx( GetParent() );
+    VclPtr<ToolBox> aTbx( new ToolBox(GetParent()) );
     if( GetItemCount() == 0 )
     {
         ResMgr* pResMgr = ImplGetResMgr();
@@ -68,7 +68,7 @@ void DecoToolBox::calcMinSize()
         Bitmap aBitmap;
         if( pResMgr )
             aBitmap = Bitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        aTbx.InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
+        aTbx->InsertItem( IID_DOCUMENTCLOSE, Image( aBitmap ) );
     }
     else
     {
@@ -76,11 +76,11 @@ void DecoToolBox::calcMinSize()
         for( sal_uInt16 i = 0; i < nItems; i++ )
         {
             sal_uInt16 nId = GetItemId( i );
-            aTbx.InsertItem( nId, GetItemImage( nId ) );
+            aTbx->InsertItem( nId, GetItemImage( nId ) );
         }
     }
-    aTbx.SetOutStyle( TOOLBOX_STYLE_FLAT );
-    maMinSize = aTbx.CalcWindowSizePixel();
+    aTbx->SetOutStyle( TOOLBOX_STYLE_FLAT );
+    maMinSize = aTbx->CalcWindowSizePixel();
 }
 
 void DecoToolBox::SetImages( long nMaxHeight, bool bForce )

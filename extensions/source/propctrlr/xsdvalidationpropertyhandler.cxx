@@ -496,11 +496,11 @@ namespace pcr
         ::std::vector< OUString > aExistentNames;
         m_pHelper->getAvailableDataTypeNames( aExistentNames );
 
-        NewDataTypeDialog aDialog( NULL, pType->getName(), aExistentNames );  // TODO/eForms: proper parent
-        if ( aDialog.Execute() != RET_OK )
+        VclPtr<NewDataTypeDialog> aDialog(new NewDataTypeDialog( NULL, pType->getName(), aExistentNames ) );  // TODO/eForms: proper parent
+        if ( aDialog->Execute() != RET_OK )
             return false;
 
-        _rNewName = aDialog.GetName();
+        _rNewName = aDialog->GetName();
         return true;
     }
 
@@ -535,8 +535,8 @@ namespace pcr
         // confirmation message
         OUString sConfirmation( PcrRes( RID_STR_CONFIRM_DELETE_DATA_TYPE ).toString() );
         sConfirmation = sConfirmation.replaceFirst( "#type#", pType->getName() );
-        QueryBox aQuery( NULL, WB_YES_NO, sConfirmation ); // TODO/eForms: proper parent
-        if ( aQuery.Execute() != RET_YES )
+        VclPtr<QueryBox> aQuery(new QueryBox( NULL, WB_YES_NO, sConfirmation ) ); // TODO/eForms: proper parent
+        if ( aQuery->Execute() != RET_YES )
             return false;
 
         return true;

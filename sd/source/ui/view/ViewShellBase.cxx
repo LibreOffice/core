@@ -533,11 +533,11 @@ sal_uInt16 ViewShellBase::SetPrinter (
         bool bScaleAll = false;
         if ( bIsAPI )
         {
-            WarningBox aWarnBox (
+            VclPtr<WarningBox> aWarnBox (new WarningBox(
                 GetWindow(),
                 (WinBits)(WB_YES_NO | WB_DEF_YES),
-                SD_RESSTR(STR_SCALE_OBJS_TO_PAGE));
-            bScaleAll = (aWarnBox.Execute() == RET_YES);
+                SD_RESSTR(STR_SCALE_OBJS_TO_PAGE)));
+            bScaleAll = (aWarnBox->Execute() == RET_YES);
         }
 
         ::boost::shared_ptr<DrawViewShell> pDrawViewShell (

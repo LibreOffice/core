@@ -987,8 +987,8 @@ void OQueryController::impl_initialize()
                 OUString aTitle( ModuleRes( STR_QUERYDESIGN_NO_VIEW_SUPPORT ) );
                 OUString aMessage( ModuleRes( STR_QUERYDESIGN_NO_VIEW_ASK ) );
                 ODataView* pWindow = getView();
-                OSQLMessageBox aDlg( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query );
-                bClose = aDlg.Execute() == RET_NO;
+                VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( pWindow, aTitle, aMessage, WB_YES_NO | WB_DEF_YES, OSQLMessageBox::Query ));
+                bClose = aDlg->Execute() == RET_NO;
             }
             if ( bClose )
                 throw VetoException();
@@ -1238,13 +1238,13 @@ void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollectio
 
 void OQueryController::execute_QueryPropDlg()
 {
-    QueryPropertiesDialog aQueryPropDlg(
-        getContainer(), m_bDistinct, m_nLimit );
+    VclPtr<QueryPropertiesDialog> aQueryPropDlg(new QueryPropertiesDialog(
+        getContainer(), m_bDistinct, m_nLimit ));
 
-    if( aQueryPropDlg.Execute() == RET_OK )
+    if( aQueryPropDlg->Execute() == RET_OK )
     {
-        m_bDistinct = aQueryPropDlg.getDistinct();
-        m_nLimit = aQueryPropDlg.getLimit();
+        m_bDistinct = aQueryPropDlg->getDistinct();
+        m_nLimit = aQueryPropDlg->getLimit();
         InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
         InvalidateFeature( SID_QUERY_LIMIT, 0, true );
     }
@@ -1398,23 +1398,23 @@ bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements, b
         }
 
         DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
-        OSaveAsDlg aDlg(
+        VclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg(
                 getView(),
                 m_nCommandType,
                 getORB(),
                 getConnection(),
                 aDefaultName,
                 aNameChecker,
-                SAD_DEFAULT );
+                SAD_DEFAULT ));
 
-        bRet = ( aDlg.Execute() == RET_OK );
+        bRet = ( aDlg->Execute() == RET_OK );
         if ( bRet )
         {
-            m_sName = aDlg.getName();
+            m_sName = aDlg->getName();
             if ( editingView() )
             {
-                m_sUpdateCatalogName    = aDlg.getCatalog();
-                m_sUpdateSchemaName     = aDlg.getSchema();
+                m_sUpdateCatalogName    = aDlg->getCatalog();
+                m_sUpdateSchemaName     = aDlg->getSchema();
             }
         }
     }
@@ -1802,9 +1802,9 @@ short OQueryController::saveModified()
         )
     {
         OUString sMessageText( lcl_getObjectResourceString( STR_QUERY_SAVEMODIFIED, m_nCommandType ) );
-        QueryBox aQry( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText );
+        VclPtr<QueryBox> aQry(new QueryBox( getView(), WB_YES_NO_CANCEL | WB_DEF_YES, sMessageText ) );
 
-        nRet = aQry.Execute();
+        nRet = aQry->Execute();
         if  (   ( nRet == RET_YES )
             &&  !doSaveAsDoc( false )
             )
@@ -1914,8 +1914,8 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         OUString aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
-                        OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
-                        aDlg.Execute();
+                        VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(getView(),aTitle,aErrorMsg));
+                        aDlg->Execute();
                     }
                     bError = true;
                 }

@@ -29,9 +29,9 @@ short ExecuteQuerySaveDocument(vcl::Window* _pParent, const OUString& _rTitle)
         return RET_NO;
     }
 
-    MessageDialog aQBox(_pParent, "QuerySaveDialog", "sfx/ui/querysavedialog.ui");
-    aQBox.set_primary_text(aQBox.get_primary_text().replaceFirst("$(DOC)", _rTitle));
-    return aQBox.Execute();
+    VclPtr<MessageDialog> aQBox(new MessageDialog(_pParent, "QuerySaveDialog", "sfx/ui/querysavedialog.ui"));
+    aQBox->set_primary_text(aQBox->get_primary_text().replaceFirst("$(DOC)", _rTitle));
+    return aQBox->Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

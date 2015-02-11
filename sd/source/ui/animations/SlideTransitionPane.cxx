@@ -730,9 +730,9 @@ void SlideTransitionPane::openSoundFileDialog()
             {
                 OUString aStrWarning(SD_RESSTR(STR_WARNING_NOSOUNDFILE));
                 aStrWarning = aStrWarning.replaceFirst("%", aFile);
-                WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (true);
-                bQuitLoop = (aWarningBox.Execute() != RET_RETRY);
+                VclPtr<WarningBox> aWarningBox(new WarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning ));
+                aWarningBox->SetModalInputMode (true);
+                bQuitLoop = (aWarningBox->Execute() != RET_RETRY);
 
                 bValidSoundFile = false;
             }

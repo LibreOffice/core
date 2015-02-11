@@ -412,24 +412,24 @@ IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 
 void SwLabPage::DisplayFormat()
 {
-    MetricField aField(this, WinBits(0));
+    VclPtr<MetricField> aField(new MetricField(this, WinBits(0)));
     FieldUnit aMetric = ::GetDfltMetric(false);
-    SetMetric(aField, aMetric);
-    aField.SetDecimalDigits(2);
-    aField.SetMin         (0);
-    aField.SetMax         (LONG_MAX);
+    SetMetric(*aField.get(), aMetric);
+    aField->SetDecimalDigits(2);
+    aField->SetMin         (0);
+    aField->SetMax         (LONG_MAX);
 
     SwLabRec* pRec = GetSelectedEntryPos();
     aItem.aLstType = pRec->aType;
-    SETFLDVAL(aField, pRec->lWidth);
-    aField.Reformat();
-    const OUString aWString = aField.GetText();
+    SETFLDVAL(*aField.get(), pRec->lWidth);
+    aField->Reformat();
+    const OUString aWString = aField->GetText();
 
-    SETFLDVAL(aField, pRec->lHeight);
-    aField.Reformat();
+    SETFLDVAL(*aField.get(), pRec->lHeight);
+    aField->Reformat();
 
     OUString aText = pRec->aType + ": " + aWString +
-           " x " + aField.GetText() +
+           " x " + aField->GetText() +
            " (" + OUString::number( pRec->nCols ) +
            " x " + OUString::number( pRec->nRows ) + ")";
     m_pFormatInfo->SetText(aText);

@@ -406,8 +406,8 @@ namespace dbmm
             // check that the backup location isn't the same as the document itself
             if ( lcl_equalURLs_nothrow( m_pData->aContext, sBackupLocation, m_pData->xDocumentModel->getURL() ) )
             {
-                MessageDialog aErrorBox( const_cast< MacroMigrationDialog* >( this ), MacroMigrationResId( STR_INVALID_BACKUP_LOCATION ) );
-                aErrorBox.Execute();
+                VclPtr<MessageDialog> aErrorBox(new MessageDialog( const_cast< MacroMigrationDialog* >( this ), MacroMigrationResId( STR_INVALID_BACKUP_LOCATION ) ));
+                aErrorBox->Execute();
                 rBackupPage.grabLocationFocus();
                 return false;
             }

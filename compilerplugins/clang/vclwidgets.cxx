@@ -31,13 +31,15 @@ public:
 
     virtual void run() override { TraverseDecl(compiler.getASTContext().getTranslationUnitDecl()); }
 
-    bool VisitFieldDecl(const FieldDecl * decl);
+    bool VisitVarDecl(const VarDecl *);
 
-    bool VisitParmVarDecl(ParmVarDecl const * decl);
+    bool VisitFieldDecl(const FieldDecl *);
 
-    bool VisitFunctionDecl( const FunctionDecl* var );
+    bool VisitParmVarDecl(const ParmVarDecl *);
 
-    bool VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorDecl);
+    bool VisitFunctionDecl(const FunctionDecl *);
+
+    bool VisitCXXDestructorDecl(const CXXDestructorDecl *);
 
 private:
     bool isDisposeCallingSuperclassDispose(const CXXMethodDecl* pMethodDecl);
@@ -149,6 +151,30 @@ bool VCLWidgets::VisitCXXDestructorDecl(const CXXDestructorDecl* pCXXDestructorD
     return true;
 }
 
+
+bool VCLWidgets::VisitVarDecl(const VarDecl * pVarDecl) {
+    if (ignoreLocation(pVarDecl)) {
+        return true;
+    }
+    const RecordType *recordType = pVarDecl->getType()->getAs<RecordType>();
+    if (recordType == nullptr) {
+        return true;
+    }
+    const CXXRecordDecl *recordDecl = dyn_cast<CXXRecordDecl>(recordType->getDecl());
+    if (recordDecl == nullptr) {
+        return true;
+    }
+
+    // check if this field is derived from Window
+    if (isDerivedFromWindow(recordDecl)) {
+        report(
+            DiagnosticsEngine::Warning,
+            "vcl::Window subclass allocated on stack, should be allocated via VclPtr or via *.",
+            pVarDecl->getLocation())
+          << pVarDecl->getSourceRange();
+    }
+    return true;
+}
 
 bool VCLWidgets::VisitFieldDecl(const FieldDecl * fieldDecl) {
     if (ignoreLocation(fieldDecl)) {

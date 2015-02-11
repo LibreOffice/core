@@ -326,8 +326,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ParameterHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                MessageDialog aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-                aWarnBox.Execute();
+                VclPtr<MessageDialog> aWarnBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO ));
+                aWarnBox->Execute();
             }
         }
     }
@@ -371,8 +371,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, ClassPathHdl_Impl)
             (void)eErr;
             if ( bRunning )
             {
-                MessageDialog aWarnBox( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO );
-                aWarnBox.Execute();
+                VclPtr<MessageDialog> aWarnBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_OPTIONS_RESTART ), VCL_MESSAGE_INFO ));
+                aWarnBox->Execute();
             }
         }
     }
@@ -620,13 +620,13 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
     }
     else if ( JFW_E_NOT_RECOGNIZED == eErr )
     {
-        MessageDialog aErrBox( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) );
-        aErrBox.Execute();
+        VclPtr<MessageDialog> aErrBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_JRE_NOT_RECOGNIZED ) ));
+        aErrBox->Execute();
     }
     else if ( JFW_E_FAILED_VERSION == eErr )
     {
-        MessageDialog aErrBox( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) );
-        aErrBox.Execute();
+        VclPtr<MessageDialog> aErrBox(new MessageDialog( this, CUI_RES( RID_SVXSTR_JRE_FAILED_VERSION ) ));
+        aErrBox->Execute();
     }
 
     if ( bStartAgain )

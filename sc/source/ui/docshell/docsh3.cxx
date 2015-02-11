@@ -1202,12 +1202,12 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
                 while ( bLoop )
                 {
                     bLoop = false;
-                    ScConflictsDlg aDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList );
-                    if ( aDlg.Execute() == RET_CANCEL )
+                    VclPtr<ScConflictsDlg> aDlg(new ScConflictsDlg( GetActiveDialogParent(), GetViewData(), &rSharedDoc, aConflictsList ) );
+                    if ( aDlg->Execute() == RET_CANCEL )
                     {
-                        QueryBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
-                            ScGlobal::GetRscString( STR_DOC_WILLNOTBESAVED ) );
-                        if ( aBox.Execute() == RET_YES )
+                        VclPtr<QueryBox> aBox(new QueryBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                            ScGlobal::GetRscString( STR_DOC_WILLNOTBESAVED ) ) );
+                        if ( aBox->Execute() == RET_YES )
                         {
                             return false;
                         }
@@ -1320,8 +1320,8 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         PostPaintExtras();
         PostPaintGridAll();
 
-        InfoBox aInfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) );
-        aInfoBox.Execute();
+        VclPtr<InfoBox> aInfoBox(new InfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) ) );
+        aInfoBox->Execute();
     }
 
     return ( pThisAction != NULL );

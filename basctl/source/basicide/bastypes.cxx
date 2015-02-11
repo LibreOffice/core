@@ -790,8 +790,8 @@ bool QueryDel( const OUString& rName, const ResId& rId, vcl::Window* pParent )
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');
     aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
-    MessageDialog aQueryBox(pParent, aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-    return ( aQueryBox.Execute() == RET_YES );
+    VclPtr<MessageDialog> aQueryBox(new MessageDialog(pParent, aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+    return ( aQueryBox->Execute() == RET_YES );
 }
 
 bool QueryDelMacro( const OUString& rName, vcl::Window* pParent )
@@ -827,19 +827,19 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
     do
     {
         // password dialog
-        SfxPasswordDialog aDlg(Application::GetDefDialogParent());
-        aDlg.SetMinLen( 1 );
+        VclPtr<SfxPasswordDialog> aDlg(new SfxPasswordDialog(Application::GetDefDialogParent()));
+        aDlg->SetMinLen( 1 );
 
         // set new title
         if ( bNewTitle )
         {
             OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
             aTitle = aTitle.replaceAll("XX", rLibName);
-            aDlg.SetText( aTitle );
+            aDlg->SetText( aTitle );
         }
 
         // execute dialog
-        nRet = aDlg.Execute();
+        nRet = aDlg->Execute();
 
         // verify password
         if ( nRet == RET_OK )
@@ -849,14 +849,14 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
                 {
-                    rPassword = aDlg.GetPassword();
+                    rPassword = aDlg->GetPassword();
                     //                    OUString aOUPassword( rPassword );
                     bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
 
                     if ( !bOK )
                     {
-                        MessageDialog aErrorBox(Application::GetDefDialogParent(), IDE_RESSTR(RID_STR_WRONGPASSWORD));
-                        aErrorBox.Execute();
+                        VclPtr<MessageDialog> aErrorBox(new MessageDialog(Application::GetDefDialogParent(), IDE_RESSTR(RID_STR_WRONGPASSWORD)));
+                        aErrorBox->Execute();
                     }
                 }
             }

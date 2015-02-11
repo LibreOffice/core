@@ -717,11 +717,11 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
         // dialog for per cent settings
-        OfaAutoFmtPrcntSet aDlg(this);
-        aDlg.GetPrcntFld().SetValue(nPercent);
-        if(RET_OK == aDlg.Execute())
+        VclPtr<OfaAutoFmtPrcntSet> aDlg(new OfaAutoFmtPrcntSet(this));
+        aDlg->GetPrcntFld().SetValue(nPercent);
+        if(RET_OK == aDlg->Execute())
         {
-            nPercent = (sal_uInt16)aDlg.GetPrcntFld().GetValue();
+            nPercent = (sal_uInt16)aDlg->GetPrcntFld().GetValue();
             sMargin = " " +
                 unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
         }

@@ -1078,12 +1078,12 @@ void LibPage::Export( void )
             return;
     }
 
-    ExportDialog aNewDlg(this);
-    if (aNewDlg.Execute() == RET_OK)
+    VclPtr<ExportDialog> aNewDlg(new ExportDialog(this));
+    if (aNewDlg->Execute() == RET_OK)
     {
         try
         {
-            if (aNewDlg.isExportAsPackage())
+            if (aNewDlg->isExportAsPackage())
                 ExportAsPackage( aLibName );
             else
                 ExportAsBasic( aLibName );
@@ -1454,13 +1454,13 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
         i++;
     }
 
-    NewObjectDialog aNewDlg(pWin, ObjectMode::Library);
-    aNewDlg.SetObjectName(aLibName);
+    VclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(pWin, ObjectMode::Library));
+    aNewDlg->SetObjectName(aLibName);
 
-    if (aNewDlg.Execute())
+    if (aNewDlg->Execute())
     {
-        if (!aNewDlg.GetObjectName().isEmpty())
-            aLibName = aNewDlg.GetObjectName();
+        if (!aNewDlg->GetObjectName().isEmpty())
+            aLibName = aNewDlg->GetObjectName();
 
         if ( aLibName.getLength() > 30 )
         {

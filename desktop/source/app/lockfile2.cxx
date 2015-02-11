@@ -38,22 +38,22 @@ bool Lockfile_execWarning( Lockfile * that )
     OString aTime  = aConfig.ReadKey( LOCKFILE_TIMEKEY );
 
     // display warning and return response
-    MessageDialog aBox(NULL, DesktopResId(STR_QUERY_USERDATALOCKED),
-                       VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    VclPtr<MessageDialog> aBox(new MessageDialog(NULL, DesktopResId(STR_QUERY_USERDATALOCKED),
+                       VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
     // set box title
     OUString aTitle = OUString( DesktopResId( STR_TITLE_USERDATALOCKED ));
-    aBox.SetText( aTitle );
+    aBox->SetText( aTitle );
     // insert values...
-    OUString aMsgText = aBox.get_primary_text();
+    OUString aMsgText = aBox->get_primary_text();
     aMsgText = aMsgText.replaceFirst(
         "$u", OStringToOUString( aUser, RTL_TEXTENCODING_ASCII_US) );
     aMsgText = aMsgText.replaceFirst(
         "$h", OStringToOUString( aHost, RTL_TEXTENCODING_ASCII_US) );
     aMsgText = aMsgText.replaceFirst(
         "$t", OStringToOUString( aTime, RTL_TEXTENCODING_ASCII_US) );
-    aBox.set_primary_text(aMsgText);
+    aBox->set_primary_text(aMsgText);
     // do it
-    return aBox.Execute( ) == RET_YES;
+    return aBox->Execute( ) == RET_YES;
 }
 
 }

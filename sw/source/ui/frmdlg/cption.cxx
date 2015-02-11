@@ -284,17 +284,17 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     OUString sFldTypeName = m_pCategoryBox->GetText();
     if(sFldTypeName == m_sNone)
         sFldTypeName = OUString();
-    SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
-    aDlg.SetApplyBorderAndShadow(bCopyAttributes);
-    aDlg.SetCharacterStyle( sCharacterStyle );
-    aDlg.SetOrderNumberingFirst( bOrderNumberingFirst );
-    aDlg.Execute();
-    bCopyAttributes = aDlg.IsApplyBorderAndShadow();
-    sCharacterStyle = aDlg.GetCharacterStyle();
+    VclPtr<SwSequenceOptionDialog> aDlg( pButton, rView, sFldTypeName );
+    aDlg->SetApplyBorderAndShadow(bCopyAttributes);
+    aDlg->SetCharacterStyle( sCharacterStyle );
+    aDlg->SetOrderNumberingFirst( bOrderNumberingFirst );
+    aDlg->Execute();
+    bCopyAttributes = aDlg->IsApplyBorderAndShadow();
+    sCharacterStyle = aDlg->GetCharacterStyle();
     //#i61007# order of captions
-    if( bOrderNumberingFirst != aDlg.IsOrderNumberingFirst() )
+    if( bOrderNumberingFirst != aDlg->IsOrderNumberingFirst() )
     {
-        bOrderNumberingFirst = aDlg.IsOrderNumberingFirst();
+        bOrderNumberingFirst = aDlg->IsOrderNumberingFirst();
         SW_MOD()->GetModuleConfig()->SetCaptionOrderNumberingFirst(bOrderNumberingFirst);
         ApplyCaptionOrder();
     }
@@ -338,8 +338,8 @@ IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
-    SwCaptionOptDlg aDlg( this, aSet );
-    aDlg.Execute();
+    VclPtr<SwCaptionOptDlg> aDlg(new SwCaptionOptDlg( this, aSet ) );
+    aDlg->Execute();
 
     return 0;
 }

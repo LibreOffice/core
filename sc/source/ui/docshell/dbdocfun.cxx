@@ -1269,9 +1269,9 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
         // OutRange of pOldObj (pDestObj) is still old area
         if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
-            QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
-            if (aBox.Execute() == RET_NO)
+            VclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) ) );
+            if (aBox->Execute() == RET_NO)
             {
                 //! like above (not editable)
                 *pOldObj = aUndoDPObj;
@@ -1421,11 +1421,11 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
         if (!bEmpty)
         {
-            QueryBox aBox(
+            VclPtr<QueryBox> aBox(new QueryBox(
                 rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY));
+                ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY)));
 
-            if (aBox.Execute() == RET_NO)
+            if (aBox->Execute() == RET_NO)
             {
                 //! like above (not editable)
                 return false;
@@ -1495,9 +1495,9 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     {
         if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
-            QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
-            if (aBox.Execute() == RET_NO)
+            VclPtr<QueryBox> aBox(new QueryBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                             ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) ) );
+            if (aBox->Execute() == RET_NO)
             {
                 rDPObj = aUndoDPObj;
                 return false;
@@ -1593,9 +1593,9 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
     const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {
-        InfoBox aInfoBox(rDocShell.GetActiveDialogParent(),
-                    ScGlobal::GetRscString( STR_TARGETNOTFOUND ) );
-        aInfoBox.Execute();
+        VclPtr<InfoBox> aInfoBox(new InfoBox(rDocShell.GetActiveDialogParent(),
+                    ScGlobal::GetRscString( STR_TARGETNOTFOUND ) ));
+        aInfoBox->Execute();
         return;
     }
 

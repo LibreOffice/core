@@ -44,10 +44,10 @@ bool sfx2::openUriExternally(
                 "unexpected IllegalArgumentException: " + e.Message);
         }
         SolarMutexGuard g;
-        MessageDialog eb(
-            SfxGetpApp()->GetTopWindow(), SfxResId(STR_NO_ABS_URI_REF));
-        eb.set_primary_text(eb.get_primary_text().replaceFirst("$(ARG1)", uri));
-        eb.Execute();
+        VclPtr<MessageDialog> eb(new MessageDialog(
+            SfxGetpApp()->GetTopWindow(), SfxResId(STR_NO_ABS_URI_REF)));
+        eb->set_primary_text(eb->get_primary_text().replaceFirst("$(ARG1)", uri));
+        eb->Execute();
     } catch (css::system::SystemShellExecuteException &) {
         if (!handleSystemShellExecuteException) {
             throw;

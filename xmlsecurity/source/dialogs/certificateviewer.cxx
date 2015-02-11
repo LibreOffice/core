@@ -382,8 +382,8 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
     SvTreeListEntry* pEntry = mpCertPathLB->FirstSelected();
     if( pEntry )
     {
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, static_cast<CertPath_UserData*>(pEntry->GetUserData())->mxCert, false );
-        aViewer.Execute();
+        ScopedVclPtr<CertificateViewer> aViewer( this, mpDlg->mxSecurityEnvironment, static_cast<CertPath_UserData*>(pEntry->GetUserData())->mxCert, false );
+        aViewer->Execute();
     }
 
     return 0;

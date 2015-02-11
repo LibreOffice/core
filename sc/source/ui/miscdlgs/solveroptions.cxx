@@ -314,23 +314,23 @@ void ScSolverOptionsDialog::EditOption()
             {
                 if ( pStringItem->IsDouble() )
                 {
-                    ScSolverValueDialog aValDialog( this );
-                    aValDialog.SetOptionName( pStringItem->GetText() );
-                    aValDialog.SetValue( pStringItem->GetDoubleValue() );
-                    if ( aValDialog.Execute() == RET_OK )
+                    VclPtr<ScSolverValueDialog> aValDialog(new ScSolverValueDialog( this ));
+                    aValDialog->SetOptionName( pStringItem->GetText() );
+                    aValDialog->SetValue( pStringItem->GetDoubleValue() );
+                    if ( aValDialog->Execute() == RET_OK )
                     {
-                        pStringItem->SetDoubleValue( aValDialog.GetValue() );
+                        pStringItem->SetDoubleValue( aValDialog->GetValue() );
                         m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }
                 else
                 {
-                    ScSolverIntegerDialog aIntDialog( this );
-                    aIntDialog.SetOptionName( pStringItem->GetText() );
-                    aIntDialog.SetValue( pStringItem->GetIntValue() );
-                    if ( aIntDialog.Execute() == RET_OK )
+                    VclPtr<ScSolverIntegerDialog> aIntDialog(new ScSolverIntegerDialog( this ));
+                    aIntDialog->SetOptionName( pStringItem->GetText() );
+                    aIntDialog->SetValue( pStringItem->GetIntValue() );
+                    if ( aIntDialog->Execute() == RET_OK )
                     {
-                        pStringItem->SetIntValue( aIntDialog.GetValue() );
+                        pStringItem->SetIntValue( aIntDialog->GetValue() );
                         m_pLbSettings->InvalidateEntry( pEntry );
                     }
                 }

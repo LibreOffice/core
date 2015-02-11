@@ -993,10 +993,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if( pObj && pObj->ISA( SdrGrafObj ) && static_cast<SdrGrafObj*>(pObj)->GetGraphicType() == GRAPHIC_BITMAP )
                 {
                     SdrGrafObj* pGraphicObj = static_cast<SdrGrafObj*>(pObj);
-                    CompressGraphicsDialog dialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() );
-                    if ( dialog.Execute() == RET_OK )
+                    VclPtr<CompressGraphicsDialog> dialog(new CompressGraphicsDialog( GetParentWindow(), pGraphicObj, GetViewFrame()->GetBindings() ) );
+                    if ( dialog->Execute() == RET_OK )
                     {
-                        SdrGrafObj* pNewObject = dialog.GetCompressedSdrGrafObj();
+                        SdrGrafObj* pNewObject = dialog->GetCompressedSdrGrafObj();
                         SdrPageView* pPageView = mpDrawView->GetSdrPageView();
                         OUString aUndoString = mpDrawView->GetDescriptionOfMarkedObjects();
                         aUndoString += " Compress";
@@ -1422,11 +1422,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                             || aLayerName.isEmpty() )
                         {
                             // name already exists
-                            WarningBox aWarningBox (
+                            VclPtr<WarningBox> aWarningBox (new WarningBox(
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
-                                SD_RESSTR(STR_WARN_NAME_DUPLICATE));
-                            aWarningBox.Execute();
+                                SD_RESSTR(STR_WARN_NAME_DUPLICATE)));
+                            aWarningBox->Execute();
                         }
                         else
                             bLoop = false;
@@ -1591,11 +1591,11 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                              aLayerName != aOldLayerName) || aLayerName.isEmpty() )
                         {
                             // name already exists
-                            WarningBox aWarningBox (
+                            VclPtr<WarningBox> aWarningBox (new WarningBox(
                                 GetParentWindow(),
                                 WinBits( WB_OK ),
-                                SD_RESSTR(STR_WARN_NAME_DUPLICATE));
-                            aWarningBox.Execute();
+                                SD_RESSTR(STR_WARN_NAME_DUPLICATE)));
+                            aWarningBox->Execute();
                         }
                         else
                             bLoop = false;

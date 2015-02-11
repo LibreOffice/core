@@ -364,11 +364,11 @@ void SfxObjectShell::CheckIn( )
     {
         uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
         // Pop up dialog to ask for comment and major
-        SfxCheckinDialog checkinDlg( &GetFrame( )->GetWindow( ) );
-        if ( checkinDlg.Execute( ) == RET_OK )
+        VclPtr<SfxCheckinDialog> checkinDlg(new SfxCheckinDialog(&GetFrame( )->GetWindow( )));
+        if ( checkinDlg->Execute( ) == RET_OK )
         {
-            OUString sComment = checkinDlg.GetComment( );
-            bool bMajor = checkinDlg.IsMajor( );
+            OUString sComment = checkinDlg->GetComment( );
+            bool bMajor = checkinDlg->IsMajor( );
             xCmisDoc->checkIn( bMajor, sComment );
             uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
             if ( xModifiable.is( ) )
@@ -857,10 +857,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_DOCTEMPLATE:
         {
             // save as document templates
-            SfxTemplateManagerDlg aDlg;
-            aDlg.setDocumentModel(GetModel());
-            aDlg.setSaveMode();
-            aDlg.Execute();
+            VclPtr<SfxTemplateManagerDlg> aDlg(new SfxTemplateManagerDlg);
+            aDlg->setDocumentModel(GetModel());
+            aDlg->setSaveMode();
+            aDlg->Execute();
 
             break;
         }

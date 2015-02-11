@@ -122,10 +122,10 @@ void ScTpFormulaOptions::UpdateCustomCalcRadioButtons(bool bDefault)
 
 void ScTpFormulaOptions::LaunchCustomCalcSettings()
 {
-    ScCalcOptionsDialog aDlg(this, maCurrentConfig);
-    if (aDlg.Execute() == RET_OK)
+    VclPtr<ScCalcOptionsDialog> aDlg(new ScCalcOptionsDialog(this, maCurrentConfig));
+    if (aDlg->Execute() == RET_OK)
     {
-        maCurrentConfig = aDlg.GetConfig();
+        maCurrentConfig = aDlg->GetConfig();
     }
 }
 

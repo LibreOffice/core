@@ -952,11 +952,11 @@ namespace
     {
         bool bRet = false;
 
-        RTSPWDialog aDialog(rServer, rUserName, NULL);
-        if (aDialog.Execute())
+        VclPtr<RTSPWDialog> aDialog(new RTSPWDialog(rServer, rUserName, NULL));
+        if (aDialog->Execute())
         {
-            rUserName = aDialog.getUserName();
-            rPassword = aDialog.getPassword();
+            rUserName = aDialog->getUserName();
+            rPassword = aDialog->getPassword();
             bRet = true;
         }
 

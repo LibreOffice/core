@@ -966,10 +966,10 @@ void SbiIoSystem::CloseAll(void)
 void SbiIoSystem::ReadCon(OString& rIn)
 {
     OUString aPromptStr(OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
-    SbiInputDialog aDlg( NULL, aPromptStr );
-    if( aDlg.Execute() )
+    VclPtr<SbiInputDialog> aDlg(new SbiInputDialog(NULL, aPromptStr) );
+    if( aDlg->Execute() )
     {
-        rIn = OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
+        rIn = OUStringToOString(aDlg->GetInput(), osl_getThreadTextEncoding());
     }
     else
     {

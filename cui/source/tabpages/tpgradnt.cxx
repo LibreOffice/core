@@ -561,10 +561,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
+                VclPtr<MessageDialog> aBox( new MessageDialog( GetParentDialog()
                                     ,"DuplicateNameDialog"
-                                    ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                                    ,"cui/ui/queryduplicatedialog.ui") );
+                aBox->Execute();
             }
 
         }
@@ -580,9 +580,9 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui");
+        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelGradientDialog","cui/ui/querydeletegradientdialog.ui"));
 
-        if ( aQueryBox.Execute() == RET_YES )
+        if ( aQueryBox->Execute() == RET_YES )
         {
             delete pGradientList->Remove( nPos );
             m_pLbGradients->RemoveEntry( nPos );

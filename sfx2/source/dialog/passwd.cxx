@@ -71,8 +71,8 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
         bConfirmFailed = true;
     if ( bConfirmFailed )
     {
-        MessageDialog aBox(this, SfxResId(STR_ERROR_WRONG_CONFIRM));
-        aBox.Execute();
+        VclPtr<MessageDialog> aBox(new MessageDialog(this, SfxResId(STR_ERROR_WRONG_CONFIRM)));
+        aBox->Execute();
         mpConfirm1ED->SetText( OUString() );
         mpConfirm1ED->GrabFocus();
     }

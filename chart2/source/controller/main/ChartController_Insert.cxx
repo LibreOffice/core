@@ -109,14 +109,14 @@ void ChartController::executeDispatch_InsertAxes()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, true );
 
         SolarMutexGuard aGuard;
-        SchAxisDlg aDlg( m_pChartWindow, aDialogInput );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<SchAxisDlg> aDlg(new SchAxisDlg( m_pChartWindow, aDialogInput ));
+        if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
 
             InsertAxisOrGridDialogData aDialogOutput;
-            aDlg.getResult( aDialogOutput );
+            aDlg->getResult( aDialogOutput );
             boost::scoped_ptr< ReferenceSizeProvider > mpRefSizeProvider(
                 impl_createReferenceSizeProvider());
             bool bChanged = AxisHelper::changeVisibilityOfAxes( xDiagram
@@ -147,13 +147,13 @@ void ChartController::executeDispatch_InsertGrid()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, false );
 
         SolarMutexGuard aGuard;
-        SchGridDlg aDlg( m_pChartWindow, aDialogInput );//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<SchGridDlg> aDlg(new SchGridDlg( m_pChartWindow, aDialogInput ));//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
+        if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
             InsertAxisOrGridDialogData aDialogOutput;
-            aDlg.getResult( aDialogOutput );
+            aDlg->getResult( aDialogOutput );
             bool bChanged = AxisHelper::changeVisibilityOfGrids( xDiagram
                 , aDialogInput.aExistenceList, aDialogOutput.aExistenceList, m_xCC );
             if( bChanged )
@@ -179,13 +179,13 @@ void ChartController::executeDispatch_InsertTitles()
         aDialogInput.readFromModel( getModel() );
 
         SolarMutexGuard aGuard;
-        SchTitleDlg aDlg( m_pChartWindow, aDialogInput );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<SchTitleDlg> aDlg(new SchTitleDlg( m_pChartWindow, aDialogInput ));
+        if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
             TitleDialogData aDialogOutput(impl_createReferenceSizeProvider());
-            aDlg.getResult( aDialogOutput );
+            aDlg->getResult( aDialogOutput );
             bool bChanged = aDialogOutput.writeDifferenceToModel( getModel(), m_xCC, &aDialogInput );
             if( bChanged )
                 aUndoGuard.commit();
@@ -232,13 +232,13 @@ void ChartController::executeDispatch_OpenLegendDialog()
     {
         //prepare and open dialog
         SolarMutexGuard aGuard;
-        SchLegendDlg aDlg( m_pChartWindow, m_xCC );
-        aDlg.init( getModel() );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<SchLegendDlg> aDlg(new SchLegendDlg( m_pChartWindow, m_xCC ));
+        aDlg->init( getModel() );
+        if( aDlg->Execute() == RET_OK )
         {
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
-            bool bChanged = aDlg.writeToModel( getModel() );
+            bool bChanged = aDlg->writeToModel( getModel() );
             if( bChanged )
                 aUndoGuard.commit();
         }
@@ -292,12 +292,12 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
 
-        DataLabelsDialog aDlg( m_pChartWindow, aItemSet, pNumberFormatter);
+        VclPtr<DataLabelsDialog> aDlg(new DataLabelsDialog( m_pChartWindow, aItemSet, pNumberFormatter));
 
-        if( aDlg.Execute() == RET_OK )
+        if( aDlg->Execute() == RET_OK )
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.FillItemSet( aOutItemSet );
+            aDlg->FillItemSet( aOutItemSet );
             // lock controllers till end of block
             ControllerLockGuardUNO aCLGuard( getModel() );
             bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
@@ -397,14 +397,14 @@ void ChartController::executeDispatch_InsertTrendline()
     aDialogParameter.init( getModel() );
     ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
     SolarMutexGuard aGuard;
-    SchAttribTabDlg aDialog( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
-                          uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
+    VclPtr<SchAttribTabDlg> aDialog(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+                          uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY )));
 
     // note: when a user pressed "OK" but didn't change any settings in the
     // dialog, the SfxTabDialog returns "Cancel"
-    if( aDialog.Execute() == RET_OK || aDialog.DialogWasClosedWithOK())
+    if( aDialog->Execute() == RET_OK || aDialog->DialogWasClosedWithOK())
     {
-        const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
+        const SfxItemSet* pOutItemSet = aDialog->GetOutputItemSet();
         if( pOutItemSet )
         {
             ControllerLockGuardUNO aCLGuard( getModel() );
@@ -452,17 +452,17 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
-        SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
-                              uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
-        aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+        VclPtr<SchAttribTabDlg> aDlg(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
+                              uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY )));
+        aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));
 
         // note: when a user pressed "OK" but didn't change any settings in the
         // dialog, the SfxTabDialog returns "Cancel"
-        if( aDlg.Execute() == RET_OK || aDlg.DialogWasClosedWithOK())
+        if( aDlg->Execute() == RET_OK || aDlg->DialogWasClosedWithOK())
         {
-            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+            const SfxItemSet* pOutItemSet = aDlg->GetOutputItemSet();
             if( pOutItemSet )
             {
                 ControllerLockGuardUNO aCLGuard( getModel() );
@@ -489,18 +489,18 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
             //prepare and open dialog
             SolarMutexGuard aGuard;
-            InsertErrorBarsDialog aDlg(
+            VclPtr<InsertErrorBarsDialog> aDlg(new InsertErrorBarsDialog(
                 m_pChartWindow, aItemSet,
                 uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
-                bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X);
+                bYError ? ErrorBarResources::ERROR_BAR_Y : ErrorBarResources::ERROR_BAR_X));
 
-            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+            aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, OUString() ) );
 
-            if( aDlg.Execute() == RET_OK )
+            if( aDlg->Execute() == RET_OK )
             {
                 SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-                aDlg.FillItemSet( aOutItemSet );
+                aDlg->FillItemSet( aOutItemSet );
 
                 // lock controllers till end of block
                 ControllerLockGuardUNO aCLGuard( getModel() );

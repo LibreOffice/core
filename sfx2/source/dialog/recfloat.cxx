@@ -152,9 +152,9 @@ bool SfxRecordingFloatWrapper_Impl::QueryClose()
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
     {
-        QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS).toString() );
-        aBox.SetText( SfxResId(STR_CANCEL_RECORDING).toString() );
-        bRet = ( aBox.Execute() == RET_YES );
+        VclPtr<QueryBox> aBox(new QueryBox(GetWindow(), WB_YES_NO | WB_DEF_NO , SfxResId(STR_MACRO_LOSS).toString()));
+        aBox->SetText( SfxResId(STR_CANCEL_RECORDING).toString() );
+        bRet = ( aBox->Execute() == RET_YES );
     }
 
     return bRet;

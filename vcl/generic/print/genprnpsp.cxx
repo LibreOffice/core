@@ -136,8 +136,8 @@ namespace
     int QueryFaxNumber(OUString& rNumber)
     {
         OUString aTmpString(VclResId(SV_PRINT_QUERYFAXNUMBER_TXT));
-        QueryString aQuery(NULL, aTmpString, rNumber);
-        return aQuery.Execute();
+        VclPtr<QueryString> aQuery(new QueryString(NULL, aTmpString, rNumber));
+        return aQuery->Execute();
     }
 }
 

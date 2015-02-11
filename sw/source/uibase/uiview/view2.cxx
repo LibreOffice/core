@@ -240,8 +240,8 @@ int SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
             const sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                MessageDialog aQueryBox( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui");
-                if (aQueryBox.Execute() == RET_YES)
+                VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetWindow(),"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui") );
+                if (aQueryBox->Execute() == RET_YES)
                 {
                     GraphicNativeTransform aTransform( aGraphic );
                     aTransform.rotate( aRotation );
@@ -439,8 +439,8 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             // really store as link only?
             if( bAsLink && SvtMiscOptions().ShowLinkWarningDialog() )
             {
-                SvxLinkWarningDialog aWarnDlg(GetWindow(),pFileDlg->GetPath());
-                if( aWarnDlg.Execute() != RET_OK )
+                VclPtr<SvxLinkWarningDialog> aWarnDlg(new SvxLinkWarningDialog(GetWindow(),pFileDlg->GetPath()));
+                if( aWarnDlg->Execute() != RET_OK )
                     bAsLink=false; // don't store as link
             }
         }
@@ -504,8 +504,8 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                MessageDialog aInfoBox( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO);
-                aInfoBox.Execute();
+                VclPtr<MessageDialog> aInfoBox(new MessageDialog( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO) );
+                aInfoBox->Execute();
             }
             rReq.Ignore();
         }
@@ -585,11 +585,11 @@ void SwView::Execute(SfxRequest &rReq)
                         pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
-                    SfxPasswordDialog aPasswdDlg( pParent );
-                    aPasswdDlg.SetMinLen( 1 );
+                    VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
+                    aPasswdDlg->SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
-                    (void)aPasswdDlg.Execute();
-                    OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                    (void)aPasswdDlg->Execute();
+                    OUString sNewPasswd( aPasswdDlg->GetPassword() );
                     Sequence <sal_Int8> aNewPasswd = pIDRA->GetRedlinePassword();
                     SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                     if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
@@ -623,14 +623,14 @@ void SwView::Execute(SfxRequest &rReq)
                 pParent = static_cast<const XWindowItem*>( pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
-            SfxPasswordDialog aPasswdDlg( pParent );
-            aPasswdDlg.SetMinLen( 1 );
+            VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog( pParent ));
+            aPasswdDlg->SetMinLen( 1 );
             if(!aPasswd.getLength())
-                aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
-            if (aPasswdDlg.Execute())
+                aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
+            if (aPasswdDlg->Execute())
             {
                 sal_uInt16 nOn = nsRedlineMode_t::REDLINE_ON;
-                OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                OUString sNewPasswd( aPasswdDlg->GetPassword() );
                 Sequence <sal_Int8> aNewPasswd =
                         pIDRA->GetRedlinePassword();
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
@@ -2287,11 +2287,11 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             if ( lcl_NeedAdditionalDataSource( xDBContext ) )
             {
                 // no data sources are available - create a new one
-                MessageDialog aQuery(&GetViewFrame()->GetWindow(),
+                VclPtr<MessageDialog> aQuery(new MessageDialog(&GetViewFrame()->GetWindow(),
                     "DataSourcesUnavailableDialog",
-                    "modules/swriter/ui/datasourcesunavailabledialog.ui");
+                    "modules/swriter/ui/datasourcesunavailabledialog.ui"));
                 // no cancel allowed
-                if (RET_OK != aQuery.Execute())
+                if (RET_OK != aQuery->Execute())
                     return;
                 bCallAddressPilot = true;
             }
@@ -2336,12 +2336,12 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             OUString sSource;
             if(!GetWrtShell().IsFieldDataSourceAvailable(sSource))
             {
-                MessageDialog aWarning(&GetViewFrame()->GetWindow(),
+                VclPtr<MessageDialog> aWarning(new MessageDialog(&GetViewFrame()->GetWindow(),
                     "WarnDataSourceDialog",
-                    "modules/swriter/ui/warndatasourcedialog.ui");
-                OUString sTmp(aWarning.get_primary_text());
-                aWarning.set_primary_text(sTmp.replaceFirst("%1", sSource));
-                if (RET_OK == aWarning.Execute())
+                    "modules/swriter/ui/warndatasourcedialog.ui"));
+                OUString sTmp(aWarning->get_primary_text());
+                aWarning->set_primary_text(sTmp.replaceFirst("%1", sSource));
+                if (RET_OK == aWarning->Execute())
                 {
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )
@@ -2390,8 +2390,8 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         SfxApplication* pSfxApp = SfxGetpApp();
         vcl::Window* pTopWin = pSfxApp->GetTopWindow();
 
-        SfxTemplateManagerDlg aDocTemplDlg;
-        int nRet = aDocTemplDlg.Execute();
+        VclPtr<SfxTemplateManagerDlg> aDocTemplDlg(new SfxTemplateManagerDlg);
+        int nRet = aDocTemplDlg->Execute();
         bool bNewWin = false;
         if ( nRet == RET_OK )
         {

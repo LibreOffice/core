@@ -1576,8 +1576,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             pLinguData = new SvxLinguData_Impl;
 
         SvxLinguData_Impl   aOldLinguData( *pLinguData );
-        SvxEditModulesDlg   aDlg( this, *pLinguData );
-        if (aDlg.Execute() != RET_OK)
+        VclPtr<SvxEditModulesDlg>   aDlg(new SvxEditModulesDlg( this, *pLinguData ));
+        if (aDlg->Execute() != RET_OK)
             *pLinguData = aOldLinguData;
 
         // evaluate new status of 'bConfigured' flag
@@ -1653,9 +1653,9 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     }
     else if (m_pLinguDicsDelPB == pBtn)
     {
-        MessageDialog aQuery(this, "QueryDeleteDictionaryDialog",
-            "cui/ui/querydeletedictionarydialog.ui");
-        if (RET_NO == aQuery.Execute())
+        VclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDeleteDictionaryDialog",
+            "cui/ui/querydeletedictionarydialog.ui"));
+        if (RET_NO == aQuery->Execute())
             return 0;
 
         SvTreeListEntry *pEntry = m_pLinguDicsCLB->GetCurEntry();
@@ -1725,11 +1725,11 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
             if(aData.HasNumericValue())
             {
                 sal_uInt16 nRID = aData.GetEntryId();
-                OptionsBreakSet aDlg( this, nRID );
-                aDlg.GetNumericFld().SetValue( aData.GetNumericValue() );
-                if (RET_OK == aDlg.Execute() )
+                VclPtr<OptionsBreakSet> aDlg( new OptionsBreakSet(this, nRID) );
+                aDlg->GetNumericFld().SetValue( aData.GetNumericValue() );
+                if (RET_OK == aDlg->Execute() )
                 {
-                    long nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
+                    long nVal = static_cast<long>(aDlg->GetNumericFld().GetValue());
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
                         aData.SetNumericValue( (sal_uInt8)nVal ); //! sets IsModified !

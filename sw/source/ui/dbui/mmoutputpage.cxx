@@ -695,12 +695,12 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
         }
 
         SwView* pSourceView = rConfigItem.GetSourceView();
-        PrintMonitor aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
-        aSaveMonitor.m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
-        aSaveMonitor.SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
-        aSaveMonitor.m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
+        VclPtr<PrintMonitor> aSaveMonitor(this, false, PrintMonitor::MONITOR_TYPE_SAVE);
+        aSaveMonitor->m_pDocName->SetText(pSourceView->GetDocShell()->GetTitle(22));
+        aSaveMonitor->SetCancelHdl(LINK(this, SwMailMergeOutputPage, SaveCancelHdl_Impl));
+        aSaveMonitor->m_pPrinter->SetText( INetURLObject( sPath ).getFSysPath( INetURLObject::FSYS_DETECT ) );
         m_bCancelSaving = false;
-        aSaveMonitor.Show();
+        aSaveMonitor->Show();
         m_pWizard->enableButtons(WZB_CANCEL, false);
 
         for(sal_uInt32 nDoc = nBegin; nDoc < nEnd && !m_bCancelSaving; ++nDoc)
@@ -713,7 +713,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                 sPath += "." + sExtension;
             }
             OUString sStat = OUString(SW_RES(STR_STATSTR_LETTER)) + " " + OUString::number( nDoc );
-            aSaveMonitor.m_pPrintInfo->SetText(sStat);
+            aSaveMonitor->m_pPrintInfo->SetText(sStat);
 
             //now extract a document from the target document
             // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
@@ -761,9 +761,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
                 if(bFailed)
                 {
-                    SwSaveWarningBox_Impl aWarning( pButton, sOutPath );
-                    if(RET_OK == aWarning.Execute())
-                        sOutPath = aWarning.GetFileName();
+                    VclPtr<SwSaveWarningBox_Impl> aWarning(new SwSaveWarningBox_Impl( pButton, sOutPath ));
+                    if(RET_OK == aWarning->Execute())
+                        sOutPath = aWarning->GetFileName();
                     else
                     {
                         xTempDocShell->DoClose();
@@ -945,8 +945,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     if(rConfigItem.GetMailServer().isEmpty() ||
             !SwMailMergeHelper::CheckMailAddress(rConfigItem.GetMailAddress()) )
     {
-        QueryBox aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
-        sal_uInt16 nRet = aQuery.Execute();
+        VclPtr<QueryBox> aQuery(new QueryBox(pButton, WB_YES_NO_CANCEL, m_sConfigureMail));
+        sal_uInt16 nRet = aQuery->Execute();
         if(RET_YES == nRet )
         {
             SfxAllItemSet aSet(pTargetView->GetPool());
@@ -1039,26 +1039,26 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 
     if(m_pSubjectED->GetText().isEmpty())
     {
-        SwSendQueryBox_Impl aQuery(pButton, "SubjectDialog",
-         "modules/swriter/ui/subjectdialog.ui");
-        aQuery.SetIsEmptyTextAllowed(true);
-        aQuery.SetValue(m_sNoSubjectST);
-        if(RET_OK == aQuery.Execute())
+        VclPtr<SwSendQueryBox_Impl> aQuery(new SwSendQueryBox_Impl(pButton, "SubjectDialog",
+         "modules/swriter/ui/subjectdialog.ui"));
+        aQuery->SetIsEmptyTextAllowed(true);
+        aQuery->SetValue(m_sNoSubjectST);
+        if(RET_OK == aQuery->Execute())
         {
-            if(aQuery.GetValue() != m_sNoSubjectST)
-                m_pSubjectED->SetText(aQuery.GetValue());
+            if(aQuery->GetValue() != m_sNoSubjectST)
+                m_pSubjectED->SetText(aQuery->GetValue());
         }
         else
             return 0;
     }
     if(!bAsBody && m_pAttachmentED->GetText().isEmpty())
     {
-        SwSendQueryBox_Impl aQuery(pButton, "AttachNameDialog",
-         "modules/swriter/ui/attachnamedialog.ui");
-        aQuery.SetIsEmptyTextAllowed(false);
-        if(RET_OK == aQuery.Execute())
+        VclPtr<SwSendQueryBox_Impl> aQuery(new SwSendQueryBox_Impl(pButton, "AttachNameDialog",
+         "modules/swriter/ui/attachnamedialog.ui"));
+        aQuery->SetIsEmptyTextAllowed(false);
+        if(RET_OK == aQuery->Execute())
         {
-            OUString sAttach(aQuery.GetValue());
+            OUString sAttach(aQuery->GetValue());
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
             if (2 > nTokenCount)
             {

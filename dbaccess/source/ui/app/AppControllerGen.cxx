@@ -111,12 +111,12 @@ void OApplicationController::convertToView(const OUString& _sName)
         OUString aDefaultName = ::dbaui::createDefaultName(xMeta,xTables,aName);
 
         DynamicTableOrQueryNameCheck aNameChecker( xConnection, CommandType::TABLE );
-        OSaveAsDlg aDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker );
-        if ( aDlg.Execute() == RET_OK )
+        VclPtr<OSaveAsDlg> aDlg(new OSaveAsDlg( getView(), CommandType::TABLE, getORB(), xConnection, aDefaultName, aNameChecker ) );
+        if ( aDlg->Execute() == RET_OK )
         {
-            OUString sName = aDlg.getName();
-            OUString sCatalog = aDlg.getCatalog();
-            OUString sSchema  = aDlg.getSchema();
+            OUString sName = aDlg->getName();
+            OUString sCatalog = aDlg->getCatalog();
+            OUString sSchema  = aDlg->getSchema();
             OUString sNewName(
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, false, ::dbtools::eInTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
@@ -534,8 +534,8 @@ void OApplicationController::askToReconnect()
         bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
-            MessageDialog aQry(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-            switch (aQry.Execute())
+            VclPtr<MessageDialog> aQry(new MessageDialog(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+            switch (aQry->Execute())
             {
                 case RET_YES:
                     closeSubComponents();

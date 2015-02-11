@@ -142,11 +142,11 @@ void ManageLanguageDialog::ClearLanguageBox()
 
 IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 {
-    SetDefaultLanguageDialog aDlg( this, m_xLocalizationMgr );
-    if ( RET_OK == aDlg.Execute() )
+    VclPtr<SetDefaultLanguageDialog> aDlg(new SetDefaultLanguageDialog( this, m_xLocalizationMgr ));
+    if ( RET_OK == aDlg->Execute() )
     {
         // add new locales
-        Sequence< Locale > aLocaleSeq = aDlg.GetLocales();
+        Sequence< Locale > aLocaleSeq = aDlg->GetLocales();
         m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
         // update listbox
         ClearLanguageBox();
@@ -160,8 +160,8 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
-    MessageDialog aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui");
-    if ( aQBox.Execute() == RET_OK )
+    VclPtr<MessageDialog> aQBox(new MessageDialog(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui"));
+    if ( aQBox->Execute() == RET_OK )
     {
         sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
         sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();

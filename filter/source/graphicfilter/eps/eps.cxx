@@ -486,8 +486,8 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         pResMgr = ResMgr::CreateResMgr( "eps", Application::GetSettings().GetUILanguageTag() );
         if( pResMgr )
         {
-            InfoBox aInfoBox( NULL, ResId(KEY_VERSION_CHECK, *pResMgr).toString() );
-            aInfoBox.Execute();
+            VclPtr<InfoBox> aInfoBox(new InfoBox( NULL, ResId(KEY_VERSION_CHECK, *pResMgr).toString() ) );
+            aInfoBox->Execute();
             delete pResMgr;
         }
     }

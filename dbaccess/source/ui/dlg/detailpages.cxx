@@ -241,8 +241,8 @@ namespace dbaui
     {
         if (m_pIndexes == pButton)
         {
-            ODbaseIndexDialog aIndexDialog(this, m_sDsn);
-            aIndexDialog.Execute();
+            VclPtr<ODbaseIndexDialog> aIndexDialog(new ODbaseIndexDialog(this, m_sDsn));
+            aIndexDialog->Execute();
         }
         else
         {
@@ -490,8 +490,8 @@ namespace dbaui
 #endif
         const sal_uInt16 nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
         const OSQLMessageBox::MessageType mt = bSuccess ? OSQLMessageBox::Info : OSQLMessageBox::Error;
-        OSQLMessageBox aMsg( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt );
-        aMsg.Execute();
+        VclPtr<OSQLMessageBox> aMsg(new OSQLMessageBox( this, OUString( ModuleRes( nMessage ) ), OUString(), WB_OK | WB_DEF_OK, mt ) );
+        aMsg->Execute();
         return 0L;
     }
     IMPL_LINK(OGeneralSpecialJDBCDetailsPage, OnEditModified, Edit*, _pEdit)

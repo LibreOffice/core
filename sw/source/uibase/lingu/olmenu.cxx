@@ -803,9 +803,9 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             uno::Any exc( ::cppu::getCaughtException() );
             OUString msg( ::comphelper::anyToString( exc ) );
             const SolarMutexGuard guard;
-            MessageDialog aErrorBox(NULL, msg);
-            aErrorBox.SetText( "Explanations" );
-            aErrorBox.Execute();
+            VclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
+            aErrorBox->SetText( "Explanations" );
+            aErrorBox->Execute();
         }
     }
     else if (nId == FN_REDLINE_ACCEPT_DIRECT || nId == FN_REDLINE_REJECT_DIRECT

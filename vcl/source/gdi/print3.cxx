@@ -305,9 +305,9 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if (xController->isShowDialogs())
         {
-            MessageDialog aBox(NULL, "ErrorNoPrinterDialog",
-                "vcl/ui/errornoprinterdialog.ui");
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoPrinterDialog",
+                "vcl/ui/errornoprinterdialog.ui"));
+            aBox->Execute();
         }
         xController->setValue( OUString( "IsDirect" ),
                                makeAny( false ) );
@@ -454,9 +454,9 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         if( xController->getFilteredPageCount() == 0 )
         {
-            MessageDialog aBox(NULL, "ErrorNoContentDialog",
-                "vcl/ui/errornocontentdialog.ui");
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, "ErrorNoContentDialog",
+                "vcl/ui/errornocontentdialog.ui"));
+            aBox->Execute();
             return;
         }
     }
@@ -470,13 +470,13 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
     {
         try
         {
-            PrintDialog aDlg( NULL, xController );
-            if( ! aDlg.Execute() )
+            VclPtr<PrintDialog> aDlg(new PrintDialog( NULL, xController ));
+            if( ! aDlg->Execute() )
             {
                 xController->abortJob();
                 return;
             }
-            if( aDlg.isPrintToFile() )
+            if( aDlg->isPrintToFile() )
             {
                 OUString aFile = queryFile( xController->getPrinter().get() );
                 if( aFile.isEmpty() )
@@ -487,7 +487,7 @@ void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                 xController->setValue( OUString( "LocalFileName" ),
                                        makeAny( aFile ) );
             }
-            else if( aDlg.isSingleJobs() )
+            else if( aDlg->isSingleJobs() )
             {
                 xController->setValue( OUString( "PrintCollateAsSingleJobs" ),
                                        makeAny( true ) );

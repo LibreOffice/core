@@ -716,10 +716,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
+                VclPtr<MessageDialog> aBox( new MessageDialog(GetParentDialog()
                                    ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                                   ,"cui/ui/queryduplicatedialog.ui"));
+                aBox->Execute();
             }
         }
     }
@@ -734,9 +734,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui");
+        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelBitmapDialog","cui/ui/querydeletebitmapdialog.ui" ));
 
-        if( aQueryBox.Execute() == RET_YES )
+        if( aQueryBox->Execute() == RET_YES )
         {
             delete pBitmapList->Remove( nPos );
             m_pLbBitmaps->RemoveEntry( nPos );

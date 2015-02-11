@@ -273,10 +273,10 @@ IMPL_LINK(ListEntryDialog, EditModifiedHdl, Edit*, pEdit)
 
 void openListDialog(SvxOpenCLTabPage* pTabPage, OpenCLConfig::ImplMatcher& rEntry, const OString& rTag)
 {
-    ListEntryDialog aDlg(pTabPage, rEntry, rTag);
+    VclPtr<ListEntryDialog> aDlg(new ListEntryDialog(pTabPage, rEntry, rTag));
 
-    if (aDlg.Execute() == RET_OK)
-        rEntry = aDlg.maEntry;
+    if (aDlg->Execute() == RET_OK)
+        rEntry = aDlg->maEntry;
 }
 
 const OpenCLConfig::ImplMatcher& findCurrentEntry(OpenCLConfig::ImplMatcherSet& rSet, SvSimpleTable* pListBox)

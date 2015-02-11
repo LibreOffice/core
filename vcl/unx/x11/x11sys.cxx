@@ -134,19 +134,19 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
     if( pSVData->mpIntroWindow )
         pSVData->mpIntroWindow->Hide();
 
-    WarningBox aWarn( NULL, WB_STDWORK, rMessage );
-    aWarn.SetText( rTitle );
-    aWarn.Clear();
+    VclPtr<WarningBox> aWarn(new WarningBox(NULL, WB_STDWORK, rMessage) );
+    aWarn->SetText( rTitle );
+    aWarn->Clear();
 
     sal_uInt16 nButton = 0;
     for( std::list< OUString >::const_iterator it = rButtons.begin(); it != rButtons.end(); ++it )
     {
-            aWarn.AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
+            aWarn->AddButton( *it, nButton+1, nButton == (sal_uInt16)nDefButton ? BUTTONDIALOG_DEFBUTTON : 0 );
             nButton++;
     }
-    aWarn.SetFocusButton( (sal_uInt16)nDefButton+1 );
+    aWarn->SetFocusButton( (sal_uInt16)nDefButton+1 );
 
-    nRet = ((int)aWarn.Execute()) - 1;
+    nRet = ((int)aWarn->Execute()) - 1;
 
     // normalize behaviour, actually this should never happen
     if( nRet < -1 || nRet >= int(rButtons.size()) )

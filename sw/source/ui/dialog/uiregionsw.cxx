@@ -404,11 +404,11 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
-            SfxPasswordDialog aPasswdDlg(this);
+            VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(this));
             bRet = false;
-            if (aPasswdDlg.Execute())
+            if (aPasswdDlg->Execute())
             {
-                const OUString sNewPasswd( aPasswdDlg.GetPassword() );
+                const OUString sNewPasswd( aPasswdDlg->GetPassword() );
                 ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
                 SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
                 if (SvPasswordHelper::CompareHashPassword(
@@ -1059,10 +1059,10 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
 
-        SwSectionPropertyTabDialog aTabDlg(this, aSet, rSh);
-        if(RET_OK == aTabDlg.Execute())
+        VclPtr<SwSectionPropertyTabDialog> aTabDlg(new SwSectionPropertyTabDialog(this, aSet, rSh));
+        if(RET_OK == aTabDlg->Execute())
         {
-            const SfxItemSet* pOutSet = aTabDlg.GetOutputItemSet();
+            const SfxItemSet* pOutSet = aTabDlg->GetOutputItemSet();
             if( pOutSet && pOutSet->Count() )
             {
                 const SfxPoolItem *pColItem, *pBrushItem,
@@ -1238,12 +1238,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
-                SfxPasswordDialog aPasswdDlg(this);
-                aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
-                if(RET_OK == aPasswdDlg.Execute())
+                VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(this));
+                aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
+                if(RET_OK == aPasswdDlg->Execute())
                 {
-                    const OUString sNewPasswd( aPasswdDlg.GetPassword() );
-                    if( aPasswdDlg.GetConfirm() == sNewPasswd )
+                    const OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                    if( aPasswdDlg->GetConfirm() == sNewPasswd )
                     {
                         SvPasswordHelper::GetHashPassword( pRepr->GetTempPasswd(), sNewPasswd );
                     }
@@ -1682,12 +1682,12 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     {
         if(!m_aNewPasswd.getLength() || bChange)
         {
-            SfxPasswordDialog aPasswdDlg(this);
-            aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
-            if(RET_OK == aPasswdDlg.Execute())
+            VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(this));
+            aPasswdDlg->ShowExtras(SHOWEXTRAS_CONFIRM);
+            if(RET_OK == aPasswdDlg->Execute())
             {
-                const OUString sNewPasswd( aPasswdDlg.GetPassword() );
-                if( aPasswdDlg.GetConfirm() == sNewPasswd )
+                const OUString sNewPasswd( aPasswdDlg->GetPassword() );
+                if( aPasswdDlg->GetConfirm() == sNewPasswd )
                 {
                     SvPasswordHelper::GetHashPassword( m_aNewPasswd, sNewPasswd );
                 }

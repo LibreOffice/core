@@ -193,13 +193,13 @@ IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
     PlacePtr pPlace = maPlaces[nSelected];
     if ( pPlace->IsEditable() == true && !pPlace->IsLocal( ) )
     {
-        PlaceEditDialog aDlg( mpDlg, pPlace );
-        short aRetCode = aDlg.Execute();
+        VclPtr<PlaceEditDialog> aDlg(new PlaceEditDialog(mpDlg, pPlace));
+        short aRetCode = aDlg->Execute();
         switch(aRetCode) {
             case RET_OK :
             {
-                pPlace->SetName ( aDlg.GetServerName() );
-                pPlace->SetUrl( aDlg.GetServerUrl() );
+                pPlace->SetName ( aDlg->GetServerName() );
+                pPlace->SetUrl( aDlg->GetServerUrl() );
                 mbUpdated = true;
                 break;
             }

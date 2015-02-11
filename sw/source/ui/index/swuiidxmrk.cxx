@@ -1201,8 +1201,8 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                MessageDialog aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                if(RET_YES != aQuery.Execute())
+                VclPtr<MessageDialog> aQuery(new MessageDialog(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                if(RET_YES != aQuery->Execute())
                     return 0;
             }
         }
@@ -1241,14 +1241,14 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
     OUString sOldId = m_sCreatedEntry[0];
     for(int i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? OUString() : m_sFields[i];
-    SwCreateAuthEntryDlg_Impl aDlg(pButton,
+    VclPtr<SwCreateAuthEntryDlg_Impl> aDlg(new SwCreateAuthEntryDlg_Impl(pButton,
                 bCreate ? m_sCreatedEntry : m_sFields,
-                *pSh, bNewEntry, bCreate);
+                *pSh, bNewEntry, bCreate));
     if(bNewEntry)
     {
-        aDlg.SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
+        aDlg->SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
     }
-    if(RET_OK == aDlg.Execute())
+    if(RET_OK == aDlg->Execute())
     {
         if(bCreate && !sOldId.isEmpty())
         {
@@ -1256,7 +1256,7 @@ IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
         }
         for(int i = 0; i < AUTH_FIELD_END; i++)
         {
-            m_sFields[i] = aDlg.GetEntryText((ToxAuthorityField)i);
+            m_sFields[i] = aDlg->GetEntryText((ToxAuthorityField)i);
             m_sCreatedEntry[i] = m_sFields[i];
         }
         if(bNewEntry && !m_pFromDocContentRB->IsChecked())

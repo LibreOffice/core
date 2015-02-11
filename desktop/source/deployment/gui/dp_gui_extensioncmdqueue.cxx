@@ -451,12 +451,12 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             SolarMutexGuard guard;
-            MessageDialog box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
-                ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+            VclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
+                ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
             OUString s;
             if (bEqualNames)
             {
-                s = box.get_primary_text();
+                s = box->get_primary_text();
             }
             else if (id == RID_STR_WARNING_VERSION_EQUAL)
             {
@@ -477,8 +477,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
             s = s.replaceAll("$NEW", getVersion(verExc.NewVersion));
             s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
-            box.set_primary_text(s);
-            approve = box.Execute() == RET_OK;
+            box->set_primary_text(s);
+            approve = box->Execute() == RET_OK;
             abort = !approve;
         }
     }
@@ -506,8 +506,8 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        MessageDialog box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg);
-        box.Execute();
+        VclPtr<MessageDialog> box(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg));
+        box->Execute();
         approve = true;
     }
 

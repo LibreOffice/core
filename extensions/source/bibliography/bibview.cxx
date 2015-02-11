@@ -139,11 +139,11 @@ namespace bib
             {
                 sErrorString += "\n";
                 sErrorString += BIB_RESSTR(RID_MAP_QUESTION);
-                QueryBox aQuery( this, WB_YES_NO, sErrorString );
-                aQuery.SetDefaultCheckBoxText();
-                short nResult = aQuery.Execute();
+                VclPtr<QueryBox> aQuery(new QueryBox(this, WB_YES_NO, sErrorString) );
+                aQuery->SetDefaultCheckBoxText();
+                short nResult = aQuery->Execute();
                 BibModul::GetConfig()->SetShowColumnAssignmentWarning(
-                    !aQuery.GetCheckBoxState());
+                    !aQuery->GetCheckBoxState());
                 if( RET_YES != nResult )
                 {
                     bExecute = false;

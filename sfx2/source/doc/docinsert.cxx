@@ -190,12 +190,12 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl)
                 if ( ( aValue >>= bPassWord ) && bPassWord )
                 {
                     // ask for the password
-                    SfxPasswordDialog aPasswordDlg( NULL );
-                    aPasswordDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-                    short nRet = aPasswordDlg.Execute();
+                    VclPtr<SfxPasswordDialog> aPasswordDlg( new SfxPasswordDialog(NULL) );
+                    aPasswordDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+                    short nRet = aPasswordDlg->Execute();
                     if ( RET_OK == nRet )
                     {
-                        OUString aPasswd = aPasswordDlg.GetPassword();
+                        OUString aPasswd = aPasswordDlg->GetPassword();
                         m_pItemSet->Put( SfxStringItem( SID_PASSWORD, aPasswd ) );
                     }
                     else

@@ -263,8 +263,8 @@ bool XMLFilterTabDialog::onOk()
             aMessage = aMessage.replaceAll( "%s", aReplace1 );
         }
 
-        MessageDialog aBox(this, aMessage);
-        aBox.Execute();
+        VclPtr<MessageDialog> aBox(new MessageDialog(this, aMessage));
+        aBox->Execute();
 
         if( pFocusWindow )
             pFocusWindow->GrabFocus();

@@ -2355,9 +2355,9 @@ short SvxMenuConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    QueryBox qbox( this, WB_YES_NO, label );
+    VclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
 
-    return qbox.Execute();
+    return qbox->Execute();
 }
 
 IMPL_LINK( SvxMenuConfigPage, SelectMenu, ListBox *, pBox )
@@ -2996,10 +2996,10 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_pContentsListBox->GetEntryCount() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            MessageDialog qbox(this,
-                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            VclPtr<MessageDialog> qbox(new MessageDialog(this,
+                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
-            if ( qbox.Execute() == RET_YES )
+            if ( qbox->Execute() == RET_YES )
             {
                 DeleteSelectedTopLevel();
             }
@@ -3076,10 +3076,10 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         }
         case ID_DEFAULT_STYLE:
         {
-            MessageDialog qbox(this,
-                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            VclPtr<MessageDialog> qbox(new MessageDialog(this,
+                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
-            if ( qbox.Execute() == RET_YES )
+            if ( qbox->Execute() == RET_YES )
             {
                 ToolbarSaveInData* pSaveInData_ =
                     static_cast<ToolbarSaveInData*>(GetSaveInData());
@@ -4307,9 +4307,9 @@ short SvxToolbarConfigPage::QueryReset()
 
     OUString label = replaceSaveInName( msg, saveInName );
 
-    QueryBox qbox( this, WB_YES_NO, label );
+    VclPtr<QueryBox> qbox(new QueryBox( this, WB_YES_NO, label ));
 
-    return qbox.Execute();
+    return qbox->Execute();
 }
 
 IMPL_LINK( SvxToolbarConfigPage, SelectToolbar, ListBox *, pBox )
@@ -5226,8 +5226,8 @@ void SvxIconSelectorDialog::ImportGraphics(
             message += newLine;
         }
 
-        SvxIconChangeDialog aDialog(this, message);
-        aDialog.Execute();
+        VclPtr<SvxIconChangeDialog> aDialog(new SvxIconChangeDialog(this, message));
+        aDialog->Execute();
     }
 }
 

@@ -682,10 +682,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
     // if yes, it is repeated and a new name is demanded
     if ( !bDifferent )
     {
-        MessageDialog aWarningBox( GetParentDialog()
+        VclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
                                    ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui");
-        aWarningBox.Execute();
+                                   ,"cui/ui/queryduplicatedialog.ui"));
+        aWarningBox->Execute();
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
@@ -705,7 +705,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
             if( bDifferent )
                 bLoop = false;
             else
-                aWarningBox.Execute();
+                aWarningBox->Execute();
         }
     }
 
@@ -753,10 +753,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
         // if yes, it is repeated and a new name is demanded
         if ( !bDifferent )
         {
-            MessageDialog aWarningBox( GetParentDialog()
+            VclPtr<MessageDialog> aWarningBox(new MessageDialog( GetParentDialog()
                                       ,"DuplicateNameDialog"
-                                      ,"cui/ui/queryduplicatedialog.ui");
-            aWarningBox.Execute();
+                                      ,"cui/ui/queryduplicatedialog.ui"));
+            aWarningBox->Execute();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             boost::scoped_ptr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aName, aDesc ));
@@ -774,7 +774,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
                 if( bDifferent )
                     bLoop = false;
                 else
-                    aWarningBox.Execute();
+                    aWarningBox->Execute();
             }
         }
 
@@ -849,9 +849,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelColorDialog","cui/ui/querydeletecolordialog.ui");
+        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelColorDialog","cui/ui/querydeletecolordialog.ui"));
 
-        if( aQueryBox.Execute() == RET_YES )
+        if( aQueryBox->Execute() == RET_YES )
         {
             XColorEntry* pEntry = pColorList->Remove( nPos );
             DBG_ASSERT( pEntry, "ColorEntry not found !" );

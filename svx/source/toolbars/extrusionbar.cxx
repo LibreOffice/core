@@ -583,11 +583,11 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                 double fDepth = static_cast<const SvxDoubleItem*>(rReq.GetArgs()->GetItem(SID_EXTRUSION_DEPTH))->GetValue();
                 FieldUnit eUnit = (FieldUnit)static_cast<const SfxUInt16Item*>(rReq.GetArgs()->GetItem(SID_ATTR_METRIC))->GetValue();
 
-                ExtrusionDepthDialog aDlg( 0L, fDepth, eUnit );
-                sal_uInt16 nRet = aDlg.Execute();
+                VclPtr<ExtrusionDepthDialog> aDlg(new ExtrusionDepthDialog(0L, fDepth, eUnit));
+                sal_uInt16 nRet = aDlg->Execute();
                 if( nRet != 0 )
                 {
-                    fDepth = aDlg.getDepth();
+                    fDepth = aDlg->getDepth();
 
                     SvxDoubleItem aItem( fDepth, SID_EXTRUSION_DEPTH );
                     SfxPoolItem* aItems[] = { &aItem, 0 };

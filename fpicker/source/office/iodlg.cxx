@@ -668,17 +668,17 @@ IMPL_STATIC_LINK( SvtFileDialog, NewFolderHdl_Impl, PushButton*, EMPTYARG )
     SmartContent aContent( pThis->_pFileView->GetViewURL( ) );
     OUString aTitle;
     aContent.getTitle( aTitle );
-    QueryFolderNameDialog aDlg( pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER) );
+    VclPtr<QueryFolderNameDialog> aDlg(new QueryFolderNameDialog(pThis, aTitle, SVT_RESSTR(STR_SVT_NEW_FOLDER)) );
     bool bHandled = false;
 
     while ( !bHandled )
     {
-        if ( aDlg.Execute() == RET_OK )
+        if ( aDlg->Execute() == RET_OK )
         {
-            OUString aUrl = aContent.createFolder( aDlg.GetName( ) );
+            OUString aUrl = aContent.createFolder( aDlg->GetName( ) );
             if ( !aUrl.isEmpty( ) )
             {
-                pThis->_pFileView->CreatedFolder( aUrl, aDlg.GetName() );
+                pThis->_pFileView->CreatedFolder( aUrl, aDlg->GetName() );
                 bHandled = true;
             }
         }
@@ -1052,8 +1052,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
                 );
-                MessageDialog aBox(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                if ( aBox.Execute() != RET_YES )
+                VclPtr<MessageDialog> aBox(new MessageDialog(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                if ( aBox->Execute() != RET_YES )
                     return 0;
             }
             else
@@ -1097,8 +1097,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     }
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
-                    MessageDialog aError(pThis, sError);
-                    aError.Execute();
+                    VclPtr<MessageDialog> aError(new MessageDialog(pThis, sError));
+                    aError->Execute();
                     return 0;
                 }
             }
@@ -1250,13 +1250,13 @@ IMPL_STATIC_LINK ( SvtFileDialog, ConnectToServerPressed_Hdl, void*, EMPTYARG )
 {
     pThis->_pFileView->EndInplaceEditing( false );
 
-    PlaceEditDialog aDlg( pThis );
-    short aRetCode = aDlg.Execute();
+    VclPtr<PlaceEditDialog> aDlg(new PlaceEditDialog(pThis));
+    short aRetCode = aDlg->Execute();
 
     switch (aRetCode) {
         case RET_OK :
         {
-            PlacePtr newPlace = aDlg.GetPlace();
+            PlacePtr newPlace = aDlg->GetPlace();
             pThis->_pImp->_pPlaces->AppendPlace(newPlace);
 
       break;
@@ -1886,8 +1886,8 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    MessageDialog aBox(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE));
-                    aBox.Execute();
+                    VclPtr<MessageDialog> aBox(new MessageDialog(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE)));
+                    aBox->Execute();
                     return 0;
                 }
             }

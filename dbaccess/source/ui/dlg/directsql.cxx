@@ -99,8 +99,8 @@ namespace dbaui
 
         {
             OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
-            MessageDialog aError(this, sMessage);
-            aError.Execute();
+            VclPtr<MessageDialog> aError(new MessageDialog(this, sMessage));
+            aError->Execute();
         }
 
         PostUserEvent(LINK(this, DirectSQLDialog, OnClose));

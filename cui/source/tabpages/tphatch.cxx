@@ -606,10 +606,10 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
+                VclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
                                     ,"DuplicateNameDialog"
-                                    ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                                    ,"cui/ui/queryduplicatedialog.ui"));
+                aBox->Execute();
             }
         }
     }
@@ -624,9 +624,9 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickDeleteHdl_Impl)
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui");
+        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog(),"AskDelHatchDialog","cui/ui/querydeletehatchdialog.ui"));
 
-        if( aQueryBox.Execute() == RET_YES )
+        if( aQueryBox->Execute() == RET_YES )
         {
             delete pHatchingList->Remove( nPos );
             m_pLbHatchings->RemoveEntry( nPos );

@@ -1298,8 +1298,8 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             // display info
-            MessageDialog aBox(this, CUI_RES(RID_SVXSTR_LANGUAGE_RESTART), VCL_MESSAGE_INFO);
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(this, CUI_RES(RID_SVXSTR_LANGUAGE_RESTART), VCL_MESSAGE_INFO));
+            aBox->Execute();
 
             // tell quickstarter to stop being a veto listener
 

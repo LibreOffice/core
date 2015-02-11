@@ -1074,11 +1074,11 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bRecord, bool bC
     {
         if (!bApi)
         {
-            MessBox aBox( GetViewData().GetDialogParent(),
+            VclPtr<MessBox> aBox(new MessBox( GetViewData().GetDialogParent(),
                             WinBits(WB_YES_NO_CANCEL | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
-                            ScGlobal::GetRscString( STR_MERGE_NOTEMPTY ) );
-            sal_uInt16 nRetVal = aBox.Execute();
+                            ScGlobal::GetRscString( STR_MERGE_NOTEMPTY ) ) );
+            sal_uInt16 nRetVal = aBox->Execute();
 
             if ( nRetVal == RET_YES )
                 rDoContents = true;
@@ -1771,10 +1771,10 @@ void ScViewFunc::Solve( const ScSolveParam& rParam )
             aMsgStr += ScGlobal::GetRscString( STR_MSSG_SOLVE_4 );
         }
 
-        MessBox aBox( GetViewData().GetDialogParent(),
+        VclPtr<MessBox> aBox(new MessBox( GetViewData().GetDialogParent(),
                         WinBits(WB_YES_NO | WB_DEF_NO),
-                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ), aMsgStr );
-        sal_uInt16 nRetVal = aBox.Execute();
+                        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ), aMsgStr ) );
+        sal_uInt16 nRetVal = aBox->Execute();
 
         if ( RET_YES == nRetVal )
             EnterValue( nDestCol, nDestRow, nDestTab, nSolveResult );

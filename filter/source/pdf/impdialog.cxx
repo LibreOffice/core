@@ -812,8 +812,8 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
-        MessageDialog aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING);
-        aBox.Execute();
+        VclPtr<MessageDialog> aBox(new MessageDialog(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING));
+        aBox->Execute();
     }
 
     return 0;
@@ -1197,17 +1197,17 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
 
 IMPL_LINK_NOARG(ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl)
 {
-    SfxPasswordDialog aPwdDialog( this, &msUserPwdTitle );
-    aPwdDialog.SetMinLen( 0 );
-    aPwdDialog.ShowMinLengthText(false);
-    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM | SHOWEXTRAS_PASSWORD2 | SHOWEXTRAS_CONFIRM2 );
-    aPwdDialog.SetText(msStrSetPwd);
-    aPwdDialog.SetGroup2Text(msOwnerPwdTitle);
-    aPwdDialog.AllowAsciiOnly();
-    if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
+    VclPtr<SfxPasswordDialog> aPwdDialog(new SfxPasswordDialog( this, &msUserPwdTitle ) );
+    aPwdDialog->SetMinLen( 0 );
+    aPwdDialog->ShowMinLengthText(false);
+    aPwdDialog->ShowExtras( SHOWEXTRAS_CONFIRM | SHOWEXTRAS_PASSWORD2 | SHOWEXTRAS_CONFIRM2 );
+    aPwdDialog->SetText(msStrSetPwd);
+    aPwdDialog->SetGroup2Text(msOwnerPwdTitle);
+    aPwdDialog->AllowAsciiOnly();
+    if( aPwdDialog->Execute() == RET_OK )  //OK issued get password and set it
     {
-        OUString aUserPW( aPwdDialog.GetPassword() );
-        OUString aOwnerPW( aPwdDialog.GetPassword2() );
+        OUString aUserPW( aPwdDialog->GetPassword() );
+        OUString aOwnerPW( aPwdDialog->GetPassword2() );
 
         mbHaveUserPassword = !aUserPW.isEmpty();
         mbHaveOwnerPassword = !aOwnerPW.isEmpty();

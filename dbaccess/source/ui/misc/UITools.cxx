@@ -852,12 +852,12 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     }
 
     {   // want the dialog to be destroyed before our set
-        SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat);
-        if (RET_OK == aDlg.Execute())
+        VclPtr<SbaSbAttrDlg> aDlg(new SbaSbAttrDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat));
+        if (RET_OK == aDlg->Execute())
         {
             // ItemSet->UNO
             // UNO-properties
-            const SfxItemSet* pSet = aDlg.GetExampleSet();
+            const SfxItemSet* pSet = aDlg->GetExampleSet();
             // (of course we could put the modified items directly into the column, but then the UNO-model
             // won't reflect these changes, and why do we have a model, then ?)
 
@@ -875,7 +875,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
             bRet = true;
         }
             // deleted formats
-        const SfxItemSet* pResult = aDlg.GetOutputItemSet();
+        const SfxItemSet* pResult = aDlg->GetOutputItemSet();
         if (pResult)
         {
             const SfxPoolItem* pItem = pResult->GetItem( SID_ATTR_NUMBERFORMAT_INFO );
@@ -997,10 +997,10 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
 
     Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MAP_MM ) );
 
-    DlgSize aColumnSizeDlg( _pBox, nColSize, false, aDefaultMM.Width() * 10 );
-    if ( aColumnSizeDlg.Execute() )
+    VclPtr<DlgSize> aColumnSizeDlg(new DlgSize( _pBox, nColSize, false, aDefaultMM.Width() * 10 ) );
+    if ( aColumnSizeDlg->Execute() )
     {
-        sal_Int32 nValue = aColumnSizeDlg.GetValue();
+        sal_Int32 nValue = aColumnSizeDlg->GetValue();
         if ( -1 == nValue )
         {   // default width
             nValue = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
@@ -1286,13 +1286,13 @@ sal_Int32 askForUserAction(vcl::Window* _pParent,sal_uInt16 _nTitle,sal_uInt16 _
     SolarMutexGuard aGuard;
     OUString aMsg = ModuleRes(_nText);
     aMsg = aMsg.replaceFirst("%1", _sName);
-    OSQLMessageBox aAsk(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
+    VclPtr<OSQLMessageBox> aAsk(new OSQLMessageBox(_pParent, ModuleRes(_nTitle ), aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query));
     if ( _bAll )
     {
-        aAsk.AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL, 0);
-        aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
+        aAsk->AddButton(ModuleRes(STR_BUTTON_TEXT_ALL), RET_ALL, 0);
+        aAsk->GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
     }
-    return aAsk.Execute();
+    return aAsk->Execute();
 }
 
 namespace
@@ -1431,17 +1431,17 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
             // here we have everything needed to create a new query object ...
             HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
             // ... ehm, except a new name
-            OSaveAsDlg aAskForName( _pParent,
+            VclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( _pParent,
                                     _rxContext,
                                     sTargetName,
                                     sLabel,
                                     aNameChecker,
-                                    SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
-            if ( RET_OK != aAskForName.Execute() )
+                                    SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS));
+            if ( RET_OK != aAskForName->Execute() )
                 // cancelled by the user
                 return false;
 
-            sNewName = aAskForName.getName();
+            sNewName = aAskForName->getName();
         }
     }
     else if ( xNameAccess->hasByName(sNewName) )

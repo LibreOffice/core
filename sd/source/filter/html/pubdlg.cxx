@@ -1072,11 +1072,11 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
         {
             bRetry = false;
 
-            SdDesignNameDlg aDlg(this, aName );
+            VclPtr<SdDesignNameDlg> aDlg(new SdDesignNameDlg(this, aName ));
 
-            if ( aDlg.Execute() == RET_OK )
+            if ( aDlg->Execute() == RET_OK )
             {
-                pDesign->m_aDesignName = aDlg.GetDesignName();
+                pDesign->m_aDesignName = aDlg->GetDesignName();
 
                 boost::ptr_vector<SdPublishingDesign>::iterator iter;
                 for (iter = m_aDesignList.begin(); iter != m_aDesignList.end(); ++iter)
@@ -1087,9 +1087,9 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
                 if (iter != m_aDesignList.end())
                 {
-                    MessageDialog aErrorBox(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
-                        VCL_MESSAGE_ERROR, VCL_BUTTONS_YES_NO);
-                    bRetry = aErrorBox.Execute() == RET_NO;
+                    VclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SD_RESSTR(STR_PUBDLG_SAMENAME),
+                        VCL_MESSAGE_ERROR, VCL_BUTTONS_YES_NO));
+                    bRetry = aErrorBox->Execute() == RET_NO;
 
                     if(!bRetry)
                         m_aDesignList.erase(iter);

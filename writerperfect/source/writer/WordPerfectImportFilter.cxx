@@ -119,11 +119,11 @@ throw (RuntimeException, std::exception)
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            SfxPasswordDialog aPasswdDlg(0);
-            aPasswdDlg.SetMinLen(0);
-            if (!aPasswdDlg.Execute())
+            VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(0));
+            aPasswdDlg->SetMinLen(0);
+            if (!aPasswdDlg->Execute())
                 return false;
-            OUString aPasswd = aPasswdDlg.GetPassword();
+            OUString aPasswd = aPasswdDlg->GetPassword();
             aUtf8Passwd = OUStringToOString(aPasswd, RTL_TEXTENCODING_UTF8);
             if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;
@@ -303,11 +303,11 @@ throw (RuntimeException, std::exception)
         int unsuccessfulAttempts = 0;
         while (true)
         {
-            SfxPasswordDialog aPasswdDlg(0);
-            aPasswdDlg.SetMinLen(0);
-            if (!aPasswdDlg.Execute())
+            VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(0));
+            aPasswdDlg->SetMinLen(0);
+            if (!aPasswdDlg->Execute())
                 return com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
-            msPassword = aPasswdDlg.GetPassword().getStr();
+            msPassword = aPasswdDlg->GetPassword().getStr();
             aUtf8Passwd = OUStringToOString(msPassword, RTL_TEXTENCODING_UTF8);
             if (libwpd::WPD_PASSWORD_MATCH_OK == libwpd::WPDocument::verifyPassword(&input, aUtf8Passwd.getStr()))
                 break;

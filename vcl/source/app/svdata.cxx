@@ -160,8 +160,8 @@ ResMgr* ImplGetResMgr()
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
             fprintf( stderr, "%s\n", pMsg );
-            MessageDialog aBox(NULL, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US));
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(NULL, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US)));
+            aBox->Execute();
         }
     }
     return pSVData->mpResMgr;

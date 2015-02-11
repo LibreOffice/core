@@ -3113,9 +3113,9 @@ bool HtmlExport::checkForExistingFiles()
                 OUString aSystemPath;
                 osl::FileBase::getSystemPathFromFileURL( maExportPath, aSystemPath );
                 aMsg = aMsg.replaceFirst( "%FILENAME", aSystemPath );
-                WarningBox aWarning( 0, WB_YES_NO | WB_DEF_YES, aMsg );
-                aWarning.SetImage( WarningBox::GetStandardImage() );
-                bFound = ( RET_NO == aWarning.Execute() );
+                VclPtr<WarningBox> aWarning(new WarningBox( 0, WB_YES_NO | WB_DEF_YES, aMsg ));
+                aWarning->SetImage( WarningBox::GetStandardImage() );
+                bFound = ( RET_NO == aWarning->Execute() );
 
                 delete pResMgr;
             }

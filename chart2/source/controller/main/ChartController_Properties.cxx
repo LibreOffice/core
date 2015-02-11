@@ -761,8 +761,8 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 
         SolarMutexGuard aGuard;
-        SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider
-            , uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ) );
+        VclPtr<SchAttribTabDlg> aDlg(new SchAttribTabDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider
+            , uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ) ));
 
         if(aDialogParameter.HasSymbolProperties())
         {
@@ -782,18 +782,18 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
             sal_Int32   nStandardSymbol=0;//@todo get from somewhere
             Graphic*    pAutoSymbolGraphic = new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, pSymbolShapeProperties ) );
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
-            aDlg.setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );
+            aDlg->setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );
         }
         if( aDialogParameter.HasStatisticProperties() )
         {
-            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+            aDlg->SetAxisMinorStepWidthForErrorBarDecimals(
                 InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rObjectCID ) );
         }
 
         //open the dialog
-        if (aDlg.Execute() == RET_OK || (bSuccessOnUnchanged && aDlg.DialogWasClosedWithOK()))
+        if (aDlg->Execute() == RET_OK || (bSuccessOnUnchanged && aDlg->DialogWasClosedWithOK()))
         {
-            const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
+            const SfxItemSet* pOutItemSet = aDlg->GetOutputItemSet();
             if(pOutItemSet)
             {
                 ControllerLockGuardUNO aCLGuard( getModel());
@@ -822,8 +822,8 @@ void ChartController::executeDispatch_View3D()
 
         //open dialog
         SolarMutexGuard aSolarGuard;
-        View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorList() );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<View3DDialog> aDlg(new View3DDialog( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorList() ));
+        if( aDlg->Execute() == RET_OK )
             aUndoGuard.commit();
     }
     catch(const uno::RuntimeException& e)

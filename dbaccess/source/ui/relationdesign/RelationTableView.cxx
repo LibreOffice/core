@@ -222,8 +222,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
 
 void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 {
-    ORelationDialog aRelDlg( this, pConnection->GetData() );
-    switch (aRelDlg.Execute())
+    VclPtr<ORelationDialog> aRelDlg(new ORelationDialog( this, pConnection->GetData() ));
+    switch (aRelDlg->Execute())
     {
         case RET_OK:
             // successfully updated
@@ -250,9 +250,9 @@ void ORelationTableView::AddNewRelation()
 {
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ORelationDialog aRelDlg(this, pNewConnData, true);
+    VclPtr<ORelationDialog> aRelDlg(new ORelationDialog(this, pNewConnData, true));
 
-    bool bSuccess = (aRelDlg.Execute() == RET_OK);
+    bool bSuccess = (aRelDlg->Execute() == RET_OK);
     if (bSuccess)
     {
         // already updated by the dialog
@@ -325,8 +325,8 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
 
 void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
 {
-    OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
-    if ( m_bInRemove || aDlg.Execute() == RET_YES )
+    VclPtr<OSQLWarningBox> aDlg(new OSQLWarningBox( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES ));
+    if ( m_bInRemove || aDlg->Execute() == RET_YES )
     {
         m_pView->getController().ClearUndoManager();
         OJoinTableView::RemoveTabWin( pTabWin );
@@ -343,13 +343,14 @@ void ORelationTableView::lookForUiActivities()
     {
         OUString sTitle(ModuleRes(STR_RELATIONDESIGN));
         sTitle = sTitle.copy(3);
-        OSQLMessageBox aDlg(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0);
-        aDlg.SetText(sTitle);
-        aDlg.RemoveButton(aDlg.GetButtonId(0));
-        aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-        aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
-        aDlg.AddButton( StandardButtonType::Cancel,RET_CANCEL,0);
-        sal_uInt16 nRet = aDlg.Execute();
+
+        VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox(this,ModuleRes(STR_QUERY_REL_EDIT_RELATION),OUString(),0));
+        aDlg->SetText(sTitle);
+        aDlg->RemoveButton(aDlg->GetButtonId(0));
+        aDlg->AddButton( ModuleRes(STR_QUERY_REL_EDIT), RET_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
+        aDlg->AddButton( ModuleRes(STR_QUERY_REL_CREATE), RET_YES, 0);
+        aDlg->AddButton( StandardButtonType::Cancel,RET_CANCEL,0);
+        sal_uInt16 nRet = aDlg->Execute();
         if( nRet == RET_CANCEL)
         {
             m_pCurrentlyTabConnData.reset();
@@ -363,8 +364,8 @@ void ORelationTableView::lookForUiActivities()
     }
     if(m_pCurrentlyTabConnData)
     {
-        ORelationDialog aRelDlg( this, m_pCurrentlyTabConnData );
-        if (aRelDlg.Execute() == RET_OK)
+        VclPtr<ORelationDialog> aRelDlg(new ORelationDialog( this, m_pCurrentlyTabConnData ) );
+        if (aRelDlg->Execute() == RET_OK)
         {
             // already updated by the dialog
             addConnection( new ORelationTableConnection( this, m_pCurrentlyTabConnData ) );

@@ -424,9 +424,9 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         if( !xLink.Is() )
             return 0;
 
-        QueryBox aBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() );
+        VclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO | WB_DEF_YES, Closelinkmsg() ));
 
-        if( RET_YES == aBox.Execute() )
+        if( RET_YES == aBox->Execute() )
         {
             m_pTbLinks->GetModel()->Remove( m_pTbLinks->GetEntry( nPos ) );
 
@@ -455,9 +455,9 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     }
     else
     {
-        QueryBox aBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() );
+        VclPtr<QueryBox> aBox(new QueryBox( this, WB_YES_NO | WB_DEF_YES, CloselinkmsgMulti() ));
 
-        if( RET_YES == aBox.Execute() )
+        if( RET_YES == aBox->Execute() )
         {
 
             SvBaseLinkMemberList aLinkList;

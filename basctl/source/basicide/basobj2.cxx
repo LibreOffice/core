@@ -149,16 +149,16 @@ bool RenameModule (
 
     if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
-        aError.Execute();
+        VclPtr<MessageDialog> aError(new MessageDialog(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)));
+        aError->Execute();
         return false;
     }
 
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
-        aError.Execute();
+        VclPtr<MessageDialog> aError(new MessageDialog(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME)));
+        aError->Execute();
         return false;
     }
 

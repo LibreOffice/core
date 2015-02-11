@@ -768,15 +768,15 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 {
     // show progress dialog
 
-    ScSolverProgressDialog aProgress( this );
+    VclPtr<ScSolverProgressDialog> aProgress(new ScSolverProgressDialog( this ) );
     sal_Int32 nTimeout = 0;
     if ( FindTimeout( nTimeout ) )
-        aProgress.SetTimeLimit( nTimeout );
+        aProgress->SetTimeLimit( nTimeout );
     else
-        aProgress.HideTimeLimit();
-    aProgress.Show();
-    aProgress.Update();
-    aProgress.Sync();
+        aProgress->HideTimeLimit();
+    aProgress->Show();
+    aProgress->Update();
+    aProgress->Sync();
     // try to make sure the progress dialog is painted before continuing
     Application::Reschedule(true);
 
@@ -967,7 +967,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     xSolver->solve();
     bool bSuccess = xSolver->getSuccess();
 
-    aProgress.Hide();
+    aProgress->Hide();
     bool bClose = false;
     bool bRestore = true;   // restore old values unless a solution is accepted
     if ( bSuccess )
@@ -993,8 +993,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
             static_cast<SCTAB>(aObjective.Sheet));
 
-        ScSolverSuccessDialog aDialog( this, aResultStr );
-        if ( aDialog.Execute() == RET_OK )
+        VclPtr<ScSolverSuccessDialog> aDialog(new ScSolverSuccessDialog( this, aResultStr ) );
+        if ( aDialog->Execute() == RET_OK )
         {
             // keep results and close dialog
             bRestore = false;
@@ -1007,8 +1007,8 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         uno::Reference<sheet::XSolverDescription> xDesc( xSolver, uno::UNO_QUERY );
         if ( xDesc.is() )
             aError = xDesc->getStatusDescription();         // error description from component
-        ScSolverNoSolutionDialog aDialog( this, aError );
-        aDialog.Execute();
+        VclPtr<ScSolverNoSolutionDialog> aDialog(new ScSolverNoSolutionDialog( this, aError ) );
+        aDialog->Execute();
     }
 
     if ( bRestore )         // restore old values

@@ -264,8 +264,8 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     if(bWarn)
     {
         //show warning message and don't close
-        WarningBox aWarn(this, WB_OK, maStrWarnSameValue );
-        aWarn.Execute();
+        VclPtr<WarningBox> aWarn(new WarningBox(this, WB_OK, maStrWarnSameValue ));
+        aWarn->Execute();
     }
     else
     {

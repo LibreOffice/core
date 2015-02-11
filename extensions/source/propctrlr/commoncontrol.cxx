@@ -103,9 +103,9 @@ namespace pcr
         if ( !m_pControlWindow )
             return;
 
-        ComboBox aComboBox(m_pControlWindow, WB_DROPDOWN);
-        aComboBox.SetPosSizePixel(Point(0,0), Size(100,100));
-        m_pControlWindow->SetSizePixel(aComboBox.GetSizePixel());
+        VclPtr<ComboBox> aComboBox(new ComboBox(m_pControlWindow, WB_DROPDOWN));
+        aComboBox->SetPosSizePixel(Point(0,0), Size(100,100));
+        m_pControlWindow->SetSizePixel(aComboBox->GetSizePixel());
 
         // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
         // of the browser listbox/line?

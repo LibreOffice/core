@@ -552,8 +552,8 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
             aStr += pInfo->GetThemeName();
             aStr += ")";
 
-            InfoBox aBox( this, aStr );
-            aBox.Execute();
+            VclPtr<InfoBox> aBox(new InfoBox( this, aStr ));
+            aBox->Execute();
             m_pLbResName->GrabFocus();
             bDifferentThemeExists = true;
         }

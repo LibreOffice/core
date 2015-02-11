@@ -666,9 +666,9 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         {
             // notify the user that SaveAs is going to be done
             vcl::Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
-            MessageDialog aMessageBox(pWin, SfxResId(STR_NEW_FILENAME_SAVE),
-                                      VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL);
-            if ( aMessageBox.Execute() == RET_OK )
+            VclPtr<MessageDialog> aMessageBox(new MessageDialog(pWin, SfxResId(STR_NEW_FILENAME_SAVE),
+                                      VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL));
+            if ( aMessageBox->Execute() == RET_OK )
                 nResult = STATUS_SAVEAS;
             else
                 nResult = STATUS_NO_ACTION;
@@ -1856,9 +1856,9 @@ bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XMod
         return true;
 
     vcl::Window* pWin = SfxStoringHelper::GetModelWindow( xModel );
-    SfxAlienWarningDialog aDlg( pWin, aOldUIName );
+    VclPtr<SfxAlienWarningDialog> aDlg(new SfxAlienWarningDialog(pWin, aOldUIName));
 
-    return aDlg.Execute() == RET_OK;
+    return aDlg->Execute() == RET_OK;
 }
 
 vcl::Window* SfxStoringHelper::GetModelWindow( const uno::Reference< frame::XModel >& xModel )

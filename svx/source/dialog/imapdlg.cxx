@@ -234,8 +234,8 @@ bool SvxIMapDlg::Close()
 
     if ( m_pTbxIMapDlg1->IsItemEnabled( mnApplyId ) )
     {
-        MessageDialog aQBox( this,"QueryModifyImageMapChangesDialog","svx/ui/querymodifyimagemapchangesdialog.ui");
-        const long  nRet = aQBox.Execute();
+        VclPtr<MessageDialog> aQBox(new MessageDialog(this,"QueryModifyImageMapChangesDialog","svx/ui/querymodifyimagemapchangesdialog.ui"));
+        const long  nRet = aQBox->Execute();
 
         if( nRet == RET_YES )
         {
@@ -248,8 +248,8 @@ bool SvxIMapDlg::Close()
     }
     else if( pIMapWnd->IsChanged() )
     {
-        MessageDialog aQBox( this,"QuerySaveImageMapChangesDialog","svx/ui/querysaveimagemapchangesdialog.ui");
-        const long  nRet = aQBox.Execute();
+        VclPtr<MessageDialog> aQBox(new MessageDialog(this,"QuerySaveImageMapChangesDialog","svx/ui/querysaveimagemapchangesdialog.ui"));
+        const long  nRet = aQBox->Execute();
 
         if( nRet == RET_YES )
             bRet = DoSave();

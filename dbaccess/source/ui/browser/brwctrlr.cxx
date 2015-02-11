@@ -1271,8 +1271,8 @@ IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotIntere
 {
     if ( m_aCurrentError.isValid() )
     {
-        OSQLMessageBox aDlg( getBrowserView(), m_aCurrentError );
-        aDlg.Execute();
+        VclPtr<OSQLMessageBox> aDlg(new OSQLMessageBox( getBrowserView(), m_aCurrentError ));
+        aDlg->Execute();
     }
     return 0L;
 }
@@ -1764,19 +1764,19 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(bool bFilter)
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
-            if ( !aDlg.Execute() )
+            VclPtr<DlgFilterCrit> aDlg(new DlgFilterCrit( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() ) );
+            if ( !aDlg->Execute() )
                 return; // if so we don't need to update the grid
-            aDlg.BuildWherePart();
+            aDlg->BuildWherePart();
         }
         else
         {
-            DlgOrderCrit aDlg( getBrowserView(),xCon,xParser,xSup->getColumns() );
-            if(!aDlg.Execute())
+            VclPtr<DlgOrderCrit> aDlg(new DlgOrderCrit( getBrowserView(),xCon,xParser,xSup->getColumns() ) );
+            if(!aDlg->Execute())
             {
                 return; // if so we don't need to actualize the grid
             }
-            aDlg.BuildOrderPart();
+            aDlg->BuildOrderPart();
         }
     }
     catch(const SQLException& )
@@ -2172,11 +2172,11 @@ bool SbaXDataBrowserController::SaveModified(bool bAskFor)
     {
         getBrowserView()->getVclControl()->GrabFocus();
 
-        MessageDialog aQry(getBrowserView()->getVclControl(),
+        VclPtr<MessageDialog> aQry(new MessageDialog(getBrowserView()->getVclControl(),
                            "SaveModifiedDialog",
-                           "dbaccess/ui/savemodifieddialog.ui");
+                           "dbaccess/ui/savemodifieddialog.ui"));
 
-        switch (aQry.Execute())
+        switch (aQry->Execute())
         {
             case RET_NO:
                 Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());

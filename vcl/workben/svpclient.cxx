@@ -120,9 +120,9 @@ public:
 
 void Main()
 {
-    MyWin aMainWin( NULL, WB_STDWORK );
-    aMainWin.SetText( OUString( "SvpClient" ) );
-    aMainWin.Show();
+    VclPtr<MyWin> aMainWin(new MyWin(NULL, WB_STDWORK) );
+    aMainWin->SetText( OUString( "SvpClient" ) );
+    aMainWin->Show();
 
     Application::Execute();
 }

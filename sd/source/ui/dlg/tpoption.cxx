@@ -331,10 +331,9 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
             FillItemSet( pActiveSet );
         return LEAVE_PAGE;
     }
-    WarningBox aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
-    short nReturn = aWarnBox.Execute();
+    VclPtr<WarningBox> aWarnBox(new WarningBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) ));
 
-    if( nReturn == RET_YES )
+    if( aWarnBox->Execute() == RET_YES )
         return KEEP_PAGE;
 
     if( pActiveSet )

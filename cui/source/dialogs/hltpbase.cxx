@@ -325,10 +325,10 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
         bool bIsInputEnabled = GetParent()->IsInputEnabled();
         if ( bIsInputEnabled )
             GetParent()->EnableInput( false );
-        SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
+        VclPtr<SfxMacroAssignDlg> aDlg(new SfxMacroAssignDlg( this, mxDocumentFrame, *pItemSet ));
 
         // add events
-        SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg.GetTabPage() );
+        SfxMacroTabPage *pMacroPage = static_cast<SfxMacroTabPage*>( aDlg->GetTabPage() );
 
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
             pMacroPage->AddEvent( OUString( CUI_RESSTR(RID_SVXSTR_HYPDLG_MACROACT1) ),
@@ -344,11 +344,11 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
             GetParent()->EnableInput( true );
         // execute dlg
         DisableClose( true );
-        short nRet = aDlg.Execute();
+        short nRet = aDlg->Execute();
         DisableClose( false );
         if ( RET_OK == nRet )
         {
-            const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
+            const SfxItemSet* pOutSet = aDlg->GetOutputItemSet();
             const SfxPoolItem* pItem;
             if( SfxItemState::SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
             {

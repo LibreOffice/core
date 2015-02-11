@@ -111,8 +111,8 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
     if( p == m_pBtnNew )
     {
         pCustomShow = NULL;
-        SdDefineCustomShowDlg aDlg( this, rDoc, pCustomShow );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<SdDefineCustomShowDlg> aDlg(new SdDefineCustomShowDlg( this, rDoc, pCustomShow ));
+        if( aDlg->Execute() == RET_OK )
         {
             if( pCustomShow )
             {
@@ -125,7 +125,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 m_pLbCustomShows->SelectEntry( pCustomShow->GetName() );
             }
 
-            if( aDlg.IsModified() )
+            if( aDlg->IsModified() )
                 bModified = true;
         }
         else if( pCustomShow )
@@ -139,9 +139,9 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         {
             DBG_ASSERT( pCustomShowList, "pCustomShowList does not exist" );
             pCustomShow = (*pCustomShowList)[ nPos ];
-            SdDefineCustomShowDlg aDlg( this, rDoc, pCustomShow );
+            VclPtr<SdDefineCustomShowDlg> aDlg(new SdDefineCustomShowDlg( this, rDoc, pCustomShow ));
 
-            if( aDlg.Execute() == RET_OK )
+            if( aDlg->Execute() == RET_OK )
             {
                 if( pCustomShow )
                 {
@@ -151,7 +151,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                     m_pLbCustomShows->InsertEntry( pCustomShow->GetName(), nPos );
                     m_pLbCustomShows->SelectEntryPos( nPos );
                 }
-                if( aDlg.IsModified() )
+                if( aDlg->IsModified() )
                     bModified = true;
             }
         }

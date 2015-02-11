@@ -694,10 +694,9 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
         // Pop up question box that asks the user whether to wrap around.
         // The dialog is made modal with respect to the whole application.
-        QueryBox aQuestionBox ( NULL, (WB_YES_NO | WB_DEF_YES), SD_RESSTR(nStringId));
-        aQuestionBox.SetImage (QueryBox::GetStandardImage());
-        short nBoxResult = aQuestionBox.Execute();
-        if (nBoxResult != RET_YES)
+        VclPtr<QueryBox> aQuestionBox (new QueryBox( NULL, (WB_YES_NO | WB_DEF_YES), SD_RESSTR(nStringId)));
+        aQuestionBox->SetImage( QueryBox::GetStandardImage() );
+        if (aQuestionBox->Execute() != RET_YES)
             break;
     }
     while( true );

@@ -327,9 +327,9 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window* /* pParent */,
 
 void MediaWindow::executeFormatErrorBox( vcl::Window* pParent )
 {
-    MessageDialog aErrBox( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) );
+    VclPtr<MessageDialog> aErrBox(new MessageDialog( pParent, AVMEDIA_RESID( AVMEDIA_STR_ERR_URL ) ) );
 
-    aErrBox.Execute();
+    aErrBox->Execute();
 }
 
 

@@ -1960,9 +1960,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if(!pCondFormatDlg && bContainsExistingCondFormat)
                     {
-                        QueryBox aBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
-                               ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) );
-                        bool bEditExisting = aBox.Execute() == RET_YES;
+                        VclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                               ScGlobal::GetRscString(STR_EDIT_EXISTING_COND_FORMATS) ) );
+                        bool bEditExisting = aBox->Execute() == RET_YES;
                         if(bEditExisting)
                         {
                             // differentiate between ranges where one conditional format is defined
@@ -2652,10 +2652,10 @@ void ScCellShell::ExecuteDataPilotDialog()
                     {
                         //  confirm selection if it contains SubTotal cells
 
-                        QueryBox aBox( pTabViewShell->GetDialogParent(),
+                        VclPtr<QueryBox> aBox(new QueryBox( pTabViewShell->GetDialogParent(),
                                         WinBits(WB_YES_NO | WB_DEF_YES),
-                                        ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) );
-                        if (aBox.Execute() == RET_NO)
+                                        ScGlobal::GetRscString(STR_DATAPILOT_SUBTOTAL) ) );
+                        if (aBox->Execute() == RET_NO)
                             bOK = false;
                     }
                     if (bOK)
@@ -2682,8 +2682,8 @@ void ScCellShell::ExecuteDataPilotDialog()
         if (nSrcErrorId)
         {
             // Error occurred during data creation.  Launch an error and bail out.
-            InfoBox aBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId));
-            aBox.Execute();
+            VclPtr<InfoBox> aBox(new InfoBox(pTabViewShell->GetDialogParent(), ScGlobal::GetRscString(nSrcErrorId)));
+            aBox->Execute();
             return;
         }
 

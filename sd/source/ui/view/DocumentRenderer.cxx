@@ -1300,11 +1300,11 @@ public:
                 // Show warning that the orientation could not be set.
                 if (pViewShell)
                 {
-                    WarningBox aWarnBox(
+                    VclPtr<WarningBox> aWarnBox(new WarningBox(
                         pViewShell->GetActiveWindow(),
                         (WinBits)(WB_OK_CANCEL | WB_DEF_CANCEL),
-                        SD_RESSTR(STR_WARN_PRINTFORMAT_FAILURE));
-                    if (aWarnBox.Execute() != RET_OK)
+                        SD_RESSTR(STR_WARN_PRINTFORMAT_FAILURE)));
+                    if (aWarnBox->Execute() != RET_OK)
                         return;
                 }
             }

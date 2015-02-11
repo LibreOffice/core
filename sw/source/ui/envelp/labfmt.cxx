@@ -614,15 +614,15 @@ IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
             return 0;
         }
 
-        MessageDialog aQuery(this, "QuerySaveLabelDialog",
-            "modules/swriter/ui/querysavelabeldialog.ui");
+        VclPtr<MessageDialog> aQuery(new MessageDialog(this, "QuerySaveLabelDialog",
+            "modules/swriter/ui/querysavelabeldialog.ui"));
 
-        aQuery.set_primary_text(aQuery.get_primary_text().
+        aQuery->set_primary_text(aQuery->get_primary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
-        aQuery.set_secondary_text(aQuery.get_secondary_text().
+        aQuery->set_secondary_text(aQuery->get_secondary_text().
             replaceAll("%1", sMake).replaceAll("%2", sType));
 
-        if (RET_YES != aQuery.Execute())
+        if (RET_YES != aQuery->Execute())
             return 0;
     }
     rLabRec.aType = sType;

@@ -116,8 +116,8 @@ namespace svx
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_DOESNOTEXIST);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            MessageDialog aError(this, sMsg);
-            aError.Execute();
+            VclPtr<MessageDialog> aError(new MessageDialog(this, sMsg));
+            aError->Execute();
             return 0L;
         } // if (!bFileExists)
         INetURLObject aURL( sURL );
@@ -125,8 +125,8 @@ namespace svx
         {
             OUString sMsg = CUI_RES(STR_LINKEDDOC_NO_SYSTEM_FILE);
             sMsg = sMsg.replaceFirst("$file$", m_pURL->GetText());
-            MessageDialog aError(this, sMsg);
-            aError.Execute();
+            VclPtr<MessageDialog> aError(new MessageDialog(this, sMsg));
+            aError->Execute();
             return 0L;
         }
 
@@ -137,8 +137,8 @@ namespace svx
             {
                 OUString sMsg = CUI_RES(STR_NAME_CONFLICT);
                 sMsg = sMsg.replaceFirst("$file$", sCurrentText);
-                MessageDialog aError(this, sMsg, VCL_MESSAGE_INFO);
-                aError.Execute();
+                VclPtr<MessageDialog> aError(new MessageDialog(this, sMsg, VCL_MESSAGE_INFO));
+                aError->Execute();
 
                 m_pName->SetSelection(Selection(0,sCurrentText.getLength()));
                 m_pName->GrabFocus();

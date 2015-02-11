@@ -708,9 +708,9 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 
         OUString const aMessage(aDiagnosticMessage + "\n");
 
-        MessageDialog aBootstrapFailedBox(NULL, aMessage);
-        aBootstrapFailedBox.SetText( aProductKey );
-        aBootstrapFailedBox.Execute();
+        VclPtr<MessageDialog> aBootstrapFailedBox(new MessageDialog(NULL, aMessage));
+        aBootstrapFailedBox->SetText( aProductKey );
+        aBootstrapFailedBox->Execute();
     }
 }
 
@@ -2354,8 +2354,8 @@ void Desktop::OpenClients()
             ResMgr* pDtResMgr = GetDesktopResManager();
             if( pDtResMgr )
             {
-                MessageDialog aBox(NULL, ResId(STR_ERR_PRINTDISABLED, *pDtResMgr));
-                aBox.Execute();
+                VclPtr<MessageDialog> aBox(new MessageDialog(NULL, ResId(STR_ERR_PRINTDISABLED, *pDtResMgr)));
+                aBox->Execute();
             }
         }
 

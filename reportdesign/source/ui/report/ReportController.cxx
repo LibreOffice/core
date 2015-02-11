@@ -1568,8 +1568,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XFormattedField> xFormattedField(getDesignView()->getCurrentControlModel(),uno::UNO_QUERY);
                 if ( xFormattedField.is() )
                 {
-                    ConditionalFormattingDialog aDlg( getView(), xFormattedField.get(), *this );
-                    aDlg.Execute();
+                    VclPtr<ConditionalFormattingDialog> aDlg(new ConditionalFormattingDialog( getView(), xFormattedField.get(), *this ));
+                    aDlg->Execute();
                 }
             }
             break;
@@ -1578,8 +1578,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    ODateTimeDialog aDlg(getView(),getDesignView()->getCurrentSection(),this);
-                    aDlg.Execute();
+                    VclPtr<ODateTimeDialog> aDlg(new ODateTimeDialog(getView(),getDesignView()->getCurrentSection(),this));
+                    aDlg->Execute();
                 }
                 else
                     createDateTime(aArgs);
@@ -1590,8 +1590,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 if ( !aArgs.getLength() )
                 {
-                    OPageNumberDialog aDlg(getView(),m_xReportDefinition,this);
-                    aDlg.Execute();
+                    VclPtr<OPageNumberDialog> aDlg(new OPageNumberDialog(getView(),m_xReportDefinition,this));
+                    aDlg->Execute();
                 }
                 else
                     createPageNumber(aArgs);
@@ -2481,15 +2481,15 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
         }
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(getView(), pDescriptor.get(),_xSection.is()
+            VclPtr<ORptPageDialog> aDlg(new ORptPageDialog(getView(), pDescriptor.get(),_xSection.is()
                 ? OUString("BackgroundDialog")
-                : OUString("PageDialog"));
-            if (RET_OK == aDlg.Execute())
+                : OUString("PageDialog")));
+            if (RET_OK == aDlg->Execute())
             {
 
                 // ItemSet->UNO
                 // UNO-properties
-                const SfxItemSet* pSet = aDlg.GetOutputItemSet();
+                const SfxItemSet* pSet = aDlg->GetOutputItemSet();
                 if ( _xSection.is() )
                 {
                     const SfxPoolItem* pItem;

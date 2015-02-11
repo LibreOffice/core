@@ -283,11 +283,11 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         // What the ... !?
         return 0;
 
-    ScRetypePassInputDlg aDlg(this, pProtected);
-    if (aDlg.Execute() == RET_OK)
+    VclPtr<ScRetypePassInputDlg> aDlg(new ScRetypePassInputDlg(this, pProtected));
+    if (aDlg->Execute() == RET_OK)
     {
         // OK is pressed.  Update the protected item.
-        if (aDlg.IsRemovePassword())
+        if (aDlg->IsRemovePassword())
         {
             // Remove password from this item.
             pProtected->setPassword(OUString());
@@ -295,7 +295,7 @@ IMPL_LINK( ScRetypePassDlg, RetypeBtnHdl, PushButton*, pBtn )
         else
         {
             // Set a new password.
-            OUString aNewPass = aDlg.GetNewPassword();
+            OUString aNewPass = aDlg->GetNewPassword();
             pProtected->setPassword(aNewPass);
         }
 

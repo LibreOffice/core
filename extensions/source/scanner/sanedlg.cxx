@@ -262,8 +262,8 @@ short SaneDlg::Execute()
 {
     if( ! Sane::IsSane() )
     {
-        MessageDialog aErrorBox(NULL, SaneResId(STR_COULD_NOT_BE_INIT));
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, SaneResId(STR_COULD_NOT_BE_INIT)));
+        aErrorBox->Execute();
         return sal_False;
     }
     LoadState();
@@ -545,8 +545,8 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
-            MessageDialog aInfoBox(this, aString, VCL_MESSAGE_INFO);
-            aInfoBox.Execute();
+            VclPtr<MessageDialog> aInfoBox(new MessageDialog(this, aString, VCL_MESSAGE_INFO));
+            aInfoBox->Execute();
         }
         else if( pButton == mpPreviewButton )
             AcquirePreview();
@@ -574,11 +574,11 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                         x[ i ] = (double)i;
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
-                    GridDialog aGrid( x.get(), y.get(), nElements, this );
-                    aGrid.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-                    aGrid.setBoundings( 0, mfMin, nElements, mfMax );
-                    if( aGrid.Execute() && aGrid.getNewYValues() )
-                        mrSane.SetOptionValue( mnCurrentOption, aGrid.getNewYValues() );
+                    VclPtr<GridDialog> aGrid(new GridDialog( x.get(), y.get(), nElements, this ) );
+                    aGrid->SetText( mrSane.GetOptionName( mnCurrentOption ) );
+                    aGrid->setBoundings( 0, mfMin, nElements, mfMax );
+                    if( aGrid->Execute() && aGrid->getNewYValues() )
+                        mrSane.SetOptionValue( mnCurrentOption, aGrid->getNewYValues() );
                 }
                 break;
                 case SANE_TYPE_BOOL:
@@ -826,8 +826,8 @@ void SaneDlg::AcquirePreview()
     if( nOption == -1 )
     {
         OUString aString(SaneResId(STR_SLOW_PREVIEW));
-        MessageDialog aBox(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
-        if (aBox.Execute() == RET_CANCEL)
+        VclPtr<MessageDialog> aBox(new MessageDialog(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL));
+        if (aBox->Execute() == RET_CANCEL)
             return;
     }
     else
@@ -836,8 +836,8 @@ void SaneDlg::AcquirePreview()
     BitmapTransporter aTransporter;
     if( ! mrSane.Start( aTransporter ) )
     {
-        MessageDialog aErrorBox(this, SaneResId(STR_ERROR_SCAN));
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(this, SaneResId(STR_ERROR_SCAN)));
+        aErrorBox->Execute();
     }
     else
     {

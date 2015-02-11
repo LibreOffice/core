@@ -1048,8 +1048,8 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 
         if ( aFactories.empty() )
         {
-            MessageDialog aBox( this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VCL_MESSAGE_INFO );
-            aBox.Execute();
+            VclPtr<MessageDialog> aBox(new MessageDialog(this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VCL_MESSAGE_INFO) );
+            aBox->Execute();
         }
     }
     return 0;
@@ -1194,15 +1194,15 @@ void BookmarksBox_Impl::DoAction( sal_uInt16 nAction )
             sal_Int32 nPos = GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
-                SfxAddHelpBookmarkDialog_Impl aDlg( this, true );
-                aDlg.SetTitle( GetEntry( nPos ) );
-                if ( aDlg.Execute() == RET_OK )
+                VclPtr<SfxAddHelpBookmarkDialog_Impl> aDlg(new SfxAddHelpBookmarkDialog_Impl(this, true));
+                aDlg->SetTitle( GetEntry( nPos ) );
+                if ( aDlg->Execute() == RET_OK )
                 {
                     OUString* pURL = static_cast<OUString*>(GetEntryData( nPos ));
                     RemoveEntry( nPos );
                     OUString aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
-                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
+                    nPos = InsertEntry( aDlg->GetTitle(), SvFileInformationManager::GetImage( INetURLObject(aImageURL), false ) );
                     SetEntryData( nPos, new OUString( *pURL ) );
                     SelectEntryPos( nPos );
                     delete pURL;
@@ -2288,8 +2288,8 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
                 else
                 {
                     DBG_ASSERT( pSrchDlg, "no search dialog" );
-                    MessageDialog aBox( pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VCL_MESSAGE_INFO );
-                    aBox.Execute();
+                    VclPtr<MessageDialog> aBox(new MessageDialog(pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VCL_MESSAGE_INFO) );
+                    aBox->Execute();
                     pSrchDlg->SetFocusOnEdit();
                 }
             }
@@ -3167,11 +3167,11 @@ void SfxHelpWindow_Impl::DoAction( sal_uInt16 nActionId )
                         if ( aAny >>= aValue )
                         {
                             OUString aTitle( aValue );
-                            SfxAddHelpBookmarkDialog_Impl aDlg( this, false );
-                            aDlg.SetTitle( aTitle );
-                            if ( aDlg.Execute() == RET_OK )
+                            VclPtr<SfxAddHelpBookmarkDialog_Impl> aDlg(new SfxAddHelpBookmarkDialog_Impl(this, false));
+                            aDlg->SetTitle( aTitle );
+                            if ( aDlg->Execute() == RET_OK )
                             {
-                                aTitle = aDlg.GetTitle();
+                                aTitle = aDlg->GetTitle();
                                 pIndexWin->AddBookmarks( aTitle, aURL );
                             }
                         }

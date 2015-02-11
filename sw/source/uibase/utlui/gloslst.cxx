@@ -143,16 +143,16 @@ bool SwGlossaryList::GetShortName(const OUString& rLongName,
     }
     else if(1 < nCount)
     {
-        SwGlossDecideDlg aDlg(0);
-        OUString sTitle = aDlg.GetText() + " " + aTripleStrings.front().sBlock;
-        aDlg.SetText(sTitle);
+        VclPtr<SwGlossDecideDlg> aDlg(new SwGlossDecideDlg(0));
+        OUString sTitle = aDlg->GetText() + " " + aTripleStrings.front().sBlock;
+        aDlg->SetText(sTitle);
 
-        ListBox& rLB = aDlg.GetListBox();
+        ListBox& rLB = aDlg->GetListBox();
         for(std::vector<TripleString>::const_iterator i = aTripleStrings.begin(); i != aTripleStrings.end(); ++i)
             rLB.InsertEntry(i->sGroup.getToken(0, GLOS_DELIM));
 
         rLB.SelectEntryPos(0);
-        if(RET_OK == aDlg.Execute() &&
+        if(RET_OK == aDlg->Execute() &&
             LISTBOX_ENTRY_NOTFOUND != rLB.GetSelectEntryPos())
         {
             const TripleString& pTriple(aTripleStrings[rLB.GetSelectEntryPos()]);

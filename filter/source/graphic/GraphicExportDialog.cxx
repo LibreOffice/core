@@ -107,10 +107,10 @@ void GraphicExportDialog::setTitle( const OUString& aTitle )
 sal_Int16 GraphicExportDialog::execute() throw ( RuntimeException, std::exception )
 {
     sal_Int16 nReturn = ui::dialogs::ExecutableDialogResults::CANCEL;
-    GraphicExportOptionsDialog graphicExportOptionsDialog( Application::GetDefDialogParent(), mxSourceDocument );
-    if (graphicExportOptionsDialog.Execute() == RET_OK )
+    VclPtr<GraphicExportOptionsDialog> graphicExportOptionsDialog(new GraphicExportOptionsDialog( Application::GetDefDialogParent(), mxSourceDocument ) );
+    if (graphicExportOptionsDialog->Execute() == RET_OK )
     {
-        maFilterDataSequence = graphicExportOptionsDialog.getFilterData();
+        maFilterDataSequence = graphicExportOptionsDialog->getFilterData();
         nReturn = ui::dialogs::ExecutableDialogResults::OK;
     }
     return nReturn;

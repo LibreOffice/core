@@ -388,8 +388,8 @@ namespace
             sal_uInt16 aRotation = aMetadata.getRotation();
             if (aRotation != 0)
             {
-                MessageDialog aQueryBox( 0,"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui");
-                if (aQueryBox.Execute() == RET_YES)
+                VclPtr<MessageDialog> aQueryBox(new MessageDialog( 0,"QueryRotateIntoStandardOrientationDialog","modules/swriter/ui/queryrotateintostandarddialog.ui") );
+                if (aQueryBox->Execute() == RET_YES)
                 {
                     GraphicNativeTransform aTransform( aGraphic );
                     aTransform.rotate( aRotation );

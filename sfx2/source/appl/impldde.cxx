@@ -255,10 +255,10 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
 
 void SvDDEObject::Edit( vcl::Window* pParent, sfx2::SvBaseLink* pBaseLink, const Link& rEndEditHdl )
 {
-    SvDDELinkEditDialog aDlg( pParent, pBaseLink );
-    if ( RET_OK == aDlg.Execute() && rEndEditHdl.IsSet() )
+    VclPtr<SvDDELinkEditDialog> aDlg(new SvDDELinkEditDialog(pParent, pBaseLink) );
+    if ( RET_OK == aDlg->Execute() && rEndEditHdl.IsSet() )
     {
-        OUString sCommand = aDlg.GetCmd();
+        OUString sCommand = aDlg->GetCmd();
         rEndEditHdl.Call( &sCommand );
     }
 }

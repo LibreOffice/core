@@ -898,8 +898,8 @@ sal_uInt16 GrindApp::Exception( sal_uInt16 nError )
 
 int GrindApp::Main()
 {
-    TestWindow aWindow;
-    aWindow.Execute();
+    VclPtr<TestWindow> aWindow(new TestWindow);
+    aWindow->Execute();
     return 0;
 }
 

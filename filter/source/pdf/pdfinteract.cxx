@@ -53,8 +53,8 @@ sal_Bool SAL_CALL PDFInteractionHandler::handleInteractionRequest( const Referen
         sal_Int32 nCodes = aExc.ErrorCodes.getLength();
         for( sal_Int32 i = 0; i < nCodes; i++ )
             aCodes.insert( (vcl::PDFWriter::ErrorCode)aExc.ErrorCodes.getConstArray()[i] );
-        ImplErrorDialog aDlg( aCodes );
-        aDlg.Execute();
+        VclPtr<ImplErrorDialog> aDlg(new ImplErrorDialog( aCodes ) );
+        aDlg->Execute();
         bHandled = true;
     }
     return bHandled;

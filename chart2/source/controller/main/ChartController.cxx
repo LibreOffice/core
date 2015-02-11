@@ -1271,8 +1271,8 @@ void ChartController::executeDispatch_ChartType()
 
     SolarMutexGuard aSolarGuard;
     //prepare and open dialog
-    ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
-    if( aDlg.Execute() == RET_OK )
+    VclPtr<ChartTypeDialog> aDlg(new ChartTypeDialog( m_pChartWindow, getModel(), m_xCC ));
+    if( aDlg->Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
         aUndoGuard.commit();
@@ -1292,8 +1292,8 @@ void ChartController::executeDispatch_SourceData()
     if( xChartDoc.is())
     {
         SolarMutexGuard aSolarGuard;
-        ::chart::DataSourceDialog aDlg( m_pChartWindow, xChartDoc, m_xCC );
-        if( aDlg.Execute() == RET_OK )
+        VclPtr<::chart::DataSourceDialog> aDlg(new ::chart::DataSourceDialog( m_pChartWindow, xChartDoc, m_xCC ));
+        if( aDlg->Execute() == RET_OK )
         {
             impl_adaptDataSeriesAutoResize();
             aUndoGuard.commit();

@@ -49,8 +49,8 @@ MasterPasswordDialog::MasterPasswordDialog
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         OUString aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
-        MessageDialog aErrorBox(pParent, aErrorMsg);
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(pParent, aErrorMsg));
+        aErrorBox->Execute();
     }
 
     m_pOKBtn->SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );

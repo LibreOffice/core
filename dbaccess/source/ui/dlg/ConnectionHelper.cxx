@@ -312,16 +312,16 @@ namespace dbaui
                     aProfiles.insert(pArray[index]);
 
                 // execute the select dialog
-                ODatasourceSelectDialog aSelector(GetParent(), aProfiles);
+                VclPtr<ODatasourceSelectDialog> aSelector(new ODatasourceSelectDialog(GetParent(), aProfiles));
                 OUString sOldProfile=getURLNoPrefix();
 
                 if (!sOldProfile.isEmpty())
-                    aSelector.Select(sOldProfile);
+                    aSelector->Select(sOldProfile);
                 else
-                    aSelector.Select(xMozillaBootstrap->getDefaultProfile(profileType));
+                    aSelector->Select(xMozillaBootstrap->getDefaultProfile(profileType));
 
-                if ( RET_OK == aSelector.Execute() )
-                    setURLNoPrefix(aSelector.GetSelected());
+                if ( RET_OK == aSelector->Execute() )
+                    setURLNoPrefix(aSelector->GetSelected());
                 break;
             }
             case ::dbaccess::DST_FIREBIRD:
@@ -482,8 +482,8 @@ namespace dbaui
             sQuery = sQuery.replaceFirst("$path$", aTransformer.get(OFileNotation::N_SYSTEM));
 
             m_bUserGrabFocus = false;
-            QueryBox aQuery(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery);
-            sal_Int32 nQueryResult = aQuery.Execute();
+            VclPtr<QueryBox> aQuery(new QueryBox(GetParent(), WB_YES_NO | WB_DEF_YES, sQuery));
+            sal_Int32 nQueryResult = aQuery->Execute();
             m_bUserGrabFocus = true;
 
             switch (nQueryResult)
@@ -499,8 +499,8 @@ namespace dbaui
                             sQuery = sQuery.replaceFirst("$name$", aTransformer.get(OFileNotation::N_SYSTEM));
 
                             m_bUserGrabFocus = false;
-                            QueryBox aWhatToDo(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery);
-                            nQueryResult = aWhatToDo.Execute();
+                            VclPtr<QueryBox> aWhatToDo(new QueryBox(GetParent(), WB_RETRY_CANCEL | WB_DEF_RETRY, sQuery));
+                            nQueryResult = aWhatToDo->Execute();
                             m_bUserGrabFocus = true;
 
                             if (RET_RETRY == nQueryResult)

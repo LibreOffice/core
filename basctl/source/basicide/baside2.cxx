@@ -619,8 +619,8 @@ void ModulWindow::BasicToggleBreakPointEnabled()
 void ModulWindow::ManageBreakPoints()
 {
     BreakPointWindow& rBrkWin = GetBreakPointWindow();
-    BreakPointDialog aBrkDlg( &rBrkWin, GetBreakPoints() );
-    aBrkDlg.Execute();
+    VclPtr<BreakPointDialog> aBrkDlg(new BreakPointDialog( &rBrkWin, GetBreakPoints() ));
+    aBrkDlg->Execute();
     rBrkWin.Invalidate();
 }
 
@@ -1043,9 +1043,9 @@ void ModulWindow::ExecuteCommand (SfxRequest& rReq)
             break;
         case SID_GOTOLINE:
         {
-            GotoLineDialog aGotoDlg(this);
-            if (aGotoDlg.Execute())
-                if (sal_Int32 const nLine = aGotoDlg.GetLineNumber())
+            VclPtr<GotoLineDialog> aGotoDlg(new GotoLineDialog(this));
+            if (aGotoDlg->Execute())
+                if (sal_Int32 const nLine = aGotoDlg->GetLineNumber())
                 {
                     TextSelection const aSel(TextPaM(nLine - 1, 0), TextPaM(nLine - 1, 0));
                     GetEditView()->SetSelection(aSel);

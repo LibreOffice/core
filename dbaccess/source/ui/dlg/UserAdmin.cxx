@@ -92,8 +92,8 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
-        MessageDialog aErrorBox(this, aErrorMsg);
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(this, aErrorMsg));
+        aErrorBox->Execute();
         m_pEDPassword->SetText( OUString() );
         m_pEDPasswordRepeat->SetText( OUString() );
         m_pEDPassword->GrabFocus();
@@ -199,16 +199,16 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
     {
         if(pButton == m_pNEWUSER)
         {
-            SfxPasswordDialog aPwdDlg(this);
-            aPwdDlg.ShowExtras(SHOWEXTRAS_ALL);
-            if(aPwdDlg.Execute())
+            VclPtr<SfxPasswordDialog> aPwdDlg(new SfxPasswordDialog(this));
+            aPwdDlg->ShowExtras(SHOWEXTRAS_ALL);
+            if(aPwdDlg->Execute())
             {
                 Reference<XDataDescriptorFactory> xUserFactory(m_xUsers,UNO_QUERY);
                 Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
                 if(xNewUser.is())
                 {
-                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(OUString(aPwdDlg.GetUser())));
-                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(OUString(aPwdDlg.GetPassword())));
+                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(OUString(aPwdDlg->GetUser())));
+                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(OUString(aPwdDlg->GetPassword())));
                     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
                     if(xAppend.is())
                         xAppend->appendByDescriptor(xNewUser);
@@ -226,11 +226,11 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 if(xUser.is())
                 {
                     OUString sNewPassword,sOldPassword;
-                    OPasswordDialog aDlg(this,sName);
-                    if(aDlg.Execute() == RET_OK)
+                    VclPtr<OPasswordDialog> aDlg(new OPasswordDialog(this,sName));
+                    if(aDlg->Execute() == RET_OK)
                     {
-                        sNewPassword = aDlg.GetNewPassword();
-                        sOldPassword = aDlg.GetOldPassword();
+                        sNewPassword = aDlg->GetNewPassword();
+                        sOldPassword = aDlg->GetOldPassword();
 
                         if(!sNewPassword.isEmpty())
                             xUser->changePassword(sOldPassword,sNewPassword);
@@ -245,8 +245,8 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    MessageDialog aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                    if(aQry.Execute() == RET_YES)
+                    VclPtr<MessageDialog> aQry(new MessageDialog(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                    if(aQry->Execute() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }
             }

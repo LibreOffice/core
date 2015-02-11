@@ -241,8 +241,8 @@ bool ORowSetImportExport::insertNewRow()
         if(!m_bAlreadyAsked)
         {
             OUString sAskIfContinue = ModuleRes(STR_ERROR_OCCURRED_WHILE_COPYING);
-            OSQLWarningBox aDlg( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES );
-            if(aDlg.Execute() == RET_YES)
+            VclPtr<OSQLWarningBox> aDlg(new OSQLWarningBox( m_pParent, sAskIfContinue, WB_YES_NO | WB_DEF_YES ) );
+            if(aDlg->Execute() == RET_YES)
                 m_bAlreadyAsked = true;
             else
                 return false;

@@ -464,8 +464,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     {
                         OUString sMessage( SfxResId(STR_QRYTEMPL_MESSAGE).toString() );
                         sMessage = sMessage.replaceAll( "$(ARG1)", aTemplName );
-                        sfx2::QueryTemplateBox aBox( GetDialogParent(), sMessage );
-                        if ( RET_YES == aBox.Execute() )
+                        VclPtr<sfx2::QueryTemplateBox> aBox(new sfx2::QueryTemplateBox(GetDialogParent(), sMessage) );
+                        if ( RET_YES == aBox->Execute() )
                             bLoad = true;
                     }
 

@@ -41,8 +41,8 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
-        MessageDialog aErrorBox(this, aErrorMsg);
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(this, aErrorMsg));
+        aErrorBox->Execute();
         m_pEDMasterPasswordCrt->SetText( OUString() );
         m_pEDMasterPasswordRepeat->SetText( OUString() );
         m_pEDMasterPasswordCrt->GrabFocus();

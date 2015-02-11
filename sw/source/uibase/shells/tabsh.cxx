@@ -735,9 +735,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         break;
                     case TBLMERGE_TOOCOMPLEX:
                     {
-                        MessageDialog aInfoBox( GetView().GetWindow(),
-                                    SW_RES( STR_ERR_TABLE_MERGE ), VCL_MESSAGE_INFO );
-                        aInfoBox.Execute();
+                        VclPtr<MessageDialog> aInfoBox(new MessageDialog( GetView().GetWindow(),
+                                    SW_RES( STR_ERR_TABLE_MERGE ), VCL_MESSAGE_INFO ) );
+                        aInfoBox->Execute();
                         break;
                     }
                     default:

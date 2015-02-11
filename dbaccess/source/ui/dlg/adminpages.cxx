@@ -117,19 +117,19 @@ namespace dbaui
             // show an error message
             OUString sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
-            MessageDialog aDialog(this, sError);
-            aDialog.Execute();
+            VclPtr<MessageDialog> aDialog(new MessageDialog(this, sError));
+            aDialog->Execute();
             return false;
         }
         else
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // execute the select dialog
-            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources);
+            VclPtr<ODatasourceSelectDialog> aSelector(new ODatasourceSelectDialog(GetParent(), aOdbcDatasources));
             if (!_sCurr.isEmpty())
-                aSelector.Select(_sCurr);
-            if ( RET_OK == aSelector.Execute() )
-                _sReturn = aSelector.GetSelected();
+                aSelector->Select(_sCurr);
+            if ( RET_OK == aSelector->Execute() )
+                _sReturn = aSelector->GetSelected();
         }
         return true;
     }
@@ -242,8 +242,8 @@ namespace dbaui
                     eImage = OSQLMessageBox::Error;
                     aMessage = ModuleRes(STR_CONNECTION_NO_SUCCESS);
                 }
-                OSQLMessageBox aMsg( this, sTitle, aMessage, WB_OK, eImage );
-                aMsg.Execute();
+                VclPtr<OSQLMessageBox> aMsg(new OSQLMessageBox( this, sTitle, aMessage, WB_OK, eImage ) );
+                aMsg->Execute();
             }
             if ( !bSuccess )
                 m_pAdminDialog->clearPassword();

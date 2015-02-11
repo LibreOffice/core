@@ -118,11 +118,11 @@ namespace
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
-        DlgQryJoin aDlg(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
-        bool bOk = aDlg.Execute() == RET_OK;
+        VclPtr<DlgQryJoin> aDlg(new DlgQryJoin(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables));
+        bool bOk = aDlg->Execute() == RET_OK;
         if( bOk )
         {
-            pData->SetJoinType(aDlg.GetJoinType());
+            pData->SetJoinType(aDlg->GetJoinType());
             _pView->getDesignView()->getController().setModified(sal_True);
         }
 
@@ -208,10 +208,10 @@ namespace
             pNewConnData->AppendConnLine(*pIter,sRelatedColumn);
 
             // now add the Conn itself
-            OQueryTableConnection aNewConn(_pView, aNewConnData);
+            VclPtr<OQueryTableConnection> aNewConn(new OQueryTableConnection(_pView, aNewConnData));
             // referring to the local variable is not important, as NotifyQueryTabConn creates a new copy
             // to add me (if not existent)
-            _pView->NotifyTabConnection(aNewConn, false);
+            _pView->NotifyTabConnection(*aNewConn.get(), false);
                 // don't create an Undo-Action for the new connection : the connection is
                 // covered by the Undo-Action for the tabwin, as the "Undo the insert" will
                 // automatically remove all connections adjacent to the win.
@@ -621,8 +621,8 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 
         pNewConnectionData->AppendConnLine( aSourceFieldName,aDestFieldName );
 
-        OQueryTableConnection aNewConnection(this, aNewConnectionData);
-        NotifyTabConnection(aNewConnection);
+        VclPtr<OQueryTableConnection> aNewConnection(new OQueryTableConnection(this, aNewConnectionData));
+        NotifyTabConnection(*aNewConnection.get());
         // As usual with NotifyTabConnection, using a local variable is fine because a copy is made
     }
     else

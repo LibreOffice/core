@@ -204,8 +204,8 @@ IMPL_LINK(SwMailConfigPage, ReplyToHdl, CheckBox*, pBox)
 
 IMPL_LINK_NOARG(SwMailConfigPage, AuthenticationHdl)
 {
-    SwAuthenticationSettingsDialog aDlg(this, *m_pConfigItem);
-    aDlg.Execute();
+    VclPtr<SwAuthenticationSettingsDialog> aDlg(new SwAuthenticationSettingsDialog(this, *m_pConfigItem));
+    aDlg->Execute();
     return 0;
 }
 

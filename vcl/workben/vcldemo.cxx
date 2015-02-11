@@ -1609,18 +1609,18 @@ public:
                 }
             }
 
-            DemoWin aMainWin(aRenderer, bThreads);
+            VclPtr<DemoWin> aMainWin(new DemoWin(aRenderer, bThreads));
             std::unique_ptr<DemoWidgets> xWidgets;
             std::unique_ptr<DemoPopup> xPopup;
 
-            aMainWin.SetText("Interactive VCL demo #1");
+            aMainWin->SetText("Interactive VCL demo #1");
 
             if (bWidgets)
                 xWidgets.reset(new DemoWidgets());
             else if (bPopup)
                 xPopup.reset(new DemoPopup());
             else
-                aMainWin.Show();
+                aMainWin->Show();
 
             Application::Execute();
         }

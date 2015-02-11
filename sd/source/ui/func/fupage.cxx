@@ -351,13 +351,13 @@ const SfxItemSet* FuPage::ExecuteDialog( ::vcl::Window* pParent )
                 // notice-masterpage (at the moment)
                 if( ePageKind != PK_NOTES )
                 {
-                    MessBox aQuestionBox (
+                    VclPtr<MessBox> aQuestionBox (new MessBox(
                         pParent,
                         WB_YES_NO | WB_DEF_YES,
                         SD_RESSTR(STR_PAGE_BACKGROUND_TITLE),
-                        SD_RESSTR(STR_PAGE_BACKGROUND_TXT) );
-                    aQuestionBox.SetImage( QueryBox::GetStandardImage() );
-                    bSetToAllPages = ( RET_YES == aQuestionBox.Execute() );
+                        SD_RESSTR(STR_PAGE_BACKGROUND_TXT) ) );
+                    aQuestionBox->SetImage( QueryBox::GetStandardImage() );
+                    bSetToAllPages = ( RET_YES == aQuestionBox->Execute() );
                 }
 
                 if( mbPageBckgrdDeleted )

@@ -126,9 +126,9 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        MessageDialog aErrorBox(NULL, msg);
-        aErrorBox.SetText( GetText() );
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(NULL, msg));
+        aErrorBox->SetText( GetText() );
+        aErrorBox->Execute();
     }
 
     return 1;

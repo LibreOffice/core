@@ -545,12 +545,12 @@ void ColorConfigWindow_Impl::CreateEntries()
     long nCheckBoxLabelOffset = 0;
     {
         OUString sSampleText("X");
-        CheckBox aCheckBox(this);
-        FixedText aFixedText(this);
-        aCheckBox.SetText(sSampleText);
-        aFixedText.SetText(sSampleText);
-        Size aCheckSize(aCheckBox.CalcMinimumSize(0x7fffffff));
-        Size aFixedSize(aFixedText.CalcMinimumSize(0x7fffffff));
+        VclPtr<CheckBox> aCheckBox(new CheckBox(this));
+        VclPtr<FixedText> aFixedText(new FixedText(this));
+        aCheckBox->SetText(sSampleText);
+        aFixedText->SetText(sSampleText);
+        Size aCheckSize(aCheckBox->CalcMinimumSize(0x7fffffff));
+        Size aFixedSize(aFixedText->CalcMinimumSize(0x7fffffff));
         nCheckBoxLabelOffset = aCheckSize.Width() - aFixedSize.Width();
     }
 
@@ -620,13 +620,13 @@ void ColorConfigWindow_Impl::SetAppearance ()
     OSL_ENSURE( vEntries.size() >= sizeof vEntryInfo / sizeof vEntryInfo[0], "wrong number of helpIDs for color listboxes" );
 
     // creating a sample color listbox with the color entries
-    ColorListBox aSampleColorList(this);
+    VclPtr<ColorListBox> aSampleColorList(new ColorListBox(this));
     {
         XColorListRef const xColorTable = XColorList::CreateStdColorList();
         for (sal_Int32 i = 0; i != xColorTable->Count(); ++i)
         {
             XColorEntry& rEntry = *xColorTable->GetColor(i);
-            aSampleColorList.InsertEntry(rEntry.GetColor(), rEntry.GetName());
+            aSampleColorList->InsertEntry(rEntry.GetColor(), rEntry.GetName());
         }
     }
 
@@ -634,7 +634,7 @@ void ColorConfigWindow_Impl::SetAppearance ()
     for (size_t i = 0; i != vEntries.size(); ++i)
     {
         // appearance
-        vEntries[i]->SetAppearance(aTransparentWall, aSampleColorList);
+        vEntries[i]->SetAppearance(aTransparentWall, *aSampleColorList.get());
     }
 }
 
@@ -1187,9 +1187,9 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     else
     {
         DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
-        MessageDialog aQuery(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        aQuery.SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
-        if(RET_YES == aQuery.Execute())
+        VclPtr<MessageDialog> aQuery(new MessageDialog(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        aQuery->SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
+        if(RET_YES == aQuery->Execute())
         {
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());
             m_pColorSchemeLB->RemoveEntry(m_pColorSchemeLB->GetSelectEntryPos());

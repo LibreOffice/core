@@ -352,10 +352,10 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            MessageDialog aBox(this, OUString(
+            VclPtr<MessageDialog> aBox(new MessageDialog(this, OUString(
                 "Some of the changed settings will only be active after "
-                "restarting the process"), VCL_MESSAGE_INFO);
-            aBox.Execute();
+                "restarting the process"), VCL_MESSAGE_INFO));
+            aBox->Execute();
         }
         EndDialog( RET_OK );
     }
@@ -367,7 +367,7 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & HelpEventMode::CONTEXT )
     {
-        DbgInfoDialog aInfoDialog( this, true );
+        VclPtr<DbgInfoDialog> aInfoDialog(new DbgInfoDialog( this, true ) );
         OUString aHelpText;
         const sal_Char** pHelpStrs = pDbgHelpText;
         while ( *pHelpStrs )
@@ -375,9 +375,9 @@ void DbgDialog::RequestHelp( const HelpEvent& rHEvt )
             aHelpText += OUString::createFromAscii(*pHelpStrs);
             pHelpStrs++;
         }
-        aInfoDialog.SetText( "Debug Hilfe" );
-        aInfoDialog.SetInfoText( aHelpText );
-        aInfoDialog.Execute();
+        aInfoDialog->SetText( "Debug Hilfe" );
+        aInfoDialog->SetInfoText( aHelpText );
+        aInfoDialog->Execute();
     }
 }
 

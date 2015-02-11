@@ -732,23 +732,23 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                     aCropDlgAttr.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(),
                                                     aRBSize.Width(), aRBSize.Height() ) );
 
-                    SfxSingleTabDialog  aCropDialog(
+                    VclPtr<SfxSingleTabDialog>  aCropDialog(new SfxSingleTabDialog(
                         SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
-                        aCropDlgAttr);
+                        aCropDlgAttr));
                     const OUString aCropStr(SVX_RESSTR(RID_SVXSTR_GRAFCROP));
 
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     assert(pFact && "Dialog creation failed!");
                     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
                     assert(fnCreatePage && "Dialog creation failed!");
-                    SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog.get_content_area(), &aCropDlgAttr );
+                    SfxTabPage* pTabPage = (*fnCreatePage)( aCropDialog->get_content_area(), &aCropDlgAttr );
 
                     pTabPage->SetText( aCropStr );
-                    aCropDialog.SetTabPage( pTabPage );
+                    aCropDialog->SetTabPage( pTabPage );
 
-                    if( aCropDialog.Execute() == RET_OK )
+                    if( aCropDialog->Execute() == RET_OK )
                     {
-                        const SfxItemSet* pOutAttr = aCropDialog.GetOutputItemSet();
+                        const SfxItemSet* pOutAttr = aCropDialog->GetOutputItemSet();
 
                         if( pOutAttr )
                         {

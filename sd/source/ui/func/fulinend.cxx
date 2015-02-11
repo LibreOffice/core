@@ -138,9 +138,9 @@ void FuLineEnd::DoExecute( SfxRequest& )
                 }
                 else
                 {
-                    WarningBox aWarningBox( mpWindow, WinBits( WB_OK ),
-                            SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
-                    aWarningBox.Execute();
+                    VclPtr<WarningBox> aWarningBox(new WarningBox( mpWindow, WinBits( WB_OK ),
+                            SD_RESSTR( STR_WARN_NAME_DUPLICATE ) ) );
+                    aWarningBox->Execute();
                 }
             }
         }

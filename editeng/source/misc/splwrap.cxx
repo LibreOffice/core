@@ -411,8 +411,8 @@ bool SvxSpellWrapper::SpellNext( )
         WAIT_OFF();
 
         sal_uInt16 nResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
-        MessageDialog aBox(pWin, EditResId(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-        if ( aBox.Execute() != RET_YES )
+        VclPtr<MessageDialog> aBox(new MessageDialog(pWin, EditResId(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+        if ( aBox->Execute() != RET_YES )
         {
             // sacrifice the other area if necessary ask for special area
             WAIT_ON();

@@ -531,8 +531,8 @@ void ScDocShell::CheckConfigOptions()
         if (pViewShell)
         {
             vcl::Window* pParent = pViewShell->GetFrameWin();
-            InfoBox aBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS));
-            aBox.Execute();
+            VclPtr<InfoBox> aBox(new InfoBox(pParent, ScGlobal::GetRscString(STR_OPTIONS_WARN_SEPARATORS)));
+            aBox->Execute();
         }
 
         // For now, this is the only option setting that could launch info

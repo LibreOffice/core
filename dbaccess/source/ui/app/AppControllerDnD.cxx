@@ -175,8 +175,8 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
         else
         {
             OUString sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
-            MessageDialog aError(getView(), sMessage);
-            aError.Execute();
+            VclPtr<MessageDialog> aError(new MessageDialog(getView(), sMessage));
+            aError->Execute();
         }
     }
 }
@@ -210,19 +210,19 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
-                svtools::QueryDeleteDlg_Impl aDlg( getView(), *aThisRound );
+                VclPtr<svtools::QueryDeleteDlg_Impl> aDlg( new svtools::QueryDeleteDlg_Impl(getView(), *aThisRound) );
 
                 if ( !sDialogPosition.isEmpty() )
-                    aDlg.SetWindowState( sDialogPosition );
+                    aDlg->SetWindowState( sDialogPosition );
 
                 if ( nObjectsLeft > 1 )
-                    aDlg.EnableAllButton();
+                    aDlg->EnableAllButton();
 
-                eResult = aDlg.Execute();
+                eResult = aDlg->Execute();
                 if (eResult == svtools::QUERYDELETE_CANCEL)
                     return;
 
-                sDialogPosition = aDlg.GetWindowState( );
+                sDialogPosition = aDlg->GetWindowState( );
             }
 
             bool bSuccess = false;
@@ -686,17 +686,17 @@ bool OApplicationController::paste( ElementType _eType, const ::svx::ODataAccess
                                                 has a /table/ with that name) */
                 if ( bNeedAskForName )
                 {
-                    OSaveAsDlg aAskForName( getView(),
+                    VclPtr<OSaveAsDlg> aAskForName(new OSaveAsDlg( getView(),
                                             CommandType::QUERY,
                                             getORB(),
                                             getConnection(),
                                             sTargetName,
                                             aNameChecker,
-                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
-                    if ( RET_OK != aAskForName.Execute() )
+                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS));
+                    if ( RET_OK != aAskForName->Execute() )
                         // cancelled by the user
                         return false;
-                    sTargetName = aAskForName.getName();
+                    sTargetName = aAskForName->getName();
                 }
 
                 // create a new object

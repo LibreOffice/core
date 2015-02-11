@@ -495,9 +495,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
                         // ::com::sun::star::sdbcx::User offering to open it as a template
-                        MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
-                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                        if ( RET_YES == aBox.Execute() )
+                        VclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                        if ( RET_YES == aBox->Execute() )
                         {
                             SfxApplication* pApp = SfxGetpApp();
                             SfxAllItemSet aSet( pApp->GetPool() );
@@ -579,9 +579,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
-                MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
-                                   VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                bDo = ( RET_YES == aBox.Execute() );
+                VclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
+                                   VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                bDo = ( RET_YES == aBox->Execute() );
             }
 
             if ( bDo )
@@ -756,9 +756,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( bForEdit && SID_EDITDOC == rReq.GetSlot() )
                     {
                         // ask user for opening as template
-                        MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
-                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-                        if ( RET_YES == aBox.Execute() )
+                        VclPtr<MessageDialog> aBox(new MessageDialog(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+                        if ( RET_YES == aBox->Execute() )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );
                             aSet.Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );

@@ -904,9 +904,9 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                         bValid = false;
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
-                        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), aError);
-                        aErrorBox.SetText( m_createErrTitleStr );
-                        aErrorBox.Execute();
+                        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+                        aErrorBox->SetText( m_createErrTitleStr );
+                        aErrorBox->Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
                     }
@@ -986,9 +986,9 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
-        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox.SetText( m_createErrTitleStr );
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+        aErrorBox->SetText( m_createErrTitleStr );
+        aErrorBox->Execute();
     }
 }
 
@@ -1062,9 +1062,9 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
-        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), aError);
-        aErrorBox.SetText( m_renameErrTitleStr );
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), aError));
+        aErrorBox->SetText( m_renameErrTitleStr );
+        aErrorBox->Execute();
     }
 }
 void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
@@ -1073,9 +1073,9 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
-    MessageDialog aQueryBox(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
-    aQueryBox.SetText( m_delQueryTitleStr );
-    if ( aQueryBox.Execute() == RET_NO )
+    VclPtr<MessageDialog> aQueryBox(new MessageDialog(static_cast<vcl::Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
+    aQueryBox->SetText( m_delQueryTitleStr );
+    if ( aQueryBox->Execute() == RET_NO )
     {
         return;
     }
@@ -1108,9 +1108,9 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        MessageDialog aErrorBox(static_cast<vcl::Window*>(this), m_delErrStr);
-        aErrorBox.SetText( m_delErrTitleStr );
-        aErrorBox.Execute();
+        VclPtr<MessageDialog> aErrorBox(new MessageDialog(static_cast<vcl::Window*>(this), m_delErrStr));
+        aErrorBox->SetText( m_delErrTitleStr );
+        aErrorBox->Execute();
     }
 
 }

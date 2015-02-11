@@ -210,9 +210,9 @@ bool ScImportExport::StartPaste()
         ScEditableTester aTester( pDoc, aRange );
         if ( !aTester.IsEditable() )
         {
-            InfoBox aInfoBox(Application::GetDefDialogParent(),
-                                ScGlobal::GetRscString( aTester.GetMessageId() ) );
-            aInfoBox.Execute();
+            VclPtr<InfoBox> aInfoBox(new InfoBox(Application::GetDefDialogParent(),
+                                ScGlobal::GetRscString( aTester.GetMessageId() ) ) );
+            aInfoBox->Execute();
             return false;
         }
     }
@@ -1452,8 +1452,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             if ( !mbApi && nStartCol != nEndCol &&
                  !pDoc->IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
             {
-                ScReplaceWarnBox aBox( pDocSh->GetActiveDialogParent() );
-                if ( aBox.Execute() != RET_YES )
+                VclPtr<ScReplaceWarnBox> aBox(new ScReplaceWarnBox( pDocSh->GetActiveDialogParent() ));
+                if ( aBox->Execute() != RET_YES )
                 {
                     return false;
                 }

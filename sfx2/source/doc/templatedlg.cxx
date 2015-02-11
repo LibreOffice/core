@@ -614,9 +614,9 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
     }
     else if (nMenuId == MNI_REPOSITORY_NEW)
     {
-        PlaceEditDialog dlg(this);
+        VclPtr<PlaceEditDialog> dlg(new PlaceEditDialog(this));
 
-        if (dlg.Execute())
+        if (dlg->Execute())
         {
             std::shared_ptr<Place> xPlace = dlg.GetPlace();
 
@@ -628,8 +628,8 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
             else
             {
                 OUString aMsg(SfxResId(STR_MSG_ERROR_REPOSITORY_NAME).toString());
-                aMsg = aMsg.replaceFirst("$1", xPlace->GetName());
-                MessageDialog(this, aMsg).Execute();
+                aMsg = aMsg.replaceFirst("$1",xPlace->GetName());
+                VclPtr<MessageDialog>(new MessageDialog(this, aMsg))->Execute();
             }
         }
     }
@@ -1158,16 +1158,16 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 {
     const TemplateViewItem *pItem = static_cast<const TemplateViewItem*>(*maSelTemplates.begin());
 
-    SfxTemplateInfoDlg aDlg;
-    aDlg.loadDocument(pItem->getPath());
-    aDlg.Execute();
+    VclPtr<SfxTemplateInfoDlg> aDlg(new SfxTemplateInfoDlg);
+    aDlg->loadDocument(pItem->getPath());
+    aDlg->Execute();
 }
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
-    MessageDialog aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    VclPtr<MessageDialog> aQueryDlg(new MessageDialog(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
-    if ( aQueryDlg.Execute() != RET_YES )
+    if ( aQueryDlg->Execute() != RET_YES )
         return;
 
     OUString aTemplateList;
@@ -1236,13 +1236,13 @@ void SfxTemplateManagerDlg::OnTemplateAsDefault ()
 
 void SfxTemplateManagerDlg::OnFolderNew()
 {
-    InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+    VclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
 
-    int ret = dlg.Execute();
+    int ret = dlg->Execute();
 
     if (ret)
     {
-        OUString aName = dlg.getEntryText();
+        OUString aName = dlg->getEntryText();
 
         mpCurView->createRegion(aName);
     }
@@ -1250,9 +1250,9 @@ void SfxTemplateManagerDlg::OnFolderNew()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
-    MessageDialog aQueryDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+    VclPtr<MessageDialog> aQueryDlg(new MessageDialog(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
-    if ( aQueryDlg.Execute() != RET_YES )
+    if ( aQueryDlg->Execute() != RET_YES )
         return;
 
     OUString aFolderList;
@@ -1303,17 +1303,17 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
         return;
     }
 
-    InputDialog aDlg(SfxResId(STR_INPUT_TEMPLATE_NEW).toString(),this);
+    VclPtr<InputDialog> aDlg(new InputDialog(SfxResId(STR_INPUT_TEMPLATE_NEW).toString(),this));
 
-    if (aDlg.Execute())
+    if (aDlg->Execute())
     {
-        OUString aName = aDlg.getEntryText();
+        OUString aName = aDlg->getEntryText();
 
         if (!aName.isEmpty())
         {
             OUString aFolderList;
             OUString aQMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
-            MessageDialog aQueryDlg(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+            VclPtr<MessageDialog> aQueryDlg(new MessageDialog(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO));
 
             if (mpLocalView->isNonRootRegionVisible())
             {
@@ -1322,9 +1322,9 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                 if (!mpLocalView->isTemplateNameUnique(nRegionItemId,aName))
                 {
                     aQMsg = aQMsg.replaceFirst("$1",aName);
-                    aQueryDlg.set_primary_text(aQMsg.replaceFirst("$2",mpLocalView->getCurRegionName()));
+                    aQueryDlg->set_primary_text(aQMsg.replaceFirst("$2",mpLocalView->getCurRegionName()));
 
-                    if (aQueryDlg.Execute() == RET_NO)
+                    if (aQueryDlg->Execute() == RET_NO)
                         return;
                 }
 
@@ -1341,9 +1341,9 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                     if (!mpLocalView->isTemplateNameUnique(pItem->mnId,aName))
                     {
                         OUString aDQMsg = aQMsg.replaceFirst("$1",aName);
-                        aQueryDlg.set_primary_text(aDQMsg.replaceFirst("$2",pItem->maTitle));
+                        aQueryDlg->set_primary_text(aDQMsg.replaceFirst("$2",pItem->maTitle));
 
-                        if (aQueryDlg.Execute() == RET_NO)
+                        if (aQueryDlg->Execute() == RET_NO)
                             continue;
                     }
 
@@ -1441,13 +1441,13 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
-        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+        VclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
 
-        int ret = dlg.Execute();
+        int ret = dlg->Execute();
 
         if (ret)
         {
-            OUString aName = dlg.getEntryText();
+            OUString aName = dlg->getEntryText();
 
             if (!aName.isEmpty())
                 nItemId = mpLocalView->createRegion(aName);
@@ -1489,13 +1489,13 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
-        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+        VclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
 
-        int ret = dlg.Execute();
+        int ret = dlg->Execute();
 
         if (ret)
         {
-            OUString aName = dlg.getEntryText();
+            OUString aName = dlg->getEntryText();
 
             if (!aName.isEmpty())
                 nItemId = mpLocalView->createRegion(aName);
@@ -1543,13 +1543,13 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
 
     if (nMenuId == MNI_MOVE_NEW)
     {
-        InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+        VclPtr<InputDialog> dlg(new InputDialog(SfxResId(STR_INPUT_NEW).toString(),this));
 
-        int ret = dlg.Execute();
+        int ret = dlg->Execute();
 
         if (ret)
         {
-            OUString aName = dlg.getEntryText();
+            OUString aName = dlg->getEntryText();
 
             if (!aName.isEmpty())
                 nItemId = mpLocalView->createRegion(aName);

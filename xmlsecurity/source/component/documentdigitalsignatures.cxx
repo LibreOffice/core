@@ -222,17 +222,17 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException, std::exception)
 {
     bool bChanges = false;
-    DigitalSignaturesDialog aSignaturesDialog(
-        NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature);
-    bool bInit = aSignaturesDialog.Init();
+    VclPtr<DigitalSignaturesDialog> aSignaturesDialog(new DigitalSignaturesDialog(
+        NULL, mxCtx, eMode, bReadOnly, m_sODFVersion, m_bHasDocumentSignature));
+    bool bInit = aSignaturesDialog->Init();
     DBG_ASSERT( bInit, "Error initializing security context!" );
     if ( bInit )
     {
-        aSignaturesDialog.SetStorage( rxStorage );
-        aSignaturesDialog.SetSignatureStream( xSignStream );
-        if ( aSignaturesDialog.Execute() )
+        aSignaturesDialog->SetStorage( rxStorage );
+        aSignaturesDialog->SetSignatureStream( xSignStream );
+        if ( aSignaturesDialog->Execute() )
         {
-            if ( aSignaturesDialog.SignaturesChanged() )
+            if ( aSignaturesDialog->SignaturesChanged() )
             {
                 bChanges = true;
                 // If we have a storage and no stream, we are responsible for commit
@@ -246,8 +246,8 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     }
     else
     {
-        MessageDialog aBox(NULL, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VCL_MESSAGE_WARNING);
-        aBox.Execute();
+        VclPtr<MessageDialog> aBox(new MessageDialog(NULL, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VCL_MESSAGE_WARNING));
+        aBox->Execute();
     }
 
     return bChanges;
@@ -386,8 +386,8 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (RuntimeException
     if ( aSignatureHelper.Init() )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    MacroSecurity aDlg( NULL, mxCtx, xSecEnv );
-    aDlg.Execute();
+    VclPtr<MacroSecurity> aDlg(new MacroSecurity( NULL, mxCtx, xSecEnv ) );
+    aDlg->Execute();
 }
 
 void DocumentDigitalSignatures::showCertificate(
@@ -401,8 +401,8 @@ void DocumentDigitalSignatures::showCertificate(
 
     if ( bInit )
     {
-        CertificateViewer aViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, false );
-        aViewer.Execute();
+        VclPtr<CertificateViewer> aViewer(new CertificateViewer( NULL, aSignatureHelper.GetSecurityEnvironment(), _Certificate, false ) );
+        aViewer->Execute();
     }
 
 }
@@ -441,12 +441,12 @@ Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertif
     if ( aSignatureHelper.Init() )
         xSecEnv = aSignatureHelper.GetSecurityEnvironment();
 
-    CertificateChooser aChooser( NULL, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations());
+    VclPtr<CertificateChooser> aChooser(new CertificateChooser( NULL, mxCtx, xSecEnv, aSignatureHelper.GetSignatureInformations()) );
 
-    if (aChooser.Execute() != RET_OK)
+    if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(0);
 
-    Reference< css::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
+    Reference< css::security::XCertificate > xCert = aChooser->GetSelectedCertificate();
 
     if ( !xCert.is() )
         return Reference< css::security::XCertificate >(0);

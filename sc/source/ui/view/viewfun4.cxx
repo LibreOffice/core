@@ -99,8 +99,8 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
         if (pActWin)
         {
             pEngine->SetPaperSize(Size(100000,100000));
-            vcl::Window aWin( pActWin );
-            EditView aEditView( pEngine.get(), &aWin );
+            VclPtr<vcl::Window> aWin(new vcl::Window( pActWin ));
+            EditView aEditView( pEngine.get(), aWin.get() );
             aEditView.SetOutputArea(Rectangle(0,0,100000,100000));
 
             // same method now for clipboard or drag&drop
@@ -387,8 +387,8 @@ void ScViewFunc::DoThesaurus( bool bRecord )
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
-        InfoBox aBox( GetViewData().GetDialogParent(), aErr );
-        aBox.Execute();
+        VclPtr<InfoBox> aBox(new InfoBox( GetViewData().GetDialogParent(), aErr ) );
+        aBox->Execute();
     }
     if (pThesaurusEngine->IsModified())
     {

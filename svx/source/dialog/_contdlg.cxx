@@ -295,8 +295,8 @@ bool SvxSuperContourDlg::Close()
 
     if (m_pTbx1->IsItemEnabled(mnApplyId))
     {
-        MessageDialog aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
-        const long  nRet = aQBox.Execute();
+        VclPtr<MessageDialog> aQBox(new MessageDialog( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui") );
+        const long  nRet = aQBox->Execute();
 
         if ( nRet == RET_YES )
         {
@@ -427,9 +427,9 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
     {
         if (m_pTbx1->IsItemChecked(mnWorkSpaceId))
         {
-            MessageDialog aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui");
+            VclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui" ));
 
-            if ( !m_pContourWnd->IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
+            if ( !m_pContourWnd->IsContourChanged() || ( aQBox->Execute() == RET_YES ) )
                 m_pContourWnd->SetWorkplaceMode( true );
             else
                 m_pTbx1->CheckItem(mnWorkSpaceId, false);
@@ -501,10 +501,10 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
             m_pStbStatus->Invalidate();
         else if ( bGraphicLinked )
         {
-            MessageDialog aQBox(this, "QueryUnlinkGraphicsDialog",
-                "svx/ui/queryunlinkgraphicsdialog.ui");
+            VclPtr<MessageDialog> aQBox(new MessageDialog(this, "QueryUnlinkGraphicsDialog",
+                "svx/ui/queryunlinkgraphicsdialog.ui"));
 
-            if (aQBox.Execute() != RET_YES)
+            if (aQBox->Execute() != RET_YES)
             {
                 bPipette = false;
                 m_pTbx1->CheckItem(mnPipetteId, bPipette);
@@ -695,7 +695,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
 
             if( !!aMask )
             {
-                MessageDialog aQBox( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui");
+                VclPtr<MessageDialog> aQBox(new MessageDialog( this,"QueryNewContourDialog","svx/ui/querynewcontourdialog.ui" ));
                 bool        bNewContour;
 
                 aRedoGraphic = Graphic();
@@ -703,7 +703,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
                 aGraphic = Graphic( BitmapEx( aBmp, aMask ) );
                 nGrfChanged++;
 
-                bNewContour = ( aQBox.Execute() == RET_YES );
+                bNewContour = ( aQBox->Execute() == RET_YES );
                 pWnd->SetGraphic( aGraphic, bNewContour );
 
                 if( bNewContour )

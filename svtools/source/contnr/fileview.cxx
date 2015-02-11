@@ -879,16 +879,16 @@ void ViewTabListBox_Impl::DeleteEntries()
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
             INetURLObject aObj( aURL );
-            svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+            VclPtr<svtools::QueryDeleteDlg_Impl> aDlg(new svtools::QueryDeleteDlg_Impl(NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) ));
             if ( sDialogPosition.getLength() )
-                aDlg.SetWindowState( sDialogPosition );
+                aDlg->SetWindowState( sDialogPosition );
 
             if ( GetSelectionCount() > 1 )
-                aDlg.EnableAllButton();
+                aDlg->EnableAllButton();
 
-            eResult = aDlg.Execute();
+            eResult = aDlg->Execute();
 
-            sDialogPosition = aDlg.GetWindowState( );
+            sDialogPosition = aDlg->GetWindowState( );
         }
 
         if ( ( eResult == svtools::QUERYDELETE_ALL ) ||

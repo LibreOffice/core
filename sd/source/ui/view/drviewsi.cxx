@@ -164,10 +164,10 @@ void DrawViewShell::AssignFrom3DWindow()
             }
             else
             {
-                InfoBox aInfoBox (
+                VclPtr<InfoBox> aInfoBox (new InfoBox(
                     GetActiveWindow(),
-                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE));
-                aInfoBox.Execute();
+                    SD_RESSTR(STR_ACTION_NOTPOSSIBLE)));
+                aInfoBox->Execute();
             }
 
             // get focus back

@@ -804,12 +804,12 @@ void ObjectPage::NewDialog()
     {
         aDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
-        NewObjectDialog aNewDlg(this, ObjectMode::Dialog, true);
-        aNewDlg.SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
+        VclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(this, ObjectMode::Dialog, true));
+        aNewDlg->SetObjectName( aDocument.createObjectName( E_DIALOGS, aLibName ) );
 
-        if (aNewDlg.Execute() != 0)
+        if (aNewDlg->Execute() != 0)
         {
-            OUString aDlgName = aNewDlg.GetObjectName();
+            OUString aDlgName = aNewDlg->GetObjectName();
             if (aDlgName.isEmpty())
                 aDlgName = aDocument.createObjectName( E_DIALOGS, aLibName);
 
@@ -947,13 +947,13 @@ SbModule* createModImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    NewObjectDialog aNewDlg(pWin, ObjectMode::Module, true);
-    aNewDlg.SetObjectName( aModName );
+    VclPtr<NewObjectDialog> aNewDlg(new NewObjectDialog(pWin, ObjectMode::Module, true));
+    aNewDlg->SetObjectName( aModName );
 
-    if (aNewDlg.Execute() != 0)
+    if (aNewDlg->Execute() != 0)
     {
-        if (!aNewDlg.GetObjectName().isEmpty() )
-            aModName = aNewDlg.GetObjectName();
+        if (!aNewDlg->GetObjectName().isEmpty() )
+            aModName = aNewDlg->GetObjectName();
 
         try
         {

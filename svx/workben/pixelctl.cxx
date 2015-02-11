@@ -98,9 +98,9 @@ public:
 
 void Main()
 {
-    MyWin aMainWin( NULL, WB_STDWORK );
-    aMainWin.SetText( OUString( "SvxPixelCtl" ) );
-    aMainWin.Show();
+    VclPtr<MyWin> aMainWin(new MyWin( NULL, WB_STDWORK ));
+    aMainWin->SetText( OUString( "SvxPixelCtl" ) );
+    aMainWin->Show();
 
     Application::Execute();
 }

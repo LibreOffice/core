@@ -315,9 +315,9 @@ IMPL_LINK_NOARG(SwCompatibilityOptPage, SelectHdl)
 
 IMPL_LINK_NOARG(SwCompatibilityOptPage, UseAsDefaultHdl)
 {
-    MessageDialog aQuery(this, "QueryDefaultCompatDialog",
-        "modules/swriter/ui/querydefaultcompatdialog.ui");
-    if (aQuery.Execute() == RET_YES)
+    VclPtr<MessageDialog> aQuery(new MessageDialog(this, "QueryDefaultCompatDialog",
+        "modules/swriter/ui/querydefaultcompatdialog.ui"));
+    if (aQuery->Execute() == RET_YES)
     {
         for ( vector< CompatibilityItem >::iterator pItem = m_pImpl->m_aList.begin();
               pItem != m_pImpl->m_aList.end(); ++pItem )

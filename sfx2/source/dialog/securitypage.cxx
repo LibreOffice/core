@@ -99,13 +99,13 @@ static bool lcl_GetPassword(
     /*out*/OUString &rPassword )
 {
     bool bRes = false;
-    SfxPasswordDialog aPasswdDlg( pParent );
-    aPasswdDlg.SetMinLen( 1 );
+    VclPtr<SfxPasswordDialog> aPasswdDlg(new SfxPasswordDialog(pParent));
+    aPasswdDlg->SetMinLen( 1 );
     if (bProtect)
-        aPasswdDlg.ShowExtras( SHOWEXTRAS_CONFIRM );
-    if (RET_OK == aPasswdDlg.Execute() && !aPasswdDlg.GetPassword().isEmpty())
+        aPasswdDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
+    if (RET_OK == aPasswdDlg->Execute() && !aPasswdDlg->GetPassword().isEmpty())
     {
-        rPassword = aPasswdDlg.GetPassword();
+        rPassword = aPasswdDlg->GetPassword();
         bRes = true;
     }
     return bRes;
@@ -335,9 +335,9 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
         bool bAlreadyDone = false;
         if (!m_bEndRedliningWarningDone)
         {
-            WarningBox aBox( m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
-                    m_aEndRedliningWarning );
-            if (aBox.Execute() != RET_YES)
+            VclPtr<WarningBox> aBox(new WarningBox(m_rMyTabPage.GetParent(), WinBits(WB_YES_NO | WB_DEF_NO),
+                    m_aEndRedliningWarning ));
+            if (aBox->Execute() != RET_YES)
                 bAlreadyDone = true;
             else
                 m_bEndRedliningWarningDone = true;

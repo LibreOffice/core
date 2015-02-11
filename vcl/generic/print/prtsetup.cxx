@@ -464,11 +464,11 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
 int SetupPrinterDriver(::psp::PrinterInfo& rJobData)
 {
     int nRet = 0;
-    RTSDialog aDialog( rJobData, NULL );
+    VclPtr<RTSDialog> aDialog(new RTSDialog( rJobData, NULL ) );
 
-    if( aDialog.Execute() )
+    if( aDialog->Execute() )
     {
-        rJobData = aDialog.getSetup();
+        rJobData = aDialog->getSetup();
         nRet = 1;
     }
 

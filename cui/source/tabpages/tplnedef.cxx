@@ -594,10 +594,10 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
         else
         {
 
-            MessageDialog aBox( GetParentDialog()
+            VclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
                                 ,"DuplicateNameDialog"
-                                ,"cui/ui/queryduplicatedialog.ui");
-            aBox.Execute();
+                                ,"cui/ui/queryduplicatedialog.ui"));
+            aBox->Execute();
         }
     }
     pDlg.reset();
@@ -672,10 +672,10 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
             }
             else
             {
-                MessageDialog aBox( GetParentDialog()
+                VclPtr<MessageDialog> aBox(new MessageDialog( GetParentDialog()
                                    ,"DuplicateNameDialog"
-                                   ,"cui/ui/queryduplicatedialog.ui");
-                aBox.Execute();
+                                   ,"cui/ui/queryduplicatedialog.ui") );
+                aBox->Execute();
             }
         }
     }
@@ -690,11 +690,11 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        MessageDialog aQueryBox( GetParentDialog()
+        VclPtr<MessageDialog> aQueryBox(new MessageDialog( GetParentDialog()
                                 ,"AskDelLineStyleDialog"
-                                ,"cui/ui/querydeletelinestyledialog.ui");
+                                ,"cui/ui/querydeletelinestyledialog.ui"));
 
-        if ( aQueryBox.Execute() == RET_YES )
+        if ( aQueryBox->Execute() == RET_YES )
         {
             delete pDashList->Remove( nPos );
             m_pLbLineStyles->RemoveEntry( nPos );

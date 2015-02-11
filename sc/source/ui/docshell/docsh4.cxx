@@ -222,8 +222,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     aMessage += sTarget;
                     aMessage += aTemplate.getToken( 1, '#' );
 
-                    QueryBox aBox( 0, WinBits(WB_YES_NO | WB_DEF_YES), aMessage );
-                    bDo = ( aBox.Execute() == RET_YES );
+                    VclPtr<QueryBox> aBox(new QueryBox( 0, WinBits(WB_YES_NO | WB_DEF_YES), aMessage ));
+                    bDo = ( aBox->Execute() == RET_YES );
                 }
 
                 if (bDo)
@@ -427,10 +427,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if(nSet==LM_ON_DEMAND)
                 {
-                    QueryBox aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                             ScGlobal::GetRscString(STR_RELOAD_TABLES) );
+                    VclPtr<QueryBox> aBox(new QueryBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                             ScGlobal::GetRscString(STR_RELOAD_TABLES) ) );
 
-                    nDlgRet=aBox.Execute();
+                    nDlgRet=aBox->Execute();
                 }
 
                 if (nDlgRet == RET_YES || nSet==LM_ALWAYS)
@@ -476,9 +476,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     OSL_ENSURE(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
                     if (pViewSh && pDBColl)
                     {
-                        QueryBox aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
-                                                ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
-                        if (aBox.Execute() == RET_YES)
+                        VclPtr<QueryBox> aBox(new QueryBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                                                ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) ) );
+                        if (aBox->Execute() == RET_YES)
                         {
                             ScDBCollection::NamedDBs& rDBs = pDBColl->getNamedDBs();
                             ScDBCollection::NamedDBs::iterator itr = rDBs.begin(), itrEnd = rDBs.end();
@@ -575,10 +575,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     if ( !pItem )
                     {
                         // no dialog on playing the macro
-                        WarningBox aBox( pParent ? pParent : GetActiveDialogParent(),
+                        VclPtr<WarningBox> aBox(new WarningBox( pParent ? pParent : GetActiveDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO),
-                            ScGlobal::GetRscString( STR_END_REDLINING ) );
-                        bDo = ( aBox.Execute() == RET_YES );
+                            ScGlobal::GetRscString( STR_END_REDLINING ) ) );
+                        bDo = ( aBox->Execute() == RET_YES );
                     }
 
                     if ( bDo )
@@ -644,10 +644,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( nSlot == SID_DOCUMENT_COMPARE )
                     {   //! old changes trace will be lost
-                        WarningBox aBox( GetActiveDialogParent(),
+                        VclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO),
-                            ScGlobal::GetRscString( STR_END_REDLINING ) );
-                        if( aBox.Execute() == RET_YES )
+                            ScGlobal::GetRscString( STR_END_REDLINING ) ) );
+                        if( aBox->Execute() == RET_YES )
                             bDo = ExecuteChangeProtectionDialog( NULL, true );
                         else
                             bDo = false;
@@ -913,10 +913,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     break;
                 }
 
-                ScShareDocumentDlg aDlg( GetActiveDialogParent(), pViewData );
-                if ( aDlg.Execute() == RET_OK )
+                VclPtr<ScShareDocumentDlg> aDlg(new ScShareDocumentDlg( GetActiveDialogParent(), pViewData ) );
+                if ( aDlg->Execute() == RET_OK )
                 {
-                    bool bSetShared = aDlg.IsShareDocumentChecked();
+                    bool bSetShared = aDlg->IsShareDocumentChecked();
                     if ( bSetShared != static_cast< bool >( IsDocShared() ) )
                     {
                         if ( bSetShared )
@@ -924,9 +924,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             bool bContinue = true;
                             if ( HasName() )
                             {
-                                QueryBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
-                                    ScGlobal::GetRscString( STR_DOC_WILLBESAVED ) );
-                                if ( aBox.Execute() == RET_NO )
+                                VclPtr<QueryBox> aBox(new QueryBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                                    ScGlobal::GetRscString( STR_DOC_WILLBESAVED ) ) );
+                                if ( aBox->Execute() == RET_NO )
                                 {
                                     bContinue = false;
                                 }
@@ -1016,14 +1016,14 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                         OUString aMessage( ScGlobal::GetRscString( STR_FILE_LOCKED_TRY_LATER ) );
                                         aMessage = aMessage.replaceFirst( "%1", aUserName );
 
-                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage );
-                                        aBox.Execute();
+                                        VclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_OK ), aMessage ) );
+                                        aBox->Execute();
                                     }
                                     else
                                     {
-                                        WarningBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
-                                            ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) );
-                                        if ( aBox.Execute() == RET_YES )
+                                        VclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            ScGlobal::GetRscString( STR_DOC_DISABLESHARED ) ) );
+                                        if ( aBox->Execute() == RET_YES )
                                         {
                                             xCloseable->close( sal_True );
 
@@ -1055,9 +1055,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 else
                                 {
                                     xCloseable->close( sal_True );
-                                    WarningBox aBox( GetActiveDialogParent(), WinBits( WB_OK ),
-                                        ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) );
-                                    aBox.Execute();
+                                    VclPtr<WarningBox> aBox(new WarningBox( GetActiveDialogParent(), WinBits( WB_OK ),
+                                        ScGlobal::GetRscString( STR_DOC_NOLONGERSHARED ) ) );
+                                    aBox->Execute();
                                 }
                             }
                             catch ( uno::Exception& )
@@ -1156,9 +1156,9 @@ bool ScDocShell::ExecuteChangeProtectionDialog( vcl::Window* _pParent, bool bJus
                 }
                 else
                 {
-                    InfoBox aBox( GetActiveDialogParent(),
-                        OUString( ScResId( SCSTR_WRONGPASSWORD ) ) );
-                    aBox.Execute();
+                    VclPtr<InfoBox> aBox(new InfoBox( GetActiveDialogParent(),
+                        OUString( ScResId( SCSTR_WRONGPASSWORD ) ) ) );
+                    aBox->Execute();
                 }
             }
             else
@@ -1486,9 +1486,9 @@ void ScDocShell::PageStyleModified( const OUString& rStyleName, bool bApi )
         if (bWarn && !bApi)
         {
             ScWaitCursorOff aWaitOff( GetActiveDialogParent() );
-            InfoBox aInfoBox(GetActiveDialogParent(),
-                             ScGlobal::GetRscString(STR_PRINT_INVALID_AREA));
-            aInfoBox.Execute();
+            VclPtr<InfoBox> aInfoBox(new InfoBox(GetActiveDialogParent(),
+                             ScGlobal::GetRscString(STR_PRINT_INVALID_AREA)));
+            aInfoBox->Execute();
         }
     }
 
