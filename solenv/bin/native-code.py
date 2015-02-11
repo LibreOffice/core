@@ -85,6 +85,8 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_XMLFilter_get_implementation",
 # chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
+# dbaccess/util/dba.component
+    "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
     "com_sun_star_comp_forms_ODatabaseForm_get_implementation",
     "com_sun_star_form_OFormsCollection_get_implementation",
@@ -143,6 +145,7 @@ core_constructor_list = [
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
+    "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",
     "stardiv_Toolkit_UnoComboBoxControl_get_implementation",
     "stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation",
     "stardiv_Toolkit_UnoControlComboBoxModel_get_implementation",
