@@ -85,7 +85,7 @@ certain functionality.
 @section comphelper
 
 @li @c comphelper
-@li @c comphelper.container
+@li @c comphelper.container - EmbeddedObjectContainer
 
 @section cppu
 

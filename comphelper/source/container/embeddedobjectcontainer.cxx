@@ -1153,8 +1153,10 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
                 }
             }
         }
-        catch (const uno::Exception&)
+        catch (uno::Exception const& e)
         {
+            SAL_INFO("comphelper.container",
+                "EmbeddedObjectContainer::GetGraphicStream(): exception: " << e.Message);
         }
     }
 
