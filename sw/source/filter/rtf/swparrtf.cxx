@@ -43,10 +43,10 @@ using namespace ::com::sun::star;
 /// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
 class SwRTFReader : public Reader
 {
-    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &,const OUString &) SAL_OVERRIDE;
+    virtual sal_uLong Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) SAL_OVERRIDE;
 };
 
-sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString &)
+sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString&)
 {
     if (!pStrm)
         return ERR_SWG_READ_ERROR;
@@ -54,27 +54,24 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     // We want to work in an empty paragraph.
     // Step 1: XTextRange will be updated when content is inserted, so we know
     // the end position.
-    const uno::Reference<text::XTextRange> xInsertPosition =
-        SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), 0);
-    SwNodeIndex *pSttNdIdx = new SwNodeIndex(rDoc.GetNodes());
+    const uno::Reference<text::XTextRange> xInsertPosition = SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), 0);
+    SwNodeIndex* pSttNdIdx = new SwNodeIndex(rDoc.GetNodes());
     const SwPosition* pPos = rPam.GetPoint();
 
     // Step 2: Split once and remember the node that has been split.
-    rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
+    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
     *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
     // Step 3: Split again.
-    rDoc.getIDocumentContentOperations().SplitNode( *pPos, false );
+    rDoc.getIDocumentContentOperations().SplitNode(*pPos, false);
 
     // Step 4: Insert all content into the new node
-    rPam.Move( fnMoveBackward );
-    rDoc.SetTxtFmtColl
-        ( rPam, rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
+    rPam.Move(fnMoveBackward);
+    rDoc.SetTxtFmtColl(rPam, rDoc.getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false));
 
-    SwDocShell *pDocShell(rDoc.GetDocShell());
+    SwDocShell* pDocShell(rDoc.GetDocShell());
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
-    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance(
-        "com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+    uno::Reference<uno::XInterface> xInterface(xMultiServiceFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
 
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
     uno::Reference<lang::XComponent> xDstDoc(pDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -93,7 +90,8 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     aDescriptor[2].Name = "TextInsertModeRange";
     aDescriptor[2].Value <<= xInsertTextRange;
     sal_uLong ret(0);
-    try {
+    try
+    {
         xFilter->filter(aDescriptor);
     }
     catch (uno::Exception const& e)
@@ -111,26 +109,24 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
         // of the new content with the first new node. Or in other words:
         // Revert the first split node.
         SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
-        SwNodeIndex aNxtIdx( *pSttNdIdx );
-        if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ) &&
-                pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
+        SwNodeIndex aNxtIdx(*pSttNdIdx);
+        if (pTxtNode && pTxtNode->CanJoinNext(&aNxtIdx) && pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex())
         {
             // If the PaM points to the first new node, move the PaM to the
             // end of the previous node.
-            if( aPam.GetPoint()->nNode == aNxtIdx )
+            if (aPam.GetPoint()->nNode == aNxtIdx)
             {
                 aPam.GetPoint()->nNode = *pSttNdIdx;
-                aPam.GetPoint()->nContent.Assign( pTxtNode,
-                        pTxtNode->GetTxt().getLength() );
+                aPam.GetPoint()->nContent.Assign(pTxtNode, pTxtNode->GetTxt().getLength());
             }
             // If the first new node isn't empty, convert  the node's text
             // attributes into hints. Otherwise, set the new node's
             // paragraph style at the previous (empty) node.
             SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
             if (pTxtNode->GetTxt().getLength())
-                pDelNd->FmtToTxtAttr( pTxtNode );
+                pDelNd->FmtToTxtAttr(pTxtNode);
             else
-                pTxtNode->ChgFmtColl( pDelNd->GetTxtColl() );
+                pTxtNode->ChgFmtColl(pDelNd->GetTxtColl());
             pTxtNode->JoinNext();
         }
     }
