@@ -16,6 +16,24 @@
       "revId": "2622e9fe7fdef35d5538d655a09a422a3a4740b2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_7c5b5555",
+        "filename": "sc/source/core/tool/interpr4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4384,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2015-02-11T12:30:29Z",
+      "side": 1,
+      "message": "I did have some doubts about these lines, but didn\u0027t dare to remove them. Now you have your wisdom given the change to review and reject, I will remove the lines ;-)",
+      "parentUuid": "da20952f_dc494190",
+      "revId": "2622e9fe7fdef35d5538d655a09a422a3a4740b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
