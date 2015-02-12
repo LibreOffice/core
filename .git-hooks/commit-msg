@@ -45,6 +45,13 @@ if [ "`head -n 1 $1 | wc -c`" -gt 79 ] ; then
     abort "$1" "The first line is too long, please try to fit into 79 characters."
 fi
 
+fdo_regex='fdo#[0-9]+'
+if egrep -q "$fdo_regex" $1; then
+    if [ "`head -n 1 $1 |egrep -o "$fdo_regex" |sed 's/fdo#//'`" -gt 88775 ]; then
+        abort "$1" "The first line contains a suspicious fdo# rereference, did you mean tdf#?"
+    fi
+fi
+
 # ...and that it does not continue on the second line
 if [ "`wc -l < $1`" -gt 1 -a -n "`head -n 2 $1 | tail -n 1 | sed 's/^#.*//'`" ] ; then
     abort "$1" "The second line is not empty - maybe the first line continues there?"
