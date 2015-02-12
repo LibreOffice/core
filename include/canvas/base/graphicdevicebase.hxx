@@ -296,18 +296,20 @@ namespace canvas
 
         virtual void SAL_CALL setPropertyValue( const OUString&                   aPropertyName,
                                                 const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException,
-                                                                                                  css::beans::PropertyVetoException,
-                                                                                                  css::lang::IllegalArgumentException,
-                                                                                                  css::lang::WrappedTargetException,
-                                                                                                  css::uno::RuntimeException) SAL_OVERRIDE
+                                                                                     css::beans::PropertyVetoException,
+                                                                                     css::lang::IllegalArgumentException,
+                                                                                     css::lang::WrappedTargetException,
+                                                                                     css::uno::RuntimeException,
+                                                                                     std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             maPropHelper.setPropertyValue( aPropertyName, aValue );
         }
 
         virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& aPropertyName ) throw (css::beans::UnknownPropertyException,
-                                                                                                                    css::lang::WrappedTargetException,
-                                                                                                                    css::uno::RuntimeException) SAL_OVERRIDE
+                                                                                                css::lang::WrappedTargetException,
+                                                                                                css::uno::RuntimeException,
+                                                                                                std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
             return maPropHelper.getPropertyValue( aPropertyName );
