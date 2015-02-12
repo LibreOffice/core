@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_5ff8c37c",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2045,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T18:00:36Z",
+      "side": 1,
+      "message": "This fails in an --enable-werror build with unused parameter ‘nElemType’ and ‘nDataSize’ error.\n\nThe usual way to silence this is to comment out the name of the unused variable, i.e.\n\n    void operator() (const int /* nElemType */, size_t nRow, size_t /* nDataSize */)",
+      "revId": "4ecd49049c2e33c0902873f37f9d97377e7dadaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_7ff58781",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2048,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T18:00:36Z",
+      "side": 1,
+      "message": "Since we are specifically interested here in empty cells that are not handled otherwise, it is unnecessary to call GetCellValue() for those and have the cell processed with processCell(), which even may lead to formatted null dates if a date format was applied to an empty cell.\n\nInstead, check nElemType for the empty type and in that case directly do\n\n mrStrings.push_back(ScTypedStrData(OUString()));",
+      "revId": "4ecd49049c2e33c0902873f37f9d97377e7dadaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9f341b4b",
+        "filename": "sc/source/ui/cctrl/checklistmenu.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T18:00:36Z",
+      "side": 1,
+      "message": "I\u0027d rather use \"Blank cells\" here, as users might misleadingly interpret \"Blanks\" as cells containing blanks.",
+      "revId": "4ecd49049c2e33c0902873f37f9d97377e7dadaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
