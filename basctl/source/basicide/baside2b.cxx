@@ -789,7 +789,7 @@ void EditorWindow::HandleProcedureCompletion()
     }
 }
 
-bool EditorWindow::GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName)
+bool EditorWindow::GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName) const
 {
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions(rLine, aPortions);

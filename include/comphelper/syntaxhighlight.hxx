@@ -78,7 +78,7 @@ public:
     ~SyntaxHighlighter();
 
     void getHighlightPortions( const OUString& rLine,
-                               std::vector<HighlightPortion>& pPortions );
+                               std::vector<HighlightPortion>& pPortions ) const;
 
     HighlighterLanguage GetLanguage();
 };

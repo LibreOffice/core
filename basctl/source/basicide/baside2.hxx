@@ -157,7 +157,7 @@ public:
 
     void            UpdateSyntaxHighlighting ();
 
-    bool            GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName);
+    bool            GetProcedureName(OUString& rLine, OUString& rProcType, OUString& rProcName) const;
 };
 
 

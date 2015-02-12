@@ -261,11 +261,11 @@ class SyntaxHighlighter::Tokenizer
     sal_uInt16 aCharTypeTab[256];
 
     // Auxiliary function: testing of the character flags
-    bool testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags );
+    bool testCharFlags(sal_Unicode c, sal_uInt16 nTestFlags) const;
 
     // Get new token, EmptyString == nothing more over there
-    bool getNextToken( const sal_Unicode*& pos, /*out*/TokenTypes& reType,
-        /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
+    bool getNextToken(const sal_Unicode*& pos, /*out*/TokenTypes& reType,
+        /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos) const;
 
     const char** ppListKeyWords;
     sal_uInt16 nKeyWordCount;
@@ -276,13 +276,13 @@ public:
     Tokenizer( HighlighterLanguage aLang );
     ~Tokenizer( void );
 
-    void getHighlightPortions( const OUString& rLine,
-                               /*out*/std::vector<HighlightPortion>& portions );
+    void getHighlightPortions(const OUString& rLine,
+                               /*out*/std::vector<HighlightPortion>& portions) const;
     void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
 };
 
 // Helper function: test character flag
-bool SyntaxHighlighter::Tokenizer::testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags )
+bool SyntaxHighlighter::Tokenizer::testCharFlags(sal_Unicode c, sal_uInt16 nTestFlags) const
 {
     bool bRet = false;
     if( c != 0 && c <= 255 )
@@ -303,8 +303,8 @@ void SyntaxHighlighter::Tokenizer::setKeyWords( const char** ppKeyWords, sal_uIn
     nKeyWordCount = nCount;
 }
 
-bool SyntaxHighlighter::Tokenizer::getNextToken( const sal_Unicode*& pos, /*out*/TokenTypes& reType,
-    /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos )
+bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/TokenTypes& reType,
+    /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos) const
 {
     reType = TT_UNKNOWN;
 
@@ -665,8 +665,8 @@ SyntaxHighlighter::Tokenizer::~Tokenizer( void )
 {
 }
 
-void SyntaxHighlighter::Tokenizer::getHighlightPortions( const OUString& rLine,
-                                                 /*out*/std::vector<HighlightPortion>& portions  )
+void SyntaxHighlighter::Tokenizer::getHighlightPortions(const OUString& rLine,
+                                                 /*out*/std::vector<HighlightPortion>& portions) const
 {
     // Set the position to the beginning of the source string
     const sal_Unicode* pos = rLine.getStr();
@@ -706,8 +706,8 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
 
 SyntaxHighlighter::~SyntaxHighlighter() {}
 
-void SyntaxHighlighter::getHighlightPortions( const OUString& rLine,
-                                              /*out*/std::vector<HighlightPortion>& portions )
+void SyntaxHighlighter::getHighlightPortions(const OUString& rLine,
+                                              /*out*/std::vector<HighlightPortion>& portions) const
 {
     m_tokenizer->getHighlightPortions( rLine, portions );
 }
