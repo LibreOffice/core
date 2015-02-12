@@ -355,6 +355,7 @@ public:
                         mbPaintDisabled:1,
                         mbAllResize:1,
                         mbInDtor:1,
+                        mbInDispose:1,
                         mbExtTextInput:1,
                         mbInFocusHdl:1,
                         mbOverlapVisible:1,

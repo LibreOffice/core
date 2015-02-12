@@ -136,6 +136,12 @@ void Window::dispose()
     if (!mpWindowImpl)
         return;
 
+    // TODO: turn this assert on once we have switched to using VclPtr everywhere
+    //assert( !mpWindowImpl->mbInDispose && "vcl::Window - already in dispose()" );
+    if (mpWindowImpl->mbInDispose)
+        return;
+    mpWindowImpl->mbInDispose = true;
+
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
     Application::RemoveMouseAndKeyEvents( this );
 
@@ -711,6 +717,7 @@ WindowImpl::WindowImpl( WindowType nType )
     mbPaintDisabled                     = false;                     // true: Paint should not be executed
     mbAllResize                         = false;                     // true: Also sent ResizeEvents with 0,0
     mbInDtor                            = false;                     // true: We're still in Window-Dtor
+    mbInDispose                         = false;                     // true: We're still in Window::dispose()
     mbExtTextInput                      = false;                     // true: ExtTextInput-Mode is active
     mbInFocusHdl                        = false;                     // true: Within GetFocus-Handler
     mbCreatedWithToolkit                = false;
