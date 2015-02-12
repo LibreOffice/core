@@ -53,6 +53,7 @@ private: //member
     CheckBox*    m_pCBConnect;
     CheckBox*    m_pCBAxisSideBySide;
 
+    VclFrame*    m_pGrpPlotOptions;
     VclGrid*     m_pGridPlotOptions;
     RadioButton* m_pRB_DontPaint;
     RadioButton* m_pRB_AssumeZero;
