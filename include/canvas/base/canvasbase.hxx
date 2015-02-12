@@ -188,10 +188,12 @@ namespace canvas
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                             const ::com::sun::star::rendering::ViewState&                                          viewState,
-                             const ::com::sun::star::rendering::RenderState&                                        renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+            drawPolyPolygon(const css::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
+                            const css::rendering::ViewState&                                          viewState,
+                            const css::rendering::RenderState&                                        renderState)
+                                throw (css::lang::IllegalArgumentException,
+                                       css::uno::RuntimeException,
+                                       std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
