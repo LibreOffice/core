@@ -33,9 +33,10 @@ namespace frm
         sal_Int32   m_nDefaultSpinValue;
         // </properties>
 
-    protected:
+    public:
         DECLARE_DEFAULT_LEAF_XTOR( OSpinButtonModel );
 
+    protected:
         // XServiceInfo
         DECLARE_SERVICE_REGISTRATION( OSpinButtonModel )
 

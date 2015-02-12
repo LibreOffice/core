@@ -53,13 +53,6 @@ StringSequence ONumericControl::getSupportedServiceNames() throw(std::exception)
 }
 
 
-
-InterfaceRef SAL_CALL ONumericControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new ONumericControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> ONumericControl::_getTypes()
 {
     return OBoundControl::_getTypes();
@@ -67,13 +60,6 @@ Sequence<Type> ONumericControl::_getTypes()
 
 
 // ONumericModel
-
-
-InterfaceRef SAL_CALL ONumericModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new ONumericModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
 
 Sequence<Type> ONumericModel::_getTypes()
 {
@@ -196,8 +182,20 @@ void ONumericModel::resetNoBroadcast()
     m_aSaveValue.clear();
 }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ONumericModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ONumericModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ONumericControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ONumericControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

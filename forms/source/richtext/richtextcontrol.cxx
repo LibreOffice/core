@@ -40,12 +40,12 @@
 #include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>
 
-
-extern "C" void SAL_CALL createRegistryInfo_ORichTextControl()
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ORichTextControl_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextControl > aAutoRegistration;
+    return cppu::acquire(new frm::ORichTextControl());
 }
-
 
 namespace frm
 {

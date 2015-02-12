@@ -71,14 +71,6 @@ using namespace ::com::sun::star::form::binding;
 
 
 // class OComboBoxModel
-
-
-InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return (*new OComboBoxModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> OComboBoxModel::_getTypes()
 {
     return ::comphelper::concatSequences(
@@ -867,14 +859,6 @@ void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( R
 
 //= OComboBoxControl
 
-
-
-InterfaceRef SAL_CALL OComboBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OComboBoxControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 OComboBoxControl::OComboBoxControl(const Reference<XComponentContext>& _rxContext)
     :OBoundControl(_rxContext, VCL_CONTROL_COMBOBOX)
 {
@@ -891,8 +875,20 @@ StringSequence SAL_CALL OComboBoxControl::getSupportedServiceNames() throw(Runti
     return aSupported;
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OComboBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OComboBoxModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OComboBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OComboBoxControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

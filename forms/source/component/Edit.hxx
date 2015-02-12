@@ -31,8 +31,7 @@ struct ImplSVEvent;
 namespace frm
 {
 
-class OEditModel
-                :public OEditBaseModel
+class OEditModel : public OEditBaseModel
 {
     ::std::unique_ptr< ::dbtools::FormattedColumnValue >
                                 m_pValueFormatter;
@@ -40,10 +39,11 @@ class OEditModel
 
     bool                    m_bWritingFormattedFake : 1; // are we writing something which should be interpreted as formatted upon reading?
 
+public:
+    DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
+
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;
-
-    DECLARE_DEFAULT_LEAF_XTOR( OEditModel );
 
     void enableFormattedWriteFake() { m_bWritingFormattedFake = true; }
     void disableFormattedWriteFake() { m_bWritingFormattedFake = false; }
@@ -168,9 +168,7 @@ private:
     DECL_LINK( OnKeyPressed, void* );
 };
 
-
 }
-
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_EDIT_HXX
 

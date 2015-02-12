@@ -57,44 +57,6 @@ void registerClassInfo(
 }
 
 
-
-#define REGISTER_CLASS_CORE(classImplName) \
-    registerClassInfo( \
-        "com.sun.star.form." #classImplName, \
-        aServices, \
-        frm::classImplName##_CreateInstance)
-
-
-#define REGISTER_CLASS1(classImplName, service1) \
-    aServices.realloc(1); \
-    aServices.getArray()[0] = service1; \
-    REGISTER_CLASS_CORE(classImplName)
-
-
-#define REGISTER_CLASS2(classImplName, service1, service2) \
-    aServices.realloc(2); \
-    aServices.getArray()[0] = service1; \
-    aServices.getArray()[1] = service2; \
-    REGISTER_CLASS_CORE(classImplName)
-
-
-#define REGISTER_CLASS3(classImplName, service1, service2, service3) \
-    aServices.realloc(3); \
-    aServices.getArray()[0] = service1; \
-    aServices.getArray()[1] = service2; \
-    aServices.getArray()[2] = service3; \
-    REGISTER_CLASS_CORE(classImplName)
-
-
-#define REGISTER_CLASS4(classImplName, service1, service2, service3, service4) \
-    aServices.realloc(4); \
-    aServices.getArray()[0] = service1; \
-    aServices.getArray()[1] = service2; \
-    aServices.getArray()[2] = service3; \
-    aServices.getArray()[3] = service4; \
-    REGISTER_CLASS_CORE(classImplName)
-
-
 void ensureClassInfos()
 {
     if (s_aClassImplementationNames.getLength())
@@ -102,140 +64,18 @@ void ensureClassInfos()
         return;
     Sequence< OUString > aServices;
 
-
-    // = ControlModels
-
-    // - FixedText
-    REGISTER_CLASS2(OFixedTextModel, FRM_COMPONENT_FIXEDTEXT, FRM_SUN_COMPONENT_FIXEDTEXT);
-    // - Hidden
-    REGISTER_CLASS3(OHiddenModel, FRM_COMPONENT_HIDDENCONTROL, FRM_SUN_COMPONENT_HIDDENCONTROL, FRM_COMPONENT_HIDDEN);
-    // - FileControl
-    REGISTER_CLASS2(OFileControlModel, FRM_COMPONENT_FILECONTROL, FRM_SUN_COMPONENT_FILECONTROL);
-    // - ImageButton
-    REGISTER_CLASS2(OImageButtonModel, FRM_COMPONENT_IMAGEBUTTON, FRM_SUN_COMPONENT_IMAGEBUTTON);
-    // - GridControl
-    REGISTER_CLASS3(OGridControlModel, FRM_COMPONENT_GRID /* compatibility */, FRM_COMPONENT_GRIDCONTROL, FRM_SUN_COMPONENT_GRIDCONTROL);
-    // - GroupBox
-    REGISTER_CLASS2(OGroupBoxModel, FRM_COMPONENT_GROUPBOX, FRM_SUN_COMPONENT_GROUPBOX);
-
-    // - RadioButton
-    REGISTER_CLASS4( ORadioButtonModel, FRM_COMPONENT_RADIOBUTTON, FRM_SUN_COMPONENT_RADIOBUTTON, FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON, BINDABLE_DATABASE_RADIO_BUTTON );
-    // - CheckBox
-    REGISTER_CLASS4( OCheckBoxModel, FRM_COMPONENT_CHECKBOX, FRM_SUN_COMPONENT_CHECKBOX, FRM_SUN_COMPONENT_DATABASE_CHECKBOX, BINDABLE_DATABASE_CHECK_BOX );
-    // - ListBox
-    REGISTER_CLASS4( OListBoxModel, FRM_COMPONENT_LISTBOX, FRM_SUN_COMPONENT_LISTBOX, FRM_SUN_COMPONENT_DATABASE_LISTBOX, BINDABLE_DATABASE_LIST_BOX );
-    // - ComboBox
-    REGISTER_CLASS4( OComboBoxModel, FRM_COMPONENT_COMBOBOX, FRM_SUN_COMPONENT_COMBOBOX, FRM_SUN_COMPONENT_DATABASE_COMBOBOX, BINDABLE_DATABASE_COMBO_BOX );
-    // - EditControl
-    REGISTER_CLASS4( OEditModel, FRM_COMPONENT_TEXTFIELD, FRM_SUN_COMPONENT_TEXTFIELD, FRM_SUN_COMPONENT_DATABASE_TEXTFIELD, BINDABLE_DATABASE_TEXT_FIELD );
-    // - DateControl
-    REGISTER_CLASS3( ODateModel, FRM_COMPONENT_DATEFIELD, FRM_SUN_COMPONENT_DATEFIELD, FRM_SUN_COMPONENT_DATABASE_DATEFIELD );
-    // - TimeControl
-    REGISTER_CLASS3( OTimeModel, FRM_COMPONENT_TIMEFIELD, FRM_SUN_COMPONENT_TIMEFIELD, FRM_SUN_COMPONENT_DATABASE_TIMEFIELD );
-    // - NumericField
-    REGISTER_CLASS4( ONumericModel, FRM_COMPONENT_NUMERICFIELD, FRM_SUN_COMPONENT_NUMERICFIELD, FRM_SUN_COMPONENT_DATABASE_NUMERICFIELD, BINDABLE_DATABASE_NUMERIC_FIELD );
-    // - CurrencyField
-    REGISTER_CLASS3( OCurrencyModel, FRM_COMPONENT_CURRENCYFIELD, FRM_SUN_COMPONENT_CURRENCYFIELD, FRM_SUN_COMPONENT_DATABASE_CURRENCYFIELD );
-    // - PatternField
-    REGISTER_CLASS3( OPatternModel, FRM_COMPONENT_PATTERNFIELD, FRM_SUN_COMPONENT_PATTERNFIELD, FRM_SUN_COMPONENT_DATABASE_PATTERNFIELD );
-    // - Button
-    REGISTER_CLASS2( OButtonModel, FRM_COMPONENT_COMMANDBUTTON, FRM_SUN_COMPONENT_COMMANDBUTTON );
-    // - ImageControl
-    REGISTER_CLASS2( OImageControlModel, FRM_COMPONENT_IMAGECONTROL, FRM_SUN_COMPONENT_IMAGECONTROL );
-
-    // - FormattedField
-    REGISTER_CLASS1(OFormattedFieldWrapper, FRM_COMPONENT_EDIT);
-        // since SRC568 both OFormattedModel and OEditModel use FRM_COMPONENT_EDIT for persistence,
-        // and while reading a wrapper determines which kind of model it is
-    // register the wrapper for the FormattedField, as it handles the XPersistObject::write
-    // so that version <= 5.1 are able to read it
-    aServices.realloc(4);
-    aServices.getArray()[0] = FRM_COMPONENT_FORMATTEDFIELD;
-    aServices.getArray()[1] = FRM_SUN_COMPONENT_FORMATTEDFIELD;
-    aServices.getArray()[2] = FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
-    aServices.getArray()[3] = BINDABLE_DATABASE_FORMATTED_FIELD;
-
-    registerClassInfo(OUString("com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"),
-        aServices,
-        frm::OFormattedFieldWrapper_CreateInstance_ForceFormatted);
-
-
-    // = Controls
-    // - RadioButton
-    REGISTER_CLASS2(ORadioButtonControl, STARDIV_ONE_FORM_CONTROL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON);
-    // - CheckBox
-    REGISTER_CLASS2(OCheckBoxControl, STARDIV_ONE_FORM_CONTROL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX);
-    // - GroupBox
-    REGISTER_CLASS2(OGroupBoxControl, STARDIV_ONE_FORM_CONTROL_GROUPBOX, FRM_SUN_CONTROL_GROUPBOX);
-    // - ListBox
-    REGISTER_CLASS2(OListBoxControl, STARDIV_ONE_FORM_CONTROL_LISTBOX, FRM_SUN_CONTROL_LISTBOX);
-    // - ComboBox
-    REGISTER_CLASS2(OComboBoxControl, STARDIV_ONE_FORM_CONTROL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX);
-    // - EditControl
-    REGISTER_CLASS3(OEditControl, STARDIV_ONE_FORM_CONTROL_TEXTFIELD, FRM_SUN_CONTROL_TEXTFIELD, STARDIV_ONE_FORM_CONTROL_EDIT);
-    // - DateControl
-    REGISTER_CLASS2(ODateControl, STARDIV_ONE_FORM_CONTROL_DATEFIELD, FRM_SUN_CONTROL_DATEFIELD);
-    // - TimeControl
-    REGISTER_CLASS2(OTimeControl, STARDIV_ONE_FORM_CONTROL_TIMEFIELD, FRM_SUN_CONTROL_TIMEFIELD);
-    // - NumericField
-    REGISTER_CLASS2(ONumericControl, STARDIV_ONE_FORM_CONTROL_NUMERICFIELD, FRM_SUN_CONTROL_NUMERICFIELD);
-    // - CurrencyField
-    REGISTER_CLASS2(OCurrencyControl, STARDIV_ONE_FORM_CONTROL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD);
-    // - PatternField
-    REGISTER_CLASS2(OPatternControl, STARDIV_ONE_FORM_CONTROL_PATTERNFIELD, FRM_SUN_CONTROL_PATTERNFIELD);
-    // - FormattedField
-    REGISTER_CLASS2(OFormattedControl, STARDIV_ONE_FORM_CONTROL_FORMATTEDFIELD, FRM_SUN_CONTROL_FORMATTEDFIELD);
-    // - Button
-    REGISTER_CLASS2(OButtonControl, STARDIV_ONE_FORM_CONTROL_COMMANDBUTTON, FRM_SUN_CONTROL_COMMANDBUTTON);
-    // - ImageButton
-    REGISTER_CLASS2(OImageButtonControl, STARDIV_ONE_FORM_CONTROL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON);
-    // - ImageControl
-    REGISTER_CLASS2(OImageControlControl, STARDIV_ONE_FORM_CONTROL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL);
-
-
-
-    // = various
     aServices.realloc(1);
-    aServices.getArray()[0] = "com.sun.star.form.Forms";
+    aServices[0] = "com.sun.star.xforms.XForms";
 
-    REGISTER_CLASS1(ImageProducer, SRV_AWT_IMAGEPRODUCER);
-
-
-    // = XForms core
-#define REGISTER_XFORMS_CLASS(name) \
-    aServices.realloc(1); \
-    aServices[0] = "com.sun.star.xforms." #name ; \
-    REGISTER_CLASS_CORE(name)
-
-    REGISTER_XFORMS_CLASS(Model);
-    REGISTER_XFORMS_CLASS(XForms);
-
+    registerClassInfo(
+        "com.sun.star.form.XForms",
+        aServices,
+        frm::XForms_CreateInstance);
 }
 
 
 extern "C"
 {
-
-void SAL_CALL createRegistryInfo_FORMS()
-{
-    static bool bInit = false;
-    if (!bInit)
-    {
-        createRegistryInfo_OFilterControl();
-        createRegistryInfo_OScrollBarModel();
-        createRegistryInfo_OSpinButtonModel();
-        createRegistryInfo_ONavigationBarModel();
-        createRegistryInfo_ONavigationBarControl();
-        createRegistryInfo_ORichTextModel();
-        createRegistryInfo_ORichTextControl();
-        createRegistryInfo_CLibxml2XFormsExtension();
-#if HAVE_FEATURE_DBCONNECTIVITY
-        createRegistryInfo_FormOperations();
-#endif
-        bInit = true;
-    }
-}
-
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pImplName, void* _pServiceManager, void* /*_pRegistryKey*/)
 {
@@ -289,18 +129,15 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pI
     // the real way - use the OModule
     if ( !pRet )
     {
-        createRegistryInfo_FORMS();
-        {
-            // let the module look for the component
-            Reference< XInterface > xRet;
-            xRet = ::frm::OFormsModule::getComponentFactory(
-                OUString::createFromAscii( _pImplName ),
-                static_cast< XMultiServiceFactory* >( _pServiceManager ) );
+        // let the module look for the component
+        Reference< XInterface > xRet;
+        xRet = ::frm::OFormsModule::getComponentFactory(
+            OUString::createFromAscii( _pImplName ),
+            static_cast< XMultiServiceFactory* >( _pServiceManager ) );
 
-            if ( xRet.is() )
-                xRet->acquire();
-            pRet = xRet.get();
-        }
+        if ( xRet.is() )
+            xRet->acquire();
+        pRet = xRet.get();
     }
 
     return pRet;

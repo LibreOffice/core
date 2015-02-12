@@ -27,6 +27,7 @@
 
 namespace frm
 {
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -40,11 +41,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 // OImageButtonModel
-InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-     return *(new OImageButtonModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
 OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFactory)
                     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
                     // use the old control name for compytibility reasons
@@ -145,11 +141,6 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 }
 
 // OImageButtonControl
-InterfaceRef SAL_CALL OImageButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OImageButtonControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
 Sequence<Type> OImageButtonControl::_getTypes()
 {
     static Sequence<Type> aTypes;
@@ -228,5 +219,19 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) thr
 }
 
 }   // namespace frm
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OImageButtonModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageButtonControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OImageButtonControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -66,16 +66,8 @@
 #include <tools/wintypes.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
-{
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::OFilterControl > aAutoRegistration;
-}
-
-
 namespace frm
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -914,14 +906,18 @@ namespace frm
         return aNames;
     }
 
-
     Reference< XInterface > SAL_CALL OFilterControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return static_cast< XServiceInfo* >( new OFilterControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_OFilterControl_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OFilterControl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

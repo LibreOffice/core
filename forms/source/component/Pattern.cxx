@@ -20,35 +20,27 @@
 #include "Pattern.hxx"
 #include "comphelper/processfactory.hxx"
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Type;
+using ::com::sun::star::uno::XComponentContext;
+using ::com::sun::star::beans::Property;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::sdbc::XRowSet;
+using ::com::sun::star::uno::UNO_QUERY;
+
+namespace FormComponentType = ::com::sun::star::form::FormComponentType;
 
 namespace frm
 {
 
-
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::beans::Property;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::sdbc::XRowSet;
-    using ::com::sun::star::uno::UNO_QUERY;
-
-    namespace FormComponentType = ::com::sun::star::form::FormComponentType;
-
 OPatternControl::OPatternControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_PATTERNFIELD)
 {
-}
-
-
-InterfaceRef SAL_CALL OPatternControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OPatternControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
 
@@ -70,12 +62,6 @@ StringSequence OPatternControl::getSupportedServiceNames() throw(std::exception)
 
 
 // OPatternModel
-
-
-InterfaceRef SAL_CALL OPatternModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OPatternModel( comphelper::getComponentContext(_rxFactory) ));
-}
 
 
 Sequence<Type> OPatternModel::_getTypes()
@@ -228,15 +214,26 @@ Any OPatternModel::getDefaultForReset() const
     return makeAny( m_aDefaultText );
 }
 
-
 void OPatternModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
     m_aLastKnownValue.clear();
 }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OPatternModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OPatternModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OPatternControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OPatternControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

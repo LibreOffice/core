@@ -59,7 +59,6 @@
 #define ID_OPEN_GRAPHICS            1
 #define ID_CLEAR_GRAPHICS           2
 
-
 namespace frm
 {
 
@@ -118,14 +117,6 @@ namespace
 
 
 // OImageControlModel
-
-
-
-InterfaceRef SAL_CALL OImageControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OImageControlModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
 
 Sequence<Type> OImageControlModel::_getTypes()
 {
@@ -692,14 +683,6 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
 
 // OImageControlControl
 
-
-
-InterfaceRef SAL_CALL OImageControlControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OImageControlControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> OImageControlControl::_getTypes()
 {
     return concatSequences(
@@ -1000,8 +983,20 @@ void SAL_CALL OImageControlControl::mouseExited(const awt::MouseEvent& /*e*/) th
 {
 }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageControlModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OImageControlModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OImageControlControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OImageControlControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

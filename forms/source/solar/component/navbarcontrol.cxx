@@ -40,15 +40,8 @@
 #include <vcl/settings.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
-{
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarControl > aAutoRegistration;
-}
-
-
 namespace frm
 {
-
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -512,8 +505,14 @@ namespace frm
         _rFeatureIds.push_back( FormFeature::RemoveFilterAndSort );
     }
 
-
 }   // namespace frm
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_form_ONavigationBarControl_get_implementation (css::uno::XComponentContext* context,
+                                                                 css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ONavigationBarControl(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,6 @@
 
 using namespace dbtools;
 
-
 namespace frm
 {
 
@@ -51,12 +50,6 @@ ODateControl::ODateControl(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-InterfaceRef SAL_CALL ODateControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new ODateControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> ODateControl::_getTypes()
 {
     return OBoundControl::_getTypes();
@@ -71,11 +64,6 @@ StringSequence SAL_CALL ODateControl::getSupportedServiceNames() throw(std::exce
     OUString*pArray = aSupported.getArray();
     pArray[aSupported.getLength()-1] = FRM_SUN_CONTROL_DATEFIELD;
     return aSupported;
-}
-
-InterfaceRef SAL_CALL ODateModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new ODateModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 
@@ -318,8 +306,20 @@ Sequence< Type > ODateModel::getSupportedBindingTypes()
     return Sequence< Type >( & cppu::UnoType<util::Date>::get(), 1 );
 }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ODateModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ODateModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ODateControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ODateControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

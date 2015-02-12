@@ -22,7 +22,6 @@
 #include "FormComponent.hxx"
 #include "frm_module.hxx"
 
-
 namespace frm
 {
 
@@ -33,9 +32,10 @@ namespace frm
         sal_Int32   m_nDefaultScrollValue;
         // </properties>
 
-    protected:
+    public:
         DECLARE_DEFAULT_LEAF_XTOR( OScrollBarModel );
 
+    protected:
         // XServiceInfo
         DECLARE_SERVICE_REGISTRATION( OScrollBarModel )
 
@@ -89,10 +89,7 @@ namespace frm
 
     css::uno::Any translateControlIntToExternalDoubleValue( const css::uno::Any& _rControlIntValue );
 
-
-
 } // namespacefrm
-
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_SCROLLBAR_HXX
 

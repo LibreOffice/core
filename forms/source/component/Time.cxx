@@ -50,12 +50,6 @@ OTimeControl::OTimeControl(const Reference<XComponentContext>& _rxFactory)
 }
 
 
-InterfaceRef SAL_CALL OTimeControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OTimeControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> OTimeControl::_getTypes()
 {
     return OBoundControl::_getTypes();
@@ -74,12 +68,6 @@ StringSequence SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exce
 
 
 //= OTimeModel
-
-
-InterfaceRef SAL_CALL OTimeModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OTimeModel( comphelper::getComponentContext(_rxFactory) ));
-}
 
 // XServiceInfo
 
@@ -311,8 +299,20 @@ Sequence< Type > OTimeModel::getSupportedBindingTypes()
     return Sequence< Type >( & cppu::UnoType<util::Time>::get(), 1 );
 }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OTimeModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OTimeModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OTimeControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OTimeControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

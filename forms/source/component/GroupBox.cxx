@@ -24,9 +24,9 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-
 namespace frm
 {
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -41,14 +41,6 @@ using namespace ::com::sun::star::util;
 
 
 // OGroupBoxModel
-
-
-
-InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OGroupBoxModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
 
 
 OGroupBoxModel::OGroupBoxModel(const Reference<XComponentContext>& _rxFactory)
@@ -129,14 +121,6 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
 
 // OGroupBoxControl
 
-
-
-InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<css::lang::XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OGroupBoxControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactory)
                    :OControl(_rxFactory, VCL_CONTROL_GROUPBOX)
 {
@@ -153,8 +137,21 @@ StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(Runti
     return aSupported;
 }
 
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OGroupBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OGroupBoxModel(component));
 
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OGroupBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OGroupBoxControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

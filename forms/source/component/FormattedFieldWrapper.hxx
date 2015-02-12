@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
-
 namespace frm
 {
 
@@ -42,6 +41,9 @@ class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
 
+public:
+    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
@@ -53,9 +55,6 @@ protected:
     // if bActAsFormatted is false, the state is undetermined until somebody calls
     // ::read or does anything which requires a living aggregate
     static InterfaceRef createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
-
-private:
-    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
 
 protected:
     virtual ~OFormattedFieldWrapper();
@@ -86,9 +85,7 @@ protected:
     void ensureAggregate();
 };
 
-
 }
-
 
 #endif // INCLUDED_FORMS_SOURCE_COMPONENT_FORMATTEDFIELDWRAPPER_HXX
 
