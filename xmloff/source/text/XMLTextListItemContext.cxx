@@ -21,6 +21,8 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include "txtparai.hxx"
 #include "txtlists.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -34,6 +36,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 TYPEINIT1( XMLTextListItemContext, SvXMLImportContext );
 
@@ -121,11 +125,91 @@ XMLTextListItemContext::XMLTextListItemContext(
 
 }
 
+XMLTextListItemContext::XMLTextListItemContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rTxtImp, sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const bool bIsHeader )
+:   SvXMLImportContext( rImport ),
+    rTxtImport( rTxtImp ),
+    nStartValue( -1 ),
+    mnSubListCount( 0 ),
+    mxNumRulesOverride()
+{
+    static const char s_NumberingRules[] = "NumberingRules";
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        if( !bIsHeader && attribute.Token ==
+            (NAMESPACE | XML_NAMESPACE_TEXT | XML_start_value) )
+        {
+            sal_Int32 nTmp = attribute.Value.toInt32();
+            if( nTmp >= 0 && nTmp <= SHRT_MAX )
+                nStartValue = static_cast< sal_Int16 >( nTmp );
+        }
+        else if( attribute.Token ==
+                (NAMESPACE | XML_NAMESPACE_TEXT | XML_style_override) )
+        {
+            const OUString sListStyleOverrideName = attribute.Value;
+            if( !sListStyleOverrideName.isEmpty() )
+            {
+                OUString sDisplayStyleName(
+                    GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
+                        sListStyleOverrideName ) );
+                const Reference< container::XNameContainer >& rNumStyles =
+                    rTxtImp.GetNumberingStyles();
+                if( rNumStyles.is() && rNumStyles->hasByName( sDisplayStyleName ) )
+                {
+                    Reference< style::XStyle > xStyle;
+                    Any aAny = rNumStyles->getByName( sDisplayStyleName );
+                    aAny >>= xStyle;
+
+                    uno::Reference< beans::XPropertySet > xPropSet( xStyle, UNO_QUERY );
+                    aAny = xPropSet->getPropertyValue(s_NumberingRules);
+                    aAny >>= mxNumRulesOverride;
+                }
+                else
+                {
+                    const SvxXMLListStyleContext* pListStyle =
+                        rTxtImp.FindAutoListStyle( sListStyleOverrideName );
+                    if( pListStyle )
+                    {
+                        mxNumRulesOverride = pListStyle->GetNumRules();
+                        if( !mxNumRulesOverride.is() )
+                        {
+                            pListStyle->CreateAndInsertAuto();
+                            mxNumRulesOverride = pListStyle->GetNumRules();
+                        }
+                    }
+                }
+            }
+        }
+        else if( attribute.Token ==
+                (NAMESPACE | XML_NAMESPACE_XML | XML_id) )
+        {
+            ;
+//FIXME: there is no UNO API for list items
+        }
+    }
+
+    // If this is a <text:list-item> element, then remember it as a sign
+    // that a bullet has to be generated.
+    if( !bIsHeader ) {
+        rTxtImport.GetTextListHelper().SetListItem( this );
+    }
+}
+
 XMLTextListItemContext::~XMLTextListItemContext()
 {
 }
 
 void XMLTextListItemContext::EndElement()
+{
+    // finish current list item
+    rTxtImport.GetTextListHelper().SetListItem( 0 );
+}
+
+void SAL_CALL XMLTextListItemContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
 {
     // finish current list item
     rTxtImport.GetTextListHelper().SetListItem( 0 );
@@ -163,6 +247,39 @@ SvXMLImportContext *XMLTextListItemContext::CreateChildContext(
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLTextListItemContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    const SvXMLTokenMap& rTokenMap = rTxtImport.GetTextElemTokenMap();
+    bool bHeading = false;
+    switch( rTokenMap.Get( Element ) )
+    {
+    case XML_TOK_TEXT_H:
+        bHeading = true;
+    case XML_TOK_TEXT_P:
+        pContext = new XMLParaContext( GetImport(), Element,
+                xAttrList, bHeading );
+        if( rTxtImport.IsProgress() )
+            GetImport().GetProgressBarHelper()->Increment();
+
+        break;
+    case XML_TOK_TEXT_LIST:
+        ++mnSubListCount;
+        pContext = new XMLTextListBlockContext( GetImport(), rTxtImport,
+                Element, xAttrList, (mnSubListCount > 1) );
+        break;
+    }
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
