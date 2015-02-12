@@ -465,7 +465,7 @@ SwDoc::~SwDoc()
     // Old - deletion without a Flag is expensive, because we send a Modify
     // aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
     {
-        for( sal_uInt16 n = mpTOXTypes->size(); n; )
+        for( auto n = mpTOXTypes->size(); n; )
         {
             (*mpTOXTypes)[ --n ]->SetInDocDTOR();
             delete (*mpTOXTypes)[ n ];
@@ -634,9 +634,8 @@ void SwDoc::ClearDoc()
     }
 
     // if there are still FlyFrames dangling around, delete them too
-    sal_uInt16 n;
-    while ( 0 != (n = GetSpzFrmFmts()->size()) )
-        getIDocumentLayoutAccess().DelLayoutFmt((*mpSpzFrmFmtTbl)[n-1]);
+    while ( !mpSpzFrmFmtTbl->empty() )
+        getIDocumentLayoutAccess().DelLayoutFmt((*mpSpzFrmFmtTbl)[mpSpzFrmFmtTbl->size()-1]);
     OSL_ENSURE( !GetDocumentDrawModelManager().GetDrawModel() || !GetDocumentDrawModelManager().GetDrawModel()->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
@@ -826,8 +825,7 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 
     SfxItemSet aNewDefaults(GetAttrPool(), aRangeOfDefaults);
 
-    sal_uInt16 nRange = 0;
-    while (aRangeOfDefaults[nRange] != 0)
+    for (auto nRange = 0; aRangeOfDefaults[nRange] != 0; nRange += 2)
     {
         for (sal_uInt16 nWhich = aRangeOfDefaults[nRange];
              nWhich <= aRangeOfDefaults[nRange + 1]; ++nWhich)
@@ -837,7 +835,6 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
             if (rSourceAttr != mpAttrPool->GetDefaultItem(nWhich))
                 aNewDefaults.Put(rSourceAttr);
         }
-        nRange += 2;
     }
 
     if (aNewDefaults.Count())
@@ -1016,7 +1013,7 @@ SwNodeIndex SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNu
         }
 
         {
-            sal_uInt16 iDelNodes = 0;
+            sal_uLong iDelNodes = 0;
             SwNodeIndex aDelIdx( aFixupIdx );
 
             // we just need to set the new page description and reset numbering
@@ -1098,10 +1095,9 @@ else
         }
 
         // finally copy page bound frames
-        const SwFrmFmts *pSpzFrmFmts = rSource.GetSpzFrmFmts();
-        for ( sal_uInt16 i = 0; i < pSpzFrmFmts->size(); ++i )
+        for ( auto pCpyFmt : *rSource.GetSpzFrmFmts() )
         {
-            const SwFrmFmt& rCpyFmt = *(*pSpzFrmFmts)[i];
+            const SwFrmFmt& rCpyFmt = *pCpyFmt;
             SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
             if (FLY_AT_PAGE != aAnchor.GetAnchorId())
                 continue;
