@@ -167,11 +167,13 @@ namespace canvas
             maCanvasHelper.drawLine( this, aStartPoint, aEndPoint, viewState, renderState );
         }
 
-        virtual void SAL_CALL drawBezier( const ::com::sun::star::geometry::RealBezierSegment2D&    aBezierSegment,
-                                          const ::com::sun::star::geometry::RealPoint2D&            aEndPoint,
-                                          const ::com::sun::star::rendering::ViewState&             viewState,
-                                          const ::com::sun::star::rendering::RenderState&           renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                         ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL drawBezier( const css::geometry::RealBezierSegment2D&    aBezierSegment,
+                                          const css::geometry::RealPoint2D&            aEndPoint,
+                                          const css::rendering::ViewState&             viewState,
+                                          const css::rendering::RenderState&           renderState )
+                                            throw (css::lang::IllegalArgumentException,
+                                                   css::uno::RuntimeException,
+                                                   std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(aBezierSegment, aEndPoint, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
