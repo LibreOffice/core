@@ -75,7 +75,8 @@ void Test::test() {
     std::vector<OUString> blacklist;
     blacklist.push_back("com.sun.star.comp.report.OReportDefinition");
 
-    //TODO: bug ID
+    // <https://bugs.documentfoundation.org/show_bug.cgi?id=89343>
+    // "~SwXMailMerge() goes into endless SwCache::Check()":
     blacklist.push_back("SwXMailMerge");
 
     css::uno::Reference<css::container::XContentEnumerationAccess> enumAcc(
