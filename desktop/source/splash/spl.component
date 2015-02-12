@@ -19,9 +19,6 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="spl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.desktop.FirstStart">
-    <service name="com.sun.star.task.Job"/>
-  </implementation>
   <implementation name="com.sun.star.office.comp.SplashScreen">
     <service name="com.sun.star.office.SplashScreen"/>
   </implementation>
