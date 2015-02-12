@@ -100,7 +100,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         sal_uInt16 nAreaCount = GetPrintRangeCount();
         if ( nAreaCount > 1 )
         {
-            //  bei mehreren Bereichen nichts anzeigen:
+            // Show nothing, when multiple ranges
 
             for (nX=0; nX<MAXCOL; nX++)
                 RemoveColBreak(nX, true, false);
@@ -119,7 +119,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                 nEndCol = pArea->aEnd.Col();
                 nEndRow = pArea->aEnd.Row();
             }
-        }           // sonst alles
+        }           // otherwise show everything
     }
 
     // get bSkipColBreaks/bSkipRowBreaks flags:
@@ -151,7 +151,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     long nPageSizeX = aPageSizeTwips.Width();
     long nPageSizeY = aPageSizeTwips.Height();
 
-        //  Anfang: Breaks loeschen
+        //  Beginning: Remove breaks
 
     for (nX=0; nX<nStartCol; nX++)
         RemoveColBreak(nX, true, false);
@@ -162,7 +162,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     if (nStartRow > 0)
         SetRowBreak(nStartRow, true, false);  // AREABREAK
 
-        //  Mittelteil: Breaks verteilen
+        //  Middle part: Distribute breaks
 
     bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
     bool bColFound = false;
@@ -288,7 +288,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         nSizeY += nThisY;
     }
 
-        //  Ende: Breaks loeschen
+        //  End: Remove Break
 
     if (nEndCol < MAXCOL)
     {
@@ -1072,7 +1072,7 @@ Size ScTable::GetPageSize() const
     if ( bPageSizeValid )
         return aPageSizeTwips;
     else
-        return Size();  // leer
+        return Size();  // blank
 }
 
 void ScTable::SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
@@ -1150,7 +1150,7 @@ void ScTable::SetPageStyle( const OUString& rName )
                     InvalidateTextWidth(NULL, NULL, false, false);
             }
 
-            if ( pNewStyle )            // auch ohne den alten (fuer UpdateStdNames)
+            if ( pNewStyle )            // also without the old one (for UpdateStdNames)
                 aPageStyle = aStrNew;
 
             if (IsStreamValid())
@@ -1184,7 +1184,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
             rCol.SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
 
         if ( bBroadcast )
-        {   // nur bei CalcAsShown
+        {   // Only with CalcAsShown
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
@@ -1224,7 +1224,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                 aCol[nCol].SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
 
             if ( bBroadcast )
-            {   // nur bei CalcAsShown
+            {   // Only with CalcAsShown
                 switch (aCell.meType)
                 {
                     case CELLTYPE_VALUE :
