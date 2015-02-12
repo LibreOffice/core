@@ -176,4 +176,11 @@ css::uno::Reference<css::beans::XPropertySetInfo> GL3DBarChartType::getPropertyS
 
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart_GL3DBarChartType_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::GL3DBarChartType(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -324,4 +324,32 @@ css::uno::Sequence< OUString > SAL_CALL PowerScaling::getSupportedServiceNames()
 
 } //namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_chart2_LinearScaling_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::LinearScaling(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_chart2_ExponentialScaling_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::ExponentialScaling(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_chart2_LogarithmicScaling_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::LogarithmicScaling(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_chart2_PowerScaling_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::PowerScaling(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
