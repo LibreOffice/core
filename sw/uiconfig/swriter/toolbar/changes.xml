@@ -27,10 +27,10 @@
  <toolbar:toolbaritem xlink:href=".uno:RejectTrackedChange" toolbar:text="Reject" toolbar:helpid="10626"/>
  <toolbar:toolbaritem xlink:href=".uno:AcceptTrackedChanges" toolbar:text="List" toolbar:helpid="10622"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:CommentChangeTracking" toolbar:text="Comment" toolbar:helpid="10625"/>
- <toolbar:toolbaritem xlink:href=".uno:ProtectTraceChangeMode" toolbar:text="Protect" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:text="Regular Comment" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:CommentChangeTracking" toolbar:text="Change Comment" toolbar:helpid="10625"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ProtectTraceChangeMode" toolbar:text="Protect" toolbar:helpid="10625"/>
  <toolbar:toolbaritem xlink:href=".uno:CompareDocuments" toolbar:text="Compare"/>
  <toolbar:toolbaritem xlink:href=".uno:MergeDocuments" toolbar:text="Merge" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:visible="false" toolbar:helpid="10625"/>
 </toolbar:toolbar>
