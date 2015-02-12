@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_ffbaf7bf",
+        "filename": "sc/source/core/tool/token.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4014,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T12:19:58Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer a new member function QueryWrapReference() or some such than pulling the bQueryNeedWrap argument through and unnecessarily complicate this function here.",
+      "revId": "e128cffa5a4209a60ecbf2d43b8a5f0eacd020a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_bfb47fd1",
+        "filename": "sc/source/filter/excel/excform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T12:19:58Z",
+      "side": 1,
+      "message": "Why create an ScFormulaCell just to throw it away again and replace it below?\n\nAn ScTokenArray::QueryWrapReference() function could check beforehand whether a copy is need or not.",
+      "revId": "e128cffa5a4209a60ecbf2d43b8a5f0eacd020a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9faf3b7d",
+        "filename": "sc/source/filter/excel/excform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T12:19:58Z",
+      "side": 1,
+      "message": "The old pCell\u0027s memory leaks here.",
+      "revId": "e128cffa5a4209a60ecbf2d43b8a5f0eacd020a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
