@@ -51,6 +51,9 @@
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLChangeImportContext.hxx"
 #include "txtlists.hxx"
+#include <com/sun/star/xml/FastAttribute.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <xmloff/token/tokens.hxx>
 
 #include <txtparaimphint.hxx>
 class XMLHints_Impl : public boost::ptr_vector<XMLHint_Impl> {};
@@ -63,6 +66,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 TYPEINIT1( XMLCharContext, SvXMLImportContext );
 
@@ -291,6 +296,10 @@ public:
             bool& rIgnLeadSpace,
             sal_uInt8 nSFConvFlags
                           );
+    XMLImpSpanContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        XMLHints_Impl& rHnts, bool& rIgnLeadSpace,
+        sal_uInt8 nSFConvFlags );
 
     virtual ~XMLImpSpanContext_Impl();
 
@@ -302,11 +311,22 @@ public:
             bool& rIgnLeadSpace,
             sal_uInt8 nStarFontsConvFlags = 0
              );
+    static Reference< xml::sax::XFastContextHandler > createFastChildContext(
+        SvXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        sal_uInt16 nToken, XMLHints_Impl& rHnts,
+        bool& rIgnLeadSpace, sal_uInt8 nStarFontsConvFlags = 0 );
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
@@ -1547,6 +1567,34 @@ XMLImpSpanContext_Impl::XMLImpSpanContext_Impl(
     }
 }
 
+XMLImpSpanContext_Impl::XMLImpSpanContext_Impl( SvXMLImport& rImport,
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    XMLHints_Impl& rHnts, bool& rIgnLeadSpace,
+    sal_uInt8 nSFConvFlags )
+:   SvXMLImportContext( rImport ),
+    rHints( rHnts ),
+    pHint( 0 ),
+    rIgnoreLeadingSpace( rIgnLeadSpace ),
+    nStarFontsConvFlags( nSFConvFlags & (CONV_FROM_STAR_BATS|CONV_FROM_STAR_MATH) )
+{
+    OUString aStyleName;
+
+    if( xAttrList.is() &&
+        Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name)
+        && xAttrList->hasAttribute( Element ) )
+    {
+        aStyleName = xAttrList->getValue( Element );
+    }
+
+    if( !aStyleName.isEmpty() )
+    {
+        pHint = new XMLStyleHint_Impl( aStyleName,
+            GetImport().GetTextImport()->GetCursorAsRange()->getStart() );
+        rHints.push_back( pHint );
+    }
+}
+
 XMLImpSpanContext_Impl::~XMLImpSpanContext_Impl()
 {
     if( pHint )
@@ -1795,6 +1843,27 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     return pContext;
 }
 
+Reference< xml::sax::XFastContextHandler >
+    XMLImpSpanContext_Impl::createFastChildContext( SvXMLImport& rImport,
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    sal_uInt16 nToken, XMLHints_Impl& rHints,
+    bool& rIgnoreLeadingSpace, sal_uInt8 nStarFontsConvFlags )
+{
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    switch( nToken )
+    {
+    case XML_TOK_TEXT_SPAN:
+        pContext = new XMLImpSpanContext_Impl( rImport, Element, xAttrList,
+                rHints, rIgnoreLeadingSpace, nStarFontsConvFlags );
+        break;
+    //TODO: missing cases
+    }
+
+    return pContext;
+}
+
 SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< xml::sax::XAttributeList > & xAttrList )
@@ -1809,6 +1878,19 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
                              );
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLImpSpanContext_Impl::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextPElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get( Element );
+
+    return createFastChildContext( GetImport(), Element, xAttrList,
+            nToken, rHints, rIgnoreLeadingSpace, nStarFontsConvFlags );
+}
+
 void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
 {
     OUString sStyleName;
@@ -1818,6 +1900,18 @@ void XMLImpSpanContext_Impl::Characters( const OUString& rChars )
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
                                                        false, GetImport() );
+    GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
+}
+
+void XMLImpSpanContext_Impl::characters( const OUString& rChars )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    OUString sStyleName;
+    if( pHint )
+        sStyleName = pHint->GetStyleName();
+    OUString sChars =
+        GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
+                nStarFontsConvFlags, false, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, rIgnoreLeadingSpace );
 }
 
