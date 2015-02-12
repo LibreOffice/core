@@ -1298,13 +1298,11 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 
     const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
 
-    sal_uInt16 nNum, nTmp, nFlagSize = ( rFmts.size() / 8 ) +2;
-    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
-    sal_uInt16 n;
+    sal_uInt16 nNum;
 
-    memset( pSetFlags, 0, nFlagSize );
+    std::vector<sal_uInt8> aSetFlags(rFmts.size()/8 + 2);
 
-    for( n = 0; n < rFmts.size(); ++n )
+    for( SwFrmFmts::size_type n = 0; n < rFmts.size(); ++n )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ n ];
         if( RES_FLYFRMFMT == pFlyFmt->Which() &&
@@ -1313,14 +1311,16 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
             // Only get and set the Flag
             nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().copy( nNmLen ).toInt32() );
             if( nNum-- && nNum < rFmts.size() )
-                pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+                aSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
     // All numbers are flagged accordingly, so determine the right one
     nNum = rFmts.size();
-    for( n = 0; n < nFlagSize; ++n )
-        if( 0xff != ( nTmp = pSetFlags[ n ] ))
+    for( std::vector<sal_uInt8>::size_type n=0; n<aSetFlags.size(); ++n )
+    {
+        sal_uInt8 nTmp = aSetFlags[ n ];
+        if( 0xff != nTmp )
         {
             // so determine the number
             nNum = n * 8;
@@ -1328,8 +1328,8 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
                 ++nNum, nTmp >>= 1;
             break;
         }
+    }
 
-    delete [] pSetFlags;
     return aName += OUString::number( ++nNum );
 }
 
