@@ -3610,6 +3610,81 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     i_rImport.GetTextImport()->GetTextListHelper().PushListContext( this );
 }
 
+XMLNumberedParaContext::XMLNumberedParaContext( SvXMLImport& rImport,
+    sal_Int32 /*nElement*/,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+:   SvXMLImportContext( rImport ),
+    m_Level(0),
+    m_StartValue(-1),
+    m_ListId(),
+    m_xNumRules()
+{
+    OUString StyleName;
+
+    const SvXMLTokenMap& rTokenMap(
+        rImport.GetTextImport()->GetTextNumberedParagraphAttrTokenMap() );
+
+    if ( xAttrList.is() )
+    {
+        uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+        for( xml::FastAttribute attribute : attributes )
+        {
+            switch( rTokenMap.Get( attribute.Token ) )
+            {
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_XMLID:
+                m_XmlId = attribute.Value;
+            //FIXME: there is no UNO API for lists
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LIST_ID:
+                m_ListId = attribute.Value;
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_LEVEL:
+                {
+                    sal_Int32 nTmp = attribute.Value.toInt32();
+                    if( nTmp >= 1 && nTmp <= SHRT_MAX ) {
+                        m_Level = static_cast<sal_uInt16>(nTmp) - 1;
+                    }
+                }
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_STYLE_NAME:
+                StyleName = attribute.Value;
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_CONTINUE_NUMBERING:
+                // this attribute is deprecated
+                break;
+            case XML_TOK_TEXT_NUMBERED_PARAGRAPH_START_VALUE:
+                {
+                    sal_Int32 nTmp = attribute.Value.toInt32();
+                    if( nTmp >= 0 && nTmp <= SHRT_MAX ) {
+                        m_StartValue = static_cast<sal_Int16>(nTmp);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    XMLTextListsHelper& rTextListsHelper(
+            rImport.GetTextImport()->GetTextListHelper() );
+    if( m_ListId.isEmpty() )
+    {
+        SAL_WARN_IF( rImport.GetODFVersion() == "1.2", "xmloff.text",
+                "invalid numbered-paragraph: no list-id (1.2)" );
+        m_ListId = rTextListsHelper.GetNumberedParagraphListId(
+                m_Level, StyleName );
+        SAL_WARN_IF( m_ListId.isEmpty(), "xmloff.text", "numbered-paragraph: no ListId");
+        if( m_ListId.isEmpty() ){
+            return;
+        }
+    }
+    m_xNumRules = rTextListsHelper.EnsureNumberedParagraph(
+            rImport, m_ListId, m_Level, StyleName );
+
+    SAL_WARN_IF( !m_xNumRules.is(), "xmloff.text", "numbered-paragraph: no NumRules" );
+
+    rImport.GetTextImport()->GetTextListHelper().PushListContext( this );
+}
+
 XMLNumberedParaContext::~XMLNumberedParaContext()
 {
 }
@@ -3617,6 +3692,14 @@ XMLNumberedParaContext::~XMLNumberedParaContext()
 void XMLNumberedParaContext::EndElement()
 {
     if (!m_ListId.isEmpty()) {
+        GetImport().GetTextImport()->PopListContext();
+    }
+}
+
+void SAL_CALL XMLNumberedParaContext::endFastElement( sal_Int32 /*nElement*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( !m_ListId.isEmpty() ) {
         GetImport().GetTextImport()->PopListContext();
     }
 }
@@ -3646,5 +3729,32 @@ SvXMLImportContext *XMLNumberedParaContext::CreateChildContext(
 
     return pContext;
 }
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLNumberedParaContext::createFastChildContext( sal_Int32 nElement,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext( 0 );
+
+    if( ( ( nElement & NMSP_MASK ) == NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) ) ||
+        ( ( nElement & NMSP_MASK ) == NAMESPACE_TOKEN( XML_NAMESPACE_LO_EXT ) ) )
+    {
+        bool bIsHeader( XML_H == ( nElement & TOKEN_MASK ) );
+        if( bIsHeader || ( XML_P == ( nElement & TOKEN_MASK ) ) )
+        {
+            pContext = new XMLParaContext( GetImport(),
+                    nElement, xAttrList, bIsHeader );
+        }
+    }
+
+    if( !pContext.is() ) {
+        pContext = SvXMLImportContext::createFastChildContext(
+                nElement, xAttrList );
+    }
+
+    return pContext;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

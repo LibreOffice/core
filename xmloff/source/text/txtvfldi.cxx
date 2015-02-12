@@ -699,6 +699,15 @@ XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
 {
 }
 
+XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_Int32 /*nElement*/,
+    enum VarType eVarType )
+    :   SvXMLImportContext( rImport ),
+        eVarDeclsContextType(eVarType),
+        rImportHelper(rHlp)
+{
+}
+
 SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList> & xAttrList )
@@ -743,6 +752,49 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     return pImportContext;
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLVariableDeclsImportContext::createFastChildContext( sal_Int32 nElement,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    enum XMLTokenEnum eElementName;
+    Reference< xml::sax::XFastContextHandler > pImportContext = nullptr;
+
+    if( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) == ( nElement & NMSP_MASK ) )
+    {
+        switch (eVarDeclsContextType)
+        {
+            case VarTypeSequence:
+                eElementName = XML_SEQUENCE_DECL;
+                break;
+            case VarTypeSimple:
+                eElementName = XML_VARIABLE_DECL;
+                break;
+            case VarTypeUserField:
+                eElementName = XML_USER_FIELD_DECL;
+                break;
+            default:
+                OSL_FAIL("unknown field type!");
+                eElementName = XML_SEQUENCE_DECL;
+                break;
+        }
+
+        if( eElementName == ( nElement & TOKEN_MASK ) )
+        {
+            pImportContext = new XMLVariableDeclImportContext(
+                GetImport(), rImportHelper, nElement, xAttrList,
+                eVarDeclsContextType);
+        }
+    }
+
+    // if no context was created, use default context
+    if (!pImportContext.is()) {
+        pImportContext = SvXMLImportContext::createFastChildContext(nElement,
+                                                                xAttrList);
+    }
+
+    return pImportContext;
+}
 
 // declaration import (<variable/user-field/sequence-decl> elements)
 
@@ -852,6 +904,109 @@ XMLVariableDeclImportContext::XMLVariableDeclImportContext(
         } // else: no field master found/constructed
     } // else: no sequence-decl
 }
+
+XMLVariableDeclImportContext::XMLVariableDeclImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp,
+    sal_Int32 nElement,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    enum VarType eVarType )
+    :   SvXMLImportContext( rImport ),
+        // bug?? which properties for userfield/userfieldmaster
+        sPropertySubType(sAPI_sub_type),
+        sPropertyNumberingLevel(sAPI_chapter_numbering_level),
+        sPropertyNumberingSeparator(sAPI_numbering_separator),
+        sPropertyIsExpression(sAPI_is_expression),
+        aValueHelper(rImport, rHlp, true, false, true, false),
+        nNumLevel(-1), cSeparationChar('.')
+{
+    if( nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_SEQUENCE_DECL)
+     || nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_VARIABLE_DECL)
+     || nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_USER_FIELD_DECL) )
+    {
+        // TODO: check validity (need name!)
+        if( xAttrList.is() )
+        {
+            // parse attributes
+            uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+            for( xml::FastAttribute attribute : attributes )
+            {
+                sal_uInt16 nToken = rHlp.
+                GetTextFieldAttrTokenMap().Get(nElement);
+
+                switch( nToken )
+                {
+                case XML_TOK_TEXTFIELD_NAME:
+                    sName = attribute.Value;
+                    break;
+                case XML_TOK_TEXTFIELD_NUMBERING_LEVEL:
+                {
+                    sal_Int32 nLevel;
+                    bool const bRet = ::sax::Converter::convertNumber(
+                        nLevel, attribute.Value, 0,
+                        GetImport().GetTextImport()->GetChapterNumbering()->
+                                                                getCount() );
+
+                    if( bRet )
+                    {
+                        nNumLevel = static_cast< sal_Int8 >( nLevel-1 ); // API numbers -1..9
+                    }
+                    break;
+                }
+                case XML_TOK_TEXTFIELD_NUMBERING_SEPARATOR:
+                    cSeparationChar =
+                        (sal_Char)attribute.Value.toChar();
+                    break;
+                default:
+                    // delegate to value helper
+                    aValueHelper.ProcessAttribute( nToken, attribute.Value );
+                    break;
+                }
+            }
+        }
+
+        Reference<XPropertySet> xFieldMaster;
+        if (FindFieldMaster(xFieldMaster, GetImport(), rHlp,
+                            sName, eVarType))
+        {
+            // now we have a field master: process attributes!
+            Any aAny;
+
+            switch (eVarType)
+            {
+            case VarTypeSequence:
+                xFieldMaster->setPropertyValue(sPropertyNumberingLevel, Any(nNumLevel));
+
+                if (nNumLevel >= 0)
+                {
+                    OUString sStr(&cSeparationChar, 1);
+                    xFieldMaster->setPropertyValue(
+                        sPropertyNumberingSeparator, Any(sStr));
+                }
+                break;
+            case VarTypeSimple:
+                {
+                    // set string or non-string SubType (#93192#)
+                    // The SubType was already set in the FindFieldMaster
+                    // method, but it needs to be adjusted if it's a string.
+                    aAny <<= aValueHelper.IsStringValue()
+                        ? SetVariableType::STRING : SetVariableType::VAR;
+                    xFieldMaster->setPropertyValue(sPropertySubType, aAny);
+                }
+                break;
+            case VarTypeUserField:
+            {
+                bool bTmp = !aValueHelper.IsStringValue();
+                xFieldMaster->setPropertyValue(sPropertyIsExpression, Any(bTmp));
+                aValueHelper.PrepareField(xFieldMaster);
+                break;
+            }
+            default:
+                OSL_FAIL("unknown varfield type");
+            } // switch
+        } // else: no field master found/constructed
+    } // else: no sequence-decl
+}
+
 
 
 bool XMLVariableDeclImportContext::FindFieldMaster(

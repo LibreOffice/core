@@ -425,10 +425,21 @@ public:
         const OUString& rLocalName,      /// element name w/o prefix
         enum VarType eVarType);                 /// variable type
 
+    XMLVariableDeclsImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// text import helper
+        sal_Int32 nElement,                      /// xml-tag specifier
+        enum VarType eVarType );                /// variable type
+
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 /**
@@ -457,6 +468,13 @@ public:
         const OUString& rLocalName,      /// element name w/o prefix
         const css::uno::Reference< css::xml::sax::XAttributeList> & xAttrList,/// list of element attributes
         enum VarType eVarType);                 /// variable type
+
+    XMLVariableDeclImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// text import helper
+        sal_Int32 nElement,                      /// XML-tag specifier
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,/// list of element attributes
+        enum VarType eVarType );                /// variable type
 
     /// get field master for name and rename if appropriate
     static bool FindFieldMaster(css::uno::Reference<css::beans::XPropertySet> & xMaster,
