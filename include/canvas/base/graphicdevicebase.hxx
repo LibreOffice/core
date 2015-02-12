@@ -187,8 +187,10 @@ namespace canvas
             return maDeviceHelper.createCompatibleBezierPolyPolygon( this, points );
         }
 
-        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleBitmap( const css::geometry::IntegerSize2D& size ) throw (css::lang::IllegalArgumentException,
-                                                                                                                                                                                         css::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleBitmap( const css::geometry::IntegerSize2D& size )
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException,
+                   std::exception) SAL_OVERRIDE
         {
             tools::verifyBitmapSize(size,
                                     BOOST_CURRENT_FUNCTION,
@@ -211,8 +213,10 @@ namespace canvas
             return maDeviceHelper.createVolatileBitmap( this, size );
         }
 
-        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size ) throw (css::lang::IllegalArgumentException,
-                                                                                                                                                                                              css::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL createCompatibleAlphaBitmap( const css::geometry::IntegerSize2D& size )
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException,
+                   std::exception) SAL_OVERRIDE
         {
             tools::verifyBitmapSize(size,
                                     BOOST_CURRENT_FUNCTION,
