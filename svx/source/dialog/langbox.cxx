@@ -713,21 +713,29 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
         const sal_Int32 nPos = GetEntryPos( aStr);
         if (nPos != COMBOBOX_ENTRY_NOTFOUND)
         {
-            // Advance start of full selection by one so the next character
-            // will already continue the string instead of having to type the
-            // same character again to start a new string. The selection
-            // includes formatting characters and is reverse when obtained from
-            // the Edit control.
             Selection aSel( GetSelection());
+
+            // Select the corresponding listbox entry if not current. This
+            // invalidates the Edit Selection thus has to happen between
+            // obtaining the Selection and setting the new Selection.
+            sal_Int32 nSelPos = ImplGetSelectEntryPos();
+            if (nSelPos != nPos)
+                ImplSelectEntryPos( nPos, true);
+
+            // If typing into the Edit control led us here, advance start of a
+            // full selection by one so the next character will already
+            // continue the string instead of having to type the same character
+            // again to start a new string. The selection includes formatting
+            // characters and is reverse when obtained from the Edit control.
             if (aSel.Max() == 1)
             {
                 OUString aText( GetText());
                 if (aSel.Min() == aText.getLength())
-                {
                     ++aSel.Max();
-                    SetSelection( aSel);
-                }
             }
+
+            SetSelection( aSel);
+
             meEditedAndValid = EDITED_NO;
         }
         else
