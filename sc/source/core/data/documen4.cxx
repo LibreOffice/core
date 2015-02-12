@@ -291,8 +291,7 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         if (*itr == nTab1)
         {
             pCell = maTabs[*itr]->SetFormulaCell(nCol1, nRow1, pCell);
-            assert(pCell);  //NULL if nCol1/nRow1 is invalid, which it can't be here
-            if (!pCell)
+            if (!pCell) //NULL if nCol1/nRow1 is invalid, which it can't be here
                 break;
         }
         else
