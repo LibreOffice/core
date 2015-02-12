@@ -38,6 +38,16 @@ public class Document {
      */
     public static final int CALLBACK_INVALIDATE_TILES = 0;
     public static final int CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1;
+    public static final int CALLBACK_INVALIDATE_TEXT_SELECTION = 2;
+    public static final int CALLBACK_INVALIDATE_TEXT_SELECTION_START = 3;
+    public static final int CALLBACK_INVALIDATE_TEXT_SELECTION_END = 4;
+
+    /**
+     * Text selection types
+     */
+    public static final int TEXT_SELECTION_START = 0;
+    public static final int TEXT_SELECTION_END = 1;
+    public static final int TEXT_SELECTION_RESET = 2;
 
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
@@ -106,6 +116,14 @@ public class Document {
      * @param count - number of events
      */
     public native void postMouseEvent(int type, int x, int y, int count);
+
+    /**
+     * Change text selection
+     * @param type - text selection type
+     * @param x - x coordinate
+     * @param y - y coordinate
+     */
+    public native void setTextSelection(int type, int x, int y);
 
     /**
      * Callback to retrieve messages from LOK
