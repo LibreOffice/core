@@ -66,11 +66,12 @@
 #include <tools/wintypes.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_OFilterControl_get_implementation(css::uno::XComponentContext* context,
+                                                            css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::OFilterControl > aAutoRegistration;
+    return cppu::acquire(new frm::OFilterControl(context));
 }
-
 
 namespace frm
 {

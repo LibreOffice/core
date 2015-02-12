@@ -43,7 +43,8 @@
     <service name="com.sun.star.form.component.HTMLForm"/>
     <service name="stardiv.one.form.component.Form"/>
   </implementation>
-  <implementation name="com.sun.star.comp.forms.OFilterControl">
+  <implementation name="com.sun.star.comp.forms.OFilterControl"
+      constructor="com_sun_star_comp_forms_OFilterControl_get_implementation">
     <service name="com.sun.star.awt.UnoControl"/>
     <service name="com.sun.star.form.control.FilterControl"/>
   </implementation>

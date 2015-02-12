@@ -221,7 +221,6 @@ void SAL_CALL createRegistryInfo_FORMS()
     static bool bInit = false;
     if (!bInit)
     {
-        createRegistryInfo_OFilterControl();
         createRegistryInfo_OScrollBarModel();
         createRegistryInfo_OSpinButtonModel();
         createRegistryInfo_ONavigationBarModel();
