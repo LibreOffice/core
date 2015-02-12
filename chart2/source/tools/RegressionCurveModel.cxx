@@ -683,4 +683,54 @@ uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::create
 
 } //  namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_ExponentialRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::ExponentialRegressionCurve(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_LinearRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::LinearRegressionCurve(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_LogarithmicRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::LogarithmicRegressionCurve(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_MeanValueRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::MeanValueRegressionCurve(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_PotentialRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::PotentialRegressionCurve(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_PolynomialRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::PolynomialRegressionCurve(context));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_MovingAverageRegressionCurve_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::MovingAverageRegressionCurve(context));
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

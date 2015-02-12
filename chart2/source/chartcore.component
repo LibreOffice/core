@@ -18,166 +18,205 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="chartcore" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.chart2.ExponentialScaling">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.chart2.ExponentialScaling"
+    constructor="com_sun_star_chart2_ExponentialScaling_get_implementation">
     <service name="com.sun.star.chart2.ExponentialScaling"/>
   </implementation>
-  <implementation name="com.sun.star.chart2.LinearScaling">
+  <implementation name="com.sun.star.chart2.LinearScaling"
+    constructor="com_sun_star_chart2_LinearScaling_get_implementation">
     <service name="com.sun.star.chart2.LinearScaling"/>
   </implementation>
-  <implementation name="com.sun.star.chart2.LogarithmicScaling">
+  <implementation name="com.sun.star.chart2.LogarithmicScaling"
+    constructor="com_sun_star_chart2_LogarithmicScaling_get_implementation">
     <service name="com.sun.star.chart2.LogarithmicScaling"/>
   </implementation>
-  <implementation name="com.sun.star.chart2.PowerScaling">
+  <implementation name="com.sun.star.chart2.PowerScaling"
+    constructor="com_sun_star_chart2_PowerScaling_get_implementation">
     <service name="com.sun.star.chart2.PowerScaling"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.CachedDataSequence">
+  <implementation name="com.sun.star.comp.chart.CachedDataSequence"
+    constructor="com_sun_star_comp_chart_CachedDataSequence_get_implementation">
     <service name="com.sun.star.chart2.data.DataSequence"/>
     <service name="com.sun.star.chart2.data.NumericalDataSequence"/>
     <service name="com.sun.star.chart2.data.TextualDataSequence"/>
     <service name="com.sun.star.comp.chart.CachedDataSequence"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.DataSource">
+  <implementation name="com.sun.star.comp.chart.DataSource"
+    constructor="com_sun_star_comp_chart_DataSource_get_implementation">
     <service name="com.sun.star.chart2.data.DataSource"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.InternalDataProvider">
+  <implementation name="com.sun.star.comp.chart.InternalDataProvider"
+    constructor="com_sun_star_comp_chart_InternalDataProvider_get_implementation">
     <service name="com.sun.star.chart2.data.DataProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ConfigDefaultColorScheme">
+  <implementation name="com.sun.star.comp.chart2.ConfigDefaultColorScheme"
+    constructor="com_sun_star_comp_chart2_ConfigDefaultColorScheme_get_implementation">
     <service name="com.sun.star.chart2.ColorScheme"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ErrorBar">
+  <implementation name="com.sun.star.comp.chart2.ErrorBar"
+    constructor="com_sun_star_comp_chart2_ErrorBar_get_implementation">
     <service name="com.sun.star.chart2.ErrorBar"/>
     <service name="com.sun.star.comp.chart2.ErrorBar"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ExponentialRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.ExponentialRegressionCurve"
+    constructor="com_sun_star_comp_chart2_ExponentialRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.ExponentialRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.LabeledDataSequence">
+  <implementation name="com.sun.star.comp.chart2.LabeledDataSequence"
+    constructor="com_sun_star_comp_chart2_LabeledDataSequence_get_implementation">
     <service name="com.sun.star.chart2.data.LabeledDataSequence"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.LinearRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.LinearRegressionCurve"
+    constructor="com_sun_star_comp_chart2_LinearRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.LinearRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.LogarithmicRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.LogarithmicRegressionCurve"
+    constructor="com_sun_star_comp_chart2_LogarithmicRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.LogarithmicRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.MeanValueRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.MeanValueRegressionCurve"
+    constructor="com_sun_star_comp_chart2_MeanValueRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.MeanValueRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.PotentialRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.PotentialRegressionCurve"
+    constructor="com_sun_star_comp_chart2_PotentialRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.PotentialRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.PolynomialRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.PolynomialRegressionCurve"
+    constructor="com_sun_star_comp_chart2_PolynomialRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.PolynomialRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.MovingAverageRegressionCurve">
+  <implementation name="com.sun.star.comp.chart2.MovingAverageRegressionCurve"
+    constructor="com_sun_star_comp_chart2_MovingAverageRegressionCurve_get_implementation">
     <service name="com.sun.star.chart2.MovingAverageRegressionCurve"/>
     <service name="com.sun.star.chart2.RegressionCurve"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.RegressionEquation">
+  <implementation name="com.sun.star.comp.chart2.RegressionEquation"
+    constructor="com_sun_star_comp_chart2_RegressionEquation_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.RegressionEquation"/>
     <service name="com.sun.star.drawing.FillProperties"/>
     <service name="com.sun.star.drawing.LineProperties"/>
     <service name="com.sun.star.style.CharacterProperties"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.AreaChartType">
+  <implementation name="com.sun.star.comp.chart.AreaChartType"
+    constructor="com_sun_star_comp_chart_AreaChartType_get_implementation">
     <service name="com.sun.star.chart2.AreaChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.BarChartType">
+  <implementation name="com.sun.star.comp.chart.BarChartType"
+    constructor="com_sun_star_comp_chart_BarChartType_get_implementation">
     <service name="com.sun.star.chart2.BarChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.BubbleChartType">
+  <implementation name="com.sun.star.comp.chart.BubbleChartType"
+    constructor="com_sun_star_comp_chart_BubbleChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.BubbleChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.GL3DBarChartType">
+  <implementation name="com.sun.star.comp.chart.GL3DBarChartType"
+    constructor="com_sun_star_comp_chart_GL3DBarChartType_get_implementation">
     <service name="com.sun.star.chart2.GL3DBarChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.CandleStickChartType">
+  <implementation name="com.sun.star.comp.chart.CandleStickChartType"
+    constructor="com_sun_star_comp_chart_CandleStickChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.CandleStickChartType"/>
     <service name="com.sun.star.chart2.ChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.ChartTypeManager">
+  <implementation name="com.sun.star.comp.chart.ChartTypeManager"
+    constructor="com_sun_star_comp_chart_ChartTypeManager_get_implementation">
     <service name="com.sun.star.chart2.ChartTypeManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.ColumnChartType">
+  <implementation name="com.sun.star.comp.chart.ColumnChartType"
+    constructor="com_sun_star_comp_chart_ColumnChartType_get_implementation">
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.ColumnChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.DataSeries">
+  <implementation name="com.sun.star.comp.chart.DataSeries"
+    constructor="com_sun_star_comp_chart_DataSeries_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.DataPointProperties"/>
     <service name="com.sun.star.chart2.DataSeries"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.FilledNetChartType">
+  <implementation name="com.sun.star.comp.chart.FilledNetChartType"
+    constructor="com_sun_star_comp_chart_FilledNetChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.FilledNetChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.FormattedString">
+  <implementation name="com.sun.star.comp.chart.FormattedString"
+    constructor="com_sun_star_comp_chart_FormattedString_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.FormattedString"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.LineChartType">
+  <implementation name="com.sun.star.comp.chart.LineChartType"
+    constructor="com_sun_star_comp_chart_LineChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.LineChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.NetChartType">
+  <implementation name="com.sun.star.comp.chart.NetChartType"
+    constructor="com_sun_star_comp_chart_NetChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.NetChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.PieChartType">
+  <implementation name="com.sun.star.comp.chart.PieChartType"
+    constructor="com_sun_star_comp_chart_PieChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.PieChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart.ScatterChartType">
+  <implementation name="com.sun.star.comp.chart.ScatterChartType"
+    constructor="com_sun_star_comp_chart_ScatterChartType_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.ChartType"/>
     <service name="com.sun.star.chart2.ScatterChartType"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.Axis">
+  <implementation name="com.sun.star.comp.chart2.Axis"
+    constructor="com_sun_star_comp_chart2_Axis_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.Axis"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.CartesianCoordinateSystem2d">
+  <implementation name="com.sun.star.comp.chart2.CartesianCoordinateSystem2d"
+    constructor="com_sun_star_comp_chart2_CartesianCoordinateSystem2d_get_implementation">
     <service name="com.sun.star.chart2.CartesianCoordinateSystem2d"/>
     <service name="com.sun.star.chart2.CoordinateSystems.Cartesian"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.CartesianCoordinateSystem3d">
+  <implementation name="com.sun.star.comp.chart2.CartesianCoordinateSystem3d"
+    constructor="com_sun_star_comp_chart2_CartesianCoordinateSystem3d_get_implementation">
     <service name="com.sun.star.chart2.CartesianCoordinateSystem3d"/>
     <service name="com.sun.star.chart2.CoordinateSystems.Cartesian"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.ChartModel">
+  <implementation name="com.sun.star.comp.chart2.ChartModel"
+    constructor="com_sun_star_comp_chart2_ChartModel_get_implementation">
     <service name="com.sun.star.chart.ChartDocument"/>
     <service name="com.sun.star.chart2.ChartDocument"/>
     <service name="com.sun.star.document.OfficeDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.Diagram">
+  <implementation name="com.sun.star.comp.chart2.Diagram"
+    constructor="com_sun_star_comp_chart2_Diagram_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.Diagram"/>
     <service name="com.sun.star.layout.LayoutElement"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.GridProperties">
+  <implementation name="com.sun.star.comp.chart2.GridProperties"
+    constructor="com_sun_star_comp_chart2_GridProperties_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.GridProperties"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.Legend">
+  <implementation name="com.sun.star.comp.chart2.Legend"
+    constructor="com_sun_star_comp_chart2_Legend_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.Legend"/>
     <service name="com.sun.star.drawing.FillProperties"/>
@@ -185,29 +224,35 @@
     <service name="com.sun.star.layout.LayoutElement"/>
     <service name="com.sun.star.style.CharacterProperties"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.PageBackground">
+  <implementation name="com.sun.star.comp.chart2.PageBackground"
+    constructor="com_sun_star_comp_chart2_PageBackground_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.PageBackground"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.PolarCoordinateSystem2d">
+  <implementation name="com.sun.star.comp.chart2.PolarCoordinateSystem2d"
+    constructor="com_sun_star_comp_chart2_PolarCoordinateSystem2d_get_implementation">
     <service name="com.sun.star.chart2.CoordinateSystems.Polar"/>
     <service name="com.sun.star.chart2.PolarCoordinateSystem2d"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.PolarCoordinateSystem3d">
+  <implementation name="com.sun.star.comp.chart2.PolarCoordinateSystem3d"
+    constructor="com_sun_star_comp_chart2_PolarCoordinateSystem3d_get_implementation">
     <service name="com.sun.star.chart2.CoordinateSystems.Polar"/>
     <service name="com.sun.star.chart2.PolarCoordinateSystem3d"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.Title">
+  <implementation name="com.sun.star.comp.chart2.Title"
+    constructor="com_sun_star_comp_chart2_Title_get_implementation">
     <service name="com.sun.star.beans.PropertySet"/>
     <service name="com.sun.star.chart2.Title"/>
     <service name="com.sun.star.layout.LayoutElement"/>
     <service name="com.sun.star.style.ParagraphProperties"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.XMLFilter">
+  <implementation name="com.sun.star.comp.chart2.XMLFilter"
+    constructor="com_sun_star_comp_chart2_XMLFilter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.chart2.report.XMLFilter">
+  <implementation name="com.sun.star.comp.chart2.report.XMLFilter"
+    constructor="com_sun_star_comp_chart2_XMLFilter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>

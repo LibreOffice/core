@@ -394,4 +394,11 @@ void SAL_CALL CachedDataSequence::initialize(const uno::Sequence< uno::Any > & _
 }
 }  // namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart_CachedDataSequence_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new chart::CachedDataSequence(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

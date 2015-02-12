@@ -225,4 +225,11 @@ css::uno::Sequence< OUString > SAL_CALL LineChartType::getSupportedServiceNames(
 
 } //  namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart_LineChartType_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::LineChartType(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

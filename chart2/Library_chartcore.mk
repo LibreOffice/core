@@ -138,7 +138,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/main/Legend \
     chart2/source/model/main/PageBackground \
     chart2/source/model/main/PolarCoordinateSystem \
-    chart2/source/model/main/_serviceregistration_model \
     chart2/source/model/main/StockBar \
     chart2/source/model/main/Title \
     chart2/source/model/main/UndoManager \
@@ -169,7 +168,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/template/PieChartTypeTemplate \
     chart2/source/model/template/ScatterChartType \
     chart2/source/model/template/ScatterChartTypeTemplate \
-    chart2/source/model/template/_serviceregistration_charttypes \
     chart2/source/model/template/StockChartTypeTemplate \
     chart2/source/model/template/StockDataInterpreter \
     chart2/source/model/template/XYDataInterpreter \
@@ -232,7 +230,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/ResourceManager \
     chart2/source/tools/Scaling \
     chart2/source/tools/SceneProperties \
-    chart2/source/tools/_serviceregistration_tools \
     chart2/source/tools/StatisticsHelper \
     chart2/source/tools/ThreeDHelper \
     chart2/source/tools/TitleHelper \
