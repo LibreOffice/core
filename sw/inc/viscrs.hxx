@@ -71,7 +71,7 @@ class SwSelPaintRects : public SwRects
 
     const SwCrsrShell* pCShell;
 
-#if HAVE_FEATURE_DESKTOP
+#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
     sdr::overlay::OverlayObject*    mpCursorOverlay;
 
     // access to mpCursorOverlay for swapContent
