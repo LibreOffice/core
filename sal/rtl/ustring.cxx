@@ -569,11 +569,12 @@ void SAL_CALL rtl_uString_newFromCodePoints(
             ++n;
         }
     }
-    /* coverity[dead_error_condition] - Builds on the assumption that sal_Int32
-       uses 32 bit two's complement representation with wrap around (the
-       necessary number of UTF-16 code units will be no larger than 2 *
-       SAL_MAX_INT32, represented as sal_Int32 -2): */
+    /* Builds on the assumption that sal_Int32 uses 32 bit two's complement
+       representation with wrap around (the necessary number of UTF-16 code
+       units will be no larger than 2 * SAL_MAX_INT32, represented as
+       sal_Int32 -2): */
     if (n < 0) {
+        // coverity[dead_error_begin] - assumes wrap around
         *newString = NULL;
         return;
     }
