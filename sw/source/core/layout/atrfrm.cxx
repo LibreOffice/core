@@ -2810,6 +2810,31 @@ OUString SwFrmFmt::GetDescription() const
     return SW_RES(STR_FRAME);
 }
 
+void SwFrmFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFrmFmt"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("whichId"), "%d", Which());
+
+    const char* pWhich = 0;
+    switch (Which())
+    {
+    case RES_FLYFRMFMT:
+        pWhich = "fly frame format";
+        break;
+    case RES_DRAWFRMFMT:
+        pWhich = "draw frame format";
+        break;
+    }
+    if (pWhich)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
+
+    GetAttrSet().dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 //  class SwFlyFrmFmt
 //  Partially implemented inline in hxx
 
