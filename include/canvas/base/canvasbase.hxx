@@ -303,11 +303,13 @@ namespace canvas
         }
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            fillTexturedPolyPolygon( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
-                                     const ::com::sun::star::rendering::ViewState&                                          viewState,
-                                     const ::com::sun::star::rendering::RenderState&                                        renderState,
-                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::rendering::Texture >&         textures ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                              ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+            fillTexturedPolyPolygon(const css::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >& xPolyPolygon,
+                                    const css::rendering::ViewState&                                          viewState,
+                                    const css::rendering::RenderState&                                        renderState,
+                                    const css::uno::Sequence< ::com::sun::star::rendering::Texture >&         textures)
+                                        throw (css::lang::IllegalArgumentException,
+                                               css::uno::RuntimeException,
+                                               std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(xPolyPolygon, viewState, renderState, textures,
                               BOOST_CURRENT_FUNCTION,
@@ -400,9 +402,12 @@ namespace canvas
 
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawTextLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XTextLayout >& laidOutText,
-                            const ::com::sun::star::rendering::ViewState&                                       viewState,
-                            const ::com::sun::star::rendering::RenderState&                                     renderState ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+            drawTextLayout(const css::uno::Reference< ::com::sun::star::rendering::XTextLayout >& laidOutText,
+                            const css::rendering::ViewState&                                       viewState,
+                            const css::rendering::RenderState&                                     renderState)
+                            throw (css::lang::IllegalArgumentException,
+                                   css::uno::RuntimeException,
+                                   std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(laidOutText, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
