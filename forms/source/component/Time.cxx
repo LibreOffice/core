@@ -25,6 +25,20 @@
 
 using namespace dbtools;
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OTimeModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OTimeModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OTimeControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                  ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OTimeControl(component));
+}
+
 namespace frm
 {
 

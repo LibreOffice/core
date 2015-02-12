@@ -36,6 +36,14 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 using namespace ::com::sun::star::uno;
+
+extern "C" SAL_DLLPUBLIC_EXPORT XInterface* SAL_CALL
+com_sun_star_form_OGridControlModel_get_implementation(XComponentContext* component,
+                                                       Sequence<Any> const &)
+{
+    return cppu::acquire(new frm::OGridControlModel(component));
+}
+
 namespace frm
 {
 using namespace ::com::sun::star;

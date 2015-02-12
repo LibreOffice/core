@@ -33,9 +33,10 @@ namespace frm
         sal_Int32   m_nDefaultScrollValue;
         // </properties>
 
-    protected:
+    public:
         DECLARE_DEFAULT_LEAF_XTOR( OScrollBarModel );
 
+    protected:
         // XServiceInfo
         DECLARE_SERVICE_REGISTRATION( OScrollBarModel )
 

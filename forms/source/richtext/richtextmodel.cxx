@@ -34,11 +34,12 @@
 #include <vcl/svapp.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_ORichTextModel()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_ORichTextModel_get_implementation(css::uno::XComponentContext* context,
+                                                          css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextModel >   aRegisterModel;
+    return cppu::acquire(new frm::ORichTextModel(context));
 }
-
 
 namespace frm
 {

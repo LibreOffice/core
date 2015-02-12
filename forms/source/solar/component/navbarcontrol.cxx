@@ -40,11 +40,12 @@
 #include <vcl/settings.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_form_ONavigationBarControl_get_implementation (css::uno::XComponentContext* context,
+                                                                 css::uno::Sequence<css::uno::Any> const &)
 {
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarControl > aAutoRegistration;
+    return cppu::acquire(new frm::ONavigationBarControl(context));
 }
-
 
 namespace frm
 {

@@ -23,11 +23,12 @@
 #include <rtl/math.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_OScrollBarModel()
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_OScrollBarModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::OScrollBarModel >   aRegisterModel;
+    return cppu::acquire(new frm::OScrollBarModel(component));
 }
-
 
 namespace frm
 {

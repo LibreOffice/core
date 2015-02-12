@@ -54,6 +54,9 @@ namespace frm
             ,public ::comphelper::OPropertyContainerHelper
             ,public ORichTextModel_BASE
     {
+    public:
+        DECLARE_DEFAULT_LEAF_XTOR( ORichTextModel );
+
     private:
         // <properties>
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >
@@ -100,7 +103,6 @@ namespace frm
         static  RichTextEngine* getEditEngine( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel );
 
     private:
-        DECLARE_DEFAULT_LEAF_XTOR( ORichTextModel );
 
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ORichTextModel, OControlModel )

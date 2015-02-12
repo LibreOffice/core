@@ -55,6 +55,16 @@
 #include <unotools/desktopterminationobserver.hxx>
 #include <list>
 #include <algorithm>
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OFormattedControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                       ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OFormattedControl(component));
+}
+
+
 using namespace dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -68,12 +78,14 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
+
 namespace
 {
     typedef com::sun::star::util::Date UNODate;
     typedef com::sun::star::util::Time UNOTime;
     typedef com::sun::star::util::DateTime UNODateTime;
 }
+
 namespace frm
 {
 class StandardFormatsSupplier : protected SvNumberFormatsSupplierObj, public ::utl::ITerminationListener

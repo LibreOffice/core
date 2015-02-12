@@ -24,6 +24,21 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OCurrencyModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OCurrencyModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OCurrencyControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OCurrencyControl(component));
+}
+
 namespace frm
 {
 

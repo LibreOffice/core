@@ -28,6 +28,20 @@
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ORadioButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                       ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ORadioButtonModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ORadioButtonControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ORadioButtonControl(component));
+}
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
