@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_7fa02791",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-12T11:57:55Z",
+      "side": 1,
+      "message": "Actually the string is already empty..\n\nBeside that instead of assigning an empty \"\" literal, using OUString::clear() should be preferred to clear a string.\n\nNothing to stop this patch from going into 4-4 though.",
+      "revId": "b1b01c27a93be509c454fde12dfbe0ab50945e87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
