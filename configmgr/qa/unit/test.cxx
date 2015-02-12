@@ -123,11 +123,11 @@ protected:
 
 private:
     virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL propertyChange(
         css::beans::PropertyChangeEvent const &)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     int count_;
     bool * destroyed_;
@@ -160,14 +160,14 @@ RecursiveTest::~RecursiveTest()
 }
 
 void RecursiveTest::disposing(css::lang::EventObject const & Source)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     CPPUNIT_ASSERT(properties_.is() && Source.Source == properties_);
     properties_.clear();
 }
 
 void RecursiveTest::propertyChange(css::beans::PropertyChangeEvent const & evt)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     CPPUNIT_ASSERT( evt.Source == properties_ && evt.PropertyName == "Label" );
     if (count_ > 0) {
