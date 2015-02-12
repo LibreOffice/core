@@ -494,7 +494,6 @@ certain functionality.
 @li @c jvmaccess
 @li @c linguistic
 @li @c mysqlc
-@li @c postprocess.cppunit
 @li @c registry
 @li @c reportdesign
 @li @c rsc

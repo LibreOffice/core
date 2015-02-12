@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_use_externals,services, \
 
 $(eval $(call gb_CppunitTest_use_libraries,services, \
 	cppu \
+	cppuhelper \
 	sal \
 	test \
 	vcl \
@@ -26,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,services, \
 ))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,services))
+$(eval $(call gb_CppunitTest_use_api,services,oovbaapi))
 
 $(eval $(call gb_CppunitTest_use_ure,services))
 $(eval $(call gb_CppunitTest_use_vcl,services))

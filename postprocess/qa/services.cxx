@@ -7,42 +7,61 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// Try to instantiate as many implementations as possible.  Finds all
+// implementations reachable via the service manager.  If a given implementation
+// is the only implementor of some service that has a zero-parameter
+// constructor, instantiate the implementation through that service name.  If a
+// given implementation does not offer any such contructors (because it does not
+// support any single-interface--based service, or because for each relevant
+// service there are multiple implementations or it does not have an appropriate
+// constructor) but does support at least one accumulation-based service, then
+// instantiate it through its implementation name (a heuristic to identify
+// instantiatable implementations that appears to work well).
+
 #include <sal/config.h>
 
 #include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <map>
+#include <utility>
 #include <vector>
 
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <cppuhelper/exc_hlp.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/svapp.hxx>
 
-using namespace css::container;
-using namespace css::reflection;
-using namespace css::uno;
-
 namespace {
 
-class ServicesTest: public test::BootstrapFixture
-{
+OString msg(OUString const & string) {
+    return OUStringToOString(string, osl_getThreadTextEncoding());
+}
+
+class Test: public test::BootstrapFixture {
 public:
     void test();
 
-    CPPUNIT_TEST_SUITE(ServicesTest);
+    CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    void createInstance(
+        OUString const & name, bool withArguments,
+        std::vector<css::uno::Reference<css::lang::XComponent>> * components);
 };
 
-void ServicesTest::test()
-{
-    std::vector<OUString> blacklist;
-
-    // On Windows, blacklist the com.sun.star.report.ReportDefinition service,
-    // as its reportdesign::OReportDefinition implementation (in
-    // reportdesign/source/core/api/ReportDefinition.cxx) spawns a thread that
-    // forever blocks in SendMessageW when no VCL event loop is running
+void Test::test() {
+    // On Windows, blacklist the com.sun.star.comp.report.OReportDefinition
+    // implementation (reportdesign::OReportDefinition in
+    // reportdesign/source/core/api/ReportDefinition.cxx), as it spawns a thread
+    // that forever blocks in SendMessageW when no VCL event loop is running
     // (reportdesign::<anon>::FactoryLoader::execute ->
     // framework::Desktop::findFrame -> framework::TaskCreator::createTask ->
     // <anon>::TaskCreatorService::createInstanceWithArguments ->
@@ -53,76 +72,174 @@ void ServicesTest::test()
     // WorkWindow::ImplInit -> ImplBorderWindow::ImplBorderWindow ->
     // ImplBorderWindow::ImplInit -> Window::ImplInit ->
     // WinSalInstance::CreateFrame -> ImplSendMessage -> SendMessageW):
-    blacklist.push_back("com.sun.star.report.ReportDefinition");
+    std::vector<OUString> blacklist;
+    blacklist.push_back("com.sun.star.comp.report.OReportDefinition");
 
-    Reference< XHierarchicalNameAccess > xTypeManager(
-            m_xContext->getValueByName(
-                "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
-            UNO_QUERY_THROW );
-    Sequence<OUString> s = m_xContext->getServiceManager()->getAvailableServiceNames();
-    std::vector< css::uno::Reference<css::lang::XComponent> > comps;
-    for (sal_Int32 i = 0; i < s.getLength(); i++)
-    {
-        if (std::find(blacklist.begin(), blacklist.end(), s[i])
-            != blacklist.end())
-        {
-            continue;
+    //TODO: bug ID
+    blacklist.push_back("SwXMailMerge");
+
+    css::uno::Reference<css::container::XContentEnumerationAccess> enumAcc(
+        m_xContext->getServiceManager(), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference<css::container::XHierarchicalNameAccess> typeMgr(
+        m_xContext->getValueByName(
+            "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
+        css::uno::UNO_QUERY_THROW);
+    css::uno::Sequence<OUString> serviceNames(
+        m_xContext->getServiceManager()->getAvailableServiceNames());
+    struct Constructor {
+        Constructor(
+            OUString const & theServiceName, bool theDefaultConstructor):
+            serviceName(theServiceName),
+            defaultConstructor(theDefaultConstructor)
+        {}
+        OUString serviceName;
+        bool defaultConstructor;
+    };
+    struct Implementation {
+        Implementation(css::uno::Reference<css::lang::XServiceInfo> theFactory):
+            factory(theFactory), accumulationBased(false) {}
+        css::uno::Reference<css::lang::XServiceInfo> factory;
+        std::vector<Constructor> constructors;
+        bool accumulationBased;
+    };
+    std::map<OUString, Implementation> impls;
+    for (sal_Int32 i = 0; i != serviceNames.getLength(); ++i) {
+        css::uno::Reference<css::container::XEnumeration> serviceImpls1(
+            enumAcc->createContentEnumeration(serviceNames[i]),
+            css::uno::UNO_SET_THROW);
+        std::vector<css::uno::Reference<css::lang::XServiceInfo>> serviceImpls2;
+        while (serviceImpls1->hasMoreElements()) {
+            serviceImpls2.push_back(
+                css::uno::Reference<css::lang::XServiceInfo>(
+                    serviceImpls1->nextElement(), css::uno::UNO_QUERY_THROW));
         }
-        if (!xTypeManager->hasByHierarchicalName(s[i]))
-        {
-            SAL_WARN(
-                "postprocess.cppunit",
-                "fantasy service name \"" << s[i] << "\"");
-            continue;
+        css::uno::Reference<css::reflection::XServiceTypeDescription2> desc;
+        if (typeMgr->hasByHierarchicalName(serviceNames[i])) {
+            desc.set(
+                typeMgr->getByHierarchicalName(serviceNames[i]),
+                css::uno::UNO_QUERY_THROW);
         }
-        SAL_WARN(
-                "postprocess.cppunit",
-                "trying (index: " << i << ") \"" << s[i] << "\"");
-        Reference< XServiceTypeDescription2 > xDesc(
-            xTypeManager->getByHierarchicalName(s[i]), UNO_QUERY_THROW);
-        Sequence< Reference< XServiceConstructorDescription > > xseq = xDesc->getConstructors();
-        SAL_WARN_IF(xseq.getLength() == 0, "postprocess.cppunit", "not tested because there is no constructor");
-        for (sal_Int32 c = 0; c < xseq.getLength(); c++)
-            if (!xseq[c]->getParameters().hasElements())
-            {
-                Reference< XInterface > instance;
-                try
-                {
-                    OString message = OUStringToOString(s[i], RTL_TEXTENCODING_UTF8);
-                    bool bDefConstructor = xseq[c]->isDefaultConstructor();
-                    Reference< css::lang::XMultiComponentFactory > serviceManager = m_xContext->getServiceManager();
-
-                    if( bDefConstructor )
-                        instance = serviceManager->createInstanceWithContext(s[i], m_xContext);
-                    else
-                        instance = serviceManager->createInstanceWithArgumentsAndContext(
-                                                    s[i], css::uno::Sequence<css::uno::Any>(), m_xContext);
-
-                    CPPUNIT_ASSERT_MESSAGE( message.getStr(), instance.is() );
+        if (serviceImpls2.empty()) {
+            if (desc.is()) {
+                CPPUNIT_ASSERT_MESSAGE(
+                    (OString(
+                        "no implementations of singlie-interface--based \""
+                        + msg(serviceNames[i]) + "\"")
+                     .getStr()),
+                    !desc->isSingleInterfaceBased());
+                std::cout
+                    << "accumulation-based service \"" << serviceNames[i]
+                    << "\" without implementations\n";
+            } else {
+                std::cout
+                    << "fantasy service name \"" << serviceNames[i]
+                    << "\" without implementations\n";
+            }
+        } else {
+            for (auto const & j: serviceImpls2) {
+                OUString name(j->getImplementationName());
+                auto k = impls.find(name);
+                if (k == impls.end()) {
+                    k = impls.insert(std::make_pair(name, Implementation(j)))
+                        .first;
+                } else {
+                    CPPUNIT_ASSERT_MESSAGE(
+                        (OString(
+                            "multiple implementations named \"" + msg(name)
+                            + "\"")
+                         .getStr()),
+                        j == k->second.factory);
                 }
-                catch(const Exception & e)
-                {
-                    OString exc = "Exception thrown while creating " +
-                        OUStringToOString(s[i] + ": " + e.Message, RTL_TEXTENCODING_UTF8);
-                    CPPUNIT_FAIL(exc.getStr());
-                }
-                css::uno::Reference<css::lang::XComponent> comp(
-                    instance, css::uno::UNO_QUERY);
-                if (comp.is()) {
-                    comps.push_back(comp);
+                if (desc.is()) {
+                    if (desc->isSingleInterfaceBased()) {
+                        if (serviceImpls2.size() == 1) {
+                            css::uno::Sequence<
+                                css::uno::Reference<
+                                    css::reflection::XServiceConstructorDescription>>
+                                        ctors(desc->getConstructors());
+                            for (sal_Int32 l = 0; l != ctors.getLength(); ++l) {
+                                if (!ctors[l]->getParameters().hasElements()) {
+                                    k->second.constructors.push_back(
+                                        Constructor(
+                                            serviceNames[i],
+                                            ctors[l]->isDefaultConstructor()));
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        k->second.accumulationBased = true;
+                    }
+                } else {
+                    std::cout
+                        << "implementation \"" << name
+                        << "\" supports fantasy service name \""
+                        << serviceNames[i] << "\"\n";
                 }
             }
+        }
+    }
+    std::vector<css::uno::Reference<css::lang::XComponent>> comps;
+    for (auto const & i: impls) {
+        if (std::find(blacklist.begin(), blacklist.end(), i.first)
+            == blacklist.end())
+        {
+            if (i.second.constructors.empty()) {
+                if (i.second.accumulationBased) {
+                    createInstance(i.first, false, &comps);
+                } else {
+                    std::cout
+                        << "no obvious way to instantiate implementation \""
+                        << i.first << "\"\n";
+                }
+            } else {
+                for (auto const & j: i.second.constructors) {
+                    createInstance(
+                        j.serviceName, !j.defaultConstructor, &comps);
+                }
+            }
+        }
     }
     SolarMutexReleaser rel;
-    for (std::vector< css::uno::Reference<css::lang::XComponent> >::iterator i(
-             comps.begin());
-         i != comps.end(); ++i)
-    {
-        (*i)->dispose();
+    for (auto const & i: comps) {
+        i->dispose();
     }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ServicesTest);
+void Test::createInstance(
+    OUString const & name, bool withArguments,
+    std::vector<css::uno::Reference<css::lang::XComponent>> * components)
+{
+    assert(components != nullptr);
+    css::uno::Reference<css::uno::XInterface> inst;
+    try {
+        if (withArguments) {
+            inst = m_xContext->getServiceManager()
+                ->createInstanceWithArgumentsAndContext(
+                    name, css::uno::Sequence<css::uno::Any>(), m_xContext);
+        } else {
+            inst = m_xContext->getServiceManager()->createInstanceWithContext(
+                name, m_xContext);
+        }
+    } catch (css::uno::Exception & e) {
+        css::uno::Any a(cppu::getCaughtException());
+        CPPUNIT_FAIL(
+            OString(
+                "creating \"" + msg(name) + "\" caused "
+                + msg(a.getValueTypeName()) + " \"" + msg(e.Message) + "\"")
+            .getStr());
+    }
+    CPPUNIT_ASSERT_MESSAGE(
+        (OString("creating \"" + msg(name) + "\" returned null reference")
+         .getStr()),
+        inst.is());
+    css::uno::Reference<css::lang::XComponent> comp(inst, css::uno::UNO_QUERY);
+    if (comp.is()) {
+        components->push_back(comp);
+    }
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
