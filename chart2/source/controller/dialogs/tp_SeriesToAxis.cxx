@@ -52,6 +52,7 @@ SchOptionTabPage::SchOptionTabPage(vcl::Window* pWindow,const SfxItemSet& rInAtt
     get(m_pCBConnect,"CB_CONNECTOR");
     get(m_pCBAxisSideBySide,"CB_BARS_SIDE_BY_SIDE");
 
+    get(m_pGrpPlotOptions,"frameFL_PLOT_OPTIONS" );
     get(m_pGridPlotOptions,"gridPLOT_OPTIONS");
     get(m_pRB_DontPaint,"RB_DONT_PAINT");
     get(m_pRB_AssumeZero,"RB_ASSUME_ZERO");
@@ -213,7 +214,11 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
     else
     {
         m_pCBIncludeHiddenCells->Show(false);
-        m_pGridPlotOptions->Show(false);
+        // check if the radiobutton guys above
+        // are visible. If they aren't, we can
+        // as well hide the whole frame
+        if(!m_pGridPlotOptions->IsVisible())
+            m_pGrpPlotOptions->Show(sal_False);
     }
 
     AdaptControlPositionsAndVisibility();
