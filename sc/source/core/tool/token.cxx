@@ -3994,27 +3994,17 @@ OUString ScTokenArray::CreateString( sc::TokenStringContext& rCxt, const ScAddre
 
 namespace {
 
-bool wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow, bool bQueryOnly )
+void wrapAddress( ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
 {
-    bool bChanged = false;
     if (rPos.Col() > nMaxCol)
-    {
-        if (!bQueryOnly)
-            rPos.SetCol(rPos.Col() - nMaxCol - 1);
-        bChanged = true;
-    }
+        rPos.SetCol(rPos.Col() - nMaxCol - 1);
     if (rPos.Row() > nMaxRow)
-    {
-        if (!bQueryOnly)
-            rPos.SetRow(rPos.Row() - nMaxRow - 1);
-        bChanged = true;
-    }
-    return bChanged;
+        rPos.SetRow(rPos.Row() - nMaxRow - 1);
 }
 
 }
 
-bool ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow, bool bQueryNeedWrap)
+void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow )
 {
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -4027,12 +4017,8 @@ bool ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
                 ScAddress aAbs = rRef.toAbs(rPos);
-                if (wrapAddress(aAbs, nMaxCol, nMaxRow, bQueryNeedWrap))
-                {
-                    if (bQueryNeedWrap)
-                        return true;
-                    rRef.SetAddress(aAbs, rPos);
-                }
+                wrapAddress(aAbs, nMaxCol, nMaxRow);
+                rRef.SetAddress(aAbs, rPos);
             }
             break;
             case svDoubleRef:
@@ -4040,15 +4026,43 @@ bool ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(rPos);
-                bool bChanged = wrapAddress(aAbs.aStart, nMaxCol, nMaxRow, bQueryNeedWrap);
-                bool bChanged2 = wrapAddress(aAbs.aEnd, nMaxCol, nMaxRow, bQueryNeedWrap);
-                if (bChanged || bChanged2)
-                {
-                    if (bQueryNeedWrap)
-                        return true;
-                    aAbs.PutInOrder();
-                    rRef.SetRange(aAbs, rPos);
-                }
+                wrapAddress(aAbs.aStart, nMaxCol, nMaxRow);
+                wrapAddress(aAbs.aEnd, nMaxCol, nMaxRow);
+                aAbs.PutInOrder();
+                rRef.SetRange(aAbs, rPos);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                formula::FormulaToken* pToken = *p;
+                ScSingleRefData& rRef = *pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rPos);
+                if (aAbs.Col() > nMaxCol || aAbs.Row() > nMaxRow)
+                   return true;
+            }
+            break;
+            case svDoubleRef:
+            {
+                formula::FormulaToken* pToken = *p;
+                ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rPos);
+                if (aAbs.aStart.Col() > nMaxCol || aAbs.aStart.Row() > nMaxRow ||
+                    aAbs.aEnd.Col() > nMaxCol || aAbs.aEnd.Row() > nMaxRow)
+                    return true;
             }
             break;
             default:
