@@ -416,9 +416,12 @@ void SAL_CALL FindTextToolbarController::dispose() throw ( css::uno::RuntimeExce
     SearchToolbarControllersManager::createControllersManager().freeController(m_xFrame, css::uno::Reference< css::frame::XStatusListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY), m_aCommandURL);
 
     svt::ToolboxController::dispose();
-    SearchToolbarControllersManager::createControllersManager().saveSearchHistory(m_pFindTextFieldControl);
-    delete m_pFindTextFieldControl;
-    m_pFindTextFieldControl = 0;
+    if (m_pFindTextFieldControl != nullptr) {
+        SearchToolbarControllersManager::createControllersManager()
+            .saveSearchHistory(m_pFindTextFieldControl);
+        delete m_pFindTextFieldControl;
+        m_pFindTextFieldControl = 0;
+    }
 }
 
 // XInitialization
