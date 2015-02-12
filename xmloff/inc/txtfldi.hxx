@@ -36,7 +36,8 @@
 #include <vector>
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml { namespace sax { class XAttributeList;
+                                    class XFastAttributeList;} }
     namespace text { class XTextField; }
     namespace beans { class XPropertySet; struct PropertyValue; }
 } } }
@@ -993,10 +994,17 @@ public:
                                   sal_uInt16 nPrfx,
                                   const OUString& sLocalName);
 
+    XMLDdeFieldDeclsImportContext(SvXMLImport& rImport, sal_Int32 nElement);
+
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList ) override;
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 /** import dde field declaration (<text:dde-connection-decl>) */
@@ -1017,9 +1025,17 @@ public:
                                  const OUString& sLocalName,
                                  const SvXMLTokenMap& rMap);
 
+    XMLDdeFieldDeclImportContext( SvXMLImport& rImport,
+                                 sal_Int32 nElement,
+                                 const SvXMLTokenMap& rMap );
+
     // create fieldmaster
     virtual void StartElement(
         const css::uno::Reference<css::xml::sax::XAttributeList> & xAttrList) override;
+
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 };
 
 /** import dde fields (<text:dde-connection>) */

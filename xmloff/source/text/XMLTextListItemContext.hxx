@@ -45,6 +45,14 @@ public:
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             const bool bIsHeader = false );
+
+    XMLTextListItemContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rTxtImp,
+        sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const bool bIsHeader = false );
+
     virtual ~XMLTextListItemContext();
 
     virtual void EndElement() override;
@@ -52,6 +60,14 @@ public:
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                  const OUString& rLocalName,
                  const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+
+    css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 nElement,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
 
     bool HasStartValue() const { return -1 != nStartValue; }
     sal_Int16 GetStartValue() const { return nStartValue; }

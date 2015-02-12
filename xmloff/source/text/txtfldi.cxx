@@ -2793,6 +2793,13 @@ XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
 {
 }
 
+XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
+    SvXMLImport& rImport, sal_Int32 /*nElement*/ )
+:   SvXMLImportContext( rImport ),
+    aTokenMap(aDdeDeclAttrTokenMap)
+{
+}
+
 SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -2812,6 +2819,21 @@ SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
     }
 }
 
+Reference< XFastContextHandler > SAL_CALL
+    XMLDdeFieldDeclsImportContext::createFastChildContext(
+    sal_Int32 nElement, const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    if( nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) | XML_DDE_CONNECTION_DECL ) )
+    {
+        return new XMLDdeFieldDeclImportContext( GetImport(), nElement,
+                                                    aTokenMap );
+    }
+    else
+    {
+        return SvXMLImportContext::createFastChildContext( nElement, xAttrList );
+    }
+}
 
 // import dde field declaration
 
@@ -2829,6 +2851,21 @@ XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
 {
     DBG_ASSERT(XML_NAMESPACE_TEXT == nPrfx, "wrong prefix");
     DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
+}
+
+XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
+    SvXMLImport& rImport, sal_Int32 nElement,
+    const SvXMLTokenMap& rMap )
+:   SvXMLImportContext( rImport ),
+    sPropertyIsAutomaticUpdate(sAPI_is_automatic_update),
+    sPropertyName(sAPI_name),
+    sPropertyDDECommandType(sAPI_dde_command_type),
+    sPropertyDDECommandFile(sAPI_dde_command_file),
+    sPropertyDDECommandElement(sAPI_dde_command_element),
+    rTokenMap(rMap)
+{
+    DBG_ASSERT( nElement == ( NAMESPACE_TOKEN( XML_NAMESPACE_TEXT ) |
+        XML_DDE_CONNECTION_DECL ), "wrong xml-tag");
 }
 
 void XMLDdeFieldDeclImportContext::StartElement(
@@ -2881,6 +2918,116 @@ void XMLDdeFieldDeclImportContext::StartElement(
                     bUpdate = bTmp;
                 }
                 break;
+            }
+        }
+    }
+
+    // valid data?
+    if (bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK)
+    {
+        // make service name
+        OUStringBuffer sBuf;
+        sBuf.append(sAPI_fieldmaster_prefix);
+        sBuf.append(sAPI_dde);
+
+        // create DDE TextFieldMaster
+        Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
+                                                 UNO_QUERY);
+        if( xFactory.is() )
+        {
+            /* #i6432# There might be multiple occurrences of one DDE
+               declaration if it is used in more than one of
+               header/footer/body. createInstance will throw an exception if we
+               try to create the second, third, etc. instance of such a
+               declaration. Thus we ignore the exception. Otherwise this will
+               lead to an unloadable document. */
+            try
+            {
+                Reference<XInterface> xIfc =
+                    xFactory->createInstance(sBuf.makeStringAndClear());
+                if( xIfc.is() )
+                {
+                    Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+                    if (xPropSet.is() &&
+                        xPropSet->getPropertySetInfo()->hasPropertyByName(
+                                                                          sPropertyDDECommandType))
+                    {
+                        xPropSet->setPropertyValue(sPropertyName, Any(sName));
+
+                        xPropSet->setPropertyValue(sPropertyDDECommandType, Any(sCommandApplication));
+
+                        xPropSet->setPropertyValue(sPropertyDDECommandFile, Any(sCommandTopic));
+
+                        xPropSet->setPropertyValue(sPropertyDDECommandElement,
+                                                   Any(sCommandItem));
+
+                        xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
+                                                   Any(bUpdate));
+                    }
+                    // else: ignore (can't get XPropertySet, or DDE
+                    //               properties are not supported)
+                }
+                // else: ignore
+            }
+            catch (const Exception&)
+            {
+                //ignore
+            }
+        }
+        // else: ignore
+    }
+    // else: ignore
+}
+
+void SAL_CALL XMLDdeFieldDeclImportContext::startFastElement(
+    sal_Int32 /*nElement*/, const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    OUString sName;
+    OUString sCommandApplication;
+    OUString sCommandTopic;
+    OUString sCommandItem;
+
+    bool bUpdate = false;
+    bool bNameOK = false;
+    bool bCommandApplicationOK = false;
+    bool bCommandTopicOK = false;
+    bool bCommandItemOK = false;
+
+    if ( xAttrList.is() )
+    {
+        // process attributes
+        Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+        for( xml::FastAttribute attribute : attributes )
+        {
+            switch ( rTokenMap.Get( attribute.Token ) )
+            {
+                case XML_TOK_DDEFIELD_NAME:
+                    sName = attribute.Value;
+                    bNameOK = true;
+                    break;
+                case XML_TOK_DDEFIELD_APPLICATION:
+                    sCommandApplication = attribute.Value;
+                    bCommandApplicationOK = true;
+                    break;
+                case XML_TOK_DDEFIELD_TOPIC:
+                    sCommandTopic = attribute.Value;
+                    bCommandTopicOK = true;
+                    break;
+                case XML_TOK_DDEFIELD_ITEM:
+                    sCommandItem = attribute.Value;
+                    bCommandItemOK = true;
+                    break;
+                case XML_TOK_DDEFIELD_UPDATE:
+                {
+                    bool bTmp(false);
+                    if (::sax::Converter::convertBool(
+                        bTmp, attribute.Value) )
+                    {
+                        bUpdate = bTmp;
+                    }
+                    break;
+                }
             }
         }
     }
