@@ -47,12 +47,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 
-InterfaceRef SAL_CALL OFileControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OFileControlModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> OFileControlModel::_getTypes()
 {
     static Sequence<Type> aTypes;
@@ -283,8 +277,13 @@ void OFileControlModel::_reset()
     }
 }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OFileControlModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OFileControlModel(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

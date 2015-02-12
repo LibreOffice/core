@@ -23,6 +23,7 @@
 #include "property.hxx"
 #include <comphelper/processfactory.hxx>
 
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -36,13 +37,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
-
-InterfaceRef SAL_CALL OFixedTextModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OFixedTextModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
 
 
 OFixedTextModel::OFixedTextModel( const Reference<XComponentContext>& _rxFactory )
@@ -113,8 +107,13 @@ void SAL_CALL OFixedTextModel::read(const Reference<XObjectInputStream>& _rxInSt
         readHelpTextCompatibly(_rxInStream);
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OFixedTextModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OFixedTextModel(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

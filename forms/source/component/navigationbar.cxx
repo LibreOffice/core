@@ -26,16 +26,8 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-
-extern "C" void SAL_CALL createRegistryInfo_ONavigationBarModel()
-{
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarModel > aAutoRegistration;
-}
-
-
 namespace frm
 {
-
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -482,8 +474,13 @@ namespace frm
         );
     }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_form_ONavigationBarModel_get_implementation(css::uno::XComponentContext* context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ONavigationBarModel(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

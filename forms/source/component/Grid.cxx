@@ -35,7 +35,9 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+
 using namespace ::com::sun::star::uno;
+
 namespace frm
 {
 using namespace ::com::sun::star;
@@ -61,10 +63,7 @@ const sal_uInt16 TEXTCOLOR          =   0x0020;
 const sal_uInt16 FONTDESCRIPTOR     =   0x0040;
 const sal_uInt16 RECORDMARKER       =   0x0080;
 const sal_uInt16 BACKGROUNDCOLOR    =   0x0100;
-InterfaceRef SAL_CALL OGridControlModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OGridControlModel( comphelper::getComponentContext(_rxFactory) ));
-}
+
 OGridControlModel::OGridControlModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
     ,OInterfaceContainer(_rxFactory, m_aMutex, cppu::UnoType<XPropertySet>::get())
@@ -993,5 +992,14 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
         m_aBackgroundColor <<= (sal_Int32)nValue;
     }
 }
+
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT XInterface* SAL_CALL
+com_sun_star_form_OGridControlModel_get_implementation(XComponentContext* component,
+        Sequence<Any> const &)
+{
+    return cppu::acquire(new frm::OGridControlModel(component));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

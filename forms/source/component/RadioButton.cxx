@@ -27,7 +27,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
-
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -42,13 +41,6 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
-
-
-
-InterfaceRef SAL_CALL ORadioButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new ORadioButtonControl( comphelper::getComponentContext(_rxFactory) ));
-}
 
 
 StringSequence SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
@@ -88,13 +80,6 @@ void SAL_CALL ORadioButtonControl::createPeer(const Reference<css::awt::XToolkit
     //   So we switched AutoToggle _on_, again, because then VCL can handle the notifications, and will send
     //   them in the proper order.
 }
-
-
-InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new ORadioButtonModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
 
 
 ORadioButtonModel::ORadioButtonModel(const Reference<XComponentContext>& _rxFactory)
@@ -413,8 +398,20 @@ bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return true;
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ORadioButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ORadioButtonModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ORadioButtonControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::ORadioButtonControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,7 +24,6 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -46,12 +45,6 @@ OCheckBoxControl::OCheckBoxControl(const Reference<XComponentContext>& _rxFactor
 }
 
 
-InterfaceRef SAL_CALL OCheckBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OCheckBoxControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -64,15 +57,6 @@ StringSequence SAL_CALL OCheckBoxControl::getSupportedServiceNames() throw(::com
 
 
 //= OCheckBoxModel
-
-
-
-InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OCheckBoxModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, true )
@@ -281,8 +265,20 @@ bool OCheckBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return true;
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OCheckBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OCheckBoxModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OCheckBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OCheckBoxControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

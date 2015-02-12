@@ -41,13 +41,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
 
-InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OHiddenModel( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
-
 OHiddenModel::OHiddenModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
 {
@@ -169,8 +162,13 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
     OControlModel::read(_rxInStream);
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OHiddenModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OHiddenModel(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

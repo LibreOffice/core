@@ -64,12 +64,6 @@
 #include <sal/macros.h>
 
 
-extern "C" void SAL_CALL createRegistryInfo_FormOperations()
-{
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::FormOperations > aAutoRegistration;
-}
-
-
 namespace frm
 {
 
@@ -1763,5 +1757,12 @@ namespace frm
 
 } // namespace frm
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_FormOperations_get_implementation(css::uno::XComponentContext* context,
+                                                          css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::FormOperations(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

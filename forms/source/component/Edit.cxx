@@ -60,12 +60,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
 
-InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
-{
-    return *(new OEditControl( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 Sequence<Type> OEditControl::_getTypes()
 {
     static Sequence<Type> aTypes;
@@ -267,11 +261,6 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
 void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, const Reference< XWindowPeer>& _rxParent ) throw ( RuntimeException, std::exception )
 {
     OBoundControl::createPeer(_rxToolkit, _rxParent);
-}
-
-InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OEditModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
 
@@ -734,8 +723,20 @@ Any OEditModel::getDefaultForReset() const
     return makeAny( m_aDefaultText );
 }
 
-
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OEditModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OEditModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OEditControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OEditControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

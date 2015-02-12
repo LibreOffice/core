@@ -23,15 +23,8 @@
 #include <comphelper/basicio.hxx>
 
 
-extern "C" void SAL_CALL createRegistryInfo_OSpinButtonModel()
-{
-    static ::frm::OMultiInstanceAutoRegistration< ::frm::OSpinButtonModel >   aRegisterModel;
-}
-
-
 namespace frm
 {
-
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -246,8 +239,13 @@ namespace frm
         return Sequence< Type >( &cppu::UnoType<double>::get(), 1 );
     }
 
-
 }   // namespace frm
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_forms_OSpinButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OSpinButtonModel(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
