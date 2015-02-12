@@ -2033,6 +2033,115 @@ XMLParaContext::XMLParaContext(
     }
 }
 
+XMLParaContext::XMLParaContext( SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    bool bHead )
+:   SvXMLImportContext( rImport ),
+    xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
+    m_bHaveAbout( false ),
+    nOutlineLevel( XML_H == (XML_H | Element) ? 1 : -1 ),
+    pHints( 0 ),
+    // Lost outline numbering in master document (#73509#)
+    mbOutlineLevelAttrFound( false ),
+    bIgnoreLeadingSpace( true ),
+    bHeading( bHead ),
+    bIsListHeader( false ),
+    bIsRestart( false ),
+    nStartValue( 0 ),
+    nStarFontsConvFlags( 0 )
+{
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextPAttrTokenMap();
+
+    bool bHaveXmlId( false );
+    OUString aCondStyleName, sClassNames;
+
+    if( xAttrList.is() )
+    {
+        uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+        for( xml::FastAttribute attribute : attributes )
+        {
+            switch( rTokenMap.Get( attribute.Token ) )
+            {
+            case XML_TOK_TEXT_P_XMLID:
+                m_sXmlId = attribute.Value;
+                bHaveXmlId = true;
+                break;
+            case XML_TOK_TEXT_P_ABOUT:
+                m_sAbout = attribute.Value;
+                m_bHaveAbout = true;
+                break;
+            case XML_TOK_TEXT_P_PROPERTY:
+                m_sProperty = attribute.Value;
+                break;
+            case XML_TOK_TEXT_P_CONTENT:
+                m_sContent = attribute.Value;
+                break;
+            case XML_TOK_TEXT_P_DATATYPE:
+                m_sDatatype = attribute.Value;
+                break;
+            case XML_TOK_TEXT_P_TEXTID:
+                if( !bHaveXmlId) { m_sXmlId = attribute.Value; }
+                break;
+            case XML_TOK_TEXT_P_STYLE_NAME:
+                sStyleName = attribute.Value;
+                break;
+            case XML_TOK_TEXT_P_CLASS_NAMES:
+                sClassNames = attribute.Value;
+                break;
+            case XML_TOK_TEXT_P_COND_STYLE_NAME:
+                aCondStyleName = attribute.Value;
+                break;
+            case XML_TOK_TEXT_P_LEVEL:
+                {
+                    sal_Int32 nTmp = attribute.Value.toInt32();
+                    if( nTmp > 0L )
+                    {
+                        if( nTmp > 127 )
+                            nTmp = 127;
+                        nOutlineLevel = static_cast< sal_Int8 >( nTmp );
+                    }
+                    // Lost outline numbering in master document (#i73509#)
+                    mbOutlineLevelAttrFound = true;
+                }
+                break;
+            case XML_TOK_TEXT_P_IS_LIST_HEADER:
+                {
+                    bool bBool(false);
+                    if( ::sax::Converter::convertBool( bBool, attribute.Value ) )
+                    {
+                        bIsListHeader = bBool;
+                    }
+                }
+                break;
+            case XML_TOK_TEXT_P_RESTART_NUMBERING:
+                {
+                    bool bBool(false);
+                    if( ::sax::Converter::convertBool( bBool, attribute.Value ) )
+                    {
+                        bIsRestart = bBool;
+                    }
+                }
+                break;
+            case XML_TOK_TEXT_P_START_VALUE:
+                {
+                    nStartValue = sal::static_int_cast< sal_Int16 >(
+                            attribute.Value.toInt32() );
+                }
+                break;
+            }
+        }
+    }
+
+    if( !aCondStyleName.isEmpty() )
+        sStyleName = aCondStyleName;
+    else if( !sClassNames.isEmpty() )
+    {
+        sal_Int32 nDummy = 0;
+        sStyleName = sClassNames.getToken( 0, ' ', nDummy );
+    }
+}
+
 XMLParaContext::~XMLParaContext()
 {
     rtl::Reference < XMLTextImportHelper > xTxtImport(
@@ -2330,12 +2439,36 @@ SvXMLImportContext *XMLParaContext::CreateChildContext(
                                                      );
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLParaContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextPElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get( Element );
+    if( !pHints )
+        pHints = new XMLHints_Impl;
+    return XMLImpSpanContext_Impl::createFastChildContext(
+            GetImport(), Element, xAttrList, nToken, *pHints,
+            bIgnoreLeadingSpace, nStarFontsConvFlags );
+}
+
 void XMLParaContext::Characters( const OUString& rChars )
 {
     OUString sChars =
         GetImport().GetTextImport()->ConvertStarFonts( rChars, sStyleName,
                                                        nStarFontsConvFlags,
                                                        true, GetImport() );
+    GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
+}
+
+void SAL_CALL XMLParaContext::characters( const OUString& rChars )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    OUString sChars =
+        GetImport().GetTextImport()->ConvertStarFonts( rChars,
+                sStyleName, nStarFontsConvFlags, true, GetImport() );
     GetImport().GetTextImport()->InsertString( sChars, bIgnoreLeadingSpace );
 }
 

@@ -26,7 +26,8 @@
 class XMLHints_Impl;
 namespace com { namespace sun { namespace star {
 namespace text {  class XTextRange; }
-namespace xml { namespace sax { class XAttributeList; } }
+namespace xml { namespace sax { class XAttributeList;
+                                class XFastAttributeList; } }
 } } }
 
 #define CONV_FROM_STAR_BATS 1
@@ -65,6 +66,9 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             bool bHeading );
+    XMLParaContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        bool bHeading );
 
     virtual ~XMLParaContext();
 
@@ -72,8 +76,14 @@ public:
             const OUString& rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 };
 
