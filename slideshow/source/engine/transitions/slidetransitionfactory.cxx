@@ -38,6 +38,7 @@
 
 #include "slidechangebase.hxx"
 #include "transitionfactory.hxx"
+#include "transitionfactorytab.hxx"
 #include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
 #include "animationfactory.hxx"

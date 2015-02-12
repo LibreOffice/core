@@ -31,6 +31,7 @@
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
 #include "transitionfactory.hxx"
+#include "transitionfactorytab.hxx"
 #include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
 #include "animationfactory.hxx"
@@ -191,26 +192,7 @@ double ClippingAnimation::getUnderlyingValue() const
                     // Permissible range for operator() above is [0,1]
 }
 
-} // anon namespace
-
-
-AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
-    const ActivitiesFactory::CommonParameters&          rParms,
-    const AnimatableShapeSharedPtr&                     rShape,
-    const ShapeManagerSharedPtr&                        rShapeManager,
-    const ::basegfx::B2DVector&                         rSlideSize,
-    uno::Reference< animations::XTransitionFilter > const& xTransition )
-{
-    return createShapeTransition( rParms,
-                                  rShape,
-                                  rShapeManager,
-                                  rSlideSize,
-                                  xTransition,
-                                  xTransition->getTransition(),
-                                  xTransition->getSubtype() );
-}
-
-AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
+AnimationActivitySharedPtr createShapeTransitionByType(
     const ActivitiesFactory::CommonParameters&              rParms,
     const AnimatableShapeSharedPtr&                         rShape,
     const ShapeManagerSharedPtr&                            rShapeManager,
@@ -222,7 +204,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 {
     ENSURE_OR_THROW(
         xTransition.is(),
-        "TransitionFactory::createShapeTransition(): Invalid XTransition" );
+        "createShapeTransitionByType(): Invalid XTransition" );
 
     const TransitionInfo* pTransitionInfo(
         getTransitionInfo( nType, nSubType ) );
@@ -234,7 +216,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
         {
             default:
             case TransitionInfo::TRANSITION_INVALID:
-                OSL_FAIL( "TransitionFactory::createShapeTransition(): Invalid transition type. "
+                OSL_FAIL( "createShapeTransitionByType(): Invalid transition type. "
                             "Don't ask me for a 0 TransitionType, have no XTransitionFilter node instead!" );
                 return AnimationActivitySharedPtr();
 
@@ -272,13 +254,13 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                         const TransitionInfo* pRandomTransitionInfo( getRandomTransitionInfo() );
 
                         ENSURE_OR_THROW( pRandomTransitionInfo != NULL,
-                                          "TransitionFactory::createShapeTransition(): Got invalid random transition info" );
+                                          "createShapeTransitionByType(): Got invalid random transition info" );
 
                         ENSURE_OR_THROW( pRandomTransitionInfo->mnTransitionType != animations::TransitionType::RANDOM,
-                                          "TransitionFactory::createShapeTransition(): Got random again for random input!" );
+                                          "createShapeTransitionByType(): Got random again for random input!" );
 
                         // and recurse
-                        pGeneratedActivity = createShapeTransition( rParms,
+                        pGeneratedActivity = createShapeTransitionByType( rParms,
                                                                     rShape,
                                                                     rShapeManager,
                                                                     rSlideSize,
@@ -319,7 +301,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 
                             default:
                                 ENSURE_OR_THROW( false,
-                                                  "TransitionFactory::createShapeTransition(): Unexpected subtype for SLIDEWIPE" );
+                                                  "createShapeTransitionByType(): Unexpected subtype for SLIDEWIPE" );
                                 break;
                         }
 
@@ -372,16 +354,34 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
         // No animation generated, maybe no table entry for given
         // transition?
         OSL_TRACE(
-            "TransitionFactory::createShapeTransition(): Unknown type/subtype (%d/%d) "
+            "createShapeTransitionByType(): Unknown type/subtype (%d/%d) "
             "combination encountered",
             xTransition->getTransition(),
             xTransition->getSubtype() );
         OSL_FAIL(
-            "TransitionFactory::createShapeTransition(): Unknown type/subtype "
+            "createShapeTransitionByType(): Unknown type/subtype "
             "combination encountered" );
     }
 
     return pGeneratedActivity;
+}
+
+} // anon namespace
+
+AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
+    const ActivitiesFactory::CommonParameters&          rParms,
+    const AnimatableShapeSharedPtr&                     rShape,
+    const ShapeManagerSharedPtr&                        rShapeManager,
+    const ::basegfx::B2DVector&                         rSlideSize,
+    uno::Reference< animations::XTransitionFilter > const& xTransition )
+{
+    return createShapeTransitionByType( rParms,
+                                  rShape,
+                                  rShapeManager,
+                                  rSlideSize,
+                                  xTransition,
+                                  xTransition->getTransition(),
+                                  xTransition->getSubtype() );
 }
 
 }

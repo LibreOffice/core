@@ -24,6 +24,7 @@
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
 #include "transitionfactory.hxx"
+#include "transitionfactorytab.hxx"
 #include "tools.hxx"
 
 #include <algorithm>
@@ -2108,7 +2109,7 @@ static const TransitionInfo lcl_transitionInfo[] =
 
 } // anon namespace
 
-const TransitionInfo* TransitionFactory::getTransitionInfo(
+const TransitionInfo* getTransitionInfo(
     sal_Int16 nTransitionType, sal_Int16 nTransitionSubType )
 {
     static const TransitionInfo* pTableEnd = lcl_transitionInfo+
@@ -2124,7 +2125,7 @@ const TransitionInfo* TransitionFactory::getTransitionInfo(
         return NULL;
 }
 
-const TransitionInfo* TransitionFactory::getRandomTransitionInfo()
+const TransitionInfo* getRandomTransitionInfo()
 {
     return lcl_transitionInfo + getRandomOrdinal(
         SAL_N_ELEMENTS(lcl_transitionInfo)

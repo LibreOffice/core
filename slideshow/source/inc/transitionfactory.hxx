@@ -33,16 +33,13 @@
 #include "transitioninfo.hxx"
 #include "soundplayer.hxx"
 
-#include <boost/utility.hpp>
-
 namespace slideshow
 {
     namespace internal
     {
         /* Definition of Transitionfactory class */
-        class TransitionFactory : private boost::noncopyable
+        namespace TransitionFactory
         {
-        public:
             /** Create a transition effect for shapes.
 
                 This method creates an AnimationActivity, which, when
@@ -64,7 +61,7 @@ namespace slideshow
                 @return the created activity, or NULL for no
                 transition effect
              */
-            static AnimationActivitySharedPtr createShapeTransition(
+            AnimationActivitySharedPtr createShapeTransition(
                 const ActivitiesFactory::CommonParameters&              rParms,
                 const AnimatableShapeSharedPtr&                         rShape,
                 const ShapeManagerSharedPtr&                            rShapeManager,
@@ -100,7 +97,7 @@ namespace slideshow
                 @return the created animation, or NULL for no
                 transition effect
              */
-            static NumberAnimationSharedPtr createSlideTransition(
+            NumberAnimationSharedPtr createSlideTransition(
                 const SlideSharedPtr&                          rLeavingSlide,
                 const SlideSharedPtr&                          rEnteringSlide,
                 const UnoViewContainer&                        rViewContainer,
@@ -114,26 +111,7 @@ namespace slideshow
                 bool                                           bTransitionDirection,
                 const RGBColor&                                rTransitionFadeColor,
                 const SoundPlayerSharedPtr&                    rSoundPlayer );
-
-        private:
-            static const TransitionInfo* getTransitionInfo(
-                sal_Int16 nTransitionType, sal_Int16 nTransitionSubType );
-            static const TransitionInfo* getRandomTransitionInfo();
-
-            static AnimationActivitySharedPtr createShapeTransition(
-                const ActivitiesFactory::CommonParameters&              rParms,
-                const AnimatableShapeSharedPtr&                         rShape,
-                const ShapeManagerSharedPtr&                            rShapeManager,
-                const ::basegfx::B2DVector&                             rSlideSize,
-                ::com::sun::star::uno::Reference<
-                    ::com::sun::star::animations::XTransitionFilter > const& xTransition,
-                sal_Int16                                               nTransitionType,
-                sal_Int16                                               nTransitionSubType );
-
-            // static factory
-            TransitionFactory() SAL_DELETED_FUNCTION; //TODO: get rid of this class
-            ~TransitionFactory() SAL_DELETED_FUNCTION;
-        };
+        }
     }
 }
 
