@@ -110,15 +110,24 @@ public:
             const OUString& i_rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList );
+    XMLNumberedParaContext( SvXMLImport& rImport,
+        sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     virtual ~XMLNumberedParaContext();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 i_nPrefix,
             const OUString& i_rLocalName,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & i_xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     sal_Int16 GetLevel() const { return m_Level; }
     const ::com::sun::star::uno::Reference <
