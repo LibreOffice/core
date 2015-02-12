@@ -2039,7 +2039,7 @@ XMLParaContext::XMLParaContext( SvXMLImport& rImport, sal_Int32 Element,
 :   SvXMLImportContext( rImport ),
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     m_bHaveAbout( false ),
-    nOutlineLevel( XML_H == (XML_H | Element) ? 1 : -1 ),
+    nOutlineLevel( XML_h == (XML_h & Element) ? 1 : -1 ),
     pHints( 0 ),
     // Lost outline numbering in master document (#73509#)
     mbOutlineLevelAttrFound( false ),
