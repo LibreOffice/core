@@ -223,7 +223,6 @@ void SAL_CALL createRegistryInfo_FORMS()
     {
         createRegistryInfo_OScrollBarModel();
         createRegistryInfo_OSpinButtonModel();
-        createRegistryInfo_ONavigationBarControl();
         createRegistryInfo_ORichTextModel();
         createRegistryInfo_ORichTextControl();
         createRegistryInfo_CLibxml2XFormsExtension();
