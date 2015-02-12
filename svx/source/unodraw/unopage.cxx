@@ -81,9 +81,9 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 
 SvxDrawPage::~SvxDrawPage() throw()
 {
-    DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );
     if( !mrBHelper.bDisposed )
     {
+        SAL_WARN("svx", "SvxDrawPage must be disposed!");
         acquire();
         dispose();
     }
@@ -394,8 +394,8 @@ namespace
 // only in the given SdrPageView. It hasn't to be the visible SdrPageView.
 void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aShapes, SdrPageView* pPageView ) throw ()
 {
-    DBG_ASSERT(pPageView,"SdrPageView is NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
+    SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
+    SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
 
     if(pPageView!=NULL && mpView!=NULL)
     {
@@ -416,8 +416,8 @@ void SvxDrawPage::_SelectObjectsInView( const Reference< drawing::XShapes > & aS
 // It hasn't to be the visible SdrPageView.
 void SvxDrawPage::_SelectObjectInView( const Reference< drawing::XShape > & xShape, SdrPageView* pPageView ) throw()
 {
-    DBG_ASSERT(pPageView,"SdrPageView is NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
+    SAL_WARN_IF(!pPageView, "svx", "SdrPageView is NULL!");
+    SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
 
     if(pPageView!=NULL && mpView != NULL)
     {
@@ -434,8 +434,8 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    DBG_ASSERT(mpPage,"SdrPage is NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
+    SAL_WARN_IF(!mpPage , "svx", "SdrPage is NULL!");
+    SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
 
     Reference< ::com::sun::star::drawing::XShapeGroup >  xShapeGroup;
     if(mpPage==NULL||mpView==NULL||!xShapes.is())
@@ -472,8 +472,8 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
     if( (mpModel == 0) || (mpPage == 0) )
         throw lang::DisposedException();
 
-    DBG_ASSERT(mpPage,"SdrPage is NULL! [CL]");
-    DBG_ASSERT(mpView, "SdrView is NULL! [CL]");
+    SAL_WARN_IF(!mpPage, "svx", "SdrPage is NULL!");
+    SAL_WARN_IF(!mpView, "svx", "SdrView is NULL!");
 
     if(mpPage==NULL||mpView==NULL||!aGroup.is())
         return;
