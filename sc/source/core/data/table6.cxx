@@ -134,10 +134,10 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     if ( bFound &&
         ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
         ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
-            // Matrix nicht zerreissen, nur Matrixformel ersetzen
+            // Don't split the matrix, only replace Matrix formulas
             !( (eCellType == CELLTYPE_FORMULA &&
             ((cMatrixFlag = aCell.mpFormula->GetMatrixFlag()) == MM_REFERENCE))
-            // kein UndoDoc => Matrix nicht wiederherstellbar => nicht ersetzen
+            // No UndoDoc => Matrix not restorable => don't replace
             || (cMatrixFlag != MM_NONE && !pUndoDoc) ) &&
          IsBlockEditable(nCol, nRow, nCol, nRow)
         )
@@ -152,8 +152,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         bool bRepeat = !rSearchItem.GetWordOnly();
         do
         {
-            //  wenn der gefundene Text leer ist, nicht weitersuchen,
-            //  sonst wuerde man nie mehr aufhoeren (#35410#)
+            //  don't continue search if the found text is empty,
+            //  otherwise it would never stop (#35410#)
             if ( nEnd < nStart )
                 bRepeat = false;
 
@@ -174,7 +174,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 aString = aStrBuffer.makeStringAndClear();
             }
 
-                    //  Indizes anpassen
+            //  Adjust index
             if (bDoBack)
             {
                 nEnd = nStart;
@@ -186,7 +186,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 nEnd = aString.getLength();
             }
 
-                    //  weitersuchen ?
+            //  continue search ?
             if (bRepeat)
             {
                 if ( rSearchItem.GetCommand() != SVX_SEARCHCMD_REPLACE_ALL || nStart >= nEnd )
@@ -209,9 +209,9 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         while (bRepeat);
 
         if ( cMatrixFlag != MM_NONE )
-        {   // Matrix nicht zerreissen
+        {   // don't split Matrix
             if ( aString.getLength() > 2 )
-            {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
+            {   // remove {} here so that "{=" can be replaced by "{=..."
                 if ( aString[ aString.getLength()-1 ] == '}' )
                     aString = aString.copy( 0, aString.getLength()-1 );
                 if ( aString[0] == '{' )
@@ -534,7 +534,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
     bool bBack = rSearchItem.GetBackward();
     short nAdd = bBack ? -1 : 1;
 
-    if (bRows)                                      // zeilenweise
+    if (bRows)                                      // by row
     {
         if (!ValidCol(nCol))
         {
@@ -558,7 +558,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
         }
         while (!bFound && ValidCol(nCol));
     }
-    else                                            // spaltenweise
+    else                                            // by column
     {
         SCsROW nNextRows[MAXCOLCOUNT];
         SCsCOL i;
@@ -569,7 +569,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
             else        { if (i<=nCol) ++nSRow; }
             nNextRows[i] = aCol[i].SearchStyle( nSRow, pSearchStyle, bBack, bSelect, rMark );
         }
-        if (bBack)                          // rueckwaerts
+        if (bBack)                          // backwards
         {
             nRow = -1;
             for (i=MAXCOL; i>=0; i--)
@@ -580,7 +580,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
                     bFound = true;
                 }
         }
-        else                                // vorwaerts
+        else                                // forwards
         {
             nRow = MAXROW+1;
             for (i=0; i<=MAXCOL; i++)
