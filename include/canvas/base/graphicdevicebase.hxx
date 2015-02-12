@@ -159,14 +159,14 @@ namespace canvas
             return maDeviceHelper.getColorSpace();
         }
 
-        virtual css::geometry::RealSize2D SAL_CALL getPhysicalResolution(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::geometry::RealSize2D SAL_CALL getPhysicalResolution() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
             return maDeviceHelper.getPhysicalResolution();
         }
 
-        virtual css::geometry::RealSize2D SAL_CALL getPhysicalSize(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
+        virtual css::geometry::RealSize2D SAL_CALL getPhysicalSize() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             MutexType aGuard( BaseType::m_aMutex );
 
