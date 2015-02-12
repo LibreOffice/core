@@ -96,7 +96,6 @@ SwModelessRedlineAcceptDlg::SwModelessRedlineAcceptDlg(
 void SwModelessRedlineAcceptDlg::Activate()
 {
     SwView *pView = ::GetActiveView();
-
     if (!pView) // can happen when switching to another app, when a Listbox in dialog
         return; // had the focus previously (actually THs Bug)
 
@@ -159,6 +158,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, bool bAutoFmt) :
 {
     aTabPagesCTRL.SetHelpId(HID_REDLINE_CTRL);
     pTPView = aTabPagesCTRL.GetViewPage();
+
     pTable = pTPView->GetTableControl();
 
     pTPView->InsertWriterHeader();
@@ -167,6 +167,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, bool bAutoFmt) :
     pTPView->SetRejectClickHdl(LINK(this, SwRedlineAcceptDlg, RejectHdl));
     pTPView->SetRejectAllClickHdl(LINK(this, SwRedlineAcceptDlg, RejectAllHdl));
     pTPView->SetUndoClickHdl(LINK(this, SwRedlineAcceptDlg, UndoHdl));
+    //tdf#89227 default to disabled, and only enable if possible to accept/reject
+    pTPView->EnableAccept(false);
+    pTPView->EnableReject(false);
+    pTPView->EnableAcceptAll(false);
+    pTPView->EnableRejectAll(false);
 
     aTabPagesCTRL.GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
 
@@ -357,9 +362,14 @@ void SwRedlineAcceptDlg::Activate()
         return;
 
     SwView *pView = ::GetActiveView();
-
-    if (!pView) // can happen when switching to another app, when a Listbox in the dialog
-        return; // had the focus previously (actually THs Bug)
+    if (!pView) // can happen when switching to another app
+    {
+        pTPView->EnableAccept(false);
+        pTPView->EnableReject(false);
+        pTPView->EnableAcceptAll(false);
+        pTPView->EnableRejectAll(false);
+        return; // had the focus previously
+    }
 
     SwWait aWait( *pView->GetDocShell(), false );
 
