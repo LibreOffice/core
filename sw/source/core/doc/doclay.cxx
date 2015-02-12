@@ -512,12 +512,10 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
                            bool bAsCharAlso ) const
 {
     SwPosFlyFrms aRetval;
-    SwFrmFmt *pFly;
 
     // collect all anchored somehow to paragraphs
-    for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
+    for( auto pFly : *GetSpzFrmFmts() )
     {
-        pFly = (*GetSpzFrmFmts())[ n ];
         bool bDrawFmt = bDrawAlso && RES_DRAWFRMFMT == pFly->Which();
         bool bFlyFmt = RES_FLYFRMFMT == pFly->Which();
         if( bFlyFmt || bDrawFmt )
@@ -554,6 +552,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
             for( size_t i = 0; i < rObjs.size(); ++i)
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
+                SwFrmFmt *pFly;
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
                     pFly = &(pAnchoredObj->GetFrmFmt());
                 else if ( bDrawAlso )
@@ -655,7 +654,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     SwTxtFmtColl * pColl = NULL;
     if( pType )
     {
-        for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
+        for( auto i = pTxtFmtCollTbl->size(); i; )
         {
             if( (*pTxtFmtCollTbl)[ --i ]->GetName()==pType->GetName() )
             {
@@ -1004,7 +1003,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     SwTxtFmtColl *pColl = NULL;
     if( pType )
     {
-        for( sal_uInt16 i = pTxtFmtCollTbl->size(); i; )
+        for( auto i = pTxtFmtCollTbl->size(); i; )
         {
             if( (*pTxtFmtCollTbl)[ --i ]->GetName()==pType->GetName() )
             {
@@ -1298,8 +1297,6 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 
     const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
 
-    sal_uInt16 nNum;
-
     std::vector<sal_uInt8> aSetFlags(rFmts.size()/8 + 2);
 
     for( SwFrmFmts::size_type n = 0; n < rFmts.size(); ++n )
@@ -1309,14 +1306,14 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
             pFlyFmt->GetName().startsWith( aName ) )
         {
             // Only get and set the Flag
-            nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().copy( nNmLen ).toInt32() );
-            if( nNum-- && nNum < rFmts.size() )
+            const sal_Int32 nNum = pFlyFmt->GetName().copy( nNmLen ).toInt32()-1;
+            if( nNum >= 0 && static_cast<SwFrmFmts::size_type>(nNum) < rFmts.size() )
                 aSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
     }
 
     // All numbers are flagged accordingly, so determine the right one
-    nNum = rFmts.size();
+    SwFrmFmts::size_type nNum = rFmts.size();
     for( std::vector<sal_uInt8>::size_type n=0; n<aSetFlags.size(); ++n )
     {
         sal_uInt8 nTmp = aSetFlags[ n ];
@@ -1351,7 +1348,7 @@ OUString SwDoc::GetUniqueFrameName() const
 const SwFlyFrmFmt* SwDoc::FindFlyByName( const OUString& rName, sal_Int8 nNdTyp ) const
 {
     const SwFrmFmts& rFmts = *GetSpzFrmFmts();
-    for( sal_uInt16 n = rFmts.size(); n; )
+    for( auto n = rFmts.size(); n; )
     {
         const SwFrmFmt* pFlyFmt = rFmts[ --n ];
         const SwNodeIndex* pIdx = 0;
@@ -1468,7 +1465,7 @@ void SwDoc::SetAllUniqueFlyNames()
         if( 0 != ( pIdx = ( pFlyFmt = aArr[ --n ])->GetCntnt().GetCntntIdx() )
             && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
-            sal_uInt16 nNum;
+            sal_Int32 nNum;
             OUString sNm;
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
@@ -1522,10 +1519,8 @@ bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
         // get up by using the Anchor
 #if OSL_DEBUG_LEVEL > 0
         std::list<const SwFrmFmt*> checkFmts;
-        sal_uInt16 n;
-        for( n = 0; n < GetSpzFrmFmts()->size(); ++n )
+        for( auto pFmt : *GetSpzFrmFmts() )
         {
-            const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[ n ];
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if( pIdx && pFlyNd == &pIdx->GetNode() )
                 checkFmts.push_back( pFmt );
