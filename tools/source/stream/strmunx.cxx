@@ -373,6 +373,8 @@ sal_uInt64 SvFileStream::SeekPos(sal_uInt64 const nPos)
             SetError( SVSTREAM_SEEK_ERROR );
             return 0L;
         }
+        if ( nPos != STREAM_SEEK_TO_END )
+            return nPos;
         rc = osl_getFilePos( pInstanceData->rHandle, &nNewPos );
         return (sal_Size) nNewPos;
     }
