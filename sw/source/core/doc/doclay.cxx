@@ -134,7 +134,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
         uno::Reference< awt::XControlModel >  xModel = static_cast<SdrUnoObj*>(pObj)->GetUnoControlModel();
         uno::Any aVal;
         uno::Reference< beans::XPropertySet >  xSet(xModel, uno::UNO_QUERY);
-        OUString sName("Name");
+        const OUString sName("Name");
         if( xSet.is() )
             aVal = xSet->getPropertyValue( sName );
         if( bInsInPage )
@@ -1327,7 +1327,7 @@ static OUString lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
         }
     }
 
-    return aName += OUString::number( ++nNum );
+    return aName + OUString::number( ++nNum );
 }
 
 OUString SwDoc::GetUniqueGrfName() const
@@ -1398,9 +1398,9 @@ void SwDoc::SetAllUniqueFlyNames()
     ResId nFrmId( STR_FRAME_DEFNAME, *pSwResMgr ),
           nGrfId( STR_GRAPHIC_DEFNAME, *pSwResMgr ),
           nOLEId( STR_OBJECT_DEFNAME, *pSwResMgr );
-    OUString sFlyNm( nFrmId );
-    OUString sGrfNm( nGrfId );
-    OUString sOLENm( nOLEId );
+    const OUString sFlyNm( nFrmId );
+    const OUString sGrfNm( nGrfId );
+    const OUString sOLENm( nOLEId );
 
     if( 255 < ( n = GetSpzFrmFmts()->size() ))
         n = 255;
@@ -1465,24 +1465,18 @@ void SwDoc::SetAllUniqueFlyNames()
         if( 0 != ( pIdx = ( pFlyFmt = aArr[ --n ])->GetCntnt().GetCntntIdx() )
             && pIdx->GetNode().GetNodes().IsDocNodes() )
         {
-            sal_Int32 nNum;
-            OUString sNm;
             switch( GetNodes()[ pIdx->GetIndex() + 1 ]->GetNodeType() )
             {
             case ND_GRFNODE:
-                sNm = sGrfNm;
-                nNum = ++nGrfNum;
+                pFlyFmt->SetName( sGrfNm + OUString::number( ++nGrfNum ));
                 break;
             case ND_OLENODE:
-                sNm = sOLENm;
-                nNum = ++nOLENum;
+                pFlyFmt->SetName( sOLENm + OUString::number( ++nOLENum ));
                 break;
             default:
-                sNm = sFlyNm;
-                nNum = ++nFlyNum;
+                pFlyFmt->SetName( sFlyNm + OUString::number( ++nFlyNum ));
                 break;
             }
-            pFlyFmt->SetName( sNm + OUString::number( nNum ));
         }
     }
     aArr.clear();
