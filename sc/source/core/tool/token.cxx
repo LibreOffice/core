@@ -4008,6 +4008,40 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
     }
 }
 
+bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nMaxRow ) const
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                formula::FormulaToken* pToken = *p;
+                ScSingleRefData& rRef = *pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rPos);
+                if (aAbs.Col() > nMaxCol || aAbs.Row() > nMaxRow)
+                   return true;
+            }
+            break;
+            case svDoubleRef:
+            {
+                formula::FormulaToken* pToken = *p;
+                ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rPos);
+                if (aAbs.aStart.Col() > nMaxCol || aAbs.aStart.Row() > nMaxRow ||
+                    aAbs.aEnd.Col() > nMaxCol || aAbs.aEnd.Row() > nMaxRow)
+                    return true;
+            }
+            break;
+            default:
+                ;
+        }
+    }
+    return false;
+}
+
 #if DEBUG_FORMULA_COMPILER
 
 void ScTokenArray::Dump() const
