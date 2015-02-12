@@ -136,10 +136,7 @@ void Window::dispose()
     if (!mpWindowImpl)
         return;
 
-    // TODO: turn this assert on once we have switched to using VclPtr everywhere
-    //assert( !mpWindowImpl->mbInDispose && "vcl::Window - already in dispose()" );
-    if (mpWindowImpl->mbInDispose)
-        return;
+    assert( !mpWindowImpl->mbInDispose && "vcl::Window - already in dispose()" );
     mpWindowImpl->mbInDispose = true;
 
     // remove Key and Mouse events issued by Application::PostKey/MouseEvent
@@ -549,9 +546,8 @@ void Window::dispose()
         delete mpWindowImpl->mpOverlapData;
 
     // remove BorderWindow or Frame window data
-    if ( mpWindowImpl->mpBorderWindow )
-        delete mpWindowImpl->mpBorderWindow;
-    else if ( mpWindowImpl->mbFrame )
+    mpWindowImpl->mpBorderWindow.disposeAndClear();
+    if ( mpWindowImpl->mbFrame )
     {
         if ( pSVData->maWinData.mpFirstFrame == this )
             pSVData->maWinData.mpFirstFrame = mpWindowImpl->mpFrameData->mpNextFrame;
@@ -575,9 +571,10 @@ void Window::dispose()
 
 Window::~Window()
 {
+    DBG_ASSERT( !mbInDtor, "~Window - already in DTOR!" );
+    mbInDtor = true;
     vcl::LazyDeletor<vcl::Window>::Undelete( this );
-    dispose ();
-    DBG_ASSERT( !mpWindowImpl->mbInDtor, "~Window - already in DTOR!" );
+    dispose();
 }
 
 } /* namespace vcl */
@@ -716,7 +713,6 @@ WindowImpl::WindowImpl( WindowType nType )
     mbCompoundControlHasFocus           = false;                     // true: Composite Control has focus somewhere
     mbPaintDisabled                     = false;                     // true: Paint should not be executed
     mbAllResize                         = false;                     // true: Also sent ResizeEvents with 0,0
-    mbInDtor                            = false;                     // true: We're still in Window-Dtor
     mbInDispose                         = false;                     // true: We're still in Window::dispose()
     mbExtTextInput                      = false;                     // true: ExtTextInput-Mode is active
     mbInFocusHdl                        = false;                     // true: Within GetFocus-Handler
@@ -1201,6 +1197,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpOutputDevice = (OutputDevice*)this;
 
     mnRefCnt = 0;
+    mbInDtor = false;                     // true: We're still in Window-Dtor
 
     mpWindowImpl = new WindowImpl( nType );
 
@@ -2108,7 +2105,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
         else
         {
             if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetBorderStyle( nBorderStyle );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetBorderStyle( nBorderStyle );
             else
                 mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
         }
@@ -2121,7 +2118,7 @@ WindowBorderStyle Window::GetBorderStyle() const
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->GetBorderStyle();
+            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorderStyle();
         else
             return mpWindowImpl->mpBorderWindow->GetBorderStyle();
     }
@@ -2135,7 +2132,7 @@ long Window::CalcTitleWidth() const
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->CalcTitleWidth();
+            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->CalcTitleWidth();
         else
             return mpWindowImpl->mpBorderWindow->CalcTitleWidth();
     }
@@ -2539,8 +2536,8 @@ void Window::Enable( bool bEnable, bool bChild )
     {
         mpWindowImpl->mpBorderWindow->Enable( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
-             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, true );
+             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->Enable( bEnable, true );
     }
 
     // #i56102# restore app focus win in case the
@@ -2601,8 +2598,8 @@ void Window::EnableInput( bool bEnable, bool bChild )
     {
         mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
-             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, true );
+             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->EnableInput( bEnable, true );
     }
 
     if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||

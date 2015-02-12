@@ -1576,7 +1576,7 @@ ToolBox::~ToolBox()
 void ToolBox::dispose()
 {
     // custom menu event still running?
-    if( mpData->mnEventId )
+    if( mpData && mpData->mnEventId )
         Application::RemoveUserEvent( mpData->mnEventId );
 
     // #103005# make sure our activate/deactivate balance is right
@@ -1587,9 +1587,12 @@ void ToolBox::dispose()
     // still connected
     if ( mpFloatWin )
         mpFloatWin->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL );
+    mpFloatWin = NULL;
 
     // delete private data
-    delete mpData;
+    if (mpData)
+        delete mpData;
+    mpData = NULL;
 
     // remove the lists when there are no more toolbox references to
     // the lists

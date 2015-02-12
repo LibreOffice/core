@@ -99,7 +99,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetMapMode(MAP_PIXEL);
 
     // Even RTL languages don't use RTL for math
-    rCmdBox.GetEditWindow().EnableRTL( false );
+    EnableRTL( false );
 
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
@@ -149,10 +149,14 @@ void SmEditWindow::dispose()
             pEditEngine->RemoveView( pEditView );
         }
         delete pEditView;
+        pEditView = NULL;
     }
     delete pHScrollBar;
+    pHScrollBar = NULL;
     delete pVScrollBar;
+    pVScrollBar = NULL;
     delete pScrollBox;
+    pScrollBox = NULL;
     vcl::Window::dispose();
 }
 

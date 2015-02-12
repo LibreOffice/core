@@ -136,6 +136,12 @@ public:
         m_rInnerRef.set(pBody);
     }
 
+    inline VclPtr<reference_type>& SAL_CALL operator= (reference_type * pBody)
+    {
+        m_rInnerRef.set(pBody);
+        return *this;
+    }
+
     inline SAL_CALL operator reference_type * () const
     {
         return m_rInnerRef.get();
@@ -151,8 +157,9 @@ public:
         // hold it alive for the lifetime of this method
         ::rtl::Reference<reference_type> aTmp(m_rInnerRef);
         m_rInnerRef.clear(); // we should use some 'swap' method ideally ;-)
-        if (aTmp.get())
+        if (aTmp.get()) {
             aTmp->dispose();
+        }
     }
 
 }; // class VclPtr

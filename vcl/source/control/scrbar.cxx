@@ -130,7 +130,7 @@ ScrollBar::~ScrollBar()
 
 void ScrollBar::dispose()
 {
-    delete mpData;
+    delete mpData; mpData = NULL;
     Control::dispose();
 }
 

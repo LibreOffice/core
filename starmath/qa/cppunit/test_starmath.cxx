@@ -60,8 +60,8 @@ private:
 
     SfxBindings m_aBindings;
     SfxDispatcher *m_pDispatcher;
-    SmCmdBoxWindow *m_pSmCmdBoxWindow;
-    SmEditWindow *m_pEditWindow;
+    VclPtr<SmCmdBoxWindow> m_pSmCmdBoxWindow;
+    VclPtr<SmEditWindow> m_pEditWindow;
     SmDocShellRef m_xDocShRef;
     SmViewShell *m_pViewShell;
 };
@@ -94,8 +94,8 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    delete m_pEditWindow;
-    delete m_pSmCmdBoxWindow;
+    m_pEditWindow.disposeAndClear();
+    m_pSmCmdBoxWindow.disposeAndClear();
     delete m_pDispatcher;
     m_xDocShRef->DoClose();
     m_xDocShRef.Clear();

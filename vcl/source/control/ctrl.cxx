@@ -344,7 +344,11 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 
 void Control::ImplClearLayoutData() const
 {
-    delete mpControlData->mpLayoutData, mpControlData->mpLayoutData = NULL;
+    if (mpControlData)
+    {
+        delete mpControlData->mpLayoutData;
+        mpControlData->mpLayoutData = NULL;
+    }
 }
 
 void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )

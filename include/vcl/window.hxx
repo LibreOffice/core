@@ -420,7 +420,8 @@ private:
     // OutputDevice
     ::OutputDevice* mpOutputDevice;
 
-    mutable int mnRefCnt;        // reference count
+    mutable int mnRefCnt;         // reference count
+    bool        mbInDtor = false; // true: We're still in Window-Dtor
 
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );

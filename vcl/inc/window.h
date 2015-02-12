@@ -35,6 +35,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/vclevent.hxx>
+#include <vcl/vclptr.hxx>
 #include <vector>
 
 struct SalPaintEvent;
@@ -214,7 +215,7 @@ public:
     SalObject*          mpSysObj;
     vcl::Window*        mpFrameWindow;
     vcl::Window*        mpOverlapWindow;
-    vcl::Window*        mpBorderWindow;
+    VclPtr<vcl::Window> mpBorderWindow;
     vcl::Window*        mpClientWindow;
     vcl::Window*        mpParent;
     vcl::Window*        mpRealParent;

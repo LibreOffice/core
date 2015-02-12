@@ -1768,7 +1768,7 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
             ", created " << pWindow << " child of " <<
             pParent << "(" << pWindow->mpWindowImpl->mpParent << "/" <<
             pWindow->mpWindowImpl->mpRealParent << "/" <<
-            pWindow->mpWindowImpl->mpBorderWindow << ") with helpid " <<
+            pWindow->mpWindowImpl->mpBorderWindow.get() << ") with helpid " <<
             pWindow->GetHelpId().getStr());
         m_aChildren.push_back(WinAndId(id, pWindow, bVertical));
     }
