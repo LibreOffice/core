@@ -132,10 +132,12 @@ namespace canvas
             maCanvasHelper.clear();
         }
 
-        virtual void SAL_CALL drawPoint( const ::com::sun::star::geometry::RealPoint2D&     aPoint,
-                                         const ::com::sun::star::rendering::ViewState&      viewState,
-                                         const ::com::sun::star::rendering::RenderState&    renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                 ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+        virtual void SAL_CALL drawPoint(const css::geometry::RealPoint2D&     aPoint,
+                                        const css::rendering::ViewState&      viewState,
+                                        const css::rendering::RenderState&    renderState)
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException,
+                   std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(aPoint, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
