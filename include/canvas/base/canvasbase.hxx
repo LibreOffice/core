@@ -384,12 +384,14 @@ namespace canvas
 
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
-            drawText( const ::com::sun::star::rendering::StringContext&                                     text,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >&   xFont,
-                      const ::com::sun::star::rendering::ViewState&                                         viewState,
-                      const ::com::sun::star::rendering::RenderState&                                       renderState,
-                      sal_Int8                                                                              textDirection ) throw (::com::sun::star::lang::IllegalArgumentException,
-                                                                                                                                   ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE
+            drawText(const css::rendering::StringContext&                                     text,
+                     const css::uno::Reference< ::com::sun::star::rendering::XCanvasFont >&   xFont,
+                     const css::rendering::ViewState&                                         viewState,
+                     const css::rendering::RenderState&                                       renderState,
+                     sal_Int8                                                                 textDirection)
+                throw (css::lang::IllegalArgumentException,
+                       css::uno::RuntimeException,
+                       std::exception) SAL_OVERRIDE
         {
             tools::verifyArgs(xFont, viewState, renderState,
                               BOOST_CURRENT_FUNCTION,
