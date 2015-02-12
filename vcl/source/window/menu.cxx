@@ -2407,13 +2407,13 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
 }
 
 // - MenuBar -
-
 IMenuBarWindow* MenuBar::getMenuBarWindow()
 {
     // so far just a dynamic_cast, hopefully to be turned into something saner
     // at some stage
     IMenuBarWindow *pWin = dynamic_cast<IMenuBarWindow*>(pWindow);
-    assert(pWin);
+    //either there is no window (fdo#87663) or it is an IMenuBarWindow
+    assert(!pWindow || pWin);
     return pWin;
 }
 
@@ -2445,15 +2445,19 @@ MenuBar::~MenuBar()
 
 void MenuBar::ClosePopup(Menu *pMenu)
 {
-    getMenuBarWindow()->PopupClosed(pMenu);
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    if (!pMenuWin)
+        return;
+    pMenuWin->PopupClosed(pMenu);
 }
 
 sal_uLong MenuBar::DeactivateMenuBar(sal_uLong nFocusId)
 {
-    nFocusId = getMenuBarWindow()->GetFocusId();
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    nFocusId = pMenuWin ? pMenuWin->GetFocusId() : 0;
     if (nFocusId)
     {
-        getMenuBarWindow()->SetFocusId(0);
+        pMenuWin->SetFocusId(0);
         ImplGetSVData()->maWinData.mbNoDeactivate = false;
     }
 
@@ -2479,7 +2483,9 @@ void MenuBar::ShowButtons( bool bClose, bool bFloat, bool bHide )
         mbCloseBtnVisible = bClose;
         mbFloatBtnVisible = bFloat;
         mbHideBtnVisible = bHide;
-        getMenuBarWindow()->ShowButtons(bClose, bFloat, bHide);
+        IMenuBarWindow* pMenuWin = getMenuBarWindow();
+        if (pMenuWin)
+            pMenuWin->ShowButtons(bClose, bFloat, bHide);
     }
 }
 
@@ -2488,7 +2494,9 @@ void MenuBar::SetDisplayable( bool bDisplayable )
     if( bDisplayable != mbDisplayable )
     {
         mbDisplayable = bDisplayable;
-        getMenuBarWindow()->LayoutChanged();
+        IMenuBarWindow* pMenuWin = getMenuBarWindow();
+        if (pMenuWin)
+            pMenuWin->LayoutChanged();
     }
 }
 
@@ -2521,7 +2529,9 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
     vcl::Window *pWindow = pMenu->ImplGetWindow();
     if (pWindow && bDelete)
     {
-        pMenu->getMenuBarWindow()->KillActivePopup();
+        IMenuBarWindow* pMenuWin = pMenu->getMenuBarWindow();
+        if (pMenuWin)
+            pMenuWin->KillActivePopup();
         delete pWindow;
     }
     pMenu->pWindow = NULL;
@@ -2538,29 +2548,34 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 
     // check for enabled, if this method is called from another window...
     vcl::Window* pWin = ImplGetWindow();
-    if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && ! pWin->IsInModalMode() )
-        bDone = getMenuBarWindow()->HandleKeyEvent( rKEvent, bFromMenu );
+    if (pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && !pWin->IsInModalMode())
+    {
+        IMenuBarWindow* pMenuWin = getMenuBarWindow();
+        bDone = pMenuWin ? pMenuWin->HandleKeyEvent(rKEvent, bFromMenu) : false;
+    }
     return bDone;
 }
 
 void MenuBar::SelectItem(sal_uInt16 nId)
 {
-    IMenuBarWindow* pMenuWin = getMenuBarWindow();
-
     if (pWindow)
     {
         pWindow->GrabFocus();
         nId = GetItemPos( nId );
 
-        // #99705# popup the selected menu
-        pMenuWin->SetAutoPopup( true );
-        if (ITEMPOS_INVALID != pMenuWin->GetHighlightedItem())
+        IMenuBarWindow* pMenuWin = getMenuBarWindow();
+        if (pMenuWin)
         {
-            pMenuWin->KillActivePopup();
-            pMenuWin->ChangeHighlightItem( ITEMPOS_INVALID, false );
+            // #99705# popup the selected menu
+            pMenuWin->SetAutoPopup( true );
+            if (ITEMPOS_INVALID != pMenuWin->GetHighlightedItem())
+            {
+                pMenuWin->KillActivePopup();
+                pMenuWin->ChangeHighlightItem( ITEMPOS_INVALID, false );
+            }
+            if (nId != ITEMPOS_INVALID)
+                pMenuWin->ChangeHighlightItem( nId, false );
         }
-        if (nId != ITEMPOS_INVALID)
-            pMenuWin->ChangeHighlightItem( nId, false );
     }
 }
 
@@ -2638,27 +2653,36 @@ bool MenuBar::HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nCommandEventId ) 
 
 sal_uInt16 MenuBar::AddMenuBarButton( const Image& i_rImage, const Link& i_rLink, const OUString& i_rToolTip, sal_uInt16 i_nPos )
 {
-    return getMenuBarWindow()->AddMenuBarButton(i_rImage, i_rLink, i_rToolTip, i_nPos);
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    return pMenuWin ? pMenuWin->AddMenuBarButton(i_rImage, i_rLink, i_rToolTip, i_nPos) : 0;
 }
 
 void MenuBar::SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& rLink )
 {
-    getMenuBarWindow()->SetMenuBarButtonHighlightHdl(nId, rLink);
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    if (!pMenuWin)
+        return;
+    pMenuWin->SetMenuBarButtonHighlightHdl(nId, rLink);
 }
 
 Rectangle MenuBar::GetMenuBarButtonRectPixel( sal_uInt16 nId )
 {
-    return getMenuBarWindow()->GetMenuBarButtonRectPixel(nId);
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    return pMenuWin ? pMenuWin->GetMenuBarButtonRectPixel(nId) : Rectangle();
 }
 
 void MenuBar::RemoveMenuBarButton( sal_uInt16 nId )
 {
-    getMenuBarWindow()->RemoveMenuBarButton(nId);
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    if (!pMenuWin)
+        return;
+    pMenuWin->RemoveMenuBarButton(nId);
 }
 
 bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId )
 {
-    return getMenuBarWindow()->HandleMenuButtonEvent(i_nButtonId);
+    IMenuBarWindow* pMenuWin = getMenuBarWindow();
+    return pMenuWin ? pMenuWin->HandleMenuButtonEvent(i_nButtonId) : false;
 }
 
 // bool PopupMenu::bAnyPopupInExecute = false;
