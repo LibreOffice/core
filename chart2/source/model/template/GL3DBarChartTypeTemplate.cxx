@@ -154,9 +154,9 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
 
     try
     {
-#if 1
-        // I gave up trying to use UNO just to instantiate this little thing...
-        xResult.set(new GL3DBarChartType(GetComponentContext()));
+        uno::Reference<lang::XMultiServiceFactory> xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
+        xResult.set(xFact->createInstance(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR), uno::UNO_QUERY_THROW);
         uno::Reference<beans::XPropertySet> xCTProp(xResult, uno::UNO_QUERY);
         if (xCTProp.is())
         {
@@ -164,12 +164,6 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
             getFastPropertyValue(PROP_GL3DCHARTTYPE_ROUNDED_EDGE) >>= bVal;
             xCTProp->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(bVal));
         }
-#else
-        // This never works for me.
-        uno::Reference<lang::XMultiServiceFactory> xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
-        xResult.set(xFact->createInstance(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR), uno::UNO_QUERY_THROW);
-#endif
     }
     catch (const uno::Exception & ex)
     {

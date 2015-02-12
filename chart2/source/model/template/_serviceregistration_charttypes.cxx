@@ -23,6 +23,7 @@
 #include "BarChartType.hxx"
 #include "CandleStickChartType.hxx"
 #include "ColumnChartType.hxx"
+#include "GL3DBarChartType.hxx"
 #include "LineChartType.hxx"
 #include "NetChartType.hxx"
 #include "FilledNetChartType.hxx"
@@ -110,6 +111,14 @@ static const struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
           ::chart::BubbleChartType::create
         , ::chart::BubbleChartType::getImplementationName_Static
         , ::chart::BubbleChartType::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
+          ::chart::GL3DBarChartType::create
+        , ::chart::GL3DBarChartType::getImplementationName_Static
+        , ::chart::GL3DBarChartType::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
