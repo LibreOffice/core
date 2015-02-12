@@ -30,7 +30,8 @@
   <implementation name="com.sun.star.comp.form.ORichTextControl">
     <service name="com.sun.star.form.control.RichTextControl"/>
   </implementation>
-  <implementation name="com.sun.star.comp.forms.FormOperations">
+  <implementation name="com.sun.star.comp.forms.FormOperations"
+      constructor="com_sun_star_comp_forms_FormOperations_get_implementation">
     <service name="com.sun.star.form.runtime.FormOperations"/>
   </implementation>
   <implementation name="com.sun.star.comp.forms.ODatabaseForm"

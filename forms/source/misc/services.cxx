@@ -229,9 +229,6 @@ void SAL_CALL createRegistryInfo_FORMS()
         createRegistryInfo_ORichTextModel();
         createRegistryInfo_ORichTextControl();
         createRegistryInfo_CLibxml2XFormsExtension();
-#if HAVE_FEATURE_DBCONNECTIVITY
-        createRegistryInfo_FormOperations();
-#endif
         bInit = true;
     }
 }
