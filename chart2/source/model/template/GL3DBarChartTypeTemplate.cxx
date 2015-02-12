@@ -154,16 +154,12 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
 
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xFact(
-            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW);
-        xResult.set(xFact->createInstance(CHART2_SERVICE_NAME_CHARTTYPE_GL3DBAR), uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xCTProp(xResult, uno::UNO_QUERY);
-        if (xCTProp.is())
-        {
-            bool bVal = false;
-            getFastPropertyValue(PROP_GL3DCHARTTYPE_ROUNDED_EDGE) >>= bVal;
-            xCTProp->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(bVal));
-        }
+        rtl::Reference<GL3DBarChartType> chart(
+            new GL3DBarChartType(GetComponentContext()));
+        bool bVal = false;
+        getFastPropertyValue(PROP_GL3DCHARTTYPE_ROUNDED_EDGE) >>= bVal;
+        chart->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(bVal));
+        xResult = chart.get();
     }
     catch (const uno::Exception & ex)
     {

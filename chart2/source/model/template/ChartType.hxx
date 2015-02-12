@@ -58,6 +58,9 @@ public:
             ::com::sun::star::uno::XComponentContext > const & xContext );
     virtual ~ChartType();
 
+    /// merge XInterface implementations
+     DECLARE_XINTERFACE()
+
 protected:
     explicit ChartType( const ChartType & rOther );
 
@@ -133,8 +136,6 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
     /// merge XTypeProvider implementations
      DECLARE_XTYPEPROVIDER()
 
