@@ -733,7 +733,7 @@ private:
     }
 
 public:
-    void blendBitmap(
+    bool blendBitmap(
             const BitmapWriteAccess* pDestination,
             const BitmapReadAccess*  pSource,
             const BitmapReadAccess*  pSourceAlpha,
@@ -754,10 +754,12 @@ public:
                       || (nSourceFormat == BMP_FORMAT_24BIT_TC_RGB && nDestinationFormat == BMP_FORMAT_32BIT_TC_RGBA))
                     {
                         blendBitmap24(pDestination, pSource, pSourceAlpha, nDstWidth, nDstHeight);
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     void blendBitmap24(
@@ -915,10 +917,12 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
         }
         else
         {
-            bool isBitmap24bitRGB = (pBitmapReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB ||
-                                     pBitmapReadAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR);
-
-            if (GetBitCount() <= 8 && !isBitmap24bitRGB)
+            if( aContext.blendBitmap( Bitmap::ScopedWriteAccess(aBmp).get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
+                    nDstWidth, nDstHeight))
+            {
+                aNewBitmap = aBmp;
+            }
+            else
             {
                 aNewBitmap = BlendBitmap(
                             aBmp, pBitmapReadAccess.get(), pAlphaReadAccess.get(),
@@ -927,14 +931,6 @@ void OutputDevice::DrawDeviceAlphaBitmapSlowPath(const Bitmap& rBitmap, const Al
                             aBmpRect, aOutSize,
                             bHMirr, bVMirr,
                             aContext.mpMapX.get(), aContext.mpMapY.get() );
-            }
-            else
-            {
-                Bitmap::ScopedWriteAccess pDestination(aBmp);
-                aContext.blendBitmap(
-                    pDestination.get(), pBitmapReadAccess.get(), pAlphaReadAccess.get(),
-                    nDstWidth, nDstHeight);
-                aNewBitmap = aBmp;
             }
         }
 
