@@ -234,7 +234,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                      " max possible entries, but " << nRead << " claimed, truncating");
             return rIStream;
         }
-        boost::scoped_array<char> pTempBuf(new char[nLen]);
+        boost::scoped_array<char> pTempBuf(new char[nRead]);
         rIStream.Read(pTempBuf.get(),  nRead);
         if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
         {
@@ -261,7 +261,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
                 Impl364JobSetupData* pOldJobData    = reinterpret_cast<Impl364JobSetupData*>(pTempBuf.get() + sizeof( ImplOldJobSetupData ));
-                sal_uInt16 nOldJobDataSize              = SVBT16ToShort( pOldJobData->nSize );
+                sal_uInt16 nOldJobDataSize          = SVBT16ToShort( pOldJobData->nSize );
                 pJobData->mnSystem                  = SVBT16ToShort( pOldJobData->nSystem );
                 pJobData->mnDriverDataLen           = SVBT32ToUInt32( pOldJobData->nDriverDataLen );
                 pJobData->meOrientation             = (Orientation)SVBT16ToShort( pOldJobData->nOrientation );
