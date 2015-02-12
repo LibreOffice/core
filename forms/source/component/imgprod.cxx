@@ -33,7 +33,6 @@
 #include "svtools/imageresourceaccess.hxx"
 #include <comphelper/processfactory.hxx>
 
-
 // - ImgProdLockBytes -
 
 
@@ -554,15 +553,11 @@ void ImageProducer::initialize( const ::com::sun::star::uno::Sequence< ::com::su
     }
 }
 
-namespace frm
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_ImageProducer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL ImageProducer_CreateInstance(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
-{
-    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >(
-        ( ::cppu::OWeakObject* ) new ImageProducer );
+    return cppu::acquire(new ImageProducer());
 }
-} // namespace frm
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

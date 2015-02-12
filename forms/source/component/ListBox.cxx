@@ -60,7 +60,6 @@
 #include <iterator>
 
 
-
 namespace frm
 {
     using namespace ::com::sun::star::uno;
@@ -133,13 +132,6 @@ namespace frm
 
 
     //= OListBoxModel
-
-
-    InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-    {
-        return *(new OListBoxModel( comphelper::getComponentContext(_rxFactory) ));
-    }
-
 
     Sequence< Type> OListBoxModel::_getTypes()
     {
@@ -1749,14 +1741,6 @@ namespace frm
 
     // OListBoxControl
 
-
-
-    InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-    {
-        return *(new OListBoxControl( comphelper::getComponentContext(_rxFactory) ));
-    }
-
-
     Sequence< Type> OListBoxControl::_getTypes()
     {
         return TypeBag(
@@ -2156,5 +2140,19 @@ namespace frm
 
 }
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OListBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OListBoxModel(component));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_form_OListBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new frm::OListBoxControl(component));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
