@@ -64,7 +64,6 @@ cmd/sc_closewin.png cmd/sc_closedoc.png
 cmd/lc_savebasicas.png cmd/lc_saveas.png
 res/lc05710.png cmd/lc_cut.png
 sch/res/sc30514.png cmd/sc_viewdatasourcebrowser.png
-cmd/lc_view100.png cmd/lc_zoom100percent.png
 sd/imglst/sc27085.png cmd/sc_mirror.png
 cmd/lc_sortup.png cmd/lc_sortascending.png
 cmd/sc_sortup.png cmd/sc_sortascending.png
