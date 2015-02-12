@@ -21,6 +21,7 @@
 
 #include "jvmaccess/classpath.hxx"
 
+#include <cassert>
 #include <vector>
 
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
@@ -32,7 +33,6 @@
 #include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarExpandUrlReference.hpp"
 #include "com/sun/star/util/theMacroExpander.hpp"
-#include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
@@ -42,7 +42,8 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     JNIEnv * environment, OUString const & classPath)
 {
-    OSL_ASSERT(context.is() && environment != 0);
+    assert(context.is());
+    assert(environment != 0);
     jclass classUrl(environment->FindClass("java/net/URL"));
     if (classUrl == 0) {
         return 0;
@@ -104,7 +105,8 @@ jclass jvmaccess::ClassPath::loadClass(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     JNIEnv * environment, OUString const & classPath, OUString const & name)
 {
-    OSL_ASSERT(context.is() && environment != 0);
+    assert(context.is());
+    assert(environment != 0);
     jclass classLoader(environment->FindClass("java/net/URLClassLoader"));
     if (classLoader == 0) {
         return 0;

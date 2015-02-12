@@ -17,9 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "jvmaccess/virtualmachine.hxx"
+#include <sal/config.h>
 
-#include "osl/diagnose.h"
+#include <cassert>
+
+#include <jvmaccess/virtualmachine.hxx>
+#include <sal/log.hxx>
 
 using jvmaccess::VirtualMachine;
 
@@ -44,7 +47,7 @@ VirtualMachine::AttachGuard::AttachGuard(
     rtl::Reference< VirtualMachine > const & rMachine):
     m_xMachine(rMachine)
 {
-    OSL_ENSURE(m_xMachine.is(), "bad parameter");
+    assert(m_xMachine.is());
     m_pEnvironment = m_xMachine->attachThread(&m_bDetach);
     if (m_pEnvironment == 0)
         throw CreationException();
@@ -61,8 +64,9 @@ VirtualMachine::VirtualMachine(JavaVM * pVm, int nVersion, bool bDestroy,
     m_pVm(pVm), m_nVersion(nVersion), m_bDestroy(bDestroy)
 {
     (void) pMainThreadEnv; // avoid warnings
-    OSL_ENSURE(pVm != 0 && nVersion >= JNI_VERSION_1_2 && pMainThreadEnv != 0,
-               "bad parameter");
+    assert(pVm != 0);
+    assert(nVersion >= JNI_VERSION_1_2);
+    assert(pMainThreadEnv);
 }
 
 VirtualMachine::~VirtualMachine()
@@ -75,7 +79,7 @@ VirtualMachine::~VirtualMachine()
         // forever.
 /*
         jint n = m_pVm->DestroyJavaVM();
-        OSL_ENSURE(n == JNI_OK, "JNI: DestroyJavaVM failed");
+        SAL_WARN_IF(n != JNI_OK, "jvmaccess", "JNI: DestroyJavaVM failed");
 */
     }
 }
@@ -85,9 +89,8 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     assert(pAttached != 0 && "bad parameter");
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
-    if (n != JNI_OK && n != JNI_EDETACHED) {
-        OSL_FAIL("JNI: GetEnv failed");
-    }
+    SAL_WARN_IF(
+        n != JNI_OK && n != JNI_EDETACHED, "jvmaccess", "JNI: GetEnv failed");
     if (pEnv == 0)
     {
         if (m_pVm->AttachCurrentThread
@@ -111,9 +114,8 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 
 void VirtualMachine::detachThread() const
 {
-    if (m_pVm->DetachCurrentThread() != JNI_OK) {
-        OSL_FAIL("JNI: DetachCurrentThread failed");
-    }
+    jint n = m_pVm->DetachCurrentThread();
+    SAL_WARN_IF(n != JNI_OK, "jvmaccess", "JNI: DetachCurrentThread failed");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

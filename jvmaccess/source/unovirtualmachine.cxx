@@ -21,9 +21,8 @@
 
 #include "jvmaccess/unovirtualmachine.hxx"
 
-#include "osl/diagnose.h"
-
 #include "jvmaccess/virtualmachine.hxx"
+#include "sal/log.hxx"
 
 #include "jni.h"
 
@@ -66,9 +65,10 @@ UnoVirtualMachine::~UnoVirtualMachine() {
             getEnvironment()->DeleteGlobalRef(
                 static_cast< jobject >(m_classLoader));
     } catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &) {
-        OSL_TRACE(
-            "jvmaccess::UnoVirtualMachine::~UnoVirtualMachine:"
-            " jvmaccess::VirtualMachine::AttachGuard::CreationException" );
+        SAL_INFO(
+            "jvmaccess",
+            "ignored"
+                " jvmaccess::VirtualMachine::AttachGuard::CreationException");
     }
 }
 

@@ -491,6 +491,7 @@ certain functionality.
 @li @c cppcanvas.emf
 @li @c drawinglayer
 @li @c helpcompiler
+@li @c jvmaccess
 @li @c linguistic
 @li @c mysqlc
 @li @c postprocess.cppunit
