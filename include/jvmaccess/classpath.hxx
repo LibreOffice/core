@@ -20,11 +20,14 @@
 #ifndef INCLUDED_JVMACCESS_CLASSPATH_HXX
 #define INCLUDED_JVMACCESS_CLASSPATH_HXX
 
-#include <jvmaccess/jvmaccessdllapi.h>
 #include <sal/config.h>
-#include <com/sun/star/uno/Reference.hxx>
 
-#include "jni.h"
+#include <jni.h>
+
+#include <com/sun/star/uno/Reference.hxx>
+#include <jvmaccess/jvmaccessdllapi.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
@@ -34,103 +37,69 @@ namespace jvmaccess {
 
 /**
    Helper functions for class path handling.
-*/
-class JVMACCESS_DLLPUBLIC ClassPath {
-public:
-    /**
-       translates a class path into a java.net.URL[] instance.
+ */
+namespace ClassPath {
 
-       @param context
-       a component context; must not be null.
+/**
+   translates a class path into a java.net.URL[] instance.
 
-       @param environment
-       a JNI environment; must not be null.
+   @param context
+   a component context; must not be null.
 
-       @param classPath
-       a list of zero or more internal (see the
-       com.sun.star.uri.ExternalUriReferenceTranslator service) URI references,
-       where any space characters (U+0020) are ignored (and, in particular,
-       separate adjacent URI references).  Any vnd.sun.star.expand URL
-       references in the list are expanded using the
-       com.sun.star.util.theMacroExpander singleton of the given context.
+   @param environment
+   a JNI environment; must not be null.
 
-       @returns
-       a local reference to a java.net.URL[] instance containing the external
-       (see the com.sun.star.uri.ExternalUriReferenceTranslator service)
-       equivalents of all the URI references in the given classPath.  If null, a
-       (still pending) JNI exception occurred.
+   @param classPath
+   a list of zero or more internal (see the
+   com.sun.star.uri.ExternalUriReferenceTranslator service) URI references,
+   where any space characters (U+0020) are ignored (and, in particular, separate
+   adjacent URI references).  Any vnd.sun.star.expand URL references in the list
+   are expanded using the com.sun.star.util.theMacroExpander singleton of the
+   given context.
 
-       @throws com::sun::star::uno::RuntimeException
-    */
-    static inline ::jobjectArray
-    translateToUrls(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > const & context,
-        ::JNIEnv * environment, OUString const & classPath)
-    {
-        return
-            static_cast< ::jobjectArray >(
-                doTranslateToUrls(context, environment, classPath));
-    }
+   @returns
+   a local reference to a java.net.URL[] instance containing the external (see
+   the com.sun.star.uri.ExternalUriReferenceTranslator service) equivalents of
+   all the URI references in the given classPath.  If null, a (still pending)
+   JNI exception occurred.
 
-    /**
-       loads a class via a java.net.URLClassLoader.
+   @throws com::sun::star::uno::RuntimeException
+ */
+JVMACCESS_DLLPUBLIC jobjectArray translateToUrls(
+    css::uno::Reference<css::uno::XComponentContext> const & context,
+    JNIEnv * environment, OUString const & classPath);
 
-       @param context
-       a component context; must not be null.
+/**
+   loads a class via a java.net.URLClassLoader.
 
-       @param environment
-       a JNI environment; must not be null.
+   @param context
+   a component context; must not be null.
 
-       @param classPath
-       a list of zero or more internal (see the
-       com.sun.star.uri.ExternalUriReferenceTranslator service) URI references,
-       where any space characters (U+0020) are ignored (and, in particular,
-       separate adjacent URI references).  Any vnd.sun.star.expand URL
-       references in the list are expanded using the
-       com.sun.star.util.theMacroExpander singleton of the given context.
+   @param environment
+   a JNI environment; must not be null.
 
-       @param name
-       the Java binary name of the class to load.
+   @param classPath
+   a list of zero or more internal (see the
+   com.sun.star.uri.ExternalUriReferenceTranslator service) URI references,
+   where any space characters (U+0020) are ignored (and, in particular, separate
+   adjacent URI references).  Any vnd.sun.star.expand URL references in the list
+   are expanded using the com.sun.star.util.theMacroExpander singleton of the
+   given context.
 
-       @returns
-       a local reference to a java.lang.Class instance.  If null, a (still
-       pending) JNI exception occurred.
+   @param name
+   the Java binary name of the class to load.
 
-       @throws com::sun::star::uno::RuntimeException
-    */
-    static inline ::jclass loadClass(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > const & context,
-        ::JNIEnv * environment, OUString const & classPath,
-        OUString const & name)
-    {
-        return
-            static_cast< ::jclass >(
-                doLoadClass(context, environment, classPath, name));
-    }
+   @returns
+   a local reference to a java.lang.Class instance.  If null, a (still pending)
+   JNI exception occurred.
 
-private:
-    ClassPath() SAL_DELETED_FUNCTION; //TODO: get rid of this class
-    ClassPath(ClassPath &) SAL_DELETED_FUNCTION;
-    ~ClassPath() SAL_DELETED_FUNCTION;
-    void operator =(ClassPath &) SAL_DELETED_FUNCTION;
+   @throws com::sun::star::uno::RuntimeException
+ */
+JVMACCESS_DLLPUBLIC jclass loadClass(
+    css::uno::Reference<css::uno::XComponentContext> const & context,
+    JNIEnv * environment, OUString const & classPath, OUString const & name);
 
-    // Functions that replace JNIEnv, jobjectArray, and jclass with void *, so
-    // that their mangled C++ names do not depend on the JDK version used at
-    // compile time:
-
-    static void * doTranslateToUrls(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > const & context,
-        void * environment, OUString const & classPath);
-
-    static void * doLoadClass(
-        ::com::sun::star::uno::Reference<
-        ::com::sun::star::uno::XComponentContext > const & context,
-        void * environment, OUString const & classPath,
-        OUString const & name);
-};
+}
 
 }
 

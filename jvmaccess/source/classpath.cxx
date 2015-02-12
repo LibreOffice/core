@@ -38,18 +38,17 @@
 
 #include "jni.h"
 
-void * ::jvmaccess::ClassPath::doTranslateToUrls(
+jobjectArray jvmaccess::ClassPath::translateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    void * environment, OUString const & classPath)
+    JNIEnv * environment, OUString const & classPath)
 {
     OSL_ASSERT(context.is() && environment != 0);
-    ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
-    jclass classUrl(env->FindClass("java/net/URL"));
+    jclass classUrl(environment->FindClass("java/net/URL"));
     if (classUrl == 0) {
         return 0;
     }
     jmethodID ctorUrl(
-        env->GetMethodID(classUrl, "<init>", "(Ljava/lang/String;)V"));
+        environment->GetMethodID(classUrl, "<init>", "(Ljava/lang/String;)V"));
     if (ctorUrl == 0) {
         return 0;
     }
@@ -73,20 +72,20 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                 }
             }
             jvalue arg;
-            arg.l = env->NewString(
+            arg.l = environment->NewString(
                 static_cast< jchar const * >(url.getStr()),
                 static_cast< jsize >(url.getLength()));
             if (arg.l == 0) {
                 return 0;
             }
-            jobject o(env->NewObjectA(classUrl, ctorUrl, &arg));
+            jobject o(environment->NewObjectA(classUrl, ctorUrl, &arg));
             if (o == 0) {
                 return 0;
             }
             urls.push_back(o);
         }
     }
-    jobjectArray result = env->NewObjectArray(
+    jobjectArray result = environment->NewObjectArray(
         static_cast< jsize >(urls.size()), classUrl, 0);
         // static_cast is ok, as each element of urls occupied at least one
         // character of the OUString classPath
@@ -96,49 +95,48 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
     jsize idx = 0;
     for (std::vector< jobject >::iterator i(urls.begin()); i != urls.end(); ++i)
     {
-        env->SetObjectArrayElement(result, idx++, *i);
+        environment->SetObjectArrayElement(result, idx++, *i);
     }
     return result;
 }
 
-void * ::jvmaccess::ClassPath::doLoadClass(
+jclass jvmaccess::ClassPath::loadClass(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    void * environment, OUString const & classPath,
-    OUString const & name)
+    JNIEnv * environment, OUString const & classPath, OUString const & name)
 {
     OSL_ASSERT(context.is() && environment != 0);
-    ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
-    jclass classLoader(env->FindClass("java/net/URLClassLoader"));
+    jclass classLoader(environment->FindClass("java/net/URLClassLoader"));
     if (classLoader == 0) {
         return 0;
     }
     jmethodID ctorLoader(
-        env->GetMethodID(classLoader, "<init>", "([Ljava/net/URL;)V"));
+        environment->GetMethodID(classLoader, "<init>", "([Ljava/net/URL;)V"));
     if (ctorLoader == 0) {
         return 0;
     }
     jvalue arg;
-    arg.l = translateToUrls(context, env, classPath);
+    arg.l = translateToUrls(context, environment, classPath);
     if (arg.l == 0) {
         return 0;
     }
-    jobject cl = env->NewObjectA(classLoader, ctorLoader, &arg);
+    jobject cl = environment->NewObjectA(classLoader, ctorLoader, &arg);
     if (cl == 0) {
         return 0;
     }
     jmethodID methLoadClass(
-        env->GetMethodID(
+        environment->GetMethodID(
             classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;"));
     if (methLoadClass == 0) {
         return 0;
     }
-    arg.l = env->NewString(
+    arg.l = environment->NewString(
         static_cast< jchar const * >(name.getStr()),
         static_cast< jsize >(name.getLength()));
     if (arg.l == 0) {
         return 0;
     }
-    return env->CallObjectMethodA(cl, methLoadClass, &arg);
+    return static_cast<jclass>(
+        environment->CallObjectMethodA(cl, methLoadClass, &arg));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
