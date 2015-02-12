@@ -34,8 +34,10 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -63,6 +65,8 @@
 #include <rtl/strbuf.hxx>
 
 using namespace ::com::sun::star;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
 {
@@ -470,15 +474,24 @@ const SvXMLTokenMap& ODBFilter::GetDocElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OOO,    XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OOO,    XML_STYLES,             XML_TOK_DOC_STYLES      },
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OFFICE, XML_DATABASE,           XML_TOK_DOC_DATABASE    },
-            { XML_NAMESPACE_OOO,    XML_DATABASE,           XML_TOK_DOC_DATABASE    },
-            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT      },
+            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_settings) },
+            { XML_NAMESPACE_OOO,    XML_SETTINGS,           XML_TOK_DOC_SETTINGS,
+                (NAMESPACE | XML_NAMESPACE_OOO | XML_settings) },
+            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_styles) },
+            { XML_NAMESPACE_OOO,    XML_STYLES,             XML_TOK_DOC_STYLES,
+                (NAMESPACE | XML_NAMESPACE_OOO | XML_styles) },
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_styles) },
+            { XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES,
+                (NAMESPACE | XML_NAMESPACE_OOO | XML_automatic_styles) },
+            { XML_NAMESPACE_OFFICE, XML_DATABASE,           XML_TOK_DOC_DATABASE,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_database) },
+            { XML_NAMESPACE_OOO,    XML_DATABASE,           XML_TOK_DOC_DATABASE,
+                (NAMESPACE | XML_NAMESPACE_OOO | XML_database) },
+            { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_scripts) },
             XML_TOKEN_MAP_END
         };
         m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -492,13 +505,20 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_DATASOURCE,             XML_TOK_DATASOURCE  },
-            { XML_NAMESPACE_DB, XML_FORMS,                  XML_TOK_FORMS},
-            { XML_NAMESPACE_DB, XML_REPORTS,                XML_TOK_REPORTS},
-            { XML_NAMESPACE_DB, XML_QUERIES,                XML_TOK_QUERIES},
-            { XML_NAMESPACE_DB, XML_TABLES,                 XML_TOK_TABLES},
-            { XML_NAMESPACE_DB, XML_TABLE_REPRESENTATIONS,  XML_TOK_TABLES},
-            { XML_NAMESPACE_DB, XML_SCHEMA_DEFINITION,      XML_TOK_SCHEMA_DEFINITION},
+            { XML_NAMESPACE_DB, XML_DATASOURCE,             XML_TOK_DATASOURCE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source) },
+            { XML_NAMESPACE_DB, XML_FORMS,                  XML_TOK_FORMS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_forms) },
+            { XML_NAMESPACE_DB, XML_REPORTS,                XML_TOK_REPORTS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_reports) },
+            { XML_NAMESPACE_DB, XML_QUERIES,                XML_TOK_QUERIES,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_queries) },
+            { XML_NAMESPACE_DB, XML_TABLES,                 XML_TOK_TABLES,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_tables) },
+            { XML_NAMESPACE_DB, XML_TABLE_REPRESENTATIONS,  XML_TOK_TABLES,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_table_representations) },
+            { XML_NAMESPACE_DB, XML_SCHEMA_DEFINITION,      XML_TOK_SCHEMA_DEFINITION,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_schema_definition) },
             XML_TOKEN_MAP_END
         };
         m_pDatabaseElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -512,44 +532,81 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB,     XML_CONNECTION_RESOURCE,            XML_TOK_CONNECTION_RESOURCE},
-            { XML_NAMESPACE_DB,     XML_SUPPRESS_VERSION_COLUMNS,       XML_TOK_SUPPRESS_VERSION_COLUMNS},
-            { XML_NAMESPACE_DB,     XML_JAVA_DRIVER_CLASS,              XML_TOK_JAVA_DRIVER_CLASS},
-            { XML_NAMESPACE_DB,     XML_EXTENSION,                      XML_TOK_EXTENSION},
-            { XML_NAMESPACE_DB,     XML_IS_FIRST_ROW_HEADER_LINE,       XML_TOK_IS_FIRST_ROW_HEADER_LINE},
-            { XML_NAMESPACE_DB,     XML_SHOW_DELETED,                   XML_TOK_SHOW_DELETED},
-            { XML_NAMESPACE_DB,     XML_IS_TABLE_NAME_LENGTH_LIMITED,   XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED},
-            { XML_NAMESPACE_DB,     XML_SYSTEM_DRIVER_SETTINGS,         XML_TOK_SYSTEM_DRIVER_SETTINGS},
-            { XML_NAMESPACE_DB,     XML_ENABLE_SQL92_CHECK,             XML_TOK_ENABLE_SQL92_CHECK},
-            { XML_NAMESPACE_DB,     XML_APPEND_TABLE_ALIAS_NAME,        XML_TOK_APPEND_TABLE_ALIAS_NAME},
-            { XML_NAMESPACE_DB,     XML_PARAMETER_NAME_SUBSTITUTION,    XML_TOK_PARAMETER_NAME_SUBSTITUTION},
-            { XML_NAMESPACE_DB,     XML_IGNORE_DRIVER_PRIVILEGES,       XML_TOK_IGNORE_DRIVER_PRIVILEGES},
-            { XML_NAMESPACE_DB,     XML_BOOLEAN_COMPARISON_MODE,        XML_TOK_BOOLEAN_COMPARISON_MODE},
-            { XML_NAMESPACE_DB,     XML_USE_CATALOG,                    XML_TOK_USE_CATALOG},
-            { XML_NAMESPACE_DB,     XML_BASE_DN,                        XML_TOK_BASE_DN},
-            { XML_NAMESPACE_DB,     XML_MAX_ROW_COUNT,                  XML_TOK_MAX_ROW_COUNT},
-            { XML_NAMESPACE_DB,     XML_LOGIN,                          XML_TOK_LOGIN},
-            { XML_NAMESPACE_DB,     XML_TABLE_FILTER,                   XML_TOK_TABLE_FILTER},
-            { XML_NAMESPACE_DB,     XML_TABLE_TYPE_FILTER,              XML_TOK_TABLE_TYPE_FILTER},
-            { XML_NAMESPACE_DB,     XML_AUTO_INCREMENT,                 XML_TOK_AUTO_INCREMENT},
-            { XML_NAMESPACE_DB,     XML_DELIMITER,                      XML_TOK_DELIMITER},
-            { XML_NAMESPACE_DB,     XML_DATA_SOURCE_SETTINGS,           XML_TOK_DATA_SOURCE_SETTINGS},
-            { XML_NAMESPACE_DB,     XML_FONT_CHARSET,                   XML_TOK_FONT_CHARSET},
+            { XML_NAMESPACE_DB,     XML_CONNECTION_RESOURCE,            XML_TOK_CONNECTION_RESOURCE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_connection_resource) },
+            { XML_NAMESPACE_DB,     XML_SUPPRESS_VERSION_COLUMNS,       XML_TOK_SUPPRESS_VERSION_COLUMNS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_suppress_version_columns) },
+            { XML_NAMESPACE_DB,     XML_JAVA_DRIVER_CLASS,              XML_TOK_JAVA_DRIVER_CLASS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_java_driver_class) },
+            { XML_NAMESPACE_DB,     XML_EXTENSION,                      XML_TOK_EXTENSION,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_extension) },
+            { XML_NAMESPACE_DB,     XML_IS_FIRST_ROW_HEADER_LINE,       XML_TOK_IS_FIRST_ROW_HEADER_LINE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_is_first_row_header_line) },
+            { XML_NAMESPACE_DB,     XML_SHOW_DELETED,                   XML_TOK_SHOW_DELETED,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_show_deleted) },
+            { XML_NAMESPACE_DB,     XML_IS_TABLE_NAME_LENGTH_LIMITED,   XML_TOK_IS_TABLE_NAME_LENGTH_LIMITED,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_is_table_name_length_limited) },
+            { XML_NAMESPACE_DB,     XML_SYSTEM_DRIVER_SETTINGS,         XML_TOK_SYSTEM_DRIVER_SETTINGS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_system_driver_settings) },
+            { XML_NAMESPACE_DB,     XML_ENABLE_SQL92_CHECK,             XML_TOK_ENABLE_SQL92_CHECK,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_enable_sql92_check) },
+            { XML_NAMESPACE_DB,     XML_APPEND_TABLE_ALIAS_NAME,        XML_TOK_APPEND_TABLE_ALIAS_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_append_table_alias_name) },
+            { XML_NAMESPACE_DB,     XML_PARAMETER_NAME_SUBSTITUTION,    XML_TOK_PARAMETER_NAME_SUBSTITUTION,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_parameter_name_substitution) },
+            { XML_NAMESPACE_DB,     XML_IGNORE_DRIVER_PRIVILEGES,       XML_TOK_IGNORE_DRIVER_PRIVILEGES,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_ignore_driver_privileges) },
+            { XML_NAMESPACE_DB,     XML_BOOLEAN_COMPARISON_MODE,        XML_TOK_BOOLEAN_COMPARISON_MODE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_boolean_comparison_mode) },
+            { XML_NAMESPACE_DB,     XML_USE_CATALOG,                    XML_TOK_USE_CATALOG,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_use_catalog) },
+            { XML_NAMESPACE_DB,     XML_BASE_DN,                        XML_TOK_BASE_DN,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_base_dn) },
+            { XML_NAMESPACE_DB,     XML_MAX_ROW_COUNT,                  XML_TOK_MAX_ROW_COUNT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_max_row_count) },
+            { XML_NAMESPACE_DB,     XML_LOGIN,                          XML_TOK_LOGIN,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_login) },
+            { XML_NAMESPACE_DB,     XML_TABLE_FILTER,                   XML_TOK_TABLE_FILTER,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_table_filter) },
+            { XML_NAMESPACE_DB,     XML_TABLE_TYPE_FILTER,              XML_TOK_TABLE_TYPE_FILTER,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_table_type_filter) },
+            { XML_NAMESPACE_DB,     XML_AUTO_INCREMENT,                 XML_TOK_AUTO_INCREMENT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_auto_increment) },
+            { XML_NAMESPACE_DB,     XML_DELIMITER,                      XML_TOK_DELIMITER,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_delimiter) },
+            { XML_NAMESPACE_DB,     XML_DATA_SOURCE_SETTINGS,           XML_TOK_DATA_SOURCE_SETTINGS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source_settings) },
+            { XML_NAMESPACE_DB,     XML_FONT_CHARSET,                   XML_TOK_FONT_CHARSET,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_font_charset) },
             // db odf 12
-            { XML_NAMESPACE_DB,     XML_CONNECTION_DATA,                XML_TOK_CONNECTION_DATA},
-            { XML_NAMESPACE_DB,     XML_DATABASE_DESCRIPTION,           XML_TOK_DATABASE_DESCRIPTION},
-            { XML_NAMESPACE_DB,     XML_COMPOUND_DATABASE,              XML_TOK_COMPOUND_DATABASE},
-            { XML_NAMESPACE_XLINK,  XML_HREF,                           XML_TOK_DB_HREF},
-            { XML_NAMESPACE_DB,     XML_MEDIA_TYPE,                     XML_TOK_MEDIA_TYPE},
-            { XML_NAMESPACE_DB,     XML_TYPE,                           XML_TOK_DB_TYPE},
-            { XML_NAMESPACE_DB,     XML_HOSTNAME,                       XML_TOK_HOSTNAME},
-            { XML_NAMESPACE_DB,     XML_PORT,                           XML_TOK_PORT},
-            { XML_NAMESPACE_DB,     XML_LOCAL_SOCKET,                   XML_TOK_LOCAL_SOCKET},
-            { XML_NAMESPACE_DB,     XML_DATABASE_NAME,                  XML_TOK_DATABASE_NAME},
-            { XML_NAMESPACE_DB,     XML_DRIVER_SETTINGS,                XML_TOK_DRIVER_SETTINGS},
-            { XML_NAMESPACE_DB,     XML_JAVA_CLASSPATH,                 XML_TOK_JAVA_CLASSPATH},
-            { XML_NAMESPACE_DB,     XML_CHARACTER_SET,                  XML_TOK_CHARACTER_SET},
-            { XML_NAMESPACE_DB,     XML_APPLICATION_CONNECTION_SETTINGS,XML_TOK_APPLICATION_CONNECTION_SETTINGS},
+            { XML_NAMESPACE_DB,     XML_CONNECTION_DATA,                XML_TOK_CONNECTION_DATA,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_connection_data) },
+            { XML_NAMESPACE_DB,     XML_DATABASE_DESCRIPTION,           XML_TOK_DATABASE_DESCRIPTION,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_database_description) },
+            { XML_NAMESPACE_DB,     XML_COMPOUND_DATABASE,              XML_TOK_COMPOUND_DATABASE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_compound_database) },
+            { XML_NAMESPACE_XLINK,  XML_HREF,                           XML_TOK_DB_HREF,
+                (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_DB,     XML_MEDIA_TYPE,                     XML_TOK_MEDIA_TYPE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_media_type) },
+            { XML_NAMESPACE_DB,     XML_TYPE,                           XML_TOK_DB_TYPE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_type) },
+            { XML_NAMESPACE_DB,     XML_HOSTNAME,                       XML_TOK_HOSTNAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_hostname) },
+            { XML_NAMESPACE_DB,     XML_PORT,                           XML_TOK_PORT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_port) },
+            { XML_NAMESPACE_DB,     XML_LOCAL_SOCKET,                   XML_TOK_LOCAL_SOCKET,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_local_socket) },
+            { XML_NAMESPACE_DB,     XML_DATABASE_NAME,                  XML_TOK_DATABASE_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_database_name) },
+            { XML_NAMESPACE_DB,     XML_DRIVER_SETTINGS,                XML_TOK_DRIVER_SETTINGS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_driver_settings) },
+            { XML_NAMESPACE_DB,     XML_JAVA_CLASSPATH,                 XML_TOK_JAVA_CLASSPATH,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_java_classpath) },
+            { XML_NAMESPACE_DB,     XML_CHARACTER_SET,                  XML_TOK_CHARACTER_SET,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_character_set) },
+            { XML_NAMESPACE_DB,     XML_APPLICATION_CONNECTION_SETTINGS,XML_TOK_APPLICATION_CONNECTION_SETTINGS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_application_connection_settings) },
             XML_TOKEN_MAP_END
         };
         m_pDataSourceElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -563,10 +620,14 @@ const SvXMLTokenMap& ODBFilter::GetLoginElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_USER_NAME,              XML_TOK_USER_NAME},
-            { XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,   XML_TOK_IS_PASSWORD_REQUIRED},
-            { XML_NAMESPACE_DB, XML_USE_SYSTEM_USER,        XML_TOK_USE_SYSTEM_USER},
-            { XML_NAMESPACE_DB, XML_LOGIN_TIMEOUT,          XML_TOK_LOGIN_TIMEOUT},
+            { XML_NAMESPACE_DB, XML_USER_NAME,              XML_TOK_USER_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_user_name) },
+            { XML_NAMESPACE_DB, XML_IS_PASSWORD_REQUIRED,   XML_TOK_IS_PASSWORD_REQUIRED,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_is_password_required) },
+            { XML_NAMESPACE_DB, XML_USE_SYSTEM_USER,        XML_TOK_USE_SYSTEM_USER,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_use_system_user) },
+            { XML_NAMESPACE_DB, XML_LOGIN_TIMEOUT,          XML_TOK_LOGIN_TIMEOUT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_login_timeout) },
             XML_TOKEN_MAP_END
         };
         m_pLoginElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -580,8 +641,10 @@ const SvXMLTokenMap& ODBFilter::GetDatabaseDescriptionElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE,    XML_TOK_FILE_BASED_DATABASE},
-            { XML_NAMESPACE_DB, XML_SERVER_DATABASE,        XML_TOK_SERVER_DATABASE},
+            { XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE,    XML_TOK_FILE_BASED_DATABASE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_file_based_database) },
+            { XML_NAMESPACE_DB, XML_SERVER_DATABASE,        XML_TOK_SERVER_DATABASE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_server_database) },
             XML_TOKEN_MAP_END
         };
         m_pDatabaseDescriptionElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -595,19 +658,32 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceInfoElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,XML_TOK_ADDITIONAL_COLUMN_STATEMENT},
-            { XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,   XML_TOK_ROW_RETRIEVING_STATEMENT},
-            { XML_NAMESPACE_DB, XML_STRING,                     XML_TOK_STRING},
-            { XML_NAMESPACE_DB, XML_FIELD,                      XML_TOK_FIELD},
-            { XML_NAMESPACE_DB, XML_DECIMAL,                    XML_TOK_DECIMAL},
-            { XML_NAMESPACE_DB, XML_THOUSAND,                   XML_TOK_THOUSAND},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING,        XML_TOK_DATA_SOURCE_SETTING},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE,  XML_TOK_DATA_SOURCE_SETTING_VALUE},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,XML_TOK_DATA_SOURCE_SETTING_IS_LIST},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE,   XML_TOK_DATA_SOURCE_SETTING_TYPE},
-            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME,   XML_TOK_DATA_SOURCE_SETTING_NAME},
-            { XML_NAMESPACE_DB, XML_FONT_CHARSET,               XML_TOK_FONT_CHARSET},
-            { XML_NAMESPACE_DB, XML_ENCODING,                   XML_TOK_ENCODING},
+            { XML_NAMESPACE_DB, XML_ADDITIONAL_COLUMN_STATEMENT,XML_TOK_ADDITIONAL_COLUMN_STATEMENT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_additional_column_statement) },
+            { XML_NAMESPACE_DB, XML_ROW_RETRIEVING_STATEMENT,   XML_TOK_ROW_RETRIEVING_STATEMENT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_row_retrieving_statement) },
+            { XML_NAMESPACE_DB, XML_STRING,                     XML_TOK_STRING,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_string) },
+            { XML_NAMESPACE_DB, XML_FIELD,                      XML_TOK_FIELD,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_field) },
+            { XML_NAMESPACE_DB, XML_DECIMAL,                    XML_TOK_DECIMAL,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_decimal) },
+            { XML_NAMESPACE_DB, XML_THOUSAND,                   XML_TOK_THOUSAND,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_thousand) },
+            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING,        XML_TOK_DATA_SOURCE_SETTING,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source_setting) },
+            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_VALUE,  XML_TOK_DATA_SOURCE_SETTING_VALUE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source_setting_value) },
+            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,XML_TOK_DATA_SOURCE_SETTING_IS_LIST,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source_setting_is_list) },
+            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE,   XML_TOK_DATA_SOURCE_SETTING_TYPE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source_setting_type) },
+            { XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME,   XML_TOK_DATA_SOURCE_SETTING_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_data_source_setting_name) },
+            { XML_NAMESPACE_DB, XML_FONT_CHARSET,               XML_TOK_FONT_CHARSET,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_font_charset) },
+            { XML_NAMESPACE_DB, XML_ENCODING,                   XML_TOK_ENCODING,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_encoding) },
             XML_TOKEN_MAP_END
         };
         m_pDataSourceInfoElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -621,13 +697,20 @@ const SvXMLTokenMap& ODBFilter::GetDocumentsElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_COMPONENT,              XML_TOK_COMPONENT},
-            { XML_NAMESPACE_DB, XML_COMPONENT_COLLECTION,   XML_TOK_COMPONENT_COLLECTION},
-            { XML_NAMESPACE_DB, XML_QUERY_COLLECTION,       XML_TOK_QUERY_COLLECTION},
-            { XML_NAMESPACE_DB, XML_QUERY,                  XML_TOK_QUERY},
-            { XML_NAMESPACE_DB, XML_TABLE,                  XML_TOK_TABLE},
-            { XML_NAMESPACE_DB, XML_TABLE_REPRESENTATION,   XML_TOK_TABLE},
-            { XML_NAMESPACE_DB, XML_COLUMN,                 XML_TOK_COLUMN},
+            { XML_NAMESPACE_DB, XML_COMPONENT,              XML_TOK_COMPONENT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_component) },
+            { XML_NAMESPACE_DB, XML_COMPONENT_COLLECTION,   XML_TOK_COMPONENT_COLLECTION,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_component_collection) },
+            { XML_NAMESPACE_DB, XML_QUERY_COLLECTION,       XML_TOK_QUERY_COLLECTION,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_query_collection) },
+            { XML_NAMESPACE_DB, XML_QUERY,                  XML_TOK_QUERY,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_query) },
+            { XML_NAMESPACE_DB, XML_TABLE,                  XML_TOK_TABLE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_table) },
+            { XML_NAMESPACE_DB, XML_TABLE_REPRESENTATION,   XML_TOK_TABLE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_table_representation) },
+            { XML_NAMESPACE_DB, XML_COLUMN,                 XML_TOK_COLUMN,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_column) },
             XML_TOKEN_MAP_END
         };
         m_pDocumentsElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -641,12 +724,18 @@ const SvXMLTokenMap& ODBFilter::GetComponentElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_HREF    },
-            { XML_NAMESPACE_XLINK,  XML_TYPE,           XML_TOK_TYPE    },
-            { XML_NAMESPACE_XLINK,  XML_SHOW,           XML_TOK_SHOW    },
-            { XML_NAMESPACE_XLINK,  XML_ACTUATE,        XML_TOK_ACTUATE},
-            { XML_NAMESPACE_DB, XML_AS_TEMPLATE,    XML_TOK_AS_TEMPLATE },
-            { XML_NAMESPACE_DB, XML_NAME,           XML_TOK_COMPONENT_NAME  },
+            { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_HREF,
+                (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_XLINK,  XML_TYPE,           XML_TOK_TYPE,
+                (NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
+            { XML_NAMESPACE_XLINK,  XML_SHOW,           XML_TOK_SHOW,
+                (NAMESPACE | XML_NAMESPACE_XLINK | XML_show) },
+            { XML_NAMESPACE_XLINK,  XML_ACTUATE,        XML_TOK_ACTUATE,
+                (NAMESPACE | XML_NAMESPACE_XLINK | XML_actuate) },
+            { XML_NAMESPACE_DB, XML_AS_TEMPLATE,    XML_TOK_AS_TEMPLATE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_as_template) },
+            { XML_NAMESPACE_DB, XML_NAME,           XML_TOK_COMPONENT_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_name) },
             XML_TOKEN_MAP_END
         };
         m_pComponentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -660,17 +749,28 @@ const SvXMLTokenMap& ODBFilter::GetQueryElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_COMMAND,            XML_TOK_COMMAND },
-            { XML_NAMESPACE_DB, XML_ESCAPE_PROCESSING,  XML_TOK_ESCAPE_PROCESSING   },
-            { XML_NAMESPACE_DB, XML_NAME,               XML_TOK_QUERY_NAME  },
-            { XML_NAMESPACE_DB, XML_FILTER_STATEMENT,   XML_TOK_FILTER_STATEMENT    },
-            { XML_NAMESPACE_DB, XML_ORDER_STATEMENT,    XML_TOK_ORDER_STATEMENT },
-            { XML_NAMESPACE_DB, XML_CATALOG_NAME,       XML_TOK_CATALOG_NAME    },
-            { XML_NAMESPACE_DB, XML_SCHEMA_NAME,        XML_TOK_SCHEMA_NAME },
-            { XML_NAMESPACE_DB, XML_STYLE_NAME,         XML_TOK_STYLE_NAME},
-            { XML_NAMESPACE_DB, XML_APPLY_FILTER,       XML_TOK_APPLY_FILTER},
-            { XML_NAMESPACE_DB, XML_APPLY_ORDER,        XML_TOK_APPLY_ORDER},
-            { XML_NAMESPACE_DB, XML_COLUMNS,            XML_TOK_COLUMNS},
+            { XML_NAMESPACE_DB, XML_COMMAND,            XML_TOK_COMMAND,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_command) },
+            { XML_NAMESPACE_DB, XML_ESCAPE_PROCESSING,  XML_TOK_ESCAPE_PROCESSING,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_escape_processing) },
+            { XML_NAMESPACE_DB, XML_NAME,               XML_TOK_QUERY_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_name) },
+            { XML_NAMESPACE_DB, XML_FILTER_STATEMENT,   XML_TOK_FILTER_STATEMENT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_filter_statement) },
+            { XML_NAMESPACE_DB, XML_ORDER_STATEMENT,    XML_TOK_ORDER_STATEMENT,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_order_statement) },
+            { XML_NAMESPACE_DB, XML_CATALOG_NAME,       XML_TOK_CATALOG_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_catalog_name) },
+            { XML_NAMESPACE_DB, XML_SCHEMA_NAME,        XML_TOK_SCHEMA_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_schema_name) },
+            { XML_NAMESPACE_DB, XML_STYLE_NAME,         XML_TOK_STYLE_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_style_name) },
+            { XML_NAMESPACE_DB, XML_APPLY_FILTER,       XML_TOK_APPLY_FILTER,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_apply_filter) },
+            { XML_NAMESPACE_DB, XML_APPLY_ORDER,        XML_TOK_APPLY_ORDER,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_apply_order) },
+            { XML_NAMESPACE_DB, XML_COLUMNS,            XML_TOK_COLUMNS,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_columns) },
             XML_TOKEN_MAP_END
         };
         m_pQueryElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
@@ -684,14 +784,22 @@ const SvXMLTokenMap& ODBFilter::GetColumnElemTokenMap() const
     {
         static const SvXMLTokenMapEntry aElemTokenMap[]=
         {
-            { XML_NAMESPACE_DB, XML_NAME,                       XML_TOK_COLUMN_NAME             },
-            { XML_NAMESPACE_DB, XML_STYLE_NAME,                 XML_TOK_COLUMN_STYLE_NAME       },
-            { XML_NAMESPACE_DB, XML_HELP_MESSAGE,               XML_TOK_COLUMN_HELP_MESSAGE     },
-            { XML_NAMESPACE_DB, XML_VISIBILITY,                 XML_TOK_COLUMN_VISIBILITY       },
-            { XML_NAMESPACE_DB, XML_DEFAULT_VALUE,              XML_TOK_COLUMN_DEFAULT_VALUE    },
-            { XML_NAMESPACE_DB, XML_TYPE_NAME,                  XML_TOK_COLUMN_TYPE_NAME        },
-            { XML_NAMESPACE_DB, XML_VISIBLE,                    XML_TOK_COLUMN_VISIBLE          },
-            { XML_NAMESPACE_DB, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_DEFAULT_CELL_STYLE_NAME },
+            { XML_NAMESPACE_DB, XML_NAME,                       XML_TOK_COLUMN_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_name) },
+            { XML_NAMESPACE_DB, XML_STYLE_NAME,                 XML_TOK_COLUMN_STYLE_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_style_name) },
+            { XML_NAMESPACE_DB, XML_HELP_MESSAGE,               XML_TOK_COLUMN_HELP_MESSAGE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_help_message) },
+            { XML_NAMESPACE_DB, XML_VISIBILITY,                 XML_TOK_COLUMN_VISIBILITY,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_visibility) },
+            { XML_NAMESPACE_DB, XML_DEFAULT_VALUE,              XML_TOK_COLUMN_DEFAULT_VALUE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_default_value) },
+            { XML_NAMESPACE_DB, XML_TYPE_NAME,                  XML_TOK_COLUMN_TYPE_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_type_name) },
+            { XML_NAMESPACE_DB, XML_VISIBLE,                    XML_TOK_COLUMN_VISIBLE,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_visible) },
+            { XML_NAMESPACE_DB, XML_DEFAULT_CELL_STYLE_NAME,    XML_TOK_DEFAULT_CELL_STYLE_NAME,
+                (NAMESPACE | XML_NAMESPACE_DB | XML_default_cell_style_name) },
             XML_TOKEN_MAP_END
         };
         m_pColumnElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
