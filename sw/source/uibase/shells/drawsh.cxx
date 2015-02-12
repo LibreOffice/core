@@ -498,7 +498,15 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
                     // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
                     if (pFrmFmt && pFrmFmt->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::findTextBox(pFrmFmt))
-                        bDisable = false;
+                    {
+                        if (SdrObjCustomShape* pCustomShape = PTR_CAST(SdrObjCustomShape, pObj))
+                        {
+                            const SdrCustomShapeGeometryItem& rGeometryItem = static_cast<const SdrCustomShapeGeometryItem&>(pCustomShape->GetMergedItem(SDRATTR_CUSTOMSHAPE_GEOMETRY));
+                            if (const uno::Any* pAny = rGeometryItem.GetPropertyValueByName("Type"))
+                                // But still disallow fontwork shapes.
+                                bDisable = pAny->get<OUString>().startsWith("fontwork-");
+                        }
+                    }
                 }
 
                 if (bDisable)
