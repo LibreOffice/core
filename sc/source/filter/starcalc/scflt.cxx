@@ -1355,6 +1355,22 @@ void Sc10Import::LoadDataBaseCollection()
     }
 }
 
+namespace
+{
+    sal_uInt16 SanitizeDataCount(sal_uInt16 nDataCount, SvStream &rStream)
+    {
+        const size_t nMinRecordSize = sizeof(sal_uInt16)*2;
+        const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
+        if (nDataCount > nMaxRecords)
+        {
+            SAL_WARN("sc", "Parsing error: " << nMaxRecords <<
+                     " max possible entries, but " << nDataCount << " claimed, truncating");
+            nDataCount = nMaxRecords;
+        }
+        return nDataCount;
+    }
+}
+
 void Sc10Import::LoadTables()
 {
     Sc10PageCollection aPageCollection;
@@ -1456,13 +1472,7 @@ void Sc10Import::LoadTables()
             return;
         }
         rStream.ReadUInt16( DataCount );
-        const sal_Size nMaxPossibleRecords = rStream.remainingSize() / (sizeof(sal_uInt16)*2);
-        if (DataCount > nMaxPossibleRecords)
-        {
-            SAL_WARN("sc", "Parsing error: " << nMaxPossibleRecords <<
-                     " max possible pairs, but " << DataCount << " claimed, truncating");
-            DataCount = nMaxPossibleRecords;
-        }
+        DataCount = SanitizeDataCount(DataCount, rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
@@ -1485,6 +1495,7 @@ void Sc10Import::LoadTables()
         }
 
         rStream.ReadUInt16( DataCount );
+        DataCount = SanitizeDataCount(DataCount, rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
@@ -1515,6 +1526,7 @@ void Sc10Import::LoadTables()
         }
 
         rStream.ReadUInt16( DataCount );
+        DataCount = SanitizeDataCount(DataCount, rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
@@ -1535,15 +1547,7 @@ void Sc10Import::LoadTables()
         }
 
         rStream.ReadUInt16(DataCount);
-        const size_t nMinRecordSize = sizeof(sal_uInt16)*2;
-        const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
-        if (DataCount > nMaxRecords)
-        {
-            SAL_WARN("sc", "Parsing error: " << nMaxRecords <<
-                     " max possible entries, but " << DataCount << " claimed, truncating");
-            DataCount = nMaxRecords;
-        }
-
+        DataCount = SanitizeDataCount(DataCount, rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
