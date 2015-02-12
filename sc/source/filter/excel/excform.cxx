@@ -124,8 +124,14 @@ void ImportExcel::Formula(
             const ScTokenArray* pSharedCode = pFormConv->GetSharedFormula(aRefPos);
             if (pSharedCode)
             {
-                ScFormulaCell* pCell = new ScFormulaCell(pD, aScPos, pSharedCode->Clone());
-                pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
+                ScFormulaCell* pCell;
+                if (pSharedCode->NeedsWrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8))
+                {
+                    pCell = new ScFormulaCell(pD, aScPos, pSharedCode->Clone());
+                    pCell->GetCode()->WrapReference(aScPos, EXC_MAXCOL8, EXC_MAXROW8);
+                }
+                else
+                    pCell = new ScFormulaCell(pD, aScPos, *pSharedCode);
                 rDoc.getDoc().EnsureTable(aScPos.Tab());
                 rDoc.setFormulaCell(aScPos, pCell);
                 pCell->SetNeedNumberFormat(false);
