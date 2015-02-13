@@ -4237,8 +4237,6 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                 break;
 
             case MappingNotify:
-                if( MappingPointer != pEvent->xmapping.request )
-                    nRet = CallCallback( SALEVENT_KEYBOARDCHANGED, 0 );
                 break;
 
             case ColormapNotify:
