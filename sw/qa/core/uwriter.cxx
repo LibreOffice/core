@@ -1381,6 +1381,8 @@ void SwDocTest::testIntrusiveRing()
     foo.MoveTo(&foo);
     CPPUNIT_ASSERT_EQUAL(&bar, bar.GetNext());
     CPPUNIT_ASSERT_EQUAL(&bar, bar.GetPrev());
+    CPPUNIT_ASSERT_EQUAL(&foo, foo.GetNext());
+    CPPUNIT_ASSERT_EQUAL(&foo, foo.GetPrev());
 }
 
 void SwDocTest::setUp()

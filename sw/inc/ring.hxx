@@ -43,7 +43,14 @@ namespace sw
             typedef RingContainer<value_type> ring_container;
             typedef RingContainer<const_value_type> const_ring_container;
             virtual ~Ring()
-                { algo::unlink(this); };
+                { unlink(); };
+            /** algo::unlink is buggy! don't call it directly! */
+            void unlink()
+            {
+                algo::unlink(this);
+                pNext = this; // don't leave pointers to old list behind!
+                pPrev = this;
+            }
             /**
              * Removes this item from its current ring container and adds it to
              * another ring container. If the item was not alone in the original
@@ -135,7 +142,7 @@ namespace sw
     inline void Ring<value_type>::MoveTo(value_type* pDestRing)
     {
         value_type* pThis = static_cast< value_type* >(this);
-        algo::unlink(pThis);
+        unlink();
         // insert into "new"
         if (pDestRing)
         {
