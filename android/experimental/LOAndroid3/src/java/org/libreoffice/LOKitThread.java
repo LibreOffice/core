@@ -40,7 +40,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 mLayerClient.beginDrawing();
                 SubTile tile = new SubTile(image, tileId);
                 composedTileLayer.addTile(tile);
-                mLayerClient.endDrawing(mViewportMetrics);
+                mLayerClient.endDrawing();
                 mLayerClient.forceRender();
             }
         } else {
@@ -57,7 +57,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             mLayerClient.beginDrawing();
             mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
             tile.invalidate();
-            mLayerClient.endDrawing(mViewportMetrics);
+            mLayerClient.endDrawing();
             mLayerClient.forceRender();
         }
     }
@@ -78,7 +78,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         for (SubTile tile : tiles) {
             tile.invalidate();
         }
-        mLayerClient.endDrawing(mViewportMetrics);
+        mLayerClient.endDrawing();
         mLayerClient.forceRender();
     }
 

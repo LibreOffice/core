@@ -240,7 +240,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mRootLayer.beginTransaction();
     }
 
-    public void endDrawing(ImmutableViewportMetrics viewportMetrics) {
+    public void endDrawing() {
         synchronized (this) {
             mLowResLayer.endTransaction();
             mRootLayer.endTransaction();
