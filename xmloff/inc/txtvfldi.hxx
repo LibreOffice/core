@@ -509,6 +509,13 @@ public:
         const ::com::sun::star::uno::Reference< /// list of element attributes
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList,
         enum VarType eVarType);                 /// variable type
+    XMLVariableDeclImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// text import helper
+        sal_Int32 Element,                      /// XML-tag specifier
+        const css::uno::Reference<              /// list of element attributes
+        css::xml::sax::XFastAttributeList >& xAttrList,
+        enum VarType eVarType );                /// variable type
 
     /// get field master for name and rename if appropriate
     static bool FindFieldMaster(::com::sun::star::uno::Reference<
