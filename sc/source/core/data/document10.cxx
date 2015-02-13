@@ -19,12 +19,23 @@
 #include <poolhelp.hxx>
 #include <bcaslot.hxx>
 #include <cellvalues.hxx>
+#include <docpool.hxx>
 
 #include "dociter.hxx"
 #include "patattr.hxx"
 #include <svl/whiter.hxx>
 #include <editeng/colritem.hxx>
 #include "scitems.hxx"
+
+#include <stdint.h>
+void
+ExtractColors(const uint32_t rgba, uint8_t *store)
+{
+    store[0] = (rgba & 0xFF000000) >> 24;
+    store[1] = (rgba & 0x00FF0000) >> 16;
+    store[2] = (rgba & 0x0000FF00) >> 8;
+    store[3] = rgba & 0x000000FF;
+}
 
 // Add totally brand-new methods to this source file.
 
@@ -157,53 +168,25 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
 
 std::vector<Color> ScDocument::GetDocColors()
 {
-    std::vector<Color> docColors;
-
-    for( unsigned int nTabIx = 0; nTabIx < maTabs.size(); ++nTabIx )
+    std::vector<Color> aDocColors;
+    ScDocumentPool *pPool = GetPool();
+    const SvxColorItem *pItem;
+    const sal_uInt16 ATTRIBS[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
+    for (int i=0; i<2; i++)
     {
-        ScUsedAreaIterator aIt(this, nTabIx, 0, 0, MAXCOLCOUNT-1, MAXROWCOUNT-1);
-
-        for( bool bIt = aIt.GetNext(); bIt; bIt = aIt.GetNext() )
+        const sal_uInt16 ATTRIB = ATTRIBS[i];
+        const sal_uInt32 COUNT = pPool->GetItemCount2(ATTRIB);
+        for (sal_uInt32 j=0; j<COUNT; j++)
         {
-            const ScPatternAttr* pPattern = aIt.GetPattern();
-
-            if( pPattern == 0 )
-                continue;
-
-            const SfxItemSet& rItemSet = pPattern->GetItemSet();
-
-            SfxWhichIter aIter( rItemSet );
-            sal_uInt16 nWhich = aIter.FirstWhich();
-            while( nWhich )
+            pItem = static_cast<const SvxColorItem*>(pPool->GetItem2(ATTRIB, j));
+            Color aColor( pItem->GetValue() );
+            if (COL_AUTO != aColor.GetColor())
             {
-                const SfxPoolItem *pItem;
-                if( SfxItemState::SET == rItemSet.GetItemState( nWhich, false, &pItem ) )
-                {
-                    sal_uInt16 aWhich = pItem->Which();
-                    switch (aWhich)
-                    {
-                        // attributes we want to collect
-                        case ATTR_FONT_COLOR:
-                        case ATTR_BACKGROUND:
-                            {
-                                Color aColor( static_cast<const SvxColorItem*>(pItem)->GetValue() );
-                                if( COL_AUTO != aColor.GetColor() &&
-                                        std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
-                                {
-                                    docColors.push_back( aColor );
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                nWhich = aIter.NextWhich();
+                aDocColors.push_back(aColor);
             }
         }
     }
-    return docColors;
+    return aDocColors;
 }
 
 void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
