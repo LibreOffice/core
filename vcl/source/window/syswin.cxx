@@ -1032,8 +1032,8 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
 {
     sal_Int32 nBorderWidth = get_border_width();
 
-    aSize.Width() -= 2 * nBorderWidth;
-    aSize.Height() -= 2 * nBorderWidth;
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder + 2 * nBorderWidth;
+    aSize.Height() -= nBorderWidth + mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder + 2 * nBorderWidth;
 
     Point aPos(nBorderWidth, nBorderWidth);
     VclContainer::setLayoutAllocation(rBox, aPos, aSize);
