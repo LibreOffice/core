@@ -1351,21 +1351,22 @@ void _SaveBox::CreateNew( SwTable& rTbl, SwTableLine& rParent, _SaveTable& rSTbl
     {
         // search box for StartNode in old table
         SwTableBox* pBox = rTbl.GetTblBox( nSttNode );
-        OSL_ENSURE( pBox, "Where is my TableBox?" );
+        if (pBox)
+        {
+            SwFrmFmt* pOld = pBox->GetFrmFmt();
+            pBox->RegisterToFormat( *pFmt );
+            if( !pOld->GetDepends() )
+                delete pOld;
 
-        SwFrmFmt* pOld = pBox->GetFrmFmt();
-        pBox->RegisterToFormat( *pFmt );
-        if( !pOld->GetDepends() )
-            delete pOld;
+            pBox->setRowSpan( nRowSpan );
 
-        pBox->setRowSpan( nRowSpan );
+            SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
+            pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pBox ) );
 
-        SwTableBoxes* pTBoxes = &pBox->GetUpper()->GetTabBoxes();
-        pTBoxes->erase( std::find( pTBoxes->begin(), pTBoxes->end(), pBox ) );
-
-        pBox->SetUpper( &rParent );
-        pTBoxes = &rParent.GetTabBoxes();
-        pTBoxes->push_back( pBox );
+            pBox->SetUpper( &rParent );
+            pTBoxes = &rParent.GetTabBoxes();
+            pTBoxes->push_back( pBox );
+        }
     }
 
     if( pNext )
