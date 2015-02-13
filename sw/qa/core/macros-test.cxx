@@ -75,7 +75,9 @@ public:
     void testVba();
 #endif
     void testBookmarkDeleteAndJoin();
+#if 0
     void testControlShapeGrouping();
+#endif
     void testFdo55289();
     void testFdo68983();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
@@ -86,7 +88,9 @@ public:
     CPPUNIT_TEST(testVba);
 #endif
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
-    // CPPUNIT_TEST(testControlShapeGrouping);
+#if 0
+    CPPUNIT_TEST(testControlShapeGrouping);
+#endif
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
 
@@ -212,6 +216,7 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
     }
 }
 
+#if 0
 void SwMacrosTest::testControlShapeGrouping()
 {
     OUString aFileName;
@@ -314,6 +319,7 @@ void SwMacrosTest::testControlShapeGrouping()
         CPPUNIT_ASSERT(xTS->getControl() == xTimeControlModel);
     }
 }
+#endif
 
 void SwMacrosTest::testFdo55289()
 {
