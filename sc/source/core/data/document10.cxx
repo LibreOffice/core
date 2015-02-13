@@ -19,6 +19,7 @@
 #include <poolhelp.hxx>
 #include <bcaslot.hxx>
 #include <cellvalues.hxx>
+#include <docpool.hxx>
 
 #include "dociter.hxx"
 #include "patattr.hxx"
@@ -157,53 +158,26 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
 
 std::vector<Color> ScDocument::GetDocColors()
 {
-    std::vector<Color> docColors;
-
-    for( unsigned int nTabIx = 0; nTabIx < maTabs.size(); ++nTabIx )
+    std::vector<Color> aDocColors;
+    ScDocumentPool *pPool = GetPool();
+    const sal_uInt16 pAttribs[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
+    for (size_t i=0; i<SAL_N_ELEMENTS( pAttribs ); i++)
     {
-        ScUsedAreaIterator aIt(this, nTabIx, 0, 0, MAXCOLCOUNT-1, MAXROWCOUNT-1);
-
-        for( bool bIt = aIt.GetNext(); bIt; bIt = aIt.GetNext() )
+        const sal_uInt16 nAttrib = pAttribs[i];
+        const sal_uInt32 nCount = pPool->GetItemCount2(nAttrib);
+        for (sal_uInt32 j=0; j<nCount; j++)
         {
-            const ScPatternAttr* pPattern = aIt.GetPattern();
-
-            if( pPattern == 0 )
+            const SvxColorItem *pItem = static_cast<const SvxColorItem*>(pPool->GetItem2(nAttrib, j));
+            if (pItem == 0)
                 continue;
-
-            const SfxItemSet& rItemSet = pPattern->GetItemSet();
-
-            SfxWhichIter aIter( rItemSet );
-            sal_uInt16 nWhich = aIter.FirstWhich();
-            while( nWhich )
-            {
-                const SfxPoolItem *pItem;
-                if( SfxItemState::SET == rItemSet.GetItemState( nWhich, false, &pItem ) )
-                {
-                    sal_uInt16 aWhich = pItem->Which();
-                    switch (aWhich)
-                    {
-                        // attributes we want to collect
-                        case ATTR_FONT_COLOR:
-                        case ATTR_BACKGROUND:
-                            {
-                                Color aColor( static_cast<const SvxColorItem*>(pItem)->GetValue() );
-                                if( COL_AUTO != aColor.GetColor() &&
-                                        std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
-                                {
-                                    docColors.push_back( aColor );
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
-                nWhich = aIter.NextWhich();
-            }
+            Color aColor( pItem->GetValue() );
+            if (COL_AUTO == aColor.GetColor())
+                continue;
+            if (std::find(aDocColors.begin(), aDocColors.end(), aColor) == aDocColors.end())
+                aDocColors.push_back(aColor);
         }
     }
-    return docColors;
+    return aDocColors;
 }
 
 void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
