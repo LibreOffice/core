@@ -821,4 +821,11 @@ com_sun_star_comp_chart2_XMLFilter_get_implementation(css::uno::XComponentContex
     return cppu::acquire(new ::chart::XMLFilter(context));
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_report_XMLFilter_get_implementation(css::uno::XComponentContext *context,
+        css::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ::chart::XMLReportFilterHelper(context));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

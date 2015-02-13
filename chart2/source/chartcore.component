@@ -252,7 +252,7 @@
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.chart2.report.XMLFilter"
-    constructor="com_sun_star_comp_chart2_XMLFilter_get_implementation">
+    constructor="com_sun_star_comp_chart2_report_XMLFilter_get_implementation">
     <service name="com.sun.star.document.ExportFilter"/>
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
