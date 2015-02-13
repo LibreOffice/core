@@ -719,8 +719,14 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
             // invalidates the Edit Selection thus has to happen between
             // obtaining the Selection and setting the new Selection.
             sal_Int32 nSelPos = ImplGetSelectEntryPos();
-            if (nSelPos != nPos)
+            bool bSetEditSelection;
+            if (nSelPos == nPos)
+                bSetEditSelection = false;
+            else
+            {
                 ImplSelectEntryPos( nPos, true);
+                bSetEditSelection = true;
+            }
 
             // If typing into the Edit control led us here, advance start of a
             // full selection by one so the next character will already
@@ -731,10 +737,14 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
             {
                 OUString aText( GetText());
                 if (aSel.Min() == aText.getLength())
+                {
                     ++aSel.Max();
+                    bSetEditSelection = true;
+                }
             }
 
-            SetSelection( aSel);
+            if (bSetEditSelection)
+                SetSelection( aSel);
 
             meEditedAndValid = EDITED_NO;
         }
