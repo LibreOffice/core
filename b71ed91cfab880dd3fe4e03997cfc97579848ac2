@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_5f7763d4",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T09:30:22Z",
+      "side": 0,
+      "message": "Until we switch to a std::set we can\u0027t just abandon the check that makes sure that each color is only added once.",
+      "revId": "b71ed91cfab880dd3fe4e03997cfc97579848ac2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

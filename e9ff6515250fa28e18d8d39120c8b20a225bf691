@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_ff675723",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T09:30:22Z",
+      "side": 1,
+      "message": "Method is unused.",
+      "revId": "e9ff6515250fa28e18d8d39120c8b20a225bf691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9f6c1b0a",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T09:30:22Z",
+      "side": 1,
+      "message": "don\u0027t call this variable ATTRIBS, Please use pAttribs.",
+      "revId": "e9ff6515250fa28e18d8d39120c8b20a225bf691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_bf71dfe2",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T09:30:22Z",
+      "side": 1,
+      "message": "Instead of hard coding 2 please use SAL_N_ELEMENTS",
+      "revId": "e9ff6515250fa28e18d8d39120c8b20a225bf691",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
