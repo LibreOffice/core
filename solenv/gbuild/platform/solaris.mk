@@ -83,11 +83,8 @@ gb_LinkTarget_LDFLAGS += \
 
 endif
 
-ifneq ($(gb_DEBUGLEVEL),0)
+# sun ld doesn't understand -O1 optimize flag
 gb_LINKEROPTFLAGS :=
-else
-gb_LINKEROPTFLAGS := -Wl,-O1
-endif
 
 ifeq ($(gb_SYMBOL),$(true))
 gb_LINKERSTRIPDEBUGFLAGS :=
