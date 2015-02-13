@@ -218,7 +218,7 @@ void SchOptionTabPage::Reset(const SfxItemSet* rInAttrs)
         // are visible. If they aren't, we can
         // as well hide the whole frame
         if(!m_pGridPlotOptions->IsVisible())
-            m_pGrpPlotOptions->Show(sal_False);
+            m_pGrpPlotOptions->Show(false);
     }
 
     AdaptControlPositionsAndVisibility();
