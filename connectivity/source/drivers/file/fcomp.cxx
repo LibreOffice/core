@@ -72,10 +72,10 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     // analyse Parse Tree (depending on Statement-type)
     // and set pointer on WHERE-clause:
     OSQLParseNode * pWhereClause = NULL;
-    OSQLParseNode * pOrderbyClause = NULL;
 
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
+        OSQLParseNode * pOrderbyClause = NULL;
         DBG_ASSERT(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);

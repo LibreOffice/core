@@ -1397,12 +1397,13 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
     }
     static SbxVariable* pTRUE = NULL;
     static SbxVariable* pFALSE = NULL;
-    static SbxVariable* pNULL = NULL;
     // why do this on non-windows ?
     // why do this at all ?
     // I dumbly follow the pattern :-/
     if ( bVBAEnabled && ( p1->IsNull() || p2->IsNull() ) )
     {
+        static SbxVariable* pNULL = NULL;
+
         if( !pNULL )
         {
             pNULL = new SbxVariable;

@@ -1722,7 +1722,6 @@ bool ChartController::impl_moveOrResizeObject(
     double fAmountLogicY )
 {
     bool bResult = false;
-    bool bNeedShift = true;
     bool bNeedResize = ( eType == CENTERED_RESIZE_OBJECT );
 
     uno::Reference< frame::XModel > xChartModel( getModel() );
@@ -1788,8 +1787,7 @@ bool ChartController::impl_moveOrResizeObject(
                     eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
                 ControllerLockGuardUNO aCLGuard( xChartModel );
-                if( bNeedShift )
-                    xObjProp->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
+                xObjProp->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set
                     xObjProp->setPropertyValue( "RelativeSize", uno::makeAny( aRelSize ));
             }

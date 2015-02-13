@@ -470,13 +470,15 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
         args2[0].l =  pByteArray;
         args2[1].i =  0;
         args2[2].i =  actualLength;
-        // initialize temporary variable
-        const char * cSignatureStream = "([BII)V";
         // Java-Call
         jclass aClass = t.pEnv->FindClass("java/io/CharArrayInputStream");
         static jmethodID mID2 = NULL;
-        if ( !mID2  )
+        if ( !mID2 )
+        {
+            // initialize temporary variable
+            const char * cSignatureStream = "([BII)V";
             mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
+        }
         jobject tempObj = NULL;
         if(mID2)
             tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
@@ -519,13 +521,15 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             args2[1].i =  0;
             args2[2].i =  (sal_Int32)actualLength;
 
-            // initialize temporary variable
-            const char * cSignatureStream = "([BII)V";
             // Java-Call
             jclass aClass = t.pEnv->FindClass("java/io/ByteArrayInputStream");
             static jmethodID mID2 = NULL;
-            if ( !mID2  )
+            if ( !mID2 )
+            {
+                // initialize temporary variable
+                const char * cSignatureStream = "([BII)V";
                 mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
+            }
             jobject tempObj = NULL;
             if(mID2)
                 tempObj = t.pEnv->NewObjectA( aClass, mID2, args2 );
@@ -629,7 +633,6 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
 
     if( !object && _pEnv ){
         // initialize temporary variable
-        static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
         static const char * cMethodName = "prepareStatement";
 
         jvalue args[1];
@@ -638,18 +641,23 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
         // Java-Call
         jobject out = NULL;
         static jmethodID mID(NULL);
-        if ( !mID  )
+        if ( !mID )
+        {
+            static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/PreparedStatement;";
             mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+        }
         if( mID )
         {
             out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, args[0].l ,m_nResultSetType,m_nResultSetConcurrency);
         }
         else
         {
-            static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
             static jmethodID mID2 = NULL;
-            if ( !mID2)
+            if ( !mID2 )
+            {
+                static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/PreparedStatement;";
                 mID2 = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );
+            }
             if ( mID2 )
                 out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
         }

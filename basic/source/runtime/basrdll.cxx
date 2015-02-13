@@ -86,14 +86,13 @@ void BasicDLL::SetDebugMode( bool bDebugMode )
 
 void BasicDLL::BasicBreak()
 {
-    // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
-    // but the Basic doesn't stop early enough, the box might appear more often...
-    static bool bJustStopping = false;
-
     BasicDLL* pThis = BASIC_DLL();
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
+        // bJustStopping: if there's someone pressing STOP like crazy umpteen times,
+        // but the Basic doesn't stop early enough, the box might appear more often...
+        static bool bJustStopping = false;
         if (StarBASIC::IsRunning() && !bJustStopping
             && (pThis->m_xImpl->bBreakEnabled || pThis->m_xImpl->bDebugMode))
         {

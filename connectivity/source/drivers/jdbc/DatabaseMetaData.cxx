@@ -106,7 +106,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getColumns(
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         const Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const Sequence< OUString >& _types ) throw(SQLException, RuntimeException, std::exception)
 {
-    static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getTables";
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, cMethodName );
@@ -115,6 +114,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)Ljava/sql/ResultSet;";
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -335,7 +335,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
         const Any& catalog, const OUString& schema, const OUString& table,
         sal_Bool unique, sal_Bool approximate ) throw(SQLException, RuntimeException, std::exception)
 {
-    static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getIndexInfo";
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, cMethodName );
@@ -344,6 +343,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZZ)Ljava/sql/ResultSet;";
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -376,7 +376,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
         const Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope,
         sal_Bool nullable ) throw(SQLException, RuntimeException, std::exception)
 {
-    static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IZ)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getBestRowIdentifier";
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, cMethodName );
@@ -385,6 +384,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IZ)Ljava/sql/ResultSet;";
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);
@@ -493,14 +493,13 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
         const OUString& primaryTable, const Any& foreignCatalog,
         const OUString& foreignSchema, const OUString& foreignTable ) throw(SQLException, RuntimeException, std::exception)
 {
-    static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
     static const char * cMethodName = "getCrossReference";
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_METHOD, cMethodName );
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-
+        static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/ResultSet;";
         // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId_throwSQL(t.pEnv, cMethodName,cSignature, mID);

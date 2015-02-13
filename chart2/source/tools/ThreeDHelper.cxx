@@ -1453,7 +1453,6 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeft
     if( lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
     {
         ThreeDHelper::adaptRadAnglesForRightAngledAxes( fXAngleRad, fYAngleRad );
-        fZAngleRad=0.0;
     }
     if( sin(fYAngleRad)>0.0 )
         eRet = CuboidPlanePosition_Right;
@@ -1469,7 +1468,6 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBack
     if( lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
     {
         ThreeDHelper::adaptRadAnglesForRightAngledAxes( fXAngleRad, fYAngleRad );
-        fZAngleRad=0.0;
     }
     if( cos(fXAngleRad)*cos(fYAngleRad)<0.0 )
         eRet = CuboidPlanePosition_Front;
@@ -1485,7 +1483,6 @@ CuboidPlanePosition ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBott
     if( lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )
     {
         ThreeDHelper::adaptRadAnglesForRightAngledAxes( fXAngleRad, fYAngleRad );
-        fZAngleRad=0.0;
     }
     if( sin(fXAngleRad)*cos(fYAngleRad)<0.0 )
         eRet = CuboidPlanePosition_Top;

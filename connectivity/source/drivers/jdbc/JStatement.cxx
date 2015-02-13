@@ -781,13 +781,15 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
 
     if( _pEnv && !object ){
         // initialize temporary variable
-        static const char * cSignature = "(II)Ljava/sql/Statement;";
         static const char * cMethodName = "createStatement";
         // Java-Call
         jobject out = NULL;
         static jmethodID mID(NULL);
-        if ( !mID  )
+        if ( !mID )
+        {
+            static const char * cSignature = "(II)Ljava/sql/Statement;";
             mID  = _pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+        }
         if( mID ){
             out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID,m_nResultSetType,m_nResultSetConcurrency );
         } //mID

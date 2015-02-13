@@ -321,7 +321,6 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv && !object ){
         // initialize temporary variable
-        static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
         static const char * cMethodName = "prepareCall";
         // execute Java-Call
         jobject out = NULL;
@@ -330,7 +329,10 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
 
         static jmethodID mID(NULL);
         if ( !mID  )
+        {
+            static const char * cSignature = "(Ljava/lang/String;II)Ljava/sql/CallableStatement;";
             mID  = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
+        }
         if( mID ){
             out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, str.get() ,m_nResultSetType,m_nResultSetConcurrency);
         } //mID
