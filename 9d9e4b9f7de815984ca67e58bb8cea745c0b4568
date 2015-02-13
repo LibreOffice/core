@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_e2cfbcb1",
+        "filename": "svtools/source/svhtml/parhtml.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1847,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-02-13T15:45:20Z",
+      "side": 0,
+      "message": "I wonder what this code actually does. Not 100% sure we want to remove this if statement completely.",
+      "revId": "9d9e4b9f7de815984ca67e58bb8cea745c0b4568",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
