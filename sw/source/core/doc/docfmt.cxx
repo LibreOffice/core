@@ -1919,53 +1919,28 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
 }
 
-
 std::vector<Color> SwDoc::GetDocColors()
 {
-    std::vector<Color> docColors;
-
-    for(unsigned int i = 0; i < m_pNodes->Count(); ++i)
+    std::vector<Color> aDocColors;
+    SwAttrPool& rPool = GetAttrPool();
+    const sal_uInt16 pAttribs[] = {RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND};
+    for (size_t i=0; i<SAL_N_ELEMENTS(pAttribs); i++)
     {
-        const SwNode* pNode = (*m_pNodes)[i];
-        if( ! pNode->IsTxtNode() )
-            continue;
-
-        const SfxItemSet* pItemSet = pNode->GetTxtNode()->GetpSwAttrSet();
-        if( pItemSet == 0 )
-            continue;
-
-        SfxWhichIter aIter( *pItemSet );
-        sal_uInt16 nWhich = aIter.FirstWhich();
-        while( nWhich )
+        const sal_uInt16 nAttrib = pAttribs[i];
+        const sal_uInt32 nCount = rPool.GetItemCount2(nAttrib);
+        for (sal_uInt32 j=0; j<nCount; j++)
         {
-            const SfxPoolItem *pItem;
-            if( SfxItemState::SET == pItemSet->GetItemState( nWhich, false, &pItem ) )
-            {
-                sal_uInt16 aWhich = pItem->Which();
-                switch (aWhich)
-                {
-                    // list of color attributes to collect
-                    case RES_CHRATR_COLOR:
-                    case RES_CHRATR_HIGHLIGHT:
-                    case RES_BACKGROUND:
-                        {
-                            Color aColor( static_cast<const SvxColorItem*>(pItem)->GetValue() );
-                            if( COL_AUTO != aColor.GetColor() &&
-                                    std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
-                            {
-                                docColors.push_back( aColor );
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            nWhich = aIter.NextWhich();
+            const SvxColorItem *pItem = static_cast<const SvxColorItem*>(rPool.GetItem2(nAttrib, j));
+            if (pItem == 0)
+                continue;
+            Color aColor( pItem->GetValue() );
+            if (COL_AUTO == aColor.GetColor())
+                continue;
+            if (std::find(aDocColors.begin(), aDocColors.end(), aColor) == aDocColors.end())
+                aDocColors.push_back(aColor);
         }
     }
-    return docColors;
+    return aDocColors;
 }
 
 // #i69627#
