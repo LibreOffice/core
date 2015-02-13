@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_ff999720",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T02:52:18Z",
+      "side": 1,
+      "message": "zerreisen is more something like split.",
+      "revId": "f9fb825454cf0c0f1b9c008e02252af9164f768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_df94d3e9",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T02:52:18Z",
+      "side": 1,
+      "message": "typo",
+      "revId": "f9fb825454cf0c0f1b9c008e02252af9164f768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_9f9e5b06",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T02:52:18Z",
+      "side": 1,
+      "message": "Please fix identation at the same time.",
+      "revId": "f9fb825454cf0c0f1b9c008e02252af9164f768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_bfa31f4f",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T02:52:18Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "f9fb825454cf0c0f1b9c008e02252af9164f768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_5f89a3c9",
+        "filename": "sc/source/core/data/table6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T02:52:18Z",
+      "side": 1,
+      "message": "see above",
+      "revId": "f9fb825454cf0c0f1b9c008e02252af9164f768f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
