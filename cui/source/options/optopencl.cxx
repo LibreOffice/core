@@ -247,7 +247,7 @@ IMPL_LINK(ListEntryDialog, OSSelectHdl, ListBox*, pListBox)
         if (mpOS->GetSelectEntryPos() == 0)
             maEntry.maOS.clear();
         else
-            maEntry.maOS = mpOS->GetEntry(mpOS->GetSelectEntryPos());
+            maEntry.maOS = mpOS->GetSelectEntry();
     }
 
     return 0;

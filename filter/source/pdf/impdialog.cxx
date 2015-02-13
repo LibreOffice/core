@@ -1518,7 +1518,7 @@ ImplErrorDialog::~ImplErrorDialog()
 
 IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 {
-    OUString* pStr = reinterpret_cast<OUString*>(m_pErrors->GetEntryData( m_pErrors->GetSelectEntryPos() ));
+    OUString* pStr = reinterpret_cast<OUString*>(m_pErrors->GetSelectEntryData());
     m_pExplanation->SetText( pStr ? *pStr : OUString() );
     return 0;
 }

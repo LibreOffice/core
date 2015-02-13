@@ -299,8 +299,7 @@ void SwSortDlg::Apply()
         OUString sEntry( m_pTypDLB1->GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.clear();
-        else if( 0 != (pUserData = m_pTypDLB1->GetEntryData(
-                                            m_pTypDLB1->GetSelectEntryPos())) )
+        else if( 0 != (pUserData = m_pTypDLB1->GetSelectEntryData()) )
             sEntry = *(OUString*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
@@ -313,8 +312,7 @@ void SwSortDlg::Apply()
         OUString sEntry( m_pTypDLB2->GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.clear();
-        else if( 0 != (pUserData = m_pTypDLB2->GetEntryData(
-                                            m_pTypDLB2->GetSelectEntryPos())) )
+        else if( 0 != (pUserData = m_pTypDLB2->GetSelectEntryData()) )
             sEntry = *(OUString*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
@@ -327,8 +325,7 @@ void SwSortDlg::Apply()
         OUString sEntry( m_pTypDLB3->GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.clear();
-        else if( 0 != (pUserData = m_pTypDLB3->GetEntryData(
-                                            m_pTypDLB3->GetSelectEntryPos())) )
+        else if( 0 != (pUserData = m_pTypDLB3->GetSelectEntryData()) )
             sEntry = *(OUString*)pUserData;
 
         SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
@@ -429,7 +426,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     for( int n = 0; n < nLstBoxCnt; ++n )
     {
         ListBox* pL = aLstArr[ n ];
-        void* pUserData = pL->GetEntryData( pL->GetSelectEntryPos() );
+        void* pUserData = pL->GetSelectEntryData();
         if (pUserData)
             aOldStrArr[ n ] = *(OUString*)pUserData;
         ::lcl_ClearLstBoxAndDelUserData( *pL );

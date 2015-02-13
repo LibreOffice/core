@@ -130,7 +130,7 @@ public:
 
     void                    SelectTheme( const OUString& rThemeName ) { mpThemes->SelectEntry( rThemeName ); SelectThemeHdl( NULL ); }
     void                    SelectTheme( sal_uIntPtr nThemePos ) { mpThemes->SelectEntryPos( (sal_uInt16) nThemePos ); SelectThemeHdl( NULL ); }
-    OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetEntry( mpThemes->GetSelectEntryPos() ) : OUString(); }
+    OUString                GetSelectedTheme() { return mpThemes->GetEntryCount() ? mpThemes->GetSelectEntry() : OUString(); }
 
     void                    ShowContextMenu();
     bool                    KeyInput( const KeyEvent& rKEvt, vcl::Window* pWindow );

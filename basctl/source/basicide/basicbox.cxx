@@ -452,7 +452,7 @@ void LanguageBox::ClearBox()
 
 void LanguageBox::SetLanguage()
 {
-    LanguageEntry* pEntry = (LanguageEntry*)GetEntryData( GetSelectEntryPos() );
+    LanguageEntry* pEntry = (LanguageEntry*)GetSelectEntryData();
     if ( pEntry )
         GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale( pEntry->m_aLocale );
 }

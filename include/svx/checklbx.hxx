@@ -56,6 +56,7 @@ public:
 
     void            SelectEntryPos      ( sal_uLong  nPos, bool bSelect = true );
     sal_uLong       GetSelectEntryPos   () const;
+    void*           GetSelectEntryData  () const { return GetEntryData(GetSelectEntryPos()); }
 
     OUString        GetText             ( sal_uLong  nPos ) const;
     sal_uLong       GetCheckedEntryCount() const;

@@ -249,7 +249,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     {
         pTabPage->FillItemSet(pSet);
     }
-    nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetEntryData(m_pApplyToLB->GetSelectEntryPos()));
+    nOldSelection = reinterpret_cast<sal_IntPtr>(m_pApplyToLB->GetSelectEntryData());
     long nWidth = nSelectionWidth;
     switch(nOldSelection)
     {

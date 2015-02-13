@@ -326,7 +326,7 @@ IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
     OUString aStr("<" + m_pDatabaseLB->GetSelectEntry() + "." +
                   m_pTableLB->GetSelectEntry() + "." +
-                  (m_pTableLB->GetEntryData(m_pTableLB->GetSelectEntryPos()) == 0 ? OUString("0") : OUString("1")) + "." +
+                  (m_pTableLB->GetSelectEntryData() == 0 ? OUString("0") : OUString("1")) + "." +
                   m_pDBFieldLB->GetSelectEntry() + ">");
     m_pWritingEdit->ReplaceSelected(aStr);
     Selection aSel = m_pWritingEdit->GetSelection();
@@ -614,8 +614,7 @@ int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 
 bool SwVisitingCardPage::FillItemSet(SfxItemSet* rSet)
 {
-    const OUString* pGroup = (const OUString*)m_pAutoTextGroupLB->GetEntryData(
-                                    m_pAutoTextGroupLB->GetSelectEntryPos());
+    const OUString* pGroup = (const OUString*)m_pAutoTextGroupLB->GetSelectEntryData();
     OSL_ENSURE(pGroup, "no group selected?");
 
     if (pGroup)

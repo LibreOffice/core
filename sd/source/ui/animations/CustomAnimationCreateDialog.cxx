@@ -318,7 +318,7 @@ IMPL_LINK( CustomAnimationCreateTabPage, implDoubleClickHdl, Control*, pControl 
 
 void CustomAnimationCreateTabPage::onSelectEffect()
 {
-    CustomAnimationPresetPtr*p = static_cast< CustomAnimationPresetPtr* >( mpLBEffects->GetEntryData( mpLBEffects->GetSelectEntryPos() ) );
+    CustomAnimationPresetPtr*p = static_cast< CustomAnimationPresetPtr* >( mpLBEffects->GetSelectEntryData() );
 
     if( !p )
         return;
@@ -366,7 +366,7 @@ CustomAnimationPresetPtr CustomAnimationCreateTabPage::getSelectedPreset() const
 
     if( mpLBEffects->GetSelectEntryCount() == 1 )
     {
-        void* pEntryData = mpLBEffects->GetEntryData( mpLBEffects->GetSelectEntryPos() );
+        void* pEntryData = mpLBEffects->GetSelectEntryData();
         if( pEntryData )
             pPreset = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
     }
