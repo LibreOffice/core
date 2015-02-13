@@ -112,8 +112,8 @@ class ClassName : public ListenerMultiplexerBase, public InterfaceName \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-    void                        SAL_CALL acquire() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::release(); } \
+    void                        SAL_CALL acquire() throw() SAL_OVERRIDE; \
+    void                        SAL_CALL release() throw() SAL_OVERRIDE; \
     void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
@@ -124,8 +124,8 @@ class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public Inter
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE; \
-    void                        SAL_CALL acquire() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::acquire(); } \
-    void                        SAL_CALL release() throw() SAL_OVERRIDE  { ListenerMultiplexerBase::release(); } \
+    void                        SAL_CALL acquire() throw() SAL_OVERRIDE; \
+    void                        SAL_CALL release() throw() SAL_OVERRIDE; \
     void                        SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 
@@ -140,6 +140,8 @@ ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
     : ListenerMultiplexerBase( rSource ) \
 { \
 } \
+void SAL_CALL ClassName::acquire() throw() { ListenerMultiplexerBase::acquire(); } \
+void SAL_CALL ClassName::release() throw() { ListenerMultiplexerBase::release(); } \
 ::com::sun::star::uno::Any ClassName::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) \
 { \
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType, \
