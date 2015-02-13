@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_e281fc4e",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3637,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-13T14:31:59Z",
+      "side": 1,
+      "message": "This is not a good approach. The symbol is parsed twice identically to detect whether it could be an external named range, running through the quite expensive address parsers.\n\nI\u0027d much prefer if the original IsExternalNamedRange() function got a boolean reference out parameter added that determines whether the symbol is a resolvable semantically valid external name and could be checked here if the function returned true if the symbol is syntactically a valid external name.",
+      "revId": "aa1184ae696f9c396ca5a01dfc1a29d445ef8c0a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
