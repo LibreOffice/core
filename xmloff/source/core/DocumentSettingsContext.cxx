@@ -157,6 +157,10 @@ public:
                                     com::sun::star::uno::Any& rAny,
                                     const OUString& rItemName,
                                     XMLConfigBaseContext* pBaseContext);
+    XMLConfigItemContext(SvXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        uno::Any& rAny, const OUString& rItemName, XMLConfigBaseContext* pBaseContext);
+
     virtual ~XMLConfigItemContext();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
@@ -167,7 +171,15 @@ public:
 
     virtual void EndElement() SAL_OVERRIDE;
 
-    void ManipulateConfigItem();
+    virtual uno::Reference< xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList>& xAttrList)
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& aChars )
+        throw (uno::RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+
+    virtual void ManipulateConfigItem();
 };
 
 class XMLConfigItemSetContext : public XMLConfigBaseContext
@@ -523,6 +535,18 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_uInt16 nPrf
     }
 }
 
+XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+    css::uno::Any& rTempAny, const OUString& rTempItemName, XMLConfigBaseContext* pTempBaseContext)
+    : SvXMLImportContext(rImport),
+    mrAny(rTempAny),
+    mrItemName(rTempItemName),
+    mpBaseContext(pTempBaseContext)
+{
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_CONFIG | XML_type ) )
+        msType = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_CONFIG | XML_type );
+}
+
 XMLConfigItemContext::~XMLConfigItemContext()
 {
 }
@@ -536,9 +560,55 @@ SvXMLImportContext *XMLConfigItemContext::CreateChildContext( sal_uInt16 nPrefix
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL XMLConfigItemContext::createFastChildContext(
+    sal_Int32 /*Element*/, const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext* pContext = new SvXMLImportContext(GetImport());
+    return pContext;
+}
+
 void XMLConfigItemContext::Characters( const OUString& rChars )
 {
     if (IsXMLToken(msType, XML_BASE64BINARY))
+    {
+        OUString sTrimmedChars( rChars.trim() );
+        if( !sTrimmedChars.isEmpty() )
+        {
+            OUString sChars;
+            if( !msValue.isEmpty() )
+            {
+                sChars = msValue;
+                sChars += sTrimmedChars;
+                msValue.clear();
+            }
+            else
+            {
+                sChars = sTrimmedChars;
+            }
+            uno::Sequence<sal_Int8> aBuffer((sChars.getLength() / 4) * 3 );
+            sal_Int32 const nCharsDecoded =
+                ::sax::Converter::decodeBase64SomeChars( aBuffer, sChars );
+            sal_uInt32 nStartPos(maDecoded.getLength());
+            sal_uInt32 nCount(aBuffer.getLength());
+            maDecoded.realloc(nStartPos + nCount);
+            sal_Int8* pDecoded = maDecoded.getArray();
+            sal_Int8* pBuffer = aBuffer.getArray();
+            for (sal_uInt32 i = 0; i < nCount; i++, pBuffer++)
+                pDecoded[nStartPos + i] = *pBuffer;
+            if( nCharsDecoded != sChars.getLength() )
+                msValue = sChars.copy( nCharsDecoded );
+        }
+    }
+    else
+        msValue += rChars;
+}
+
+void SAL_CALL XMLConfigItemContext::characters( const OUString& rChars )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    //TODO: should be done via tokens
+    if( msType.equals( "base64Binary" ) )
     {
         OUString sTrimmedChars( rChars.trim() );
         if( !sTrimmedChars.isEmpty() )
@@ -574,6 +644,14 @@ void XMLConfigItemContext::Characters( const OUString& rChars )
 
 void XMLConfigItemContext::EndElement()
 {
+    //workaround until EndElement can be removed
+    endFastElement(0);
+}
+
+void SAL_CALL XMLConfigItemContext::endFastElement(sal_Int32 /*Element*/)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    //TODO: remove IsXMLToken with equivalent method
     if (mpBaseContext)
     {
         if (IsXMLToken(msType, XML_BOOLEAN))
