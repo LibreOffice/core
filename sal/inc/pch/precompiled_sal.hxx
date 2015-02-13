@@ -90,7 +90,6 @@
 #include <rtl/crc.h>
 #include <rtl/digest.h>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.h>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/process.h>
 #include <rtl/random.h>

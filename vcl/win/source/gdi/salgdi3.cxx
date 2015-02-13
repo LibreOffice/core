@@ -34,7 +34,6 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
-#include <rtl/logfile.hxx>
 #include <tools/helpers.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontcfg.hxx>

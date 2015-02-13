@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
-#include <rtl/logfile.h>
 #include <vector>
 
 /*

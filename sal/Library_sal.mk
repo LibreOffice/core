@@ -99,7 +99,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/rtl/digest \
 	sal/rtl/hash \
 	sal/rtl/locale \
-	sal/rtl/logfile \
 	sal/rtl/math \
 	sal/rtl/random \
 	sal/rtl/rtl_process \

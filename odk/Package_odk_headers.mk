@@ -126,8 +126,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_headers,$(SDKDIRNAME)/include,\
 	rtl/digest.h \
 	rtl/instance.hxx \
 	rtl/locale.h \
-	rtl/logfile.h \
-	rtl/logfile.hxx \
 	rtl/malformeduriexception.hxx \
 	rtl/math.h \
 	rtl/math.hxx \

@@ -35,7 +35,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <rtl/logfile.hxx>
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <comphelper/weakbag.hxx>

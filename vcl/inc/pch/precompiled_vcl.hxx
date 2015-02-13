@@ -86,7 +86,6 @@
 #include "osl/thread.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/instance.hxx"
-#include "rtl/logfile.hxx"
 #include "rtl/math.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/string.hxx"

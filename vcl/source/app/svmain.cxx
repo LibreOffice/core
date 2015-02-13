@@ -21,8 +21,6 @@
 
 #include <cassert>
 
-#include "rtl/logfile.hxx"
-
 #include <osl/file.hxx>
 #include <osl/signal.h>
 

@@ -33,7 +33,6 @@
 #include <docsh.hxx>
 #include <docfld.hxx>
 #include <fldbas.hxx>
-#include <rtl/logfile.hxx>
 
 namespace sw
 {

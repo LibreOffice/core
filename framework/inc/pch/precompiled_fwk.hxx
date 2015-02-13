@@ -316,7 +316,6 @@
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
-#include <rtl/logfile.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.h>

@@ -36,7 +36,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#include <rtl/logfile.h>
 
 using namespace framework;
 
