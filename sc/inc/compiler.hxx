@@ -322,7 +322,7 @@ private:
     bool IsDoubleReference( const OUString& );
     bool IsMacro( const OUString& );
     bool IsNamedRange( const OUString& );
-    bool IsExternalNamedRange( const OUString& rSymbol );
+    bool IsExternalNamedRange( const OUString& rSymbol, bool& isInvalidExternalNameRange );
     bool IsDBRange( const OUString& );
     bool IsColRowName( const OUString& );
     bool IsBoolean( const OUString& );
