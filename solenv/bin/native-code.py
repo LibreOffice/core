@@ -24,7 +24,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
     ("libstocserviceslo.a", "stocservices_component_getFactory"),
-    ("libchartcorelo.a", "chartcore_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
@@ -62,6 +61,27 @@ core_factory_list = [
     ]
 
 core_constructor_list = [
+# chart2/source/chartcore.component
+    "com_sun_star_comp_chart_AreaChartType_get_implementation",
+    "com_sun_star_comp_chart_BarChartType_get_implementation",
+    "com_sun_star_comp_chart_BubbleChartType_get_implementation",
+    "com_sun_star_comp_chart_CandleStickChartType_get_implementation",
+    "com_sun_star_comp_chart_ChartTypeManager_get_implementation",
+    "com_sun_star_comp_chart_ColumnChartType_get_implementation",
+    "com_sun_star_comp_chart_DataSeries_get_implementation",
+    "com_sun_star_comp_chart_FilledNetChartType_get_implementation",
+    "com_sun_star_comp_chart_GL3DBarChartType_get_implementation",
+    "com_sun_star_comp_chart_FormattedString_get_implementation",
+    "com_sun_star_comp_chart_LineChartType_get_implementation",
+    "com_sun_star_comp_chart_NetChartType_get_implementation",
+    "com_sun_star_comp_chart_PieChartType_get_implementation",
+    "com_sun_star_comp_chart_ScatterChartType_get_implementation",
+    "com_sun_star_comp_chart2_Axis_get_implementation",
+    "com_sun_star_comp_chart2_ChartModel_get_implementation",
+    "com_sun_star_comp_chart2_Diagram_get_implementation",
+    "com_sun_star_comp_chart2_LabeledDataSequence_get_implementation",
+    "com_sun_star_comp_chart2_Legend_get_implementation",
+    "com_sun_star_comp_chart2_XMLFilter_get_implementation",
 # chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
 # framework/util/fwk.component
