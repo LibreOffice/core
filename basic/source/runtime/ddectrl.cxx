@@ -109,6 +109,7 @@ SbError SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopi
     if( nErr )
     {
         delete pConv;
+        pConv = NULL;
         rnHandle = 0;
     }
     else
@@ -133,7 +134,7 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
         return SbERR_DDE_NO_CHANNEL;
     }
     delete pConv;
-    pConv = DDE_FREECHANNEL;
+    pConv = NULL;
 
     return 0L;
 }

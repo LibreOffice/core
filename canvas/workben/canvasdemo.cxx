@@ -462,8 +462,6 @@ class DemoRenderer
             //This stuff doesn't belong here, but probably in curves
             //This stuff doesn't work in VCL b/c vcl doesn't do beziers
             //Hah!  Every time the window redraws, we do this
-            double ax;
-            double ay;
             double bx;
             double by;
             bx= gimmerand();
@@ -471,6 +469,8 @@ class DemoRenderer
 
             for (int i= 0; i < 1; i++)
             {
+                double ax;
+                double ay;
                 //point a= point b;
                 ax= bx;
                 ay= by;
