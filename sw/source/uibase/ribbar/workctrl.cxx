@@ -46,7 +46,7 @@
 #include <rtl/ustring.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>
-
+#include <sfx2/zoomitem.hxx>
 #include <vcl/svapp.hxx>
 
 // Size check
@@ -570,6 +570,12 @@ SwZoomBox_Impl::SwZoomBox_Impl(
             Application::GetSettings().GetUILanguageTag());
         InsertEntry(sEntry);
     }
+    OUString TextZoomValues[] =
+        {"Page Width", "Optimal view", "Entire Page"};
+
+    for(sal_uInt16 i = 0; i < 3; i++)
+        InsertEntry(TextZoomValues[i]);
+
 }
 
 SwZoomBox_Impl::~SwZoomBox_Impl()
@@ -580,25 +586,25 @@ void    SwZoomBox_Impl::Select()
     if ( !IsTravelSelect() )
     {
         OUString sEntry(comphelper::string::remove(GetText(), '%'));
-        sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
-        if(nZoom < MINZOOM)
-            nZoom = MINZOOM;
-        if(nZoom > MAXZOOM)
-            nZoom = MAXZOOM;
+        SvxZoomItem aZoom(SVX_ZOOM_PERCENT,100);
+        if(sEntry == "Page Width")
+            aZoom.SetType(SVX_ZOOM_PAGEWIDTH);
+        else if(sEntry == "Optimal view")
+            aZoom.SetType(SVX_ZOOM_OPTIMAL);
+        else if(sEntry == "Entire Page")
+            aZoom.SetType(SVX_ZOOM_WHOLEPAGE);
+        else
+            {
+            sal_uInt16 nZoom = (sal_uInt16)sEntry.toInt32();
+            if(nZoom < MINZOOM)
+                nZoom = MINZOOM;
+            if(nZoom > MAXZOOM)
+                nZoom = MAXZOOM;
+            aZoom.SetValue(nZoom);
+            }
+            SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
 
-        SfxUInt16Item aItem( nSlotId, nZoom );
-        if ( FN_PREVIEW_ZOOM == nSlotId )
-        {
-            Any a;
-            Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = "PreviewZoom";
-            aItem.QueryValue( a );
-            aArgs[0].Value = a;
-            SfxToolBoxControl::Dispatch(
-                m_xDispatchProvider,
-                OUString( ".uno:PreviewZoom" ),
-                aArgs );
-        }
+            pCurrentShell->GetDispatcher()->Execute(SID_ATTR_ZOOM, SfxCallMode::ASYNCHRON, &aZoom, 0L);
 
         ReleaseFocus();
     }
