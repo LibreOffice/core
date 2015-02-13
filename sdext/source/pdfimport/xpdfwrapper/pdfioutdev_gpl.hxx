@@ -138,6 +138,7 @@ namespace pdfi
         mutable std::unordered_map< long long,
                                FontAttributes > m_aFontMap;
         UnicodeMap*                             m_pUtf8Map;
+        bool                                    m_bSkipImages;
 
         int  parseFont( long long nNewId, GfxFont* pFont, GfxState* state ) const;
         void writeFontFile( GfxFont* gfxFont ) const;
@@ -267,6 +268,7 @@ namespace pdfi
                                         ) SAL_OVERRIDE;
 
         void setPageNum( int nNumPages );
+        void setSkipImages ( bool bSkipImages );
     };
 }
 

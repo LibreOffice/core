@@ -88,7 +88,8 @@ namespace pdfi
                     const OUString&                                                          rPwd,
                     const css::uno::Reference<css::task::XStatusIndicator>& xStatus,
                     const XmlEmitterSharedPtr&                                                    rEmitter,
-                    const OUString&                                                          rURL );
+                    const OUString&                                                          rURL,
+                    const OUString&                                         rFilterOptions = OUString());
 
     public:
         explicit PDFIRawAdaptor( const css::uno::Reference<

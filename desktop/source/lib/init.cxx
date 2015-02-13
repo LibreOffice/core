@@ -262,6 +262,9 @@ static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
+static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
+                                                           const char* pURL,
+                                                           const char* pOptions);
 static void                    lo_postKeyEvent  (LibreOfficeKit* pThis, int nType, int nCode);
 
 
@@ -281,6 +284,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->destroy = lo_destroy;
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
+            m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
             m_pOfficeClass->postKeyEvent = lo_postKeyEvent;
 
             gOfficeClass = m_pOfficeClass;
@@ -308,6 +312,11 @@ static uno::Reference<css::lang::XMultiComponentFactory> xFactory;
 
 static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char* pURL)
 {
+    return lo_documentLoadWithOptions(pThis, pURL, NULL);
+}
+
+static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis, const char* pURL, const char* pOptions)
+{
     LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
 
     SolarMutexGuard aGuard;
@@ -334,10 +343,15 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
     try
     {
+        uno::Sequence<css::beans::PropertyValue> aFilterOptions(1);
+        aFilterOptions[0] = css::beans::PropertyValue( OUString("FilterOptions"),
+                                                       0,
+                                                       uno::makeAny(OUString::createFromAscii(pOptions)),
+                                                       beans::PropertyState_DIRECT_VALUE);
         uno::Reference<lang::XComponent> xComponent;
         xComponent = xComponentLoader->loadComponentFromURL(
                                             aURL, OUString("_blank"), 0,
-                                            uno::Sequence<css::beans::PropertyValue>());
+                                            aFilterOptions);
 
         if (!xComponent.is())
         {
@@ -357,7 +371,6 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
 
     return NULL;
 }
-
 static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);

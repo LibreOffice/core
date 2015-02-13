@@ -221,7 +221,8 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
                             const OUString&                          rPwd,
                             const uno::Reference<task::XStatusIndicator>& xStatus,
                             const XmlEmitterSharedPtr&                    rEmitter,
-                            const OUString&                          rURL )
+                            const OUString&                          rURL,
+                            const OUString&                          rFilterOptions )
 {
     // container for metaformat
     boost::shared_ptr<PDFIProcessor> pSink(
@@ -234,9 +235,11 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
     bool bSuccess=false;
 
     if( xInput.is() )
-        bSuccess = xpdf_ImportFromStream( xInput, pSink, xIHdl, rPwd, m_xContext );
+        bSuccess = xpdf_ImportFromStream( xInput, pSink, xIHdl,
+                                          rPwd, m_xContext, rFilterOptions );
     else
-        bSuccess = xpdf_ImportFromFile( rURL, pSink, xIHdl, rPwd, m_xContext );
+        bSuccess = xpdf_ImportFromFile( rURL, pSink, xIHdl,
+                                        rPwd, m_xContext, rFilterOptions );
 
     if( bSuccess )
         pSink->emit(*rEmitter,*m_pVisitorFactory);
@@ -271,6 +274,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     uno::Reference< task::XInteractionHandler > xInteractionHandler;
     OUString aURL;
     OUString aPwd;
+    OUString aFilterOptions;
     const beans::PropertyValue* pAttribs = rSourceData.getConstArray();
     sal_Int32 nAttribs = rSourceData.getLength();
     for( sal_Int32 i = 0; i < nAttribs; i++, pAttribs++ )
@@ -286,12 +290,15 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
             pAttribs->Value >>= xInteractionHandler;
         else if ( pAttribs->Name == "Password" )
             pAttribs->Value >>= aPwd;
+        else if ( pAttribs->Name == "FilterOptions" )
+            pAttribs->Value >>= aFilterOptions;
     }
     if( !xInput.is() )
         return sal_False;
 
     XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
-    const bool bSuccess = parse(xInput,xInteractionHandler, aPwd, xStatus,pEmitter,aURL);
+    const bool bSuccess = parse(xInput, xInteractionHandler,
+                                aPwd, xStatus, pEmitter, aURL, aFilterOptions);
 
     // tell input stream that it is no longer needed
     xInput->closeInput();

@@ -27,7 +27,8 @@ FILE* g_binary_out=stderr;
 
 static const char *ownerPassword = "\001";
 static const char *userPassword  = "\001";
-static const char *outputFile   = "\001";
+static const char *outputFile    = "\001";
+static const char *options       = "\001";
 
 int main(int argc, char **argv)
 {
@@ -41,6 +42,14 @@ int main(int argc, char **argv)
             for (int j = k; j < argc; ++j)
                 argv[j] = argv[j+2];
         }
+        else if (!strcmp(argv[k], "-o"))
+        {
+            options = argv[k+1];
+            argc -= 2;
+            for (int j = k; j < argc; ++j)
+                argv[j] = argv[j+2];
+        }
+
         else if (!strcmp(argv[k], "-opw"))
         {
             ownerPassword = argv[k+1];
@@ -57,9 +66,6 @@ int main(int argc, char **argv)
         }
     ++k;
     }
-
-    if( argc != 3 )
-        return 1;
 
     // read config file
     globalParams = new GlobalParams();
@@ -119,6 +125,9 @@ int main(int argc, char **argv)
     PDFDoc &rDoc = aDoc.isOk()? aDoc: aErrDoc;
 
     pdfi::PDFOutDev aOutDev(&rDoc);
+    if (!strcmp(options, "SkipImages")) {
+            aOutDev.setSkipImages(true);
+    }
 
     // tell the receiver early - needed for proper progress calculation
     const int nPages = rDoc.isOk()? rDoc.getNumPages(): 0;

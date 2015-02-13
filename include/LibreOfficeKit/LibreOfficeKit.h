@@ -143,6 +143,9 @@ struct _LibreOfficeKitClass
   void                    (*destroy)       (LibreOfficeKit* pThis);
   LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit* pThis, const char* pURL);
   char*                   (*getError)      (LibreOfficeKit* pThis);
+  LibreOfficeKitDocument* (*documentLoadWithOptions)  (LibreOfficeKit* pThis,
+                                                      const char* pURL,
+                                                      const char* pOptions);
   void                    (*postKeyEvent)  (LibreOfficeKit* pThis, int nType, int nCode);
 };
 
