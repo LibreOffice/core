@@ -328,6 +328,15 @@ protected:
         return xAutoStyleFamily;
     }
 
+    /// Similar to parseExport(), but this gives the xmlDocPtr of the layout dump.
+    xmlDocPtr parseLayoutDump()
+    {
+        if (!mpXmlBuffer)
+            dumpLayout();
+
+        return xmlParseMemory((const char*)xmlBufferContent(mpXmlBuffer), xmlBufferLength(mpXmlBuffer));;
+    }
+
     /**
      * Extract a value from the layout dump using an XPath expression and an attribute name.
      *

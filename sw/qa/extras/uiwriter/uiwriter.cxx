@@ -38,6 +38,7 @@ public:
     void testFdo74981();
     void testCp1000071();
     void testCommentedWord();
+    void testCp1000115();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testFdo74981);
     CPPUNIT_TEST(testCp1000071);
     CPPUNIT_TEST(testCommentedWord);
+    CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -319,6 +321,17 @@ void SwUiWriterTest::testCommentedWord()
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<text::XTextContent> xField(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("word"), xField->getAnchor()->getString());
+}
+
+void SwUiWriterTest::testCp1000115()
+{
+    createDoc("cp1000115.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
+    // This was 1: the long paragraph in the B1 cell did flow over to the
+    // second page, so there was only one paragraph in the second cell of the
+    // second page.
+    CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
