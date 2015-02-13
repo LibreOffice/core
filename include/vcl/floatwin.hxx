@@ -94,7 +94,7 @@ private:
 
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
     DECL_DLLPRIVATE_LINK(  ImplEndPopupModeHdl, void* );
-    virtual void setPosSizeOnContainee(Size aSize, Window &rBox);
+    virtual void setPosSizeOnContainee(Size aSize, Window &rBox) SAL_OVERRIDE;
 
                            FloatingWindow (const FloatingWindow &) SAL_DELETED_FUNCTION;
                            FloatingWindow & operator= (const FloatingWindow &) SAL_DELETED_FUNCTION;
