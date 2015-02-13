@@ -27,6 +27,7 @@
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -42,12 +43,15 @@
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/NamedPropertyValues.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <xmlenums.hxx>
 
 using namespace com::sun::star;
+using namespace css::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 class XMLMyList
 {
@@ -130,6 +134,8 @@ public:
     XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
                                     com::sun::star::uno::Any& rAny,
                                     XMLConfigBaseContext* pBaseContext);
+    XMLConfigBaseContext(SvXMLImport& rImport, uno::Any& rAny,
+        XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigBaseContext();
 
     void AddPropertyValue() { maProps.push_back(maProp); }
@@ -438,6 +444,16 @@ XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport, sal_uInt16 nPrf
         const OUString& rLName, com::sun::star::uno::Any& rTempAny,
         XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext( rImport, nPrfx, rLName ),
+    maProps( rImport.GetComponentContext() ),
+    maProp(),
+    mrAny(rTempAny),
+    mpBaseContext(pTempBaseContext)
+{
+}
+
+XMLConfigBaseContext::XMLConfigBaseContext(SvXMLImport& rImport,
+    uno::Any& rTempAny, XMLConfigBaseContext* pTempBaseContext)
+    : SvXMLImportContext( rImport ),
     maProps( rImport.GetComponentContext() ),
     maProp(),
     mrAny(rTempAny),
