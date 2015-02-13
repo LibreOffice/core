@@ -2920,13 +2920,15 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
         return false;
 }
 
-bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
+bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange )
 {
     /* FIXME: This code currently (2008-12-02T15:41+0100 in CWS mooxlsc)
      * correctly parses external named references in OOo, as required per RFE
      * #i3740#, just that we can't store them in ODF yet. We will need an OASIS
      * spec first. Until then don't pretend to support external names that
      * wouldn't survive a save and reload cycle, return false instead. */
+
+    rbInvalidExternalNameRange = false;
 
     if (!pConv)
         return false;
@@ -2944,8 +2946,11 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
     aFile = aTmp;
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aFile);
     if (!pRefMgr->isValidRangeName(nFileId, aName))
+    {
+        rbInvalidExternalNameRange = true;
         // range name doesn't exist in the source document.
         return false;
+    }
 
     const OUString* pRealName = pRefMgr->getRealRangeName(nFileId, aName);
     maRawToken.SetExternalName(nFileId, pRealName ? *pRealName : OUString(aTmp));
@@ -3481,7 +3486,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if (mnPredetectedReference)
     {
         OUString aStr( cSymbol);
-        if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr))
+        bool bInvalidExternalNameRange;
+        if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr, bInvalidExternalNameRange ))
         {
             /* TODO: it would be nice to generate a #REF! error here, which
              * would need an ocBad token with additional error value.
@@ -3610,8 +3616,19 @@ bool ScCompiler::NextNewToken( bool bInArray )
         if (IsNamedRange( aUpper ))
             return true;
         // Preserve case of file names in external references.
-        if (IsExternalNamedRange( aOrg ))
+        bool bInvalidExternalNameRange;
+        if (IsExternalNamedRange( aOrg, bInvalidExternalNameRange ))
             return true;
+        // Preserve case of file names in external references even when range
+        // is not valid and previous check failed tdf#89330
+        if (bInvalidExternalNameRange)
+        {
+            // add ocBad but do not lowercase
+            svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aOrg);
+            maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
+            maRawToken.NewOpCode( ocBad );
+            return true;
+        }
         if (IsDBRange( aUpper ))
             return true;
         // If followed by '(' (with or without space inbetween) it can not be a
