@@ -48,20 +48,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         }
     }
 
-    private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
-        if (mTileProvider == null) {
-            return;
-        }
-
-        if (composedTileLayer.isStillValid(tile.id) && !tile.markedForRemoval) {
-            mLayerClient.beginDrawing();
-            mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
-            tile.invalidate();
-            mLayerClient.endDrawing();
-            mLayerClient.forceRender();
-        }
-    }
-
     private void tileInvalidation(RectF rect) {
         if (mLayerClient == null || mTileProvider == null) {
             return;
