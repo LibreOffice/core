@@ -1384,6 +1384,23 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testErrorOnExternalReferences()
+{
+    // Test tdf#89330
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->SetString(ScAddress(0,0,0), "='file:///Path/To/FileA.ods'#$Sheet1.A1A");
+
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoName, pFC->GetErrCode());
+
+    if (!checkFormula(*m_pDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A"))
+        CPPUNIT_FAIL("Formula changed");
+
+    m_pDoc->DeleteTab(0);
+}
+
+
 void Test::testFormulaRefUpdateSheets()
 {
     m_pDoc->InsertTab(0, "Sheet1");
