@@ -135,16 +135,12 @@ namespace sw
     inline void Ring<value_type>::MoveTo(value_type* pDestRing)
     {
         value_type* pThis = static_cast< value_type* >(this);
+        algo::unlink(pThis);
         // insert into "new"
-        if( pDestRing )
+        if (pDestRing)
         {
-            if(algo::unique(pThis))
-                algo::link_before(pDestRing, pThis);
-            else
-                algo::transfer(pDestRing, pThis);
+            algo::link_before(pDestRing, pThis);
         }
-        else
-            algo::unlink(pThis);
     }
 
     /**
