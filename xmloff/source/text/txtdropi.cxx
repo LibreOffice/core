@@ -30,12 +30,16 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 enum SvXMLTokenMapDropAttrs
@@ -49,10 +53,14 @@ enum SvXMLTokenMapDropAttrs
 
 static const SvXMLTokenMapEntry aDropAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES  },
-    { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH },
-    { XML_NAMESPACE_STYLE, XML_DISTANCE,    XML_TOK_DROP_DISTANCE   },
-    { XML_NAMESPACE_STYLE, XML_STYLE_NAME,  XML_TOK_DROP_STYLE  },
+    { XML_NAMESPACE_STYLE, XML_LINES,       XML_TOK_DROP_LINES,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_lines) },
+    { XML_NAMESPACE_STYLE, XML_LENGTH,      XML_TOK_DROP_LENGTH,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_length) },
+    { XML_NAMESPACE_STYLE, XML_DISTANCE,    XML_TOK_DROP_DISTANCE,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_distance) },
+    { XML_NAMESPACE_STYLE, XML_STYLE_NAME,  XML_TOK_DROP_STYLE,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_name) },
     XML_TOKEN_MAP_END
 };
 

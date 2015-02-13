@@ -25,6 +25,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include "XMLFootnoteBodyImportContext.hxx"
 #include "XMLTextListBlockContext.hxx"
@@ -35,6 +36,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 
@@ -44,6 +46,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 TYPEINIT1(XMLFootnoteImportContext, SvXMLImportContext);
 
@@ -58,8 +62,10 @@ enum XMLFootnoteChildToken {
 static const SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_NOTE_CITATION,
-      XML_TOK_FTN_NOTE_CITATION },
-    { XML_NAMESPACE_TEXT, XML_NOTE_BODY, XML_TOK_FTN_NOTE_BODY },
+      XML_TOK_FTN_NOTE_CITATION,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_note_citation) },
+    { XML_NAMESPACE_TEXT, XML_NOTE_BODY, XML_TOK_FTN_NOTE_BODY,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_note_body) },
     XML_TOKEN_MAP_END
 };
 

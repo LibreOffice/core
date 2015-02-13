@@ -29,6 +29,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include "XMLTextColumnsContext.hxx"
 
 using namespace ::com::sun::star;
@@ -38,6 +40,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 enum SvXMLTokenMapAttrs
 {
@@ -59,19 +63,27 @@ enum SvXMLSepTokenMapAttrs
 
 static const SvXMLTokenMapEntry aColAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
-    { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT },
-    { XML_NAMESPACE_FO,     XML_END_INDENT,     XML_TOK_COLUMN_MARGIN_RIGHT },
+    { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH ,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_rel_width) },
+    { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT,
+        (NAMESPACE | XML_NAMESPACE_FO | XML_start_indent) },
+    { XML_NAMESPACE_FO,     XML_END_INDENT,     XML_TOK_COLUMN_MARGIN_RIGHT,
+        (NAMESPACE | XML_NAMESPACE_FO | XML_end_indent) },
     XML_TOKEN_MAP_END
 };
 
 static const SvXMLTokenMapEntry aColSepAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH },
-    { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR },
-    { XML_NAMESPACE_STYLE,  XML_HEIGHT,         XML_TOK_COLUMN_SEP_HEIGHT },
-    { XML_NAMESPACE_STYLE,  XML_VERTICAL_ALIGN, XML_TOK_COLUMN_SEP_ALIGN },
-    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_COLUMN_SEP_STYLE },
+    { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_width) },
+    { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_color) },
+    { XML_NAMESPACE_STYLE,  XML_HEIGHT,         XML_TOK_COLUMN_SEP_HEIGHT,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_height) },
+    { XML_NAMESPACE_STYLE,  XML_VERTICAL_ALIGN, XML_TOK_COLUMN_SEP_ALIGN,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_vertical_align) },
+    { XML_NAMESPACE_STYLE,  XML_STYLE,          XML_TOK_COLUMN_SEP_STYLE,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_style) },
     XML_TOKEN_MAP_END
 };
 
@@ -81,7 +93,7 @@ static SvXMLEnumMapEntry const pXML_Sep_Style_Enum[] =
     { XML_SOLID,         1 },
     { XML_DOTTED,        2 },
     { XML_DASHED,        3 },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 static SvXMLEnumMapEntry const pXML_Sep_Align_Enum[] =
@@ -89,7 +101,7 @@ static SvXMLEnumMapEntry const pXML_Sep_Align_Enum[] =
     { XML_TOP,          VerticalAlignment_TOP   },
     { XML_MIDDLE,       VerticalAlignment_MIDDLE },
     { XML_BOTTOM,       VerticalAlignment_BOTTOM },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 class XMLTextColumnContext_Impl: public SvXMLImportContext

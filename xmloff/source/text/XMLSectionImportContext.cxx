@@ -27,6 +27,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prstylei.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -34,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using ::com::sun::star::beans::XPropertySet;
@@ -41,10 +43,12 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XNamed;
+using css::xml::sax::FastToken::NAMESPACE;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 
 TYPEINIT1( XMLSectionImportContext, SvXMLImportContext );
@@ -71,16 +75,25 @@ enum XMLSectionToken
 
 static const SvXMLTokenMapEntry aSectionTokenMap[] =
 {
-    { XML_NAMESPACE_XML , XML_ID, XML_TOK_SECTION_XMLID },
-    { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME },
-    { XML_NAMESPACE_TEXT, XML_NAME, XML_TOK_SECTION_NAME },
-    { XML_NAMESPACE_TEXT, XML_CONDITION, XML_TOK_SECTION_CONDITION },
-    { XML_NAMESPACE_TEXT, XML_DISPLAY, XML_TOK_SECTION_DISPLAY },
-    { XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TOK_SECTION_PROTECT },
-    { XML_NAMESPACE_TEXT, XML_PROTECTION_KEY, XML_TOK_SECTION_PROTECTION_KEY},
-    { XML_NAMESPACE_TEXT, XML_IS_HIDDEN, XML_TOK_SECTION_IS_HIDDEN },
+    { XML_NAMESPACE_XML , XML_ID, XML_TOK_SECTION_XMLID,
+        (NAMESPACE | XML_NAMESPACE_XML | XML_id) },
+    { XML_NAMESPACE_TEXT, XML_STYLE_NAME, XML_TOK_SECTION_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name) },
+    { XML_NAMESPACE_TEXT, XML_NAME, XML_TOK_SECTION_NAME,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_name) },
+    { XML_NAMESPACE_TEXT, XML_CONDITION, XML_TOK_SECTION_CONDITION,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_condition) },
+    { XML_NAMESPACE_TEXT, XML_DISPLAY, XML_TOK_SECTION_DISPLAY,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_display) },
+    { XML_NAMESPACE_TEXT, XML_PROTECTED, XML_TOK_SECTION_PROTECT,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_protected) },
+    { XML_NAMESPACE_TEXT, XML_PROTECTION_KEY, XML_TOK_SECTION_PROTECTION_KEY,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_protection_key) },
+    { XML_NAMESPACE_TEXT, XML_IS_HIDDEN, XML_TOK_SECTION_IS_HIDDEN,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_is_hidden) },
     // compatibility with SRC629 (or earlier) versions
-    { XML_NAMESPACE_TEXT, XML_PROTECT, XML_TOK_SECTION_PROTECT },
+    { XML_NAMESPACE_TEXT, XML_PROTECT, XML_TOK_SECTION_PROTECT,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_protect) },
     XML_TOKEN_MAP_END
 };
 

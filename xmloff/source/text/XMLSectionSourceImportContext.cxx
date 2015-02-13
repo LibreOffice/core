@@ -26,17 +26,21 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 
 TYPEINIT1(XMLSectionSourceImportContext, SvXMLImportContext);
@@ -64,10 +68,13 @@ enum XMLSectionSourceToken
 
 static const SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
-    { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+    { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_filter_name) },
     { XML_NAMESPACE_TEXT, XML_SECTION_NAME,
-                                        XML_TOK_SECTION_TEXT_SECTION_NAME },
+                                        XML_TOK_SECTION_TEXT_SECTION_NAME,
+        (NAMESPACE | XML_NAMESPACE_TEXT | XML_section_name) },
     XML_TOKEN_MAP_END
 };
 

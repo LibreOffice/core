@@ -26,20 +26,24 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <tools/debug.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 const sal_Char sAPI_DDECommandFile[] = "DDECommandFile";
 const sal_Char sAPI_DDECommandType[] = "DDECommandType";
@@ -78,11 +82,15 @@ enum XMLSectionSourceDDEToken
 static const SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
-          XML_TOK_SECTION_DDE_APPLICATION },
-    { XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, XML_TOK_SECTION_DDE_TOPIC },
-    { XML_NAMESPACE_OFFICE, XML_DDE_ITEM, XML_TOK_SECTION_DDE_ITEM },
+          XML_TOK_SECTION_DDE_APPLICATION,
+        (NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_application) },
+    { XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, XML_TOK_SECTION_DDE_TOPIC,
+        (NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_topic) },
+    { XML_NAMESPACE_OFFICE, XML_DDE_ITEM, XML_TOK_SECTION_DDE_ITEM,
+        (NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_item) },
     { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE,
-          XML_TOK_SECTION_IS_AUTOMATIC_UPDATE },
+          XML_TOK_SECTION_IS_AUTOMATIC_UPDATE,
+        (NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_update) },
     XML_TOKEN_MAP_END
 };
 
