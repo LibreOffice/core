@@ -30,6 +30,7 @@ public:
     void testFdo75110();
     void testFdo75898();
     void testCp1000071();
+    void testCp1000115();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -38,6 +39,7 @@ public:
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testCp1000071);
+    CPPUNIT_TEST(testCp1000115);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -188,6 +190,17 @@ void SwUiWriterTest::testCp1000071()
     CPPUNIT_ASSERT_EQUAL( redlineStart1Index, rTbl[ 1 ]->Start()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1NodeIndex, rTbl[ 1 ]->End()->nNode.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd1Index, rTbl[ 1 ]->End()->nContent.GetIndex());
+}
+
+void SwUiWriterTest::testCp1000115()
+{
+    createDoc("cp1000115.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
+    // This was 1: the long paragraph in the B1 cell did flow over to the
+    // second page, so there was only one paragraph in the second cell of the
+    // second page.
+    CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
