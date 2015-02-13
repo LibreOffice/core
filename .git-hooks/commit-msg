@@ -47,9 +47,12 @@ fi
 
 fdo_regex='fdo#[0-9]+'
 if egrep -q "$fdo_regex" $1; then
-    if [ "`head -n 1 $1 |egrep -o "$fdo_regex" |sed 's/fdo#//'`" -gt 88775 ]; then
-        abort "$1" "The first line contains a suspicious fdo# rereference, did you mean tdf#?"
-    fi
+    for bugid in `head -n 1 $1 |egrep -o "$fdo_regex" |sed 's/fdo#//'`
+    do
+        if [ "`echo $bugid |sed 's/fdo#//'`" -gt 88775 ]; then
+            abort "$1" "The first line contains a suspicious fdo# rereference: 'fdo#$bugid', did you mean tdf#?"
+        fi
+    done
 fi
 
 # ...and that it does not continue on the second line
@@ -186,3 +189,5 @@ add_ChangeId
 
 
 exit 0
+
+# vi:set shiftwidth=4 expandtab:
