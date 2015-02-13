@@ -5,7 +5,6 @@ import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
 
-import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;

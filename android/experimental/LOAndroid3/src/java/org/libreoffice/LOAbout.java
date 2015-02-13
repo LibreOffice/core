@@ -2,27 +2,14 @@ package org.libreoffice;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.ComponentName;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.view.View;
+import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.File;
 
 public abstract class LOAbout extends Activity {
