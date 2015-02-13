@@ -94,7 +94,7 @@ private:
 
     SAL_DLLPRIVATE void    ImplCallPopupModeEnd();
     DECL_DLLPRIVATE_LINK(  ImplEndPopupModeHdl, void* );
-    virtual void setPosSizeOnContainee(Size aSize, VclContainer &rBox);
+    virtual void setPosSizeOnContainee(Size aSize, VclContainer &rBox) SAL_OVERRIDE;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE         FloatingWindow (const FloatingWindow &);
