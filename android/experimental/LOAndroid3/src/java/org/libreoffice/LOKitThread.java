@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -38,7 +39,8 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
             if (image != null) {
                 mLayerClient.beginDrawing();
-                SubTile tile = new SubTile(image, tileId);
+                SubTile tile = new SubTile(tileId);
+                tile.setImage(image);
                 composedTileLayer.addTile(tile);
                 mLayerClient.endDrawing();
                 mLayerClient.forceRender();
@@ -57,7 +59,8 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         mLayerClient.invalidateTiles(tiles, rect);
 
         for (SubTile tile : tiles) {
-            mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
+            CairoImage image = mTileProvider.createTile(tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
+            tile.setImage(image);
         }
 
         mLayerClient.beginDrawing();
