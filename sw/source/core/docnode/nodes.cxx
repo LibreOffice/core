@@ -2262,7 +2262,10 @@ void SwNodes::RemoveNode( sal_uLong nDelPos, sal_uLong nSz, bool bDel )
             BigPtrEntry* pTempEntry = &aTempEntries[nCnt];
             BigPtrArray::Replace( nPrevNdIdx+1, pTempEntry );
             if( nCnt )
-                pPrev = (*this)[ nPrevNdIdx  - 1 ];
+                pPrev = BigPtrArray::operator []( nPrevNdIdx  - 1 );
+                    // the accessed element can be a naked BigPtrEntry from
+                    // aTempEntries, so the downcast to SwNode* in
+                    // SwNodes::operator[] would be illegal (and unnecessary)
         }
         nDelPos = pDel->GetPos() + 1;
     }
