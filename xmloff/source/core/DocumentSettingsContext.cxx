@@ -371,6 +371,15 @@ XMLDocumentSettingsContext::XMLDocumentSettingsContext(SvXMLImport& rImport, sal
     // here are no attributes
 }
 
+XMLDocumentSettingsContext::XMLDocumentSettingsContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& )
+:   SvXMLImportContext( rImport ),
+    m_pData( new XMLDocumentSettingsContext_Data )
+{
+    // here are no attributes
+}
+
 XMLDocumentSettingsContext::~XMLDocumentSettingsContext()
 {
 }
@@ -440,7 +449,49 @@ SvXMLImportContext *XMLDocumentSettingsContext::CreateChildContext( sal_uInt16 p
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL XMLDocumentSettingsContext::createFastChildContext(
+    sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList >& xAttrList)
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext *pContext = 0;
+    OUString sName;
+
+    if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_CONFIG | XML_name ) )
+    {
+        sName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_CONFIG | XML_name );
+    }
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_CONFIG | XML_config_item_set) )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OOO | XML_view_settings ) )
+            pContext = new XMLConfigItemSetContext(GetImport(), xAttrList, m_pData->aViewProps, NULL);
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OOO | XML_configuration_settings ) )
+            pContext = new XMLConfigItemSetContext(GetImport(), xAttrList, m_pData->aConfigProps, NULL);
+        else
+        {
+            //TODO :: Fix right name
+            m_pData->aDocSpecificSettings.push_back( SettingsGroup( "", uno::Any() ) );
+            std::list< SettingsGroup >::reverse_iterator settingsPos =
+                m_pData->aDocSpecificSettings.rbegin();
+
+            pContext = new XMLConfigItemSetContext(GetImport(), xAttrList, settingsPos->aSettings, NULL);
+        }
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
 void XMLDocumentSettingsContext::EndElement()
+{
+    //workaround until EndElement can be removed
+    endFastElement(0);
+}
+
+void SAL_CALL XMLDocumentSettingsContext::endFastElement( sal_Int32 /*Element*/ )
+    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Sequence<beans::PropertyValue> aSeqViewProps;
     if (m_pData->aViewProps >>= aSeqViewProps)
