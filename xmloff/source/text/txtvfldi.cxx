@@ -779,6 +779,15 @@ XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
 {
 }
 
+XMLVariableDeclsImportContext::XMLVariableDeclsImportContext(
+    SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_Int32 /*Element*/,
+    enum VarType eVarType )
+:   SvXMLImportContext( rImport ),
+    eVarDeclsContextType(eVarType),
+    rImportHelper(rHlp)
+{
+}
+
 SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix, const OUString& rLocalName,
     const Reference<xml::sax::XAttributeList> & xAttrList )
@@ -823,8 +832,44 @@ SvXMLImportContext* XMLVariableDeclsImportContext::CreateChildContext(
     return pImportContext;
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLVariableDeclsImportContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    sal_Int32 ElementToken = NAMESPACE | XML_NAMESPACE_TEXT;
+    Reference< xml::sax::XFastContextHandler > pImportContext = NULL;
 
+    switch( eVarDeclsContextType )
+    {
+        case VarTypeSequence:
+            ElementToken = ElementToken | XML_sequence_decl;
+            break;
+        case VarTypeSimple:
+            ElementToken = ElementToken | XML_variable_decl;
+            break;
+        case VarTypeUserField:
+            ElementToken = ElementToken | XML_user_field_decl;
+        default:
+            OSL_FAIL("unknown field type!");
+            ElementToken = ElementToken | XML_sequence_decl;
+            break;
+    }
 
+    if( Element == ElementToken )
+    {
+        pImportContext = new XMLVariableDeclImportContext(
+            GetImport(), rImportHelper, Element, xAttrList, eVarDeclsContextType );
+    }
+
+    // if no context was created, use default context
+    if( !pImportContext.is() ) {
+        pImportContext = SvXMLImportContext::createFastChildContext(
+                Element, xAttrList );
+    }
+
+    return pImportContext;
+}
 
 // declaration import (<variable/user-field/sequence-decl> elements)
 
