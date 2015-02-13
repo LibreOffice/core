@@ -56,6 +56,8 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <map>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -68,6 +70,8 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::document;
 using namespace ::xmloff::token;
 using ::com::sun::star::document::XEventsSupplier;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 #define XML_TEXT_FRAME_TEXTBOX 1
 #define XML_TEXT_FRAME_GRAPHIC 2
@@ -1380,6 +1384,7 @@ XMLTextFrameContext::XMLTextFrameContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   MultiImageImportHelper()
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
+,   m_xFastAttrList( 0 )
 ,   m_pHyperlink( 0 )
     // Implement Title/Description Elements UI (#i73249#)
 ,   m_sTitle()
@@ -1430,6 +1435,25 @@ XMLTextFrameContext::XMLTextFrameContext(
     }
 }
 
+XMLTextFrameContext::XMLTextFrameContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList,
+    TextContentAnchorType eATyp )
+:   SvXMLImportContext( rImport ),
+    MultiImageImportHelper(),
+    m_xAttrList( 0 ),
+    m_xFastAttrList( xAttrList ),
+    m_pHyperlink( 0 ),
+    // Implement Title/Description Elements UI (#i73249#)
+    m_sTitle(),
+    m_sDesc(),
+    m_eDefaultAnchorType( eATyp ),
+    // Shapes in Writer cannot be named via context menu (#i51726#)
+    m_HasAutomaticStyleWithoutParentStyle( false ),
+    m_bSupportsReplacement( false )
+{
+}
+
 XMLTextFrameContext::~XMLTextFrameContext()
 {
     delete m_pHyperlink;
@@ -1473,6 +1497,11 @@ void XMLTextFrameContext::EndElement()
         }
 
     }
+}
+
+void SAL_CALL XMLTextFrameContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
 }
 
 SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
@@ -1680,6 +1709,16 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextFrameContext::createFastChildContext( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = 0;
 
     return pContext;
 }

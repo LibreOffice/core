@@ -34,6 +34,7 @@ class XMLTextFrameContext : public SvXMLImportContext, public MultiImageImportHe
 {
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList > m_xAttrList;
+    css::uno::Reference< css::xml::sax::XFastAttributeList > m_xFastAttrList;
 
     SvXMLImportContextRef m_xImplContext;
     SvXMLImportContextRef m_xReplImplContext;
@@ -72,14 +73,23 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             ::com::sun::star::text::TextContentAnchorType eDfltAnchorType );
+    XMLTextFrameContext( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        css::text::TextContentAnchorType eDfltAnchorType );
     virtual ~XMLTextFrameContext();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
