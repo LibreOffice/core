@@ -23,6 +23,8 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include "XMLTextFrameContext.hxx"
 #include "XMLTextFrameHyperlinkContext.hxx"
 
@@ -33,6 +35,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 namespace drawing = com::sun::star::drawing;
 
@@ -96,11 +100,66 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
     }
 }
 
+XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList,
+    TextContentAnchorType eATyp )
+:   SvXMLImportContext( rImport ),
+    eDefaultAnchorType( eATyp ),
+    bMap( false )
+{
+    OUString sShow;
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextHyperlinkAttrTokenMap();
+
+    Sequence< css::xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( css::xml::FastAttribute attribute : attributes )
+    {
+        switch( rTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_TEXT_HYPERLINK_HREF:
+            sHRef = GetImport().GetAbsoluteReference( attribute.Value );
+            break;
+        case XML_TOK_TEXT_HYPERLINK_NAME:
+            sName = attribute.Value;
+            break;
+        case XML_TOK_TEXT_HYPERLINK_TARGET_FRAME:
+            sTargetFrameName = attribute.Value;
+            break;
+        case XML_TOK_TEXT_HYPERLINK_SHOW:
+            sShow = attribute.Value;
+            break;
+        case XML_TOK_TEXT_HYPERLINK_SERVER_MAP:
+            {
+                bool bTmp(false);
+                if( ::sax::Converter::convertBool( bTmp, attribute.Value ) )
+                {
+                    bMap = bTmp;
+                }
+            }
+            break;
+        }
+    }
+
+    if( !sShow.isEmpty() && sTargetFrameName.isEmpty() )
+    {
+        if( sShow.equals( "new" ) )
+            sTargetFrameName = "_blank";
+        else if( sShow.equals( "replace" ) )
+            sTargetFrameName = "_self";
+    }
+}
+
 XMLTextFrameHyperlinkContext::~XMLTextFrameHyperlinkContext()
 {
 }
 
 void XMLTextFrameHyperlinkContext::EndElement()
+{
+}
+
+void SAL_CALL XMLTextFrameHyperlinkContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, SAXException, std::exception)
 {
 }
 
@@ -128,6 +187,32 @@ SvXMLImportContext *XMLTextFrameHyperlinkContext::CreateChildContext(
     }
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextFrameHyperlinkContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    SvXMLImportContext *pContext = 0;
+    XMLTextFrameContext *pTextFrameContext = 0;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_frame) )
+    {
+        pTextFrameContext = new XMLTextFrameContext( GetImport(), Element,
+                xAttrList, eDefaultAnchorType );
+    }
+
+    if( pTextFrameContext )
+    {
+        pTextFrameContext->SetHyperlink( sHRef, sName, sTargetFrameName, bMap );
+        pContext = pTextFrameContext;
+        xFrameContext = pContext;
+    }
+    else
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
