@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Do not warn if there were no real merge
 git rev-parse -q --verify HEAD^2 >/dev/null || exit
