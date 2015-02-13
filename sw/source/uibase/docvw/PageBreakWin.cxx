@@ -235,7 +235,7 @@ void SwPageBreakWin::Select( )
                         SwCntntNode* pNd = pCnt->GetNode();
                         rSh.SetSelection( *pNd );
 
-                        SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "textflow");
+                        SfxStringItem aItem(pEditWin->GetView().GetPool().GetWhich(FN_FORMAT_TABLE_DLG), "labelTP_PARA_EXT");
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 FN_FORMAT_TABLE_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, NULL );
 
@@ -248,7 +248,7 @@ void SwPageBreakWin::Select( )
 
                         SwPaM aPaM( *pNd );
                         SwPaMItem aPaMItem( pEditWin->GetView().GetPool( ).GetWhich( FN_PARAM_PAM ), &aPaM );
-                        SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "textflow" );
+                        SfxStringItem aItem( pEditWin->GetView().GetPool( ).GetWhich( SID_PARA_DLG ), "labelTP_PARA_EXT" );
                         pEditWin->GetView().GetViewFrame()->GetDispatcher()->Execute(
                                 SID_PARA_DLG, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, &aItem, &aPaMItem, NULL );
                     }
