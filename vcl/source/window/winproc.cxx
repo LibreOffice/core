@@ -2108,9 +2108,6 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
         DataChangedEventType nType;
         switch ( nEvent )
         {
-            case SALEVENT_VOLUMECHANGED:
-                nType = DataChangedEventType::NONE;
-                break;
             case SALEVENT_PRINTERCHANGED:
                 ImplDeletePrnQueueList();
                 nType = DataChangedEventType::PRINTER;
@@ -2121,12 +2118,6 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
             case SALEVENT_FONTCHANGED:
                 OutputDevice::ImplUpdateAllFontData( true );
                 nType = DataChangedEventType::FONTS;
-                break;
-            case SALEVENT_DATETIMECHANGED:
-                nType = DataChangedEventType::NONE;
-                break;
-            case SALEVENT_KEYBOARDCHANGED:
-                nType = DataChangedEventType::NONE;
                 break;
             default:
                 nType = DataChangedEventType::NONE;
@@ -2478,12 +2469,9 @@ bool ImplWindowFrameProc( vcl::Window* pWindow, SalFrame* /*pFrame*/,
             }
 
         case SALEVENT_SETTINGSCHANGED:
-        case SALEVENT_VOLUMECHANGED:
         case SALEVENT_PRINTERCHANGED:
         case SALEVENT_DISPLAYCHANGED:
         case SALEVENT_FONTCHANGED:
-        case SALEVENT_DATETIMECHANGED:
-        case SALEVENT_KEYBOARDCHANGED:
             ImplHandleSalSettings( nEvent );
             break;
 

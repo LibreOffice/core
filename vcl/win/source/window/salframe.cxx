@@ -4074,8 +4074,6 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
         nSalEvent = SALEVENT_DISPLAYCHANGED;
     else if ( nMsg == WM_FONTCHANGE )
         nSalEvent = SALEVENT_FONTCHANGED;
-    else if ( nMsg == WM_TIMECHANGE )
-        nSalEvent = SALEVENT_DATETIMECHANGED;
     else if ( nMsg == WM_WININICHANGE )
     {
         if ( lParam )
