@@ -18,6 +18,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -47,11 +48,14 @@
 #include <basic/sbxdef.hxx>
 #include <unotools/tempfile.hxx>
 
+#include <unocrsr.hxx>
+#include <ndtxt.hxx>
 #include <doc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentContentOperations.hxx>
 #include "docsh.hxx"
+#include <unotxdoc.hxx>
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -80,6 +84,7 @@ public:
 #endif
     void testFdo55289();
     void testFdo68983();
+    void testFindReplace();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
 #if !defined(MACOSX) && !defined(WNT)
     //enable this test if you want to play with star basic macros in unit tests
@@ -93,6 +98,7 @@ public:
 #endif
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
+    CPPUNIT_TEST(testFindReplace);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -393,6 +399,64 @@ void SwMacrosTest::testFdo68983()
     xDocCloseable->close(false);
 }
 
+void SwMacrosTest::testFindReplace()
+{
+    // we need a full document with view and layout etc. because ::GetNode()
+    Reference<lang::XComponent> const xComponent =
+        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+    SwXTextDocument *const pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+    SwDoc *const pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    // use a UnoCrsr so it will be corrected when deleting nodes
+    SwUnoCrsr *const pPaM(pDoc->CreateUnoCrsr(SwPosition(aIdx), false));
+
+    IDocumentContentOperations & rIDCO(pDoc->getIDocumentContentOperations());
+    rIDCO.InsertString(*pPaM, OUString("foo"));
+    rIDCO.AppendTxtNode(*pPaM->GetPoint());
+    rIDCO.InsertString(*pPaM, OUString("bar"));
+    rIDCO.AppendTxtNode(*pPaM->GetPoint());
+    rIDCO.InsertString(*pPaM, OUString("baz"));
+    pPaM->Move(fnMoveBackward, fnGoDoc);
+
+    bool bCancel(false);
+    util::SearchOptions opts(
+            util::SearchAlgorithms_REGEXP,
+            65536,
+            "$",
+            "",
+            lang::Locale("en", "US", ""),
+            2,
+            2,
+            2,
+            1073745152);
+
+    // find newline on 1st paragraph
+    bool bFound = pPaM->Find(
+            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_BODY, false);
+    CPPUNIT_ASSERT(bFound);
+    CPPUNIT_ASSERT(pPaM->HasMark());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetTxt());
+
+    // now do another Find, inside the selection from the first Find
+//    opts.searchFlags = 71680;
+    bFound = pPaM->Find(
+            opts, false, DOCPOS_CURR, DOCPOS_END, bCancel, FND_IN_SEL, false);
+    CPPUNIT_ASSERT(bFound);
+    CPPUNIT_ASSERT(pPaM->HasMark());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pPaM->GetTxt());
+
+    rIDCO.ReplaceRange(*pPaM, " ", true);
+
+    pPaM->DeleteMark();
+    pPaM->Move(fnMoveBackward, fnGoDoc);
+
+    // problem was that after the 2nd Find, the wrong newline was selected
+    CPPUNIT_ASSERT_EQUAL(OUString("foo bar"),
+            pPaM->Start()->nNode.GetNode().GetTxtNode()->GetTxt());
+    pPaM->Move(fnMoveForward, fnGoNode);
+    CPPUNIT_ASSERT_EQUAL(OUString("baz"),
+            pPaM->End()->nNode.GetNode().GetTxtNode()->GetTxt());
+}
 
 SwMacrosTest::SwMacrosTest()
       : m_aBaseString("/sw/qa/core/data")
