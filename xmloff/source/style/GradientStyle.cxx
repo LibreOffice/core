@@ -428,7 +428,7 @@ bool XMLGradientStyleImport::importXML(
         case XML_TOK_GRADIENT_ANGLE:
         {
             sal_Int32 nValue;
-            sax::Converter::convertNumber( nTmpValue, attr->Value, 0, 3600 );
+            sax::Converter::convertNumber( nValue, attr->Value, 0, 3600 );
             aGradient.Angle = sal_Int16( nValue );
         }
         break;
