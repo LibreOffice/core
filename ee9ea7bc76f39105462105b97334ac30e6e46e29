@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_e2d25c34",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T19:13:13Z",
+      "side": 1,
+      "message": "No need to declare the variable here.",
+      "revId": "ee9ea7bc76f39105462105b97334ac30e6e46e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_421788ed",
+        "filename": "sc/source/core/data/document10.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-13T19:13:13Z",
+      "side": 1,
+      "message": "don\u0027t use all caps for variable names",
+      "revId": "ee9ea7bc76f39105462105b97334ac30e6e46e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
