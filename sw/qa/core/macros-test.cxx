@@ -355,7 +355,7 @@ void SwMacrosTest::testFdo68983()
     Reference< com::sun::star::lang::XComponent > xComponent =
         loadFromDesktop(aFileName, "com.sun.star.text.TextDocument");
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load StarBasic.ods", xComponent.is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo68983.odt", xComponent.is());
 
     Reference< frame::XStorable > xDocStorable(xComponent, UNO_QUERY_THROW);
     CPPUNIT_ASSERT(xDocStorable.is());
