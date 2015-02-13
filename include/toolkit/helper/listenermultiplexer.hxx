@@ -83,7 +83,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class FocusListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START( FocusListenerMultiplexer, ::com::sun::star::awt::XFocusListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( FocusListenerMultiplexer, ::com::sun::star::awt::XFocusListener )
     void SAL_CALL focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 DECL_LISTENERMULTIPLEXER_END
@@ -92,7 +92,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class WindowListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( WindowListenerMultiplexer, ::com::sun::star::awt::XWindowListener )
     void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -112,7 +112,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class KeyListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START( KeyListenerMultiplexer, ::com::sun::star::awt::XKeyListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( KeyListenerMultiplexer, ::com::sun::star::awt::XKeyListener )
     void SAL_CALL keyPressed( const ::com::sun::star::awt::KeyEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL keyReleased( const ::com::sun::star::awt::KeyEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 DECL_LISTENERMULTIPLEXER_END
@@ -130,7 +130,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class MouseMotionListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START( MouseMotionListenerMultiplexer, ::com::sun::star::awt::XMouseMotionListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( MouseMotionListenerMultiplexer, ::com::sun::star::awt::XMouseMotionListener )
     void SAL_CALL mouseDragged( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     void SAL_CALL mouseMoved( const ::com::sun::star::awt::MouseEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 DECL_LISTENERMULTIPLEXER_END
@@ -138,7 +138,7 @@ DECL_LISTENERMULTIPLEXER_END
 
 //  class PaintListenerMultiplexer
 
-DECL_LISTENERMULTIPLEXER_START( PaintListenerMultiplexer, ::com::sun::star::awt::XPaintListener )
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( PaintListenerMultiplexer, ::com::sun::star::awt::XPaintListener )
     void SAL_CALL windowPaint( const ::com::sun::star::awt::PaintEvent& e ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 DECL_LISTENERMULTIPLEXER_END
 
