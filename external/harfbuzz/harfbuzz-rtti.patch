@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -16799,7 +16799,7 @@
+ 	LDFLAGS="$LDFLAGS -Bsymbolic-functions"
+ 
+ 	# Make sure we don't link to libstdc++
+-	CXXFLAGS="$CXXFLAGS -fno-rtti -fno-exceptions"
++	CXXFLAGS="$CXXFLAGS -fno-exceptions"
+ 
+ 	# Assorted warnings
+ 	CXXFLAGS="$CXXFLAGS -Wcast-align"
