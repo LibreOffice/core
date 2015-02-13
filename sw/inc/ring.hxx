@@ -185,6 +185,10 @@ namespace sw
              */
             void merge( RingContainer< value_type > aDestRing )
             {
+                // first check that we aren't merged already, swapping would
+                // actually un-merge in this case!
+                assert(m_pStart->pPrev != aDestRing.m_pStart);
+                assert(m_pStart != aDestRing.m_pStart->pPrev);
                 std::swap(*(&m_pStart->pPrev->pNext), *(&aDestRing.m_pStart->pPrev->pNext));
                 std::swap(*(&m_pStart->pPrev), *(&aDestRing.m_pStart->pPrev));
             }
