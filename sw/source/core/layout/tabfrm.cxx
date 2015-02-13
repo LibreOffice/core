@@ -4974,7 +4974,7 @@ long SwCellFrm::GetLayoutRowSpan() const
     if ( nRet < 1 )
     {
         const SwFrm* pRow = GetUpper();
-        const SwTabFrm* pTab = static_cast<const SwTabFrm*>(pRow->GetUpper());
+        const SwTabFrm* pTab = pRow ? static_cast<const SwTabFrm*>(pRow->GetUpper()) : NULL;
 
         if ( pTab && pTab->IsFollow() && pRow == pTab->GetFirstNonHeadlineRow() )
             nRet = -nRet;
