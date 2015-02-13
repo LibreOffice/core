@@ -2669,16 +2669,16 @@ void CodeCompleteListBox::InsertSelectedEntry()
         GetParentEditView()->SetSelection( pCodeCompleteWindow->pParent->GetLastHighlightPortionTextSelection() );
         GetParentEditView()->DeleteSelected();
 
-        if( !GetEntry( GetSelectEntryPos() ).isEmpty() )
+        if( !GetSelectEntry().isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( GetEntry(GetSelectEntryPos()), false );
+            GetParentEditView()->InsertText( GetSelectEntry(), false );
         }
     }
     else
     {
-        if( !GetEntry( GetSelectEntryPos() ).isEmpty() )
+        if( !GetSelectEntry().isEmpty() )
         {//if the user selected something
-            GetParentEditView()->InsertText( GetEntry(GetSelectEntryPos()), false );
+            GetParentEditView()->InsertText( GetSelectEntry(), false );
         }
     }
     HideAndRestoreFocus();

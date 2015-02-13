@@ -134,7 +134,7 @@ static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
 /// Returns the fill style of the currently selected entry.
 static drawing::FillStyle lcl_getFillStyle(ListBox* pLbSelect)
 {
-    return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos()));
+    return (drawing::FillStyle)reinterpret_cast<sal_uLong>(pLbSelect->GetSelectEntryData());
 }
 
 // Selects the entry matching the specified fill style.

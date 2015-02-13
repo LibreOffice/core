@@ -1071,7 +1071,7 @@ void SearchTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 OUString SearchTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    OUString* pData = reinterpret_cast<OUString*>(m_pResultsLB->GetEntryData( m_pResultsLB->GetSelectEntryPos() ));
+    OUString* pData = reinterpret_cast<OUString*>(m_pResultsLB->GetSelectEntryData());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1298,7 +1298,7 @@ void BookmarksTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
 OUString BookmarksTabPage_Impl::GetSelectEntry() const
 {
     OUString aRet;
-    OUString* pData = reinterpret_cast<OUString*>(m_pBookmarksBox->GetEntryData(m_pBookmarksBox->GetSelectEntryPos()));
+    OUString* pData = reinterpret_cast<OUString*>(m_pBookmarksBox->GetSelectEntryData());
     if ( pData )
         aRet = *pData;
     return aRet;
@@ -1540,7 +1540,7 @@ IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, InitHdl)
 
 IMPL_LINK_NOARG(SfxHelpIndexWindow_Impl, SelectFactoryHdl)
 {
-    OUString* pFactory = reinterpret_cast<OUString*>(m_pActiveLB->GetEntryData( m_pActiveLB->GetSelectEntryPos() ));
+    OUString* pFactory = reinterpret_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
     if ( pFactory )
     {
         SetFactory( OUString( *pFactory ).toAsciiLowerCase(), false );

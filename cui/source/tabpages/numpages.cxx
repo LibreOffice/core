@@ -1713,7 +1713,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             // PAGEDESC does not exist
-            sal_uInt16 nNumType = (sal_uInt16)reinterpret_cast<sal_uLong>(pBox->GetEntryData(pBox->GetSelectEntryPos()));
+            sal_uInt16 nNumType = (sal_uInt16)reinterpret_cast<sal_uLong>(pBox->GetSelectEntryData());
             aNumFmt.SetNumberingType((sal_Int16)nNumType);
             sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))

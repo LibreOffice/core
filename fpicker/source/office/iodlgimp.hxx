@@ -244,7 +244,7 @@ inline  void SvtExpFileDlg_Impl::SetNoFilterListSelection( )
 inline SvtFileDialogFilter_Impl* SvtExpFileDlg_Impl::GetSelectedFilterEntry( OUString& _rDisplayName ) const
 {
     _rDisplayName = _pLbFilter->GetSelectEntry();
-    return static_cast< SvtFileDialogFilter_Impl* >( _pLbFilter->GetEntryData ( _pLbFilter->GetSelectEntryPos() ) );
+    return static_cast< SvtFileDialogFilter_Impl* >( _pLbFilter->GetSelectEntryData () );
 }
 
 inline bool SvtExpFileDlg_Impl::IsFilterListTravelSelect() const

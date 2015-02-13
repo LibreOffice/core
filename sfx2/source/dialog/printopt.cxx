@@ -210,7 +210,7 @@ void SfxCommonPrintOptionsTabPage::ImplUpdateControls( const PrinterOptions* pCu
         }
     }
 
-    m_pReduceBitmapsResolutionLB->SetText( m_pReduceBitmapsResolutionLB->GetEntry( m_pReduceBitmapsResolutionLB->GetSelectEntryPos() ) );
+    m_pReduceBitmapsResolutionLB->SetText( m_pReduceBitmapsResolutionLB->GetSelectEntry() );
 
     m_pReduceBitmapsTransparencyCB->Check( pCurrentOptions->IsReducedBitmapIncludesTransparency() );
     m_pConvertToGreyscalesCB->Check( pCurrentOptions->IsConvertToGreyscales() );

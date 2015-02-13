@@ -143,6 +143,7 @@ public:
 
     void                SetEntryData( sal_Int32  nPos, void* pNewData );
     void*               GetEntryData( sal_Int32  nPos ) const;
+    void*               GetSelectEntryData() const { return GetEntryData(GetSelectEntryPos()); }
 
     /** this methods stores a combination of flags from the
         LISTBOX_ENTRY_FLAG_* defines at the given entry.

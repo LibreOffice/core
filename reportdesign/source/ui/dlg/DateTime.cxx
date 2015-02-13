@@ -142,12 +142,12 @@ short ODateTimeDialog::Execute()
             sal_Int32 nWidth = 0;
             if ( m_pDate->IsChecked() )
             {
-                OUString sDateFormat = m_pDateListBox->GetEntry( m_pDateListBox->GetSelectEntryPos() );
+                OUString sDateFormat = m_pDateListBox->GetSelectEntry();
                 nWidth = LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM);
             }
             if ( m_pTime->IsChecked() )
             {
-                OUString sDateFormat = m_pTimeListBox->GetEntry( m_pTimeListBox->GetSelectEntryPos() );
+                OUString sDateFormat = m_pTimeListBox->GetSelectEntry();
                 nWidth = ::std::max<sal_Int32>(LogicToLogic(PixelToLogic(Size(GetCtrlTextWidth(sDateFormat),0)).Width(),GetMapMode().GetMapUnit(),MAP_100TH_MM),nWidth);
             }
 
@@ -217,11 +217,11 @@ sal_Int32 ODateTimeDialog::getFormatKey(bool _bDate) const
     sal_Int32 nFormatKey;
     if ( _bDate )
     {
-         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pDateListBox->GetEntryData( m_pDateListBox->GetSelectEntryPos() )));
+         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pDateListBox->GetSelectEntryData()));
     }
     else
     {
-         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pTimeListBox->GetEntryData( m_pTimeListBox->GetSelectEntryPos() )));
+         nFormatKey = static_cast<sal_Int32>(reinterpret_cast<sal_IntPtr>(m_pTimeListBox->GetSelectEntryData()));
     }
     return nFormatKey;
 }

@@ -445,7 +445,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             OUString sAttach( m_sDefaultAttachmentST );
             sAttach += ".";
             sAttach += lcl_GetExtensionForDocType(
-                        reinterpret_cast<sal_uLong>(m_pSendAsLB->GetEntryData(m_pSendAsLB->GetSelectEntryPos())));
+                        reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData()));
             m_pAttachmentED->SetText( sAttach );
 
         }
@@ -890,7 +890,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterSetupHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
 {
-    sal_uLong nDocType = reinterpret_cast<sal_uLong>(pBox->GetEntryData(pBox->GetSelectEntryPos()));
+    sal_uLong nDocType = reinterpret_cast<sal_uLong>(pBox->GetSelectEntryData());
     bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
     m_pSendAsPB->Enable( bEnable );
     m_pAttachmentGroup->Enable( bEnable );
@@ -970,7 +970,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const SfxFilter *pSfxFlt = 0;
-    sal_uLong nDocType = reinterpret_cast<sal_uLong>(m_pSendAsLB->GetEntryData(m_pSendAsLB->GetSelectEntryPos()));
+    sal_uLong nDocType = reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData());
     OUString sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
     {
@@ -1060,7 +1060,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 ++nTokenCount;
             }
             sAttach = comphelper::string::setToken(sAttach, nTokenCount - 1, '.', lcl_GetExtensionForDocType(
-                     reinterpret_cast<sal_uLong>(m_pSendAsLB->GetEntryData(m_pSendAsLB->GetSelectEntryPos()))));
+                     reinterpret_cast<sal_uLong>(m_pSendAsLB->GetSelectEntryData())));
             m_pAttachmentED->SetText(sAttach);
         }
         else

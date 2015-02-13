@@ -518,7 +518,7 @@ bool SwMailMergeDlg::ExecQryShell()
             pMgr->SetEMailColumn(m_pColumnLB->GetSelectEntry());
             pModOpt->SetNameFromColumn(m_pColumnLB->GetSelectEntry());
             if( m_pFilterLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
-                m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetEntryData( m_pFilterLB->GetSelectEntryPos() ));
+                m_sSaveFilter = *static_cast<const OUString*>(m_pFilterLB->GetSelectEntryData());
         }
         else
         {

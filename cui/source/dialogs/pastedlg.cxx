@@ -201,7 +201,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
 
     if( Dialog::Execute() == RET_OK )
     {
-        nSelFormat  = reinterpret_cast<sal_uLong>(ObjectLB().GetEntryData( ObjectLB().GetSelectEntryPos() ));
+        nSelFormat  = reinterpret_cast<sal_uLong>(ObjectLB().GetSelectEntryData());
     }
 
     return nSelFormat;

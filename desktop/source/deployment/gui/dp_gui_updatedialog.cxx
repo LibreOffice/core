@@ -1139,7 +1139,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
 {
     OUStringBuffer b;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
-        m_pUpdates->GetEntryData(m_pUpdates->GetSelectEntryPos()));
+        m_pUpdates->GetSelectEntryData());
     clearDescription();
 
     if ( p != NULL )

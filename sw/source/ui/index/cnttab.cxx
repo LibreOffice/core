@@ -1184,8 +1184,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         rDesc.SetStyleNames(aStyleArr[i], i);
 
     rDesc.SetLanguage(m_pLanguageLB->GetSelectLanguage());
-    const OUString* pEntryData = (const OUString*)m_pSortAlgorithmLB->GetEntryData(
-                                            m_pSortAlgorithmLB->GetSelectEntryPos() );
+    const OUString* pEntryData = (const OUString*)m_pSortAlgorithmLB->GetSelectEntryData();
     OSL_ENSURE(pEntryData, "no entry data available");
     if(pEntryData)
         rDesc.SetSortAlgorithm(*pEntryData);
@@ -1241,7 +1240,7 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
         _pSet->Put(SfxUInt16Item(FN_PARAM_TOX_TYPE,
-            (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pTypeLB->GetEntryData( m_pTypeLB->GetSelectEntryPos() ))));
+            (sal_uInt16)reinterpret_cast<sal_IntPtr>(m_pTypeLB->GetSelectEntryData())));
     FillTOXDescription();
     return LEAVE_PAGE;
 }
@@ -1255,7 +1254,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 {
     SwMultiTOXTabDialog* pTOXDlg = static_cast<SwMultiTOXTabDialog*>(GetTabDialog());
     const sal_uInt16 nType =  sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(
-                                pBox->GetEntryData( pBox->GetSelectEntryPos() )));
+                                pBox->GetSelectEntryData()));
     CurTOXType eCurType = lcl_UserData2TOXTypes(nType);
     pTOXDlg->SetCurrentTOXType(eCurType);
 
@@ -1379,7 +1378,7 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
     OUString sOldString;
     void* pUserData;
-    if( 0 != (pUserData = m_pSortAlgorithmLB->GetEntryData( m_pSortAlgorithmLB->GetSelectEntryPos())) )
+    if( 0 != (pUserData = m_pSortAlgorithmLB->GetSelectEntryData()) )
         sOldString = *(OUString*)pUserData;
     sal_Int32 nEnd = m_pSortAlgorithmLB->GetEntryCount();
     for( sal_Int32 n = 0; n < nEnd; ++n )
@@ -2051,14 +2050,11 @@ void SwTOXEntryTabPage::UpdateDescriptor()
     {
         rDesc.SetSortByDocument(m_pSortDocPosRB->IsChecked());
         SwTOXSortKey aKey1, aKey2, aKey3;
-        aKey1.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pFirstKeyLB->GetEntryData(
-                                    m_pFirstKeyLB->GetSelectEntryPos()));
+        aKey1.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pFirstKeyLB->GetSelectEntryData());
         aKey1.bSortAscending = m_pFirstSortUpRB->IsChecked();
-        aKey2.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pSecondKeyLB->GetEntryData(
-                                    m_pSecondKeyLB->GetSelectEntryPos()));
+        aKey2.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pSecondKeyLB->GetSelectEntryData());
         aKey2.bSortAscending = m_pSecondSortUpRB->IsChecked();
-        aKey3.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pThirdKeyLB->GetEntryData(
-                                m_pThirdKeyLB->GetSelectEntryPos()));
+        aKey3.eField = (ToxAuthorityField)reinterpret_cast<sal_uIntPtr>(m_pThirdKeyLB->GetSelectEntryData());
         aKey3.bSortAscending = m_pThirdSortUpRB->IsChecked();
 
         rDesc.SetSortKeys(aKey1, aKey2, aKey3);
@@ -2413,7 +2409,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox*, pBox)
 {
     OUString sEntry = pBox->GetSelectEntry();
-    const sal_uInt16 nId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(pBox->GetEntryData(pBox->GetSelectEntryPos()));
+    const sal_uInt16 nId = (sal_uInt16)reinterpret_cast<sal_IntPtr>(pBox->GetSelectEntryData());
     const bool bEqualsNoCharStyle = sEntry == sNoCharStyle;
     m_pEditStylePB->Enable(!bEqualsNoCharStyle);
     if (bEqualsNoCharStyle)

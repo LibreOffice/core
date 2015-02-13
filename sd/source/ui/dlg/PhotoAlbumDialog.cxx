@@ -524,8 +524,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, DownHdl)
     sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
     if (!pImagesLst->GetEntry(nActPos + 1).isEmpty())
     {
-        OUString sActEntry( pImagesLst->GetEntry(pImagesLst->GetSelectEntryPos()) );
-        OUString* pActData = (OUString*) pImagesLst->GetEntryData(pImagesLst->GetSelectEntryPos());
+        OUString sActEntry( pImagesLst->GetSelectEntry() );
+        OUString* pActData = (OUString*) pImagesLst->GetSelectEntryData();
         OUString sAct(*pActData);
 
         OUString sDownEntry( pImagesLst->GetEntry(nActPos + 1) );
@@ -559,7 +559,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, RemoveHdl)
 
 IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
 {
-    OUString* pData = (OUString*) pImagesLst->GetEntryData(pImagesLst->GetSelectEntryPos());
+    OUString* pData = (OUString*) pImagesLst->GetSelectEntryData();
     OUString sImgUrl = pData ? OUString(*pData) : "";
 
     if (sImgUrl != SD_RESSTR(STR_PHOTO_ALBUM_TEXTBOX))
