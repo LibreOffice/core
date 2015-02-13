@@ -47,6 +47,15 @@ EventListenerMultiplexer::EventListenerMultiplexer( ::cppu::OWeakObject& rSource
 {
 }
 
+void SAL_CALL EventListenerMultiplexer::acquire() throw ()
+{
+    return ListenerMultiplexerBase::acquire();
+}
+void SAL_CALL EventListenerMultiplexer::release() throw ()
+{
+    return ListenerMultiplexerBase::release();
+}
+
 // ::com::sun::star::uno::XInterface
 ::com::sun::star::uno::Any EventListenerMultiplexer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
