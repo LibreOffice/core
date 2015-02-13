@@ -42,11 +42,13 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
 
     // Turn of Java-Call for the constructor
     // initialise temporary variables
-    static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
     static jmethodID mID(NULL);
-    if ( !mID  )
+    if ( !mID )
+    {
+        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
+    }
     OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     saveRef( t.pEnv, tempObj );
@@ -109,11 +111,13 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
 
     // Turn off Java-Call for the constructor
     // intialise temporary variables
-    static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
     static jmethodID mID(NULL);
-    if ( !mID  )
+    if ( !mID )
+    {
+        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
+    }
     OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
     t.pEnv->DeleteLocalRef(static_cast<jstring>(args[0].l));
@@ -163,11 +167,13 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
 
     // Turn off Java-Call for the constructor
     // initialise temporary variables
-    static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
     static jmethodID mID(NULL);
-    if ( !mID  )
+    if ( !mID )
+    {
+        static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
         mID  = t.pEnv->GetStaticMethodID( getMyClass(), "valueOf", cSignature );
+    }
     OSL_ENSURE(mID,"Unknown method id!");
     tempObj = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
 
