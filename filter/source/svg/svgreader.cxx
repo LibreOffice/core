@@ -1343,6 +1343,13 @@ struct ShapeWritingVisitor
                 basegfx::B2DPolyPolygon aPoly;
                 basegfx::tools::importFromSvgD(aPoly, sPath, false, NULL);
 
+                if ((maCurrState.meStrokeType == NONE) &&
+                    (maCurrState.meFillType != NONE) &&
+                    !aPoly.isClosed())
+                {
+                    aPoly.setClosed(true);
+                }
+
                 writePathShape(xAttrs,
                                xUnoAttrs,
                                xElem,
