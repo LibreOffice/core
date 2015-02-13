@@ -268,7 +268,11 @@ typedef void *                   sal_Handle;
 #       define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
 #       define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
 #       if defined __clang__
-#         define SAL_DLLPUBLIC_RTTI  __attribute__ ((visibility("default")))
+#         if __has_attribute(type_visibility)
+#           define SAL_DLLPUBLIC_RTTI  __attribute__ ((type_visibility("default")))
+#         else
+#           define SAL_DLLPUBLIC_RTTI  __attribute__ ((visibility("default")))
+#         endif
 #       else
 #         define SAL_DLLPUBLIC_RTTI
 #       endif
