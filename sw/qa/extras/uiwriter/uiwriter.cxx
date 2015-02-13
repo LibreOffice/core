@@ -79,6 +79,7 @@ public:
     void testFdo85876();
     void testFdo87448();
     void testTdf68183();
+    void testCp1000115();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -110,6 +111,7 @@ public:
     CPPUNIT_TEST(testFdo85876);
     CPPUNIT_TEST(testFdo87448);
     CPPUNIT_TEST(testTdf68183);
+    CPPUNIT_TEST(testCp1000115);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -829,6 +831,19 @@ void SwUiWriterTest::testTdf68183()
     pWrtShell->Insert2("X");
 
     CPPUNIT_ASSERT_EQUAL(true, pTxtNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
+}
+
+void SwUiWriterTest::testCp1000115()
+{
+    createDoc("cp1000115.fodt");
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    // This was 1: the long paragraph in the B1 cell did flow over to the
+    // second page, so there was only one paragraph in the second cell of the
+    // second page.
+    CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

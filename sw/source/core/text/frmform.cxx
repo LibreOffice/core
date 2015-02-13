@@ -1056,6 +1056,14 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
             {
                 nNew |= 3;
             }
+            else if (FindTabFrm() && nEnd > 0 && rLine.GetInfo().GetChar(nEnd - 1) == CH_BREAK)
+            {
+                // We are in a table, the paragraph has a follow and the text
+                // ends with a hard line break. Don't join the follow just
+                // because the follow would have no content, we may still need it
+                // for the paragraph mark.
+                nNew |= 1;
+            }
             CHG_OFFSET( GetFollow(), nEnd )
             GetFollow()->ManipOfst( nEnd );
         }
