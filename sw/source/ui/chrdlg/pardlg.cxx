@@ -93,12 +93,12 @@ SwParaDlg::SwParaDlg(vcl::Window *pParent,
     {
         OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageCreatorFunc fail!");
         OSL_ENSURE(pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH), "GetTabPageRangesFunc fail!");
-        m_nParaExt = AddTabPage( "labelTP_PARA_EXT", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),
+        m_nParaExt = AddTabPage( "textflow", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_EXT_PARAGRAPH),
                                  pFact->GetTabPageRangesFunc(RID_SVXPAGE_EXT_PARAGRAPH) );
 
     }
     else
-        RemoveTabPage("labelTP_PARA_EXT");
+        RemoveTabPage("textflow");
 
     SvtCJKOptions aCJKOptions;
     if(!bHtmlMode && aCJKOptions.IsAsianTypographyEnabled())
