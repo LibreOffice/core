@@ -308,15 +308,7 @@ void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
     {
         writer.startElement("swtxtfmtcolls");
         for (size_t i = 0; i < size(); ++i)
-        {
-            const SwTxtFmtColl* pColl = GetFmt(i);
-            writer.startElement("swtxtfmtcoll");
-            OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-
-            pColl->GetAttrSet().dumpAsXml(w);
-            writer.endElement();
-        }
+            GetFmt(i)->dumpAsXml(w);
         writer.endElement();
     }
 }

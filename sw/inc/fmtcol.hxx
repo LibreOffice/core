@@ -130,6 +130,8 @@ public:
     }
 
     bool AreListLevelIndentsApplicable() const;
+
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwGrfFmtColl: public SwFmtColl

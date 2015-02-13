@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <sal/macros.h>
 #include <hintids.hxx>
 #include <editeng/ulspitem.hxx>
@@ -460,6 +462,14 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
     }
 
     return bAreListLevelIndentsApplicable;
+}
+
+void SwTxtFmtColl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtFmtColl"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    GetAttrSet().dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 //FEATURE::CONDCOLL
