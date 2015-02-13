@@ -78,7 +78,6 @@ SvxOpenCLTabPage::SvxOpenCLTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     HeaderBar &rBlBar = mpBlackList->GetTheHeaderBar();
     HeaderBar &rWiBar = mpWhiteList->GetTheHeaderBar();
 
-
     WinBits nHBits = HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE;
     rBlBar.InsertItem( 1, mpOS->GetText(),         0, nHBits );
     rBlBar.InsertItem( 2, mpOSVersion->GetText(),  0, nHBits );
@@ -374,7 +373,5 @@ IMPL_LINK_NOARG(SvxOpenCLTabPage, EnableOpenCLHdl)
     EnableOpenCLHdl(mpWhiteListFrame, mpUseOpenCL->IsChecked());
     return 0;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
