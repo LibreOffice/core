@@ -86,7 +86,7 @@ public:
     CPPUNIT_TEST(testVba);
 #endif
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
-    CPPUNIT_TEST(testControlShapeGrouping);
+    // CPPUNIT_TEST(testControlShapeGrouping);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
 
