@@ -2922,6 +2922,26 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
 
 bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol )
 {
+    /* This function checks if the string looks like an external named range
+     * which does not have to be valid. Its used from NextNewToken to
+     * preserve the case of the symbol in that case
+     */
+
+    if (!pConv)
+        return false;
+
+    OUString aFile, aName;
+    if (!pConv->parseExternalName( rSymbol, aFile, aName, pDoc, &maExternalLinks))
+        return false;
+
+    if (aFile.getLength() > MAXSTRLEN || aName.getLength() > MAXSTRLEN)
+        return false;
+
+    return true;
+}
+
+bool ScCompiler::IsValidExternalNamedRange( const OUString& rSymbol )
+{
     /* FIXME: This code currently (2008-12-02T15:41+0100 in CWS mooxlsc)
      * correctly parses external named references in OOo, as required per RFE
      * #i3740#, just that we can't store them in ODF yet. We will need an OASIS
@@ -3481,7 +3501,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if (mnPredetectedReference)
     {
         OUString aStr( cSymbol);
-        if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr))
+        if (!IsPredetectedReference( aStr) && !IsValidExternalNamedRange( aStr))
         {
             /* TODO: it would be nice to generate a #REF! error here, which
              * would need an ocBad token with additional error value.
@@ -3610,8 +3630,18 @@ bool ScCompiler::NextNewToken( bool bInArray )
         if (IsNamedRange( aUpper ))
             return true;
         // Preserve case of file names in external references.
-        if (IsExternalNamedRange( aOrg ))
+        if (IsValidExternalNamedRange( aOrg ))
             return true;
+        // Preserve case of file names in external references even when range
+        // is not valid and previous check failed tdf#89330
+        if (IsExternalNamedRange( aOrg ))
+        {
+            // add ocBad but do not lowercase
+            svl::SharedString aSS = pDoc->GetSharedStringPool().intern(aOrg);
+            maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
+            maRawToken.NewOpCode( ocBad );
+            return true;
+        }
         if (IsDBRange( aUpper ))
             return true;
         // If followed by '(' (with or without space inbetween) it can not be a
