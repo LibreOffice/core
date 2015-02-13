@@ -86,7 +86,9 @@ $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
 	sfx2/util/sfx \
 	sot/util/sot \
 	svl/source/fsstor/fsstorage \
+	svl/util/svl \
 	svtools/util/svt \
+	svx/util/svx \
 	sw/util/msword \
 	sw/util/sw \
 	sw/util/swd \

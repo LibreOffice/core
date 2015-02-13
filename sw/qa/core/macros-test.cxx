@@ -28,8 +28,14 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapeGrouper.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
@@ -69,6 +75,7 @@ public:
     void testVba();
 #endif
     void testBookmarkDeleteAndJoin();
+    void testControlShapeGrouping();
     void testFdo55289();
     void testFdo68983();
     CPPUNIT_TEST_SUITE(SwMacrosTest);
@@ -79,6 +86,7 @@ public:
     CPPUNIT_TEST(testVba);
 #endif
     CPPUNIT_TEST(testBookmarkDeleteAndJoin);
+    CPPUNIT_TEST(testControlShapeGrouping);
     CPPUNIT_TEST(testFdo55289);
     CPPUNIT_TEST(testFdo68983);
 
@@ -201,6 +209,109 @@ void SwMacrosTest::testBookmarkDeleteAndJoin()
         // problem was that the nContent was pointing at deleted node
         CPPUNIT_ASSERT((*i)->GetMarkStart().nNode.GetNode().GetCntntNode() ==
             static_cast<const SwCntntNode*>((*i)->GetMarkStart().nContent.GetIdxReg()));
+    }
+}
+
+void SwMacrosTest::testControlShapeGrouping()
+{
+    OUString aFileName;
+    createFileURL("testControlShapeGrouping.", "odt", aFileName);
+    Reference< com::sun::star::lang::XComponent > xComponent(
+        loadFromDesktop(aFileName, "com.sun.star.text.TextDocument"));
+    CPPUNIT_ASSERT(xComponent.is());
+
+    uno::Reference<frame::XModel> const xModel(xComponent, UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xModel, UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModel, UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> const xDP(xDPS->getDrawPage(), UNO_QUERY);
+    CPPUNIT_ASSERT(xDP.is());
+    uno::Reference<drawing::XShapes> const xDPShapes(xDP, UNO_QUERY);
+    CPPUNIT_ASSERT(xDPShapes.is());
+    uno::Reference<drawing::XShapes> const xShapes(getMultiServiceFactory()->createInstance("com.sun.star.drawing.ShapeCollection"),
+                                                   UNO_QUERY);
+    CPPUNIT_ASSERT(xShapes.is());
+    uno::Reference<container::XIndexAccess> xShapesIC(xShapes, UNO_QUERY);
+    CPPUNIT_ASSERT(xShapesIC.is());
+
+    // uno::Reference<beans::XPropertySet> xFormProps(xForm, UNO_QUERY);
+    // xFormProps->setPropertyValue("Name", makeAny("aForm"));
+    uno::Reference<form::XFormsSupplier> const xFS(xDP, UNO_QUERY);
+    CPPUNIT_ASSERT(xFS.is());
+    uno::Reference<container::XIndexContainer> const xForms(xFS->getForms(), UNO_QUERY);
+    CPPUNIT_ASSERT(xForms.is());
+    uno::Reference<form::XForm> xForm(xForms->getByIndex(0), UNO_QUERY);
+    CPPUNIT_ASSERT(xForm.is());
+    uno::Reference<container::XNameContainer> xFormNC(xForm, UNO_QUERY);
+
+    uno::Reference<drawing::XControlShape> const xDateShape(
+        xFactory->createInstance("com.sun.star.drawing.ControlShape"),
+        UNO_QUERY);
+    uno::Reference<awt::XControlModel> const xDateControlModel(
+        xFactory->createInstance("com.sun.star.form.component.DateField"),
+        UNO_QUERY);
+    xDateShape->setControl(xDateControlModel);
+    uno::Reference<beans::XPropertySet> xDateShapeProps(xDateShape, UNO_QUERY);
+    xDateShapeProps->setPropertyValue("AnchorType", makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
+
+    uno::Reference<drawing::XControlShape> const xTimeShape(
+        xFactory->createInstance("com.sun.star.drawing.ControlShape"),
+        UNO_QUERY);
+    uno::Reference<awt::XControlModel> const xTimeControlModel(
+        xFactory->createInstance("com.sun.star.form.component.TimeField"),
+        UNO_QUERY);
+    xTimeShape->setControl(xTimeControlModel);
+    uno::Reference<beans::XPropertySet> xTimeShapeProps(xTimeShape, UNO_QUERY);
+    xTimeShapeProps->setPropertyValue("AnchorType", makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
+
+    xFormNC->insertByName("aDateCntrl", makeAny(xDateControlModel));
+    xDPShapes->add(xDateShape);
+    xFormNC->insertByName("aTimeCntrl", makeAny(xTimeControlModel));
+    xDPShapes->add(xTimeShape);
+
+    xShapes->add(uno::Reference<drawing::XShape>(xDateShape, UNO_QUERY));
+    xShapes->add(uno::Reference<drawing::XShape>(xTimeShape, UNO_QUERY));
+    uno::Reference<drawing::XShapeGrouper> const xDPGrouper(xDP, UNO_QUERY);
+    CPPUNIT_ASSERT(xDPGrouper.is());
+    uno::Reference<drawing::XShapeGroup> xGroup(xDPGrouper->group(xShapes));
+    CPPUNIT_ASSERT(xGroup.is());
+    uno::Reference<container::XIndexAccess> xGroupIC(xGroup, UNO_QUERY);
+    CPPUNIT_ASSERT(xGroup.is());
+
+    CPPUNIT_ASSERT(xDateShape->getControl().is());
+    CPPUNIT_ASSERT(xDateShape->getControl() == xDateControlModel);
+    CPPUNIT_ASSERT(xTimeShape->getControl().is());
+    CPPUNIT_ASSERT(xTimeShape->getControl() == xTimeControlModel);
+
+    {
+        uno::Reference< uno::XInterface > xDI;
+        xGroupIC->getByIndex(0) >>= xDI;
+        CPPUNIT_ASSERT(xDI.is());
+        uno::Reference< drawing::XControlShape > xDS(xDI, UNO_QUERY);
+        CPPUNIT_ASSERT(xDS.is());
+        CPPUNIT_ASSERT(xDS->getControl() == xDateControlModel);
+
+        uno::Reference< uno::XInterface > xTI;
+        xGroupIC->getByIndex(1) >>= xTI;
+        CPPUNIT_ASSERT(xTI.is());
+        uno::Reference< drawing::XControlShape > xTS(xTI, UNO_QUERY);
+        CPPUNIT_ASSERT(xTS.is());
+        CPPUNIT_ASSERT(xTS->getControl() == xTimeControlModel);
+    }
+    {
+        uno::Reference< uno::XInterface > xDI;
+        xShapesIC->getByIndex(0) >>= xDI;
+        CPPUNIT_ASSERT(xDI.is());
+        uno::Reference< drawing::XControlShape > xDS(xDI, UNO_QUERY);
+        CPPUNIT_ASSERT(xDS.is());
+        CPPUNIT_ASSERT(xDS->getControl() == xDateControlModel);
+
+        uno::Reference< uno::XInterface > xTI;
+        xShapesIC->getByIndex(1) >>= xTI;
+        CPPUNIT_ASSERT(xTI.is());
+        uno::Reference< drawing::XControlShape > xTS(xTI, UNO_QUERY);
+        CPPUNIT_ASSERT(xTS.is());
+        CPPUNIT_ASSERT(xTS->getControl() == xTimeControlModel);
     }
 }
 
