@@ -21,6 +21,7 @@
 #include <com/sun/star/rendering/ARGBColor.hpp>
 
 #include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 //subdivision count of bezier segments
 #define COUNT_OF_ADAPTIVE_SUBDIVISION 40

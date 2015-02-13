@@ -49,6 +49,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <limits>
 
+#include <glm/glm.hpp>
+
 using namespace ::com::sun::star;
 
 namespace basegfx
