@@ -2,7 +2,6 @@ package org.libreoffice;
 
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.SubTile;
 
 
 public class LOEventFactory {
@@ -31,14 +30,10 @@ public class LOEventFactory {
     }
 
     public static LOEvent tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileID, boolean forceRedraw) {
-        return new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileID, forceRedraw);
+        return new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileID);
     }
 
     public static LOEvent thumbnail(ThumbnailCreator.ThumbnailCreationTask task) {
         return new LOEvent(LOEvent.THUMBNAIL, task);
-    }
-
-    public static LOEvent tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
-        return new LOEvent(LOEvent.TILE_RERENDER, composedTileLayer, tile);
     }
 }

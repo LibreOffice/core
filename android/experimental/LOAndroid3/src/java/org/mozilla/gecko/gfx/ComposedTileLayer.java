@@ -1,6 +1,5 @@
 package org.mozilla.gecko.gfx;
 
-import android.app.ActivityManager;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -212,12 +211,12 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     /**
      * Invalidate tiles which intersect the input rect
      */
-    public void invalidateTiles(RectF cssRect) {
+    public void invalidateTiles(List<SubTile> tilesToInvalidate, RectF cssRect) {
         RectF zoomedRect = RectUtils.scale(cssRect, currentZoom);
 
         for (SubTile tile : tiles) {
-            if (RectF.intersects(zoomedRect, tile.id.getRectF())) {
-                LOKitShell.sendEvent(LOEventFactory.tileRerender(this, tile));
+            if (!tile.markedForRemoval && RectF.intersects(zoomedRect, tile.id.getRectF())) {
+                tilesToInvalidate.add(tile);
             }
         }
     }

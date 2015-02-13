@@ -13,6 +13,8 @@ import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.SubTile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
 public class LOKitThread extends Thread implements TileProvider.TileInvalidationCallback {
@@ -28,7 +30,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         TileProviderFactory.initialize();
     }
 
-    private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId, boolean forceRedraw) {
+    private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
         if (mTileProvider == null)
             return;
 
@@ -47,8 +49,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     }
 
     private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
-        if (mTileProvider == null)
+        if (mTileProvider == null) {
             return;
+        }
 
         if (composedTileLayer.isStillValid(tile.id) && !tile.markedForRemoval) {
             mLayerClient.beginDrawing();
@@ -57,6 +60,26 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             mLayerClient.endDrawing(mViewportMetrics);
             mLayerClient.forceRender();
         }
+    }
+
+    private void tileInvalidation(RectF rect) {
+        if (mLayerClient == null || mTileProvider == null) {
+            return;
+        }
+
+        List<SubTile> tiles = new ArrayList<SubTile>();
+        mLayerClient.invalidateTiles(tiles, rect);
+
+        for (SubTile tile : tiles) {
+            mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
+        }
+
+        mLayerClient.beginDrawing();
+        for (SubTile tile : tiles) {
+            tile.invalidate();
+        }
+        mLayerClient.endDrawing(mViewportMetrics);
+        mLayerClient.forceRender();
     }
 
     /** Handle the geometry change + draw. */
@@ -159,10 +182,10 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 changePart(event.mPartIndex);
                 break;
             case LOEvent.TILE_REQUEST:
-                tileRequest(event.mComposedTileLayer, event.mTileId, event.mForceRedraw);
+                tileRequest(event.mComposedTileLayer, event.mTileId);
                 break;
-            case LOEvent.TILE_RERENDER:
-                tileRerender(event.mComposedTileLayer, event.mTile);
+            case LOEvent.TILE_INVALIDATION:
+                tileInvalidation(event.mInvalidationRect);
                 break;
             case LOEvent.THUMBNAIL:
                 createThumbnail(event.mTask);
@@ -216,10 +239,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     @Override
     public void invalidate(RectF rect) {
-        Log.i(LOGTAG, "Invalidate request: " + rect);
-
-        mLayerClient = mApplication.getLayerClient();
-        mLayerClient.invalidateTiles(rect);
+        queueEvent(new LOEvent(LOEvent.TILE_INVALIDATION, rect));
     }
 }
 

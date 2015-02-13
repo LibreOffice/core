@@ -15,8 +15,11 @@ import android.util.Log;
 import org.libreoffice.LOEvent;
 import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
+import org.libreoffice.LOKitThread;
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.util.FloatUtils;
+
+import java.util.List;
 
 public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
     private static final String LOGTAG = GeckoLayerClient.class.getSimpleName();
@@ -388,8 +391,8 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         mRootLayer.clearAndReset();
     }
 
-    public void invalidateTiles(RectF rect) {
-        mLowResLayer.invalidateTiles(rect);
-        mRootLayer.invalidateTiles(rect);
+    public void invalidateTiles(List<SubTile> tilesToInvalidate, RectF rect) {
+        mLowResLayer.invalidateTiles(tilesToInvalidate, rect);
+        mRootLayer.invalidateTiles(tilesToInvalidate, rect);
     }
 }
