@@ -190,7 +190,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                     (aScaleData.IncrementData.Distance >>= fStepMain) )
                 {
                     // approximate interval count
-                    sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepMain / fStepHelp);
+                    sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepMain / fStepHelp);//cppcheck-suppress zerodiv
                     rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
                 }
             }

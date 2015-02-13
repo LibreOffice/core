@@ -641,8 +641,7 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
     {
         aResult = GetRowString( static_cast< sal_Int32 >( nRow ));
     }
-    else if( nRow >= 0 &&
-             m_apDataBrowserModel.get())
+    else if( nRow >= 0 && m_apDataBrowserModel.get())
     {
         sal_Int32 nColIndex = static_cast< sal_Int32 >( nColumnId ) - 1;
 
@@ -650,13 +649,15 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
         {
             double fData( m_apDataBrowserModel->getCellNumber( nColIndex, nRow ));
             sal_Int32 nLabelColor;
-            bool bColorChanged = false;
 
             if( ! ::rtl::math::isNan( fData ) &&
                 m_spNumberFormatterWrapper.get() )
+            {
+                bool bColorChanged = false;
                 aResult = m_spNumberFormatterWrapper->getFormattedString(
                                       GetNumberFormatKey( nRow, nColumnId ),
                                       fData, nLabelColor, bColorChanged );
+            }
         }
         else if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXTORDATE )
         {
@@ -668,11 +669,13 @@ OUString DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
             else if( aAny>>=fDouble )
             {
                 sal_Int32 nLabelColor;
-                bool bColorChanged = false;
                 sal_Int32 nDateNumberFormat = DiagramHelper::getDateNumberFormat( Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY) );
                 if( ! ::rtl::math::isNan( fDouble ) && m_spNumberFormatterWrapper.get() )
+                {
+                    bool bColorChanged = false;
                     aResult = m_spNumberFormatterWrapper->getFormattedString(
                         nDateNumberFormat, fDouble, nLabelColor, bColorChanged );
+                }
             }
         }
         else

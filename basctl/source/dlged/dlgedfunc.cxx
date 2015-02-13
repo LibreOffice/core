@@ -459,8 +459,6 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
         SdrHdl* pHdl = rView.PickHandle(aMDPos);
-        SdrObject* pObj;
-        SdrPageView* pPV;
 
         // hit selected object?
         if ( pHdl!=NULL || rView.IsMarkedHit(aMDPos, nHitLog) )
@@ -474,6 +472,8 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
                 rView.UnmarkAll();
             else
             {
+                SdrObject* pObj;
+                SdrPageView* pPV;
                 if( rView.PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
                     //if (dynamic_cast<DlgEdForm*>(pObj))

@@ -1088,7 +1088,6 @@ namespace basegfx
                             // inside parameter range edge2, too
                             if(fTools::more(fCut2, fZero) && fTools::less(fCut2, fOne))
                             {
-                                bFinished = true;
                                 aRetval = CUTFLAG_LINE;
                             }
                         }
