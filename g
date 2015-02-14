@@ -12,7 +12,7 @@ SUBMODULES_ALL="dictionaries helpcontent2 translations"
 pushd $(dirname $0) > /dev/null
 if [ -f config_host.mk ] ; then
     # we are in the BUILDDIR
-    SRC_ROOT=$(cat config_host.mk | grep SRC_ROOT | sed -e "s/.*=//")
+    SRC_ROOT=$(cat config_host.mk | grep -a SRC_ROOT | sed -e "s/.*=//")
 else
     SRC_ROOT=$(pwd)
 fi
