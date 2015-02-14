@@ -129,6 +129,49 @@ void ScUndoObjData::Redo()
     }
 }
 
+ScUndoAnchorData::ScUndoAnchorData( SdrObject* pObjP, ScDocument* pDoc, SCTAB nTab ) :
+    SdrUndoObj( *pObjP ),
+    mpDoc( pDoc ),
+    mnTab( nTab )
+{
+    mbWasCellAnchored = ScDrawLayer::IsCellAnchored( *pObjP );
+}
+
+ScUndoAnchorData::~ScUndoAnchorData()
+{
+}
+
+void ScUndoAnchorData::Undo()
+{
+    // Trigger Object Change
+    if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    {
+        SdrHint aHint(*pObj);
+        pObj->GetModel()->Broadcast(aHint);
+    }
+
+    if (mbWasCellAnchored)
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab);
+    else
+        ScDrawLayer::SetPageAnchored( *pObj );
+}
+
+void ScUndoAnchorData::Redo()
+{
+    if (mbWasCellAnchored)
+        ScDrawLayer::SetPageAnchored( *pObj );
+    else
+        ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *mpDoc, mnTab);
+
+    // Trigger Object Change
+    if(pObj && pObj->IsInserted() && pObj->GetPage() && pObj->GetModel())
+    {
+        SdrHint aHint(*pObj);
+        pObj->GetModel()->Broadcast(aHint);
+    }
+}
+
+
 ScTabDeletedHint::ScTabDeletedHint( SCTAB nTabNo ) :
     nTab( nTabNo )
 {
