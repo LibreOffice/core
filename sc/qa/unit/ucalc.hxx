@@ -454,7 +454,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNameExpandRef);
     CPPUNIT_TEST(testFormulaRefUpdateNameDeleteRow);
     CPPUNIT_TEST(testFormulaRefUpdateValidity);
-    CPPUNIT_TEST(testErrorOnExternalReferences);
+    //CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncCOUNT);
