@@ -19,7 +19,6 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 #include <svl/nfkeytab.hxx>
-//#include <zformat.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
 
@@ -361,7 +360,7 @@ void ScFiltersTest::testBooleanFormatXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("check-boolean.", XLSX);
     ScDocument& rDoc = xDocSh->GetDocument();
-    SvNumberFormatter *pNumFormatter = rDoc.GetFormatTable();
+    SvNumberFormatter* pNumFormatter = rDoc.GetFormatTable();
     const OUString aBooleanTypeStr = "\"TRUE\";\"TRUE\";\"FALSE\"";
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load check-boolean.xlsx", xDocSh.Is());
@@ -369,10 +368,10 @@ void ScFiltersTest::testBooleanFormatXLSX()
 
     for (SCROW i = 0; i <= 1; i++)
     {
-         rDoc.GetNumberFormat(0, i, 0, nNumberFormat);
-         const SvNumberformat *pSvnumberFormat = pNumFormatter->GetEntry(nNumberFormat);
-         const OUString &rFormatStr = pSvnumberFormat->GetFormatstring();
-        CPPUNIT_ASSERT_MESSAGE("Number format != boolean", rFormatStr == aBooleanTypeStr);
+        rDoc.GetNumberFormat(0, i, 0, nNumberFormat);
+        const SvNumberformat* pNumberFormat = pNumFormatter->GetEntry(nNumberFormat);
+        const OUString& rFormatStr = pNumberFormat->GetFormatstring();
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("Number format != boolean", rFormatStr, aBooleanTypeStr);
     }
 
     xDocSh->DoClose();
