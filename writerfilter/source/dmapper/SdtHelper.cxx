@@ -93,18 +93,18 @@ void SdtHelper::createDropDownControl()
 void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue aCharFormat)
 {
     uno::Reference<awt::XControlModel> xControlModel;
-    try {
-        xControlModel.set(
-            m_rDM_Impl.GetTextFactory()->createInstance(
-                "com.sun.star.form.component.DateField"),
-            uno::UNO_QUERY_THROW);
-    } catch (css::uno::RuntimeException &) {
+    try
+    {
+        xControlModel.set(m_rDM_Impl.GetTextFactory()->createInstance("com.sun.star.form.component.DateField"), uno::UNO_QUERY_THROW);
+    }
+    catch (css::uno::RuntimeException&)
+    {
         throw;
-    } catch (css::uno::Exception & e) {
+    }
+    catch (css::uno::Exception& e)
+    {
         css::uno::Any a(cppu::getCaughtException());
-        throw css::lang::WrappedTargetRuntimeException(
-            "wrapped " + a.getValueTypeName() + ": " + e.Message,
-            css::uno::Reference<css::uno::XInterface>(), a);
+        throw css::lang::WrappedTargetRuntimeException("wrapped " + a.getValueTypeName() + ": " + e.Message, css::uno::Reference<css::uno::XInterface>(), a);
     }
     uno::Reference<beans::XPropertySet> xPropertySet(
         xControlModel, uno::UNO_QUERY_THROW);

@@ -3191,10 +3191,10 @@ void DomainMapper_Impl::handleToc
                         //todo: what doesn 'the applied paragraph outline level' refer to?
     }
 //    \w Preserve tab characters within table entries
-     if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
-     {
-         bIsTabEntry = true ;
-     }
+    if( lcl_FindInCommand( pContext->GetCommand(), 'w', sValue ))
+    {
+        bIsTabEntry = true ;
+    }
 //                  \x Preserve newline characters within table entries
     if( lcl_FindInCommand( pContext->GetCommand(), 'x', sValue ))
     {
