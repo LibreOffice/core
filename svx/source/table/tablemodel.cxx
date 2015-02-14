@@ -738,7 +738,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableModelNotifyGuard aGuard( this );
 
-            // clip removed columns to columns actually avalaible
+            // clip removed columns to columns actually available
             if( (nIndex + nCount) > nColCount )
                 nCount = nColCount - nIndex;
 
@@ -914,7 +914,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableModelNotifyGuard aGuard( this );
 
-            // clip removed rows to rows actually avalaible
+            // clip removed rows to rows actually available
             if( (nIndex + nCount) > nRowCount )
                 nCount = nRowCount - nIndex;
 
