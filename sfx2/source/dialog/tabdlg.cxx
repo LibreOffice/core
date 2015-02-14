@@ -1103,9 +1103,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         pDataObject = Find(pImpl->aData, nId);
     }
 
-    assert(pDataObject); //Id not known
     if (!pDataObject)
+    {
+        SAL_WARN("sfx.config", "Tab Page ID not known, this is pretty serious and needs investigation");
         return 0;
+    }
 
     // Create TabPage if possible:
     if ( !pTabPage )
