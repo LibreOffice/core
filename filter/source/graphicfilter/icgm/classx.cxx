@@ -100,11 +100,11 @@ void CGM::ImplDoClass6()
                 case -124 : /*paragraph vertical align */break;
                 case -125 : /*region line flow */break;
                 case -130 : /*paragraph spacing */break;
-                case -131 : /*paragraph identation */break;
+                case -131 : /*paragraph indentation */break;
                 case -132 : /*paragraph tabs */break;
                 case -133 : /*paragraph bullet */break;
-                case -134 : /*paragraph bulet level */break;
-                case -135 : /*line horuzontal align */break;
+                case -134 : /*paragraph bullet level */break;
+                case -135 : /*line horizontal align */break;
                 case -136 : /*line vertical align */break;
                 case -137 : /*line spacing */break;
                 case -138 : /*word wrap */break;
@@ -144,7 +144,7 @@ void CGM::ImplDoClass6()
                     mpOutAct->BeginFigure();
                 }
                 break;
-                case -32763 : /*pop transformatin */break;
+                case -32763 : /*pop transformation */break;
                 case -32764 : /*push transformation */break;
                 case -32765 : /*copy segment */break;
                 case -32766 : /*endseg */break;
