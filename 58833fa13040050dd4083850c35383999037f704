@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_2276143f",
+        "filename": "sc/source/ui/view/drawvie3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-14T00:33:51Z",
+      "side": 1,
+      "message": "As you noticed yourself this needs to be fixed before that can be pushed.",
+      "revId": "58833fa13040050dd4083850c35383999037f704",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_4273084e",
+        "filename": "sc/source/ui/view/drawvie3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2015-02-14T00:33:51Z",
+      "side": 1,
+      "message": "Same here!",
+      "revId": "58833fa13040050dd4083850c35383999037f704",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
