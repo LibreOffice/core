@@ -1628,7 +1628,10 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
         aGuard.clear();
         uno::Sequence<beans::PropertyValue> aEmpty;
-        StoreDocToStorage_Impl( m_xObjectStorage, aEmpty, aEmpty, nStorageFormat, m_aEntryName, true );
+        uno::Sequence<beans::PropertyValue> aMediaArgs(1);
+        aMediaArgs[0].Name = "DocumentBaseURL";
+        aMediaArgs[0].Value <<= GetBaseURL_Impl();
+        StoreDocToStorage_Impl( m_xObjectStorage, aMediaArgs, aEmpty, nStorageFormat, m_aEntryName, true );
         aGuard.reset();
     }
 
