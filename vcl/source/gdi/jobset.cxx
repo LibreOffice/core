@@ -218,8 +218,6 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
     {
-        sal_Size nFirstPos = rIStream.Tell();
-
         sal_uInt16 nLen = 0;
         rIStream.ReadUInt16( nLen );
         if ( !nLen )
@@ -234,9 +232,10 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                      " max possible entries, but " << nRead << " claimed, truncating");
             return rIStream;
         }
+        sal_Size nFirstPos = rIStream.Tell();
         boost::scoped_array<char> pTempBuf(new char[nRead]);
         rIStream.Read(pTempBuf.get(),  nRead);
-        if ( nLen >= sizeof(ImplOldJobSetupData)+4 )
+        if (nRead >= sizeof(ImplOldJobSetupData))
         {
             ImplOldJobSetupData* pData = reinterpret_cast<ImplOldJobSetupData*>(pTempBuf.get());
             if ( rJobSetup.mpData )
@@ -278,8 +277,8 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                 }
                 if( nSystem == JOBSET_FILE605_SYSTEM )
                 {
-                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + 4 + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
-                    while( rIStream.Tell() < nFirstPos + nLen )
+                    rIStream.Seek( nFirstPos + sizeof( ImplOldJobSetupData ) + sizeof( Impl364JobSetupData ) + pJobData->mnDriverDataLen );
+                    while( rIStream.Tell() < nFirstPos + nRead )
                     {
                         OUString aKey = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
                         OUString aValue = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStream, RTL_TEXTENCODING_UTF8);
@@ -297,9 +296,9 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                         else
                             pJobData->maValueMap[ aKey ] = aValue;
                     }
-                    DBG_ASSERT( rIStream.Tell() == nFirstPos+nLen, "corrupted job setup" );
+                    DBG_ASSERT( rIStream.Tell() == nFirstPos+nRead, "corrupted job setup" );
                     // ensure correct stream position
-                    rIStream.Seek( nFirstPos + nLen );
+                    rIStream.Seek(nFirstPos + nRead);
                 }
             }
         }
