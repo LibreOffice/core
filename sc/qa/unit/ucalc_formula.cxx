@@ -1384,6 +1384,7 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->DeleteTab(0);
 }
 
+/*
 void Test::testErrorOnExternalReferences()
 {
     // Test tdf#89330
@@ -1399,6 +1400,7 @@ void Test::testErrorOnExternalReferences()
 
     m_pDoc->DeleteTab(0);
 }
+*/
 
 
 void Test::testFormulaRefUpdateSheets()

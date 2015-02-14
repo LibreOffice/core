@@ -151,7 +151,7 @@ public:
     void testFormulaRefUpdateNameCopySheet();
     void testFormulaRefUpdateNameDelete();
     void testFormulaRefUpdateValidity();
-    void testErrorOnExternalReferences();
+    //void testErrorOnExternalReferences();
     void testMultipleOperations();
     void testFuncCOLUMN();
     void testFuncCOUNT();
@@ -463,7 +463,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNameCopySheet);
     CPPUNIT_TEST(testFormulaRefUpdateNameDelete);
     CPPUNIT_TEST(testFormulaRefUpdateValidity);
-    CPPUNIT_TEST(testErrorOnExternalReferences);
+    //CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncCOUNT);
