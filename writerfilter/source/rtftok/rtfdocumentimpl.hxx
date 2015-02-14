@@ -61,12 +61,12 @@ enum RTFBufferTypes
 };
 
 /// Form field types
-enum RTFFormFieldTypes
+enum class RTFFormFieldType
 {
-    FORMFIELD_NONE,
-    FORMFIELD_TEXT,
-    FORMFIELD_CHECKBOX,
-    FORMFIELD_LIST
+    NONE,
+    TEXT,
+    CHECKBOX,
+    LIST
 };
 
 enum class RTFBmpStyle
@@ -537,7 +537,7 @@ private:
 
     RTFSprms m_aFormfieldSprms;
     RTFSprms m_aFormfieldAttributes;
-    RTFFormFieldTypes m_nFormFieldType;
+    RTFFormFieldType m_nFormFieldType;
 
     RTFSprms m_aObjectSprms;
     RTFSprms m_aObjectAttributes;

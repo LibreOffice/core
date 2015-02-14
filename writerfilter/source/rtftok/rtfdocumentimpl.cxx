@@ -249,7 +249,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
       m_aAuthors(),
       m_aFormfieldSprms(),
       m_aFormfieldAttributes(),
-      m_nFormFieldType(FORMFIELD_NONE),
+      m_nFormFieldType(RTFFormFieldType::NONE),
       m_aObjectSprms(),
       m_aObjectAttributes(),
       m_bObject(false),
@@ -4354,29 +4354,29 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         switch (nParam)
         {
         case 0:
-            m_nFormFieldType = FORMFIELD_TEXT;
+            m_nFormFieldType = RTFFormFieldType::TEXT;
             break;
         case 1:
-            m_nFormFieldType = FORMFIELD_CHECKBOX;
+            m_nFormFieldType = RTFFormFieldType::CHECKBOX;
             break;
         case 2:
-            m_nFormFieldType = FORMFIELD_LIST;
+            m_nFormFieldType = RTFFormFieldType::LIST;
             break;
         default:
-            m_nFormFieldType = FORMFIELD_NONE;
+            m_nFormFieldType = RTFFormFieldType::NONE;
             break;
         }
         break;
     case RTF_FFDEFRES:
-        if (m_nFormFieldType == FORMFIELD_CHECKBOX)
+        if (m_nFormFieldType == RTFFormFieldType::CHECKBOX)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFCheckBox_default, pIntValue);
-        else if (m_nFormFieldType == FORMFIELD_LIST)
+        else if (m_nFormFieldType == RTFFormFieldType::LIST)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_default, pIntValue);
         break;
     case RTF_FFRES:
-        if (m_nFormFieldType == FORMFIELD_CHECKBOX)
+        if (m_nFormFieldType == RTFFormFieldType::CHECKBOX)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFCheckBox_checked, pIntValue);
-        else if (m_nFormFieldType == FORMFIELD_LIST)
+        else if (m_nFormFieldType == RTFFormFieldType::LIST)
             m_aFormfieldSprms.set(NS_ooxml::LN_CT_FFDDList_result, pIntValue);
         break;
     case RTF_EDMINS:
