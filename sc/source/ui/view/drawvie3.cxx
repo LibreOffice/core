@@ -59,11 +59,18 @@ void ScDrawView::SetPageAnchored()
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();
+
+        // FIXME. Change the string for i18n from global resources
+        //OUString aStr = OUString(ScGlobal::GetRscString( STR_UNDO_PAGE_ANCHOR ));
+        OUString aStr = OUString("Undo Page Anchor");
+        BegUndo( aStr );
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+            AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
             ScDrawLayer::SetPageAnchored( *pObj );
         }
+        EndUndo();
 
         if ( pViewData )
             pViewData->GetDocShell()->SetDrawModified();
@@ -83,11 +90,18 @@ void ScDrawView::SetCellAnchored()
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();
+
+        // FIXME. Change the string for i18n from global resources
+        //OUString aStr = OUString(ScGlobal::GetRscString( STR_UNDO_CELL_ANCHOR ));
+        OUString aStr = OUString("Undo Cell Anchor");
+        BegUndo( aStr );
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+            AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
             ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
         }
+        EndUndo();
 
         if ( pViewData )
             pViewData->GetDocShell()->SetDrawModified();
