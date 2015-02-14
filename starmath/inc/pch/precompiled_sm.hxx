@@ -16,7 +16,6 @@
 
 #include "svx/modctrl.hxx"
 #include "tools/rcid.h"
-#include <boost/scoped_array.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

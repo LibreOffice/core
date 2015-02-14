@@ -36,8 +36,7 @@
 
 #include <math.h>
 #include <float.h>
-#include <boost/scoped_array.hpp>
-
+#include <vector>
 
 SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     : aNodeToken( rNodeToken )
@@ -2558,9 +2557,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 
     // initialize array that is to hold the maximum widths of all
     // elements (subnodes) in that column.
-    boost::scoped_array<long> pColWidth(new long[nNumCols]);
-    for (j = 0;  j  < nNumCols;  j++)
-        pColWidth[j] = 0;
+    std::vector<long> aColWidth(nNumCols);
 
     // arrange subnodes and calculate the aboves arrays contents
     sal_uInt16 nNodes = GetNumSubNodes();
@@ -2571,7 +2568,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         {
             pNode->Arrange(rDev, rFormat);
             int  nCol = nIdx % nNumCols;
-            pColWidth[nCol] = std::max(pColWidth[nCol], pNode->GetItalicWidth());
+            aColWidth[nCol] = std::max(aColWidth[nCol], pNode->GetItalicWidth());
         }
     }
 
@@ -2584,11 +2581,12 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
           nVerDist = nNormDist * rFormat.GetDistance(DIS_MATRIXROW) / 100L;
 
     // build array that holds the leftmost position for each column
-    boost::scoped_array<long> pColLeft(new long[nNumCols]);
+    std::vector<long> aColLeft(nNumCols);
     long  nX = 0;
     for (j = 0;  j < nNumCols;  j++)
-    {   pColLeft[j] = nX;
-        nX += pColWidth[j] + nHorDist;
+    {
+        aColLeft[j] = nX;
+        nX += aColWidth[j] + nHorDist;
     }
 
     Point   aPos, aDelta;
@@ -2614,16 +2612,16 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             // and horizontal alignment
             switch (eHorAlign)
             {   case RHA_LEFT:
-                    aPos.X() = rNodeRect.GetLeft() + pColLeft[j];
+                    aPos.X() = rNodeRect.GetLeft() + aColLeft[j];
                     break;
                 case RHA_CENTER:
-                    aPos.X() = rNodeRect.GetLeft() + pColLeft[j]
-                               + pColWidth[j] / 2
+                    aPos.X() = rNodeRect.GetLeft() + aColLeft[j]
+                               + aColWidth[j] / 2
                                - rNodeRect.GetItalicCenterX();
                     break;
                 case RHA_RIGHT:
-                    aPos.X() = rNodeRect.GetLeft() + pColLeft[j]
-                               + pColWidth[j] - rNodeRect.GetItalicWidth();
+                    aPos.X() = rNodeRect.GetLeft() + aColLeft[j]
+                               + aColWidth[j] - rNodeRect.GetItalicWidth();
                     break;
             }
 
