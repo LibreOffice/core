@@ -76,6 +76,20 @@ public:
     virtual void     Redo() SAL_OVERRIDE;
 };
 
+class ScUndoAnchorData : public SdrUndoObj
+{
+private:
+    bool                    mbWasCellAnchored;
+    ScDocument*             mpDoc;
+    SCTAB                   mnTab;
+public:
+                ScUndoAnchorData( SdrObject* pObj, ScDocument* pDoc, SCTAB nTab );
+                virtual ~ScUndoAnchorData();
+
+    virtual void     Undo() SAL_OVERRIDE;
+    virtual void     Redo() SAL_OVERRIDE;
+};
+
 class SC_DLLPUBLIC ScDrawLayer : public FmFormModel
 {
 private:

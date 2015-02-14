@@ -22,6 +22,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 
+#include "sc.hrc"
+#include "scresid.hxx"
 #include "drawview.hxx"
 #include "drwlayer.hxx"
 #include "imapwrap.hxx"
@@ -59,11 +61,15 @@ void ScDrawView::SetPageAnchored()
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();
+
+        BegUndo( OUString(ScResId( SCSTR_UNDO_PAGE_ANCHOR )) );
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+            AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
             ScDrawLayer::SetPageAnchored( *pObj );
         }
+        EndUndo();
 
         if ( pViewData )
             pViewData->GetDocShell()->SetDrawModified();
@@ -83,11 +89,15 @@ void ScDrawView::SetCellAnchored()
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
         const size_t nCount = pMark->GetMarkCount();
+
+        BegUndo( OUString(ScResId( SCSTR_UNDO_CELL_ANCHOR )) );
         for( size_t i=0; i<nCount; ++i )
         {
             SdrObject* pObj = pMark->GetMark(i)->GetMarkedSdrObj();
+            AddUndo (new ScUndoAnchorData( pObj, pDoc, nTab ));
             ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *pDoc, nTab);
         }
+        EndUndo();
 
         if ( pViewData )
             pViewData->GetDocShell()->SetDrawModified();

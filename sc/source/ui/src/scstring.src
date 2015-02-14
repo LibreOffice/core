@@ -907,4 +907,14 @@ String STR_CONTENT
     Text [ en-US ] = "Content" ;
 };
 
+String SCSTR_UNDO_PAGE_ANCHOR
+{
+    Text [ en-US ] = "Page Anchor" ;
+};
+
+String SCSTR_UNDO_CELL_ANCHOR
+{
+    Text [ en-US ] = "Cell Anchor" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

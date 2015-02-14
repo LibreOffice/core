@@ -8,6 +8,9 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdpage.hxx>
+#include <sfx2/dispatch.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
@@ -16,6 +19,11 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <unonames.hxx>
+
+#include "tabvwsh.hxx"
+#include "docsh.hxx"
+
+#include "sc.hrc"
 
 using namespace css;
 
@@ -33,9 +41,11 @@ public:
 
     uno::Reference< uno::XInterface > init();
     void testCondFormat();
+    void testUndoAnchor();
 
     CPPUNIT_TEST_SUITE(ScConditionalFormatTest);
     CPPUNIT_TEST(testCondFormat);
+    CPPUNIT_TEST(testUndoAnchor);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -108,6 +118,106 @@ void ScConditionalFormatTest::testCondFormat()
     xSheetConditionalEntries.set(xProps->getPropertyValue(SC_UNONAME_CONDFMT), uno::UNO_QUERY_THROW);
     // This was 1 before - conditional formats were not removed
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSheetConditionalEntries->getCount());
+}
+
+void ScConditionalFormatTest::testUndoAnchor()
+{
+    const OString sFailedMessage = OString("Failed on :");
+    OUString aFileURL;
+    createFileURL(OUString("document_with_linked_graphic.ods"), aFileURL);
+    // open the document with graphic included
+    uno::Reference< com::sun::star::lang::XComponent > xComponent = loadFromDesktop(aFileURL);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh != NULL);
+
+    // Check whether graphic imported well
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawLayer != NULL );
+
+    const SdrPage *pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pPage != NULL );
+
+    SdrGrafObj* pObject = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject != NULL );
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pObject->IsLinkedGraphic() );
+
+    const GraphicObject& rGraphicObj = pObject->GetGraphicObject(true);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), !rGraphicObj.IsSwappedOut());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
+    // Get the document controller
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pViewShell != NULL );
+
+    // Get the draw view of the document
+    ScDrawView* pDrawView = pViewShell->GetViewData().GetScDrawView();
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawView != NULL );
+
+    // Select graphic object
+    pDrawView->MarkNextObj(false);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), pDrawView->AreObjectsMarked() );
+
+    // Set Cell Anchor
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObject, rDoc, 0);
+    // Check state
+    ScAnchorType oldType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), oldType == SCA_CELL );
+
+    // Change all selected objects to page anchor
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_ANCHOR_PAGE);
+    // Check state
+    ScAnchorType newType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), newType == SCA_PAGE );
+
+    // Undo and check its result.
+    SfxUndoManager* pUndoMgr = rDoc.GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+    pUndoMgr->Undo();
+
+    // Check anchor type
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), oldType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
+    pUndoMgr->Redo();
+
+    // Check anchor type
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), newType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
+    ScDrawLayer::SetPageAnchored(*pObject);
+    // Check state
+    oldType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), oldType == SCA_PAGE );
+
+    // Change all selected objects to cell anchor
+    pViewShell->GetViewData().GetDispatcher().Execute(SID_ANCHOR_CELL);
+    // Check state
+    newType = ScDrawLayer::GetAnchorType(*pObject);
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), newType == SCA_CELL );
+
+    pUndoMgr->Undo();
+
+    // Check anchor type
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), oldType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
+
+    pUndoMgr->Redo();
+
+    // Check anchor type
+    CPPUNIT_ASSERT_MESSAGE( sFailedMessage.getStr(), newType == ScDrawLayer::GetAnchorType(*pObject) );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), GRAPHIC_BITMAP, rGraphicObj.GetGraphic().GetType());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( sFailedMessage.getStr(), sal_uLong(864900), rGraphicObj.GetSizeBytes());
 }
 
 void ScConditionalFormatTest::setUp()
