@@ -1357,8 +1357,10 @@ void Sc10Import::LoadDataBaseCollection()
 
 namespace
 {
-    sal_uInt16 SanitizeDataCount(sal_uInt16 nDataCount, SvStream &rStream)
+    sal_uInt16 ReadAndSanitizeDataCount(SvStream &rStream)
     {
+        sal_uInt16 nDataCount(0);
+        rStream.ReadUInt16(nDataCount);
         const size_t nMinRecordSize = sizeof(sal_uInt16)*2;
         const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
         if (nDataCount > nMaxRecords)
@@ -1471,8 +1473,7 @@ void Sc10Import::LoadTables()
             nError = errUnknownID;
             return;
         }
-        rStream.ReadUInt16( DataCount );
-        DataCount = SanitizeDataCount(DataCount, rStream);
+        DataCount = ReadAndSanitizeDataCount(rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
@@ -1494,8 +1495,7 @@ void Sc10Import::LoadTables()
             return;
         }
 
-        rStream.ReadUInt16( DataCount );
-        DataCount = SanitizeDataCount(DataCount, rStream);
+        DataCount = ReadAndSanitizeDataCount(rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
@@ -1525,8 +1525,7 @@ void Sc10Import::LoadTables()
             return;
         }
 
-        rStream.ReadUInt16( DataCount );
-        DataCount = SanitizeDataCount(DataCount, rStream);
+        DataCount = ReadAndSanitizeDataCount(rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
@@ -1546,8 +1545,7 @@ void Sc10Import::LoadTables()
             return;
         }
 
-        rStream.ReadUInt16(DataCount);
-        DataCount = SanitizeDataCount(DataCount, rStream);
+        DataCount = ReadAndSanitizeDataCount(rStream);
         DataStart = 0;
         for (i=0; i < DataCount; i++)
         {
