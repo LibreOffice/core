@@ -2492,7 +2492,15 @@ void ToolBox::ImplFormat( bool bResize )
                             // items here. ( Note: assume mnMaxItemHeight is
                             // equal to the LineSize when multibar has a single
                             // line size )
-                            it->maCalcRect.Top()      =  it->maRect.Top() ? it->maRect.Top() : ( nY + ( mnMaxItemHeight-aCurrentItemSize.Height())/2 );
+                            if ( it->maRect.Top() ||
+                                 (it->mpWindow && it->mpWindow->GetType() == WINDOW_CALCINPUTLINE) ) // tdf#83099
+                            {
+                                it->maCalcRect.Top()  = it->maRect.Top();
+                            }
+                            else
+                            {
+                                it->maCalcRect.Top()  = nY+(mnMaxItemHeight-aCurrentItemSize.Height())/2;
+                            }
                         }
                         else
                             it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
@@ -2516,6 +2524,9 @@ void ToolBox::ImplFormat( bool bResize )
                     if ( it->mbShowWindow )
                     {
                         Point aPos( it->maCalcRect.Left(), it->maCalcRect.Top() );
+
+                        assert( it->maCalcRect.Top() >= 0 );
+
                         it->mpWindow->SetPosPixel( aPos );
                         if ( !mbCustomizeMode )
                             it->mpWindow->Show();
