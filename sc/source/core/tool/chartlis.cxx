@@ -577,6 +577,7 @@ void ScChartListenerCollection::FreeUno( const uno::Reference< chart::XChartData
     }
 
     // Release all pointers currently managed by the ptr_map container.
+    // coverity[leaked_storage] - no leak, because because we will take care of them below
     maListeners.release().release();
 
     // Re-insert the listeners we need to keep.
