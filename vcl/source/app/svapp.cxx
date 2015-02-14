@@ -1633,7 +1633,12 @@ void Application::setDeInitHook(Link const & hook) {
 void ImplDelData::AttachToWindow( const vcl::Window* pWindow )
 {
     if( pWindow )
-        const_cast<vcl::Window*>(pWindow)->ImplAddDel( this );
+    {
+        if( pWindow->IsDisposed() )
+            mbDel = true;
+        else
+            const_cast<vcl::Window*>(pWindow)->ImplAddDel( this );
+    }
 }
 
 // define dtor for ImplDelData

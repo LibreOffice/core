@@ -421,7 +421,6 @@ private:
     ::OutputDevice* mpOutputDevice;
 
     mutable int mnRefCnt;         // reference count
-    bool        mbInDtor = false; // true: We're still in Window-Dtor
 
 #ifdef DBG_UTIL
     friend const char* ::ImplDbgCheckWindow( const void* pObj );
@@ -772,6 +771,7 @@ public:
     bool                                IsMenuFloatingWindow() const;
     bool                                IsToolbarFloatingWindow() const;
     bool                                IsTopWindow() const;
+    bool                                IsDisposed() const;
     SystemWindow*                       GetSystemWindow() const;
 
     void                                EnableAllResize( bool bEnable = true );

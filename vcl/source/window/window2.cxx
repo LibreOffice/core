@@ -1215,22 +1215,22 @@ bool Window::IsControlBackground() const
 
 bool Window::IsInPaint() const
 {
-    return mpWindowImpl->mbInPaint;
+    return mpWindowImpl ? mpWindowImpl->mbInPaint : false;
 }
 
 vcl::Window* Window::GetParent() const
 {
-    return mpWindowImpl->mpRealParent;
+    return mpWindowImpl ? mpWindowImpl->mpRealParent : NULL;
 }
 
 bool Window::IsVisible() const
 {
-    return mpWindowImpl->mbVisible;
+    return mpWindowImpl ? mpWindowImpl->mbVisible : false;
 }
 
 bool Window::IsReallyVisible() const
 {
-    return mpWindowImpl->mbReallyVisible;
+    return mpWindowImpl ? mpWindowImpl->mbReallyVisible : false;
 }
 
 bool Window::IsReallyShown() const
@@ -1370,8 +1370,8 @@ bool Window::IsCreatedWithToolkit() const
 void Window::SetCreatedWithToolkit( bool b )
 {
     mpWindowImpl->mbCreatedWithToolkit = b;
-
 }
+
 const Pointer& Window::GetPointer() const
 {
     return mpWindowImpl->maPointer;
@@ -1442,6 +1442,9 @@ void Window::InvalidateSizeCache()
 
 void Window::queue_resize(StateChangedType eReason)
 {
+    if (IsDisposed())
+        return;
+
     bool bSomeoneCares = queue_ungrouped_resize(this);
 
     if (eReason != StateChangedType::VISIBLE)

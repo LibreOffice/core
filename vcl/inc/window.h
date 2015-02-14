@@ -355,7 +355,6 @@ public:
                         mbCompoundControlHasFocus:1,
                         mbPaintDisabled:1,
                         mbAllResize:1,
-                        mbInDtor:1,
                         mbInDispose:1,
                         mbExtTextInput:1,
                         mbInFocusHdl:1,

@@ -221,6 +221,9 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     {
         pWindow->ImplAddDel( &aDelData );
 
+        if ( aDelData.IsDead() )
+            return;
+
         pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
 
         if ( aDelData.IsDead() )

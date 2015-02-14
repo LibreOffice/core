@@ -632,7 +632,7 @@ void Window::EnableAlwaysOnTop( bool bEnable )
 
 bool Window::IsTopWindow() const
 {
-    if ( mpWindowImpl->mbInDtor )
+    if ( !mpWindowImpl || mpWindowImpl->mbInDispose )
         return false;
 
     // topwindows must be frames or they must have a borderwindow which is a frame

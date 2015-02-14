@@ -131,9 +131,14 @@ namespace
 }
 #endif
 
+bool Window::IsDisposed() const
+{
+    return !mpWindowImpl;
+}
+
 void Window::dispose()
 {
-    if (!mpWindowImpl)
+    if (IsDisposed())
         return;
 
     assert( !mpWindowImpl->mbInDispose && "vcl::Window - already in dispose()" );
@@ -571,8 +576,6 @@ void Window::dispose()
 
 Window::~Window()
 {
-    DBG_ASSERT( !mbInDtor, "~Window - already in DTOR!" );
-    mbInDtor = true;
     vcl::LazyDeletor<vcl::Window>::Undelete( this );
     dispose();
 }
@@ -1197,8 +1200,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mpOutputDevice = (OutputDevice*)this;
 
     mnRefCnt = 0;
-    mbInDtor = false;                     // true: We're still in Window-Dtor
-
     mpWindowImpl = new WindowImpl( nType );
 
     meOutDevType        = OUTDEV_WINDOW;
@@ -1363,6 +1364,12 @@ void Window::ImplSetReallyVisible()
 
 void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
+    if ( IsDisposed() )
+    {
+        pDel->mbDel = true;
+        return;
+    }
+
     DBG_ASSERT( !pDel->mpWindow, "Window::ImplAddDel(): cannot add ImplDelData twice !" );
     if( !pDel->mpWindow )
     {
@@ -1375,6 +1382,10 @@ void Window::ImplAddDel( ImplDelData* pDel ) // TODO: make "const" when incompat
 void Window::ImplRemoveDel( ImplDelData* pDel ) // TODO: make "const" when incompatibility ok
 {
     pDel->mpWindow = NULL;      // #112873# pDel is not associated with a Window anymore
+
+    if ( IsDisposed() )
+        return;
+
     if ( mpWindowImpl->mpFirstDel == pDel )
         mpWindowImpl->mpFirstDel = pDel->mpNext;
     else
