@@ -73,7 +73,7 @@
 #include "cursor.hxx"
 #include "accessibility.hxx"
 #include "ElementsDockingWindow.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define MINZOOM         25
 #define MAXZOOM         800
@@ -563,8 +563,8 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
             {
                 GetParent()->ToTop();
                 SmResId aResId( RID_VIEWMENU );
-                boost::scoped_ptr<PopupMenu> pPopupMenu(new PopupMenu(aResId));
-                pPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
+                std::unique_ptr<PopupMenu> xPopupMenu(new PopupMenu(aResId));
+                xPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
                     aPos = rCEvt.GetMousePosPixel();
@@ -1738,7 +1738,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             if ( !GetViewFrame()->GetFrame().IsInPlace() )
             {
-                boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
+                std::unique_ptr<AbstractSvxZoomDialog> xDlg;
                 const SfxItemSet *pSet = rReq.GetArgs();
                 if ( !pSet )
                 {
@@ -1747,11 +1747,11 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet));
-                        SAL_WARN_IF( !pDlg, "starmath", "Dialog creation failed!" );
-                        pDlg->SetLimits( MINZOOM, MAXZOOM );
-                        if( pDlg->Execute() != RET_CANCEL )
-                            pSet = pDlg->GetOutputItemSet();
+                        xDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet));
+                        SAL_WARN_IF( !xDlg, "starmath", "Dialog creation failed!" );
+                        xDlg->SetLimits( MINZOOM, MAXZOOM );
+                        if (xDlg->Execute() != RET_CANCEL)
+                            pSet = xDlg->GetOutputItemSet();
                     }
                 }
                 if ( pSet )

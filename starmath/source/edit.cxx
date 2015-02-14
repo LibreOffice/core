@@ -49,7 +49,7 @@
 #include "document.hxx"
 #include "config.hxx"
 #include "accessibility.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define SCROLL_LINE         24
 
@@ -337,7 +337,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         GetParent()->ToTop();
 
         Point aPoint = rCEvt.GetMousePosPixel();
-        boost::scoped_ptr<PopupMenu> pPopupMenu(new PopupMenu(SmResId(RID_COMMANDMENU)));
+        std::unique_ptr<PopupMenu> xPopupMenu(new PopupMenu(SmResId(RID_COMMANDMENU)));
 
         // added for replaceability of context menus
         Menu* pMenu = NULL;
@@ -346,17 +346,17 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         aEvent.ExecutePosition.X = aPoint.X();
         aEvent.ExecutePosition.Y = aPoint.Y();
         OUString sDummy;
-        if ( GetView()->TryContextMenuInterception( *pPopupMenu, sDummy, pMenu, aEvent ) )
+        if ( GetView()->TryContextMenuInterception( *xPopupMenu, sDummy, pMenu, aEvent ) )
         {
             if ( pMenu )
             {
-                pPopupMenu.reset(static_cast<PopupMenu*>(pMenu));
+                xPopupMenu.reset(static_cast<PopupMenu*>(pMenu));
             }
         }
 
-        pPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
+        xPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
 
-        pPopupMenu->Execute( this, aPoint );
+        xPopupMenu->Execute( this, aPoint );
         bForwardEvt = false;
     }
     else if (rCEvt.GetCommand() == COMMAND_WHEEL)
@@ -1088,21 +1088,19 @@ void SmEditWindow::Flush()
     }
 }
 
-
 void SmEditWindow::DeleteEditView( SmViewShell & /*rView*/ )
 {
     if (pEditView)
     {
-        boost::scoped_ptr<EditEngine> pEditEngine(pEditView->GetEditEngine());
-        if (pEditEngine)
+        std::unique_ptr<EditEngine> xEditEngine(pEditView->GetEditEngine());
+        if (xEditEngine)
         {
-            pEditEngine->SetStatusEventHdl( Link() );
-            pEditEngine->RemoveView( pEditView );
+            xEditEngine->SetStatusEventHdl( Link() );
+            xEditEngine->RemoveView( pEditView );
         }
         pEditView = 0;
     }
 }
-
 
 uno::Reference< XAccessible > SmEditWindow::CreateAccessible()
 {

@@ -19,7 +19,7 @@
 #include <cursor.hxx>
 
 #include "mock-visitor.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 typedef tools::SvRef<SmDocShell> SmDocShellRef;
 
@@ -447,7 +447,7 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
         output2);
 
     // auxiliary test for Accept()
-    boost::scoped_ptr<MockVisitor> mv(new MockVisitor);
+    std::unique_ptr<MockVisitor> mv(new MockVisitor);
     pNode1->Accept(mv.get());
     pNode2->Accept(mv.get());
 
@@ -473,7 +473,7 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
         sOutput);
 
     // auxiliary test for Accept()
-    boost::scoped_ptr<MockVisitor> mv(new MockVisitor);
+    std::unique_ptr<MockVisitor> mv(new MockVisitor);
     pNode->Accept(mv.get());
 
     delete pNode;
@@ -500,7 +500,7 @@ void Test::ParseAndCompare(const char *formula1, const char *formula2, const cha
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name, sOutput1, sOutput2);
 
     // auxiliary test for Accept()
-    boost::scoped_ptr<MockVisitor> mv(new MockVisitor);
+    std::unique_ptr<MockVisitor> mv(new MockVisitor);
     pNode1->Accept(mv.get());
     pNode2->Accept(mv.get());
 

@@ -94,7 +94,7 @@
 #include <tools/diagnose_ex.h>
 #include "visitors.hxx"
 #include "accessibility.hxx"
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -989,15 +989,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pDev = &SM_MOD()->GetDefaultVirtualDev();
             OSL_ENSURE (pDev, "device for font list missing" );
 
-            boost::scoped_ptr<SmFontTypeDialog> pFontTypeDialog(new SmFontTypeDialog( NULL, pDev ));
+            std::unique_ptr<SmFontTypeDialog> xFontTypeDialog(new SmFontTypeDialog( NULL, pDev ));
 
             SmFormat aOldFormat  = GetFormat();
-            pFontTypeDialog->ReadFrom( aOldFormat );
-            if (pFontTypeDialog->Execute() == RET_OK)
+            xFontTypeDialog->ReadFrom( aOldFormat );
+            if (xFontTypeDialog->Execute() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                pFontTypeDialog->WriteTo(aNewFormat);
+                xFontTypeDialog->WriteTo(aNewFormat);
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
                     pTmpUndoMgr->AddUndoAction(
@@ -1011,15 +1011,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_FONTSIZE:
         {
-            boost::scoped_ptr<SmFontSizeDialog> pFontSizeDialog(new SmFontSizeDialog(NULL));
+            std::unique_ptr<SmFontSizeDialog> xFontSizeDialog(new SmFontSizeDialog(NULL));
 
             SmFormat aOldFormat  = GetFormat();
-            pFontSizeDialog->ReadFrom( aOldFormat );
-            if (pFontSizeDialog->Execute() == RET_OK)
+            xFontSizeDialog->ReadFrom( aOldFormat );
+            if (xFontSizeDialog->Execute() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                pFontSizeDialog->WriteTo(aNewFormat);
+                xFontSizeDialog->WriteTo(aNewFormat);
 
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
@@ -1034,15 +1034,15 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_DISTANCE:
         {
-            boost::scoped_ptr<SmDistanceDialog> pDistanceDialog(new SmDistanceDialog(NULL));
+            std::unique_ptr<SmDistanceDialog> xDistanceDialog(new SmDistanceDialog(NULL));
 
             SmFormat aOldFormat  = GetFormat();
-            pDistanceDialog->ReadFrom( aOldFormat );
-            if (pDistanceDialog->Execute() == RET_OK)
+            xDistanceDialog->ReadFrom( aOldFormat );
+            if (xDistanceDialog->Execute() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                pDistanceDialog->WriteTo(aNewFormat);
+                xDistanceDialog->WriteTo(aNewFormat);
 
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();
                 if (pTmpUndoMgr)
@@ -1057,19 +1057,19 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_ALIGN:
         {
-            boost::scoped_ptr<SmAlignDialog> pAlignDialog(new SmAlignDialog(NULL));
+            std::unique_ptr<SmAlignDialog> xAlignDialog(new SmAlignDialog(NULL));
 
             SmFormat aOldFormat  = GetFormat();
-            pAlignDialog->ReadFrom( aOldFormat );
-            if (pAlignDialog->Execute() == RET_OK)
+            xAlignDialog->ReadFrom( aOldFormat );
+            if (xAlignDialog->Execute() == RET_OK)
             {
                 SmFormat aNewFormat( aOldFormat );
 
-                pAlignDialog->WriteTo(aNewFormat);
+                xAlignDialog->WriteTo(aNewFormat);
 
                 SmModule *pp = SM_MOD();
                 SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
-                pAlignDialog->WriteTo( aFmt );
+                xAlignDialog->WriteTo( aFmt );
                 pp->GetConfig()->SetStandardFormat( aFmt );
 
                 ::svl::IUndoManager *pTmpUndoMgr = GetUndoManager();

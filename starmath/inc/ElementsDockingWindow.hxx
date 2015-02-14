@@ -20,7 +20,6 @@
 #ifndef INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 #define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/signals2/signal.hpp>
 #include <sfx2/dockwin.hxx>
 #include <svx/dlgctrl.hxx>
@@ -97,7 +96,7 @@ class SmElementsControl : public Control
     SmElementList maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
-    boost::scoped_ptr< ScrollBar > mpScroll;
+    std::unique_ptr<ScrollBar> mxScroll;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 

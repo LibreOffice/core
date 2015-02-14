@@ -222,7 +222,7 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
     , maCurrentSetId(0)
     , mpCurrentElement(NULL)
     , mbVerticalMode(true)
-    , mpScroll(new ScrollBar(this, WB_VERT))
+    , mxScroll(new ScrollBar(this, WB_VERT))
 {
     SetMapMode( MapMode(MAP_100TH_MM) );
     SetDrawMode( DRAWMODE_DEFAULT );
@@ -231,8 +231,8 @@ SmElementsControl::SmElementsControl(vcl::Window *pParent)
 
     maFormat.SetBaseSize(PixelToLogic(Size(0, SmPtsTo100th_mm(12))));
 
-    mpScroll->SetScrollHdl( LINK(this, SmElementsControl, ScrollHdl) );
-    mpScroll->Show();
+    mxScroll->SetScrollHdl( LINK(this, SmElementsControl, ScrollHdl) );
+    mxScroll->Show();
 }
 
 SmElementsControl::~SmElementsControl()
@@ -249,7 +249,7 @@ void SmElementsControl::Paint(const Rectangle&)
 {
     Push();
 
-    bool bOldVisibleState = mpScroll->IsVisible();
+    bool bOldVisibleState = mxScroll->IsVisible();
 
     sal_Int32 nScrollbarWidth = bOldVisibleState ? GetSettings().GetStyleSettings().GetScrollBarSize() : 0;
 
@@ -260,7 +260,7 @@ void SmElementsControl::Paint(const Rectangle&)
     sal_Int32 boxY = maMaxElementDimensions.Height() + 10;
 
     sal_Int32 x = 0;
-    sal_Int32 y = -mpScroll->GetThumbPos();
+    sal_Int32 y = -mxScroll->GetThumbPos();
 
     sal_Int32 perLine = 0;
 
@@ -351,24 +351,24 @@ void SmElementsControl::Paint(const Rectangle&)
         }
     }
 
-    sal_Int32 nTotalControlHeight = y + boxY + mpScroll->GetThumbPos();
+    sal_Int32 nTotalControlHeight = y + boxY + mxScroll->GetThumbPos();
 
     if (nTotalControlHeight > GetOutputSizePixel().Height())
     {
-        mpScroll->SetRangeMax(nTotalControlHeight);
-        mpScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
-        mpScroll->SetVisibleSize(nControlHeight);
-        mpScroll->Show();
+        mxScroll->SetRangeMax(nTotalControlHeight);
+        mxScroll->SetPosSizePixel(Point(nControlWidth, 0), Size(nScrollbarWidth, nControlHeight));
+        mxScroll->SetVisibleSize(nControlHeight);
+        mxScroll->Show();
     }
     else
     {
-        mpScroll->SetThumbPos(0);
-        mpScroll->Hide();
+        mxScroll->SetThumbPos(0);
+        mxScroll->Hide();
     }
 
     // If scrollbar visibility changed, we have to go through the
     // calculation once more, see nScrollbarWidth
-    if (bOldVisibleState != mpScroll->IsVisible())
+    if (bOldVisibleState != mxScroll->IsVisible())
         Invalidate();
 
     Pop();
@@ -428,17 +428,17 @@ void SmElementsControl::MouseButtonDown(const MouseEvent& rMouseEvent)
 
 IMPL_LINK_NOARG( SmElementsControl, ScrollHdl )
 {
-    DoScroll(mpScroll->GetDelta());
+    DoScroll(mxScroll->GetDelta());
     return 0;
 }
 
 void SmElementsControl::DoScroll(long nDelta)
 {
-    Point aNewPoint = mpScroll->GetPosPixel();
+    Point aNewPoint = mxScroll->GetPosPixel();
     Rectangle aRect(Point(), GetOutputSize());
-    aRect.Right() -= mpScroll->GetSizePixel().Width();
+    aRect.Right() -= mxScroll->GetSizePixel().Width();
     Scroll( 0, -nDelta, aRect );
-    mpScroll->SetPosPixel(aNewPoint);
+    mxScroll->SetPosPixel(aNewPoint);
     Invalidate();
 }
 
