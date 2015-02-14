@@ -193,7 +193,7 @@ public:
                                sal_Int32 nFileFormat,
                                bool bTemplate = false ) const SAL_OVERRIDE;
 
-    virtual std::vector<Color> GetDocColors() SAL_OVERRIDE;
+    virtual std::set<Color> GetDocColors() SAL_OVERRIDE;
 
     virtual bool    InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& ) SAL_OVERRIDE;
     virtual bool    Load( SfxMedium& rMedium ) SAL_OVERRIDE;

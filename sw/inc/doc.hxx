@@ -1668,7 +1668,7 @@ public:
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
 
-    std::vector<Color> GetDocColors();
+    std::set<Color> GetDocColors();
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

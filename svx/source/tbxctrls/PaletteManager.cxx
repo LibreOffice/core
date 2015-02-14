@@ -104,10 +104,10 @@ void PaletteManager::ReloadColorSet(SvxColorValueSet &rColorSet)
     else if( mnCurrentPalette == mnNumOfPalettes - 1 )
     {
         // Add doc colors to palette
-        std::vector<Color> aColors = pDocSh->GetDocColors();
+        std::set<Color> aColors = pDocSh->GetDocColors();
         mnColorCount = aColors.size();
         rColorSet.Clear();
-        rColorSet.addEntriesForColorVector(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
+        rColorSet.addEntriesForColorSet(aColors, SVX_RESSTR( RID_SVXSTR_DOC_COLOR_PREFIX ) + " " );
     }
     else
     {

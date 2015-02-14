@@ -205,7 +205,7 @@ void ScDocShell::FillClass( SvGlobalName* pClassName,
     }
 }
 
-std::vector<Color> ScDocShell::GetDocColors()
+std::set<Color> ScDocShell::GetDocColors()
 {
     return aDocument.GetDocColors();
 }

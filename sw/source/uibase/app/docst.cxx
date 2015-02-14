@@ -1225,7 +1225,7 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
     return nFamily;
 }
 
-std::vector<Color> SwDocShell::GetDocColors()
+std::set<Color> SwDocShell::GetDocColors()
 {
     return mpDoc->GetDocColors();
 }
