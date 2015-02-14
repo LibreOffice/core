@@ -21,6 +21,7 @@
 
 #include <svtools/valueset.hxx>
 #include <svx/svxdllapi.h>
+#include <set>
 
 class XColorList;
 
@@ -36,7 +37,7 @@ public:
     sal_uInt32 getColumnCount() const;
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
-    void addEntriesForColorVector(const std::vector<Color>& rColorVector, const OUString& rNamePrefix, sal_uInt32 nStartIndex = 1);
+    void addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix, sal_uInt32 nStartIndex = 1);
     Size layoutAllVisible(sal_uInt32 nEntryCount);
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };

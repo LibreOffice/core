@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/CmisVersion.hpp>
 #include <boost/shared_ptr.hpp>
+#include <set>
 
 #include <vcl/timer.hxx>
 #include <svl/poolitem.hxx>
@@ -489,7 +490,7 @@ public:
 #define CONTENT_MACRO 2
 
 
-    virtual std::vector<Color> GetDocColors();
+    virtual std::set<Color> GetDocColors();
 
     virtual void                LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );

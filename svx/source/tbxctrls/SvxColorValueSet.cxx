@@ -80,20 +80,20 @@ void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sa
     }
 }
 
-void SvxColorValueSet::addEntriesForColorVector(const std::vector<Color>& rColorVector, const OUString& rNamePrefix, sal_uInt32 nStartIndex)
+void SvxColorValueSet::addEntriesForColorSet(const std::set<Color>& rColorSet, const OUString& rNamePrefix, sal_uInt32 nStartIndex)
 {
     if(rNamePrefix.getLength() != 0)
     {
-        for(std::vector<Color>::const_iterator it = rColorVector.begin();
-            it != rColorVector.end(); ++it, nStartIndex++)
+        for(std::set<Color>::const_iterator it = rColorSet.begin();
+            it != rColorSet.end(); ++it, nStartIndex++)
         {
             InsertItem(nStartIndex, *it, rNamePrefix + OUString::number(nStartIndex));
         }
     }
     else
     {
-        for(std::vector<Color>::const_iterator it = rColorVector.begin();
-            it != rColorVector.end(); ++it, nStartIndex++)
+        for(std::set<Color>::const_iterator it = rColorSet.begin();
+            it != rColorSet.end(); ++it, nStartIndex++)
         {
             InsertItem(nStartIndex, *it, "");
         }

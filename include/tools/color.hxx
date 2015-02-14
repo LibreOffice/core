@@ -112,6 +112,11 @@ public:
                                 sal_uInt8((rBColor.getBlue() * 255.0) + 0.5));
                         }
 
+                        bool operator<(const Color& b) const
+                        {
+                            return mnColor < b.GetColor();
+                        }
+
     void                SetRed( sal_uInt8 nRed );
     sal_uInt8           GetRed() const { return COLORDATA_RED( mnColor ); }
     void                SetGreen( sal_uInt8 nGreen );

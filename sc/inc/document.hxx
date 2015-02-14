@@ -1863,7 +1863,7 @@ public:
 
     void CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellValues& rSrc );
 
-    std::vector<Color> GetDocColors();
+    std::set<Color> GetDocColors();
 
 private:
     ScDocument(const ScDocument& r) SAL_DELETED_FUNCTION;

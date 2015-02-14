@@ -1919,9 +1919,9 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
 }
 
-std::vector<Color> SwDoc::GetDocColors()
+std::set<Color> SwDoc::GetDocColors()
 {
-    std::vector<Color> aDocColors;
+    std::set<Color> aDocColors;
     SwAttrPool& rPool = GetAttrPool();
     const sal_uInt16 pAttribs[] = {RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND};
     for (size_t i=0; i<SAL_N_ELEMENTS(pAttribs); i++)
@@ -1934,10 +1934,8 @@ std::vector<Color> SwDoc::GetDocColors()
             if (pItem == 0)
                 continue;
             Color aColor( pItem->GetValue() );
-            if (COL_AUTO == aColor.GetColor())
-                continue;
-            if (std::find(aDocColors.begin(), aDocColors.end(), aColor) == aDocColors.end())
-                aDocColors.push_back(aColor);
+            if (COL_AUTO != aColor.GetColor())
+                aDocColors.insert(aColor);
         }
     }
     return aDocColors;

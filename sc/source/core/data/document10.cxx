@@ -156,9 +156,9 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
     pTab->CopyCellValuesFrom(rTopPos.Col(), rTopPos.Row(), rSrc);
 }
 
-std::vector<Color> ScDocument::GetDocColors()
+std::set<Color> ScDocument::GetDocColors()
 {
-    std::vector<Color> aDocColors;
+    std::set<Color> aDocColors;
     ScDocumentPool *pPool = GetPool();
     const sal_uInt16 pAttribs[] = {ATTR_BACKGROUND, ATTR_FONT_COLOR};
     for (size_t i=0; i<SAL_N_ELEMENTS( pAttribs ); i++)
@@ -171,10 +171,8 @@ std::vector<Color> ScDocument::GetDocColors()
             if (pItem == 0)
                 continue;
             Color aColor( pItem->GetValue() );
-            if (COL_AUTO == aColor.GetColor())
-                continue;
-            if (std::find(aDocColors.begin(), aDocColors.end(), aColor) == aDocColors.end())
-                aDocColors.push_back(aColor);
+            if (COL_AUTO != aColor.GetColor())
+                aDocColors.insert(aColor);
         }
     }
     return aDocColors;
