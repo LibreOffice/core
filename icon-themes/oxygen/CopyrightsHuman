@@ -26,17 +26,9 @@ Copyright 2004-2006 by Canonical Ltd. Available under the terms of the Creative 
 /res/folderop.png
 /res/fp015.png
 /res/newdoc.png
-/res/sc05505.png
-/res/lc05505.png 
-/res/lc05700.png 
-/res/lc05505.png
-/res/lc05700.png
-/res/lc05701.png
-/res/sc06331.png
 
 Copyright 2004-2006 by Canonical Ltd, Modifications Copyright 2007 by Gabriel Hurley. Available under the terms of the Creative Commons Attribution-ShareAlike 2.5 License (Source: human-icon-theme)
-/res/lc05508.png
-/res/sc05508.png
+-None-
 
 Copyright 2005-2006 by Jakub Steiner and Novell Inc., Copyright 2004-2006 by Canonical Ltd., Combined by Gabriel Hurley 2006. Available under the terms of the LGPL (combination of human-icon-theme and OpenOffice Industrial Icons)
 /cmd/lc_convertinto3d.png
@@ -52,9 +44,6 @@ Copyright 2005-2006 by Jakub Steiner and Novell Inc., Copyright 2004-2006 by Can
 /cmd/lc_gotoendofdoc.png 
 /cmd/lc_gotostartofdoc.png 
 /res/browse.png 
-/res/lc10627.png 
-/res/lc10630.png 
-/res/sc10630.png 
 
 Copyright 2005-2006 by Jakub Steiner and Novell Inc., Copyright 2004-2006 by Canonical Ltd., Combined by Gabriel Hurley 2006. Available under the terms of the LGPL (combination of human-icon-theme and OpenOffice Tango Icons)
 /cmd/lc_recundo.png
