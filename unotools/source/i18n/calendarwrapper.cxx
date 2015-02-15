@@ -122,41 +122,6 @@ double CalendarWrapper::getDateTime() const
     return 0.0;
 }
 
-sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
-        sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const
-{
-    sal_Int32 nOffset = 0;
-    try
-    {
-        if ( xC.is() )
-        {
-            nOffset = static_cast<sal_Int32>( xC->getValue( nParentFieldIndex )) * 60000;
-            sal_Int16 nSecondMillis = xC->getValue( nChildFieldIndex );
-            if (nOffset < 0)
-                nOffset -= static_cast<sal_uInt16>( nSecondMillis);
-            else
-                nOffset += static_cast<sal_uInt16>( nSecondMillis);
-        }
-    }
-    catch (const Exception& e)
-    {
-        SAL_WARN( "unotools.i18n", "getCombinedOffsetInMillis: Exception caught " << e.Message );
-    }
-    return nOffset;
-}
-
-sal_Int32 CalendarWrapper::getZoneOffsetInMillis() const
-{
-    return getCombinedOffsetInMillis( CalendarFieldIndex::ZONE_OFFSET,
-            CalendarFieldIndex::ZONE_OFFSET_SECOND_MILLIS);
-}
-
-sal_Int32 CalendarWrapper::getDSTOffsetInMillis() const
-{
-    return getCombinedOffsetInMillis( CalendarFieldIndex::DST_OFFSET,
-            CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
-}
-
 void CalendarWrapper::setLocalDateTime( double fTimeInDays )
 {
     try

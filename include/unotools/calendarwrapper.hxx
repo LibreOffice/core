@@ -76,13 +76,6 @@ public:
     sal_Int16 getNumberOfDaysInWeek() const;
     OUString getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int16 nIdx, sal_Int16 nNameType ) const;
 
-    /** Convenience method to get timezone offset in milliseconds, taking both
-        fields ZONE_OFFSET and ZONE_OFFSET_SECOND_MILLIS into account. */
-    sal_Int32 getZoneOffsetInMillis() const;
-    /** Convenience method to get DST offset in milliseconds, taking both
-        fields DST_OFFSET and DST_OFFSET_SECOND_MILLIS into account. */
-    sal_Int32 getDSTOffsetInMillis() const;
-
     // wrapper implementations of XExtendedCalendar
 
     OUString getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode ) const;
@@ -115,14 +108,6 @@ public:
     /// get the DateTime as a local (!) Gregorian DateTime
     inline  DateTime            getGregorianDateTime() const
                                     { return aEpochStart + getLocalDateTime(); }
-
-private:
-
-    /** get timezone or DST offset in milliseconds, fields are
-        CalendarFieldIndex ZONE_OFFSET and ZONE_OFFSET_SECOND_MILLIS
-        respectively DST_OFFSET and DST_OFFSET_SECOND_MILLIS.
-     */
-    sal_Int32 getCombinedOffsetInMillis( sal_Int16 nParentFieldIndex, sal_Int16 nChildFieldIndex ) const;
 };
 
 #endif

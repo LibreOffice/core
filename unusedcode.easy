@@ -1,6 +1,4 @@
 BigInt::BigInt(unsigned int)
-CalendarWrapper::getDSTOffsetInMillis() const
-CalendarWrapper::getZoneOffsetInMillis() const
 FontCharMap::GetDefaultMap(bool)
 LineListBox::Clear()
 LineListBox::InsertEntry(rtl::OUString const&, int)
