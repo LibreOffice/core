@@ -144,6 +144,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         }
     }
 
+    @Override
     public void run() {
         try {
             while (true) {
@@ -193,6 +194,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         if (!LOKitShell.isEditingEnabled()) {
             return;
         }
+        if (mTileProvider == null) {
+            return;
+        }
         if (keyEventType == "KeyPress") {
             mTileProvider.keyPress(keyEvent);
         } else if (keyEventType.equals("KeyRelease")) {
@@ -205,6 +209,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
      */
     private void touch(String touchType, MotionEvent motionEvent, PointF mDocumentTouchCoordinate) {
         if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
+        if (mTileProvider == null) {
             return;
         }
         LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
