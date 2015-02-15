@@ -3330,7 +3330,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_INFO;
             U2S( HID_FUNC_ISTGERADE );
             1;  0;
             0;
@@ -3354,7 +3354,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         ExtraData =
         {
             0;
-            ID_FUNCTION_GRP_MATH;
+            ID_FUNCTION_GRP_INFO;
             U2S( HID_FUNC_ISTUNGERADE );
             1;  0;
             0;
