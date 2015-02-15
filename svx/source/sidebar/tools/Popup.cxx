@@ -29,86 +29,71 @@ Popup::Popup (
     vcl::Window* pParent,
     const ::boost::function<PopupControl*(PopupContainer*)>& rControlCreator,
     const ::rtl::OUString& rsAccessibleName)
-    : mpControl(),
+    : mxControl(),
       mpParent(pParent),
       maControlCreator(rControlCreator),
       maPopupModeEndCallback(),
       msAccessibleName(rsAccessibleName),
-      mpContainer()
+      mxContainer()
 {
     OSL_ASSERT(mpParent!=NULL);
     OSL_ASSERT(maControlCreator);
 }
 
-
-
-
 Popup::~Popup (void)
 {
-    mpControl.reset();
-    mpContainer.reset();
+    mxControl.reset();
+    mxContainer.reset();
 }
-
-
-
 
 void Popup::Show (ToolBox& rToolBox)
 {
     rToolBox.SetItemDown(rToolBox.GetCurItemId(), true);
 
     ProvideContainerAndControl();
-    if ( ! (mpContainer && mpControl))
+    if ( ! (mxContainer && mxControl))
     {
-        OSL_ASSERT(mpContainer);
-        OSL_ASSERT(mpControl);
+        OSL_ASSERT(mxContainer);
+        OSL_ASSERT(mxControl);
         return;
     }
 
-    if ( !mpContainer->IsInPopupMode() )
+    if ( !mxContainer->IsInPopupMode() )
     {
-        mpContainer->SetSizePixel(mpControl->GetOutputSizePixel());
+        mxContainer->SetSizePixel(mxControl->GetOutputSizePixel());
 
         const Point aPos (rToolBox.GetParent()->OutputToScreenPixel(rToolBox.GetPosPixel()));
         const Size aSize (rToolBox.GetSizePixel());
         const Rectangle aRect (aPos, aSize);
 
-        mpContainer->StartPopupMode(
+        mxContainer->StartPopupMode(
             aRect,
             FLOATWIN_POPUPMODE_NOFOCUSCLOSE|FLOATWIN_POPUPMODE_DOWN);
-        mpContainer->SetPopupModeFlags(
-            mpContainer->GetPopupModeFlags()
+        mxContainer->SetPopupModeFlags(
+            mxContainer->GetPopupModeFlags()
                 | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
 
-        mpControl->GetFocus();
+        mxControl->GetFocus();
     }
 }
 
-
-
-
 void Popup::Hide (void)
 {
-    if (mpContainer)
-        if (mpContainer->IsInPopupMode())
-            mpContainer->EndPopupMode();
+    if (mxContainer)
+        if (mxContainer->IsInPopupMode())
+            mxContainer->EndPopupMode();
 }
-
-
-
 
 void Popup::SetPopupModeEndHandler (const ::boost::function<void(void)>& rCallback)
 {
     maPopupModeEndCallback = rCallback;
-    if (mpContainer)
-        mpContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
+    if (mxContainer)
+        mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
 }
-
-
-
 
 void Popup::ProvideContainerAndControl (void)
 {
-    if ( ! (mpContainer && mpControl)
+    if ( ! (mxContainer && mxControl)
         && mpParent!=NULL
         && maControlCreator)
     {
@@ -116,21 +101,15 @@ void Popup::ProvideContainerAndControl (void)
     }
 }
 
-
-
-
 void Popup::CreateContainerAndControl (void)
 {
-    mpContainer.reset(new PopupContainer(mpParent));
-    mpContainer->SetAccessibleName(msAccessibleName);
-    mpContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
-    mpContainer->SetBorderStyle(mpContainer->GetBorderStyle() | WindowBorderStyle::MENU);
+    mxContainer.reset(new PopupContainer(mpParent));
+    mxContainer->SetAccessibleName(msAccessibleName);
+    mxContainer->SetPopupModeEndHdl(LINK(this, Popup, PopupModeEndHandler));
+    mxContainer->SetBorderStyle(mxContainer->GetBorderStyle() | WindowBorderStyle::MENU);
 
-    mpControl.reset(maControlCreator(mpContainer.get()));
+    mxControl.reset(maControlCreator(mxContainer.get()));
 }
-
-
-
 
 IMPL_LINK(Popup, PopupModeEndHandler, void*, EMPTYARG)
 {
@@ -138,8 +117,8 @@ IMPL_LINK(Popup, PopupModeEndHandler, void*, EMPTYARG)
         maPopupModeEndCallback();
 
     // Popup control is no longer needed and can be destroyed.
-    mpControl.reset();
-    mpContainer.reset();
+    mxControl.reset();
+    mxContainer.reset();
 
     return 0;
 }

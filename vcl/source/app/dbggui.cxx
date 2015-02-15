@@ -58,7 +58,6 @@
 
 #include <algorithm>
 #include <boost/scoped_array.hpp>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -809,11 +808,11 @@ void DbgGUIStart()
 
     if ( pData )
     {
-        boost::scoped_ptr<DbgDialog> pDialog(new DbgDialog);
+        std::unique_ptr<DbgDialog> xDialog(new DbgDialog);
         // we switch off dialog tests for the debug dialog
         sal_uLong nOldFlags = pData->nTestFlags;
         pData->nTestFlags &= ~DBG_TEST_DIALOG;
-        if ( !pDialog->Execute() )
+        if (!xDialog->Execute())
             pData->nTestFlags |= (nOldFlags & DBG_TEST_DIALOG);
     }
     else

@@ -24,8 +24,8 @@
 #include <svl/lstner.hxx>
 #include <svx/svxdllapi.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
+#include <memory>
 
 class SvxProtectItem;
 class SvxRulerItem;
@@ -47,19 +47,19 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
     using Window::Notify;
 
     SvxRulerItem**      pCtrlItem;
-    boost::scoped_ptr<SvxLongLRSpaceItem> mpLRSpaceItem;    // left and right edge
-    boost::scoped_ptr<SfxRectangleItem>   mpMinMaxItem;     // maxima for dragging
-    boost::scoped_ptr<SvxLongULSpaceItem> mpULSpaceItem;    // upper and lower edge
-    boost::scoped_ptr<SvxTabStopItem>     mpTabStopItem;    // tab stops
-    boost::scoped_ptr<SvxLRSpaceItem>     mpParaItem;       // paragraphs
-    boost::scoped_ptr<SvxLRSpaceItem>     mpParaBorderItem; // border distance
-    boost::scoped_ptr<SvxPagePosSizeItem> mpPagePosItem;    // page distance to the rule
-    boost::scoped_ptr<SvxColumnItem>      mpColumnItem;     // columns
-    boost::scoped_ptr<SvxObjectItem>      mpObjectItem;     // object
+    std::unique_ptr<SvxLongLRSpaceItem> mxLRSpaceItem;    // left and right edge
+    std::unique_ptr<SfxRectangleItem>   mxMinMaxItem;     // maxima for dragging
+    std::unique_ptr<SvxLongULSpaceItem> mxULSpaceItem;    // upper and lower edge
+    std::unique_ptr<SvxTabStopItem>     mxTabStopItem;    // tab stops
+    std::unique_ptr<SvxLRSpaceItem>     mxParaItem;       // paragraphs
+    std::unique_ptr<SvxLRSpaceItem>     mxParaBorderItem; // border distance
+    std::unique_ptr<SvxPagePosSizeItem> mxPagePosItem;    // page distance to the rule
+    std::unique_ptr<SvxColumnItem>      mxColumnItem;     // columns
+    std::unique_ptr<SvxObjectItem>      mxObjectItem;     // object
 
     vcl::Window*         pEditWin;
 
-    boost::scoped_ptr<SvxRuler_Impl> mpRulerImpl;
+    std::unique_ptr<SvxRuler_Impl> mxRulerImpl;
 
     bool            bAppSetNullOffset :1;
     bool            bHorz :1;

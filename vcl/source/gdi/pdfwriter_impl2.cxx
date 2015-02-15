@@ -42,7 +42,7 @@
 #include "cppuhelper/implbase1.hxx"
 
 #include <rtl/digest.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace vcl;
 using namespace com::sun::star;
@@ -244,11 +244,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 {
     bool bAssertionFired( false );
 
-    boost::scoped_ptr<VirtualDevice> pPrivateDevice;
+    std::unique_ptr<VirtualDevice> xPrivateDevice;
     if( ! pDummyVDev )
     {
-        pPrivateDevice.reset(new VirtualDevice());
-        pDummyVDev = pPrivateDevice.get();
+        xPrivateDevice.reset(new VirtualDevice());
+        pDummyVDev = xPrivateDevice.get();
         pDummyVDev->EnableOutput( false );
         pDummyVDev->SetMapMode( i_rMtf.GetPrefMapMode() );
     }
@@ -431,8 +431,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         if ( nPixelX && nPixelY )
                         {
                             Size aDstSizePixel( nPixelX, nPixelY );
-                            boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice);
-                            if( pVDev->SetOutputSizePixel( aDstSizePixel ) )
+                            std::unique_ptr<VirtualDevice> xVDev(new VirtualDevice);
+                            if( xVDev->SetOutputSizePixel( aDstSizePixel ) )
                             {
                                 Bitmap          aPaint, aMask;
                                 AlphaMask       aAlpha;
@@ -440,8 +440,8 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 MapMode aMapMode( pDummyVDev->GetMapMode() );
                                 aMapMode.SetOrigin( aPoint );
-                                pVDev->SetMapMode( aMapMode );
-                                Size aDstSize( pVDev->PixelToLogic( aDstSizePixel ) );
+                                xVDev->SetMapMode( aMapMode );
+                                Size aDstSize( xVDev->PixelToLogic( aDstSizePixel ) );
 
                                 Point   aMtfOrigin( aTmpMtf.GetPrefMapMode().GetOrigin() );
                                 if ( aMtfOrigin.X() || aMtfOrigin.Y() )
@@ -454,33 +454,33 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                                 // create paint bitmap
                                 aTmpMtf.WindStart();
-                                aTmpMtf.Play( pVDev.get(), aPoint, aDstSize );
+                                aTmpMtf.Play( xVDev.get(), aPoint, aDstSize );
                                 aTmpMtf.WindStart();
 
-                                pVDev->EnableMapMode( false );
-                                aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                                pVDev->EnableMapMode( true );
+                                xVDev->EnableMapMode( false );
+                                aPaint = xVDev->GetBitmap( aPoint, aDstSizePixel );
+                                xVDev->EnableMapMode( true );
 
                                 // create mask bitmap
-                                pVDev->SetLineColor( COL_BLACK );
-                                pVDev->SetFillColor( COL_BLACK );
-                                pVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
-                                pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                                xVDev->SetLineColor( COL_BLACK );
+                                xVDev->SetFillColor( COL_BLACK );
+                                xVDev->DrawRect( Rectangle( aPoint, aDstSize ) );
+                                xVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
                                                     DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
                                 aTmpMtf.WindStart();
-                                aTmpMtf.Play( pVDev.get(), aPoint, aDstSize );
+                                aTmpMtf.Play( xVDev.get(), aPoint, aDstSize );
                                 aTmpMtf.WindStart();
-                                pVDev->EnableMapMode( false );
-                                aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                                pVDev->EnableMapMode( true );
+                                xVDev->EnableMapMode( false );
+                                aMask = xVDev->GetBitmap( aPoint, aDstSizePixel );
+                                xVDev->EnableMapMode( true );
 
                                 // create alpha mask from gradient
-                                pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
-                                pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
-                                pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                                pVDev->EnableMapMode( false );
-                                pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
-                                aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
+                                xVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                                xVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
+                                xVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                                xVDev->EnableMapMode( false );
+                                xVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
+                                aAlpha = xVDev->GetBitmap( aPoint, aDstSizePixel );
                                 implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint, aAlpha ), pDummyVDev, i_rContext );
                             }
                         }

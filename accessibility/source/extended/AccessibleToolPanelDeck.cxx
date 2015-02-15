@@ -229,7 +229,7 @@ namespace accessibility
     AccessibleToolPanelDeck::AccessibleToolPanelDeck( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::ToolPanelDeck& i_rPanelDeck )
         :AccessibleToolPanelDeck_Base( i_rPanelDeck.GetWindowPeer() )
-        ,m_pImpl( new AccessibleToolPanelDeck_Impl( *this, i_rAccessibleParent, i_rPanelDeck ) )
+        ,m_xImpl( new AccessibleToolPanelDeck_Impl( *this, i_rAccessibleParent, i_rPanelDeck ) )
     {
     }
 
@@ -239,11 +239,11 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleToolPanelDeck::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
 
-        sal_Int32 nChildCount( m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
+        sal_Int32 nChildCount( m_xImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
 
-        ::boost::optional< size_t > aActivePanel( m_pImpl->m_pPanelDeck->GetActivePanel() );
+        ::boost::optional< size_t > aActivePanel( m_xImpl->m_pPanelDeck->GetActivePanel() );
         if ( !!aActivePanel )
             return ++nChildCount;
 
@@ -252,62 +252,62 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
 
         const sal_Int32 nChildCount( getAccessibleChildCount() );
         if ( ( i_nIndex < 0 ) || ( i_nIndex >= nChildCount ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
         // first "n" children are provided by the layouter
-        const size_t nLayouterCount( m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
+        const size_t nLayouterCount( m_xImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
         if ( size_t( i_nIndex ) < nLayouterCount )
-            return m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChild(
+            return m_xImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChild(
                 size_t( i_nIndex ),
-                m_pImpl->getOwnAccessible()
+                m_xImpl->getOwnAccessible()
             );
 
         // the last child is the XAccessible of the active panel
-        return m_pImpl->getActivePanelAccessible();
+        return m_xImpl->getActivePanelAccessible();
     }
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
         const Reference< XAccessible > xParent = implGetForeignControlledParent();
         if ( xParent.is() )
             return xParent;
-        return m_pImpl->m_xAccessibleParent;
+        return m_xImpl->m_xAccessibleParent;
     }
 
     sal_Int16 SAL_CALL AccessibleToolPanelDeck::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
         return AccessibleRole::PANEL;
     }
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
 
         const ::Point aRequestedPoint( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) );
         // check the panel window itself
-        const vcl::Window& rActivePanelAnchor( m_pImpl->m_pPanelDeck->GetPanelWindowAnchor() );
+        const vcl::Window& rActivePanelAnchor( m_xImpl->m_pPanelDeck->GetPanelWindowAnchor() );
         const Rectangle aPanelAnchorArea( rActivePanelAnchor.GetPosPixel(), rActivePanelAnchor.GetOutputSizePixel() );
         if ( aPanelAnchorArea.IsInside( aRequestedPoint ) )
             // note that this assumes that the Window which actually implements the concrete panel covers
             // the complete area of its "anchor" Window. But this is ensured by the ToolPanelDeck implementation.
-            return m_pImpl->getActivePanelAccessible();
+            return m_xImpl->getActivePanelAccessible();
 
         // check the XAccessible instances provided by the layouter
         try
         {
-            const ::svt::PDeckLayouter pLayouter( m_pImpl->m_pPanelDeck->GetLayouter() );
+            const ::svt::PDeckLayouter pLayouter( m_xImpl->m_pPanelDeck->GetLayouter() );
             ENSURE_OR_THROW( pLayouter.get() != NULL, "invalid layouter" );
 
             const size_t nLayouterChildren = pLayouter->GetAccessibleChildCount();
             for ( size_t i=0; i<nLayouterChildren; ++i )
             {
-                const Reference< XAccessible > xLayoutItemAccessible( pLayouter->GetAccessibleChild( i, m_pImpl->getOwnAccessible() ), UNO_SET_THROW );
+                const Reference< XAccessible > xLayoutItemAccessible( pLayouter->GetAccessibleChild( i, m_xImpl->getOwnAccessible() ), UNO_SET_THROW );
                 const Reference< XAccessibleComponent > xLayoutItemComponent( xLayoutItemAccessible->getAccessibleContext(), UNO_QUERY_THROW );
                 const ::Rectangle aLayoutItemBounds( VCLUnoHelper::ConvertToVCLRect( xLayoutItemComponent->getBounds() ) );
                 if ( aLayoutItemBounds.IsInside( aRequestedPoint ) )
@@ -324,14 +324,14 @@ namespace accessibility
 
     void SAL_CALL AccessibleToolPanelDeck::grabFocus(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
-        m_pImpl->m_pPanelDeck->GrabFocus();
+        MethodGuard aGuard( *m_xImpl );
+        m_xImpl->m_pPanelDeck->GrabFocus();
     }
 
     void SAL_CALL AccessibleToolPanelDeck::disposing()
     {
         AccessibleToolPanelDeck_Base::disposing();
-        m_pImpl->dispose();
+        m_xImpl->dispose();
     }
 
     Reference< XAccessible > AccessibleToolPanelDeck::GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent )
@@ -345,7 +345,7 @@ namespace accessibility
     void AccessibleToolPanelDeck::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
         AccessibleToolPanelDeck_Base::FillAccessibleStateSet( i_rStateSet );
-        if ( m_pImpl->isDisposed() )
+        if ( m_xImpl->isDisposed() )
         {
             i_rStateSet.AddState( AccessibleStateType::DEFUNC );
         }

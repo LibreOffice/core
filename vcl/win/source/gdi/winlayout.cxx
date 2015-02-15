@@ -217,9 +217,9 @@ void WinLayout::DrawText(SalGraphics& rGraphics) const
         {
             pImpl->PreDraw();
 
-            boost::scoped_ptr<OpenGLTexture> pTexture(aDC.getTexture());
-            if (pTexture)
-                pImpl->DrawMask(*pTexture, salColor, aDC.getTwoRect());
+            std::unique_ptr<OpenGLTexture> xTexture(aDC.getTexture());
+            if (xTexture)
+                pImpl->DrawMask(*xTexture, salColor, aDC.getTwoRect());
 
             pImpl->PostDraw();
         }

@@ -45,7 +45,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
-
+#include <algorithm>
 
 namespace dbtools
 {

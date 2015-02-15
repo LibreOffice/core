@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -30,7 +31,6 @@
 #include <com/sun/star/util/ChangesSet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
-#include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -148,7 +148,7 @@ private:
     OUString name_;
     ChangesListeners changesListeners_;
 
-    boost::shared_ptr<osl::Mutex> lock_;
+    std::shared_ptr<osl::Mutex> lock_;
 
     bool update_:1;
     bool finalized_:1;

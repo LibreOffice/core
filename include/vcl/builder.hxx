@@ -20,7 +20,6 @@
 #include <set>
 #include <stack>
 #include <vector>
-#include <boost/noncopyable.hpp>
 #ifdef check
 #  //some problem with MacOSX and a check define
 #  undef check
@@ -40,7 +39,7 @@ class VclExpander;
 class VclMultiLineEdit;
 namespace xmlreader { class XmlReader; }
 
-class VCL_DLLPUBLIC VclBuilder: private boost::noncopyable
+class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<OString, OString> stringmap;
@@ -115,6 +114,9 @@ public:
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_xFrame; }
 
 private:
+    VclBuilder(const VclBuilder&) SAL_DELETED_FUNCTION;
+    VclBuilder& operator=(const VclBuilder&) SAL_DELETED_FUNCTION;
+
     typedef boost::ptr_map<OUString, osl::Module> ModuleMap;
 
     //We store these until the builder is deleted, that way we can use the

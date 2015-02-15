@@ -33,9 +33,8 @@
 #include "sallayout.hxx"
 #include "vclpluginapi.h"
 
-#include <boost/scoped_ptr.hpp>
-
 #include <deque>
+#include <memory>
 
 class ImplFontMetricData;
 class FontSelectPattern;
@@ -345,8 +344,8 @@ protected:
     bool                            bFontGC_ : 1;       // is Font GC valid
 
 private:
-    boost::scoped_ptr<SalGraphicsImpl> mpImpl;
-    boost::scoped_ptr<TextRenderImpl> mpTextRenderImpl;
+    std::unique_ptr<SalGraphicsImpl> mxImpl;
+    std::unique_ptr<TextRenderImpl> mxTextRenderImpl;
 
 };
 

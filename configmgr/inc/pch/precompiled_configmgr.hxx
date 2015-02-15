@@ -16,7 +16,6 @@
 
 #include <algorithm>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cassert>
 #include <climits>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -119,6 +118,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <list>
 #include <map>
+#include <memory>
 #include <osl/conditn.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>

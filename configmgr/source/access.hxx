@@ -23,12 +23,12 @@
 #include <sal/config.h>
 
 #include <map>
+#include <memory>
 #include <set>
 #include <vector>
 #include "config_map.hxx"
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
@@ -564,7 +564,7 @@ private:
     PropertiesChangeListeners propertiesChangeListeners_;
     bool disposed_;
 
-    boost::shared_ptr<osl::Mutex> lock_;
+    std::shared_ptr<osl::Mutex> lock_;
 
 #if !defined NDEBUG
 protected:

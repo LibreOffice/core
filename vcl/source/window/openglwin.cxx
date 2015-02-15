@@ -19,22 +19,22 @@ public:
     OpenGLContext& getContext() { return maContext;}
 private:
     OpenGLContext maContext;
-    boost::scoped_ptr<SystemChildWindow> mpChildWindow;
+    std::unique_ptr<SystemChildWindow> mxChildWindow;
 };
 
 OpenGLWindowImpl::OpenGLWindowImpl(vcl::Window* pWindow)
 {
     SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
-    mpChildWindow.reset(new SystemChildWindow(pWindow, 0, &aData));
-    mpChildWindow->Show();
-    maContext.init(mpChildWindow.get());
+    mxChildWindow.reset(new SystemChildWindow(pWindow, 0, &aData));
+    mxChildWindow->Show();
+    maContext.init(mxChildWindow.get());
     pWindow->SetMouseTransparent(false);
 }
 
 
 OpenGLWindow::OpenGLWindow(vcl::Window* pParent):
     Window(pParent, 0),
-    mpImpl(new OpenGLWindowImpl(this)),
+    mxImpl(new OpenGLWindowImpl(this)),
     mpRenderer(NULL)
 {
 }
@@ -47,7 +47,7 @@ OpenGLWindow::~OpenGLWindow()
 
 OpenGLContext& OpenGLWindow::getContext()
 {
-    return mpImpl->getContext();
+    return mxImpl->getContext();
 }
 
 void OpenGLWindow::Paint(const Rectangle&)

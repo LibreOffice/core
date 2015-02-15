@@ -1623,7 +1623,6 @@ namespace vcl
 /** guard class that uses tryToAcquire() and has isAcquired() to check
  */
 class SolarMutexTryAndBuyGuard
-    : private boost::noncopyable
 {
     private:
         bool m_isAcquired;
@@ -1631,6 +1630,9 @@ class SolarMutexTryAndBuyGuard
         bool m_isChecked;
 #endif
         comphelper::SolarMutex& m_rSolarMutex;
+
+        SolarMutexTryAndBuyGuard(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
+        SolarMutexTryAndBuyGuard& operator=(const SolarMutexTryAndBuyGuard&) SAL_DELETED_FUNCTION;
 
     public:
 

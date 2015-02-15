@@ -58,7 +58,7 @@ enum
 void ValueSet::ImplInit()
 {
     mpNoneItem.reset(NULL);
-    mpScrollBar.reset(NULL);
+    mxScrollBar.reset(NULL);
 
     mnItemWidth         = 0;
     mnItemHeight        = 0;
@@ -197,16 +197,16 @@ void ValueSet::ImplInitScrollBar()
 {
     if ( GetStyle() & WB_VSCROLL )
     {
-        if ( !mpScrollBar.get() )
+        if ( !mxScrollBar.get() )
         {
-            mpScrollBar.reset(new ScrollBar( this, WB_VSCROLL | WB_DRAG ));
-            mpScrollBar->SetScrollHdl( LINK( this, ValueSet, ImplScrollHdl ) );
+            mxScrollBar.reset(new ScrollBar( this, WB_VSCROLL | WB_DRAG ));
+            mxScrollBar->SetScrollHdl( LINK( this, ValueSet, ImplScrollHdl ) );
         }
         else
         {
             // adapt the width because of the changed settings
             long nScrBarWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
-            mpScrollBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH );
+            mxScrollBar->setPosSizePixel( 0, 0, nScrBarWidth, 0, WINDOW_POSSIZE_WIDTH );
         }
     }
 }
@@ -344,17 +344,17 @@ void ValueSet::Format()
     long        nOff;
     long        nNoneHeight;
     long        nNoneSpace;
-    boost::scoped_ptr<ScrollBar> pDeletedScrollBar(NULL);
+    std::unique_ptr<ScrollBar> xDeletedScrollBar;
 
     // consider the scrolling
     if ( nStyle & WB_VSCROLL )
         ImplInitScrollBar();
     else
     {
-        if ( mpScrollBar.get() )
+        if ( mxScrollBar.get() )
         {
             // delete ScrollBar not until later, to prevent recursive calls
-            pDeletedScrollBar.swap(mpScrollBar);
+            xDeletedScrollBar.swap(mxScrollBar);
         }
     }
 
@@ -403,8 +403,8 @@ void ValueSet::Format()
 
     // calculate ScrollBar width
     long nScrBarWidth = 0;
-    if (mpScrollBar.get())
-        nScrBarWidth = mpScrollBar->GetSizePixel().Width()+SCRBAR_OFFSET;
+    if (mxScrollBar.get())
+        nScrBarWidth = mxScrollBar->GetSizePixel().Width()+SCRBAR_OFFSET;
 
     // calculate number of columns
     if (!mnUserCols)
@@ -511,8 +511,8 @@ void ValueSet::Format()
             mItemList[i]->mbVisible = false;
         }
 
-        if ( mpScrollBar.get() )
-            mpScrollBar->Hide();
+        if ( mxScrollBar.get() )
+            mxScrollBar->Hide();
     }
     else
     {
@@ -644,7 +644,7 @@ void ValueSet::Format()
         }
 
         // arrange ScrollBar, set values and show it
-        if ( mpScrollBar.get() )
+        if ( mxScrollBar.get() )
         {
             Point   aPos( aWinSize.Width() - nScrBarWidth + SCRBAR_OFFSET, 0 );
             Size    aSize( nScrBarWidth - SCRBAR_OFFSET, aWinSize.Height() );
@@ -654,15 +654,15 @@ void ValueSet::Format()
                 aPos.Y() = nStartY + nNoneHeight + 1;
                 aSize.Height() = ((mnItemHeight + mnSpacing) * mnVisLines) - 2 - mnSpacing;
             }
-            mpScrollBar->SetPosSizePixel( aPos, aSize );
-            mpScrollBar->SetRangeMax( mnLines );
-            mpScrollBar->SetVisibleSize( mnVisLines );
-            mpScrollBar->SetThumbPos( (long)mnFirstLine );
+            mxScrollBar->SetPosSizePixel( aPos, aSize );
+            mxScrollBar->SetRangeMax( mnLines );
+            mxScrollBar->SetVisibleSize( mnVisLines );
+            mxScrollBar->SetThumbPos( (long)mnFirstLine );
             long nPageSize = mnVisLines;
             if ( nPageSize < 1 )
                 nPageSize = 1;
-            mpScrollBar->SetPageSize( nPageSize );
-            mpScrollBar->Show();
+            mxScrollBar->SetPageSize( nPageSize );
+            mxScrollBar->Show();
         }
     }
 
@@ -933,10 +933,10 @@ void ValueSet::ImplDraw()
     Point   aDefPos;
     Size    aSize = maVirDev.GetOutputSizePixel();
 
-    if ( mpScrollBar.get() && mpScrollBar->IsVisible() )
+    if ( mxScrollBar.get() && mxScrollBar->IsVisible() )
     {
-        Point   aScrPos = mpScrollBar->GetPosPixel();
-        Size    aScrSize = mpScrollBar->GetSizePixel();
+        Point   aScrPos = mxScrollBar->GetPosPixel();
+        Size    aScrSize = mxScrollBar->GetSizePixel();
         Point   aTempPos( 0, aScrPos.Y() );
         Size    aTempSize( aSize.Width(), aScrPos.Y() );
 
@@ -1402,7 +1402,7 @@ void ValueSet::Command( const CommandEvent& rCommandEvent )
          rCommandEvent.GetCommand() == COMMAND_STARTAUTOSCROLL ||
          rCommandEvent.GetCommand() == COMMAND_AUTOSCROLL )
     {
-        if ( HandleScrollCommand( rCommandEvent, NULL, mpScrollBar.get() ) )
+        if ( HandleScrollCommand( rCommandEvent, NULL, mxScrollBar.get() ) )
             return;
     }
 
@@ -2252,7 +2252,7 @@ long ValueSet::GetScrollWidth() const
     if ( GetStyle() & WB_VSCROLL )
     {
         const_cast<ValueSet*>(this)->ImplInitScrollBar();
-        return mpScrollBar->GetSizePixel().Width() + SCRBAR_OFFSET;
+        return mxScrollBar->GetSizePixel().Width() + SCRBAR_OFFSET;
     }
     else
         return 0;

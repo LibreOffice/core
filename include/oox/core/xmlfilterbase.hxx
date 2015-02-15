@@ -52,7 +52,7 @@ namespace oox {
 namespace sax_fastparser {
     class FastSerializerHelper;
 
-    typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;
+    typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;
 }
 
 namespace oox {

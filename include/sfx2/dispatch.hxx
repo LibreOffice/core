@@ -27,7 +27,6 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <boost/scoped_ptr.hpp>
 
 class SfxSlotServer;
 class SfxShell;
@@ -72,7 +71,7 @@ enum SfxSlotFilterState
 
 class SFX2_DLLPUBLIC SfxDispatcher
 {
-    boost::scoped_ptr<SfxDispatcher_Impl> pImp;
+    std::unique_ptr<SfxDispatcher_Impl> xImp;
 
 private:
     // Search for temporary evaluated Todos

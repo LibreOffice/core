@@ -298,7 +298,7 @@ namespace toolkit
 
     AnimatedImagesPeer::AnimatedImagesPeer()
         :AnimatedImagesPeer_Base()
-        ,m_pData( new AnimatedImagesPeer_Data( *this ) )
+        ,m_xData( new AnimatedImagesPeer_Data( *this ) )
     {
     }
 
@@ -425,7 +425,7 @@ namespace toolkit
         switch ( i_windowEvent.GetId() )
         {
         case VCLEVENT_WINDOW_RESIZE:
-            lcl_updateImageList_nothrow( *m_pData );
+            lcl_updateImageList_nothrow( *m_xData );
             break;
         }
 
@@ -437,7 +437,7 @@ namespace toolkit
     {
         SolarMutexGuard aGuard;
 
-        lcl_updateImageList_nothrow( *m_pData, Reference< XAnimatedImages >( i_animatedImages, UNO_QUERY_THROW ) );
+        lcl_updateImageList_nothrow( *m_xData, Reference< XAnimatedImages >( i_animatedImages, UNO_QUERY_THROW ) );
     }
 
 
@@ -449,18 +449,18 @@ namespace toolkit
         sal_Int32 nPosition(0);
         OSL_VERIFY( i_event.Accessor >>= nPosition );
         size_t position = size_t( nPosition );
-        if ( position > m_pData->aCachedImageSets.size() )
+        if ( position > m_xData->aCachedImageSets.size() )
         {
             OSL_ENSURE( false, "AnimatedImagesPeer::elementInserted: illegal accessor/index!" );
-            lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
+            lcl_updateImageList_nothrow( *m_xData, xAnimatedImages );
         }
 
         Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
-        m_pData->aCachedImageSets.insert( m_pData->aCachedImageSets.begin() + position, aImages );
-        lcl_updateImageList_nothrow( *m_pData );
+        m_xData->aCachedImageSets.insert( m_xData->aCachedImageSets.begin() + position, aImages );
+        lcl_updateImageList_nothrow( *m_xData );
     }
 
 
@@ -472,14 +472,14 @@ namespace toolkit
         sal_Int32 nPosition(0);
         OSL_VERIFY( i_event.Accessor >>= nPosition );
         size_t position = size_t( nPosition );
-        if ( position >= m_pData->aCachedImageSets.size() )
+        if ( position >= m_xData->aCachedImageSets.size() )
         {
             OSL_ENSURE( false, "AnimatedImagesPeer::elementRemoved: illegal accessor/index!" );
-            lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
+            lcl_updateImageList_nothrow( *m_xData, xAnimatedImages );
         }
 
-        m_pData->aCachedImageSets.erase( m_pData->aCachedImageSets.begin() + position );
-        lcl_updateImageList_nothrow( *m_pData );
+        m_xData->aCachedImageSets.erase( m_xData->aCachedImageSets.begin() + position );
+        lcl_updateImageList_nothrow( *m_xData );
     }
 
 
@@ -491,18 +491,18 @@ namespace toolkit
         sal_Int32 nPosition(0);
         OSL_VERIFY( i_event.Accessor >>= nPosition );
         size_t position = size_t( nPosition );
-        if ( position >= m_pData->aCachedImageSets.size() )
+        if ( position >= m_xData->aCachedImageSets.size() )
         {
             OSL_ENSURE( false, "AnimatedImagesPeer::elementReplaced: illegal accessor/index!" );
-            lcl_updateImageList_nothrow( *m_pData, xAnimatedImages );
+            lcl_updateImageList_nothrow( *m_xData, xAnimatedImages );
         }
 
         Sequence< OUString > aImageURLs;
         OSL_VERIFY( i_event.Element >>= aImageURLs );
         ::std::vector< CachedImage > aImages;
         lcl_init( aImageURLs, aImages );
-        m_pData->aCachedImageSets[ position ] = aImages;
-        lcl_updateImageList_nothrow( *m_pData );
+        m_xData->aCachedImageSets[ position ] = aImages;
+        lcl_updateImageList_nothrow( *m_xData );
     }
 
 
@@ -522,7 +522,7 @@ namespace toolkit
     {
         AnimatedImagesPeer_Base::dispose();
         SolarMutexGuard aGuard;
-        m_pData->aCachedImageSets.resize(0);
+        m_xData->aCachedImageSets.resize(0);
     }
 
 

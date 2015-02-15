@@ -40,8 +40,6 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 
-#include <boost/scoped_ptr.hpp>
-
 // filename of configuration files
 #define PRINT_FILENAME  "psprint.conf"
 // the group of the global defaults

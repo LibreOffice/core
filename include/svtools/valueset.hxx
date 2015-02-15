@@ -25,8 +25,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 class MouseEvent;
 class TrackingEvent;
@@ -177,7 +177,7 @@ to be set (before Show) with SetStyle().
 *************************************************************************/
 
 typedef std::vector<ValueSetItem*> ValueItemList;
-typedef boost::scoped_ptr<ValueSetItem> ValueSetItemPtr;
+typedef std::unique_ptr<ValueSetItem> ValueSetItemPtr;
 
 // - ValueSet types -
 #define WB_RADIOSEL             ((WinBits)0x00008000)
@@ -201,7 +201,7 @@ private:
     Timer           maTimer;
     ValueItemList   mItemList;
     ValueSetItemPtr mpNoneItem;
-    boost::scoped_ptr<ScrollBar> mpScrollBar;
+    std::unique_ptr<ScrollBar> mxScrollBar;
     Rectangle       maNoneItemRect;
     Rectangle       maItemListRect;
     long            mnItemWidth;

@@ -23,9 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <tools/rtti.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <limits>
+#include <memory>
 
 struct MarkedUndoAction;
 
@@ -313,8 +312,8 @@ class SVL_DLLPUBLIC SfxUndoManager : public ::svl::IUndoManager
 {
     friend class SfxLinkUndoAction;
 
-    ::boost::scoped_ptr< SfxUndoManager_Data >
-                            m_pData;
+    std::unique_ptr< SfxUndoManager_Data >
+                            m_xData;
 public:
                             SfxUndoManager( size_t nMaxUndoActionCount = 20 );
     virtual                 ~SfxUndoManager();

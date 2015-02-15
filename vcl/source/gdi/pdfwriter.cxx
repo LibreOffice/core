@@ -29,7 +29,7 @@ PDFWriter::AnyWidget::~AnyWidget()
 
 PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc )
         :
-        pImplementation( new PDFWriterImpl( rContext, xEnc, *this ) )
+        xImplementation( new PDFWriterImpl( rContext, xEnc, *this ) )
 {
 }
 
@@ -39,32 +39,32 @@ PDFWriter::~PDFWriter()
 
 OutputDevice* PDFWriter::GetReferenceDevice()
 {
-    return pImplementation->getReferenceDevice();
+    return xImplementation->getReferenceDevice();
 }
 
 sal_Int32 PDFWriter::NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation )
 {
-    return pImplementation->newPage( nPageWidth, nPageHeight, eOrientation );
+    return xImplementation->newPage( nPageWidth, nPageHeight, eOrientation );
 }
 
 bool PDFWriter::Emit()
 {
-    return pImplementation->emit();
+    return xImplementation->emit();
 }
 
 void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
 {
-    pImplementation->setDocumentLocale( rLoc );
+    xImplementation->setDocumentLocale( rLoc );
 }
 
 void PDFWriter::SetFont( const vcl::Font& rFont )
 {
-    pImplementation->setFont( rFont );
+    xImplementation->setFont( rFont );
 }
 
 void PDFWriter::DrawText( const Point& rPos, const OUString& rText )
 {
-    pImplementation->drawText( rPos, rText, 0, rText.getLength() );
+    xImplementation->drawText( rPos, rText, 0, rText.getLength() );
 }
 
 void PDFWriter::DrawTextLine(
@@ -75,7 +75,7 @@ void PDFWriter::DrawTextLine(
                              FontUnderline eOverline,
                              bool bUnderlineAbove )
 {
-    pImplementation->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+    xImplementation->drawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 }
 
 void PDFWriter::DrawTextArray(
@@ -85,7 +85,7 @@ void PDFWriter::DrawTextArray(
                               sal_Int32 nIndex,
                               sal_Int32 nLen )
 {
-    pImplementation->drawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
+    xImplementation->drawTextArray( rStartPt, rStr, pDXAry, nIndex, nLen );
 }
 
 void PDFWriter::DrawStretchText(
@@ -95,7 +95,7 @@ void PDFWriter::DrawStretchText(
                                 sal_Int32 nIndex,
                                 sal_Int32 nLen )
 {
-    pImplementation->drawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
+    xImplementation->drawStretchText( rStartPt, nWidth, rStr, nIndex, nLen );
 }
 
 void PDFWriter::DrawText(
@@ -103,343 +103,343 @@ void PDFWriter::DrawText(
                          const OUString& rStr,
                          sal_uInt16 nStyle )
 {
-    pImplementation->drawText( rRect, rStr, nStyle );
+    xImplementation->drawText( rRect, rStr, nStyle );
 }
 
 void PDFWriter::DrawLine( const Point& rStart, const Point& rStop )
 {
-    pImplementation->drawLine( rStart, rStop );
+    xImplementation->drawLine( rStart, rStop );
 }
 
 void PDFWriter::DrawLine( const Point& rStart, const Point& rStop, const LineInfo& rInfo )
 {
-    pImplementation->drawLine( rStart, rStop, rInfo );
+    xImplementation->drawLine( rStart, rStop, rInfo );
 }
 
 void PDFWriter::DrawPolygon( const Polygon& rPoly )
 {
-    pImplementation->drawPolygon( rPoly );
+    xImplementation->drawPolygon( rPoly );
 }
 
 void PDFWriter::DrawPolyLine( const Polygon& rPoly )
 {
-    pImplementation->drawPolyLine( rPoly );
+    xImplementation->drawPolyLine( rPoly );
 }
 
 void PDFWriter::DrawRect( const Rectangle& rRect )
 {
-    pImplementation->drawRectangle( rRect );
+    xImplementation->drawRectangle( rRect );
 }
 
 void PDFWriter::DrawRect( const Rectangle& rRect, sal_uLong nHorzRound, sal_uLong nVertRound )
 {
-    pImplementation->drawRectangle( rRect, nHorzRound, nVertRound );
+    xImplementation->drawRectangle( rRect, nHorzRound, nVertRound );
 }
 
 void PDFWriter::DrawEllipse( const Rectangle& rRect )
 {
-    pImplementation->drawEllipse( rRect );
+    xImplementation->drawEllipse( rRect );
 }
 
 void PDFWriter::DrawArc( const Rectangle& rRect, const Point& rStart, const Point& rStop )
 {
-    pImplementation->drawArc( rRect, rStart, rStop, false, false );
+    xImplementation->drawArc( rRect, rStart, rStop, false, false );
 }
 
 void PDFWriter::DrawPie( const Rectangle& rRect, const Point& rStart, const Point& rStop )
 {
-    pImplementation->drawArc( rRect, rStart, rStop, true, false );
+    xImplementation->drawArc( rRect, rStart, rStop, true, false );
 }
 
 void PDFWriter::DrawChord( const Rectangle& rRect, const Point& rStart, const Point& rStop )
 {
-    pImplementation->drawArc( rRect, rStart, rStop, false, true );
+    xImplementation->drawArc( rRect, rStart, rStop, false, true );
 }
 
 void PDFWriter::DrawPolyLine( const Polygon& rPoly, const LineInfo& rInfo )
 {
-    pImplementation->drawPolyLine( rPoly, rInfo );
+    xImplementation->drawPolyLine( rPoly, rInfo );
 }
 
 void PDFWriter::DrawPolyLine( const Polygon& rPoly, const ExtLineInfo& rInfo )
 {
-    pImplementation->drawPolyLine( rPoly, rInfo );
+    xImplementation->drawPolyLine( rPoly, rInfo );
 }
 
 void PDFWriter::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
 {
-    pImplementation->drawPolyPolygon( rPolyPoly );
+    xImplementation->drawPolyPolygon( rPolyPoly );
 }
 
 void PDFWriter::DrawPixel( const Point& rPos, const Color& rColor )
 {
-    pImplementation->drawPixel( rPos, rColor );
+    xImplementation->drawPixel( rPos, rColor );
 }
 
 void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
 {
-    pImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
+    xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
 }
 
 void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const BitmapEx& rBitmap )
 {
-    pImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
+    xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
 }
 
 void PDFWriter::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
-    pImplementation->drawHatch( rPolyPoly, rHatch );
+    xImplementation->drawHatch( rPolyPoly, rHatch );
 }
 
 void PDFWriter::DrawGradient( const Rectangle& rRect, const Gradient& rGradient )
 {
-    pImplementation->drawGradient( rRect, rGradient );
+    xImplementation->drawGradient( rRect, rGradient );
 }
 
 void PDFWriter::DrawGradient( const tools::PolyPolygon& rPolyPoly, const Gradient& rGradient )
 {
-    pImplementation->push(PushFlags::CLIPREGION);
-    pImplementation->setClipRegion( rPolyPoly.getB2DPolyPolygon() );
-    pImplementation->drawGradient( rPolyPoly.GetBoundRect(), rGradient );
-    pImplementation->pop();
+    xImplementation->push(PushFlags::CLIPREGION);
+    xImplementation->setClipRegion( rPolyPoly.getB2DPolyPolygon() );
+    xImplementation->drawGradient( rPolyPoly.GetBoundRect(), rGradient );
+    xImplementation->pop();
 }
 
 void PDFWriter::DrawWallpaper( const Rectangle& rRect, const Wallpaper& rWallpaper )
 {
-    pImplementation->drawWallpaper( rRect, rWallpaper );
+    xImplementation->drawWallpaper( rRect, rWallpaper );
 }
 
 void PDFWriter::DrawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uInt16 nTransparencePercent )
 {
-    pImplementation->drawTransparent( rPolyPoly, nTransparencePercent );
+    xImplementation->drawTransparent( rPolyPoly, nTransparencePercent );
 }
 
 void PDFWriter::BeginTransparencyGroup()
 {
-    pImplementation->beginTransparencyGroup();
+    xImplementation->beginTransparencyGroup();
 }
 
 void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, sal_uInt16 nTransparentPercent )
 {
-    pImplementation->endTransparencyGroup( rRect, nTransparentPercent );
+    xImplementation->endTransparencyGroup( rRect, nTransparentPercent );
 }
 
 void PDFWriter::Push( PushFlags nFlags )
 {
-    pImplementation->push( nFlags );
+    xImplementation->push( nFlags );
 }
 
 void PDFWriter::Pop()
 {
-    pImplementation->pop();
+    xImplementation->pop();
 }
 
 void PDFWriter::SetMapMode( const MapMode& rMapMode )
 {
-    pImplementation->setMapMode( rMapMode );
+    xImplementation->setMapMode( rMapMode );
 }
 
 void PDFWriter::SetLineColor( const Color& rColor )
 {
-    pImplementation->setLineColor( rColor );
+    xImplementation->setLineColor( rColor );
 }
 
 void PDFWriter::SetFillColor( const Color& rColor )
 {
-    pImplementation->setFillColor( rColor );
+    xImplementation->setFillColor( rColor );
 }
 
 void PDFWriter::SetClipRegion()
 {
-    pImplementation->clearClipRegion();
+    xImplementation->clearClipRegion();
 }
 
 void PDFWriter::SetClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    pImplementation->setClipRegion( rRegion );
+    xImplementation->setClipRegion( rRegion );
 }
 
 void PDFWriter::MoveClipRegion( long nHorzMove, long nVertMove )
 {
-    pImplementation->moveClipRegion( nHorzMove, nVertMove );
+    xImplementation->moveClipRegion( nHorzMove, nVertMove );
 }
 
 void PDFWriter::IntersectClipRegion( const basegfx::B2DPolyPolygon& rRegion )
 {
-    pImplementation->intersectClipRegion( rRegion );
+    xImplementation->intersectClipRegion( rRegion );
 }
 
 void PDFWriter::IntersectClipRegion( const Rectangle& rRect )
 {
-    pImplementation->intersectClipRegion( rRect );
+    xImplementation->intersectClipRegion( rRect );
 }
 
 void PDFWriter::SetLayoutMode( ComplexTextLayoutMode nMode )
 {
-    pImplementation->setLayoutMode( nMode );
+    xImplementation->setLayoutMode( nMode );
 }
 
 void PDFWriter::SetDigitLanguage( LanguageType eLang )
 {
-    pImplementation->setDigitLanguage( eLang );
+    xImplementation->setDigitLanguage( eLang );
 }
 
 void PDFWriter::SetTextColor( const Color& rColor )
 {
-    pImplementation->setTextColor( rColor );
+    xImplementation->setTextColor( rColor );
 }
 
 void PDFWriter::SetTextFillColor()
 {
-    pImplementation->setTextFillColor();
+    xImplementation->setTextFillColor();
 }
 
 void PDFWriter::SetTextFillColor( const Color& rColor )
 {
-    pImplementation->setTextFillColor( rColor );
+    xImplementation->setTextFillColor( rColor );
 }
 
 void PDFWriter::SetTextLineColor()
 {
-    pImplementation->setTextLineColor();
+    xImplementation->setTextLineColor();
 }
 
 void PDFWriter::SetTextLineColor( const Color& rColor )
 {
-    pImplementation->setTextLineColor( rColor );
+    xImplementation->setTextLineColor( rColor );
 }
 
 void PDFWriter::SetOverlineColor()
 {
-    pImplementation->setOverlineColor();
+    xImplementation->setOverlineColor();
 }
 
 void PDFWriter::SetOverlineColor( const Color& rColor )
 {
-    pImplementation->setOverlineColor( rColor );
+    xImplementation->setOverlineColor( rColor );
 }
 
 void PDFWriter::SetTextAlign( ::TextAlign eAlign )
 {
-    pImplementation->setTextAlign( eAlign );
+    xImplementation->setTextAlign( eAlign );
 }
 
 void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
 {
-    pImplementation->drawJPGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rMask );
+    xImplementation->drawJPGBitmap( rStreamData, bIsTrueColor, rSrcSizePixel, rTargetArea, rMask );
 }
 
 sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
 {
-    return pImplementation->createLink( rRect, nPageNr );
+    return xImplementation->createLink( rRect, nPageNr );
 }
 sal_Int32 PDFWriter::RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType )
 {
-    return pImplementation->registerDestReference( nDestId, rRect, nPageNr, eType );
+    return xImplementation->registerDestReference( nDestId, rRect, nPageNr, eType );
 }
 //--->i56629
 sal_Int32 PDFWriter::CreateNamedDest( const OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
-    return pImplementation->createNamedDest( sDestName, rRect, nPageNr, eType );
+    return xImplementation->createNamedDest( sDestName, rRect, nPageNr, eType );
 }
 sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
-    return pImplementation->createDest( rRect, nPageNr, eType );
+    return xImplementation->createDest( rRect, nPageNr, eType );
 }
 
 sal_Int32 PDFWriter::SetLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
-    return pImplementation->setLinkDest( nLinkId, nDestId );
+    return xImplementation->setLinkDest( nLinkId, nDestId );
 }
 
 sal_Int32 PDFWriter::SetLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
-    return pImplementation->setLinkURL( nLinkId, rURL );
+    return xImplementation->setLinkURL( nLinkId, rURL );
 }
 
 void PDFWriter::SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyId )
 {
-    pImplementation->setLinkPropertyId( nLinkId, nPropertyId );
+    xImplementation->setLinkPropertyId( nLinkId, nPropertyId );
 }
 
 sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
 {
-    return pImplementation->createOutlineItem( nParent, rText, nDestID );
+    return xImplementation->createOutlineItem( nParent, rText, nDestID );
 }
 
 sal_Int32 PDFWriter::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
 {
-    return pImplementation->setOutlineItemParent( nItem, nNewParent );
+    return xImplementation->setOutlineItemParent( nItem, nNewParent );
 }
 
 sal_Int32 PDFWriter::SetOutlineItemText( sal_Int32 nItem, const OUString& rText )
 {
-    return  pImplementation->setOutlineItemText( nItem, rText );
+    return  xImplementation->setOutlineItemText( nItem, rText );
 }
 
 sal_Int32 PDFWriter::SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDest )
 {
-    return pImplementation->setOutlineItemDest( nItem, nDest );
+    return xImplementation->setOutlineItemDest( nItem, nDest );
 }
 
 void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
-    pImplementation->createNote( rRect, rNote, nPageNr );
+    xImplementation->createNote( rRect, rNote, nPageNr );
 }
 
 sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, const OUString& rAlias )
 {
-    return pImplementation->beginStructureElement( eType, rAlias );
+    return xImplementation->beginStructureElement( eType, rAlias );
 }
 
 void PDFWriter::EndStructureElement()
 {
-    pImplementation->endStructureElement();
+    xImplementation->endStructureElement();
 }
 
 bool PDFWriter::SetCurrentStructureElement( sal_Int32 nID )
 {
-    return pImplementation->setCurrentStructureElement( nID );
+    return xImplementation->setCurrentStructureElement( nID );
 }
 
 bool PDFWriter::SetStructureAttribute( enum StructAttribute eAttr, enum StructAttributeValue eVal )
 {
-    return pImplementation->setStructureAttribute( eAttr, eVal );
+    return xImplementation->setStructureAttribute( eAttr, eVal );
 }
 
 bool PDFWriter::SetStructureAttributeNumerical( enum StructAttribute eAttr, sal_Int32 nValue )
 {
-    return pImplementation->setStructureAttributeNumerical( eAttr, nValue );
+    return xImplementation->setStructureAttributeNumerical( eAttr, nValue );
 }
 
 void PDFWriter::SetStructureBoundingBox( const Rectangle& rRect )
 {
-    pImplementation->setStructureBoundingBox( rRect );
+    xImplementation->setStructureBoundingBox( rRect );
 }
 
 void PDFWriter::SetActualText( const OUString& rText )
 {
-    pImplementation->setActualText( rText );
+    xImplementation->setActualText( rText );
 }
 
 void PDFWriter::SetAlternateText( const OUString& rText )
 {
-    pImplementation->setAlternateText( rText );
+    xImplementation->setAlternateText( rText );
 }
 
 void PDFWriter::SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr )
 {
-    pImplementation->setAutoAdvanceTime( nSeconds, nPageNr );
+    xImplementation->setAutoAdvanceTime( nSeconds, nPageNr );
 }
 
 void PDFWriter::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr )
 {
-    pImplementation->setPageTransition( eType, nMilliSec, nPageNr );
+    xImplementation->setPageTransition( eType, nMilliSec, nPageNr );
 }
 
 sal_Int32 PDFWriter::CreateControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr )
 {
-    return pImplementation->createControl( rControl, nPageNr );
+    return xImplementation->createControl( rControl, nPageNr );
 }
 
 PDFOutputStream::~PDFOutputStream()
@@ -448,12 +448,12 @@ PDFOutputStream::~PDFOutputStream()
 
 void PDFWriter::AddStream( const OUString& rMimeType, PDFOutputStream* pStream, bool bCompress )
 {
-    pImplementation->addStream( rMimeType, pStream, bCompress );
+    xImplementation->addStream( rMimeType, pStream, bCompress );
 }
 
 std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
 {
-    return pImplementation->getErrors();
+    return xImplementation->getErrors();
 }
 
 com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
@@ -467,7 +467,7 @@ PDFWriter::InitEncryption( const OUString& i_rOwnerPassword,
 
 void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
 {
-    pImplementation->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
+    xImplementation->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

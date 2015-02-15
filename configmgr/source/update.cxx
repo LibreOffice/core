@@ -20,10 +20,10 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 #include <set>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/configuration/XUpdate.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -91,7 +91,7 @@ private:
         css::uno::Sequence< OUString > const & excludedPaths)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    boost::shared_ptr<osl::Mutex> lock_;
+    std::shared_ptr<osl::Mutex> lock_;
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
 

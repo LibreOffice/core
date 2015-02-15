@@ -23,10 +23,10 @@
 #include <cassert>
 #include <cstddef>
 #include <limits>
+#include <memory>
 #include <vector>
 
 #include "boost/noncopyable.hpp"
-#include "boost/scoped_ptr.hpp"
 #include "com/sun/star/bridge/InvalidProtocolChangeException.hpp"
 #include "com/sun/star/bridge/XBridge.hpp"
 #include "com/sun/star/bridge/XInstanceProvider.hpp"
@@ -584,7 +584,7 @@ bool Bridge::makeCall(
     bool setter, std::vector< BinaryAny > const & inArguments,
     BinaryAny * returnValue, std::vector< BinaryAny > * outArguments)
 {
-    boost::scoped_ptr< IncomingReply > resp;
+    std::unique_ptr< IncomingReply > resp;
     {
         uno_ThreadPool tp = getThreadPool();
         AttachThread att(tp);

@@ -21,7 +21,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <tools/helpers.hxx>
-#include <boost/scoped_ptr.hpp>
 
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
@@ -155,7 +154,7 @@ void ImplAnimView::getPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size
 void ImplAnimView::drawToPos( sal_uLong nPos )
 {
     VirtualDevice   aVDev;
-    boost::scoped_ptr<vcl::Region> pOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
+    std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
 
     aVDev.SetOutputSizePixel( maSzPix, false );
     nPos = std::min( nPos, (sal_uLong) mpParent->Count() - 1UL );
@@ -163,13 +162,13 @@ void ImplAnimView::drawToPos( sal_uLong nPos )
     for( sal_uLong i = 0UL; i <= nPos; i++ )
         draw( i, &aVDev );
 
-    if( pOldClip )
+    if (xOldClip)
         mpOut->SetClipRegion( maClip );
 
     mpOut->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, aVDev );
 
-    if( pOldClip )
-        mpOut->SetClipRegion( *pOldClip );
+    if (xOldClip)
+        mpOut->SetClipRegion(*xOldClip);
 }
 
 void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
@@ -261,17 +260,17 @@ void ImplAnimView::draw( sal_uLong nPos, VirtualDevice* pVDev )
 
         if( !pVDev )
         {
-            boost::scoped_ptr<vcl::Region> pOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
+            std::unique_ptr<vcl::Region> xOldClip(!maClip.IsNull() ? new vcl::Region( mpOut->GetClipRegion() ) : NULL);
 
-            if( pOldClip )
+            if (xOldClip)
                 mpOut->SetClipRegion( maClip );
 
             mpOut->DrawOutDev( maDispPt, maDispSz, Point(), maSzPix, *pDev );
 
-            if( pOldClip )
+            if( xOldClip)
             {
-                mpOut->SetClipRegion( *pOldClip );
-                pOldClip.reset();
+                mpOut->SetClipRegion(*xOldClip);
+                xOldClip.reset();
             }
 
             delete pDev;

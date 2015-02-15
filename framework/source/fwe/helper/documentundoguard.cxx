@@ -220,14 +220,14 @@ namespace framework
     //= DocumentUndoGuard
 
     DocumentUndoGuard::DocumentUndoGuard( const Reference< XInterface >& i_undoSupplierComponent )
-        :m_pData( new DocumentUndoGuard_Data )
+        :m_xData( new DocumentUndoGuard_Data )
     {
-        lcl_init( *m_pData, i_undoSupplierComponent );
+        lcl_init( *m_xData, i_undoSupplierComponent );
     }
 
     DocumentUndoGuard::~DocumentUndoGuard()
     {
-        lcl_restore( *m_pData );
+        lcl_restore( *m_xData );
     }
 
 } // namespace framework

@@ -28,7 +28,7 @@
 #include "impfont.hxx"
 #include <vcl/fontcapabilities.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <unordered_set>
 
 #include <config_graphite.h>
@@ -188,7 +188,7 @@ class WinSalGraphics : public SalGraphics
     friend class WinLayout;
 
 protected:
-    boost::scoped_ptr<SalGraphicsImpl> mpImpl;
+    std::unique_ptr<SalGraphicsImpl> mpImpl;
 
 private:
     HDC                     mhLocalDC;              // HDC

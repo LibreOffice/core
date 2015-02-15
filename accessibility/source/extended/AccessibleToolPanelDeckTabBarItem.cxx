@@ -238,7 +238,7 @@ namespace accessibility
             ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar, const size_t i_nItemPos )
         : ::comphelper::OAccessibleExtendedComponentHelper(
                 new VCLExternalSolarLock)
-        , m_pImpl(new AccessibleToolPanelDeckTabBarItem_Impl(*this,
+        , m_xImpl(new AccessibleToolPanelDeckTabBarItem_Impl(*this,
                 i_rAccessibleParent, i_rPanelDeck, i_rTabBar, i_nItemPos))
     {
     }
@@ -260,8 +260,8 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getAccessibleParent();
+        ItemMethodGuard aGuard( *m_xImpl );
+        return m_xImpl->getAccessibleParent();
     }
 
     sal_Int16 SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRole(  ) throw (RuntimeException, std::exception)
@@ -271,45 +271,45 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getPanelDisplayName();
+        ItemMethodGuard aGuard( *m_xImpl );
+        return m_xImpl->getPanelDisplayName();
     }
 
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleName(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getPanelDisplayName();
+        ItemMethodGuard aGuard( *m_xImpl );
+        return m_xImpl->getPanelDisplayName();
     }
 
     Reference< XAccessibleRelationSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
+        ItemMethodGuard aGuard( *m_xImpl );
         ::utl::AccessibleRelationSetHelper* pRelationSet = new utl::AccessibleRelationSetHelper;
         return pRelationSet;
     }
 
     Reference< XAccessibleStateSet > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
+        ItemMethodGuard aGuard( *m_xImpl );
 
         ::utl::AccessibleStateSetHelper* pStateSet( new ::utl::AccessibleStateSetHelper );
         pStateSet->AddState( AccessibleStateType::FOCUSABLE );
         pStateSet->AddState( AccessibleStateType::SELECTABLE );
         pStateSet->AddState( AccessibleStateType::ICONIFIED );
 
-        if ( m_pImpl->getItemPos() == m_pImpl->getPanelDeck()->GetActivePanel() )
+        if ( m_xImpl->getItemPos() == m_xImpl->getPanelDeck()->GetActivePanel() )
         {
             pStateSet->AddState( AccessibleStateType::ACTIVE );
             pStateSet->AddState( AccessibleStateType::SELECTED );
         }
 
-        if ( m_pImpl->getItemPos() == m_pImpl->getTabBar()->GetFocusedPanelItem() )
+        if ( m_xImpl->getItemPos() == m_xImpl->getTabBar()->GetFocusedPanelItem() )
             pStateSet->AddState( AccessibleStateType::FOCUSED );
 
-        if ( m_pImpl->getTabBar()->IsEnabled() )
+        if ( m_xImpl->getTabBar()->IsEnabled() )
             pStateSet->AddState( AccessibleStateType::ENABLED );
 
-        if ( m_pImpl->getTabBar()->IsVisible() )
+        if ( m_xImpl->getTabBar()->IsVisible() )
         {
             pStateSet->AddState( AccessibleStateType::SHOWING );
             pStateSet->AddState( AccessibleStateType::VISIBLE );
@@ -320,7 +320,7 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeckTabBarItem::getAccessibleAtPoint( const UnoPoint& i_rLocation ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
+        ItemMethodGuard aGuard( *m_xImpl );
         // we do not have children ...
         (void)i_rLocation;
         return NULL;
@@ -328,28 +328,28 @@ namespace accessibility
 
     void SAL_CALL AccessibleToolPanelDeckTabBarItem::grabFocus(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        m_pImpl->getTabBar()->FocusPanelItem( m_pImpl->getItemPos() );
+        ItemMethodGuard aGuard( *m_xImpl );
+        m_xImpl->getTabBar()->FocusPanelItem( m_xImpl->getItemPos() );
     }
 
     ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getForeground(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        Reference< XAccessibleComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_SET_THROW );
+        ItemMethodGuard aGuard( *m_xImpl );
+        Reference< XAccessibleComponent > xParentComponent( m_xImpl->getParentAccessibleComponent(), UNO_SET_THROW );
         return xParentComponent->getForeground();
     }
 
     ::sal_Int32 SAL_CALL AccessibleToolPanelDeckTabBarItem::getBackground(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        Reference< XAccessibleComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_SET_THROW );
+        ItemMethodGuard aGuard( *m_xImpl );
+        Reference< XAccessibleComponent > xParentComponent( m_xImpl->getParentAccessibleComponent(), UNO_SET_THROW );
         return xParentComponent->getBackground();
     }
 
     Reference< XFont > SAL_CALL AccessibleToolPanelDeckTabBarItem::getFont(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        Reference< XAccessibleExtendedComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_QUERY_THROW );
+        ItemMethodGuard aGuard( *m_xImpl );
+        Reference< XAccessibleExtendedComponent > xParentComponent( m_xImpl->getParentAccessibleComponent(), UNO_QUERY_THROW );
         // TODO: strictly, this is not correct: The TabBar implementation of the TabLayouter might use
         // a different font ...
         return xParentComponent->getFont();
@@ -357,24 +357,24 @@ namespace accessibility
 
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getTitledBorderText(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
+        ItemMethodGuard aGuard( *m_xImpl );
         // no support
         return OUString();
     }
 
     OUString SAL_CALL AccessibleToolPanelDeckTabBarItem::getToolTipText(  ) throw (RuntimeException, std::exception)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getPanelDisplayName();
+        ItemMethodGuard aGuard( *m_xImpl );
+        return m_xImpl->getPanelDisplayName();
     }
 
     UnoRectangle AccessibleToolPanelDeckTabBarItem::implGetBounds() throw (RuntimeException)
     {
-        ItemMethodGuard aGuard( *m_pImpl );
+        ItemMethodGuard aGuard( *m_xImpl );
 
-        const ::Rectangle aItemScreenRect( m_pImpl->getTabBar()->GetItemScreenRect( m_pImpl->getItemPos() ) );
+        const ::Rectangle aItemScreenRect( m_xImpl->getTabBar()->GetItemScreenRect( m_xImpl->getItemPos() ) );
 
-        Reference< XAccessibleComponent > xParentComponent( m_pImpl->getParentAccessibleComponent(), UNO_SET_THROW );
+        Reference< XAccessibleComponent > xParentComponent( m_xImpl->getParentAccessibleComponent(), UNO_SET_THROW );
         const UnoPoint aParentLocation( xParentComponent->getLocationOnScreen() );
         return UnoRectangle(
             aItemScreenRect.Left() - aParentLocation.X,
@@ -386,8 +386,8 @@ namespace accessibility
 
     void SAL_CALL AccessibleToolPanelDeckTabBarItem::disposing()
     {
-        ItemMethodGuard aGuard( *m_pImpl );
-        m_pImpl->dispose();
+        ItemMethodGuard aGuard( *m_xImpl );
+        m_xImpl->dispose();
     }
 } // namespace accessibility
 

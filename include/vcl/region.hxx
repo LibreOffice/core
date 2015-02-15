@@ -22,9 +22,8 @@
 
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
-
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class ImplRegionBand;
 class RegionBand;
@@ -34,9 +33,9 @@ namespace vcl { class Window; }
 class OutputDevice;
 class Bitmap;
 
-typedef boost::shared_ptr< RegionBand > RegionBandPtr;
-typedef boost::shared_ptr< tools::PolyPolygon > PolyPolygonPtr;
-typedef boost::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
+typedef std::shared_ptr< RegionBand > RegionBandPtr;
+typedef std::shared_ptr< tools::PolyPolygon > PolyPolygonPtr;
+typedef std::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
 typedef std::vector< Rectangle > RectangleVector;
 
 namespace vcl {

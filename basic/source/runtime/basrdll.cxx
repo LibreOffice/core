@@ -35,14 +35,14 @@ struct BasicDLL::Impl
     bool        bDebugMode;
     bool        bBreakEnabled;
 
-    ::boost::scoped_ptr<ResMgr> pBasResMgr;
-    ::boost::scoped_ptr<SbxAppData> pSbxAppData;
+    std::unique_ptr<ResMgr> xBasResMgr;
+    std::unique_ptr<SbxAppData> xSbxAppData;
 
     Impl()
         : bDebugMode(false)
         , bBreakEnabled(true)
-        , pBasResMgr(ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag()))
-        , pSbxAppData(new SbxAppData)
+        , xBasResMgr(ResMgr::CreateResMgr("sb", Application::GetSettings().GetUILanguageTag()))
+        , xSbxAppData(new SbxAppData)
     { }
 };
 
@@ -52,7 +52,7 @@ BasResId::BasResId( sal_uInt32 nId ) :
 }
 
 BasicDLL::BasicDLL()
-    : m_pImpl(new Impl)
+    : m_xImpl(new Impl)
 {
     BASIC_DLL() = this;
 }
@@ -61,7 +61,7 @@ BasicDLL::~BasicDLL()
 {
 }
 
-ResMgr* BasicDLL::GetBasResMgr() const { return m_pImpl->pBasResMgr.get(); }
+ResMgr* BasicDLL::GetBasResMgr() const { return m_xImpl->xBasResMgr.get(); }
 
 void BasicDLL::EnableBreak( bool bEnable )
 {
@@ -69,7 +69,7 @@ void BasicDLL::EnableBreak( bool bEnable )
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
-        pThis->m_pImpl->bBreakEnabled = bEnable;
+        pThis->m_xImpl->bBreakEnabled = bEnable;
     }
 }
 
@@ -79,7 +79,7 @@ void BasicDLL::SetDebugMode( bool bDebugMode )
     DBG_ASSERT( pThis, "BasicDLL::EnableBreak: No instance yet!" );
     if ( pThis )
     {
-        pThis->m_pImpl->bDebugMode = bDebugMode;
+        pThis->m_xImpl->bDebugMode = bDebugMode;
     }
 }
 
@@ -95,7 +95,7 @@ void BasicDLL::BasicBreak()
     if ( pThis )
     {
         if (StarBASIC::IsRunning() && !bJustStopping
-            && (pThis->m_pImpl->bBreakEnabled || pThis->m_pImpl->bDebugMode))
+            && (pThis->m_xImpl->bBreakEnabled || pThis->m_xImpl->bDebugMode))
         {
             bJustStopping = true;
             StarBASIC::Stop();
@@ -107,7 +107,7 @@ void BasicDLL::BasicBreak()
 
 SbxAppData& GetSbxData_Impl()
 {
-    return *BASIC_DLL()->m_pImpl->pSbxAppData;
+    return *BASIC_DLL()->m_xImpl->xSbxAppData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

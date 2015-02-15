@@ -25,15 +25,10 @@
 
 #include <memory>
 
-#include <boost/scoped_ptr.hpp>
 #include <sfx2/itemwrapper.hxx>
 #include <sfx2/controlwrapper.hxx>
 
-
-
 namespace sfx {
-
-
 
 typedef int ItemConnFlags;
 
@@ -513,7 +508,7 @@ bool ItemControlConnection< ItemWrpT, ControlWrpT >::FillItemSet(
         if( !pOldItem || !(maItemWrp.GetItemValue( *pOldItem ) == aNewValue) )
         {
             sal_uInt16 nWhich = ItemWrapperHelper::GetWhichId( rDestSet, maItemWrp.GetSlotId() );
-            boost::scoped_ptr< ItemType > xItem(
+            std::unique_ptr< ItemType > xItem(
                 static_cast< ItemType* >( maItemWrp.GetDefaultItem( rDestSet ).Clone() ) );
             xItem->SetWhich( nWhich );
             maItemWrp.SetItemValue( *xItem, aNewValue );

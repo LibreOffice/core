@@ -22,12 +22,9 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <boost/shared_array.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
 #include <vcl/bitmapex.hxx>
 #include <rtl/ustring.hxx>
-
 
 
 typedef boost::shared_array< sal_uInt8 > SvgDataArray;
@@ -44,8 +41,7 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const sal_uInt32 nMaximumQuadraticPixels = 500000);
 
 
-
-class VCL_DLLPUBLIC SvgData : private boost::noncopyable
+class VCL_DLLPUBLIC SvgData
 {
 private:
     // the file and length
@@ -64,6 +60,9 @@ private:
     void ensureReplacement();
     void ensureSequenceAndRange();
 
+    SvgData(const SvgData&) SAL_DELETED_FUNCTION;
+    SvgData& operator=(const SvgData&) SAL_DELETED_FUNCTION;
+
 public:
     SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath);
     SvgData(const OUString& rPath);
@@ -79,7 +78,7 @@ public:
     const BitmapEx& getReplacement() const;
 };
 
-typedef boost::shared_ptr< SvgData > SvgDataPtr;
+typedef std::shared_ptr< SvgData > SvgDataPtr;
 
 #endif // INCLUDED_VCL_SVGDATA_HXX
 

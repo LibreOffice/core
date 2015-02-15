@@ -81,7 +81,7 @@ protected:
 
 private:
         struct Impl;
-        ::boost::scoped_ptr<Impl> m_pImpl;
+        std::unique_ptr<Impl> m_xImpl;
 };
 
 #endif // INCLUDED_SVX_SVDOMEDIA_HXX

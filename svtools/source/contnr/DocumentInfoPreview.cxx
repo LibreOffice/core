@@ -45,7 +45,7 @@ namespace svtools {
 
 ODocumentInfoPreview::ODocumentInfoPreview(vcl::Window * pParent, WinBits nBits):
     Window(pParent, WB_DIALOGCONTROL), m_pEditWin(this, nBits),
-    m_pInfoTable(new SvtDocInfoTable_Impl),
+    m_xInfoTable(new SvtDocInfoTable_Impl),
     m_aLanguageTag(SvtPathOptions().GetLanguageTag()) // detect application language
 {
     m_pEditWin.SetLeftMargin(10);
@@ -147,7 +147,7 @@ void ODocumentInfoPreview::insertEntry(
 void ODocumentInfoPreview::insertNonempty(long id, OUString const & value)
 {
     if (!value.isEmpty()) {
-        insertEntry(m_pInfoTable->GetString(id), value);
+        insertEntry(m_xInfoTable->GetString(id), value);
     }
 }
 
@@ -163,7 +163,7 @@ void ODocumentInfoPreview::insertDateTime(
         OUStringBuffer buf(rLocaleWrapper.getDate(aToolsDT));
         buf.append(", ");
         buf.append(rLocaleWrapper.getTime(aToolsDT));
-        insertEntry(m_pInfoTable->GetString(id), buf.makeStringAndClear());
+        insertEntry(m_xInfoTable->GetString(id), buf.makeStringAndClear());
     }
 }
 

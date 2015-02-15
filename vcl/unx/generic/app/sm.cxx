@@ -141,8 +141,8 @@ public:
 };
 
 SalSession * SessionManagerClient::m_pSession = NULL;
-boost::scoped_ptr< ICEConnectionObserver >
-SessionManagerClient::m_pICEConnectionObserver;
+std::unique_ptr< ICEConnectionObserver >
+SessionManagerClient::m_xICEConnectionObserver;
 SmcConn SessionManagerClient::m_pSmcConnection = NULL;
 OString SessionManagerClient::m_aClientID;
 bool SessionManagerClient::m_bDocSaveDone = false; // HACK
@@ -403,8 +403,8 @@ void SessionManagerClient::saveDone()
 {
     if( m_pSmcConnection )
     {
-        assert(m_pICEConnectionObserver);
-        osl::MutexGuard g(m_pICEConnectionObserver->m_ICEMutex);
+        assert(m_xICEConnectionObserver);
+        osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
         SmcSetProperties( m_pSmcConnection, nSmProps, ppSmProps );
         SmcSaveYourselfDone( m_pSmcConnection, True );
         SAL_INFO("vcl.sm", "sent SaveYourselfDone SmRestartHint of " << *pSmRestartHint );
@@ -414,17 +414,17 @@ void SessionManagerClient::saveDone()
 
 void SessionManagerClient::open(SalSession * pSession)
 {
-    assert(!m_pSession && !m_pICEConnectionObserver && !m_pSmcConnection);
+    assert(!m_pSession && !m_xICEConnectionObserver && !m_pSmcConnection);
         // must only be called once
     m_pSession = pSession;
     // This is the way Xt does it, so we can too:
     if( getenv( "SESSION_MANAGER" ) )
     {
-        m_pICEConnectionObserver.reset(new ICEConnectionObserver);
-        m_pICEConnectionObserver->activate();
+        m_xICEConnectionObserver.reset(new ICEConnectionObserver);
+        m_xICEConnectionObserver->activate();
 
         {
-            osl::MutexGuard g(m_pICEConnectionObserver->m_ICEMutex);
+            osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
 
             static SmcCallbacks aCallbacks; // does this need to be static?
             aCallbacks.save_yourself.callback           = SaveYourselfProc;
@@ -489,15 +489,15 @@ void SessionManagerClient::close()
 {
     if( m_pSmcConnection )
     {
-        assert(m_pICEConnectionObserver);
+        assert(m_xICEConnectionObserver);
         {
-            osl::MutexGuard g(m_pICEConnectionObserver->m_ICEMutex);
+            osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
             SAL_INFO("vcl.sm", "attempting SmcCloseConnection");
             SmcCloseConnection( m_pSmcConnection, 0, NULL );
             SAL_INFO("vcl.sm", "SmcConnection closed");
         }
-        m_pICEConnectionObserver->deactivate();
-        m_pICEConnectionObserver.reset();
+        m_xICEConnectionObserver->deactivate();
+        m_xICEConnectionObserver.reset();
         m_pSmcConnection = NULL;
     }
 }
@@ -507,8 +507,8 @@ bool SessionManagerClient::queryInteraction()
     bool bRet = false;
     if( m_pSmcConnection )
     {
-        assert(m_pICEConnectionObserver);
-        osl::MutexGuard g(m_pICEConnectionObserver->m_ICEMutex);
+        assert(m_xICEConnectionObserver);
+        osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
         if( SmcInteractRequest( m_pSmcConnection, SmDialogNormal, InteractProc, NULL ) )
             bRet = true;
     }
@@ -519,8 +519,8 @@ void SessionManagerClient::interactionDone( bool bCancelShutdown )
 {
     if( m_pSmcConnection )
     {
-        assert(m_pICEConnectionObserver);
-        osl::MutexGuard g(m_pICEConnectionObserver->m_ICEMutex);
+        assert(m_xICEConnectionObserver);
+        osl::MutexGuard g(m_xICEConnectionObserver->m_ICEMutex);
         SmcInteractDone( m_pSmcConnection, bCancelShutdown ? True : False );
     }
 }

@@ -19,13 +19,11 @@
 #ifndef INCLUDED_COMPHELPER_STORAGEHELPER_HXX
 #define INCLUDED_COMPHELPER_STORAGEHELPER_HXX
 
-#include <boost/scoped_ptr.hpp>
-
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <comphelper/comphelperdllapi.h>
-
+#include <memory>
 
 #define PACKAGE_STORAGE_FORMAT_STRING   "PackageFormat"
 #define ZIP_STORAGE_FORMAT_STRING       "ZipFormat"
@@ -58,7 +56,7 @@ class COMPHELPER_DLLPUBLIC LifecycleProxy
 private:
     class Impl;
 public:
-    ::boost::scoped_ptr<Impl> m_pBadness;
+    std::unique_ptr<Impl> m_xBadness;
     LifecycleProxy();
     ~LifecycleProxy();
     // commit the storages: necessary for writes to streams to take effect!

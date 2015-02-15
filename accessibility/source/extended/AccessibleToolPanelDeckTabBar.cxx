@@ -276,7 +276,7 @@ namespace accessibility
     AccessibleToolPanelTabBar::AccessibleToolPanelTabBar( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::IToolPanelDeck& i_rPanelDeck, ::svt::PanelTabBar& i_rTabBar )
         :AccessibleToolPanelTabBar_Base( i_rTabBar.GetWindowPeer() )
-        ,m_pImpl( new AccessibleToolPanelTabBar_Impl( *this, i_rAccessibleParent, i_rPanelDeck, i_rTabBar ) )
+        ,m_xImpl( new AccessibleToolPanelTabBar_Impl( *this, i_rAccessibleParent, i_rPanelDeck, i_rTabBar ) )
     {
     }
 
@@ -286,22 +286,22 @@ namespace accessibility
 
     sal_Int32 SAL_CALL AccessibleToolPanelTabBar::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
 
-        const bool bHasScrollBack = m_pImpl->getTabBar()->GetScrollButton( false ).IsVisible();
-        const bool bHasScrollForward = m_pImpl->getTabBar()->GetScrollButton( true ).IsVisible();
+        const bool bHasScrollBack = m_xImpl->getTabBar()->GetScrollButton( false ).IsVisible();
+        const bool bHasScrollForward = m_xImpl->getTabBar()->GetScrollButton( true ).IsVisible();
 
-        return  m_pImpl->getPanelDeck()->GetPanelCount()
+        return  m_xImpl->getPanelDeck()->GetPanelCount()
             +   ( bHasScrollBack ? 1 : 0 )
             +   ( bHasScrollForward ? 1 : 0 );
     }
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
 
-        const bool bHasScrollBack = m_pImpl->getTabBar()->GetScrollButton( false ).IsVisible();
-        const bool bHasScrollForward = m_pImpl->getTabBar()->GetScrollButton( true ).IsVisible();
+        const bool bHasScrollBack = m_xImpl->getTabBar()->GetScrollButton( false ).IsVisible();
+        const bool bHasScrollForward = m_xImpl->getTabBar()->GetScrollButton( true ).IsVisible();
 
         const bool bScrollBackRequested = ( bHasScrollBack && ( i_nIndex == 0 ) );
         const bool bScrollForwardRequested = ( bHasScrollForward && ( i_nIndex == getAccessibleChildCount() - 1 ) );
@@ -309,29 +309,29 @@ namespace accessibility
 
         if ( bScrollBackRequested || bScrollForwardRequested )
         {
-            Reference< XAccessible > xScrollButtonAccessible( m_pImpl->getTabBar()->GetScrollButton( bScrollForwardRequested ).GetAccessible() );
+            Reference< XAccessible > xScrollButtonAccessible( m_xImpl->getTabBar()->GetScrollButton( bScrollForwardRequested ).GetAccessible() );
             ENSURE_OR_RETURN( xScrollButtonAccessible.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible!", NULL );
         #if OSL_DEBUG_LEVEL > 0
             Reference< XAccessibleContext > xScrollButtonContext( xScrollButtonAccessible->getAccessibleContext() );
             ENSURE_OR_RETURN( xScrollButtonContext.is(), "AccessibleToolPanelTabBar::getAccessibleChild: invalid button accessible context!", xScrollButtonAccessible );
-            OSL_ENSURE( xScrollButtonContext->getAccessibleParent() == m_pImpl->getOwnAccessible(),
+            OSL_ENSURE( xScrollButtonContext->getAccessibleParent() == m_xImpl->getOwnAccessible(),
                 "AccessibleToolPanelTabBar::getAccessibleChild: wrong parent at the button's accessible!" );
         #endif
             return xScrollButtonAccessible;
         }
 
-        return m_pImpl->getAccessiblePanelItem( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
+        return m_xImpl->getAccessiblePanelItem( i_nIndex - ( bHasScrollBack ? 1 : 0 ) );
     }
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleParent(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
-        return m_pImpl->getAccessibleParent();
+        MethodGuard aGuard( *m_xImpl );
+        return m_xImpl->getAccessibleParent();
     }
 
     sal_Int16 SAL_CALL AccessibleToolPanelTabBar::getAccessibleRole(  ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
         return AccessibleRole::PAGE_TAB_LIST;
     }
 
@@ -346,29 +346,29 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL AccessibleToolPanelTabBar::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException, std::exception)
     {
-        MethodGuard aGuard( *m_pImpl );
+        MethodGuard aGuard( *m_xImpl );
 
         // check the tab items
         const UnoPoint aOwnScreenPos( getLocationOnScreen() );
         const ::Point aRequestedScreenPoint( i_rPoint.X + aOwnScreenPos.X, i_rPoint.Y + aOwnScreenPos.Y );
 
-        for ( size_t i=0; i<m_pImpl->getPanelDeck()->GetPanelCount(); ++i )
+        for ( size_t i=0; i<m_xImpl->getPanelDeck()->GetPanelCount(); ++i )
         {
-            const ::Rectangle aItemScreenRect( m_pImpl->getTabBar()->GetItemScreenRect(i) );
+            const ::Rectangle aItemScreenRect( m_xImpl->getTabBar()->GetItemScreenRect(i) );
             if ( aItemScreenRect.IsInside( aRequestedScreenPoint ) )
-                return m_pImpl->getAccessiblePanelItem(i);
+                return m_xImpl->getAccessiblePanelItem(i);
         }
 
         // check the scroll buttons
         const ::Point aRequestedClientPoint( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) );
 
-        const bool bHasScrollBack = m_pImpl->getTabBar()->GetScrollButton( false ).IsVisible();
-        if ( bHasScrollBack && lcl_covers( m_pImpl->getTabBar()->GetScrollButton( false ), aRequestedClientPoint ) )
-            return m_pImpl->getTabBar()->GetScrollButton( false ).GetAccessible();
+        const bool bHasScrollBack = m_xImpl->getTabBar()->GetScrollButton( false ).IsVisible();
+        if ( bHasScrollBack && lcl_covers( m_xImpl->getTabBar()->GetScrollButton( false ), aRequestedClientPoint ) )
+            return m_xImpl->getTabBar()->GetScrollButton( false ).GetAccessible();
 
-        const bool bHasScrollForward = m_pImpl->getTabBar()->GetScrollButton( true ).IsVisible();
-        if ( bHasScrollForward && lcl_covers( m_pImpl->getTabBar()->GetScrollButton( true ), aRequestedClientPoint ) )
-            return m_pImpl->getTabBar()->GetScrollButton( true ).GetAccessible();
+        const bool bHasScrollForward = m_xImpl->getTabBar()->GetScrollButton( true ).IsVisible();
+        if ( bHasScrollForward && lcl_covers( m_xImpl->getTabBar()->GetScrollButton( true ), aRequestedClientPoint ) )
+            return m_xImpl->getTabBar()->GetScrollButton( true ).GetAccessible();
 
         // no hit
         return NULL;
@@ -377,7 +377,7 @@ namespace accessibility
     void SAL_CALL AccessibleToolPanelTabBar::disposing()
     {
         AccessibleToolPanelTabBar_Base::disposing();
-        m_pImpl->dispose();
+        m_xImpl->dispose();
     }
 
     Reference< XAccessible > AccessibleToolPanelTabBar::GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent )
@@ -393,8 +393,8 @@ namespace accessibility
         AccessibleToolPanelTabBar_Base::FillAccessibleStateSet( i_rStateSet );
         i_rStateSet.AddState( AccessibleStateType::FOCUSABLE );
 
-        ENSURE_OR_RETURN_VOID( !m_pImpl->isDisposed(), "AccessibleToolPanelTabBar::FillAccessibleStateSet: already disposed!" );
-        if ( m_pImpl->getTabBar()->IsVertical() )
+        ENSURE_OR_RETURN_VOID( !m_xImpl->isDisposed(), "AccessibleToolPanelTabBar::FillAccessibleStateSet: already disposed!" );
+        if ( m_xImpl->getTabBar()->IsVertical() )
             i_rStateSet.AddState( AccessibleStateType::VERTICAL );
         else
             i_rStateSet.AddState( AccessibleStateType::HORIZONTAL );

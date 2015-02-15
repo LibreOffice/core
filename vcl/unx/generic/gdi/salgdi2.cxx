@@ -39,7 +39,6 @@
 
 #include "vcl/bmpacc.hxx"
 #include <outdata.hxx>
-#include <boost/scoped_ptr.hpp>
 
 void X11SalGraphics::CopyScreenArea( Display* pDisplay,
                                      Drawable aSrc, SalX11Screen nXScreenSrc, int nSrcDepth,
@@ -80,14 +79,14 @@ void X11SalGraphics::CopyScreenArea( Display* pDisplay,
 
 bool X11SalGraphics::FillPixmapFromScreen( X11Pixmap* pPixmap, int nX, int nY )
 {
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mpImpl.get());
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
     return rImpl.FillPixmapFromScreen( pPixmap, nX, nY );
 }
 
 bool X11SalGraphics::RenderPixmapToScreen( X11Pixmap* pPixmap, X11Pixmap* pMask, int nX, int nY )
 {
     SAL_INFO( "vcl", "RenderPixmapToScreen" );
-    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mpImpl.get());
+    X11GraphicsImpl& rImpl = dynamic_cast<X11GraphicsImpl&>(*mxImpl.get());
     return rImpl.RenderPixmapToScreen( pPixmap, pMask, nX, nY );
 }
 
@@ -151,7 +150,7 @@ void X11SalGraphics::YieldGraphicsExpose()
 void X11SalGraphics::copyBits( const SalTwoRect& rPosAry,
                                   SalGraphics      *pSSrcGraphics )
 {
-    mpImpl->copyBits( rPosAry, pSSrcGraphics );
+    mxImpl->copyBits( rPosAry, pSSrcGraphics );
 }
 
 void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
@@ -159,13 +158,13 @@ void X11SalGraphics::copyArea ( long nDestX,    long nDestY,
                                 long nSrcWidth, long nSrcHeight,
                                 sal_uInt16 n )
 {
-    mpImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, n );
+    mxImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, n );
 }
 
 bool X11SalGraphics::blendBitmap( const SalTwoRect& rTR,
                                   const SalBitmap& rBitmap )
 {
-    return mpImpl->blendBitmap( rTR, rBitmap );
+    return mxImpl->blendBitmap( rTR, rBitmap );
 }
 
 bool X11SalGraphics::blendAlphaBitmap( const SalTwoRect& rTR,
@@ -173,31 +172,31 @@ bool X11SalGraphics::blendAlphaBitmap( const SalTwoRect& rTR,
                                        const SalBitmap& rMaskBitmap,
                                        const SalBitmap& rAlphaBitmap )
 {
-    return mpImpl->blendAlphaBitmap( rTR, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
+    return mxImpl->blendAlphaBitmap( rTR, rSrcBitmap, rMaskBitmap, rAlphaBitmap );
 }
 
 void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap )
 {
-    mpImpl->drawBitmap( rPosAry, rSalBitmap );
+    mxImpl->drawBitmap( rPosAry, rSalBitmap );
 }
 
 void X11SalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSrcBitmap,
                                  const SalBitmap& rMaskBitmap )
 {
-    mpImpl->drawBitmap( rPosAry, rSrcBitmap, rMaskBitmap );
+    mxImpl->drawBitmap( rPosAry, rSrcBitmap, rMaskBitmap );
 }
 
 bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     const SalBitmap& rSrcBitmap, const SalBitmap& rAlphaBmp )
 {
-    return mpImpl->drawAlphaBitmap( rTR, rSrcBitmap, rAlphaBmp );
+    return mxImpl->drawAlphaBitmap( rTR, rSrcBitmap, rAlphaBmp );
 }
 
 bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
                                       const SalBitmap& rBitmap )
 {
-    return mpImpl->drawAlphaBitmap( rTR, rBitmap );
+    return mxImpl->drawAlphaBitmap( rTR, rBitmap );
 }
 
 bool X11SalGraphics::drawTransformedBitmap(
@@ -207,37 +206,37 @@ bool X11SalGraphics::drawTransformedBitmap(
     const SalBitmap& rSourceBitmap,
     const SalBitmap* pAlphaBitmap)
 {
-    return mpImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap );
+    return mxImpl->drawTransformedBitmap( rNull, rX, rY, rSourceBitmap, pAlphaBitmap );
 }
 
 bool X11SalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
 {
-    return mpImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
+    return mxImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
 }
 
 void X11SalGraphics::drawBitmap( const SalTwoRect& rRect,
                                  const SalBitmap& rBitmap,
                                  SalColor nColor )
 {
-    mpImpl->drawBitmap( rRect, rBitmap, nColor );
+    mxImpl->drawBitmap( rRect, rBitmap, nColor );
 }
 
 void X11SalGraphics::drawMask( const SalTwoRect& rPosAry,
                                const SalBitmap &rSalBitmap,
                                SalColor nMaskColor )
 {
-    mpImpl->drawMask( rPosAry, rSalBitmap, nMaskColor );
+    mxImpl->drawMask( rPosAry, rSalBitmap, nMaskColor );
 }
 
 SalBitmap *X11SalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
-    return mpImpl->getBitmap( nX, nY, nDX, nDY );
+    return mxImpl->getBitmap( nX, nY, nDX, nDY );
 }
 
 SalColor X11SalGraphics::getPixel( long nX, long nY )
 {
-    return mpImpl->getPixel( nX, nY );
+    return mxImpl->getPixel( nX, nY );
 }
 
 void X11SalGraphics::invert( long       nX,
@@ -246,7 +245,7 @@ void X11SalGraphics::invert( long       nX,
                                 long        nDY,
                                 SalInvert   nFlags )
 {
-    mpImpl->invert( nX, nY, nDX, nDY, nFlags );
+    mxImpl->invert( nX, nY, nDX, nDY, nFlags );
 }
 
 bool X11SalGraphics::supportsOperation( OutDevSupportType eType ) const

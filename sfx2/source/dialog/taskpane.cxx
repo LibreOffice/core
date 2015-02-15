@@ -695,7 +695,7 @@ namespace sfx2
 
     ModuleTaskPane::ModuleTaskPane( vcl::Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
         :Window( &i_rParentWindow, WB_DIALOGCONTROL )
-        ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame ) )
+        ,m_xImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame ) )
     {
     }
 
@@ -714,44 +714,44 @@ namespace sfx2
     void ModuleTaskPane::Resize()
     {
         Window::Resize();
-        m_pImpl->OnResize();
+        m_xImpl->OnResize();
     }
 
 
     void ModuleTaskPane::GetFocus()
     {
         Window::GetFocus();
-        m_pImpl->OnGetFocus();
+        m_xImpl->OnGetFocus();
     }
 
 
     ::svt::ToolPanelDeck& ModuleTaskPane::GetPanelDeck()
     {
-        return m_pImpl->GetPanelDeck();
+        return m_xImpl->GetPanelDeck();
     }
 
 
     const ::svt::ToolPanelDeck& ModuleTaskPane::GetPanelDeck() const
     {
-        return m_pImpl->GetPanelDeck();
+        return m_xImpl->GetPanelDeck();
     }
 
 
     ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const OUString& i_rResourceURL )
     {
-        return m_pImpl->GetPanelPos( i_rResourceURL );
+        return m_xImpl->GetPanelPos( i_rResourceURL );
     }
 
 
     void ModuleTaskPane::SetDrawersLayout()
     {
-        m_pImpl->SetDrawersLayout();
+        m_xImpl->SetDrawersLayout();
     }
 
 
     void ModuleTaskPane::SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent )
     {
-        m_pImpl->SetTabsLayout( i_eTabAlignment, i_eTabContent );
+        m_xImpl->SetTabsLayout( i_eTabAlignment, i_eTabContent );
     }
 
 
@@ -1214,7 +1214,7 @@ namespace sfx2
 
 
     TaskPaneController::TaskPaneController( ModuleTaskPane& i_rTaskPane, TitledDockingWindow& i_rDockingWindow )
-        :m_pImpl( new TaskPaneController_Impl( i_rTaskPane, i_rDockingWindow ) )
+        :m_xImpl( new TaskPaneController_Impl( i_rTaskPane, i_rDockingWindow ) )
     {
     }
 
@@ -1226,7 +1226,7 @@ namespace sfx2
 
     void TaskPaneController::ActivateToolPanel( const OUString& i_rPanelURL )
     {
-        m_pImpl->ActivateToolPanel( i_rPanelURL );
+        m_xImpl->ActivateToolPanel( i_rPanelURL );
     }
 
 

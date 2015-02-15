@@ -30,8 +30,8 @@
 #include <xmloff/styleexp.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
+#include <memory>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 class XMLTextListsHelper;
 class SvXMLExport;
@@ -66,7 +66,7 @@ namespace xmloff
 class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
 {
     struct Impl;
-    ::boost::scoped_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_xImpl;
 
 //  SvXMLExport& rExport;
     SvXMLAutoStylePoolP& rAutoStylePool;

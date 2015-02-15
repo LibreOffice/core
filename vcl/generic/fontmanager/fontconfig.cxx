@@ -782,7 +782,7 @@ namespace
     OString mapToFontConfigLangTag(const LanguageTag &rLangTag)
     {
 #if defined(FC_VERSION) && (FC_VERSION >= 20492)
-        boost::shared_ptr<FcStrSet> xLangSet(FcGetLangs(), FcStrSetDestroy);
+        std::shared_ptr<FcStrSet> xLangSet(FcGetLangs(), FcStrSetDestroy);
         OString sLangAttrib;
 
         sLangAttrib = OUStringToOString(rLangTag.getBcp47(), RTL_TEXTENCODING_UTF8).toAsciiLowerCase();

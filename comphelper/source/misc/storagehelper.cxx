@@ -514,13 +514,13 @@ bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSeg
 class LifecycleProxy::Impl
     : public std::vector< uno::Reference< embed::XStorage > > {};
 LifecycleProxy::LifecycleProxy()
-    : m_pBadness( new Impl() ) { }
+    : m_xBadness( new Impl() ) { }
 LifecycleProxy::~LifecycleProxy() { }
 
 void LifecycleProxy::commitStorages()
 {
-    for (Impl::reverse_iterator iter = m_pBadness->rbegin();
-            iter != m_pBadness->rend(); ++iter) // reverse order (outwards)
+    for (Impl::reverse_iterator iter = m_xBadness->rbegin();
+            iter != m_xBadness->rend(); ++iter) // reverse order (outwards)
     {
         uno::Reference<embed::XTransactedObject> const xTransaction(*iter,
                 uno::UNO_QUERY);
@@ -544,11 +544,11 @@ static uno::Reference< embed::XStorage > LookupStorageAtPath(
         LifecycleProxy &rNastiness )
 {
     uno::Reference< embed::XStorage > xStorage( xParentStorage );
-    rNastiness.m_pBadness->push_back( xStorage );
+    rNastiness.m_xBadness->push_back( xStorage );
     for( size_t i = 0; i < rElems.size() && xStorage.is(); i++ )
     {
         xStorage = xStorage->openStorageElement( rElems[i], nOpenMode );
-        rNastiness.m_pBadness->push_back( xStorage );
+        rNastiness.m_xBadness->push_back( xStorage );
     }
     return xStorage;
 }

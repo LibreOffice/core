@@ -36,8 +36,6 @@
 #include <oox/helper/storagebase.hxx>
 #include <oox/dllapi.h>
 
-#include <boost/scoped_ptr.hpp>
-
 namespace com { namespace sun { namespace star {
     namespace awt { struct DeviceInfo; }
     namespace frame { class XFrame; }
@@ -284,7 +282,7 @@ private:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxOutStream ) const = 0;
 
 private:
-    boost::scoped_ptr< FilterBaseImpl > mxImpl;
+    std::unique_ptr< FilterBaseImpl > mxImpl;
 };
 
 

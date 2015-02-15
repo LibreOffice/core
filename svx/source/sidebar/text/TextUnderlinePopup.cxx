@@ -32,21 +32,15 @@ TextUnderlinePopup::TextUnderlinePopup (
 {
 }
 
-
-
-
 TextUnderlinePopup::~TextUnderlinePopup (void)
 {
 }
-
-
-
 
 void TextUnderlinePopup::Rearrange (FontUnderline eLine)
 {
     ProvideContainerAndControl();
 
-    TextUnderlineControl* pControl = dynamic_cast<TextUnderlineControl*>(mpControl.get());
+    TextUnderlineControl* pControl = dynamic_cast<TextUnderlineControl*>(mxControl.get());
     if (pControl != NULL)
         pControl->Rearrange(eLine);
 }

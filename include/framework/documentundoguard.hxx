@@ -24,14 +24,10 @@
 
 #include <com/sun/star/uno/XInterface.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
+#include <memory>
 
 namespace framework
 {
-
-
-
     //= DocumentUndoGuard
 
     struct DocumentUndoGuard_Data;
@@ -51,7 +47,7 @@ namespace framework
         ~DocumentUndoGuard();
 
     private:
-        ::boost::scoped_ptr< DocumentUndoGuard_Data >   m_pData;
+        std::unique_ptr< DocumentUndoGuard_Data >   m_xData;
     };
 
 

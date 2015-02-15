@@ -22,19 +22,15 @@
 
 #include <sal/config.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
 #include <salhelper/simplereferenceobject.hxx>
-
+#include <memory>
 
 namespace comphelper
 {
-
-
-
     //= AnyEvent
 
     /** the very basic instance to hold a description of an event
@@ -104,7 +100,7 @@ namespace comphelper
         friend struct EventNotifierImpl;
 
     private:
-        boost::scoped_ptr< EventNotifierImpl >        m_pImpl;
+        std::unique_ptr<EventNotifierImpl>        m_xImpl;
 
         SAL_DLLPRIVATE virtual ~AsyncEventNotifier();
 

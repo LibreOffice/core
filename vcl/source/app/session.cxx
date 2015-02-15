@@ -19,7 +19,6 @@
 
 #include "sal/config.h"
 
-#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 
@@ -66,7 +65,7 @@ class VCLSession:
     };
 
     std::list< Listener >                           m_aListeners;
-    boost::scoped_ptr< SalSession >                 m_pSession;
+    std::unique_ptr< SalSession >                   m_xSession;
     bool                                            m_bInteractionRequested;
     bool                                            m_bInteractionGranted;
     bool                                            m_bInteractionDone;
@@ -94,14 +93,14 @@ public:
 
 VCLSession::VCLSession()
         : cppu::WeakComponentImplHelper1< XSessionManagerClient >( m_aMutex ),
-          m_pSession( ImplGetSVData()->mpDefInst->CreateSalSession() ),
+          m_xSession( ImplGetSVData()->mpDefInst->CreateSalSession() ),
           m_bInteractionRequested( false ),
           m_bInteractionGranted( false ),
           m_bInteractionDone( false ),
           m_bSaveDone( false )
 {
-    if( m_pSession )
-        m_pSession->SetCallback( SalSessionEventProc, this );
+    if (m_xSession)
+        m_xSession->SetCallback( SalSessionEventProc, this );
 }
 
 void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
@@ -123,14 +122,14 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         m_bInteractionDone = false;
         // without session we assume UI is always possible,
         // so it was reqeusted and granted
-        m_bInteractionRequested = m_bInteractionGranted = !m_pSession;
+        m_bInteractionRequested = m_bInteractionGranted = !m_xSession;
 
         // answer the session manager even if no listeners available anymore
         DBG_ASSERT( ! aListeners.empty(), "saveRequested but no listeners !" );
         if( aListeners.empty() )
         {
-            if( m_pSession )
-                m_pSession->saveDone();
+            if (m_xSession)
+                m_xSession->saveDone();
             return;
         }
     }
@@ -157,8 +156,8 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
         DBG_ASSERT( ! aListeners.empty(), "interactionGranted but no listeners !" );
         if( aListeners.empty() )
         {
-            if( m_pSession )
-                m_pSession->interactionDone();
+            if (m_xSession)
+                m_xSession->interactionDone();
             return;
         }
     }
@@ -271,7 +270,7 @@ void SAL_CALL VCLSession::queryInteraction( const css::uno::Reference<XSessionMa
     osl::MutexGuard aGuard( m_aMutex );
     if( ! m_bInteractionRequested )
     {
-        m_pSession->queryInteraction();
+        m_xSession->queryInteraction();
         m_bInteractionRequested = true;
     }
     for( std::list< Listener >::iterator it = m_aListeners.begin(); it != m_aListeners.end(); ++it )
@@ -302,8 +301,8 @@ void SAL_CALL VCLSession::interactionDone( const css::uno::Reference< XSessionMa
     if( nDone == nRequested && nDone > 0 )
     {
         m_bInteractionDone = true;
-        if( m_pSession )
-            m_pSession->interactionDone();
+        if (m_xSession)
+            m_xSession->interactionDone();
     }
 }
 
@@ -323,14 +322,14 @@ void SAL_CALL VCLSession::saveDone( const css::uno::Reference< XSessionManagerLi
     if( bSaveDone )
     {
         m_bSaveDone = true;
-        if( m_pSession )
-            m_pSession->saveDone();
+        if (m_xSession)
+            m_xSession->saveDone();
     }
 }
 
 sal_Bool SAL_CALL VCLSession::cancelShutdown() throw( RuntimeException, std::exception )
 {
-    return m_pSession && m_pSession->cancelShutdown();
+    return m_xSession && m_xSession->cancelShutdown();
 }
 
 // service implementation

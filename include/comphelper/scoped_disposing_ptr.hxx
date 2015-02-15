@@ -12,7 +12,6 @@
 
 #include <cppuhelper/implbase1.hxx>
 #include <boost/utility.hpp>
-#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -22,42 +21,42 @@
 
 namespace comphelper
 {
-//Similar to boost::scoped_ptr, except additionally releases the ptr on XComponent::disposing and/or XTerminateListener::notifyTermination if supported
+//Similar to std::unique_ptr, except additionally releases the ptr on XComponent::disposing and/or XTerminateListener::notifyTermination if supported
 template<class T> class scoped_disposing_ptr : private boost::noncopyable
 {
 private:
-    boost::scoped_ptr<T> m_aItem;
+    std::unique_ptr<T> m_xItem;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener> m_xTerminateListener;
 public:
     scoped_disposing_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
-        : m_aItem(p)
+        : m_xItem(p)
     {
         m_xTerminateListener = new TerminateListener(rComponent, *this);
     }
 
     virtual void reset(T * p = 0)
     {
-        m_aItem.reset(p);
+        m_xItem.reset(p);
     }
 
     T & operator*() const
     {
-        return *m_aItem;
+        return *m_xItem;
     }
 
     T * get() const
     {
-        return m_aItem.get();
+        return m_xItem.get();
     }
 
     T * operator->() const
     {
-        return m_aItem.get();
+        return m_xItem.get();
     }
 
     operator bool () const
     {
-        return static_cast< bool >(m_aItem);
+        return static_cast< bool >(m_xItem);
     }
 
     virtual ~scoped_disposing_ptr()

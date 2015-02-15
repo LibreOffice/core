@@ -91,30 +91,30 @@ X11SalGraphics::GetFontGC()
 
 void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 {
-    mpTextRenderImpl->DrawServerFontLayout(rLayout);
+    mxTextRenderImpl->DrawServerFontLayout(rLayout);
 }
 
 const FontCharMapPtr X11SalGraphics::GetFontCharMap() const
 {
-    return mpTextRenderImpl->GetFontCharMap();
+    return mxTextRenderImpl->GetFontCharMap();
 }
 
 bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
 {
-    return mpTextRenderImpl->GetFontCapabilities(rGetImplFontCapabilities);
+    return mxTextRenderImpl->GetFontCapabilities(rGetImplFontCapabilities);
 }
 
 // SalGraphics
 
 sal_uInt16 X11SalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
-    return mpTextRenderImpl->SetFont(pEntry, nFallbackLevel);
+    return mxTextRenderImpl->SetFont(pEntry, nFallbackLevel);
 }
 
 void
 X11SalGraphics::SetTextColor( SalColor nSalColor )
 {
-    mpTextRenderImpl->SetTextColor(nSalColor);
+    mxTextRenderImpl->SetTextColor(nSalColor);
     nTextPixel_     = GetPixel( nSalColor );
     bFontGC_        = false;
 }
@@ -123,44 +123,44 @@ bool X11SalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
-    return mpTextRenderImpl->AddTempDevFont(pFontCollection, rFileURL, rFontName);
+    return mxTextRenderImpl->AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 
 void X11SalGraphics::ClearDevFontCache()
 {
-    mpTextRenderImpl->ClearDevFontCache();
+    mxTextRenderImpl->ClearDevFontCache();
 }
 
 void X11SalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
 {
-    mpTextRenderImpl->GetDevFontList(pFontCollection);
+    mxTextRenderImpl->GetDevFontList(pFontCollection);
 }
 
 void
 X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 {
-    mpTextRenderImpl->GetFontMetric(pMetric, nFallbackLevel);
+    mxTextRenderImpl->GetFontMetric(pMetric, nFallbackLevel);
 }
 
 bool X11SalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
 {
-    return mpTextRenderImpl->GetGlyphBoundRect(aGlyphId, rRect);
+    return mxTextRenderImpl->GetGlyphBoundRect(aGlyphId, rRect);
 }
 
 bool X11SalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
     ::basegfx::B2DPolyPolygon& rPolyPoly )
 {
-    return mpTextRenderImpl->GetGlyphOutline(aGlyphId, rPolyPoly);
+    return mxTextRenderImpl->GetGlyphOutline(aGlyphId, rPolyPoly);
 }
 
 SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
 {
-    return mpTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
+    return mxTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
 }
 
 SystemFontData X11SalGraphics::GetSysFontData( int nFallbackLevel ) const
 {
-    return mpTextRenderImpl->GetSysFontData(nFallbackLevel);
+    return mxTextRenderImpl->GetSysFontData(nFallbackLevel);
 }
 
 bool X11SalGraphics::CreateFontSubset(
@@ -173,23 +173,23 @@ bool X11SalGraphics::CreateFontSubset(
                                    FontSubsetInfo& rInfo
                                    )
 {
-    return mpTextRenderImpl->CreateFontSubset(rToFile, pFont,
+    return mxTextRenderImpl->CreateFontSubset(rToFile, pFont,
             pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
 }
 
 const void* X11SalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen )
 {
-    return mpTextRenderImpl->GetEmbedFontData(pFont, pUnicodes, pWidths, nLen, rInfo, pDataLen);
+    return mxTextRenderImpl->GetEmbedFontData(pFont, pUnicodes, pWidths, nLen, rInfo, pDataLen);
 }
 
 void X11SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
-    mpTextRenderImpl->FreeEmbedFontData(pData, nLen);
+    mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
 }
 
 const Ucs2SIntMap* X11SalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
 {
-    return mpTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded, ppPriority);
+    return mxTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded, ppPriority);
 }
 
 void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
@@ -197,7 +197,7 @@ void X11SalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    Int32Vector& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
 {
-    mpTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
+    mxTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -138,16 +138,15 @@ namespace utl
     }
 
     //= CloseVeto
-
     CloseVeto::CloseVeto( const Reference< XInterface >& i_closeable )
-        :m_pData( new CloseVeto_Data )
+        : m_xData(new CloseVeto_Data)
     {
-        lcl_init( *m_pData, i_closeable );
+        lcl_init(*m_xData, i_closeable);
     }
 
     CloseVeto::~CloseVeto()
     {
-        lcl_deinit( *m_pData );
+        lcl_deinit(*m_xData);
     }
 
 } // namespace utl

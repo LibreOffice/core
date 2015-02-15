@@ -682,12 +682,12 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
         if( !aDstRect.IsEmpty() )
         {
-            boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice);
+            std::unique_ptr<VirtualDevice> xVDev(new VirtualDevice);
 
-            ((OutputDevice*)pVDev.get())->mnDPIX = mnDPIX;
-            ((OutputDevice*)pVDev.get())->mnDPIY = mnDPIY;
+            ((OutputDevice*)xVDev.get())->mnDPIX = mnDPIX;
+            ((OutputDevice*)xVDev.get())->mnDPIY = mnDPIY;
 
-            if( pVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
+            if( xVDev->SetOutputSizePixel( aDstRect.GetSize() ) )
             {
                 if(GetAntialiasing())
                 {
@@ -696,48 +696,48 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     // into account that the content is AntiAlialised and needs to be masked
                     // like that. Instead of masking, i will use a copy-modify-paste cycle
                     // here (as i already use in the VclPrimiziveRenderer with successs)
-                    pVDev->SetAntialiasing(GetAntialiasing());
+                    xVDev->SetAntialiasing(GetAntialiasing());
 
                     // create MapMode for buffer (offset needed) and set
                     MapMode aMap(GetMapMode());
                     const Point aOutPos(PixelToLogic(aDstRect.TopLeft()));
                     aMap.SetOrigin(Point(-aOutPos.X(), -aOutPos.Y()));
-                    pVDev->SetMapMode(aMap);
+                    xVDev->SetMapMode(aMap);
 
                     // copy MapMode state and disable for target
                     const bool bOrigMapModeEnabled(IsMapModeEnabled());
                     EnableMapMode(false);
 
                     // copy MapMode state and disable for buffer
-                    const bool bBufferMapModeEnabled(pVDev->IsMapModeEnabled());
-                    pVDev->EnableMapMode(false);
+                    const bool bBufferMapModeEnabled(xVDev->IsMapModeEnabled());
+                    xVDev->EnableMapMode(false);
 
                     // copy content from original to buffer
-                    pVDev->DrawOutDev( aPoint, pVDev->GetOutputSizePixel(), // dest
-                                       aDstRect.TopLeft(), pVDev->GetOutputSizePixel(), // source
+                    xVDev->DrawOutDev( aPoint, xVDev->GetOutputSizePixel(), // dest
+                                       aDstRect.TopLeft(), xVDev->GetOutputSizePixel(), // source
                                        *this);
 
                     // draw MetaFile to buffer
-                    pVDev->EnableMapMode(bBufferMapModeEnabled);
+                    xVDev->EnableMapMode(bBufferMapModeEnabled);
                     ((GDIMetaFile&)rMtf).WindStart();
-                    ((GDIMetaFile&)rMtf).Play(pVDev.get(), rPos, rSize);
+                    ((GDIMetaFile&)rMtf).Play(xVDev.get(), rPos, rSize);
                     ((GDIMetaFile&)rMtf).WindStart();
 
                     // get content bitmap from buffer
-                    pVDev->EnableMapMode(false);
+                    xVDev->EnableMapMode(false);
 
-                    const Bitmap aPaint(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
+                    const Bitmap aPaint(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
 
                     // create alpha mask from gradient and get as Bitmap
-                    pVDev->EnableMapMode(bBufferMapModeEnabled);
-                    pVDev->SetDrawMode(DRAWMODE_GRAYGRADIENT);
-                    pVDev->DrawGradient(Rectangle(rPos, rSize), rTransparenceGradient);
-                    pVDev->SetDrawMode(DRAWMODE_DEFAULT);
-                    pVDev->EnableMapMode(false);
+                    xVDev->EnableMapMode(bBufferMapModeEnabled);
+                    xVDev->SetDrawMode(DRAWMODE_GRAYGRADIENT);
+                    xVDev->DrawGradient(Rectangle(rPos, rSize), rTransparenceGradient);
+                    xVDev->SetDrawMode(DRAWMODE_DEFAULT);
+                    xVDev->EnableMapMode(false);
 
-                    const AlphaMask aAlpha(pVDev->GetBitmap(aPoint, pVDev->GetOutputSizePixel()));
+                    const AlphaMask aAlpha(xVDev->GetBitmap(aPoint, xVDev->GetOutputSizePixel()));
 
-                    pVDev.reset();
+                    xVDev.reset();
 
                     // draw masked content to target and restore MapMode
                     DrawBitmapEx(aDstRect.TopLeft(), BitmapEx(aPaint, aAlpha));
@@ -752,40 +752,40 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
                     const bool bOldMap = mbMap;
 
                     aMap.SetOrigin( Point( -aOutPos.X(), -aOutPos.Y() ) );
-                    pVDev->SetMapMode( aMap );
-                    const bool bVDevOldMap = pVDev->IsMapModeEnabled();
+                    xVDev->SetMapMode( aMap );
+                    const bool bVDevOldMap = xVDev->IsMapModeEnabled();
 
                     // create paint bitmap
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    ( (GDIMetaFile&) rMtf ).Play( pVDev.get(), rPos, rSize );
+                    ( (GDIMetaFile&) rMtf ).Play( xVDev.get(), rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    pVDev->EnableMapMode( false );
-                    aPaint = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
+                    xVDev->EnableMapMode( false );
+                    aPaint = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
+                    xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create mask bitmap
-                    pVDev->SetLineColor( COL_BLACK );
-                    pVDev->SetFillColor( COL_BLACK );
-                    pVDev->DrawRect( Rectangle( pVDev->PixelToLogic( Point() ), pVDev->GetOutputSize() ) );
-                    pVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                    xVDev->SetLineColor( COL_BLACK );
+                    xVDev->SetFillColor( COL_BLACK );
+                    xVDev->DrawRect( Rectangle( xVDev->PixelToLogic( Point() ), xVDev->GetOutputSize() ) );
+                    xVDev->SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
                                         DRAWMODE_WHITEBITMAP | DRAWMODE_WHITEGRADIENT );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    ( (GDIMetaFile&) rMtf ).Play( pVDev.get(), rPos, rSize );
+                    ( (GDIMetaFile&) rMtf ).Play( xVDev.get(), rPos, rSize );
                     ( (GDIMetaFile&) rMtf ).WindStart();
-                    pVDev->EnableMapMode( false );
-                    aMask = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
-                    pVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
+                    xVDev->EnableMapMode( false );
+                    aMask = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
+                    xVDev->EnableMapMode( bVDevOldMap ); // #i35331#: MUST NOT use EnableMapMode( sal_True ) here!
 
                     // create alpha mask from gradient
-                    pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
-                    pVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
-                    pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                    pVDev->EnableMapMode( false );
-                    pVDev->DrawMask( Point(), pVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
+                    xVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
+                    xVDev->DrawGradient( Rectangle( rPos, rSize ), rTransparenceGradient );
+                    xVDev->SetDrawMode( DRAWMODE_DEFAULT );
+                    xVDev->EnableMapMode( false );
+                    xVDev->DrawMask( Point(), xVDev->GetOutputSizePixel(), aMask, Color( COL_WHITE ) );
 
-                    aAlpha = pVDev->GetBitmap( Point(), pVDev->GetOutputSizePixel() );
+                    aAlpha = xVDev->GetBitmap( Point(), xVDev->GetOutputSizePixel() );
 
-                    pVDev.reset();
+                    xVDev.reset();
 
                     EnableMapMode( false );
                     DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );

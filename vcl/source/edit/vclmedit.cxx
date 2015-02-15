@@ -31,7 +31,6 @@
 #include <svids.hrc>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
-#include <boost/scoped_ptr.hpp>
 
 class TextWindow : public vcl::Window
 {
@@ -939,7 +938,7 @@ VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
 VclMultiLineEdit::~VclMultiLineEdit()
 {
     {
-        boost::scoped_ptr< ImpVclMEdit > pDelete( pImpVclMEdit );
+        std::unique_ptr< ImpVclMEdit > xDelete(pImpVclMEdit);
         pImpVclMEdit = NULL;
     }
     delete pUpdateDataTimer;

@@ -30,7 +30,7 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
     bWindow_     = pDisplay->IsDisplay();
     bVirDev_     = true;
 
-    mpImpl->Init();
+    mxImpl->Init();
 }
 
 X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,

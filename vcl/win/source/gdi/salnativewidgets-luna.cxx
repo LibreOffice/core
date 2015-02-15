@@ -1290,12 +1290,12 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         {
             pImpl->PreDraw();
 
-            boost::scoped_ptr<OpenGLTexture> pBlackTexture(aBlackDC.getTexture());
-            boost::scoped_ptr<OpenGLTexture> pWhiteTexture(aWhiteDC.getTexture());
+            std::unique_ptr<OpenGLTexture> xBlackTexture(aBlackDC.getTexture());
+            std::unique_ptr<OpenGLTexture> xWhiteTexture(aWhiteDC.getTexture());
 
-            if (pBlackTexture && pWhiteTexture)
+            if (xBlackTexture && xWhiteTexture)
             {
-                pImpl->DrawTextureDiff(*pWhiteTexture, *pBlackTexture, aBlackDC.getTwoRect());
+                pImpl->DrawTextureDiff(*xWhiteTexture, *xBlackTexture, aBlackDC.getTwoRect());
                 bOk = true;
             }
 

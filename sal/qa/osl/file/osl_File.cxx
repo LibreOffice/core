@@ -32,7 +32,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #ifdef WNT
 #include <windows.h>
@@ -1530,16 +1530,16 @@ namespace osl_FileStatus
             createTestFile( aTmpName3, aTmpName2 );
             createTestDirectory( aTmpName3, aTmpName1 );
 
-            boost::scoped_ptr<Directory> pDir( new Directory( aTmpName3 ) );
-            nError1 = pDir->open();
+            std::unique_ptr<Directory> xDir( new Directory( aTmpName3 ) );
+            nError1 = xDir->open();
             CPPUNIT_ASSERT_MESSAGE("open aTmpName3 failed!", ::osl::FileBase::E_None == nError1 );
             //getNextItem can not assure which item retrieved
-                    nError1 = pDir->getNextItem( m_aItem_1, 1 );
+                    nError1 = xDir->getNextItem( m_aItem_1, 1 );
             CPPUNIT_ASSERT_MESSAGE("get first item failed!", ::osl::FileBase::E_None == nError1 );
 
-                    nError1 = pDir->getNextItem( m_aItem_2 );
+                    nError1 = xDir->getNextItem( m_aItem_2 );
             CPPUNIT_ASSERT_MESSAGE("get second item failed!", ::osl::FileBase::E_None == nError1 );
-            pDir->close();
+            xDir->close();
             //mindy: failed on my RH9,so removed temporaly
             //nError1 = ::osl::DirectoryItem::get( aVolURL2, m_aVolumeItem );
             //CPPUNIT_ASSERT_MESSAGE("get volume item failed!", ::osl::FileBase::E_None == nError1 );

@@ -12,9 +12,9 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
-#include <vector>
 #include <editeng/editengdllapi.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
+#include <vector>
 
 namespace editeng
 {
@@ -24,7 +24,7 @@ struct TrieNode;
 class EDITENG_DLLPUBLIC Trie
 {
 private:
-    boost::scoped_ptr<TrieNode> mRoot;
+    std::unique_ptr<TrieNode> mRoot;
 
 public:
     Trie();

@@ -78,7 +78,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 
     const Drawable aVdevDrawable = pDevice->GetDrawable();
     SetDrawable( aVdevDrawable, m_nXScreen );
-    mpImpl->Init();
+    mxImpl->Init();
 }
 
 X11SalVirtualDevice::X11SalVirtualDevice( SalGraphics* pGraphics,

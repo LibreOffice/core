@@ -24,7 +24,6 @@
 #include <memory>
 #include <vector>
 
-#include "boost/scoped_ptr.hpp"
 #include "com/sun/star/connection/XConnection.hpp"
 #include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -80,7 +79,7 @@ css::uno::Sequence< sal_Int8 > read(
 
 extern "C" void SAL_CALL request(void * pThreadSpecificData) {
     assert(pThreadSpecificData != 0);
-    boost::scoped_ptr< IncomingRequest >(
+    std::unique_ptr< IncomingRequest >(
         static_cast< IncomingRequest * >(pThreadSpecificData))->
         execute();
 }

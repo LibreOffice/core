@@ -29,7 +29,6 @@
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdlayer.hxx>
-#include <vector>
 #include <svx/sdrpageuser.hxx>
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
@@ -37,11 +36,11 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <svx/svdobj.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
+#include <vector>
 
 
 // predefines
-
 namespace reportdesign { class OSection; }
 namespace sdr { namespace contact { class ViewContact; }}
 class SdrPage;
@@ -213,7 +212,7 @@ public:
         const sal_uInt32 nNewNavigationPosition);
 
     /** Return the object for the given navigation position.  When there is
-        a user defined navigation order, i.e. mpNavigationOrder is not NULL,
+        a user defined navigation order, i.e. mxNavigationOrder is not NULL,
         then that is used to look up the object.  Otherwise the z-order is
         used by looking up the object in maList.
         @param nNavigationPosition
@@ -229,7 +228,7 @@ public:
     void ClearObjectNavigationOrder (void);
 
     /** Set the navigation position of all SdrObjects to their position in
-        the mpNavigationOrder list.  This method returns immediately when no
+        the mxNavigationOrder list.  This method returns immediately when no
         update is necessary.
         @return
             This method returns <TRUE/> when the navigation positions stored
@@ -258,7 +257,7 @@ private:
     class WeakSdrObjectContainerType;
     /// This list, if it exists, defines the navigation order. If it does
     /// not exist then maList defines the navigation order.
-    ::boost::scoped_ptr<WeakSdrObjectContainerType> mpNavigationOrder;
+    std::unique_ptr<WeakSdrObjectContainerType> mxNavigationOrder;
 
     /// This flag is <TRUE/> when the mpNavigation list has been changed but
     /// the indices of the referenced SdrObjects still have their old values.

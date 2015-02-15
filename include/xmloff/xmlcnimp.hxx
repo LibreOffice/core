@@ -22,14 +22,14 @@
 
 #include <xmloff/dllapi.h>
 #include <sal/types.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 class SvXMLAttrCollection;
 
 class XMLOFF_DLLPUBLIC SvXMLAttrContainerData
 {
 private:
-    boost::scoped_ptr<SvXMLAttrCollection> pimpl;
+    std::unique_ptr<SvXMLAttrCollection> pimpl;
 
 public:
     SvXMLAttrContainerData();

@@ -21,7 +21,6 @@
 #define INCLUDED_VCL_SOURCE_FILTER_WMF_WINMTF_HXX
 
 #include <sot/object.hxx>
-#include <boost/shared_ptr.hpp>
 #include <vcl/graph.hxx>
 #include <basegfx/tools/b2dclipstate.hxx>
 #include <vcl/font.hxx>
@@ -454,7 +453,7 @@ struct SaveStruct
     bool            bFillStyleSelected;
 };
 
-typedef boost::shared_ptr<SaveStruct> SaveStructPtr;
+typedef std::shared_ptr<SaveStruct> SaveStructPtr;
 
 struct BSaveStruct
 {

@@ -75,7 +75,7 @@ TYPEINIT0(SdrObjList);
 
 SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList):
     maList(),
-    mpNavigationOrder(),
+    mxNavigationOrder(),
     mbIsNavigationOrderDirty(false)
 {
     maList.reserve(InitialObjectContainerCapacity);
@@ -90,7 +90,7 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
 
 SdrObjList::SdrObjList():
     maList(),
-    mpNavigationOrder(),
+    mxNavigationOrder(),
     mbIsNavigationOrderDirty(false)
 {
     maList.reserve(InitialObjectContainerCapacity);
@@ -766,7 +766,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
 
 bool SdrObjList::HasObjectNavigationOrder (void) const
 {
-    return mpNavigationOrder.get() != NULL;
+    return mxNavigationOrder.get() != NULL;
 }
 
 
@@ -779,43 +779,43 @@ void SdrObjList::SetObjectNavigationPosition (
     // When the navigation order container has not yet been created then
     // create one now.  It is initialized with the z-order taken from
     // maList.
-    if (mpNavigationOrder.get() == NULL)
+    if (mxNavigationOrder.get() == NULL)
     {
-        mpNavigationOrder.reset(new WeakSdrObjectContainerType(maList.size()));
+        mxNavigationOrder.reset(new WeakSdrObjectContainerType(maList.size()));
         ::std::copy(
             maList.begin(),
             maList.end(),
-            mpNavigationOrder->begin());
+            mxNavigationOrder->begin());
     }
-    OSL_ASSERT(mpNavigationOrder.get()!=NULL);
-    OSL_ASSERT( mpNavigationOrder->size() == maList.size());
+    OSL_ASSERT(mxNavigationOrder.get()!=NULL);
+    OSL_ASSERT( mxNavigationOrder->size() == maList.size());
 
     SdrObjectWeakRef aReference (&rObject);
 
     // Look up the object whose navigation position is to be changed.
     WeakSdrObjectContainerType::iterator iObject (::std::find(
-        mpNavigationOrder->begin(),
-        mpNavigationOrder->end(),
+        mxNavigationOrder->begin(),
+        mxNavigationOrder->end(),
         aReference));
-    if (iObject == mpNavigationOrder->end())
+    if (iObject == mxNavigationOrder->end())
     {
         // The given object is not a member of the navigation order.
         return;
     }
 
     // Move the object to its new position.
-    const sal_uInt32 nOldPosition = ::std::distance(mpNavigationOrder->begin(), iObject);
+    const sal_uInt32 nOldPosition = ::std::distance(mxNavigationOrder->begin(), iObject);
     if (nOldPosition != nNewPosition)
     {
-        mpNavigationOrder->erase(iObject);
+        mxNavigationOrder->erase(iObject);
         sal_uInt32 nInsertPosition (nNewPosition);
         // Adapt insertion position for the just erased object.
         if (nNewPosition >= nOldPosition)
             nInsertPosition -= 1;
-        if (nInsertPosition >= mpNavigationOrder->size())
-            mpNavigationOrder->push_back(aReference);
+        if (nInsertPosition >= mxNavigationOrder->size())
+            mxNavigationOrder->push_back(aReference);
         else
-            mpNavigationOrder->insert(mpNavigationOrder->begin()+nInsertPosition, aReference);
+            mxNavigationOrder->insert(mxNavigationOrder->begin()+nInsertPosition, aReference);
 
         mbIsNavigationOrderDirty = true;
 
@@ -833,13 +833,13 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
     if (HasObjectNavigationOrder())
     {
         // There is a user defined navigation order. Make sure the object
-        // index is correct and look up the object in mpNavigationOrder.
-        if (nNavigationPosition >= mpNavigationOrder->size())
+        // index is correct and look up the object in mxNavigationOrder.
+        if (nNavigationPosition >= mxNavigationOrder->size())
         {
-            OSL_ASSERT(nNavigationPosition < mpNavigationOrder->size());
+            OSL_ASSERT(nNavigationPosition < mxNavigationOrder->size());
         }
         else
-            return (*mpNavigationOrder)[nNavigationPosition].get();
+            return (*mxNavigationOrder)[nNavigationPosition].get();
     }
     else
     {
@@ -860,7 +860,7 @@ SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigat
 
 void SdrObjList::ClearObjectNavigationOrder (void)
 {
-    mpNavigationOrder.reset();
+    mxNavigationOrder.reset();
     mbIsNavigationOrderDirty = true;
 }
 
@@ -871,19 +871,19 @@ bool SdrObjList::RecalcNavigationPositions (void)
 {
     if (mbIsNavigationOrderDirty)
     {
-        if (mpNavigationOrder.get() != NULL)
+        if (mxNavigationOrder.get() != NULL)
         {
             mbIsNavigationOrderDirty = false;
 
             WeakSdrObjectContainerType::iterator iObject;
-            WeakSdrObjectContainerType::const_iterator iEnd (mpNavigationOrder->end());
+            WeakSdrObjectContainerType::const_iterator iEnd (mxNavigationOrder->end());
             sal_uInt32 nIndex (0);
-            for (iObject=mpNavigationOrder->begin(); iObject!=iEnd; ++iObject,++nIndex)
+            for (iObject=mxNavigationOrder->begin(); iObject!=iEnd; ++iObject,++nIndex)
                 (*iObject)->SetNavigationPosition(nIndex);
         }
     }
 
-    return mpNavigationOrder.get() != NULL;
+    return mxNavigationOrder.get() != NULL;
 }
 
 
@@ -897,8 +897,8 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
         if ((sal_uInt32)nCount != maList.size())
             return;
 
-        if (mpNavigationOrder.get() == NULL)
-            mpNavigationOrder.reset(new WeakSdrObjectContainerType(nCount));
+        if (mxNavigationOrder.get() == NULL)
+            mxNavigationOrder.reset(new WeakSdrObjectContainerType(nCount));
 
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
@@ -906,7 +906,7 @@ void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAcces
             SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
             if (pObject == NULL)
                 break;
-            (*mpNavigationOrder)[nIndex] = pObject;
+            (*mxNavigationOrder)[nIndex] = pObject;
         }
 
         mbIsNavigationOrderDirty = true;
@@ -929,8 +929,8 @@ void SdrObjList::InsertObjectIntoContainer (
     {
         // The new object does not have a user defined position so append it
         // to the list.
-        rObject.SetNavigationPosition(mpNavigationOrder->size());
-        mpNavigationOrder->push_back(&rObject);
+        rObject.SetNavigationPosition(mxNavigationOrder->size());
+        mxNavigationOrder->push_back(&rObject);
     }
 
     // Insert object into object list.  Because the insert() method requires
@@ -965,13 +965,13 @@ void SdrObjList::ReplaceObjectInContainer (
         OSL_ASSERT(nObjectPosition < maList.size());
         SdrObjectWeakRef aReference (maList[nObjectPosition]);
         WeakSdrObjectContainerType::iterator iObject (::std::find(
-            mpNavigationOrder->begin(),
-            mpNavigationOrder->end(),
+            mxNavigationOrder->begin(),
+            mxNavigationOrder->end(),
             aReference));
-        if (iObject != mpNavigationOrder->end())
-            mpNavigationOrder->erase(iObject);
+        if (iObject != mxNavigationOrder->end())
+            mxNavigationOrder->erase(iObject);
 
-        mpNavigationOrder->push_back(&rNewObject);
+        mxNavigationOrder->push_back(&rNewObject);
 
         mbIsNavigationOrderDirty = true;
     }
@@ -997,11 +997,11 @@ void SdrObjList::RemoveObjectFromContainer (
     {
         SdrObjectWeakRef aReference (maList[nObjectPosition]);
         WeakSdrObjectContainerType::iterator iObject (::std::find(
-            mpNavigationOrder->begin(),
-            mpNavigationOrder->end(),
+            mxNavigationOrder->begin(),
+            mxNavigationOrder->end(),
             aReference));
-        if (iObject != mpNavigationOrder->end())
-            mpNavigationOrder->erase(iObject);
+        if (iObject != mxNavigationOrder->end())
+            mxNavigationOrder->erase(iObject);
         mbIsNavigationOrderDirty = true;
     }
 

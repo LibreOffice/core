@@ -74,8 +74,8 @@ namespace o3tl
         that, despite the fact that this template provides access to
         the wrapped type via pointer-like methods
         (<code>operator->()</code> and <code>operator*()</code>), it does
-        <em>not</em> work like e.g. the boost pointer wrappers
-        (shared_ptr, scoped_ptr, etc.). Internally, the cow_wrapper
+        <em>not</em> work like e.g. the std smart pointer wrappers
+        (shared_ptr, unique_ptr, etc.). Internally, the cow_wrapper
         holds a by-value instance of the wrapped object. This is to
         avoid one additional heap allocation, and providing access via
         <code>operator->()</code>/<code>operator*()</code> is because

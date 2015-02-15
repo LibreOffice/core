@@ -20,13 +20,11 @@
 #ifndef INCLUDED_SVX_FRAMELINKARRAY_HXX
 #define INCLUDED_SVX_FRAMELINKARRAY_HXX
 
-#include <svx/framelink.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-
-#include <vector>
+#include <svx/framelink.hxx>
 #include <svx/svxdllapi.h>
-
-#include <boost/scoped_ptr.hpp>
+#include <memory>
+#include <vector>
 
 namespace svx {
 namespace frame {
@@ -380,7 +378,7 @@ public:
 
 
 private:
-    typedef boost::scoped_ptr<ArrayImpl> ArrayImplPtr;
+    typedef std::unique_ptr<ArrayImpl> ArrayImplPtr;
 
     ArrayImplPtr        mxImpl;
 };

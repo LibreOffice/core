@@ -25,7 +25,7 @@
 #include <oox/crypto/AgileEngine.hxx>
 #include <oox/crypto/Standard2007Engine.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace oox {
@@ -44,7 +44,7 @@ private:
     };
 
     oox::ole::OleStorage&           mrOleStorage;
-    boost::scoped_ptr<CryptoEngine> mEngine;
+    std::unique_ptr<CryptoEngine> mEngine;
     CryptoType                      mCryptoType;
 
     bool readAgileEncryptionInfo( com::sun::star::uno::Reference< com::sun::star::io::XInputStream >& rStream );

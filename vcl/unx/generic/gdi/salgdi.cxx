@@ -85,13 +85,13 @@ X11SalGraphics::X11SalGraphics():
 {
     if (OpenGLHelper::isVCLOpenGLEnabled())
     {
-        mpImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
-        mpTextRenderImpl.reset((new OpenGLX11CairoTextRender(false, *this)));
+        mxImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
+        mxTextRenderImpl.reset((new OpenGLX11CairoTextRender(false, *this)));
     }
     else
     {
-        mpTextRenderImpl.reset((new X11CairoTextRender(false, *this)));
-        mpImpl.reset(new X11SalGraphicsImpl(*this));
+        mxTextRenderImpl.reset((new X11CairoTextRender(false, *this)));
+        mxImpl.reset(new X11SalGraphicsImpl(*this));
     }
 
 }
@@ -109,7 +109,7 @@ void X11SalGraphics::freeResources()
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
     if( mpClipRegion ) XDestroyRegion( mpClipRegion ), mpClipRegion = None;
 
-    mpImpl->freeResources();
+    mxImpl->freeResources();
 
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pFontGC_ ) XFreeGC( pDisplay, pFontGC_ ), pFontGC_ = None;
@@ -124,7 +124,7 @@ void X11SalGraphics::freeResources()
 
 SalGraphicsImpl* X11SalGraphics::GetImpl() const
 {
-    return mpImpl.get();
+    return mxImpl.get();
 }
 
 void X11SalGraphics::SetDrawable( Drawable aDrawable, SalX11Screen nXScreen )
@@ -165,7 +165,7 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     bVirDev_    = false;
 
     SetDrawable( aTarget, nXScreen );
-    mpImpl->Init();
+    mxImpl->Init();
 }
 
 void X11SalGraphics::DeInit()
@@ -314,123 +314,123 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
 
 sal_uInt16 X11SalGraphics::GetBitCount() const
 {
-    return mpImpl->GetBitCount();
+    return mxImpl->GetBitCount();
 }
 
 long X11SalGraphics::GetGraphicsWidth() const
 {
-    return mpImpl->GetGraphicsWidth();
+    return mxImpl->GetGraphicsWidth();
 }
 
 void X11SalGraphics::ResetClipRegion()
 {
-    mpImpl->ResetClipRegion();
+    mxImpl->ResetClipRegion();
 }
 
 bool X11SalGraphics::setClipRegion( const vcl::Region& i_rClip )
 {
-    return mpImpl->setClipRegion( i_rClip );
+    return mxImpl->setClipRegion( i_rClip );
 }
 
 void X11SalGraphics::SetLineColor()
 {
-    mpImpl->SetLineColor();
+    mxImpl->SetLineColor();
 }
 
 void X11SalGraphics::SetLineColor( SalColor nSalColor )
 {
-    mpImpl->SetLineColor( nSalColor );
+    mxImpl->SetLineColor( nSalColor );
 }
 
 void X11SalGraphics::SetFillColor()
 {
-    mpImpl->SetFillColor();
+    mxImpl->SetFillColor();
 }
 
 void X11SalGraphics::SetFillColor( SalColor nSalColor )
 {
-    mpImpl->SetFillColor( nSalColor );
+    mxImpl->SetFillColor( nSalColor );
 }
 
 void X11SalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
-    mpImpl->SetROPLineColor( nROPColor );
+    mxImpl->SetROPLineColor( nROPColor );
 }
 
 void X11SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
-    mpImpl->SetROPFillColor( nROPColor );
+    mxImpl->SetROPFillColor( nROPColor );
 }
 
 void X11SalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
-    mpImpl->SetXORMode( bSet, bInvertOnly );
+    mxImpl->SetXORMode( bSet, bInvertOnly );
 }
 
 void X11SalGraphics::drawPixel( long nX, long nY )
 {
-    mpImpl->drawPixel( nX, nY );
+    mxImpl->drawPixel( nX, nY );
 }
 
 void X11SalGraphics::drawPixel( long nX, long nY, SalColor nSalColor )
 {
-    mpImpl->drawPixel( nX, nY, nSalColor );
+    mxImpl->drawPixel( nX, nY, nSalColor );
 }
 
 void X11SalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    mpImpl->drawLine( nX1, nY1, nX2, nY2 );
+    mxImpl->drawLine( nX1, nY1, nX2, nY2 );
 }
 
 void X11SalGraphics::drawRect( long nX, long nY, long nDX, long nDY )
 {
-    mpImpl->drawRect( nX, nY, nDX, nDY );
+    mxImpl->drawRect( nX, nY, nDX, nDY );
 }
 
 void X11SalGraphics::drawPolyLine( sal_uInt32 nPoints, const SalPoint *pPtAry )
 {
-    mpImpl->drawPolyLine( nPoints, pPtAry );
+    mxImpl->drawPolyLine( nPoints, pPtAry );
 }
 
 void X11SalGraphics::drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry )
 {
-    mpImpl->drawPolygon( nPoints, pPtAry );
+    mxImpl->drawPolygon( nPoints, pPtAry );
 }
 
 void X11SalGraphics::drawPolyPolygon( sal_uInt32 nPoly,
                                    const sal_uInt32    *pPoints,
                                    PCONSTSALPOINT  *pPtAry )
 {
-    mpImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
+    mxImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
 }
 
 bool X11SalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
-    return mpImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
+    return mxImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool X11SalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
-    return mpImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
+    return mxImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
 }
 
 bool X11SalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoints, const sal_uInt32* pPoints,
                                                 const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry)
 {
-    return mpImpl->drawPolyPolygonBezier( nPoints, pPoints, pPtAry, pFlgAry );
+    return mxImpl->drawPolyPolygonBezier( nPoints, pPoints, pPtAry, pFlgAry );
 }
 
 void X11SalGraphics::invert( sal_uInt32 nPoints,
                              const SalPoint* pPtAry,
                              SalInvert nFlags )
 {
-    mpImpl->invert( nPoints, pPtAry, nFlags );
+    mxImpl->invert( nPoints, pPtAry, nFlags );
 }
 
 bool X11SalGraphics::drawEPS( long nX, long nY, long nWidth,
         long nHeight, void* pPtr, sal_uLong nSize )
 {
-    return mpImpl->drawEPS( nX, nY, nWidth, nHeight, pPtr, nSize );
+    return mxImpl->drawEPS( nX, nY, nWidth, nHeight, pPtr, nSize );
 }
 
 XRenderPictFormat* X11SalGraphics::GetXRenderFormat() const
@@ -458,7 +458,7 @@ SystemGraphicsData X11SalGraphics::GetGraphicsData() const
 // draw a poly-polygon
 bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPolyPoly, double fTransparency )
 {
-    return mpImpl->drawPolyPolygon( rOrigPolyPoly, fTransparency );
+    return mxImpl->drawPolyPolygon( rOrigPolyPoly, fTransparency );
 }
 
 bool X11SalGraphics::drawPolyLine(
@@ -468,23 +468,23 @@ bool X11SalGraphics::drawPolyLine(
     basegfx::B2DLineJoin eLineJoin,
     com::sun::star::drawing::LineCap eLineCap)
 {
-    return mpImpl->drawPolyLine( rPolygon, fTransparency, rLineWidth,
+    return mxImpl->drawPolyLine( rPolygon, fTransparency, rLineWidth,
             eLineJoin, eLineCap );
 }
 
 bool X11SalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)
 {
-    return mpImpl->drawGradient(rPoly, rGradient);
+    return mxImpl->drawGradient(rPoly, rGradient);
 }
 
 void X11SalGraphics::BeginPaint()
 {
-    return mpImpl->beginPaint();
+    return mxImpl->beginPaint();
 }
 
 void X11SalGraphics::EndPaint()
 {
-    return mpImpl->endPaint();
+    return mxImpl->endPaint();
 }
 
 SalGeometryProvider *X11SalGraphics::GetGeometryProvider() const

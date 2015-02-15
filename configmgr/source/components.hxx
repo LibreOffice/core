@@ -26,7 +26,6 @@
 #include <set>
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
@@ -164,7 +163,7 @@ private:
     int sharedExtensionLayer_;
     int userExtensionLayer_;
     OUString modificationFileUrl_;
-    boost::shared_ptr<osl::Mutex> lock_;
+    std::shared_ptr<osl::Mutex> lock_;
 };
 
 }

@@ -22,16 +22,15 @@
 
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // class SvxZoomSliderControl ----------------------------------------
-
 class SVX_DLLPUBLIC SvxZoomSliderControl : public SfxStatusBarControl
 {
 private:
 
     struct SvxZoomSliderControl_Impl;
-    boost::scoped_ptr<SvxZoomSliderControl_Impl> mpImpl;
+    std::unique_ptr<SvxZoomSliderControl_Impl> mxImpl;
 
     sal_uInt16 Offset2Zoom( long nOffset ) const;
     long Zoom2Offset( sal_uInt16 nZoom ) const;

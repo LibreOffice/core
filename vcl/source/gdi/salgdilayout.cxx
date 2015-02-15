@@ -43,7 +43,7 @@
 #include <svdata.hxx>
 #include <outdata.hxx>
 #include <boost/scoped_array.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
@@ -705,7 +705,7 @@ bool SalGraphics::DrawNativeControl( ControlType nType, ControlPart nPart, const
     {
         Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        boost::scoped_ptr< ImplControlValue > mirrorValue( aValue.clone());
+        std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
         bool bRet = drawNativeControl( nType, nPart, rgn, nState, *mirrorValue, aCaption );
         return bRet;
@@ -722,7 +722,7 @@ bool SalGraphics::GetNativeControlRegion( ControlType nType, ControlPart nPart, 
     {
         Rectangle rgn( rControlRegion );
         mirror( rgn, pOutDev );
-        boost::scoped_ptr< ImplControlValue > mirrorValue( aValue.clone());
+        std::unique_ptr< ImplControlValue > mirrorValue( aValue.clone());
         mirror( *mirrorValue, pOutDev );
         if( getNativeControlRegion( nType, nPart, rgn, nState, *mirrorValue, aCaption,
                                                 rNativeBoundingRegion, rNativeContentRegion ) )

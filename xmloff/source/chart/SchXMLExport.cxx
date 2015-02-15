@@ -1216,7 +1216,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     }
 
     // chart element
-    boost::scoped_ptr<SvXMLElementExport> pElChart;
+    std::unique_ptr<SvXMLElementExport> xElChart;
 
     // get property states for autostyles
     if( mxExpPropMapper.is())
@@ -1289,7 +1289,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         AddAutoStyleAttribute( aPropertyStates );
 
         //element
-        pElChart.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_CHART, true, true ));
+        xElChart.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_CHART, true, true ));
     }
     else    // autostyles
     {
@@ -1870,7 +1870,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     // plot-area element
 
-    boost::scoped_ptr<SvXMLElementExport> pElPlotArea;
+    std::unique_ptr<SvXMLElementExport> xElPlotArea;
     // get property states for autostyles
     xPropSet = Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY );
     if( xPropSet.is())
@@ -1961,7 +1961,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         }
 
         // plot-area element
-        pElPlotArea.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_PLOT_AREA, true, true ));
+        xElPlotArea.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_PLOT_AREA, true, true ));
 
         //inner position rectangle element
         exportCoordinateRegion( xDiagram );

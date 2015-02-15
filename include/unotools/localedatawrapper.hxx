@@ -21,7 +21,6 @@
 #define INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
@@ -29,6 +28,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <unotools/readwritemutexguard.hxx>
 #include <unotools/unotoolsdllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -54,14 +54,14 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >            xLD;
-    LanguageTag                                                                         maLanguageTag;
-    ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
-    ::com::sun::star::i18n::LocaleDataItem                                              aLocaleDataItem;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >     xLD;
+    LanguageTag                                                                  maLanguageTag;
+    std::shared_ptr< ::com::sun::star::i18n::Calendar2 >                         xDefaultCalendar;
+    ::com::sun::star::i18n::LocaleDataItem                                       aLocaleDataItem;
     ::com::sun::star::uno::Sequence< OUString >                                  aReservedWordSeq;
     ::com::sun::star::uno::Sequence< OUString >                                  aDateAcceptancePatterns;
-    ::com::sun::star::uno::Sequence< sal_Int32 >                                        aGrouping;
+    ::com::sun::star::uno::Sequence< sal_Int32 >                                 aGrouping;
     // cached items
     OUString               aLocaleItem[::com::sun::star::i18n::LocaleItem::COUNT];
     OUString               aReservedWord[::com::sun::star::i18n::reservedWords::COUNT];
@@ -170,7 +170,7 @@ public:
     MeasurementSystem   mapMeasurementStringToEnum( const OUString& rMS ) const;
 
     /// Convenience method to obtain the default calendar.
-    const ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 > getDefaultCalendar() const;
+    const std::shared_ptr< ::com::sun::star::i18n::Calendar2 > getDefaultCalendar() const;
 
     /// Convenience method to obtain the day names of the default calendar.
     const ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::CalendarItem2 > getDefaultCalendarDays() const;

@@ -21,9 +21,9 @@
 #define INCLUDED_SAX_FSHELPER_HXX
 
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <stdarg.h>
-#include <boost/shared_ptr.hpp>
 #include <sax/fastattribs.hxx>
+#include <stdarg.h>
+#include <memory>
 
 #define FSNS(namespc, element) ((namespc << 16) | element)
 // Backwards compatibility for code that used FSEND to terminate the vararg.
@@ -184,7 +184,7 @@ private:
     FastSaxSerializer* mpSerializer;
 };
 
-typedef boost::shared_ptr< FastSerializerHelper > FSHelperPtr;
+typedef std::shared_ptr< FastSerializerHelper > FSHelperPtr;
 
 }
 

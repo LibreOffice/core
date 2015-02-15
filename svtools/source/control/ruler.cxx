@@ -857,9 +857,9 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
             if (RULER_INDENT_BORDER != nIndentStyle)
             {
                 bool bIsHit = false;
-                if(mpCurrentHitTest.get() != NULL && mpCurrentHitTest->eType == RULER_TYPE_INDENT)
+                if(mxCurrentHitTest.get() != NULL && mxCurrentHitTest->eType == RULER_TYPE_INDENT)
                 {
-                    bIsHit = mpCurrentHitTest->nAryPos == j;
+                    bIsHit = mxCurrentHitTest->nAryPos == j;
                 }
                 else if(mbDrag && meDragType == RULER_TYPE_INDENT)
                 {
@@ -2083,36 +2083,36 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
 {
     PointerStyle ePtrStyle = POINTER_ARROW;
 
-    mpCurrentHitTest.reset(new RulerSelection);
+    mxCurrentHitTest.reset(new RulerSelection);
 
     maHoverSelection.eType = RULER_TYPE_DONTKNOW;
 
-    if (ImplHitTest( rMEvt.GetPosPixel(), mpCurrentHitTest.get() ))
+    if (ImplHitTest( rMEvt.GetPosPixel(), mxCurrentHitTest.get() ))
     {
-        maHoverSelection = *mpCurrentHitTest.get();
+        maHoverSelection = *mxCurrentHitTest.get();
 
-        if (mpCurrentHitTest->bSize)
+        if (mxCurrentHitTest->bSize)
         {
             if (mnWinStyle & WB_HORZ)
             {
-                if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
+                if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
                     ePtrStyle = POINTER_TAB_SELECT_W;
-                else if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
+                else if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
                     ePtrStyle = POINTER_TAB_SELECT_E;
                 else
                     ePtrStyle = POINTER_ESIZE;
             }
             else
             {
-                if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
+                if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_1)
                     ePtrStyle = POINTER_WINDOW_NSIZE;
-                else if (mpCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
+                else if (mxCurrentHitTest->mnDragSize == RULER_DRAGSIZE_2)
                     ePtrStyle = POINTER_WINDOW_SSIZE;
                 else
                     ePtrStyle = POINTER_SSIZE;
             }
         }
-        else if (mpCurrentHitTest->bSizeBar)
+        else if (mxCurrentHitTest->bSizeBar)
         {
             if (mnWinStyle & WB_HORZ)
                 ePtrStyle = POINTER_HSIZEBAR;
@@ -2121,7 +2121,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-    if(mpPreviousHitTest.get() != NULL && mpPreviousHitTest->eType != mpCurrentHitTest->eType)
+    if(mxPreviousHitTest.get() != NULL && mxPreviousHitTest->eType != mxCurrentHitTest->eType)
     {
         mbFormat = true;
     }
@@ -2133,7 +2133,7 @@ void Ruler::MouseMove( const MouseEvent& rMEvt )
         Paint(Rectangle());
         mnUpdateFlags &= ~RULER_UPDATE_DRAW;
     }
-    mpPreviousHitTest.swap(mpCurrentHitTest);
+    mxPreviousHitTest.swap(mxCurrentHitTest);
 }
 
 void Ruler::Tracking( const TrackingEvent& rTEvt )

@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <boost/scoped_ptr.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <svtools/svmedit2.hxx>
@@ -56,7 +55,7 @@ public:
 
 private:
     ExtMultiLineEdit m_pEditWin;
-    boost::scoped_ptr< SvtDocInfoTable_Impl > m_pInfoTable;
+    std::unique_ptr< SvtDocInfoTable_Impl > m_xInfoTable;
     LanguageTag m_aLanguageTag;
 
     void insertEntry(OUString const & title, OUString const & value);

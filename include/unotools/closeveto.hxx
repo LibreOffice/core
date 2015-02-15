@@ -21,16 +21,13 @@
 #define INCLUDED_UNOTOOLS_CLOSEVETO_HXX
 
 #include <unotools/unotoolsdllapi.h>
-
 #include <com/sun/star/uno/XInterface.hpp>
-
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace utl
 {
 
     //= CloseVeto
-
     struct CloseVeto_Data;
     /** will add a XCloseListener to a given component, and veto its closing as long as the <code>CloseVeto</code>
         instance is alive.
@@ -45,7 +42,7 @@ namespace utl
         ~CloseVeto();
 
     private:
-        ::boost::scoped_ptr< CloseVeto_Data >   m_pData;
+        std::unique_ptr< CloseVeto_Data >   m_xData;
     };
 
 } // namespace dbaui

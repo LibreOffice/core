@@ -62,12 +62,12 @@ sal_uInt16 IcnCursor_Impl::GetSortListPos( SvxIconChoiceCtrlEntryPtrVec& rList, 
 void IcnCursor_Impl::ImplCreate()
 {
     pView->CheckBoundingRects();
-    DBG_ASSERT(pColumns==0&&pRows==0,"ImplCreate: Not cleared");
+    DBG_ASSERT(xColumns==0&&xRows==0,"ImplCreate: Not cleared");
 
     SetDeltas();
 
-    pColumns.reset(new IconChoiceMap);
-    pRows.reset(new IconChoiceMap);
+    xColumns.reset(new IconChoiceMap);
+    xRows.reset(new IconChoiceMap);
 
     size_t nCount = pView->aEntries.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
@@ -84,11 +84,11 @@ void IcnCursor_Impl::ImplCreate()
         if( nX >= nCols )
             nX = sal::static_int_cast< short >(nCols - 1);
 
-        SvxIconChoiceCtrlEntryPtrVec& rColEntry = (*pColumns)[nX];
+        SvxIconChoiceCtrlEntryPtrVec& rColEntry = (*xColumns)[nX];
         sal_uInt16 nIns = GetSortListPos( rColEntry, rRect.Top(), sal_True );
         rColEntry.insert( rColEntry.begin() + nIns, pEntry );
 
-        SvxIconChoiceCtrlEntryPtrVec& rRowEntry = (*pRows)[nY];
+        SvxIconChoiceCtrlEntryPtrVec& rRowEntry = (*xRows)[nY];
         nIns = GetSortListPos( rRowEntry, rRect.Left(), sal_False );
         rRowEntry.insert( rRowEntry.begin() + nIns, pEntry );
 
@@ -102,10 +102,10 @@ void IcnCursor_Impl::ImplCreate()
 
 void IcnCursor_Impl::Clear()
 {
-    if( pColumns )
+    if( xColumns )
     {
-        pColumns.reset();
-        pRows.reset();
+        xColumns.reset();
+        xRows.reset();
         pCurEntry = 0;
         nDeltaWidth = 0;
         nDeltaHeight = 0;
@@ -116,8 +116,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     sal_uInt16, bool bDown, bool bSimple )
 {
     DBG_ASSERT(pCurEntry, "SearchCol: No reference entry");
-    IconChoiceMap::iterator mapIt = pColumns->find( nCol );
-    if ( mapIt == pColumns->end() )
+    IconChoiceMap::iterator mapIt = xColumns->find( nCol );
+    if ( mapIt == xColumns->end() )
         return 0;
     SvxIconChoiceCtrlEntryPtrVec const & rList = mapIt->second;
     const sal_uInt16 nCount = rList.size();
@@ -195,8 +195,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     sal_uInt16, bool bRight, bool bSimple )
 {
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
-    IconChoiceMap::iterator mapIt = pRows->find( nRow );
-    if ( mapIt == pRows->end() )
+    IconChoiceMap::iterator mapIt = xRows->find( nRow );
+    if ( mapIt == xRows->end() )
         return 0;
     SvxIconChoiceCtrlEntryPtrVec const & rList = mapIt->second;
     const sal_uInt16 nCount = rList.size();

@@ -22,15 +22,11 @@
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
-
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
 #include <cppuhelper/implbase1.hxx>
-
-#include <boost/scoped_ptr.hpp>
-
+#include <memory>
 
 namespace toolkit
 {
@@ -83,8 +79,7 @@ namespace toolkit
         void SAL_CALL                   setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception, std::exception) SAL_OVERRIDE;
 
     private:
-        ::boost::scoped_ptr< AnimatedImagesControlModel_Data >
-                m_pData;
+        std::unique_ptr< AnimatedImagesControlModel_Data > m_xData;
     };
 
 

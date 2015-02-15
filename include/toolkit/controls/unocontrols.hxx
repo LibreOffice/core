@@ -55,9 +55,9 @@
 #include <comphelper/uno3.hxx>
 
 #include <list>
+#include <memory>
 #include <vector>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 
 #define UNO_NAME_GRAPHOBJ_URLPREFIX                             "vnd.sun.star.GraphicObject:"
@@ -825,8 +825,8 @@ private:
     void    impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems );
 
 protected:
-    ::boost::scoped_ptr< UnoControlListBoxModel_Data >  m_pData;
-    ::cppu::OInterfaceContainerHelper                   m_aItemListListeners;
+    std::unique_ptr<UnoControlListBoxModel_Data>  m_xData;
+    ::cppu::OInterfaceContainerHelper             m_aItemListListeners;
 };
 
 

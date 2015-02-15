@@ -54,9 +54,9 @@
 #include <unicode/ubidi.h>
 
 #include <cstdlib>
+#include <memory>
 #include <set>
 #include <vector>
-#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -608,7 +608,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
 void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
 {
     TextNode* pNode = mpDoc->GetNodes()[ nPara ];
-    boost::scoped_ptr<TEParaPortion> pPortion(mpTEParaPortions->GetObject( nPara ));
+    std::unique_ptr<TEParaPortion> xPortion(mpTEParaPortions->GetObject( nPara ));
 
     // the Node is handled by Undo and is deleted if appropriate
     mpDoc->GetNodes().erase( mpDoc->GetNodes().begin() + nPara );
@@ -618,7 +618,7 @@ void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
         delete pNode;
 
     mpTEParaPortions->Remove( nPara );
-    pPortion.reset();
+    xPortion.reset();
 
     ImpParagraphRemoved( nPara );
 }

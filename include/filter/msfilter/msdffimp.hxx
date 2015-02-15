@@ -27,7 +27,6 @@
 #include <set>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 
@@ -400,8 +399,8 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 {
     FmFormModel*            pFormModel;
     SvxMSDffBLIPInfos*      pBLIPInfos;
-    ::boost::scoped_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_pShapeInfosByTxBxComp;
-    ::boost::scoped_ptr<SvxMSDffShapeInfos_ById> m_pShapeInfosById;
+    std::unique_ptr<SvxMSDffShapeInfos_ByTxBxComp> m_xShapeInfosByTxBxComp;
+    std::unique_ptr<SvxMSDffShapeInfos_ById> m_xShapeInfosById;
     SvxMSDffShapeOrders*    pShapeOrders;
     sal_uLong               nDefaultFontHeight;
     sal_uInt32              nOffsDgg;
@@ -682,7 +681,7 @@ public:
                           const Rectangle& rGlobalChildRect );
 
     inline const SvxMSDffShapeInfos_ById* GetShapeInfos( void ) const
-        { return m_pShapeInfosById.get(); }
+        { return m_xShapeInfosById.get(); }
 
     inline SvxMSDffShapeOrders* GetShapeOrders( void ) const
         { return pShapeOrders; }

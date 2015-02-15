@@ -273,12 +273,10 @@ public:
 
 
 // - RadioButton -
-
-
 class VCL_DLLPUBLIC RadioButton : public Button
 {
 private:
-    boost::shared_ptr< std::vector<RadioButton*> > m_xGroup;
+    std::shared_ptr< std::vector<RadioButton*> > m_xGroup;
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;

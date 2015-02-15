@@ -135,9 +135,9 @@
 #include <sfx2/tbxctrl.hxx>
 #include <svx/strarray.hxx>
 #include <svx/svxdllapi.h>
-#include <boost/scoped_ptr.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <svx/PaletteManager.hxx>
+#include <memory>
 
 // important im tbxctrls.hxx created HeDaBu !!!
 class SvxLineItem;
@@ -236,7 +236,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     using SfxToolBoxControl::StateChanged;
 
-    ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > pBtnUpdater;
+    std::unique_ptr< ::svx::ToolboxButtonColorUpdater > m_xBtnUpdater;
     PaletteManager                      mPaletteManager;
     BorderColorStatus maBorderColorStatus;
     bool bSidebarType;

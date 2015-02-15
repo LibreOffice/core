@@ -88,7 +88,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
             // do nothing if the rectangle is empty
             if ( !aRect.IsEmpty() )
             {
-                tools::PolyPolygon aClipPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
+                tools::PolyPolygon aClixPolyPoly( ImplLogicToDevicePixel( rPolyPoly ) );
                 bool bDrawn = false;
 
                 if( !mpGraphics && !AcquireGraphics() )
@@ -102,7 +102,7 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                     InitClipRegion();
 
                 // try to draw gradient natively
-                bDrawn = mpGraphics->DrawGradient( aClipPolyPoly, aGradient, this );
+                bDrawn = mpGraphics->DrawGradient( aClixPolyPoly, aGradient, this );
 
                 if( !bDrawn && !mbOutputClipped )
                 {
@@ -132,9 +132,9 @@ void OutputDevice::DrawGradient( const tools::PolyPolygon& rPolyPoly,
                     // if the clipping polypolygon is a rectangle, then it's the same size as the bounding of the
                     // polypolygon, so pass in a NULL for the clipping parameter
                     if( aGradient.GetStyle() == GradientStyle_LINEAR || rGradient.GetStyle() == GradientStyle_AXIAL )
-                        DrawLinearGradient( aRect, aGradient, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
+                        DrawLinearGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? NULL : &aClixPolyPoly );
                     else
-                        DrawComplexGradient( aRect, aGradient, aClipPolyPoly.IsRect() ? NULL : &aClipPolyPoly );
+                        DrawComplexGradient( aRect, aGradient, aClixPolyPoly.IsRect() ? NULL : &aClixPolyPoly );
                 }
 
                 Pop();
@@ -251,7 +251,7 @@ namespace
 
 void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
                                        const Gradient& rGradient,
-                                       const tools::PolyPolygon* pClipPolyPoly )
+                                       const tools::PolyPolygon* pClixPolyPoly )
 {
     // get BoundRect of rotated rectangle
     Rectangle aRect;
@@ -329,7 +329,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         aPoly[3] = aBorderRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
 
-        ImplDrawPolygon( aPoly, pClipPolyPoly );
+        ImplDrawPolygon( aPoly, pClixPolyPoly );
 
         if ( !bLinear)
         {
@@ -342,7 +342,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
             aPoly[3] = aBorderRect.BottomLeft();
             aPoly.Rotate( aCenter, nAngle );
 
-            ImplDrawPolygon( aPoly, pClipPolyPoly );
+            ImplDrawPolygon( aPoly, pClixPolyPoly );
         }
     }
 
@@ -393,7 +393,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         aPoly[3] = aRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
 
-        ImplDrawPolygon( aPoly, pClipPolyPoly );
+        ImplDrawPolygon( aPoly, pClixPolyPoly );
 
         if ( !bLinear )
         {
@@ -405,7 +405,7 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
             aPoly[3] = aMirrorRect.BottomLeft();
             aPoly.Rotate( aCenter, nAngle );
 
-            ImplDrawPolygon( aPoly, pClipPolyPoly );
+            ImplDrawPolygon( aPoly, pClixPolyPoly );
         }
     }
     if ( !bLinear)
@@ -425,13 +425,13 @@ void OutputDevice::DrawLinearGradient( const Rectangle& rRect,
         aPoly[3] = aRect.BottomLeft();
         aPoly.Rotate( aCenter, nAngle );
 
-        ImplDrawPolygon( aPoly, pClipPolyPoly );
+        ImplDrawPolygon( aPoly, pClixPolyPoly );
     }
 }
 
 void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
                                         const Gradient& rGradient,
-                                        const tools::PolyPolygon* pClipPolyPoly )
+                                        const tools::PolyPolygon* pClixPolyPoly )
 {
     // Determine if we output via Polygon or PolyPolygon
     // For all rasteroperations other then Overpaint always use PolyPolygon,
@@ -439,7 +439,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    boost::scoped_ptr<tools::PolyPolygon> pPolyPoly;
+    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
     Rectangle       aRect;
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
@@ -458,7 +458,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     if ( UsePolyPolygonForComplexGradient() )
-        pPolyPoly.reset(new tools::PolyPolygon( 2 ));
+        xPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
     bool bMtf = false;
     bool bComplex = true;
@@ -500,10 +500,10 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
 
     mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
-    if( pPolyPoly )
+    if( xPolyPoly )
     {
-        pPolyPoly->Insert( aPoly = rRect );
-        pPolyPoly->Insert( aPoly );
+        xPolyPoly->Insert( aPoly = rRect );
+        xPolyPoly->Insert( aPoly );
     }
     else
     {
@@ -515,7 +515,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
         aExtRect.Right() += 1;
         aExtRect.Bottom() += 1;
 
-        ImplDrawPolygon( aPoly = aExtRect, pClipPolyPoly );
+        ImplDrawPolygon( aPoly = aExtRect, pClixPolyPoly );
     }
 
     // loop to output Polygone/PolyPolygone sequentially
@@ -538,23 +538,23 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( ( pPolyPoly ) ? i : ( i + 1 ) );
+        const long nStepIndex = ( ( xPolyPoly ) ? i : ( i + 1 ) );
         nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
         // either slow tools::PolyPolygon output or fast Polygon-Paiting
-        if( pPolyPoly )
+        if( xPolyPoly )
         {
             bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
 
-            pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
-            pPolyPoly->Replace( aPoly, 1 );
+            xPolyPoly->Replace( xPolyPoly->GetObject( 1 ), 0 );
+            xPolyPoly->Replace( aPoly, 1 );
 
-            ImplDrawPolyPolygon( *pPolyPoly, pClipPolyPoly );
+            ImplDrawPolyPolygon( *xPolyPoly, pClixPolyPoly );
 
             // #107349# Set fill color _after_ geometry painting:
-            // pPolyPoly's geometry is the band from last iteration's
+            // xPolyPoly's geometry is the band from last iteration's
             // aPoly to current iteration's aPoly. The window outdev
             // path (see else below), on the other hand, paints the
             // full aPoly. Thus, here, we're painting the band before
@@ -567,14 +567,14 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             // #107349# Set fill color _before_ geometry painting
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
 
-            ImplDrawPolygon( aPoly, pClipPolyPoly );
+            ImplDrawPolygon( aPoly, pClixPolyPoly );
         }
     }
 
     // we should draw last inner Polygon if we output PolyPolygon
-    if( pPolyPoly )
+    if( xPolyPoly )
     {
-        const Polygon& rPoly = pPolyPoly->GetObject( 1 );
+        const Polygon& rPoly = xPolyPoly->GetObject( 1 );
 
         if( !rPoly.GetBoundRect().IsEmpty() )
         {
@@ -589,7 +589,7 @@ void OutputDevice::DrawComplexGradient( const Rectangle& rRect,
             }
 
             mpGraphics->SetFillColor( MAKE_SALCOLOR( nRed, nGreen, nBlue ) );
-            ImplDrawPolygon( rPoly, pClipPolyPoly );
+            ImplDrawPolygon( rPoly, pClixPolyPoly );
         }
     }
 }
@@ -781,7 +781,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
     // Also for printers always use PolyPolygon, as not all printers
     // can print polygons on top of each other.
 
-    boost::scoped_ptr<tools::PolyPolygon> pPolyPoly;
+    std::unique_ptr<tools::PolyPolygon> xPolyPoly;
     Rectangle       aRect;
     Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
@@ -799,7 +799,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
 
     rGradient.GetBoundRect( rRect, aRect, aCenter );
 
-    pPolyPoly.reset(new tools::PolyPolygon( 2 ));
+    xPolyPoly.reset(new tools::PolyPolygon( 2 ));
 
     // last parameter - true if complex gradient, false if linear
     long nStepCount = GetGradientSteps( rGradient, rRect, true, true );
@@ -840,8 +840,8 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
 
     mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
 
-    pPolyPoly->Insert( aPoly = rRect );
-    pPolyPoly->Insert( aPoly );
+    xPolyPoly->Insert( aPoly = rRect );
+    xPolyPoly->Insert( aPoly );
 
     // loop to output Polygone/PolyPolygone sequentially
     for( long i = 1; i < nSteps; i++ )
@@ -863,20 +863,20 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
         aPoly.Rotate( aCenter, nAngle );
 
         // adapt colour accordingly
-        const long nStepIndex = ( ( pPolyPoly ) ? i : ( i + 1 ) );
+        const long nStepIndex = ( ( xPolyPoly ) ? i : ( i + 1 ) );
         nRed = GetGradientColorValue( nStartRed + ( ( nRedSteps * nStepIndex ) / nSteps ) );
         nGreen = GetGradientColorValue( nStartGreen + ( ( nGreenSteps * nStepIndex ) / nSteps ) );
         nBlue = GetGradientColorValue( nStartBlue + ( ( nBlueSteps * nStepIndex ) / nSteps ) );
 
         bPaintLastPolygon = true; // #107349# Paint last polygon only if loop has generated any output
 
-        pPolyPoly->Replace( pPolyPoly->GetObject( 1 ), 0 );
-        pPolyPoly->Replace( aPoly, 1 );
+        xPolyPoly->Replace( xPolyPoly->GetObject( 1 ), 0 );
+        xPolyPoly->Replace( aPoly, 1 );
 
-        mpMetaFile->AddAction( new MetaPolyPolygonAction( *pPolyPoly ) );
+        mpMetaFile->AddAction( new MetaPolyPolygonAction( *xPolyPoly ) );
 
         // #107349# Set fill color _after_ geometry painting:
-        // pPolyPoly's geometry is the band from last iteration's
+        // xPolyPoly's geometry is the band from last iteration's
         // aPoly to current iteration's aPoly. The window outdev
         // path (see else below), on the other hand, paints the
         // full aPoly. Thus, here, we're painting the band before
@@ -885,7 +885,7 @@ void OutputDevice::DrawComplexGradientToMetafile( const Rectangle& rRect,
         mpMetaFile->AddAction( new MetaFillColorAction( Color( nRed, nGreen, nBlue ), true ) );
     }
 
-    const Polygon& rPoly = pPolyPoly->GetObject( 1 );
+    const Polygon& rPoly = xPolyPoly->GetObject( 1 );
 
     if( !rPoly.GetBoundRect().IsEmpty() )
     {

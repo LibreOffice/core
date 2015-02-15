@@ -12,7 +12,7 @@
 
 #include "generic/genprn.h"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 struct GtkSalPrinter_Impl;
 
@@ -35,7 +35,7 @@ private:
             int i_nCopies, bool i_bCollate, vcl::PrinterController& io_rController);
 
 private:
-    boost::scoped_ptr<GtkSalPrinter_Impl> m_pImpl;
+    std::unique_ptr<GtkSalPrinter_Impl> m_xImpl;
 };
 
 class VCL_DLLPUBLIC GtkSalInfoPrinter : public PspSalInfoPrinter

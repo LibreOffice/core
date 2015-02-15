@@ -32,21 +32,15 @@ AreaTransparencyGradientPopup::AreaTransparencyGradientPopup (
 {
 }
 
-
-
-
 AreaTransparencyGradientPopup::~AreaTransparencyGradientPopup (void)
 {
 }
-
-
-
 
 void AreaTransparencyGradientPopup::Rearrange (XFillFloatTransparenceItem* pItem)
 {
     ProvideContainerAndControl();
 
-    AreaTransparencyGradientControl* pControl = dynamic_cast<AreaTransparencyGradientControl*>(mpControl.get());
+    AreaTransparencyGradientControl* pControl = dynamic_cast<AreaTransparencyGradientControl*>(mxControl.get());
     if (pControl != NULL)
         pControl->Rearrange(pItem);
 }

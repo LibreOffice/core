@@ -38,7 +38,7 @@
 #include <impgraph.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <vcl/dibtools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #define GRAPHIC_MTFTOBMP_MAXEXT     2048
 #define GRAPHIC_STREAMBUFSIZE       8192UL
@@ -1161,20 +1161,20 @@ bool ImpGraphic::ImplSwapOut()
 
         if( !aTmpURL.GetMainURL( INetURLObject::NO_DECODE ).isEmpty() )
         {
-            boost::scoped_ptr<SvStream> pOStm;
+            std::unique_ptr<SvStream> xOStm;
             try
             {
-                pOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+                xOStm.reset(::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
             }
-            if( pOStm )
+            if( xOStm )
             {
-                pOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                pOStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
+                xOStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+                xOStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                if( ( bRet = ImplSwapOut( pOStm.get() ) ) )
+                if( ( bRet = ImplSwapOut( xOStm.get() ) ) )
                 {
                     mpSwapFile = new ImpSwapFile;
                     mpSwapFile->nRefCount = 1;
@@ -1182,7 +1182,7 @@ bool ImpGraphic::ImplSwapOut()
                 }
                 else
                 {
-                    pOStm.reset();
+                    xOStm.reset();
 
                     try
                     {
@@ -1219,19 +1219,19 @@ void ImpGraphic::ImplSwapOutAsLink()
     mbSwapOut = true;
 }
 
-bool ImpGraphic::ImplSwapOut( SvStream* pOStm )
+bool ImpGraphic::ImplSwapOut( SvStream* xOStm )
 {
     bool bRet = false;
 
-    if( pOStm )
+    if( xOStm )
     {
-        pOStm->SetBufferSize( GRAPHIC_STREAMBUFSIZE );
+        xOStm->SetBufferSize( GRAPHIC_STREAMBUFSIZE );
 
-        if( !pOStm->GetError() && ImplWriteEmbedded( *pOStm ) )
+        if( !xOStm->GetError() && ImplWriteEmbedded( *xOStm ) )
         {
-            pOStm->Flush();
+            xOStm->Flush();
 
-            if( !pOStm->GetError() )
+            if( !xOStm->GetError() )
             {
                 ImplClearGraphics( true );
                 bRet = mbSwapOut = true;
@@ -1259,22 +1259,22 @@ bool ImpGraphic::ImplSwapIn()
 
         if( !aSwapURL.isEmpty() )
         {
-            boost::scoped_ptr<SvStream> pIStm;
+            std::unique_ptr<SvStream> xIStm;
             try
             {
-                pIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+                xIStm.reset(::utl::UcbStreamHelper::CreateStream( aSwapURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
             }
             catch( const ::com::sun::star::uno::Exception& )
             {
             }
 
-            if( pIStm )
+            if( xIStm )
             {
-                pIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
-                pIStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
+                xIStm->SetVersion( SOFFICE_FILEFORMAT_50 );
+                xIStm->SetCompressMode( SvStreamCompressFlags::NATIVE );
 
-                bRet = ImplSwapIn( pIStm.get() );
-                pIStm.reset();
+                bRet = ImplSwapIn( xIStm.get() );
+                xIStm.reset();
 
                 if( mpSwapFile )
                 {
@@ -1316,18 +1316,18 @@ bool ImpGraphic::ImplSwapIn()
     return bRet;
 }
 
-bool ImpGraphic::ImplSwapIn( SvStream* pIStm )
+bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
 {
     bool bRet = false;
 
-    if( pIStm )
+    if( xIStm )
     {
-        pIStm->SetBufferSize( GRAPHIC_STREAMBUFSIZE );
+        xIStm->SetBufferSize( GRAPHIC_STREAMBUFSIZE );
 
-        if( !pIStm->GetError() )
+        if( !xIStm->GetError() )
         {
             mbSwapUnderway = true;
-            bRet = ImplReadEmbedded( *pIStm );
+            bRet = ImplReadEmbedded( *xIStm );
             mbSwapUnderway = false;
 
             if( !bRet )

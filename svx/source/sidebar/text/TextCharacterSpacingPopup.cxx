@@ -34,21 +34,15 @@ TextCharacterSpacingPopup::TextCharacterSpacingPopup (
     SetPopupModeEndHandler(::boost::bind(&TextCharacterSpacingPopup::PopupModeEndCallback, this));
 }
 
-
-
-
 TextCharacterSpacingPopup::~TextCharacterSpacingPopup (void)
 {
 }
-
-
-
 
 void TextCharacterSpacingPopup::Rearrange (bool bLBAvailable,bool bAvailable, long nKerning)
 {
     ProvideContainerAndControl();
 
-    TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mpControl.get());
+    TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mxControl.get());
     if (pControl != NULL)
         pControl->Rearrange(bLBAvailable,bAvailable,nKerning);
 }
@@ -56,7 +50,7 @@ void TextCharacterSpacingPopup::Rearrange (bool bLBAvailable,bool bAvailable, lo
 void TextCharacterSpacingPopup::PopupModeEndCallback (void)
 {
     ProvideContainerAndControl();
-    TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mpControl.get());
+    TextCharacterSpacingControl* pControl = dynamic_cast<TextCharacterSpacingControl*>(mxControl.get());
     if (pControl == NULL)
         return;
 

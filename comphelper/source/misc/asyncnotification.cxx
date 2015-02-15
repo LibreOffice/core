@@ -28,24 +28,16 @@
 #include <functional>
 #include <algorithm>
 
-
 namespace comphelper
 {
-
-
-
     //= AnyEvent
-
-
     AnyEvent::AnyEvent()
     {
     }
 
-
     AnyEvent::~AnyEvent()
     {
     }
-
 
     //= ProcessableEvent
 
@@ -101,7 +93,7 @@ namespace comphelper
 
 
     AsyncEventNotifier::AsyncEventNotifier(char const * name):
-        Thread(name), m_pImpl(new EventNotifierImpl)
+        Thread(name), m_xImpl(new EventNotifierImpl)
     {
     }
 
@@ -113,35 +105,35 @@ namespace comphelper
 
     void AsyncEventNotifier::removeEventsForProcessor( const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
-        ::osl::MutexGuard aGuard( m_pImpl->aMutex );
+        ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
         // remove all events for this processor
-        m_pImpl->aEvents.erase(::std::remove_if( m_pImpl->aEvents.begin(), m_pImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_pImpl->aEvents.end());
+        m_xImpl->aEvents.erase(::std::remove_if( m_xImpl->aEvents.begin(), m_xImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_xImpl->aEvents.end());
     }
 
 
     void SAL_CALL AsyncEventNotifier::terminate()
     {
-        ::osl::MutexGuard aGuard( m_pImpl->aMutex );
+        ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
         // remember the termination request
-        m_pImpl->bTerminate = true;
+        m_xImpl->bTerminate = true;
 
         // awake the thread
-        m_pImpl->aPendingActions.set();
+        m_xImpl->aPendingActions.set();
     }
 
 
     void AsyncEventNotifier::addEvent( const AnyEventRef& _rEvent, const ::rtl::Reference< IEventProcessor >& _xProcessor )
     {
-        ::osl::MutexGuard aGuard( m_pImpl->aMutex );
+        ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
         OSL_TRACE( "AsyncEventNotifier(%p): adding %p", this, _rEvent.get() );
         // remember this event
-        m_pImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
+        m_xImpl->aEvents.push_back( ProcessableEvent( _rEvent, _xProcessor ) );
 
         // awake the thread
-        m_pImpl->aPendingActions.set();
+        m_xImpl->aPendingActions.set();
     }
 
 
@@ -149,25 +141,25 @@ namespace comphelper
     {
         for (;;)
         {
-            m_pImpl->aPendingActions.wait();
+            m_xImpl->aPendingActions.wait();
             ProcessableEvent aEvent;
             {
-                osl::MutexGuard aGuard(m_pImpl->aMutex);
-                if (m_pImpl->bTerminate)
+                osl::MutexGuard aGuard(m_xImpl->aMutex);
+                if (m_xImpl->bTerminate)
                 {
                     break;
                 }
-                if (!m_pImpl->aEvents.empty())
+                if (!m_xImpl->aEvents.empty())
                 {
-                    aEvent = m_pImpl->aEvents.front();
-                    m_pImpl->aEvents.pop_front();
+                    aEvent = m_xImpl->aEvents.front();
+                    m_xImpl->aEvents.pop_front();
                     OSL_TRACE(
                         "AsyncEventNotifier(%p): popping %p", this,
                         aEvent.aEvent.get());
                 }
-                if (m_pImpl->aEvents.empty())
+                if (m_xImpl->aEvents.empty())
                 {
-                    m_pImpl->aPendingActions.reset();
+                    m_xImpl->aPendingActions.reset();
                 }
             }
             if (aEvent.aEvent.is()) {

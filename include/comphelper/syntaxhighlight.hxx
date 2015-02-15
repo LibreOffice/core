@@ -19,10 +19,7 @@
 #ifndef INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 #define INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 
-#include <vector>
-
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #include <rtl/ustring.hxx>
 
 #include <comphelper/comphelperdllapi.h>
@@ -30,6 +27,9 @@
 #ifdef UNX
 #include <sys/resource.h>
 #endif
+
+#include <vector>
+#include <memory>
 
 // Token-Typen TT_...
 enum TokenTypes
@@ -71,7 +71,7 @@ class COMPHELPER_DLLPUBLIC SyntaxHighlighter: private boost::noncopyable
     class Tokenizer;
 
     HighlighterLanguage eLanguage;
-    boost::scoped_ptr<Tokenizer> m_tokenizer;
+    std::unique_ptr<Tokenizer> m_tokenizer;
 
 public:
     SyntaxHighlighter(HighlighterLanguage language);

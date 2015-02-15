@@ -83,13 +83,13 @@ TYPEINIT1( SdrMediaObj, SdrRectObj );
 
 SdrMediaObj::SdrMediaObj()
     : SdrRectObj()
-    , m_pImpl( new Impl() )
+    , m_xImpl( new Impl() )
 {
 }
 
 SdrMediaObj::SdrMediaObj( const Rectangle& rRect )
     : SdrRectObj( rRect )
-    , m_pImpl( new Impl() )
+    , m_xImpl( new Impl() )
 {
 }
 
@@ -169,22 +169,22 @@ SdrMediaObj& SdrMediaObj::operator=(const SdrMediaObj& rObj)
         return *this;
     SdrRectObj::operator=( rObj );
 
-    m_pImpl->m_pTempFile = rObj.m_pImpl->m_pTempFile; // before props
+    m_xImpl->m_pTempFile = rObj.m_xImpl->m_pTempFile; // before props
     setMediaProperties( rObj.getMediaProperties() );
-    m_pImpl->m_xCachedSnapshot = rObj.m_pImpl->m_xCachedSnapshot;
+    m_xImpl->m_xCachedSnapshot = rObj.m_xImpl->m_xCachedSnapshot;
     return *this;
 }
 
 const uno::Reference< graphic::XGraphic > SdrMediaObj::getSnapshot() const
 {
-    if( !m_pImpl->m_xCachedSnapshot.is() )
+    if( !m_xImpl->m_xCachedSnapshot.is() )
     {
-        OUString aRealURL = m_pImpl->m_MediaProperties.getTempURL();
+        OUString aRealURL = m_xImpl->m_MediaProperties.getTempURL();
         if( aRealURL.isEmpty() )
-            aRealURL = m_pImpl->m_MediaProperties.getURL();
-        m_pImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_pImpl->m_MediaProperties.getReferer(), m_pImpl->m_MediaProperties.getMimeType());
+            aRealURL = m_xImpl->m_MediaProperties.getURL();
+        m_xImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_xImpl->m_MediaProperties.getReferer(), m_xImpl->m_MediaProperties.getMimeType());
     }
-    return m_pImpl->m_xCachedSnapshot;
+    return m_xImpl->m_xCachedSnapshot;
 }
 
 void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /* = false */ )
@@ -235,14 +235,14 @@ void SdrMediaObj::setURL( const OUString& rURL, const OUString& rReferer, const 
 {
     ::avmedia::MediaItem aURLItem;
     if( !rMimeType.isEmpty() )
-        m_pImpl->m_MediaProperties.setMimeType(rMimeType);
+        m_xImpl->m_MediaProperties.setMimeType(rMimeType);
     aURLItem.setURL( rURL, "", rReferer );
     setMediaProperties( aURLItem );
 }
 
 const OUString& SdrMediaObj::getURL() const
 {
-    return m_pImpl->m_MediaProperties.getURL();
+    return m_xImpl->m_MediaProperties.getURL();
 }
 
 void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
@@ -253,7 +253,7 @@ void SdrMediaObj::setMediaProperties( const ::avmedia::MediaItem& rState )
 
 const ::avmedia::MediaItem& SdrMediaObj::getMediaProperties() const
 {
-    return m_pImpl->m_MediaProperties;
+    return m_xImpl->m_MediaProperties;
 }
 
 Size SdrMediaObj::getPreferredSize() const
@@ -263,12 +263,12 @@ Size SdrMediaObj::getPreferredSize() const
 
 uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 {
-    if (!m_pImpl->m_pTempFile)
+    if (!m_xImpl->m_pTempFile)
     {
         SAL_WARN("svx", "this is only intended for embedded media");
         return 0;
     }
-    ucbhelper::Content tempFile(m_pImpl->m_pTempFile->m_TempFileURL,
+    ucbhelper::Content tempFile(m_xImpl->m_pTempFile->m_TempFileURL,
                 uno::Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext());
     return tempFile.openStream();
@@ -367,7 +367,7 @@ static bool lcl_CopyToTempFile(
 
 void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream)
 {
-    if (m_pImpl->m_pTempFile || m_pImpl->m_LastFailedPkgURL.isEmpty())
+    if (m_xImpl->m_pTempFile || m_xImpl->m_LastFailedPkgURL.isEmpty())
     {
         SAL_WARN("svx", "this is only intended for embedded media");
         return;
@@ -376,11 +376,11 @@ void SdrMediaObj::SetInputStream(uno::Reference<io::XInputStream> const& xStream
     bool const bSuccess = lcl_CopyToTempFile(xStream, tempFileURL);
     if (bSuccess)
     {
-        m_pImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL, ""));
-        m_pImpl->m_MediaProperties.setURL(
-            m_pImpl->m_LastFailedPkgURL, tempFileURL, "");
+        m_xImpl->m_pTempFile.reset(new MediaTempFile(tempFileURL, ""));
+        m_xImpl->m_MediaProperties.setURL(
+            m_xImpl->m_LastFailedPkgURL, tempFileURL, "");
     }
-    m_pImpl->m_LastFailedPkgURL.clear(); // once only
+    m_xImpl->m_LastFailedPkgURL.clear(); // once only
 }
 
 /// copy a stream from XStorage to temp file
@@ -424,17 +424,17 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
 
     // use only a subset of MediaItem properties for own own properties
     if( AVMEDIA_SETMASK_MIME_TYPE & nMaskSet )
-        m_pImpl->m_MediaProperties.setMimeType( rNewProperties.getMimeType() );
+        m_xImpl->m_MediaProperties.setMimeType( rNewProperties.getMimeType() );
 
     if( ( AVMEDIA_SETMASK_URL & nMaskSet ) &&
         ( rNewProperties.getURL() != getURL() ))
     {
-        m_pImpl->m_xCachedSnapshot.clear();
+        m_xImpl->m_xCachedSnapshot.clear();
         OUString const url(rNewProperties.getURL());
         if (url.startsWithIgnoreAsciiCase("vnd.sun.star.Package:"))
         {
-            if (   !m_pImpl->m_pTempFile
-                || (m_pImpl->m_pTempFile->m_TempFileURL !=
+            if (   !m_xImpl->m_pTempFile
+                || (m_xImpl->m_pTempFile->m_TempFileURL !=
                                 rNewProperties.getTempURL()))
             {
                 OUString tempFileURL;
@@ -448,44 +448,44 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
                     bSuccess = lcl_HandlePackageURL(url, GetModel(), tempFileURL);
                 if (bSuccess)
                 {
-                    m_pImpl->m_pTempFile.reset(
+                    m_xImpl->m_pTempFile.reset(
                             new MediaTempFile(tempFileURL, tempDirURL));
-                    m_pImpl->m_MediaProperties.setURL(url, tempFileURL, "");
+                    m_xImpl->m_MediaProperties.setURL(url, tempFileURL, "");
                 }
                 else // this case is for Clone via operator=
                 {
-                    m_pImpl->m_pTempFile.reset();
-                    m_pImpl->m_MediaProperties.setURL("", "", "");
+                    m_xImpl->m_pTempFile.reset();
+                    m_xImpl->m_MediaProperties.setURL("", "", "");
                     // UGLY: oox import also gets here, because unlike ODF
                     // getDocumentStorage() is not the imported file...
-                    m_pImpl->m_LastFailedPkgURL = url;
+                    m_xImpl->m_LastFailedPkgURL = url;
                 }
             }
             else
             {
-                m_pImpl->m_MediaProperties.setURL(url,
+                m_xImpl->m_MediaProperties.setURL(url,
                         rNewProperties.getTempURL(), "");
             }
         }
         else
         {
-            m_pImpl->m_pTempFile.reset();
-            m_pImpl->m_MediaProperties.setURL(url, "", rNewProperties.getReferer());
+            m_xImpl->m_pTempFile.reset();
+            m_xImpl->m_MediaProperties.setURL(url, "", rNewProperties.getReferer());
         }
         bBroadcastChanged = true;
     }
 
     if( AVMEDIA_SETMASK_LOOP & nMaskSet )
-        m_pImpl->m_MediaProperties.setLoop( rNewProperties.isLoop() );
+        m_xImpl->m_MediaProperties.setLoop( rNewProperties.isLoop() );
 
     if( AVMEDIA_SETMASK_MUTE & nMaskSet )
-        m_pImpl->m_MediaProperties.setMute( rNewProperties.isMute() );
+        m_xImpl->m_MediaProperties.setMute( rNewProperties.isMute() );
 
     if( AVMEDIA_SETMASK_VOLUMEDB & nMaskSet )
-        m_pImpl->m_MediaProperties.setVolumeDB( rNewProperties.getVolumeDB() );
+        m_xImpl->m_MediaProperties.setVolumeDB( rNewProperties.getVolumeDB() );
 
     if( AVMEDIA_SETMASK_ZOOM & nMaskSet )
-        m_pImpl->m_MediaProperties.setZoom( rNewProperties.getZoom() );
+        m_xImpl->m_MediaProperties.setZoom( rNewProperties.getZoom() );
 
     if( bBroadcastChanged )
     {

@@ -656,10 +656,10 @@ bool OpenGLContext::init( vcl::Window* pParent )
     if(mbInitialized)
         return true;
 
-    m_pWindow.reset(pParent ? NULL : new vcl::Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
-    mpWindow = pParent ? pParent : m_pWindow.get();
-    if(m_pWindow)
-        m_pWindow->setPosSizePixel(0,0,0,0);
+    m_xWindow.reset(pParent ? NULL : new vcl::Window(0, WB_NOBORDER|WB_NODIALOGCONTROL));
+    mpWindow = pParent ? pParent : m_xWindow.get();
+    if(m_xWindow)
+        m_xWindow->setPosSizePixel(0,0,0,0);
     m_pChildWindow = 0;
     initWindow();
     return ImplInit();
@@ -1043,8 +1043,8 @@ bool OpenGLContext::InitGLEW()
 
 void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
 {
-    if(m_pWindow)
-        m_pWindow->SetPosSizePixel(rPos, rSize);
+    if(m_xWindow)
+        m_xWindow->SetPosSizePixel(rPos, rSize);
     if( m_pChildWindow )
         m_pChildWindow->SetPosSizePixel(rPos, rSize);
 
@@ -1054,8 +1054,8 @@ void OpenGLContext::setWinPosAndSize(const Point &rPos, const Size& rSize)
 
 void OpenGLContext::setWinSize(const Size& rSize)
 {
-    if(m_pWindow)
-        m_pWindow->SetSizePixel(rSize);
+    if(m_xWindow)
+        m_xWindow->SetSizePixel(rSize);
     if( m_pChildWindow )
         m_pChildWindow->SetSizePixel(rSize);
 
@@ -1080,7 +1080,7 @@ bool OpenGLContext::initWindow()
     {
         SystemWindowData winData = generateWinData(mpWindow, false);
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
-        m_pChildWindowGC.reset(m_pChildWindow);
+        m_xChildWindowGC.reset(m_pChildWindow);
     }
 
     if( m_pChildWindow )
@@ -1108,7 +1108,7 @@ bool OpenGLContext::initWindow()
     {
         SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
-        m_pChildWindowGC.reset(m_pChildWindow);
+        m_xChildWindowGC.reset(m_pChildWindow);
     }
 
     if( m_pChildWindow )
@@ -1143,7 +1143,7 @@ bool OpenGLContext::initWindow()
         if( !m_pChildWindow )
         {
             m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
-            m_pChildWindowGC.reset(m_pChildWindow);
+            m_xChildWindowGC.reset(m_pChildWindow);
         }
         pChildSysData = m_pChildWindow->GetSystemData();
     }
@@ -1447,8 +1447,8 @@ void OpenGLContext::show()
 {
     if (m_pChildWindow)
         m_pChildWindow->Show();
-    else if (m_pWindow)
-        m_pWindow->Show();
+    else if (m_xWindow)
+        m_xWindow->Show();
 }
 
 SystemChildWindow* OpenGLContext::getChildWindow()

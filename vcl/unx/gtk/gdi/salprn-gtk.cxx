@@ -65,11 +65,11 @@ public:
     bool run();
     GtkPrinter* getPrinter() const
     {
-        return m_pWrapper->print_unix_dialog_get_selected_printer(GTK_PRINT_UNIX_DIALOG(m_pDialog));
+        return m_xWrapper->print_unix_dialog_get_selected_printer(GTK_PRINT_UNIX_DIALOG(m_pDialog));
     }
     GtkPrintSettings* getSettings() const
     {
-        return m_pWrapper->print_unix_dialog_get_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog));
+        return m_xWrapper->print_unix_dialog_get_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog));
     }
     void updateControllerPrintRange();
 #if 0
@@ -110,7 +110,7 @@ private:
     vcl::PrinterController& m_rController;
     std::map<GtkWidget*, OUString> m_aControlToPropertyMap;
     std::map<GtkWidget*, sal_Int32> m_aControlToNumValMap;
-    boost::shared_ptr<GtkPrintWrapper> m_pWrapper;
+    std::shared_ptr<GtkPrintWrapper> m_xWrapper;
 };
 
 struct GtkSalPrinter_Impl
@@ -213,10 +213,10 @@ GtkSalPrinter::StartJob(
     if (!lcl_useSystemPrintDialog())
         return PspSalPrinter::StartJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, io_rController);
 
-    assert(!m_pImpl);
+    assert(!m_xImpl);
 
-    m_pImpl.reset(new GtkSalPrinter_Impl());
-    m_pImpl->m_sJobName = i_rJobName;
+    m_xImpl.reset(new GtkSalPrinter_Impl());
+    m_xImpl->m_sJobName = i_rJobName;
 
     OString sFileName;
     if (i_pFileName)
@@ -229,16 +229,16 @@ GtkSalPrinter::StartJob(
         return false;
     }
     aDialog.updateControllerPrintRange();
-    m_pImpl->m_pPrinter = aDialog.getPrinter();
-    m_pImpl->m_pSettings = aDialog.getSettings();
+    m_xImpl->m_pPrinter = aDialog.getPrinter();
+    m_xImpl->m_pSettings = aDialog.getSettings();
 
 #if 0
-    if (const gchar *uri = gtk_print_settings_get(m_pImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_URI))
+    if (const gchar *uri = gtk_print_settings_get(m_xImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_URI))
     {
-        const gchar *pStr = gtk_print_settings_get(m_pImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
+        const gchar *pStr = gtk_print_settings_get(m_xImpl->m_pSettings, GTK_PRINT_SETTINGS_OUTPUT_FILE_FORMAT);
         if (pStr && !strcmp(pStr, "pdf"))
         {
-            aDialog.ExportAsPDF(OUString((const sal_Char *)uri, strlen((const sal_Char *)uri), RTL_TEXTENCODING_UTF8), m_pImpl->m_pSettings);
+            aDialog.ExportAsPDF(OUString((const sal_Char *)uri, strlen((const sal_Char *)uri), RTL_TEXTENCODING_UTF8), m_xImpl->m_pSettings);
             bDoJob = false;
         }
     }
@@ -251,7 +251,7 @@ GtkSalPrinter::StartJob(
 
     //To-Do proper name, watch for encodings
     sFileName = OString("/tmp/hacking.ps");
-    m_pImpl->m_sSpoolFile = sFileName;
+    m_xImpl->m_sSpoolFile = sFileName;
 
     OUString aFileName = OStringToOUString(sFileName, osl_getThreadTextEncoding());
 
@@ -268,14 +268,14 @@ GtkSalPrinter::EndJob()
     if (!lcl_useSystemPrintDialog())
         return bRet;
 
-    assert(m_pImpl);
+    assert(m_xImpl);
 
-    if (!bRet || m_pImpl->m_sSpoolFile.isEmpty())
+    if (!bRet || m_xImpl->m_sSpoolFile.isEmpty())
         return bRet;
 
-    boost::shared_ptr<GtkPrintWrapper> const pWrapper(lcl_getGtkSalInstance().getPrintWrapper());
+    std::shared_ptr<GtkPrintWrapper> const xWrapper(lcl_getGtkSalInstance().getPrintWrapper());
 
-    GtkPageSetup* pPageSetup = pWrapper->page_setup_new();
+    GtkPageSetup* pPageSetup = xWrapper->page_setup_new();
 #if 0
     //todo
     gtk_page_setup_set_orientation(pPageSetup,);
@@ -286,14 +286,14 @@ GtkSalPrinter::EndJob()
     gtk_page_setup_set_right_margin(pPageSetup,);
 #endif
 
-    GtkPrintJob* const pJob = pWrapper->print_job_new(
-        OUStringToOString(m_pImpl->m_sJobName, RTL_TEXTENCODING_UTF8).getStr(),
-        m_pImpl->m_pPrinter, m_pImpl->m_pSettings, pPageSetup);
+    GtkPrintJob* const pJob = xWrapper->print_job_new(
+        OUStringToOString(m_xImpl->m_sJobName, RTL_TEXTENCODING_UTF8).getStr(),
+        m_xImpl->m_pPrinter, m_xImpl->m_pSettings, pPageSetup);
 
     GError* error = NULL;
-    bRet = pWrapper->print_job_set_source_file(pJob, m_pImpl->m_sSpoolFile.getStr(), &error);
+    bRet = xWrapper->print_job_set_source_file(pJob, m_xImpl->m_sSpoolFile.getStr(), &error);
     if (bRet)
-        pWrapper->print_job_send(pJob, NULL, NULL, NULL);
+        xWrapper->print_job_send(pJob, NULL, NULL, NULL);
     else
     {
         //To-Do, do something with this
@@ -302,7 +302,7 @@ GtkSalPrinter::EndJob()
     }
 
     g_object_unref(pPageSetup);
-    m_pImpl.reset();
+    m_xImpl.reset();
 
     //To-Do, remove temp spool file
 
@@ -398,9 +398,9 @@ lcl_combo_box_text_append(GtkWidget* const pWidget, gchar const* const pText)
 
 GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
     : m_rController(io_rController)
-    , m_pWrapper(lcl_getGtkSalInstance().getPrintWrapper())
+    , m_xWrapper(lcl_getGtkSalInstance().getPrintWrapper())
 {
-    assert(m_pWrapper->supportsPrinting());
+    assert(m_xWrapper->supportsPrinting());
     impl_initDialog();
     impl_initCustomTab();
     impl_readFromSettings();
@@ -410,7 +410,7 @@ void
 GtkPrintDialog::impl_initDialog()
 {
     //To-Do, like fpicker, set UI language
-    m_pDialog = m_pWrapper->print_unix_dialog_new(NULL, NULL);
+    m_pDialog = m_xWrapper->print_unix_dialog_new(NULL, NULL);
 
     vcl::Window* const pTopWindow(Application::GetActiveTopWindow());
     if (pTopWindow)
@@ -424,7 +424,7 @@ GtkPrintDialog::impl_initDialog()
         }
     }
 
-    m_pWrapper->print_unix_dialog_set_manual_capabilities(GTK_PRINT_UNIX_DIALOG(m_pDialog),
+    m_xWrapper->print_unix_dialog_set_manual_capabilities(GTK_PRINT_UNIX_DIALOG(m_pDialog),
         GtkPrintCapabilities(GTK_PRINT_CAPABILITY_COPIES
             | GTK_PRINT_CAPABILITY_COLLATE
             | GTK_PRINT_CAPABILITY_REVERSE
@@ -745,7 +745,7 @@ GtkPrintDialog::impl_initCustomTab()
     for (CustomTabs_t::const_reverse_iterator aI = aCustomTabs.rbegin(); aI != aEnd; ++aI)
     {
         gtk_widget_show_all(aI->first);
-        m_pWrapper->print_unix_dialog_add_custom_tab(GTK_PRINT_UNIX_DIALOG(m_pDialog), aI->first,
+        m_xWrapper->print_unix_dialog_add_custom_tab(GTK_PRINT_UNIX_DIALOG(m_pDialog), aI->first,
             gtk_label_new(OUStringToOString(aI->second, RTL_TEXTENCODING_UTF8).getStr()));
     }
 }
@@ -763,10 +763,10 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
     // the controls in the rDisabled sequence (cf. the intialization of
     // the "PrintContent" UI option in SwPrintUIOptions::SwPrintUIOptions,
     // sw/source/core/view/printdata.cxx)
-    if (m_pWrapper->supportsPrintSelection() && !i_rDisabled[2])
+    if (m_xWrapper->supportsPrintSelection() && !i_rDisabled[2])
     {
-        m_pWrapper->print_unix_dialog_set_support_selection(pDialog, TRUE);
-        m_pWrapper->print_unix_dialog_set_has_selection(pDialog, TRUE);
+        m_xWrapper->print_unix_dialog_set_support_selection(pDialog, TRUE);
+        m_xWrapper->print_unix_dialog_set_has_selection(pDialog, TRUE);
     }
 
     beans::PropertyValue* const pPrintContent(
@@ -788,7 +788,7 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
                 break;
             case 2:
 #if GTK_CHECK_VERSION(2,14,0)
-                if (m_pWrapper->supportsPrintSelection())
+                if (m_xWrapper->supportsPrintSelection())
                     ePrintPages = GTK_PRINT_PAGES_SELECTION;
                 else
 #endif
@@ -797,8 +797,8 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
             default:
                 SAL_WARN("vcl.gtk", "unexpected selection type: " << nSelectionType);
         }
-        m_pWrapper->print_settings_set_print_pages(pSettings, ePrintPages);
-        m_pWrapper->print_unix_dialog_set_settings(pDialog, pSettings);
+        m_xWrapper->print_settings_set_print_pages(pSettings, ePrintPages);
+        m_xWrapper->print_unix_dialog_set_settings(pDialog, pSettings);
         g_object_unref(G_OBJECT(pSettings));
     }
 }
@@ -1038,7 +1038,7 @@ GtkPrintDialog::updateControllerPrintRange()
 {
     GtkPrintSettings* const pSettings(getSettings());
     // TODO: use get_print_pages
-    if (const gchar* const pStr = m_pWrapper->print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES))
+    if (const gchar* const pStr = m_xWrapper->print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES))
     {
         beans::PropertyValue* pVal = m_rController.getValue(OUString("PrintRange"));
         if (!pVal)
@@ -1063,7 +1063,7 @@ GtkPrintDialog::updateControllerPrintRange()
                 {
                     OUStringBuffer sBuf;
                     gint num_ranges;
-                    const GtkPageRange* const pRanges = m_pWrapper->print_settings_get_page_ranges(pSettings, &num_ranges);
+                    const GtkPageRange* const pRanges = m_xWrapper->print_settings_get_page_ranges(pSettings, &num_ranges);
                     for (gint i = 0; i != num_ranges && pRanges; ++i)
                     {
                         sBuf.append(sal_Int32(pRanges[i].start+1));
@@ -1103,25 +1103,25 @@ GtkPrintDialog::impl_readFromSettings()
 
     bool bChanged(false);
 
-    const gint nOldCopyCount(m_pWrapper->print_settings_get_n_copies(pSettings));
+    const gint nOldCopyCount(m_xWrapper->print_settings_get_n_copies(pSettings));
     const sal_Int32 nCopyCount(aCopyCount.toInt32());
     if (nCopyCount > 0 && nOldCopyCount != nCopyCount)
     {
         bChanged = true;
-        m_pWrapper->print_settings_set_n_copies(pSettings, sal::static_int_cast<gint>(nCopyCount));
+        m_xWrapper->print_settings_set_n_copies(pSettings, sal::static_int_cast<gint>(nCopyCount));
     }
 
-    const bool bOldCollate(m_pWrapper->print_settings_get_collate(pSettings));
+    const bool bOldCollate(m_xWrapper->print_settings_get_collate(pSettings));
     const bool bCollate(aCollate.equalsIgnoreAsciiCase("true"));
     if (bOldCollate != bCollate)
     {
         bChanged = true;
-        m_pWrapper->print_settings_set_collate(pSettings, bCollate);
+        m_xWrapper->print_settings_set_collate(pSettings, bCollate);
     }
     // TODO: wth was this var. meant for?
     (void) bChanged;
 
-    m_pWrapper->print_unix_dialog_set_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog), pSettings);
+    m_xWrapper->print_unix_dialog_set_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog), pSettings);
     g_object_unref(G_OBJECT(pSettings));
 }
 
@@ -1135,10 +1135,10 @@ const
     const OUString aPrintDialogStr("PrintDialog");
     pItem->setValue(aPrintDialogStr,
             OUString("CopyCount"),
-            OUString::number(m_pWrapper->print_settings_get_n_copies(pSettings)));
+            OUString::number(m_xWrapper->print_settings_get_n_copies(pSettings)));
     pItem->setValue(aPrintDialogStr,
             OUString("Collate"),
-            m_pWrapper->print_settings_get_collate(pSettings)
+            m_xWrapper->print_settings_get_collate(pSettings)
                 ? OUString("true")
                 : OUString("false"))
         ;

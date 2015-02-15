@@ -641,12 +641,12 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         // #i60699# No chance to handle graphics exposures - we copy
         // to a temp bitmap first, into which no repaints are
         // technically possible.
-        boost::scoped_ptr<SalBitmap> pDDB(pSrcGraphics->getBitmap( rPosAry.mnSrcX,
+        std::unique_ptr<SalBitmap> xDDB(pSrcGraphics->getBitmap( rPosAry.mnSrcX,
                                                                    rPosAry.mnSrcY,
                                                                    rPosAry.mnSrcWidth,
                                                                    rPosAry.mnSrcHeight ));
 
-        if( !pDDB )
+        if( !xDDB )
         {
             stderr0( "SalGraphics::CopyBits !pSrcGraphics->GetBitmap()\n" );
             return;
@@ -655,7 +655,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         SalTwoRect aPosAry( rPosAry );
 
         aPosAry.mnSrcX = 0, aPosAry.mnSrcY = 0;
-        drawBitmap( aPosAry, *pDDB );
+        drawBitmap( aPosAry, *xDDB );
     }
     else {
         stderr0( "X11SalGraphicsImpl::CopyBits from Printer not yet implemented\n" );

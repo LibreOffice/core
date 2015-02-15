@@ -23,9 +23,9 @@
 
 #include <X11/SM/SMlib.h>
 
-#include "boost/scoped_ptr.hpp"
 #include "tools/link.hxx"
 #include <rtl/ustring.hxx>
+#include <memory>
 
 #include "vclpluginapi.h"
 
@@ -35,7 +35,7 @@ class SalSession;
 class SessionManagerClient
 {
     static SalSession * m_pSession;
-    static boost::scoped_ptr< ICEConnectionObserver > m_pICEConnectionObserver;
+    static std::unique_ptr< ICEConnectionObserver > m_xICEConnectionObserver;
     static SmcConn m_pSmcConnection;
     static OString m_aClientID;
     static bool m_bDocSaveDone;

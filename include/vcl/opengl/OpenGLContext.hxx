@@ -52,7 +52,6 @@ class NSOpenGLView;
 #endif
 
 #include <vcl/vclopengl_dllapi.hxx>
-#include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
@@ -250,10 +249,10 @@ private:
 #endif
 
     GLWindow m_aGLWin;
-    boost::scoped_ptr<vcl::Window> m_pWindow;
-    vcl::Window* mpWindow; //points to m_pWindow or the parent window, don't delete it
+    std::unique_ptr<vcl::Window> m_xWindow;
+    vcl::Window* mpWindow; //points to m_xWindow or the parent window, don't delete it
     SystemChildWindow* m_pChildWindow;
-    boost::scoped_ptr<SystemChildWindow> m_pChildWindowGC;
+    std::unique_ptr<SystemChildWindow> m_xChildWindowGC;
     bool mbInitialized;
     int  mnRefCount;
     bool mbRequestLegacyContext;

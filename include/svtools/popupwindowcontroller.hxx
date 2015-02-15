@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <svtools/toolboxcontroller.hxx>
-#include <boost/scoped_ptr.hpp>
 
 namespace vcl { class Window; }
 
@@ -69,7 +68,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createItemWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& Parent ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 private:
-    boost::scoped_ptr< PopupWindowControllerImpl >  mpImpl;
+    std::unique_ptr< PopupWindowControllerImpl >  mxImpl;
 };
 
 } // namespace svt

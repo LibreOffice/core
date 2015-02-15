@@ -23,7 +23,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 #include <svl/svldllapi.h>
@@ -62,7 +62,7 @@ public:
 private:
     struct Impl;
 
-    boost::scoped_ptr< Impl > impl_;
+    std::unique_ptr< Impl > impl_;
 };
 
 #endif

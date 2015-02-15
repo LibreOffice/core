@@ -138,7 +138,7 @@ PopupWindowController::PopupWindowController( const Reference< uno::XComponentCo
                                               const Reference< frame::XFrame >& xFrame,
                                               const OUString& aCommandURL )
 : svt::ToolboxController( rxContext, xFrame, aCommandURL )
-, mpImpl( new PopupWindowControllerImpl() )
+, mxImpl( new PopupWindowControllerImpl() )
 {
 }
 
@@ -223,8 +223,8 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() th
         vcl::Window* pWin = createPopupWindow( pItemWindow ? pItemWindow : pToolBox );
         if( pWin )
         {
-               pWin->EnableDocking(true);
-            mpImpl->SetPopupWindow(pWin,pToolBox);
+            pWin->EnableDocking(true);
+            mxImpl->SetPopupWindow(pWin,pToolBox);
             vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pWin,
                                                            FLOATWIN_POPUPMODE_GRABFOCUS |
                                                            FLOATWIN_POPUPMODE_NOFOCUSCLOSE |

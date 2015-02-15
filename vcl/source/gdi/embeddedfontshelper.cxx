@@ -10,8 +10,6 @@
 #include <config_folders.h>
 #include <config_eot.h>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
 #include <vcl/outdev.hxx>
@@ -115,7 +113,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( uno::Reference< io::XInputStream > st
         libeot::EOTMetadata eotMetadata;
         libeot::EOTError uncompressError =
             libeot::EOT2ttf_buffer( reinterpret_cast<unsigned char *>(&fontData[0]), fontData.size(), &eotMetadata, &nakedPointerToUncompressedFont, &uncompressedFontSize );
-        boost::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::EOTfreeBuffer );
+        std::shared_ptr<unsigned char> uncompressedFont( nakedPointerToUncompressedFont, libeot::EOTfreeBuffer );
         if( uncompressError != libeot::EOT_SUCCESS )
         {
             SAL_WARN( "vcl.fonts", "Failed to uncompress font" );
@@ -232,7 +230,7 @@ OUString EmbeddedFontsHelper::fontFileUrl( const OUString& familyName, FontFamil
     SalGraphics* graphics = Application::GetDefaultDevice()->GetGraphics();
     PhysicalFontCollection fonts;
     graphics->GetDevFontList( &fonts );
-    boost::scoped_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());
+    std::unique_ptr< ImplGetDevFontList > fontInfo( fonts.GetDevFontList());
     PhysicalFontFace* selected = NULL;
     for( int i = 0;
          i < fontInfo->Count();

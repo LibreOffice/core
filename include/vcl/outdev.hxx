@@ -43,8 +43,6 @@
 
 #include <unotools/fontdefs.hxx>
 
-#include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 #ifdef check
 #  //some problem with MacOSX and a check define
 #  undef check
@@ -54,6 +52,7 @@
 #include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/uno/Reference.h>
 
+#include <memory>
 #include <vector>
 
 #if defined UNX
@@ -250,7 +249,7 @@ extern const sal_uLong nVCLBLut[ 6 ];
 extern const sal_uLong nVCLDitherLut[ 256 ];
 extern const sal_uLong nVCLLut[ 256 ];
 
-class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
+class VCL_DLLPUBLIC OutputDevice
 {
     friend class Printer;
     friend class VirtualDevice;
@@ -260,6 +259,9 @@ class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
     friend void ImplHandleResize( vcl::Window* pWindow, long nNewWidth, long nNewHeight );
 
 private:
+    OutputDevice(const OutputDevice&) SAL_DELETED_FUNCTION;
+    OutputDevice& operator=(const OutputDevice&) SAL_DELETED_FUNCTION;
+
     mutable SalGraphics*            mpGraphics;         ///< Graphics context to draw on
     mutable OutputDevice*           mpPrevGraphics;     ///< Previous output device in list
     mutable OutputDevice*           mpNextGraphics;     ///< Next output device in list
@@ -316,7 +318,7 @@ private:
     TextAlign                       meTextAlign;
     RasterOp                        meRasterOp;
     Wallpaper                       maBackground;
-    boost::scoped_ptr<AllSettings>  mxSettings;
+    std::unique_ptr<AllSettings>    mxSettings;
     MapMode                         maMapMode;
     Point                           maRefPoint;
     sal_uInt16                      mnAntialiasing;

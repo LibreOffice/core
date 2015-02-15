@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <memory>
 #include <vector>
 
 #include <boost/noncopyable.hpp>
@@ -178,7 +179,7 @@ private:
     css::uno::Reference< css::uno::XComponentContext > context_;
     OUString locale_;
     bool default_;
-    boost::shared_ptr<osl::Mutex> lock_;
+    std::shared_ptr<osl::Mutex> lock_;
 };
 
 css::uno::Reference< css::uno::XInterface > Service::createInstance(

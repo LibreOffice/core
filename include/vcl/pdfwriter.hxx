@@ -35,8 +35,6 @@
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <list>
 #include <vector>
 #include <set>
@@ -77,7 +75,7 @@ class VCL_DLLPUBLIC PDFOutputStream
 
 class VCL_DLLPUBLIC PDFWriter
 {
-    boost::scoped_ptr<PDFWriterImpl> pImplementation;
+    std::unique_ptr<PDFWriterImpl> xImplementation;
 public:
     // extended line info
     enum CapType { capButt, capRound, capSquare };

@@ -21,10 +21,9 @@
 #define INCLUDED_UNOTOOLS_SHAREDUNOCOMPONENT_HXX
 
 #include <unotools/unotoolsdllapi.h>
-
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -139,10 +138,10 @@ namespace utl
     {
     private:
         typedef COMPONENT                           Component;
-        typedef ::boost::shared_ptr< Component >    ComponentPointer;
+        typedef std::shared_ptr<Component>          ComponentPointer;
 
     private:
-        ComponentPointer                                m_pComponent;
+        ComponentPointer                                m_xComponent;
         ::com::sun::star::uno::Reference< INTERFACE >   m_xTypedComponent;
 
     public:
@@ -208,24 +207,24 @@ namespace utl
 
         INTERFACE* SAL_CALL operator->() const;
 
-        inline operator const ::com::sun::star::uno::Reference< INTERFACE >&() const
+        operator const ::com::sun::star::uno::Reference< INTERFACE >&() const
         {
             return m_xTypedComponent;
         }
 
-        inline const ::com::sun::star::uno::Reference< INTERFACE >& getTyped() const
+        const ::com::sun::star::uno::Reference< INTERFACE >& getTyped() const
         {
             return m_xTypedComponent;
         }
 
-        inline bool is() const
+        bool is() const
         {
             return m_xTypedComponent.is();
         }
 
-        inline void clear()
+        void clear()
         {
-            m_pComponent.reset();
+            m_xComponent.reset();
             m_xTypedComponent.clear();
         }
     };
@@ -240,7 +239,7 @@ namespace utl
     template < class INTERFACE, class COMPONENT >
     void SharedUNOComponent< INTERFACE, COMPONENT >::reset( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent, AssignmentMode _eMode )
     {
-        m_pComponent.reset( _eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : NULL );
+        m_xComponent.reset(_eMode == TakeOwnership ? new COMPONENT( _rxComponent ) : NULL);
         m_xTypedComponent = _rxComponent;
     }
 

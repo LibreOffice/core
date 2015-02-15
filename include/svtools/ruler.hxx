@@ -27,8 +27,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/field.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include <svtools/accessibleruler.hxx>
 
 class MouseEvent;
@@ -680,8 +678,8 @@ private:
     Link            maDoubleClickHdl;
     Link            maExtraDownHdl;
 
-    boost::scoped_ptr<RulerSelection> mpCurrentHitTest;
-    boost::scoped_ptr<RulerSelection> mpPreviousHitTest;
+    std::unique_ptr<RulerSelection> mxCurrentHitTest;
+    std::unique_ptr<RulerSelection> mxPreviousHitTest;
 
     SvtRulerAccessible* pAccContext;
 

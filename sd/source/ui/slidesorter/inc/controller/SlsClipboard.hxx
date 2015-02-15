@@ -133,9 +133,9 @@ private:
         Typically created in ExecuteDrop() and released in DragFinish().
     */
     class UndoContext;
-    ::boost::scoped_ptr<UndoContext> mpUndoContext;
+    std::unique_ptr<UndoContext> mxUndoContext;
 
-    ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
+    std::unique_ptr<SelectionObserver::Context> mxSelectionObserverContext;
     ImplSVEvent * mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (

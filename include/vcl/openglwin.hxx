@@ -14,8 +14,6 @@
 #include <vcl/syschild.hxx>
 #include <vcl/vclopengl_dllapi.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 class OpenGLContext;
 class OpenGLWindowImpl;
 
@@ -49,7 +47,7 @@ public:
     virtual void Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
 
 private:
-    boost::scoped_ptr<OpenGLWindowImpl> mpImpl;
+    std::unique_ptr<OpenGLWindowImpl> mxImpl;
     IRenderer* mpRenderer;
 
     Point maStartPoint;

@@ -2482,8 +2482,8 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     else
         rTbx.SetItemBits( nId, ToolBoxItemBits::DROPDOWN | rTbx.GetItemBits( nId ) );
 
-    pBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
-    mPaletteManager.SetBtnUpdater( pBtnUpdater.get() );
+    m_xBtnUpdater.reset( new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ) );
+    mPaletteManager.SetBtnUpdater( m_xBtnUpdater.get() );
 }
 
 SvxColorToolBoxControl::~SvxColorToolBoxControl()
@@ -2545,7 +2545,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
 
 IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, pColor)
 {
-    pBtnUpdater->Update( *pColor );
+    m_xBtnUpdater->Update( *pColor );
     mPaletteManager.SetLastColor( *pColor );
     return 0;
 }
@@ -2575,7 +2575,7 @@ void SvxColorToolBoxControl::StateChanged(
             else if ( pState->ISA( XFillColorItem ) )
                 aColor = static_cast< const XFillColorItem* >(pState)->GetColorValue();
         }
-        pBtnUpdater->Update( aColor );
+        m_xBtnUpdater->Update( aColor );
     }
 }
 

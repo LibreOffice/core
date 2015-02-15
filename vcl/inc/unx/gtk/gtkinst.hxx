@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 #define INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX
 
-#include <boost/shared_ptr.hpp>
-
 #include <unx/salinst.h>
 #include <generic/gensys.h>
 #include <headless/svpinst.hxx>
@@ -102,14 +100,14 @@ public:
     void                        addEvent( sal_uInt16 nMask );
     void                        subtractEvent( sal_uInt16 nMask );
 
-    boost::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
+    std::shared_ptr<vcl::unx::GtkPrintWrapper> getPrintWrapper() const;
 
 private:
     std::vector<GtkSalTimer *>  m_aTimers;
     bool                        IsTimerExpired();
     bool                        bNeedsInit;
 
-    mutable boost::shared_ptr<vcl::unx::GtkPrintWrapper> m_pPrintWrapper;
+    mutable std::shared_ptr<vcl::unx::GtkPrintWrapper> m_xPrintWrapper;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_GTK_GTKINST_HXX

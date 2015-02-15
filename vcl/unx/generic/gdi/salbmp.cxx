@@ -50,7 +50,7 @@
 #include <valgrind/memcheck.h>
 #endif
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 // - SalBitmap -
 
@@ -414,8 +414,8 @@ XImage* X11SalBitmap::ImplCreateXImage(
         {
             BitmapBuffer*   pDstBuf;
             sal_uLong           nDstFormat = BMP_FORMAT_TOP_DOWN;
-            boost::scoped_ptr<BitmapPalette> pPal;
-            boost::scoped_ptr<ColorMask> pMask;
+            std::unique_ptr<BitmapPalette> xPal;
+            std::unique_ptr<ColorMask> xMask;
 
             switch( pImage->bits_per_pixel )
             {
@@ -454,7 +454,7 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
                     #endif
 
-                    pMask.reset(new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask ));
+                    xMask.reset(new ColorMask( pImage->red_mask, pImage->green_mask, pImage->blue_mask ));
                 }
                 break;
 
@@ -485,17 +485,17 @@ XImage* X11SalBitmap::ImplCreateXImage(
 
             if( pImage->depth == 1 )
             {
-                pPal.reset(new BitmapPalette( 2 ));
-                (*pPal)[ 0 ] = Color( COL_BLACK );
-                (*pPal)[ 1 ] = Color( COL_WHITE );
+                xPal.reset(new BitmapPalette( 2 ));
+                (*xPal)[ 0 ] = Color( COL_BLACK );
+                (*xPal)[ 1 ] = Color( COL_WHITE );
             }
             else if( pImage->depth == 8 && mbGrey )
             {
-                pPal.reset(new BitmapPalette( 256 ));
+                xPal.reset(new BitmapPalette( 256 ));
 
                 for( sal_uInt16 i = 0; i < 256; i++ )
                 {
-                    BitmapColor&    rBmpCol = (*pPal)[ i ];
+                    BitmapColor&    rBmpCol = (*xPal)[ i ];
 
                     rBmpCol.SetRed( i );
                     rBmpCol.SetGreen( i );
@@ -510,12 +510,12 @@ XImage* X11SalBitmap::ImplCreateXImage(
                                             , (sal_uLong)(1 << pImage->depth)
                                             );
 
-                pPal.reset(new BitmapPalette( nCols ));
+                xPal.reset(new BitmapPalette( nCols ));
 
                 for( sal_uInt16 i = 0; i < nCols; i++ )
                 {
                     const SalColor  nColor( rColMap.GetColor( i ) );
-                    BitmapColor&    rBmpCol = (*pPal)[ i ];
+                    BitmapColor&    rBmpCol = (*xPal)[ i ];
 
                     rBmpCol.SetRed( SALCOLOR_RED( nColor ) );
                     rBmpCol.SetGreen( SALCOLOR_GREEN( nColor ) );
@@ -523,9 +523,9 @@ XImage* X11SalBitmap::ImplCreateXImage(
                 }
             }
 
-            pDstBuf = StretchAndConvert( *mpDIB, rTwoRect, nDstFormat, pPal.get(), pMask.get() );
-            pPal.reset();
-            pMask.reset();
+            pDstBuf = StretchAndConvert( *mpDIB, rTwoRect, nDstFormat, xPal.get(), xMask.get() );
+            xPal.reset();
+            xMask.reset();
 
             if( pDstBuf && pDstBuf->mpBits )
             {

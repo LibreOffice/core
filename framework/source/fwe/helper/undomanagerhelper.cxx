@@ -876,7 +876,7 @@ namespace framework
     //= UndoManagerHelper
 
     UndoManagerHelper::UndoManagerHelper( IUndoManagerImplementation& i_undoManagerImpl )
-        :m_pImpl( new UndoManagerHelper_Impl( i_undoManagerImpl ) )
+        :m_xImpl( new UndoManagerHelper_Impl( i_undoManagerImpl ) )
     {
     }
 
@@ -886,22 +886,22 @@ namespace framework
 
     void UndoManagerHelper::disposing()
     {
-        m_pImpl->disposing();
+        m_xImpl->disposing();
     }
 
     void UndoManagerHelper::enterUndoContext( const OUString& i_title, IMutexGuard& i_instanceLock )
     {
-        m_pImpl->enterUndoContext( i_title, false, i_instanceLock );
+        m_xImpl->enterUndoContext( i_title, false, i_instanceLock );
     }
 
     void UndoManagerHelper::enterHiddenUndoContext( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->enterUndoContext( OUString(), true, i_instanceLock );
+        m_xImpl->enterUndoContext( OUString(), true, i_instanceLock );
     }
 
     void UndoManagerHelper::leaveUndoContext( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->leaveUndoContext( i_instanceLock );
+        m_xImpl->leaveUndoContext( i_instanceLock );
     }
 
     void UndoManagerHelper_Impl::undo( IMutexGuard& i_instanceLock )
@@ -932,24 +932,24 @@ namespace framework
 
     void UndoManagerHelper::addUndoAction( const Reference< XUndoAction >& i_action, IMutexGuard& i_instanceLock )
     {
-        m_pImpl->addUndoAction( i_action, i_instanceLock );
+        m_xImpl->addUndoAction( i_action, i_instanceLock );
     }
 
     void UndoManagerHelper::undo( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->undo( i_instanceLock );
+        m_xImpl->undo( i_instanceLock );
     }
 
     void UndoManagerHelper::redo( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->redo( i_instanceLock );
+        m_xImpl->redo( i_instanceLock );
     }
 
     bool UndoManagerHelper::isUndoPossible() const
     {
         // SYNCHRONIZED --->
-        ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
-        IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        ::osl::MutexGuard aGuard( m_xImpl->getMutex() );
+        IUndoManager& rUndoManager = m_xImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
             return false;
         return rUndoManager.GetUndoActionCount( IUndoManager::TopLevel ) > 0;
@@ -959,8 +959,8 @@ namespace framework
     bool UndoManagerHelper::isRedoPossible() const
     {
         // SYNCHRONIZED --->
-        ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
-        const IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        ::osl::MutexGuard aGuard( m_xImpl->getMutex() );
+        const IUndoManager& rUndoManager = m_xImpl->getUndoManager();
         if ( rUndoManager.IsInListAction() )
             return false;
         return rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0;
@@ -1015,55 +1015,55 @@ namespace framework
 
     OUString UndoManagerHelper::getCurrentUndoActionTitle() const
     {
-        return lcl_getCurrentActionTitle( *m_pImpl, true );
+        return lcl_getCurrentActionTitle( *m_xImpl, true );
     }
 
     OUString UndoManagerHelper::getCurrentRedoActionTitle() const
     {
-        return lcl_getCurrentActionTitle( *m_pImpl, false );
+        return lcl_getCurrentActionTitle( *m_xImpl, false );
     }
 
     Sequence< OUString > UndoManagerHelper::getAllUndoActionTitles() const
     {
-        return lcl_getAllActionTitles( *m_pImpl, true );
+        return lcl_getAllActionTitles( *m_xImpl, true );
     }
 
     Sequence< OUString > UndoManagerHelper::getAllRedoActionTitles() const
     {
-        return lcl_getAllActionTitles( *m_pImpl, false );
+        return lcl_getAllActionTitles( *m_xImpl, false );
     }
 
     void UndoManagerHelper::clear( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->clear( i_instanceLock );
+        m_xImpl->clear( i_instanceLock );
     }
 
     void UndoManagerHelper::clearRedo( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->clearRedo( i_instanceLock );
+        m_xImpl->clearRedo( i_instanceLock );
     }
 
     void UndoManagerHelper::reset( IMutexGuard& i_instanceLock )
     {
-        m_pImpl->reset( i_instanceLock );
+        m_xImpl->reset( i_instanceLock );
     }
 
     void UndoManagerHelper::lock()
     {
-        m_pImpl->lock();
+        m_xImpl->lock();
     }
 
     void UndoManagerHelper::unlock()
     {
-        m_pImpl->unlock();
+        m_xImpl->unlock();
     }
 
     bool UndoManagerHelper::isLocked()
     {
         // SYNCHRONIZED --->
-        ::osl::MutexGuard aGuard( m_pImpl->getMutex() );
+        ::osl::MutexGuard aGuard( m_xImpl->getMutex() );
 
-        IUndoManager& rUndoManager = m_pImpl->getUndoManager();
+        IUndoManager& rUndoManager = m_xImpl->getUndoManager();
         return !rUndoManager.IsUndoEnabled();
         // <--- SYNCHRONIZED
     }
@@ -1071,25 +1071,25 @@ namespace framework
     void UndoManagerHelper::addUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         if ( i_listener.is() )
-            m_pImpl->addUndoManagerListener( i_listener );
+            m_xImpl->addUndoManagerListener( i_listener );
     }
 
     void UndoManagerHelper::removeUndoManagerListener( const Reference< XUndoManagerListener >& i_listener )
     {
         if ( i_listener.is() )
-            m_pImpl->removeUndoManagerListener( i_listener );
+            m_xImpl->removeUndoManagerListener( i_listener );
     }
 
     void UndoManagerHelper::addModifyListener( const Reference< XModifyListener >& i_listener )
     {
         if ( i_listener.is() )
-            m_pImpl->addModifyListener( i_listener );
+            m_xImpl->addModifyListener( i_listener );
     }
 
     void UndoManagerHelper::removeModifyListener( const Reference< XModifyListener >& i_listener )
     {
         if ( i_listener.is() )
-            m_pImpl->removeModifyListener( i_listener );
+            m_xImpl->removeModifyListener( i_listener );
     }
 
 } // namespace framework

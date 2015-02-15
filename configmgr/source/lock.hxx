@@ -22,11 +22,11 @@
 
 #include <sal/config.h>
 #include <osl/mutex.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace configmgr {
 
-boost::shared_ptr<osl::Mutex> lock();
+std::shared_ptr<osl::Mutex> lock();
 
 }
 

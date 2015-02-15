@@ -158,7 +158,7 @@ private:
     OUString url_;
     Data const & data_;
     osl::Condition delay_;
-    boost::shared_ptr<osl::Mutex> lock_;
+    std::shared_ptr<osl::Mutex> lock_;
 };
 
 Components::WriteThread::WriteThread(

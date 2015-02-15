@@ -32,11 +32,7 @@
 
 namespace svx {
 
-
-
 const long DIAL_OUTER_WIDTH = 8;
-
-
 
 DialControlBmp::DialControlBmp( vcl::Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
@@ -224,9 +220,9 @@ void DialControlBmp::DrawBackground()
 
 
 DialControl::DialControl_Impl::DialControl_Impl ( vcl::Window& rParent ) :
-    mpBmpEnabled(new DialControlBmp(rParent)),
-    mpBmpDisabled(new DialControlBmp(rParent)),
-    mpBmpBuffered(new DialControlBmp(rParent)),
+    mxBmpEnabled(new DialControlBmp(rParent)),
+    mxBmpDisabled(new DialControlBmp(rParent)),
+    mxBmpBuffered(new DialControlBmp(rParent)),
     mpLinkField( 0 ),
     mnLinkedFieldValueMultiplyer( 0 ),
     mnAngle( 0 ),
@@ -242,7 +238,7 @@ void DialControl::DialControl_Impl::Init( const Size& rWinSize, const vcl::Font&
 {
     maWinFont = rWinFont;
     maWinFont.SetTransparent(true);
-    mpBmpBuffered->InitBitmap(maWinFont);
+    mxBmpBuffered->InitBitmap(maWinFont);
     SetSize(rWinSize);
 }
 
@@ -257,9 +253,9 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
     mnCenterX = maWinSize.Width() / 2;
     mnCenterY = maWinSize.Height() / 2;
 
-    mpBmpEnabled->DrawBackground( maWinSize, true );
-    mpBmpDisabled->DrawBackground( maWinSize, false );
-    mpBmpBuffered->SetSize( maWinSize );
+    mxBmpEnabled->DrawBackground( maWinSize, true );
+    mxBmpDisabled->DrawBackground( maWinSize, false );
+    mxBmpBuffered->SetSize( maWinSize );
 }
 
 
@@ -289,7 +285,7 @@ void DialControl::Resize()
 void DialControl::Paint( const Rectangle&  )
 {
     Point aPos;
-    DrawBitmapEx( aPos, mpImpl->mpBmpBuffered->GetBitmapEx( aPos, mpImpl->maWinSize ) );
+    DrawBitmapEx( aPos, mpImpl->mxBmpBuffered->GetBitmapEx( aPos, mpImpl->maWinSize ) );
 }
 
 void DialControl::StateChanged( StateChangedType nStateChange )
@@ -448,9 +444,9 @@ void DialControl::Init( const Size& rWinSize )
 
 void DialControl::InvalidateControl()
 {
-    mpImpl->mpBmpBuffered->CopyBackground( IsEnabled() ? *mpImpl->mpBmpEnabled : *mpImpl->mpBmpDisabled );
+    mpImpl->mxBmpBuffered->CopyBackground( IsEnabled() ? *mpImpl->mxBmpEnabled : *mpImpl->mxBmpDisabled );
     if( !mpImpl->mbNoRot )
-        mpImpl->mpBmpBuffered->DrawElements( GetText(), mpImpl->mnAngle );
+        mpImpl->mxBmpBuffered->DrawElements( GetText(), mpImpl->mnAngle );
     Invalidate();
 }
 

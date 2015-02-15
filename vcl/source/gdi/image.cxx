@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
 #include <osl/file.hxx>
@@ -301,10 +300,10 @@ ImageList::ImageList( const ResId& rResId ) :
 
         sal_uLong                               nObjMask = pResMgr->ReadLong();
         pResMgr->ReadString(); //skip string
-        ::boost::scoped_ptr< Color >        spMaskColor;
+        std::unique_ptr< Color >        xMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
-            spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
+            xMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
 
         pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
 

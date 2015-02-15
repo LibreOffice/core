@@ -27,9 +27,8 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
-
+#include <memory>
 
 namespace toolkit
 {
@@ -87,7 +86,7 @@ namespace toolkit
         void    impl_updateImages_nolck( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_animatedImages );
 
     private:
-        ::boost::scoped_ptr< AnimatedImagesPeer_Data >   m_pData;
+        std::unique_ptr< AnimatedImagesPeer_Data >   m_xData;
     };
 
 

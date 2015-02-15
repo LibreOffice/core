@@ -44,7 +44,8 @@
 #include <salinst.hxx>
 #include <svdata.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
+
 using namespace ::com::sun::star;
 
 BitmapEx::BitmapEx() :
@@ -800,10 +801,10 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     {
         // 0 means get BitmapEx
         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-        boost::scoped_ptr<BitmapEx> pBitmapEx(reinterpret_cast<BitmapEx*>( *reinterpret_cast<const sal_Int64*>(aAny.getValue())));
-        if( pBitmapEx )
+        std::unique_ptr<BitmapEx> xBitmapEx(reinterpret_cast<BitmapEx*>( *reinterpret_cast<const sal_Int64*>(aAny.getValue())));
+        if( xBitmapEx )
         {
-            *this = *pBitmapEx;
+            *this = *xBitmapEx;
             return true;
         }
     }
@@ -843,14 +844,13 @@ namespace
         bool bSmooth)
     {
         Bitmap aDestination(aDestinationSize, 24);
-        boost::scoped_ptr<BitmapWriteAccess> pWrite(aDestination.AcquireWriteAccess());
+        std::unique_ptr<BitmapWriteAccess> xWrite(aDestination.AcquireWriteAccess());
 
-        if(pWrite)
+        if(xWrite)
         {
-            //const Size aContentSizePixel(rSource.GetSizePixel());
-            boost::scoped_ptr<BitmapReadAccess> pRead((const_cast< Bitmap& >(rSource)).AcquireReadAccess());
+            std::unique_ptr<BitmapReadAccess> xRead((const_cast< Bitmap& >(rSource)).AcquireReadAccess());
 
-            if(pRead)
+            if (xRead)
             {
                 const Size aDestinationSizePixel(aDestination.GetSizePixel());
                 const BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
@@ -863,10 +863,10 @@ namespace
 
                         if(bSmooth)
                         {
-                            pWrite->SetPixel(
+                            xWrite->SetPixel(
                                 y,
                                 x,
-                                pRead->GetInterpolatedColorWithFallback(
+                                xRead->GetInterpolatedColorWithFallback(
                                     aSourceCoor.getY(),
                                     aSourceCoor.getX(),
                                     aOutside));
@@ -875,10 +875,10 @@ namespace
                         {
                             // this version does the correct <= 0.0 checks, so no need
                             // to do the static_cast< sal_Int32 > self and make an error
-                            pWrite->SetPixel(
+                            xWrite->SetPixel(
                                 y,
                                 x,
-                                pRead->GetColorWithFallback(
+                                xRead->GetColorWithFallback(
                                     aSourceCoor.getY(),
                                     aSourceCoor.getX(),
                                     aOutside));
@@ -1028,12 +1028,12 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                     // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
                     // erase color is determined and used -> this may be different from what is
                     // wanted here. Better create a new bitmap with the needed color explicitely
-                    boost::scoped_ptr<BitmapReadAccess> pReadAccess(aChangedBitmap.AcquireReadAccess());
-                    OSL_ENSURE(pReadAccess, "Got no Bitmap ReadAccess ?!?");
+                    std::unique_ptr<BitmapReadAccess> xReadAccess(aChangedBitmap.AcquireReadAccess());
+                    OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
 
-                    if(pReadAccess)
+                    if(xReadAccess)
                     {
-                        BitmapPalette aNewPalette(pReadAccess->GetPalette());
+                        BitmapPalette aNewPalette(xReadAccess->GetPalette());
                         aNewPalette[0] = BitmapColor(Color(pReplace->getBColor()));
                         aChangedBitmap = Bitmap(
                             aChangedBitmap.GetSizePixel(),
@@ -1056,34 +1056,34 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
         }
         else
         {
-            boost::scoped_ptr<BitmapWriteAccess> pContent(aChangedBitmap.AcquireWriteAccess());
+            std::unique_ptr<BitmapWriteAccess> xContent(aChangedBitmap.AcquireWriteAccess());
 
-            if(pContent)
+            if(xContent)
             {
                 const double fConvertColor(1.0 / 255.0);
 
-                if(pContent->HasPalette())
+                if(xContent->HasPalette())
                 {
-                    const sal_uInt16 nCount(pContent->GetPaletteEntryCount());
+                    const sal_uInt16 nCount(xContent->GetPaletteEntryCount());
 
                     for(sal_uInt16 b(0); b < nCount; b++)
                     {
-                        const BitmapColor& rCol = pContent->GetPaletteColor(b);
+                        const BitmapColor& rCol = xContent->GetPaletteColor(b);
                         const basegfx::BColor aBSource(
                             rCol.GetRed() * fConvertColor,
                             rCol.GetGreen() * fConvertColor,
                             rCol.GetBlue() * fConvertColor);
                         const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
-                        pContent->SetPaletteColor(b, BitmapColor(Color(aBDest)));
+                        xContent->SetPaletteColor(b, BitmapColor(Color(aBDest)));
                     }
                 }
-                else if(BMP_FORMAT_24BIT_TC_BGR == pContent->GetScanlineFormat())
+                else if(BMP_FORMAT_24BIT_TC_BGR == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0L); y < (sal_uInt32)pContent->Height(); y++)
+                    for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
                     {
-                        Scanline pScan = pContent->GetScanline(y);
+                        Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0L); x < (sal_uInt32)pContent->Width(); x++)
+                        for(sal_uInt32 x(0L); x < (sal_uInt32)xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *(pScan + 2)* fConvertColor,
@@ -1096,13 +1096,13 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                         }
                     }
                 }
-                else if(BMP_FORMAT_24BIT_TC_RGB == pContent->GetScanlineFormat())
+                else if(BMP_FORMAT_24BIT_TC_RGB == xContent->GetScanlineFormat())
                 {
-                    for(sal_uInt32 y(0L); y < (sal_uInt32)pContent->Height(); y++)
+                    for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
                     {
-                        Scanline pScan = pContent->GetScanline(y);
+                        Scanline pScan = xContent->GetScanline(y);
 
-                        for(sal_uInt32 x(0L); x < (sal_uInt32)pContent->Width(); x++)
+                        for(sal_uInt32 x(0L); x < (sal_uInt32)xContent->Width(); x++)
                         {
                             const basegfx::BColor aBSource(
                                 *pScan * fConvertColor,
@@ -1117,18 +1117,18 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 }
                 else
                 {
-                    for(sal_uInt32 y(0L); y < (sal_uInt32)pContent->Height(); y++)
+                    for(sal_uInt32 y(0L); y < (sal_uInt32)xContent->Height(); y++)
                     {
-                        for(sal_uInt32 x(0L); x < (sal_uInt32)pContent->Width(); x++)
+                        for(sal_uInt32 x(0L); x < (sal_uInt32)xContent->Width(); x++)
                         {
-                            const BitmapColor aBMCol(pContent->GetColor(y, x));
+                            const BitmapColor aBMCol(xContent->GetColor(y, x));
                             const basegfx::BColor aBSource(
                                 (double)aBMCol.GetRed() * fConvertColor,
                                 (double)aBMCol.GetGreen() * fConvertColor,
                                 (double)aBMCol.GetBlue() * fConvertColor);
                             const basegfx::BColor aBDest(rModifier->getModifiedColor(aBSource));
 
-                            pContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
+                            xContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
                         }
                     }
                 }
@@ -1223,16 +1223,16 @@ BitmapEx createBlendFrame(
 
         aContent.Erase(COL_BLACK);
 
-        BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
+        BitmapWriteAccess* xContent = aContent.AcquireWriteAccess();
         BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
 
-        if(pContent && pAlpha)
+        if(xContent && pAlpha)
         {
             long x(0);
             long y(0);
 
             // x == 0, y == 0, top-left corner
-            pContent->SetPixel(0, 0, aColorTopLeft);
+            xContent->SetPixel(0, 0, aColorTopLeft);
             pAlpha->SetPixelIndex(0, 0, nAlpha);
 
             // y == 0, top line left to right
@@ -1241,7 +1241,7 @@ BitmapEx createBlendFrame(
                 Color aMix(aColorTopLeft);
 
                 aMix.Merge(aColorTopRight, 255 - sal_uInt8((x * 255) / nW));
-                pContent->SetPixel(0, x, aMix);
+                xContent->SetPixel(0, x, aMix);
                 pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
@@ -1249,7 +1249,7 @@ BitmapEx createBlendFrame(
             // #i123690# Caution! When nW is 1, x == nW is possible (!)
             if(x < nW)
             {
-                pContent->SetPixel(0, x, aColorTopRight);
+                xContent->SetPixel(0, x, aColorTopRight);
                 pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
@@ -1259,7 +1259,7 @@ BitmapEx createBlendFrame(
                 Color aMixA(aColorTopLeft);
 
                 aMixA.Merge(aColorBottomLeft, 255 - sal_uInt8((y * 255) / nH));
-                pContent->SetPixel(y, 0, aMixA);
+                xContent->SetPixel(y, 0, aMixA);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
@@ -1268,7 +1268,7 @@ BitmapEx createBlendFrame(
                     Color aMixB(aColorTopRight);
 
                     aMixB.Merge(aColorBottomRight, 255 - sal_uInt8((y * 255) / nH));
-                    pContent->SetPixel(y, x, aMixB);
+                    xContent->SetPixel(y, x, aMixB);
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
             }
@@ -1277,7 +1277,7 @@ BitmapEx createBlendFrame(
             if(y < nH)
             {
                 // x == 0, y == nH - 1, bottom-left corner
-                pContent->SetPixel(y, 0, aColorBottomLeft);
+                xContent->SetPixel(y, 0, aColorBottomLeft);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
                 // y == nH - 1, bottom line left to right
@@ -1286,7 +1286,7 @@ BitmapEx createBlendFrame(
                     Color aMix(aColorBottomLeft);
 
                     aMix.Merge(aColorBottomRight, 255 - sal_uInt8(((x - 0)* 255) / nW));
-                    pContent->SetPixel(y, x, aMix);
+                    xContent->SetPixel(y, x, aMix);
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
 
@@ -1294,21 +1294,21 @@ BitmapEx createBlendFrame(
                 // #i123690# Caution! When nW is 1, x == nW is possible (!)
                 if(x < nW)
                 {
-                    pContent->SetPixel(y, x, aColorBottomRight);
+                    xContent->SetPixel(y, x, aColorBottomRight);
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
             }
 
-            aContent.ReleaseAccess(pContent);
+            aContent.ReleaseAccess(xContent);
             aAlpha.ReleaseAccess(pAlpha);
 
             pBlendFrameCache->m_aLastResult = BitmapEx(aContent, aAlpha);
         }
         else
         {
-            if(pContent)
+            if(xContent)
             {
-                aContent.ReleaseAccess(pContent);
+                aContent.ReleaseAccess(xContent);
             }
 
             if(pAlpha)

@@ -70,7 +70,7 @@ const sal_uInt16 nOptionNameCount = SAL_N_ELEMENTS(vOptionNames);
 
 } // namespace
 
-boost::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::pSharedImpl;
+std::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::xSharedImpl;
 
 class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper1<util::XChangesListener>
 {
@@ -254,21 +254,21 @@ SvtUserOptions::SvtUserOptions ()
     // Global access, must be guarded (multithreading)
     osl::MutexGuard aGuard(GetInitMutex());
 
-    if (pSharedImpl.expired())
+    if (xSharedImpl.expired())
     {
-        pImpl.reset(new Impl);
-        pSharedImpl = pImpl;
+        xImpl.reset(new Impl);
+        xSharedImpl = xImpl;
         ItemHolder1::holdConfigItem(E_USEROPTIONS);
     }
-    pImpl = pSharedImpl.lock();
-    pImpl->AddListener(this);
+    xImpl = xSharedImpl.lock();
+    xImpl->AddListener(this);
 }
 
 SvtUserOptions::~SvtUserOptions()
 {
     // Global access, must be guarded (multithreading)
     osl::MutexGuard aGuard( GetInitMutex() );
-    pImpl->RemoveListener(this);
+    xImpl->RemoveListener(this);
 }
 
 namespace
@@ -300,25 +300,25 @@ OUString SvtUserOptions::GetEmail          () const { return GetToken(USER_OPT_E
 bool SvtUserOptions::IsTokenReadonly (sal_uInt16 nToken) const
 {
     osl::MutexGuard aGuard(GetInitMutex());
-    return pImpl->IsTokenReadonly(nToken);
+    return xImpl->IsTokenReadonly(nToken);
 }
 
 OUString SvtUserOptions::GetToken (sal_uInt16 nToken) const
 {
     osl::MutexGuard aGuard(GetInitMutex());
-    return pImpl->GetToken(nToken);
+    return xImpl->GetToken(nToken);
 }
 
 void SvtUserOptions::SetToken (sal_uInt16 nToken, OUString const& rNewToken)
 {
     osl::MutexGuard aGuard(GetInitMutex());
-    pImpl->SetToken(nToken, rNewToken);
+    xImpl->SetToken(nToken, rNewToken);
 }
 
 OUString SvtUserOptions::GetFullName () const
 {
     osl::MutexGuard aGuard(GetInitMutex());
-    return pImpl->GetFullName();
+    return xImpl->GetFullName();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -148,8 +148,8 @@ Clipboard::Clipboard (SlideSorter& rSlideSorter)
       maPagesToRemove(),
       maPagesToSelect(),
       mbUpdateSelectionPending(false),
-      mpUndoContext(),
-      mpSelectionObserverContext(),
+      mxUndoContext(),
+      mxSelectionObserverContext(),
       mnDragFinishedUserEventId(0)
 {
 }
@@ -605,8 +605,8 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
         }
         mrController.GetSelectionManager()->DeleteSelectedPages();
     }
-    mpUndoContext.reset();
-    mpSelectionObserverContext.reset();
+    mxUndoContext.reset();
+    mxSelectionObserverContext.reset();
 
     return 1;
 }
@@ -687,7 +687,7 @@ sal_Int8 Clipboard::ExecuteDrop (
     sal_uInt16 nLayer)
 {
     sal_Int8 nResult = DND_ACTION_NONE;
-    mpUndoContext.reset();
+    mxUndoContext.reset();
     const Clipboard::DropType eDropType (IsDropAccepted(rTargetHelper));
 
     switch (eDropType)
@@ -728,10 +728,10 @@ sal_Int8 Clipboard::ExecuteDrop (
                 SlideSorterController::ModelChangeLock aModelChangeLock (mrController);
 
                 // Handle a general drop operation.
-                mpUndoContext.reset(new UndoContext (
+                mxUndoContext.reset(new UndoContext (
                     mrSlideSorter.GetModel().GetDocument(),
                     mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell()));
-                mpSelectionObserverContext.reset(new SelectionObserver::Context(mrSlideSorter));
+                mxSelectionObserverContext.reset(new SelectionObserver::Context(mrSlideSorter));
 
                 HandlePageDrop(*pDragTransferable);
                 nResult = rEvent.mnAction;
@@ -797,10 +797,10 @@ bool Clipboard::IsInsertionTrivial (
 
 void Clipboard::Abort (void)
 {
-    if (mpSelectionObserverContext)
+    if (mxSelectionObserverContext)
     {
-        mpSelectionObserverContext->Abort();
-        mpSelectionObserverContext.reset();
+        mxSelectionObserverContext->Abort();
+        mxSelectionObserverContext.reset();
     }
 }
 

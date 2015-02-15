@@ -20,9 +20,8 @@
 #ifndef INCLUDED_BASIC_BASRDLL_HXX
 #define INCLUDED_BASIC_BASRDLL_HXX
 
-#include <boost/scoped_ptr.hpp>
-
 #include <basic/basicdllapi.h>
+#include <memory>
 
 class ResMgr;
 
@@ -30,7 +29,7 @@ class BASIC_DLLPUBLIC BasicDLL
 {
 public:
     struct Impl;
-    ::boost::scoped_ptr<Impl> m_pImpl;
+    std::unique_ptr<Impl> m_xImpl;
 
 public:
                 BasicDLL();

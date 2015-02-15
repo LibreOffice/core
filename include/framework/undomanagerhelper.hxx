@@ -26,7 +26,7 @@
 #include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace svl
 {
@@ -150,7 +150,7 @@ namespace framework
         void            removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& i_listener );
 
     private:
-        ::boost::scoped_ptr< UndoManagerHelper_Impl >   m_pImpl;
+        std::unique_ptr< UndoManagerHelper_Impl >   m_xImpl;
     };
 
 

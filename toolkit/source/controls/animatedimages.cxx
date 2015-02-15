@@ -37,8 +37,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
-#include <boost/scoped_ptr.hpp>
-
 #include "helper/unopropertyarrayhelper.hxx"
 
 using namespace css::awt;
@@ -245,7 +243,7 @@ namespace toolkit {
 
     AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< com::sun::star::uno::XComponentContext > const & i_factory )
         :AnimatedImagesControlModel_Base( i_factory )
-        ,m_pData( new AnimatedImagesControlModel_Data )
+        ,m_xData( new AnimatedImagesControlModel_Data )
     {
         ImplRegisterProperty( BASEPROPERTY_AUTO_REPEAT );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -262,7 +260,7 @@ namespace toolkit {
 
     AnimatedImagesControlModel::AnimatedImagesControlModel( const AnimatedImagesControlModel& i_copySource )
         :AnimatedImagesControlModel_Base( i_copySource )
-        ,m_pData( new AnimatedImagesControlModel_Data( *i_copySource.m_pData ) )
+        ,m_xData( new AnimatedImagesControlModel_Data( *i_copySource.m_xData ) )
     {
     }
 
@@ -412,7 +410,7 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        return m_pData->aImageSets.size();
+        return m_xData->aImageSets.size();
     }
 
 
@@ -422,9 +420,9 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_pData, i_index, *this );
+        lcl_checkIndex( *m_xData, i_index, *this );
 
-        return m_pData->aImageSets[ i_index ];
+        return m_xData->aImageSets[ i_index ];
     }
 
 
@@ -435,10 +433,10 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_pData, i_index, *this, true );
+        lcl_checkIndex( *m_xData, i_index, *this, true );
 
         // actaul insertion
-        m_pData->aImageSets.insert( m_pData->aImageSets.begin() + i_index, i_imageURLs );
+        m_xData->aImageSets.insert( m_xData->aImageSets.begin() + i_index, i_imageURLs );
 
         // listener notification
         lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementInserted, i_index, i_imageURLs, *this );
@@ -452,10 +450,10 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_pData, i_index, *this );
+        lcl_checkIndex( *m_xData, i_index, *this );
 
         // actaul insertion
-        m_pData->aImageSets[ i_index ] = i_imageURLs;
+        m_xData->aImageSets[ i_index ] = i_imageURLs;
 
         // listener notification
         lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementReplaced, i_index, i_imageURLs, *this );
@@ -469,12 +467,12 @@ namespace toolkit {
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
             throw DisposedException();
 
-        lcl_checkIndex( *m_pData, i_index, *this );
+        lcl_checkIndex( *m_xData, i_index, *this );
 
         // actual removal
-        ::std::vector< Sequence< OUString > >::iterator removalPos = m_pData->aImageSets.begin() + i_index;
+        ::std::vector< Sequence< OUString > >::iterator removalPos = m_xData->aImageSets.begin() + i_index;
         Sequence< OUString > aRemovedElement( *removalPos );
-        m_pData->aImageSets.erase( removalPos );
+        m_xData->aImageSets.erase( removalPos );
 
         // listener notification
         lcl_notify( aGuard, BrdcstHelper, &XContainerListener::elementRemoved, i_index, aRemovedElement, *this );

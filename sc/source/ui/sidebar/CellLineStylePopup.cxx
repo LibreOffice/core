@@ -37,7 +37,7 @@ void CellLineStylePopup::SetLineStyleSelect(sal_uInt16 out, sal_uInt16 in, sal_u
 {
     ProvideContainerAndControl();
 
-    CellLineStyleControl* pControl = dynamic_cast< CellLineStyleControl* >(mpControl.get());
+    CellLineStyleControl* pControl = dynamic_cast< CellLineStyleControl* >(mxControl.get());
 
     if(pControl)
     {

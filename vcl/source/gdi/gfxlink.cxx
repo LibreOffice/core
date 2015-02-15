@@ -27,7 +27,7 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 GfxLink::GfxLink() :
     meType      ( GFX_LINK_TYPE_NONE ),
@@ -322,12 +322,12 @@ ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
         maURL = aTempFile.GetURL();
         if( !maURL.isEmpty() )
         {
-            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
-            if( pOStm )
+            std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE | StreamMode::SHARE_DENYWRITE ));
+            if( xOStm )
             {
-                pOStm->Write( pData, mnDataSize );
-                bool bError = ( ERRCODE_NONE != pOStm->GetError() );
-                pOStm.reset();
+                xOStm->Write( pData, mnDataSize );
+                bool bError = ( ERRCODE_NONE != xOStm->GetError() );
+                xOStm.reset();
 
                 if( bError )
                 {
@@ -351,18 +351,18 @@ sal_uInt8* ImpSwap::GetData() const
 
     if( IsSwapped() )
     {
-        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE ));
-        if( pIStm )
+        std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE ));
+        if( xIStm )
         {
             pData = new sal_uInt8[ mnDataSize ];
-            pIStm->Read( pData, mnDataSize );
-            bool bError = ( ERRCODE_NONE != pIStm->GetError() );
-            sal_Size nActReadSize = pIStm->Tell();
+            xIStm->Read( pData, mnDataSize );
+            bool bError = ( ERRCODE_NONE != xIStm->GetError() );
+            sal_Size nActReadSize = xIStm->Tell();
             if (nActReadSize != mnDataSize)
             {
                 bError = true;
             }
-            pIStm.reset();
+            xIStm.reset();
 
             if( bError )
                 delete[] pData, pData = NULL;

@@ -1160,7 +1160,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLAutoStylePoolP & rASP
         ) :
     XMLStyleExport( rExp, OUString(), &rASP ),
-    m_pImpl(new Impl),
+    m_xImpl(new Impl),
     rAutoStylePool( rASP ),
     pBoundFrameSets(new BoundFrameSets(GetExport().GetModel())),
     pFieldExport( 0 ),
@@ -2315,7 +2315,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                             {   // name attribute is mandatory, so have to pull a
                                 // rabbit out of the hat here
                                 sName = sFieldMarkName + OUString::number(
-                                        m_pImpl->AddFieldMarkStart(xFormField));
+                                        m_xImpl->AddFieldMarkStart(xFormField));
                             }
                             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
                                     sName);
@@ -2366,7 +2366,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                             {   // name attribute is mandatory, so have to pull a
                                 // rabbit out of the hat here
                                 sName = sFieldMarkName + OUString::number(
-                                    m_pImpl->GetFieldMarkIndex(xFormField));
+                                    m_xImpl->GetFieldMarkIndex(xFormField));
                             }
                             GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
                                     sName);

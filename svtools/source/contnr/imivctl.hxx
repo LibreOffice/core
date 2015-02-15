@@ -569,8 +569,8 @@ typedef std::map<sal_uInt16, SvxIconChoiceCtrlEntryPtrVec> IconChoiceMap;
 class IcnCursor_Impl
 {
     SvxIconChoiceCtrl_Impl* pView;
-    boost::scoped_ptr<IconChoiceMap> pColumns;
-    boost::scoped_ptr<IconChoiceMap> pRows;
+    std::unique_ptr<IconChoiceMap> xColumns;
+    std::unique_ptr<IconChoiceMap> xRows;
     long                    nCols;
     long                    nRows;
     short                   nDeltaWidth;
@@ -578,7 +578,7 @@ class IcnCursor_Impl
     SvxIconChoiceCtrlEntry* pCurEntry;
     void                    SetDeltas();
     void                    ImplCreate();
-    void                    Create() {  if( !pColumns ) ImplCreate(); }
+    void                    Create() {  if( !xColumns ) ImplCreate(); }
 
     sal_uInt16              GetSortListPos(
                                 SvxIconChoiceCtrlEntryPtrVec& rList,

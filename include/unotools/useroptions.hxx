@@ -23,8 +23,7 @@
 #include <unotools/configitem.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/options.hxx>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+#include <memory>
 
 // define ----------------------------------------------------------------
 
@@ -81,8 +80,8 @@ public:
 
 private:
     class Impl;
-    boost::shared_ptr<Impl> pImpl;
-    static boost::weak_ptr<Impl> pSharedImpl;
+    std::shared_ptr<Impl> xImpl;
+    static std::weak_ptr<Impl> xSharedImpl;
 private:
     class ChangeListener;
 };

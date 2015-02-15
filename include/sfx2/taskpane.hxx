@@ -27,7 +27,6 @@
 #include <svtools/toolpanel/tabalignment.hxx>
 #include <svtools/toolpanel/tabitemcontent.hxx>
 
-#include <boost/scoped_ptr.hpp>
 #include <boost/optional.hpp>
 
 namespace svt
@@ -126,7 +125,7 @@ namespace sfx2
         virtual void GetFocus() SAL_OVERRIDE;
 
     private:
-        ::boost::scoped_ptr< ModuleTaskPane_Impl >  m_pImpl;
+        std::unique_ptr<ModuleTaskPane_Impl>  m_xImpl;
     };
 
 
@@ -152,7 +151,7 @@ namespace sfx2
         void    ActivateToolPanel( const OUString& i_rPanelURL );
 
     private:
-        ::boost::scoped_ptr< TaskPaneController_Impl >  m_pImpl;
+        std::unique_ptr<TaskPaneController_Impl>  m_xImpl;
     };
 
 

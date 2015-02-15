@@ -1542,12 +1542,12 @@ public:
             }
 
             DemoWin aMainWin(aRenderer, bThreads);
-            boost::scoped_ptr<DemoWidgets> aWidgets;
+            std::unique_ptr<DemoWidgets> xWidgets;
 
             aMainWin.SetText("Interactive VCL demo #1");
 
             if (bWidgets)
-                aWidgets.reset(new DemoWidgets());
+                xWidgets.reset(new DemoWidgets());
             else
                 aMainWin.Show();
 

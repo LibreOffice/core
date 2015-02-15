@@ -1068,7 +1068,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
     vcl::PDFWriter::PlayMetafileContext aMtfContext;
     aMtfContext.m_bOnlyLosslessCompression = true;
 
-    boost::shared_ptr<vcl::PDFWriter> pWriter;
+    std::shared_ptr<vcl::PDFWriter> xWriter;
     std::vector< PDFPrintFile > aPDFFiles;
     std::shared_ptr<Printer> xPrinter(i_rController.getPrinter());
     int nAllPages = i_rController.getFilteredPageCount();
@@ -1107,12 +1107,12 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
             // or on paper format change - cups does not support multiple paper formats per job (yet?)
             // so we need to start a new job to get a new paper format from the printer
             // orientation switches (that is switch of height and width) is handled transparently by CUPS
-            if( ! pWriter ||
+            if( ! xWriter ||
                 (aNewParm != aLastParm && ! i_pFileName ) )
             {
-                if( pWriter )
+                if( xWriter )
                 {
-                    pWriter->Emit();
+                    xWriter->Emit();
                 }
                 // produce PDF file
                 OUString aPDFUrl;
@@ -1136,20 +1136,20 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
                 aContext.URL = aPDFUrl;
 
                 // create and initialize PDFWriter
-                pWriter.reset( new vcl::PDFWriter( aContext, uno::Reference< beans::XMaterialHolder >() ) );
+                xWriter.reset( new vcl::PDFWriter( aContext, uno::Reference< beans::XMaterialHolder >() ) );
             }
 
-            pWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
+            xWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
                               TenMuToPt( aNewParm.maPageSize.Height() ),
                               vcl::PDFWriter::Portrait );
 
-            pWriter->PlayMetafile( aPageFile, aMtfContext, NULL );
+            xWriter->PlayMetafile( aPageFile, aMtfContext, NULL );
         }
     }
 
     // emit the last file
-    if( pWriter )
-        pWriter->Emit();
+    if( xWriter )
+        xWriter->Emit();
 
     // handle collate, copy count and multiple jobs correctly
     int nOuterJobs = 1;
