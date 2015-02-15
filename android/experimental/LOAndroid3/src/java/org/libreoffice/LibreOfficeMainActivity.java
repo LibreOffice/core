@@ -198,6 +198,7 @@ public class LibreOfficeMainActivity extends LOAbout {
     @Override
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
+        hideSoftKeyboardDirect();
         LOKitShell.sendCloseEvent();
         super.onStop();
     }
@@ -242,8 +243,6 @@ public class LibreOfficeMainActivity extends LOAbout {
      * Force the request on main thread.
      */
     public void showSoftKeyboard() {
-        Log.i(LOGTAG, "SoftKeyboard show request..");
-
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -255,6 +254,30 @@ public class LibreOfficeMainActivity extends LOAbout {
                 }
             }
         });
+    }
+
+    /**
+     * Hides software keyboard on UI thread.
+     */
+    public void hideSoftKeyboard() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                hideSoftKeyboardDirect();
+            }
+        });
+    }
+
+    /**
+     * Hides software keyboard.
+     */
+    private void hideSoftKeyboardDirect() {
+        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public void showProgressSpinner() {
