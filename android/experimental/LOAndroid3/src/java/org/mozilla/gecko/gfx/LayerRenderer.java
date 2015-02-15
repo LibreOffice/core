@@ -36,16 +36,12 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class LayerRenderer implements GLSurfaceView.Renderer {
     private static final String LOGTAG = "GeckoLayerRenderer";
-    private static final String PROFTAG = "GeckoLayerRendererProf";
 
     /*
      * The amount of time a frame is allowed to take to render before we declare it a dropped
      * frame.
      */
     private static final int MAX_FRAME_TIME = 16;   /* 1000 ms / 60 FPS */
-
-    private static final int FRAME_RATE_METER_WIDTH = 128;
-    private static final int FRAME_RATE_METER_HEIGHT = 32;
 
     private final LayerView mView;
     private final SingleTileLayer mBackgroundLayer;
@@ -60,16 +56,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private int mBackgroundColor;
 
     private CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
-
-    // Dropped frames display
-    private int[] mFrameTimings;
-    private int mCurrentFrame, mFrameTimingsSum, mDroppedFrames;
-
-    // Render profiling output
-    private int mFramesRendered;
-    private float mCompleteFramesRendered;
-    private boolean mProfileRender;
-    private long mProfileOutputTime;
 
     /* Used by robocop for testing purposes */
     private IntBuffer mPixelBuffer;
@@ -136,9 +122,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         mHorizScrollLayer = ScrollbarLayer.create(this, false);
         mVertScrollLayer = ScrollbarLayer.create(this, true);
         mFadeRunnable = new FadeRunnable();
-
-        mFrameTimings = new int[60];
-        mCurrentFrame = mFrameTimingsSum = mDroppedFrames = 0;
 
         // Initialize the FloatBuffer that will be used to store all vertices and texture
         // coordinates in draw() commands.
@@ -253,27 +236,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         }
     }
 
-    private void printCheckerboardStats() {
-        Log.d(PROFTAG, "Frames rendered over last 1000ms: " + mCompleteFramesRendered + "/" + mFramesRendered);
-        mFramesRendered = 0;
-        mCompleteFramesRendered = 0;
-    }
-
-    /** Used by robocop for testing purposes. Not for production use! */
-    IntBuffer getPixels() {
-        IntBuffer pixelBuffer = IntBuffer.allocate(mView.getWidth() * mView.getHeight());
-        synchronized (pixelBuffer) {
-            mPixelBuffer = pixelBuffer;
-            mView.requestRender();
-            try {
-                pixelBuffer.wait();
-            } catch (InterruptedException ie) {
-            }
-            mPixelBuffer = null;
-        }
-        return pixelBuffer;
-    }
-
     private RenderContext createScreenContext(ImmutableViewportMetrics metrics) {
         RectF viewport = new RectF(0.0f, 0.0f, metrics.getWidth(), metrics.getHeight());
         RectF pageRect = new RectF(metrics.getPageRect());
@@ -294,19 +256,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
         GLES20.glViewport(0, 0, width, height);
-    }
-
-    private void updateDroppedFrames(long frameStartTime) {
-        int frameElapsedTime = (int)(SystemClock.uptimeMillis() - frameStartTime);
-
-        /* Update the running statistics. */
-        mFrameTimingsSum -= mFrameTimings[mCurrentFrame];
-        mFrameTimingsSum += frameElapsedTime;
-        mDroppedFrames -= (mFrameTimings[mCurrentFrame] + 1) / MAX_FRAME_TIME;
-        mDroppedFrames += (frameElapsedTime + 1) / MAX_FRAME_TIME;
-
-        mFrameTimings[mCurrentFrame] = frameElapsedTime;
-        mCurrentFrame = (mCurrentFrame + 1) % mFrameTimings.length;
     }
 
     /*
@@ -552,55 +501,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             /* Draw the horizontal scrollbar. */
             if (mPageRect.width() > mFrameMetrics.getWidth())
                 mHorizScrollLayer.draw(mPageContext);
-
-            /* Measure how much of the screen is checkerboarding */
-            Layer rootLayer = mView.getLayerClient().getRoot();
-            if ((rootLayer != null) &&
-                (mProfileRender || PanningPerfAPI.isRecordingCheckerboard())) {
-                // Find out how much of the viewport area is valid
-                Rect viewport = RectUtils.round(mPageContext.viewport);
-                Region validRegion = rootLayer.getValidRegion(mPageContext);
-
-                /* restrict the viewport to page bounds so we don't
-                 * count overscroll as checkerboard */
-                if (!viewport.intersect(mPageRect)) {
-                    /* if the rectangles don't intersect
-                       intersect() doesn't change viewport
-                       so we set it to empty by hand */
-                    viewport.setEmpty();
-                }
-                validRegion.op(viewport, Region.Op.INTERSECT);
-
-                float checkerboard = 0.0f;
-
-                int screenArea = viewport.width() * viewport.height();
-                if (screenArea > 0 && !(validRegion.isRect() && validRegion.getBounds().equals(viewport))) {
-                    validRegion.op(viewport, Region.Op.REVERSE_DIFFERENCE);
-
-                    // XXX The assumption here is that a Region never has overlapping
-                    //     rects. This is true, as evidenced by reading the SkRegion
-                    //     source, but is not mentioned in the Android documentation,
-                    //     and so is liable to change.
-                    //     If it does change, this code will need to be reevaluated.
-                    Rect r = new Rect();
-                    int checkerboardArea = 0;
-                    for (RegionIterator i = new RegionIterator(validRegion); i.next(r);) {
-                        checkerboardArea += r.width() * r.height();
-                    }
-
-                    checkerboard = checkerboardArea / (float)screenArea;
-                }
-
-                PanningPerfAPI.recordCheckerboard(checkerboard);
-
-                mCompleteFramesRendered += 1.0f - checkerboard;
-                mFramesRendered ++;
-
-                if (mFrameStartTime - mProfileOutputTime > 1000) {
-                    mProfileOutputTime = mFrameStartTime;
-                    printCheckerboardStats();
-                }
-            }
         }
 
         /** This function is invoked via JNI; be careful when modifying signature. */
@@ -608,8 +508,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             // If a layer update requires further work, schedule another redraw
             if (!mUpdated)
                 mView.requestRender();
-
-            PanningPerfAPI.recordFrameTime();
 
             /* Used by robocop for testing purposes */
             IntBuffer pixelBuffer = mPixelBuffer;
