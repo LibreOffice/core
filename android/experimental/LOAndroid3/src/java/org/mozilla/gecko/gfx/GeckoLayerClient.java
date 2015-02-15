@@ -34,12 +34,6 @@ public class GeckoLayerClient implements PanZoomTarget {
     private ComposedTileLayer mLowResLayer;
     private ComposedTileLayer mRootLayer;
 
-    /*
-     * The viewport metrics being used to draw the current frame. This is only
-     * accessed by the compositor thread, and so needs no synchronisation.
-     */
-    private ImmutableViewportMetrics mFrameMetrics;
-
     private boolean mForceRedraw;
 
     /* The current viewport metrics.
@@ -58,10 +52,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     private ZoomConstraints mZoomConstraints;
 
-    private boolean mIsReady ;
-
-    /* The new color for the checkerboard. */
-    private int mCheckerboardColor;
+    private boolean mIsReady;
 
     private PanZoomController mPanZoomController;
     private LayerView mView;
@@ -94,6 +85,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         mLayerRenderer = new LayerRenderer(mView);
 
         mView.setLayerRenderer(mLayerRenderer);
+
         sendResizeEventIfNecessary();
     }
 
@@ -110,7 +102,6 @@ public class GeckoLayerClient implements PanZoomTarget {
         if (!mPanZoomController.getRedrawHint()) {
             return false;
         }
-
         return DisplayPortCalculator.aboutToCheckerboard(mViewportMetrics, mPanZoomController.getVelocityVector(), getDisplayPort());
     }
 

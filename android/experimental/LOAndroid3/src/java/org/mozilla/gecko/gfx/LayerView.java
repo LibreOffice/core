@@ -182,7 +182,6 @@ public class LayerView extends FrameLayout {
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
     public PanZoomController getPanZoomController() { return mPanZoomController; }
 
-    /** The LayerRenderer calls this to indicate that the window has changed size. */
     public void setViewportSize(IntSize size) {
         mLayerClient.setViewportSize(new FloatSize(size));
     }
