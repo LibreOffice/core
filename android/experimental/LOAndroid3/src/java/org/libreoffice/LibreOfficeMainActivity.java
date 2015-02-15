@@ -192,13 +192,13 @@ public class LibreOfficeMainActivity extends LOAbout {
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        LOKitShell.sendEvent(LOEventFactory.load(mInputFile));
+        LOKitShell.sendLoadEvent(mInputFile);
     }
 
     @Override
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
-        LOKitShell.sendEvent(LOEventFactory.close());
+        LOKitShell.sendCloseEvent();
         super.onStop();
     }
 
@@ -293,7 +293,7 @@ public class LibreOfficeMainActivity extends LOAbout {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
-            LOKitShell.sendEvent(LOEventFactory.changePart(partView.partIndex));
+            LOKitShell.sendChangePartEvent(partView.partIndex);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
     }

@@ -8,7 +8,6 @@ import android.graphics.Region;
 import android.util.Log;
 
 import org.libreoffice.LOEvent;
-import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.TileIdentifier;
 import org.mozilla.gecko.util.FloatUtils;
@@ -162,9 +161,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
                 }
                 if (!contains) {
                     TileIdentifier tileId = new TileIdentifier((int) x, (int) y, currentZoom, tileSize);
-                    LOEvent event = LOEventFactory.tileRequest(this, tileId, true);
-                    event.mPriority = getTilePriority();
-                    LOKitShell.sendEvent(event);
+                    LOKitShell.sendTileRequestEvent(this, tileId, true, getTilePriority());
                 }
             }
         }

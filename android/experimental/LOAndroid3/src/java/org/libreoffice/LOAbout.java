@@ -31,8 +31,8 @@ public abstract class LOAbout extends Activity {
             i.setComponent(componentName);
             startActivity(i);
         } else {
-            LOKitShell.sendEvent(LOEventFactory.close());
-            LOKitShell.sendEvent(LOEventFactory.load(input));
+            LOKitShell.sendCloseEvent();
+            LOKitShell.sendLoadEvent(input);
         }
     }
 

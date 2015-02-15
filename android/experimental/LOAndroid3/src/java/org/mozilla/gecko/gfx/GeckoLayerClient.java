@@ -13,7 +13,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.libreoffice.LOEvent;
-import org.libreoffice.LOEventFactory;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.LOKitThread;
 import org.mozilla.gecko.ZoomConstraints;
@@ -156,8 +155,7 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
         mScreenSize = newScreenSize;
 
-        LOEvent event = LOEventFactory.sizeChanged(mScreenSize.width, mScreenSize.height);
-        LOKitShell.sendEvent(event);
+        LOKitShell.sendSizeChangedEvent(mScreenSize.width, mScreenSize.height);
     }
 
     /**

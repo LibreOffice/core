@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.LayerView;
 
 
@@ -57,6 +58,14 @@ public class LOKitShell {
         return metrics;
     }
 
+    public static boolean isEditingEnabled() {
+        return false;
+    }
+
+    public static LayerView getLayerView() {
+        return LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
+    }
+
     // EVENTS
 
     /**
@@ -93,11 +102,30 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_EVENT, "KeyRelease", event));
     }
 
-    public static boolean isEditingEnabled() {
-        return false;
+    public static void sendSizeChangedEvent(int width, int height) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.SIZE_CHANGED, width, height));
     }
 
-    public static LayerView getLayerView() {
-        return LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
+    public static void sendChangePartEvent(int part) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_PART, part));
     }
+
+    public static void sendLoadEvent(String inputFile) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.LOAD, inputFile));
+    }
+
+    public static void sendCloseEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.CLOSE));
+    }
+
+    public static void sendRedrawEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.REDRAW));
+    }
+
+    public static void sendTileRequestEvent(ComposedTileLayer composedTileLayer, TileIdentifier tileID, boolean forceRedraw, int priority) {
+        LOEvent event = new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileID);
+        event.mPriority = priority;
+        LOKitShell.sendEvent(event);
+    }
+
 }
