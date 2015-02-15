@@ -52,26 +52,17 @@ Copyright 2009 by Daniel Foré <Daniel.p.Fore@gmail.com>, Jonian Guveli <jonian.
 /res/foldercl.png
 /res/folderop.png
 /res/fp015.png
-/res/lc05501.png
-/res/lx03141.png
 /res/lc06303.png
 /res/lx03189.png
 /res/newdoc.png
 /res/sc05501.png
-/res/sc05505.png
-/res/sx03141.png
 /res/sx03189.png
-/res/lc05505.png
-/res/lc05700.png
-/res/lc05501.png
-/res/sc05700.png
 /res/sc05701.png
 /res/lc06300.png
 /res/lc06301.png
 /res/sc05502.png
 /res/sc06300.png
 /res/sc06301.png
-/res/sc06331.png
 /sfx2/res/favourite.png
 /sfx2/res/favourite_big.png
 
@@ -116,9 +107,6 @@ cmd/lc_printpreview.png
 /cmd/lc_firstpage
 /cmd/lc_filecontrol.png
 /cmd/lc_dbformopen.png
-/res/lc10630.png
-/res/sc10630.png
-/res/sc10724.png
 /res/browse.png
 
 
