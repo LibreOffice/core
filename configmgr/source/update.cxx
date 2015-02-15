@@ -23,7 +23,6 @@
 #include <memory>
 #include <set>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/configuration/XUpdate.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -58,8 +57,7 @@ std::set< OUString > seqToSet(
 }
 
 class Service:
-    public cppu::WeakImplHelper1< css::configuration::XUpdate >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper1< css::configuration::XUpdate >
 {
 public:
     Service(css::uno::Reference< css::uno::XComponentContext > const context):
@@ -70,6 +68,9 @@ public:
     }
 
 private:
+    Service(const Service&) SAL_DELETED_FUNCTION;
+    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+
     virtual ~Service() {}
 
     virtual void SAL_CALL insertExtensionXcsFile(

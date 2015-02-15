@@ -26,7 +26,6 @@
 #include "config_map.hxx"
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -41,7 +40,7 @@ namespace configmgr {
 
 class Node;
 
-struct Data: private boost::noncopyable {
+struct Data {
     enum { NO_LAYER = INT_MAX };
 
     struct ExtensionXcu: public salhelper::SimpleReferenceObject {
@@ -86,6 +85,9 @@ struct Data: private boost::noncopyable {
         OUString const & url);
 
 private:
+    Data(const Data&) SAL_DELETED_FUNCTION;
+    Data& operator=(const Data&) SAL_DELETED_FUNCTION;
+
     typedef config_map< rtl::Reference< ExtensionXcu > >
         ExtensionXcuAdditions;
 

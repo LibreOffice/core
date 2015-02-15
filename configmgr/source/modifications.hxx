@@ -22,18 +22,17 @@
 
 #include <sal/config.h>
 
-#include <boost/unordered_map.hpp>
-#include <boost/noncopyable.hpp>
+#include <unordered_map>
 
 #include "path.hxx"
 
 
 namespace configmgr {
 
-class Modifications: private boost::noncopyable {
+class Modifications {
 public:
     struct Node {
-        typedef boost::unordered_map<OUString, Node, OUStringHash> Children;
+        typedef std::unordered_map<OUString, Node, OUStringHash> Children;
 
         Children children;
     };
@@ -49,6 +48,9 @@ public:
     Node const & getRoot() const { return root_;}
 
 private:
+    Modifications(const Modifications&) SAL_DELETED_FUNCTION;
+    Modifications& operator=(const Modifications&) SAL_DELETED_FUNCTION;
+
     Node root_;
 };
 

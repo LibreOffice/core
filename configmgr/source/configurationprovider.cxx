@@ -23,7 +23,6 @@
 #include <memory>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -89,7 +88,7 @@ typedef
     ServiceBase;
 
 class Service:
-    private cppu::BaseMutex, public ServiceBase, private boost::noncopyable
+    private cppu::BaseMutex, public ServiceBase
 {
 public:
     Service(
@@ -111,6 +110,9 @@ public:
     }
 
 private:
+    Service(const Service&) SAL_DELETED_FUNCTION;
+    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+
     virtual ~Service() {}
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE { flushModifications(); }
@@ -368,13 +370,15 @@ void Service::flushModifications() const {
 
 class Factory:
     public cppu::WeakImplHelper2<
-        css::lang::XSingleComponentFactory, css::lang::XServiceInfo >,
-    private boost::noncopyable
+        css::lang::XSingleComponentFactory, css::lang::XServiceInfo >
 {
 public:
     Factory() {}
 
 private:
+    Factory(const Factory&) SAL_DELETED_FUNCTION;
+    Factory& operator=(const Factory&) SAL_DELETED_FUNCTION;
+
     virtual ~Factory() {}
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL

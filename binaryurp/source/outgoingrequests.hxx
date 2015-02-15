@@ -25,7 +25,6 @@
 #include <map>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "osl/mutex.hxx"
 
 namespace binaryurp { struct OutgoingRequest; }
@@ -33,7 +32,7 @@ namespace rtl { class ByteSequence; }
 
 namespace binaryurp {
 
-class OutgoingRequests: private boost::noncopyable {
+class OutgoingRequests {
 public:
     OutgoingRequests();
 
@@ -46,6 +45,9 @@ public:
     void pop(rtl::ByteSequence const & tid) throw ();
 
 private:
+    OutgoingRequests(const OutgoingRequests&) SAL_DELETED_FUNCTION;
+    OutgoingRequests& operator=(const OutgoingRequests&) SAL_DELETED_FUNCTION;
+
     typedef std::map< rtl::ByteSequence, std::vector< OutgoingRequest > > Map;
 
     osl::Mutex mutex_;

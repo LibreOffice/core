@@ -28,7 +28,6 @@
 #include <vector>
 #include "config_map.hxx"
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/PropertyVetoException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
@@ -109,8 +108,7 @@ class Access:
     public com::sun::star::beans::XMultiHierarchicalPropertySet,
     public com::sun::star::beans::XHierarchicalPropertySetInfo,
     public com::sun::star::container::XNameContainer,
-    public com::sun::star::lang::XSingleServiceFactory,
-    private boost::noncopyable
+    public com::sun::star::lang::XSingleServiceFactory
 {
 public:
     oslInterlockedCount acquireCounting();
@@ -476,6 +474,9 @@ protected:
     bool isDisposed() const { return disposed_;}
 
 private:
+    Access(const Access&) SAL_DELETED_FUNCTION;
+    Access& operator=(const Access&) SAL_DELETED_FUNCTION;
+
     struct ModifiedChild {
         rtl::Reference< ChildAccess > child;
         bool directlyModified;

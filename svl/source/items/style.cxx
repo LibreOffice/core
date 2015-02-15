@@ -36,6 +36,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/utility.hpp>
 
 #include <string.h>
 

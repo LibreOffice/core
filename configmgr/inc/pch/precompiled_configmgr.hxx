@@ -15,7 +15,6 @@
 */
 
 #include <algorithm>
-#include <boost/noncopyable.hpp>
 #include <cassert>
 #include <climits>
 #include <com/sun/star/beans/NamedValue.hpp>

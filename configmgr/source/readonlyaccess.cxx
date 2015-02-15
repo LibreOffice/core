@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -44,8 +43,7 @@ namespace {
 class Service:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo, css::lang::XInitialization,
-        css::container::XHierarchicalNameAccess >,
-    private boost::noncopyable
+        css::container::XHierarchicalNameAccess >
 {
 public:
     explicit Service(
@@ -53,6 +51,9 @@ public:
         context_(context) {}
 
 private:
+    Service(const Service&) SAL_DELETED_FUNCTION;
+    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+
     virtual ~Service() {}
 
     virtual OUString SAL_CALL getImplementationName()

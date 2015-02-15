@@ -27,7 +27,6 @@
 #include <map>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/bridge/XBridge.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -69,8 +68,7 @@ namespace binaryurp {
 
 class Bridge:
     public cppu::WeakImplHelper2<
-        com::sun::star::bridge::XBridge, com::sun::star::lang::XComponent >,
-    private boost::noncopyable
+        com::sun::star::bridge::XBridge, com::sun::star::lang::XComponent >
 {
 public:
     Bridge(
@@ -171,6 +169,9 @@ public:
     bool isCurrentContextMode();
 
 private:
+    Bridge(const Bridge&) SAL_DELETED_FUNCTION;
+    Bridge& operator=(const Bridge&) SAL_DELETED_FUNCTION;
+
     virtual ~Bridge();
 
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface >

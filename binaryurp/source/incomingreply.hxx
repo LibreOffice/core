@@ -24,13 +24,15 @@
 
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-
 #include "binaryany.hxx"
 
 namespace binaryurp {
 
-struct IncomingReply: private boost::noncopyable {
+struct IncomingReply {
+private:
+    IncomingReply(const IncomingReply&) SAL_DELETED_FUNCTION;
+    IncomingReply& operator=(const IncomingReply&) SAL_DELETED_FUNCTION;
+public:
     IncomingReply(
         bool theException, BinaryAny const & theReturnValue,
         std::vector< BinaryAny > const & theOutArguments):

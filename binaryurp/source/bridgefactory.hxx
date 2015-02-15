@@ -26,7 +26,6 @@
 #include <list>
 #include <map>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/bridge/XBridgeFactory2.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/uno/Exception.hpp"
@@ -55,9 +54,7 @@ typedef
         com::sun::star::bridge::XBridgeFactory2 >
     BridgeFactoryBase;
 
-class BridgeFactory:
-    private cppu::BaseMutex, public BridgeFactoryBase,
-    private boost::noncopyable
+class BridgeFactory : private cppu::BaseMutex, public BridgeFactoryBase
 {
 public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
@@ -78,6 +75,9 @@ public:
     using BridgeFactoryBase::release;
 
 private:
+    BridgeFactory(const BridgeFactory&) SAL_DELETED_FUNCTION;
+    BridgeFactory& operator=(const BridgeFactory&) SAL_DELETED_FUNCTION;
+
     explicit BridgeFactory(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);

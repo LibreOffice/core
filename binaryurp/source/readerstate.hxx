@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "rtl/byteseq.hxx"
 #include "rtl/ustring.hxx"
 #include "typelib/typedescription.hxx"
@@ -31,11 +30,15 @@
 
 namespace binaryurp {
 
-struct ReaderState: private boost::noncopyable {
+struct ReaderState {
+private:
+    ReaderState(const ReaderState&) SAL_DELETED_FUNCTION;
+    ReaderState& operator=(const ReaderState&) SAL_DELETED_FUNCTION;
+public:
+    ReaderState() {}
+
     com::sun::star::uno::TypeDescription typeCache[cache::size];
-
     OUString oidCache[cache::size];
-
     rtl::ByteSequence tidCache[cache::size];
 };
 

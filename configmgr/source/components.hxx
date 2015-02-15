@@ -23,9 +23,9 @@
 #include <sal/config.h>
 
 #include <map>
+#include <memory>
 #include <set>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
@@ -50,7 +50,7 @@ class Node;
 class Partial;
 class RootAccess;
 
-class Components: private boost::noncopyable {
+class Components {
 public:
     static Components & getSingleton(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -105,6 +105,9 @@ public:
     getExternalValue(OUString const & descriptor);
 
 private:
+    Components(const Components&) SAL_DELETED_FUNCTION;
+    Components& operator=(const Components&) SAL_DELETED_FUNCTION;
+
     typedef void FileParser(
         OUString const &, int, Data &, Partial const *, Modifications *,
         Additions *);

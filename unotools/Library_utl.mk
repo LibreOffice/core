@@ -11,8 +11,6 @@
 # utl is the name of the library as it is found in Repository.mk
 $(eval $(call gb_Library_Library,utl))
 
-$(eval $(call gb_Library_use_external,utl,boost_headers))
-
 $(eval $(call gb_Library_use_custom_headers,utl,\
  officecfg/registry \
 ))

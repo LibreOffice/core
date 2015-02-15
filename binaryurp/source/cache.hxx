@@ -27,7 +27,6 @@
 #include <map>
 #include <list>
 
-#include "boost/noncopyable.hpp"
 #include "sal/types.h"
 
 namespace binaryurp {
@@ -38,7 +37,7 @@ enum { size = 256, ignore = 0xFFFF };
 
 }
 
-template< typename T > class Cache : private boost::noncopyable {
+template< typename T > class Cache {
 public:
     typedef sal_uInt16 IdxType;
 
@@ -81,6 +80,9 @@ public:
     }
 
 private:
+    Cache(const Cache&) SAL_DELETED_FUNCTION;
+    Cache& operator=(const Cache&) SAL_DELETED_FUNCTION;
+
     typedef std::list<T> LruList; // last recently used list
     typedef typename LruList::iterator LruListIt;
     struct CmpT{ bool operator()( const LruListIt& rA, const LruListIt& rB) const { return (*rA<*rB);}};

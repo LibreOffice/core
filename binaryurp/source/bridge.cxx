@@ -26,7 +26,6 @@
 #include <memory>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/bridge/InvalidProtocolChangeException.hpp"
 #include "com/sun/star/bridge/XBridge.hpp"
 #include "com/sun/star/bridge/XInstanceProvider.hpp"
@@ -99,7 +98,7 @@ bool isThread(salhelper::Thread * thread) {
     return osl::Thread::getCurrentIdentifier() == thread->getIdentifier();
 }
 
-class AttachThread: private boost::noncopyable {
+class AttachThread {
 public:
     explicit AttachThread(uno_ThreadPool threadPool);
 
@@ -108,6 +107,9 @@ public:
     rtl::ByteSequence getTid() throw () { return tid_;}
 
 private:
+    AttachThread(const AttachThread&) SAL_DELETED_FUNCTION;
+    AttachThread& operator=(const AttachThread&) SAL_DELETED_FUNCTION;
+
     uno_ThreadPool threadPool_;
     rtl::ByteSequence tid_;
 };
@@ -125,7 +127,7 @@ AttachThread::~AttachThread() {
 }
 
 
-class PopOutgoingRequest: private boost::noncopyable {
+class PopOutgoingRequest {
 public:
     PopOutgoingRequest(
         OutgoingRequests & requests, rtl::ByteSequence const & tid,
@@ -136,6 +138,9 @@ public:
     void clear();
 
 private:
+    PopOutgoingRequest(const PopOutgoingRequest&) SAL_DELETED_FUNCTION;
+    PopOutgoingRequest& operator=(const PopOutgoingRequest&) SAL_DELETED_FUNCTION;
+
     OutgoingRequests & requests_;
     rtl::ByteSequence tid_;
     bool cleared_;

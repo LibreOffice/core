@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "rtl/byteseq.hxx"
 #include "rtl/ustring.hxx"
 #include "typelib/typedescription.hxx"
@@ -31,7 +30,11 @@
 
 namespace binaryurp {
 
-struct WriterState: private boost::noncopyable {
+struct WriterState {
+private:
+    WriterState(const WriterState&) SAL_DELETED_FUNCTION;
+    WriterState& operator=(const WriterState&) SAL_DELETED_FUNCTION;
+public:
     WriterState():
         typeCache(cache::size), oidCache(cache::size), tidCache(cache::size) {}
 

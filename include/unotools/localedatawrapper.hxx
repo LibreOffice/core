@@ -20,7 +20,6 @@
 #ifndef INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #define INCLUDED_UNOTOOLS_LOCALEDATAWRAPPER_HXX
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
 #include <com/sun/star/i18n/LocaleItem.hpp>
 #include <com/sun/star/i18n/reservedWords.hpp>
@@ -50,7 +49,7 @@ enum MeasurementSystem {
     MEASURE_US
 };
 
-class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
+class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
@@ -343,6 +342,9 @@ public:
         also raised as an assertion message box. */
     static  void                outputCheckMessage( const OUString& rMsg );
     static  void                outputCheckMessage( const char* pStr);
+
+    LocaleDataWrapper(const LocaleDataWrapper&) SAL_DELETED_FUNCTION;
+    LocaleDataWrapper& operator=(const LocaleDataWrapper&) SAL_DELETED_FUNCTION;
 
 private:
 

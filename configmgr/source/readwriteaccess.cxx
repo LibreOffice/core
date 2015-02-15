@@ -9,7 +9,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/configuration/XReadWriteAccess.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -46,8 +45,7 @@ namespace {
 class Service:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo, css::lang::XInitialization,
-        css::configuration::XReadWriteAccess >,
-    private boost::noncopyable
+        css::configuration::XReadWriteAccess >
 {
 public:
     explicit Service(
@@ -55,6 +53,9 @@ public:
         context_(context) {}
 
 private:
+    Service(const Service&) SAL_DELETED_FUNCTION;
+    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+
     virtual ~Service() {}
 
     virtual OUString SAL_CALL getImplementationName()

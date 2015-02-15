@@ -20,7 +20,6 @@
 #include <sal/config.h>
 #include <osl/diagnose.h>
 
-#include <boost/noncopyable.hpp>
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -67,11 +66,13 @@ namespace utl
 
     typedef ::cppu::WeakImplHelper1 <   XCloseListener
                                     >   CloseableComponentImpl_Base;
-    class CloseableComponentImpl:
-        public CloseableComponentImpl_Base, private boost::noncopyable
+    class CloseableComponentImpl : public CloseableComponentImpl_Base
     {
     private:
         Reference< XCloseable > m_xCloseable;
+
+        CloseableComponentImpl(const CloseableComponentImpl&) SAL_DELETED_FUNCTION;
+        CloseableComponentImpl& operator=(const CloseableComponentImpl&) SAL_DELETED_FUNCTION;
 
     public:
         CloseableComponentImpl( const Reference< XInterface >& _rxComponent );

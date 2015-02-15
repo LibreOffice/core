@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
@@ -41,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace binaryurp {
 
-class Unmarshal: private boost::noncopyable {
+class Unmarshal {
 public:
     Unmarshal(
         rtl::Reference< Bridge > const & bridge, ReaderState & state,
@@ -66,6 +65,9 @@ public:
     void done() const;
 
 private:
+    Unmarshal(const Unmarshal&) SAL_DELETED_FUNCTION;
+    Unmarshal& operator=(const Unmarshal&) SAL_DELETED_FUNCTION;
+
     void check(sal_Int32 size) const;
 
     sal_uInt32 readCompressed();

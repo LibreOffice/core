@@ -25,7 +25,6 @@
 #include <set>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -43,7 +42,7 @@ namespace configmgr {
 
 class Node;
 
-class ValueParser: private boost::noncopyable {
+class ValueParser {
 public:
     ValueParser(int layer);
 
@@ -69,6 +68,9 @@ public:
     OString separator_;
 
 private:
+    ValueParser(const ValueParser&) SAL_DELETED_FUNCTION;
+    ValueParser& operator=(const ValueParser&) SAL_DELETED_FUNCTION;
+
     template< typename T > com::sun::star::uno::Any convertItems();
 
     enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };

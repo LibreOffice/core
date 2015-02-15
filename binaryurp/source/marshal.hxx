@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
@@ -39,7 +38,7 @@ namespace binaryurp {
 
 namespace binaryurp {
 
-class Marshal: private boost::noncopyable {
+class Marshal {
 public:
     Marshal(rtl::Reference< Bridge > const & bridge, WriterState & state);
 
@@ -69,6 +68,9 @@ public:
         std::vector< unsigned char > * buffer, rtl::ByteSequence const & tid);
 
 private:
+    Marshal(const Marshal&) SAL_DELETED_FUNCTION;
+    Marshal& operator=(const Marshal&) SAL_DELETED_FUNCTION;
+
     void writeValue(
         std::vector< unsigned char > * buffer,
         com::sun::star::uno::TypeDescription const & type, void const * value);

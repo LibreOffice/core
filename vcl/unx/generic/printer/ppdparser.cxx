@@ -20,8 +20,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <boost/noncopyable.hpp>
-
 #include <comphelper/string.hxx>
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
@@ -269,13 +267,17 @@ namespace
     struct thePPDCache : public rtl::Static<PPDCache, thePPDCache> {};
 }
 
-class PPDDecompressStream: private boost::noncopyable
+class PPDDecompressStream
 {
+private:
+    PPDDecompressStream(const PPDDecompressStream&) SAL_DELETED_FUNCTION;
+    PPDDecompressStream& operator=(const PPDDecompressStream&) SAL_DELETED_FUNCTION;
+
     SvFileStream*       mpFileStream;
     SvMemoryStream*     mpMemStream;
     OUString       maFileName;
 
-    public:
+public:
     PPDDecompressStream( const OUString& rFile );
     ~PPDDecompressStream();
 

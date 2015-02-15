@@ -10,8 +10,6 @@
 #ifndef INCLUDED_VCL_UNX_GTK_INC_GTKPRINTWRAPPER_HXX
 #define INCLUDED_VCL_UNX_GTK_INC_GTKPRINTWRAPPER_HXX
 
-#include <boost/noncopyable.hpp>
-
 #include <gtk/gtk.h>
 
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
@@ -23,9 +21,8 @@
 #include <gtk/gtkprintunixdialog.h>
 #endif
 
-#if !GTK_CHECK_VERSION(3,0,0)
 #include <osl/module.hxx>
-#endif
+#include <sal/types.h>
 
 #endif
 
@@ -34,8 +31,11 @@ namespace vcl
 namespace unx
 {
 
-class GtkPrintWrapper : private boost::noncopyable
+class GtkPrintWrapper
 {
+private:
+    GtkPrintWrapper(const GtkPrintWrapper&) SAL_DELETED_FUNCTION;
+    GtkPrintWrapper& operator=(const GtkPrintWrapper&) SAL_DELETED_FUNCTION;
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
 public:
     GtkPrintWrapper();

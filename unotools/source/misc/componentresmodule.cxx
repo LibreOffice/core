@@ -18,8 +18,6 @@
  */
 
 #include <unotools/componentresmodule.hxx>
-
-#include <boost/noncopyable.hpp>
 #include <tools/resmgr.hxx>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
@@ -33,12 +31,15 @@ namespace utl
 
         not threadsafe!
     */
-    class OComponentResModuleImpl: private boost::noncopyable
+    class OComponentResModuleImpl
     {
     private:
         ResMgr*         m_pResources;
         bool            m_bInitialized;
         OString  m_sResFilePrefix;
+
+        OComponentResModuleImpl(const OComponentResModuleImpl&) SAL_DELETED_FUNCTION;
+        OComponentResModuleImpl& operator=(const OComponentResModuleImpl&) SAL_DELETED_FUNCTION;
 
     public:
         OComponentResModuleImpl( const OString& _rResFilePrefix )

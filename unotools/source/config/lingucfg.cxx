@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -142,7 +141,7 @@ SvtLinguOptions::SvtLinguOptions()
 {
 }
 
-class SvtLinguConfigItem: public utl::ConfigItem, private boost::noncopyable
+class SvtLinguConfigItem : public utl::ConfigItem
 {
     SvtLinguOptions     aOpt;
 
@@ -150,6 +149,9 @@ class SvtLinguConfigItem: public utl::ConfigItem, private boost::noncopyable
     static const uno::Sequence< OUString > GetPropertyNames();
     bool                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
     bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
+
+    SvtLinguConfigItem(const SvtLinguConfigItem&) SAL_DELETED_FUNCTION;
+    SvtLinguConfigItem& operator=(const SvtLinguConfigItem&) SAL_DELETED_FUNCTION;
 
 public:
     SvtLinguConfigItem();

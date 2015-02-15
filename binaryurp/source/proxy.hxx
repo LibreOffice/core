@@ -22,7 +22,6 @@
 
 #include "sal/config.h"
 
-#include "boost/noncopyable.hpp"
 #include "osl/interlck.h"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
@@ -38,7 +37,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 
 namespace binaryurp {
 
-class Proxy: public uno_Interface, private boost::noncopyable {
+class Proxy: public uno_Interface {
 public:
     Proxy(
         rtl::Reference< Bridge > const & bridge, OUString const & oid,
@@ -64,6 +63,9 @@ public:
         OUString * oid);
 
 private:
+    Proxy(const Proxy&) SAL_DELETED_FUNCTION;
+    Proxy& operator=(const Proxy&) SAL_DELETED_FUNCTION;
+
     ~Proxy();
 
     void do_dispatch_throw(

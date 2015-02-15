@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <unotools/searchopt.hxx>
 #include <tools/debug.hxx>
 #include <unotools/configitem.hxx>
@@ -36,10 +35,13 @@ using namespace com::sun::star::i18n;
 
 #define MAX_FLAGS_OFFSET    27
 
-class SvtSearchOptions_Impl: public ConfigItem, private boost::noncopyable
+class SvtSearchOptions_Impl : public ConfigItem
 {
     sal_Int32   nFlags;
     bool    bModified;
+
+    SvtSearchOptions_Impl(const SvtSearchOptions_Impl&) SAL_DELETED_FUNCTION;
+    SvtSearchOptions_Impl& operator=(const SvtSearchOptions_Impl&) SAL_DELETED_FUNCTION;
 
 protected:
     bool            IsModified() const { return bModified; }

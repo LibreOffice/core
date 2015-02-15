@@ -24,7 +24,6 @@
 
 #include <list>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <sal/types.h>
 #include <unotools/unotoolsdllapi.h>
@@ -36,7 +35,7 @@ namespace utl { class ConfigItem; }
 
 namespace utl {
 
-class UNOTOOLS_DLLPUBLIC ConfigManager: private boost::noncopyable {
+class UNOTOOLS_DLLPUBLIC ConfigManager {
 public:
     static OUString getAboutBoxProductVersion();
 
@@ -75,6 +74,10 @@ public:
     SAL_DLLPRIVATE void registerConfigItem(utl::ConfigItem * item);
 
 private:
+
+    ConfigManager(const ConfigManager&) SAL_DELETED_FUNCTION;
+    ConfigManager& operator=(const ConfigManager&) SAL_DELETED_FUNCTION;
+
     void doStoreConfigItems();
 
     std::list< ConfigItem * > items_;

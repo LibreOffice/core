@@ -22,7 +22,6 @@
 #ifndef INCLUDED_UNOTOOLS_CHARCLASS_HXX
 #define INCLUDED_UNOTOOLS_CHARCLASS_HXX
 
-#include <boost/noncopyable.hpp>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
@@ -64,11 +63,14 @@ const sal_Int32 nCharClassNumericTypeMask =
     ::com::sun::star::i18n::KCharacterType::PRINTABLE |
     ::com::sun::star::i18n::KCharacterType::BASE_FORM;
 
-class UNOTOOLS_DLLPUBLIC CharClass : private boost::noncopyable
+class UNOTOOLS_DLLPUBLIC CharClass
 {
     LanguageTag                 maLanguageTag;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >    xCC;
     mutable ::osl::Mutex        aMutex;
+
+    CharClass(const CharClass&) SAL_DELETED_FUNCTION;
+    CharClass& operator=(const CharClass&) SAL_DELETED_FUNCTION;
 
 public:
     /// Preferred ctor with service manager specified

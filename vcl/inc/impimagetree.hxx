@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace container {
 } } } }
 class BitmapEx;
 
-class ImplImageTree: private boost::noncopyable {
+class ImplImageTree {
 public:
     ImplImageTree();
 
@@ -57,6 +57,9 @@ public:
     css::uno::Reference< css::container::XNameAccess > getNameAccess();
 
 private:
+    ImplImageTree(const ImplImageTree&) SAL_DELETED_FUNCTION;
+    ImplImageTree& operator=(const ImplImageTree&) SAL_DELETED_FUNCTION;
+
     typedef std::unordered_map<OUString, std::pair<bool, BitmapEx>, OUStringHash> IconCache;
     typedef std::unordered_map<OUString, OUString, OUStringHash> IconLinkHash;
 

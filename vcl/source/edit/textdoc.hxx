@@ -23,12 +23,14 @@
 #include <rtl/ustring.hxx>
 #include <vcl/textdata.hxx>
 #include <vcl/txtattr.hxx>
-#include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class TextCharAttribList : boost::noncopyable
+class TextCharAttribList
 {
 private:
+    TextCharAttribList(const TextCharAttribList&) SAL_DELETED_FUNCTION;
+    TextCharAttribList& operator=(const TextCharAttribList&) SAL_DELETED_FUNCTION;
+
     typedef boost::ptr_vector<TextCharAttrib> TextCharAttribs;
     TextCharAttribs maAttribs;
     bool            mbHasEmptyAttribs;

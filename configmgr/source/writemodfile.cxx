@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -74,7 +73,7 @@ OString convertToUtf8(
     return s;
 }
 
-struct TempFile: public boost::noncopyable {
+struct TempFile {
     OUString url;
     oslFileHandle handle;
     bool closed;
@@ -82,6 +81,9 @@ struct TempFile: public boost::noncopyable {
     TempFile(): handle(0), closed(false) {}
 
     ~TempFile();
+private:
+    TempFile(const TempFile&) SAL_DELETED_FUNCTION;
+    TempFile& operator=(const TempFile&) SAL_DELETED_FUNCTION;
 };
 
 TempFile::~TempFile() {

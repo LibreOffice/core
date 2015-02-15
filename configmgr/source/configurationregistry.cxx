@@ -21,7 +21,6 @@
 
 #include <cassert>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XProperty.hpp>
@@ -71,13 +70,15 @@ namespace {
 class Service:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo, css::registry::XSimpleRegistry,
-        css::util::XFlushable >,
-    private boost::noncopyable
+        css::util::XFlushable >
 {
 public:
     Service(css::uno::Reference< css::uno::XComponentContext > const & context);
 
 private:
+    Service(const Service&) SAL_DELETED_FUNCTION;
+    Service& operator=(const Service&) SAL_DELETED_FUNCTION;
+
     virtual ~Service() {}
 
     virtual OUString SAL_CALL getImplementationName()
@@ -151,14 +152,16 @@ private:
 };
 
 class RegistryKey:
-    public cppu::WeakImplHelper1< css::registry::XRegistryKey >,
-    private boost::noncopyable
+    public cppu::WeakImplHelper1< css::registry::XRegistryKey >
 {
 public:
     RegistryKey(Service & service, css::uno::Any const & value):
         service_(service), value_(value) {}
 
 private:
+    RegistryKey(const RegistryKey&) SAL_DELETED_FUNCTION;
+    RegistryKey& operator=(const RegistryKey&) SAL_DELETED_FUNCTION;
+
     virtual ~RegistryKey() {}
 
     virtual OUString SAL_CALL getKeyName()

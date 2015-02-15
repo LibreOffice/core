@@ -22,7 +22,6 @@
 #include <list>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "com/sun/star/bridge/XInstanceProvider.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/byteseq.hxx"

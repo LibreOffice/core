@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/container/ContainerEvent.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
@@ -44,8 +43,10 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr {
 
-class Broadcaster: private boost::noncopyable {
+class Broadcaster {
 public:
+    Broadcaster() {}
+
     void addDisposeNotification(
         com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
             const & listener,
@@ -85,6 +86,9 @@ public:
     void send();
 
 private:
+    Broadcaster(const Broadcaster&) SAL_DELETED_FUNCTION;
+    Broadcaster& operator=(const Broadcaster&) SAL_DELETED_FUNCTION;
+
     struct DisposeNotification {
         com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >
             listener;

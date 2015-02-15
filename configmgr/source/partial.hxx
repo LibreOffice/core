@@ -22,17 +22,15 @@
 
 #include <sal/config.h>
 
-#include <boost/unordered_map.hpp>
 #include <set>
-
-#include <boost/noncopyable.hpp>
+#include <unordered_map>
 
 #include "path.hxx"
 #include <rtl/ustring.hxx>
 
 namespace configmgr {
 
-class Partial: private boost::noncopyable {
+class Partial {
 public:
     enum Containment { CONTAINS_NOT, CONTAINS_SUBNODES, CONTAINS_NODE };
 
@@ -45,8 +43,11 @@ public:
     Containment contains(Path const & path) const;
 
 private:
+    Partial(const Partial&) SAL_DELETED_FUNCTION;
+    Partial& operator=(const Partial&) SAL_DELETED_FUNCTION;
+
     struct Node {
-        typedef boost::unordered_map< OUString, Node, OUStringHash > Children;
+        typedef std::unordered_map< OUString, Node, OUStringHash > Children;
 
         Node(): startInclude(false) {}
         void clear() { startInclude=false; children.clear(); }

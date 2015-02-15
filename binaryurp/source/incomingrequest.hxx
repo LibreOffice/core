@@ -24,7 +24,6 @@
 
 #include <vector>
 
-#include "boost/noncopyable.hpp"
 #include "rtl/byteseq.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/ustring.hxx"
@@ -39,7 +38,10 @@ namespace binaryurp {
 
 namespace binaryurp {
 
-class IncomingRequest: private boost::noncopyable {
+class IncomingRequest {
+private:
+    IncomingRequest(const IncomingRequest&) SAL_DELETED_FUNCTION;
+    IncomingRequest& operator=(const IncomingRequest&) SAL_DELETED_FUNCTION;
 public:
     IncomingRequest(
         rtl::Reference< Bridge > const & bridge, rtl::ByteSequence const & tid,

@@ -21,7 +21,6 @@
 
 #include <list>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
@@ -39,7 +38,7 @@
 
 namespace {
 
-class RegisterConfigItemHelper: private boost::noncopyable {
+class RegisterConfigItemHelper {
 public:
     RegisterConfigItemHelper(
         utl::ConfigManager & manager, utl::ConfigItem & item):
@@ -59,6 +58,9 @@ public:
 private:
     utl::ConfigManager & manager_;
     utl::ConfigItem * item_;
+
+    RegisterConfigItemHelper(const RegisterConfigItemHelper&) SAL_DELETED_FUNCTION;
+    RegisterConfigItemHelper& operator=(const RegisterConfigItemHelper&) SAL_DELETED_FUNCTION;
 };
 
 css::uno::Reference< css::lang::XMultiServiceFactory >
