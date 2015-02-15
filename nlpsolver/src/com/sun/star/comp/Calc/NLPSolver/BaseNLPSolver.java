@@ -78,9 +78,17 @@ public abstract class BaseNLPSolver extends WeakBase
     private com.sun.star.lang.Locale m_locale = new com.sun.star.lang.Locale();
     private final ResourceManager resourceManager;
 
+    private CellAddress m_objective;
+    protected CellAddress[] m_variables;
+    protected SolverConstraint[] m_constraints;
+
     public BaseNLPSolver(XComponentContext xContext, String name) {
         m_xContext = xContext;
         m_name = name;
+            // init members exposed as XSolver properties thru uno bridge
+        m_objective = new CellAddress();
+        m_variables = new CellAddress[0];
+        m_constraints = new SolverConstraint[0];
 
         XMultiComponentFactory componentFactory = xContext.getServiceManager();
         try {
@@ -117,9 +125,6 @@ public abstract class BaseNLPSolver extends WeakBase
     private XSpreadsheetDocument m_document;
     private XModel m_xModel;
     protected XReschedule m_xReschedule;
-    private CellAddress m_objective;
-    protected CellAddress[] m_variables;
-    protected SolverConstraint[] m_constraints;
     protected ExtSolverConstraint[] m_extConstraints;
     protected boolean m_maximize;
 
@@ -155,9 +160,6 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
     public CellAddress[] getVariables() {
-        if (m_variables == null)
-            return new CellAddress[0]; //Workaround for basic scripts; otherwise
-                                       //setting the Variables property fails.
         return m_variables;
     }
 
@@ -296,9 +298,6 @@ public abstract class BaseNLPSolver extends WeakBase
     }
 
     public SolverConstraint[] getConstraints() {
-        if (m_constraints == null)
-            return new SolverConstraint[0]; //Workaround for basic scripts; otherwise
-                                            //setting the Constraints property fails.
         return m_constraints;
     }
 
@@ -463,7 +462,7 @@ public abstract class BaseNLPSolver extends WeakBase
         return m_propertyMap.containsKey(property);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Helper functions">
+        // Helper functions
     private void lockDocument(boolean lock) {
         if (lock)
             m_xModel.lockControllers();
