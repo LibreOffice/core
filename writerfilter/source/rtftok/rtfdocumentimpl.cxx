@@ -3491,6 +3491,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     case RTF_NOCOLBAL:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_noColumnBalance, std::make_shared<RTFValue>(1));
         break;
+    case RTF_MARGMIRROR:
+        m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_mirrorMargins, std::make_shared<RTFValue>(1));
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");

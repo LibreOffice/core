@@ -512,6 +512,9 @@ void RtfExport::ExportDocument_Impl()
     // Record changes?
     if (nsRedlineMode_t::REDLINE_ON & mnRedlineMode)
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_REVISIONS);
+    // Mirror margins?
+    if ((nsUseOnPage::PD_MIRROR & pDoc->GetPageDesc(0).ReadUseOn()) == nsUseOnPage::PD_MIRROR)
+        Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_MARGMIRROR);
     // Init sections
     m_pSections = new MSWordSections(*this);
 

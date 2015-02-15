@@ -15,6 +15,7 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
@@ -857,6 +858,13 @@ DECLARE_RTFEXPORT_TEST(testTdf88583, "tdf88583.odt")
     // This was FillStyle_NONE, as background color was missing from the color table during export.
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
+}
+
+DECLARE_RTFEXPORT_TEST(testMargmirror, "margmirror.rtf")
+{
+    // \margmirror was not handled, this was PageStyleLayout_ALL.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_MIRRORED, getProperty<style::PageStyleLayout>(xPageStyle, "PageStyleLayout"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
