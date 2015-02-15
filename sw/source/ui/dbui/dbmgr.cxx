@@ -941,6 +941,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
             SwView* pTargetView = 0;
             std::auto_ptr< utl::TempFile > aTempFile;
+            bool createTempFile = ( rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL || rMergeDescriptor.nMergeType == DBMGR_MERGE_FILE );
             String sModifiedStartingPageDesc;
             String sStartingPageDesc;
             sal_uInt16 nStartingPageNo = 0;
@@ -1055,7 +1056,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     }
 
                     // create a new temporary file name - only done once in case of bCreateSingleFile
-                    if( 1 == nDocNo || !rMergeDescriptor.bCreateSingleFile )
+                    if( createTempFile && ( 1 == nDocNo || !rMergeDescriptor.bCreateSingleFile ))
                     {
                         INetURLObject aEntry(sPath);
                         String sLeading;
@@ -1071,23 +1072,25 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 new utl::TempFile(sLeading,&sExt,&sPath ));
                         if( rMergeDescriptor.bSubjectIsFilename )
                             aTempFile->EnableKillingFile();
+                        if( !aTempFile->IsValid() )
+                        {
+                            ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
+                            bNoError = false;
+                            bCancel = true;
+                        }
                     }
 
-                    if( !aTempFile->IsValid() )
+                    if( !bCancel )
                     {
-                        ErrorHandler::HandleError( ERRCODE_IO_NOTSUPPORTED );
-                        bNoError = sal_False;
-                        bCancel = sal_True;
-                    }
-                    else
-                    {
-                        INetURLObject aTempFileURL(aTempFile->GetURL());
+                        boost::scoped_ptr< INetURLObject > aTempFileURL;
+                        if( createTempFile )
+                            aTempFileURL.reset( new INetURLObject(aTempFile->GetURL()));
                         if (!IsMergeSilent()) {
                             if( bMergeShell )
                                 ((CreateMonitor*) pProgressDlg)->SetCurrentPosition( nDocNo );
                             else {
                                 PrintMonitor *pPrintMonDlg = (PrintMonitor*) pProgressDlg;
-                                pPrintMonDlg->aPrinter.SetText( aTempFileURL.GetBase() );
+                                pPrintMonDlg->aPrinter.SetText( createTempFile ? aTempFileURL->GetBase() : OUString( pSourceDocSh->GetTitle( 22 )));
                                 OUString sStat(SW_RES(STR_STATSTR_LETTER));   // Brief
                                 sStat += " ";
                                 sStat += OUString::number( nDocNo );
@@ -1196,7 +1199,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             }
                             else
                             {
-                                String sFileURL =  aTempFileURL.GetMainURL( INetURLObject::NO_DECODE );
+                                assert( createTempFile );
+                                String sFileURL =  aTempFileURL->GetMainURL( INetURLObject::NO_DECODE );
                                 SfxMedium* pDstMed = new SfxMedium(
                                     sFileURL,
                                     STREAM_STD_READWRITE );
@@ -1351,7 +1355,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 if( rMergeDescriptor.nMergeType != DBMGR_MERGE_PRINTER )
                 {
-                    OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
+                    assert( aTempFile.get());
                     INetURLObject aTempFileURL( rMergeDescriptor.bSubjectIsFilename ? sSubject : aTempFile->GetURL());
                     SfxMedium* pDstMed = new SfxMedium(
                         aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
