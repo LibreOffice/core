@@ -1008,6 +1008,14 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             bool bFreezedLayouts = false;
             // collect temporary files
             ::std::vector< OUString> aFilesToRemove;
+
+            // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
+            SfxObjectShellLock xWorkDocSh;
+            // a view frame for the document
+            SwView* pWorkView = NULL;
+            SwDoc* pWorkDoc = NULL;
+            SwDBManager* pOldDBManager = NULL;
+
             do
             {
                 nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
@@ -1074,21 +1082,26 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         for( sal_uInt16 i = 0; i < 25; i++ )
                             Application::Reschedule();
 
-                        // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
-                        // copy the source document
-                        SfxObjectShellLock xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
+                        // Create a copy of the source document and work with that one instead of the source.
+                        // If we're not in the single file mode (which requires modifying the document for the merging),
+                        // it is enough to do this just once.
+                        if( 1 == nDocNo || rMergeDescriptor.bCreateSingleFile )
+                        {
+                            assert( !xWorkDocSh.Is());
+                            // copy the source document
+                            xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
 
                         //create a view frame for the document
-                        SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
+                        pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
                         //request the layout calculation
                         SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
                         pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
-                        SwDoc* pWorkDoc = rWorkShell.GetDoc();
+                        pWorkDoc = rWorkShell.GetDoc();
                         pWorkDoc->ReplaceDocumentProperties( *pSourceDocSh->GetDoc());
                         if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                             lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-                        SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
+                        pOldDBManager = pWorkDoc->GetDBManager();
                         pWorkDoc->SetDBManager( this );
                         pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
@@ -1096,12 +1109,15 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                         rWorkShell.LockExpFlds();
                         rWorkShell.CalcLayout();
                         rWorkShell.UnlockExpFlds();
+                    }
 
+                        SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
                         rWorkShell.SwViewShell::UpdateFlds();
                         SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
-                        pWorkDoc->RemoveInvisibleContent();
+                        if( rMergeDescriptor.bCreateSingleFile )
+                            pWorkDoc->RemoveInvisibleContent();
 
                         // launch MailMergeEvent if required
                         const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
@@ -1272,9 +1288,12 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                 }
                             }
                         }
-                        pWorkDoc->SetDBManager( pOldDBManager );
-
-                        xWorkDocSh->DoClose();
+                        if( rMergeDescriptor.bCreateSingleFile )
+                        {
+                            pWorkDoc->SetDBManager( pOldDBManager );
+                            xWorkDocSh->DoClose();
+                            xWorkDocSh = NULL;
+                        }
                     }
                 }
                 nDocNo++;
@@ -1291,6 +1310,13 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                 }
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+            if( !rMergeDescriptor.bCreateSingleFile )
+            {
+                pWorkDoc->SetDBManager( pOldDBManager );
+                xWorkDocSh->DoClose();
+            }
+
             if (rMergeDescriptor.bCreateSingleFile)
             {
                 // sw::DocumentLayoutManager::CopyLayoutFmt() did not generate
