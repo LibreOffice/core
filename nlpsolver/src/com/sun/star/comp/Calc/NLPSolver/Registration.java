@@ -23,16 +23,12 @@ public final class Registration {
     {
         XSingleComponentFactory xFactory = null;
 
-	    System.out.println("Get component '" + sImplementationName + "'");
-
         if ( sImplementationName.equals( "com.sun.star.comp.Calc.NLPSolver.DEPSSolverImpl" ) )
             xFactory = Factory.createComponentFactory( com.sun.star.comp.Calc.NLPSolver.DEPSSolverImpl.class,
                                                        m_serviceNames );
         if ( sImplementationName.equals( "com.sun.star.comp.Calc.NLPSolver.SCOSolverImpl" ) )
             xFactory = Factory.createComponentFactory( com.sun.star.comp.Calc.NLPSolver.SCOSolverImpl.class,
                                                        m_serviceNames );
-
-	    System.out.println("Return factory " + xFactory);
 
         return xFactory;
     }

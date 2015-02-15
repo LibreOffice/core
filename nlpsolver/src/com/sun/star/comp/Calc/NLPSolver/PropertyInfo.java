@@ -89,10 +89,11 @@ public class PropertyInfo<PropType> {
 
     public void localize(ResourceManager resourceManager) {
         try {
-            m_description = resourceManager.getLocalizedString("Properties." + m_property.Name);
-	    System.out.println("Localised description to " + m_description);
+            m_description = resourceManager.getLocalizedString("Properties."
+                            + m_property.Name);
         } catch (com.sun.star.resource.MissingResourceException ex) {
-	    System.out.println("No properties file !");
+            System.out.println("Can't localize. Resource missing for property: "
+                            + m_property.Name);
         }
     }
 
