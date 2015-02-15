@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,15 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.mozilla.gecko.OnInterceptTouchListener;
-
-import java.lang.reflect.Method;
-import java.nio.IntBuffer;
 
 /**
  * A view rendered by the layer compositor.
@@ -246,9 +241,6 @@ public class LayerView extends FrameLayout {
     }
 
     public void requestRender() {
-        if (mRenderControllerThread != null) {
-            mRenderControllerThread.renderFrame();
-        }
         if (mListener != null) {
             mListener.renderRequested();
         }
@@ -324,9 +316,7 @@ public class LayerView extends FrameLayout {
     private void onSizeChanged(int width, int height) {
         mGLController.surfaceChanged(width, height);
 
-        if (mRenderControllerThread != null) {
-            mRenderControllerThread.surfaceChanged(width, height);
-        }
+        mLayerClient.setViewportSize(new FloatSize(width, height));
 
         if (mListener != null) {
             mListener.surfaceChanged(width, height);
@@ -335,10 +325,6 @@ public class LayerView extends FrameLayout {
 
     private void onDestroyed() {
         mGLController.surfaceDestroyed();
-
-        if (mRenderControllerThread != null) {
-            mRenderControllerThread.surfaceDestroyed();
-        }
 
         if (mListener != null) {
             mListener.compositionPauseRequested();
@@ -430,6 +416,7 @@ public class LayerView extends FrameLayout {
         Log.e(LOGTAG, "### Creating GL thread!");
         mRenderControllerThread = new RenderControllerThread(mGLController);
         mRenderControllerThread.start();
+        setListener(mRenderControllerThread);
         notifyAll();
     }
 
@@ -447,16 +434,9 @@ public class LayerView extends FrameLayout {
         Log.e(LOGTAG, "### Destroying GL thread!");
         Thread thread = mRenderControllerThread;
         mRenderControllerThread.shutdown();
+        setListener(null);
         mRenderControllerThread = null;
         return thread;
-    }
-
-    public synchronized void recreateSurface() {
-        if (mRenderControllerThread == null) {
-            throw new LayerViewException("recreateSurface() called with no GL thread active!");
-        }
-
-        mRenderControllerThread.recreateSurface();
     }
 
     public static class LayerViewException extends RuntimeException {

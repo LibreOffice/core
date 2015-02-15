@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class RenderControllerThread extends Thread {
+public class RenderControllerThread extends Thread implements LayerView.Listener {
     private LinkedBlockingQueue<RenderCommand> queue = new LinkedBlockingQueue<RenderCommand>();
     private GLController controller;
     private boolean renderQueued = false;
@@ -38,9 +38,6 @@ public class RenderControllerThread extends Thread {
             case SHUTDOWN:
                 doShutdown();
                 break;
-            case RECREATE_SURFACE:
-                doRecreateSurface();
-                break;
             case RENDER_FRAME:
                 doRenderFrame();
                 break;
@@ -56,11 +53,17 @@ public class RenderControllerThread extends Thread {
         }
     }
 
-    public void recreateSurface() {
-        queue.add(RenderCommand.RECREATE_SURFACE);
+    public void shutdown() {
+        queue.add(RenderCommand.SHUTDOWN);
     }
 
-    public void renderFrame() {
+    @Override
+    public void compositorCreated() {
+
+    }
+
+    @Override
+    public void renderRequested() {
         synchronized (this) {
             if (!renderQueued) {
                 queue.add(RenderCommand.RENDER_FRAME);
@@ -69,10 +72,17 @@ public class RenderControllerThread extends Thread {
         }
     }
 
-    public void shutdown() {
-        queue.add(RenderCommand.SHUTDOWN);
+    @Override
+    public void compositionPauseRequested() {
+        queue.add(RenderCommand.SURFACE_DESTROYED);
     }
 
+    @Override
+    public void compositionResumeRequested(int width, int height) {
+
+    }
+
+    @Override
     public void surfaceChanged(int width, int height) {
         this.width = width;
         this.height = height;
@@ -81,15 +91,6 @@ public class RenderControllerThread extends Thread {
 
     public void surfaceCreated() {
         queue.add(RenderCommand.SURFACE_CREATED);
-    }
-
-    public void surfaceDestroyed() {
-        queue.add(RenderCommand.SURFACE_DESTROYED);
-    }
-
-    private void doRecreateSurface() {
-        controller.disposeGLContext();
-        controller.initGLContext();
     }
 
     private GLSurfaceView.Renderer getRenderer() {

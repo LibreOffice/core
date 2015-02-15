@@ -20,7 +20,7 @@ import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.List;
 
-public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
+public class GeckoLayerClient implements PanZoomTarget {
     private static final String LOGTAG = GeckoLayerClient.class.getSimpleName();
 
     private LayerRenderer mLayerRenderer;
@@ -93,7 +93,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
 
         mLayerRenderer = new LayerRenderer(mView);
 
-        mView.setListener(this);
         mView.setLayerRenderer(mLayerRenderer);
         sendResizeEventIfNecessary();
     }
@@ -250,38 +249,6 @@ public class GeckoLayerClient implements PanZoomTarget, LayerView.Listener {
         if (getRedrawHint()) {
             adjustViewport(null);
         }
-    }
-
-    /** Implementation of LayerView.Listener */
-    @Override
-    public void renderRequested() {
-    }
-
-    /** Implementation of LayerView.Listener */
-    @Override
-    public void compositionPauseRequested() {
-    }
-
-    /** Implementation of LayerView.Listener */
-    @Override
-    public void compositionResumeRequested(int width, int height) {
-    }
-
-    /** Implementation of LayerView.Listener */
-    @Override
-    public void surfaceChanged(int width, int height) {
-        setViewportSize(new FloatSize(width, height));
-
-        // We need to make this call even when the compositor isn't currently
-        // paused (e.g. during an orientation change), to make the compositor
-        // aware of the changed surface.
-        compositionResumeRequested(width, height);
-        renderRequested();
-    }
-
-    /** Implementation of LayerView.Listener */
-    @Override
-    public void compositorCreated() {
     }
 
     /** Implementation of PanZoomTarget */
