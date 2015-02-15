@@ -472,6 +472,14 @@ void SwTxtFmtColl::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtFmtColls"));
+    for (size_t i = 0; i < size(); ++i)
+        GetFmt(i)->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 //FEATURE::CONDCOLL
 
 SwCollCondition::SwCollCondition( SwTxtFmtColl* pColl, sal_uLong nMasterCond,

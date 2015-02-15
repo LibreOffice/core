@@ -301,18 +301,6 @@ void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w) const
     }
 }
 
-void SwTxtFmtColls::dumpAsXml(xmlTextWriterPtr w) const
-{
-    WriterHelper writer(w);
-    if (size())
-    {
-        writer.startElement("swtxtfmtcolls");
-        for (size_t i = 0; i < size(); ++i)
-            GetFmt(i)->dumpAsXml(w);
-        writer.endElement();
-    }
-}
-
 void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );
