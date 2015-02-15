@@ -3186,7 +3186,10 @@ IMPL_LINK_TYPED( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, vo
             if ( pNameDialog->Execute() == RET_OK ) {
                 pNameDialog->GetName(aNewName);
 
-                pEntry->SetName( aNewName );
+                if( aNewName == "" )
+                    pEntry->SetName( "~" );
+                else
+                    pEntry->SetName( aNewName );
                 m_pContentsListBox->SetEntryText( pActEntry, aNewName );
 
                 bNeedsApply = true;
