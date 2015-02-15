@@ -50,8 +50,7 @@ public class LayerView extends FrameLayout {
     private GLController mGLController;
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;
-    private long mRenderTime;
-    private boolean mRenderTimeReset;
+
     /* Must be a PAINT_xxx constant */
     private int mPaintState = PAINT_NONE;
     private boolean mFullScreen = false;
@@ -253,13 +252,6 @@ public class LayerView extends FrameLayout {
         if (mListener != null) {
             mListener.renderRequested();
         }
-
-        synchronized(this) {
-            if (!mRenderTimeReset) {
-                mRenderTimeReset = true;
-                mRenderTime = System.nanoTime();
-            }
-        }
     }
 
     public void addLayer(Layer layer) {
@@ -268,17 +260,6 @@ public class LayerView extends FrameLayout {
 
     public void removeLayer(Layer layer) {
         mRenderer.removeLayer(layer);
-    }
-
-    /**
-     * Returns the time elapsed between the first call of requestRender() after
-     * the last call of getRenderTime(), in nanoseconds.
-     */
-    public long getRenderTime() {
-        synchronized(this) {
-            mRenderTimeReset = false;
-            return System.nanoTime() - mRenderTime;
-        }
     }
 
     public int getMaxTextureSize() {

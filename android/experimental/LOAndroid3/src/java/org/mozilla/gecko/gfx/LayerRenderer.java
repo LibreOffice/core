@@ -49,9 +49,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     private final LayerView mView;
     private final SingleTileLayer mBackgroundLayer;
-    private final ScreenshotLayer mScreenshotLayer;
     private final NinePatchTileLayer mShadowLayer;
-    private TextLayer mFrameRateLayer;
     private final ScrollbarLayer mHorizScrollLayer;
     private final ScrollbarLayer mVertScrollLayer;
     private final FadeRunnable mFadeRunnable;
@@ -126,43 +124,11 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         "    gl_FragColor = texture2D(sTexture, vTexCoord);\n" +
         "}\n";
 
-    public void setCheckerboardBitmap(Bitmap bitmap, float pageWidth, float pageHeight) {
-        mScreenshotLayer.setBitmap(bitmap);
-        mScreenshotLayer.beginTransaction();
-        try {
-            mScreenshotLayer.setPosition(new Rect(0, 0, Math.round(pageWidth),
-                                                    Math.round(pageHeight)));
-            mScreenshotLayer.invalidate();
-        } finally {
-            mScreenshotLayer.endTransaction();
-        }
-    }
-
-    public void updateCheckerboardBitmap(Bitmap bitmap, float x, float y,
-                                         float width, float height,
-                                         float pageWidth, float pageHeight) {
-        mScreenshotLayer.updateBitmap(bitmap, x, y, width, height);
-        mScreenshotLayer.beginTransaction();
-        try {
-            mScreenshotLayer.setPosition(new Rect(0, 0, Math.round(pageWidth),
-                                                    Math.round(pageHeight)));
-            mScreenshotLayer.invalidate();
-        } finally {
-            mScreenshotLayer.endTransaction();
-        }
-    }
-
-    public void resetCheckerboard() {
-        mScreenshotLayer.reset();
-    }
-
     public LayerRenderer(LayerView view) {
         mView = view;
 
         CairoImage backgroundImage = new BufferedCairoImage(view.getBackgroundPattern());
         mBackgroundLayer = new SingleTileLayer(true, backgroundImage);
-
-        mScreenshotLayer = ScreenshotLayer.create();
 
         CairoImage shadowImage = new BufferedCairoImage(view.getShadowPattern());
         mShadowLayer = new NinePatchTileLayer(shadowImage);
@@ -196,18 +162,13 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
         DirectBufferAllocator.free(mCoordByteBuffer);
         mCoordByteBuffer = null;
         mCoordBuffer = null;
-        mScreenshotLayer.destroy();
         mBackgroundLayer.destroy();
         mShadowLayer.destroy();
         mHorizScrollLayer.destroy();
         mVertScrollLayer.destroy();
-        if (mFrameRateLayer != null) {
-            mFrameRateLayer.destroy();
-        }
     }
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        checkMonitoringEnabled();
         createDefaultProgram();
         activateDefaultProgram();
     }
@@ -333,12 +294,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
         GLES20.glViewport(0, 0, width, height);
-
-        if (mFrameRateLayer != null) {
-            moveFrameRateLayer(width, height);
-        }
-
-        /* TODO: Throw away tile images? */
     }
 
     private void updateDroppedFrames(long frameStartTime) {
@@ -352,45 +307,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
 
         mFrameTimings[mCurrentFrame] = frameElapsedTime;
         mCurrentFrame = (mCurrentFrame + 1) % mFrameTimings.length;
-
-        int averageTime = mFrameTimingsSum / mFrameTimings.length;
-        mFrameRateLayer.beginTransaction();     // called on compositor thread
-        try {
-            mFrameRateLayer.setText(averageTime + " ms/" + mDroppedFrames);
-        } finally {
-            mFrameRateLayer.endTransaction();
-        }
-    }
-
-    /* Given the new dimensions for the surface, moves the frame rate layer appropriately. */
-    private void moveFrameRateLayer(int width, int height) {
-        mFrameRateLayer.beginTransaction();     // called on compositor thread
-        try {
-            Rect position = new Rect(width - FRAME_RATE_METER_WIDTH - 8,
-                                    height - FRAME_RATE_METER_HEIGHT + 8,
-                                    width - 8,
-                                    height + 8);
-            mFrameRateLayer.setPosition(position);
-        } finally {
-            mFrameRateLayer.endTransaction();
-        }
-    }
-
-    void checkMonitoringEnabled() {
-        /* Do this I/O off the main thread to minimize its impact on startup time. */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Context context = mView.getContext();
-                SharedPreferences preferences = context.getSharedPreferences("GeckoApp", 0);
-                if (preferences.getBoolean("showFrameRate", false)) {
-                    IntSize frameRateLayerSize = new IntSize(FRAME_RATE_METER_WIDTH, FRAME_RATE_METER_HEIGHT);
-                    mFrameRateLayer = TextLayer.create(frameRateLayerSize, "-- ms/--");
-                    moveFrameRateLayer(mView.getWidth(), mView.getHeight());
-                }
-                mProfileRender = Log.isLoggable(PROFTAG, Log.DEBUG);
-            }
-        }).start();
     }
 
     /*
@@ -519,8 +435,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
             if (lowResLayer != null) mUpdated &= lowResLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mBackgroundLayer.update(mScreenContext);    // called on compositor thread
             mUpdated &= mShadowLayer.update(mPageContext);  // called on compositor thread
-            mUpdated &= mScreenshotLayer.update(mPageContext);   // called on compositor thread
-            if (mFrameRateLayer != null) mUpdated &= mFrameRateLayer.update(mScreenContext); // called on compositor thread
             mUpdated &= mVertScrollLayer.update(mPageContext);  // called on compositor thread
             mUpdated &= mHorizScrollLayer.update(mPageContext); // called on compositor thread
 
@@ -687,15 +601,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                     printCheckerboardStats();
                 }
             }
-
-            /* Draw the FPS. */
-            if (mFrameRateLayer != null) {
-                updateDroppedFrames(mFrameStartTime);
-
-                GLES20.glEnable(GLES20.GL_BLEND);
-                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-                mFrameRateLayer.draw(mScreenContext);
-            }
         }
 
         /** This function is invoked via JNI; be careful when modifying signature. */
@@ -717,16 +622,6 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
                     pixelBuffer.notify();
                 }
             }
-
-            // Remove white screen once we've painted
-            /*if (mView.getPaintState() == LayerView.PAINT_BEFORE_FIRST) {
-                GeckoAppShell.getMainHandler().postAtFrontOfQueue(new Runnable() {
-                    public void run() {
-                        mView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-                    }
-                });
-                mView.setPaintState(LayerView.PAINT_AFTER_FIRST);
-            }*/
         }
     }
 }
