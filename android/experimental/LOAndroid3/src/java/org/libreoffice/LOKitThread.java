@@ -55,16 +55,14 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             return;
         }
 
+        mLayerClient.beginDrawing();
+
         List<SubTile> tiles = new ArrayList<SubTile>();
         mLayerClient.invalidateTiles(tiles, rect);
 
         for (SubTile tile : tiles) {
             CairoImage image = mTileProvider.createTile(tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
             tile.setImage(image);
-        }
-
-        mLayerClient.beginDrawing();
-        for (SubTile tile : tiles) {
             tile.invalidate();
         }
         mLayerClient.endDrawing();
