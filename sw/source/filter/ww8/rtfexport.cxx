@@ -971,26 +971,22 @@ void RtfExport::OutColorTable()
     }
 
     // background color
-    static const sal_uInt16 aBrushIds[] =
-    {
-        RES_BACKGROUND, RES_CHRATR_BACKGROUND, 0
-    };
+    static const sal_uInt16 aBrushIds[] = {RES_BACKGROUND, RES_CHRATR_BACKGROUND};
 
-    for (const sal_uInt16* pIds = aBrushIds; *pIds; ++pIds)
+    for (sal_uInt32 i=0; i<SAL_N_ELEMENTS(aBrushIds); i++)
     {
-        const SvxBrushItem* pBkgrd = static_cast<const SvxBrushItem*>(GetDfltAttr(*pIds));
+        const sal_uInt16 nId = aBrushIds[i];
+        const SvxBrushItem* pBkgrd = static_cast<const SvxBrushItem*>(GetDfltAttr(nId));
         InsColor(pBkgrd->GetColor());
-        if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(*pIds))))
-        {
+
+        if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetPoolDefaultItem(nId))))
             InsColor(pBkgrd->GetColor());
-        }
-        nMaxItem = rPool.GetItemCount2(*pIds);
+        nMaxItem = rPool.GetItemCount2(nId);
+
         for (sal_uInt32 n = 0; n < nMaxItem; ++n)
         {
-            if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetItem2(*pIds , n))))
-            {
+            if (0 != (pBkgrd = static_cast<const SvxBrushItem*>(rPool.GetItem2(nId , n))))
                 InsColor(pBkgrd->GetColor());
-            }
         }
     }
 

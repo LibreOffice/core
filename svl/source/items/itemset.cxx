@@ -440,38 +440,35 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
     {
         SfxItemArray ppFnd = pAktSet->_aItems;
         const sal_uInt16* pPtr = pAktSet->_pWhichRanges;
-        if (pPtr)
+        if (!pPtr)
+            continue;
+        while ( *pPtr )
         {
-            while ( *pPtr )
+            if ( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
             {
-                if ( *pPtr <= nWhich && nWhich <= *(pPtr+1) )
+                // Within this range
+                ppFnd += nWhich - *pPtr;
+                if ( !*ppFnd )
                 {
-                    // Within this range
-                    ppFnd += nWhich - *pPtr;
-                    if ( !*ppFnd )
-                    {
-                        eRet = SfxItemState::DEFAULT;
-                        if( !bSrchInParent )
-                            return eRet; // Not present
-                        break; // Keep searching in the parents!
-                    }
-
-                    if ( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd )
-                        // Different ones are present
-                        return SfxItemState::DONTCARE;
-
-                    if ( (*ppFnd)->Type() == TYPE(SfxVoidItem) )
-                        return SfxItemState::DISABLED;
-
-                    if (ppItem)
-                    {
-                        *ppItem = *ppFnd;
-                    }
-                    return SfxItemState::SET;
+                    eRet = SfxItemState::DEFAULT;
+                    if( !bSrchInParent )
+                        return eRet; // Not present
+                    break; // Keep searching in the parents!
                 }
-                ppFnd += *(pPtr+1) - *pPtr + 1;
-                pPtr += 2;
+
+                if ( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd )
+                    // Different ones are present
+                    return SfxItemState::DONTCARE;
+
+                if ( (*ppFnd)->Type() == TYPE(SfxVoidItem) )
+                    return SfxItemState::DISABLED;
+
+                if (ppItem)
+                    *ppItem = *ppFnd;
+                return SfxItemState::SET;
             }
+            ppFnd += *(pPtr+1) - *pPtr + 1;
+            pPtr += 2;
         }
     } while( bSrchInParent && 0 != ( pAktSet = pAktSet->_pParent ));
     return eRet;
