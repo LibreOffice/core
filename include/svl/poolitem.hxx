@@ -119,15 +119,38 @@ enum SfxItemPresentation
     SFX_ITEM_PRESENTATION_COMPLETE
 };
 
-
-
+/**
+ * These values have to match the values in the
+ * com::sun::star::frame::status::ItemState IDL
+ * to be found at offapi/com/sun/star/frame/status/ItemState.idl
+*/
 enum class SfxItemState {
-    // These values have to match the values in the com::sun::star::frame::status::ItemState IDL
+
+    /** Specifies an unknown state. */
     UNKNOWN  = 0,
+
+    /** Specifies that the property is currently disabled. */
     DISABLED = 0x0001,
+
+    /** Specifies that the property is currently read-only. */
     READONLY = 0x0002,
+
+    /** Specifies that the property is currently in a don't care state.
+     * <br/>
+     * This is normally used if a selection provides more than one state
+     * for a property at the same time.
+     */
     DONTCARE = 0x0010,
+
+    /** Specifies that the property is currently in a default state. */
     DEFAULT  = 0x0020,
+
+    /** The property has been explicitly set to a given value hence we know
+     * we are not taking the default value.
+     * <br/>
+     * For example, you may want to get the font color and it might either
+     * be the default one or one that has been explicitly set.
+    */
     SET      = 0x0030
 };
 
