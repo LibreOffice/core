@@ -419,10 +419,12 @@ class ImpPDFTabSigningPage : public SfxTabPage
     Edit*                       mpEdSignLocation;
     Edit*                       mpEdSignContactInfo;
     Edit*                       mpEdSignReason;
+    ListBox*                    mpLBSignTSA;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
 
     DECL_LINK( ClickmaPbSignCertSelect, void* );
     DECL_LINK( ClickmaPbSignCertClear, void* );
+    DECL_LINK( SelectLBSignTSA, void* );
 
 public:
     ImpPDFTabSigningPage( vcl::Window* pParent,
