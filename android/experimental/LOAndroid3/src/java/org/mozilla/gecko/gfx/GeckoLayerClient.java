@@ -24,12 +24,10 @@ public class GeckoLayerClient implements PanZoomTarget {
     private static final String LOGTAG = GeckoLayerClient.class.getSimpleName();
 
     private LayerRenderer mLayerRenderer;
-    private boolean mLayerRendererInitialized;
 
     private Context mContext;
     private IntSize mScreenSize;
     private DisplayPortMetrics mDisplayPort;
-    private DisplayPortMetrics mReturnDisplayPort;
 
     private ComposedTileLayer mLowResLayer;
     private ComposedTileLayer mRootLayer;
@@ -89,6 +87,26 @@ public class GeckoLayerClient implements PanZoomTarget {
         sendResizeEventIfNecessary();
     }
 
+    public void destroy() {
+        mPanZoomController.destroy();
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    Layer getRoot() {
+        return mIsReady ? mRootLayer : null;
+    }
+
+    Layer getLowResLayer() {
+        return mIsReady ? mLowResLayer : null;
+    }
+
+    public LayerView getView() {
+        return mView;
+    }
+
     /**
      * Returns true if this controller is fine with performing a redraw operation or false if it
      * would prefer that the action didn't take place.
@@ -103,18 +121,6 @@ public class GeckoLayerClient implements PanZoomTarget {
             return false;
         }
         return DisplayPortCalculator.aboutToCheckerboard(mViewportMetrics, mPanZoomController.getVelocityVector(), getDisplayPort());
-    }
-
-    Layer getRoot() {
-        return mIsReady ? mRootLayer : null;
-    }
-
-    Layer getLowResLayer() {
-        return mIsReady ? mLowResLayer : null;
-    }
-
-    public LayerView getView() {
-        return mView;
     }
 
     /**
@@ -243,16 +249,19 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     /** Implementation of PanZoomTarget */
+    @Override
     public ImmutableViewportMetrics getViewportMetrics() {
         return mViewportMetrics;
     }
 
     /** Implementation of PanZoomTarget */
+    @Override
     public ZoomConstraints getZoomConstraints() {
         return mZoomConstraints;
     }
 
     /** Implementation of PanZoomTarget */
+    @Override
     public void setAnimationTarget(ImmutableViewportMetrics viewport) {
         if (mIsReady) {
             // We know what the final viewport of the animation is going to be, so
@@ -267,6 +276,7 @@ public class GeckoLayerClient implements PanZoomTarget {
     /** Implementation of PanZoomTarget
      * You must hold the monitor while calling this.
      */
+    @Override
     public void setViewportMetrics(ImmutableViewportMetrics viewport) {
         mViewportMetrics = viewport;
         mView.requestRender();
@@ -276,6 +286,7 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     /** Implementation of PanZoomTarget */
+    @Override
     public void forceRedraw() {
         mForceRedraw = true;
         if (mIsReady) {
@@ -284,11 +295,13 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     /** Implementation of PanZoomTarget */
+    @Override
     public boolean post(Runnable action) {
         return mView.post(action);
     }
 
     /** Implementation of PanZoomTarget */
+    @Override
     public Object getLock() {
         return this;
     }
@@ -305,17 +318,10 @@ public class GeckoLayerClient implements PanZoomTarget {
         return layerPoint;
     }
 
+    /** Implementation of PanZoomTarget */
     @Override
     public boolean isFullScreen() {
         return false;
-    }
-
-    public void destroy() {
-        mPanZoomController.destroy();
-    }
-
-    public Context getContext() {
-        return mContext;
     }
 
     public void zoomTo(RectF rect) {
