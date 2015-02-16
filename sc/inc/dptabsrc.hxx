@@ -666,6 +666,11 @@ public:
         return bEnableLayout && aLayoutInfo.AddEmptyLines;
     }
 
+    bool IsRepeatItemLabels() const
+    {
+        return aLayoutInfo.RepeatItemLabels;
+    }
+
     //! number format (for data fields and date fields)
 };
 

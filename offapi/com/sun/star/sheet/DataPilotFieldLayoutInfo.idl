@@ -44,6 +44,11 @@ published struct DataPilotFieldLayoutInfo
         */
 
         boolean AddEmptyLines;
+
+    /** If 'TRUE', the item labels are repeated for each item of the field.
+        */
+
+        boolean RepeatItemLabels;
 };
 
 

@@ -2430,6 +2430,7 @@ namespace xmloff { namespace token {
         TOKEN( "sort-mode",                         XML_SORT_MODE ),
         TOKEN( "data-pilot-sort-info",              XML_DATA_PILOT_SORT_INFO ),
         TOKEN( "add-empty-lines",                   XML_ADD_EMPTY_LINES ),
+        TOKEN( "repeat-item-labels",                XML_REPEAT_ITEM_LABELS ),
         TOKEN( "tabular-layout",                    XML_TABULAR_LAYOUT ),
         TOKEN( "outline-subtotals-top",             XML_OUTLINE_SUBTOTALS_TOP ),
         TOKEN( "outline-subtotals-bottom",          XML_OUTLINE_SUBTOTALS_BOTTOM ),

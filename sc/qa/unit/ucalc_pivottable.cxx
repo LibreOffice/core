@@ -127,6 +127,7 @@ ScDPObject* createDPFromSourceDesc(
             sheet::DataPilotFieldLayoutInfo aLayInfo;
             aLayInfo.LayoutMode = 0;
             aLayInfo.AddEmptyLines = false;
+            aLayInfo.RepeatItemLabels = false;
             pDim->SetLayoutInfo(&aLayInfo);
             sheet::DataPilotFieldAutoShowInfo aShowInfo;
             aShowInfo.IsEnabled = false;

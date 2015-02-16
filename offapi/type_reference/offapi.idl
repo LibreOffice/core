@@ -11668,6 +11668,7 @@ module com {
     published struct DataPilotFieldLayoutInfo {
      long LayoutMode;
      boolean AddEmptyLines;
+     boolean RepeatItemLabels;
     };
     published enum DataPilotFieldOrientation {
      HIDDEN = 0,

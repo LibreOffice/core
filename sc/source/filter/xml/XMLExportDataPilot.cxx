@@ -408,6 +408,12 @@ void ScXMLExportDataPilot::WriteLayoutInfo(ScDPSaveDimension* pDim)
         else
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ADD_EMPTY_LINES, XML_FALSE);
 
+        if (pLayoutInfo->RepeatItemLabels)
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REPEAT_ITEM_LABELS, XML_TRUE);
+        else
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REPEAT_ITEM_LABELS, XML_FALSE);
+
+
         OUString sValueStr;
         switch (pLayoutInfo->LayoutMode)
         {

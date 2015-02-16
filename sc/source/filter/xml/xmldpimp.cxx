@@ -1436,6 +1436,13 @@ ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& r
                 else
                     aInfo.AddEmptyLines = false;
             }
+            else if (IsXMLToken(aLocalName, XML_REPEAT_ITEM_LABELS))
+            {
+                if (IsXMLToken(sValue, XML_TRUE))
+                    aInfo.RepeatItemLabels = sal_True;
+                else
+                    aInfo.RepeatItemLabels = false;
+            }
             else if (IsXMLToken(aLocalName, XML_LAYOUT_MODE))
             {
                 if (IsXMLToken(sValue, XML_TABULAR_LAYOUT))

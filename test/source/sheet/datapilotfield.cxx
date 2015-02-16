@@ -71,6 +71,7 @@ void DataPilotField::testLayoutInfo()
     sheet::DataPilotFieldLayoutInfo aLayoutInfoValue;
     OUString aLayoutInfo("LayoutInfo");
     aLayoutInfoValue.AddEmptyLines = false;
+    aLayoutInfoValue.RepeatItemLabels = false;
     aLayoutInfoValue.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
     uno::Any xValue;
     xValue <<= aLayoutInfoValue;
@@ -80,7 +81,7 @@ void DataPilotField::testLayoutInfo()
     xValue = xPropSet->getPropertyValue(aLayoutInfo);
     CPPUNIT_ASSERT( xValue >>= aNewLayoutInfoValue );
     CPPUNIT_ASSERT_MESSAGE("set value should be the same as the got value", aNewLayoutInfoValue.LayoutMode == aLayoutInfoValue.LayoutMode &&
-            aNewLayoutInfoValue.AddEmptyLines == aLayoutInfoValue.AddEmptyLines);
+            aNewLayoutInfoValue.AddEmptyLines == aLayoutInfoValue.AddEmptyLines && aNewLayoutInfoValue.RepeatItemLabels == aLayoutInfoValue.RepeatItemLabels);
 
     //setting HasLayoutInfo only makes sense for false, tor true the uno implementation does nothing
     bool bHasLayoutInfo(false);
