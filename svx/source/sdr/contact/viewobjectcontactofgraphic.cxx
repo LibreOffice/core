@@ -134,6 +134,9 @@ namespace sdr
                             rGrafObj.mbInsidePaint = false;
                         }
 
+                        // Invalidate paint areas.
+                        GetViewContact().ActionChanged();
+
                         bRetval = true;
                     }
                 }
@@ -185,6 +188,9 @@ namespace sdr
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = false;
                     }
+
+                    // Invalidate paint areas.
+                    GetViewContact().ActionChanged();
 
                     bRetval = true;
                 }
