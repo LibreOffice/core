@@ -22,14 +22,13 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <comphelper/comphelperdllapi.h>
 
 namespace comphelper {
 
 /** SolarMutex interface, needed for Application::GetSolarMutex().
 */
-class COMPHELPER_DLLPUBLIC SolarMutex: private boost::noncopyable {
+class COMPHELPER_DLLPUBLIC SolarMutex {
 public:
     virtual void acquire() = 0;
 
@@ -41,6 +40,9 @@ protected:
     SolarMutex();
 
     virtual ~SolarMutex();
+private:
+    SolarMutex(const SolarMutex&) SAL_DELETED_FUNCTION;
+    SolarMutex& operator=(const SolarMutex&) SAL_DELETED_FUNCTION;
 };
 
 }

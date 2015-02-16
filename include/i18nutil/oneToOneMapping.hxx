@@ -19,7 +19,6 @@
 #ifndef INCLUDED_I18NUTIL_ONETOONEMAPPING_HXX
 #define INCLUDED_I18NUTIL_ONETOONEMAPPING_HXX
 
-#include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>
 #include <i18nutil/i18nutildllapi.h>
 
@@ -41,8 +40,11 @@ struct UnicodePairWithFlag
     UnicodePairFlag flag;
 };
 
-class I18NUTIL_DLLPUBLIC oneToOneMapping : private boost::noncopyable
+class I18NUTIL_DLLPUBLIC oneToOneMapping
 {
+private:
+    oneToOneMapping(const oneToOneMapping&) SAL_DELETED_FUNCTION;
+    oneToOneMapping& operator=(const oneToOneMapping&) SAL_DELETED_FUNCTION;
 public:
     oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
     virtual ~oneToOneMapping();
@@ -60,6 +62,10 @@ protected:
 
 class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : public oneToOneMapping
 {
+private:
+    oneToOneMappingWithFlag(const oneToOneMappingWithFlag&) SAL_DELETED_FUNCTION;
+    oneToOneMappingWithFlag& operator=(const oneToOneMappingWithFlag&) SAL_DELETED_FUNCTION;
+
     friend class widthfolding;
 
 public:

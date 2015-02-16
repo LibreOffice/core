@@ -16,7 +16,7 @@
 #include <i18nlangtag/i18nlangtagdllapi.h>
 #include <i18nlangtag/lang.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 typedef struct _rtl_Locale rtl_Locale;  // as in rtl/locale.h
@@ -507,7 +507,7 @@ public:
     /** @ATTENTION: _ONLY_ to be called by the application's configuration! */
     static void setConfiguredSystemLanguage( LanguageType nLang );
 
-    typedef ::boost::shared_ptr< LanguageTagImpl > ImplPtr;
+    typedef std::shared_ptr< LanguageTagImpl > ImplPtr;
 
 private:
 

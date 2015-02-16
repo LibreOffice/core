@@ -22,16 +22,13 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <boost/function.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/bind.hpp>
 
 namespace comphelper {
 
 /** ScopeGuard to ease writing exception-safe code.
  */
-class COMPHELPER_DLLPUBLIC ScopeGuard : private ::boost::noncopyable
-                                        // noncopyable until we have
-                                        // good reasons...
+class COMPHELPER_DLLPUBLIC ScopeGuard
 {
 public:
     enum exc_handling { IGNORE_EXCEPTIONS, ALLOW_EXCEPTIONS };
@@ -53,6 +50,10 @@ public:
     void dismiss();
 
 private:
+    // noncopyable until we have good reasons...
+    ScopeGuard(const ScopeGuard&) SAL_DELETED_FUNCTION;
+    ScopeGuard& operator=(const ScopeGuard&) SAL_DELETED_FUNCTION;
+
     ::boost::function0<void> m_func; // preferring portable syntax
     exc_handling const m_excHandling;
 };

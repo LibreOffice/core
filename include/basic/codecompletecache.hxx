@@ -23,7 +23,6 @@
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
-#include <boost/utility.hpp>
 #include <rtl/ustring.hxx>
 #include <svtools/miscopt.hxx>
 #include <unordered_map>

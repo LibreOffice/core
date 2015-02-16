@@ -15,7 +15,6 @@
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <rtl/ref.hxx>
-#include <boost/noncopyable.hpp>
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 
@@ -30,7 +29,7 @@ public:
 };
 
 /// A very basic thread pool implementation
-class COMPHELPER_DLLPUBLIC ThreadPool: private boost::noncopyable
+class COMPHELPER_DLLPUBLIC ThreadPool
 {
 public:
     /// returns a pointer to a shared pool with optimal thread
@@ -47,6 +46,9 @@ public:
     void        waitUntilEmpty();
 
 private:
+    ThreadPool(const ThreadPool&) SAL_DELETED_FUNCTION;
+    ThreadPool& operator=(const ThreadPool&) SAL_DELETED_FUNCTION;
+
     class ThreadWorker;
     friend class ThreadWorker;
 

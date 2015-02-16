@@ -19,7 +19,6 @@
 #ifndef INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 #define INCLUDED_COMPHELPER_SYNTAXHIGHLIGHT_HXX
 
-#include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>
 
 #include <comphelper/comphelperdllapi.h>
@@ -66,13 +65,15 @@ enum HighlighterLanguage
     HIGHLIGHT_SQL
 };
 
-class COMPHELPER_DLLPUBLIC SyntaxHighlighter: private boost::noncopyable
+class COMPHELPER_DLLPUBLIC SyntaxHighlighter
 {
     class Tokenizer;
 
     HighlighterLanguage eLanguage;
     std::unique_ptr<Tokenizer> m_tokenizer;
 
+    SyntaxHighlighter(const SyntaxHighlighter&) SAL_DELETED_FUNCTION;
+    SyntaxHighlighter& operator=(const SyntaxHighlighter&) SAL_DELETED_FUNCTION;
 public:
     SyntaxHighlighter(HighlighterLanguage language);
     ~SyntaxHighlighter();

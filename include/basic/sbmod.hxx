@@ -28,7 +28,6 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <deque>
-#include <boost/utility.hpp>
 #include <basic/basicdllapi.h>
 #include <basic/codecompletecache.hxx>
 
@@ -46,7 +45,7 @@ class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
 
-class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
+class BASIC_DLLPUBLIC SbModule : public SbxObject
 {
     friend class    SbiCodeGen;
     friend class    SbMethod;
@@ -58,6 +57,8 @@ class BASIC_DLLPUBLIC SbModule : public SbxObject, private ::boost::noncopyable
 
     BASIC_DLLPRIVATE void implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
 
+    SbModule(const SbModule&) SAL_DELETED_FUNCTION;
+    SbModule& operator=(const SbModule&) SAL_DELETED_FUNCTION;
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     OUString            aOUSource;
