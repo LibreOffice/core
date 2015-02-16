@@ -271,7 +271,7 @@ void BrwStringDic_Impl::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* pEntry)
 {
-    ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
+    ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
     Point aPos(rPos);
     vcl::Font aOldFont( rDev.GetFont());
     if(pData->IsParent())
@@ -1925,18 +1925,18 @@ IMPL_LINK( SvxEditModulesDlg, SelectHdl_Impl, SvxCheckListBox *, pBox )
         {
             bool bDisableUp = true;
             bool bDisableDown = true;
-            ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
+            ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
             if(!pData->IsParent() && pData->GetType() != TYPE_HYPH)
             {
                 sal_uLong  nCurPos = pBox->GetSelectEntryPos();
                 if(nCurPos < pBox->GetEntryCount() - 1)
                 {
-                    bDisableDown = ((ModuleUserData_Impl*)pBox->
+                    bDisableDown = static_cast<ModuleUserData_Impl*>(pBox->
                             GetEntry(nCurPos + 1)->GetUserData())->IsParent();
                 }
                 if(nCurPos > 1)
                 {
-                                bDisableUp = ((ModuleUserData_Impl*)pBox->
+                    bDisableUp = static_cast<ModuleUserData_Impl*>(pBox->
                             GetEntry(nCurPos - 1)->GetUserData())->IsParent();
                 }
             }
@@ -1958,8 +1958,8 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
         SvTreeListEntry *pCurEntry = pBox->GetCurEntry();
         if (pCurEntry)
         {
-            ModuleUserData_Impl* pData = (ModuleUserData_Impl *)
-                                                pCurEntry->GetUserData();
+            ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl *>(
+                                                pCurEntry->GetUserData());
             if (!pData->IsParent()  &&  pData->GetType() == TYPE_HYPH)
             {
                 // make hyphenator checkboxes function as radio-buttons
@@ -1967,7 +1967,7 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
                 SvTreeListEntry *pEntry = pBox->First();
                 while (pEntry)
                 {
-                    pData = (ModuleUserData_Impl *) pEntry->GetUserData();
+                    pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
                     if (!pData->IsParent()  &&
                          pData->GetType() == TYPE_HYPH  &&
                          pEntry != pCurEntry)
@@ -2002,7 +2002,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         for(sal_uLong i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
         {
             SvTreeListEntry *pEntry = m_pModulesCLB->GetEntry(i);
-            ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
+            ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
             if(pData->IsParent())
             {
                 if(bChanged)
@@ -2045,7 +2045,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     }
 
     for(sal_uLong i = 0; i < m_pModulesCLB->GetEntryCount(); i++)
-        delete (ModuleUserData_Impl*)m_pModulesCLB->GetEntry(i)->GetUserData();
+        delete static_cast<ModuleUserData_Impl*>(m_pModulesCLB->GetEntry(i)->GetUserData());
 
 
     // display entries for new selected language
@@ -2248,7 +2248,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
         m_pModulesCLB->SetUpdateMode(false);
         SvTreeList *pModel = m_pModulesCLB->GetModel();
 
-        ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
+        ModuleUserData_Impl* pData = static_cast<ModuleUserData_Impl*>(pEntry->GetUserData());
         OUString aStr(m_pModulesCLB->GetEntryText(pEntry));
         SvTreeListEntry* pToInsert = CreateEntry( aStr, CBCOL_FIRST );
         pToInsert->SetUserData( (void *)pData);
