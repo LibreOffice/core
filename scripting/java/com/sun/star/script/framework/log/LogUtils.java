@@ -18,8 +18,8 @@
 
 package com.sun.star.script.framework.log;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 public class LogUtils {
 
@@ -50,27 +50,8 @@ public class LogUtils {
     }
 
     public static String getTrace(Exception e) {
-        ByteArrayOutputStream baos = null;
-        PrintStream ps = null;
-        String result = "";
-
-        try {
-            baos = new ByteArrayOutputStream();
-            ps = new PrintStream(baos);
-            e.printStackTrace(ps);
-        } finally {
-            try {
-                if (baos != null) {
-                    baos.close();
-                }
-
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (Exception excp) {
-            }
-        }
-
-        return result;
+        StringWriter w = new StringWriter();
+        e.printStackTrace(new PrintWriter(w));
+        return w.toString();
     }
 }
