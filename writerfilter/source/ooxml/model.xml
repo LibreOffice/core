@@ -15162,7 +15162,7 @@
           <xs:documentation>Field Codes</xs:documentation>
         </attribute>
         <attribute name="fldLock">
-          <text/>
+          <ref name="ST_OnOff"/>
           <xs:documentation>Field Should Not Be Recalculated</xs:documentation>
         </attribute>
         <attribute name="dirty">
@@ -15266,7 +15266,7 @@
           <xs:documentation>Field Character Type</xs:documentation>
         </attribute>
         <attribute name="fldLock">
-          <text/>
+          <ref name="ST_OnOff"/>
           <xs:documentation>Field Should Not Be Recalculated</xs:documentation>
         </attribute>
         <attribute name="dirty">
@@ -22268,6 +22268,7 @@
       <action name="start" action="fieldend">
         <cond tokenid="ooxml:CT_FldChar_fldCharType" value="ooxml:Value_ST_FldCharType_end"/>
       </action>
+      <action name="start" action="fieldlock"/>
     </resource>
     <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Stream" tag="link">
       <attribute name="tgtFrame" tokenid="ooxml:CT_Hyperlink_tgtFrame"/>

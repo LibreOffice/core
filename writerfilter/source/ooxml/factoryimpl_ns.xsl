@@ -494,6 +494,16 @@ CreateElementMapPointer </xsl:text>
             <xsl:text>
     pHandler-&gt;endField();</xsl:text>
         </xsl:when>
+        <xsl:when test="@action='fieldlock'">
+          <xsl:text>
+    {
+    OOXMLPropertySetEntryToBool aHandler(NS_ooxml::LN_CT_FldChar_fldLock);
+    if (OOXMLFastContextHandlerStream* pStream = dynamic_cast&lt;OOXMLFastContextHandlerStream*&gt;(pHandler))
+        pStream-&gt;getPropertySetAttrs()-&gt;resolve(aHandler);
+    if (aHandler.getValue())
+        pHandler-&gt;lockField();
+    }</xsl:text>
+        </xsl:when>
         <xsl:when test="@action='printproperty'">
           <xsl:text>
     dynamic_cast&lt;OOXMLFastContextHandlerStream*&gt;(pHandler)-&gt;sendProperty(</xsl:text>
