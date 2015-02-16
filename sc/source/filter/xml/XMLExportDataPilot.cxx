@@ -796,6 +796,8 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DRILL_DOWN_ON_DOUBLE_CLICK, XML_FALSE);
         if ((*pDPs)[i]->GetHeaderLayout())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HEADER_GRID_LAYOUT, XML_TRUE);
+        if (pDPSave->GetRepeatItemLabels())
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REPEAT_ITEM_LABELS, XML_TRUE);
 
         SvXMLElementExport aElemDP(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLE, true, true);
 

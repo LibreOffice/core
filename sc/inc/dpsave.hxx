@@ -247,6 +247,7 @@ private:
     sal_uInt16 nRepeatEmptyMode;
     bool bFilterButton; // not passed to DataPilotSource
     bool bDrillDown; // not passed to DataPilotSource
+    bool bRepeatItemLabels; // not passed to DataPilotSource
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
@@ -341,6 +342,10 @@ public:
     SC_DLLPUBLIC void SetDrillDown( bool bSet );
     bool GetDrillDown() const
         { return bDrillDown; }
+
+    SC_DLLPUBLIC void SetRepeatItemLabels( bool bSet );
+    bool GetRepeatItemLabels() const
+        { return bRepeatItemLabels; }
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;

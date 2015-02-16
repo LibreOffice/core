@@ -2612,6 +2612,7 @@ namespace xmloff { namespace token {
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:database:1.0",     XML_N_DB_OASIS ),
 
         TOKEN( "show-filter-button",                   XML_SHOW_FILTER_BUTTON ),
+        TOKEN( "repeat-item-labels",                   XML_REPEAT_ITEM_LABELS ),
         TOKEN( "drill-down-on-double-click",           XML_DRILL_DOWN_ON_DOUBLE_CLICK ),
         TOKEN( "header-grid-layout",                   XML_HEADER_GRID_LAYOUT ),
         TOKEN( "grouped-by",                           XML_GROUPED_BY ),
