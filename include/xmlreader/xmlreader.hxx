@@ -25,7 +25,6 @@
 #include <stack>
 #include <vector>
 
-#include <boost/noncopyable.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <osl/file.h>
@@ -37,7 +36,7 @@
 
 namespace xmlreader {
 
-class OOO_DLLPUBLIC_XMLREADER XmlReader: private boost::noncopyable {
+class OOO_DLLPUBLIC_XMLREADER XmlReader {
 public:
     XmlReader(char const *sStr, size_t nLength);
 
@@ -69,6 +68,9 @@ public:
     const OUString& getUrl() const { return fileUrl_;}
 
 private:
+    XmlReader(const XmlReader&) SAL_DELETED_FUNCTION;
+    XmlReader& operator=(const XmlReader&) SAL_DELETED_FUNCTION;
+
     typedef std::vector< Span > NamespaceIris;
 
     // If NamespaceData (and similarly ElementData and AttributeData) is made

@@ -12,7 +12,6 @@
 
 #include <sal/config.h>
 
-#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -43,7 +42,7 @@ namespace detail { class ConfigurationWrapper; }
 ///
 /// This is the only class from this header file that client code should use
 /// directly.
-class COMPHELPER_DLLPUBLIC ConfigurationChanges: private boost::noncopyable {
+class COMPHELPER_DLLPUBLIC ConfigurationChanges {
 public:
     static std::shared_ptr<ConfigurationChanges> create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -54,6 +53,9 @@ public:
     void commit() const;
 
 private:
+    ConfigurationChanges(const ConfigurationChanges&) SAL_DELETED_FUNCTION;
+    ConfigurationChanges& operator=(const ConfigurationChanges&) SAL_DELETED_FUNCTION;
+
     SAL_DLLPRIVATE ConfigurationChanges(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context);
@@ -79,7 +81,7 @@ private:
 namespace detail {
 
 /// @internal
-class COMPHELPER_DLLPUBLIC ConfigurationWrapper: private boost::noncopyable {
+class COMPHELPER_DLLPUBLIC ConfigurationWrapper {
 public:
     static ConfigurationWrapper const & get(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
@@ -127,6 +129,9 @@ public:
     std::shared_ptr< ConfigurationChanges > createChanges() const;
 
 private:
+    ConfigurationWrapper(const ConfigurationWrapper&) SAL_DELETED_FUNCTION;
+    ConfigurationWrapper& operator=(const ConfigurationWrapper&) SAL_DELETED_FUNCTION;
+
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         context_;
 
@@ -135,7 +140,7 @@ private:
 };
 
 /// @internal
-template< typename T > struct Convert: private boost::noncopyable {
+template< typename T > struct Convert {
     static com::sun::star::uno::Any toAny(T const & value)
     { return com::sun::star::uno::makeAny(value); }
 
@@ -143,13 +148,15 @@ template< typename T > struct Convert: private boost::noncopyable {
     { return value.get< T >(); }
 
 private:
+    Convert(const Convert&) SAL_DELETED_FUNCTION;
+    Convert& operator=(const Convert&) SAL_DELETED_FUNCTION;
+
     Convert() SAL_DELETED_FUNCTION;
     ~Convert() SAL_DELETED_FUNCTION;
 };
 
 /// @internal
-template< typename T > struct Convert< boost::optional< T > >:
-    private boost::noncopyable
+template< typename T > struct Convert< boost::optional< T > >
 {
     static com::sun::star::uno::Any toAny(boost::optional< T > const & value) {
         return value
@@ -164,6 +171,9 @@ template< typename T > struct Convert< boost::optional< T > >:
     }
 
 private:
+    Convert(const Convert&) SAL_DELETED_FUNCTION;
+    Convert& operator=(const Convert&) SAL_DELETED_FUNCTION;
+
     Convert() SAL_DELETED_FUNCTION;
     ~Convert() SAL_DELETED_FUNCTION;
 };
@@ -175,8 +185,7 @@ private:
 /// Automatically generated headers for the various configuration properties
 /// derive from this template and make available its member functions to access
 /// each given configuration property.
-template< typename T, typename U > struct ConfigurationProperty:
-    private boost::noncopyable
+template< typename T, typename U > struct ConfigurationProperty
 {
     /// Get the value of the given (non-localized) configuration property.
     ///
@@ -208,6 +217,9 @@ template< typename T, typename U > struct ConfigurationProperty:
     }
 
 private:
+    ConfigurationProperty(const ConfigurationProperty&) SAL_DELETED_FUNCTION;
+    ConfigurationProperty& operator=(const ConfigurationProperty&) SAL_DELETED_FUNCTION;
+
     ConfigurationProperty() SAL_DELETED_FUNCTION;
     ~ConfigurationProperty() SAL_DELETED_FUNCTION;
 };
@@ -217,8 +229,7 @@ private:
 /// Automatically generated headers for the various localized configuration
 /// properties derive from this template and make available its member functions
 /// to access each given localized configuration property.
-template< typename T, typename U > struct ConfigurationLocalizedProperty:
-    private boost::noncopyable
+template< typename T, typename U > struct ConfigurationLocalizedProperty
 {
     /// Get the value of the given localized configuration property, for the
     /// locale currently set at the
@@ -254,6 +265,9 @@ template< typename T, typename U > struct ConfigurationLocalizedProperty:
     }
 
 private:
+    ConfigurationLocalizedProperty(const ConfigurationLocalizedProperty&) SAL_DELETED_FUNCTION;
+    ConfigurationLocalizedProperty& operator=(const ConfigurationLocalizedProperty&) SAL_DELETED_FUNCTION;
+
     ConfigurationLocalizedProperty() SAL_DELETED_FUNCTION;
     ~ConfigurationLocalizedProperty() SAL_DELETED_FUNCTION;
 };
@@ -263,7 +277,7 @@ private:
 /// Automatically generated headers for the various configuration groups derive
 /// from this template and make available its member functions to access each
 /// given configuration group.
-template< typename T > struct ConfigurationGroup: private boost::noncopyable {
+template< typename T > struct ConfigurationGroup {
     /// Get read-only access to the given configuration group.
     static com::sun::star::uno::Reference<
         com::sun::star::container::XHierarchicalNameAccess >
@@ -287,6 +301,9 @@ template< typename T > struct ConfigurationGroup: private boost::noncopyable {
     }
 
 private:
+    ConfigurationGroup(const ConfigurationGroup&) SAL_DELETED_FUNCTION;
+    ConfigurationGroup& operator=(const ConfigurationGroup&) SAL_DELETED_FUNCTION;
+
     ConfigurationGroup() SAL_DELETED_FUNCTION;
     ~ConfigurationGroup() SAL_DELETED_FUNCTION;
 };
@@ -296,7 +313,7 @@ private:
 /// Automatically generated headers for the various configuration sets derive
 /// from this template and make available its member functions to access each
 /// given configuration set.
-template< typename T > struct ConfigurationSet: private boost::noncopyable {
+template< typename T > struct ConfigurationSet {
     /// Get read-only access to the given configuration set.
     static
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
@@ -320,6 +337,9 @@ template< typename T > struct ConfigurationSet: private boost::noncopyable {
     }
 
 private:
+    ConfigurationSet(const ConfigurationSet&) SAL_DELETED_FUNCTION;
+    ConfigurationSet& operator=(const ConfigurationSet&) SAL_DELETED_FUNCTION;
+
     ConfigurationSet() SAL_DELETED_FUNCTION;
     ~ConfigurationSet() SAL_DELETED_FUNCTION;
 };
