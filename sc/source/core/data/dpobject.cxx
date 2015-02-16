@@ -537,7 +537,10 @@ void ScDPObject::CreateOutput()
     if (!pOutput)
     {
         bool bFilterButton = IsSheetData() && pSaveData && pSaveData->GetFilterButton();
-        pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton );
+        if ( IsSheetData() && pSaveData )
+            pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton, pSaveData->GetRepeatItemLabels() );
+        else
+            pOutput = new ScDPOutput( pDoc, xSource, aOutRange.aStart, bFilterButton, NULL );
         pOutput->SetHeaderLayout ( mbHeaderLayout );
 
         long nOldRows = nHeaderRows;

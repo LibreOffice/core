@@ -780,9 +780,11 @@ ScDPSaveData::ScDPSaveData() :
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( true ),
     bDrillDown( true ),
+    mpRepeatItemLabels( NULL ),
     mbDimensionMembersBuilt(false),
     mpGrandTotalName(NULL)
 {
+    mpRepeatItemLabels = new FieldBoolMap();
 }
 
 ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
@@ -792,6 +794,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
+    mpRepeatItemLabels(NULL),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
     mpGrandTotalName(NULL),
     mpDimOrder(NULL)
@@ -805,6 +808,8 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
 
     if (r.mpGrandTotalName)
         mpGrandTotalName.reset(new OUString(*r.mpGrandTotalName));
+    if (r.mpRepeatItemLabels)
+        mpRepeatItemLabels = new FieldBoolMap(*r.mpRepeatItemLabels);
 }
 
 ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
@@ -847,6 +852,13 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
     }
     else if (r.mpGrandTotalName)
         return false;
+    if ( (!mpRepeatItemLabels && r.mpRepeatItemLabels) || (mpRepeatItemLabels && !r.mpRepeatItemLabels) )
+        return false;
+    if ( mpRepeatItemLabels && r.mpRepeatItemLabels )
+        for ( auto it = mpRepeatItemLabels->begin(); it != mpRepeatItemLabels->end(); ++it )
+            if ( it->second )
+                if ( r.mpRepeatItemLabels->find(it->first) == r.mpRepeatItemLabels->end() )
+                    return false;
 
     return true;
 }
@@ -854,6 +866,7 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
 ScDPSaveData::~ScDPSaveData()
 {
     delete pDimensionData;
+    delete mpRepeatItemLabels;
 }
 
 void ScDPSaveData::SetGrandTotalName(const OUString& rName)
@@ -1117,6 +1130,42 @@ void ScDPSaveData::SetFilterButton(bool bSet)
 void ScDPSaveData::SetDrillDown(bool bSet)
 {
     bDrillDown = bSet;
+}
+
+void ScDPSaveData::ToggleRepeatItemLabel(OUString aField)
+{
+    std::unordered_map<OUString, bool, OUStringHash>::const_iterator it = mpRepeatItemLabels->find(aField);
+    if (it == mpRepeatItemLabels->end())
+        (*mpRepeatItemLabels)[aField] = true;
+    else
+        (*mpRepeatItemLabels)[aField] = !(it->second);
+}
+
+void ScDPSaveData::SetRepeatItemLabel(OUString aField, bool bSet)
+{
+    (*mpRepeatItemLabels)[aField] = bSet;
+}
+
+void ScDPSaveData::SetRepeatItemLabels(OUString aEncodedString)
+{
+    sal_Int32 fromIndex = 0;
+    do
+    {
+        OUString aField = aEncodedString.getToken(0, ' ', fromIndex);
+        aField = aField.replaceAll("__SPACE__", " ");
+        (*mpRepeatItemLabels)[aField] = true;
+    } while ( fromIndex >= 0 );
+}
+
+OUString ScDPSaveData::GetRepeatItemLabelsEncoded(void) const
+{
+    OUString aOut = "";
+    for ( auto it = mpRepeatItemLabels->begin(); it != mpRepeatItemLabels->end(); ++it )
+        if ( it->second )
+            aOut += (" " + it->first.replaceAll(" ", "__SPACE__"));
+    if ( !aOut.isEmpty() )
+        aOut = aOut.copy(1);
+    return aOut;
 }
 
 static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )

@@ -507,10 +507,11 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 }
 
 ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
-                        const ScAddress& rPos, bool bFilter ) :
+                        const ScAddress& rPos, bool bFilter,  std::unordered_map<OUString, bool, OUStringHash>*  pRepeatItemLabels ) :
     pDoc( pD ),
     xSource( xSrc ),
     aStartPos( rPos ),
+    mpRepeatItemLabels(pRepeatItemLabels),
     pColNumFmt( NULL ),
     pRowNumFmt( NULL ),
     nColFmtCount( 0 ),
@@ -1033,17 +1034,37 @@ void ScDPOutput::Output()
     for (nField=0; nField<nColFieldCount; nField++)
     {
         SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //TODO: check for overflow
-        FieldCell(nHdrCol, nTabStartRow, nTab, pColFields[nField], true);
+        const ScDPOutLevelData  aCurrentColField(pColFields[nField]);
+        FieldCell(nHdrCol, nTabStartRow, nTab, aCurrentColField, true);
 
         SCROW nRowPos = nMemberStartRow + (SCROW)nField;                //TODO: check for overflow
-        const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nField].aResult;
+        const uno::Sequence<sheet::MemberResult> rSequence = aCurrentColField.aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisColCount = rSequence.getLength();
         OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //TODO: ???
+        OUString aLastLabel = "";
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //TODO: check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
+            if ( mpRepeatItemLabels ) {
+                std::unordered_map<OUString, bool, OUStringHash>::const_iterator itField = mpRepeatItemLabels->find(aCurrentColField.maCaption);
+                if ( itField != mpRepeatItemLabels->end() && itField->second )
+                {
+                        sheet::MemberResult aCurrentMember(pArray[nCol]);
+                        if ( !aCurrentMember.Caption.isEmpty() )
+                            aLastLabel = aCurrentMember.Caption;
+                        else if ( aCurrentMember.Flags & sheet::MemberResultFlags::CONTINUE ) {
+                            aCurrentMember.Caption = aLastLabel;
+                            aCurrentMember.Flags |= sheet::MemberResultFlags::HASMEMBER;
+                        }
+                        HeaderCell( nColPos, nRowPos, nTab, aCurrentMember, true, nField );
+                }
+                else
+                    HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
+            }
+            else
+                HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
+
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
@@ -1071,7 +1092,7 @@ void ScDPOutput::Output()
                 outputimp.AddCol( nColPos );
 
             // Apply the same number format as in data source.
-            pDoc->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, pColFields[nField].mnSrcNumFmt));
+            pDoc->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, aCurrentColField.mnSrcNumFmt));
         }
         if ( nField== 0 && nColFieldCount == 1 )
             outputimp.OutputBlockFrame( nDataStartCol,nTabStartRow, nTabEndCol,nRowPos-1 );
@@ -1084,17 +1105,37 @@ void ScDPOutput::Output()
     {
         SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //TODO: check for overflow
         SCROW nHdrRow = nDataStartRow - 1;
-        FieldCell(nHdrCol, nHdrRow, nTab, pRowFields[nField], true);
+        const ScDPOutLevelData  aCurrentRowField(pRowFields[nField]);
+        FieldCell(nHdrCol, nHdrRow, nTab, aCurrentRowField, true);
 
         SCCOL nColPos = nMemberStartCol + (SCCOL)nField;                //TODO: check for overflow
-        const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nField].aResult;
+        const uno::Sequence<sheet::MemberResult> rSequence = aCurrentRowField.aResult;
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisRowCount = rSequence.getLength();
         OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //TODO: ???
+        OUString aLastLabel = "";
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
             SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //TODO: check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
+            if ( mpRepeatItemLabels ) {
+                std::unordered_map<OUString, bool, OUStringHash>::const_iterator itField = mpRepeatItemLabels->find(aCurrentRowField.maCaption);
+                if ( itField != mpRepeatItemLabels->end() && itField->second )
+                {
+                    sheet::MemberResult aCurrentMember(pArray[nRow]);
+                    if ( !aCurrentMember.Caption.isEmpty() )
+                        aLastLabel = aCurrentMember.Caption;
+                    else if ( aCurrentMember.Flags & sheet::MemberResultFlags::CONTINUE ) {
+                        aCurrentMember.Caption = aLastLabel;
+                        aCurrentMember.Flags |= sheet::MemberResultFlags::HASMEMBER;
+                    }
+                    HeaderCell( nColPos, nRowPos, nTab, aCurrentMember, false, nField );
+                }
+                else
+                    HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
+            }
+            else
+                HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
+
             if ( ( pArray[nRow].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
@@ -1124,7 +1165,7 @@ void ScDPOutput::Output()
                 outputimp.AddRow( nRowPos );
 
             // Apply the same number format as in data source.
-            pDoc->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, pRowFields[nField].mnSrcNumFmt));
+            pDoc->ApplyAttr(nColPos, nRowPos, nTab, SfxUInt32Item(ATTR_VALUE_FORMAT, aCurrentRowField.mnSrcNumFmt));
         }
     }
 

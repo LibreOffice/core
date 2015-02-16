@@ -399,6 +399,24 @@ private:
     ScGridWindow* mpGridWindow;
 };
 
+class PopupRepeatItemLabelsAction : public ScMenuFloatingWindow::Action
+{
+public:
+    explicit PopupRepeatItemLabelsAction(ScGridWindow* p, ScDPObject* pDPObj, OUString aField) :
+        mpGridWindow(p), mpDPObj(pDPObj), aFieldName(aField) {}
+
+    virtual void execute() SAL_OVERRIDE
+    {
+        ScDPSaveData* pSaveData = mpDPObj->GetSaveData();
+        pSaveData->ToggleRepeatItemLabel(aFieldName);
+        mpGridWindow->UpdateDPFromFieldPopupMenu();
+    }
+private:
+    ScGridWindow* mpGridWindow;
+    ScDPObject* mpDPObj;
+    OUString aFieldName;
+};
+
 class PopupSortAction : public ScMenuFloatingWindow::Action
 {
 public:
@@ -494,6 +512,9 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
         // Populate the menus.
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
+        mpDPFieldPopup->addMenuItem(
+            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_TOGGLE_REPEAT_ITEM_LABELS), true,
+            new PopupRepeatItemLabelsAction(this, pDPObj, aDimName));
         mpDPFieldPopup->addMenuItem(
             SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC), true,
             new PopupSortAction(rPos, PopupSortAction::ASCENDING, 0, pViewShell));

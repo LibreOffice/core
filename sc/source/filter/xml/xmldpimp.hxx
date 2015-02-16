@@ -96,6 +96,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     OUString   sServicePassword;
     OUString   sButtons;
     OUString   sSourceRangeName;
+    OUString   sRepeatItemLabels;
     ScRange         aSourceCellRangeAddress;
     ScRange         aTargetRangeAddress;
     ScRange         aFilterSourceRange;

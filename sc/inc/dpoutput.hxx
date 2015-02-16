@@ -33,6 +33,7 @@
 #include "dptypes.hxx"
 
 #include <vector>
+#include <unordered_map>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -60,6 +61,7 @@ private:
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
     OUString           aDataDescription;
+    std::unordered_map<OUString, bool, OUStringHash> *mpRepeatItemLabels;
 
     // Number format related parameters
     sal_uInt32*                 pColNumFmt;
@@ -106,7 +108,7 @@ public:
                     ScDPOutput( ScDocument* pD,
                                 const com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XDimensionsSupplier>& xSrc,
-                                const ScAddress& rPos, bool bFilter );
+                                const ScAddress& rPos, bool bFilter, std::unordered_map<OUString, bool, OUStringHash>* pRepeatItemLabels );
                     ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );

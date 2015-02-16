@@ -797,6 +797,8 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
         if ((*pDPs)[i]->GetHeaderLayout())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HEADER_GRID_LAYOUT, XML_TRUE);
 
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REPEAT_ITEM_LABELS, pDPSave->GetRepeatItemLabelsEncoded());
+
         SvXMLElementExport aElemDP(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLE, true, true);
 
         // grand total elements.

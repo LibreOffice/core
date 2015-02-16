@@ -112,6 +112,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     pDPDimSaveData(NULL),
     sDataPilotTableName(),
     sApplicationData(),
+    sRepeatItemLabels(),
     nSourceType(SQL),
     mnRowFieldCount(0),
     mnColFieldCount(0),
@@ -207,6 +208,11 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_TABLE_ATTR_HEADER_GRID_LAYOUT :
             {
                 bHeaderGridLayout = IsXMLToken(sValue, XML_TRUE);
+            }
+            break;
+            case XML_TOK_DATA_PILOT_TABLE_ATTR_REPEAT_ITEM_LABELS :
+            {
+                sRepeatItemLabels = sValue;
             }
             break;
         }
@@ -548,6 +554,7 @@ void ScXMLDataPilotTableContext::EndElement()
     pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
     pDPSave->SetFilterButton(bShowFilter);
     pDPSave->SetDrillDown(bDrillDown);
+    pDPSave->SetRepeatItemLabels(sRepeatItemLabels);
     if (pDPDimSaveData)
         pDPSave->SetDimensionData(pDPDimSaveData);
     pDPObject->SetSaveData(*pDPSave);

@@ -236,6 +236,7 @@ class ScDPSaveData
 public:
     typedef std::unordered_map<OUString, size_t, OUStringHash> DimOrderType;
     typedef boost::ptr_vector<ScDPSaveDimension> DimsType;
+    typedef std::unordered_map <OUString, bool, OUStringHash> FieldBoolMap;
 
 private:
     DimsType aDimList;
@@ -247,6 +248,7 @@ private:
     sal_uInt16 nRepeatEmptyMode;
     bool bFilterButton; // not passed to DataPilotSource
     bool bDrillDown; // not passed to DataPilotSource
+    FieldBoolMap *mpRepeatItemLabels; // not passed to DataPilotSource
 
     /** if true, all dimensions already have all of their member instances
      *  created. */
@@ -341,6 +343,13 @@ public:
     SC_DLLPUBLIC void SetDrillDown( bool bSet );
     bool GetDrillDown() const
         { return bDrillDown; }
+
+    SC_DLLPUBLIC void SetRepeatItemLabel( OUString aField, bool bSet );
+    SC_DLLPUBLIC void SetRepeatItemLabels(OUString aEncodedString);
+    SC_DLLPUBLIC OUString GetRepeatItemLabelsEncoded() const;
+    SC_DLLPUBLIC void ToggleRepeatItemLabel(OUString aField);
+    FieldBoolMap* GetRepeatItemLabels() const
+        { return mpRepeatItemLabels; }
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource );
     bool IsEmpty() const;
