@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 #include "path.hxx"
 
@@ -32,7 +32,7 @@ namespace configmgr {
 class Modifications {
 public:
     struct Node {
-        typedef std::unordered_map<OUString, Node, OUStringHash> Children;
+        typedef boost::unordered_map<OUString, Node, OUStringHash> Children;
 
         Children children;
     };
