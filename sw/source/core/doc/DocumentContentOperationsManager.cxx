@@ -3982,11 +3982,14 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
         }
     }
 
-    if( bJoinTxt )
-        ::sw_JoinText( rPam, bJoinPrev );
+    bool bRet(true);
+    if (bJoinTxt)
+    {
+        bRet = ::sw_JoinText(rPam, bJoinPrev);
+    }
 
     m_rDoc.getIDocumentState().SetModified();
-    return true;
+    return bRet;
 }
 
 SwFlyFrmFmt* DocumentContentOperationsManager::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,

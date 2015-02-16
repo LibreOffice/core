@@ -323,7 +323,7 @@ void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev )
     }
 }
 
-void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
+bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
 {
     SwNodeIndex aIdx( rPam.GetPoint()->nNode );
     SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
@@ -445,7 +445,9 @@ void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             }
             pTxtNd->JoinNext();
         }
+        return true;
     }
+    else return false;
 }
 
 static void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_DOCEDT_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCEDT_HXX
 
-void sw_JoinText( SwPaM& rPam, bool bJoinPrev );
+bool sw_JoinText( SwPaM& rPam, bool bJoinPrev );
 
 void sw_GetJoinFlags( SwPaM& rPam, bool& rJoinTxt, bool& rJoinPrev );
 

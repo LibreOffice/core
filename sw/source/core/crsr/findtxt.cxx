@@ -583,9 +583,11 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
         boost::scoped_ptr<OUString> pRepl( (bRegExp)
                 ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
-        rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange( *pCrsr,
-            (pRepl.get()) ? *pRepl : rSearchOpt.replaceString,
-            bRegExp );
+        bool const bReplaced =
+            rCursor.GetDoc()->getIDocumentContentOperations().ReplaceRange(
+                *pCrsr,
+                (pRepl.get()) ? *pRepl : rSearchOpt.replaceString,
+                bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -599,7 +601,15 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
                 p->MoveTo( const_cast<SwPaM*>(pRegion) );
             } while( p != pPrev );
         }
-        pCrsr->Start()->nContent = nSttCnt;
+        if (bRegExp && !bReplaced)
+        {   // fdo#80715 avoid infinite loop if join failed
+            bool bRet = ((fnMoveForward == fnMove) ? &GoNextPara : &GoPrevPara)
+                (*pCrsr, fnMove);
+            (void) bRet;
+            assert(bRet); // if join failed, next node must be SwTxtNode
+        }
+        else
+            pCrsr->Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;
