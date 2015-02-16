@@ -65,6 +65,7 @@ private:
     CheckBox* mpCheckIdentifyCategories;
     CheckBox* mpCheckTotalRows;
     CheckBox* mpCheckDrillToDetail;
+    CheckBox* mpCheckRepeatItemLabels;
 
     RadioButton* mpSourceRadioNamedRange;
     RadioButton* mpSourceRadioSelection;

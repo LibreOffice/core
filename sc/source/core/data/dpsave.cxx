@@ -780,6 +780,7 @@ ScDPSaveData::ScDPSaveData() :
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( true ),
     bDrillDown( true ),
+    bRepeatItemLabels( false ),
     mbDimensionMembersBuilt(false),
     mpGrandTotalName(NULL)
 {
@@ -792,6 +793,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
     bDrillDown( r.bDrillDown ),
+    bRepeatItemLabels( r.bRepeatItemLabels ),
     mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
     mpGrandTotalName(NULL),
     mpDimOrder(NULL)
@@ -825,6 +827,7 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          nRepeatEmptyMode != r.nRepeatEmptyMode ||
          bFilterButton    != r.bFilterButton    ||
          bDrillDown       != r.bDrillDown       ||
+         bRepeatItemLabels != r.bRepeatItemLabels ||
          mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
         return false;
 
@@ -1117,6 +1120,11 @@ void ScDPSaveData::SetFilterButton(bool bSet)
 void ScDPSaveData::SetDrillDown(bool bSet)
 {
     bDrillDown = bSet;
+}
+
+void ScDPSaveData::SetRepeatItemLabels(bool bSet)
+{
+    bRepeatItemLabels = bSet;
 }
 
 static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )

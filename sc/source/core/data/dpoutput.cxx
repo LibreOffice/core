@@ -507,7 +507,7 @@ uno::Sequence<sheet::MemberResult> getVisiblePageMembersAsResults( const uno::Re
 }
 
 ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsSupplier>& xSrc,
-                        const ScAddress& rPos, bool bFilter ) :
+                        const ScAddress& rPos, bool bFilter, bool bRepeatItemLabels ) :
     pDoc( pD ),
     xSource( xSrc ),
     aStartPos( rPos ),
@@ -520,6 +520,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     nRowCount(0),
     nHeaderSize(0),
     bDoFilter(bFilter),
+    bDoRepeatItemLabels(bRepeatItemLabels),
     bResultsError(false),
     mbHasDataLayout(false),
     bSizesValid(false),
@@ -1040,10 +1041,24 @@ void ScDPOutput::Output()
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisColCount = rSequence.getLength();
         OSL_ENSURE( nThisColCount == nColCount, "count mismatch" );     //! ???
+        OUString aLastLabel = "";
         for (long nCol=0; nCol<nThisColCount; nCol++)
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
+            if ( bDoRepeatItemLabels )
+            {
+                    sheet::MemberResult aCurrentMember(pArray[nCol]);
+                    if ( !aCurrentMember.Caption.isEmpty() )
+                        aLastLabel = aCurrentMember.Caption;
+                    else if ( aCurrentMember.Flags & sheet::MemberResultFlags::CONTINUE ) {
+                        aCurrentMember.Caption = aLastLabel;
+                        aCurrentMember.Flags |= sheet::MemberResultFlags::HASMEMBER;
+                    }
+                    HeaderCell( nColPos, nRowPos, nTab, aCurrentMember, true, nField );
+            }
+            else
+                HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], true, nField );
+
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
@@ -1091,10 +1106,24 @@ void ScDPOutput::Output()
         const sheet::MemberResult* pArray = rSequence.getConstArray();
         long nThisRowCount = rSequence.getLength();
         OSL_ENSURE( nThisRowCount == nRowCount, "count mismatch" );     //! ???
+        OUString aLastLabel = "";
         for (long nRow=0; nRow<nThisRowCount; nRow++)
         {
             SCROW nRowPos = nDataStartRow + (SCROW)nRow;                //! check for overflow
-            HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
+            if ( bDoRepeatItemLabels )
+            {
+                sheet::MemberResult aCurrentMember(pArray[nRow]);
+                if ( !aCurrentMember.Caption.isEmpty() )
+                    aLastLabel = aCurrentMember.Caption;
+                else if ( aCurrentMember.Flags & sheet::MemberResultFlags::CONTINUE ) {
+                    aCurrentMember.Caption = aLastLabel;
+                    aCurrentMember.Flags |= sheet::MemberResultFlags::HASMEMBER;
+                }
+                HeaderCell( nColPos, nRowPos, nTab, aCurrentMember, false, nField );
+            }
+            else
+                HeaderCell( nColPos, nRowPos, nTab, pArray[nRow], false, nField );
+
             if ( ( pArray[nRow].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {

@@ -115,6 +115,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     bool            bShowFilter:1;
     bool            bDrillDown:1;
     bool            bHeaderGridLayout:1;
+    bool            bRepeatItemLabels:1;
 
     SelectedPagesType maSelectedPages;
 

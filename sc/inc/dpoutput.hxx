@@ -81,6 +81,7 @@ private:
     SCCOL                   nTabEndCol;
     SCROW                   nTabEndRow;
     bool                    bDoFilter:1;
+    bool                    bDoRepeatItemLabels:1;
     bool                    bResultsError:1;
     bool                    mbHasDataLayout:1;
     bool                    bSizesValid:1;
@@ -106,7 +107,7 @@ public:
                     ScDPOutput( ScDocument* pD,
                                 const com::sun::star::uno::Reference<
                                     com::sun::star::sheet::XDimensionsSupplier>& xSrc,
-                                const ScAddress& rPos, bool bFilter );
+                                const ScAddress& rPos, bool bFilter, bool bRepeatItemLabels );
                     ~ScDPOutput();
 
     void            SetPosition( const ScAddress& rPos );
