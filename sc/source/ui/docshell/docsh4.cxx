@@ -109,9 +109,6 @@ using namespace ::com::sun::star;
         static_cast<const SvxSetItem&>((set).Get(ATTR_PAGE_FOOTERSET)).GetItemSet(). \
             Get(ATTR_PAGE_SHARED)).GetValue()
 
-#define SC_PREVIEW_SIZE_X   10000
-#define SC_PREVIEW_SIZE_Y   12400
-
 void ScDocShell::Execute( SfxRequest& rReq )
 {
     //  SID_SC_RANGE (Range),
@@ -1900,7 +1897,11 @@ Rectangle ScDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
     if( nAspect == ASPECT_THUMBNAIL )
     {
-        Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X,SC_PREVIEW_SIZE_Y );
+        Size pSize = aDocument.GetPageSize(aDocument.GetVisibleTab());
+        static const int SC_PREVIEW_SIZE_X = 10000;
+        static const int SC_PREVIEW_SIZE_Y = 12400;
+        Rectangle aArea = pSize.Width()?Rectangle( 0,0, pSize.Width(),pSize.Height()):Rectangle( 0,0, SC_PREVIEW_SIZE_X,SC_PREVIEW_SIZE_Y );
+
         bool bNegativePage = aDocument.IsNegativePage( aDocument.GetVisibleTab() );
         if ( bNegativePage )
             ScDrawLayer::MirrorRectRTL( aArea );
