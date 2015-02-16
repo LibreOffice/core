@@ -120,14 +120,10 @@ OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex
 
 void AnalysisAddIn::InitData( void )
 {
-    if( pResMgr )
-        delete pResMgr;
+    delete pResMgr;
+    pResMgr = ResMgr::CreateResMgr("analysis", LanguageTag(aFuncLoc));
 
-    OString             aModName( "analysis" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( aFuncLoc) );
-
-    if( pFD )
-        delete pFD;
+    delete pFD;
 
     if( pResMgr )
         pFD = new FuncDataList( *pResMgr );
@@ -153,17 +149,11 @@ AnalysisAddIn::AnalysisAddIn( const uno::Reference< uno::XComponentContext >& xC
 
 AnalysisAddIn::~AnalysisAddIn()
 {
-    if( pFD )
-        delete pFD;
-
-    if( pFactDoubles )
-        delete[] pFactDoubles;
-
-    if( pCDL )
-        delete pCDL;
-
-    if( pDefLocales )
-        delete[] pDefLocales;
+    delete pResMgr;
+    delete pCDL;
+    delete[] pFactDoubles;
+    delete pFD;
+    delete[] pDefLocales;
 }
 
 sal_Int32 AnalysisAddIn::getDateMode(
@@ -235,8 +225,7 @@ uno::Sequence< OUString > AnalysisAddIn::getSupportedServiceNames_Static()
 uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& xServiceFact )
 {
-    static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) );
-    return xInst;
+    return (cppu::OWeakObject*) new AnalysisAddIn( comphelper::getComponentContext(xServiceFact) );
 }
 
 // XServiceName

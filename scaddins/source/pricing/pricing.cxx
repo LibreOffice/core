@@ -171,10 +171,8 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
 uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
-    static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new ScaPricingAddIn();
-    return xInst;
+    return (cppu::OWeakObject*) new ScaPricingAddIn();
 }
-
 
 extern "C" {
 
@@ -214,12 +212,9 @@ ScaPricingAddIn::ScaPricingAddIn() :
 
 ScaPricingAddIn::~ScaPricingAddIn()
 {
-    if( pFuncDataList )
-        delete pFuncDataList;
-    if( pDefLocales )
-        delete[] pDefLocales;
-
-    // pResMgr already deleted (_all_ resource managers are deleted _before_ this dtor is called)
+    delete pFuncDataList;
+    delete pResMgr;
+    delete[] pDefLocales;
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -258,15 +253,9 @@ ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException )
 
 void ScaPricingAddIn::InitData()
 {
-
-    if( pResMgr )
-        delete pResMgr;
-
-    OString aModName( "pricing" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( aFuncLoc) );
-
-    if( pFuncDataList )
-        delete pFuncDataList;
+    delete pResMgr;
+    pResMgr = ResMgr::CreateResMgr("pricing", LanguageTag( aFuncLoc) );
+    delete pFuncDataList;
 
     pFuncDataList = pResMgr ? new ScaFuncDataList( *pResMgr ) : NULL;
 

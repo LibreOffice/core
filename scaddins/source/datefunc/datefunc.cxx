@@ -166,8 +166,7 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
 uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
-    static uno::Reference< uno::XInterface > xInst = (cppu::OWeakObject*) new ScaDateAddIn();
-    return xInst;
+    return (cppu::OWeakObject*) new ScaDateAddIn();
 }
 
 extern "C" {
@@ -208,12 +207,9 @@ ScaDateAddIn::ScaDateAddIn() :
 
 ScaDateAddIn::~ScaDateAddIn()
 {
-    if( pFuncDataList )
-        delete pFuncDataList;
-    if( pDefLocales )
-        delete[] pDefLocales;
-
-    // pResMgr already deleted (_all_ resource managers are deleted _before_ this dtor is called)
+    delete pFuncDataList;
+    delete pResMgr;
+    delete[] pDefLocales;
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -252,14 +248,9 @@ ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException )
 
 void ScaDateAddIn::InitData()
 {
-    if( pResMgr )
-        delete pResMgr;
-
-    OString aModName( "date" );
-    pResMgr = ResMgr::CreateResMgr( aModName.getStr(), LanguageTag( aFuncLoc) );
-
-    if( pFuncDataList )
-        delete pFuncDataList;
+    delete pResMgr;
+    pResMgr = ResMgr::CreateResMgr("date", LanguageTag(aFuncLoc));
+    delete pFuncDataList;
 
     pFuncDataList = pResMgr ? new ScaFuncDataList( *pResMgr ) : NULL;
 
