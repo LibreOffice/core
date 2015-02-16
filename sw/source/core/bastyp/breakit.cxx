@@ -30,6 +30,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <algorithm>
 
 using namespace com::sun::star;
 

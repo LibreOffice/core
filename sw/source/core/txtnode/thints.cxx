@@ -1257,6 +1257,8 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
     OSL_ENSURE( pAttr && pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
     OSL_ENSURE( !pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()),
             "EndIdx out of bounds!" );
+    if (pAttr->GetEnd() && (*pAttr->GetEnd() > Len()))
+        fprintf(stderr, "debug here\n");
 
     // translate from SetAttrMode to InsertMode (for hints with CH_TXTATR)
     const enum IDocumentContentOperations::InsertFlags nInsertFlags =
