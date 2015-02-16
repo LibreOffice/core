@@ -85,6 +85,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         mView.setLayerRenderer(mLayerRenderer);
 
         sendResizeEventIfNecessary();
+        mView.requestRender();
     }
 
     public void destroy() {
@@ -335,11 +336,7 @@ public class GeckoLayerClient implements PanZoomTarget {
     }
 
     public void forceRender() {
-        post(new Runnable() {
-            public void run() {
-                mView.requestRender();
-            }
-        });
+        mView.requestRender();
     }
 
     /* Root Layer Access */
