@@ -46,6 +46,8 @@ $(eval $(call gb_Library_add_exception_objects,configmgr, \
     configmgr/source/xmldata \
 ))
 
+$(eval $(call gb_Library_use_external,configmgr,boost_headers))
+
 $(eval $(call gb_Library_use_sdk_api,configmgr))
 
 $(eval $(call gb_Library_use_libraries,configmgr, \
