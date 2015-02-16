@@ -6943,7 +6943,8 @@ bool PDFWriterImpl::finalizeSignature()
         src.reqPolicy.data = NULL;
         src.reqPolicy.len = 0;
 
-        unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
+        srand( unsigned( time( NULL ) ));
+        unsigned int nNonce = rand();
         src.nonce.type = siUnsignedInteger;
         src.nonce.data = reinterpret_cast<unsigned char*>(&nNonce);
         src.nonce.len = sizeof(nNonce);
@@ -7414,7 +7415,8 @@ bool PDFWriterImpl::finalizeSignature()
         CMSG_SIGNER_INFO *pDecodedSignerInfo = (CMSG_SIGNER_INFO *) pDecodedSignerInfoBuf.get();
 
         CRYPT_TIMESTAMP_PARA aTsPara;
-        unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
+        srand( unsigned( time( NULL ) ));
+        unsigned int nNonce = rand();
 
         aTsPara.pszTSAPolicyId = NULL;
         aTsPara.fRequestCerts = TRUE;

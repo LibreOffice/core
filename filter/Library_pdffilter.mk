@@ -30,6 +30,10 @@ $(eval $(call gb_Library_set_include,pdffilter,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_use_custom_headers,pdffilter,\
+	officecfg/registry \
+))
+
 $(eval $(call gb_Library_use_libraries,pdffilter,\
 	svt \
 	sfx \

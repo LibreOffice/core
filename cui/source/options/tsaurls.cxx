@@ -17,7 +17,7 @@
 
 using namespace ::com::sun::star;
 
-TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
+TSAURLsDialog::TSAURLsDialog(Window* pParent)
     : ModalDialog(pParent, "TSAURLDialog", "cui/ui/tsaurldialog.ui")
 {
     get(m_pAddBtn, "add");
@@ -50,7 +50,7 @@ TSAURLsDialog::TSAURLsDialog(vcl::Window* pParent)
 
 IMPL_LINK_NOARG(TSAURLsDialog, OKHdl_Impl)
 {
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
+    boost::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
     css::uno::Sequence<OUString> aNewValue(m_aURLs.size());
     size_t n(0);

@@ -30,7 +30,7 @@ private:
     void AddTSAURL(const OUString &rURL);
 
 public:
-    TSAURLsDialog(vcl::Window* pParent);
+    TSAURLsDialog(Window* pParent);
     virtual ~TSAURLsDialog();
 
 };

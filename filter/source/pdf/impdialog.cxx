@@ -21,6 +21,7 @@
 
 #include "impdialog.hxx"
 #include "impdialog.hrc"
+#include <officecfg/Office/Common.hxx>
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include <vcl/settings.hxx>
@@ -1541,10 +1542,12 @@ ImpPDFTabSigningPage::ImpPDFTabSigningPage(Window* pParent, const SfxItemSet& rC
     get(mpEdSignLocation, "location");
     get(mpEdSignContactInfo, "contact");
     get(mpEdSignReason, "reason");
+    get(mpLBSignTSA, "tsa");
 
     mpPbSignCertSelect->Enable( true );
     mpPbSignCertSelect->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertSelect ) );
     mpPbSignCertClear->SetClickHdl( LINK( this, ImpPDFTabSigningPage, ClickmaPbSignCertClear ) );
+    mpLBSignTSA->SetSelectHdl( LINK( this, ImpPDFTabSigningPage, SelectLBSignTSA ) );
 }
 
 
@@ -1569,6 +1572,24 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertSelect )
         mpEdSignPassword->Enable( true );
         mpEdSignContactInfo->Enable( true );
         mpEdSignReason->Enable( true );
+
+        try
+        {
+            css::uno::Sequence<OUString> aTSAURLs(officecfg::Office::Common::Security::Scripting::TSAURLs::get());
+
+            for (auto i = aTSAURLs.begin(); i != aTSAURLs.end(); ++i)
+            {
+                mpLBSignTSA->InsertEntry( *i );
+            }
+        }
+        catch (const uno::Exception &e)
+        {
+            SAL_INFO("filter.pdf", "TSAURLsDialog::TSAURLsDialog(): caught exception" << e.Message);
+        }
+
+        // If more than only the "None" entry is there, enable the ListBox
+        if (mpLBSignTSA->GetEntryCount() > 1)
+            mpLBSignTSA->Enable();
     }
 
     return 0;
@@ -1583,10 +1604,16 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
     mpEdSignPassword->Enable( false );
     mpEdSignContactInfo->Enable( false );
     mpEdSignReason->Enable( false );
+    mpLBSignTSA->Enable( false );
 
     return 0;
 }
 
+
+IMPL_LINK_NOARG( ImpPDFTabSigningPage, SelectLBSignTSA )
+{
+    return 0;
+}
 
 SfxTabPage*  ImpPDFTabSigningPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet)
@@ -1616,6 +1643,7 @@ void ImpPDFTabSigningPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent
     mpEdSignPassword->Enable( false );
     mpEdSignContactInfo->Enable( false );
     mpEdSignReason->Enable( false );
+    mpLBSignTSA->Enable( false );
     mpPbSignCertClear->Enable( false );
 
     if (paParent->mbSignPDF)
