@@ -591,6 +591,8 @@ public:
     SAL_DLLPRIVATE bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
     SAL_DLLPRIVATE void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
+
 private:
     /** This member stores the printer independent layout mode.  Please
         refer to <member>SetPrinterIndependentLayout()</member> for its

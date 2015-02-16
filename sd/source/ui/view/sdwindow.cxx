@@ -213,6 +213,12 @@ void Window::Paint(const Rectangle& rRect)
 
 void Window::KeyInput(const KeyEvent& rKEvt)
 {
+    if (getenv("SD_DEBUG") && rKEvt.GetKeyCode().GetCode() == KEY_F12 && mpViewShell)
+    {
+        mpViewShell->GetDoc()->dumpAsXml(0);
+        return;
+    }
+
     if (!(mpViewShell && mpViewShell->KeyInput(rKEvt, this)))
     {
         if (mpViewShell && rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)

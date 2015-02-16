@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include "PageListWatcher.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -1047,4 +1049,22 @@ void SdDrawDocument::InitObjectVector()
         }
     }
 }
+
+void SdDrawDocument::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    bool bOwns = false;
+    if (!pWriter)
+    {
+        pWriter = xmlNewTextWriterFilename("model.xml", 0);
+        xmlTextWriterStartDocument(pWriter, NULL, NULL, NULL);
+        bOwns = true;
+    }
+    FmFormModel::dumpAsXml(pWriter);
+    if (bOwns)
+    {
+        xmlTextWriterEndDocument(pWriter);
+        xmlFreeTextWriter(pWriter);
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
