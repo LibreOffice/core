@@ -343,6 +343,7 @@ public:
     virtual bool IsInContent() const SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 };
 

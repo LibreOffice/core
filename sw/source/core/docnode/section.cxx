@@ -1086,6 +1086,22 @@ SwSectionFmt::MakeUnoObject()
     return xMeta;
 }
 
+void SwSectionFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swSectionFmt"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    GetAttrSet().dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
+void SwSectionFmts::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swSectionFmts"));
+    for (size_t i = 0; i < size(); ++i)
+        GetFmt(i)->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 // Method to break section links inside a linked section
 static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {

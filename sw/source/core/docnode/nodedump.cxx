@@ -249,58 +249,6 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w ) const
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
 
-void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName) const
-{
-    WriterHelper writer(w);
-    if (size())
-    {
-        writer.startElement(pName);
-        for (size_t i = 0; i < size(); ++i)
-        {
-            if (const SwFrmFmt* pFmt = GetFmt(i))
-                pFmt->dumpAsXml(writer);
-        }
-        writer.endElement();
-    }
-}
-
-void SwCharFmts::dumpAsXml(xmlTextWriterPtr w) const
-{
-    WriterHelper writer(w);
-    if (size())
-    {
-        writer.startElement("swcharfmts");
-        for (size_t i = 0; i < size(); ++i)
-        {
-            const SwCharFmt* pFmt = GetFmt(i);
-            writer.startElement("swcharfmt");
-            OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
-            writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-
-            pFmt->GetAttrSet().dumpAsXml(w);
-            writer.endElement();
-        }
-        writer.endElement();
-    }
-}
-
-void SwSectionFmts::dumpAsXml(xmlTextWriterPtr w) const
-{
-    WriterHelper writer(w);
-    if (size())
-    {
-        writer.startElement("swsectionfmts");
-        for (size_t i = 0; i < size(); ++i)
-        {
-            const SwSectionFmt* pFmt = GetFmt(i);
-            writer.startElement("swsectionfmt");
-            pFmt->GetAttrSet().dumpAsXml(w);
-            writer.endElement();
-        }
-        writer.endElement();
-    }
-}
-
 void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer( w );

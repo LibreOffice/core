@@ -2835,6 +2835,14 @@ void SwFrmFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterEndElement(pWriter);
 }
 
+void SwFrmFmts::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
+    for (size_t i = 0; i < size(); ++i)
+        GetFmt(i)->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
 //  class SwFlyFrmFmt
 //  Partially implemented inline in hxx
 

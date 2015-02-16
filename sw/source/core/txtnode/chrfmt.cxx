@@ -17,8 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
+
 #include <charfmt.hxx>
+#include <docary.hxx>
 
 TYPEINIT1( SwCharFmt, SwFmt );  //rtti fuer SwCharFmt
+
+void SwCharFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swCharFmt"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetName().toUtf8().getStr()));
+    GetAttrSet().dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
+
+void SwCharFmts::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swCharFmts"));
+    for (size_t i = 0; i < size(); ++i)
+        GetFmt(i)->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
