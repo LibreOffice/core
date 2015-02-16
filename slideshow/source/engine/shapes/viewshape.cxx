@@ -853,7 +853,9 @@ namespace slideshow
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
-            if( isBackgroundDetached() )
+            // Hack, force use of Sprites
+            // TODO should be only the case by using ogl canvas-> getImplementationName()
+            //if( isBackgroundDetached() )
                 return renderSprite( mpViewLayer,
                                      rMtf,
                                      rArgs.maOrigBounds,
@@ -864,7 +866,7 @@ namespace slideshow
                                      rArgs.mrSubsets,
                                      rArgs.mnShapePriority,
                                      bIsVisible );
-            else
+            /*else
                 return render( mpViewLayer->getCanvas(),
                                rMtf,
                                rArgs.maBounds,
@@ -872,7 +874,7 @@ namespace slideshow
                                nUpdateFlags,
                                rArgs.mrAttr,
                                rArgs.mrSubsets,
-                               bIsVisible );
+                               bIsVisible );*/
         }
 
     }
