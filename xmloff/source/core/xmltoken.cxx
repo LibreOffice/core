@@ -2641,6 +2641,7 @@ namespace xmloff { namespace token {
         TOKEN( "default-outline-level",        XML_DEFAULT_OUTLINE_LEVEL ),
         TOKEN( "show-details",                 XML_SHOW_DETAILS ),
         TOKEN( "show-empty",                   XML_SHOW_EMPTY ),
+        TOKEN( "repeat-item-labels",           XML_REPEAT_ITEM_LABELS ),
         TOKEN( "iterative",                    XML_ITERATIVE ),
 
         TOKEN( "X",                            XML_uX ),

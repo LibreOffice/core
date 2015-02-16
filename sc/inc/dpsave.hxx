@@ -106,6 +106,7 @@ private:
     sal_uInt16 nFunction; // enum GeneralFunction, for data dimensions
     long nUsedHierarchy;
     sal_uInt16 nShowEmptyMode; //! at level
+    bool bRepeatItemLabels; //! at level
     bool bSubTotalDefault; //! at level
     long nSubTotalCount;
     sal_uInt16* pSubTotalFuncs; // enum GeneralFunction
@@ -161,6 +162,10 @@ public:
     void SetShowEmpty(bool bSet);
     bool GetShowEmpty() const
         { return bool(nShowEmptyMode); }
+
+    void SetRepeatItemLabels(bool bSet);
+    bool GetRepeatItemLabels() const
+        { return bRepeatItemLabels; }
 
     void SetFunction(sal_uInt16 nNew); // enum GeneralFunction
     sal_uInt16 GetFunction() const

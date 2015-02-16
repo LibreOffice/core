@@ -452,6 +452,7 @@ void ScDPSubtotalDlg::FillLabelData( ScDPLabelData& rLabelData ) const
     rLabelData.maSortInfo = maLabelData.maSortInfo;
     rLabelData.maLayoutInfo = maLabelData.maLayoutInfo;
     rLabelData.maShowInfo = maLabelData.maShowInfo;
+    rLabelData.mbRepeatItemLabels = maLabelData.mbRepeatItemLabels;
 }
 
 void ScDPSubtotalDlg::Init( const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData )
@@ -524,6 +525,7 @@ ScDPSubtotalOptDlg::ScDPSubtotalOptDlg( vcl::Window* pParent, ScDPObject& rDPObj
     get(m_pLayoutFrame, "layoutframe");
     get(m_pLbLayout, "layout");
     get(m_pCbLayoutEmpty, "emptyline");
+    get(m_pCbRepeatItemLabels, "repeatitemlabels");
     get(m_pCbShow, "show");
     get(m_pNfShow, "items");
     get(m_pFtShow, "showft");
@@ -566,6 +568,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     rLabelData.maLayoutInfo.LayoutMode = m_xLbLayoutWrp->GetControlValue();
     rLabelData.maLayoutInfo.AddEmptyLines = m_pCbLayoutEmpty->IsChecked();
+    rLabelData.mbRepeatItemLabels = m_pCbRepeatItemLabels->IsChecked();
 
     // *** AUTO SHOW ***
 
@@ -648,6 +651,7 @@ void ScDPSubtotalOptDlg::Init( const ScDPNameVec& rDataFields, bool bEnableLayou
 
     m_xLbLayoutWrp->SetControlValue( maLabelData.maLayoutInfo.LayoutMode );
     m_pCbLayoutEmpty->Check( maLabelData.maLayoutInfo.AddEmptyLines );
+    m_pCbRepeatItemLabels->Check( maLabelData.mbRepeatItemLabels );
 
     // *** AUTO SHOW ***
 

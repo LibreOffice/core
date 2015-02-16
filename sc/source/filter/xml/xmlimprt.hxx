@@ -650,7 +650,8 @@ enum ScXMLDataPilotFieldElemTokens
 
 enum ScXMLDataPilotLevelAttrTokens
 {
-    XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY
+    XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY,
+    XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS
 };
 
 enum ScXMLDataPilotLevelElemTokens

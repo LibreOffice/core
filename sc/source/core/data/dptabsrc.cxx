@@ -2015,7 +2015,8 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
     bShowEmpty( false ),
-    bEnableLayout( false )
+    bEnableLayout( false ),
+    bRepeatItemLabels( false )
 {
     //TODO: hold pSource
     //  aSubTotals is empty
@@ -2201,6 +2202,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         { OUString(SC_UNO_DP_AUTOSHOW), 0,  cppu::UnoType<sheet::DataPilotFieldAutoShowInfo>::get(),     0, 0 },
         { OUString(SC_UNO_DP_LAYOUT),   0,  cppu::UnoType<sheet::DataPilotFieldLayoutInfo>::get(),       0, 0 },
         { OUString(SC_UNO_DP_SHOWEMPTY), 0, getBooleanCppuType(),                                   0, 0 },
+        { OUString(SC_UNO_DP_REPEATITEMLABELS), 0, getBooleanCppuType(),                                   0, 0 },
         { OUString(SC_UNO_DP_SORTING),  0,  cppu::UnoType<sheet::DataPilotFieldSortInfo>::get(),         0, 0 },
         { OUString(SC_UNO_DP_SUBTOTAL), 0,  getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -2217,6 +2219,8 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
 {
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         bShowEmpty = lcl_GetBoolFromAny(aValue);
+    else if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
+        bRepeatItemLabels = lcl_GetBoolFromAny(aValue);
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
         aValue >>= aSubTotals;
     else if ( aPropertyName == SC_UNO_DP_SORTING )
@@ -2238,6 +2242,8 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         lcl_SetBoolInAny(aRet, bShowEmpty);
+    if ( aPropertyName == SC_UNO_DP_REPEATITEMLABELS )
+        lcl_SetBoolInAny(aRet, bRepeatItemLabels);
     else if ( aPropertyName == SC_UNO_DP_SUBTOTAL )
     {
         uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();        //TODO: avoid extra copy?

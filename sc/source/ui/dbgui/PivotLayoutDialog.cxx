@@ -538,6 +538,7 @@ void ScPivotLayoutDialog::ApplyLabelData(ScDPSaveData& rSaveData)
 
         pSaveDimensions->SetUsedHierarchy(pLabelData.mnUsedHier);
         pSaveDimensions->SetShowEmpty(pLabelData.mbShowAll);
+        pSaveDimensions->SetRepeatItemLabels(pLabelData.mbRepeatItemLabels);
         pSaveDimensions->SetSortInfo(&pLabelData.maSortInfo);
         pSaveDimensions->SetLayoutInfo(&pLabelData.maLayoutInfo);
         pSaveDimensions->SetAutoShowInfo(&pLabelData.maShowInfo);

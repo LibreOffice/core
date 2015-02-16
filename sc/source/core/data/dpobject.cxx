@@ -2275,6 +2275,9 @@ static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans
     rData.mbShowAll = ScUnoHelpFunctions::GetBoolProperty(
         xLevProp, OUString(SC_UNO_DP_SHOWEMPTY));
 
+    rData.mbRepeatItemLabels = ScUnoHelpFunctions::GetBoolProperty(
+        xLevProp, OUString(SC_UNO_DP_REPEATITEMLABELS));
+
     try
     {
         xLevProp->getPropertyValue( OUString( SC_UNO_DP_SORTING ) )

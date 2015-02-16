@@ -140,6 +140,7 @@ ScDPObject* createDPFromSourceDesc(
     ScDPSaveDimension* pDim = aSaveData.GetDataLayoutDimension();
     pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
     pDim->SetShowEmpty(true);
+    pDim->SetRepeatItemLabels(false);
 
     pDPObj->SetSaveData(aSaveData);
     pDPObj->InvalidateData();
