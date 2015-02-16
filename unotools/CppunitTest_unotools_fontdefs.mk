@@ -9,6 +9,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,unotools_fontdefs))
 
+$(eval $(call gb_CppunitTest_use_external,unotools_fontdefs,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_api,unotools_fontdefs, \
     offapi \
     udkapi \
