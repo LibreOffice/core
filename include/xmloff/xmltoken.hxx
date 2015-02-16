@@ -3242,6 +3242,7 @@ namespace xmloff { namespace token {
         XML_CHART_DUNITS_DISPLAYUNITS,
         XML_CHART_DUNITS_BUILTINUNIT,
         XML_EXTERNALDATA,
+        XML_REPEAT_ITEM_LABELS,
 
         XML_TOKEN_END
     };

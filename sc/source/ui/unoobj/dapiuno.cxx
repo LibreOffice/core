@@ -780,6 +780,10 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
             {
                 aNewData.SetFilterButton(::cppu::any2bool( aValue ));
             }
+            else if ( aNameString == SC_UNO_DP_REPEATITEMLABELS )
+            {
+                aNewData.SetRepeatItemLabels(::cppu::any2bool( aValue ));
+            }
             else if ( aNameString == SC_UNO_DP_DRILLDOWN )
             {
                 aNewData.SetDrillDown(::cppu::any2bool( aValue ));

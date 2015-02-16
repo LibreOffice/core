@@ -599,6 +599,7 @@
 #define SC_UNO_DP_REPEATEMPTY          "RepeatIfEmpty"
 #define SC_UNO_DP_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_DP_SHOWFILTER           "ShowFilterButton"
+#define SC_UNO_DP_REPEATITEMLABELS     "RepeatItemLabels"
 #define SC_UNO_DP_IMPORTDESC           "ImportDescriptor"
 #define SC_UNO_DP_SOURCESERVICE        "SourceServiceName"
 #define SC_UNO_DP_SERVICEARG           "ServiceArguments"

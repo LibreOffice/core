@@ -92,6 +92,7 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     get(mpCheckIdentifyCategories,  "check-identify-categories");
     get(mpCheckTotalRows,           "check-total-rows");
     get(mpCheckDrillToDetail,       "check-drill-to-details");
+    get(mpCheckRepeatItemLabels,    "check-repeat-item-labels");
 
     get(mpBtnOK,  "ok");
     get(mpBtnCancel,  "cancel");
@@ -496,6 +497,7 @@ void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
     rSaveData.SetRowGrand(mpCheckTotalRows->IsChecked());
     rSaveData.SetFilterButton(mpCheckAddFilter->IsChecked());
     rSaveData.SetDrillDown(mpCheckDrillToDetail->IsChecked());
+    rSaveData.SetRepeatItemLabels(mpCheckRepeatItemLabels->IsChecked());
 
     Reference<XDimensionsSupplier> xSource = maPivotTableObject.GetSource();
 
