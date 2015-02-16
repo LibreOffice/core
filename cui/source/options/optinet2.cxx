@@ -85,6 +85,7 @@
 #include "securityoptions.hxx"
 #include "webconninfo.hxx"
 #include "certpath.hxx"
+#include "tsaurls.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -601,6 +602,8 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
     get(m_pMacroSecPB, "macro");
     get(m_pCertFrame, "certificatepath");
     get(m_pCertPathPB, "cert");
+    get(m_pTSAURLsFrame, "tsaurls");
+    get(m_pTSAURLsPB, "tsas");
     m_sPasswordStoringDeactivateStr = get<FixedText>("nopasswordsave")->GetText();
 
     InitControls();
@@ -612,6 +615,7 @@ SvxSecurityTabPage::SvxSecurityTabPage(vcl::Window* pParent, const SfxItemSet& r
     m_pShowConnectionsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     m_pMacroSecPB->SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     m_pCertPathPB->SetClickHdl( LINK( this, SvxSecurityTabPage, CertPathPBHdl ) );
+    m_pTSAURLsPB->SetClickHdl( LINK( this, SvxSecurityTabPage, TSAURLsPBHdl ) );
 
     ActivatePage( rSet );
 }
@@ -778,6 +782,20 @@ IMPL_LINK_NOARG(SvxSecurityTabPage, CertPathPBHdl)
         MessageDialog aWarnBox(this, CUI_RES(RID_SVXSTR_OPTIONS_RESTART), VCL_MESSAGE_INFO);
         aWarnBox.Execute();
     }
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxSecurityTabPage, TSAURLsPBHdl)
+{
+    // Unlike the mpCertPathDlg, we *don't* keep the same dialog object around between
+    // invocations. Seems clearer to my little brain that way.
+
+    TSAURLsDialog* pTSAURLsDlg = new TSAURLsDialog(this);
+
+    pTSAURLsDlg->Execute();
+
+    delete pTSAURLsDlg;
 
     return 0;
 }

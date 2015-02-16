@@ -2510,6 +2510,11 @@
             <desc>Contains the path to the users NSS certificate directory.</desc>
           </info>
         </prop>
+        <prop oor:name="TSAURLs" oor:type="oor:string-list" oor:nillable="false">
+          <info>
+            <desc>Contains the URLs or Time Stamping Authority servers.</desc>
+          </info>
+        </prop>
         <prop oor:name="WarnPrintDoc" oor:type="xs:boolean" oor:nillable="false">
           <info>
             <desc>Specifies whether to warn when printing documents with
