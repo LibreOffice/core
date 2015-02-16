@@ -25,6 +25,7 @@
 #include <tools/resary.hxx>
 #include <rtl/math.hxx>
 #include <sal/macros.h>
+#include <algorithm>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
