@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_62896cca",
+        "filename": "basic/source/runtime/ddectrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-02-16T06:37:45Z",
+      "side": 1,
+      "message": "??",
+      "revId": "90f3cc2e865d42a7f104ee658d5d101abd49906e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da20952f_c2a3984e",
+        "filename": "basic/source/runtime/ddectrl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2015-02-16T06:37:45Z",
+      "side": 1,
+      "message": "this assignment doesn\u0027t do anything useful, rather just remove it",
+      "revId": "90f3cc2e865d42a7f104ee658d5d101abd49906e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
