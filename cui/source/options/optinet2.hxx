@@ -125,9 +125,7 @@ protected:
 // class SvxSecurityTabPage ---------------------------------------------
 
 class SvtSecurityOptions;
-
 class CertPathDialog;
-
 class SvxSecurityTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -149,6 +147,9 @@ private:
     VclContainer*       m_pCertFrame;
     PushButton*         m_pCertPathPB;
 
+    VclContainer*       m_pTSAURLsFrame;
+    PushButton*         m_pTSAURLsPB;
+
     SvtSecurityOptions*         mpSecOptions;
     svx::SecurityOptionsDialog* mpSecOptDlg;
 
@@ -163,6 +164,7 @@ private:
     DECL_LINK(ShowPasswordsHdl, void *);
     DECL_LINK(MacroSecPBHdl, void* );
     DECL_LINK(CertPathPBHdl, void* );
+    DECL_LINK(TSAURLsPBHdl, void* );
 
     void                InitControls();
 
