@@ -1264,6 +1264,11 @@ ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
                 pDataPilotField->SetShowEmpty(IsXMLToken(sValue, XML_TRUE));
             }
             break;
+            case XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS :
+            {
+                pDataPilotField->SetRepeatItemLabels(IsXMLToken(sValue, XML_TRUE));
+            }
+            break;
         }
     }
 }

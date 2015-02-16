@@ -92,7 +92,8 @@ ScDPLabelData::ScDPLabelData() :
     mnDupCount(0),
     mbShowAll(false),
     mbIsValue(false),
-    mbDataLayout(false)
+    mbDataLayout(false),
+    mbRepeatItemLabels(false)
 {}
 
 OUString ScDPLabelData::getDisplayName() const

@@ -75,6 +75,7 @@ struct ScDPLabelData
     bool       mbShowAll:1;    ///< true = Show all (also empty) results.
     bool       mbIsValue:1;    ///< true = Sum or count in data field.
     bool       mbDataLayout:1;
+    bool       mbRepeatItemLabels:1;
 
     struct Member
     {

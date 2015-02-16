@@ -1714,6 +1714,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotLevelAttrTokenMap()
         static const SvXMLTokenMapEntry aDataPilotLevelAttrTokenMap[] =
         {
             { XML_NAMESPACE_TABLE, XML_SHOW_EMPTY,              XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY            },
+            { XML_NAMESPACE_CALC_EXT, XML_REPEAT_ITEM_LABELS, XML_TOK_DATA_PILOT_LEVEL_ATTR_REPEAT_ITEM_LABELS    },
             XML_TOKEN_MAP_END
         };
 
