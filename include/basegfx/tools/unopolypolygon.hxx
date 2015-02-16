@@ -28,8 +28,6 @@
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
-#include <boost/utility.hpp>
-
 
 namespace basegfx
 {
@@ -42,7 +40,6 @@ namespace unotools
 
     class BASEGFX_DLLPUBLIC UnoPolyPolygon
         : private cppu::BaseMutex
-        , private boost::noncopyable
         , public UnoPolyPolygonBase
     {
     public:
@@ -99,6 +96,9 @@ namespace unotools
         virtual void modifying() const {}
 
     private:
+        UnoPolyPolygon(const UnoPolyPolygon&) SAL_DELETED_FUNCTION;
+        UnoPolyPolygon& operator=(const UnoPolyPolygon&) SAL_DELETED_FUNCTION;
+
         B2DPolyPolygon                        maPolyPoly;
         ::com::sun::star::rendering::FillRule meFillRule;
     };
