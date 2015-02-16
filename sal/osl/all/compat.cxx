@@ -150,6 +150,18 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_zeroMemory(void *, sal_Size) {
     std::abort();
 }
 
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_logfile_trace( const sal_Char* pszFormat, ... ) {
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_logfile_longTrace(char const * format, ...) {
+    std::abort();
+}
+
+SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL rtl_logfile_hasLogFile( void ) {
+    for (;;) { std::abort(); } // avoid "must return a value" warnings
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
