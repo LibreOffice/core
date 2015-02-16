@@ -314,8 +314,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScSpreadsheetSettings());
-    return xInst;
+    return (cppu::OWeakObject*)new ScSpreadsheetSettings();
 }
 
 OUString ScSpreadsheetSettings::getImplementationName_Static()
@@ -602,8 +601,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScRecentFunctionsObj());
-    return xInst;
+    return (cppu::OWeakObject*)new ScRecentFunctionsObj();
 }
 
 OUString ScRecentFunctionsObj::getImplementationName_Static()
@@ -679,8 +677,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    static uno::Reference<uno::XInterface> xInst((cppu::OWeakObject*)new ScFunctionListObj());
-    return xInst;
+    return (cppu::OWeakObject*)new ScFunctionListObj();
 }
 
 OUString ScFunctionListObj::getImplementationName_Static()

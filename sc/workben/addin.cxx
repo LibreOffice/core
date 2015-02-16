@@ -120,8 +120,7 @@ UString ScTestAddIn::getImplementationName_Static()
 uno::Reference<uno::XInterface> ScTestAddIn_CreateInstance(
         const uno::Reference<lang::XMultiServiceFactory>& )
 {
-    static uno::Reference<uno::XInterface> xInst = (cppu::OWeakObject*)new ScTestAddIn();
-    return xInst;
+    return (cppu::OWeakObject*)new ScTestAddIn();
 }
 
 // XAddIn

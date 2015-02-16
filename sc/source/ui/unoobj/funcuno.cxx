@@ -205,8 +205,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionAccess_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    static uno::Reference< uno::XInterface > xInst((::cppu::OWeakObject*) new ScFunctionAccess);
-    return xInst;
+    return (::cppu::OWeakObject*) new ScFunctionAccess;
 }
 
 OUString ScFunctionAccess::getImplementationName_Static()

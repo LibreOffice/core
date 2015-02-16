@@ -178,8 +178,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();
-    static uno::Reference< uno::XInterface > xInst((::cppu::OWeakObject*) new ScAutoFormatsObj);
-    return xInst;
+    return (::cppu::OWeakObject*) new ScAutoFormatsObj;
 }
 
 OUString ScAutoFormatsObj::getImplementationName_Static()

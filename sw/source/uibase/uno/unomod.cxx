@@ -195,8 +195,7 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
 Reference< uno::XInterface > SAL_CALL SwXModule_createInstance(
     const Reference< XMultiServiceFactory > & /*rSMgr*/) throw( Exception )
 {
-    static Reference< uno::XInterface >  xModule = (cppu::OWeakObject*)new SwXModule();
-    return xModule;
+    return (cppu::OWeakObject*)new SwXModule();
 }
 
 Sequence< OUString > SAL_CALL SwXModule_getSupportedServiceNames() throw()
