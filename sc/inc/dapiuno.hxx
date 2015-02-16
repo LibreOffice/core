@@ -586,6 +586,8 @@ public:
     void setSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo* pInfo);
     bool getShowEmpty() const;
     void setShowEmpty(bool bShow);
+    bool getRepeatItemLabels() const;
+    void setRepeatItemLabels(bool bShow);
 
     bool hasGroupInfo();
     com::sun::star::sheet::DataPilotFieldGroupInfo getGroupInfo();

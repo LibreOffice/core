@@ -261,6 +261,7 @@
 #define SC_UNONAME_ISGROUP          "IsGroupField"
 #define SC_UNONAME_GROUPINFO        "GroupInfo"
 #define SC_UNONAME_SHOWEMPTY        "ShowEmpty"
+#define SC_UNONAME_REPEATITEMLABELS "RepeatItemLabels"
 
 //  data pilot item
 #define SC_UNONAME_SHOWDETAIL       "ShowDetail"
@@ -577,6 +578,7 @@
 #define SC_UNO_DP_FILTER               "Filter"
 #define SC_UNO_DP_SUBTOTAL             "SubTotals"
 #define SC_UNO_DP_SHOWEMPTY            "ShowEmpty"
+#define SC_UNO_DP_REPEATITEMLABELS     "RepeatItemLabels"
 #define SC_UNO_DP_ISVISIBLE            "IsVisible"
 #define SC_UNO_DP_SHOWDETAILS          "ShowDetails"
 #define SC_UNO_DP_IGNOREEMPTY          "IgnoreEmptyRows"

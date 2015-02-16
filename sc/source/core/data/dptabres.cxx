@@ -1368,6 +1368,7 @@ void ScDPResultMember::FillMemberResults(
     else
         pArray[rPos].Flags &= ~sheet::MemberResultFlags::NUMERIC;
 
+    const ScDPLevel*    pParentLevel = GetParentLevel();
     if ( nSize && !bRoot )                  // root is overwritten by first dimension
     {
         pArray[rPos].Name    = aName;
@@ -1377,9 +1378,20 @@ void ScDPResultMember::FillMemberResults(
         //  set "continue" flag (removed for subtotals later)
         for (long i=1; i<nSize; i++)
             pArray[rPos+i].Flags |= sheet::MemberResultFlags::CONTINUE;
+        if ( pParentLevel && pParentLevel->getRepeatItemLabels() )
+        {
+            long nSizeNonEmpty = nSize;
+            if ( pParentLevel->IsAddEmpty() )
+                --nSizeNonEmpty;
+            for (long i=1; i<nSizeNonEmpty; i++)
+            {
+                pArray[rPos+i].Name = aName;
+                pArray[rPos+i].Caption = aCaption;
+                pArray[rPos+i].Flags  |= sheet::MemberResultFlags::HASMEMBER;
+            }
+        }
     }
 
-    const ScDPLevel*    pParentLevel = GetParentLevel();
     long nExtraSpace = 0;
     if ( pParentLevel && pParentLevel->IsAddEmpty() )
         ++nExtraSpace;

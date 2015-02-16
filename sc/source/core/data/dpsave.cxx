@@ -199,6 +199,7 @@ ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     nFunction( sheet::GeneralFunction_AUTO ),
     nUsedHierarchy( -1 ),
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
+    bRepeatItemLabels( false ),
     bSubTotalDefault( true ),
     nSubTotalCount( 0 ),
     pSubTotalFuncs( NULL ),
@@ -219,6 +220,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     nFunction( r.nFunction ),
     nUsedHierarchy( r.nUsedHierarchy ),
     nShowEmptyMode( r.nShowEmptyMode ),
+    bRepeatItemLabels( r.bRepeatItemLabels ),
     bSubTotalDefault( r.bSubTotalDefault ),
     nSubTotalCount( r.nSubTotalCount ),
     pSubTotalFuncs( NULL )
@@ -279,6 +281,7 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
          nFunction        != r.nFunction        ||
          nUsedHierarchy   != r.nUsedHierarchy   ||
          nShowEmptyMode   != r.nShowEmptyMode   ||
+         bRepeatItemLabels!= r.bRepeatItemLabels||
          bSubTotalDefault != r.bSubTotalDefault ||
          nSubTotalCount   != r.nSubTotalCount    )
         return false;
@@ -393,6 +396,11 @@ bool ScDPSaveDimension::HasShowEmpty() const
 void ScDPSaveDimension::SetShowEmpty(bool bSet)
 {
     nShowEmptyMode = sal_uInt16(bSet);
+}
+
+void ScDPSaveDimension::SetRepeatItemLabels(bool bSet)
+{
+    bRepeatItemLabels = bSet;
 }
 
 void ScDPSaveDimension::SetFunction(sal_uInt16 nNew)
@@ -625,6 +633,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
                         OUString(SC_UNO_DP_SHOWEMPTY), (bool)nShowEmptyMode );
+
+                lcl_SetBoolProperty( xLevProp,
+                    OUString(SC_UNO_DP_REPEATITEMLABELS), bRepeatItemLabels );
 
                 if ( pSortInfo )
                     ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_DP_SORTING, *pSortInfo);

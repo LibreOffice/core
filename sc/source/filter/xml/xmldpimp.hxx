@@ -361,6 +361,7 @@ public:
     virtual void EndElement() SAL_OVERRIDE;
 
     void SetShowEmpty(const bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
+    void SetRepeatItemLabels(const bool bSet) { if (pDim) pDim->SetRepeatItemLabels(bSet); }
     void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if(pDim) pDim->SetSubTotals(nCount, pFunctions); }
     void AddMember(ScDPSaveMember* pMember);
     void SetSubTotalName(const OUString& rName);

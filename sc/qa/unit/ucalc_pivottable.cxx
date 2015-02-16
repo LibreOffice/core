@@ -38,6 +38,7 @@ struct DPFieldDef
      * default function (SUM) is used.
      */
     int eFunc;
+    bool bRepeatItemLabels;
 };
 
 template<size_t _Size>
@@ -133,6 +134,7 @@ ScDPObject* createDPFromSourceDesc(
             aShowInfo.ShowItemsMode = 0;
             aShowInfo.ItemCount = 0;
             pDim->SetAutoShowInfo(&aShowInfo);
+            pDim->SetRepeatItemLabels(aFields[i].bRepeatItemLabels);
         }
     }
 
@@ -189,9 +191,9 @@ void Test::testPivotTable()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0 },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, 0 }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, 0, false }
     };
 
     // Raw data
@@ -373,9 +375,9 @@ void Test::testPivotTableLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Software", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0 },
-        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0 }
+        { "Software", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0, false },
+        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0, false }
     };
 
     // Raw data
@@ -429,9 +431,9 @@ void Test::testPivotTableDateLabels()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, 0 }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Date",  sheet::DataPilotFieldOrientation_COLUMN, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, 0, false }
     };
 
     // Raw data
@@ -505,11 +507,11 @@ void Test::testPivotTableFilters()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, 0 },
-        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, 0 },
-        { "Group2", sheet::DataPilotFieldOrientation_PAGE, 0 },
-        { "Val1",   sheet::DataPilotFieldOrientation_DATA, 0 },
-        { "Val2",   sheet::DataPilotFieldOrientation_DATA, 0 }
+        { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, 0, false },
+        { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, 0, false },
+        { "Group2", sheet::DataPilotFieldOrientation_PAGE, 0, false },
+        { "Val1",   sheet::DataPilotFieldOrientation_DATA, 0, false },
+        { "Val2",   sheet::DataPilotFieldOrientation_DATA, 0, false }
     };
 
     // Raw data
@@ -658,9 +660,9 @@ void Test::testPivotTableNamedSource()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0 },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, 0 }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, 0, false }
     };
 
     // Raw data
@@ -958,9 +960,9 @@ void Test::testPivotTableDuplicateDataFields()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT }
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT, false }
     };
 
     ScAddress aPos(2,2,0);
@@ -1052,8 +1054,8 @@ void Test::testPivotTableNormalGrouping()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1214,8 +1216,8 @@ void Test::testPivotTableNumberGrouping()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Order", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Score", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Order", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1299,8 +1301,8 @@ void Test::testPivotTableDateGrouping()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Date", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Date", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1469,8 +1471,8 @@ void Test::testPivotTableEmptyRows()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1582,8 +1584,8 @@ void Test::testPivotTableTextNumber()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     // Insert raw data such that the first column values are entered as text.
@@ -1684,8 +1686,8 @@ void Test::testPivotTableCaseInsensitiveStrings()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -1760,8 +1762,8 @@ void Test::testPivotTableNumStability()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     m_pDoc->InsertTab(0, OUString("Data"));
@@ -1847,8 +1849,8 @@ void Test::testPivotTableFieldReference()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -2017,8 +2019,8 @@ void Test::testPivotTableDocFunc()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     ScAddress aPos(1,1,0);
@@ -2093,8 +2095,8 @@ void Test::testFuncGETPIVOTDATA()
     {
         // Dimension definition
         DPFieldDef aFields[] = {
-            { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+            { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
         };
 
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2156,9 +2158,9 @@ void Test::testFuncGETPIVOTDATA()
     {
         // Dimension definition
         DPFieldDef aFields[] = {
-            { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
-            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT },
+            { "Name", sheet::DataPilotFieldOrientation_ROW, 0, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
+            { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_COUNT, false },
         };
 
         pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
@@ -2250,9 +2252,9 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     // Dimension definition
     DPFieldDef aFields[] = {
-        { "Type", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Member", sheet::DataPilotFieldOrientation_ROW, 0 },
-        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+        { "Type", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Member", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM, false },
     };
 
     // Create pivot table at A1 on 2nd sheet.
@@ -2320,5 +2322,84 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
+
+void Test::testPivotTableRepeatItemLabels()
+{
+    m_pDoc->InsertTab(0, OUString("Data"));
+    m_pDoc->InsertTab(1, OUString("Table"));
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0, true },
+        { "Country", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Year", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, 0, false }
+    };
+
+    // Raw data
+    const char* aData[][4] = {
+        { "Andy",    "US", "1999", "30" },
+        { "Andy",    "US", "2002", "20" },
+        { "Andy",    "US", "2010", "45" },
+        { "David",   "GB", "1998", "12" },
+        { "Edward",  "NO", "2000",  "8" },
+        { "Frank",   "FR", "2009", "15" },
+        { "Frank",   "FR", "2008", "45" },
+        { "Frank",   "FR", "2007", "45" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), aFields, nFieldCount, false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new datapilot object into document", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    bool bOverflow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverflow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverflow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][4] = {
+            { "Name",         "Country", "Year", "Sum - Score" },
+            { "Andy",         "US",      "1999", "30"          },
+            { "Andy",         0,         "2002", "20"          },
+            { "Andy",         0,         "2010", "45"          },
+            { "David",        "GB",      "1998", "12"          },
+            { "Edward",       "NO",      "2000", "8"           },
+            { "Frank",        "FR",      "2007", "45"          },
+            { "Frank",        0,         "2008", "45"          },
+            { "Frank",        0,         "2009", "15"          },
+            { "Total Result", 0,         0,      "220"         }
+        };
+
+        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "DataPilot table output");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                                 pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -160,6 +160,7 @@ private:
     VclContainer*       m_pLayoutFrame;
     ListBox*            m_pLbLayout;
     CheckBox*           m_pCbLayoutEmpty;
+    CheckBox*           m_pCbRepeatItemLabels;
     CheckBox*           m_pCbShow;
     NumericField*       m_pNfShow;
     FixedText*          m_pFtShow;

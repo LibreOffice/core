@@ -493,6 +493,11 @@ void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
         ::sax::Converter::convertBool(sBuffer, pDim->GetShowEmpty());
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_EMPTY, sBuffer.makeStringAndClear());
     }
+    {
+        OUStringBuffer sBuffer;
+        ::sax::Converter::convertBool(sBuffer, pDim->GetRepeatItemLabels());
+        rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_REPEAT_ITEM_LABELS, sBuffer.makeStringAndClear());
+    }
     SvXMLElementExport aElemDPL(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_LEVEL, true, true);
 
     WriteSubTotals(pDim);

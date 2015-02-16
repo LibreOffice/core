@@ -125,6 +125,7 @@ const SfxItemPropertyMapEntry* lcl_GetDataPilotFieldMap()
         {OUString(SC_UNONAME_REFERENCE),    0,  cppu::UnoType<DataPilotFieldReference>::get(),      MAYBEVOID, 0 },
         {OUString(SC_UNONAME_SELPAGE),      0,  cppu::UnoType<OUString>::get(),                     0, 0 },
         {OUString(SC_UNONAME_SHOWEMPTY),    0,  getBooleanCppuType(),                          0, 0 },
+        {OUString(SC_UNONAME_REPEATITEMLABELS),    0,  getBooleanCppuType(),                          0, 0 },
         {OUString(SC_UNONAME_SORTINFO),     0,  cppu::UnoType<DataPilotFieldSortInfo>::get(),       MAYBEVOID, 0 },
         {OUString(SC_UNONAME_SUBTOTALS),    0,  getCppuType((Sequence<GeneralFunction>*)0),    0, 0 },
         {OUString(SC_UNONAME_USESELPAGE),   0,  getBooleanCppuType(),                          0, 0 },
@@ -1955,6 +1956,10 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     {
         setShowEmpty(cppu::any2bool(aValue));
     }
+    else if ( aNameString == SC_UNONAME_REPEATITEMLABELS )
+    {
+        setRepeatItemLabels(cppu::any2bool(aValue));
+    }
 }
 
 Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyName )
@@ -2015,6 +2020,8 @@ Any SAL_CALL ScDataPilotFieldObj::getPropertyValue( const OUString& aPropertyNam
     }
     else if ( aNameString == SC_UNONAME_SHOWEMPTY )
         aRet <<= getShowEmpty();
+    else if ( aNameString == SC_UNONAME_REPEATITEMLABELS )
+        aRet <<= getRepeatItemLabels();
 
     return aRet;
 }
@@ -2330,6 +2337,24 @@ void ScDataPilotFieldObj::setShowEmpty( bool bShow )
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
         pDim->SetShowEmpty( bShow );
+        SetDPObject( pDPObj );
+    }
+}
+
+bool ScDataPilotFieldObj::getRepeatItemLabels() const
+{
+    SolarMutexGuard aGuard;
+    ScDPSaveDimension* pDim = GetDPDimension();
+    return pDim && pDim->GetRepeatItemLabels();
+}
+
+void ScDataPilotFieldObj::setRepeatItemLabels( bool bShow )
+{
+    SolarMutexGuard aGuard;
+    ScDPObject* pDPObj = 0;
+    if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
+    {
+        pDim->SetRepeatItemLabels( bShow );
         SetDPObject( pDPObj );
     }
 }

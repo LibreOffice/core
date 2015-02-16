@@ -564,6 +564,7 @@ private:
     long                        nAutoMeasure;       // measure (index of data dimension) for AutoShow
     bool                        bShowEmpty:1;
     bool                        bEnableLayout:1;      // enabled only for row fields, not for the innermost one
+    bool                        bRepeatItemLabels:1;
 
 public:
                             ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL );
@@ -635,6 +636,7 @@ public:
 
     com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> getSubTotals() const;
     bool getShowEmpty() const { return bShowEmpty;}
+    bool getRepeatItemLabels() const { return bRepeatItemLabels; }
 
     const ::com::sun::star::sheet::DataPilotFieldSortInfo& GetSortInfo() const      { return aSortInfo; }
     const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo& GetAutoShow() const  { return aAutoShowInfo; }
