@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 #define INCLUDED_OOX_PPT_SLIDEPERSIST_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/clrscheme.hxx>
@@ -48,9 +48,9 @@ enum ShapeLocation
 class TimeNode;
 class SlidePersist;
 
-typedef boost::shared_ptr< SlidePersist > SlidePersistPtr;
+typedef std::shared_ptr< SlidePersist > SlidePersistPtr;
 
-class SlidePersist : public boost::enable_shared_from_this< SlidePersist >
+class SlidePersist : public std::enable_shared_from_this< SlidePersist >
 {
 
 public:

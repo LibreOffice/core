@@ -20,6 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
 #define INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
 
+#include <memory>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -72,7 +73,7 @@ class TextListStyle;
 typedef boost::shared_ptr< TextListStyle > TextListStylePtr;
 
 class Shape;
-typedef ::boost::shared_ptr< Shape > ShapePtr;
+typedef std::shared_ptr< Shape > ShapePtr;
 
 class Theme;
 typedef ::boost::shared_ptr< Theme > ThemePtr;
