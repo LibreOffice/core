@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da20952f_0d878162",
+        "filename": "sd/uiconfig/simpress/ui/photoalbum.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2015-02-17T03:20:05Z",
+      "side": 1,
+      "message": "The capitalization is wrong, use sentence case for checkboxes.",
+      "revId": "d8656f999797a9b901ebe115056e7d7d5557cf54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
