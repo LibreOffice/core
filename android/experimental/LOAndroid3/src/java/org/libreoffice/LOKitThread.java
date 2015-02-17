@@ -15,12 +15,13 @@ import org.mozilla.gecko.gfx.SubTile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class LOKitThread extends Thread implements TileProvider.TileInvalidationCallback {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
-    private PriorityBlockingQueue<LOEvent> mEventQueue = new PriorityBlockingQueue<LOEvent>();
+    private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
+
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;
@@ -30,9 +31,23 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         TileProviderFactory.initialize();
     }
 
+    @Override
+    public void run() {
+        while (true) {
+            LOEvent event;
+            try {
+                event = mEventQueue.take();
+                processEvent(event);
+            } catch (InterruptedException exception) {
+                throw new RuntimeException(exception);
+            }
+        }
+    }
+
     private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
-        if (mTileProvider == null)
+        if (mTileProvider == null) {
             return;
+        }
 
         if (composedTileLayer.isStillValid(tileId)) {
             CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
@@ -140,16 +155,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         if (mTileProvider != null) {
             mTileProvider.close();
             mTileProvider = null;
-        }
-    }
-
-    @Override
-    public void run() {
-        try {
-            while (true) {
-                processEvent(mEventQueue.take());
-            }
-        } catch (InterruptedException ex) {
         }
     }
 
