@@ -59,6 +59,7 @@
 #include <functional>
 #include <iterator>
 
+
 namespace frm
 {
     using namespace ::com::sun::star::uno;
@@ -2136,18 +2137,20 @@ namespace frm
             m_xAggregateListBox->makeVisible( nEntry );
     }
 
+
 }
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OListBoxModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OListBoxControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OListBoxControl(component));
 }

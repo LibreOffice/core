@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+
 #include "imgprod.hxx"
 #include "services.hxx"
 
@@ -554,7 +555,7 @@ void ImageProducer::initialize( const ::com::sun::star::uno::Sequence< ::com::su
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_ImageProducer_get_implementation(::com::sun::star::uno::XComponentContext*,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new ImageProducer());
 }
