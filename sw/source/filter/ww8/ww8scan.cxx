@@ -5206,6 +5206,7 @@ void WW8PLCFxDesc::Restore( const WW8PLCFxSave1& rSave )
             pPLCFx->SetDirty(false);
             aD.ReduceByOffset();
             pMemPos = aD.pMemPos + rSave.nPLCFxMemOfs;
+            nSprmsLen = nOrigSprmsLen - rSave.nPLCFxMemOfs;
         }
     }
 }
