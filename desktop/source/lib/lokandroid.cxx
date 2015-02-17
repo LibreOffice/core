@@ -76,10 +76,10 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAn
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_postKeyEvent
-    (JNIEnv* pEnv, jobject aObject, jint nType, jint nCode)
+    (JNIEnv* pEnv, jobject aObject, jint nType, jint nCharCode, jint nKeyCode)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
-    pLibreOfficeKit->pClass->postKeyEvent(pLibreOfficeKit, nType, nCode);
+    pLibreOfficeKit->pClass->postKeyEvent(pLibreOfficeKit, nType, nCharCode, nKeyCode);
 }
 
 namespace

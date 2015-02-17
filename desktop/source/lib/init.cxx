@@ -265,7 +265,7 @@ static char *                  lo_getError      (LibreOfficeKit* pThis);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
-static void                    lo_postKeyEvent  (LibreOfficeKit* pThis, int nType, int nCode);
+static void                    lo_postKeyEvent  (LibreOfficeKit* pThis, int nType, int nCharCode, int nKeyCode);
 
 
 struct LibLibreOffice_Impl : public _LibreOfficeKit
@@ -712,12 +712,12 @@ static char* lo_getError (LibreOfficeKit *pThis)
     return pMemory;
 }
 
-static void lo_postKeyEvent(LibreOfficeKit* /*pThis*/, int nType, int nCode)
+static void lo_postKeyEvent(LibreOfficeKit* /*pThis*/, int nType, int nCharCode, int nKeyCode)
 {
 #if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
     if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
     {
-        KeyEvent aEvent(nCode, nCode, 0);
+        KeyEvent aEvent(nCharCode, nKeyCode, 0);
         switch (nType)
         {
         case LOK_KEYEVENT_KEYINPUT:

@@ -147,7 +147,7 @@ struct _LibreOfficeKitClass
                                                       const char* pURL,
                                                       const char* pOptions);
 #ifdef LOK_USE_UNSTABLE_API
-  void                    (*postKeyEvent)  (LibreOfficeKit* pThis, int nType, int nCode);
+  void                    (*postKeyEvent)  (LibreOfficeKit* pThis, int nType, int nCharCode, int nKeyCode);
 #endif // LOK_USE_UNSTABLE_API
 };
 

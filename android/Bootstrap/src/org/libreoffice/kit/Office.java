@@ -39,7 +39,7 @@ public class Office {
      * @param type - type of key event
      * @param code - key event code
      */
-    public native void postKeyEvent(int type, int code);
+    public native void postKeyEvent(int type, int charCode, int keyCode);
 
     public native void destroy();
     public native void destroyAndExit();

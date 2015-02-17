@@ -135,7 +135,8 @@ void changeQuadView( GtkWidget* /*pButton*/, gpointer /* pItem */ )
 static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pData*/)
 {
     LOKDocView* pLOKDocView = LOK_DOCVIEW(pDocView);
-    int nCode = 0;
+    int nCharCode = 0;
+    int nKeyCode = 0;
 
     if (!pLOKDocView->m_bEdit)
     {
@@ -146,25 +147,25 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
     switch (pEvent->keyval)
     {
     case GDK_BackSpace:
-        nCode = com::sun::star::awt::Key::BACKSPACE;
+        nKeyCode = com::sun::star::awt::Key::BACKSPACE;
         break;
     case GDK_Return:
-        nCode = com::sun::star::awt::Key::RETURN;
+        nKeyCode = com::sun::star::awt::Key::RETURN;
         break;
     case GDK_Escape:
-        nCode = com::sun::star::awt::Key::ESCAPE;
+        nKeyCode = com::sun::star::awt::Key::ESCAPE;
         break;
     default:
         if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
-            nCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
+            nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
         else
-            nCode = gdk_keyval_to_unicode(pEvent->keyval);
+            nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
     }
 
     if (pEvent->type == GDK_KEY_RELEASE)
-        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYUP, nCode);
+        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
     else
-        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYINPUT, nCode);
+        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
 }
 
 // GtkComboBox requires gtk 2.24 or later
