@@ -24,7 +24,7 @@
 #include <swatrset.hxx>
 #include <calbck.hxx>
 #include <hintids.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -37,7 +37,7 @@ class SfxGrabBagItem;
 
 namespace drawinglayer { namespace attribute {
     class SdrAllFillAttributesHelper;
-    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+    typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
 }}
 
 /// Base class for various Writer styles.
@@ -59,7 +59,7 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     bool   bAutoUpdateFmt : 1;/**< TRUE: Set attributes of a whole paragraph
                                        at format (UI-side!). */
     bool bHidden : 1;
-    boost::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
+    std::shared_ptr<SfxGrabBagItem> m_pGrabBagItem; ///< Style InteropGrabBag.
 
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,

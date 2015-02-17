@@ -17,10 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vector>
-
-#include <boost/shared_ptr.hpp>
-
 #include <UndoTable.hxx>
 #include <UndoRedline.hxx>
 #include <UndoDelete.hxx>
@@ -67,6 +63,8 @@
 #include <comcore.hrc>
 #include <unochart.hxx>
 #include <switerator.hxx>
+#include <memory>
+#include <vector>
 
 #ifdef DBG_UTIL
 #define CHECK_TABLE(t) (t).CheckConsistency();
@@ -80,7 +78,7 @@
     #define _DEBUG_REDLINE( pDoc )
 #endif
 
-typedef std::vector<boost::shared_ptr<SfxItemSet> > SfxItemSets;
+typedef std::vector<std::shared_ptr<SfxItemSet> > SfxItemSets;
 
 class SwUndoSaveSections : public boost::ptr_vector<SwUndoSaveSection> {
 public:
@@ -206,8 +204,8 @@ struct SwTblToTxtSave
     sal_Int32 m_nCntnt;
     SwHistory* m_pHstry;
     // metadata references for first and last paragraph in cell
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
+    std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
     SwTblToTxtSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, sal_Int32 nCntnt );
     ~SwTblToTxtSave() { delete m_pHstry; }
@@ -543,7 +541,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.size(), 0 );
     pTblNd->GetTable().GetTabLines().insert( pTblNd->GetTable().GetTabLines().begin(), pLine );
 
-    const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+    const std::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
     for( size_t n = rSavedData.size(); n; )
     {
         const SwTblToTxtSave* pSave = &rSavedData[ --n ];
@@ -895,7 +893,7 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
     if( USHRT_MAX == nRet )
     {
         // Create copy of ItemSet
-        boost::shared_ptr<SfxItemSet> pSet( new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
+        std::shared_ptr<SfxItemSet> pSet( new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
             bIsLine ? aTableLineSetRange : aTableBoxSetRange ) );
         pSet->Put( pFmt->GetAttrSet() );
         // When a formula is set, never save the value. It possibly must be
@@ -1274,7 +1272,7 @@ void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
                 SwCntntNode* pCNd = rNds[ n ]->GetCntntNode();
                 if( pCNd )
                 {
-                    boost::shared_ptr<SfxItemSet> pSet( (*Ptrs.pCntntAttrs)[ nSet++ ] );
+                    std::shared_ptr<SfxItemSet> pSet( (*Ptrs.pCntntAttrs)[ nSet++ ] );
                     if( pSet )
                     {
                         sal_uInt16 *pRstAttr = aSave_BoxCntntSet;
@@ -1313,7 +1311,7 @@ void _SaveBox::SaveCntntAttrs( SwDoc* pDoc )
             SwCntntNode* pCNd = pDoc->GetNodes()[ n ]->GetCntntNode();
             if( pCNd )
             {
-                boost::shared_ptr<SfxItemSet> pSet;
+                std::shared_ptr<SfxItemSet> pSet;
                 if( pCNd->HasSwAttrSet() )
                 {
                     pSet.reset( new SfxItemSet( pDoc->GetAttrPool(),
@@ -1436,7 +1434,7 @@ SwUndoTblAutoFmt::~SwUndoTblAutoFmt()
 
 void SwUndoTblAutoFmt::SaveBoxCntnt( const SwTableBox& rBox )
 {
-    ::boost::shared_ptr<SwUndoTblNumFmt> const p(new SwUndoTblNumFmt(rBox));
+    std::shared_ptr<SwUndoTblNumFmt> const p(new SwUndoTblNumFmt(rBox));
     m_Undos.push_back(p);
 }
 

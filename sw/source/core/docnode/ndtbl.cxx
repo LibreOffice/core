@@ -748,8 +748,8 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
         sal_uInt8 nBoxArrLen = pTAFmt ? 16 : 4;
-        boost::scoped_ptr< DfltBoxAttrList_t > aBoxFmtArr1;
-        boost::scoped_ptr< std::vector<SwTableBoxFmt*> > aBoxFmtArr2;
+        std::unique_ptr< DfltBoxAttrList_t > aBoxFmtArr1;
+        std::unique_ptr< std::vector<SwTableBoxFmt*> > aBoxFmtArr2;
         if( bUseBoxFmt )
         {
             aBoxFmtArr1.reset(new DfltBoxAttrList_t( nBoxArrLen, NULL ));
@@ -1052,7 +1052,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwStartNode* pSttNd;
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
 
-        const boost::shared_ptr< sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        const std::shared_ptr< sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
         pCntntStore->Save( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength() );
 
         if( T2T_PARA != cCh )
@@ -1520,7 +1520,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
-                const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+                const std::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
                 const sal_Int32 nOldTxtLen = aCntIdx.GetIndex();
                 pCntntStore->Save( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength() );
 

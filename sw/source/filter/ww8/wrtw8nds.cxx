@@ -429,7 +429,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
                 if (nWhich == RES_TXTATR_AUTOFMT)
                 {
                     const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(pHt->GetAttr());
-                    const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
+                    const std::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
                     SfxWhichIter aIter( *pSet );
                     const SfxPoolItem* pItem;
                     sal_uInt16 nWhichId = aIter.FirstWhich();

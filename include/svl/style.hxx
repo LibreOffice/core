@@ -35,7 +35,7 @@
 #include <svl/stylesheetuser.hxx>
 
 #include <svl/style.hrc>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class SfxItemSet;
 class SfxItemPool;
@@ -183,7 +183,7 @@ private:
 friend class SfxStyleSheetBasePool;
 };
 
-typedef ::boost::shared_ptr< SfxStyleSheetIterator > SfxStyleSheetIteratorPtr;
+typedef std::shared_ptr< SfxStyleSheetIterator > SfxStyleSheetIteratorPtr;
 
 
 class SfxStyleSheetBasePool_Impl;

@@ -33,19 +33,12 @@
 #include <rtl/ref.hxx>
 #include <sal/types.h>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/optional.hpp>
-#include <boost/enable_shared_from_this.hpp>
-
+#include <memory>
 
 namespace svt { namespace table
 {
-
-
-
-
     //= ScrollbarVisibility
-
     enum ScrollbarVisibility
     {
         /** enumeration value denoting that a scrollbar should never be visible, even
@@ -79,7 +72,7 @@ namespace svt { namespace table
     /** declares an interface to be implemented by components interested in
         changes in an ->ITableModel
     */
-    class SAL_NO_VTABLE ITableModelListener : public ::boost::enable_shared_from_this< ITableModelListener >
+    class SAL_NO_VTABLE ITableModelListener : public std::enable_shared_from_this< ITableModelListener >
     {
     public:
         /** notifies the listener that one or more rows have been inserted into
@@ -157,7 +150,7 @@ namespace svt { namespace table
         /// deletes the listener instance
         virtual ~ITableModelListener(){};
     };
-    typedef ::boost::shared_ptr< ITableModelListener > PTableModelListener;
+    typedef std::shared_ptr< ITableModelListener > PTableModelListener;
 
 
     //= IColumnModel
@@ -311,7 +304,7 @@ namespace svt { namespace table
         /// deletes the column model instance
         virtual ~IColumnModel() { }
     };
-    typedef ::boost::shared_ptr< IColumnModel > PColumnModel;
+    typedef std::shared_ptr< IColumnModel > PColumnModel;
 
 
     //= ITableModel
@@ -532,7 +525,7 @@ namespace svt { namespace table
         /// destroys the table model instance
         virtual ~ITableModel() { }
     };
-    typedef ::boost::shared_ptr< ITableModel > PTableModel;
+    typedef std::shared_ptr< ITableModel > PTableModel;
 
 
 } } // namespace svt::table

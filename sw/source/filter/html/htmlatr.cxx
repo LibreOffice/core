@@ -77,7 +77,7 @@
 
 #include <svtools/HtmlWriter.hxx>
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace css;
 
@@ -202,7 +202,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 struct SwHTMLTxtCollOutputInfo
 {
     OString aToken;        // auszugendens End-Token
-    boost::scoped_ptr<SfxItemSet> pItemSet;       // harte Attributierung
+    std::unique_ptr<SfxItemSet> pItemSet;       // harte Attributierung
 
     bool bInNumBulList;         // in einer Aufzaehlungs-Liste;
     bool bParaPossible;         // ein </P> darf zusaetzlich ausgegeben werden
@@ -210,7 +210,6 @@ struct SwHTMLTxtCollOutputInfo
     bool bOutDiv;               // write a </DIV>
 
     SwHTMLTxtCollOutputInfo() :
-        pItemSet(NULL),
         bInNumBulList( false ),
         bParaPossible( false ),
         bOutPara( false ),
@@ -1733,7 +1732,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
         case HTML_AUTOFMT_VALUE:
             {
                 const SwFmtAutoFmt& rAutoFmt = static_cast<const SwFmtAutoFmt&>(rItem);
-                const boost::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
+                const std::shared_ptr<SfxItemSet> pSet = rAutoFmt.GetStyleHandle();
                 if( pSet.get() )
                     Insert( *pSet.get(), nStart, nEnd, rFmtInfos, true, bParaAttrs );
             }

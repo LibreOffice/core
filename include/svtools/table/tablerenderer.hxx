@@ -24,7 +24,7 @@
 
 #include <vcl/outdev.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class StyleSettings;
 
@@ -276,7 +276,7 @@ namespace svt { namespace table
         /// deletes the renderer instance
         virtual ~ITableRenderer() { }
     };
-    typedef ::boost::shared_ptr< ITableRenderer > PTableRenderer;
+    typedef std::shared_ptr< ITableRenderer > PTableRenderer;
 
 
 } } // namespace svt::table

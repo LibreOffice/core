@@ -41,8 +41,8 @@
 
 #include "svl/itemiter.hxx"
 
-#include <boost/make_shared.hpp>
 #include <cassert>
+#include <memory>
 
 namespace {
 
@@ -92,7 +92,7 @@ ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool b
 
 
 ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm,
-        boost::shared_ptr<ToxTabStopTokenHandler> tabStopHandler)
+        std::shared_ptr<ToxTabStopTokenHandler> tabStopHandler)
 : mToxForm(toxForm),
   mLinkProcessor(new ToxLinkProcessor()),
   mTabStopTokenHandler(tabStopHandler)
@@ -264,10 +264,10 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
     mLinkProcessor->InsertLinkAttributes(*pTOXNd);
 }
 
-/*static*/ boost::shared_ptr<SfxItemSet>
+/*static*/ std::shared_ptr<SfxItemSet>
 ToxTextGenerator::CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool)
 {
-    boost::shared_ptr<SfxItemSet> retval(new SfxItemSet(pool));
+    std::shared_ptr<SfxItemSet> retval(new SfxItemSet(pool));
     if (hint.Which() != RES_TXTATR_AUTOFMT) {
         return retval;
     }
@@ -304,7 +304,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
     const SwpHints& hints = pSrc->GetSwpHints();
     for (size_t i = 0; i < hints.Count(); ++i) {
         const SwTxtAttr* hint = hints[i];
-        boost::shared_ptr<SfxItemSet> attributesToClone = CollectAttributesForTox(*hint, pool);
+        std::shared_ptr<SfxItemSet> attributesToClone = CollectAttributesForTox(*hint, pool);
         if (attributesToClone->Count() <= 0) {
             continue;
         }

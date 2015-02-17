@@ -27,7 +27,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace sfx2
@@ -316,7 +316,7 @@ namespace sfx2
                 );
 
     private:
-        ::boost::shared_ptr< DocumentMacroMode_Data >   m_pData;
+        std::shared_ptr< DocumentMacroMode_Data >   m_xData;
     };
 
 

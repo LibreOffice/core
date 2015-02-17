@@ -92,7 +92,7 @@
 #include <oox/ole/olehelper.hxx>
 
 #include <cassert>
-#include <boost/make_shared.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -141,7 +141,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
         // iterate over all styles
         SdStyleSheetPool* pStyleSheetPool = pDocument->GetSdStyleSheetPool();
         SfxStyleSheetIteratorPtr aIter =
-                boost::make_shared<SfxStyleSheetIterator>(pStyleSheetPool, SFX_STYLE_FAMILY_ALL);
+                std::make_shared<SfxStyleSheetIterator>(pStyleSheetPool, SFX_STYLE_FAMILY_ALL);
 
         for (SfxStyleSheetBase *pSheet = aIter->First(); pSheet; pSheet = aIter->Next())
         {

@@ -74,7 +74,7 @@
 #include <svl/smplhint.hxx>
 #include <algorithm>
 #include <map>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 #ifdef DBG_UTIL
 #define CHECK           Check(true);
@@ -768,7 +768,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     // the new character format:
                     OSL_ENSURE( RES_TXTATR_AUTOFMT == (*aIter)->Which(), "AUTOSTYLES - Misc trouble" );
                     SwTxtAttr* pOther = *aIter;
-                    boost::shared_ptr<SfxItemSet> pOldStyle = static_cast<const SwFmtAutoFmt&>(pOther->GetAttr()).GetStyleHandle();
+                    std::shared_ptr<SfxItemSet> pOldStyle = static_cast<const SwFmtAutoFmt&>(pOther->GetAttr()).GetStyleHandle();
 
                     // For each attribute in the automatic style check if it
                     // is also set the new character style:
@@ -836,10 +836,10 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 ++aIter;
             }
 
-            boost::shared_ptr<SfxItemSet> pNewStyle = static_cast<const SwFmtAutoFmt&>(rNewHint.GetAttr()).GetStyleHandle();
+            std::shared_ptr<SfxItemSet> pNewStyle = static_cast<const SwFmtAutoFmt&>(rNewHint.GetAttr()).GetStyleHandle();
             if ( pCurrentAutoStyle )
             {
-                boost::shared_ptr<SfxItemSet> pCurrentStyle = static_cast<const SwFmtAutoFmt&>(pCurrentAutoStyle->GetAttr()).GetStyleHandle();
+                std::shared_ptr<SfxItemSet> pCurrentStyle = static_cast<const SwFmtAutoFmt&>(pCurrentAutoStyle->GetAttr()).GetStyleHandle();
 
                 // Merge attributes
                 SfxItemSet aNewSet( *pCurrentStyle );
@@ -1013,7 +1013,7 @@ SwTxtAttr* MakeTxtAttr(
         // If the attribute is an auto-style which refers to a pool that is
         // different from rDoc's pool, we have to correct this:
         const StylePool::SfxItemSet_Pointer_t pAutoStyle = static_cast<const SwFmtAutoFmt&>(rAttr).GetStyleHandle();
-        boost::scoped_ptr<const SfxItemSet> pNewSet(
+        std::unique_ptr<const SfxItemSet> pNewSet(
                 pAutoStyle->SfxItemSet::Clone( true, &rDoc.GetAttrPool() ));
         SwTxtAttr* pNew = MakeTxtAttr( rDoc, *pNewSet, nStt, nEnd );
         return pNew;
@@ -1900,7 +1900,7 @@ bool SwTxtNode::SetAttr(
             const bool bAutoStyle = SfxItemState::SET == aTxtSet.GetItemState( RES_TXTATR_AUTOFMT, false, &pItem );
             if ( bAutoStyle )
             {
-                boost::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFmtAutoFmt*>(pItem)->GetStyleHandle();
+                std::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFmtAutoFmt*>(pItem)->GetStyleHandle();
                 const bool bRet = SetAttr( *pAutoStyleSet );
                 if( 1 == aTxtSet.Count() )
                     return bRet;
@@ -2130,7 +2130,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         else                            // es ist ein Bereich definiert
         {
             // #i75299#
-            boost::scoped_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
+            std::unique_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
 
             const size_t coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN;
 
@@ -2165,7 +2165,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                 if( bChkInvalid )
                 {
                     // uneindeutig ?
-                    boost::scoped_ptr< SfxItemIter > pItemIter;
+                    std::unique_ptr< SfxItemIter > pItemIter;
                     const SfxPoolItem* pItem = 0;
 
                     if ( RES_TXTATR_AUTOFMT == pHt->Which() )
@@ -2458,7 +2458,7 @@ SwTxtNode::impl_FmtToTxtAttr(const SfxItemSet& i_rAttrSet)
                 // there already is an automatic style on that span:
                 // create new one and remove the original one
                 SwTxtAttr* const pAutoStyle(const_cast<SwTxtAttr*>(aAutoStyleIt->second));
-                const boost::shared_ptr<SfxItemSet> pOldStyle(
+                const std::shared_ptr<SfxItemSet> pOldStyle(
                         static_cast<const SwFmtAutoFmt&>(
                             pAutoStyle->GetAttr()).GetStyleHandle());
                 aCurSet.Put(*pOldStyle);
@@ -2672,7 +2672,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
         // check for RSID-only AUTOFMT
         if (RES_TXTATR_AUTOFMT == pHt->Which())
         {
-            boost::shared_ptr<SfxItemSet> const pSet(
+            std::shared_ptr<SfxItemSet> const pSet(
                     pHt->GetAutoFmt().GetStyleHandle());
             if ((pSet->Count() == 1) && pSet->GetItem(RES_CHRATR_RSID, false))
             {
@@ -2989,7 +2989,7 @@ bool SwpHints::TryInsertHint(
     // #i75430# Recalc hidden flags if necessary
     case RES_TXTATR_AUTOFMT:
     {
-        boost::shared_ptr<SfxItemSet> const pSet( pHint->GetAutoFmt().GetStyleHandle() );
+        std::shared_ptr<SfxItemSet> const pSet( pHint->GetAutoFmt().GetStyleHandle() );
         if (pHint->GetStart() == *pHint->GetEnd())
         {
             if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))

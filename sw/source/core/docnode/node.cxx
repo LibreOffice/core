@@ -81,7 +81,7 @@ TYPEINIT2( SwCntntNode, SwModify, SwIndexReg )
 namespace AttrSetHandleHelper
 {
 
-void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+void GetNewAutoStyle( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                       const SwCntntNode& rNode,
                       SwAttrSet& rNewAttrSet )
 {
@@ -96,7 +96,7 @@ void GetNewAutoStyle( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     rNode.SetModifyAtAttr( bSetModifyAtAttr );
 }
 
-void SetParent( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+void SetParent( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                 const SwCntntNode& rNode,
                 const SwFmt* pParentFmt,
                 const SwFmt* pConditionalFmt )
@@ -132,7 +132,7 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     }
 }
 
-const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+const SfxPoolItem* Put( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                         const SwCntntNode& rNode,
                         const SfxPoolItem& rAttr )
 {
@@ -143,7 +143,7 @@ const SfxPoolItem* Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     return pRet;
 }
 
-bool Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet, const SwCntntNode& rNode,
+bool Put( std::shared_ptr<const SfxItemSet>& rpAttrSet, const SwCntntNode& rNode,
          const SfxItemSet& rSet )
 {
     SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
@@ -171,7 +171,7 @@ bool Put( boost::shared_ptr<const SfxItemSet>& rpAttrSet, const SwCntntNode& rNo
     return nRet;
 }
 
-bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwCntntNode& rNode, const SfxPoolItem& rAttr,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -190,7 +190,7 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     return nRet;
 }
 
-bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
             const SwCntntNode& rNode, const SfxItemSet& rSet,
             SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -224,7 +224,7 @@ bool Put_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwCntntNode& rNode, sal_uInt16 nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
 {
@@ -237,7 +237,7 @@ sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
     return nRet;
 }
 
-sal_uInt16 ClearItem_BC( boost::shared_ptr<const SfxItemSet>& rpAttrSet,
+sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwCntntNode& rNode,
                      sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                      SwAttrSet* pOld, SwAttrSet* pNew )

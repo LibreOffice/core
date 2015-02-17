@@ -85,7 +85,7 @@
 #include <sortedobjs.hxx>
 #include <switerator.hxx>
 #include <attrhint.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -636,7 +636,7 @@ SwCntntNode *SwTxtNode::JoinNext()
     if( SwCntntNode::CanJoinNext( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        const std::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
         pCntntStore->Save(pDoc, aIdx.GetIndex(), SAL_MAX_INT32);
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         sal_Int32 nOldLen = m_Text.getLength();
@@ -730,7 +730,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
     if( SwCntntNode::CanJoinPrev( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        const std::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
         pCntntStore->Save( pDoc, aIdx.GetIndex(), SAL_MAX_INT32);
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         const sal_Int32 nLen = pTxtNode->Len();
@@ -848,7 +848,7 @@ void SwTxtNode::Update(
 {
     SetAutoCompleteWordDirty( true );
 
-    boost::scoped_ptr<SwpHts> pCollector;
+    std::unique_ptr<SwpHts> pCollector;
     const sal_Int32 nChangePos = rPos.GetIndex();
 
     if ( HasHints() )

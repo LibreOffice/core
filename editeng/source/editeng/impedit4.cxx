@@ -76,8 +76,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/edtdlg.hxx>
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/make_shared.hpp>
+#include <memory>
 #include <unordered_map>
 #include <vector>
 
@@ -191,11 +190,11 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
 EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
 {
     // Simply abuse a temporary text object ...
-    boost::scoped_ptr<EditTextObject> pObj(EditTextObject::Create( rInput, NULL ));
+    std::unique_ptr<EditTextObject> xObj(EditTextObject::Create( rInput, NULL ));
 
     EditPaM aLastPaM = aSel.Max();
-    if ( pObj )
-        aLastPaM = InsertText( *pObj, aSel ).Max();
+    if (xObj)
+        aLastPaM = InsertText( *xObj, aSel ).Max();
 
     return aLastPaM;
 }
@@ -293,9 +292,9 @@ static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 
 
 sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, bool bStoreUnicodeStrings )
 {
-    boost::scoped_ptr<EditTextObject> pObj(CreateTextObject(aSel, NULL));
-    pObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
-    pObj->Store(rOutput);
+    std::unique_ptr<EditTextObject> xObj(CreateTextObject(aSel, NULL));
+    xObj->mpImpl->StoreUnicodeStrings(bStoreUnicodeStrings);
+    xObj->Store(rOutput);
     return 0;
 }
 
@@ -458,7 +457,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     // StyleSheets...
     if ( GetStyleSheetPool() )
     {
-        SfxStyleSheetIteratorPtr aSSSIterator = boost::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
+        SfxStyleSheetIteratorPtr aSSSIterator = std::make_shared<SfxStyleSheetIterator>(GetStyleSheetPool(),
                 SFX_STYLE_FAMILY_ALL);
         // fill aStyleSheetToIdMap
         sal_uInt32 nId = 1;
@@ -2496,15 +2495,15 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         return EE_SPELL_ERRORFOUND;
 
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-    boost::scoped_ptr<AbstractThesaurusDialog> pDlg(pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) ));
-    if ( pDlg->Execute() == RET_OK )
+    std::unique_ptr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) ));
+    if (xDlg->Execute() == RET_OK)
     {
         // Replace Word...
         pEditView->pImpEditView->DrawSelection();
         pEditView->pImpEditView->SetEditSelection( aCurSel );
         pEditView->pImpEditView->DrawSelection();
-        pEditView->InsertText( pDlg->GetWord() );
-        pEditView->ShowCursor( true, false );
+        pEditView->InsertText(xDlg->GetWord());
+        pEditView->ShowCursor(true, false);
     }
 
     return EE_SPELL_OK;

@@ -83,7 +83,7 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+        typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
     } // end of namespace attribute
 } // end of namespace drawinglayer
 

@@ -19,7 +19,6 @@
 
 #include <bookmrk.hxx>
 #include <boost/function.hpp>
-#include <boost/make_shared.hpp>
 #include <cntfrm.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -39,6 +38,7 @@
 #include <sal/types.h>
 #include <unocrsr.hxx>
 #include <edimp.hxx>
+#include <memory>
 
 using namespace ::boost;
 using namespace ::sw::mark;
@@ -437,9 +437,9 @@ void CntntIdxStoreImpl::RestoreShellCrsrs(updater_t& rUpdater)
 }
 
 namespace sw { namespace mark {
-    boost::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
+    std::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
     {
-       return boost::make_shared<CntntIdxStoreImpl>();
+       return std::make_shared<CntntIdxStoreImpl>();
     }
 }}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

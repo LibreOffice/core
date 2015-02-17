@@ -51,7 +51,7 @@ typedef ::cppu::ImplInheritanceHelper4  <   VCLXWindow
 class SVTXGridControl : public SVTXGridControl_Base
 {
 private:
-    ::boost::shared_ptr< ::svt::table::UnoControlTableModel >   m_pTableModel;
+    std::shared_ptr< ::svt::table::UnoControlTableModel >   m_xTableModel;
     bool                                                        m_bTableModelInitCompleted;
     SelectionListenerMultiplexer                                m_aSelectionListeners;
 

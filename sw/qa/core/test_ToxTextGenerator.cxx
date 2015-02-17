@@ -15,7 +15,7 @@
 #include "ToxTextGenerator.hxx"
 #include "ToxTabStopTokenHandler.hxx"
 
-#include <boost/make_shared.hpp>
+#include <memory>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -117,7 +117,7 @@ public:
 class ToxTextGeneratorWithMockedChapterField : public ToxTextGenerator {
 public:
     ToxTextGeneratorWithMockedChapterField(SwForm &form)
-    : ToxTextGenerator(form, boost::make_shared<MockedToxTabStopTokenHandler>()),
+    : ToxTextGenerator(form, std::make_shared<MockedToxTabStopTokenHandler>()),
       mChapterFieldType(), mChapterField(&mChapterFieldType) {;}
 
     SwChapterField&

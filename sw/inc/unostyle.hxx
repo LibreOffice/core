@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_UNOSTYLE_HXX
 #define INCLUDED_SW_INC_UNOSTYLE_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <svl/style.hxx>
 #include <svl/lstner.hxx>
 #include <unocoll.hxx>
@@ -41,6 +40,7 @@
 #include <com/sun/star/style/XAutoStyle.hpp>
 
 #include <istyleaccess.hxx>
+#include <memory>
 
 class SwDocShell;
 class SfxItemPropertySet;
@@ -49,7 +49,7 @@ class SwStyleProperties_Impl;
 class SwAutoStylesEnumImpl;
 class IStyleAccess;
 class SfxItemSet;
-typedef boost::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
+typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
 class SwXStyleFamilies :  public cppu::WeakImplHelper4
 <

@@ -25,9 +25,8 @@
 #include <tools/link.hxx>
 #include <vcl/button.hxx>
 
+#include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
-
 
 namespace svt
 {
@@ -53,7 +52,7 @@ namespace svt
 
         virtual ~IWindowOperator();
     };
-    typedef ::boost::shared_ptr< IWindowOperator >  PWindowOperator;
+    typedef std::shared_ptr< IWindowOperator >  PWindowOperator;
 
 
     //= IWindowEventFilter
@@ -68,7 +67,7 @@ namespace svt
 
         virtual ~IWindowEventFilter();
     };
-    typedef ::boost::shared_ptr< IWindowEventFilter >   PWindowEventFilter;
+    typedef std::shared_ptr< IWindowEventFilter >   PWindowEventFilter;
 
 
     //= DialogController
@@ -123,7 +122,7 @@ namespace svt
         DialogController( const DialogController& ) SAL_DELETED_FUNCTION;
         DialogController& operator=( const DialogController& ) SAL_DELETED_FUNCTION;
     };
-    typedef ::boost::shared_ptr< DialogController > PDialogController;
+    typedef std::shared_ptr< DialogController > PDialogController;
 
 
     //= ControlDependencyManager

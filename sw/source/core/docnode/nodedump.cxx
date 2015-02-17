@@ -324,7 +324,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
 
             if (pHint->Which() == RES_TXTATR_AUTOFMT)
             {
-                boost::shared_ptr<SfxItemSet> const pSet(pHint->GetAutoFmt().GetStyleHandle());
+                std::shared_ptr<SfxItemSet> const pSet(pHint->GetAutoFmt().GetStyleHandle());
                 writer.startElement("autofmt");
                 pSet->dumpAsXml(writer);
                 writer.endElement();

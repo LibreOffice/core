@@ -83,12 +83,11 @@
 #include <swunohelper.hxx>
 #include <svx/xbtmpit.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 #include "ccoll.hxx"
 #include "unocore.hrc"
 
 #include <cassert>
+#include <memory>
 #include <set>
 
 #define STYLE_FAMILY_COUNT 5            // we have 5 style families

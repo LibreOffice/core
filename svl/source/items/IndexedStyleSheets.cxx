@@ -12,6 +12,7 @@
 #include <svl/style.hxx>
 
 #include <stdexcept>
+#include <algorithm>
 #include <utility>
 
 using rtl::OUString;

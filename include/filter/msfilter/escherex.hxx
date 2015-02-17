@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <tools/solar.h>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>

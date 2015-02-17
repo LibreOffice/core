@@ -73,7 +73,7 @@
 #include <ToxTabStopTokenHandler.hxx>
 #include <tools/datetimeutils.hxx>
 
-#include <boost/make_shared.hpp>
+#include <memory>
 
 using namespace ::com::sun::star;
 
@@ -995,8 +995,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // to method <GenerateText(..)>.
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        boost::shared_ptr<sw::ToxTabStopTokenHandler> tabStopTokenHandler =
-                boost::make_shared<sw::DefaultToxTabStopTokenHandler>(
+        std::shared_ptr<sw::ToxTabStopTokenHandler> tabStopTokenHandler =
+                std::make_shared<sw::DefaultToxTabStopTokenHandler>(
                         pSectNd->GetIndex(), *pDefaultPageDesc, GetTOXForm().IsRelTabPos(),
                         pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
                                 sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
@@ -1678,7 +1678,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                                     const SwTOXInternational& rIntl )
 {
     // collect starts end ends of main entry character style
-    boost::scoped_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : 0);
+    std::unique_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : 0);
 
     OUString sSrchStr = OUStringBuffer().append(C_NUM_REPL).
         append(S_PAGE_DELI).append(C_NUM_REPL).makeStringAndClear();

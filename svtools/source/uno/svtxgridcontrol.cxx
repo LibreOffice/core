@@ -77,7 +77,7 @@ typedef ::com::sun::star::util::Color   UnoColor;
 
 
 SVTXGridControl::SVTXGridControl()
-    :m_pTableModel( new UnoControlTableModel() )
+    :m_xTableModel( new UnoControlTableModel() )
     ,m_bTableModelInitCompleted( false )
     ,m_aSelectionListeners( *this )
 {
@@ -203,7 +203,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
                 break;
             }
 
-            m_pTableModel->setRowHeaderWidth( rowHeaderWidth );
+            m_xTableModel->setRowHeaderWidth( rowHeaderWidth );
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
             pTable->Invalidate();
         }
@@ -226,7 +226,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
                 break;
             }
 
-            m_pTableModel->setColumnHeaderHeight( columnHeaderHeight );
+            m_xTableModel->setColumnHeaderHeight( columnHeaderHeight );
             // TODO: the model should broadcast this change itself, and the table should invalidate itself as needed
             pTable->Invalidate();
         }
@@ -235,7 +235,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
         case BASEPROPERTY_USE_GRID_LINES:
         {
             GridTableRenderer* pGridRenderer = dynamic_cast< GridTableRenderer* >(
-                m_pTableModel->getRenderer().get() );
+                m_xTableModel->getRenderer().get() );
             if ( !pGridRenderer )
             {
                 SAL_WARN( "svtools.uno", "SVTXGridControl::setProperty(UseGridLines): invalid renderer!" );
@@ -260,7 +260,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
             {
                 aValue >>= rowHeight;
             }
-            m_pTableModel->setRowHeight( rowHeight );
+            m_xTableModel->setRowHeight( rowHeight );
             if ( rowHeight <= 0 )
             {
                 SAL_WARN( "svtools.uno", "SVTXGridControl::setProperty: illegal row height!" );
@@ -306,7 +306,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
         {
             bool bHScroll = true;
             if( aValue >>= bHScroll )
-                m_pTableModel->setHorizontalScrollbarVisibility( bHScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
+                m_xTableModel->setHorizontalScrollbarVisibility( bHScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             break;
         }
 
@@ -315,7 +315,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
             bool bVScroll = true;
             if( aValue >>= bVScroll )
             {
-                m_pTableModel->setVerticalScrollbarVisibility( bVScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
+                m_xTableModel->setVerticalScrollbarVisibility( bVScroll ? ScrollbarShowAlways : ScrollbarShowSmart );
             }
             break;
         }
@@ -325,59 +325,59 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
             bool rowHeader = true;
             if( aValue >>= rowHeader )
             {
-                m_pTableModel->setRowHeaders(rowHeader);
+                m_xTableModel->setRowHeaders(rowHeader);
             }
             break;
         }
 
         case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
-            m_pTableModel->setRowBackgroundColors( aValue );
+            m_xTableModel->setRowBackgroundColors( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_GRID_LINE_COLOR:
-            m_pTableModel->setLineColor( aValue );
+            m_xTableModel->setLineColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:
-            m_pTableModel->setHeaderBackgroundColor( aValue );
+            m_xTableModel->setHeaderBackgroundColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
-            m_pTableModel->setHeaderTextColor( aValue );
+            m_xTableModel->setHeaderTextColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR:
-            m_pTableModel->setActiveSelectionBackColor( aValue );
+            m_xTableModel->setActiveSelectionBackColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR:
-            m_pTableModel->setInactiveSelectionBackColor( aValue );
+            m_xTableModel->setInactiveSelectionBackColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR:
-            m_pTableModel->setActiveSelectionTextColor( aValue );
+            m_xTableModel->setActiveSelectionTextColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR:
-            m_pTableModel->setInactiveSelectionTextColor( aValue );
+            m_xTableModel->setInactiveSelectionTextColor( aValue );
             pTable->Invalidate();
             break;
 
 
         case BASEPROPERTY_TEXTCOLOR:
-            m_pTableModel->setTextColor( aValue );
+            m_xTableModel->setTextColor( aValue );
             pTable->Invalidate();
             break;
 
         case BASEPROPERTY_TEXTLINECOLOR:
-            m_pTableModel->setTextLineColor( aValue );
+            m_xTableModel->setTextLineColor( aValue );
             pTable->Invalidate();
             break;
 
@@ -385,7 +385,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
         {
             VerticalAlignment eAlign( VerticalAlignment_TOP );
             if ( aValue >>= eAlign )
-                m_pTableModel->setVerticalAlign( eAlign );
+                m_xTableModel->setVerticalAlign( eAlign );
             break;
         }
 
@@ -394,7 +394,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
             bool colHeader = true;
             if( aValue >>= colHeader )
             {
-                m_pTableModel->setColumnHeaders(colHeader);
+                m_xTableModel->setColumnHeaders(colHeader);
             }
             break;
         }
@@ -404,7 +404,7 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
             if ( !xDataModel.is() )
                 throw GridInvalidDataException("Invalid data model.", *this );
 
-            m_pTableModel->setDataModel( xDataModel );
+            m_xTableModel->setDataModel( xDataModel );
             impl_checkTableModelInit();
         }
         break;
@@ -417,10 +417,10 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
                 throw GridInvalidModelException("Invalid column model.", *this );
 
             // remove all old columns
-            m_pTableModel->removeAllColumns();
+            m_xTableModel->removeAllColumns();
 
             // announce to the TableModel
-            m_pTableModel->setColumnModel( xColumnModel );
+            m_xTableModel->setColumnModel( xColumnModel );
             impl_checkTableModelInit();
 
             // add new columns
@@ -436,23 +436,23 @@ void SVTXGridControl::setProperty( const OUString& PropertyName, const Any& aVal
 
 void SVTXGridControl::impl_checkTableModelInit()
 {
-    if ( !m_bTableModelInitCompleted && m_pTableModel->hasColumnModel() && m_pTableModel->hasDataModel() )
+    if ( !m_bTableModelInitCompleted && m_xTableModel->hasColumnModel() && m_xTableModel->hasDataModel() )
     {
         TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
         if ( pTable )
         {
-            pTable->SetModel( PTableModel( m_pTableModel ) );
+            pTable->SetModel( PTableModel( m_xTableModel ) );
 
             m_bTableModelInitCompleted = true;
 
             // ensure default columns exist, if they have not previously been added
-            Reference< XGridDataModel > const xDataModel( m_pTableModel->getDataModel(), UNO_QUERY_THROW );
-            Reference< XGridColumnModel > const xColumnModel( m_pTableModel->getColumnModel(), UNO_QUERY_THROW );
+            Reference< XGridDataModel > const xDataModel( m_xTableModel->getDataModel(), UNO_QUERY_THROW );
+            Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel(), UNO_QUERY_THROW );
 
             sal_Int32 const nDataColumnCount = xDataModel->getColumnCount();
             if ( ( nDataColumnCount > 0 ) && ( xColumnModel->getColumnCount() == 0 ) )
                 xColumnModel->setDefaultColumns( nDataColumnCount );
-                // this will trigger notifications, which in turn will let us update our m_pTableModel
+                // this will trigger notifications, which in turn will let us update our m_xTableModel
         }
     }
 }
@@ -497,31 +497,31 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
     }
 
     case BASEPROPERTY_GRID_SHOWROWHEADER:
-        aPropertyValue <<= m_pTableModel->hasRowHeaders();
+        aPropertyValue <<= m_xTableModel->hasRowHeaders();
         break;
 
     case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-        aPropertyValue <<= m_pTableModel->hasColumnHeaders();
+        aPropertyValue <<= m_xTableModel->hasColumnHeaders();
         break;
 
     case BASEPROPERTY_GRID_DATAMODEL:
-        aPropertyValue <<= m_pTableModel->getDataModel();
+        aPropertyValue <<= m_xTableModel->getDataModel();
         break;
 
     case BASEPROPERTY_GRID_COLUMNMODEL:
-        aPropertyValue <<= m_pTableModel->getColumnModel();
+        aPropertyValue <<= m_xTableModel->getColumnModel();
         break;
 
     case BASEPROPERTY_HSCROLL:
         {
-            bool const bHasScrollbar = ( m_pTableModel->getHorizontalScrollbarVisibility() != ScrollbarShowNever );
+            bool const bHasScrollbar = ( m_xTableModel->getHorizontalScrollbarVisibility() != ScrollbarShowNever );
             aPropertyValue <<= bHasScrollbar;
             break;
         }
 
     case BASEPROPERTY_VSCROLL:
         {
-            bool const bHasScrollbar = ( m_pTableModel->getVerticalScrollbarVisibility() != ScrollbarShowNever );
+            bool const bHasScrollbar = ( m_xTableModel->getVerticalScrollbarVisibility() != ScrollbarShowNever );
             aPropertyValue <<= bHasScrollbar;
             break;
         }
@@ -529,7 +529,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
     case BASEPROPERTY_USE_GRID_LINES:
     {
         GridTableRenderer* pGridRenderer = dynamic_cast< GridTableRenderer* >(
-            m_pTableModel->getRenderer().get() );
+            m_xTableModel->getRenderer().get() );
         if ( !pGridRenderer )
         {
             SAL_WARN( "svtools.uno", "SVTXGridControl::getProperty(UseGridLines): invalid renderer!" );
@@ -542,7 +542,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
 
     case BASEPROPERTY_GRID_ROW_BACKGROUND_COLORS:
     {
-        ::boost::optional< ::std::vector< ::Color > > aColors( m_pTableModel->getRowBackgroundColors() );
+        ::boost::optional< ::std::vector< ::Color > > aColors( m_xTableModel->getRowBackgroundColors() );
         if ( !aColors )
             aPropertyValue.clear();
         else
@@ -558,39 +558,39 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
     break;
 
     case BASEPROPERTY_GRID_LINE_COLOR:
-        lcl_convertColor( m_pTableModel->getLineColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getLineColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_GRID_HEADER_BACKGROUND:
-        lcl_convertColor( m_pTableModel->getHeaderBackgroundColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getHeaderBackgroundColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_GRID_HEADER_TEXT_COLOR:
-        lcl_convertColor( m_pTableModel->getHeaderTextColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getHeaderTextColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_ACTIVE_SEL_BACKGROUND_COLOR:
-        lcl_convertColor( m_pTableModel->getActiveSelectionBackColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getActiveSelectionBackColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR:
-        lcl_convertColor( m_pTableModel->getInactiveSelectionBackColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getInactiveSelectionBackColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR:
-        lcl_convertColor( m_pTableModel->getActiveSelectionTextColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getActiveSelectionTextColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR:
-        lcl_convertColor( m_pTableModel->getInactiveSelectionTextColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getInactiveSelectionTextColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_TEXTCOLOR:
-        lcl_convertColor( m_pTableModel->getTextColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getTextColor(), aPropertyValue );
         break;
 
     case BASEPROPERTY_TEXTLINECOLOR:
-        lcl_convertColor( m_pTableModel->getTextLineColor(), aPropertyValue );
+        lcl_convertColor( m_xTableModel->getTextLineColor(), aPropertyValue );
         break;
 
     default:
@@ -605,7 +605,7 @@ Any SVTXGridControl::getProperty( const OUString& PropertyName ) throw(RuntimeEx
 void SAL_CALL SVTXGridControl::rowsInserted( const GridDataEvent& i_event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    m_pTableModel->notifyRowsInserted( i_event );
+    m_xTableModel->notifyRowsInserted( i_event );
 }
 
 
@@ -613,7 +613,7 @@ void SAL_CALL
  SVTXGridControl::rowsRemoved( const GridDataEvent& i_event ) throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    m_pTableModel->notifyRowsRemoved( i_event );
+    m_xTableModel->notifyRowsRemoved( i_event );
 }
 
 
@@ -621,7 +621,7 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event ) throw
 {
     SolarMutexGuard aGuard;
 
-    m_pTableModel->notifyDataChanged( i_event );
+    m_xTableModel->notifyDataChanged( i_event );
 
     // if the data model is sortable, a dataChanged event is also fired in case the sort order changed.
     // So, just in case, invalidate the column header area, too.
@@ -650,9 +650,9 @@ void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) 
 
     Reference< XGridColumn > const xGridColumn( i_event.Element, UNO_QUERY_THROW );
 
-    sal_Int32 nIndex( m_pTableModel->getColumnCount() );
+    sal_Int32 nIndex( m_xTableModel->getColumnCount() );
     OSL_VERIFY( i_event.Accessor >>= nIndex );
-    m_pTableModel->insertColumn( nIndex, xGridColumn );
+    m_xTableModel->insertColumn( nIndex, xGridColumn );
 }
 
 
@@ -662,7 +662,7 @@ void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event ) t
 
     sal_Int32 nIndex( -1 );
     OSL_VERIFY( i_event.Accessor >>= nIndex );
-    m_pTableModel->removeColumn( nIndex );
+    m_xTableModel->removeColumn( nIndex );
 }
 
 
@@ -857,7 +857,7 @@ void SVTXGridControl::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno:
 {
     SolarMutexGuard aGuard;
 
-    m_pTableModel->setEnabled( bEnable );
+    m_xTableModel->setEnabled( bEnable );
     vcl::Window * pWindow = GetWindow();
     if ( pWindow )
     {
@@ -889,7 +889,7 @@ void SVTXGridControl::ImplCallItemListeners()
 
 void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
 {
-    Reference< XGridColumnModel > const xColumnModel( m_pTableModel->getColumnModel() );
+    Reference< XGridColumnModel > const xColumnModel( m_xTableModel->getColumnModel() );
     ENSURE_OR_RETURN_VOID( xColumnModel.is(), "no model!" );
     TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pTable != NULL, "no table!" );
@@ -908,7 +908,7 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
                 continue;
             }
 
-            m_pTableModel->appendColumn( *colRef );
+            m_xTableModel->appendColumn( *colRef );
         }
     }
     catch( const Exception& )

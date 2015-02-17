@@ -68,7 +68,7 @@ namespace sw { namespace mark
             sal_uLong m_nNode2;
             sal_Int32 m_nCntnt1;
             sal_Int32 m_nCntnt2;
-            ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
+            std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 
     /// Takes care of storing relevant attributes of an SwTxtNode before split, then restore them on the new node.
@@ -81,7 +81,7 @@ namespace sw { namespace mark
             virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) =0;
             virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) =0;
             virtual ~CntntIdxStore() {};
-            static boost::shared_ptr<CntntIdxStore> Create();
+            static std::shared_ptr<CntntIdxStore> Create();
     };
 }}
 

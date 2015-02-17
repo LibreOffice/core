@@ -21,12 +21,12 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_UNDOTABLE_HXX
 
 #include <undobj.hxx>
-#include <vector>
 #include <set>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
+#include <memory>
+#include <vector>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
 
 class SfxItemSet;
 
@@ -145,7 +145,7 @@ class SwUndoTblAutoFmt : public SwUndo
 {
     sal_uLong nSttNode;
     _SaveTable* pSaveTbl;
-    ::std::vector< ::boost::shared_ptr<SwUndoTblNumFmt> > m_Undos;
+    std::vector< std::shared_ptr<SwUndoTblNumFmt> > m_Undos;
     bool bSaveCntntAttr;
     sal_uInt16 m_nRepeatHeading;
 
@@ -173,8 +173,8 @@ class SwUndoTblNdsChg : public SwUndo, private boost::noncopyable
         _BoxMove(sal_uLong idx, bool moved=false) : index(idx), hasMoved(moved) {};
         bool operator<(const _BoxMove other) const { return index < other.index; };
     };
-    boost::scoped_ptr< std::set<_BoxMove> > pNewSttNds;
-    boost::scoped_ptr< SwUndoSaveSections > pDelSects;
+    std::unique_ptr< std::set<_BoxMove> > pNewSttNds;
+    std::unique_ptr< SwUndoSaveSections > pDelSects;
     long nMin, nMax;        // for redo of delete column
     sal_uLong nSttNode, nCurrBox;
     sal_uInt16 nCount, nRelDiff, nAbsDiff, nSetColType;

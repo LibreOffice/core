@@ -1959,7 +1959,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         bSplit = true;
         const sal_Int32 nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
-        const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        const std::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
         pCntntStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
 
         pTNd = pTNd->SplitCntntNode( rPos )->GetTxtNode();
@@ -2880,7 +2880,7 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
         }
     }
 
-    const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+    const std::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
     pCntntStore->Save( &m_rDoc, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(), true );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
     OSL_ENSURE(pNode->IsTxtNode(), "splitting non-text node?");
@@ -4096,7 +4096,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwUndoCpyDoc* pUndo = 0;
     // lcl_DeleteRedlines may delete the start or end node of the cursor when
     // removing the redlines so use cursor that is corrected by PaMCorrAbs
-    ::boost::scoped_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr(rPos));
+    std::unique_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr(rPos));
 
     SwTblNumFmtMerge aTNFM( m_rDoc, *pDoc );
 

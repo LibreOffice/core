@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVL_STYLEPOOL_HXX
 #define INCLUDED_SVL_STYLEPOOL_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <rtl/ustring.hxx>
 #include <svl/itemset.hxx>
 
@@ -31,7 +31,7 @@ class SVL_DLLPUBLIC StylePool
 private:
     StylePoolImpl *pImpl;
 public:
-    typedef boost::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
+    typedef std::shared_ptr<SfxItemSet> SfxItemSet_Pointer_t;
 
     explicit StylePool( SfxItemSet* pIgnorableItems = 0 );
 

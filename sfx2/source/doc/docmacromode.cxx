@@ -134,7 +134,7 @@ namespace sfx2
 
 
     DocumentMacroMode::DocumentMacroMode( IMacroDocumentAccess& rDocumentAccess )
-        :m_pData( new DocumentMacroMode_Data( rDocumentAccess ) )
+        :m_xData( new DocumentMacroMode_Data( rDocumentAccess ) )
     {
     }
 
@@ -146,26 +146,26 @@ namespace sfx2
 
     bool DocumentMacroMode::allowMacroExecution()
     {
-        m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
+        m_xData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
         return true;
     }
 
 
     bool DocumentMacroMode::disallowMacroExecution()
     {
-        m_pData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
+        m_xData->m_rDocumentAccess.setCurrentMacroExecMode( MacroExecMode::NEVER_EXECUTE );
         return false;
     }
 
 
     bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& rxInteraction )
     {
-        sal_uInt16 nMacroExecutionMode = m_pData->m_rDocumentAccess.getCurrentMacroExecMode();
+        sal_uInt16 nMacroExecutionMode = m_xData->m_rDocumentAccess.getCurrentMacroExecMode();
 
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
             // no macro should be executed at all
-            lcl_showMacrosDisabledError( rxInteraction, m_pData->m_bMacroDisabledMessageShown );
+            lcl_showMacrosDisabledError( rxInteraction, m_xData->m_bMacroDisabledMessageShown );
             return disallowMacroExecution();
         }
 
@@ -217,7 +217,7 @@ namespace sfx2
 
         try
         {
-            OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
+            OUString sReferrer( m_xData->m_rDocumentAccess.getDocumentLocation() );
 
             // get document location from medium name and check whether it is a trusted one
             // the service is created ohne document version, since it is not of interest here
@@ -236,7 +236,7 @@ namespace sfx2
             // at this point it is clear that the document is not in the secure location
             if ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
             {
-                lcl_showDocumentMacrosDisabledError( rxInteraction, m_pData->m_bDocMacroDisabledMessageShown );
+                lcl_showDocumentMacrosDisabledError( rxInteraction, m_xData->m_bDocMacroDisabledMessageShown );
                 return disallowMacroExecution();
             }
 
@@ -244,14 +244,14 @@ namespace sfx2
             if ( nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
                 // the trusted macro check will also retrieve the signature state ( small optimization )
-                bool bHasTrustedMacroSignature = m_pData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
+                bool bHasTrustedMacroSignature = m_xData->m_rDocumentAccess.hasTrustedScriptingSignature( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN );
 
-                sal_uInt16 nSignatureState = m_pData->m_rDocumentAccess.getScriptingSignatureState();
+                sal_uInt16 nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
                 {
                     // the signature is broken, no macro execution
                     if ( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                        m_pData->m_rDocumentAccess.showBrokenSignatureWarning( rxInteraction );
+                        m_xData->m_rDocumentAccess.showBrokenSignatureWarning( rxInteraction );
 
                     return disallowMacroExecution();
                 }
@@ -274,7 +274,7 @@ namespace sfx2
                 )
             {
                 if  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                    lcl_showDocumentMacrosDisabledError( rxInteraction, m_pData->m_bDocMacroDisabledMessageShown );
+                    lcl_showDocumentMacrosDisabledError( rxInteraction, m_xData->m_bDocMacroDisabledMessageShown );
 
                 return disallowMacroExecution();
             }
@@ -295,7 +295,7 @@ namespace sfx2
 
         if ( eAutoConfirm == eNoAutoConfirm )
         {
-            OUString sReferrer( m_pData->m_rDocumentAccess.getDocumentLocation() );
+            OUString sReferrer( m_xData->m_rDocumentAccess.getDocumentLocation() );
 
             OUString aSystemFileURL;
             if ( osl::FileBase::getSystemPathFromFileURL( sReferrer, aSystemFileURL ) == osl::FileBase::E_None )
@@ -312,7 +312,7 @@ namespace sfx2
 
     bool DocumentMacroMode::isMacroExecutionDisallowed() const
     {
-        return m_pData->m_rDocumentAccess.getCurrentMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
+        return m_xData->m_rDocumentAccess.getCurrentMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
     }
 
 
@@ -369,7 +369,7 @@ namespace sfx2
 #if HAVE_FEATURE_SCRIPTING
         try
         {
-            Reference< XEmbeddedScripts > xScripts( m_pData->m_rDocumentAccess.getEmbeddedDocumentScripts() );
+            Reference< XEmbeddedScripts > xScripts( m_xData->m_rDocumentAccess.getEmbeddedDocumentScripts() );
             Reference< XLibraryContainer > xContainer;
             if ( xScripts.is() )
                 xContainer.set( xScripts->getBasicLibraries(), UNO_QUERY_THROW );
@@ -422,7 +422,7 @@ namespace sfx2
         }
         else
         {
-            if ( m_pData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() )
+            if ( m_xData->m_rDocumentAccess.documentStorageHasMacros() || hasMacroLibrary() )
             {
                 bAllow = adjustMacroMode( rxInteraction );
             }

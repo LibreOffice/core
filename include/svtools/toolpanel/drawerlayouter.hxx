@@ -24,7 +24,7 @@
 #include <svtools/toolpanel/toolpaneldeck.hxx>
 #include <svtools/toolpanel/decklayouter.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace svt
@@ -33,7 +33,7 @@ namespace svt
 
     class ToolPanelViewShell;
     class ToolPanelDrawer;
-    typedef ::boost::shared_ptr< ToolPanelDrawer >  PToolPanelDrawer;
+    typedef std::shared_ptr< ToolPanelDrawer >  PToolPanelDrawer;
 
 
     //= ToolPanelDrawer

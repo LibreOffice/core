@@ -26,8 +26,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/rdf/XMetadatable.hpp>
 
-#include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 namespace com { namespace sun { namespace star {
@@ -64,9 +63,8 @@ createXmlIdRegistry(const bool i_DocIsClipboard);
             previous hooks</li></ul>
     </p>
  */
-class SFX2_DLLPUBLIC Metadatable : private boost::noncopyable
+class SFX2_DLLPUBLIC Metadatable
 {
-
 public:
     Metadatable() : m_pReg(0) {}
 
@@ -90,11 +88,11 @@ public:
         const bool i_bCopyPrecedesSource = false);
 
     /** create an Undo Metadatable, which remembers this' reference */
-    ::boost::shared_ptr<MetadatableUndo> CreateUndo() const;
-    ::boost::shared_ptr<MetadatableUndo> CreateUndoForDelete();
+    std::shared_ptr<MetadatableUndo> CreateUndo() const;
+    std::shared_ptr<MetadatableUndo> CreateUndoForDelete();
 
     /** restore this from Undo Metadatable */
-    void RestoreMetadata(::boost::shared_ptr<MetadatableUndo> const& i_pUndo);
+    void RestoreMetadata(std::shared_ptr<MetadatableUndo> const& i_pUndo);
 
     /** merge this and i_rOther into this */
     void JoinMetadatable(Metadatable const & i_rOther,
@@ -122,6 +120,9 @@ public:
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject() = 0;
 
 private:
+    Metadatable(const Metadatable&) SAL_DELETED_FUNCTION;
+    Metadatable& operator=(const Metadatable&) SAL_DELETED_FUNCTION;
+
     friend class MetadatableClipboard;
     friend class MetadatableUndo;
 

@@ -378,7 +378,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 }
                 pOldTxtNd->FmtToTxtAttr( pTxtNd );
 
-                const boost::shared_ptr< sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+                const std::shared_ptr< sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
                 pCntntStore->Save( pDoc, aOldIdx.GetIndex(), pOldTxtNd->Len() );
 
                 SwIndex aAlphaIdx(pTxtNd);

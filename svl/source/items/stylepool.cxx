@@ -17,15 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vector>
-#include <map>
-
 #include <svl/stylepool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/itempool.hxx>
-#include <boost/scoped_ptr.hpp>
-
-using namespace boost;
+#include <algorithm>
+#include <map>
+#include <memory>
+#include <vector>
 
 namespace {
     /** A "Node" represents a subset of inserted SfxItemSets
@@ -400,27 +398,27 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     // Every SfxPoolItem in the SfxItemSet causes a step deeper into the tree,
     // a complete empty SfxItemSet would stay at the root node.
     // #i86923# insert ignorable items to the tree leaves.
-    boost::scoped_ptr<SfxItemSet> pFoundIgnorableItems;
+    std::unique_ptr<SfxItemSet> xFoundIgnorableItems;
     if ( mpIgnorableItems )
     {
-        pFoundIgnorableItems.reset( new SfxItemSet( *mpIgnorableItems ) );
+        xFoundIgnorableItems.reset( new SfxItemSet( *mpIgnorableItems ) );
     }
     while( pItem )
     {
         if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SFX_ITEM_POOLABLE ) )
             bNonPoolable = true;
-        if ( !pFoundIgnorableItems.get() ||
-             ( pFoundIgnorableItems.get() &&
-               pFoundIgnorableItems->Put( *pItem ) == 0 ) )
+        if ( !xFoundIgnorableItems.get() ||
+             ( xFoundIgnorableItems.get() &&
+               xFoundIgnorableItems->Put( *pItem ) == 0 ) )
         {
             pCurNode = pCurNode->findChildNode( *pItem );
         }
         pItem = aIter.NextItem();
     }
-    if ( pFoundIgnorableItems.get() &&
-         pFoundIgnorableItems->Count() > 0 )
+    if ( xFoundIgnorableItems.get() &&
+         xFoundIgnorableItems->Count() > 0 )
     {
-        SfxItemIter aIgnorableItemsIter( *pFoundIgnorableItems );
+        SfxItemIter aIgnorableItemsIter( *xFoundIgnorableItems );
         pItem = aIgnorableItemsIter.GetCurItem();
         while( pItem )
         {

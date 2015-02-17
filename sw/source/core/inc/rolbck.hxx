@@ -260,7 +260,7 @@ class SwHistoryBookmark : public SwHistoryHint
         const bool m_bSaveOtherPos;
         const bool m_bHadOtherPos;
         const IDocumentMarkAccess::MarkType m_eBkmkType;
-        ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
+        std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
 };
 
 class SwHistorySetAttrSet : public SwHistoryHint

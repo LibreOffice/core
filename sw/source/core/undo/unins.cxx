@@ -492,8 +492,8 @@ class SwUndoReplace::Impl
     bool m_bSplitNext : 1;
     bool m_bRegExp : 1;
     // metadata references for paragraph and following para (if m_bSplitNext)
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
+    std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
 public:
     Impl(SwPaM const& rPam, OUString const& rIns, bool const bRegExp);

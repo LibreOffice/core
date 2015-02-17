@@ -24,7 +24,7 @@
 #include "sal/types.h"
 #include "swdllapi.h"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 class SfxItemSet;
@@ -57,7 +57,7 @@ class ToxTabStopTokenHandler;
 class ToxTextGenerator
 {
 public:
-    ToxTextGenerator(const SwForm& toxForm, boost::shared_ptr<ToxTabStopTokenHandler> tabStopHandler);
+    ToxTextGenerator(const SwForm& toxForm, std::shared_ptr<ToxTabStopTokenHandler> tabStopHandler);
 
     virtual ~ToxTextGenerator();
 
@@ -72,8 +72,8 @@ public:
 
 private:
     const SwForm& mToxForm;
-    boost::shared_ptr<ToxLinkProcessor> mLinkProcessor;
-    boost::shared_ptr<ToxTabStopTokenHandler> mTabStopTokenHandler;
+    std::shared_ptr<ToxLinkProcessor> mLinkProcessor;
+    std::shared_ptr<ToxTabStopTokenHandler> mTabStopTokenHandler;
 
     /** A handled text token.
      * It contains the information which should be added to the target text node.
@@ -116,7 +116,7 @@ private:
      * @param hint The hint from which the attributes are taken
      * @param pool The attribute pool for the new items
      */
-    static boost::shared_ptr<SfxItemSet>
+    static std::shared_ptr<SfxItemSet>
     CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool);
 
     /** This method will call GetNumStringOfFirstNode() of the first node in the provided SwTOXSortTabBase.

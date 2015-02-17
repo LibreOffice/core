@@ -20,11 +20,6 @@
 #ifndef INCLUDED_SW_INC_NODE_HXX
 #define INCLUDED_SW_INC_NODE_HXX
 
-#include <vector>
-
-#include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
-
 #include <sal/types.h>
 #include <tools/mempool.hxx>
 
@@ -33,6 +28,9 @@
 #include <ndtyp.hxx>
 #include <index.hxx>
 #include <fmtcol.hxx>
+
+#include <memory>
+#include <vector>
 
 // forward declarations
 
@@ -77,7 +75,7 @@ typedef std::vector<SwOLENode*> SwOLENodes; // docary.hxx
 //UUUU
 namespace drawinglayer { namespace attribute {
     class SdrAllFillAttributesHelper;
-    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+    typedef std::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
 }}
 
 /// Base class of the Writer document model elements.
@@ -363,7 +361,7 @@ protected:
 
     /**  Attribute-set for all auto attributes of a CntntNode.
       (e.g. TxtNode or NoTxtNode). */
-    boost::shared_ptr<const SfxItemSet> mpAttrSet;
+    std::shared_ptr<const SfxItemSet> mpAttrSet;
 
     /// Make respective nodes create the specific AttrSets.
     virtual void NewAttrSet( SwAttrPool& ) = 0;
@@ -525,12 +523,14 @@ private:
 
 class SwSectionNode
     : public SwStartNode
-    , private ::boost::noncopyable
 {
     friend class SwNodes;
 
 private:
-    ::std::unique_ptr<SwSection> const m_pSection;
+    SwSectionNode(const SwSectionNode&) SAL_DELETED_FUNCTION;
+    SwSectionNode& operator=(const SwSectionNode&) SAL_DELETED_FUNCTION;
+
+    std::unique_ptr<SwSection> const m_pSection;
 
 protected:
     virtual ~SwSectionNode();

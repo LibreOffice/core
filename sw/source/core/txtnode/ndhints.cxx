@@ -173,7 +173,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
             SwTxtAttr const*const pHint(m_HintStarts[i]);
             if (RES_TXTATR_AUTOFMT == pHint->Which())
             {
-                boost::shared_ptr<SfxItemSet> const pSet(
+                std::shared_ptr<SfxItemSet> const pSet(
                         pHint->GetAutoFmt().GetStyleHandle());
                 if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
                 {

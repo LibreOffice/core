@@ -16,6 +16,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <algorithm>
+
 using namespace svl;
 
 class MockedStyleSheet : public SfxStyleSheetBase

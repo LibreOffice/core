@@ -427,10 +427,10 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtForm
             if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != NULL
                 && hint->GetStart() == *hint->GetEnd() && hint->GetStart() == node->Len())
             {
-                boost::shared_ptr<SfxItemSet> pSet(hint->GetAutoFmt().GetStyleHandle());
+                std::shared_ptr<SfxItemSet> pSet(hint->GetAutoFmt().GetStyleHandle());
 
                 // Check each item and in case it should be ignored, then clear it.
-                boost::shared_ptr<SfxItemSet> pCleanedSet;
+                std::shared_ptr<SfxItemSet> pCleanedSet;
                 if (pSet.get())
                 {
                     pCleanedSet.reset(pSet->Clone());
