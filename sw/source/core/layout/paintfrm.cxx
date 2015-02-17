@@ -6455,6 +6455,15 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     pOut->Pop();
 }
 
+static bool lcl_compareFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& pA, const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& pB)
+{
+    if (pA == pB)
+        return true;
+    if (!pA || !pB)
+        return false;
+    return pA->getFillAttribute() == pB->getFillAttribute();
+}
+
 /// OD 05.09.2002 #102912#
 /// Do not paint background for fly frames without a background brush by
 /// calling <PaintBaBo> at the page or at the fly frame its anchored
@@ -6559,8 +6568,8 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 ::lcl_CalcBorderRect( aRect, this, rAttrs, false, gProp);
                 if ( (IsTxtFrm() || IsTabFrm()) && GetPrev() )
                 {
-                    if ( GetPrev()->GetAttrSet()->GetBackground() ==
-                         GetAttrSet()->GetBackground() )
+                    if ( GetPrev()->GetAttrSet()->GetBackground() == GetAttrSet()->GetBackground() &&
+                         lcl_compareFillAttributes(GetPrev()->getSdrAllFillAttributesHelper(), getSdrAllFillAttributesHelper()))
                     {
                         aRect.Top( Frm().Top() );
                     }
