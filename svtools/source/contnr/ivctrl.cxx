@@ -93,8 +93,12 @@ SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 
 void SvtIconChoiceCtrl::dispose()
 {
-    _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
-    delete _pImp;
+    if (_pImp)
+    {
+        _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
+        delete _pImp;
+        _pImp = NULL;
+    }
     Control::dispose();
 }
 
