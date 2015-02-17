@@ -57,6 +57,7 @@ class SwParagraphNumTabPage : public SfxTabPage
     DECL_LINK( StyleHdl_Impl, ListBox* );
     DECL_LINK(LineCountHdl_Impl, void *);
     DECL_LINK(EditNumStyleHdl_Impl, void *);
+    DECL_LINK(EditNumStyleSelectHdl_Impl, void *);
 
 protected:
         SwParagraphNumTabPage(vcl::Window* pParent, const SfxItemSet& rSet );
