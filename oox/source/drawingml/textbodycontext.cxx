@@ -57,41 +57,41 @@ ContextHandlerRef TextParagraphContext::onCreateContext( sal_Int32 aElementToken
     // EG_TextRun
     switch( aElementToken )
     {
-    case A_TOKEN( r ):      // "CT_RegularTextRun" Regular Text Run.
-    case W_TOKEN( r ):
-    {
-        TextRunPtr pRun( new TextRun );
-        mrParagraph.addRun( pRun );
-        return new RegularTextRunContext( *this, pRun );
-    }
-    case A_TOKEN( br ): // "CT_TextLineBreak" Soft return line break (vertical tab).
-    {
-        TextRunPtr pRun( new TextRun );
-        pRun->setLineBreak();
-        mrParagraph.addRun( pRun );
-        return new RegularTextRunContext( *this, pRun );
-    }
-    case A_TOKEN( fld ):    // "CT_TextField" Text Field.
-    {
-        TextFieldPtr pField( new TextField );
-        mrParagraph.addRun( pField );
-        return new TextFieldContext( *this, rAttribs, *pField );
-    }
-    case A_TOKEN( pPr ):
-    case W_TOKEN( pPr ):
-        return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties() );
-    case A_TOKEN( endParaRPr ):
-        return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );
-    case W_TOKEN( sdt ):
-    case W_TOKEN( sdtContent ):
-        return this;
-    case W_TOKEN( del ):
+        case A_TOKEN( r ):      // "CT_RegularTextRun" Regular Text Run.
+        case W_TOKEN( r ):
+        {
+            TextRunPtr pRun( new TextRun );
+            mrParagraph.addRun( pRun );
+            return new RegularTextRunContext( *this, pRun );
+        }
+        case A_TOKEN( br ): // "CT_TextLineBreak" Soft return line break (vertical tab).
+        {
+            TextRunPtr pRun( new TextRun );
+            pRun->setLineBreak();
+            mrParagraph.addRun( pRun );
+            return new RegularTextRunContext( *this, pRun );
+        }
+        case A_TOKEN( fld ):    // "CT_TextField" Text Field.
+        {
+            TextFieldPtr pField( new TextField );
+            mrParagraph.addRun( pField );
+            return new TextFieldContext( *this, rAttribs, *pField );
+        }
+        case A_TOKEN( pPr ):
+        case W_TOKEN( pPr ):
+            return new TextParagraphPropertiesContext( *this, rAttribs, mrParagraph.getProperties() );
+        case A_TOKEN( endParaRPr ):
+            return new TextCharacterPropertiesContext( *this, rAttribs, mrParagraph.getEndProperties() );
+        case W_TOKEN( sdt ):
+        case W_TOKEN( sdtContent ):
+            return this;
+        case W_TOKEN( del ):
         break;
-    case W_TOKEN( ins ):
-        return this;
+        case W_TOKEN( ins ):
+            return this;
         break;
-    default:
-        SAL_WARN("oox", "TextParagraphContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+        default:
+            SAL_WARN("oox", "TextParagraphContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
 
     return 0;
@@ -108,17 +108,14 @@ void RegularTextRunContext::onEndElement( )
 {
     switch( getCurrentElement() )
     {
-    case A_TOKEN( t ):
-    case W_TOKEN( t ):
-    {
-        mbIsInText = false;
+        case A_TOKEN( t ):
+        case W_TOKEN( t ):
+        {
+            mbIsInText = false;
+            break;
+        }
+        case A_TOKEN( r ):
         break;
-    }
-    case A_TOKEN( r ):
-    {
-        break;
-    }
-
     }
 }
 
@@ -134,17 +131,17 @@ ContextHandlerRef RegularTextRunContext::onCreateContext( sal_Int32 aElementToke
 {
     switch( aElementToken )
     {
-    case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
-    case W_TOKEN( rPr ):
-        return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
-    case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
-    case W_TOKEN( t ):
-        mbIsInText = true;
+        case A_TOKEN( rPr ):    // "CT_TextCharPropertyBag" The text char properties of this text run.
+        case W_TOKEN( rPr ):
+            return new TextCharacterPropertiesContext( *this, rAttribs, mpRunPtr->getTextCharacterProperties() );
+        case A_TOKEN( t ):      // "xsd:string" minOccurs="1" The actual text string.
+        case W_TOKEN( t ):
+            mbIsInText = true;
         break;
-    case W_TOKEN( drawing ):
+        case W_TOKEN( drawing ):
         break;
-    default:
-        SAL_WARN("oox", "RegularTextRunContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+        default:
+            SAL_WARN("oox", "RegularTextRunContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
         break;
     }
 
@@ -161,23 +158,23 @@ ContextHandlerRef TextBodyContext::onCreateContext( sal_Int32 aElementToken, con
 {
     switch( aElementToken )
     {
-    case A_TOKEN( bodyPr ):     // CT_TextBodyPropertyBag
-        return new TextBodyPropertiesContext( *this, rAttribs, mrTextBody.getTextProperties() );
-    case A_TOKEN( lstStyle ):   // CT_TextListStyle
-        return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
-    case A_TOKEN( p ):          // CT_TextParagraph
-    case W_TOKEN( p ):
-        return new TextParagraphContext( *this, mrTextBody.addParagraph() );
-    case W_TOKEN( sdt ):
-    case W_TOKEN( sdtContent ):
-        return this;
-    case W_TOKEN( sdtPr ):
-    case W_TOKEN( sdtEndPr ):
+        case A_TOKEN( bodyPr ):     // CT_TextBodyPropertyBag
+            return new TextBodyPropertiesContext( *this, rAttribs, mrTextBody.getTextProperties() );
+        case A_TOKEN( lstStyle ):   // CT_TextListStyle
+            return new TextListStyleContext( *this, mrTextBody.getTextListStyle() );
+        case A_TOKEN( p ):          // CT_TextParagraph
+        case W_TOKEN( p ):
+            return new TextParagraphContext( *this, mrTextBody.addParagraph() );
+        case W_TOKEN( sdt ):
+        case W_TOKEN( sdtContent ):
+            return this;
+        case W_TOKEN( sdtPr ):
+        case W_TOKEN( sdtEndPr ):
         break;
-    case W_TOKEN( tbl ):
+        case W_TOKEN( tbl ):
         break;
-    default:
-        SAL_WARN("oox", "TextBodyContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
+        default:
+            SAL_WARN("oox", "TextBodyContext::onCreateContext: unhandled element: " << getBaseToken(aElementToken));
     }
 
     return 0;
