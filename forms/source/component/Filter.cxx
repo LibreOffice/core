@@ -913,9 +913,10 @@ namespace frm
 
 }   // namespace frm
 
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_comp_forms_OFilterControl_get_implementation(css::uno::XComponentContext* context,
-        css::uno::Sequence<css::uno::Any> const &)
+                                                          css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFilterControl(context));
 }
