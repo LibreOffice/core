@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "services.hxx"
+
+#include "binding.hxx"
 #include "model.hxx"
 #include "NameContainer.hxx"
 
@@ -24,6 +27,11 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 
 using namespace ::com::sun::star;
 
