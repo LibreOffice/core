@@ -682,7 +682,7 @@ Sequence<sal_Int8> Model::getImplementationId()
 
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_xform_Model_get_implementation(::com::sun::star::uno::XComponentContext*,
+com_sun_star_form_Model_get_implementation(::com::sun::star::uno::XComponentContext*,
                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new xforms::Model());

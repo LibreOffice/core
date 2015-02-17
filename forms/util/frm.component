@@ -30,7 +30,7 @@
     <service name="com.sun.star.form.component.NavigationToolBar"/>
   </implementation>
   <implementation name="com.sun.star.comp.form.ORichTextControl"
-      constructor="com_sun_star_form_ORichTextControl_get_implementation">
+      constructor="com_sun_star_comp_form_ORichTextControl_get_implementation">
     <service name="com.sun.star.form.control.RichTextControl"/>
   </implementation>
   <implementation name="com.sun.star.comp.forms.FormOperations"
@@ -52,7 +52,7 @@
     <service name="com.sun.star.form.control.FilterControl"/>
   </implementation>
   <implementation name="com.sun.star.comp.forms.OFormattedFieldWrapper_ForcedFormatted"
-      constructor="com_sun_star_comp_form_OFormattedFieldWrapper_ForcedFormatted_get_implementation">
+      constructor="com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation">
     <service name="com.sun.star.form.binding.BindableDatabaseFormattedField"/>
     <service name="com.sun.star.form.component.DatabaseFormattedField"/>
     <service name="com.sun.star.form.component.FormattedField"/>
@@ -85,7 +85,7 @@
     <service name="com.sun.star.form.component.SpinButton"/>
   </implementation>
   <implementation name="com.sun.star.comp.xml.xpath.XFormsExtension"
-      constructor="CLibxlm2XFormsExtension_get_implementation">
+      constructor="com_sun_star_comp_xml_xpath_XFormsExtension_get_implementation">
     <service name="com.sun.star.xml.xpath.XPathExtension"/>
   </implementation>
   <implementation name="com.sun.star.form.ImageProducer"
@@ -93,7 +93,7 @@
     <service name="com.sun.star.awt.ImageProducer"/>
   </implementation>
   <implementation name="com.sun.star.form.Model"
-      constructor="com_sun_star_xform_Model_get_implementation">
+      constructor="com_sun_star_form_Model_get_implementation">
     <service name="com.sun.star.xforms.Model"/>
   </implementation>
   <implementation name="com.sun.star.form.OButtonControl"
@@ -195,7 +195,7 @@
     <service name="stardiv.one.form.component.GridControl"/>
   </implementation>
   <implementation name="com.sun.star.form.OGroupBoxControl"
-      constructor="com_sun_star_form_OGroupBoxModel_get_implementation">
+      constructor="com_sun_star_form_OGroupBoxControl_get_implementation">
     <service name="com.sun.star.form.control.GroupBox"/>
     <service name="stardiv.one.form.control.GroupBox"/>
   </implementation>
@@ -266,7 +266,7 @@
     <service name="stardiv.one.form.component.PatternField"/>
   </implementation>
   <implementation name="com.sun.star.form.ORadioButtonControl"
-      constructor="com_sun_star_form_ORadioButtonModel_get_implementation">
+      constructor="com_sun_star_form_ORadioButtonControl_get_implementation">
     <service name="com.sun.star.form.control.RadioButton"/>
     <service name="stardiv.one.form.control.RadioButton"/>
   </implementation>
