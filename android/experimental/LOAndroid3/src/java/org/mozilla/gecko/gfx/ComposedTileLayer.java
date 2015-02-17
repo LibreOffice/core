@@ -7,23 +7,28 @@ import android.graphics.RectF;
 import android.graphics.Region;
 import android.util.Log;
 
-import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
 import org.libreoffice.TileIdentifier;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public abstract class ComposedTileLayer extends Layer implements ComponentCallbacks2 {
     private static final String LOGTAG = ComposedTileLayer.class.getSimpleName();
 
-    protected final List<SubTile> tiles = new CopyOnWriteArrayList<SubTile>();
+    protected final List<SubTile> tiles = new ArrayList<SubTile>();
 
     protected final IntSize tileSize;
     protected RectF currentViewport = new RectF();
     protected float currentZoom;
+
+    private final ReadWriteLock tilesReadWriteLock = new ReentrantReadWriteLock();
+    private final Lock tilesReadLock  = tilesReadWriteLock.readLock();
+    private final Lock tilesWriteLock = tilesReadWriteLock.writeLock();
 
     public ComposedTileLayer(Context context) {
         context.registerComponentCallbacks(this);
@@ -31,64 +36,77 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     public void invalidate() {
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             tile.invalidate();
         }
+        tilesReadLock.unlock();
     }
 
     @Override
     public void beginTransaction() {
         super.beginTransaction();
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             tile.beginTransaction();
         }
+        tilesReadLock.unlock();
     }
 
     @Override
     public void endTransaction() {
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             tile.endTransaction();
         }
+        tilesReadLock.unlock();
         super.endTransaction();
     }
 
     @Override
     public void draw(RenderContext context) {
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             if (RectF.intersects(tile.getBounds(context), context.viewport)) {
                 tile.draw(context);
             }
         }
+        tilesReadLock.unlock();
     }
 
     @Override
     protected void performUpdates(RenderContext context) {
         super.performUpdates(context);
 
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             tile.beginTransaction();
             tile.refreshTileMetrics();
             tile.endTransaction();
             tile.performUpdates(context);
         }
+        tilesReadLock.unlock();
     }
 
     @Override
     public Region getValidRegion(RenderContext context) {
         Region validRegion = new Region();
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             validRegion.op(tile.getValidRegion(context), Region.Op.UNION);
         }
-
+        tilesReadLock.unlock();
         return validRegion;
     }
 
     @Override
     public void setResolution(float newResolution) {
         super.setResolution(newResolution);
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             tile.setResolution(newResolution);
         }
+        tilesReadLock.unlock();
     }
 
     protected RectF roundToTileSize(RectF input, IntSize tileSize) {
@@ -144,6 +162,20 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
 
     protected abstract int getTilePriority();
 
+    private boolean containsTilesMatching(float x, float y, float currentZoom) {
+        tilesReadLock.lock();
+        try {
+            for (SubTile tile : tiles) {
+                if (tile.id.x == x && tile.id.y == y && tile.id.zoom == currentZoom) {
+                    return true;
+                }
+            }
+            return false;
+        } finally {
+            tilesReadLock.unlock();
+        }
+    }
+
     private void addNewTiles(RectF pageRect) {
         for (float y = currentViewport.top; y < currentViewport.bottom; y += tileSize.height) {
             if (y > pageRect.height()) {
@@ -153,13 +185,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
                 if (x > pageRect.width()) {
                     continue;
                 }
-                boolean contains = false;
-                for (SubTile tile : tiles) {
-                    if (tile.id.x == x && tile.id.y == y && tile.id.zoom == currentZoom) {
-                        contains = true;
-                    }
-                }
-                if (!contains) {
+                if (!containsTilesMatching(x, y, currentZoom)) {
                     TileIdentifier tileId = new TileIdentifier((int) x, (int) y, currentZoom, tileSize);
                     LOKitShell.sendTileRequestEvent(this, tileId, true, getTilePriority());
                 }
@@ -169,6 +195,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
 
     private void clearMarkedTiles() {
         List<SubTile> tilesToRemove = new ArrayList<SubTile>();
+        tilesWriteLock.lock();
         for (SubTile tile : tiles) {
             if (tile.markedForRemoval) {
                 tile.destroy();
@@ -176,9 +203,11 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
             }
         }
         tiles.removeAll(tilesToRemove);
+        tilesWriteLock.unlock();
     }
 
     private void markTiles() {
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             if (FloatUtils.fuzzyEquals(tile.id.zoom, currentZoom)) {
                 RectF tileRect = tile.id.getRectF();
@@ -189,16 +218,21 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
                 tile.markForRemoval();
             }
         }
+        tilesReadLock.unlock();
     }
 
     public void clearAndReset() {
+        tilesWriteLock.lock();
         tiles.clear();
+        tilesWriteLock.unlock();
         currentViewport = new RectF();
     }
 
     public void addTile(SubTile tile) {
         tile.beginTransaction();
+        tilesWriteLock.lock();
         tiles.add(tile);
+        tilesWriteLock.unlock();
     }
 
     public boolean isStillValid(TileIdentifier tileId) {
@@ -210,12 +244,13 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
      */
     public void invalidateTiles(List<SubTile> tilesToInvalidate, RectF cssRect) {
         RectF zoomedRect = RectUtils.scale(cssRect, currentZoom);
-
+        tilesReadLock.lock();
         for (SubTile tile : tiles) {
             if (!tile.markedForRemoval && RectF.intersects(zoomedRect, tile.id.getRectF())) {
                 tilesToInvalidate.add(tile);
             }
         }
+        tilesReadLock.unlock();
     }
 
     @Override
