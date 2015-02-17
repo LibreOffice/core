@@ -153,6 +153,7 @@ protected:
     OUString             msSignContact;
     OUString             msSignReason;
     com::sun::star::uno::Reference< com::sun::star::security::XCertificate > maSignCertificate;
+    OUString             msSignTSA;
 
     OUString             maWatermarkText;
 
