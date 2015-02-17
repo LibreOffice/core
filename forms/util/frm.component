@@ -288,7 +288,8 @@
     <service name="com.sun.star.form.component.TimeField"/>
     <service name="stardiv.one.form.component.TimeField"/>
   </implementation>
-  <implementation name="com.sun.star.form.XForms">
+  <implementation name="com.sun.star.form.XForms"
+      constructor="com_sun_star_form_XForms_get_implementation">
     <service name="com.sun.star.xforms.XForms"/>
   </implementation>
 </component>

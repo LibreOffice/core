@@ -17,42 +17,21 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "services.hxx"
-
-#include "binding.hxx"
 #include "model.hxx"
 #include "NameContainer.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/container/XNameContainer.hpp>
 
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::XInterface;
-using com::sun::star::lang::XMultiServiceFactory;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::form::binding::XValueBinding;
-using com::sun::star::beans::XPropertySet;
-using com::sun::star::container::XNameContainer;
+using namespace ::com::sun::star;
 
-
-namespace frm
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL
+com_sun_star_form_XForms_get_implementation(uno::XComponentContext*,
+        uno::Sequence<uno::Any> const &)
 {
-
-Reference<XInterface> Model_CreateInstance(
-    const Reference<XMultiServiceFactory>& )
-{
-    return static_cast<XPropertySet*>( static_cast<PropertySetBase*>( new xforms::Model ) );
-}
-
-Reference<XInterface> XForms_CreateInstance(
-    const Reference<XMultiServiceFactory>& )
-{
-    return static_cast<XNameContainer*>( new NameContainer<Reference<XPropertySet> >() );
-}
-
+    return cppu::acquire(new NameContainer<uno::Reference<beans::XPropertySet> >());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

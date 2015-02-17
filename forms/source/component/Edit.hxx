@@ -49,7 +49,6 @@ protected:
     void disableFormattedWriteFake() { m_bWritingFormattedFake = false; }
     bool lastReadWasFormattedFake() const { return (getLastReadVersion() & PF_FAKE_FORMATTED_FIELD) != 0; }
 
-    friend InterfaceRef SAL_CALL OEditModel_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     friend class OFormattedFieldWrapper;
     friend class OFormattedModel;   // temporary
 
