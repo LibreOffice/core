@@ -134,11 +134,18 @@ public:
         mpThis->pClass->destroy(mpThis);
     }
 
-    inline Document* documentLoad(const char* pUrl)
+    inline Document* documentLoad(const char* pUrl, const char* pFilterOptions = NULL)
     {
-        LibreOfficeKitDocument* pDoc = mpThis->pClass->documentLoad(mpThis, pUrl);
+        LibreOfficeKitDocument* pDoc = NULL;
+
+        if (LIBREOFFICEKIT_HAS(mpThis, documentLoadWithOptions))
+            pDoc = mpThis->pClass->documentLoadWithOptions(mpThis, pUrl, pFilterOptions);
+        else
+            pDoc = mpThis->pClass->documentLoad(mpThis, pUrl);
+
         if (pDoc == NULL)
             return NULL;
+
         return new Document(pDoc);
     }
 
@@ -148,6 +155,7 @@ public:
         return mpThis->pClass->getError(mpThis);
     }
 
+#ifdef LOK_USE_UNSTABLE_API
     /**
      * Posts a keyboard event to the focused frame.
      *
@@ -158,6 +166,7 @@ public:
     {
         mpThis->pClass->postKeyEvent(mpThis, nType, nCode);
     }
+#endif // LOK_USE_UNSTABLE_API
 };
 
 inline Office* lok_cpp_init(const char* pInstallPath)
