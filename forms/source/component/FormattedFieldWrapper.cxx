@@ -30,8 +30,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-namespace frm
-{
+using namespace frm;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -43,17 +42,6 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-
-
-Reference<XInterface> SAL_CALL OFormattedFieldWrapper_CreateInstance_ForceFormatted(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return OFormattedFieldWrapper::createFormattedFieldWrapper( comphelper::getComponentContext(_rxFactory), true);
-}
-
-InterfaceRef SAL_CALL OFormattedFieldWrapper_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return OFormattedFieldWrapper::createFormattedFieldWrapper( comphelper::getComponentContext(_rxFactory), false);
-}
 
 OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext>& _rxFactory)
     :m_xContext(_rxFactory)
@@ -351,8 +339,6 @@ void OFormattedFieldWrapper::ensureAggregate()
         m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
     decrement(m_refCount);
-}
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL

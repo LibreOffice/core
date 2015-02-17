@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "FormsCollection.hxx"
 #include "services.hxx"
 #include <comphelper/sequence.hxx>
@@ -25,41 +24,27 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
-
-namespace frm
-{
-
+using namespace frm;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
-
-
-InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OFormsCollection( comphelper::getComponentContext(_rxFactory) ));
-}
-
-
 OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.form.Forms");
 }
-
 
 Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-
 Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException, std::exception)
 {
     return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
 }
-
 
 OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
     :FormsCollectionComponentBase( m_aMutex )
@@ -68,14 +53,12 @@ OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactor
 {
 }
 
-
 OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
     :FormsCollectionComponentBase( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
     ,OFormsCollection_BASE()
 {
 }
-
 
 OFormsCollection::~OFormsCollection()
 {
@@ -85,7 +68,6 @@ OFormsCollection::~OFormsCollection()
         dispose();
     }
 }
-
 
 Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
 {
@@ -151,18 +133,14 @@ void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportExc
     m_xParent = Parent;
 }
 
-
 InterfaceRef  OFormsCollection::getParent() throw( RuntimeException, std::exception )
 {
     return m_xParent;
 }
 
-
-}   // namespace frm
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL
 com_sun_star_form_OFormsCollection_get_implementation(css::uno::XComponentContext* context,
-                                                      css::uno::Sequence<css::uno::Any> const &)
+        css::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormsCollection(context));
 }
