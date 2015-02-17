@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -94,7 +95,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
         return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
     case PPT_TOKEN( sp ):           // Shape
         {
-            boost::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
+            std::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
             if( rAttribs.getBool( XML_useBgFill, false ) )
             {
                 ::oox::drawingml::FillProperties &aFill = pShape->getFillProperties();
