@@ -3950,6 +3950,7 @@ cygwin*)
             RTL_ARCH=X86_64
             PLATFORMID=windows_x86_64
             WINDOWS_X64=1
+            SCPDEFS="$SCPDEFS -DWINDOWS_X64"
         else
             CPUNAME=INTEL
             RTL_ARCH=x86
