@@ -2321,7 +2321,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             return NULL; // Found nothing
         nCol = nStartCol; // Start at the left again
 
-        if ( bRepeatedRow && ! nMinNextEnd < nRow ) // use the data of the previous row
+        if ( !bRowEmpty && bRepeatedRow && ! nMinNextEnd < nRow ) // use the data of the previous row
            continue;
 
         bRepeatedRow = true; // ppPatterns is not modified
