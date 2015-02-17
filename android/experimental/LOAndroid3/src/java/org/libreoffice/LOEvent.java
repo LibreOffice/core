@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
+import org.mozilla.gecko.gfx.SubTile;
 
 public class LOEvent implements Comparable<LOEvent> {
     public static final int SIZE_CHANGED = 1;
@@ -28,7 +29,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mTypeString;
     public int mPartIndex;
     public String mFilename;
-    public TileIdentifier mTileId;
+    public SubTile mTile;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
     public MotionEvent mMotionEvent;
@@ -46,11 +47,11 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
-    public LOEvent(int type, ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
+    public LOEvent(int type, ComposedTileLayer composedTileLayer, SubTile tile) {
         mType = type;
         mTypeString = "Tile Request";
         mComposedTileLayer = composedTileLayer;
-        mTileId = tileId;
+        mTile = tile;
     }
 
     public LOEvent(int type, String filename) {

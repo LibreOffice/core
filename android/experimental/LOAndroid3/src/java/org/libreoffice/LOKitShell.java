@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.LayerView;
+import org.mozilla.gecko.gfx.SubTile;
 
 
 public class LOKitShell {
@@ -122,9 +123,8 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.REDRAW));
     }
 
-    public static void sendTileRequestEvent(ComposedTileLayer composedTileLayer, TileIdentifier tileID, boolean forceRedraw, int priority) {
-        LOEvent event = new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tileID);
-        event.mPriority = priority;
+    public static void sendTileRequestEvent(ComposedTileLayer composedTileLayer, SubTile tile, boolean forceRedraw, int priority) {
+        LOEvent event = new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tile);
         LOKitShell.sendEvent(event);
     }
 

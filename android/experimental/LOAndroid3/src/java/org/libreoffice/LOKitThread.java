@@ -44,23 +44,20 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         }
     }
 
-    private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId) {
+    private void tileRequest(ComposedTileLayer composedTileLayer, SubTile tile) {
         if (mTileProvider == null) {
             return;
         }
 
-        if (composedTileLayer.isStillValid(tileId)) {
+        if (composedTileLayer.isStillValid(tile.id)) {
+            TileIdentifier tileId = tile.id;
             CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
             if (image != null) {
                 mLayerClient.beginDrawing();
-                SubTile tile = new SubTile(tileId);
                 tile.setImage(image);
-                composedTileLayer.addTile(tile);
                 mLayerClient.endDrawing();
                 mLayerClient.forceRender();
             }
-        } else {
-            composedTileLayer.cleanupInvalidTile(tileId);
         }
     }
 
@@ -174,7 +171,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 changePart(event.mPartIndex);
                 break;
             case LOEvent.TILE_REQUEST:
-                tileRequest(event.mComposedTileLayer, event.mTileId);
+                tileRequest(event.mComposedTileLayer, event.mTile);
                 break;
             case LOEvent.TILE_INVALIDATION:
                 tileInvalidation(event.mInvalidationRect);

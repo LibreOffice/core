@@ -27,7 +27,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     protected float currentZoom;
 
     private final ReadWriteLock tilesReadWriteLock = new ReentrantReadWriteLock();
-    private final Lock tilesReadLock  = tilesReadWriteLock.readLock();
+    private final Lock tilesReadLock = tilesReadWriteLock.readLock();
     private final Lock tilesWriteLock = tilesReadWriteLock.writeLock();
 
     public ComposedTileLayer(Context context) {
@@ -177,6 +177,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     private void addNewTiles(RectF pageRect) {
+        beginTransaction();
         for (float y = currentViewport.top; y < currentViewport.bottom; y += tileSize.height) {
             if (y > pageRect.height()) {
                 continue;
@@ -187,10 +188,12 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
                 }
                 if (!containsTilesMatching(x, y, currentZoom)) {
                     TileIdentifier tileId = new TileIdentifier((int) x, (int) y, currentZoom, tileSize);
-                    LOKitShell.sendTileRequestEvent(this, tileId, true, getTilePriority());
+                    SubTile tile = createNewTile(tileId);
+                    LOKitShell.sendTileRequestEvent(this, tile, true, getTilePriority());
                 }
             }
         }
+        endTransaction();
     }
 
     private void clearMarkedTiles() {
@@ -228,11 +231,13 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         currentViewport = new RectF();
     }
 
-    public void addTile(SubTile tile) {
+    private SubTile createNewTile(TileIdentifier tileId) {
+        SubTile tile = new SubTile(tileId);
         tile.beginTransaction();
         tilesWriteLock.lock();
         tiles.add(tile);
         tilesWriteLock.unlock();
+        return tile;
     }
 
     public boolean isStillValid(TileIdentifier tileId) {
