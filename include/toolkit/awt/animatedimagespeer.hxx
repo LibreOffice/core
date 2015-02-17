@@ -27,7 +27,6 @@
 
 #include <cppuhelper/implbase3.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <memory>
 
 namespace toolkit
@@ -45,7 +44,6 @@ namespace toolkit
                                             >   AnimatedImagesPeer_Base;
 
     class AnimatedImagesPeer    :public AnimatedImagesPeer_Base
-                                ,public ::boost::noncopyable
     {
     public:
         AnimatedImagesPeer();
@@ -86,6 +84,9 @@ namespace toolkit
         void    impl_updateImages_nolck( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& i_animatedImages );
 
     private:
+        AnimatedImagesPeer(const AnimatedImagesPeer&) SAL_DELETED_FUNCTION;
+        AnimatedImagesPeer& operator=(const AnimatedImagesPeer&) SAL_DELETED_FUNCTION;
+
         std::unique_ptr< AnimatedImagesPeer_Data >   m_xData;
     };
 

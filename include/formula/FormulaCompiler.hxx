@@ -25,9 +25,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/debug.hxx>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/noncopyable.hpp>
-
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <formula/opcode.hxx>
@@ -35,6 +32,7 @@
 #include <formula/token.hxx>
 #include <formula/ExternalReferenceHelper.hxx>
 
+#include <memory>
 #include <unordered_map>
 
 #define FORMULA_MAXJUMPCOUNT    32  /* maximum number of jumps (ocChoose) */
@@ -64,8 +62,11 @@ struct FormulaArrayStack
 typedef std::unordered_map< OUString, OpCode, OUStringHash, ::std::equal_to< OUString > > OpCodeHashMap;
 typedef std::unordered_map< OUString, OUString, OUStringHash, ::std::equal_to< OUString > > ExternalHashMap;
 
-class FORMULA_DLLPUBLIC FormulaCompiler : boost::noncopyable
+class FORMULA_DLLPUBLIC FormulaCompiler
 {
+private:
+    FormulaCompiler(const FormulaCompiler&) SAL_DELETED_FUNCTION;
+    FormulaCompiler& operator=(const FormulaCompiler&) SAL_DELETED_FUNCTION;
 public:
     FormulaCompiler();
     FormulaCompiler(FormulaTokenArray& _rArr);
@@ -191,8 +192,8 @@ public:
     };
 
 public:
-    typedef ::boost::shared_ptr< const OpCodeMap >  OpCodeMapPtr;
-    typedef ::boost::shared_ptr< OpCodeMap >        NonConstOpCodeMapPtr;
+    typedef std::shared_ptr< const OpCodeMap >  OpCodeMapPtr;
+    typedef std::shared_ptr< OpCodeMap >        NonConstOpCodeMapPtr;
 
     /** Get OpCodeMap for formula language.
         @param nLanguage

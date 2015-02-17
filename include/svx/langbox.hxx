@@ -24,7 +24,6 @@
 #include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
-#include <boost/noncopyable.hpp>
 
 
 #define LANG_LIST_EMPTY             0x0000
@@ -45,12 +44,14 @@
                                             // locale, such as Arabic as
                                             // opposed to Arabic-Egypt.
 
-
 // load language strings from resource
 SVX_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg );
 
-class SVX_DLLPUBLIC SvxLanguageBoxBase : boost::noncopyable
+class SVX_DLLPUBLIC SvxLanguageBoxBase
 {
+private:
+    SvxLanguageBoxBase(const SvxLanguageBoxBase&) SAL_DELETED_FUNCTION;
+    SvxLanguageBoxBase& operator=(const SvxLanguageBoxBase&) SAL_DELETED_FUNCTION;
 public:
     explicit SvxLanguageBoxBase( bool bCheck );
     virtual ~SvxLanguageBoxBase();

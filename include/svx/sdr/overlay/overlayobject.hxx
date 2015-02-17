@@ -56,9 +56,12 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayObject : private ::boost::noncopyable, public ::sdr::animation::Event
+        class SVX_DLLPUBLIC OverlayObject : public ::sdr::animation::Event
         {
         private:
+            OverlayObject(const OverlayObject&) SAL_DELETED_FUNCTION;
+            OverlayObject& operator=(const OverlayObject&) SAL_DELETED_FUNCTION;
+
             // Manager is allowed access to private Member mpOverlayManager
             friend class                                    OverlayManager;
 

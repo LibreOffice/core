@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 #define INCLUDED_SVX_SDR_OVERLAY_OVERLAYMANAGER_HXX
 
-#include <boost/utility.hpp>
 #include <rtl/ref.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
@@ -54,10 +53,13 @@ namespace sdr
     namespace overlay
     {
         class SVX_DLLPUBLIC OverlayManager
-            : private boost::noncopyable
-            , protected ::sdr::animation::Scheduler
+            : protected ::sdr::animation::Scheduler
             , public salhelper::SimpleReferenceObject
         {
+        private:
+            OverlayManager(const OverlayManager&) SAL_DELETED_FUNCTION;
+            OverlayManager& operator=(const OverlayManager&) SAL_DELETED_FUNCTION;
+
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
             OutputDevice&                               rmOutputDevice;
