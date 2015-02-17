@@ -985,6 +985,15 @@ Selection Window::GetSurroundingTextSelection() const
     }
 }
 
+void Window::LogicInvalidate(const ::vcl::Region* pRegion)
+{
+    OString sRectangle;
+    if (!pRegion)
+        sRectangle = "EMPTY";
+    else
+        sRectangle = pRegion->GetBoundRect().toString();
+}
+
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
