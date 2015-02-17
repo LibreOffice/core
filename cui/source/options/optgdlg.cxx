@@ -78,6 +78,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
@@ -456,6 +457,7 @@ public:
 
     bool    IsHardwareAccelerationEnabled() const;
     bool    IsHardwareAccelerationAvailable() const;
+    bool    IsHardwareAccelerationRO() const;
     void    EnabledHardwareAcceleration( bool _bEnabled ) const;
 
 private:
@@ -581,6 +583,17 @@ bool CanvasSettings::IsHardwareAccelerationEnabled() const
         return true;
 
     return !bForceLastEntry;
+}
+
+bool CanvasSettings::IsHardwareAccelerationRO() const
+{
+    Reference< XPropertySet > xSet(mxForceFlagNameAccess, UNO_QUERY);
+    if (!xSet.is())
+        return true;
+
+    Reference< XPropertySetInfo > xInfo = xSet->getPropertySetInfo();
+    Property aProp = xInfo->getPropertyByName("ForceSafeServiceImpl");
+    return ((aProp.Attributes & css::beans::PropertyAttribute::READONLY ) == css::beans::PropertyAttribute::READONLY);
 }
 
 void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
@@ -949,6 +962,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
         if(pCanvasSettings->IsHardwareAccelerationAvailable())
         {
             m_pUseHardwareAccell->Check(pCanvasSettings->IsHardwareAccelerationEnabled());
+            m_pUseHardwareAccell->Enable(!pCanvasSettings->IsHardwareAccelerationRO());
         }
         else
         {
