@@ -24,16 +24,48 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     protected final List<SubTile> tiles = new ArrayList<SubTile>();
 
     protected final IntSize tileSize;
-    protected RectF currentViewport = new RectF();
-    protected float currentZoom;
-
     private final ReadWriteLock tilesReadWriteLock = new ReentrantReadWriteLock();
     private final Lock tilesReadLock = tilesReadWriteLock.readLock();
     private final Lock tilesWriteLock = tilesReadWriteLock.writeLock();
 
+    protected RectF currentViewport = new RectF();
+    protected float currentZoom;
+
     public ComposedTileLayer(Context context) {
         context.registerComponentCallbacks(this);
         this.tileSize = new IntSize(256, 256);
+    }
+
+    protected static RectF roundToTileSize(RectF input, IntSize tileSize) {
+        float minX = ((int) (input.left / tileSize.width)) * tileSize.width;
+        float minY = ((int) (input.top / tileSize.height)) * tileSize.height;
+        float maxX = ((int) (input.right / tileSize.width) + 1) * tileSize.width;
+        float maxY = ((int) (input.bottom / tileSize.height) + 1) * tileSize.height;
+        return new RectF(minX, minY, maxX, maxY);
+    }
+
+    protected static RectF inflate(RectF rect, IntSize inflateSize) {
+        RectF newRect = new RectF(rect);
+        newRect.left -= inflateSize.width;
+        newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
+
+        newRect.top -= inflateSize.height;
+        newRect.top = newRect.top < 0.0f ? 0.0f : newRect.top;
+
+        newRect.right += inflateSize.width;
+        newRect.bottom += inflateSize.height;
+
+        return newRect;
+    }
+
+    protected static RectF normalizeRect(RectF rect, float sourceFactor, float targetFactor) {
+        RectF normalizedRect = new RectF(
+                (rect.left / sourceFactor) * targetFactor,
+                (rect.top / sourceFactor) * targetFactor,
+                (rect.right / sourceFactor) * targetFactor,
+                (rect.bottom / sourceFactor) * targetFactor);
+
+        return normalizedRect;
     }
 
     public void invalidate() {
@@ -108,38 +140,6 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
             tile.setResolution(newResolution);
         }
         tilesReadLock.unlock();
-    }
-
-    protected RectF roundToTileSize(RectF input, IntSize tileSize) {
-        float minX = ((int) (input.left / tileSize.width)) * tileSize.width;
-        float minY = ((int) (input.top / tileSize.height)) * tileSize.height;
-        float maxX = ((int) (input.right / tileSize.width) + 1) * tileSize.width;
-        float maxY = ((int) (input.bottom / tileSize.height) + 1) * tileSize.height;
-        return new RectF(minX, minY, maxX, maxY);
-    }
-
-    protected RectF inflate(RectF rect, IntSize inflateSize) {
-        RectF newRect = new RectF(rect);
-        newRect.left -= inflateSize.width;
-        newRect.left = newRect.left < 0.0f ? 0.0f : newRect.left;
-
-        newRect.top -= inflateSize.height;
-        newRect.top = newRect.top < 0.0f ? 0.0f : newRect.top;
-
-        newRect.right += inflateSize.width;
-        newRect.bottom += inflateSize.height;
-
-        return newRect;
-    }
-
-    protected RectF normalizeRect(RectF rect, float sourceFactor, float targetFactor) {
-        RectF normalizedRect = new RectF(
-                (rect.left / sourceFactor) * targetFactor,
-                (rect.top / sourceFactor) * targetFactor,
-                (rect.right / sourceFactor) * targetFactor,
-                (rect.bottom / sourceFactor) * targetFactor);
-
-        return normalizedRect;
     }
 
     public void reevaluateTiles(ImmutableViewportMetrics viewportMetrics, DisplayPortMetrics mDisplayPort) {
@@ -275,8 +275,5 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         } else if (level >= 10 /*TRIM_MEMORY_RUNNING_LOW*/) {
             Log.i(LOGTAG, "Trimming memory - TRIM_MEMORY_RUNNING_LOW");
         }
-    }
-
-    public void cleanupInvalidTile(TileIdentifier tileId) {
     }
 }
