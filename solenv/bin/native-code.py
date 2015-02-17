@@ -33,6 +33,7 @@ core_factory_list = [
     ("libhyphenlo.a", "hyphen_component_getFactory"),
     ("libi18npoollo.a", "i18npool_component_getFactory"),
     ("libi18nsearchlo.a", "i18nsearch_component_getFactory"),
+    ("libinvocadaptlo.a", "invocadapt_component_getFactory"),
     ("liblnglo.a", "lng_component_getFactory"),
     ("liblnthlo.a", "lnth_component_getFactory"),
     ("liblocalebe1lo.a", "localebe1_component_getFactory"),
@@ -57,6 +58,7 @@ core_factory_list = [
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libcanvasfactorylo.a", "canvasfactory_component_getFactory"),
+    ("libvbaeventslo.a", "vbaevents_component_getFactory"),
     ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ]
@@ -88,6 +90,12 @@ core_constructor_list = [
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
+    "com_sun_star_form_OCheckBoxControl_get_implementation",
+    "com_sun_star_form_OCheckBoxModel_get_implementation",
+    "com_sun_star_form_OComboBoxControl_get_implementation",
+    "com_sun_star_form_OComboBoxModel_get_implementation",
+    "com_sun_star_form_ODateControl_get_implementation",
+    "com_sun_star_form_ODateModel_get_implementation",
     "com_sun_star_comp_forms_ODatabaseForm_get_implementation",
     "com_sun_star_form_OFormsCollection_get_implementation",
 # framework/util/fwk.component
@@ -145,6 +153,7 @@ core_constructor_list = [
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
+    "stardiv_Toolkit_StdTabController_get_implementation",
     "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",
     "stardiv_Toolkit_UnoComboBoxControl_get_implementation",
     "stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation",
@@ -198,7 +207,6 @@ draw_constructor_list = [
     ]
 
 writer_factory_list = [
-    ("libfrmlo.a", "frm_component_getFactory"),
     ("libsblo.a", "sb_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
