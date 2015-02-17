@@ -88,6 +88,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     else
         m_pEditStyleBtn->Enable();
 
+    sal_Int32 linkSelectPos = m_pBaseLb->GetSelectEntryCount();
+    if ( linkSelectPos == 0 )
+        m_pEditLinkStyleBtn->Disable();
+    else
+        m_pEditLinkStyleBtn->Enable();
+
     ResMgr* pResMgr = SfxGetpApp()->GetModule_Impl()->GetResMgr();
     OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
@@ -235,6 +241,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(vcl::Window* pParent, const Sfx
     if(SfxItemState::SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
         m_pAutoCB->Show();
     m_pFollowLb->SetSelectHdl( LINK( this, SfxManageStyleSheetPage, EditStyleSelectHdl_Impl ) );
+    m_pBaseLb->SetSelectHdl( LINK( this, SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl ) );
     m_pEditStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditStyleHdl_Impl ) );
     m_pEditLinkStyleBtn->SetClickHdl( LINK( this, SfxManageStyleSheetPage, EditLinkStyleHdl_Impl ) );
 }
@@ -346,10 +353,20 @@ IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditStyleHdl_Impl )
 
 }
 
+IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleSelectHdl_Impl )
+{
+    sal_Int32 linkSelectPos = m_pBaseLb->GetSelectEntryCount();
+    if ( linkSelectPos == 0 )
+        m_pEditLinkStyleBtn->Disable();
+    else
+    m_pEditLinkStyleBtn->Enable();
+    return 0;
+}
+
 IMPL_LINK_NOARG( SfxManageStyleSheetPage, EditLinkStyleHdl_Impl )
 {
     OUString aTemplName(m_pBaseLb->GetSelectEntry());
-    if ( !( aTemplName == "- None -" ) )
+    if ( !(SfxResId(STR_NONE).toString().equals(aTemplName)) )
         Execute_Impl( SID_STYLE_EDIT, aTemplName, OUString(),(sal_uInt16)pStyle->GetFamily(), 0 );
     return 0;
 }
