@@ -440,33 +440,27 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     aRet.realloc( aRet.getLength() + nElementAdded );
 
-    // add the encryption enable flag
     sal_uInt32 const nLength(aRet.getLength());
     aRet[ nLength - nElementAdded ].Name = "Watermark";
     aRet[ nLength - nElementAdded ].Value <<= maWatermarkText;
     nElementAdded--;
 
-// add the encryption enable flag
     aRet[ nLength - nElementAdded ].Name = "EncryptFile";
     aRet[ nLength - nElementAdded ].Value <<= mbEncrypt;
     nElementAdded--;
 
-// add the open password
     aRet[ nLength - nElementAdded ].Name = "PreparedPasswords";
     aRet[ nLength - nElementAdded ].Value <<= mxPreparedPasswords;
     nElementAdded--;
 
-//the restrict permission flag (needed to have the scripting consistent with the dialog)
     aRet[ nLength - nElementAdded ].Name = "RestrictPermissions";
     aRet[ nLength - nElementAdded ].Value <<= mbRestrictPermissions;
     nElementAdded--;
 
-//add the permission password
     aRet[ nLength - nElementAdded ].Name = "PreparedPermissionPassword";
     aRet[ nLength - nElementAdded ].Value <<= maPreparedOwnerPassword;
     nElementAdded--;
 
-// this should be the last added...
     if( mbIsRangeChecked )
     {
         aRet[ nLength - nElementAdded ].Name = "PageRange";
