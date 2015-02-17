@@ -556,6 +556,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rFilterData[ nData ].Value >>= msSignPassword;
                 else if ( rFilterData[ nData ].Name == "SignatureCertificate" )
                     rFilterData[ nData ].Value >>= maSignCertificate;
+                else if ( rFilterData[ nData ].Name == "SignatureTSA" )
+                    rFilterData[ nData ].Value >>= msSignTSA;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
 
@@ -787,6 +789,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.SignReason = msSignReason;
             aContext.SignPassword = msSignPassword;
             aContext.SignCertificate = maSignCertificate;
+            aContext.SignTSA = msSignTSA;
 
 // all context data set, time to create the printing device
             boost::scoped_ptr<PDFWriter> pPDFWriter(new PDFWriter( aContext, xEnc ));

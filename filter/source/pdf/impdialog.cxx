@@ -435,7 +435,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
-    int nElementAdded = 11;
+    // OMG, this is horrible coding style...
+    int nElementAdded = 12;
 
     aRet.realloc( aRet.getLength() + nElementAdded );
 
@@ -497,6 +498,10 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
     aRet[ nLength - nElementAdded ].Name = "SignatureCertificate";
     aRet[ nLength - nElementAdded ].Value <<= maSignCertificate;
+    nElementAdded--;
+
+    aRet[ nLength - nElementAdded ].Name = "SignatureTSA";
+    aRet[ nLength - nElementAdded ].Value <<= msSignTSA;
     nElementAdded--;
 
     return aRet;
@@ -1626,7 +1631,9 @@ void ImpPDFTabSigningPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     paParent->msSignPassword = mpEdSignPassword->GetText();
     paParent->msSignContact = mpEdSignContactInfo->GetText();
     paParent->msSignReason = mpEdSignReason->GetText();
-
+    // Entry 0 is 'None'
+    if (mpLBSignTSA->GetSelectEntryPos() >= 1)
+        paParent->msSignTSA = mpLBSignTSA->GetSelectEntry();
 }
 
 

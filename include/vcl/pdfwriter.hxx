@@ -630,6 +630,7 @@ The following structure describes the permissions used in PDF security
                                                         // 0 here specifies a default handling
         PDFWriter::ColorMode            ColorMode;
         com::sun::star::uno::Reference< com::sun::star::security::XCertificate> SignCertificate;
+        OUString                   SignTSA;
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
