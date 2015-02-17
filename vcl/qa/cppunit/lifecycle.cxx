@@ -90,6 +90,7 @@ void LifecycleTest::testParentedWidgets()
     VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
                                                  WB_APP|WB_STDWORK));
     CPPUNIT_ASSERT(xWin.get() != NULL);
+    xWin->Show();
     testWidgets(xWin);
 }
 
