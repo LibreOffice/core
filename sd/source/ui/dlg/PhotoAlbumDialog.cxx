@@ -9,7 +9,7 @@
 
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
-
+#include <svl/itemset.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -24,10 +24,11 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <officecfg/Office/Impress.hxx>
-
+#include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/unoshape.hxx>
-
+#include <svx/xfltrit.hxx>
+#include <svx/xfillit.hxx>
 #include "PhotoAlbumDialog.hxx"
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -54,7 +55,7 @@ SdPhotoAlbumDialog::SdPhotoAlbumDialog(vcl::Window* pWindow, SdDrawDocument* pAc
 
     get(pInsTypeCombo, "opt_combo");
     get(pASRCheck, "asr_check");
-
+    get(pCapCheck, "cap_check");
     pCancelBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CancelHdl));
     pCreateBtn->SetClickHdl(LINK(this, SdPhotoAlbumDialog, CreateHdl));
 
@@ -151,6 +152,8 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                 xShape->setPosition(aPicPos);
                 xSlide->add(xShape);
+                if(pCapCheck->IsChecked())
+                    createCaption( aPageSize );
             }
         }
         else if( nOpt == TWO_IMAGES )
@@ -251,6 +254,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
+                    if(pCapCheck->IsChecked())
+                        createCaption( aPageSize );
+
                 }
             }
         }
@@ -431,6 +437,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     xShape->setPosition(aPicPos);
                     xSlide->add(xShape);
+                    if(pCapCheck->IsChecked())
+                        createCaption( aPageSize );
+
                 }
             }
         }
@@ -648,6 +657,27 @@ awt::Size SdPhotoAlbumDialog::createASRSize(const awt::Size& aPicSize, const awt
         resizeWidth = resizeHeight * aspect;
     }
     return awt::Size(resizeWidth, resizeHeight);
+}
+
+void SdPhotoAlbumDialog::createCaption(const awt::Size& aPageSize )
+{
+    Point CapPos;
+    Size CapSize;
+
+    CapSize.Width() = aPageSize.Width;
+    CapSize.Height() = aPageSize.Height/6;
+    CapPos.X() = 0;
+    CapPos.Y() = aPageSize.Height - CapSize.Height();
+    SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD );
+    Rectangle rRect(CapPos,CapSize);
+    SdrObject* pSdrObj = pSlide->CreatePresObj(PRESOBJ_TITLE,false,rRect);
+    SdrModel* pSdrModel = pDoc->AllocModel();
+    SfxItemSet aSet(pSdrModel->GetItemPool() );
+    aSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
+    aSet.Put( XFillColorItem( "", Color(COL_BLACK) ) );
+    aSet.Put( XFillTransparenceItem( 20 ) );
+    pSdrObj->SetMergedItemSetAndBroadcast(aSet);
+    pSlide->InsertObject(pSdrObj);
 }
 
 Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OUString& sUrl,

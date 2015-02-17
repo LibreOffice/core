@@ -64,7 +64,7 @@ private:
 
     ListBox*    pInsTypeCombo;
     CheckBox*   pASRCheck;
-
+    CheckBox*   pCapCheck;
     SdDrawDocument* pDoc;
     GraphicFilter* mpGraphicFilter;
 
@@ -83,7 +83,7 @@ private:
         Reference< drawing::XDrawPages > xDrawPages);
 
     awt::Size createASRSize(const awt::Size& aPicSize, const awt::Size& aMaxSize);
-
+    void createCaption(const awt::Size& aPageSize);
     Reference< graphic::XGraphic> createXGraphicFromUrl(const OUString& sUrl,
         Reference< graphic::XGraphicProvider> xProvider);
 
