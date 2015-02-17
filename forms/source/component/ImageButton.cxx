@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
 
+
 namespace frm
 {
 
@@ -222,14 +223,14 @@ void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) thr
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OImageButtonModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                       ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OImageButtonControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OImageButtonControl(component));
 }

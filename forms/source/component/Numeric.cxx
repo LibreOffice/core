@@ -184,16 +184,17 @@ void ONumericModel::resetNoBroadcast()
 
 }   // namespace frm
 
+
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_ONumericModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::ONumericModel(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_ONumericControl_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::ONumericControl(component));
 }

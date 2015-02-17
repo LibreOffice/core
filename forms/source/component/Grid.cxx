@@ -995,9 +995,10 @@ void OGridControlModel::read(const Reference<XObjectInputStream>& _rxInStream) t
 
 }
 
+
 extern "C" SAL_DLLPUBLIC_EXPORT XInterface* SAL_CALL
 com_sun_star_form_OGridControlModel_get_implementation(XComponentContext* component,
-        Sequence<Any> const &)
+                                                       Sequence<Any> const &)
 {
     return cppu::acquire(new frm::OGridControlModel(component));
 }
