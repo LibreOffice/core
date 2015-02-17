@@ -145,15 +145,15 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         RectF newViewPort = getViewPort(viewportMetrics);
         float newZoom = getZoom(viewportMetrics);
 
-        if (!currentViewport.equals(newViewPort) || currentZoom != newZoom) {
-            currentViewport = newViewPort;
-            currentZoom = newZoom;
-            RectF pageRect = viewportMetrics.getPageRect();
-
-            clearMarkedTiles();
-            addNewTiles(pageRect);
-            markTiles();
+        if (currentViewport.equals(newViewPort) && FloatUtils.fuzzyEquals(currentZoom, newZoom)) {
+            return;
         }
+        currentViewport = newViewPort;
+        currentZoom = newZoom;
+
+        clearMarkedTiles();
+        addNewTiles(viewportMetrics.getPageRect());
+        markTiles();
     }
 
     protected abstract RectF getViewPort(ImmutableViewportMetrics viewportMetrics);
