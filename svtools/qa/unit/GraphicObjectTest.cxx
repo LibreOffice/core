@@ -41,6 +41,7 @@ public:
     void testSwap();
     void testSizeBasedAutoSwap();
     void testTdf88836();
+    void testTdf88935();
 
 
     virtual void setUp() SAL_OVERRIDE
@@ -58,6 +59,7 @@ private:
     CPPUNIT_TEST(testSwap);
     CPPUNIT_TEST(testSizeBasedAutoSwap);
     CPPUNIT_TEST(testTdf88836);
+    CPPUNIT_TEST(testTdf88935);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -237,6 +239,70 @@ void GraphicObjectTest::testTdf88836()
     CPPUNIT_ASSERT_EQUAL(GRAPHIC_NONE, aGraphic.GetType());
     aGraphic = Graphic(BitmapEx());
     CPPUNIT_ASSERT_EQUAL(GRAPHIC_NONE, aGraphic.GetType());
+}
+
+void GraphicObjectTest::testTdf88935()
+{
+    // Cache size was not updated by deletion of graphic objects
+
+    // Load a file with two images
+    uno::Reference< lang::XComponent > xComponent =
+        loadFromDesktop(getURLFromSrc("svtools/qa/unit/data/document_with_two_images.odt"), "com.sun.star.text.TextDocument");
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    SwNodes& aNodes = pDoc->GetNodes();
+
+    // Find images
+    const GraphicObject* pGraphObj1 = 0;
+    const GraphicObject* pGraphObj2 = 0;
+    for( sal_uLong nIndex = 0; nIndex < aNodes.Count(); ++nIndex)
+    {
+        if( aNodes[nIndex]->IsGrfNode() )
+        {
+            SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+            if( !pGraphObj1 )
+            {
+                pGraphObj1 = &pGrfNode->GetGrfObj();
+            }
+            else
+            {
+                pGraphObj2 = &pGrfNode->GetGrfObj();
+            }
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("Missing image", pGraphObj1 != 0 && pGraphObj2 != 0);
+
+    // Set cache size
+    {
+        GraphicManager& rGrfMgr = pGraphObj1->GetGraphicManager();
+        rGrfMgr.SetMaxCacheSize((pGraphObj1->GetSizeBytes()+pGraphObj2->GetSizeBytes())*10);
+    }
+
+    // Both images fit into the cache
+    {
+        pGraphObj1->GetGraphic();
+        pGraphObj2->GetGraphic();
+        CPPUNIT_ASSERT(!pGraphObj1->IsSwappedOut());
+        CPPUNIT_ASSERT(!pGraphObj2->IsSwappedOut());
+    }
+
+    // Create and remove some copy of the first image
+    for( int i = 0; i < 50; ++i )
+    {
+        GraphicObject aGraphObj3(*pGraphObj1, &pGraphObj1->GetGraphicManager());
+        CPPUNIT_ASSERT(aGraphObj3.SwapOut());
+        CPPUNIT_ASSERT(aGraphObj3.SwapIn());
+    }
+
+    // Both images fit into the cache
+    {
+        pGraphObj1->GetGraphic();
+        pGraphObj2->GetGraphic();
+        CPPUNIT_ASSERT(!pGraphObj1->IsSwappedOut());
+        CPPUNIT_ASSERT(!pGraphObj2->IsSwappedOut());
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphicObjectTest);
