@@ -195,4 +195,11 @@ SvStream& WriteRectangle( SvStream& rOStream, const Rectangle& rRect )
     return rOStream;
 }
 
+OString Rectangle::toString() const
+{
+    std::stringstream ss;
+    ss << getWidth() << ", " << getHeight() << ", " << getX() << ", " << getY();
+    return ss.str().c_str();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

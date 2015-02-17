@@ -27,6 +27,10 @@
 #include <cstdlib>
 
 class SvStream;
+namespace rtl
+{
+    class OString;
+}
 
 enum TriState { TRISTATE_FALSE, TRISTATE_TRUE, TRISTATE_INDET };
 
@@ -436,6 +440,7 @@ public:
     void                setY( long n ) { nBottom += n-nTop; nTop = n; }
     void                setWidth( long n ) { nRight = nLeft + n; }
     void                setHeight( long n ) { nBottom = nTop + n; }
+    rtl::OString        toString() const;
 
 private:
     long                nLeft;

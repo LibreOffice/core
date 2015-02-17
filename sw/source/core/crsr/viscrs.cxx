@@ -179,9 +179,8 @@ void SwVisCrsr::_SetPosAndShow()
 
     if (m_pCrsrShell->isTiledRendering())
     {
-        std::stringstream ss;
-        ss << aRect.Width() << ", " << aRect.Height() << ", " << aRect.Left() << ", " << aRect.Top();
-        OString sRect = ss.str().c_str();
+        Rectangle aSVRect(aRect.Pos().getX(), aRect.Pos().getY(), aRect.Pos().getX() + aRect.SSize().Width(), aRect.Pos().getY() + aRect.SSize().Height());
+        OString sRect = aSVRect.toString();
         m_pCrsrShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, sRect.getStr());
     }
 
@@ -347,13 +346,11 @@ void SwSelPaintRects::Show()
                 // client side.
                 const SwShellCrsr* pCursor = GetShell()->getShellCrsr(false);
                 SwRect aStartRect = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
-                std::stringstream ss;
-                ss << aStartRect.Width() << ", " << aStartRect.Height() << ", " << aStartRect.Left() << ", " << aStartRect.Top();
-                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, ss.str().c_str());
+                OString sRect = aStartRect.SVRect().toString();
+                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
                 SwRect aEndRect = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
-                ss.str("");
-                ss << aEndRect.Width() << ", " << aEndRect.Height() << ", " << aEndRect.Left() << ", " << aEndRect.Top();
-                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, ss.str().c_str());
+                sRect = aEndRect.SVRect().toString();
+                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
             }
 
             std::stringstream ss;
@@ -362,7 +359,7 @@ void SwSelPaintRects::Show()
                 const SwRect& rRect = (*this)[i];
                 if (i)
                     ss << "; ";
-                ss << rRect.Width() << ", " << rRect.Height() << ", " << rRect.Left() << ", " << rRect.Top();
+                ss << rRect.SVRect().toString().getStr();
             }
             OString sRect = ss.str().c_str();
             GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION, sRect.getStr());

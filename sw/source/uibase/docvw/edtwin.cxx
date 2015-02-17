@@ -6234,12 +6234,7 @@ void SwEditWin::LogicInvalidate(const vcl::Region* pRegion)
     if (!pRegion)
         sRectangle = "EMPTY";
     else
-    {
-        std::stringstream ss;
-        Rectangle aRectangle = pRegion->GetBoundRect();
-        ss << aRectangle.getWidth() << ", " << aRectangle.getHeight() << ", " << aRectangle.getX() << ", " << aRectangle.getY();
-        sRectangle = ss.str().c_str();
-    }
+        sRectangle = pRegion->GetBoundRect().toString();
     m_rView.GetWrtShell().libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
