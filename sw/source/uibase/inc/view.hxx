@@ -332,11 +332,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SAL_DLLPRIVATE void          SpellKontext(bool bOn = true)
                                  { m_bCenterCrsr = bOn; m_bAlwaysShowSel = bOn; }
 
-    // methods for printing
-    SAL_DLLPRIVATE virtual SfxPrinter*       GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual bool              HasPrintOptionsPage() const SAL_OVERRIDE;
-    SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( vcl::Window* pParent,
-                                                    const SfxItemSet& rSet) SAL_OVERRIDE;
     // for readonly switching
     SAL_DLLPRIVATE virtual void  Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
     SAL_DLLPRIVATE void          _CheckReadonlyState();
@@ -664,6 +659,12 @@ public:
     void UpdateDocStats();
     /// Where is the real cursor: in the annotation or in the main document?
     void SetAnnotationMode(bool bMode);
+
+    // methods for printing
+    SAL_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool  HasPrintOptionsPage() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SfxTabPage*       CreatePrintOptionsPage( vcl::Window* pParent,
+                                                    const SfxItemSet& rSet) SAL_OVERRIDE;
 };
 
 inline long SwView::GetXScroll() const
