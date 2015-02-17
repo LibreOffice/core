@@ -338,7 +338,10 @@ SvxStyleBox_Impl::~SvxStyleBox_Impl()
 void SvxStyleBox_Impl::dispose()
 {
     for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
+    {
         delete m_pButtons[i];
+        m_pButtons[i] = NULL;
+    }
     ComboBox::dispose();
 }
 
@@ -2297,21 +2300,19 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
 
 IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
 {
-
-    sal_uInt16 i;
-
     // Call ReBind() && UnBind() according to visibility
     SvxStyleBox_Impl* pBox = static_cast<SvxStyleBox_Impl*>( GetToolBox().GetItemWindow( GetId() ));
-    if ( pBox->IsVisible() && !isBound() )
+
+    if ( pBox && pBox->IsVisible() && !isBound() )
     {
-        for ( i=0; i<MAX_FAMILIES; i++ )
+        for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
             pBoundItems [i]->ReBind();
 
         bindListener();
     }
-    else if ( !pBox->IsVisible() && isBound() )
+    else if ( (!pBox || !pBox->IsVisible()) && isBound() )
     {
-        for ( i=0; i<MAX_FAMILIES; i++ )
+        for ( sal_uInt16 i=0; i<MAX_FAMILIES; i++ )
             pBoundItems[i]->UnBind();
         unbindListener();
     }

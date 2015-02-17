@@ -1267,7 +1267,7 @@ void ComboBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 
 OUString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
 {
-    return mpImplLB->GetMRUEntries( cSep );
+    return mpImplLB ? mpImplLB->GetMRUEntries( cSep ) : OUString();
 }
 
 void ComboBox::SetMaxMRUCount( sal_Int32 n )
@@ -1277,12 +1277,12 @@ void ComboBox::SetMaxMRUCount( sal_Int32 n )
 
 sal_Int32 ComboBox::GetMaxMRUCount() const
 {
-    return mpImplLB->GetMaxMRUCount();
+    return mpImplLB ? mpImplLB->GetMaxMRUCount() : 0;
 }
 
 sal_uInt16 ComboBox::GetDisplayLineCount() const
 {
-    return mpImplLB->GetDisplayLineCount();
+    return mpImplLB ? mpImplLB->GetDisplayLineCount() : 0;
 }
 
 void ComboBox::SetEntryData( sal_Int32 nPos, void* pNewData )

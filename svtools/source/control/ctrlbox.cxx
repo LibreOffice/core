@@ -123,8 +123,12 @@ ColorListBox::~ColorListBox()
 
 void ColorListBox::dispose()
 {
-    ImplDestroyColorEntries();
-    delete pColorList;
+    if ( pColorList )
+    {
+        ImplDestroyColorEntries();
+        delete pColorList;
+        pColorList = NULL;
+    }
     ListBox::dispose();
 }
 
@@ -953,8 +957,11 @@ FontNameBox::~FontNameBox()
 
 void FontNameBox::dispose()
 {
-    SaveMRUEntries (maFontMRUEntriesFile);
-    ImplDestroyFontList();
+    if (mpFontList)
+    {
+        SaveMRUEntries (maFontMRUEntriesFile);
+        ImplDestroyFontList();
+    }
     ComboBox::dispose();
 }
 
@@ -1017,6 +1024,7 @@ void FontNameBox::InitFontMRUEntriesFile()
 void FontNameBox::ImplDestroyFontList()
 {
     delete mpFontList;
+    mpFontList = NULL;
 }
 
 void FontNameBox::Fill( const FontList* pList )

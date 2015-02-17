@@ -73,11 +73,11 @@ void LifecycleTest::testWidgets(vcl::Window *pParent)
     // Some widgets really insist on adoption.
     if (pParent)
     {
-        { VclPtr<CheckBox>     aPtr(new CheckBox(pParent));    }
-//        { VclPtr<Edit>         aPtr(new Edit(pParent));        }
-//        { VclPtr<ComboBox>     aPtr(new ComboBox(pParent)); }
+        { VclPtr<CheckBox>     aPtr(new CheckBox(pParent));     }
+        { VclPtr<Edit>         aPtr(new Edit(pParent));         }
+        { VclPtr<ComboBox>     aPtr(new ComboBox(pParent));     }
+        { VclPtr<RadioButton>  aPtr(new RadioButton(pParent));  }
     }
-//    { VclPtr<RadioButton>  aPtr(new RadioButton(pParent));  }
 }
 
 void LifecycleTest::testIsolatedWidgets()

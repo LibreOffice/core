@@ -1381,7 +1381,7 @@ const Pointer& Window::GetPointer() const
 
 VCLXWindow* Window::GetWindowPeer() const
 {
-    return mpWindowImpl->mpVCLXWindow;
+    return mpWindowImpl ? mpWindowImpl->mpVCLXWindow : NULL;
 }
 
 void Window::SetPosPixel( const Point& rNewPos )
