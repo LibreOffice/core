@@ -2354,6 +2354,12 @@ void SdXImpressDocument::initializeForTiledRendering()
     mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
 }
 
+void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    SolarMutexGuard aGuard;
+    mpDocShell->GetViewShell()->registerLibreOfficeKitCallback(pCallback, pData);
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);

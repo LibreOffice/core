@@ -240,8 +240,10 @@ public:
     virtual OUString getPartName( int nPart ) SAL_OVERRIDE;
     virtual void setPartMode( LibreOfficeKitPartMode ePartMode ) SAL_OVERRIDE;
 
-    /// @see ITiledRenderable::initializeForTiledRendering().
+    /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::registerCallback().
+    virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
 
     // XComponent
 
