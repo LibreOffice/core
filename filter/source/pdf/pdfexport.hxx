@@ -108,6 +108,7 @@ private:
     OUString                msSignReason;
     OUString                msSignPassword;
     Reference< security::XCertificate > maSignCertificate;
+    OUString                msSignTSA;
 
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
