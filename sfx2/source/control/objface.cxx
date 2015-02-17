@@ -83,8 +83,8 @@ struct SfxInterface_Impl
     bool                    bRegistered;
 
     SfxInterface_Impl() :
-        aPopupRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager()),
-        aStatBarRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager())
+        aPopupRes(nullptr, *SfxApplication::GetOrCreate()->GetSfxResManager()),
+        aStatBarRes(nullptr, *SfxApplication::GetOrCreate()->GetSfxResManager())
     , pModule(NULL)
     , bRegistered(false)
     {

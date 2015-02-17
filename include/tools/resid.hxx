@@ -65,19 +65,6 @@ public:
     {
         ImplInit( nId, rMgr, NULL );
     }
-    // backwards compatibility; avoid ambiguities
-    ResId( sal_uInt16 nId, ResMgr& rMgr )
-    {
-        ImplInit( sal_uInt32(nId), rMgr, NULL );
-    }
-    ResId( int nId, ResMgr& rMgr )
-    {
-        ImplInit( sal_uInt32(nId), rMgr, NULL );
-    }
-    ResId( long nId, ResMgr& rMgr )
-    {
-        ImplInit( sal_uInt32(nId), rMgr, NULL );
-    }
 
     sal_uInt32 GetWinBits() const { return m_nWinBits; }
     void SetWinBits( sal_uInt32 nBits ) const { m_nWinBits = nBits; }
