@@ -4,13 +4,6 @@
 
 package org.mozilla.gecko;
 
-import org.libreoffice.LOKitShell;
-import org.libreoffice.R;
-import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
-import org.mozilla.gecko.gfx.LayerView;
-
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.PointF;
@@ -20,6 +13,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import org.json.JSONObject;
+import org.libreoffice.LOKitShell;
+import org.libreoffice.R;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
+import org.mozilla.gecko.gfx.LayerView;
 
 public class TextSelectionHandle extends ImageView implements View.OnTouchListener {
     private static final String LOGTAG = TextSelectionHandle.class.getSimpleName();

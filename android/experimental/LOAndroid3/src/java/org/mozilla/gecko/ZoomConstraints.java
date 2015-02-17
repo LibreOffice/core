@@ -5,9 +5,6 @@
 
 package org.mozilla.gecko;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public final class ZoomConstraints {
     private final boolean mAllowZoom;
     private final boolean mAllowDoubleTapZoom;

@@ -6,6 +6,7 @@
 package org.mozilla.gecko.gfx;
 
 import android.graphics.RectF;
+
 import org.mozilla.gecko.util.FloatUtils;
 
 /*

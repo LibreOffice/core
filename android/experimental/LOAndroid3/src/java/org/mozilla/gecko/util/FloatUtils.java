@@ -7,8 +7,6 @@ package org.mozilla.gecko.util;
 
 import android.graphics.PointF;
 
-import java.lang.IllegalArgumentException;
-
 public final class FloatUtils {
     private FloatUtils() {}
 

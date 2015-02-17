@@ -6,17 +6,12 @@
 package org.mozilla.gecko.gfx;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
-import org.libreoffice.LOEvent;
 import org.libreoffice.LOKitShell;
-import org.libreoffice.LOKitThread;
 import org.mozilla.gecko.ZoomConstraints;
-import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.List;
 

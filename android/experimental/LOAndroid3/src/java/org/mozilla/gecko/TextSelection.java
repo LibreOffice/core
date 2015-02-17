@@ -9,16 +9,14 @@ import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.libreoffice.LOKitShell;
-import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;
 
-import static org.mozilla.gecko.TextSelectionHandle.HandleType.*;
+import static org.mozilla.gecko.TextSelectionHandle.HandleType.MIDDLE;
+import static org.mozilla.gecko.TextSelectionHandle.HandleType.START;
 
 public class TextSelection extends Layer {
     private static final String LOGTAG = "GeckoTextSelection";
