@@ -12,6 +12,7 @@ import org.libreoffice.TileIdentifier;
 import org.mozilla.gecko.util.FloatUtils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -197,15 +198,15 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     }
 
     private void clearMarkedTiles() {
-        List<SubTile> tilesToRemove = new ArrayList<SubTile>();
         tilesWriteLock.lock();
-        for (SubTile tile : tiles) {
+        Iterator<SubTile> iterator = tiles.iterator();
+        while (iterator.hasNext()) {
+            SubTile tile = iterator.next();
             if (tile.markedForRemoval) {
                 tile.destroy();
-                tilesToRemove.add(tile);
+                iterator.remove();
             }
         }
-        tiles.removeAll(tilesToRemove);
         tilesWriteLock.unlock();
     }
 
