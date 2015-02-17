@@ -778,22 +778,22 @@ struct ParserContext
 
 };
 
-typedef ::boost::shared_ptr< ParserContext > ParserContextSharedPtr;
+typedef std::shared_ptr< ParserContext > ParserContextSharedPtr;
 
 /** Generate parse-dependent-but-then-constant value
     */
 class DoubleConstantFunctor
 {
-    ParserContextSharedPtr  mpContext;
+    ParserContextSharedPtr  mxContext;
 
 public:
     DoubleConstantFunctor( const ParserContextSharedPtr& rContext ) :
-        mpContext( rContext )
+        mxContext( rContext )
     {
     }
     void operator()( double n ) const
     {
-        mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( n ) ) );
+        mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( n ) ) );
     }
 };
 
@@ -801,14 +801,14 @@ class EnumFunctor
 {
     const ExpressionFunct           meFunct;
     double                          mnValue;
-    ParserContextSharedPtr          mpContext;
+    ParserContextSharedPtr          mxContext;
 
 public:
 
     EnumFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext )
     : meFunct( eFunct )
     , mnValue( 0 )
-    , mpContext( rContext )
+    , mxContext( rContext )
     {
     }
     void operator()( StringIteratorT rFirst, StringIteratorT rSecond ) const
@@ -819,17 +819,17 @@ public:
             case ENUM_FUNC_ADJUSTMENT :
             {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-                mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new AdjustmentExpression( *mpContext->mpCustoShape, aVal.toInt32() ) ) );
+                mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new AdjustmentExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
             case ENUM_FUNC_EQUATION :
                 {
                 OUString aVal( rFirst + 1, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
-                mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new EquationExpression( *mpContext->mpCustoShape, aVal.toInt32() ) ) );
+                mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new EquationExpression( *mxContext->mpCustoShape, aVal.toInt32() ) ) );
             }
             break;
             default:
-                mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new EnumValueExpression( *mpContext->mpCustoShape, meFunct ) ) );
+                mxContext->maOperandStack.push( ExpressionNodeSharedPtr( new EnumValueExpression( *mxContext->mpCustoShape, meFunct ) ) );
         }
     }
 };
@@ -837,18 +837,18 @@ public:
 class UnaryFunctionFunctor
 {
     const ExpressionFunct   meFunct;
-    ParserContextSharedPtr  mpContext;
+    ParserContextSharedPtr  mxContext;
 
 public :
 
     UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
         meFunct( eFunct ),
-        mpContext( rContext )
+        mxContext( rContext )
     {
     }
     void operator()( StringIteratorT, StringIteratorT ) const
     {
-        ParserContext::OperandStack& rNodeStack( mpContext->maOperandStack );
+        ParserContext::OperandStack& rNodeStack( mxContext->maOperandStack );
 
         if( rNodeStack.size() < 1 )
             throw ParseError( "Not enough arguments for unary operator" );
@@ -874,19 +874,19 @@ public :
 class BinaryFunctionFunctor
 {
     const ExpressionFunct   meFunct;
-    ParserContextSharedPtr  mpContext;
+    ParserContextSharedPtr  mxContext;
 
 public:
 
     BinaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
         meFunct( eFunct ),
-        mpContext( rContext )
+        mxContext( rContext )
     {
     }
 
     void operator()( StringIteratorT, StringIteratorT ) const
     {
-        ParserContext::OperandStack& rNodeStack( mpContext->maOperandStack );
+        ParserContext::OperandStack& rNodeStack( mxContext->maOperandStack );
 
         if( rNodeStack.size() < 2 )
             throw ParseError( "Not enough arguments for binary operator" );
@@ -909,17 +909,17 @@ public:
 
 class IfFunctor
 {
-    ParserContextSharedPtr  mpContext;
+    ParserContextSharedPtr  mxContext;
 
 public :
 
     IfFunctor( const ParserContextSharedPtr& rContext ) :
-        mpContext( rContext )
+        mxContext( rContext )
     {
     }
     void operator()( StringIteratorT, StringIteratorT ) const
     {
-        ParserContext::OperandStack& rNodeStack( mpContext->maOperandStack );
+        ParserContext::OperandStack& rNodeStack( mxContext->maOperandStack );
 
         if( rNodeStack.size() < 3 )
             throw ParseError( "Not enough arguments for ternary operator" );

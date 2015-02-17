@@ -2588,7 +2588,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                 EnhancedCustomShape2d aCustoShape2d( pCustoShape );
                 try
                 {
-                    ::boost::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
+                    std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
                         EnhancedCustomShape::FunctionParser::parseFunction( sEquationSource[ i ], aCustoShape2d ) );
                     com::sun::star::drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, NULL, 0 ) );
                     if ( aPara.Type != com::sun::star::drawing::EnhancedCustomShapeParameterType::EQUATION )

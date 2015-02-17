@@ -108,13 +108,13 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     return false;
 }
 
-::boost::shared_ptr<GDIMetaFile>
+std::shared_ptr<GDIMetaFile>
 SfxObjectShell::GetPreviewMetaFile( bool bFullContent ) const
 {
     return CreatePreviewMetaFile_Impl( bFullContent );
 }
 
-::boost::shared_ptr<GDIMetaFile>
+std::shared_ptr<GDIMetaFile>
 SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
 {
     // DoDraw can only be called when no printing is done, otherwise
@@ -123,16 +123,16 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     if ( pFrame && pFrame->GetViewShell() &&
          pFrame->GetViewShell()->GetPrinter() &&
          pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
-         return ::boost::shared_ptr<GDIMetaFile>();
+         return std::shared_ptr<GDIMetaFile>();
 
-    ::boost::shared_ptr<GDIMetaFile> pFile(new GDIMetaFile);
+    std::shared_ptr<GDIMetaFile> xFile(new GDIMetaFile);
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( false );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );
-    pFile->SetPrefMapMode( aMode );
+    xFile->SetPrefMapMode( aMode );
 
     Size aTmpSize;
     sal_Int8 nAspect;
@@ -147,11 +147,11 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
         aTmpSize = ((SfxObjectShell*)this)->GetFirstPageSize();
     }
 
-    pFile->SetPrefSize( aTmpSize );
+    xFile->SetPrefSize( aTmpSize );
     DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
         "size of first page is 0, override GetFirstPageSize or set vis-area!" );
 
-    pFile->Record( &aDevice );
+    xFile->Record( &aDevice );
 
     LanguageType eLang;
     SvtCTLOptions aCTLOptions;
@@ -168,9 +168,9 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
         SAL_INFO( "sfx.doc", "PERFORMANCE SfxObjectShell::CreatePreviewMetaFile_Impl" );
         ((SfxObjectShell*)this)->DoDraw( &aDevice, Point(0,0), aTmpSize, JobSetup(), nAspect );
     }
-    pFile->Stop();
+    xFile->Stop();
 
-    return pFile;
+    return xFile;
 }
 
 

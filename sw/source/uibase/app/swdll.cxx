@@ -35,7 +35,7 @@
 
 #include <com/sun/star/frame/Desktop.hpp>
 #include <unotools/moduleoptions.hxx>
-#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <svx/fmobjfac.hxx>
@@ -54,10 +54,10 @@ namespace
 {
     //Holds a SwDLL and release it on exit, or dispose of the
     //default XComponent, whichever comes first
-    class SwDLLInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<SwDLL>
+    class SwDLLInstance : public comphelper::unique_disposing_solar_mutex_reset_ptr<SwDLL>
     {
     public:
-        SwDLLInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<SwDLL>(uno::Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY_THROW), new SwDLL)
+        SwDLLInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<SwDLL>(uno::Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), uno::UNO_QUERY_THROW), new SwDLL)
         {
         }
     };

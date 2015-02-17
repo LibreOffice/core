@@ -3571,10 +3571,10 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, bool bIsTemplate, const uno
         }
         else
         {
-            boost::shared_ptr<GDIMetaFile> pMetaFile = GetPreviewMetaFile(false);
-            if (pMetaFile)
+            std::shared_ptr<GDIMetaFile> xMetaFile = GetPreviewMetaFile(false);
+            if (xMetaFile)
             {
-                bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(pMetaFile.get(), xStream);
+                bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(xMetaFile.get(), xStream);
             }
         }
     }

@@ -26,8 +26,6 @@
 
 #include <map>
 #include <memory>
-#include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <xmloff/xmltkmap.hxx>
 #include <rtl/ref.hxx>
@@ -366,16 +364,18 @@ enum XMLTextType
 #define XML_TEXT_RENAME_TYPE_FRAME 10
 #define XML_TEXT_RENAME_TYPE_TABLE 20
 
-class XMLOFF_DLLPUBLIC XMLTextImportHelper : public salhelper::SimpleReferenceObject,
-    private boost::noncopyable
+class XMLOFF_DLLPUBLIC XMLTextImportHelper : public salhelper::SimpleReferenceObject
 {
 private:
+    XMLTextImportHelper(const XMLTextImportHelper&) SAL_DELETED_FUNCTION;
+    XMLTextImportHelper& operator=(const XMLTextImportHelper&) SAL_DELETED_FUNCTION;
+
     struct Impl;
     std::unique_ptr<Impl> m_xImpl;
     /// ugly, but implementation of this is in XMLPropertyBackpatcher.cxx
     struct BackpatcherImpl;
-    ::boost::shared_ptr<BackpatcherImpl> m_pBackpatcherImpl;
-    ::boost::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
+    std::shared_ptr<BackpatcherImpl> m_xBackpatcherImpl;
+    std::shared_ptr<BackpatcherImpl> MakeBackpatcherImpl();
 
 protected:
     virtual SvXMLImportContext *CreateTableChildContext(
@@ -567,7 +567,7 @@ public:
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & rRange,
         OUString const& i_rXmlId,
-        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
+        std::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
             i_rpRDFaAttributes);
 
     /// process the start of a range reference
@@ -576,7 +576,7 @@ public:
         ::com::sun::star::uno::Reference<
                 ::com::sun::star::text::XTextRange> & o_rRange,
         OUString & o_rXmlId,
-        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
+        std::shared_ptr< ::xmloff::ParsedRDFaAttributes > &
             o_rpRDFaAttributes);
 
     OUString FindActiveBookmarkName();

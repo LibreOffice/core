@@ -1110,19 +1110,18 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
                         nPgNum++;
                     }
-                    ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                        pDocShell->GetPreviewMetaFile();
-                    if ( pMetaFile )
+                    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
+                    if (xMetaFile)
                     {
                         Point   aPoint;
                         Size    aSize( GetPage()->GetSize() );
-                        pMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, true ), 0 );
-                        pMetaFile->AddAction( (MetaAction*) new MetaRectAction( Rectangle( aPoint, aSize ) ), 1 );
-                        pMetaFile->SetPrefMapMode( MAP_100TH_MM );
-                        pMetaFile->SetPrefSize( aSize );
+                        xMetaFile->AddAction( (MetaAction*) new MetaFillColorAction( COL_WHITE, true ), 0 );
+                        xMetaFile->AddAction( (MetaAction*) new MetaRectAction( Rectangle( aPoint, aSize ) ), 1 );
+                        xMetaFile->SetPrefMapMode( MAP_100TH_MM );
+                        xMetaFile->SetPrefSize( aSize );
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
-                        ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, false );
+                        ConvertGDIMetaFileToWMF( *xMetaFile, aDestStrm, NULL, false );
                         Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
                         aAny <<= aSeq;
                     }
@@ -1147,10 +1146,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                         pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nPageNumber );
                         nPgNum++;
                     }
-                    ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                        pDocShell->GetPreviewMetaFile();
+                    std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
                     BitmapEx aBitmap;
-                    if (pMetaFile && pMetaFile->CreateThumbnail(aBitmap))
+                    if (xMetaFile && xMetaFile->CreateThumbnail(aBitmap))
                     {
                         SvMemoryStream aMemStream;
                         WriteDIB(aBitmap.GetBitmap(), aMemStream, false, false);

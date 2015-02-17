@@ -25,8 +25,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 #include <vector>
 
 #include <com/sun/star/table/XTableColumns.hpp>
@@ -49,7 +49,7 @@
 class SvXMLExport;
 class SvXMLExportPropertyMapper;
 
-typedef ::std::map< const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >, OUString > TableStyleMap;
+typedef std::map< const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >, OUString > TableStyleMap;
 
 struct XMLTableInfo
 {
@@ -59,7 +59,7 @@ struct XMLTableInfo
     std::vector< OUString > maDefaultRowCellStyles;
 };
 
-typedef ::std::map< const ::com::sun::star::uno::Reference< com::sun::star::table::XColumnRowRange >, boost::shared_ptr< XMLTableInfo > > TableInfoMap;
+typedef std::map< const ::com::sun::star::uno::Reference< com::sun::star::table::XColumnRowRange >, std::shared_ptr< XMLTableInfo > > TableInfoMap;
 
 class XMLOFF_DLLPUBLIC XMLTableExport : public salhelper::SimpleReferenceObject
 {
@@ -96,8 +96,8 @@ private:
 
     SAL_DLLPRIVATE void ImpExportText( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell );
 
-    void ExportCell( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, const boost::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& sDefaultCellStyle  );
-    void ExportTableColumns( const com::sun::star::uno::Reference < com::sun::star::container::XIndexAccess >& xtableColumns, const boost::shared_ptr< XMLTableInfo >& pTableInfo );
+    void ExportCell( const com::sun::star::uno::Reference < com::sun::star::table::XCell >& xCell, const std::shared_ptr< XMLTableInfo >& pTableInfo, const OUString& sDefaultCellStyle  );
+    void ExportTableColumns( const com::sun::star::uno::Reference < com::sun::star::container::XIndexAccess >& xtableColumns, const std::shared_ptr< XMLTableInfo >& pTableInfo );
 
 };
 

@@ -26,7 +26,6 @@
 
 #include <memory>
 #include <limits.h>
-#include <boost/utility.hpp>
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -80,9 +79,11 @@ public:
 */
 
 class XMLOFF_DLLPUBLIC SvXMLUnitConverter
-    : private ::boost::noncopyable
 {
 private:
+    SvXMLUnitConverter(const SvXMLUnitConverter&) SAL_DELETED_FUNCTION;
+    SvXMLUnitConverter& operator=(const SvXMLUnitConverter&) SAL_DELETED_FUNCTION;
+
     struct Impl;
     ::std::unique_ptr<Impl> m_pImpl;
 

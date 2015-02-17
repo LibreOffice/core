@@ -26,8 +26,6 @@
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include <memory>
 
 namespace cppu
@@ -58,7 +56,7 @@ namespace svx
 
         virtual ~IPropertyValueProvider();
     };
-    typedef ::boost::shared_ptr< IPropertyValueProvider >  PPropertyValueProvider;
+    typedef std::shared_ptr< IPropertyValueProvider >  PPropertyValueProvider;
 
 
     //= PropertyValueProvider
@@ -69,7 +67,6 @@ namespace svx
         and calls the getPropertyValue method.
     */
     class SVX_DLLPUBLIC PropertyValueProvider   :public IPropertyValueProvider
-                                                ,public ::boost::noncopyable
     {
     public:
         PropertyValueProvider( ::cppu::OWeakObject& _rContext, const sal_Char* _pAsciiPropertyName )
@@ -83,6 +80,9 @@ namespace svx
 
     protected:
         ::cppu::OWeakObject&    getContext() const { return m_rContext; }
+        PropertyValueProvider(const PropertyValueProvider&) SAL_DELETED_FUNCTION;
+        PropertyValueProvider& operator=(const PropertyValueProvider&) SAL_DELETED_FUNCTION;
+
     private:
         ::cppu::OWeakObject&    m_rContext;
         const OUString   m_sPropertyName;
@@ -97,7 +97,7 @@ namespace svx
 
         The class is intended to be held as member of the class which does the property change broadcasting.
     */
-    class SVX_DLLPUBLIC PropertyChangeNotifier : public ::boost::noncopyable
+    class SVX_DLLPUBLIC PropertyChangeNotifier
     {
     public:
         /** constructs a notifier instance
@@ -129,7 +129,10 @@ namespace svx
         void    disposing();
 
     private:
-        ::std::unique_ptr< PropertyChangeNotifier_Data >  m_pData;
+        PropertyChangeNotifier(const PropertyChangeNotifier&) SAL_DELETED_FUNCTION;
+        PropertyChangeNotifier& operator=(const PropertyChangeNotifier&) SAL_DELETED_FUNCTION;
+
+        std::unique_ptr< PropertyChangeNotifier_Data >  m_xData;
     };
 
 

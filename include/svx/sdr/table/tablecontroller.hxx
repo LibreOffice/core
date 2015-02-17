@@ -61,7 +61,7 @@ public:
     SVX_DLLPRIVATE virtual bool GetStyleSheet( SfxStyleSheet* &rpStyleSheet ) const SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr ) SAL_OVERRIDE;
 
-    SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  ) SAL_OVERRIDE;
+    SVX_DLLPRIVATE virtual bool TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  ) SAL_OVERRIDE;
     SVX_DLLPRIVATE virtual bool ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoCharacterFormats, bool bNoParagraphFormats ) SAL_OVERRIDE;
 
     // slots

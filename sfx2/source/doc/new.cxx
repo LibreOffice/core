@@ -41,17 +41,17 @@
 
 void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 {
-    ::boost::shared_ptr<GDIMetaFile> pFile = pObj
+    std::shared_ptr<GDIMetaFile> xFile = pObj
         ? pObj->GetPreviewMetaFile()
-        : ::boost::shared_ptr<GDIMetaFile>();
-    pMetaFile = pFile;
+        : std::shared_ptr<GDIMetaFile>();
+    xMetaFile = xFile;
     Invalidate();
 }
 
 SfxPreviewBase_Impl::SfxPreviewBase_Impl(
     vcl::Window* pParent, WinBits nStyle)
     : Window(pParent, nStyle)
-    , pMetaFile()
+    , xMetaFile()
 {
 }
 
@@ -112,7 +112,7 @@ void SfxPreviewWin_Impl::ImpPaint(
 
 void SfxPreviewWin_Impl::Paint( const Rectangle& rRect )
 {
-    ImpPaint( rRect, pMetaFile.get(), this );
+    ImpPaint( rRect, xMetaFile.get(), this );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeSfxPreviewWin(vcl::Window *pParent, VclBuilder::stringmap &)

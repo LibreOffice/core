@@ -28,9 +28,7 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
-
 
 class SdrMarkView;
 
@@ -45,8 +43,7 @@ namespace {
 
 
 class SVX_DLLPUBLIC SelectionChangeHandler
-    : private ::boost::noncopyable,
-      private ::cppu::BaseMutex,
+    : private ::cppu::BaseMutex,
       public SelectionChangeHandlerInterfaceBase
 {
 public:
@@ -69,6 +66,9 @@ public:
     void Disconnect (void);
 
 private:
+    SelectionChangeHandler(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
+    SelectionChangeHandler& operator=(const SelectionChangeHandler&) SAL_DELETED_FUNCTION;
+
     const boost::function<rtl::OUString(void)> maSelectionChangeCallback;
     css::uno::Reference<css::frame::XController> mxController;
     const sfx2::sidebar::EnumContext::Context meDefaultContext;

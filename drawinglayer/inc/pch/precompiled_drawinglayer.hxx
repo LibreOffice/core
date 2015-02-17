@@ -80,7 +80,7 @@
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
-#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase2.hxx>

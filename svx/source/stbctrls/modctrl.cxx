@@ -63,20 +63,20 @@ struct SvxModifyControl::ImplData
 
 SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    mpImpl(new ImplData)
+    mxImpl(new ImplData)
 {
 //#ifndef MACOSX
     if ( rStb.GetDPIScaleFactor() > 1 )
     {
-        for (int i = 0; i < mpImpl->MODIFICATION_STATE_SIZE; i++)
+        for (int i = 0; i < mxImpl->MODIFICATION_STATE_SIZE; i++)
         {
-            BitmapEx b = mpImpl->maImages[i].GetBitmapEx();
+            BitmapEx b = mxImpl->maImages[i].GetBitmapEx();
             b.Scale(rStb.GetDPIScaleFactor(), rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
-            mpImpl->maImages[i] = Image(b);
+            mxImpl->maImages[i] = Image(b);
         }
     }
 //#endif
-    mpImpl->maIdle.SetIdleHdl( LINK(this, SvxModifyControl, OnTimer) );
+    mxImpl->maIdle.SetIdleHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 
 
@@ -89,12 +89,12 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 
     DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );
     const SfxBoolItem* pItem = static_cast<const SfxBoolItem*>(pState);
-    mpImpl->maIdle.Stop();
+    mxImpl->maIdle.Stop();
 
     bool modified = pItem->GetValue();
-    bool start = ( !modified && mpImpl->mnModState == ImplData::MODIFICATION_STATE_YES);  // should timer be started and feedback image displayed ?
+    bool start = ( !modified && mxImpl->mnModState == ImplData::MODIFICATION_STATE_YES);  // should timer be started and feedback image displayed ?
 
-    mpImpl->mnModState = (start ? ImplData::MODIFICATION_STATE_FEEDBACK : (modified ? ImplData::MODIFICATION_STATE_YES : ImplData::MODIFICATION_STATE_NO));
+    mxImpl->mnModState = (start ? ImplData::MODIFICATION_STATE_FEEDBACK : (modified ? ImplData::MODIFICATION_STATE_YES : ImplData::MODIFICATION_STATE_NO));
 
     _repaint();
 
@@ -102,7 +102,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
     GetStatusBar().SetQuickHelpText(GetId(), SVX_RESSTR(nResId));
 
     if ( start )
-        mpImpl->maIdle.Start();
+        mxImpl->maIdle.Start();
 }
 
 
@@ -113,7 +113,7 @@ IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
         return 0;
 
     pTimer->Stop();
-    mpImpl->mnModState = ImplData::MODIFICATION_STATE_NO;
+    mxImpl->mnModState = ImplData::MODIFICATION_STATE_NO;
 
     _repaint();
 
@@ -154,14 +154,14 @@ void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
     OutputDevice*       pDev =  rUsrEvt.GetDevice();
     Rectangle           aRect = rUsrEvt.GetRect();
 
-    ImplData::ModificationState state = mpImpl->mnModState;
-    Point aPt = centerImage(aRect, mpImpl->maImages[state]);
-    pDev->DrawImage(aPt, mpImpl->maImages[state]);
+    ImplData::ModificationState state = mxImpl->mnModState;
+    Point aPt = centerImage(aRect, mxImpl->maImages[state]);
+    pDev->DrawImage(aPt, mxImpl->maImages[state]);
 }
 
 void SvxModifyControl::Click()
 {
-    if (mpImpl->mnModState != ImplData::MODIFICATION_STATE_YES)
+    if (mxImpl->mnModState != ImplData::MODIFICATION_STATE_YES)
         // document not modified.  nothing to do here.
         return;
 

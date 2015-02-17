@@ -137,7 +137,7 @@
 #include <rtl/ustring.hxx>
 #include <svtools/embedhlp.hxx>
 #include <boost/scoped_array.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace ::com::sun::star    ;
 using namespace ::com::sun::star::drawing;
@@ -257,17 +257,17 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
 
     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( OUString("d:\\ashape.dbg"), aURLStr ) )
     {
-        boost::scoped_ptr<SvStream> pOut(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::WRITE ));
+        std::unique_ptr<SvStream> xOut(::utl::UcbStreamHelper::CreateStream( aURLStr, StreamMode::WRITE ));
 
-        if( pOut )
+        if( xOut )
         {
-            pOut->Seek( STREAM_SEEK_TO_END );
+            xOut->Seek( STREAM_SEEK_TO_END );
 
             if ( IsProperty( DFF_Prop_adjustValue ) || IsProperty( DFF_Prop_pVertices ) )
             {
-                pOut->WriteLine( "" );
+                xOut->WriteLine( "" );
                 OString aString("ShapeId: " + OString::number(nShapeId));
-                pOut->WriteLine(aString);
+                xOut->WriteLine(aString);
             }
             for ( sal_uInt32 i = DFF_Prop_adjustValue; i <= DFF_Prop_adjust10Value; i++ )
             {
@@ -275,7 +275,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                 {
                     OString aString("Prop_adjustValue" + OString::number( ( i - DFF_Prop_adjustValue ) + 1 ) +
                                     ":" + OString::number(GetPropertyValue(i)) );
-                    pOut->WriteLine(aString);
+                    xOut->WriteLine(aString);
                 }
             }
             sal_Int32 i;
@@ -290,15 +290,15 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                         sal_Int32 nLen = (sal_Int32)GetPropertyValue( i );
                         if ( nLen )
                         {
-                            pOut->WriteLine( "" );
+                            xOut->WriteLine( "" );
                             OStringBuffer aDesc("Property:" + OString::number(i) +
                                                 "  Size:" + OString::number(nLen));
-                            pOut->WriteLine(aDesc.makeStringAndClear());
+                            xOut->WriteLine(aDesc.makeStringAndClear());
                             sal_Int16   nNumElem, nNumElemMem, nNumSize;
                             rIn >> nNumElem >> nNumElemMem >> nNumSize;
                             aDesc.append("Entries: " + OString::number(nNumElem) +
                                          "  Size:" + OString::number(nNumSize));
-                            pOut->WriteLine(aDesc.makeStringAndClear());
+                            xOut->WriteLine(aDesc.makeStringAndClear());
                             if ( nNumSize < 0 )
                                 nNumSize = ( ( -nNumSize ) >> 2 );
                             if ( !nNumSize )
@@ -315,21 +315,21 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                                             sal_uInt8 nVal;
                                             rIn >> nVal;
                                             if ( ( nVal >> 4 ) > 9 )
-                                                *pOut << (sal_uInt8)( ( nVal >> 4 ) + 'A' - 10 );
+                                                *xOut << (sal_uInt8)( ( nVal >> 4 ) + 'A' - 10 );
                                             else
-                                                *pOut << (sal_uInt8)( ( nVal >> 4 ) + '0' );
+                                                *xOut << (sal_uInt8)( ( nVal >> 4 ) + '0' );
 
                                             if ( ( nVal & 0xf ) > 9 )
-                                                *pOut << (sal_uInt8)( ( nVal & 0xf ) + 'A' - 10 );
+                                                *xOut << (sal_uInt8)( ( nVal & 0xf ) + 'A' - 10 );
                                             else
-                                                *pOut << (sal_uInt8)( ( nVal & 0xf ) + '0' );
+                                                *xOut << (sal_uInt8)( ( nVal & 0xf ) + '0' );
 
                                             nLen--;
                                         }
                                     }
-                                    *pOut << (char)( ' ' );
+                                    *xOut << (char)( ' ' );
                                 }
-                                pOut->WriteLine( OString() );
+                                xOut->WriteLine( OString() );
                             }
                         }
                     }
@@ -337,7 +337,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
                     {
                         OString aString("Property" + OString::number(i) +
                                         ":" + OString::number(GetPropertyValue(i)));
-                        pOut->WriteLine(aString);
+                        xOut->WriteLine(aString);
                     }
                 }
             }
@@ -3084,15 +3084,15 @@ DffRecordHeader* DffRecordManager::GetRecordHeader( sal_uInt16 nRecId, DffSeekTo
 
 
 bool CompareSvxMSDffShapeInfoById::operator() (
-    ::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
-    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const
+    std::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+    std::shared_ptr<SvxMSDffShapeInfo> const& rhs) const
 {
     return lhs->nShapeId < rhs->nShapeId;
 }
 
 bool CompareSvxMSDffShapeInfoByTxBxComp::operator() (
-    ::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
-    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const
+    std::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+    std::shared_ptr<SvxMSDffShapeInfo> const& rhs) const
 {
     return lhs->nTxBxComp < rhs->nTxBxComp;
 }
@@ -5144,7 +5144,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // the object with a frame, otherwise
             if( bTextFrame )
             {
-                ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
+                std::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
                     new SvxMSDffShapeInfo(0, pImpRec->nShapeId));
 
                 SvxMSDffShapeInfos_ById::const_iterator const it =
@@ -5707,7 +5707,7 @@ void SvxMSDffManager::CheckTxBxStoryChain()
             mark = m_xShapeInfosByTxBxComp->begin();
          iter != m_xShapeInfosByTxBxComp->end(); ++iter)
     {
-        boost::shared_ptr<SvxMSDffShapeInfo> const pObj = *iter;
+        std::shared_ptr<SvxMSDffShapeInfo> const pObj = *iter;
         if( pObj->nTxBxComp )
         {
             // group change?
@@ -6136,7 +6136,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         {
             aInfo.bReplaceByFly = true;
         }
-        m_xShapeInfosByTxBxComp->insert(::boost::shared_ptr<SvxMSDffShapeInfo>(
+        m_xShapeInfosByTxBxComp->insert(std::shared_ptr<SvxMSDffShapeInfo>(
                     new SvxMSDffShapeInfo(aInfo)));
         pShapeOrders->push_back( new SvxMSDffShapeOrder( aInfo.nShapeId ) );
     }
@@ -6156,7 +6156,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
                                           SvxMSDffImportData& rData)
 {
-    ::boost::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
+    std::shared_ptr<SvxMSDffShapeInfo> const pTmpRec(
         new SvxMSDffShapeInfo(0, nId));
 
     SvxMSDffShapeInfos_ById::const_iterator const it =
@@ -6333,18 +6333,18 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         rBLIPStream.SeekRel( nSkip );
 
         SvStream* pGrStream = &rBLIPStream;
-        boost::scoped_ptr<SvMemoryStream> pOut;
+        std::unique_ptr<SvMemoryStream> xOut;
         if( bZCodecCompression )
         {
-            pOut.reset(new SvMemoryStream( 0x8000, 0x4000 ));
+            xOut.reset(new SvMemoryStream( 0x8000, 0x4000 ));
             ZCodec aZCodec( 0x8000, 0x8000 );
             aZCodec.BeginCompression();
-            aZCodec.Decompress( rBLIPStream, *pOut );
+            aZCodec.Decompress( rBLIPStream, *xOut );
             aZCodec.EndCompression();
-            pOut->Seek( STREAM_SEEK_TO_BEGIN );
-            pOut->SetResizeOffset( 0 ); // sj: #i102257# setting ResizeOffset of 0 prevents from seeking
+            xOut->Seek( STREAM_SEEK_TO_BEGIN );
+            xOut->SetResizeOffset( 0 ); // sj: #i102257# setting ResizeOffset of 0 prevents from seeking
                                         // behind the stream end (allocating too much memory)
-            pGrStream = pOut.get();
+            pGrStream = xOut.get();
         }
 
 #if OSL_DEBUG_LEVEL > 2
@@ -6376,24 +6376,24 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
 
             SAL_INFO("filter.ms", "dumping " << aURLStr);
 
-            boost::scoped_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, StreamMode::TRUNC | StreamMode::WRITE));
+            std::unique_ptr<SvStream> pDbgOut(::utl::UcbStreamHelper::CreateStream(aURLStr, StreamMode::TRUNC | StreamMode::WRITE));
 
             if( pDbgOut )
             {
                 if ( bZCodecCompression )
                 {
-                    pOut->Seek( STREAM_SEEK_TO_END );
-                    pDbgOut->Write( pOut->GetData(), pOut->Tell() );
-                    pOut->Seek( STREAM_SEEK_TO_BEGIN );
+                    xOut->Seek( STREAM_SEEK_TO_END );
+                    pDbgOut->Write( xOut->GetData(), xOut->Tell() );
+                    xOut->Seek( STREAM_SEEK_TO_BEGIN );
                 }
                 else
                 {
                     sal_Int32 nDbgLen = nLength - nSkip;
                     if ( nDbgLen )
                     {
-                        boost::scoped_array<sal_Char> pDat(new sal_Char[ nDbgLen ]);
-                        pGrStream->Read( pDat.get(), nDbgLen );
-                        pDbgOut->Write( pDat.get(), nDbgLen );
+                        std::scoped_array<sal_Char> xDat(new sal_Char[ nDbgLen ]);
+                        pGrStream->Read( xDat.get(), nDbgLen );
+                        pDbgOut->Write( xDat.get(), nDbgLen );
                         pGrStream->SeekRel( -nDbgLen );
                     }
                 }
@@ -6905,7 +6905,7 @@ com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >  SvxMS
     {
         //TODO/MBA: check if (and when) storage and stream will be destroyed!
         const SfxFilter* pFilter = 0;
-        ::boost::scoped_ptr<SvMemoryStream> xMemStream (new SvMemoryStream);
+        std::unique_ptr<SvMemoryStream> xMemStream (new SvMemoryStream);
         if ( pName )
         {
             // TODO/LATER: perhaps we need to retrieve VisArea and Metafile from the storage also

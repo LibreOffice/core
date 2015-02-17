@@ -30,13 +30,13 @@
 
 #include <rtl/ref.hxx>
 
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 
 class SvXMLStyleContext;
 
 typedef std::map< OUString, OUString > XMLTableTemplate;
-typedef std::map < OUString, boost::shared_ptr< XMLTableTemplate > > XMLTableTemplateMap;
+typedef std::map < OUString, std::shared_ptr< XMLTableTemplate > > XMLTableTemplateMap;
 
 class XMLTableImport : public salhelper::SimpleReferenceObject
 {

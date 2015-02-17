@@ -57,9 +57,9 @@ public:
         SfxBaseModel* pModel = dynamic_cast<SfxBaseModel*>(mxComponent.get());
         CPPUNIT_ASSERT(pModel);
         SfxObjectShell* pShell = pModel->GetObjectShell();
-        boost::shared_ptr<GDIMetaFile> pMetaFile = pShell->GetPreviewMetaFile();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
         BitmapEx aResultBitmap;
-        CPPUNIT_ASSERT(pMetaFile->CreateThumbnail(aResultBitmap));
+        CPPUNIT_ASSERT(xMetaFile->CreateThumbnail(aResultBitmap));
         // If this is set, the metafile will be dumped as a PNG one for debug purposes.
         char* pEnv = getenv("CPPCANVAS_DEBUG_EMFPLUS_DUMP_TO");
         if (pEnv)

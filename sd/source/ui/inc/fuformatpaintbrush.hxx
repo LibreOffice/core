@@ -23,7 +23,7 @@
 #include "futext.hxx"
 
 #include <svl/itemset.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 namespace sd {
 
@@ -57,7 +57,7 @@ private:
 
     void implcancel();
 
-    ::boost::shared_ptr<SfxItemSet> mpItemSet;
+    std::shared_ptr<SfxItemSet> mxItemSet;
     bool   mbPermanent;
     bool   mbOldIsQuickTextEditMode;
 };

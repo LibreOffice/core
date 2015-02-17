@@ -34,8 +34,8 @@ public:
 class ScTBC : public TBBase
 {
     TBCHeader tbch;
-    boost::shared_ptr<TBCCmd> tbcCmd; // optional
-    boost::shared_ptr<TBCData> tbcd;
+    std::shared_ptr<TBCCmd> tbcCmd; // optional
+    std::shared_ptr<TBCData> tbcd;
 public:
     ScTBC();
     virtual ~ScTBC(){}

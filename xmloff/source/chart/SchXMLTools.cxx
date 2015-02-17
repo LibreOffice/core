@@ -47,6 +47,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <algorithm>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;

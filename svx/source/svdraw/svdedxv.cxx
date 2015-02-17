@@ -60,7 +60,7 @@
 #include <sdr/overlay/overlaytools.hxx>
 #include <svx/sdr/table/tablecontroller.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 void SdrObjEditView::ImpClearVars()
@@ -342,11 +342,11 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
     {
         // completely reworked to use primitives; this ensures same look and functionality
         const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
-        boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
+        boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> xProcessor(drawinglayer::processor2d::createProcessor2DFromOutputDevice(
             rTargetDevice,
             aViewInformation2D));
 
-        if(pProcessor)
+        if (xProcessor)
         {
             const bool bMerk(rTargetDevice.IsMapModeEnabled());
             const basegfx::B2DRange aRange(aPixRect.Left(), aPixRect.Top(), aPixRect.Right(), aPixRect.Bottom());
@@ -365,7 +365,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
             const drawinglayer::primitive2d::Primitive2DSequence aSequence(&xReference, 1);
 
             rTargetDevice.EnableMapMode(false);
-            pProcessor->process(aSequence);
+            xProcessor->process(aSequence);
             rTargetDevice.EnableMapMode(bMerk);
         }
     }
@@ -1978,7 +1978,7 @@ static const sal_uInt16* GetFormatRangeImpl( bool bTextOnly )
     return &gRanges[ bTextOnly ? 10 : 0];
 }
 
-bool SdrObjEditView::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFormatSet  )
+bool SdrObjEditView::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& rFormatSet  )
 {
     if( mxSelectionController.is() && mxSelectionController->TakeFormatPaintBrush(rFormatSet) )
         return true;

@@ -22,8 +22,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/scrbar.hxx>
-#include <boost/shared_ptr.hpp>
 #include <map>
+#include <memory>
 #include <svx/svxdllapi.h>
 
 // define ----------------------------------------------------------------
@@ -95,7 +95,7 @@ protected:
 
 
 private:
-    typedef ::std::map<sal_Int32, boost::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
+    typedef std::map<sal_Int32, std::shared_ptr<svx::SvxShowCharSetItem> > ItemsMap;
     ItemsMap        m_aItems;
     Link            aDoubleClkHdl;
     Link            aSelectHdl;

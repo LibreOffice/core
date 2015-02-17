@@ -29,8 +29,8 @@ class SwCTBWrapper;
 class SwTBC : public TBBase
 {
     TBCHeader tbch;
-    boost::shared_ptr< sal_uInt32 > cid; // optional
-    boost::shared_ptr<TBCData> tbcd;
+    std::shared_ptr< sal_uInt32 > cid; // optional
+    std::shared_ptr<TBCData> tbcd;
 
 public:
     SwTBC();
@@ -126,7 +126,7 @@ class Customization : public TBBase
     sal_uInt16 reserved1;
     sal_uInt16 ctbds;
     SwCTBWrapper* pWrapper;
-    boost::shared_ptr< SwCTB > customizationDataCTB;
+    std::shared_ptr< SwCTB > customizationDataCTB;
     std::vector< TBDelta > customizationDataTBDelta;
     bool bIsDroppedMenuTB;
     bool ImportMenu( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );

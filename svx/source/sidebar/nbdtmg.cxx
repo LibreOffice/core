@@ -51,7 +51,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -159,17 +159,17 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     aFile.Append( filename);
-    boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
-    if( pIStm ) {
+    std::unique_ptr<SvStream> xIStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
+    if( xIStm ) {
         sal_uInt32                  nVersion = 0;
         sal_Int32                   nNumIndex = 0;
-        pIStm->ReadUInt32( nVersion );
+        xIStm->ReadUInt32( nVersion );
         if (nVersion==DEFAULT_NUMBERING_CACHE_FORMAT_VERSION) //first version
         {
-            pIStm->ReadInt32( nNumIndex );
+            xIStm->ReadInt32( nNumIndex );
             sal_uInt16 mLevel = 0x1;
             while (nNumIndex>=0 && nNumIndex<DEFAULT_NUM_VALUSET_COUNT) {
-                SvxNumRule aNum(*pIStm);
+                SvxNumRule aNum(*xIStm);
                 //bullet color in font properties is not stored correctly. Need set tranparency bits manually
                 for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
                 {
@@ -184,7 +184,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
                     }
                 }
                 RelplaceNumRule(aNum,nNumIndex,mLevel);
-                pIStm->ReadInt32( nNumIndex );
+                xIStm->ReadInt32( nNumIndex );
             }
         }
     }
@@ -198,24 +198,24 @@ void NBOTypeMgrBase::ImplStore(const OUString& filename)
     eCoreUnit = SFX_MAPUNIT_100TH_MM;
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
     aFile.Append( filename);
-    boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
-    if( pOStm ) {
+    std::unique_ptr<SvStream> xOStm(::utl::UcbStreamHelper::CreateStream( aFile.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::WRITE ));
+    if( xOStm ) {
         sal_uInt32                      nVersion;
         sal_Int32                       nNumIndex;
         nVersion = DEFAULT_NUMBERING_CACHE_FORMAT_VERSION;
-        pOStm->WriteUInt32( nVersion );
+        xOStm->WriteUInt32( nVersion );
         for(sal_Int32 nItem = 0; nItem < DEFAULT_NUM_VALUSET_COUNT; nItem++ ) {
             if (IsCustomized(nItem)) {
                 SvxNumRule aDefNumRule( NUM_BULLET_REL_SIZE|NUM_CONTINUOUS|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE|NUM_SYMBOL_ALIGNMENT,10, false,
                     SVX_RULETYPE_NUMBERING,SvxNumberFormat::LABEL_ALIGNMENT);
                 sal_uInt16 mLevel = 0x1;
-                pOStm->WriteInt32( nItem );
+                xOStm->WriteInt32( nItem );
                 ApplyNumRule(aDefNumRule,nItem,mLevel,false,true);
-                aDefNumRule.Store(*pOStm);
+                aDefNumRule.Store(*xOStm);
             }
         }
         nNumIndex = -1;
-        pOStm->WriteInt32( nNumIndex );  //write end flag
+        xOStm->WriteInt32( nNumIndex );  //write end flag
     }
     eCoreUnit = eOldCoreUnit;
 }
@@ -1311,7 +1311,7 @@ void NumberingTypeMgr::Init()
             pNumEntry->nIndexDefault = i;
             pNumEntry->pNumSetting = pNew;
             pNumEntry->sDescription = SVX_RESSTR( RID_SVXSTR_SINGLENUM_DESCRIPTIONS + i );
-            pNumberSettingsArr->push_back(boost::shared_ptr<NumberSettings_Impl>(pNumEntry));
+            pNumberSettingsArr->push_back(std::shared_ptr<NumberSettings_Impl>(pNumEntry));
         }
     }
     catch(Exception&)
@@ -1533,7 +1533,7 @@ void OutlineTypeMgr::Init()
                 pNew->eNumAlign = aNumFmt.GetNumAdjust();
                 pNew->nNumAlignAt = aNumFmt.GetFirstLineIndent();
                 pNew->nNumIndentAt = aNumFmt.GetIndentAt();
-                pItemArr->pNumSettingsArr->push_back(boost::shared_ptr<NumSettings_Impl>(pNew));
+                pItemArr->pNumSettingsArr->push_back(std::shared_ptr<NumSettings_Impl>(pNew));
             }
         }
     }

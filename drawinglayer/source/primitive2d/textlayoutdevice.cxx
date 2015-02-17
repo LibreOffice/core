@@ -23,7 +23,7 @@
 
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/unique_disposing_ptr.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/font.hxx>
@@ -46,10 +46,10 @@ namespace
     //The ImpTimerRefDev itself, if the timeout ever gets hit, will call
     //reset on the scoped_timed_RefDev to release the ImpTimerRefDev early
     //if its unused for a few minutes
-    class scoped_timed_RefDev : public comphelper::scoped_disposing_ptr<ImpTimedRefDev>
+    class scoped_timed_RefDev : public comphelper::unique_disposing_ptr<ImpTimedRefDev>
     {
     public:
-        scoped_timed_RefDev() : comphelper::scoped_disposing_ptr<ImpTimedRefDev>((::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(::comphelper::getProcessComponentContext(), ::com::sun::star::uno::UNO_QUERY_THROW)))
+        scoped_timed_RefDev() : comphelper::unique_disposing_ptr<ImpTimedRefDev>((::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(::comphelper::getProcessComponentContext(), ::com::sun::star::uno::UNO_QUERY_THROW)))
         {
         }
     };

@@ -21,9 +21,9 @@
 #define INCLUDED_SVX_ENHANCEDCUSTOMSHAPEFUNCTIONPARSER_HXX
 
 #include <sal/config.h>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#include <memory>
 #include <vector>
 
 #include <svx/svxdllapi.h>
@@ -119,7 +119,7 @@ public:
     virtual com::sun::star::drawing::EnhancedCustomShapeParameter fillNode(
         std::vector< EnhancedCustomShapeEquation >& rEquations, ExpressionNode* pOptionalArg, sal_uInt32 nFlags ) = 0;
 };
-typedef ::boost::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
+typedef std::shared_ptr< ExpressionNode > ExpressionNodeSharedPtr;
 
 /** This exception is thrown, when the arithmetic expression
     parser failed to parse a string.

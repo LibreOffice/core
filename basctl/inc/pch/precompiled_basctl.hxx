@@ -97,7 +97,7 @@
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>

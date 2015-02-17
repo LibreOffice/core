@@ -1155,9 +1155,7 @@ private:
     bool                mbPicStrmQueried;   /// True = ImplQueryPictureStream() has been called.
 };
 
-typedef ::boost::shared_ptr< EscherExGlobal > EscherExGlobalRef;
-
-
+typedef std::shared_ptr< EscherExGlobal > EscherExGlobalRef;
 
 class SdrObject;
 class SdrPage;

@@ -7,11 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_COMPHELPER_SCOPED_DISPOSING_PTR_HXX
-#define INCLUDED_COMPHELPER_SCOPED_DISPOSING_PTR_HXX
+#ifndef INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
+#define INCLUDED_COMPHELPER_UNIQUE_DISPOSING_PTR_HXX
 
 #include <cppuhelper/implbase1.hxx>
-#include <boost/utility.hpp>
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -22,13 +21,16 @@
 namespace comphelper
 {
 //Similar to std::unique_ptr, except additionally releases the ptr on XComponent::disposing and/or XTerminateListener::notifyTermination if supported
-template<class T> class scoped_disposing_ptr : private boost::noncopyable
+template<class T> class unique_disposing_ptr
 {
 private:
     std::unique_ptr<T> m_xItem;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTerminateListener> m_xTerminateListener;
+
+    unique_disposing_ptr(const unique_disposing_ptr&) SAL_DELETED_FUNCTION;
+    unique_disposing_ptr& operator=(const unique_disposing_ptr&) SAL_DELETED_FUNCTION;
 public:
-    scoped_disposing_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
+    unique_disposing_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
         : m_xItem(p)
     {
         m_xTerminateListener = new TerminateListener(rComponent, *this);
@@ -59,7 +61,7 @@ public:
         return static_cast< bool >(m_xItem);
     }
 
-    virtual ~scoped_disposing_ptr()
+    virtual ~unique_disposing_ptr()
     {
         reset();
     }
@@ -68,10 +70,10 @@ private:
     {
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > m_xComponent;
-        scoped_disposing_ptr<T>& m_rItem;
+        unique_disposing_ptr<T>& m_rItem;
     public:
         TerminateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent,
-            scoped_disposing_ptr<T>& rItem) : m_xComponent(rComponent), m_rItem(rItem)
+            unique_disposing_ptr<T>& rItem) : m_xComponent(rComponent), m_rItem(rItem)
         {
             if (m_xComponent.is())
             {
@@ -135,19 +137,19 @@ private:
 //for threadsafety. The user can ensure this, except in the case of its dtor
 //being called from reset due to a terminate on the XComponent being called
 //from an aribitrary thread
-template<class T> class scoped_disposing_solar_mutex_reset_ptr
-    : public scoped_disposing_ptr<T>
+template<class T> class unique_disposing_solar_mutex_reset_ptr
+    : public unique_disposing_ptr<T>
 {
 public:
-    scoped_disposing_solar_mutex_reset_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
-        : scoped_disposing_ptr<T>(rComponent, p)
+    unique_disposing_solar_mutex_reset_ptr( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > &rComponent, T * p = 0 )
+        : unique_disposing_ptr<T>(rComponent, p)
     {
     }
 
     virtual void reset(T * p = 0)
     {
         SolarMutexGuard aGuard;
-        scoped_disposing_ptr<T>::reset(p);
+        unique_disposing_ptr<T>::reset(p);
     }
 };
 

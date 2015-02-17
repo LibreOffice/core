@@ -13,7 +13,6 @@
 #include <ostream>
 #include <memory>
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
@@ -173,7 +172,7 @@ public:
 class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase
 {
     sal_Int32 tbid;
-    boost::shared_ptr< WString > name; //exist only if tbid equals 0x00000001
+    std::shared_ptr< WString > name; //exist only if tbid equals 0x00000001
 public:
     TBCMenuSpecific();
     virtual ~TBCMenuSpecific(){}
@@ -205,7 +204,7 @@ public:
 
 class TBCComboDropdownSpecific : public TBBase
 {
-    boost::shared_ptr< TBCCDData > data;
+    std::shared_ptr< TBCCDData > data;
 public:
     TBCComboDropdownSpecific( const TBCHeader& header );
     TBCComboDropdownSpecific(){}
@@ -218,10 +217,10 @@ public:
 class TBCBSpecific :  public TBBase
 {
     sal_uInt8 bFlags;
-    boost::shared_ptr< TBCBitMap > icon; // optional
-    boost::shared_ptr< TBCBitMap > iconMask; // optional
-    boost::shared_ptr< sal_uInt16 > iBtnFace; // optional
-    boost::shared_ptr< WString > wstrAcc; // optional
+    std::shared_ptr< TBCBitMap > icon; // optional
+    std::shared_ptr< TBCBitMap > iconMask; // optional
+    std::shared_ptr< sal_uInt16 > iBtnFace; // optional
+    std::shared_ptr< WString > wstrAcc; // optional
 
 public:
     TBCBSpecific();
@@ -266,8 +265,8 @@ class MSFILTER_DLLPUBLIC TBCHeader : public TBBase
     sal_uInt16 tcid;
     sal_uInt32 tbct;
     sal_uInt8 bPriority;
-    boost::shared_ptr< sal_uInt16 > width;  //optional
-    boost::shared_ptr< sal_uInt16 > height; //optional
+    std::shared_ptr< sal_uInt16 > width;  //optional
+    std::shared_ptr< sal_uInt16 > height; //optional
 
 public:
     TBCHeader();
@@ -287,7 +286,7 @@ class MSFILTER_DLLPUBLIC TBCData : public TBBase
 {
     TBCHeader rHeader;
     TBCGeneralInfo controlGeneralInfo;
-    boost::shared_ptr< TBBase > controlSpecificInfo; // can be one of TBCBSpecific, TBCMenuSpecific or TBCComboDropdow nSpecific depending on the control type specified by TBCHeader.tct
+    std::shared_ptr< TBBase > controlSpecificInfo; // can be one of TBCBSpecific, TBCMenuSpecific or TBCComboDropdow nSpecific depending on the control type specified by TBCHeader.tct
     TBCData(const TBCData&) SAL_DELETED_FUNCTION;
     TBCData& operator = ( const TBCData&) SAL_DELETED_FUNCTION;
 public:

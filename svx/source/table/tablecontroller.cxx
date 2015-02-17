@@ -66,7 +66,7 @@
 #include "tableundo.hxx"
 #include "tablelayouter.hxx"
 #include <vcl/msgbox.hxx>
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 using ::editeng::SvxBorderLine;
 using namespace ::sdr::table;
@@ -393,7 +393,7 @@ void SvxTableController::GetState( SfxItemSet& rSet )
     if( !mxTable.is() || !mxTableObj.is() || !mxTableObj->GetModel() )
         return;
 
-    boost::scoped_ptr<SfxItemSet> pSet;
+    std::unique_ptr<SfxItemSet> xSet;
 
     bool bVertDone = false;
 
@@ -414,16 +414,16 @@ void SvxTableController::GetState( SfxItemSet& rSet )
                     }
                     else if(!bVertDone)
                     {
-                        if( !pSet )
+                        if (!xSet)
                         {
-                            pSet.reset(new SfxItemSet( mxTableObj->GetModel()->GetItemPool() ));
-                            MergeAttrFromSelectedCells(*pSet, false);
+                            xSet.reset(new SfxItemSet( mxTableObj->GetModel()->GetItemPool() ));
+                            MergeAttrFromSelectedCells(*xSet, false);
                         }
 
                         SdrTextVertAdjust eAdj = SDRTEXTVERTADJUST_BLOCK;
 
-                        if( pSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE )
-                            eAdj = static_cast<const SdrTextVertAdjustItem&>(pSet->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+                        if (xSet->GetItemState( SDRATTR_TEXT_VERTADJUST ) != SfxItemState::DONTCARE)
+                            eAdj = static_cast<const SdrTextVertAdjustItem&>(xSet->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
 
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_BOTTOM, eAdj == SDRTEXTVERTADJUST_BOTTOM));
                         rSet.Put(SfxBoolItem(SID_TABLE_VERT_CENTER, eAdj == SDRTEXTVERTADJUST_CENTER));
@@ -893,11 +893,11 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
         aNewAttr.Put( aBoxInfoItem );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr< SfxAbstractTabDialog > pDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
+        std::unique_ptr< SfxAbstractTabDialog > xDlg( pFact ? pFact->CreateSvxFormatCellsDialog( NULL, &aNewAttr, pTableObj->GetModel(), pTableObj) : 0 );
         // Even Cancel Button is returning positive(101) value,
-        if( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
+        if (xDlg.get() && xDlg->Execute() == RET_OK)
         {
-            SfxItemSet aNewSet( *(pDlg->GetOutputItemSet ()) );
+            SfxItemSet aNewSet(*(xDlg->GetOutputItemSet()));
 
             //Only properties that were unchanged by the dialog appear in this
             //itemset.  We had constructed these two properties from other
@@ -1199,7 +1199,7 @@ void SvxTableController::SplitMarkedCells()
         getSelectedCells( aStart, aEnd );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        boost::scoped_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( NULL, false, 99, 99 ) : 0 );
+        std::unique_ptr< SvxAbstractSplittTableDialog > xDlg( pFact ? pFact->CreateSvxSplittTableDialog( NULL, false, 99, 99 ) : 0 );
         if( xDlg.get() && xDlg->Execute() )
         {
             const sal_Int32 nCount = xDlg->GetCount() - 1;
@@ -2647,7 +2647,7 @@ bool SvxTableController::PasteObject( SdrTableObj* pPasteTableObj )
     return true;
 }
 
-bool SvxTableController::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
+bool SvxTableController::TakeFormatPaintBrush( std::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
 {
     // SdrView::TakeFormatPaintBrush() is enough
     return false;

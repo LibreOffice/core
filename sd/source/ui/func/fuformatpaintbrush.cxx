@@ -71,7 +71,7 @@ void FuFormatPaintBrush::DoExecute( SfxRequest& rReq )
 
     if( mpView )
     {
-        mpView->TakeFormatPaintBrush( mpItemSet );
+        mpView->TakeFormatPaintBrush( mxItemSet );
     }
 }
 
@@ -175,7 +175,7 @@ bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
 
 bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if( mpItemSet.get() && mpView && mpView->AreObjectsMarked() )
+    if( mxItemSet.get() && mpView && mpView->AreObjectsMarked() )
     {
         bool bNoCharacterFormats = false;
         bool bNoParagraphFormats = false;
@@ -233,7 +233,7 @@ void FuFormatPaintBrush::Deactivate()
 
 bool FuFormatPaintBrush::HasContentForThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const
 {
-    if( mpItemSet.get() == 0 )
+    if( mxItemSet.get() == 0 )
         return false;
     if( !mpView || (!mpView->SupportsFormatPaintbrush( nObjectInventor, nObjectIdentifier) ) )
         return false;
@@ -243,7 +243,7 @@ bool FuFormatPaintBrush::HasContentForThisType( sal_uInt32 nObjectInventor, sal_
 void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    if( mpItemSet.get() && ( rMarkList.GetMarkCount() == 1 ) )
+    if( mxItemSet.get() && ( rMarkList.GetMarkCount() == 1 ) )
     {
         SdrObject* pObj( NULL );
         bool bUndo = mpDoc->IsUndoEnabled();
@@ -260,7 +260,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
             mpDoc->AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pObj, false, true ) );
         }
 
-        mpView->ApplyFormatPaintBrush( *mpItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
+        mpView->ApplyFormatPaintBrush( *mxItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
 
         if( pObj )
         {

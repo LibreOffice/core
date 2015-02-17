@@ -38,8 +38,6 @@
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
 
-#include <boost/shared_ptr.hpp>
-
 class OutputDevice;
 #include <svx/svdtypes.hxx>
 #include <svx/svxdllapi.h>

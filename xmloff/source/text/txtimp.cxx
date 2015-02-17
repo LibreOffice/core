@@ -525,7 +525,7 @@ struct XMLTextImportHelper::Impl
     // start range, xml:id, RDFa stuff
     typedef ::boost::tuple<
         uno::Reference<text::XTextRange>, OUString,
-        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
+        std::shared_ptr< ::xmloff::ParsedRDFaAttributes > >
             BookmarkMapEntry_t;
     /// start ranges for open bookmarks
     ::std::map< OUString, BookmarkMapEntry_t > m_BookmarkStartRanges;
@@ -879,7 +879,7 @@ XMLTextImportHelper::XMLTextImportHelper(
         bool const bOrganizerMode)
     : m_xImpl( new Impl(rModel, rImport, bInsertMode, bStylesOnlyMode,
                     bProgress, bBlockMode, bOrganizerMode) )
-    , m_pBackpatcherImpl( MakeBackpatcherImpl() )
+    , m_xBackpatcherImpl( MakeBackpatcherImpl() )
 {
     static const char s_PropNameDefaultListId[] = "DefaultListId";
 
@@ -2485,7 +2485,7 @@ void XMLTextImportHelper::InsertBookmarkStartRange(
     const OUString & sName,
     const Reference<XTextRange> & rRange,
     OUString const& i_rXmlId,
-    ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > & i_rpRDFaAttributes)
+    std::shared_ptr< ::xmloff::ParsedRDFaAttributes > & i_rpRDFaAttributes)
 {
     m_xImpl->m_BookmarkStartRanges[sName] =
         ::boost::make_tuple(rRange, i_rXmlId, i_rpRDFaAttributes);
@@ -2496,7 +2496,7 @@ bool XMLTextImportHelper::FindAndRemoveBookmarkStartRange(
     const OUString & sName,
     Reference<XTextRange> & o_rRange,
     OUString & o_rXmlId,
-    ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes > & o_rpRDFaAttributes)
+    std::shared_ptr< ::xmloff::ParsedRDFaAttributes > & o_rpRDFaAttributes)
 {
     if (m_xImpl->m_BookmarkStartRanges.count(sName))
     {

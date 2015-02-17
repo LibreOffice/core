@@ -3406,10 +3406,10 @@ void WW8Export::PrepareStorage()
         {
             if ( SvtFilterOptions::Get().IsEnableWordPreview() )
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     pDocShell->GetPreviewMetaFile(false);
                 uno::Sequence<sal_uInt8> metaFile(
-                    sfx2::convertMetaFile(pMetaFile.get()));
+                    sfx2::convertMetaFile(xMetaFile.get()));
                 sfx2::SaveOlePropertySet(xDocProps, &GetWriter().GetStorage(), &metaFile);
             }
             else

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <comphelper/scoped_disposing_ptr.hxx>
+#include <comphelper/unique_disposing_ptr.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <iderdll.hxx>
@@ -48,7 +48,7 @@ namespace
 class Dll
 {
     Shell* m_pShell;
-    boost::scoped_ptr<ExtraData> m_pExtraData;
+    std::unique_ptr<ExtraData> m_xExtraData;
 
 public:
     Dll ();
@@ -60,10 +60,10 @@ public:
 
 // Holds a basctl::Dll and release it on exit, or dispose of the
 //default XComponent, whichever comes first
-class DllInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>
+class DllInstance : public comphelper::unique_disposing_solar_mutex_reset_ptr<Dll>
 {
 public:
-    DllInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>(Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), UNO_QUERY_THROW), new Dll)
+    DllInstance() : comphelper::unique_disposing_solar_mutex_reset_ptr<Dll>(Reference<lang::XComponent>( frame::Desktop::create(comphelper::getProcessComponentContext()), UNO_QUERY_THROW), new Dll)
     { }
 };
 
@@ -137,9 +137,9 @@ Dll::Dll () :
 
 ExtraData* Dll::GetExtraData ()
 {
-    if (!m_pExtraData)
-        m_pExtraData.reset(new ExtraData);
-    return m_pExtraData.get();
+    if (!m_xExtraData)
+        m_xExtraData.reset(new ExtraData);
+    return m_xExtraData.get();
 }
 
 } // namespace

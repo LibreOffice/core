@@ -99,7 +99,7 @@ namespace svx
     }
 
     PropertyChangeNotifier::PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner, ::osl::Mutex& _rMutex )
-        :m_pData( new PropertyChangeNotifier_Data( _rOwner, _rMutex ) )
+        :m_xData( new PropertyChangeNotifier_Data( _rOwner, _rMutex ) )
     {
     }
 
@@ -114,10 +114,10 @@ namespace svx
         ENSURE_OR_THROW( _eProperty != eInvalidShapeProperty, "Illegal ShapeProperty value!" );
         ENSURE_OR_THROW( !!_pProvider, "NULL factory not allowed." );
 
-        OSL_ENSURE( m_pData->m_aProviders.find( _eProperty ) == m_pData->m_aProviders.end(),
+        OSL_ENSURE( m_xData->m_aProviders.find( _eProperty ) == m_xData->m_aProviders.end(),
             "PropertyChangeNotifier::registerProvider: factory for this ID already present!" );
 
-        m_pData->m_aProviders[ _eProperty ] = _pProvider;
+        m_xData->m_aProviders[ _eProperty ] = _pProvider;
     }
 
 
@@ -125,22 +125,22 @@ namespace svx
     {
         ENSURE_OR_THROW( _eProperty != eInvalidShapeProperty, "Illegal ShapeProperty value!" );
 
-        PropertyProviders::const_iterator provPos = m_pData->m_aProviders.find( _eProperty );
-        OSL_ENSURE( provPos != m_pData->m_aProviders.end(), "PropertyChangeNotifier::notifyPropertyChange: no factory!" );
-        if ( provPos == m_pData->m_aProviders.end() )
+        PropertyProviders::const_iterator provPos = m_xData->m_aProviders.find( _eProperty );
+        OSL_ENSURE( provPos != m_xData->m_aProviders.end(), "PropertyChangeNotifier::notifyPropertyChange: no factory!" );
+        if ( provPos == m_xData->m_aProviders.end() )
             return;
 
         OUString sPropertyName( provPos->second->getPropertyName() );
 
-        ::cppu::OInterfaceContainerHelper* pPropListeners = m_pData->m_aPropertyChangeListeners.getContainer( sPropertyName );
-        ::cppu::OInterfaceContainerHelper* pAllListeners = m_pData->m_aPropertyChangeListeners.getContainer( OUString() );
+        ::cppu::OInterfaceContainerHelper* pPropListeners = m_xData->m_aPropertyChangeListeners.getContainer( sPropertyName );
+        ::cppu::OInterfaceContainerHelper* pAllListeners = m_xData->m_aPropertyChangeListeners.getContainer( OUString() );
         if ( !pPropListeners && !pAllListeners )
             return;
 
         try
         {
             PropertyChangeEvent aEvent;
-            aEvent.Source = m_pData->m_rContext;
+            aEvent.Source = m_xData->m_rContext;
             // Handle/OldValue not supported
             aEvent.PropertyName = provPos->second->getPropertyName();
             provPos->second->getCurrentValue( aEvent.NewValue );
@@ -159,21 +159,21 @@ namespace svx
 
     void PropertyChangeNotifier::addPropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
-        m_pData->m_aPropertyChangeListeners.addInterface( _rPropertyName, _rxListener );
+        m_xData->m_aPropertyChangeListeners.addInterface( _rPropertyName, _rxListener );
     }
 
 
     void PropertyChangeNotifier::removePropertyChangeListener( const OUString& _rPropertyName, const Reference< XPropertyChangeListener >& _rxListener )
     {
-        m_pData->m_aPropertyChangeListeners.removeInterface( _rPropertyName, _rxListener );
+        m_xData->m_aPropertyChangeListeners.removeInterface( _rPropertyName, _rxListener );
     }
 
 
     void PropertyChangeNotifier::disposing()
     {
         EventObject aEvent;
-        aEvent.Source = m_pData->m_rContext;
-        m_pData->m_aPropertyChangeListeners.disposeAndClear( aEvent );
+        aEvent.Source = m_xData->m_rContext;
+        m_xData->m_aPropertyChangeListeners.disposeAndClear( aEvent );
     }
 
 

@@ -164,11 +164,11 @@ struct XMLTextImportHelper::BackpatcherImpl
         m_pSequenceNameBackpatcher;
 };
 
-::boost::shared_ptr<XMLTextImportHelper::BackpatcherImpl>
+std::shared_ptr<XMLTextImportHelper::BackpatcherImpl>
 XMLTextImportHelper::MakeBackpatcherImpl()
 {
     // n.b.: the shared_ptr stores the dtor!
-    return ::boost::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
+    return std::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
 }
 
 static OUString GetSequenceNumber()
@@ -192,33 +192,33 @@ static OUString GetSequenceNumber()
 
 XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()
 {
-    if (!m_pBackpatcherImpl->m_pFootnoteBackpatcher.get())
+    if (!m_xBackpatcherImpl->m_pFootnoteBackpatcher.get())
     {
-        m_pBackpatcherImpl->m_pFootnoteBackpatcher.reset(
+        m_xBackpatcherImpl->m_pFootnoteBackpatcher.reset(
             new XMLPropertyBackpatcher<sal_Int16>(GetSequenceNumber()));
     }
-    return *m_pBackpatcherImpl->m_pFootnoteBackpatcher;
+    return *m_xBackpatcherImpl->m_pFootnoteBackpatcher;
 }
 
 XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetSequenceIdBP()
 {
-    if (!m_pBackpatcherImpl->m_pSequenceIdBackpatcher.get())
+    if (!m_xBackpatcherImpl->m_pSequenceIdBackpatcher.get())
     {
-        m_pBackpatcherImpl->m_pSequenceIdBackpatcher.reset(
+        m_xBackpatcherImpl->m_pSequenceIdBackpatcher.reset(
             new XMLPropertyBackpatcher<sal_Int16>(GetSequenceNumber()));
     }
-    return *m_pBackpatcherImpl->m_pSequenceIdBackpatcher;
+    return *m_xBackpatcherImpl->m_pSequenceIdBackpatcher;
 }
 
 XMLPropertyBackpatcher<OUString>& XMLTextImportHelper::GetSequenceNameBP()
 {
     static const char s_SourceName[] = "SourceName";
-    if (!m_pBackpatcherImpl->m_pSequenceNameBackpatcher.get())
+    if (!m_xBackpatcherImpl->m_pSequenceNameBackpatcher.get())
     {
-        m_pBackpatcherImpl->m_pSequenceNameBackpatcher.reset(
+        m_xBackpatcherImpl->m_pSequenceNameBackpatcher.reset(
             new XMLPropertyBackpatcher<OUString>(s_SourceName));
     }
-    return *m_pBackpatcherImpl->m_pSequenceNameBackpatcher;
+    return *m_xBackpatcherImpl->m_pSequenceNameBackpatcher;
 }
 
 void XMLTextImportHelper::InsertFootnoteID(

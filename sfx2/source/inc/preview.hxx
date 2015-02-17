@@ -29,7 +29,7 @@ class GDIMetaFile;
 class SfxPreviewBase_Impl : public vcl::Window
 {
 protected:
-    ::boost::shared_ptr<GDIMetaFile> pMetaFile;
+    std::shared_ptr<GDIMetaFile> xMetaFile;
 public:
     SfxPreviewBase_Impl(vcl::Window* pParent, WinBits nStyle);
     void            SetObjectShell( SfxObjectShell* pObj );

@@ -34,8 +34,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/CmisVersion.hpp>
-#include <boost/shared_ptr.hpp>
-#include <set>
 
 #include <vcl/timer.hxx>
 #include <svl/poolitem.hxx>
@@ -47,6 +45,8 @@
 #include <sfx2/shell.hxx>
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <memory>
+#include <set>
 
 class SbxValue;
 class SvxMacro;
@@ -415,7 +415,7 @@ public:
     virtual Size                GetFirstPageSize();
     bool                        DoClose();
     virtual void                PrepareReload();
-    ::boost::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
+    std::shared_ptr<GDIMetaFile> GetPreviewMetaFile( bool bFullContent = false ) const;
     virtual void                CancelTransfers();
 
     bool                        GenerateAndStoreThumbnail(
@@ -597,7 +597,7 @@ public:
     virtual bool    SetProtectionPassword( const OUString &rPassword );
     virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 
-    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;
+    SAL_DLLPRIVATE std::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( bool bFullContent ) const;
 
     SAL_DLLPRIVATE bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
 

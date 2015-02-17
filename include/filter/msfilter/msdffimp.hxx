@@ -23,10 +23,10 @@
 #include <string.h>
 
 #include <map>
-#include <vector>
+#include <memory>
 #include <set>
+#include <vector>
 
-#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/ptr_container/ptr_set.hpp>
 
@@ -114,19 +114,19 @@ typedef boost::ptr_vector<SvxMSDffShapeOrder> SvxMSDffShapeOrders;
 
 struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoById
 {
-    bool operator()(::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
-                    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
+    bool operator()(std::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+                    std::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
 };
 struct MSFILTER_DLLPUBLIC CompareSvxMSDffShapeInfoByTxBxComp
 {
-    bool operator()(::boost::shared_ptr<SvxMSDffShapeInfo> const& lhs,
-                    ::boost::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
+    bool operator()(std::shared_ptr<SvxMSDffShapeInfo> const& lhs,
+                    std::shared_ptr<SvxMSDffShapeInfo> const& rhs) const;
 };
 
 // the following will be sorted explicitly:
-typedef ::std::set< ::boost::shared_ptr<SvxMSDffShapeInfo>,
+typedef ::std::set< std::shared_ptr<SvxMSDffShapeInfo>,
             CompareSvxMSDffShapeInfoById > SvxMSDffShapeInfos_ById;
-typedef ::std::multiset< ::boost::shared_ptr<SvxMSDffShapeInfo>,
+typedef ::std::multiset< std::shared_ptr<SvxMSDffShapeInfo>,
             CompareSvxMSDffShapeInfoByTxBxComp> SvxMSDffShapeInfos_ByTxBxComp;
 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1

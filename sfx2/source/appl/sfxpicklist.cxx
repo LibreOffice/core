@@ -202,9 +202,9 @@ void SfxPickList::AddDocumentToPickList( SfxObjectShell* pDocSh )
     if (!pDocSh->IsModified() && !pEncryptionDataItem && !Application::IsHeadlessModeEnabled())
     {
         // not modified => the document matches what is in the shell
-        boost::shared_ptr<GDIMetaFile> pMetaFile = pDocSh->GetPreviewMetaFile();
+        std::shared_ptr<GDIMetaFile> xMetaFile = pDocSh->GetPreviewMetaFile();
         BitmapEx aResultBitmap;
-        if (pMetaFile->CreateThumbnail(aResultBitmap))
+        if (xMetaFile->CreateThumbnail(aResultBitmap))
         {
             SvMemoryStream aStream(65535, 65535);
             vcl::PNGWriter aWriter(aResultBitmap);

@@ -35,7 +35,7 @@
 #include <svx/EnhancedCustomShapeFunctionParser.hxx>
 #include <tools/gen.hxx>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 #define DFF_CUSTOMSHAPE_FLIP_V      1
@@ -102,8 +102,8 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
             bool bReady;
             double fValue;
         };
-        com::sun::star::uno::Sequence< OUString >                                                  seqEquations;
-        std::vector< ::boost::shared_ptr< EnhancedCustomShape::ExpressionNode > >                       vNodesSharedPtr;
+        com::sun::star::uno::Sequence< OUString >                                                       seqEquations;
+        std::vector< std::shared_ptr< EnhancedCustomShape::ExpressionNode > >                           vNodesSharedPtr;
         std::vector< EquationResult >                                                                   vEquationResults;
 
         com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >            seqSegments;

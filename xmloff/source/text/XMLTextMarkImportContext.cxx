@@ -233,12 +233,12 @@ void XMLTextMarkImportContext::EndElement()
                 case TypeBookmarkStart:
                     // save XTextRange for later construction of bookmark
                     {
-                        ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes >
-                            pRDFaAttributes;
+                        std::shared_ptr< ::xmloff::ParsedRDFaAttributes >
+                            xRDFaAttributes;
                         if (m_bHaveAbout && (TypeBookmarkStart
                                 == static_cast<lcl_MarkType>(nTmp)))
                         {
-                            pRDFaAttributes =
+                            xRDFaAttributes =
                                 GetImport().GetRDFaImportHelper().ParseRDFa(
                                     m_sAbout, m_sProperty,
                                     m_sContent, m_sDatatype);
@@ -246,7 +246,7 @@ void XMLTextMarkImportContext::EndElement()
                         m_rHelper.InsertBookmarkStartRange(
                             m_sBookmarkName,
                             m_rHelper.GetCursorAsRange()->getStart(),
-                            m_sXmlId, pRDFaAttributes);
+                            m_sXmlId, xRDFaAttributes);
                     }
                     break;
 
@@ -255,11 +255,11 @@ void XMLTextMarkImportContext::EndElement()
                 {
                     // get old range, and construct
                     Reference<XTextRange> xStartRange;
-                    ::boost::shared_ptr< ::xmloff::ParsedRDFaAttributes >
-                        pRDFaAttributes;
+                    std::shared_ptr< ::xmloff::ParsedRDFaAttributes >
+                        xRDFaAttributes;
                     if (m_rHelper.FindAndRemoveBookmarkStartRange(
                             m_sBookmarkName, xStartRange,
-                            m_sXmlId, pRDFaAttributes))
+                            m_sXmlId, xRDFaAttributes))
                     {
                         Reference<XTextRange> xEndRange(
                             m_rHelper.GetCursorAsRange()->getStart());
@@ -313,12 +313,12 @@ void XMLTextMarkImportContext::EndElement()
                                         m_sBookmarkName,
                                         xInsertionCursor,
                                         m_sXmlId);
-                                if (pRDFaAttributes)
+                                if (xRDFaAttributes)
                                 {
                                     const Reference<rdf::XMetadatable>
                                         xMeta(xContent, UNO_QUERY);
                                     GetImport().GetRDFaImportHelper().AddRDFa(
-                                        xMeta, pRDFaAttributes);
+                                        xMeta, xRDFaAttributes);
                                 }
                             }
 

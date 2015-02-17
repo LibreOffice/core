@@ -716,7 +716,7 @@ void SvxShowCharSet::ReleaseAccessible()
     if ( aFind == m_aItems.end() )
     {
         OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
-        boost::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
+        std::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
             m_pAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
         aFind = m_aItems.insert(ItemsMap::value_type(_nPos, xItem)).first;
         OUStringBuffer buf;

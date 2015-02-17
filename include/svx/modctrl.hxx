@@ -23,7 +23,7 @@
 #include <sfx2/stbitem.hxx>
 #include <svx/svxdllapi.h>
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 // Forward declarations
 class Timer;
@@ -50,7 +50,7 @@ private: // Functions
 
 private:
     struct ImplData;
-    ::boost::shared_ptr<ImplData> mpImpl;
+    std::shared_ptr<ImplData> mxImpl;
 };
 
 

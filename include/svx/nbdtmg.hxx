@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SVX_NBDTMG_HXX
 #define INCLUDED_SVX_NBDTMG_HXX
 #include <svx/svxdllapi.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 #include <editeng/numitem.hxx>
 #include <vcl/font.hxx>
@@ -81,7 +81,7 @@ class  SVX_DLLPUBLIC NumSettings_Impl
 };
 
 typedef NumSettings_Impl* NumSettings_ImplPtr;
-typedef std::vector< boost::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
+typedef std::vector< std::shared_ptr<NumSettings_Impl> > NumSettingsArr_Impl;
 
 class  SVX_DLLPUBLIC BulletsSettings
 {
@@ -165,7 +165,7 @@ class  SVX_DLLPUBLIC NumberSettings_Impl
 };
 
 typedef NumberSettings_Impl* NumberSettings_ImplPtr;
-typedef std::vector< boost::shared_ptr<NumberSettings_Impl> > NumberSettingsArr_Impl;
+typedef std::vector< std::shared_ptr<NumberSettings_Impl> > NumberSettingsArr_Impl;
 
 class  SVX_DLLPUBLIC OutlineSettings_Impl
 {

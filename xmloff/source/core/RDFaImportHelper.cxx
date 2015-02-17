@@ -137,12 +137,12 @@ struct ParsedRDFaAttributes
 struct RDFaEntry
 {
     uno::Reference<rdf::XMetadatable> m_xObject;
-    ::boost::shared_ptr<ParsedRDFaAttributes> m_pRDFaAttributes;
+    std::shared_ptr<ParsedRDFaAttributes> m_xRDFaAttributes;
 
     RDFaEntry(uno::Reference<rdf::XMetadatable> const & i_xObject,
-            ::boost::shared_ptr<ParsedRDFaAttributes> const& i_pRDFaAttributes)
+            std::shared_ptr<ParsedRDFaAttributes> const& i_pRDFaAttributes)
         : m_xObject(i_xObject)
-        , m_pRDFaAttributes(i_pRDFaAttributes)
+        , m_xRDFaAttributes(i_pRDFaAttributes)
     { }
 };
 
@@ -331,7 +331,7 @@ void RDFaInserter::InsertRDFaEntry(
     if (!i_rEntry.m_xObject.is()) return;
 
     const uno::Reference< rdf::XResource > xSubject(
-        MakeResource( i_rEntry.m_pRDFaAttributes->m_About ) );
+        MakeResource( i_rEntry.m_xRDFaAttributes->m_About ) );
     if (!xSubject.is())
     {
         return; // invalid
@@ -339,15 +339,15 @@ void RDFaInserter::InsertRDFaEntry(
 
     ::std::vector< uno::Reference< rdf::XURI > > predicates;
 
-    predicates.reserve(i_rEntry.m_pRDFaAttributes->m_Properties.size());
+    predicates.reserve(i_rEntry.m_xRDFaAttributes->m_Properties.size());
 
     ::std::remove_copy_if(
         ::boost::make_transform_iterator(
-            i_rEntry.m_pRDFaAttributes->m_Properties.begin(),
+            i_rEntry.m_xRDFaAttributes->m_Properties.begin(),
             ::boost::bind(&RDFaInserter::MakeURI, this, _1)),
         // argh, this must be the same type :(
         ::boost::make_transform_iterator(
-            i_rEntry.m_pRDFaAttributes->m_Properties.end(),
+            i_rEntry.m_xRDFaAttributes->m_Properties.end(),
             ::boost::bind(&RDFaInserter::MakeURI, this, _1)),
         ::std::back_inserter(predicates),
         ref_is_null() );
@@ -364,9 +364,9 @@ void RDFaInserter::InsertRDFaEntry(
     }
 
     uno::Reference<rdf::XURI> xDatatype;
-    if (!i_rEntry.m_pRDFaAttributes->m_Datatype.isEmpty())
+    if (!i_rEntry.m_xRDFaAttributes->m_Datatype.isEmpty())
     {
-        xDatatype = MakeURI( i_rEntry.m_pRDFaAttributes->m_Datatype );
+        xDatatype = MakeURI( i_rEntry.m_xRDFaAttributes->m_Datatype );
     }
 
     try
@@ -376,7 +376,7 @@ void RDFaInserter::InsertRDFaEntry(
         // to prevent collision between generated ids and ids in the file
         m_xRepository->setStatementRDFa(xSubject, comphelper::containerToSequence(predicates),
             i_rEntry.m_xObject,
-            i_rEntry.m_pRDFaAttributes->m_Content, xDatatype);
+            i_rEntry.m_xRDFaAttributes->m_Content, xDatatype);
     }
     catch (uno::Exception &)
     {
@@ -393,7 +393,7 @@ RDFaImportHelper::~RDFaImportHelper()
 {
 }
 
-::boost::shared_ptr<ParsedRDFaAttributes>
+std::shared_ptr<ParsedRDFaAttributes>
 RDFaImportHelper::ParseRDFa(
     OUString const & i_rAbout,
     OUString const & i_rProperty,
@@ -403,30 +403,30 @@ RDFaImportHelper::ParseRDFa(
     if (i_rProperty.isEmpty())
     {
         SAL_INFO("xmloff.core", "AddRDFa: invalid input: xhtml:property empty");
-        return ::boost::shared_ptr<ParsedRDFaAttributes>();
+        return std::shared_ptr<ParsedRDFaAttributes>();
     }
     // must parse CURIEs here: need namespace declaration context
     RDFaReader reader(GetImport());
     const OUString about( reader.ReadURIOrSafeCURIE(i_rAbout) );
     if (about.isEmpty()) {
-        return ::boost::shared_ptr<ParsedRDFaAttributes>();
+        return std::shared_ptr<ParsedRDFaAttributes>();
     }
     const ::std::vector< OUString > properties(
         reader.ReadCURIEs(i_rProperty) );
     if (!properties.size()) {
-        return ::boost::shared_ptr<ParsedRDFaAttributes>();
+        return std::shared_ptr<ParsedRDFaAttributes>();
     }
     const OUString datatype( !i_rDatatype.isEmpty()
         ?   reader.ReadCURIE(i_rDatatype)
         :   OUString() );
-    return ::boost::shared_ptr<ParsedRDFaAttributes>(
+    return std::shared_ptr<ParsedRDFaAttributes>(
             new ParsedRDFaAttributes(about, properties, i_rContent, datatype));
 }
 
 void
 RDFaImportHelper::AddRDFa(
     uno::Reference<rdf::XMetadatable> const & i_xObject,
-    ::boost::shared_ptr<ParsedRDFaAttributes> & i_pRDFaAttributes)
+    std::shared_ptr<ParsedRDFaAttributes> & i_pRDFaAttributes)
 {
     if (!i_xObject.is())
     {
@@ -449,7 +449,7 @@ RDFaImportHelper::ParseAndAddRDFa(
     OUString const & i_rContent,
     OUString const & i_rDatatype)
 {
-    ::boost::shared_ptr<ParsedRDFaAttributes> pAttributes(
+    std::shared_ptr<ParsedRDFaAttributes> pAttributes(
         ParseRDFa(i_rAbout, i_rProperty, i_rContent, i_rDatatype) );
     if (pAttributes.get())
     {

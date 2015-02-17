@@ -216,7 +216,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     Reference< rdf::XDocumentMetadataAccess>                   m_xDocumentMetadata      ;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >            m_pDocumentUndoManager   ;
     Sequence< document::CmisProperty>                          m_cmisProperties         ;
-    boost::shared_ptr<SfxGrabBagItem>                          m_pGrabBagItem           ;
+    std::shared_ptr<SfxGrabBagItem>                            m_xGrabBagItem           ;
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
             :   m_pObjectShell          ( pObjectShell  )
@@ -2010,15 +2010,15 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
 
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
                     SvMemoryStream aMemStm( 65535, 65535 );
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-                    pMetaFile->Write( aMemStm );
+                    xMetaFile->Write( aMemStm );
                     aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 }
@@ -2030,15 +2030,15 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->CreatePreviewMetaFile_Impl( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
                     SvMemoryStream aMemStm( 65535, 65535 );
                     aMemStm.SetVersion( SOFFICE_FILEFORMAT_CURRENT );
 
-                    pMetaFile->Write( aMemStm );
+                    xMetaFile->Write( aMemStm );
                     aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ),
                                                     aMemStm.Seek( STREAM_SEEK_TO_END ) );
                 }
@@ -2050,32 +2050,32 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
-                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                    std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            pMetaFile.get(), CVT_EMF ) );
-                    if ( pStream )
+                            xMetaFile.get(), CVT_EMF ) );
+                    if (xStream)
                     {
-                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
-                                                        pStream->Seek( STREAM_SEEK_TO_END ) );
+                        xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
             }
             else if ( GraphicHelper::supportsMetaFileHandle_Impl()
               && aFlavor.DataType == cppu::UnoType<sal_uInt64>::get())
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
                     aAny <<= reinterpret_cast< const sal_uInt64 >(
-                        GraphicHelper::getEnhMetaFileFromGDI_Impl( pMetaFile.get() ) );
+                        GraphicHelper::getEnhMetaFileFromGDI_Impl( xMetaFile.get() ) );
                 }
             }
             else
@@ -2085,20 +2085,20 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
-                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                    std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            pMetaFile.get(), CVT_WMF ) );
+                            xMetaFile.get(), CVT_WMF ) );
 
-                    if ( pStream )
+                    if (xStream)
                     {
-                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
-                                                        pStream->Seek( STREAM_SEEK_TO_END ) );
+                        xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
             }
@@ -2107,15 +2107,15 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
             {
                 // means HGLOBAL handler to memory storage containing METAFILEPICT structure
 
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
-                    Size aMetaSize = pMetaFile->GetPrefSize();
+                    Size aMetaSize = xMetaFile->GetPrefSize();
                     aAny <<= reinterpret_cast< const sal_uInt64 >(
                         GraphicHelper::getWinMetaFileFromGDI_Impl(
-                            pMetaFile.get(), aMetaSize ) );
+                            xMetaFile.get(), aMetaSize ) );
                 }
             }
             else
@@ -2125,20 +2125,20 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
-                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                    std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            pMetaFile.get(), CVT_BMP ) );
+                            xMetaFile.get(), CVT_BMP ) );
 
-                    if ( pStream )
+                    if (xStream)
                     {
-                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
-                                                        pStream->Seek( STREAM_SEEK_TO_END ) );
+                        xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
             }
@@ -2149,20 +2149,20 @@ Any SAL_CALL SfxBaseModel::getTransferData( const datatransfer::DataFlavor& aFla
         {
             if ( aFlavor.DataType == getCppuType( (const Sequence< sal_Int8 >*) 0 ) )
             {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
+                std::shared_ptr<GDIMetaFile> xMetaFile =
                     m_pData->m_pObjectShell->GetPreviewMetaFile( true );
 
-                if ( pMetaFile )
+                if (xMetaFile)
                 {
-                    ::boost::shared_ptr<SvMemoryStream> pStream(
+                    std::shared_ptr<SvMemoryStream> xStream(
                         GraphicHelper::getFormatStrFromGDI_Impl(
-                            pMetaFile.get(), CVT_PNG ) );
+                            xMetaFile.get(), CVT_PNG ) );
 
-                    if ( pStream )
+                    if (xStream)
                     {
-                        pStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
-                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pStream->GetData() ),
-                                                        pStream->Seek( STREAM_SEEK_TO_END ) );
+                        xStream->SetVersion( SOFFICE_FILEFORMAT_CURRENT );
+                        aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( xStream->GetData() ),
+                                                        xStream->Seek( STREAM_SEEK_TO_END ) );
                     }
                 }
             }
@@ -3454,8 +3454,8 @@ bool SfxBaseModel::hasValidSignatures() const
 
 void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
 {
-    if (m_pData->m_pGrabBagItem.get())
-        m_pData->m_pGrabBagItem->QueryValue(rVal);
+    if (m_pData->m_xGrabBagItem.get())
+        m_pData->m_xGrabBagItem->QueryValue(rVal);
     else {
         uno::Sequence<beans::PropertyValue> aValue(0);
         rVal = uno::makeAny(aValue);
@@ -3464,10 +3464,10 @@ void SfxBaseModel::getGrabBagItem(com::sun::star::uno::Any& rVal) const
 
 void SfxBaseModel::setGrabBagItem(const com::sun::star::uno::Any& rVal)
 {
-    if (!m_pData->m_pGrabBagItem.get())
-        m_pData->m_pGrabBagItem.reset(new SfxGrabBagItem);
+    if (!m_pData->m_xGrabBagItem.get())
+        m_pData->m_xGrabBagItem.reset(new SfxGrabBagItem);
 
-    m_pData->m_pGrabBagItem->PutValue(rVal);
+    m_pData->m_xGrabBagItem->PutValue(rVal);
 }
 
 static void GetCommandFromSequence( OUString& rCommand, sal_Int32& nIndex, const Sequence< beans::PropertyValue >& rSeqPropValue )
