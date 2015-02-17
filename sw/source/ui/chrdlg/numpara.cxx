@@ -72,6 +72,12 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
     get(m_pRestartBX,              "boxRESTART_NO");
     get(m_pRestartNF,              "spinNF_RESTART_PARA");
 
+    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectEntryPos();
+    if ( numSelectPos == 0 )
+        m_pEditNumStyleBtn->Disable();
+    else
+        m_pEditNumStyleBtn->Enable();
+
     const SfxPoolItem* pItem;
     SfxObjectShell* pObjSh;
     if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
@@ -89,6 +95,7 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(vcl::Window* pParent, const SfxItem
     m_pNumberStyleLB->SetSelectHdl(LINK(this, SwParagraphNumTabPage, StyleHdl_Impl));
     m_pCountParaCB->SetClickHdl(LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
     m_pRestartParaCountCB->SetClickHdl( LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    m_pNumberStyleLB->SetSelectHdl( LINK( this, SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl ) );
     m_pEditNumStyleBtn->SetClickHdl( LINK(this, SwParagraphNumTabPage, EditNumStyleHdl_Impl));
 }
 
@@ -299,11 +306,21 @@ IMPL_LINK_NOARG(SwParagraphNumTabPage, LineCountHdl_Impl)
     return 0;
 }
 
+IMPL_LINK_NOARG( SwParagraphNumTabPage, EditNumStyleSelectHdl_Impl )
+{
+    sal_Int32 numSelectPos = m_pNumberStyleLB->GetSelectEntryPos();
+    if ( numSelectPos == 0 )
+        m_pEditNumStyleBtn->Disable();
+    else
+        m_pEditNumStyleBtn->Enable();
+
+    return 0;
+}
+
 IMPL_LINK_NOARG(SwParagraphNumTabPage, EditNumStyleHdl_Impl)
 {
     OUString aTemplName(m_pNumberStyleLB->GetSelectEntry());
-    if( !( aTemplName == "None" ) )
-        ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PARA, 0 );
+    ExecuteEditNumStyle_Impl( SID_STYLE_EDIT, aTemplName, OUString(),SFX_STYLE_FAMILY_PARA, 0 );
     return 0;
 }
 
