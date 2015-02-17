@@ -207,7 +207,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     sal_Int32 nPorLen = 0;
     // do not call the break iterator nCutPos is a blank
-    sal_Unicode cCutChar = rInf.GetTxt()[ nCutPos ];
+    sal_Unicode cCutChar = nCutPos < rInf.GetTxt().getLength() ? rInf.GetTxt()[nCutPos] : 0;
     if( CH_BLANK == cCutChar || CH_FULL_BLANK == cCutChar )
     {
         nBreakPos = nCutPos;
