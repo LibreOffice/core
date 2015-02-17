@@ -268,10 +268,8 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::lang::XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
+    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void) SAL_OVERRIDE;

@@ -43,18 +43,6 @@ OGroups::~OGroups()
 {
 }
 
-void OGroups::copyGroups(const uno::Reference< report::XGroups >& _xSource)
-{
-    sal_Int32 nCount = _xSource->getCount();
-    for (sal_Int32 i = 0; i != nCount; ++i)
-    {
-        OGroup* pGroup = new OGroup(this,m_xContext);
-        m_aGroups.push_back(pGroup);
-        uno::Reference<report::XGroup> xGroup(_xSource->getByIndex(i),uno::UNO_QUERY);
-        pGroup->copyGroup(xGroup);
-    }
-}
-
 void SAL_CALL OGroups::dispose() throw(uno::RuntimeException, std::exception)
 {
     cppu::WeakComponentImplHelperBase::dispose();

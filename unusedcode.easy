@@ -1,8 +1,5 @@
 BigInt::BigInt(unsigned int)
 FontCharMap::GetDefaultMap(bool)
-LineListBox::Clear()
-LineListBox::InsertEntry(rtl::OUString const&, int)
-LineListBox::RemoveEntry(int)
 OpenGLContext::init(_XDisplay*, unsigned long, unsigned int, unsigned int, int)
 OpenGLContext::renderToFile()
 OpenGLContext::requestSingleBufferedRendering()
@@ -178,9 +175,9 @@ basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon c
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 comphelper::OAccessibleImplementationAccess::setStateBit(short, bool)
-comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
+comphelper::detail::ConfigurationWrapper::getGroupReadWrite(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
-comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
+comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(std::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::dbase::ODbaseResultSet::createAnalyzer()
 connectivity::firebird::release(int&, cppu::OBroadcastHelperVar<cppu::OMultiTypeInterfaceContainerHelper, com::sun::star::uno::Type>&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&, com::sun::star::lang::XComponent*)
 connectivity::odbc::appendSQLWCHARs(rtl::OUStringBuffer&, wchar_t const*, int)

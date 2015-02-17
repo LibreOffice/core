@@ -779,21 +779,6 @@ void LineListBox::SelectEntry( sal_uInt16 nStyle, bool bSelect )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
 
-sal_Int32 LineListBox::InsertEntry( const OUString& rStr, sal_Int32 nPos )
-{
-    nPos = ListBox::InsertEntry( rStr, nPos );
-    if ( nPos != LISTBOX_ERROR ) {
-        if ( static_cast<size_t>(nPos) < pLineList->size() ) {
-            ImpLineList::iterator it = pLineList->begin();
-            ::std::advance( it, nPos );
-            pLineList->insert( it, reinterpret_cast<ImpLineListData *>(NULL) );
-        } else {
-            pLineList->push_back( NULL );
-        }
-    }
-    return nPos;
-}
-
 void LineListBox::InsertEntry(
     BorderWidthImpl aWidthImpl, sal_uInt16 nStyle, long nMinWidth,
     ColorFunc pColor1Fn, ColorFunc pColor2Fn, ColorDistFunc pColorDistFn )
@@ -801,30 +786,6 @@ void LineListBox::InsertEntry(
     ImpLineListData* pData = new ImpLineListData(
         aWidthImpl, nStyle, nMinWidth, pColor1Fn, pColor2Fn, pColorDistFn);
     pLineList->push_back( pData );
-}
-
-void LineListBox::RemoveEntry( sal_Int32 nPos )
-{
-    ListBox::RemoveEntry( nPos );
-
-    if ( 0 <= nPos && static_cast<size_t>(nPos) < pLineList->size() ) {
-        ImpLineList::iterator it = pLineList->begin();
-        ::std::advance( it, nPos );
-        if ( *it ) delete *it;
-        pLineList->erase( it );
-    }
-}
-
-void LineListBox::Clear()
-{
-    for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
-        if ( (*pLineList)[ i ] ) {
-            delete (*pLineList)[ i ];
-        }
-    }
-    pLineList->clear();
-
-    ListBox::Clear();
 }
 
 sal_Int32 LineListBox::GetEntryPos( sal_uInt16 nStyle ) const

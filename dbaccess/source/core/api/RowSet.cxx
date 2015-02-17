@@ -513,11 +513,6 @@ Sequence< OUString > SAL_CALL ORowSet::getSupportedServiceNames(  ) throw(Runtim
     return getSupportedServiceNames_static();
 }
 
-Reference< XInterface > ORowSet::Create(const Reference< XComponentContext >& _rxContext)
-{
-    return *(new ORowSet( _rxContext ));
-}
-
 // OComponentHelper
 void SAL_CALL ORowSet::disposing()
 {

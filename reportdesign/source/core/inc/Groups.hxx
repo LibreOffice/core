@@ -59,8 +59,6 @@ namespace reportdesign
         OGroups( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xParent
                 ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context);
 
-        void copyGroups(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >& _xSource);
-
     // XGroups
         // Attributes
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition > SAL_CALL getReportDefinition() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

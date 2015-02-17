@@ -310,17 +310,12 @@ public:
     void            SetNone( const OUString& sNone );
 
     using ListBox::InsertEntry;
-    sal_Int32   InsertEntry( const OUString& rStr, sal_Int32  nPos = LISTBOX_APPEND );
     /** Insert a listbox entry with all widths in Twips. */
     void            InsertEntry( BorderWidthImpl aWidthImpl,
                         sal_uInt16 nStyle, long nMinWidth = 0,
                         ColorFunc pColor1Fn = &sameColor,
                         ColorFunc pColor2Fn = &sameColor,
                         ColorDistFunc pColorDistFn = &sameDistColor );
-
-    using ListBox::RemoveEntry;
-    void    RemoveEntry( sal_Int32  nPos );
-    void    Clear();
 
     using ListBox::GetEntryPos;
     sal_Int32  GetEntryPos( sal_uInt16 nStyle = com::sun::star::table::BorderLineStyle::SOLID ) const;
