@@ -94,6 +94,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         zoomAndRepositionTheDocument();
 
         mLayerClient.forceRedraw();
+        mLayerClient.forceRender();
     }
 
     private void zoomAndRepositionTheDocument() {
