@@ -34,6 +34,7 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <rtl/strbuf.hxx>
 #include <stdio.h>
+#include <algorithm>
 
 namespace formula
 {
