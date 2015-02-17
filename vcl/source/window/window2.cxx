@@ -1016,37 +1016,38 @@ const vcl::Window* Window::ImplGetFirstOverlapWindow() const
 
 vcl::Window* Window::ImplGetFrameWindow() const
 {
-    return mpWindowImpl->mpFrameWindow;
+    return mpWindowImpl ? mpWindowImpl->mpFrameWindow : NULL;
 }
 
 bool Window::IsDockingWindow() const
 {
-    return mpWindowImpl->mbDockWin;
+    return mpWindowImpl ? mpWindowImpl->mbDockWin : false;
 }
 
 bool Window::ImplIsFloatingWindow() const
 {
-    return mpWindowImpl->mbFloatWin;
+    return mpWindowImpl ? mpWindowImpl->mbFloatWin : false;
 }
 
 bool Window::ImplIsSplitter() const
 {
-    return mpWindowImpl->mbSplitter;
+    return mpWindowImpl ? mpWindowImpl->mbSplitter : false;
 }
 
 bool Window::ImplIsPushButton() const
 {
-    return mpWindowImpl->mbPushButton;
+    return mpWindowImpl ? mpWindowImpl->mbPushButton : false;
 }
 
 bool Window::ImplIsOverlapWindow() const
 {
-    return mpWindowImpl->mbOverlapWin;
+    return mpWindowImpl ? mpWindowImpl->mbOverlapWin : false;
 }
 
 void Window::ImplSetMouseTransparent( bool bTransparent )
 {
-    mpWindowImpl->mbMouseTransparent = bTransparent;
+    if (mpWindowImpl)
+        mpWindowImpl->mbMouseTransparent = bTransparent;
 }
 
 Point Window::ImplOutputToFrame( const Point& rPos )
@@ -1061,7 +1062,8 @@ Point Window::ImplFrameToOutput( const Point& rPos )
 
 void Window::SetCompoundControl( bool bCompound )
 {
-    mpWindowImpl->mbCompoundControl = bCompound;
+    if (mpWindowImpl)
+        mpWindowImpl->mbCompoundControl = bCompound;
 }
 
 void Window::IncrementLockCount()
@@ -1076,17 +1078,17 @@ void Window::DecrementLockCount()
 
 WinBits Window::GetStyle() const
 {
-    return mpWindowImpl->mnStyle;
+    return mpWindowImpl ? mpWindowImpl->mnStyle : 0;
 }
 
 WinBits Window::GetPrevStyle() const
 {
-    return mpWindowImpl->mnPrevStyle;
+    return mpWindowImpl ? mpWindowImpl->mnPrevStyle : 0;
 }
 
 WinBits Window::GetExtendedStyle() const
 {
-    return mpWindowImpl->mnExtendedStyle;
+    return mpWindowImpl ? mpWindowImpl->mnExtendedStyle : 0;
 }
 
 void Window::SetType( WindowType nType )
@@ -1120,22 +1122,22 @@ Dialog* Window::GetParentDialog() const
 
 bool Window::IsSystemWindow() const
 {
-    return mpWindowImpl->mbSysWin;
+    return mpWindowImpl ? mpWindowImpl->mbSysWin : false;
 }
 
 bool Window::IsDialog() const
 {
-    return mpWindowImpl->mbDialog;
+    return mpWindowImpl ? mpWindowImpl->mbDialog : false;
 }
 
 bool Window::IsMenuFloatingWindow() const
 {
-    return mpWindowImpl->mbMenuFloatingWindow;
+    return mpWindowImpl ? mpWindowImpl->mbMenuFloatingWindow : false;
 }
 
 bool Window::IsToolbarFloatingWindow() const
 {
-    return mpWindowImpl->mbToolbarFloatingWindow;
+    return mpWindowImpl ? mpWindowImpl->mbToolbarFloatingWindow : false;
 }
 
 void Window::EnableAllResize( bool bEnable )
@@ -1150,17 +1152,17 @@ void Window::EnableChildTransparentMode( bool bEnable )
 
 bool Window::IsChildTransparentModeEnabled() const
 {
-    return mpWindowImpl->mbChildTransparent;
+    return mpWindowImpl ? mpWindowImpl->mbChildTransparent : false;
 }
 
 bool Window::IsMouseTransparent() const
 {
-    return mpWindowImpl->mbMouseTransparent;
+    return mpWindowImpl ? mpWindowImpl->mbMouseTransparent : false;
 }
 
 bool Window::IsPaintTransparent() const
 {
-    return mpWindowImpl->mbPaintTransparent;
+    return mpWindowImpl ? mpWindowImpl->mbPaintTransparent : false;
 }
 
 void Window::SetDialogControlStart( bool bStart )
@@ -1170,7 +1172,7 @@ void Window::SetDialogControlStart( bool bStart )
 
 bool Window::IsDialogControlStart() const
 {
-    return mpWindowImpl->mbDlgCtrlStart;
+    return mpWindowImpl ? mpWindowImpl->mbDlgCtrlStart : false;
 }
 
 void Window::SetDialogControlFlags( sal_uInt16 nFlags )

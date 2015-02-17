@@ -94,6 +94,9 @@ bool Window::Notify( NotifyEvent& rNEvt )
 {
     bool nRet = false;
 
+    if (IsDisposed())
+        return false;
+
     // check for docking window
     // but do nothing if window is docked and locked
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
