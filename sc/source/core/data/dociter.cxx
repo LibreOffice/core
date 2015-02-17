@@ -2235,14 +2235,12 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nRow = nStartRow;
     nCol = nStartCol;
     bRowEmpty = false;
-    bRepeatedRow = false;
 
     pIndices    = new SCSIZE[nEndCol-nStartCol+1];
     pNextEnd    = new SCROW[nEndCol-nStartCol+1];
-    pPrevColEnd = new SCCOL[nEndCol-nStartCol+1];
     ppPatterns  = new const ScPatternAttr*[nEndCol-nStartCol+1];
 
-    nMinNextEnd = MAXROW;
+    SCROW nSkipTo = MAXROW;
     bool bEmpty = true;
     for (i=nStartCol; i<=nEndCol; i++)
     {
@@ -2255,12 +2253,12 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
 
         const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
         SCROW nThisEnd = pArray->pData[nIndex].nRow;
-
-        if ( nThisEnd < nMinNextEnd )
-            nMinNextEnd = nThisEnd; // nMinNextEnd can be set here already
-
         if ( IsDefaultItem( pPattern ) )
+        {
             pPattern = NULL;
+            if ( nThisEnd < nSkipTo )
+                nSkipTo = nThisEnd; // nSkipTo can be set here already
+        }
         else
             bEmpty = false; // Found attributes
 
@@ -2270,7 +2268,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     }
 
     if (bEmpty)
-        nRow = nMinNextEnd; // Skip until end of next section
+        nRow = nSkipTo; // Skip until end of next section
 
     bRowEmpty = bEmpty;
 }
@@ -2279,7 +2277,6 @@ ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 {
     delete[] ppPatterns;
     delete[] pNextEnd;
-    delete[] pPrevColEnd;
     delete[] pIndices;
 }
 
@@ -2300,15 +2297,8 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                 const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
                 rRow = nRow;
                 rCol1 = nCol;
-                if ( bRepeatedRow )
-                    nCol = pPrevColEnd[nCol];
-                else
-                {
-                    while ( nCol < nEndCol && ( ppPatterns[nCol+1-nStartCol] == pPat) )
-                        ++nCol;
-                    // store the result to avoid the previous very expensive comparisons
-                    pPrevColEnd[rCol1] = nCol;
-                }
+                while ( nCol < nEndCol && ppPatterns[nCol+1-nStartCol] == pPat )
+                    ++nCol;
                 rCol2 = nCol;
                 ++nCol; // Count up for next call
                 return pPat; // Found it!
@@ -2319,13 +2309,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
         ++nRow;
         if ( nRow > nEndRow ) // Already at the end?
             return NULL; // Found nothing
-        nCol = nStartCol; // Start at the left again
 
-        if ( bRepeatedRow && ! nMinNextEnd < nRow ) // use the data of the previous row
-           continue;
-
-        bRepeatedRow = true; // ppPatterns is not modified
-        nMinNextEnd = MAXROW;
         bool bEmpty = true;
         SCCOL i;
 
@@ -2335,7 +2319,6 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             if ( pNextEnd[nPos] < nRow )
             {
                 const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
-                bRepeatedRow = false;
 
                 SCSIZE nIndex = ++pIndices[nPos];
                 if ( nIndex < pArray->nCount )
@@ -2361,15 +2344,19 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             }
             else if ( ppPatterns[nPos] )
                 bEmpty = false; // Area not at the end yet
-
-            if ( nMinNextEnd > pNextEnd[nPos] )
-                nMinNextEnd = pNextEnd[nPos];
-
         }
 
         if (bEmpty)
-            nRow = nMinNextEnd; // Skip empty rows
+        {
+            SCCOL nCount = nEndCol-nStartCol+1;
+            SCROW nSkipTo = pNextEnd[0]; // Search next end of area
+            for (i=1; i<nCount; i++)
+                if ( pNextEnd[i] < nSkipTo )
+                    nSkipTo = pNextEnd[i];
+            nRow = nSkipTo; // Skip empty rows
+        }
         bRowEmpty = bEmpty;
+        nCol = nStartCol; // Start at the left again
     }
 }
 
