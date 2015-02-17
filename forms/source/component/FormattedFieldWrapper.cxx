@@ -30,7 +30,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-using namespace frm;
+
+namespace frm
+{
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -341,18 +343,21 @@ void OFormattedFieldWrapper::ensureAggregate()
     decrement(m_refCount);
 }
 
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_form_OFormattedFieldWrapper_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormattedFieldWrapper(component));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                                         ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OFormattedFieldWrapper(component));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

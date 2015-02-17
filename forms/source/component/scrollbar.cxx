@@ -22,6 +22,7 @@
 #include <comphelper/basicio.hxx>
 #include <rtl/math.hxx>
 
+
 namespace frm
 {
 
@@ -286,11 +287,13 @@ namespace frm
         return Sequence< Type >( & cppu::UnoType<double>::get(), 1 );
     }
 
+
 }   // namespace frm
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_forms_OScrollBarModel_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new frm::OScrollBarModel(component));
 }
