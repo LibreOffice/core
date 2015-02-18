@@ -9,7 +9,9 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="textfd" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.filters.PlainTextFilterDetect">
-    <service name="com.sun.star.document.ExtendedTypeDetection"/>
-  </implementation>
+    <implementation name="com.sun.star.comp.filters.PlainTextFilterDetect"
+        constructor="com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation">
+      <service name="com.sun.star.document.ExtendedTypeDetection"/>
+      <service name="com.sun.star.comp.filters.PlainTextFilterDetect"/>
+    </implementation>
 </component>
