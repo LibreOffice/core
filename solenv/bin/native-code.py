@@ -58,7 +58,7 @@ core_factory_list = [
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libcanvasfactorylo.a", "canvasfactory_component_getFactory"),
-    ("libvbaeventslo.a", "vbaevents_component_getFactory"),
+    ("libvbaeventslo.a", "vbaevents_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
     ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ]
