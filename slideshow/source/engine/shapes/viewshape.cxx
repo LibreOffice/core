@@ -48,7 +48,7 @@
 #include "tools.hxx"
 
 #include <boost/bind.hpp>
-
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace ::com::sun::star;
 
@@ -853,9 +853,10 @@ namespace slideshow
             ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
-            // Hack, force use of Sprites
-            // TODO should be only the case by using ogl canvas-> getImplementationName()
-            //if( isBackgroundDetached() )
+            // Hack, force use of Sprites in case of ogl canvas
+            uno::Reference< lang::XServiceInfo >  xServiceInfo(mpViewLayer->getCanvas()->getUNOCanvas(),uno::UNO_QUERY_THROW);
+            if( xServiceInfo->getImplementationName() == "com.sun.star.comp.rendering.SpriteCanvas.OGL" ||  isBackgroundDetached() )
+            {
                 return renderSprite( mpViewLayer,
                                      rMtf,
                                      rArgs.maOrigBounds,
@@ -866,7 +867,8 @@ namespace slideshow
                                      rArgs.mrSubsets,
                                      rArgs.mnShapePriority,
                                      bIsVisible );
-            /*else
+            }
+            else
                 return render( mpViewLayer->getCanvas(),
                                rMtf,
                                rArgs.maBounds,
@@ -874,7 +876,7 @@ namespace slideshow
                                nUpdateFlags,
                                rArgs.mrAttr,
                                rArgs.mrSubsets,
-                               bIsVisible );*/
+                               bIsVisible );
         }
 
     }
