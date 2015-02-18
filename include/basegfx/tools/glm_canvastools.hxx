@@ -25,6 +25,17 @@
 #include <basegfx/basegfxdllapi.h>
 #include <glm/glm.hpp>
 
+namespace com { namespace sun { namespace star { namespace geometry
+    {
+            struct AffineMatrix2D;
+            struct AffineMatrix3D;
+    } } } }
+
+namespace com { namespace sun { namespace star { namespace rendering
+    {
+            struct RenderState;
+             struct ViewState;
+    }}}}
 
 namespace basegfx
 {
@@ -40,7 +51,15 @@ namespace basegfx
         BASEGFX_DLLPUBLIC glm::mat4 glmMatFromHomMatrix( const ::basegfx::B2DHomMatrix& input);
 
         BASEGFX_DLLPUBLIC glm::mat4 glmMatFromHomMatrix3d( const ::basegfx::B3DHomMatrix& input);
+    }
+}
 
+namespace canvas
+{
+    namespace tools
+    {
+        BASEGFX_DLLPUBLIC glm::mat4& mergeViewAndRenderTransform( const ::com::sun::star::rendering::ViewState&   viewState,
+                                                                   const ::com::sun::star::rendering::RenderState& renderState );
     }
 }
 
