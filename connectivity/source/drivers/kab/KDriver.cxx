@@ -34,6 +34,16 @@
 #include "resource/kab_res.hrc"
 #include "resource/sharedresources.hxx"
 
+#if ENABLE_TDE
+
+#define KAB_SERVICE_NAME "tdeab"
+
+#else // ENABLE_TDE
+
+#define KAB_SERVICE_NAME "kab"
+
+#endif // ENABLE_TDE
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -120,7 +130,7 @@ bool KabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const OUString sModuleName( SAL_MODULENAME( "kabdrv1"  ));
+    const OUString sModuleName( SAL_MODULENAME( KAB_SERVICE_NAME "drv1"  ));
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
@@ -379,7 +389,7 @@ Reference< XConnection > SAL_CALL KabDriver::connect( const OUString& url, const
 
     // create a new connection with the given properties and append it to our vector
     KabConnection* pConnection = m_aImplModule.createConnection( this );
-    SAL_WARN_IF( !pConnection, "connectivity.kab", "KabDriver::connect: no connection has been created by the factory!" );
+    SAL_WARN_IF( !pConnection, "connectivity." KAB_SERVICE_NAME, "KabDriver::connect: no connection has been created by the factory!" );
 
     // by definition, the factory function returned an object which was acquired once
     Reference< XConnection > xConnection = pConnection;
@@ -403,7 +413,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return url.startsWith("sdbc:address:kab:");
+    return url.startsWith("sdbc:address:" KAB_SERVICE_NAME ":");
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException, std::exception)
@@ -439,7 +449,7 @@ void SAL_CALL KabDriver::disposing( const EventObject& ) throw (RuntimeException
 
 const sal_Char* KabDriver::impl_getAsciiImplementationName()
 {
-    return "com.sun.star.comp.sdbc.kab.Driver";
+    return "com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver";
         // this name is referenced in the configuration and in the kab.xml
         // Please be careful when changing it.
 }
@@ -448,7 +458,7 @@ OUString KabDriver::impl_getConfigurationSettingsPath()
 {
     OUStringBuffer aPath;
     aPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
-    aPath.appendAscii( "com.sun.star.comp.sdbc.kab.Driver" );
+    aPath.appendAscii( "com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver" );
     return aPath.makeStringAndClear();
 }
 
