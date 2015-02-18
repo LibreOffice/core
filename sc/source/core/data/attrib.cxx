@@ -149,6 +149,11 @@ ScMergeFlagAttr::~ScMergeFlagAttr()
 {
 }
 
+SfxPoolItem * ScMergeFlagAttr::Clone(SfxItemPool *) const
+{
+    return new ScMergeFlagAttr(*this);
+}
+
 bool ScMergeFlagAttr::HasPivotButton() const
 {
     return (GetValue() & SC_MF_BUTTON) != 0;

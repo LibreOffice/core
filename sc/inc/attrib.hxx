@@ -80,6 +80,8 @@ public:
             ScMergeFlagAttr(sal_Int16 nFlags);
             virtual ~ScMergeFlagAttr();
 
+    SfxPoolItem * Clone(SfxItemPool * pPool) const SAL_OVERRIDE;
+
     bool    IsHorOverlapped() const     { return ( GetValue() & SC_MF_HOR ) != 0;  }
     bool    IsVerOverlapped() const     { return ( GetValue() & SC_MF_VER ) != 0;  }
     bool    IsOverlapped() const        { return ( GetValue() & ( SC_MF_HOR | SC_MF_VER ) ) != 0; }
