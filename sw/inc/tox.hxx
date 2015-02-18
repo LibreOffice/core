@@ -264,7 +264,7 @@ class SW_DLLPUBLIC SwFormTokensHelper
 
 public:
     /**
-       contructor
+       constructor
 
        @param rTokens       vector of tokens
     */

@@ -68,7 +68,7 @@ typedef sal_Int32 FrameSearchFlags;
 //  macros for declaration and definition of uno-services
 
 //  declaration of      XInterface::queryInterface()
-//                      XInterface::aquire()
+//                      XInterface::acquire()
 //                      XInterface::release()
 //                      XTypeProvider::getTypes()
 //                      XTypeProvider::getImplementationId()

@@ -65,7 +65,7 @@ public:
        Return the property members Name and Attribute from the handle nHandle.
        @param nHandle   the handle of a property. If the values of the handles
                           are sorted in the same way as the names and the highest handle value
-                          is getCount() -1, than it must be an indexed acces to the property array.
+                          is getCount() -1, than it must be an indexed access to the property array.
        @param pPropName is an out parameter filled with property name of the property with the
                               handle nHandle. May be NULL.
        @param pAttributes is an out parameter filled with attributes of the property with the
@@ -144,7 +144,7 @@ public:
        Return the property members Name and Attribute from the handle nHandle.
        @param nHandle   the handle of a property. If the values of the handles
                           are sorted in the same way as the names and the highest handle value
-                          is getCount() -1, than it is only an indexed acces to the property array.
+                          is getCount() -1, than it is only an indexed access to the property array.
                           Otherwise it is a linear search through the array.
        @param pPropName is an out parameter filled with property name of the property with the
                               handle nHandle. May be NULL.

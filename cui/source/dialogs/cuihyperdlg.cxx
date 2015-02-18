@@ -77,7 +77,7 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 
 /*************************************************************************
 |*
-|* Contructor / Destructor
+|* Constructor / Destructor
 |*
 |************************************************************************/
 
@@ -203,7 +203,7 @@ void SvxHpLinkDlg::Apply()
 
 /*************************************************************************
 |*
-|* When extrawindow is visible and its never moved by user, then move that
+|* When extra window is visible and its never moved by user, then move that
 |* window, too.
 |*
 |************************************************************************/

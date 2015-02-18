@@ -256,7 +256,7 @@ public class OptionsEventHandler {
                 throw new com.sun.star.lang.IllegalArgumentException(
                     "The window is not supported by this handler", this, (short) -1);
 
-            //To acces the separate controls of the window we need to obtain the
+            //To access the separate controls of the window we need to obtain the
             //XControlContainer from window implementation
             XControlContainer xContainer = UnoRuntime.queryInterface(
                 XControlContainer.class, aWindow);

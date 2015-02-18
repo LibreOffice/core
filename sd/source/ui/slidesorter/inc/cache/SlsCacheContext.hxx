@@ -86,7 +86,7 @@ public:
 
     /** Return the model to which the pages belong for which the called
         cache manages the previews.  Different caches that belong to the
-        same model but have different preview sizes may acces previews of
+        same model but have different preview sizes may access previews of
         each other in order to create fast previews of the previews.
     */
     virtual ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetModel (void) = 0;

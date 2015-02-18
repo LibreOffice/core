@@ -74,7 +74,7 @@ class SvtLocalisationOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************
             @short      access method to get internal values
-            @descr      These method give us a chance to regulate acces to our internal values.
+            @descr      These method give us a chance to regulate access to our internal values.
                         It's not used in the moment - but it's possible for the feature!
         *//*-*****************************************************************************************************/
 

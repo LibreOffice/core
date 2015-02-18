@@ -582,7 +582,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 break;
             }
 
-//copy in context the values default in the contructor or set by the FilterData sequence of properties
+//copy in context the values default in the constructor or set by the FilterData sequence of properties
             aContext.Tagged     = mbUseTaggedPDF;
 
 //values used in viewer

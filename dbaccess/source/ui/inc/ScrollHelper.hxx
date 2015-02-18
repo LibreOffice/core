@@ -30,7 +30,7 @@ namespace dbaui
         Link    m_aUpScroll;
         Link    m_aDownScroll;
     public:
-        /** default contructor
+        /** default constructor
         */
         OScrollHelper();
 

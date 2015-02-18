@@ -931,7 +931,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     // TabPage "Parts":
 
-    //! walk throuch all PrintAreas of the table !!!
+    //! walk through all PrintAreas of the table !!!
     const ScRange*  pPrintArea = pDoc->GetPrintRange( nPrintTab, 0 );
     const ScRange*  pRepeatCol = pDoc->GetRepeatColRange( nPrintTab );
     const ScRange*  pRepeatRow = pDoc->GetRepeatRowRange( nPrintTab );
@@ -2247,7 +2247,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         LocateArea( nX1,nY1, nX2,nY2, nDataX,nDataY, false,false, *pLocationData );
 
     //  output column/row headers
-    //  after data (throug probably shadow)
+    //  after data (through probably shadow)
 
     Color aGridColor( COL_BLACK );
     if ( bUseStyleColor )

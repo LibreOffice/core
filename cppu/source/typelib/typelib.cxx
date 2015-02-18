@@ -2240,8 +2240,8 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getDescription(
         else
         {
             (void)osl_atomic_decrement( &pRef->pType->nRefCount );
-            // detruction of this type in progress (another thread!)
-            // no acces through this weak reference
+            // destruction of this type in progress (another thread!)
+            // no access through this weak reference
             pRef->pType = 0;
         }
     }
@@ -2280,8 +2280,8 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
             }
             else
             {
-                // detruction of this type in progress (another thread!)
-                // no acces through this weak reference
+                // destruction of this type in progress (another thread!)
+                // no access through this weak reference
                 (void)osl_atomic_decrement( &(*aIt).second->nRefCount );
             }
         }

@@ -66,13 +66,13 @@ namespace dbaui
 
         virtual short Execute() SAL_OVERRIDE;
 
-        /** getTableMap gives acces to the table window map
+        /** getTableMap gives access to the table window map
             @retrun the table window from the join view
         */
         OJoinTableView::OTableWindowMap* getTableMap() const { return m_pTableMap; }
 
         /** getConnectionData returns the current connection data
-            @return the current connectiondata
+            @return the current connection data
         */
         virtual TTableConnectionData::value_type getConnectionData() const SAL_OVERRIDE;
 

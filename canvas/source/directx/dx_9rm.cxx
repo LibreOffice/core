@@ -153,7 +153,7 @@ namespace dxcanvas
             COMReference<IDirect3DTexture9> getTexture() const;
 
         private:
-            /// Guard local methods against concurrent acces to RenderModule
+            /// Guard local methods against concurrent access to RenderModule
             class ImplRenderModuleGuard : private ::boost::noncopyable
             {
             public:

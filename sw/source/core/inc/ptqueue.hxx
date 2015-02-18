@@ -33,7 +33,7 @@
  * Invalidating windows directly from the RootFrm::Paint was not a successful
  * approach, because the Paint()s arrive at a very unfavourable point in time.
  * Triggering an update for all windows after printing each page does not seem
- * appropriate either: on the one hand we don't have direct acces to the edit
+ * appropriate either: on the one hand we don't have direct access to the edit
  * windows and on the other hand the updates can become very costly on some
  * platforms.
  */

@@ -76,7 +76,7 @@ OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
 }
 
 /**
- * Return the sequence of properties, which are provided throug the constructor.
+ * Return the sequence of properties, which are provided through the constructor.
  */
 Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -84,7 +84,7 @@ Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::co
 }
 
 /**
- * Return the sequence of properties, which are provided throug the constructor.
+ * Return the sequence of properties, which are provided through the constructor.
  */
 Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -100,7 +100,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
 }
 
 /**
- * Return the sequence of properties, which are provided throug the constructor.
+ * Return the sequence of properties, which are provided through the constructor.
  */
 sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {

@@ -45,7 +45,7 @@ public interface InputRepository
 
     InputStream createInputStream(final String name) throws IOException;
 
-    /** allows to acces sub repositories inside this repository
+    /** allows to access sub repositories inside this repository
      *
      * @param name describes the path to the sub repository
      * @return the sub repository

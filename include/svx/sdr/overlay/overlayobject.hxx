@@ -156,7 +156,7 @@ namespace sdr
             // implementation does nothing and does not create a new event.
             virtual void Trigger(sal_uInt32 nTime) SAL_OVERRIDE;
 
-            // acces to AllowsAnimation flag
+            // access to AllowsAnimation flag
             bool allowsAnimation() const { return mbAllowsAnimation; }
 
             // stripe definition has changed. The OverlayManager does have

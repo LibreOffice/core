@@ -1003,7 +1003,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
                         catch (const Exception&)
                         {
-                            OSL_FAIL("control acces failed");
+                            OSL_FAIL("control access failed");
                         }
 
                         xFP->setTitle( SW_RESSTR( nStrId ));

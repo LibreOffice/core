@@ -357,7 +357,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
     }
     catch (const Exception&)
     {
-        OSL_FAIL("control acces failed");
+        OSL_FAIL("control access failed");
     }
 
     SFX_REQUEST_ARG( rReq, pName, SfxStringItem, SID_INSERT_GRAPHIC , false );
