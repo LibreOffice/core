@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <functional>
+
 #include "TokenContext.hxx"
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
