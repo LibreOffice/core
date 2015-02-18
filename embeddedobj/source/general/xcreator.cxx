@@ -411,4 +411,11 @@ uno::Sequence< OUString > SAL_CALL UNOEmbeddedObjectCreator::getSupportedService
     return impl_staticGetSupportedServiceNames();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_EmbeddedObjectCreator_get_implementation (::com::sun::star::uno::XComponentContext* rxContext,
+    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return ::cppu::acquire(new UNOEmbeddedObjectCreator(rxContext));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

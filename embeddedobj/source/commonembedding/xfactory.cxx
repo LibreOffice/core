@@ -505,4 +505,18 @@ uno::Sequence< OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupported
     return impl_staticGetSupportedServiceNames();
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_OOoEmbeddedObjectFactory_get_implementation (::com::sun::star::uno::XComponentContext* rxContext,
+    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return ::cppu::acquire(new OOoEmbeddedObjectFactory(rxContext));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_OOoSpecialEmbeddedObjectFactory_get_implementation (::com::sun::star::uno::XComponentContext* rxContext,
+    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return ::cppu::acquire(new OOoSpecialEmbeddedObjectFactory(rxContext));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
