@@ -99,6 +99,7 @@ endif
 ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
 gb_CFLAGS_COMMON += -fstack-protector-strong
 gb_CXXFLAGS_COMMON += -fstack-protector-strong
+gb_LinkTarget_LDFLAGS += -fstack-protector-strong
 endif
 
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
