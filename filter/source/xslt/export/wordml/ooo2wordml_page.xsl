@@ -36,7 +36,7 @@
         <w:binData w:name="{$binName}">
             <xsl:value-of select="translate(office:binary-data/text(),'&#9;&#10;&#13;&#32;','' ) "/>
         </w:binData>
-        <w:background w:bgcolor="{parent::style:page-layout-propertie/@fo:background-color}" w:background="{$binName}"/>
+        <w:background w:bgcolor="{parent::style:page-layout-properties/@fo:background-color}" w:background="{$binName}"/>
     </xsl:template>
     <xsl:template match="style:page-layout-properties" mode="bgPict">
         <w:background w:bgcolor="{@fo:background-color}"/>
