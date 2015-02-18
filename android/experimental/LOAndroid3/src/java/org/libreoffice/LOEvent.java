@@ -16,7 +16,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int LOAD = 4;
     public static final int CLOSE = 5;
     public static final int REDRAW = 6;
-    public static final int TILE_REQUEST = 7;
+    public static final int TILE_REEVALUATION_REQUEST = 7;
     public static final int THUMBNAIL = 8;
     public static final int TILE_INVALIDATION = 9;
     public static final int TOUCH = 10;
@@ -29,7 +29,6 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mTypeString;
     public int mPartIndex;
     public String mFilename;
-    public SubTile mTile;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
     public MotionEvent mMotionEvent;
@@ -47,11 +46,10 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
-    public LOEvent(int type, ComposedTileLayer composedTileLayer, SubTile tile) {
+    public LOEvent(int type, ComposedTileLayer composedTileLayer) {
         mType = type;
-        mTypeString = "Tile Request";
+        mTypeString = "Tile Reevaluation";
         mComposedTileLayer = composedTileLayer;
-        mTile = tile;
     }
 
     public LOEvent(int type, String filename) {

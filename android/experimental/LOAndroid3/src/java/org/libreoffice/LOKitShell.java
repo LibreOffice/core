@@ -123,9 +123,7 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.REDRAW));
     }
 
-    public static void sendTileRequestEvent(ComposedTileLayer composedTileLayer, SubTile tile, boolean forceRedraw, int priority) {
-        LOEvent event = new LOEvent(LOEvent.TILE_REQUEST, composedTileLayer, tile);
-        LOKitShell.sendEvent(event);
+    public static void sendTileReevaluationRequest(ComposedTileLayer composedTileLayer) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_REEVALUATION_REQUEST, composedTileLayer));
     }
-
 }

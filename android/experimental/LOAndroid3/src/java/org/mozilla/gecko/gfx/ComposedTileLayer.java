@@ -29,7 +29,10 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
     private final Lock tilesWriteLock = tilesReadWriteLock.writeLock();
 
     protected RectF currentViewport = new RectF();
-    protected float currentZoom;
+    protected float currentZoom = 1.0f;
+    protected RectF currentPageRect = new RectF();
+
+    private long reevaluationNanoTime = 0;
 
     public ComposedTileLayer(Context context) {
         context.registerComponentCallbacks(this);
@@ -149,12 +152,16 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         if (currentViewport.equals(newViewPort) && FloatUtils.fuzzyEquals(currentZoom, newZoom)) {
             return;
         }
+
         currentViewport = newViewPort;
         currentZoom = newZoom;
+        currentPageRect = viewportMetrics.getPageRect();
 
-        clearMarkedTiles();
-        addNewTiles(viewportMetrics.getPageRect());
-        markTiles();
+        long currentReevaluationNanoTime = System.nanoTime();
+        if ((currentReevaluationNanoTime - reevaluationNanoTime) > 25 * 1000000) {
+            reevaluationNanoTime = currentReevaluationNanoTime;
+            LOKitShell.sendTileReevaluationRequest(this);
+        }
     }
 
     protected abstract RectF getViewPort(ImmutableViewportMetrics viewportMetrics);
@@ -177,27 +184,25 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         }
     }
 
-    private void addNewTiles(RectF pageRect) {
-        beginTransaction();
+    public void addNewTiles(List<SubTile> newTiles) {
         for (float y = currentViewport.top; y < currentViewport.bottom; y += tileSize.height) {
-            if (y > pageRect.height()) {
+            if (y > currentPageRect.height()) {
                 continue;
             }
             for (float x = currentViewport.left; x < currentViewport.right; x += tileSize.width) {
-                if (x > pageRect.width()) {
+                if (x > currentPageRect.width()) {
                     continue;
                 }
                 if (!containsTilesMatching(x, y, currentZoom)) {
                     TileIdentifier tileId = new TileIdentifier((int) x, (int) y, currentZoom, tileSize);
                     SubTile tile = createNewTile(tileId);
-                    LOKitShell.sendTileRequestEvent(this, tile, true, getTilePriority());
+                    newTiles.add(tile);
                 }
             }
         }
-        endTransaction();
     }
 
-    private void clearMarkedTiles() {
+    public void clearMarkedTiles() {
         tilesWriteLock.lock();
         Iterator<SubTile> iterator = tiles.iterator();
         while (iterator.hasNext()) {
@@ -210,7 +215,7 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
         tilesWriteLock.unlock();
     }
 
-    private void markTiles() {
+    public void markTiles() {
         tilesReadLock.lock();
         for (SubTile tile : tiles) {
             if (FloatUtils.fuzzyEquals(tile.id.zoom, currentZoom)) {

@@ -44,23 +44,36 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         }
     }
 
-    private void tileRequest(ComposedTileLayer composedTileLayer, SubTile tile) {
+    /* Viewport changed, recheck if tiles need to be added / removed */
+    private void tileReevaluationRequest(ComposedTileLayer composedTileLayer) {
         if (mTileProvider == null) {
             return;
         }
+        List<SubTile> tiles = new ArrayList<SubTile>();
 
-        if (composedTileLayer.isStillValid(tile.id)) {
+        mLayerClient.beginDrawing();
+        composedTileLayer.addNewTiles(tiles);
+        mLayerClient.endDrawing();
+
+        for (SubTile tile : tiles) {
             TileIdentifier tileId = tile.id;
             CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
+            mLayerClient.beginDrawing();
             if (image != null) {
-                mLayerClient.beginDrawing();
                 tile.setImage(image);
-                mLayerClient.endDrawing();
-                mLayerClient.forceRender();
             }
+            mLayerClient.endDrawing();
+            mLayerClient.forceRender();
         }
+
+        mLayerClient.beginDrawing();
+        composedTileLayer.markTiles();
+        composedTileLayer.clearMarkedTiles();
+        mLayerClient.endDrawing();
+        mLayerClient.forceRender();
     }
 
+    /* Invalidate tiles that intersect the input rect */
     private void tileInvalidation(RectF rect) {
         if (mLayerClient == null || mTileProvider == null) {
             return;
@@ -171,9 +184,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             case LOEvent.CHANGE_PART:
                 changePart(event.mPartIndex);
                 break;
-            case LOEvent.TILE_REQUEST:
-                tileRequest(event.mComposedTileLayer, event.mTile);
-                break;
             case LOEvent.TILE_INVALIDATION:
                 tileInvalidation(event.mInvalidationRect);
                 break;
@@ -185,6 +195,9 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 break;
             case LOEvent.KEY_EVENT:
                 keyEvent(event.mKeyEventType, event.mKeyEvent);
+                break;
+            case LOEvent.TILE_REEVALUATION_REQUEST:
+                tileReevaluationRequest(event.mComposedTileLayer);
                 break;
         }
     }
