@@ -6306,7 +6306,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     SECItem* item = SEC_ASN1EncodeItem(NULL, &dest, &src, TimeStampReq_Template);
     // SAL_ DEBUG("====> item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
-    // SECITEM_FreeItem(item, PR_TRUE); // crashes for some reason
+    (void)item;// SECITEM_FreeItem(item, PR_TRUE); // crashes for some reason
 
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
