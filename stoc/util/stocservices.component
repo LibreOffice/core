@@ -22,10 +22,12 @@
   <implementation name="com.sun.star.comp.stoc.TypeConverter">
     <service name="com.sun.star.script.Converter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.uri.ExternalUriReferenceTranslator">
+  <implementation name="com.sun.star.comp.uri.ExternalUriReferenceTranslator"
+    constructor="com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation">
     <service name="com.sun.star.uri.ExternalUriReferenceTranslator"/>
   </implementation>
-  <implementation name="com.sun.star.comp.uri.UriReferenceFactory">
+  <implementation name="com.sun.star.comp.uri.UriReferenceFactory"
+    constructor="com_sun_star_comp_uri_UriReferenceFactory_get_implementation">
     <service name="com.sun.star.uri.UriReferenceFactory"/>
   </implementation>
   <implementation
@@ -36,7 +38,8 @@
        name="com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript">
     <service name="com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"/>
   </implementation>
-  <implementation name="com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory">
+  <implementation name="com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory"
+    constructor="com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation">
     <service name="com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"/>
   </implementation>
 </component>

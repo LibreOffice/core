@@ -39,19 +39,6 @@ static const struct ImplementationEntry g_entries[] =
     tcv_getSupportedServiceNames, createSingleComponentFactory,
     0, 0
     },
-    // uriproc
-    {
-    ExternalUriReferenceTranslator::create,
-    ExternalUriReferenceTranslator::getImplementationName,
-    ExternalUriReferenceTranslator::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0
-    },
-    {
-    UriReferenceFactory::create,
-    UriReferenceFactory::getImplementationName,
-    UriReferenceFactory::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0
-    },
     {
     UriSchemeParser_vndDOTsunDOTstarDOTexpand::create,
     UriSchemeParser_vndDOTsunDOTstarDOTexpand::getImplementationName,
@@ -62,12 +49,6 @@ static const struct ImplementationEntry g_entries[] =
     UriSchemeParser_vndDOTsunDOTstarDOTscript::create,
     UriSchemeParser_vndDOTsunDOTstarDOTscript::getImplementationName,
     UriSchemeParser_vndDOTsunDOTstarDOTscript::getSupportedServiceNames,
-    createSingleComponentFactory, 0, 0
-    },
-    {
-    VndSunStarPkgUrlReferenceFactory::create,
-    VndSunStarPkgUrlReferenceFactory::getImplementationName,
-    VndSunStarPkgUrlReferenceFactory::getSupportedServiceNames,
     createSingleComponentFactory, 0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
