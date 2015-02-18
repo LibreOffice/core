@@ -76,7 +76,7 @@ public:
     /** Derived classes may implement to resolve a palette index to an RGB color. */
     virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
 
-    virtual css::drawing::FillStyle getDefaultChartAreaFillStyle() const;
+    virtual sal_Int32 getDefaultChartAreaFillStyle() const;
 
     // Device info and device dependent unit conversion -----------------------
 
