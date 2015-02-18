@@ -782,7 +782,7 @@ public:
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
 {
 protected:
-    sal_uLong nElementCount;
+    size_t nElementCount;
 
 public:
     SmXMLRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
@@ -1030,7 +1030,7 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.aText = ",";
     aToken.eType = TIDENT;
 
-    sal_uLong i = rNodeStack.size() - nElementCount;
+    auto i = rNodeStack.size() - nElementCount;
     if (rNodeStack.size() - nElementCount > 1)
         i += rNodeStack.size() - 1 - nElementCount;
     aRelationArray.resize(i);
@@ -1428,7 +1428,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-    for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
+    for (size_t i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
     aSubNodes[eSubSup+1] = popOrZero(rNodeStack);
@@ -1488,7 +1488,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-    for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
+    for (size_t i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
     aSubNodes[aSup+1] = popOrZero(rNodeStack);
@@ -2146,9 +2146,9 @@ void SmXMLDocContext_Impl::EndElement()
     rNodeStack.push_front(pSNode);
 
     SmNodeArray  LineArray;
-    sal_uLong n = rNodeStack.size();
+    auto n = rNodeStack.size();
     LineArray.resize(n);
-    for (sal_uLong j = 0; j < n; j++)
+    for (size_t j = 0; j < n; j++)
     {
         auto pNode = rNodeStack.pop_front();
         LineArray[n - (j + 1)] = pNode.release();
@@ -2224,10 +2224,10 @@ void SmXMLRowContext_Impl::EndElement()
 
     if (rNodeStack.size() > nElementCount)
     {
-        sal_uLong nSize = rNodeStack.size() - nElementCount;
+        auto nSize = rNodeStack.size() - nElementCount;
 
         aRelationArray.resize(nSize);
-        for (sal_uLong j=nSize;j > 0;j--)
+        for (auto j=nSize;j > 0;j--)
         {
             auto pNode = rNodeStack.pop_front();
             aRelationArray[j-1] = pNode.release();
@@ -2421,7 +2421,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
     if (rNodeStack.size() <= nElementCount)
         return;
 
-    sal_uLong nCount = rNodeStack.size() - nElementCount - 1;
+    auto nCount = rNodeStack.size() - nElementCount - 1;
     if (nCount == 0)
         return;
 
@@ -2432,7 +2432,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
         aToken.eType = bIsPrescript ? TLSUB : TRSUB;
 
         SmNodeStack aReverseStack;
-        for (sal_uLong i = 0; i < nCount + 1; i++)
+        for (size_t i = 0; i < nCount + 1; i++)
         {
             auto pNode = rNodeStack.pop_front();
             aReverseStack.push_front(pNode.release());
@@ -2441,7 +2441,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
         SmSubSup eSub = bIsPrescript ? LSUB : RSUB;
         SmSubSup eSup = bIsPrescript ? LSUP : RSUP;
 
-        for (sal_uLong i = 0; i < nCount; i += 2)
+        for (size_t i = 0; i < nCount; i += 2)
         {
             SmSubSupNode *pNode = new SmSubSupNode(aToken);
 
@@ -2473,7 +2473,7 @@ void SmXMLMultiScriptsContext_Impl::ProcessSubSupPairs(bool bIsPrescript)
     else
     {
         // Ignore odd number of elements.
-        for (sal_uLong i = 0; i < nCount; i++)
+        for (size_t i = 0; i < nCount; i++)
         {
             rNodeStack.pop_front();
         }
@@ -2488,11 +2488,11 @@ void SmXMLTableContext_Impl::EndElement()
     SmNodeStack aReverseStack;
     aExpressionArray.resize(rNodeStack.size()-nElementCount);
 
-    sal_uLong nRows = rNodeStack.size()-nElementCount;
+    auto nRows = rNodeStack.size()-nElementCount;
     sal_uInt16 nCols = 0;
 
     SmStructureNode *pArray;
-    for (sal_uLong i=nRows;i > 0;i--)
+    for (auto i=nRows;i > 0;i--)
     {
         auto pNode = rNodeStack.pop_front();
         pArray = static_cast<SmStructureNode *>(pNode.release());
@@ -2519,7 +2519,7 @@ void SmXMLTableContext_Impl::EndElement()
         aReverseStack.push_front(pArray);
     }
     aExpressionArray.resize(nCols*nRows);
-    sal_uLong j=0;
+    size_t j=0;
     while ( !aReverseStack.empty() )
     {
         auto pNode = aReverseStack.pop_front();
@@ -2597,7 +2597,7 @@ void SmXMLActionContext_Impl::EndElement()
      first pushed one*/
 
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    for (sal_uLong i=rNodeStack.size()-nElementCount;i > 1;i--)
+    for (auto i=rNodeStack.size()-nElementCount;i > 1;i--)
     {
         rNodeStack.pop_front();
     }

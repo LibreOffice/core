@@ -576,12 +576,12 @@ long SmNode::GetFormulaBaseline() const
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
     SmNode( rNode.GetType(), rNode.GetToken() )
 {
-    sal_uLong i;
+    size_t i;
     for (i = 0;  i < aSubNodes.size();  i++)
         delete aSubNodes[i];
     aSubNodes.resize(0);
 
-    sal_uLong nSize = rNode.aSubNodes.size();
+    auto nSize = rNode.aSubNodes.size();
     aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
@@ -606,12 +606,12 @@ SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
 {
     SmNode::operator = ( rNode );
 
-    sal_uLong i;
+    size_t i;
     for (i = 0;  i < aSubNodes.size();  i++)
         delete aSubNodes[i];
     aSubNodes.resize(0);
 
-    sal_uLong nSize = rNode.aSubNodes.size();
+    auto nSize = rNode.aSubNodes.size();
     aSubNodes.resize( nSize );
     for (i = 0;  i < nSize;  ++i)
     {
