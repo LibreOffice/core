@@ -750,7 +750,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel,
                                    bool bNoMrowContainer /*=false*/)
 {
     SvXMLElementExport *pRow=0;
-    sal_uLong  nSize = pNode->GetNumSubNodes();
+    auto nSize = pNode->GetNumSubNodes();
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
     if (!bNoMrowContainer &&
@@ -1527,10 +1527,10 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
     SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, true, true);
     const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
     sal_uInt16 i=0;
-    for (sal_uLong y = 0; y < pMatrix->GetNumRows(); y++)
+    for (sal_uInt16 y = 0; y < pMatrix->GetNumRows(); y++)
     {
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, true, true);
-        for (sal_uLong x = 0; x < pMatrix->GetNumCols(); x++)
+        for (sal_uInt16 x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
                 if (pTemp->GetType() == NALIGN &&

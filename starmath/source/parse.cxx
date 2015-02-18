@@ -955,11 +955,11 @@ void SmParser::Table()
     if (m_aCurToken.eType != TEND)
         Error(PE_UNEXPECTED_CHAR);
 
-    sal_uLong n = m_aNodeStack.size();
+    auto n = m_aNodeStack.size();
 
     LineArray.resize(n);
 
-    for (sal_uLong i = 0; i < n; i++)
+    for (size_t i = 0; i < n; i++)
     {
         auto pNode = m_aNodeStack.pop_front();
         LineArray[n - (i + 1)] = pNode.release();
