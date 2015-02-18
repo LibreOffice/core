@@ -1440,9 +1440,8 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
                                                 sDataTableOrQuery, sal_False))
                 {
                     double fNumber;
-                    sal_uInt32 nTmpFormat;
                     pMgr->GetMergeColumnCnt(GetColumnName( sTmpName ),
-                        GetLanguage(), aContent, &fNumber, &nTmpFormat );
+                        GetLanguage(), aContent, &fNumber );
                     bValid = sal_True;
                 }
                 else if( sDBName.Len() && sDataSource.Len() &&
