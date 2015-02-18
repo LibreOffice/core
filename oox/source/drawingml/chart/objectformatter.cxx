@@ -32,6 +32,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
+#include <oox/helper/graphichelper.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -907,6 +908,11 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
                 *mxAutoFill = *pFillProps;
+
+        if (eObjType == OBJECTTYPE_CHARTSPACE)
+        {
+            mxAutoFill->moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaFillStyle();
+        }
     }
 }
 
