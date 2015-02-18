@@ -47,8 +47,8 @@ protected:
 
 
 public:
-   WriterFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-   virtual ~WriterFilter();
+   WriterFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext) {}
+   virtual ~WriterFilter() {}
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
