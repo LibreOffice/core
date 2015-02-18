@@ -953,6 +953,26 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, bool bOnlyHardAttr) con
     }
 }
 
+std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
+{
+    std::vector<sal_uInt16> aCharWhichIds;
+    {
+        SfxItemIter aIter(rSet);
+        const SfxPoolItem* pItem=aIter.FirstItem();
+        while (pItem!=NULL)
+        {
+            if (!IsInvalidItem(pItem))
+            {
+                sal_uInt16 nWhich = pItem->Which();
+                if (nWhich>=EE_CHAR_START && nWhich<=EE_CHAR_END)
+                    aCharWhichIds.push_back( nWhich );
+            }
+            pItem=aIter.NextItem();
+        }
+    }
+    return aCharWhichIds;
+}
+
 void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 {
     if (AreObjectsMarked())
@@ -977,25 +997,11 @@ void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
         }
 #endif
 
-        // #103836# if the user thets character attributes to the complete shape,
+        // #103836# if the user sets character attributes to the complete shape,
         //          we want to remove all hard set character attributes with same
         //          which ids from the text. We do that later but here we remember
         //          all character attribute which id's that are set.
-        std::vector<sal_uInt16> aCharWhichIds;
-        {
-            SfxItemIter aIter(rAttr);
-            const SfxPoolItem* pItem=aIter.FirstItem();
-            while( pItem!=NULL )
-            {
-                if (!IsInvalidItem(pItem))
-                {
-                    sal_uInt16 nWhich = pItem->Which();
-                    if (nWhich>=EE_CHAR_START && nWhich<=EE_CHAR_END)
-                        aCharWhichIds.push_back( nWhich );
-                }
-                pItem=aIter.NextItem();
-            }
-        }
+        std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(rAttr));
 
         // To make Undo reconstruct text attributes correctly after Format.Standard
         bool bHasEEItems=SearchOutlinerItems(rAttr,bReplaceAll);
