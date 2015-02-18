@@ -153,15 +153,18 @@ public abstract class ComposedTileLayer extends Layer implements ComponentCallba
             return;
         }
 
+        long currentReevaluationNanoTime = System.nanoTime();
+        if ((currentReevaluationNanoTime - reevaluationNanoTime) < 25 * 1000000) {
+            return;
+        }
+
+        reevaluationNanoTime = currentReevaluationNanoTime;
+
         currentViewport = newViewPort;
         currentZoom = newZoom;
         currentPageRect = viewportMetrics.getPageRect();
 
-        long currentReevaluationNanoTime = System.nanoTime();
-        if ((currentReevaluationNanoTime - reevaluationNanoTime) > 25 * 1000000) {
-            reevaluationNanoTime = currentReevaluationNanoTime;
-            LOKitShell.sendTileReevaluationRequest(this);
-        }
+        LOKitShell.sendTileReevaluationRequest(this);
     }
 
     protected abstract RectF getViewPort(ImmutableViewportMetrics viewportMetrics);
