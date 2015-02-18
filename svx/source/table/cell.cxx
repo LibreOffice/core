@@ -139,6 +139,8 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
 
 }
 
+extern std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet);
+
 namespace sdr
 {
     namespace properties
@@ -261,12 +263,21 @@ namespace sdr
 
                     sal_Int32 nParaCount(pOutliner->GetParagraphCount());
 
+                    // if the user sets character attributes to the complete
+                    // cell we want to remove all hard set character attributes
+                    // with same which ids from the text
+                    std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(rSet));
+
                     for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
-                        if (aSet.GetItemState(EE_CHAR_COLOR, false) == SfxItemState::SET)
-                            pOutliner->RemoveCharAttribs( nPara, EE_CHAR_COLOR );
+
+                        for (std::vector<sal_uInt16>::const_iterator aI = aCharWhichIds.begin(); aI != aCharWhichIds.end(); ++aI)
+                        {
+                            pOutliner->RemoveCharAttribs(nPara, *aI);
+                        }
+
                         pOutliner->SetParaAttribs(nPara, aSet);
                     }
 
