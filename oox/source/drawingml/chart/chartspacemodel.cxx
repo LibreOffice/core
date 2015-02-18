@@ -25,7 +25,7 @@ namespace drawingml {
 namespace chart {
 
 ChartSpaceModel::ChartSpaceModel() :
-    mnDispBlanksAs( XML_gap ),  // not zero as specified
+    mnDispBlanksAs( XML_gap ),  // not zero as specified, TODO: OOXML_spec
     mnStyle( 2 ),
     mbAutoTitleDel( true ),
     mbPlotVisOnly( false ),
