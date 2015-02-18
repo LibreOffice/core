@@ -52,6 +52,8 @@
 #include <scopetools.hxx>
 #include <columnspanset.hxx>
 #include <tokenstringcontext.hxx>
+#include <formula/errorcodes.hxx>
+
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -139,6 +141,7 @@ public:
      * by one. (fdo#76032)
      */
     void testRowIndex1BasedXLSX();
+    void testErrorOnExternalReferences();
 
     //misc tests unrelated to the import filters
 #if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
@@ -275,6 +278,7 @@ public:
     CPPUNIT_TEST(testCopyMergedNumberFormats);
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST(testEmbeddedImageXLS);
+    CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2811,6 +2815,26 @@ void ScFiltersTest::testEmbeddedImageXLS()
     const Graphic& rGrf = pImageObj->GetGraphic();
     BitmapEx aBMP = rGrf.GetBitmapEx();
     CPPUNIT_ASSERT_MESSAGE("Bitmap content should not be empty if the image has been properly imported.", !aBMP.IsEmpty());
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testErrorOnExternalReferences()
+{
+    ScDocShellRef xDocSh = loadDoc("blank.", ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open empty doc", xDocSh.Is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Test tdf#89330
+    rDoc.SetString(ScAddress(0,0,0), "='file:///Path/To/FileA.ods'#$Sheet1.A1A");
+
+    ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoName, pFC->GetErrCode());
+
+    if (!checkFormula(rDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A"))
+        CPPUNIT_FAIL("Formula changed");
 
     xDocSh->DoClose();
 }
