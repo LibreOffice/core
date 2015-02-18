@@ -76,10 +76,6 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
 
     // formatting of the chart background.  The default fill style varies with applications.
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
-    aBackPropSet.setProperty(
-        PROP_FillStyle,
-        uno::makeAny(getFilter().getGraphicHelper().getDefaultChartAreaFillStyle()));
-
     getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
     // convert plot area (container of all chart type groups)
