@@ -2313,6 +2313,8 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                 ++nCol; // Count up for next call
                 return pPat; // Found it!
             }
+
+            bRepeatedRow = true; // we can use the stored row data next time
         }
 
         // Next row
@@ -2321,10 +2323,10 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             return NULL; // Found nothing
         nCol = nStartCol; // Start at the left again
 
-        if ( !bRowEmpty && bRepeatedRow && ! nMinNextEnd < nRow ) // use the data of the previous row
+        if ( bRepeatedRow && nRow <= nMinNextEnd ) // use only the stored data of the previous row
            continue;
 
-        bRepeatedRow = true; // ppPatterns is not modified
+        bRepeatedRow = false;
         nMinNextEnd = MAXROW;
         bool bEmpty = true;
         SCCOL i;
@@ -2335,7 +2337,6 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             if ( pNextEnd[nPos] < nRow )
             {
                 const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
-                bRepeatedRow = false;
 
                 SCSIZE nIndex = ++pIndices[nPos];
                 if ( nIndex < pArray->nCount )
