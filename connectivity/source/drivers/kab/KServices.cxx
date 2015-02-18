@@ -18,8 +18,15 @@
  */
 
 
+#include <config_vclplug.h>
 #include "KDriver.hxx"
 #include <cppuhelper/factory.hxx>
+
+#if ENABLE_TDE
+
+#define kab_component_getFactory tdeab_component_getFactory
+
+#endif // ENABLE_TDE
 
 using namespace connectivity::kab;
 using ::com::sun::star::uno::Reference;
