@@ -2301,13 +2301,13 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                 rRow = nRow;
                 rCol1 = nCol;
                 if ( bRepeatedRow )
-                    nCol = pPrevColEnd[nCol];
+                    nCol = pPrevColEnd[nCol-nStartCol]; // use the result stored before
                 else
                 {
                     while ( nCol < nEndCol && ( ppPatterns[nCol+1-nStartCol] == pPat) )
                         ++nCol;
                     // store the result to avoid the previous very expensive comparisons
-                    pPrevColEnd[rCol1] = nCol;
+                    pPrevColEnd[rCol1-nStartCol] = nCol;
                 }
                 rCol2 = nCol;
                 ++nCol; // Count up for next call
