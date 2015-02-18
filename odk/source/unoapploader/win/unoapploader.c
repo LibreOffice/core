@@ -72,7 +72,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
     char* value = NULL;
     char* envstr = NULL;
     char* cmdline = NULL;
-    int size;
+    size_t size;
     STARTUPINFO startup_info;
     PROCESS_INFORMATION process_info;
     BOOL bCreate;
@@ -136,8 +136,8 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
         if (ret != 0) {
             char * buf = NULL;
             char * tmp;
-            size_t n = 1000;
-            size_t k = 0;
+            DWORD n = 1000;
+            DWORD k = 0;
             DWORD exitcode;
             int path2size;
             CloseHandle(stdoutWrite);
@@ -168,7 +168,7 @@ int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
                 }
                 k += m;
                 if (k >= n) {
-                    if (n >= SAL_MAX_SIZE / 2) {
+                    if (n >= MAXDWORD / 2) {
                         writeError(
                             "Error: out of memory reading unoinfo output!\n");
                         closeErrorFile();
