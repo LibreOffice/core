@@ -56,6 +56,7 @@ public:
     void testFdo54361();
     void testFdo54361_1();
     void testAutoBackgroundXLSX();
+    void testChartAreaStyleBackgroundXLSX();
     // void testTextCanOverlapXLSX(); // TODO : temporarily disabled.
     void testNumberFormatsXLSX();
 
@@ -87,6 +88,7 @@ public:
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testFdo54361_1);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
+    CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     // CPPUNIT_TEST(testTextCanOverlapXLSX); // TODO : temporarily disabled.
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
@@ -637,6 +639,23 @@ void Chart2ImportTest::testAutoBackgroundXLSX()
         eStyle == drawing::FillStyle_SOLID);
     CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
         (nColor & 0x00FFFFFF) == 0x00FFFFFF); // highest 2 bytes are transparency which we ignore here.
+}
+
+void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-area-style-background.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    // "Automatic" chart background fill in xlsx should be loaded as solid white.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid fill.",
+        eStyle == drawing::FillStyle_SOLID);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
+        sal_Int32(0), nColor);
 }
 
 /* TODO : temporarily disabled.
