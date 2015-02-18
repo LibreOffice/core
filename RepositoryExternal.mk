@@ -3419,7 +3419,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 ifeq ($(COM),MSC)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libgltf)/build/win32/$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/libgltf.lib,Release/libgltf.lib) \
+	$(call gb_UnpackedTarball_get_dir,libgltf)/build/win32/$(wnt_arch_subdir_optional)$(if $(MSVC_USE_DEBUG_RUNTIME),Debug/libgltf.lib,Release/libgltf.lib) \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
