@@ -211,11 +211,10 @@ writer_factory_list = [
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ("libwriterfilterlo.a", "writerfilter_component_getFactory"),
+    ("libtextfdlo.a", "textfd_component_getFactory"),
     ]
 
 writer_constructor_list = [
-# filter/source/textfilterdetect/textfd.component 
-    "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation"
     ]
 
 factory_map = {

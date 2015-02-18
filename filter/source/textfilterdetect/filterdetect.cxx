@@ -188,6 +188,12 @@ uno::Sequence<OUString> PlainTextFilterDetect_getSupportedServiceNames()
     return aRet;
 }
 
+uno::Reference<uno::XInterface> PlainTextFilterDetect_createInstance(
+    const uno::Reference<uno::XComponentContext> & rCxt)
+{
+    return (cppu::OWeakObject*) new PlainTextFilterDetect(rCxt);
+}
+
 // XServiceInfo
 OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
     throw (uno::RuntimeException, std::exception)
@@ -205,13 +211,6 @@ uno::Sequence<OUString> SAL_CALL PlainTextFilterDetect::getSupportedServiceNames
     throw (uno::RuntimeException, std::exception)
 {
     return PlainTextFilterDetect_getSupportedServiceNames();
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation(::com::sun::star::uno::XComponentContext* component,
-                                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
-{
-    return cppu::acquire(new PlainTextFilterDetect(component));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,textfd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,textfd,\
+	filter/source/textfilterdetect/fdcomp \
 	filter/source/textfilterdetect/filterdetect \
 ))
 
