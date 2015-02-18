@@ -6103,6 +6103,7 @@ const SEC_ASN1Template Extensions_Template[] =
     { SEC_ASN1_SEQUENCE_OF, 0, Extension_Template, 0 }
 };
 
+/* "will be used eventually" says tml
 const SEC_ASN1Template Integer_Template[] =
 {
     { SEC_ASN1_INTEGER, 0, NULL, sizeof(SECItem) }
@@ -6116,6 +6117,7 @@ const SEC_ASN1Template Accuracy_Template[] =
     { SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 1, offsetof(Accuracy, micros), Integer_Template, 0 },
     { 0, 0, 0, 0 }
 };
+*/
 
 const SEC_ASN1Template TimeStampReq_Template[] =
 {
