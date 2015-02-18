@@ -86,7 +86,7 @@ FormulaGroupAreaListener::FormulaGroupAreaListener( const ScRange& rRange, const
     assert(mpColumn);
     SAL_INFO( "sc.core.grouparealistener",
             "FormulaGroupAreaListener ctor this " << this <<
-            " range " << maRange.Format(SCA_VALID) <<
+            " range " << (maRange == BCA_LISTEN_ALWAYS ? "LISTEN-ALWAYS" : maRange.Format(SCA_VALID)) <<
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
 }
 
@@ -94,7 +94,7 @@ FormulaGroupAreaListener::~FormulaGroupAreaListener()
 {
     SAL_INFO( "sc.core.grouparealistener",
             "FormulaGroupAreaListener dtor this " << this <<
-            " range " << maRange.Format(SCA_VALID) <<
+            " range " << (maRange == BCA_LISTEN_ALWAYS ? "LISTEN-ALWAYS" : maRange.Format(SCA_VALID)) <<
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
 }
 
@@ -184,7 +184,7 @@ void FormulaGroupAreaListener::collectFormulaCells(
 {
     SAL_INFO( "sc.core.grouparealistener",
             "FormulaGroupAreaListener::collectFormulaCells() this " << this <<
-            " range " << maRange.Format(SCA_VALID) <<
+            " range " << (maRange == BCA_LISTEN_ALWAYS ? "LISTEN-ALWAYS" : maRange.Format(SCA_VALID)) <<
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
 
     ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
