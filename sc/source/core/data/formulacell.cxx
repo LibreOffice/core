@@ -3882,9 +3882,11 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         ScAddress aTmpPos = aPos;
         aTmpPos.SetRow(mxGroup->mpTopCell->aPos.Row() + i);
         ScFormulaCell* pCell = pDocument->GetFormulaCell(aTmpPos);
-        assert( pCell != NULL );
         if (!pCell)
+        {
+            SAL_WARN("sc", "GetFormulaCell not found");
             continue;
+        }
 
         // FIXME: this set of horrors is unclear to me ... certainly
         // the above GetCell is profoundly nasty & slow ...

@@ -188,9 +188,11 @@ void FormulaGroupAreaListener::collectFormulaCells(
             " mnTopCellRow " << mnTopCellRow << " length " << mnGroupLen);
 
     ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
-    assert(pp);
     if (!pp)
+    {
+        SAL_WARN("sc", "GetFormulaCellBlockAddress not found");
         return;
+    }
 
     ScFormulaCell* const * ppEnd = pp + mnGroupLen;
 
@@ -281,7 +283,7 @@ ScAddress FormulaGroupAreaListener::getTopCellPos() const
 const ScFormulaCell* FormulaGroupAreaListener::getTopCell() const
 {
     const ScFormulaCell* const * pp = mpColumn->GetFormulaCellBlockAddress( mnTopCellRow);
-    assert(pp);
+    SAL_WARN_IF(!pp, "sc", "GetFormulaCellBlockAddress not found");
     return pp ? *pp : NULL;
 }
 
