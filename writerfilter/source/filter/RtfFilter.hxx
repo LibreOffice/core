@@ -76,7 +76,6 @@ public:
 
 OUString RtfFilter_getImplementationName() throw (css::uno::RuntimeException);
 css::uno::Sequence<OUString> SAL_CALL RtfFilter_getSupportedServiceNames() throw (css::uno::RuntimeException);
-css::uno::Reference<css::uno::XInterface> SAL_CALL RtfFilter_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xContext) throw(css::uno::Exception);
 
 #endif
 

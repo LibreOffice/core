@@ -177,9 +177,10 @@ uno::Sequence<OUString> RtfFilter_getSupportedServiceNames() throw(uno::RuntimeE
     return aRet;
 }
 
-uno::Reference< uno::XInterface > RtfFilter_createInstance(const uno::Reference< uno::XComponentContext >& xContext) throw(uno::Exception)
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_RtfFilter_get_implementation(::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return (cppu::OWeakObject*) new RtfFilter(xContext);
+    return cppu::acquire(new RtfFilter(component));
 }
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

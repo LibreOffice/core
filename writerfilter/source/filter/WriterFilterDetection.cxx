@@ -109,14 +109,6 @@ uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) thr
    return aRet;
 }
 
-
-uno::Reference< uno::XInterface > WriterFilterDetection_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
-                throw( uno::Exception )
-{
-   return (cppu::OWeakObject*) new WriterFilterDetection( xContext );
-}
-
-
 OUString WriterFilterDetection::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
 {
    return WriterFilterDetection_getImplementationName();
@@ -132,6 +124,13 @@ sal_Bool WriterFilterDetection::supportsService( const OUString& rServiceName ) 
 uno::Sequence< OUString > WriterFilterDetection::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
 {
     return WriterFilterDetection_getSupportedServiceNames();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_WriterFilterDetector_get_implementation( ::com::sun::star::uno::XComponentContext* component,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new WriterFilterDetection(component));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
