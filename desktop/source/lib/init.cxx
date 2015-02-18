@@ -280,7 +280,9 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
+#ifdef LOK_USE_UNSTABLE_API
             m_pOfficeClass->postKeyEvent = lo_postKeyEvent;
+#endif // LOK_USE_UNSTABLE_API
 
             gOfficeClass = m_pOfficeClass;
         }
