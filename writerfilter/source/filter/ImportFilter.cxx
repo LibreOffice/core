@@ -298,14 +298,6 @@ uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::
    return aRet;
 }
 
-uno::Reference< uno::XInterface > WriterFilter_createInstance( const uno::Reference< uno::XComponentContext >& xContext)
-                throw( uno::Exception )
-{
-   return (cppu::OWeakObject*) new WriterFilter( xContext );
-}
-
-
-
 OUString WriterFilter::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
 {
    return WriterFilter_getImplementationName();
@@ -350,6 +342,13 @@ void WriterFilter::putPropertiesToDocumentGrabBag( const comphelper::SequenceAsH
     {
         SAL_WARN("writerfilter","Failed to save documents grab bag");
     }
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_WriterFilter_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new WriterFilter(component));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

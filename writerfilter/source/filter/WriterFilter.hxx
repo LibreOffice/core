@@ -47,8 +47,8 @@ protected:
 
 
 public:
-   WriterFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
-   virtual ~WriterFilter();
+   WriterFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext) {}
+   virtual ~WriterFilter() {}
 
     // XFilter
     virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
@@ -91,10 +91,6 @@ bool SAL_CALL WriterFilter_supportsService( const OUString& ServiceName )
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL WriterFilter_getSupportedServiceNames(  )
     throw ( ::com::sun::star::uno::RuntimeException );
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL WriterFilter_createInstance(
-                                                                        const ::com::sun::star::uno::Reference<
-                                                                        ::com::sun::star::uno::XComponentContext > &xContext)
-    throw( ::com::sun::star::uno::Exception );
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
