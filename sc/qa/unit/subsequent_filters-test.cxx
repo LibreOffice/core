@@ -52,6 +52,8 @@
 #include <scopetools.hxx>
 #include <columnspanset.hxx>
 #include <tokenstringcontext.hxx>
+#include <formula/errorcodes.hxx>
+
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -139,6 +141,7 @@ public:
      * by one. (fdo#76032)
      */
     void testRowIndex1BasedXLSX();
+    void testErrorOnExternalReferences();
 
     //misc tests unrelated to the import filters
 #if !defined(MACOSX) && !defined(DRAGONFLY) && !defined(WNT)
@@ -275,6 +278,7 @@ public:
     CPPUNIT_TEST(testCopyMergedNumberFormats);
     CPPUNIT_TEST(testVBAUserFunctionXLSM);
     CPPUNIT_TEST(testEmbeddedImageXLS);
+    CPPUNIT_TEST(testErrorOnExternalReferences);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2813,6 +2817,31 @@ void ScFiltersTest::testEmbeddedImageXLS()
     CPPUNIT_ASSERT_MESSAGE("Bitmap content should not be empty if the image has been properly imported.", !aBMP.IsEmpty());
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testErrorOnExternalReferences()
+{
+    ScDocShell* m_xDocShell = new ScDocShell(
+        SFXMODEL_STANDARD |
+        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
+        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+    m_xDocShell->DoInitNew();
+
+    ScDocument& m_pDoc = m_xDocShell->GetDocument();
+
+    // Test tdf#89330
+    m_pDoc.InsertTab(0, "Sheet1");
+    m_pDoc.SetString(ScAddress(0,0,0), "='file:///Path/To/FileA.ods'#$Sheet1.A1A");
+
+    ScFormulaCell* pFC = m_pDoc.GetFormulaCell(ScAddress(0,0,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoName, pFC->GetErrCode());
+
+    if (!checkFormula(m_pDoc, ScAddress(0,0,0), "'file:///Path/To/FileA.ods'#$Sheet1.A1A"))
+        CPPUNIT_FAIL("Formula changed");
+
+    m_pDoc.DeleteTab(0);
+    m_xDocShell->DoClose();
 }
 
 ScFiltersTest::ScFiltersTest()
