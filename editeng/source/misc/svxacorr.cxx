@@ -501,6 +501,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
                     rDoc.SetAttr( nNumEnd + 1 , nEndPos,
                                     SID_ATTR_CHAR_ESCAPEMENT,
                                     aSvxEscapementItem);
+                    bChg = true;
                 }
             }
         }
