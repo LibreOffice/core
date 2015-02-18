@@ -6020,6 +6020,9 @@ bool PDFWriterImpl::emitSignature()
 #if !defined(ANDROID) && !defined(IOS) && !defined(_WIN32)
 
 namespace {
+#if 0
+}
+#endif
 
 char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/, void *arg)
 {
@@ -6035,7 +6038,123 @@ public:
     HASHContext *get() { return mpPtr; }
 };
 
-}
+/*
+MessageImprint ::= SEQUENCE  {
+    hashAlgorithm AlgorithmIdentifier,
+    hashedMessage OCTET STRING  }
+*/
+
+typedef struct {
+    SECAlgorithmID hashAlgorithm;
+    SECItem hashedMessage;
+} MessageImprint;
+
+/*
+Extension  ::=  SEQUENCE  {
+    extnID    OBJECT IDENTIFIER,
+    critical  BOOLEAN DEFAULT FALSE,
+    extnValue OCTET STRING  }
+*/
+
+typedef struct {
+    SECItem extnID;
+    bool critical;
+    SECItem extnValue;
+} Extension;
+
+/*
+Extensions ::= SEQUENCE SIZE (1..MAX) OF Extension
+*/
+
+/*
+Accuracy ::= SEQUENCE {
+    seconds     INTEGER          OPTIONAL,
+    millis  [0] INTEGER (1..999) OPTIONAL,
+    micros  [1] INTEGER (1..999) OPTIONAL  }
+*/
+
+typedef struct {
+    SECItem seconds;
+    SECItem millis;
+    SECItem micros;
+} Accuracy;
+
+/*
+TimeStampReq ::= SEQUENCE  {
+    version            INTEGER  { v1(1) },
+    messageImprint     MessageImprint,
+    --a hash algorithm OID and the hash value of the data to be
+    --time-stamped
+    reqPolicy          TSAPolicyId         OPTIONAL,
+    nonce              INTEGER             OPTIONAL,
+    certReq            BOOLEAN             DEFAULT FALSE,
+    extensions     [0] IMPLICIT Extensions OPTIONAL  }
+*/
+typedef struct {
+    SECItem version;
+    MessageImprint messageImprint;
+    SECItem reqPolicy;
+    SECItem nonce;
+    SECItem certReq;
+    SECItem extensions;
+} TimeStampReq;
+
+SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
+SEC_ASN1_MKSUB(MessageImprint_Template)
+SEC_ASN1_MKSUB(Extensions_Template)
+
+const SEC_ASN1Template MessageImprint_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(MessageImprint) },
+    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(MessageImprint, hashAlgorithm), SEC_ASN1_SUB(SECOID_AlgorithmIDTemplate), 0 },
+    { SEC_ASN1_OCTET_STRING, offsetof(MessageImprint, hashedMessage), 0, 0 },
+    { 0, 0, 0, 0 }
+};
+
+const SEC_ASN1Template Extension_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(Extension) },
+    { SEC_ASN1_OBJECT_ID, offsetof(Extension, extnID), 0, 0 },
+    { SEC_ASN1_BOOLEAN, offsetof(Extension, critical), 0, 0 },
+    { SEC_ASN1_OCTET_STRING, offsetof(Extension, extnValue), 0, 0 },
+    { 0, 0, 0, 0 }
+};
+
+const SEC_ASN1Template Extensions_Template[] =
+{
+    { SEC_ASN1_SEQUENCE_OF, 0, Extension_Template, 0 }
+};
+
+const SEC_ASN1Template Integer_Template[] =
+{
+    { SEC_ASN1_INTEGER, 0, NULL, sizeof(SECItem) }
+};
+
+const SEC_ASN1Template Accuracy_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(Accuracy) },
+    { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(Accuracy, seconds), 0, 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(Accuracy, millis), Integer_Template, 0 },
+    { SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 1, offsetof(Accuracy, micros), Integer_Template, 0 },
+    { 0, 0, 0, 0 }
+};
+
+const SEC_ASN1Template TimeStampReq_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampReq) },
+    { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), 0, 0 },
+    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampReq, messageImprint), SEC_ASN1_SUB(MessageImprint_Template), 0 },
+    { SEC_ASN1_OBJECT_ID, offsetof(TimeStampReq, reqPolicy), 0, 0 },
+    { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), 0, 0 },
+    { SEC_ASN1_BOOLEAN, offsetof(TimeStampReq, certReq), 0, 0 },
+    { SEC_ASN1_XTRN | SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), SEC_ASN1_SUB(Extensions_Template), 0 },
+    { 0, 0, 0, 0 }
+};
+
+#if 0
+{
+#endif
+} // anonymous namespace
 
 #endif
 
@@ -6149,6 +6268,45 @@ bool PDFWriterImpl::finalizeSignature()
     digest.data = hash;
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
+
+    SECItem dest;
+    TimeStampReq src;
+
+    unsigned char cOne = 1;
+    src.version.type = siUnsignedInteger;
+    src.version.data = &cOne;
+    src.version.len = sizeof(cOne);
+
+    // FIXME, use proper contents
+    src.messageImprint.hashAlgorithm.algorithm.type = siBuffer;
+    src.messageImprint.hashAlgorithm.algorithm.data = NULL;
+    src.messageImprint.hashAlgorithm.algorithm.len = 0;
+    src.messageImprint.hashAlgorithm.parameters.type = siBuffer;
+    src.messageImprint.hashAlgorithm.parameters.data = NULL;
+    src.messageImprint.hashAlgorithm.parameters.len = 0;
+    src.messageImprint.hashedMessage = digest;
+
+    src.reqPolicy.type = siBuffer;
+    src.reqPolicy.data = NULL;
+    src.reqPolicy.len = 0;
+
+    // FIXME, need a proper nonce
+    src.nonce.type = siBuffer;
+    src.nonce.data = NULL;
+    src.nonce.len = 0;
+
+    unsigned char cFalse = false;
+    src.certReq.type = siUnsignedInteger;
+    src.certReq.data = &cFalse;
+    src.certReq.len = sizeof(cFalse);
+
+    src.extensions.type = siBuffer;
+    src.extensions.data = NULL;
+    src.extensions.len = 0;
+
+    SECItem* item = SEC_ASN1EncodeItem(NULL, &dest, &src, TimeStampReq_Template);
+    // SAL_ DEBUG("====> item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
+    // SECITEM_FreeItem(item, PR_TRUE); // crashes for some reason
 
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
