@@ -1094,7 +1094,7 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
             OOXML counts clockwise, Chart2 counts counterclockwise. */
         double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( 0 ) );
         // MS Office UI allows values only in range of [-90,90].
-        if ( fAngle <= -5400000.0 || fAngle >= 5400000.0 )
+        if ( fAngle < -5400000.0 || fAngle > 5400000.0 )
         {
             fAngle = 0.0;
         }
