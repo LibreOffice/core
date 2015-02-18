@@ -6022,7 +6022,7 @@ Extension  ::=  SEQUENCE  {
 
 typedef struct {
     SECItem extnID;
-    bool critical;
+    SECItem critical;
     SECItem extnValue;
 } Extension;
 
@@ -6060,7 +6060,7 @@ typedef struct {
     SECItem reqPolicy;
     SECItem nonce;
     SECItem certReq;
-    SECItem extensions;
+    Extension *extensions;
 } TimeStampReq;
 
 SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
@@ -6234,7 +6234,6 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
 
-    SECItem dest;
     TimeStampReq src;
 
     unsigned char cOne = 1;
@@ -6265,13 +6264,11 @@ bool PDFWriterImpl::finalizeSignature()
     src.certReq.data = &cFalse;
     src.certReq.len = sizeof(cFalse);
 
-    src.extensions.type = siBuffer;
-    src.extensions.data = NULL;
-    src.extensions.len = 0;
+    src.extensions = NULL;
 
-    SECItem* item = SEC_ASN1EncodeItem(NULL, &dest, &src, TimeStampReq_Template);
-    // SAL_ DEBUG("====> item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
-    // SECITEM_FreeItem(item, PR_TRUE); // crashes for some reason
+    SECItem* item = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
+    SAL_INFO("vcl.pdfwriter", "item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
+    SECITEM_FreeItem(item, PR_TRUE);
 
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
