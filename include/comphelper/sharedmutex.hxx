@@ -21,11 +21,8 @@
 #define INCLUDED_COMPHELPER_SHAREDMUTEX_HXX
 
 #include <comphelper/comphelperdllapi.h>
-
 #include <osl/mutex.hxx>
-
-#include <boost/shared_ptr.hpp>
-
+#include <memory>
 
 namespace comphelper
 {
@@ -48,7 +45,7 @@ namespace comphelper
         inline operator ::osl::Mutex& () { return *m_pMutexImpl; }
 
     private:
-        ::boost::shared_ptr< ::osl::Mutex >  m_pMutexImpl;
+        std::shared_ptr< ::osl::Mutex >  m_pMutexImpl;
     };
 
 

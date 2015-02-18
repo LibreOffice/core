@@ -22,11 +22,9 @@
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-
-#include <boost/shared_ptr.hpp>
-#include <boost/optional.hpp>
 #include <connectivity/dbtoolsdllapi.hxx>
-
+#include <boost/optional.hpp>
+#include <memory>
 
 namespace connectivity
 {
@@ -305,7 +303,7 @@ namespace connectivity
                         ) const;
 
     private:
-        ::boost::shared_ptr< SQLError_Impl > m_pImpl;
+        std::shared_ptr< SQLError_Impl > m_pImpl;
     };
 
 

@@ -24,10 +24,10 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <vector>
 #include <functional>
+#include <memory>
 #include <set>
-#include <boost/shared_ptr.hpp>
+#include <vector>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
@@ -80,7 +80,7 @@ namespace connectivity
         const ::com::sun::star::lang::Locale&   rLocale;
         ::dbtools::DatabaseMetaData             aMetaData;
         OSQLParser*                             pParser;
-        ::boost::shared_ptr< QueryNameSet >     pSubQueryHistory;
+        std::shared_ptr< QueryNameSet >         pSubQueryHistory;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xField;
         OUString                                                                        sPredicateTableAlias;

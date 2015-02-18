@@ -31,7 +31,7 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace connectivity
 {
@@ -56,7 +56,7 @@ namespace connectivity
             {}
             KeyProperties():m_Type(0),m_UpdateRule(0),m_DeleteRule(0){}
         };
-        typedef ::boost::shared_ptr< KeyProperties > TKeyProperties;
+        typedef std::shared_ptr< KeyProperties > TKeyProperties;
         typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OKey_BASE;
         class OCollection;
 

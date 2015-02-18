@@ -26,17 +26,11 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
-
-#include <boost/noncopyable.hpp>
-
-#include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
-
+#include <memory>
 
 namespace dbtools
 {
-
-
     struct FormattedColumnValue_Data;
 
     //= FormattedColumnValue
@@ -44,7 +38,7 @@ namespace dbtools
     /** a class which helps retrieving and setting the value of a database column
         as formatted string.
     */
-    class OOO_DLLPUBLIC_DBTOOLS FormattedColumnValue : public ::boost::noncopyable
+    class OOO_DLLPUBLIC_DBTOOLS FormattedColumnValue
     {
     public:
         /** constructs an instance
@@ -97,7 +91,9 @@ namespace dbtools
         OUString    getFormattedValue() const;
 
     private:
-        ::std::unique_ptr< FormattedColumnValue_Data >    m_pData;
+        FormattedColumnValue(const FormattedColumnValue&) SAL_DELETED_FUNCTION;
+        FormattedColumnValue& operator=(const FormattedColumnValue&) SAL_DELETED_FUNCTION;
+        std::unique_ptr< FormattedColumnValue_Data >    m_pData;
     };
 
 

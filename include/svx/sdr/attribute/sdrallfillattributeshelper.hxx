@@ -23,9 +23,9 @@
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <boost/shared_ptr.hpp>
 #include <tools/color.hxx>
 #include <svl/itemset.hxx>
+#include <memory>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -38,8 +38,8 @@ namespace drawinglayer
         private:
             basegfx::B2DRange                                                   maLastPaintRange;
             basegfx::B2DRange                                                   maLastDefineRange;
-            boost::shared_ptr< drawinglayer::attribute::SdrFillAttribute >      maFillAttribute;
-            boost::shared_ptr< drawinglayer::attribute::FillGradientAttribute > maFillGradientAttribute;
+            std::shared_ptr< drawinglayer::attribute::SdrFillAttribute >      maFillAttribute;
+            std::shared_ptr< drawinglayer::attribute::FillGradientAttribute > maFillGradientAttribute;
             drawinglayer::primitive2d::Primitive2DSequence                      maPrimitives;
 
             void createPrimitive2DSequence(

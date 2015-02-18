@@ -23,8 +23,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 
-#include <boost/noncopyable.hpp>
-
 #include <memory>
 #include <connectivity/dbtoolsdllapi.hxx>
 
@@ -39,7 +37,7 @@ namespace dbtools
     struct StatementComposer_Data;
     /** a class which is able to compose queries (SELECT statements) from a command and a command type
     */
-    class OOO_DLLPUBLIC_DBTOOLS StatementComposer : public ::boost::noncopyable
+    class OOO_DLLPUBLIC_DBTOOLS StatementComposer
     {
         ::std::unique_ptr< StatementComposer_Data >   m_pData;
 
@@ -90,7 +88,9 @@ namespace dbtools
                 getQuery();
 
     private:
-        StatementComposer();    // not implemented
+        StatementComposer(const StatementComposer&) SAL_DELETED_FUNCTION;
+        StatementComposer& operator=(const StatementComposer&) SAL_DELETED_FUNCTION;
+        StatementComposer() SAL_DELETED_FUNCTION;
     };
 
 
