@@ -1075,15 +1075,11 @@ void * ResMgr::GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
-    DBG_ASSERT( rResId.GetResMgr(), "illegal ResId without ResMgr" );
     *ppResMgr = rResId.GetResMgr();
-    if( *ppResMgr )
-    {
-        (*ppResMgr)->GetResource( rResId );
-        (*ppResMgr)->Increment( sizeof( RSHEADER_TYPE ) );
-        return (*ppResMgr)->GetClass();
-    }
-    return getEmptyBuffer();
+    assert(*ppResMgr != nullptr);
+    (*ppResMgr)->GetResource( rResId );
+    (*ppResMgr)->Increment( sizeof( RSHEADER_TYPE ) );
+    return (*ppResMgr)->GetClass();
 }
 
 void ResMgr::PopContext( const Resource* pResObj )
