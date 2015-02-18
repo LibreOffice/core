@@ -80,10 +80,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         PROP_FillStyle,
         uno::makeAny(getFilter().getGraphicHelper().getDefaultChartAreaFillStyle()));
 
-    if( mrModel.mxShapeProp.is() )
-    {
-        getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
-    }
+    getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );

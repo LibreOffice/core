@@ -167,6 +167,14 @@ static const AutoFormatEntry spNoFormats[] =
     AUTOFORMAT_END()
 };
 
+static const AutoFormatEntry spChartSpaceFill[] =
+{
+    AUTOFORMAT_COLOR( 1, 32, THEMED_STYLE_SUBTLE, XML_bg1 ),
+    AUTOFORMAT_COLOR( 33, 40, THEMED_STYLE_SUBTLE, XML_lt1 ),
+    AUTOFORMAT_COLOR( 41, 48, THEMED_STYLE_SUBTLE, XML_dk1 ),
+    AUTOFORMAT_END()
+};
+
 static const AutoFormatEntry spDataTableLines[] =
 {
     AUTOFORMAT_COLORMOD(  1, 32, THEMED_STYLE_SUBTLE, XML_tx1, XML_tint, 75000 ),
@@ -536,7 +544,7 @@ struct ObjectTypeFormatEntry
 static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 {
     //                object type                property info      auto text          auto line            auto fill              auto effect
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spNoFormats,         spChartSpaceFill,      0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     &saCommonPropInfo, spChartTitleTexts, 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
