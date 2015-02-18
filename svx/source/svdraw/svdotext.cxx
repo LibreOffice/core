@@ -467,18 +467,18 @@ bool SdrTextObj::HasTextImpl( SdrOutliner* pOutliner )
     if(pOutliner)
     {
         Paragraph* p1stPara=pOutliner->GetParagraph( 0 );
-        sal_Int32 nParaAnz=pOutliner->GetParagraphCount();
+        sal_Int32 nParaCount=pOutliner->GetParagraphCount();
         if(p1stPara==NULL)
-            nParaAnz=0;
+            nParaCount=0;
 
-        if(nParaAnz==1)
+        if(nParaCount==1)
         {
             // if it is only one paragraph, check if that paragraph is empty
             if( pOutliner->GetText(p1stPara).isEmpty() )
-                nParaAnz = 0;
+                nParaCount = 0;
         }
 
-        bRet= nParaAnz!=0;
+        bRet= nParaCount!=0;
     }
     return bRet;
 }
@@ -872,8 +872,8 @@ OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
     OutlinerParaObject* pPara=NULL;
     if( HasTextImpl( pEdtOutl ) )
     {
-        sal_Int32 nParaAnz = pEdtOutl->GetParagraphCount();
-        pPara = pEdtOutl->CreateParaObject(0, nParaAnz);
+        sal_Int32 nParaCount = pEdtOutl->GetParagraphCount();
+        pPara = pEdtOutl->CreateParaObject(0, nParaCount);
     }
     return pPara;
 }
