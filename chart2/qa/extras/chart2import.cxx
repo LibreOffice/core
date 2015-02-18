@@ -34,6 +34,7 @@ public:
     void testPPTXChartSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
+    void testChartAreaStyleBackgroundXLSX();
     void testNumberFormatsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
@@ -55,6 +56,7 @@ public:
 //    CPPUNIT_TEST(testPPTChartSeries);
 //    CPPUNIT_TEST(testPPTXChartSeries);
 //    CPPUNIT_TEST(testODPChartSeries);
+    CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
@@ -297,6 +299,23 @@ void Chart2ImportTest::testODPChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
 
 }
+void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "chart-area-style-background.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    // "Automatic" chart background fill in xlsx should be loaded as solid white.
+    Reference<beans::XPropertySet> xPropSet = xChartDoc->getPageBackground();
+    CPPUNIT_ASSERT(xPropSet.is());
+    drawing::FillStyle eStyle = xPropSet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+    sal_Int32 nColor = xPropSet->getPropertyValue("FillColor").get<sal_Int32>();
+    CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid fill.",
+        eStyle == drawing::FillStyle_SOLID);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
+        sal_Int32(0), nColor);
+}
+
 
 void Chart2ImportTest::testNumberFormatsXLSX()
 {
