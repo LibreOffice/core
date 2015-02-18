@@ -239,50 +239,50 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != aEndIter; ++aIter )
     {
-        XMLPropertyState* propertie = &(*aIter);
-        if (propertie->mnIndex != -1)
+        XMLPropertyState* propertyState = &(*aIter);
+        if (propertyState->mnIndex != -1)
         {
-            switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
+            switch( getPropertySetMapper()->GetEntryContextId( propertyState->mnIndex ) )
             {
-                case CTF_SC_ALLPADDING:         pPadding = propertie; break;
-                case CTF_SC_BOTTOMPADDING:      pPadding_Bottom = propertie; break;
-                case CTF_SC_LEFTPADDING:        pPadding_Left = propertie; break;
-                case CTF_SC_RIGHTPADDING:       pPadding_Right = propertie; break;
-                case CTF_SC_TOPPADDING:         pPadding_Top = propertie; break;
-                case CTF_SC_ALLBORDER:          pBorder = propertie; break;
-                case CTF_SC_LEFTBORDER:         pBorder_Left = propertie; break;
-                case CTF_SC_RIGHTBORDER:        pBorder_Right = propertie; break;
-                case CTF_SC_BOTTOMBORDER:       pBorder_Bottom = propertie; break;
-                case CTF_SC_TOPBORDER:          pBorder_Top = propertie; break;
-                case CTF_SC_ALLBORDERWIDTH:     pAllBorderWidthState = propertie; break;
-                case CTF_SC_LEFTBORDERWIDTH:    pLeftBorderWidthState = propertie; break;
-                case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertie; break;
-                case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertie; break;
-                case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertie; break;
-                case CTF_ALLBORDER:             pSWBorder = propertie; break;
-                case CTF_LEFTBORDER:            pSWBorder_Left = propertie; break;
-                case CTF_RIGHTBORDER:           pSWBorder_Right = propertie; break;
-                case CTF_BOTTOMBORDER:          pSWBorder_Bottom = propertie; break;
-                case CTF_TOPBORDER:             pSWBorder_Top = propertie; break;
-                case CTF_ALLBORDERWIDTH:        pSWAllBorderWidthState = propertie; break;
-                case CTF_LEFTBORDERWIDTH:       pSWLeftBorderWidthState = propertie; break;
-                case CTF_RIGHTBORDERWIDTH:      pSWRightBorderWidthState = propertie; break;
-                case CTF_TOPBORDERWIDTH:        pSWTopBorderWidthState = propertie; break;
-                case CTF_BOTTOMBORDERWIDTH:     pSWBottomBorderWidthState = propertie; break;
+                case CTF_SC_ALLPADDING:         pPadding = propertyState; break;
+                case CTF_SC_BOTTOMPADDING:      pPadding_Bottom = propertyState; break;
+                case CTF_SC_LEFTPADDING:        pPadding_Left = propertyState; break;
+                case CTF_SC_RIGHTPADDING:       pPadding_Right = propertyState; break;
+                case CTF_SC_TOPPADDING:         pPadding_Top = propertyState; break;
+                case CTF_SC_ALLBORDER:          pBorder = propertyState; break;
+                case CTF_SC_LEFTBORDER:         pBorder_Left = propertyState; break;
+                case CTF_SC_RIGHTBORDER:        pBorder_Right = propertyState; break;
+                case CTF_SC_BOTTOMBORDER:       pBorder_Bottom = propertyState; break;
+                case CTF_SC_TOPBORDER:          pBorder_Top = propertyState; break;
+                case CTF_SC_ALLBORDERWIDTH:     pAllBorderWidthState = propertyState; break;
+                case CTF_SC_LEFTBORDERWIDTH:    pLeftBorderWidthState = propertyState; break;
+                case CTF_SC_RIGHTBORDERWIDTH:   pRightBorderWidthState = propertyState; break;
+                case CTF_SC_TOPBORDERWIDTH:     pTopBorderWidthState = propertyState; break;
+                case CTF_SC_BOTTOMBORDERWIDTH:  pBottomBorderWidthState = propertyState; break;
+                case CTF_ALLBORDER:             pSWBorder = propertyState; break;
+                case CTF_LEFTBORDER:            pSWBorder_Left = propertyState; break;
+                case CTF_RIGHTBORDER:           pSWBorder_Right = propertyState; break;
+                case CTF_BOTTOMBORDER:          pSWBorder_Bottom = propertyState; break;
+                case CTF_TOPBORDER:             pSWBorder_Top = propertyState; break;
+                case CTF_ALLBORDERWIDTH:        pSWAllBorderWidthState = propertyState; break;
+                case CTF_LEFTBORDERWIDTH:       pSWLeftBorderWidthState = propertyState; break;
+                case CTF_RIGHTBORDERWIDTH:      pSWRightBorderWidthState = propertyState; break;
+                case CTF_TOPBORDERWIDTH:        pSWTopBorderWidthState = propertyState; break;
+                case CTF_BOTTOMBORDERWIDTH:     pSWBottomBorderWidthState = propertyState; break;
                 case CTF_SC_DIAGONALTLBR:       break; //old diagonal line attribute names without "s" are only read, not written
-                case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertie; break;
+                case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertyState; break;
                 case CTF_SC_DIAGONALBLTR:       break; //old diagonal line attribute names without "s" are only read, not written
-                case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
-                case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertie; break;
-                case CTF_PARA_ADJUSTLAST:       pParaAdjustLast = propertie; break;
-                case CTF_PARALEFTMARGIN:        pParaMarginLeft = propertie; break;
-                case CTF_PARALEFTMARGIN_REL:    pParaMarginLeftRel = propertie; break;
-                case CTF_PARARIGHTMARGIN:       pParaMarginRight = propertie; break;
-                case CTF_PARARIGHTMARGIN_REL:   pParaMarginRightRel = propertie; break;
-                case CTF_PARATOPMARGIN:         pParaMarginTop = propertie; break;
-                case CTF_PARATOPMARGIN_REL:     pParaMarginTopRel = propertie; break;
-                case CTF_PARABOTTOMMARGIN:      pParaMarginBottom = propertie; break;
-                case CTF_PARABOTTOMMARGIN_REL:  pParaMarginBottomRel = propertie; break;
+                case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertyState; break;
+                case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertyState; break;
+                case CTF_PARA_ADJUSTLAST:       pParaAdjustLast = propertyState; break;
+                case CTF_PARALEFTMARGIN:        pParaMarginLeft = propertyState; break;
+                case CTF_PARALEFTMARGIN_REL:    pParaMarginLeftRel = propertyState; break;
+                case CTF_PARARIGHTMARGIN:       pParaMarginRight = propertyState; break;
+                case CTF_PARARIGHTMARGIN_REL:   pParaMarginRightRel = propertyState; break;
+                case CTF_PARATOPMARGIN:         pParaMarginTop = propertyState; break;
+                case CTF_PARATOPMARGIN_REL:     pParaMarginTopRel = propertyState; break;
+                case CTF_PARABOTTOMMARGIN:      pParaMarginBottom = propertyState; break;
+                case CTF_PARABOTTOMMARGIN_REL:  pParaMarginBottomRel = propertyState; break;
             }
         }
     }
