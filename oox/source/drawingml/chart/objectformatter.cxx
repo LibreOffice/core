@@ -34,6 +34,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
+#include <oox/helper/graphichelper.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -164,6 +165,14 @@ struct AutoFormatEntry
 static const AutoFormatEntry spNoFormats[] =
 {
     AUTOFORMAT_INVISIBLE( 1, 48 ),
+    AUTOFORMAT_END()
+};
+
+static const AutoFormatEntry spChartSpaceFill[] =
+{
+    AUTOFORMAT_COLOR( 1, 32, THEMED_STYLE_SUBTLE, XML_bg1 ),
+    AUTOFORMAT_COLOR( 33, 40, THEMED_STYLE_SUBTLE, XML_lt1 ),
+    AUTOFORMAT_COLOR( 41, 48, THEMED_STYLE_SUBTLE, XML_dk1 ),
     AUTOFORMAT_END()
 };
 
@@ -536,7 +545,7 @@ struct ObjectTypeFormatEntry
 static const ObjectTypeFormatEntry spObjTypeFormatEntries[] =
 {
     //                object type                property info      auto text          auto line            auto fill              auto effect
-    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
+    TYPEFORMAT_FRAME( OBJECTTYPE_CHARTSPACE,     &saCommonPropInfo, 0,                 spNoFormats,         spChartSpaceFill,      0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_CHARTTITLE,     &saCommonPropInfo, spChartTitleTexts, 0 /* eq to Ch2 */,   0 /* eq to Ch2 */,     0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_LEGEND,         &saCommonPropInfo, spOtherTexts,      spNoFormats,         spNoFormats,           0 /* eq to Ch2 */ ),
     TYPEFORMAT_FRAME( OBJECTTYPE_PLOTAREA2D,     &saCommonPropInfo, 0,                 0 /* eq to Ch2 */,   spPlotArea2dFills,     0 /* eq to Ch2 */ ),
@@ -869,6 +878,11 @@ FillFormatter::FillFormatter( ObjectFormatterData& rData, const AutoFormatEntry*
         if( const Theme* pTheme = mrData.mrFilter.getCurrentTheme() )
             if( const FillProperties* pFillProps = pTheme->getFillStyle( pAutoFormatEntry->mnThemedIdx ) )
                 *mxAutoFill = *pFillProps;
+
+        if (eObjType == OBJECTTYPE_CHARTSPACE)
+        {
+            mxAutoFill->moFillType = rData.mrFilter.getGraphicHelper().getDefaultChartAreaFillStyle();
+        }
     }
 }
 
