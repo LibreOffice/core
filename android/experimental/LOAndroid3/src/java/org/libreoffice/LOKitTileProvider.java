@@ -75,8 +75,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         if (checkDocument()) {
             postLoad();
             mIsReady = true;
-        }
-        else {
+        } else {
             mIsReady = false;
         }
     }
@@ -305,8 +304,7 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
      * control keys).
      */
     private int getKeyCode(KeyEvent keyEvent) {
-        switch (keyEvent.getKeyCode())
-        {
+        switch (keyEvent.getKeyCode()) {
             case KeyEvent.KEYCODE_DEL:
                 return com.sun.star.awt.Key.BACKSPACE;
             case KeyEvent.KEYCODE_ENTER:
