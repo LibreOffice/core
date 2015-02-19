@@ -308,7 +308,7 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
                 {
                     OutlinerView* pOLV = pActiveOutliner->GetView(i);
 
-                    if(pOLV->GetWindow() == &rPaintWindow.GetOutputDevice())
+                    if(pOLV->GetWindow() == &rPaintWindow.GetOutputDevice() || rPaintWindow.GetOutputDevice().isTiledRendering())
                     {
                         ImpPaintOutlinerView(*pOLV, aCheckRect, rPaintWindow.GetTargetOutputDevice());
                         return;

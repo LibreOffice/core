@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <memory>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdpntv.hxx>
 #include <vcl/msgbox.hxx>
@@ -734,6 +735,14 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Reg
 
 void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
+    std::unique_ptr<SdrPaintWindow> pPaintWindow;
+    if (rPaintWindow.GetOutputDevice().isTiledRendering() && rPaintWindow.getTemporaryTarget())
+    {
+        // Tiled rendering, we must paint the TextEdit to the output device.
+        pPaintWindow.reset(&rPaintWindow);
+        pPaintWindow->setTemporaryTarget(false);
+    }
+
     if(rPaintWindow.getTemporaryTarget())
     {
         // get rid of temp target again
