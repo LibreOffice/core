@@ -87,7 +87,7 @@ private:
     bool                readCompressedInt( BinaryInputStream& rStrm, sal_Int32& ornValue );
 
 private:
-    typedef ::boost::shared_ptr< SequenceInputStream > SequenceInputStreamRef;
+    typedef std::shared_ptr< SequenceInputStream > SequenceInputStreamRef;
 
     SequenceInputStreamRef mxBiffStrm;
     NameListRef         mxErrCodes;

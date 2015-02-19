@@ -20,10 +20,11 @@
 #ifndef INCLUDED_OOX_HELPER_REFMAP_HXX
 #define INCLUDED_OOX_HELPER_REFMAP_HXX
 
-#include <map>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <sal/types.h>
+#include <algorithm>
+#include <map>
+#include <memory>
+#include <boost/bind.hpp>
 
 namespace oox {
 
@@ -32,15 +33,15 @@ namespace oox {
 /** Template for a map of ref-counted objects with additional accessor functions.
 
     An instance of the class RefMap< Type > stores elements of the type
-    ::boost::shared_ptr< Type >. The new accessor functions has() and get()
+    std::shared_ptr< Type >. The new accessor functions has() and get()
     work correctly for nonexisting keys, there is no need to check the passed
     key before.
  */
-template< typename KeyType, typename ObjType, typename CompType = ::std::less< KeyType > >
-class RefMap : public ::std::map< KeyType, ::boost::shared_ptr< ObjType >, CompType >
+template< typename KeyType, typename ObjType, typename CompType = std::less< KeyType > >
+class RefMap : public std::map< KeyType, std::shared_ptr< ObjType >, CompType >
 {
 public:
-    typedef ::std::map< KeyType, ::boost::shared_ptr< ObjType >, CompType > container_type;
+    typedef std::map< KeyType, std::shared_ptr< ObjType >, CompType > container_type;
     typedef typename container_type::key_type                               key_type;
     typedef typename container_type::mapped_type                            mapped_type;
     typedef typename container_type::value_type                             value_type;
@@ -68,7 +69,7 @@ public:
     template< typename FunctorType >
     void                forEach( const FunctorType& rFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
+                            std::for_each( this->begin(), this->end(), ForEachFunctor< FunctorType >( rFunctor ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object,
@@ -117,7 +118,7 @@ public:
     template< typename FunctorType >
     void                forEachWithKey( const FunctorType& rFunctor ) const
                         {
-                            ::std::for_each( this->begin(), this->end(), ForEachFunctorWithKey< FunctorType >( rFunctor ) );
+                            std::for_each( this->begin(), this->end(), ForEachFunctorWithKey< FunctorType >( rFunctor ) );
                         }
 
     /** Calls the passed member function of ObjType on every contained object.

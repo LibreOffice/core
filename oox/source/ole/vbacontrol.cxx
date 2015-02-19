@@ -419,7 +419,7 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                     BinaryXInputStream aXStrm( rStrg.openInputStream( "x" ), true );
                     pMultiPage->importPageAndMultiPageProperties( aXStrm, maControls.size() );
                 }
-                typedef std::unordered_map< sal_uInt32, ::boost::shared_ptr< VbaFormControl > > IdToPageMap;
+                typedef std::unordered_map< sal_uInt32, std::shared_ptr< VbaFormControl > > IdToPageMap;
                 IdToPageMap idToPage;
                 VbaFormControlVector::iterator it = maControls.begin();
                 VbaFormControlVector::iterator it_end = maControls.end();

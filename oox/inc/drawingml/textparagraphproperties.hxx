@@ -36,7 +36,7 @@ namespace oox { namespace drawingml {
 
 class TextParagraphProperties;
 
-typedef boost::shared_ptr< TextParagraphProperties > TextParagraphPropertiesPtr;
+typedef std::shared_ptr< TextParagraphProperties > TextParagraphPropertiesPtr;
 
 class BulletList
 {

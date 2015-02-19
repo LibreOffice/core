@@ -63,7 +63,7 @@ private:
     TextRunVector               maRuns;
 };
 
-typedef boost::shared_ptr< TextParagraph > TextParagraphPtr;
+typedef std::shared_ptr< TextParagraph > TextParagraphPtr;
 
 } }
 

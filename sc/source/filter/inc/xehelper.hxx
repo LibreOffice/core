@@ -21,7 +21,7 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_XEHELPER_HXX
 
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
@@ -59,7 +59,7 @@ public:
     void                Progress();
 
 private:
-    typedef ::std::unique_ptr< ScfProgressBar > ScfProgressBarPtr;
+    typedef std::unique_ptr< ScfProgressBar > ScfProgressBarPtr;
 
     ScfProgressBarPtr   mxProgress;         /// Progress bar implementation.
     ScfProgressBar*     mpSubProgress;      /// Current sub progress bar.
@@ -175,7 +175,7 @@ class XclExpHyperlink;
 class XclExpHyperlinkHelper : protected XclExpRoot
 {
 public:
-    typedef boost::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
+    typedef std::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
                         virtual ~XclExpHyperlinkHelper();

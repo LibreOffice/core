@@ -28,8 +28,8 @@
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
-#include <boost/scoped_ptr.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <memory>
 
 namespace oox { namespace shape {
 
@@ -105,7 +105,7 @@ uno::Reference<xml::sax::XFastContextHandler> ShapeContextHandler::getChartShape
         {
             case XML_chart:
             {
-                boost::scoped_ptr<ContextHandler2Helper> pFragmentHandler(
+                std::unique_ptr<ContextHandler2Helper> pFragmentHandler(
                         new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
                 mpShape.reset(new Shape("com.sun.star.drawing.OLE2Shape" ));
                 mxChartShapeContext.set(new ChartGraphicDataContext(*pFragmentHandler, mpShape, true));
@@ -170,7 +170,7 @@ ShapeContextHandler::getGraphicShapeContext(::sal_Int32 Element )
 {
     if (! mxGraphicShapeContext.is())
     {
-        boost::shared_ptr<ContextHandler2Helper> pFragmentHandler
+        std::shared_ptr<ContextHandler2Helper> pFragmentHandler
             (new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         ShapePtr pMasterShape;
 
@@ -226,7 +226,7 @@ ShapeContextHandler::getDiagramShapeContext()
 {
     if (!mxDiagramShapeContext.is())
     {
-        boost::shared_ptr<ContextHandler2Helper> pFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
+        std::shared_ptr<ContextHandler2Helper> pFragmentHandler(new ShapeFragmentHandler(*mxFilterBase, msRelationFragmentPath));
         mpShape.reset(new Shape());
         mxDiagramShapeContext.set(new DiagramGraphicDataContext(*pFragmentHandler, mpShape));
     }
@@ -428,7 +428,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException, std::exception)
         if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
-            if( boost::shared_ptr< vml::ShapeBase > pShape = mpDrawing->getShapes().takeLastShape() )
+            if( std::shared_ptr< vml::ShapeBase > pShape = mpDrawing->getShapes().takeLastShape() )
                 xResult = pShape->convertAndInsert( xShapes );
             // Only now remove the recursion mark, because getShape() is called in writerfilter
             // after endFastElement().

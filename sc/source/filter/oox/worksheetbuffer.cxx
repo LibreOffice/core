@@ -200,7 +200,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         // return final sheet index if sheet exists
         return IndexNamePair( nCalcSheet, aSheetName );
     }
-    catch( Exception& )
+    catch (const Exception&)
     {
         OSL_FAIL( "WorksheetBuffer::createSheet - cannot insert or rename worksheet" );
     }
@@ -211,7 +211,7 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
 {
     sal_Int32 nWorksheet = static_cast< sal_Int32 >( maSheetInfos.size() );
     IndexNamePair aIndexName = createSheet( rModel.maName, nWorksheet, rModel.mnState == XML_visible );
-    ::boost::shared_ptr< SheetInfo > xSheetInfo( new SheetInfo( rModel, aIndexName.first, aIndexName.second ) );
+    std::shared_ptr< SheetInfo > xSheetInfo( new SheetInfo( rModel, aIndexName.first, aIndexName.second ) );
     maSheetInfos.push_back( xSheetInfo );
     maSheetInfosByName[ rModel.maName ] = xSheetInfo;
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;

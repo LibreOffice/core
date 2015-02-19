@@ -26,8 +26,8 @@
 #include "xlescher.hxx"
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <svx/sdtaitm.hxx>
-#include <boost/shared_ptr.hpp>
 #include <rtl/ustring.hxx>
+#include <memory>
 
 class ScPostIt;
 
@@ -304,7 +304,7 @@ public:
     const css::uno::Reference<css::chart::XChartDocument>& GetChartDoc() const;
 
 private:
-    typedef boost::shared_ptr< XclExpChart > XclExpChartRef;
+    typedef std::shared_ptr< XclExpChart > XclExpChartRef;
     XclExpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
     XShapeRef mxShape;
     XChartDocRef mxChartDoc;
@@ -393,17 +393,17 @@ public:
 
     /** Creates and returns the MSODRAWINGGROUP record containing global DFF
         data in the DGGCONTAINER. */
-    boost::shared_ptr< XclExpRecordBase > CreateDrawingGroup();
+    std::shared_ptr< XclExpRecordBase > CreateDrawingGroup();
 
     /** Initializes the object manager for a new sheet. */
     void                StartSheet();
 
     /** Processes a drawing page and returns the record block containing all
         related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    boost::shared_ptr< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
+    std::shared_ptr< XclExpRecordBase > ProcessDrawing( SdrPage* pSdrPage );
     /** Processes a collection of UNO shapes and returns the record block
         containing all related records (MSODRAWING, OBJ, TXO, charts, etc.). */
-    boost::shared_ptr< XclExpRecordBase > ProcessDrawing( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
+    std::shared_ptr< XclExpRecordBase > ProcessDrawing( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes );
 
     /** Finalizes the object manager after conversion of all sheets. */
     void                EndDocument();
@@ -421,10 +421,10 @@ private:
     void                InitStream( bool bTempFile );
 
 private:
-    boost::shared_ptr< ::utl::TempFile > mxTempFile;
-    boost::shared_ptr< SvStream >  mxDffStrm;
-    boost::shared_ptr< XclEscherEx > mxEscherEx;
-    boost::shared_ptr< XclExpObjList > mxObjList;
+    std::shared_ptr< ::utl::TempFile > mxTempFile;
+    std::shared_ptr< SvStream >  mxDffStrm;
+    std::shared_ptr< XclEscherEx > mxEscherEx;
+    std::shared_ptr< XclExpObjList > mxObjList;
 };
 
 class XclExpEmbeddedObjectManager : public XclExpObjectManager

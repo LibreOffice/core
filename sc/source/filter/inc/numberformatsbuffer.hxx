@@ -80,7 +80,7 @@ private:
     ApiNumFmtData       maApiData;
 };
 
-typedef ::boost::shared_ptr< NumberFormat > NumberFormatRef;
+typedef std::shared_ptr< NumberFormat > NumberFormatRef;
 
 class NumberFormatsBuffer : public WorkbookHelper
 {

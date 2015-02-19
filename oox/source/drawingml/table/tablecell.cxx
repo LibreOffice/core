@@ -365,7 +365,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
 
     Color aBgColor;
     sal_Int32 nPhClr = API_RGB_TRANSPARENT;
-    boost::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
+    std::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
     ::oox::drawingml::ShapeStyleRef& rBackgroundFillStyle( rTable.getBackgroundFillStyleRef() );
     if (rBackgroundFillPropertiesPtr.get())
         aBgColor = rBackgroundFillPropertiesPtr->getBestSolidColor();

@@ -1359,7 +1359,7 @@ void SharedConfigData::createShortList( const OUString& rData )
         sal_Int64 nStartKey;
         if( StringHelper::convertStringToInt( nStartKey, aDataVec[ 1 ] ) )
         {
-            ::boost::shared_ptr< MultiList > xList = createNameList< MultiList >( aDataVec[ 0 ] );
+            std::shared_ptr< MultiList > xList = createNameList< MultiList >( aDataVec[ 0 ] );
             if( xList.get() )
             {
                 aDataVec.erase( aDataVec.begin(), aDataVec.begin() + 2 );
@@ -1382,7 +1382,7 @@ void SharedConfigData::createUnitConverter( const OUString& rData )
         double fFactor;
         if( StringHelper::convertStringToDouble( fFactor, aFactor ) && (fFactor != 0.0) )
         {
-            ::boost::shared_ptr< UnitConverter > xList = createNameList< UnitConverter >( aDataVec[ 0 ] );
+            std::shared_ptr< UnitConverter > xList = createNameList< UnitConverter >( aDataVec[ 0 ] );
             if( xList.get() )
             {
                 xList->setFactor( bRecip ? (1.0 / fFactor) : fFactor );

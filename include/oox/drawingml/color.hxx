@@ -20,8 +20,6 @@
 #ifndef INCLUDED_OOX_DRAWINGML_COLOR_HXX
 #define INCLUDED_OOX_DRAWINGML_COLOR_HXX
 
-#include <vector>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
@@ -29,6 +27,8 @@
 #include <rtl/ustring.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>
+#include <memory>
+#include <vector>
 
 namespace oox { class GraphicHelper; }
 
@@ -150,7 +150,7 @@ private:
                         maInteropTransformations;   /// Unaltered list of transformations for interoperability purposes
 };
 
-typedef boost::shared_ptr< Color > ColorPtr;
+typedef std::shared_ptr< Color > ColorPtr;
 
 
 

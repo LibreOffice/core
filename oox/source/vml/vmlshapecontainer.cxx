@@ -61,7 +61,7 @@ ShapeContainer::~ShapeContainer()
 
 ShapeType& ShapeContainer::createShapeType()
 {
-    ::boost::shared_ptr< ShapeType > xShape( new ShapeType( mrDrawing ) );
+    std::shared_ptr< ShapeType > xShape( new ShapeType( mrDrawing ) );
     maTypes.push_back( xShape );
     return *xShape;
 }
@@ -103,13 +103,13 @@ const ShapeBase* ShapeContainer::getShapeById( const OUString& rShapeId, bool bD
    return 0;
 }
 
-boost::shared_ptr< ShapeBase > ShapeContainer::takeLastShape()
+std::shared_ptr< ShapeBase > ShapeContainer::takeLastShape()
 {
     OSL_ENSURE( mrDrawing.getType() == VMLDRAWING_WORD, "ShapeContainer::takeLastShape - illegal call, Word filter only" );
     assert( !markStack.empty());
     if( markStack.top() >= maShapes.size())
-        return boost::shared_ptr< ShapeBase >();
-    boost::shared_ptr< ShapeBase > ret = maShapes.back();
+        return std::shared_ptr< ShapeBase >();
+    std::shared_ptr< ShapeBase > ret = maShapes.back();
     maShapes.pop_back();
     return ret;
 }

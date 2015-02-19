@@ -24,15 +24,15 @@
 
 #include "xlroot.hxx"
 #include "compiler.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 // Forward declarations of objects in public use ==============================
 
 class XclExpRecordBase;
 class XclExpString;
 
-typedef boost::shared_ptr< XclExpRecordBase >  XclExpRecordRef;
-typedef boost::shared_ptr< XclExpString >      XclExpStringRef;
+typedef std::shared_ptr< XclExpRecordBase >  XclExpRecordRef;
+typedef std::shared_ptr< XclExpString >      XclExpStringRef;
 
 // Global data ================================================================
 
@@ -57,22 +57,22 @@ namespace sc { class CompileFormulaContext; }
 /** Stores global buffers and data needed for Excel export filter. */
 struct XclExpRootData : public XclRootData
 {
-    typedef boost::shared_ptr< XclExpTabInfo >             XclExpTabInfoRef;
-    typedef boost::shared_ptr< XclExpAddressConverter >    XclExpAddrConvRef;
-    typedef boost::shared_ptr< XclExpFormulaCompiler >     XclExpFmlaCompRef;
-    typedef boost::shared_ptr< XclExpProgressBar >         XclExpProgressRef;
+    typedef std::shared_ptr< XclExpTabInfo >             XclExpTabInfoRef;
+    typedef std::shared_ptr< XclExpAddressConverter >    XclExpAddrConvRef;
+    typedef std::shared_ptr< XclExpFormulaCompiler >     XclExpFmlaCompRef;
+    typedef std::shared_ptr< XclExpProgressBar >         XclExpProgressRef;
 
-    typedef boost::shared_ptr< XclExpSst >                 XclExpSstRef;
-    typedef boost::shared_ptr< XclExpPalette >             XclExpPaletteRef;
-    typedef boost::shared_ptr< XclExpFontBuffer >          XclExpFontBfrRef;
-    typedef boost::shared_ptr< XclExpNumFmtBuffer >        XclExpNumFmtBfrRef;
-    typedef boost::shared_ptr< XclExpXFBuffer >            XclExpXFBfrRef;
-    typedef boost::shared_ptr< XclExpNameManager >         XclExpNameMgrRef;
-    typedef boost::shared_ptr< XclExpLinkManager >         XclExpLinkMgrRef;
-    typedef boost::shared_ptr< XclExpObjectManager >       XclExpObjectMgrRef;
-    typedef boost::shared_ptr< XclExpFilterManager >       XclExpFilterMgrRef;
-    typedef boost::shared_ptr< XclExpPivotTableManager >   XclExpPTableMgrRef;
-    typedef boost::shared_ptr< XclExpDxfs >                XclExpDxfsRef;
+    typedef std::shared_ptr< XclExpSst >                 XclExpSstRef;
+    typedef std::shared_ptr< XclExpPalette >             XclExpPaletteRef;
+    typedef std::shared_ptr< XclExpFontBuffer >          XclExpFontBfrRef;
+    typedef std::shared_ptr< XclExpNumFmtBuffer >        XclExpNumFmtBfrRef;
+    typedef std::shared_ptr< XclExpXFBuffer >            XclExpXFBfrRef;
+    typedef std::shared_ptr< XclExpNameManager >         XclExpNameMgrRef;
+    typedef std::shared_ptr< XclExpLinkManager >         XclExpLinkMgrRef;
+    typedef std::shared_ptr< XclExpObjectManager >       XclExpObjectMgrRef;
+    typedef std::shared_ptr< XclExpFilterManager >       XclExpFilterMgrRef;
+    typedef std::shared_ptr< XclExpPivotTableManager >   XclExpPTableMgrRef;
+    typedef std::shared_ptr< XclExpDxfs >                XclExpDxfsRef;
 
     XclExpTabInfoRef    mxTabInfo;          /// Calc->Excel sheet index conversion.
     XclExpAddrConvRef   mxAddrConv;         /// The address converter.
@@ -92,8 +92,8 @@ struct XclExpRootData : public XclRootData
     XclExpPTableMgrRef  mxPTableMgr;        /// All pivot tables and pivot caches.
     XclExpDxfsRef       mxDxfs;             /// All delta formatting entries
 
-    boost::shared_ptr<XclExpXmlPivotTableManager> mxXmlPTableMgr;
-    boost::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
+    std::shared_ptr<XclExpXmlPivotTableManager> mxXmlPTableMgr;
+    std::shared_ptr<sc::CompileFormulaContext> mpCompileFormulaCxt;
 
     ScCompiler::OpCodeMapPtr  mxOpCodeMap;  /// mapping between op-codes and names
 

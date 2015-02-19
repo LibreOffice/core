@@ -82,7 +82,7 @@ private:
     std::vector< SlidePersistPtr > maMasterPages;
     std::vector< SlidePersistPtr > maNotesPages;
 
-    ::boost::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
+    std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;
 };
 
 } }

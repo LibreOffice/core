@@ -95,7 +95,7 @@ protected:
     void                convertTitlePositions();
 
 private:
-    ::boost::shared_ptr< ConverterData > mxData;
+    std::shared_ptr< ConverterData > mxData;
 };
 
 

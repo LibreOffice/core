@@ -124,7 +124,7 @@ private:
     ConnectionModel     maModel;
 };
 
-typedef ::boost::shared_ptr< Connection > ConnectionRef;
+typedef std::shared_ptr< Connection > ConnectionRef;
 
 class ConnectionsBuffer : public WorkbookHelper
 {

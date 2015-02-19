@@ -102,7 +102,7 @@ public:
 
     oox::drawingml::ShapePtr getShapes() { return maShapesPtr; }
     void hideShapesAsMasterShapes();
-    ::std::list< boost::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
+    ::std::list< std::shared_ptr< TimeNode > >& getTimeNodeList() { return maTimeNodeList; }
     oox::ppt::HeaderFooter& getHeaderFooter(){ return maHeaderFooter; };
 
     oox::vml::Drawing* getDrawing() { return mpDrawingPtr.get(); }
@@ -121,7 +121,7 @@ public:
 private:
     OUString                                                           maPath;
     OUString                                                           maLayoutPath;
-    ::boost::shared_ptr< oox::vml::Drawing >                                mpDrawingPtr;
+    std::shared_ptr< oox::vml::Drawing >                                mpDrawingPtr;
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    mxPage;
     oox::drawingml::ThemePtr                                                mpThemePtr;         // the theme that is used
     oox::drawingml::ClrSchemePtr                                            mpClrSchemePtr;     // the local color scheme (if any)
@@ -131,7 +131,7 @@ private:
     oox::drawingml::ShapePtr                                                maShapesPtr;
     oox::drawingml::Color                                                   maBackgroundColor;
     oox::drawingml::FillPropertiesPtr                                       mpBackgroundPropertiesPtr;
-    ::std::list< boost::shared_ptr< TimeNode > >                            maTimeNodeList;
+    ::std::list< std::shared_ptr< TimeNode > >                            maTimeNodeList;
 
     oox::ppt::HeaderFooter                                                  maHeaderFooter;
     sal_Int32                                                               mnLayoutValueToken;

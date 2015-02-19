@@ -791,7 +791,7 @@ void CondFormatRule::finalizeImport()
     else if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
     {
         ScDocument& rDoc = getScDocument();
-        boost::scoped_ptr<ScTokenArray> pTokenArray2;
+        std::unique_ptr<ScTokenArray> pTokenArray2;
         if( maModel.maFormulas.size() >= 2)
         {
             pTokenArray2.reset(new ScTokenArray());

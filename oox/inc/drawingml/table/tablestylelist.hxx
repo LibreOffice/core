@@ -21,7 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLELIST_HXX
 
 #include <rtl/ustring.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <vector>
 
 namespace oox { namespace drawingml { namespace table {
@@ -45,7 +45,7 @@ private:
 
 };
 
-typedef boost::shared_ptr< TableStyleList > TableStyleListPtr;
+typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
 
 } } }
 

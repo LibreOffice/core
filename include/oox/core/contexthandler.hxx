@@ -21,12 +21,12 @@
 #define INCLUDED_OOX_CORE_CONTEXTHANDLER_HXX
 
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
-#include <boost/shared_ptr.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/dllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }
@@ -48,7 +48,7 @@ class ContextHandler;
 typedef ::rtl::Reference< ContextHandler > ContextHandlerRef;
 
 struct FragmentBaseData;
-typedef ::boost::shared_ptr< FragmentBaseData > FragmentBaseDataRef;
+typedef std::shared_ptr< FragmentBaseData > FragmentBaseDataRef;
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastContextHandler > ContextHandler_BASE;
 

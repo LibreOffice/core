@@ -224,7 +224,7 @@ protected:
     BinaryInputStream() : BinaryStreamBase( false ) {}
 };
 
-typedef ::boost::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
+typedef std::shared_ptr< BinaryInputStream > BinaryInputStreamRef;
 
 
 

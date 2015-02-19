@@ -44,7 +44,7 @@ namespace oox {
     namespace drawingml { namespace chart { class ChartConverter; } }
     namespace drawingml { namespace table {
         class TableStyleList;
-        typedef boost::shared_ptr< TableStyleList > TableStyleListPtr;
+        typedef std::shared_ptr< TableStyleList > TableStyleListPtr;
     } }
     namespace vml { class Drawing; }
 }

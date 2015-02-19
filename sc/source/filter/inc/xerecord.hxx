@@ -22,7 +22,7 @@
 
 #include "xlconst.hxx"
 #include "xestream.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 // Base classes to export Excel records =======================================
 
@@ -300,7 +300,7 @@ template< typename RecType = XclExpRecordBase >
 class XclExpRecordList : public XclExpRecordBase
 {
 public:
-    typedef boost::shared_ptr< RecType > RecordRefType;
+    typedef std::shared_ptr< RecType > RecordRefType;
 
     inline bool         IsEmpty() const { return maRecs.empty(); }
     inline size_t       GetSize() const { return maRecs.size(); }

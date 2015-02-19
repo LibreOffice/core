@@ -37,7 +37,7 @@ namespace oox {
 
 
 class StorageBase;
-typedef ::boost::shared_ptr< StorageBase > StorageRef;
+typedef std::shared_ptr< StorageBase > StorageRef;
 
 /** Base class for storage access implementations.
 

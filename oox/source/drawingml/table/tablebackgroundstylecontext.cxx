@@ -48,7 +48,7 @@ TableBackgroundStyleContext::onCreateContext( ::sal_Int32 aElementToken, const A
         // EG_ThemeableFillStyle (choice)
         case A_TOKEN( fill ):       // CT_FillProperties
             {
-                boost::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
+                std::shared_ptr< FillProperties >& rxFillProperties = mrTableStyle.getBackgroundFillProperties();
                 rxFillProperties.reset( new FillProperties );
                 return new FillPropertiesContext( *this, *rxFillProperties );
             }

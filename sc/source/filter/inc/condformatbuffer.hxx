@@ -22,8 +22,8 @@
 
 #include "formulaparser.hxx"
 #include "worksheethelper.hxx"
-#include <boost/scoped_ptr.hpp>
 #include <tools/color.hxx>
+#include <memory>
 
 class ScColorScaleFormat;
 class ScDataBarFormat;
@@ -118,8 +118,8 @@ public:
 private:
     std::unique_ptr<ScDataBarFormatData> mxFormat;
 
-    boost::scoped_ptr<ColorScaleRuleModelEntry> mpUpperLimit;
-    boost::scoped_ptr<ColorScaleRuleModelEntry> mpLowerLimit;
+    std::unique_ptr<ColorScaleRuleModelEntry> mpUpperLimit;
+    std::unique_ptr<ColorScaleRuleModelEntry> mpLowerLimit;
 };
 
 class IconSetRule : public WorksheetHelper
@@ -165,12 +165,12 @@ private:
     const CondFormat&   mrCondFormat;
     CondFormatRuleModel maModel;
     ScConditionalFormat* mpFormat;
-    boost::scoped_ptr<ColorScaleRule> mpColor;
-    boost::scoped_ptr<DataBarRule> mpDataBar;
-    boost::scoped_ptr<IconSetRule> mpIconSet;
+    std::unique_ptr<ColorScaleRule> mpColor;
+    std::unique_ptr<DataBarRule> mpDataBar;
+    std::unique_ptr<IconSetRule> mpIconSet;
 };
 
-typedef ::boost::shared_ptr< CondFormatRule > CondFormatRuleRef;
+typedef std::shared_ptr< CondFormatRule > CondFormatRuleRef;
 
 /** Model for a conditional formatting object. */
 struct CondFormatModel
@@ -256,8 +256,8 @@ public:
     ExCfRuleModel& getModel() { return maModel; }
 };
 
-typedef ::boost::shared_ptr< CondFormat > CondFormatRef;
-typedef ::boost::shared_ptr< ExtCfRule > ExtCfRuleRef;
+typedef std::shared_ptr< CondFormat > CondFormatRef;
+typedef std::shared_ptr< ExtCfRule > ExtCfRuleRef;
 
 class CondFormatBuffer : public WorksheetHelper
 {

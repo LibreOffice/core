@@ -31,10 +31,10 @@
 #include "xestyle.hxx"
 #include "xeextlst.hxx"
 
-#include <boost/shared_ptr.hpp>
 #include <map>
-#include <unordered_set>
+#include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 /* ============================================================================
 Export of cell tables including row and column description.
@@ -92,7 +92,7 @@ protected:
     XclAddress          maBaseXclPos;   /// Address of base cell (first FORMULA record).
 };
 
-typedef boost::shared_ptr< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
+typedef std::shared_ptr< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
 
 // Array formulas =============================================================
 
@@ -122,7 +122,7 @@ private:
     XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
 };
 
-typedef boost::shared_ptr< XclExpArray > XclExpArrayRef;
+typedef std::shared_ptr< XclExpArray > XclExpArrayRef;
 
 /** Caches all ARRAY records. */
 class XclExpArrayBuffer : protected XclExpRoot
@@ -171,7 +171,7 @@ private:
     sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
-typedef boost::shared_ptr< XclExpShrfmla > XclExpShrfmlaRef;
+typedef std::shared_ptr< XclExpShrfmla > XclExpShrfmlaRef;
 
 /** Caches all SHRFMLA records and provides functions to update their ranges. */
 class XclExpShrfmlaBuffer : protected XclExpRoot
@@ -244,7 +244,7 @@ private:
     bool                mbValid;        /// true = Contains valid references.
 };
 
-typedef boost::shared_ptr< XclExpTableop > XclExpTableopRef;
+typedef std::shared_ptr< XclExpTableop > XclExpTableopRef;
 
 /** Contains all created TABLEOP records and supports creating or updating them. */
 class XclExpTableopBuffer : protected XclExpRoot
@@ -316,7 +316,7 @@ private:
     XclAddress          maXclPos;       /// Address of the cell.
 };
 
-typedef boost::shared_ptr< XclExpCellBase > XclExpCellRef;
+typedef std::shared_ptr< XclExpCellBase > XclExpCellRef;
 
 // Single cell records ========================================================
 
@@ -945,7 +945,7 @@ private:
     XclExpRow&          GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty );
 
 private:
-    typedef ::boost::shared_ptr<XclExpRow>  RowRef;
+    typedef std::shared_ptr<XclExpRow>  RowRef;
     typedef ::std::map<sal_uInt32, RowRef>  RowMap;
 
     RowMap              maRowMap;
@@ -1005,12 +1005,12 @@ private:
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
     typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
 
-    typedef boost::shared_ptr< XclExpDefrowheight >        XclExpDefrowhRef;
-    typedef boost::shared_ptr< XclExpNoteList >            XclExpNoteListRef;
-    typedef boost::shared_ptr< XclExpMergedcells >         XclExpMergedcellsRef;
-    typedef boost::shared_ptr< XclExpHyperlinkList >       XclExpHyperlinkRef;
-    typedef boost::shared_ptr< XclExpDval >                XclExpDvalRef;
-    typedef boost::shared_ptr< XclExtLst >                 XclExtLstRef;
+    typedef std::shared_ptr< XclExpDefrowheight >        XclExpDefrowhRef;
+    typedef std::shared_ptr< XclExpNoteList >            XclExpNoteListRef;
+    typedef std::shared_ptr< XclExpMergedcells >         XclExpMergedcellsRef;
+    typedef std::shared_ptr< XclExpHyperlinkList >       XclExpHyperlinkRef;
+    typedef std::shared_ptr< XclExpDval >                XclExpDvalRef;
+    typedef std::shared_ptr< XclExtLst >                 XclExtLstRef;
 
     XclExpColinfoBuffer maColInfoBfr;       /// Buffer for column formatting.
     XclExpRowBuffer     maRowBfr;           /// Rows and cell records.

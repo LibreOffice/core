@@ -144,7 +144,7 @@ public:
     static bool         isAutomaticFill( const ModelRef< Shape >& rxShapeProp );
 
 private:
-    ::boost::shared_ptr< ObjectFormatterData > mxData;
+    std::shared_ptr< ObjectFormatterData > mxData;
 };
 
 

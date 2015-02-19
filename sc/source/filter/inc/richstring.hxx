@@ -82,7 +82,7 @@ private:
     bool                mbConverted;    /// Without repeatly convert
 };
 
-typedef ::boost::shared_ptr< RichStringPortion > RichStringPortionRef;
+typedef std::shared_ptr< RichStringPortion > RichStringPortionRef;
 
 enum BiffFontPortionMode
 {
@@ -184,7 +184,7 @@ private:
     sal_Int32           mnBaseEnd;      /// One-past-end position in base text.
 };
 
-typedef ::boost::shared_ptr< RichStringPhonetic > RichStringPhoneticRef;
+typedef std::shared_ptr< RichStringPhonetic > RichStringPhoneticRef;
 
 /** Represents a phonetic text portion in a rich-string with phonetic text.
     Used in binary filters only. */
@@ -282,7 +282,7 @@ private:
     PhoneticVector      maPhonPortions; /// Phonetic text portions.
 };
 
-typedef ::boost::shared_ptr< RichString > RichStringRef;
+typedef std::shared_ptr< RichString > RichStringRef;
 
 } // namespace xls
 } // namespace oox

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_HELPER_PROGRESSBAR_HXX
 #define INCLUDED_OOX_HELPER_PROGRESSBAR_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <com/sun/star/uno/Reference.hxx>
 #include <oox/dllapi.h>
 
@@ -60,7 +60,7 @@ public:
 
 
 class ISegmentProgressBar;
-typedef ::boost::shared_ptr< ISegmentProgressBar > ISegmentProgressBarRef;
+typedef std::shared_ptr< ISegmentProgressBar > ISegmentProgressBarRef;
 
 /** Interface for a segment in a progress bar, that is able to create sub
     segments from itself.

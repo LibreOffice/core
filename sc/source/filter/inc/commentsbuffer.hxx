@@ -71,7 +71,7 @@ private:
     CommentModel        maModel;
 };
 
-typedef ::boost::shared_ptr< Comment > CommentRef;
+typedef std::shared_ptr< Comment > CommentRef;
 
 class CommentsBuffer : public WorksheetHelper
 {

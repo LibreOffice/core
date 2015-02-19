@@ -20,12 +20,12 @@
 #ifndef INCLUDED_OOX_OLE_AXCONTROL_HXX
 #define INCLUDED_OOX_OLE_AXCONTROL_HXX
 
-#include <boost/shared_ptr.hpp>
 #include <oox/helper/binarystreambase.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/ole/axbinaryreader.hxx>
 #include <oox/ole/olehelper.hxx>
 #include <oox/dllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
@@ -389,7 +389,7 @@ protected:
     bool                mbAwtModel;     ///< True = AWT control model, false = form component.
 };
 
-typedef ::boost::shared_ptr< ControlModelBase > ControlModelRef;
+typedef std::shared_ptr< ControlModelBase > ControlModelRef;
 
 
 
@@ -972,7 +972,7 @@ private:
 template< typename ModelType >
 inline ModelType& EmbeddedControl::createModel()
 {
-    ::boost::shared_ptr< ModelType > xModel( new ModelType );
+    std::shared_ptr< ModelType > xModel( new ModelType );
     mxModel = xModel;
     xModel->setFormComponentMode();
     return *xModel;
@@ -981,7 +981,7 @@ inline ModelType& EmbeddedControl::createModel()
 template< typename ModelType, typename ParamType >
 inline ModelType& EmbeddedControl::createModel( const ParamType& rParam )
 {
-    ::boost::shared_ptr< ModelType > xModel( new ModelType( rParam ) );
+    std::shared_ptr< ModelType > xModel( new ModelType( rParam ) );
     mxModel = xModel;
     xModel->setFormComponentMode();
     return *xModel;

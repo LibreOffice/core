@@ -15,7 +15,7 @@
 
 #include "colorscale.hxx"
 
-#include <boost/scoped_ptr.hpp>
+#include <memory>
 
 enum XclExpExtType
 {
@@ -79,14 +79,14 @@ private:
     databar::ScAxisPosition meAxisPosition;
     bool mbGradient;
 
-    boost::scoped_ptr<XclExpExtCfvo> mpLowerLimit;
-    boost::scoped_ptr<XclExpExtCfvo> mpUpperLimit;
-    boost::scoped_ptr<XclExpExtNegativeColor> mpNegativeColor;
-    boost::scoped_ptr<XclExpExtAxisColor> mpAxisColor;
+    std::unique_ptr<XclExpExtCfvo> mpLowerLimit;
+    std::unique_ptr<XclExpExtCfvo> mpUpperLimit;
+    std::unique_ptr<XclExpExtNegativeColor> mpNegativeColor;
+    std::unique_ptr<XclExpExtAxisColor> mpAxisColor;
 
 };
 
-typedef boost::shared_ptr<XclExpExtDataBar> XclExpExtDataBarRef;
+typedef std::shared_ptr<XclExpExtDataBar> XclExpExtDataBarRef;
 
 class XclExpExtCfRule : public XclExpRecordBase, protected XclExpRoot
 {
@@ -99,8 +99,8 @@ private:
     OString maId;
 };
 
-typedef boost::shared_ptr<XclExpExt> XclExpExtRef;
-typedef boost::shared_ptr<XclExpExtCfRule> XclExpExtCfRuleRef;
+typedef std::shared_ptr<XclExpExt> XclExpExtRef;
+typedef std::shared_ptr<XclExpExtCfRule> XclExpExtCfRuleRef;
 
 class XclExpExtConditionalFormatting : public XclExpRecordBase, protected XclExpRoot
 {
@@ -113,7 +113,7 @@ private:
     ScRangeList maRange;
 };
 
-typedef boost::shared_ptr<XclExpExtConditionalFormatting> XclExpExtConditionalFormattingRef;
+typedef std::shared_ptr<XclExpExtConditionalFormatting> XclExpExtConditionalFormattingRef;
 
 class XclExpExtCondFormat : public XclExpExt
 {
@@ -143,7 +143,7 @@ private:
     XclExpRecordList< XclExpExt > maExtEntries;
 };
 
-typedef boost::shared_ptr< XclExtLst > XclExtLstRef;
+typedef std::shared_ptr< XclExtLst > XclExtLstRef;
 
 #endif
 

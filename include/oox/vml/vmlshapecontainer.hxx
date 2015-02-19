@@ -88,7 +88,7 @@ public:
       (Word only) Returns the last shape in the collection, if it is after the last
       mark from pushMark(), and removes it.
     */
-    boost::shared_ptr< ShapeBase > takeLastShape();
+    std::shared_ptr< ShapeBase > takeLastShape();
     /**
       Adds a recursion mark to the stack. It is possible that a shape contains <w:txbxContent>
       which contains another shape, and writerfilter needs to know which shape is from the inner
@@ -126,7 +126,7 @@ private:
 template< typename ShapeT >
 ShapeT& ShapeContainer::createShape()
 {
-    ::boost::shared_ptr< ShapeT > xShape( new ShapeT( mrDrawing ) );
+    std::shared_ptr< ShapeT > xShape( new ShapeT( mrDrawing ) );
     maShapes.push_back( xShape );
     return *xShape;
 }

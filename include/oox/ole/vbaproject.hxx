@@ -102,7 +102,7 @@ private:
     OUString     maMacroName;
 };
 
-typedef ::boost::shared_ptr< VbaMacroAttacherBase > VbaMacroAttacherRef;
+typedef std::shared_ptr< VbaMacroAttacherBase > VbaMacroAttacherRef;
 
 
 

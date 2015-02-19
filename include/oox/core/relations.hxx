@@ -20,10 +20,10 @@
 #ifndef INCLUDED_OOX_CORE_RELATIONS_HXX
 #define INCLUDED_OOX_CORE_RELATIONS_HXX
 
-#include <map>
-#include <boost/shared_ptr.hpp>
 #include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>
+#include <map>
+#include <memory>
 
 namespace oox {
 namespace core {
@@ -66,7 +66,7 @@ struct Relation
 
 
 class Relations;
-typedef ::boost::shared_ptr< Relations > RelationsRef;
+typedef std::shared_ptr< Relations > RelationsRef;
 
 class OOX_DLLPUBLIC Relations
 {

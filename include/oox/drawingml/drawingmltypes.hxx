@@ -21,7 +21,6 @@
 #define INCLUDED_OOX_DRAWINGML_DRAWINGMLTYPES_HXX
 
 #include <memory>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
@@ -47,43 +46,43 @@ const sal_Int32 MAX_DEGREE      = 360 * PER_DEGREE;
 
 
 struct LineProperties;
-typedef ::boost::shared_ptr< LineProperties > LinePropertiesPtr;
+typedef std::shared_ptr< LineProperties > LinePropertiesPtr;
 
 struct FillProperties;
-typedef ::boost::shared_ptr< FillProperties > FillPropertiesPtr;
+typedef std::shared_ptr< FillProperties > FillPropertiesPtr;
 
 struct GraphicProperties;
-typedef ::boost::shared_ptr< GraphicProperties > GraphicPropertiesPtr;
+typedef std::shared_ptr< GraphicProperties > GraphicPropertiesPtr;
 
 struct Shape3DProperties;
-typedef ::boost::shared_ptr< Shape3DProperties > Shape3DPropertiesPtr;
+typedef std::shared_ptr< Shape3DProperties > Shape3DPropertiesPtr;
 
 struct TextCharacterProperties;
-typedef ::boost::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
+typedef std::shared_ptr< TextCharacterProperties > TextCharacterPropertiesPtr;
 
 struct TextBodyProperties;
 
 struct EffectProperties;
-typedef ::boost::shared_ptr< EffectProperties > EffectPropertiesPtr;
+typedef std::shared_ptr< EffectProperties > EffectPropertiesPtr;
 
 class TextBody;
-typedef ::boost::shared_ptr< TextBody > TextBodyPtr;
+typedef std::shared_ptr< TextBody > TextBodyPtr;
 
 class TextListStyle;
-typedef boost::shared_ptr< TextListStyle > TextListStylePtr;
+typedef std::shared_ptr< TextListStyle > TextListStylePtr;
 
 class Shape;
 typedef std::shared_ptr< Shape > ShapePtr;
 
 class Theme;
-typedef ::boost::shared_ptr< Theme > ThemePtr;
+typedef std::shared_ptr< Theme > ThemePtr;
 
 
 
 namespace table {
 
 class TableProperties;
-typedef ::boost::shared_ptr< TableProperties > TablePropertiesPtr;
+typedef std::shared_ptr< TableProperties > TablePropertiesPtr;
 
 } // namespace table
 

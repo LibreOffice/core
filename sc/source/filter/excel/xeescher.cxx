@@ -78,7 +78,7 @@
 #include <oox/export/drawingml.hxx>
 #include <oox/export/chartexport.hxx>
 #include <oox/export/utils.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -1458,9 +1458,9 @@ XclExpDffAnchorBase* XclExpObjectManager::CreateDffAnchor() const
     return new XclExpDffSheetAnchor( GetRoot() );
 }
 
-boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
+std::shared_ptr< XclExpRecordBase > XclExpObjectManager::CreateDrawingGroup()
 {
-    return boost::shared_ptr< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
+    return std::shared_ptr< XclExpRecordBase >( new XclExpMsoDrawingGroup( *mxEscherEx ) );
 }
 
 void XclExpObjectManager::StartSheet()
@@ -1468,7 +1468,7 @@ void XclExpObjectManager::StartSheet()
     mxObjList.reset( new XclExpObjList( GetRoot(), *mxEscherEx ) );
 }
 
-boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
+std::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPage* pSdrPage )
 {
     if( pSdrPage )
         mxEscherEx->AddSdrPage( *pSdrPage );
@@ -1480,7 +1480,7 @@ boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( SdrPa
     return mxObjList;
 }
 
-boost::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
+std::shared_ptr< XclExpRecordBase > XclExpObjectManager::ProcessDrawing( const Reference< XShapes >& rxShapes )
 {
     if( rxShapes.is() )
         mxEscherEx->AddUnoShapes( rxShapes );

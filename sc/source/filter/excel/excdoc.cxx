@@ -75,7 +75,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <oox/token/tokens.hxx>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 using namespace oox;
 
@@ -477,7 +477,7 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     }
 
     // WSBOOL needs data from page settings, create it here, add it later
-    boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    std::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 
     if( eBiff <= EXC_BIFF5 )
@@ -618,7 +618,7 @@ void ExcTable::FillAsTableXml()
     }
 
     // WSBOOL needs data from page settings, create it here, add it later
-    boost::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
+    std::shared_ptr< XclExpPageSettings > xPageSett( new XclExpPageSettings( GetRoot() ) );
     XclExtLstRef xExtLst( new XclExtLst( GetRoot() ) );
     bool bFitToPages = xPageSett->GetPageData().mbFitToPages;
 

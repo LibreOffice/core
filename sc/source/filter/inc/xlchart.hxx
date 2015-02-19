@@ -25,10 +25,10 @@
 // disable/enable restriction to hair lines in 3D bar charts (#i83151#)
 #define EXC_CHART2_3DBAR_HAIRLINES_ONLY 1
 
-#include <map>
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
-#include <boost/shared_ptr.hpp>
+#include <map>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -807,8 +807,8 @@ class EscherPropertyContainer;
 
 struct XclChEscherFormat
 {
-    typedef boost::shared_ptr< SfxItemSet >                SfxItemSetRef;
-    typedef boost::shared_ptr< EscherPropertyContainer >   EscherPropSetRef;
+    typedef std::shared_ptr< SfxItemSet >                SfxItemSetRef;
+    typedef std::shared_ptr< EscherPropertyContainer >   EscherPropSetRef;
 
     SfxItemSetRef       mxItemSet;          /// Item set for Escher properties import.
     EscherPropSetRef    mxEscherSet;        /// Container for Escher properties export.
@@ -1402,9 +1402,9 @@ private:
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
 {
-    typedef boost::shared_ptr< XclChTypeInfoProvider >      XclChTypeProvRef;
-    typedef boost::shared_ptr< XclChFormatInfoProvider >    XclChFmtInfoProvRef;
-    typedef boost::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
+    typedef std::shared_ptr< XclChTypeInfoProvider >      XclChTypeProvRef;
+    typedef std::shared_ptr< XclChFormatInfoProvider >    XclChFmtInfoProvRef;
+    typedef std::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
     typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >

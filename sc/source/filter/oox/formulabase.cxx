@@ -225,7 +225,7 @@ const sal_uInt16 FUNCFLAG_INTERNAL          = 0x2000;   /// Function is internal
 /// Extracts a function library index (value of enum FunctionLibraryType) from function flags.
 #define FUNCFLAGS_TO_FUNCLIB( func_flags ) extractValue< FunctionLibraryType >( func_flags, 12, 4 )
 
-typedef ::boost::shared_ptr< FunctionInfo > FunctionInfoRef;
+typedef std::shared_ptr< FunctionInfo > FunctionInfoRef;
 
 struct FunctionData
 {

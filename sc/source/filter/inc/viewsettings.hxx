@@ -87,7 +87,7 @@ struct SheetViewModel
     PaneSelectionModel& createPaneSelection( sal_Int32 nPaneId );
 };
 
-typedef ::boost::shared_ptr< SheetViewModel > SheetViewModelRef;
+typedef std::shared_ptr< SheetViewModel > SheetViewModelRef;
 
 class SheetViewSettings : public WorksheetHelper
 {
@@ -145,7 +145,7 @@ struct WorkbookViewModel
     explicit            WorkbookViewModel();
 };
 
-typedef ::boost::shared_ptr< WorkbookViewModel > WorkbookViewModelRef;
+typedef std::shared_ptr< WorkbookViewModel > WorkbookViewModelRef;
 
 class ViewSettings : public WorkbookHelper
 {

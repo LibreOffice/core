@@ -120,7 +120,7 @@ private:
     bool                mbDdeLinkCreated;   /// True = already tried to create the DDE link.
 };
 
-typedef ::boost::shared_ptr< ExternalName > ExternalNameRef;
+typedef std::shared_ptr< ExternalName > ExternalNameRef;
 
 /** Contains indexes for a range of sheets in the spreadsheet document. */
 class LinkSheetRange
@@ -278,7 +278,7 @@ private:
     ExternalNameVector  maExtNames;         /// Defined names in external document.
 };
 
-typedef ::boost::shared_ptr< ExternalLink > ExternalLinkRef;
+typedef std::shared_ptr< ExternalLink > ExternalLinkRef;
 
 /** Represents a REF entry in the BIFF12 EXTERNALSHEETS or in the BIFF8
     EXTERNSHEET record.

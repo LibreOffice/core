@@ -73,7 +73,7 @@ private:
     bool                mbRelSize;          /// True = relative size, false = absolute size.
 };
 
-typedef ::boost::shared_ptr< ShapeAnchor > ShapeAnchorRef;
+typedef std::shared_ptr< ShapeAnchor > ShapeAnchorRef;
 
 
 

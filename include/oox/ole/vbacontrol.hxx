@@ -92,7 +92,7 @@ protected:
     sal_uInt16          mnGroupId;          ///< Group identifier for grouped controls.
 };
 
-typedef ::boost::shared_ptr< VbaSiteModel > VbaSiteModelRef;
+typedef std::shared_ptr< VbaSiteModel > VbaSiteModelRef;
 
 
 

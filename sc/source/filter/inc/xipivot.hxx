@@ -20,10 +20,10 @@
 #ifndef INCLUDED_SC_SOURCE_FILTER_INC_XIPIVOT_HXX
 #define INCLUDED_SC_SOURCE_FILTER_INC_XIPIVOT_HXX
 
-#include <list>
 #include "xlpivot.hxx"
 #include "xiroot.hxx"
-#include <boost/shared_ptr.hpp>
+#include <list>
+#include <memory>
 
 class ScDPSaveData;
 class ScDPSaveDimension;
@@ -56,7 +56,7 @@ private:
     void                ReadSxempty( XclImpStream& rStrm );
 };
 
-typedef boost::shared_ptr< XclImpPCItem > XclImpPCItemRef;
+typedef std::shared_ptr< XclImpPCItem > XclImpPCItemRef;
 
 struct ScDPNumGroupInfo;
 class XclImpPivotCache;
@@ -138,7 +138,7 @@ private:
     bool                mbNumGroupInfoRead; /// true = Numeric grouping info read (SXNUMGROUP record).
 };
 
-typedef boost::shared_ptr< XclImpPCField > XclImpPCFieldRef;
+typedef std::shared_ptr< XclImpPCField > XclImpPCFieldRef;
 
 class XclImpPivotCache : protected XclImpRoot
 {
@@ -192,7 +192,7 @@ private:
     bool                mbSelfRef;          /// true = Source data from own document.
 };
 
-typedef boost::shared_ptr< XclImpPivotCache > XclImpPivotCacheRef;
+typedef std::shared_ptr< XclImpPivotCache > XclImpPivotCacheRef;
 
 // Pivot table
 
@@ -217,7 +217,7 @@ private:
     const XclImpPCField* mpCacheField;      /// Corresponding pivot cache field.
 };
 
-typedef boost::shared_ptr< XclImpPTItem > XclImpPTItemRef;
+typedef std::shared_ptr< XclImpPTItem > XclImpPTItemRef;
 
 class XclImpPTField
 {
@@ -291,7 +291,7 @@ private:
     XclImpPTItemVec     maItems;            /// List of all items of this field.
 };
 
-typedef boost::shared_ptr< XclImpPTField > XclImpPTFieldRef;
+typedef std::shared_ptr< XclImpPTField > XclImpPTFieldRef;
 
 class XclImpPivotTable : protected XclImpRoot
 {
@@ -362,7 +362,7 @@ private:
     ScDPObject*         mpDPObj;
 };
 
-typedef boost::shared_ptr< XclImpPivotTable > XclImpPivotTableRef;
+typedef std::shared_ptr< XclImpPivotTable > XclImpPivotTableRef;
 
 /** The main class for pivot table import.
 

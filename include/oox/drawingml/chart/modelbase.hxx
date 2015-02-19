@@ -31,11 +31,11 @@ namespace drawingml {
 namespace chart {
 
 template< typename ModelType >
-class ModelRef : public ::boost::shared_ptr< ModelType >
+class ModelRef : public std::shared_ptr< ModelType >
 {
 public:
                  ModelRef() {}
-                 ModelRef( const ::boost::shared_ptr< ModelType >& rxModel ) : ::boost::shared_ptr< ModelType >( rxModel ) {}
+                 ModelRef( const std::shared_ptr< ModelType >& rxModel ) : std::shared_ptr< ModelType >( rxModel ) {}
                  ~ModelRef() {}
 
     bool         is() const { return this->get() != 0; }

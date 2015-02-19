@@ -54,7 +54,7 @@ private:
     bool                        mbIsLineBreak;
 };
 
-typedef boost::shared_ptr< TextRun > TextRunPtr;
+typedef std::shared_ptr< TextRun > TextRunPtr;
 
 } }
 

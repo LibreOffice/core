@@ -148,7 +148,7 @@ private:
     sal_uInt16          mnFmlaSize;         /// Cached BIFF formula size for formula import.
 };
 
-typedef ::boost::shared_ptr< DefinedName > DefinedNameRef;
+typedef std::shared_ptr< DefinedName > DefinedNameRef;
 
 class DefinedNamesBuffer : public WorkbookHelper
 {

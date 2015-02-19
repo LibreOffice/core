@@ -275,7 +275,7 @@ private:
     bool                mbDxf;
 };
 
-typedef ::boost::shared_ptr< Font > FontRef;
+typedef std::shared_ptr< Font > FontRef;
 
 /** Contains all XML cell alignment attributes, e.g. from an alignment element. */
 struct AlignmentModel
@@ -350,7 +350,7 @@ private:
     ApiAlignmentData    maApiData;          /// Alignment data converted to API constants.
 };
 
-typedef ::boost::shared_ptr< Alignment > AlignmentRef;
+typedef std::shared_ptr< Alignment > AlignmentRef;
 
 /** Contains all XML cell protection attributes, e.g. from a protection element. */
 struct ProtectionModel
@@ -400,7 +400,7 @@ private:
     ApiProtectionData   maApiData;          /// Protection data converted to API constants.
 };
 
-typedef ::boost::shared_ptr< Protection > ProtectionRef;
+typedef std::shared_ptr< Protection > ProtectionRef;
 
 /** Contains XML attributes of a single border line. */
 struct BorderLineModel
@@ -498,7 +498,7 @@ private:
     bool                mbDxf;
 };
 
-typedef ::boost::shared_ptr< Border > BorderRef;
+typedef std::shared_ptr< Border > BorderRef;
 
 /** Contains XML pattern fill attributes from the patternFill element. */
 struct PatternFillModel
@@ -594,8 +594,8 @@ public:
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
-    typedef ::boost::shared_ptr< PatternFillModel >   PatternModelRef;
-    typedef ::boost::shared_ptr< GradientFillModel >  GradientModelRef;
+    typedef std::shared_ptr< PatternFillModel >   PatternModelRef;
+    typedef std::shared_ptr< GradientFillModel >  GradientModelRef;
 
     PatternModelRef     mxPatternModel;
     GradientModelRef    mxGradientModel;
@@ -603,7 +603,7 @@ private:
     bool                mbDxf;
 };
 
-typedef ::boost::shared_ptr< Fill > FillRef;
+typedef std::shared_ptr< Fill > FillRef;
 
 /** Contains all data for a cell format or cell style. */
 struct XfModel
@@ -697,7 +697,7 @@ private:
 
 bool operator==( const Xf& rXf1,  const Xf& rXf2 );
 
-typedef ::boost::shared_ptr< Xf > XfRef;
+typedef std::shared_ptr< Xf > XfRef;
 
 class Dxf : public WorkbookHelper
 {
@@ -731,7 +731,7 @@ private:
     FillRef             mxFill;             /// Fill data.
 };
 
-typedef ::boost::shared_ptr< Dxf > DxfRef;
+typedef std::shared_ptr< Dxf > DxfRef;
 
 /** Contains attributes of a cell style, e.g. from the cellStyle element. */
 struct CellStyleModel
@@ -781,7 +781,7 @@ private:
 
 };
 
-typedef ::boost::shared_ptr< CellStyle > CellStyleRef;
+typedef std::shared_ptr< CellStyle > CellStyleRef;
 
 class CellStyleBuffer : public WorkbookHelper
 {

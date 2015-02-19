@@ -26,8 +26,8 @@
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
-#include <boost/shared_ptr.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
+#include <memory>
 
 class Size;
 class Rectangle;
@@ -150,7 +150,7 @@ protected:
     void                FinalizeFutureRecBlock( XclExpStream& rStrm );
 
 private:
-    typedef boost::shared_ptr< XclExpChRootData > XclExpChRootDataRef;
+    typedef std::shared_ptr< XclExpChRootData > XclExpChRootDataRef;
     XclExpChRootDataRef mxChData;           /// Reference to the root data object.
 };
 
@@ -213,7 +213,7 @@ private:
     XclChFramePos       maData;             /// Position of the frame.
 };
 
-typedef boost::shared_ptr< XclExpChFramePos > XclExpChFramePosRef;
+typedef std::shared_ptr< XclExpChFramePos > XclExpChFramePosRef;
 
 class XclExpChLineFormat : public XclExpRecord
 {
@@ -246,7 +246,7 @@ private:
     sal_uInt32          mnColorId;          /// Line color identifier.
 };
 
-typedef boost::shared_ptr< XclExpChLineFormat > XclExpChLineFormatRef;
+typedef std::shared_ptr< XclExpChLineFormat > XclExpChLineFormatRef;
 
 class XclExpChAreaFormat : public XclExpRecord
 {
@@ -278,7 +278,7 @@ private:
     sal_uInt32          mnBackColorId;      /// Pattern background color identifier.
 };
 
-typedef boost::shared_ptr< XclExpChAreaFormat > XclExpChAreaFormatRef;
+typedef std::shared_ptr< XclExpChAreaFormat > XclExpChAreaFormatRef;
 
 class XclExpChEscherFormat : public XclExpChGroupBase
 {
@@ -311,7 +311,7 @@ private:
     sal_uInt32          mnColor2Id;         /// Second fill color identifier.
 };
 
-typedef boost::shared_ptr< XclExpChEscherFormat > XclExpChEscherFormatRef;
+typedef std::shared_ptr< XclExpChEscherFormat > XclExpChEscherFormatRef;
 
 /** Base class for record groups containing frame formatting.
 
@@ -378,7 +378,7 @@ private:
     XclChObjectType     meObjType;          /// Type of the represented object.
 };
 
-typedef boost::shared_ptr< XclExpChFrame > XclExpChFrameRef;
+typedef std::shared_ptr< XclExpChFrame > XclExpChFrameRef;
 
 // Source links ===============================================================
 
@@ -417,7 +417,7 @@ private:
     XclExpStringRef     mxString;           /// Text data (CHSTRING record).
 };
 
-typedef boost::shared_ptr< XclExpChSourceLink > XclExpChSourceLinkRef;
+typedef std::shared_ptr< XclExpChSourceLink > XclExpChSourceLinkRef;
 
 // Text =======================================================================
 
@@ -428,7 +428,7 @@ public:
     explicit            XclExpChFont( sal_uInt16 nFontIdx );
 };
 
-typedef boost::shared_ptr< XclExpChFont > XclExpChFontRef;
+typedef std::shared_ptr< XclExpChFont > XclExpChFontRef;
 
 /** The CHOBJECTLINK record linking a text object to a specific chart object. */
 class XclExpChObjectLink : public XclExpRecord
@@ -443,7 +443,7 @@ private:
     XclChObjectLink     maData;             /// Contents of the CHOBJECTLINK record.
 };
 
-typedef boost::shared_ptr< XclExpChObjectLink > XclExpChObjectLinkRef;
+typedef std::shared_ptr< XclExpChObjectLink > XclExpChObjectLinkRef;
 
 /** Additional data label settings in the future record CHFRLABELPROPS. */
 class XclExpChFrLabelProps : public XclExpChFutureRecordBase
@@ -464,7 +464,7 @@ private:
     XclChFrLabelProps   maData;             /// Contents of the CHFRLABELPROPS record.
 };
 
-typedef boost::shared_ptr< XclExpChFrLabelProps > XclExpChFrLabelPropsRef;
+typedef std::shared_ptr< XclExpChFrLabelProps > XclExpChFrLabelPropsRef;
 
 /** Base class for objects with font settings. Provides font conversion helper functions. */
 class XclExpChFontBase
@@ -536,7 +536,7 @@ private:
     sal_uInt32          mnTextColorId;      /// Text color identifier.
 };
 
-typedef boost::shared_ptr< XclExpChText > XclExpChTextRef;
+typedef std::shared_ptr< XclExpChText > XclExpChTextRef;
 
 // Data series ================================================================
 
@@ -572,7 +572,7 @@ private:
     sal_uInt32          mnFillColorId;      /// Fill color identifier.
 };
 
-typedef boost::shared_ptr< XclExpChMarkerFormat > XclExpChMarkerFormatRef;
+typedef std::shared_ptr< XclExpChMarkerFormat > XclExpChMarkerFormatRef;
 
 /** The CHPIEFORMAT record containing data point formatting data for pie segments. */
 class XclExpChPieFormat : public XclExpUInt16Record
@@ -584,7 +584,7 @@ public:
     void                Convert( const ScfPropertySet& rPropSet );
 };
 
-typedef boost::shared_ptr< XclExpChPieFormat > XclExpChPieFormatRef;
+typedef std::shared_ptr< XclExpChPieFormat > XclExpChPieFormatRef;
 
 /** The CH3DDATAFORMAT record containing the bar type in 3D bar charts. */
 class XclExpCh3dDataFormat : public XclExpRecord
@@ -602,7 +602,7 @@ private:
     XclCh3dDataFormat   maData;             /// Contents of the CH3DDATAFORMAT record.
 };
 
-typedef boost::shared_ptr< XclExpCh3dDataFormat > XclExpCh3dDataFormatRef;
+typedef std::shared_ptr< XclExpCh3dDataFormat > XclExpCh3dDataFormatRef;
 
 /** The CHATTACHEDLABEL record that contains the type of a data point label. */
 class XclExpChAttachedLabel : public XclExpUInt16Record
@@ -611,7 +611,7 @@ public:
     explicit            XclExpChAttachedLabel( sal_uInt16 nFlags );
 };
 
-typedef boost::shared_ptr< XclExpChAttachedLabel > XclExpChAttLabelRef;
+typedef std::shared_ptr< XclExpChAttachedLabel > XclExpChAttLabelRef;
 
 /** Represents the CHDATAFORMAT record group containing data point properties.
 
@@ -650,7 +650,7 @@ private:
     XclExpChAttLabelRef mxAttLabel;         /// Data point label type (CHATTACHEDLABEL record).
 };
 
-typedef boost::shared_ptr< XclExpChDataFormat > XclExpChDataFormatRef;
+typedef std::shared_ptr< XclExpChDataFormat > XclExpChDataFormatRef;
 
 /** Represents the CHSERTRENDLINE record containing settings for a trend line. */
 class XclExpChSerTrendLine : public XclExpRecord, protected XclExpChRoot
@@ -678,7 +678,7 @@ private:
     XclExpChTextRef     mxLabel;            /// Formatting of the equation text box.
 };
 
-typedef boost::shared_ptr< XclExpChSerTrendLine > XclExpChSerTrendLineRef;
+typedef std::shared_ptr< XclExpChSerTrendLine > XclExpChSerTrendLineRef;
 
 /** Represents the CHSERERRORBAR record containing settings for error bars. */
 class XclExpChSerErrorBar : public XclExpRecord, protected XclExpChRoot
@@ -696,7 +696,7 @@ private:
     XclChSerErrorBar    maData;             /// Contents of the CHSERERRORBAR record.
 };
 
-typedef boost::shared_ptr< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
+typedef std::shared_ptr< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
 
 /** Represents the CHSERIES record group describing a data series in a chart.
 
@@ -768,7 +768,7 @@ private:
     sal_uInt16          mnParentIdx;        /// 0-based index of parent series (trend lines and error bars).
 };
 
-typedef boost::shared_ptr< XclExpChSeries > XclExpChSeriesRef;
+typedef std::shared_ptr< XclExpChSeries > XclExpChSeriesRef;
 
 // Chart type groups ==========================================================
 
@@ -822,7 +822,7 @@ private:
     XclChChart3d        maData;             /// Contents of the CHCHART3D record.
 };
 
-typedef boost::shared_ptr< XclExpChChart3d > XclExpChChart3dRef;
+typedef std::shared_ptr< XclExpChChart3d > XclExpChChart3dRef;
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
@@ -850,7 +850,7 @@ private:
     XclExpChFrameRef    mxFrame;            /// Legend frame format (CHFRAME group).
 };
 
-typedef boost::shared_ptr< XclExpChLegend > XclExpChLegendRef;
+typedef std::shared_ptr< XclExpChLegend > XclExpChLegendRef;
 
 /** Represents the CHDROPBAR record group describing pos/neg bars in line charts.
 
@@ -876,7 +876,7 @@ private:
     sal_uInt16          mnBarDist;          /// Distance between bars (CHDROPBAR record).
 };
 
-typedef boost::shared_ptr< XclExpChDropBar > XclExpChDropBarRef;
+typedef std::shared_ptr< XclExpChDropBar > XclExpChDropBarRef;
 
 /** Represents the CHTYPEGROUP record group describing a group of series.
 
@@ -955,7 +955,7 @@ private:
     XclExpChLineFormatMap maChartLines;     /// Global line formats (CHCHARTLINE group).
 };
 
-typedef boost::shared_ptr< XclExpChTypeGroup > XclExpChTypeGroupRef;
+typedef std::shared_ptr< XclExpChTypeGroup > XclExpChTypeGroupRef;
 
 // Axes =======================================================================
 
@@ -982,7 +982,7 @@ private:
     XclChDateRange      maDateData;         /// Contents of the CHDATERANGE record.
 };
 
-typedef boost::shared_ptr< XclExpChLabelRange > XclExpChLabelRangeRef;
+typedef std::shared_ptr< XclExpChLabelRange > XclExpChLabelRangeRef;
 
 class XclExpChValueRange : public XclExpRecord, protected XclExpChRoot
 {
@@ -1001,7 +1001,7 @@ private:
     XclChValueRange     maData;             /// Contents of the CHVALUERANGE record.
 };
 
-typedef boost::shared_ptr< XclExpChValueRange > XclExpChValueRangeRef;
+typedef std::shared_ptr< XclExpChValueRange > XclExpChValueRangeRef;
 
 class XclExpChTick : public XclExpRecord, protected XclExpChRoot
 {
@@ -1023,7 +1023,7 @@ private:
     sal_uInt32          mnTextColorId;      /// Axis labels text color identifier.
 };
 
-typedef boost::shared_ptr< XclExpChTick > XclExpChTickRef;
+typedef std::shared_ptr< XclExpChTick > XclExpChTickRef;
 
 /** Represents the CHAXIS record group describing an entire chart axis.
 
@@ -1076,7 +1076,7 @@ private:
     sal_uInt16          mnNumFmtIdx;        /// Index into number format buffer (CHFORMAT record).
 };
 
-typedef boost::shared_ptr< XclExpChAxis > XclExpChAxisRef;
+typedef std::shared_ptr< XclExpChAxis > XclExpChAxisRef;
 
 /** Represents the CHAXESSET record group describing an axes set (X/Y/Z axes).
 
@@ -1138,7 +1138,7 @@ private:
     XclExpChTypeGroupList maTypeGroups;     /// Chart type groups (CHTYPEGROUP group).
 };
 
-typedef boost::shared_ptr< XclExpChAxesSet > XclExpChAxesSetRef;
+typedef std::shared_ptr< XclExpChAxesSet > XclExpChAxesSetRef;
 
 // The chart object ===========================================================
 
@@ -1201,8 +1201,8 @@ public:
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
 
 private:
-    boost::shared_ptr< XclExpObjectManager > mxObjMgr;
-    boost::shared_ptr< XclExpRecordBase > mxObjRecs;
+    std::shared_ptr< XclExpObjectManager > mxObjMgr;
+    std::shared_ptr< XclExpRecordBase > mxObjRecs;
 };
 
 /** Represents the entire chart substream (all records in BOF/EOF block). */

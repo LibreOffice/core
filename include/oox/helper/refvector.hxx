@@ -20,10 +20,11 @@
 #ifndef INCLUDED_OOX_HELPER_REFVECTOR_HXX
 #define INCLUDED_OOX_HELPER_REFVECTOR_HXX
 
-#include <vector>
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
 #include <sal/types.h>
+#include <boost/bind.hpp>
+#include <algorithm>
+#include <memory>
+#include <vector>
 
 namespace oox {
 
@@ -32,15 +33,15 @@ namespace oox {
 /** Template for a vector of ref-counted objects with additional accessor functions.
 
     An instance of the class RefVector< Type > stores elements of the type
-    ::boost::shared_ptr< Type >. The new accessor functions has() and get()
+    std::shared_ptr< Type >. The new accessor functions has() and get()
     work correctly for indexes out of the current range, there is no need to
     check the passed index before.
  */
 template< typename ObjType >
-class RefVector : public ::std::vector< ::boost::shared_ptr< ObjType > >
+class RefVector : public ::std::vector< std::shared_ptr< ObjType > >
 {
 public:
-    typedef ::std::vector< ::boost::shared_ptr< ObjType > > container_type;
+    typedef ::std::vector< std::shared_ptr< ObjType > > container_type;
     typedef typename container_type::value_type             value_type;
     typedef typename container_type::size_type              size_type;
 

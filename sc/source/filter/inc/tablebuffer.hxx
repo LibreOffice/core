@@ -86,7 +86,7 @@ private:
     sal_Int32           mnTokenIndex;       /// Token index used in API token array.
 };
 
-typedef ::boost::shared_ptr< Table > TableRef;
+typedef std::shared_ptr< Table > TableRef;
 
 class TableBuffer : public WorkbookHelper
 {

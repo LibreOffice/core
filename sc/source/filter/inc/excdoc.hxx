@@ -24,7 +24,7 @@
 #include "xeroot.hxx"
 #include "root.hxx"
 #include "xeescher.hxx"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 // Forwards -
 
@@ -42,9 +42,9 @@ class ExcTable : public XclExpRecordBase, public XclExpRoot
 {
 private:
     typedef XclExpRecordList< ExcBundlesheetBase >  ExcBoundsheetList;
-    typedef boost::shared_ptr< XclExpCellTable >    XclExpCellTableRef;
+    typedef std::shared_ptr< XclExpCellTable >    XclExpCellTableRef;
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
-    typedef boost::shared_ptr< XclExpNoteList >     XclExpNoteListRef;
+    typedef std::shared_ptr< XclExpNoteList >     XclExpNoteListRef;
 
     XclExpRecordList<>          aRecList;
     XclExpCellTableRef          mxCellTable;

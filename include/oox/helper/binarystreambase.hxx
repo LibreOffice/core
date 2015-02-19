@@ -21,9 +21,9 @@
 #define INCLUDED_OOX_HELPER_BINARYSTREAMBASE_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <boost/shared_ptr.hpp>
 #include <oox/helper/helper.hxx>
 #include <oox/dllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; }
