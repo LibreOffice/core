@@ -18,6 +18,7 @@
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 
 class Chart2ImportTest : public ChartTest
 {
