@@ -30,9 +30,6 @@
 #define OOO_DLLPUBLIC_CHARTTOOLS SAL_DLLPUBLIC_IMPORT
 #endif
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL charttools_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
