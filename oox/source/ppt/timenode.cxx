@@ -19,8 +19,6 @@
 
 #include "oox/ppt/timenode.hxx"
 
-#include <boost/bind.hpp>
-
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
