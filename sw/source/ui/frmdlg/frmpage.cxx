@@ -2904,6 +2904,8 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
                 aTmpName1 = pWrtSh->GetUniqueOLEName();
             else
                 aTmpName1 = pWrtSh->GetUniqueFrameName();
+
+            pWrtSh->SetFlyName(aTmpName1);
         }
 
         pNameED->SetText( aTmpName1 );
