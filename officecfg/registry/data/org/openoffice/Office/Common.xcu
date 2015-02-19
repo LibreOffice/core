@@ -660,6 +660,9 @@
     <prop oor:name="Program">
       <value oor:external="com.sun.star.configuration.backend.DesktopBackend ExternalMailer"/>
     </prop>
+    <prop oor:name="Hidden">
+      <value oor:external="com.sun.star.configuration.backend.DesktopBackend ExternalMailer"/>
+    </prop>
   </node>
   <node oor:name="Font">
     <node oor:name="SourceViewFont" install:module="unixdesktop">
