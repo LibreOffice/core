@@ -86,7 +86,7 @@ public class LOKitShell {
      * Send touch event to LOKitThread.
      */
     public static void sentTouchEvent(String touchType, MotionEvent motionEvent, PointF pointF) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, "SingleTap", motionEvent, pointF));
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, touchType, motionEvent, pointF));
     }
 
     /**
