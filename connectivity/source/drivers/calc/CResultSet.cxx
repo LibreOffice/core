@@ -110,7 +110,7 @@ sal_Bool SAL_CALL OCalcResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 
 sal_Int32 SAL_CALL OCalcResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException, std::exception)
 {
-    return (lhs == rhs) ? 0 : 2;
+    return (lhs == rhs) ? CompareBookmark::EQUAL : CompareBookmark::NOT_EQUAL;
 }
 
 sal_Bool SAL_CALL OCalcResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException, std::exception)

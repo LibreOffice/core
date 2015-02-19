@@ -122,14 +122,12 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const Any& lhs, const Any&
         ::dbtools::throwGenericSQLException(sMessage ,*this);
     } // if ( !( lhs  >>= nFirst ) || !( rhs >>= nSecond ) )
 
-    // have a look at CompareBookmark
-    // we can't use the names there because we already have defines with the same name from the parser
     if(nFirst < nSecond)
-        nResult = -1;
+        nResult = CompareBookmark::LESS;
     else if(nFirst > nSecond)
-        nResult = 1;
+        nResult = CompareBookmark::GREATER;
     else
-        nResult = 0;
+        nResult = CompareBookmark::EQUAL;
 
     return  nResult;
 }

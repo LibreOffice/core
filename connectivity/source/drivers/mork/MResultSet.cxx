@@ -28,6 +28,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
@@ -57,6 +58,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
@@ -1610,11 +1612,11 @@ sal_Int32 OResultSet::compareBookmarks( const ::com::sun::star::uno::Any& lhs, c
         }
 
     if(nFirst < nSecond)
-         nResult = -1;
+        nResult = CompareBookmark::LESS;
     else if(nFirst > nSecond)
-         nResult = 1;
+        nResult = CompareBookmark::GREATER;
     else
-         nResult = 0;
+        nResult = CompareBookmark::EQUAL;
 
     return  nResult;
 }
