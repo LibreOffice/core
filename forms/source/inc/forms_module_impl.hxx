@@ -125,56 +125,6 @@ namespace FORMS_MODULE_NAMESPACE
         }
     }
 
-
-    Reference< XInterface > OFormsModule::getComponentFactory(
-        const OUString& _rImplementationName,
-        const Reference< XMultiServiceFactory >& _rxServiceManager)
-    {
-        OSL_ENSURE(_rxServiceManager.is(), "OFormsModule::getComponentFactory : invalid argument (service manager) !");
-        OSL_ENSURE(!_rImplementationName.isEmpty(), "OFormsModule::getComponentFactory : invalid argument (implementation name) !");
-
-        if (!s_pImplementationNames)
-        {
-            OSL_FAIL("OFormsModule::getComponentFactory : have no class infos ! Are you sure called this method at the right time ?");
-            return NULL;
-        }
-        OSL_ENSURE(s_pImplementationNames && s_pSupportedServices && s_pCreationFunctionPointers && s_pFactoryFunctionPointers,
-            "OFormsModule::getComponentFactory : inconsistent state (the pointers) !");
-        OSL_ENSURE( (s_pImplementationNames->getLength() == s_pSupportedServices->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pCreationFunctionPointers->getLength())
-                    &&  (s_pImplementationNames->getLength() == s_pFactoryFunctionPointers->getLength()),
-            "OFormsModule::getComponentFactory : inconsistent state !");
-
-
-        Reference< XInterface > xReturn;
-
-
-        sal_Int32 nLen = s_pImplementationNames->getLength();
-        const OUString* pImplName = s_pImplementationNames->getConstArray();
-        const Sequence< OUString >* pServices = s_pSupportedServices->getConstArray();
-        const sal_Int64* pComponentFunction = s_pCreationFunctionPointers->getConstArray();
-        const sal_Int64* pFactoryFunction = s_pFactoryFunctionPointers->getConstArray();
-
-        for (sal_Int32 i=0; i<nLen; ++i, ++pImplName, ++pServices, ++pComponentFunction, ++pFactoryFunction)
-        {
-            if (pImplName->equals(_rImplementationName))
-            {
-                const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<const FactoryInstantiation>(*pFactoryFunction);
-                const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<const ComponentInstantiation>(*pComponentFunction);
-
-                xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, NULL);
-                if (xReturn.is())
-                {
-                    xReturn->acquire();
-                    return xReturn.get();
-                }
-            }
-        }
-
-        return NULL;
-    }
-
-
 }   // namespace FORMS_MODULE_NAMESPACE
 
 

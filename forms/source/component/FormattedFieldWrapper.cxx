@@ -48,40 +48,6 @@ OFormattedFieldWrapper::OFormattedFieldWrapper(const Reference<XComponentContext
 {
 }
 
-InterfaceRef OFormattedFieldWrapper::createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted)
-{
-    OFormattedFieldWrapper *pRef = new OFormattedFieldWrapper(_rxFactory);
-
-    if (bActAsFormatted)
-    {
-        // instantiate an FormattedModel
-        InterfaceRef  xFormattedModel;
-        // (instantiate it directly ..., as the OFormattedModel isn't
-        // registered for any service names anymore)
-        OFormattedModel* pModel = new OFormattedModel(pRef->m_xContext);
-        query_interface(static_cast<XWeak*>(pModel), xFormattedModel);
-
-        pRef->m_xAggregate = Reference<XAggregation> (xFormattedModel, UNO_QUERY);
-        OSL_ENSURE(pRef->m_xAggregate.is(), "the OFormattedModel didn't have an XAggregation interface !");
-
-        // _before_ setting the delegator, give it to the member references
-        query_interface(xFormattedModel, pRef->m_xFormattedPart);
-        pRef->m_pEditPart = rtl::Reference< OEditModel >(new OEditModel(pRef->m_xContext));
-    }
-
-    increment(pRef->m_refCount);
-
-    if (pRef->m_xAggregate.is())
-    {   // has to be in it's own block because of the temporary variable created by *this
-        pRef->m_xAggregate->setDelegator(static_cast<XWeak*>(pRef));
-    }
-
-    InterfaceRef xRef(*pRef);
-    decrement(pRef->m_refCount);
-
-    return xRef;
-}
-
 Reference< XCloneable > SAL_CALL OFormattedFieldWrapper::createClone() throw (RuntimeException, std::exception)
 {
     ensureAggregate();

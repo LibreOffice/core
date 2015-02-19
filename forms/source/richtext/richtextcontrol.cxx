@@ -249,12 +249,10 @@ namespace frm
         return getSupportedServiceNames_Static();
     }
 
-
     OUString SAL_CALL ORichTextControl::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ORichTextControl" );
     }
-
 
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
     {
@@ -265,34 +263,22 @@ namespace frm
         return aServices;
     }
 
-
-    Reference< XInterface > SAL_CALL ORichTextControl::Create( const Reference< XMultiServiceFactory >& )
-    {
-        return *( new ORichTextControl() );
-    }
-
-
     Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException, std::exception)
     {
         FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
     }
-
 
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException, std::exception)
     {
         FORWARD_TO_PEER_1_RET( Sequence< Reference< XDispatch > >, XDispatchProvider, queryDispatches, _rRequests );
     }
 
-
     bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
     {
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName == PROPERTY_RICH_TEXT;
     }
 
-
     // ORichTextPeer
-
-
     ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, vcl::Window* _pParentWindow, WinBits _nStyle )
     {
         DBG_TESTSOLARMUTEX();

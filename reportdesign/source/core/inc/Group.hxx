@@ -102,8 +102,6 @@ namespace reportdesign
         OGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups >& _xParent
             ,const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& context);
 
-        void copyGroup(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xSource);
-
         DECLARE_XINTERFACE( )
         // ::com::sun::star::lang::XServiceInfo
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

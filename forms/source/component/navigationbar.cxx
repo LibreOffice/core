@@ -155,12 +155,10 @@ namespace frm
         return getSupportedServiceNames_Static();
     }
 
-
     OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
-
 
     Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames_Static()
     {
@@ -173,24 +171,15 @@ namespace frm
         return aSupported;
     }
 
-
-    Reference< XInterface > SAL_CALL ONavigationBarModel::Create( const Reference< XMultiServiceFactory >& _rxFactory )
-    {
-        return *( new ONavigationBarModel( comphelper::getComponentContext(_rxFactory) ) );
-    }
-
-
     void SAL_CALL ONavigationBarModel::disposing()
     {
         OControlModel::disposing( );
     }
 
-
     OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException, std::exception )
     {
         return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);
     }
-
 
     #define PERSIST_TABSTOP         0x0001
     #define PERSIST_BACKGROUND      0x0002

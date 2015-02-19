@@ -905,12 +905,6 @@ namespace frm
         aNames[ 1 ] = "com.sun.star.awt.UnoControl";
         return aNames;
     }
-
-    Reference< XInterface > SAL_CALL OFilterControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
-    {
-        return static_cast< XServiceInfo* >( new OFilterControl( comphelper::getComponentContext(_rxFactory) ) );
-    }
-
 }   // namespace frm
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface* SAL_CALL

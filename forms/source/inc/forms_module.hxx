@@ -90,20 +90,6 @@ namespace FORMS_MODULE_NAMESPACE
         static void revokeComponent(
             const OUString& _rImplementationName);
 
-        /** creates a Factory for the component with the given implementation name.
-            <p>Usually used from within component_getFactory.<p/>
-            @param  _rxServiceManager
-                        a pointer to an XMultiServiceFactory interface as got in component_getFactory
-            @param  _pImplementationName
-                        the implementation name of the component
-            @return
-                        the XInterface access to a factory for the component
-        */
-        static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getComponentFactory(
-            const OUString& _rImplementationName,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceManager
-            );
-
     private:
         /** ensure that the impl class exists
             @precond m_aMutex is guarded when this method gets called

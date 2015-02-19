@@ -129,17 +129,14 @@ namespace frm
     {
     }
 
-
     FormOperations::~FormOperations()
     {
     }
-
 
     OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.forms.FormOperations" );
     }
-
 
     Sequence< OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
@@ -147,13 +144,6 @@ namespace frm
         aNames[0] = "com.sun.star.form.runtime.FormOperations";
         return aNames;
     }
-
-
-    Reference< XInterface > SAL_CALL FormOperations::Create(const Reference< XMultiServiceFactory >& _rxFactory )
-    {
-        return *new FormOperations( comphelper::getComponentContext(_rxFactory) );
-    }
-
 
     void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException, std::exception)
     {

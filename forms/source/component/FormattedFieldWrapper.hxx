@@ -50,11 +50,6 @@ protected:
     rtl::Reference< OEditModel > m_pEditPart;
     // if we act as formatted this is used to write the EditModel part
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
-    // if we act as formatted, this is the PersistObject interface of our aggregate, used
-    // to read and write the FormattedModel part
-    // if bActAsFormatted is false, the state is undetermined until somebody calls
-    // ::read or does anything which requires a living aggregate
-    static InterfaceRef createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
 
 protected:
     virtual ~OFormattedFieldWrapper();

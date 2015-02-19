@@ -193,12 +193,6 @@ namespace frm
     }
 
 
-    Reference< XInterface > SAL_CALL ONavigationBarControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
-    {
-        return *( new ONavigationBarControl( comphelper::getComponentContext(_rxFactory) ) );
-    }
-
-
     void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, registerDispatchProviderInterceptor, _rxInterceptor );

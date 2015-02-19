@@ -33,25 +33,6 @@ using namespace com::sun::star::xml::xpath;
 using namespace com::sun::star::beans;
 using com::sun::star::xml::dom::XNode;
 
-Reference< XInterface > SAL_CALL CLibxml2XFormsExtension::Create(
-    const Reference< XMultiServiceFactory >& /*aFactory*/)
-{
-    Reference< XInterface > aInstance(static_cast< XXPathExtension* >(new CLibxml2XFormsExtension(/*aFactory*/)));
-    return aInstance;
-}
-
-OUString SAL_CALL CLibxml2XFormsExtension::getImplementationName_Static()
-{
-    return OUString("com.sun.star.comp.xml.xpath.XFormsExtension");
-}
-
-Sequence< OUString > SAL_CALL CLibxml2XFormsExtension::getSupportedServiceNames_Static()
-{
-    Sequence< OUString > aSequence(1);
-    aSequence[0] = "com.sun.star.xml.xpath.XPathExtension";
-    return aSequence;
-}
-
 Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHandle() throw (RuntimeException, std::exception)
 {
     Libxml2ExtensionHandle aHandle;

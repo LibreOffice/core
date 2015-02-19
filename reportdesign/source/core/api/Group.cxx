@@ -57,23 +57,6 @@ OGroup::~OGroup()
 {
 }
 
-void OGroup::copyGroup(const uno::Reference< report::XGroup >& _xSource)
-{
-    ::comphelper::copyProperties(_xSource.get(),static_cast<GroupPropertySet*>(this));
-
-    if ( _xSource->getHeaderOn() )
-    {
-        setHeaderOn(sal_True);
-        OSection::lcl_copySection(_xSource->getHeader(),m_xHeader);
-    }
-
-    if ( _xSource->getFooterOn() )
-    {
-        setFooterOn(sal_True);
-        OSection::lcl_copySection(_xSource->getFooter(),m_xFooter);
-    }
-}
-
 IMPLEMENT_FORWARD_XINTERFACE2(OGroup,GroupBase,GroupPropertySet)
 
 OUString SAL_CALL OGroup::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
