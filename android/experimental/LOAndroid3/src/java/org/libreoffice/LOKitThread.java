@@ -229,8 +229,13 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         if (mTileProvider == null) {
             return;
         }
-        LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
-        mTileProvider.mouseButtonDown(mDocumentTouchCoordinate);
+        if (touchType.equals("LongPress")) {
+            LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+            mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 2);
+        } else { // "SingleTap"
+            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+            mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 1);
+        }
     }
 
     private void createThumbnail(final ThumbnailCreator.ThumbnailCreationTask task) {

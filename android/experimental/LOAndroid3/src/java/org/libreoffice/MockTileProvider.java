@@ -103,12 +103,12 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
-    public void mouseButtonDown(PointF inDocument) {
+    public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks) {
 
     }
 
     @Override
-    public void mouseButtonUp(PointF inDocument) {
+    public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks) {
 
     }
 

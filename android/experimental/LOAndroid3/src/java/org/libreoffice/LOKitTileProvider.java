@@ -323,21 +323,21 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         mOffice.postKeyEvent(Office.KEY_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
     }
 
-    private void mouseButton(int type, PointF inDocument) {
+    private void mouseButton(int type, PointF inDocument, int numberOfClicks) {
         int x = (int) pixelToTwip(inDocument.x, mDPI);
         int y = (int) pixelToTwip(inDocument.y, mDPI);
 
-        mDocument.postMouseEvent(type, x, y, 1);
+        mDocument.postMouseEvent(type, x, y, numberOfClicks);
     }
 
     @Override
-    public void mouseButtonDown(PointF inDocument) {
-        mouseButton(Document.MOUSE_BUTTON_DOWN, inDocument);
+    public void mouseButtonDown(PointF documentCoordinate, int numberOfClicks) {
+        mouseButton(Document.MOUSE_BUTTON_DOWN, documentCoordinate, numberOfClicks);
     }
 
     @Override
-    public void mouseButtonUp(PointF inDocument) {
-        mouseButton(Document.MOUSE_BUTTON_UP, inDocument);
+    public void mouseButtonUp(PointF documentCoordinate, int numberOfClicks) {
+        mouseButton(Document.MOUSE_BUTTON_UP, documentCoordinate, numberOfClicks);
     }
 
     @Override

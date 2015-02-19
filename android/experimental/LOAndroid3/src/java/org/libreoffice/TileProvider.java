@@ -31,12 +31,14 @@ public interface TileProvider {
 
     /**
      * Change the document part to the one specified by the partIndex input parameter.
+     *
      * @param partIndex - part index to change to
      */
     void changePart(int partIndex);
 
     /**
      * Get the current document part number.
+     *
      * @return
      */
     int getCurrentPartNumber();
@@ -68,27 +70,33 @@ public interface TileProvider {
 
     /**
      * Trigger a key press.
+     *
      * @param keyEvent - contains information about key event
      */
     void keyPress(KeyEvent keyEvent);
 
     /**
      * Trigger a key release.
+     *
      * @param keyEvent - contains information about key event
      */
     void keyRelease(KeyEvent keyEvent);
 
     /**
      * Trigger a mouse button down event.
+     *
      * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
+     * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
-    void mouseButtonDown(PointF documentCoordinate);
+    void mouseButtonDown(PointF documentCoordinate, int numberOfClicks);
 
     /**
      * Trigger a mouse button up event.
+     *
      * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
+     * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
-    void mouseButtonUp(PointF documentCoordinate);
+    void mouseButtonUp(PointF documentCoordinate, int numberOfClicks);
 
     /**
      * Callback to retrieve invalidation calls
@@ -96,6 +104,7 @@ public interface TileProvider {
     public interface TileInvalidationCallback {
         /**
          * Invoked when a region is invalidated.
+         *
          * @param rect area in pixels which was invalidated and needs to be redrawn
          */
         void invalidate(RectF rect);
