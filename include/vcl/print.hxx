@@ -405,9 +405,16 @@ public:
                                            const Image&, sal_uInt16 ) SAL_OVERRIDE;
 
 
+    // These 3 together are more modular PrintJob(), allowing printing more documents as one print job
+    // by repeated calls to ExecutePrintJob(). Used by mailmerge.
+    static void                 PreparePrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
+                                        const JobSetup& i_rInitSetup );
+    static bool                 ExecutePrintJob( std::shared_ptr<vcl::PrinterController> i_pController );
+    static void                 FinishPrintJob( std::shared_ptr<vcl::PrinterController> i_pController );
+
     // implementation detail of PrintJob being asynchronous
     // not exported, not usable outside vcl
-    static void SAL_DLLPRIVATE  ImplPrintJob( const std::shared_ptr<vcl::PrinterController>& i_pController,
+    static void SAL_DLLPRIVATE  ImplPrintJob( std::shared_ptr<vcl::PrinterController> i_pController,
                                               const JobSetup& i_rInitSetup );
 };
 

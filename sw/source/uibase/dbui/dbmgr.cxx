@@ -23,6 +23,7 @@
 #include <unotxdoc.hxx>
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <sfx2/app.hxx>
+#include <sfx2/printer.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -1159,6 +1160,41 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                                     lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                                 }
                             }
+                        else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
+                        {
+                            if( 1 == nDocNo ) // set up printing only once at the beginning
+                            {
+                                // printing should be done synchronously otherwise the document
+                                // might already become invalid during the process
+                                uno::Sequence< beans::PropertyValue > aOptions( rMergeDescriptor.aPrintOptions );
+
+                                aOptions.realloc( 2 );
+                                aOptions[ 0 ].Name = "Wait";
+                                aOptions[ 0 ].Value <<= sal_True;
+                                aOptions[ 1 ].Name = "MonitorVisible";
+                                aOptions[ 1 ].Value <<= sal_False;
+                                // move print options
+                                const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
+                                for( sal_Int32 nOption = 0, nIndex = 1 ; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
+                                {
+                                    if( pPrintOptions[nOption].Name == "CopyCount" || pPrintOptions[nOption].Name == "FileName"
+                                        || pPrintOptions[nOption].Name == "Collate" || pPrintOptions[nOption].Name == "Pages"
+                                        || pPrintOptions[nOption].Name == "Wait" || pPrintOptions[nOption].Name == "PrinterName" )
+                                    {
+                                        // add an option
+                                        aOptions.realloc( nIndex + 1 );
+                                        aOptions[ nIndex ].Name = pPrintOptions[nOption].Name;
+                                        aOptions[ nIndex++ ].Value = pPrintOptions[nOption].Value ;
+                                    }
+                                }
+                                pWorkView->StartPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+                                SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
+                                JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
+                                Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
+                            }
+                            if( !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
+                                bCancel = true;
+                        }
                             else
                                 pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
@@ -1313,6 +1349,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
 
             if( !rMergeDescriptor.bCreateSingleFile )
             {
+                if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
+                    Printer::FinishPrintJob( pWorkView->GetPrinterController());
                 pWorkDoc->SetDBManager( pOldDBManager );
                 xWorkDocSh->DoClose();
             }
@@ -2665,7 +2703,7 @@ void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,
 
                     SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), pView->GetWrtShell(), aDescriptor );
                     aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
-                    aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc();
+                    aMergeDesc.bCreateSingleFile = pImpl->pMergeDialog->IsSaveSingleDoc() && pImpl->pMergeDialog->GetMergeType() != DBMGR_MERGE_PRINTER;
                     aMergeDesc.bSubjectIsFilename = aMergeDesc.bCreateSingleFile;
                     if( !aMergeDesc.bCreateSingleFile && pImpl->pMergeDialog->IsGenerateFromDataBase() )
                     {

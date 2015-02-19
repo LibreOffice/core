@@ -297,11 +297,9 @@ void Printer::PrintJob(const std::shared_ptr<PrinterController>& i_xController,
     }
 }
 
-void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xController,
+void Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                            const JobSetup& i_rInitSetup)
 {
-    std::shared_ptr<PrinterController> xController(i_xController);
-
     // check if there is a default printer; if not, show an error box (if appropriate)
     if( GetDefaultPrinterName().isEmpty() )
     {
@@ -328,7 +326,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
     }
 
     // reset last page property
-    i_xController->setLastPage(false);
+    xController->setLastPage(false);
 
     // update "PageRange" property inferring from other properties:
     // case 1: "Pages" set from UNO API ->
@@ -340,12 +338,12 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
     // "Pages" attribute from API is now equivalent to "PageRange"
     // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
     // Argh ! That sure needs cleaning up
-    PropertyValue* pContentVal = i_xController->getValue(OUString("PrintRange"));
+    PropertyValue* pContentVal = xController->getValue(OUString("PrintRange"));
     if( ! pContentVal )
-        pContentVal = i_xController->getValue(OUString("PrintContent"));
+        pContentVal = xController->getValue(OUString("PrintContent"));
 
     // case 1: UNO API has set "Pages"
-    PropertyValue* pPagesVal = i_xController->getValue(OUString("Pages"));
+    PropertyValue* pPagesVal = xController->getValue(OUString("Pages"));
     if( pPagesVal )
     {
         OUString aPagesVal;
@@ -358,7 +356,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
             if( pContentVal )
             {
                 pContentVal->Value = makeAny( sal_Int32( 1 ) );
-                i_xController->setValue(OUString("PageRange"), pPagesVal->Value);
+                xController->setValue(OUString("PageRange"), pPagesVal->Value);
             }
         }
     }
@@ -371,13 +369,13 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
             if( nContent == 0 )
             {
                 // do not overwrite PageRange if it is already set
-                PropertyValue* pRangeVal = i_xController->getValue(OUString("PageRange"));
+                PropertyValue* pRangeVal = xController->getValue(OUString("PageRange"));
                 OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
                 if( aRange.isEmpty() )
                 {
-                    sal_Int32 nPages = i_xController->getPageCount();
+                    sal_Int32 nPages = xController->getPageCount();
                     if( nPages > 0 )
                     {
                         OUStringBuffer aBuf( 32 );
@@ -387,14 +385,14 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
                             aBuf.appendAscii( "-" );
                             aBuf.append( nPages );
                         }
-                        i_xController->setValue(OUString("PageRange"), makeAny(aBuf.makeStringAndClear()));
+                        xController->setValue(OUString("PageRange"), makeAny(aBuf.makeStringAndClear()));
                     }
                 }
             }
         }
     }
 
-    PropertyValue* pReverseVal = i_xController->getValue(OUString("PrintReverse"));
+    PropertyValue* pReverseVal = xController->getValue(OUString("PrintReverse"));
     if( pReverseVal )
     {
         bool bReverse = false;
@@ -402,7 +400,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
         xController->setReversePrint( bReverse );
     }
 
-    PropertyValue* pPapersizeFromSetupVal = i_xController->getValue(OUString("PapersizeFromSetup"));
+    PropertyValue* pPapersizeFromSetupVal = xController->getValue(OUString("PapersizeFromSetup"));
     if( pPapersizeFromSetupVal )
     {
         bool bPapersizeFromSetup = false;
@@ -411,35 +409,35 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
     }
 
     // setup NUp printing from properties
-    sal_Int32 nRows = i_xController->getIntProperty(OUString("NUpRows"), 1);
-    sal_Int32 nCols = i_xController->getIntProperty(OUString("NUpColumns"), 1);
+    sal_Int32 nRows = xController->getIntProperty(OUString("NUpRows"), 1);
+    sal_Int32 nCols = xController->getIntProperty(OUString("NUpColumns"), 1);
     if( nRows > 1 || nCols > 1 )
     {
         PrinterController::MultiPageSetup aMPS;
         aMPS.nRows         = nRows > 1 ? nRows : 1;
         aMPS.nColumns      = nCols > 1 ? nCols : 1;
-        sal_Int32 nValue = i_xController->getIntProperty(OUString("NUpPageMarginLeft"), aMPS.nLeftMargin);
+        sal_Int32 nValue = xController->getIntProperty(OUString("NUpPageMarginLeft"), aMPS.nLeftMargin);
         if( nValue >= 0 )
             aMPS.nLeftMargin = nValue;
-        nValue = i_xController->getIntProperty(OUString("NUpPageMarginRight"), aMPS.nRightMargin);
+        nValue = xController->getIntProperty(OUString("NUpPageMarginRight"), aMPS.nRightMargin);
         if( nValue >= 0 )
             aMPS.nRightMargin = nValue;
-        nValue = i_xController->getIntProperty( OUString( "NUpPageMarginTop" ), aMPS.nTopMargin );
+        nValue = xController->getIntProperty( OUString( "NUpPageMarginTop" ), aMPS.nTopMargin );
         if( nValue >= 0 )
             aMPS.nTopMargin = nValue;
-        nValue = i_xController->getIntProperty( OUString( "NUpPageMarginBottom" ), aMPS.nBottomMargin );
+        nValue = xController->getIntProperty( OUString( "NUpPageMarginBottom" ), aMPS.nBottomMargin );
         if( nValue >= 0 )
             aMPS.nBottomMargin = nValue;
-        nValue = i_xController->getIntProperty( OUString( "NUpHorizontalSpacing" ), aMPS.nHorizontalSpacing );
+        nValue = xController->getIntProperty( OUString( "NUpHorizontalSpacing" ), aMPS.nHorizontalSpacing );
         if( nValue >= 0 )
             aMPS.nHorizontalSpacing = nValue;
-        nValue = i_xController->getIntProperty( OUString( "NUpVerticalSpacing" ), aMPS.nVerticalSpacing );
+        nValue = xController->getIntProperty( OUString( "NUpVerticalSpacing" ), aMPS.nVerticalSpacing );
         if( nValue >= 0 )
             aMPS.nVerticalSpacing = nValue;
-        aMPS.bDrawBorder = i_xController->getBoolProperty( OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
-        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_xController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
-        aMPS.aPaperSize = i_xController->getPrinter()->PixelToLogic( i_xController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        PropertyValue* pPgSizeVal = i_xController->getValue( OUString( "NUpPaperSize" ) );
+        aMPS.bDrawBorder = xController->getBoolProperty( OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
+        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(xController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
+        aMPS.aPaperSize = xController->getPrinter()->PixelToLogic( xController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        PropertyValue* pPgSizeVal = xController->getValue( OUString( "NUpPaperSize" ) );
         awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
         {
@@ -447,7 +445,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
             aMPS.aPaperSize.Height() = aSizeVal.Height;
         }
 
-        i_xController->setMultipage( aMPS );
+        xController->setMultipage( aMPS );
     }
 
     // in direct print case check whether there is anything to print.
@@ -472,10 +470,10 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
     {
         try
         {
-            PrintDialog aDlg( NULL, i_xController );
+            PrintDialog aDlg( NULL, xController );
             if( ! aDlg.Execute() )
             {
-                i_xController->abortJob();
+                xController->abortJob();
                 return;
             }
             if( aDlg.isPrintToFile() )
@@ -483,7 +481,7 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
                 OUString aFile = queryFile( xController->getPrinter().get() );
                 if( aFile.isEmpty() )
                 {
-                    i_xController->abortJob();
+                    xController->abortJob();
                     return;
                 }
                 xController->setValue( OUString( "LocalFileName" ),
@@ -501,17 +499,30 @@ void Printer::ImplPrintJob(const std::shared_ptr<PrinterController>& i_xControll
     }
 
     xController->pushPropertiesToPrinter();
+}
 
+bool Printer::ExecutePrintJob(std::shared_ptr<PrinterController> xController)
+{
     OUString aJobName;
     PropertyValue* pJobNameVal = xController->getValue( OUString( "JobName" ) );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
-    xController->getPrinter()->StartJob( aJobName, xController );
+    return xController->getPrinter()->StartJob( aJobName, xController );
+}
 
+void Printer::FinishPrintJob(std::shared_ptr<PrinterController> xController)
+{
     xController->resetPaperToLastConfigured();
-
     xController->jobFinished( xController->getJobState() );
+}
+
+void Printer::ImplPrintJob(std::shared_ptr<PrinterController> xController,
+                           const JobSetup& i_rInitSetup)
+{
+    PreparePrintJob( xController, i_rInitSetup );
+    ExecutePrintJob( xController );
+    FinishPrintJob( xController );
 }
 
 bool Printer::StartJob( const OUString& i_rJobName, std::shared_ptr<vcl::PrinterController>& i_xController)
