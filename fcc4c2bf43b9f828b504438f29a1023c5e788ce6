@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_d78efc26",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 779,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-19T20:42:27Z",
+      "side": 1,
+      "message": "no \"chart\" but \"table\" or maybe \"sheet\"?",
+      "revId": "fcc4c2bf43b9f828b504438f29a1023c5e788ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_f793004e",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-19T20:42:27Z",
+      "side": 1,
+      "message": "eeek! a german comment has survived!",
+      "revId": "fcc4c2bf43b9f828b504438f29a1023c5e788ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_9798846c",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1218,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-19T20:42:27Z",
+      "side": 1,
+      "message": "\"save\" is the verb",
+      "revId": "fcc4c2bf43b9f828b504438f29a1023c5e788ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_b79d885b",
+        "filename": "sc/source/ui/view/viewfun3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-19T20:42:27Z",
+      "side": 1,
+      "message": "not \"charts\"",
+      "revId": "fcc4c2bf43b9f828b504438f29a1023c5e788ce6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
