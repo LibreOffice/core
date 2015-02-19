@@ -1420,6 +1420,10 @@ void OutlinerView::SetBackgroundColor( const Color& rColor )
     pEditView->SetBackgroundColor( rColor );
 }
 
+void OutlinerView::setTiledRendering(bool bTiledRendering)
+{
+    pEditView->setTiledRendering(bTiledRendering);
+}
 
 Color OutlinerView::GetBackgroundColor()
 {

@@ -124,6 +124,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pDrawOutliner=NULL;
     pHitTestOutliner=NULL;
     pRefOutDev=NULL;
+    mbTiledRendering = false;
     nProgressAkt=0;
     nProgressMax=0;
     nProgressOfs=0;
@@ -806,6 +807,16 @@ void SdrModel::SetRefDevice(OutputDevice* pDev)
     ImpSetOutlinerDefaults( pDrawOutliner );
     ImpSetOutlinerDefaults( pHitTestOutliner );
     RefDeviceChanged();
+}
+
+void SdrModel::setTiledRendering(bool bTiledRendering)
+{
+    mbTiledRendering = bTiledRendering;
+}
+
+bool SdrModel::isTiledRendering() const
+{
+    return mbTiledRendering;
 }
 
 void SdrModel::ImpReformatAllTextObjects()

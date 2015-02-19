@@ -2351,6 +2351,7 @@ void SdXImpressDocument::initializeForTiledRendering()
 {
     // tiled rendering works only when we are in the 'Normal' view, switch to that
     mpDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_VIEWSHELL0, SfxCallMode::SYNCHRON | SfxCallMode::RECORD);
+    mpDoc->setTiledRendering(true);
 }
 
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()

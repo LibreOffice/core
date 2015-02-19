@@ -75,6 +75,7 @@ ImpEditView::ImpEditView( EditView* pView, EditEngine* pEng, vcl::Window* pWindo
     pOutWin             = pWindow;
     pPointer            = NULL;
     pBackgroundColor    = NULL;
+    mbTiledRendering    = false;
     nScrollDiffX        = 0;
     nExtraCursorFlags   = 0;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
@@ -110,6 +111,16 @@ void ImpEditView::SetBackgroundColor( const Color& rColor )
 {
     delete pBackgroundColor;
     pBackgroundColor = new Color( rColor );
+}
+
+void ImpEditView::setTiledRendering(bool bTiledRendering)
+{
+    mbTiledRendering = bTiledRendering;
+}
+
+bool ImpEditView::isTiledRendering() const
+{
+    return mbTiledRendering;
 }
 
 void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )

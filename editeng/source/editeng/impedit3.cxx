@@ -290,7 +290,8 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
             // convert to window coordinates ....
             aClipRect = pView->pImpEditView->GetWindowPos( aClipRect );
 
-            if ( pView == pCurView )
+            // For tiled rendering, we have to always go via Invalidate().
+            if ( pView == pCurView && !pView->isTiledRendering())
                 Paint( pView->pImpEditView, aClipRect, 0, true );
             else
                 pView->GetWindow()->Invalidate( aClipRect );

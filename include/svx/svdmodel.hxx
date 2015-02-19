@@ -171,6 +171,8 @@ protected:
     SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
     sal_uIntPtr           nDefTextHgt;    // Default text heigth in logical units
     OutputDevice*   pRefOutDev;     // ReferenceDevice for the EditEngine
+    /// Set if we are doing tiled rendering.
+    bool mbTiledRendering;
     sal_uIntPtr           nProgressAkt;   // for the
     sal_uIntPtr           nProgressMax;   // ProgressBar-
     sal_uIntPtr           nProgressOfs;   // -Handler
@@ -335,6 +337,10 @@ public:
     // ReferenceDevice for the EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
     OutputDevice*        GetRefDevice() const                   { return pRefOutDev; }
+    /// Set if we are doing tiled rendering.
+    void setTiledRendering(bool bTiledRendering);
+    /// Are we doing tiled rendering?
+    bool isTiledRendering() const;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font heigth in logical units
