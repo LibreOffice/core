@@ -212,7 +212,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         if (mTileProvider == null) {
             return;
         }
-        if (keyEventType == "KeyPress") {
+        if (keyEventType.equals("KeyPress")) {
             mTileProvider.keyPress(keyEvent);
         } else if (keyEventType.equals("KeyRelease")) {
             mTileProvider.keyRelease(keyEvent);
