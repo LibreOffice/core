@@ -47,9 +47,6 @@ liborcus_LIBS+=-lgnustl_shared -lm
 endif
 
 liborcus_CPPCLAGS=$(CPPFLAGS)
-ifeq ($(COM),MSC)
-liborcus_CPPFLAGS+=-DBOOST_ALL_NO_LIB
-endif
 ifeq ($(SYSTEM_ZLIB),)
 liborcus_CPPFLAGS+=$(ZLIB_CFLAGS)
 endif
