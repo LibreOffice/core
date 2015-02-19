@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-#include "stocservices.hxx"
-
 #include <boost/noncopyable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Exception.hpp>
@@ -79,9 +76,7 @@ private:
 OUString Factory::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return
-        stoc_services::VndSunStarPkgUrlReferenceFactory::
-        getImplementationName();
+    return OUString("com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory");
 }
 
 sal_Bool Factory::supportsService(OUString const & serviceName)
@@ -93,8 +88,9 @@ sal_Bool Factory::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return stoc_services::VndSunStarPkgUrlReferenceFactory::
-        getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory";
+    return s;
 }
 
 css::uno::Reference< css::uri::XUriReference >
@@ -121,27 +117,6 @@ Factory::createVndSunStarPkgUrlReference(
 }
 
 }
-
-namespace stoc_services { namespace VndSunStarPkgUrlReferenceFactory
-{
-
-css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
-{
-    return static_cast< cppu::OWeakObject * >(new Factory(context));
-}
-
-OUString getImplementationName() {
-    return OUString("com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory");
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.uri.VndSunStarPkgUrlReferenceFactory";
-    return s;
-}
-
-} }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation(::com::sun::star::uno::XComponentContext* rxContext,

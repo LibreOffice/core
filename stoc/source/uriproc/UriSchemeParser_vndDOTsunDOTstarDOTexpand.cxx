@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include "stocservices.hxx"
-
 #include <exception>
 
 #include <boost/noncopyable.hpp>
@@ -184,8 +182,7 @@ private:
 OUString Parser::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return ::stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTexpand::
-        getImplementationName();
+    return OUString("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand");
 }
 
 sal_Bool Parser::supportsService(OUString const & serviceName)
@@ -197,8 +194,9 @@ sal_Bool Parser::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return ::stoc_services::UriSchemeParser_vndDOTsunDOTstarDOTexpand::
-        getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand";
+    return s;
 }
 
 css::uno::Reference< css::uri::XUriReference > Parser::parse(
@@ -213,27 +211,12 @@ css::uno::Reference< css::uri::XUriReference > Parser::parse(
 
 }
 
-namespace stoc_services { namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand {
-
-css::uno::Reference< css::uno::XInterface > create(
-    SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
-        const &)
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation(::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     //TODO: single instance
-    return static_cast< ::cppu::OWeakObject * >(new Parser);
+    return ::cppu::acquire(new Parser());
 }
-
-OUString getImplementationName() {
-    return OUString(
-            "com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand");
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand";
-    return s;
-}
-
-} }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

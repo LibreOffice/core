@@ -19,11 +19,6 @@ $(eval $(call gb_Library_add_defs,bootstrap,\
 
 endif
 
-$(eval $(call gb_Library_set_include,bootstrap,\
-    -I$(SRCDIR)/stoc/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_external,bootstrap,boost_headers))
 
 $(eval $(call gb_Library_use_internal_bootstrap_api,bootstrap,\

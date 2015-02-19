@@ -42,31 +42,12 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <stocservices.hxx>
-
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::script;
 using namespace css::registry;
 using namespace cppu;
 using namespace osl;
-
-#define IMPLNAME    "com.sun.star.comp.stoc.TypeConverter"
-
-namespace stoc_services
-{
-Sequence< OUString > tcv_getSupportedServiceNames()
-{
-    Sequence< OUString > seqNames(1);
-    seqNames.getArray()[0] = "com.sun.star.script.Converter";
-    return seqNames;
-}
-
-OUString tcv_getImplementationName()
-{
-    return OUString(IMPLNAME);
-}
-}
 
 namespace stoc_tcv
 {
@@ -290,7 +271,7 @@ TypeConverter_Impl::~TypeConverter_Impl() {}
 // XServiceInfo
 OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return stoc_services::tcv_getImplementationName();
+    return OUString("com.sun.star.comp.stoc.TypeConverter");
 }
 
 // XServiceInfo
@@ -302,7 +283,9 @@ sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw(
 // XServiceInfo
 Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
-    return stoc_services::tcv_getSupportedServiceNames();
+    Sequence< OUString > seqNames(1);
+    seqNames.getArray()[0] = "com.sun.star.script.Converter";
+    return seqNames;
 }
 
 
@@ -908,17 +891,14 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         "conversion not possible!",
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
+
 }
 
-namespace stoc_services
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_stoc_TypeConverter_get_implementation(::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-
-Reference< XInterface > SAL_CALL TypeConverter_Impl_CreateInstance(
-    SAL_UNUSED_PARAMETER const Reference< XComponentContext > & )
-    throw( RuntimeException )
-{
-    return (OWeakObject *) new stoc_tcv::TypeConverter_Impl();
-}
+    return ::cppu::acquire(new stoc_tcv::TypeConverter_Impl());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

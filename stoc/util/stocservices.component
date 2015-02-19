@@ -17,9 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="stocservices" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.stoc.TypeConverter">
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.stoc.TypeConverter"
+    constructor="com_sun_star_comp_stoc_TypeConverter_get_implementation">
     <service name="com.sun.star.script.Converter"/>
   </implementation>
   <implementation name="com.sun.star.comp.uri.ExternalUriReferenceTranslator"
@@ -30,12 +30,12 @@
     constructor="com_sun_star_comp_uri_UriReferenceFactory_get_implementation">
     <service name="com.sun.star.uri.UriReferenceFactory"/>
   </implementation>
-  <implementation
-       name="com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand">
+  <implementation name="com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"
+    constructor="com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation">
     <service name="com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"/>
   </implementation>
-  <implementation
-       name="com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript">
+  <implementation name="com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"
+    constructor="com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation">
     <service name="com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"/>
   </implementation>
   <implementation name="com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory"
