@@ -2263,6 +2263,17 @@ DECLARE_RTFIMPORT_TEST(testFdo49893, "fdo49893.rtf")
     CPPUNIT_ASSERT(xShape.is());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(432)), xShape->getSize().Height);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(1296)), xShape->getSize().Width);
+
+    // No artifacts (black lines in left top corner) as shape #3 are expected
+    try
+    {
+        uno::Reference<drawing::XShape> xShape2(getShape(3), uno::UNO_QUERY);
+        CPPUNIT_FAIL("exception expected: no shape #3 in document");
+    }
+    catch (lang::IndexOutOfBoundsException const&)
+    {
+        /* expected */
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
