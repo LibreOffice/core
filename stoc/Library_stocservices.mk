@@ -9,11 +9,6 @@
 
 $(eval $(call gb_Library_Library,stocservices))
 
-$(eval $(call gb_Library_set_include,stocservices,\
-    -I$(SRCDIR)/stoc/inc \
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Library_use_udk_api,stocservices))
 
 $(eval $(call gb_Library_use_libraries,stocservices,\
@@ -28,7 +23,6 @@ $(eval $(call gb_Library_use_external,stocservices,boost_headers))
 $(eval $(call gb_Library_set_componentfile,stocservices,stoc/util/stocservices))
 
 $(eval $(call gb_Library_add_exception_objects,stocservices,\
-    stoc/source/stocservices/stocservices \
     stoc/source/typeconv/convert \
     stoc/source/uriproc/ExternalUriReferenceTranslator \
     stoc/source/uriproc/UriReference \

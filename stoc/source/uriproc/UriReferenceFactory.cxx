@@ -50,7 +50,6 @@
 #include <sal/types.h>
 
 #include "UriReference.hxx"
-#include "stocservices.hxx"
 
 namespace {
 
@@ -311,7 +310,7 @@ private:
 OUString Factory::getImplementationName()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return stoc_services::UriReferenceFactory::getImplementationName();
+    return OUString("com.sun.star.comp.uri.UriReferenceFactory");
 }
 
 sal_Bool Factory::supportsService(OUString const & serviceName)
@@ -323,7 +322,9 @@ sal_Bool Factory::supportsService(OUString const & serviceName)
 css::uno::Sequence< OUString > Factory::getSupportedServiceNames()
     throw (css::uno::RuntimeException, std::exception)
 {
-    return stoc_services::UriReferenceFactory::getSupportedServiceNames();
+    css::uno::Sequence< OUString > s(1);
+    s[0] = "com.sun.star.uri.UriReferenceFactory";
+    return s;
 }
 
 css::uno::Reference< css::uri::XUriReference > Factory::parse(
@@ -631,26 +632,6 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
 }
 
 }
-
-namespace stoc_services { namespace UriReferenceFactory {
-
-css::uno::Reference< css::uno::XInterface > create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
-{
-    return static_cast< cppu::OWeakObject * >(new Factory(context));
-}
-
-OUString getImplementationName() {
-    return OUString("com.sun.star.comp.uri.UriReferenceFactory");
-}
-
-css::uno::Sequence< OUString > getSupportedServiceNames() {
-    css::uno::Sequence< OUString > s(1);
-    s[0] = "com.sun.star.uri.UriReferenceFactory";
-    return s;
-}
-
-} }
 
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
 com_sun_star_comp_uri_UriReferenceFactory_get_implementation(::com::sun::star::uno::XComponentContext* rxContext,
