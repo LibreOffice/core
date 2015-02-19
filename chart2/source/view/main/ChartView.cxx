@@ -3435,4 +3435,12 @@ void ChartView::updateOpenGLWindow()
 
 } //namespace chart
 
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+com_sun_star_comp_chart2_ChartView_get_implementation(css::uno::XComponentContext *context,
+                                                         css::uno::Sequence<css::uno::Any> const &)
+{
+    ::chart::ChartModel *pChartModel = new ::chart::ChartModel(context);
+    return cppu::acquire(new ::chart::ChartView(context, *pChartModel));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
