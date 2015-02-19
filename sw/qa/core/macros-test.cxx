@@ -405,6 +405,7 @@ void SwMacrosTest::testFindReplace()
     Reference<lang::XComponent> const xComponent =
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
     SwXTextDocument *const pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
     SwDoc *const pDoc = pTxtDoc->GetDocShell()->GetDoc();
     SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
     // use a UnoCrsr so it will be corrected when deleting nodes
