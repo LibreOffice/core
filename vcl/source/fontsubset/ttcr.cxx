@@ -148,7 +148,9 @@ _inline void PutUInt32(sal_uInt32 val, sal_uInt8 *ptr, sal_uInt32 offset, int bi
 
 static int TableEntryCompareF(const void *l, const void *r)
 {
-    return ((const TableEntry *) l)->tag - ((const TableEntry *) r)->tag;
+    sal_uInt32 const ltag(static_cast<TableEntry const*>(l)->tag);
+    sal_uInt32 const rtag(static_cast<TableEntry const*>(r)->tag);
+    return (ltag == rtag) ? 0 : (ltag < rtag) ? -1 : 1;
 }
 
 static int NameRecordCompareF(const void *l, const void *r)
@@ -157,13 +159,13 @@ static int NameRecordCompareF(const void *l, const void *r)
     NameRecord *rr = (NameRecord *) r;
 
     if (ll->platformID != rr->platformID) {
-        return ll->platformID - rr->platformID;
+        return (ll->platformID < rr->platformID) ? -1 : 1;
     } else if (ll->encodingID != rr->encodingID) {
-        return ll->encodingID - rr->encodingID;
+        return (ll->encodingID < rr->encodingID) ? -1 : 1;
     } else if (ll->languageID != rr->languageID) {
-        return ll->languageID - rr->languageID;
+        return (ll->languageID < rr->languageID) ? -1 : 1;
     } else if (ll->nameID != rr->nameID) {
-        return ll->nameID - rr->nameID;
+        return (ll->nameID < rr->nameID) ? -1 : 1;
     }
     return 0;
 }
