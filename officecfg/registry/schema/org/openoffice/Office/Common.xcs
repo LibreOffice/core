@@ -6375,6 +6375,11 @@
         </info>
         <value/>
       </prop>
+      <prop oor:name="Hidden" oor:type="xs:boolean">
+        <info>
+          <desc>Specifies whether invisible content should be hidden or not.</desc>
+        </info>
+     </prop>
     </group>
     <group oor:name="I18N">
       <info>
