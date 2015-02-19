@@ -590,8 +590,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                         if ( bDo )
                         {
-                            if ( pChangeTrack->IsProtected() )
-                                bDo = ExecuteChangeProtectionDialog( NULL );
+                            if (pChangeTrack)
+                            {
+                                if ( pChangeTrack->IsProtected() )
+                                    bDo = ExecuteChangeProtectionDialog( NULL );
+                            }
                             if ( bDo )
                             {
                                 pDoc->EndChangeTracking();
