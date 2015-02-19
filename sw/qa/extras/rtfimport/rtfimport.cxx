@@ -2227,6 +2227,23 @@ DECLARE_RTFIMPORT_TEST(testFdo49893_2, "fdo49893-2.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("HEADER"),  parseDump("/root/page[3]/header/txt/text()"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo49893_3, "fdo49893-3.rtf")
+{
+    // No artifacts (black lines in left top corner) as shape #3 are expected
+    try
+    {
+        uno::Reference<drawing::XShape> xShape2(getShape(3), uno::UNO_QUERY);
+        CPPUNIT_FAIL("exception expected: no shape #3 in document");
+    }
+    catch (lang::IndexOutOfBoundsException const&)
+    {
+        /* expected */
+    }
+
+    // Correct wrapping for shape
+    CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(2), "Surround"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo89496, "fdo89496.rtf")
 {
     // Just ensure that document is loaded and shape exists
