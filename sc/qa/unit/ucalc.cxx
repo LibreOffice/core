@@ -1223,6 +1223,40 @@ void Test::testValueIterator()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testHorizontalAttrIterator()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Set the background color of B2:C3 to blue
+    ScPatternAttr aCellBackColor(m_pDoc->GetPool());
+    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    m_pDoc->ApplyPatternAreaTab(1, 1, 2, 2, 0, aCellBackColor);
+
+    // some numeric data
+    for (SCCOL i = 1; i <= 4; ++i)
+        for (SCROW j = 1; j <= 4; ++j)
+            m_pDoc->SetValue(ScAddress(i,j,0), i*10+j);
+
+    {
+        const int aChecks[][3] = { {1, 2, 1}, {1, 2, 2} };
+        size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
+
+        ScHorizontalAttrIterator aIter(m_pDoc, 0, 0, 0, 3, 3);
+        SCCOL nCol1, nCol2;
+        SCROW nRow;
+        size_t nCheckPos = 0;
+        for (const ScPatternAttr* pAttr = aIter.GetNext(nCol1, nCol2, nRow); pAttr; pAttr = aIter.GetNext(nCol1, nCol2, nRow), ++nCheckPos)
+        {
+              CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
+              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][0], static_cast<int>(nCol1));
+              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][1], static_cast<int>(nCol2));
+              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][2], static_cast<int>(nRow));
+        }
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 namespace {
 
 bool broadcasterShifted(const ScDocument& rDoc, const ScAddress& rFrom, const ScAddress& rTo)

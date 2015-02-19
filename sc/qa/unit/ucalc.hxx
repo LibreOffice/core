@@ -183,6 +183,7 @@ public:
 
     void testHorizontalIterator();
     void testValueIterator();
+    void testHorizontalAttrIterator();
 
     /**
      * Basic test for formula dependency tracking.
@@ -484,6 +485,7 @@ public:
     CPPUNIT_TEST(testFuncNOW);
     CPPUNIT_TEST(testHorizontalIterator);
     CPPUNIT_TEST(testValueIterator);
+    CPPUNIT_TEST(testHorizontalAttrIterator);
     CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFormulaDepTracking2);
     CPPUNIT_TEST(testFormulaDepTracking3);
