@@ -297,14 +297,14 @@ void SdrObjEditView::TextEditDrawing(SdrPaintWindow& rPaintWindow) const
 
         if(pActiveOutliner)
         {
-            const sal_uInt32 nViewAnz(pActiveOutliner->GetViewCount());
+            const sal_uInt32 nViewCount(pActiveOutliner->GetViewCount());
 
-            if(nViewAnz)
+            if(nViewCount)
             {
                 const vcl::Region& rRedrawRegion = rPaintWindow.GetRedrawRegion();
                 const Rectangle aCheckRect(rRedrawRegion.GetBoundRect());
 
-                for(sal_uInt32 i(0); i < nViewAnz; i++)
+                for(sal_uInt32 i(0); i < nViewCount; i++)
                 {
                     OutlinerView* pOLV = pActiveOutliner->GetView(i);
 
