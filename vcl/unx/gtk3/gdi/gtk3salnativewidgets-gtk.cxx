@@ -1328,7 +1328,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
                   aInfo.m_nID != 0 ? "succeeded" : "failed",
-                  OUStringToOString( aInfo.m_aStyleName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+                  OUStringToOString( aInfo.m_aFamilyName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 
     int nPointHeight = 0;
     /*sal_Int32 nDispDPIY = GetDisplay()->GetResolution().B();
@@ -1428,11 +1428,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
-    const cairo_font_options_t* pNewOptions = NULL;
-    static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
-        reinterpret_cast<cairo_font_options_t*(*)(GdkScreen*)>(osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" ));
-    if( gdk_screen_get_font_options != NULL )
-        pNewOptions = gdk_screen_get_font_options( pScreen );
+    const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options(pScreen);
     aStyleSet.SetCairoFontOptions( pNewOptions );
     // finally update the collected settings
     rSettings.SetStyleSettings( aStyleSet );
