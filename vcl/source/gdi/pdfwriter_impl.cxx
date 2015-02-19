@@ -34,6 +34,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/string.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -6039,6 +6040,13 @@ public:
 };
 
 /*
+AlgorithmIdentifier  ::=  SEQUENCE  {
+     algorithm  OBJECT IDENTIFIER,
+     parameters ANY DEFINED BY algorithm OPTIONAL  }
+                   -- contains a value of the type
+                   -- registered for use with the
+                   -- algorithm object identifier value
+
 MessageImprint ::= SEQUENCE  {
     hashAlgorithm AlgorithmIdentifier,
     hashedMessage OCTET STRING  }
@@ -6080,6 +6088,8 @@ typedef struct {
 } Accuracy;
 
 /*
+TSAPolicyId ::= OBJECT IDENTIFIER
+
 TimeStampReq ::= SEQUENCE  {
     version            INTEGER  { v1(1) },
     messageImprint     MessageImprint,
@@ -6271,42 +6281,6 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
 
-    TimeStampReq src;
-
-    unsigned char cOne = 1;
-    src.version.type = siUnsignedInteger;
-    src.version.data = &cOne;
-    src.version.len = sizeof(cOne);
-
-    // FIXME, use proper contents
-    src.messageImprint.hashAlgorithm.algorithm.type = siBuffer;
-    src.messageImprint.hashAlgorithm.algorithm.data = NULL;
-    src.messageImprint.hashAlgorithm.algorithm.len = 0;
-    src.messageImprint.hashAlgorithm.parameters.type = siBuffer;
-    src.messageImprint.hashAlgorithm.parameters.data = NULL;
-    src.messageImprint.hashAlgorithm.parameters.len = 0;
-    src.messageImprint.hashedMessage = digest;
-
-    src.reqPolicy.type = siBuffer;
-    src.reqPolicy.data = NULL;
-    src.reqPolicy.len = 0;
-
-    // FIXME, need a proper nonce
-    src.nonce.type = siBuffer;
-    src.nonce.data = NULL;
-    src.nonce.len = 0;
-
-    unsigned char cFalse = false;
-    src.certReq.type = siUnsignedInteger;
-    src.certReq.data = &cFalse;
-    src.certReq.len = sizeof(cFalse);
-
-    src.extensions = NULL;
-
-    SECItem* item = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
-    SAL_INFO("vcl.pdfwriter", "item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
-    SECITEM_FreeItem(item, PR_TRUE);
-
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
     {
@@ -6341,6 +6315,50 @@ bool PDFWriterImpl::finalizeSignature()
     {
         SAL_WARN("vcl.pdfwriter", "PDF signing: can't create CMS SignerInfo.");
         return false;
+    }
+
+    // Now we have the hash algorithm as a SECItem available in cms_siger->digestAlg
+    if( !m_aContext.SignTSA.isEmpty() )
+    {
+        TimeStampReq src;
+
+        unsigned char cOne = 1;
+        src.version.type = siUnsignedInteger;
+        src.version.data = &cOne;
+        src.version.len = sizeof(cOne);
+
+        src.messageImprint.hashAlgorithm = cms_signer->digestAlg;
+        src.messageImprint.hashedMessage = digest;
+
+        src.reqPolicy.type = siBuffer;
+        src.reqPolicy.data = NULL;
+        src.reqPolicy.len = 0;
+
+        unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
+        src.nonce.type = siUnsignedInteger;
+        src.nonce.data = reinterpret_cast<unsigned char*>(&nNonce);
+        src.nonce.len = sizeof(nNonce);
+
+        unsigned char cFalse = false;
+        src.certReq.type = siUnsignedInteger;
+        src.certReq.data = &cFalse;
+        src.certReq.len = sizeof(cFalse);
+
+        src.extensions = NULL;
+
+        SECItem* item = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
+        SAL_INFO("vcl.pdfwriter", "item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
+
+#ifdef DBG_UTIL
+        if (item && item->data)
+        {
+            FILE *out = fopen("PDFWRITER.timestampreq.data", "wb");
+            fwrite(item->data, item->len, 1, out);
+            fclose(out);
+        }
+#endif
+
+        SECITEM_FreeItem(item, PR_TRUE);
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
