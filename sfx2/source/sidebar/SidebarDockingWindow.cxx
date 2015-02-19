@@ -54,14 +54,10 @@ SidebarDockingWindow::SidebarDockingWindow(
 }
 
 
-
-
 SidebarDockingWindow::~SidebarDockingWindow (void)
 {
     DoDispose();
 }
-
-
 
 
 void SidebarDockingWindow::DoDispose (void)
@@ -75,8 +71,6 @@ void SidebarDockingWindow::DoDispose (void)
 }
 
 
-
-
 void SidebarDockingWindow::GetFocus()
 {
     if (mpSidebarController.is())
@@ -86,15 +80,11 @@ void SidebarDockingWindow::GetFocus()
 }
 
 
-
-
 // fdo#87217
 bool SidebarDockingWindow::Close (void)
 {
     return SfxDockingWindow::Close();
 }
-
-
 
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (

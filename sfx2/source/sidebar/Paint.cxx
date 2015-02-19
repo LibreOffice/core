@@ -31,8 +31,6 @@ Paint::Paint (void)
 }
 
 
-
-
 Paint::Paint (const Color& rColor)
     : meType(ColorPaint),
       maValue(rColor)
@@ -40,15 +38,11 @@ Paint::Paint (const Color& rColor)
 }
 
 
-
-
 Paint::Paint (const Gradient& rGradient)
     : meType(GradientPaint),
       maValue(rGradient)
 {
 }
-
-
 
 
 Paint Paint::Create (const css::uno::Any& rValue)
@@ -66,11 +60,6 @@ Paint Paint::Create (const css::uno::Any& rValue)
 
 
 
-
-
-
-
-
 const Color& Paint::GetColor (void) const
 {
     if (meType != ColorPaint)
@@ -84,8 +73,6 @@ const Color& Paint::GetColor (void) const
 }
 
 
-
-
 const Gradient& Paint::GetGradient (void) const
 {
     if (meType != GradientPaint)
@@ -97,8 +84,6 @@ const Gradient& Paint::GetGradient (void) const
     else
         return ::boost::get<Gradient>(maValue);
 }
-
-
 
 
 Wallpaper Paint::GetWallpaper (void) const

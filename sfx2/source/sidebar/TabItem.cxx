@@ -45,13 +45,9 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 }
 
 
-
-
 TabItem::~TabItem (void)
 {
 }
-
-
 
 
 void TabItem::Paint (const Rectangle& rUpdateArea)
@@ -93,15 +89,12 @@ void TabItem::Paint (const Rectangle& rUpdateArea)
 
 
 
-
 void TabItem::MouseMove (const MouseEvent& rEvent)
 {
     if (rEvent.IsEnterWindow() || rEvent.IsLeaveWindow())
         Invalidate();
     ImageRadioButton::MouseMove(rEvent);
 }
-
-
 
 
 void TabItem::MouseButtonDown (const MouseEvent& rMouseEvent)
@@ -113,8 +106,6 @@ void TabItem::MouseButtonDown (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
-
 
 
 void TabItem::MouseButtonUp (const MouseEvent& rMouseEvent)
@@ -137,7 +128,6 @@ void TabItem::MouseButtonUp (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
 
 
 } } // end of namespace sfx2::sidebar

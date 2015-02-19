@@ -76,7 +76,6 @@ Deck::Deck (
 
 
 
-
 Deck::~Deck (void)
 {
     Dispose();
@@ -86,8 +85,6 @@ Deck::~Deck (void)
     // without updating maPanels.
     maPanels.clear();
 }
-
-
 
 
 void Deck::Dispose (void)
@@ -114,18 +111,10 @@ void Deck::Dispose (void)
 }
 
 
-
-
-
-
-
-
 DeckTitleBar* Deck::GetTitleBar (void) const
 {
     return mpTitleBar.get();
 }
-
-
 
 
 Rectangle Deck::GetContentArea (void) const
@@ -178,8 +167,6 @@ void Deck::Paint (const Rectangle& rUpdateArea)
         rHorizontalBorderPaint,
         Theme::GetPaint(Theme::Paint_VerticalBorder));
 }
-
-
 
 
 void Deck::DataChanged (const DataChangedEvent& rEvent)
@@ -287,8 +274,6 @@ void Deck::ShowPanel (const Panel& rPanel)
 }
 
 
-
-
 const OUString GetWindowClassification (const vcl::Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
@@ -339,8 +324,6 @@ IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
 }
 
 
-
-
 //----- Deck::ScrollContainerWindow -------------------------------------------
 
 Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
@@ -353,13 +336,9 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 }
 
 
-
-
 Deck::ScrollContainerWindow::~ScrollContainerWindow (void)
 {
 }
-
-
 
 
 void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)
@@ -384,8 +363,6 @@ void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)
             rHorizontalBorderPaint);
     }
 }
-
-
 
 
 void Deck::ScrollContainerWindow::SetSeparators (const ::std::vector<sal_Int32>& rSeparators)

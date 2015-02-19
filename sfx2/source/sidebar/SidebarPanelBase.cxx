@@ -50,8 +50,6 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 }
 
 
-
-
 SidebarPanelBase::SidebarPanelBase (
     const ::rtl::OUString& rsResourceURL,
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -79,13 +77,9 @@ SidebarPanelBase::SidebarPanelBase (
 }
 
 
-
-
 SidebarPanelBase::~SidebarPanelBase (void)
 {
 }
-
-
 
 
 void SAL_CALL SidebarPanelBase::disposing (void)
@@ -109,8 +103,6 @@ void SAL_CALL SidebarPanelBase::disposing (void)
 }
 
 
-
-
 // XContextChangeEventListener
 void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     const ui::ContextChangeEventObject& rEvent)
@@ -128,8 +120,6 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
 }
 
 
-
-
 void SAL_CALL SidebarPanelBase::disposing (
     const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException, std::exception)
@@ -141,15 +131,11 @@ void SAL_CALL SidebarPanelBase::disposing (
 }
 
 
-
-
 css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
     throw(css::uno::RuntimeException, std::exception)
 {
     return mxFrame;
 }
-
-
 
 
 ::rtl::OUString SAL_CALL SidebarPanelBase::getResourceURL (void)
@@ -159,8 +145,6 @@ css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (voi
 }
 
 
-
-
 sal_Int16 SAL_CALL SidebarPanelBase::getType (void)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -168,15 +152,11 @@ sal_Int16 SAL_CALL SidebarPanelBase::getType (void)
 }
 
 
-
-
 Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface (void)
     throw(css::uno::RuntimeException, std::exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(this));
 }
-
-
 
 
 Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessible (
@@ -190,8 +170,6 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
 }
 
 
-
-
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -202,8 +180,6 @@ Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
     else
         return NULL;
 }
-
-
 
 
 ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWidth)

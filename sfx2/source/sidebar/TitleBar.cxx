@@ -52,13 +52,9 @@ TitleBar::TitleBar (
 }
 
 
-
-
 TitleBar::~TitleBar (void)
 {
 }
-
-
 
 
 void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
@@ -68,15 +64,11 @@ void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
 }
 
 
-
-
 void TitleBar::SetIcon (const Image& rIcon)
 {
     maIcon = rIcon;
     Invalidate();
 }
-
-
 
 
 void TitleBar::Paint (const Rectangle& rUpdateArea)
@@ -99,16 +91,12 @@ void TitleBar::Paint (const Rectangle& rUpdateArea)
 }
 
 
-
-
 void TitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
 
     SetBackground(GetBackgroundPaint().GetWallpaper());
 }
-
-
 
 
 void TitleBar::setPosSizePixel (
@@ -127,16 +115,6 @@ void TitleBar::setPosSizePixel (
 }
 
 
-
-
-
-
-
-
-
-
-
-
 void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     (void)nItemIndex;
@@ -144,15 +122,11 @@ void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 }
 
 
-
-
 css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible (void)
 {
     SetAccessibleRole(css::accessibility::AccessibleRole::PANEL);
     return AccessibleTitleBar::Create(*this);
 }
-
-
 
 
 void TitleBar::PaintTitle (const Rectangle& rTitleBox)
@@ -188,8 +162,6 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 }
 
 
-
-
 void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 {
     Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
@@ -216,8 +188,6 @@ void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 
     Pop();
 }
-
-
 
 
 IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox)

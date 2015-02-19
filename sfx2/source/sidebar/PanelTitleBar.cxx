@@ -62,12 +62,9 @@ PanelTitleBar::PanelTitleBar (
 
 
 
-
 PanelTitleBar::~PanelTitleBar (void)
 {
 }
-
-
 
 
 void PanelTitleBar::SetMoreOptionsCommand (
@@ -105,8 +102,6 @@ void PanelTitleBar::SetMoreOptionsCommand (
 }
 
 
-
-
 Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 {
     if (mpPanel != NULL)
@@ -123,8 +118,6 @@ Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
     else
         return rTitleBarBox;
 }
-
-
 
 
 void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
@@ -144,22 +137,16 @@ void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
 }
 
 
-
-
 Paint PanelTitleBar::GetBackgroundPaint (void)
 {
     return Theme::GetPaint(Theme::Paint_PanelTitleBarBackground);
 }
 
 
-
-
 Color PanelTitleBar::GetTextColor (void)
 {
     return Theme::GetColor(Theme::Color_PanelTitleFont);
 }
-
-
 
 
 void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
@@ -183,8 +170,6 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 }
 
 
-
-
 Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible (void)
 {
     const ::rtl::OUString sAccessibleName(msAccessibleNamePrefix + msTitle);
@@ -192,8 +177,6 @@ Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible (void)
     SetAccessibleDescription(sAccessibleName);
     return TitleBar::CreateAccessible();
 }
-
-
 
 
 void PanelTitleBar::MouseButtonDown (const MouseEvent& rMouseEvent)
@@ -204,8 +187,6 @@ void PanelTitleBar::MouseButtonDown (const MouseEvent& rMouseEvent)
         CaptureMouse();
     }
 }
-
-
 
 
 void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
@@ -227,8 +208,6 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
     if (mbIsLeftButtonDown)
         mbIsLeftButtonDown = false;
 }
-
-
 
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)

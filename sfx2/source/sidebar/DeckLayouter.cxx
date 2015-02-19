@@ -103,7 +103,6 @@ namespace {
         ++iterator_name)
 
 
-
 void DeckLayouter::LayoutDeck (
     const Rectangle aContentArea,
     sal_Int32& rMinimalWidth,
@@ -248,8 +247,6 @@ Rectangle LayoutPanels (
 }
 
 
-
-
 sal_Int32 PlacePanels (
     ::std::vector<LayoutItem>& rLayoutItems,
     const sal_Int32 nWidth,
@@ -343,8 +340,6 @@ sal_Int32 PlacePanels (
 }
 
 
-
-
 void GetRequestedSizes (
     ::std::vector<LayoutItem>& rLayoutItems,
     sal_Int32& rAvailableHeight,
@@ -396,8 +391,6 @@ void GetRequestedSizes (
         iItem->maLayoutSize = aLayoutSize;
     }
 }
-
-
 
 
 void DistributeHeights (
@@ -483,8 +476,6 @@ void DistributeHeights (
 }
 
 
-
-
 Rectangle PlaceDeckTitle (
     vcl::Window& rDeckTitleBar,
     const Rectangle& rAvailableSpace)
@@ -511,8 +502,6 @@ Rectangle PlaceDeckTitle (
             rAvailableSpace.Bottom());
     }
 }
-
-
 
 
 Rectangle PlaceVerticalScrollBar (
@@ -543,8 +532,6 @@ Rectangle PlaceVerticalScrollBar (
 }
 
 
-
-
 void SetupVerticalScrollBar(
     ScrollBar& rVerticalScrollBar,
     const sal_Int32 nContentHeight,
@@ -556,8 +543,6 @@ void SetupVerticalScrollBar(
     rVerticalScrollBar.SetRangeMax(nContentHeight-1);
     rVerticalScrollBar.SetVisibleSize(nVisibleHeight);
 }
-
-
 
 
 void UpdateFiller (

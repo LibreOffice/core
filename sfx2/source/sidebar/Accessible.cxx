@@ -35,13 +35,9 @@ Accessible::Accessible (
 }
 
 
-
-
 Accessible::~Accessible (void)
 {
 }
-
-
 
 
 void SAL_CALL Accessible::disposing (void)
@@ -50,8 +46,6 @@ void SAL_CALL Accessible::disposing (void)
     if (xComponent.is())
         xComponent->dispose();
 }
-
-
 
 
 Reference<accessibility::XAccessibleContext> SAL_CALL Accessible::getAccessibleContext (void)

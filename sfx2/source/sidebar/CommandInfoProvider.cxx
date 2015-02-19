@@ -76,7 +76,6 @@ namespace
 }
 
 
-
 namespace sfx2 { namespace sidebar {
 
 CommandInfoProvider& CommandInfoProvider::Instance (void)
@@ -84,8 +83,6 @@ CommandInfoProvider& CommandInfoProvider::Instance (void)
     static CommandInfoProvider aProvider;
     return aProvider;
 }
-
-
 
 
 CommandInfoProvider::CommandInfoProvider (void)
@@ -100,8 +97,6 @@ CommandInfoProvider::CommandInfoProvider (void)
 }
 
 
-
-
 CommandInfoProvider::~CommandInfoProvider (void)
 {
     if (mxFrameListener.is())
@@ -110,8 +105,6 @@ CommandInfoProvider::~CommandInfoProvider (void)
         mxFrameListener = NULL;
     }
 }
-
-
 
 
 OUString CommandInfoProvider::GetLabelForCommand (
@@ -127,8 +120,6 @@ OUString CommandInfoProvider::GetLabelForCommand (
     else
         return sLabel;
 }
-
-
 
 
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
@@ -153,8 +144,6 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
             mxFrameListener = new FrameListener(*this, rxFrame);
     }
 }
-
-
 
 
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceleratorConfiguration (void)
@@ -189,8 +178,6 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceler
 }
 
 
-
-
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAcceleratorConfiguration (void)
 {
     if ( ! mxCachedModuleAcceleratorConfiguration.is())
@@ -213,8 +200,6 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
 }
 
 
-
-
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAcceleratorConfiguration (void)
 {
     // Get the global accelerator configuration.
@@ -227,8 +212,6 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAccelerat
 }
 
 
-
-
 OUString CommandInfoProvider::GetModuleIdentifier (void)
 {
     if (msCachedModuleIdentifier.getLength() == 0)
@@ -238,8 +221,6 @@ OUString CommandInfoProvider::GetModuleIdentifier (void)
     }
     return msCachedModuleIdentifier;
 }
-
-
 
 
 OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName)
@@ -260,8 +241,6 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName)
 
     return OUString();
 }
-
-
 
 
 OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
@@ -293,8 +272,6 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
 }
 
 
-
-
 Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const OUString& rsCommandName)
 {
     Sequence<beans::PropertyValue> aProperties;
@@ -316,8 +293,6 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const 
 
     return aProperties;
 }
-
-
 
 
 OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)

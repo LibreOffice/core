@@ -59,13 +59,9 @@ Theme::Theme()
 }
 
 
-
-
 Theme::~Theme (void)
 {
 }
-
-
 
 
 Image Theme::GetImage (const ThemeItem eItem)
@@ -76,8 +72,6 @@ Image Theme::GetImage (const ThemeItem eItem)
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.maImages[nIndex];
 }
-
-
 
 
 Color Theme::GetColor (const ThemeItem eItem)
@@ -95,8 +89,6 @@ Color Theme::GetColor (const ThemeItem eItem)
 }
 
 
-
-
 const Paint& Theme::GetPaint (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
@@ -107,14 +99,10 @@ const Paint& Theme::GetPaint (const ThemeItem eItem)
 }
 
 
-
-
 const Wallpaper Theme::GetWallpaper (const ThemeItem eItem)
 {
     return GetPaint(eItem).GetWallpaper();
 }
-
-
 
 
 sal_Int32 Theme::GetInteger (const ThemeItem eItem)
@@ -127,8 +115,6 @@ sal_Int32 Theme::GetInteger (const ThemeItem eItem)
 }
 
 
-
-
 bool Theme::GetBoolean (const ThemeItem eItem)
 {
     const PropertyType eType (GetPropertyType(eItem));
@@ -139,15 +125,11 @@ bool Theme::GetBoolean (const ThemeItem eItem)
 }
 
 
-
-
 bool Theme::IsHighContrastMode (void)
 {
     const Theme& rTheme (GetCurrentTheme());
     return rTheme.mbIsHighContrastMode;
 }
-
-
 
 
 void Theme::HandleDataChange (void)
@@ -165,8 +147,6 @@ void Theme::HandleDataChange (void)
 }
 
 
-
-
 void Theme::InitializeTheme (void)
 {
     setPropertyValue(
@@ -176,8 +156,6 @@ void Theme::InitializeTheme (void)
         maPropertyIdToNameMap[Bool_UseSystemColors],
         Any(false));
 }
-
-
 
 
 void Theme::UpdateTheme (void)
@@ -424,8 +402,6 @@ void Theme::UpdateTheme (void)
 }
 
 
-
-
 void SAL_CALL Theme::disposing (void)
 {
     ChangeListeners aListeners;
@@ -457,14 +433,10 @@ void SAL_CALL Theme::disposing (void)
 }
 
 
-
-
 Reference<beans::XPropertySet> Theme::GetPropertySet (void)
 {
     return Reference<beans::XPropertySet>(static_cast<XWeak*>(&GetCurrentTheme()), UNO_QUERY);
 }
-
-
 
 
 Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo (void)
@@ -539,8 +511,6 @@ Any SAL_CALL Theme::getPropertyValue (
 }
 
 
-
-
 void SAL_CALL Theme::addPropertyChangeListener(
     const ::rtl::OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
@@ -565,8 +535,6 @@ void SAL_CALL Theme::addPropertyChangeListener(
     if (pListeners != NULL)
         pListeners->push_back(rxListener);
 }
-
-
 
 
 void SAL_CALL Theme::removePropertyChangeListener(
@@ -605,8 +573,6 @@ void SAL_CALL Theme::removePropertyChangeListener(
 }
 
 
-
-
 void SAL_CALL Theme::addVetoableChangeListener(
     const ::rtl::OUString& rsPropertyName,
     const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
@@ -631,8 +597,6 @@ void SAL_CALL Theme::addVetoableChangeListener(
     if (pListeners != NULL)
         pListeners->push_back(rxListener);
 }
-
-
 
 
 void SAL_CALL Theme::removeVetoableChangeListener(
@@ -670,8 +634,6 @@ void SAL_CALL Theme::removeVetoableChangeListener(
 }
 
 
-
-
 css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -698,8 +660,6 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
 }
 
 
-
-
 beans::Property SAL_CALL Theme::getPropertyByName (const ::rtl::OUString& rsPropertyName)
     throw(css::beans::UnknownPropertyException,
         css::uno::RuntimeException, std::exception)
@@ -722,8 +682,6 @@ beans::Property SAL_CALL Theme::getPropertyByName (const ::rtl::OUString& rsProp
 }
 
 
-
-
 sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyName)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -737,8 +695,6 @@ sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyNam
 
     return sal_True;
 }
-
-
 
 
 void Theme::SetupPropertyMaps (void)
@@ -893,8 +849,6 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 }
 
 
-
-
 css::uno::Type Theme::GetCppuType (const PropertyType eType)
 {
     switch(eType)
@@ -924,8 +878,6 @@ css::uno::Type Theme::GetCppuType (const PropertyType eType)
 }
 
 
-
-
 sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
 {
     switch(eType)
@@ -950,8 +902,6 @@ sal_Int32 Theme::GetIndex (const ThemeItem eItem, const PropertyType eType)
 }
 
 
-
-
 Theme::VetoableListenerContainer* Theme::GetVetoableListeners (
     const ThemeItem eItem,
     const bool bCreate)
@@ -969,8 +919,6 @@ Theme::VetoableListenerContainer* Theme::GetVetoableListeners (
 }
 
 
-
-
 Theme::ChangeListenerContainer* Theme::GetChangeListeners (
     const ThemeItem eItem,
     const bool bCreate)
@@ -986,8 +934,6 @@ Theme::ChangeListenerContainer* Theme::GetChangeListeners (
     else
         return NULL;
 }
-
-
 
 
 bool Theme::DoVetoableListenersVeto (
@@ -1021,8 +967,6 @@ bool Theme::DoVetoableListenersVeto (
 }
 
 
-
-
 void Theme::BroadcastPropertyChange (
     const ChangeListenerContainer* pListeners,
     const beans::PropertyChangeEvent& rEvent) const
@@ -1047,8 +991,6 @@ void Theme::BroadcastPropertyChange (
         // Ignore any errors (such as disposed listeners).
     }
 }
-
-
 
 
 void Theme::ProcessNewValue (

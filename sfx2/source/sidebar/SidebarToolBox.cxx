@@ -116,8 +116,6 @@ void SidebarToolBox::Paint (const Rectangle& rRect)
 }
 
 
-
-
 bool SidebarToolBox::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == MouseNotifyEvent::KEYINPUT)
@@ -132,8 +130,6 @@ bool SidebarToolBox::Notify (NotifyEvent& rEvent)
     }
     return ToolBox::Notify(rEvent);
 }
-
-
 
 
 void SidebarToolBox::CreateController (
@@ -162,8 +158,6 @@ void SidebarToolBox::CreateController (
 }
 
 
-
-
 Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (const sal_uInt16 nItemId) const
 {
     ControllerContainer::const_iterator iController (maControllers.find(nItemId));
@@ -172,8 +166,6 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
     else
         return NULL;
 }
-
-
 
 
 void SidebarToolBox::SetController(
@@ -205,8 +197,6 @@ void SidebarToolBox::SetController(
 }
 
 
-
-
 sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubToolbarName) const
 {
     for (ControllerContainer::const_iterator iController(maControllers.begin()), iEnd(maControllers.end());
@@ -226,8 +216,6 @@ sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubTool
 }
 
 
-
-
 void SidebarToolBox::RegisterHandlers (void)
 {
     if ( ! mbAreHandlersRegistered)
@@ -241,8 +229,6 @@ void SidebarToolBox::RegisterHandlers (void)
         SetDeactivateHdl(LINK(this, SidebarToolBox, DeactivateToolBox));
     }
 }
-
-
 
 
 IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox)
@@ -261,8 +247,6 @@ IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox)
 }
 
 
-
-
 IMPL_LINK(SidebarToolBox, ClickHandler, ToolBox*, pToolBox)
 {
     if (pToolBox == NULL)
@@ -274,8 +258,6 @@ IMPL_LINK(SidebarToolBox, ClickHandler, ToolBox*, pToolBox)
 
     return 1;
 }
-
-
 
 
 IMPL_LINK(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox)
@@ -291,8 +273,6 @@ IMPL_LINK(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox)
 }
 
 
-
-
 IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox)
 {
     if (pToolBox == NULL)
@@ -306,14 +286,10 @@ IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox)
 }
 
 
-
-
 IMPL_LINK(SidebarToolBox, ActivateToolBox, ToolBox*, EMPTYARG)
 {
     return 1;
 }
-
-
 
 
 IMPL_LINK(SidebarToolBox, DeactivateToolBox, ToolBox*, EMPTYARG)
