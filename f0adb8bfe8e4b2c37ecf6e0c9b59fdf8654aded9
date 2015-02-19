@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_f7ed4026",
+        "filename": "sw/source/uibase/app/docsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 846,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-02-19T07:59:26Z",
+      "side": 1,
+      "message": "Isn\u0027t there a much simpler API to access configuration values nowadays, the \u003cofficecfg/Office/Common.hxx\u003e stuff?",
+      "revId": "f0adb8bfe8e4b2c37ecf6e0c9b59fdf8654aded9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_97f2c405",
+        "filename": "sw/source/uibase/app/docsh2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 861,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-02-19T07:59:26Z",
+      "side": 1,
+      "message": "Why the odd name for this variable? bRemoveInvisible would be better.",
+      "revId": "f0adb8bfe8e4b2c37ecf6e0c9b59fdf8654aded9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
