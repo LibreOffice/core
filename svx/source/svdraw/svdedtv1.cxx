@@ -28,6 +28,7 @@
 #include <tools/bigint.hxx>
 #include <vcl/msgbox.hxx>
 
+#include "getallcharpropids.hxx"
 #include "svdglob.hxx"
 #include "svx/svditer.hxx"
 #include "svx/svdstr.hrc"

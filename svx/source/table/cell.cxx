@@ -42,6 +42,7 @@
 #include "svx/unoshtxt.hxx"
 #include "svx/svdmodel.hxx"
 
+#include "getallcharpropids.hxx"
 #include "tableundo.hxx"
 #include "cell.hxx"
 #include "svx/unoshprp.hxx"
@@ -138,8 +139,6 @@ SdrText* CellTextProvider::getText(sal_Int32 nIndex) const
 }
 
 }
-
-extern std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet);
 
 namespace sdr
 {
