@@ -5173,9 +5173,13 @@ RTFError RTFDocumentImpl::popState()
         break;
     case Destination::PICPROP:
     case Destination::SHAPEINSTRUCTION:
-        // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
-        if (!m_bObject && !aState.bInListpicture && !aState.bHadShapeText && !(aState.bInShapeGroup && !aState.bInShape))
+        if (m_aStates.size() > 1 && m_aStates[m_aStates.size() - 2].eDestination == Destination::SHAPEINSTRUCTION)
         {
+            // Do not resolve shape if shape instruction destination is inside other shape instruction
+        }
+        else if (!m_bObject && !aState.bInListpicture && !aState.bHadShapeText && !(aState.bInShapeGroup && !aState.bInShape))
+        {
+            // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
             RTFSdrImport::ShapeOrPict eType = (aState.eDestination == Destination::SHAPEINSTRUCTION) ? RTFSdrImport::SHAPE : RTFSdrImport::PICT;
             m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
         }
@@ -5973,6 +5977,17 @@ RTFError RTFDocumentImpl::popState()
         {
             m_aStates.top().aShape = aState.aShape;
             m_aStates.top().aPicture = aState.aPicture;
+            m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
+        }
+        break;
+    case Destination::SHAPEINSTRUCTION:
+        if (!m_aStates.empty() && m_aStates.top().eDestination == Destination::SHAPEINSTRUCTION)
+        {
+            // Shape instruction inside other shape instruction: just copy new shape settings:
+            // it will be resolved on end of topmost shape instruction destination
+            m_aStates.top().aShape = aState.aShape;
+            m_aStates.top().aPicture = aState.aPicture;
+            m_aStates.top().aCharacterSprms = aState.aCharacterSprms;
             m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
         }
         break;
