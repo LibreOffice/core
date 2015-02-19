@@ -158,6 +158,27 @@ Reference< chart2::XChartType > getChartTypeFromDoc( Reference< chart2::XChartDo
     return xChartTypeSequence[nChartType];
 }
 
+Reference<chart2::XAxis> getAxisFromDoc(
+const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nCooSys, sal_Int32 nAxisDim, sal_Int32 nAxisIndex )
+{
+    Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    CPPUNIT_ASSERT(xDiagram.is());
+
+    Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCooSysContainer.is());
+
+    Sequence<Reference<chart2::XCoordinateSystem> > xCooSysSequence = xCooSysContainer->getCoordinateSystems();
+    CPPUNIT_ASSERT(xCooSysSequence.getLength() > nCooSys);
+
+    Reference<chart2::XCoordinateSystem> xCoord = xCooSysSequence[nCooSys];
+    CPPUNIT_ASSERT(xCoord.is());
+
+    Reference<chart2::XAxis> xAxis = xCoord->getAxisByDimension(nAxisDim, nAxisIndex);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    return xAxis;
+}
+
 Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::XChartDocument > xChartDoc,
                                                                 sal_Int32 nDataSeries, sal_Int32 nChartType = 0, sal_Int32 nCooSys = 0 )
 {
