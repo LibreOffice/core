@@ -398,28 +398,36 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         }
 
         switch (signalNumber) {
-            case Document.CALLBACK_INVALIDATE_TILES: {
-                RectF rect = convertCallbackMessageStringToRectF(payload);
-                if (rect != null) {
-                    tileInvalidationCallback.invalidate(rect);
-                }
+            case Document.CALLBACK_INVALIDATE_TILES:
+                invalidateTiles(payload);
                 break;
-            }
-            case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR: {
-                Log.i(LOGTAG, "Invalidate visible cursor: " + payload);
-                RectF rect = convertCallbackMessageStringToRectF(payload);
-                if (rect != null) {
-                    RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-                    TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-                    textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, underSelection);
-                    textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+            case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+                invalidateCursor(payload);
+                break;
+        }
+    }
 
-                    TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
-                    textCursorLayer.positionCursor(rect);
-                    textCursorLayer.showCursor();
-                }
-                break;
-            }
+    private void invalidateCursor(String payload) {
+        RectF rect = convertCallbackMessageStringToRectF(payload);
+        if (rect != null) {
+            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
+            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
+            textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, underSelection);
+            textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+
+            TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
+            textCursorLayer.positionCursor(rect);
+            textCursorLayer.showCursor();
+        }
+    }
+
+    private void invalidateTiles(String payload) {
+        if (tileInvalidationCallback == null) {
+            return;
+        }
+        RectF rect = convertCallbackMessageStringToRectF(payload);
+        if (rect != null) {
+            tileInvalidationCallback.invalidate(rect);
         }
     }
 }
