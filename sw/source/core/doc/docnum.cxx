@@ -151,10 +151,8 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
 
 void SwDoc::PropagateOutlineRule()
 {
-    for (sal_uInt16 n = 0; n < mpTxtFmtCollTbl->size(); n++)
+    for (auto pColl : *mpTxtFmtCollTbl)
     {
-        SwTxtFmtColl *pColl = (*mpTxtFmtCollTbl)[n];
-
         if(pColl->IsAssignedToListLevelOfOutlineStyle())
         {
             // Check only the list style, which is set at the paragraph style
@@ -199,21 +197,22 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     // We now have the wanted range in the OutlineNodes array,
     // so check now if we're not invalidating sublevels
     // (stepping over the limits)
-    sal_uInt16 n;
 
     // Here we go:
     // 1. Create the style array:
     SwTxtFmtColl* aCollArr[ MAXLEVEL ];
     memset( aCollArr, 0, sizeof( SwTxtFmtColl* ) * MAXLEVEL );
 
-    for( n = 0; n < mpTxtFmtCollTbl->size(); ++n )
+    for( auto pTxtFmtColl : *mpTxtFmtCollTbl )
     {
-        if((*mpTxtFmtCollTbl)[ n ]->IsAssignedToListLevelOfOutlineStyle())
+        if (pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle())
         {
-            const int nLevel = (*mpTxtFmtCollTbl)[ n ]->GetAssignedOutlineStyleLevel();
-            aCollArr[ nLevel ] = (*mpTxtFmtCollTbl)[ n ];
+            const int nLevel = pTxtFmtColl->GetAssignedOutlineStyleLevel();
+            aCollArr[ nLevel ] = pTxtFmtColl;
         }
     }
+
+    int n;
 
     /* Find the last occupied level (backward). */
     for (n = MAXLEVEL - 1; n > 0; n--)
@@ -312,12 +311,12 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         */
         if (aCollArr[n] != NULL)
         {
-            sal_uInt16 m = n;
+            int m = n;
             int nCount = nNum;
 
             while (nCount > 0 && m + nStep >= 0 && m + nStep < MAXLEVEL)
             {
-                m = static_cast<sal_uInt16>(m + nStep);
+                m += nStep;
 
                 if (aCollArr[m] != NULL)
                     nCount--;
@@ -336,9 +335,9 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
        outline levels occurring in the document there has to be a valid
        target outline level implied by aMoveArr. */
     bool bMoveApplicable = true;
-    for (n = nSttPos; n < nEndPos; n++)
+    for (auto i = nSttPos; i < nEndPos; ++i)
     {
-        SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
+        SwTxtNode* pTxtNd = rOutlNds[ i ]->GetTxtNode();
         SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
@@ -371,11 +370,9 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     // 2. Apply the new style to all Nodes
-
-    n = nSttPos;
-    while( n < nEndPos)
+    for (auto i = nSttPos; i < nEndPos; ++i)
     {
-        SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
+        SwTxtNode* pTxtNd = rOutlNds[ i ]->GetTxtNode();
         SwTxtFmtColl* pColl = pTxtNd->GetTxtColl();
 
         if( pColl->IsAssignedToListLevelOfOutlineStyle() )
@@ -401,8 +398,6 @@ bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
                 pTxtNd->SetAttrOutlineLevel( nLevel );
 
         }
-
-        n++;
         // Undo ???
     }
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -572,7 +567,7 @@ static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const OUString& rNam
 {
     sal_uInt16 nSavePos = USHRT_MAX;
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
+    for( SwOutlineNodes::size_type n = 0; n < rOutlNds.size(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         OUString sTxt( pTxtNd->GetExpandTxt() );
@@ -612,7 +607,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, OUString& rName )
     {
         sal_uInt16 nVal = 0;
         sal_Unicode c;
-        for( sal_uInt16 n = 0; n < sNum.getLength(); ++n )
+        for( sal_Int32 n = 0; n < sNum.getLength(); ++n )
             if( '0' <= ( c = sNum[ n ]) && c <= '9' )
             {
                 nVal *= 10;  nVal += c - '0';
