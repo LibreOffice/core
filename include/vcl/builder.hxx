@@ -117,7 +117,7 @@ private:
     VclBuilder(const VclBuilder&) SAL_DELETED_FUNCTION;
     VclBuilder& operator=(const VclBuilder&) SAL_DELETED_FUNCTION;
 
-    typedef boost::ptr_map<OUString, osl::Module> ModuleMap;
+    typedef boost::ptr_map<OString, osl::Module> ModuleMap;
 
     //We store these until the builder is deleted, that way we can use the
     //ui-previewer on custom widgets and guarantee the modules they are from

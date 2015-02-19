@@ -106,6 +106,9 @@ gb_EXTRAMERGEDLIBS := \
 
 
 # we link all object files from these libraries into one, merged library
+#
+### Keep in sync with include/comphelper/libraryname.hxx ###
+#
 gb_MERGEDLIBS := \
 	avmedia \
 	$(if $(filter $(OS),ANDROID),,basebmp) \

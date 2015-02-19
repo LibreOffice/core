@@ -47,6 +47,8 @@
 #include <window.h>
 #include <xmlreader/xmlreader.hxx>
 
+#include <comphelper/libraryname.hxx>
+
 using namespace com::sun::star;
 
 #ifdef DISABLE_DYNLOADING
@@ -1668,21 +1670,15 @@ vcl::Window *VclBuilder::makeObject(vcl::Window *pParent, const OString &name, c
         if (nDelim != -1)
         {
 #ifndef DISABLE_DYNLOADING
-            OUStringBuffer sModuleBuf;
-#ifdef SAL_DLLPREFIX
-            sModuleBuf.append(SAL_DLLPREFIX);
-#endif
-            sModuleBuf.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
-            sModuleBuf.append(SAL_DLLEXTENSION);
+            OString sModule = GetLibraryName(name.copy(0, nDelim));
 #endif
             OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
 #ifndef DISABLE_DYNLOADING
-            OUString sModule = sModuleBuf.makeStringAndClear();
             ModuleMap::iterator aI = m_aModuleMap.find(sModule);
             if (aI == m_aModuleMap.end())
             {
                 osl::Module* pModule = new osl::Module;
-                pModule->loadRelative(&thisModule, sModule);
+                pModule->loadRelative(&thisModule, sModule.getStr());
                 aI = m_aModuleMap.insert(sModule, pModule).first;
             }
             customMakeWidget pFunction = reinterpret_cast<customMakeWidget>(aI->second->getFunctionSymbol(sFunction));
