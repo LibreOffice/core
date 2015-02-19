@@ -59,6 +59,8 @@ $(eval $(call gb_Library_use_custom_headers,vcl,\
 ))
 
 $(eval $(call gb_Library_use_externals,vcl,\
+	$(if $(filter LINUX MACOSX,$(OS)), \
+		curl) \
 	jpeg \
 	$(if $(filter-out WNT,$(OS)), \
 		nss3 \
