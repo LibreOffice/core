@@ -2235,12 +2235,14 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
     nRow = nStartRow;
     nCol = nStartCol;
     bRowEmpty = false;
+    bRepeatedRow = false;
 
     pIndices    = new SCSIZE[nEndCol-nStartCol+1];
     pNextEnd    = new SCROW[nEndCol-nStartCol+1];
+    pPrevColEnd = new SCCOL[nEndCol-nStartCol+1];
     ppPatterns  = new const ScPatternAttr*[nEndCol-nStartCol+1];
 
-    SCROW nSkipTo = MAXROW;
+    nMinNextEnd = MAXROW;
     bool bEmpty = true;
     for (i=nStartCol; i<=nEndCol; i++)
     {
@@ -2253,22 +2255,23 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
 
         const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
         SCROW nThisEnd = pArray->pData[nIndex].nRow;
+
+        if ( nThisEnd < nMinNextEnd )
+            nMinNextEnd = nThisEnd; // nMinNextEnd can be set here already
+
         if ( IsDefaultItem( pPattern ) )
-        {
             pPattern = NULL;
-            if ( nThisEnd < nSkipTo )
-                nSkipTo = nThisEnd; // nSkipTo can be set here already
-        }
         else
             bEmpty = false; // Found attributes
 
         pIndices[nPos] = nIndex;
         pNextEnd[nPos] = nThisEnd;
+        pPrevColEnd[nPos] = MAXCOL+1; // only for OSL_ENSURE
         ppPatterns[nPos] = pPattern;
     }
 
     if (bEmpty)
-        nRow = nSkipTo; // Skip until end of next section
+        nRow = nMinNextEnd; // Skip until end of next section
 
     bRowEmpty = bEmpty;
 }
@@ -2277,6 +2280,7 @@ ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 {
     delete[] ppPatterns;
     delete[] pNextEnd;
+    delete[] pPrevColEnd;
     delete[] pIndices;
 }
 
@@ -2297,19 +2301,37 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                 const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
                 rRow = nRow;
                 rCol1 = nCol;
-                while ( nCol < nEndCol && ppPatterns[nCol+1-nStartCol] == pPat )
-                    ++nCol;
+                if ( bRepeatedRow )
+                {
+                    OSL_ENSURE( pPrevColEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
+                    nCol = pPrevColEnd[nCol-nStartCol]; // use the result stored before
+                }
+                else
+                {
+                    while ( nCol < nEndCol && ( ppPatterns[nCol+1-nStartCol] == pPat) )
+                        ++nCol;
+                    // store the result to avoid the previous very expensive comparisons
+                    pPrevColEnd[rCol1-nStartCol] = nCol;
+                }
                 rCol2 = nCol;
                 ++nCol; // Count up for next call
                 return pPat; // Found it!
             }
+
+            bRepeatedRow = true; // we can use the stored row data next time
         }
 
         // Next row
         ++nRow;
         if ( nRow > nEndRow ) // Already at the end?
             return NULL; // Found nothing
+        nCol = nStartCol; // Start at the left again
 
+        if ( bRepeatedRow && nRow <= nMinNextEnd ) // use only the stored data of the previous row
+           continue;
+
+        bRepeatedRow = false;
+        nMinNextEnd = MAXROW;
         bool bEmpty = true;
         SCCOL i;
 
@@ -2344,19 +2366,15 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             }
             else if ( ppPatterns[nPos] )
                 bEmpty = false; // Area not at the end yet
+
+            if ( nMinNextEnd > pNextEnd[nPos] )
+                nMinNextEnd = pNextEnd[nPos];
+
         }
 
         if (bEmpty)
-        {
-            SCCOL nCount = nEndCol-nStartCol+1;
-            SCROW nSkipTo = pNextEnd[0]; // Search next end of area
-            for (i=1; i<nCount; i++)
-                if ( pNextEnd[i] < nSkipTo )
-                    nSkipTo = pNextEnd[i];
-            nRow = nSkipTo; // Skip empty rows
-        }
+            nRow = nMinNextEnd; // Skip empty rows
         bRowEmpty = bEmpty;
-        nCol = nStartCol; // Start at the left again
     }
 }
 
