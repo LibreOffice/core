@@ -6383,6 +6383,7 @@ bool PDFWriterImpl::finalizeSignature()
         // Send time stamp request to TSA server, receive response
 
         CURL* curl = curl_easy_init();
+        CURLcode rc;
         struct curl_slist* slist = NULL;
 
         if (!curl)
@@ -6394,9 +6395,9 @@ bool PDFWriterImpl::finalizeSignature()
 
         SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1) == CURLE_OK ? "OK" : "FAIL"));
 
-        if (curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr()) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_URL) failed");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_URL) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6405,19 +6406,19 @@ bool PDFWriterImpl::finalizeSignature()
         slist = curl_slist_append(slist, "Content-Type: application/timestamp-query");
         slist = curl_slist_append(slist, "Accept: application/timestamp-reply");
 
-        if (curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_HTTPHEADER) failed");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_HTTPHEADER) failed: " << curl_easy_strerror(rc));
             curl_slist_free_all(slist);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
 
-        if (curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, timestamp_request->len) != CURLE_OK ||
-            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, timestamp_request->len)) != CURLE_OK ||
+            (rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6425,27 +6426,27 @@ bool PDFWriterImpl::finalizeSignature()
 
         OStringBuffer reply_buffer;
 
-        if (curl_easy_setopt(curl, CURLOPT_WRITEDATA, &reply_buffer) != CURLE_OK ||
-            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &reply_buffer)) != CURLE_OK ||
+            (rc = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
 
-        if (curl_easy_setopt(curl, CURLOPT_POST, 1) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POST) failed");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
 
         char error_buffer[CURL_ERROR_SIZE];
-        if (curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_ERRORBUFFER) failed");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_ERRORBUFFER) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
