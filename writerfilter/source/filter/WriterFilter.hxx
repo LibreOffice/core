@@ -47,7 +47,9 @@ protected:
 
 
 public:
-   WriterFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext) {}
+   WriterFilter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext)
+        : m_xContext( rxContext )
+   {}
    virtual ~WriterFilter() {}
 
     // XFilter
