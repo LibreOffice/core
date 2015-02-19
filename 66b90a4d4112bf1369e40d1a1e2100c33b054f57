@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_978164fe",
+        "filename": "distro-configs/LibreOfficeWin64.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-19T20:30:17Z",
+      "side": 1,
+      "message": "this looks rather pointless - on WNT configure should not use any system stuff automatically",
+      "revId": "66b90a4d4112bf1369e40d1a1e2100c33b054f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_b786e811",
+        "filename": "distro-configs/LibreOfficeWin64.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-19T20:30:17Z",
+      "side": 1,
+      "message": "this too",
+      "revId": "66b90a4d4112bf1369e40d1a1e2100c33b054f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
