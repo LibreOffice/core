@@ -275,6 +275,8 @@ private:
     ImplOutDevData*                 mpOutDevData;
     std::vector< VCLXGraphics* >*   mpUnoGraphicsList;
     vcl::PDFWriterImpl*             mpPDFWriter;
+    /// Set if we are doing the tiled rendering.
+    bool                            mbTiledRendering;
     vcl::ExtOutDevData*             mpExtOutDevData;
 
     // TEMP TEMP TEMP
@@ -475,6 +477,11 @@ public:
 
     void                        SetExtOutDevData( vcl::ExtOutDevData* pExtOutDevData ) { mpExtOutDevData = pExtOutDevData; }
     vcl::ExtOutDevData*         GetExtOutDevData() const { return mpExtOutDevData; }
+
+    /// Set if we are doing tiled rendering.
+    void setTiledRendering(bool bTiledRendering);
+    /// Are we doing tiled rendering?
+    bool isTiledRendering() const;
 
     ///@}
 
