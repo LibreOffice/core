@@ -77,6 +77,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     embeddedobj/util/embobj \
     filter/source/config/cache/filterconfig1 \
     filter/source/svg/svgfilter \
+    filter/source/xmlfilteradaptor/xmlfa \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
@@ -88,6 +89,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
     sd/util/sd \
     sd/util/sdfilt \
     sd/util/sdd \
+    sdext/source/pdfimport/pdfimport \
     sfx2/util/sfx \
     sot/util/sot \
     svl/source/fsstor/fsstorage \

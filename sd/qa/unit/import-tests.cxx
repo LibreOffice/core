@@ -23,6 +23,8 @@
 #include <editeng/postitem.hxx>
 #include <rsc/rscsfx.hxx>
 
+#include <sfx2/sfxsids.hrc>
+#include <svl/stritem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>
@@ -92,8 +94,11 @@ public:
     void testShapeLineStyle();
     void testBnc862510_6();
     void testBnc862510_7();
+    void testPDFImport();
+    void testPDFImportSkipImages();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
+
     CPPUNIT_TEST(testDocumentLayout);
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
@@ -123,6 +128,7 @@ public:
     CPPUNIT_TEST(testShapeLineStyle);
     CPPUNIT_TEST(testBnc862510_6);
     CPPUNIT_TEST(testBnc862510_7);
+    CPPUNIT_TEST(testPDFImport);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1064,6 +1070,43 @@ void SdImportTest::testBnc862510_7()
     sal_Int16 nParaAdjust = 0;
     xPropSet->getPropertyValue( "ParaAdjust" ) >>= nParaAdjust;
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(nParaAdjust));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testPDFImport()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "no exactly two shapes", xPage->getCount() == 2 );
+
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testPDFImportSkipImages()
+{
+    SfxAllItemSet *pParams = new SfxAllItemSet( SfxGetpApp()->GetPool() );
+    pParams->Put( SfxStringItem ( SID_FILE_FILTEROPTIONS, OUString("SkipImages") ) );
+
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pdf/txtpic.pdf"), PDF, pParams);
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPage > xPage(xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "no exactly one shape", xPage->getCount() == 1 );
+
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_MESSAGE( "failed to load shape", xShape.is() );
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    CPPUNIT_ASSERT_MESSAGE( "not a text shape", xText.is() );
 
     xDocShRef->DoClose();
 }

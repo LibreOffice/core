@@ -23,6 +23,7 @@
 #include <rtl/strbuf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
+#include <svl/itemset.hxx>
 
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <drawinglayer/XShapeDumper.hxx>
@@ -39,10 +40,14 @@ struct FileFormat
 };
 
 // These values are taken from "Flags" in filter/source/config/fragments/filters/*
+// You need to turn value of oor:name="Flags" to SFX_FILTER_*, see
+// include/comphelper/documentconstants.hxx for the possible values.
+// Note: 3RDPARTYFILTER == SFX_FILTER_STARONEFILTER
 #define ODP_FORMAT_TYPE  ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_TEMPLATE | SFX_FILTER_OWN | SFX_FILTER_DEFAULT | SFX_FILTER_ENCRYPTION | SFX_FILTER_PREFERED )
 #define PPT_FORMAT_TYPE  ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN )
 #define PPTX_FORMAT_TYPE ( SFX_FILTER_IMPORT | SFX_FILTER_EXPORT | SFX_FILTER_ALIEN | SFX_FILTER_STARONEFILTER | SFX_FILTER_PREFERED )
 #define HTML_FORMAT_TYPE ( SFX_FILTER_EXPORT | SFX_FILTER_ALIEN )
+#define PDF_FORMAT_TYPE  ( SFX_FILTER_STARONEFILTER | SFX_FILTER_ALIEN | SFX_FILTER_IMPORT | SFX_FILTER_PREFERED )
 
 /** List of file formats we support in Impress unit tests.
 
@@ -58,6 +63,7 @@ FileFormat aFileFormats[] =
     { "ppt",  "MS PowerPoint 97", "Microsoft PowerPoint 97/2000/XP/2003", "sdfilt", PPT_FORMAT_TYPE },
     { "pptx", "Impress Office Open XML", "Office Open XML Presentation", "", PPTX_FORMAT_TYPE },
     { "html", "graphic_HTML", "graphic_HTML", "", HTML_FORMAT_TYPE },
+    { "pdf",  "draw_pdf_import", "pdf_Portable_Document_Format", "", PDF_FORMAT_TYPE },
     { 0, 0, 0, 0, 0 }
 };
 
@@ -65,6 +71,7 @@ FileFormat aFileFormats[] =
 #define PPT  1
 #define PPTX 2
 #define HTML 3
+#define PDF  4
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
@@ -94,7 +101,7 @@ public:
 
 protected:
     /// Load the document.
-    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat )
+    sd::DrawDocShellRef loadURL( const OUString &rURL, sal_Int32 nFormat, SfxAllItemSet *pParams = 0 )
     {
         FileFormat *pFmt = getFormat(nFormat);
         CPPUNIT_ASSERT_MESSAGE( "missing filter info", pFmt->pName != NULL );
@@ -112,8 +119,7 @@ protected:
         aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell();
-        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-        pSrcMed->SetFilter(aFilter);
+        SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ, aFilter, pParams);
         if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.Is() )
         {
             if (xDocShRef.Is())
