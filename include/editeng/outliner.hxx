@@ -257,6 +257,9 @@ public:
     void        SetBackgroundColor( const Color& rColor );
     Color       GetBackgroundColor();
 
+    /// Set if we are doing tiled rendering.
+    void        setTiledRendering(bool bTiledRendering);
+
     SfxItemSet  GetAttribs();
 
     void        Cut();

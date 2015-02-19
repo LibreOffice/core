@@ -572,6 +572,16 @@ Color EditView::GetBackgroundColor() const
     return pImpEditView->GetBackgroundColor();
 }
 
+void EditView::setTiledRendering(bool bTiledRendering)
+{
+    pImpEditView->setTiledRendering(bTiledRendering);
+}
+
+bool EditView::isTiledRendering()
+{
+    return pImpEditView->isTiledRendering();
+}
+
 void EditView::SetControlWord( sal_uInt32 nWord )
 {
     pImpEditView->nControl = nWord;

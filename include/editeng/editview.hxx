@@ -169,6 +169,9 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;
 
+    void            setTiledRendering(bool bTiledRendering);
+    bool            isTiledRendering();
+
     void            SetControlWord( sal_uInt32 nWord );
     sal_uInt32      GetControlWord() const;
 

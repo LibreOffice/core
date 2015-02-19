@@ -215,6 +215,7 @@ private:
     EditView*           pEditView;
     vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
+    bool                mbTiledRendering;
     EditEngine*         pEditEngine;
     vcl::Window*             pOutWin;
     Pointer*            pPointer;
@@ -362,6 +363,9 @@ public:
     void            SetBackgroundColor( const Color& rColor );
     const Color&    GetBackgroundColor() const {
                         return ( pBackgroundColor ? *pBackgroundColor : pOutWin->GetBackground().GetColor() ); }
+
+    void            setTiledRendering(bool bTiledRendering);
+    bool            isTiledRendering() const;
 
     bool        IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreOrAddWord( bool bAdd );
