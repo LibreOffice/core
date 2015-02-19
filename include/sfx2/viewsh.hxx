@@ -36,6 +36,7 @@
 #include <tools/errcode.hxx>
 #include <vcl/jobset.hxx>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 class SfxBaseController;
 class Size;
@@ -59,6 +60,7 @@ class SfxFrameItem;
 class Dialog;
 class Menu;
 class NotifyEvent;
+namespace vcl { class PrinterController; }
 
 #define SFX_PRINTER_PRINTER               1  // without JOB SETUP => Temporary
 #define SFX_PRINTER_JOBSETUP         2
@@ -257,6 +259,9 @@ public:
     sal_Bool                        TryContextMenuInterception( Menu& rIn, const OUString& rMenuIdentifier, Menu*& rpOut, ::com::sun::star::ui::ContextMenuExecuteEvent aEvent );
 
     void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
+    // Like ExecPrint(), but only sets up for printing. Use Printer::ExecutePrintJob() and Printer::FinishPrintJob() afterwards.
+    void                        StartPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, bool, bool );
+    boost::shared_ptr< vcl::PrinterController > GetPrinterController() const;
 
     void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, sal_Bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();

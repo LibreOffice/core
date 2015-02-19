@@ -299,12 +299,10 @@ void Printer::PrintJob( const boost::shared_ptr<PrinterController>& i_pControlle
     }
 }
 
-void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pController,
+void Printer::PreparePrintJob( boost::shared_ptr<PrinterController> pController,
                             const JobSetup& i_rInitSetup
                             )
 {
-    boost::shared_ptr<PrinterController> pController( i_pController );
-
     // check if there is a default printer; if not, show an error box (if appropriate)
     if( GetDefaultPrinterName().isEmpty() )
     {
@@ -332,7 +330,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     }
 
     // reset last page property
-    i_pController->setLastPage( sal_False );
+    pController->setLastPage( sal_False );
 
     // update "PageRange" property inferring from other properties:
     // case 1: "Pages" set from UNO API ->
@@ -344,12 +342,12 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     // "Pages" attribute from API is now equivalent to "PageRange"
     // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
     // Argh ! That sure needs cleaning up
-    beans::PropertyValue* pContentVal = i_pController->getValue( OUString( "PrintRange" ) );
+    beans::PropertyValue* pContentVal = pController->getValue( OUString( "PrintRange" ) );
     if( ! pContentVal )
-        pContentVal = i_pController->getValue( OUString( "PrintContent" ) );
+        pContentVal = pController->getValue( OUString( "PrintContent" ) );
 
     // case 1: UNO API has set "Pages"
-    beans::PropertyValue* pPagesVal = i_pController->getValue( OUString( "Pages" ) );
+    beans::PropertyValue* pPagesVal = pController->getValue( OUString( "Pages" ) );
     if( pPagesVal )
     {
         OUString aPagesVal;
@@ -362,7 +360,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( pContentVal )
             {
                 pContentVal->Value = makeAny( sal_Int32( 1 ) );
-                i_pController->setValue( OUString( "PageRange" ), pPagesVal->Value );
+                pController->setValue( OUString( "PageRange" ), pPagesVal->Value );
             }
         }
     }
@@ -375,13 +373,13 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( nContent == 0 )
             {
                 // do not overwrite PageRange if it is already set
-                beans::PropertyValue* pRangeVal = i_pController->getValue( OUString( "PageRange" ) );
+                beans::PropertyValue* pRangeVal = pController->getValue( OUString( "PageRange" ) );
                 OUString aRange;
                 if( pRangeVal )
                     pRangeVal->Value >>= aRange;
                 if( aRange.isEmpty() )
                 {
-                    sal_Int32 nPages = i_pController->getPageCount();
+                    sal_Int32 nPages = pController->getPageCount();
                     if( nPages > 0 )
                     {
                         OUStringBuffer aBuf( 32 );
@@ -391,14 +389,14 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                             aBuf.appendAscii( "-" );
                             aBuf.append( nPages );
                         }
-                        i_pController->setValue( OUString( "PageRange" ), makeAny( aBuf.makeStringAndClear() ) );
+                        pController->setValue( OUString( "PageRange" ), makeAny( aBuf.makeStringAndClear() ) );
                     }
                 }
             }
         }
     }
 
-    beans::PropertyValue* pReverseVal = i_pController->getValue( OUString( "PrintReverse" ) );
+    beans::PropertyValue* pReverseVal = pController->getValue( OUString( "PrintReverse" ) );
     if( pReverseVal )
     {
         sal_Bool bReverse = sal_False;
@@ -406,7 +404,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pController->setReversePrint( bReverse );
     }
 
-    beans::PropertyValue* pPapersizeFromSetupVal = i_pController->getValue( OUString( "PapersizeFromSetup" ) );
+    beans::PropertyValue* pPapersizeFromSetupVal = pController->getValue( OUString( "PapersizeFromSetup" ) );
     if( pPapersizeFromSetupVal )
     {
         sal_Bool bPapersizeFromSetup = sal_False;
@@ -415,35 +413,35 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     }
 
     // setup NUp printing from properties
-    sal_Int32 nRows = i_pController->getIntProperty( OUString( "NUpRows" ), 1 );
-    sal_Int32 nCols = i_pController->getIntProperty( OUString( "NUpColumns" ), 1 );
+    sal_Int32 nRows = pController->getIntProperty( OUString( "NUpRows" ), 1 );
+    sal_Int32 nCols = pController->getIntProperty( OUString( "NUpColumns" ), 1 );
     if( nRows > 1 || nCols > 1 )
     {
         PrinterController::MultiPageSetup aMPS;
         aMPS.nRows         = nRows > 1 ? nRows : 1;
         aMPS.nColumns      = nCols > 1 ? nCols : 1;
-        sal_Int32 nValue = i_pController->getIntProperty( OUString( "NUpPageMarginLeft" ), aMPS.nLeftMargin );
+        sal_Int32 nValue = pController->getIntProperty( OUString( "NUpPageMarginLeft" ), aMPS.nLeftMargin );
         if( nValue >= 0 )
             aMPS.nLeftMargin = nValue;
-        nValue = i_pController->getIntProperty( OUString( "NUpPageMarginRight" ), aMPS.nRightMargin );
+        nValue = pController->getIntProperty( OUString( "NUpPageMarginRight" ), aMPS.nRightMargin );
         if( nValue >= 0 )
             aMPS.nRightMargin = nValue;
-        nValue = i_pController->getIntProperty( OUString( "NUpPageMarginTop" ), aMPS.nTopMargin );
+        nValue = pController->getIntProperty( OUString( "NUpPageMarginTop" ), aMPS.nTopMargin );
         if( nValue >= 0 )
             aMPS.nTopMargin = nValue;
-        nValue = i_pController->getIntProperty( OUString( "NUpPageMarginBottom" ), aMPS.nBottomMargin );
+        nValue = pController->getIntProperty( OUString( "NUpPageMarginBottom" ), aMPS.nBottomMargin );
         if( nValue >= 0 )
             aMPS.nBottomMargin = nValue;
-        nValue = i_pController->getIntProperty( OUString( "NUpHorizontalSpacing" ), aMPS.nHorizontalSpacing );
+        nValue = pController->getIntProperty( OUString( "NUpHorizontalSpacing" ), aMPS.nHorizontalSpacing );
         if( nValue >= 0 )
             aMPS.nHorizontalSpacing = nValue;
-        nValue = i_pController->getIntProperty( OUString( "NUpVerticalSpacing" ), aMPS.nVerticalSpacing );
+        nValue = pController->getIntProperty( OUString( "NUpVerticalSpacing" ), aMPS.nVerticalSpacing );
         if( nValue >= 0 )
             aMPS.nVerticalSpacing = nValue;
-        aMPS.bDrawBorder = i_pController->getBoolProperty( OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
-        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_pController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
-        aMPS.aPaperSize = i_pController->getPrinter()->PixelToLogic( i_pController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
-        beans::PropertyValue* pPgSizeVal = i_pController->getValue( OUString( "NUpPaperSize" ) );
+        aMPS.bDrawBorder = pController->getBoolProperty( OUString( "NUpDrawBorder" ), aMPS.bDrawBorder );
+        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(pController->getIntProperty( OUString( "NUpSubPageOrder" ), aMPS.nOrder ));
+        aMPS.aPaperSize = pController->getPrinter()->PixelToLogic( pController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        beans::PropertyValue* pPgSizeVal = pController->getValue( OUString( "NUpPaperSize" ) );
         awt::Size aSizeVal;
         if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
         {
@@ -451,7 +449,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             aMPS.aPaperSize.Height() = aSizeVal.Height;
         }
 
-        i_pController->setMultipage( aMPS );
+        pController->setMultipage( aMPS );
     }
 
     // in direct print case check whether there is anything to print.
@@ -475,10 +473,10 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     {
         try
         {
-            PrintDialog aDlg( NULL, i_pController );
+            PrintDialog aDlg( NULL, pController );
             if( ! aDlg.Execute() )
             {
-                i_pController->abortJob();
+                pController->abortJob();
                 return;
             }
             if( aDlg.isPrintToFile() )
@@ -486,7 +484,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 OUString aFile = queryFile( pController->getPrinter().get() );
                 if( aFile.isEmpty() )
                 {
-                    i_pController->abortJob();
+                    pController->abortJob();
                     return;
                 }
                 pController->setValue( OUString( "LocalFileName" ),
@@ -504,17 +502,30 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     }
 
     pController->pushPropertiesToPrinter();
+}
 
+bool Printer::ExecutePrintJob(boost::shared_ptr<PrinterController> pController)
+{
     OUString aJobName;
     beans::PropertyValue* pJobNameVal = pController->getValue( OUString( "JobName" ) );
     if( pJobNameVal )
         pJobNameVal->Value >>= aJobName;
 
-    pController->getPrinter()->StartJob( String( aJobName ), pController );
+    return pController->getPrinter()->StartJob( aJobName, pController );
+}
 
+void Printer::FinishPrintJob(boost::shared_ptr<PrinterController> pController)
+{
     pController->resetPaperToLastConfigured();
-
     pController->jobFinished( pController->getJobState() );
+}
+
+void Printer::ImplPrintJob(boost::shared_ptr<PrinterController> xController,
+                           const JobSetup& i_rInitSetup)
+{
+    PreparePrintJob( xController, i_rInitSetup );
+    ExecutePrintJob( xController );
+    FinishPrintJob( xController );
 }
 
 bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::PrinterController>& i_pController )
