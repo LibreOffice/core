@@ -34,6 +34,24 @@
       "revId": "29e6f02a479f7baed04a1465a10369c718ca4e8d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_57d18cfa",
+        "filename": "odk/source/unoapploader/win/unoapploader.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-02-19T22:04:35Z",
+      "side": 1,
+      "message": "Done (untested).",
+      "parentUuid": "9a1a9d01_97408409",
+      "revId": "29e6f02a479f7baed04a1465a10369c718ca4e8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
