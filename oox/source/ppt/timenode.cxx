@@ -534,9 +534,11 @@ namespace oox { namespace ppt {
                 maTransitionFilter.setTransitionFilterProperties( xFilter );
             }
 
-            std::for_each( maChildren.begin(), maChildren.end(),
-                           boost::bind(&TimeNode::addNode, _1, boost::cref(rFilter), boost::ref(xNode),
-                                       boost::ref(pSlide) ) );
+            std::for_each(
+                maChildren.begin(), maChildren.end(),
+                [&rFilter, &xNode, &pSlide] (TimeNodePtr const & child) {
+                    child->addNode(rFilter, xNode, pSlide);
+                } );
 
             switch( mnNodeType )
             {
