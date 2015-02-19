@@ -15,8 +15,8 @@
 
 #include <cairo-svg.h>
 
-OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(bool bPrinter, X11SalGraphics& rParent):
-    X11CairoTextRender(bPrinter, rParent)
+OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(X11SalGraphics& rParent)
+    : X11CairoTextRender(rParent)
 {
 }
 

@@ -86,11 +86,11 @@ X11SalGraphics::X11SalGraphics():
     if (OpenGLHelper::isVCLOpenGLEnabled())
     {
         mxImpl.reset(new X11OpenGLSalGraphicsImpl(*this));
-        mxTextRenderImpl.reset((new OpenGLX11CairoTextRender(false, *this)));
+        mxTextRenderImpl.reset((new OpenGLX11CairoTextRender(*this)));
     }
     else
     {
-        mxTextRenderImpl.reset((new X11CairoTextRender(false, *this)));
+        mxTextRenderImpl.reset((new X11CairoTextRender(*this)));
         mxImpl.reset(new X11SalGraphicsImpl(*this));
     }
 

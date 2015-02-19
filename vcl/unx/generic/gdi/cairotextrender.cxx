@@ -40,9 +40,8 @@
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
 
-CairoTextRender::CairoTextRender(bool bPrinter):
-    mbPrinter(bPrinter),
-    mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
+CairoTextRender::CairoTextRender()
+    : mnTextColor(MAKE_SALCOLOR(0x00, 0x00, 0x00)) //black
 {
     for( int i = 0; i < MAX_FALLBACK; ++i )
         mpServerFont[i] = NULL;
@@ -89,13 +88,9 @@ bool CairoTextRender::setFont( const FontSelectPattern *pEntry, int nFallbackLev
         // register to use the font
         mpServerFont[ nFallbackLevel ] = pServerFont;
 
-        // apply font specific-hint settings if needed
-        // TODO: also disable it for reference devices
-        if( !mbPrinter )
-        {
-            ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
-            pSFE->HandleFontOptions();
-        }
+        // apply font specific-hint settings
+        ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
+        pSFE->HandleFontOptions();
 
         return true;
     }
@@ -370,9 +365,9 @@ bool CairoTextRender::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCap
 sal_uInt16 CairoTextRender::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
 {
     sal_uInt16 nRetVal = 0;
-    if( !setFont( pEntry, nFallbackLevel ) )
+    if (!setFont(pEntry, nFallbackLevel))
         nRetVal |= SAL_SETFONT_BADFONT;
-    if( mbPrinter || (mpServerFont[ nFallbackLevel ] != NULL) )
+    if (mpServerFont[nFallbackLevel])
         nRetVal |= SAL_SETFONT_USEDRAWTEXTARRAY;
     return nRetVal;
 }

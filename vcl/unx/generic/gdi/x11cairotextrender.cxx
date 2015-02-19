@@ -42,9 +42,8 @@ struct _XRegion
     BOX extents;
 };
 
-X11CairoTextRender::X11CairoTextRender(bool bPrinter, X11SalGraphics& rParent):
-    CairoTextRender(bPrinter),
-    mrParent(rParent)
+X11CairoTextRender::X11CairoTextRender(X11SalGraphics& rParent)
+    : mrParent(rParent)
 {
 }
 

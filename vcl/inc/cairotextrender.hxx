@@ -70,7 +70,6 @@ public:
 
 class CairoTextRender : public TextRenderImpl
 {
-    bool            mbPrinter;
     ServerFont*     mpServerFont[ MAX_FALLBACK ];
 
     SalColor        mnTextColor;
@@ -89,7 +88,7 @@ protected:
     virtual void                clipRegion(cairo_t* cr) = 0;
 
 public:
-                                CairoTextRender(bool bPrinter);
+                                CairoTextRender();
 
 
     virtual void                SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
