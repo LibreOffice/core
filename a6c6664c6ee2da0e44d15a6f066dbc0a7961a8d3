@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_37bbb810",
+        "filename": "cui/source/options/optinet2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 941,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-02-19T08:35:09Z",
+      "side": 1,
+      "message": "Same here, could you please shidden -\u003e bHidden?\n\nAlso, where is that bool initialized? Sounds like you forgot to adapt the MailerProgramCfg_Impl ctor.",
+      "revId": "a6c6664c6ee2da0e44d15a6f066dbc0a7961a8d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
