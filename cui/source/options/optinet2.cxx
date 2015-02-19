@@ -938,6 +938,7 @@ class MailerProgramCfg_Impl : public utl::ConfigItem
     OUString sProgram;
     // readonly states
     bool bROProgram;
+    bool bHidden;
 
     const Sequence<OUString> GetPropertyNames();
 public:
@@ -952,7 +953,8 @@ public:
 
 MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
     utl::ConfigItem("Office.Common/ExternalMailer"),
-    bROProgram(false)
+    bROProgram(false),
+    bHidden(true)
 {
     const Sequence< OUString > aNames = GetPropertyNames();
     const Sequence< Any > aValues = GetProperties(aNames);
@@ -971,6 +973,12 @@ MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
                     bROProgram = pROStates[nProp];
                 }
                 break;
+                case 1 :
+                {
+                    pValues[nProp] >>= bHidden;
+
+                }
+                break;
             }
         }
     }
@@ -986,9 +994,10 @@ MailerProgramCfg_Impl::~MailerProgramCfg_Impl()
 
 const Sequence<OUString> MailerProgramCfg_Impl::GetPropertyNames()
 {
-    Sequence<OUString> aRet(1);
+    Sequence<OUString> aRet(2);
     OUString* pRet = aRet.getArray();
     pRet[0] = "Program";
+    pRet[1] = "Hidden";
     return aRet;
 }
 
@@ -1015,6 +1024,13 @@ void MailerProgramCfg_Impl::Commit()
                     aValues[nRealCount] <<= sProgram;
                     ++nRealCount;
                 }
+            }
+            break;
+            case  1:
+            {
+                aNames[nRealCount] = aOrgNames[nProp];
+                aValues[nRealCount] <<= bHidden;
+                ++nRealCount;
             }
             break;
         }
@@ -1044,6 +1060,7 @@ SvxEMailTabPage::SvxEMailTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
     get(m_pMailerURLFI, "lockemail");
     get(m_pMailerURLED, "url");
     get(m_pMailerURLPB, "browse");
+    get(m_pSuppressHidden, "suppressHidden");
     m_sDefaultFilterName = get<FixedText>("browsetitle")->GetText();
     m_pMailerURLPB->SetClickHdl( LINK( this, SvxEMailTabPage, FileDialogHdl_Impl ) );
 }
@@ -1067,9 +1084,10 @@ SfxTabPage*  SvxEMailTabPage::Create( vcl::Window* pParent, const SfxItemSet* rA
 bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 {
     bool bMailModified = false;
-    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved())
+    if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved() || m_pSuppressHidden->IsValueChangedFromSaved())
     {
         pImpl->aMailConfig.sProgram = m_pMailerURLED->GetText();
+        pImpl->aMailConfig.bHidden = m_pSuppressHidden->GetState();
         bMailModified = true;
     }
     if ( bMailModified )
@@ -1090,6 +1108,12 @@ void SvxEMailTabPage::Reset( const SfxItemSet* )
 
     m_pMailerURLED->SetText(pImpl->aMailConfig.sProgram);
     m_pMailerURLED->SaveValue();
+
+    if(pImpl->aMailConfig.bHidden)
+        m_pSuppressHidden->SetState(TRISTATE_TRUE);
+    else
+        m_pSuppressHidden->SetState(TRISTATE_FALSE);
+    m_pSuppressHidden->SaveValue();
 
     m_pMailContainer->Enable(!pImpl->aMailConfig.bROProgram);
 }
