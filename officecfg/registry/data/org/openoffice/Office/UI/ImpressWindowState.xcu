@@ -54,7 +54,7 @@
           <value>0</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Line and Filling</value>
@@ -337,7 +337,7 @@
           <value xml:lang="en-US">Image</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="ContextSensitive" oor:type="xs:boolean">
           <value>true</value>
@@ -622,7 +622,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="Visible" oor:type="xs:boolean">
-          <value>true</value>
+          <value>false</value>
         </prop>
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">Text Formatting</value>
