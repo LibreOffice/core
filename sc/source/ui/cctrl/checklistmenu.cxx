@@ -84,7 +84,8 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(vcl::Window* pParent, ScDocument* pDo
     SetMenuStackLevel(nMenuStackLevel);
 
     // TODO: How do we get the right font to use here ?
-    const sal_uInt16 nPopupFontHeight = 12;
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+    const sal_uInt16 nPopupFontHeight = 12 * nScaleFactor;
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     maLabelFont = rStyle.GetLabelFont();
     maLabelFont.SetHeight(nPopupFontHeight);
@@ -864,9 +865,13 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(vcl::Window* pParent, ScDocument* p
     mpExtendedData(NULL),
     mpOKAction(NULL),
     mpPopupEndAction(NULL),
-    maWndSize(200, 330),
+    maWndSize(),
     mePrevToggleAllState(TRISTATE_INDET)
 {
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+
+    maWndSize = Size(200 * nScaleFactor, 330 * nScaleFactor);
+
     maTabStopCtrls.reserve(7);
     maTabStopCtrls.push_back(this);
     maTabStopCtrls.push_back(&maChecks);
@@ -887,18 +892,20 @@ ScCheckListMenuWindow::~ScCheckListMenuWindow()
 void ScCheckListMenuWindow::getSectionPosSize(
     Point& rPos, Size& rSize, SectionType eType) const
 {
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+
     // constant parameters.
-    const long nListBoxMargin = 5;            // horizontal distance from the side of the dialog to the listbox border.
-    const long nListBoxInnerPadding = 5;
-    const long nTopMargin = 5;
+    const long nListBoxMargin = 5 * nScaleFactor;            // horizontal distance from the side of the dialog to the listbox border.
+    const long nListBoxInnerPadding = 5 * nScaleFactor;
+    const long nTopMargin = 5 * nScaleFactor;
     const long nMenuHeight = maMenuSize.getHeight();
-    const long nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
-    const long nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
-    const long nBtnWidth = 90;
+    const long nSingleItemBtnAreaHeight = 32 * nScaleFactor; // height of the middle area below the list box where the single-action buttons are.
+    const long nBottomBtnAreaHeight = 50 * nScaleFactor;     // height of the bottom area where the OK and Cancel buttons are.
+    const long nBtnWidth = 90 * nScaleFactor;
     const long nLabelHeight = getLabelFont().GetHeight();
-    const long nBtnHeight = nLabelHeight*2;
-    const long nBottomMargin = 10;
-    const long nMenuListMargin = 5;
+    const long nBtnHeight = nLabelHeight * 2;
+    const long nBottomMargin = 10 * nScaleFactor;
+    const long nMenuListMargin = 5 * nScaleFactor;
 
     // parameters calculated from constants.
     const long nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
@@ -949,7 +956,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
         break;
         case BTN_SINGLE_SELECT:
         {
-            long h = 26;
+            long h = 26 * nScaleFactor;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
             rPos.X() += nListBoxWidth - h - 10 - h - 10;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
@@ -958,7 +965,7 @@ void ScCheckListMenuWindow::getSectionPosSize(
         break;
         case BTN_SINGLE_UNSELECT:
         {
-            long h = 26;
+            long h = 26 * nScaleFactor;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
             rPos.X() += nListBoxWidth - h - 10;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
@@ -1036,17 +1043,35 @@ void ScCheckListMenuWindow::packWindow()
     maChkToggleAll.SetClickHdl( LINK(this, ScCheckListMenuWindow, TriStateHdl) );
     maChkToggleAll.Show();
 
+    sal_Int32 nScaleFactor = GetDPIScaleFactor();
+
+    Image aSingleSelect(ScResId(RID_IMG_SELECT_CURRENT));
+    if (nScaleFactor != 1)
+    {
+        BitmapEx aBitmap = aSingleSelect.GetBitmapEx();
+        aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+        aSingleSelect = Image(aBitmap);
+    }
+
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle.SetPosSizePixel(aPos, aSize);
     maBtnSelectSingle.SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_SELECT_CURRENT));
-    maBtnSelectSingle.SetModeImage(Image(ScResId(RID_IMG_SELECT_CURRENT)));
+    maBtnSelectSingle.SetModeImage(aSingleSelect);
     maBtnSelectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle.Show();
+
+    Image aSingleUnselect(ScResId(RID_IMG_UNSELECT_CURRENT));
+    if (nScaleFactor != 1)
+    {
+        BitmapEx aBitmap = aSingleUnselect.GetBitmapEx();
+        aBitmap.Scale(nScaleFactor, nScaleFactor, BMP_SCALE_FAST);
+        aSingleUnselect = Image(aBitmap);
+    }
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle.SetPosSizePixel(aPos, aSize);
     maBtnUnselectSingle.SetQuickHelpText(SC_STRLOAD(RID_POPUP_FILTER, STR_BTN_UNSELECT_CURRENT));
-    maBtnUnselectSingle.SetModeImage(Image(ScResId(RID_IMG_UNSELECT_CURRENT)));
+    maBtnUnselectSingle.SetModeImage(aSingleUnselect);
     maBtnUnselectSingle.SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnUnselectSingle.Show();
 }
