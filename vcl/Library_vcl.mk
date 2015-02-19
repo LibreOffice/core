@@ -565,7 +565,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/plugadapt/salplug \
     vcl/unx/generic/printer/jobdata \
     vcl/unx/generic/printer/ppdparser \
-	vcl/unx/generic/gdi/x11windowprovider \
+    vcl/unx/generic/gdi/cairotextrender \
+    vcl/unx/generic/gdi/x11windowprovider \
     $(if $(filter TRUE,$(ENABLE_CUPS)),\
         vcl/unx/generic/printer/cupsmgr \
         vcl/unx/generic/printer/printerinfomanager \
@@ -574,6 +575,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     ) \
 ))
 $(eval $(call gb_Library_use_externals,vcl,\
+	cairo \
 	cups \
 	dbus \
 	fontconfig \

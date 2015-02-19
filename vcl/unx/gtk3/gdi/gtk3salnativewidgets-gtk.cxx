@@ -16,6 +16,7 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"
+#include "gtk3cairotextrender.hxx"
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
@@ -1471,6 +1472,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpFrame( pFrame ),
       mpWindow( pWindow )
 {
+    mxTextRenderImpl.reset((new GtkCairoTextRender(*this)));
+
     if(style_loaded)
         return;
 
@@ -1628,6 +1631,143 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
 #else
     SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 #endif
+}
+
+void GtkSalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
+{
+    mxTextRenderImpl->DrawServerFontLayout(rLayout);
+}
+
+const FontCharMapPtr GtkSalGraphics::GetFontCharMap() const
+{
+    return mxTextRenderImpl->GetFontCharMap();
+}
+
+bool GtkSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
+{
+    return mxTextRenderImpl->GetFontCapabilities(rGetImplFontCapabilities);
+}
+
+// SalGraphics
+
+sal_uInt16 GtkSalGraphics::SetFont( FontSelectPattern *pEntry, int nFallbackLevel )
+{
+    return mxTextRenderImpl->SetFont(pEntry, nFallbackLevel);
+}
+
+void GtkSalGraphics::SetTextColor(SalColor nSalColor)
+{
+    mxTextRenderImpl->SetTextColor(nSalColor);
+    SvpSalGraphics::SetTextColor(nSalColor);
+}
+
+bool GtkSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
+                                     const OUString& rFileURL,
+                                     const OUString& rFontName )
+{
+    return mxTextRenderImpl->AddTempDevFont(pFontCollection, rFileURL, rFontName);
+}
+
+void GtkSalGraphics::ClearDevFontCache()
+{
+    mxTextRenderImpl->ClearDevFontCache();
+}
+
+void GtkSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
+{
+    mxTextRenderImpl->GetDevFontList(pFontCollection);
+}
+
+void
+GtkSalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
+{
+    mxTextRenderImpl->GetFontMetric(pMetric, nFallbackLevel);
+}
+
+bool GtkSalGraphics::GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect )
+{
+    return mxTextRenderImpl->GetGlyphBoundRect(aGlyphId, rRect);
+}
+
+bool GtkSalGraphics::GetGlyphOutline( sal_GlyphId aGlyphId,
+    ::basegfx::B2DPolyPolygon& rPolyPoly )
+{
+    return mxTextRenderImpl->GetGlyphOutline(aGlyphId, rPolyPoly);
+}
+
+SalLayout* GtkSalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel )
+{
+    return mxTextRenderImpl->GetTextLayout(rArgs, nFallbackLevel);
+}
+
+SystemFontData GtkSalGraphics::GetSysFontData( int nFallbackLevel ) const
+{
+    return mxTextRenderImpl->GetSysFontData(nFallbackLevel);
+}
+
+bool GtkSalGraphics::CreateFontSubset(
+                                   const OUString& rToFile,
+                                   const PhysicalFontFace* pFont,
+                                   const sal_GlyphId* pGlyphIds,
+                                   const sal_uInt8* pEncoding,
+                                   sal_Int32* pWidths,
+                                   int nGlyphCount,
+                                   FontSubsetInfo& rInfo
+                                   )
+{
+    return mxTextRenderImpl->CreateFontSubset(rToFile, pFont,
+            pGlyphIds, pEncoding, pWidths, nGlyphCount, rInfo);
+}
+
+const void* GtkSalGraphics::GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen )
+{
+    return mxTextRenderImpl->GetEmbedFontData(pFont, pUnicodes, pWidths, nLen, rInfo, pDataLen);
+}
+
+void GtkSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
+{
+    mxTextRenderImpl->FreeEmbedFontData(pData, nLen);
+}
+
+const Ucs2SIntMap* GtkSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority)
+{
+    return mxTextRenderImpl->GetFontEncodingVector(pFont, pNonEncoded, ppPriority);
+}
+
+void GtkSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
+                                   bool bVertical,
+                                   Int32Vector& rWidths,
+                                   Ucs2UIntMap& rUnicodeEnc )
+{
+    mxTextRenderImpl->GetGlyphWidths(pFont, bVertical, rWidths, rUnicodeEnc);
+}
+
+cairo_t* GtkSalGraphics::getCairoContext()
+{
+    basebmp::RawMemorySharedArray data = mpFrame->m_aFrame->getBuffer();
+    basegfx::B2IVector size = mpFrame->m_aFrame->getSize();
+    sal_Int32 nStride = mpFrame->m_aFrame->getScanlineStride();
+    cairo_surface_t *target =
+        cairo_image_surface_create_for_data(data.get(),
+                                        CAIRO_FORMAT_RGB24,
+                                        size.getX(), size.getY(),
+                                        nStride);
+    return cairo_create(target);
+//    return gdk_cairo_create(gtk_widget_get_window(mpFrame->getWindow()));
+}
+
+void GtkSalGraphics::clipRegion(cairo_t* cr)
+{
+    if (!m_aClipRegion.IsEmpty())
+    {
+        RectangleVector aRectangles;
+        m_aClipRegion.GetRegionRectangles(aRectangles);
+        for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        {
+            cairo_rectangle(cr, aRectIter->Left(), aRectIter->Top(), aRectIter->GetWidth(), aRectIter->GetHeight());
+        }
+        cairo_clip(cr);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

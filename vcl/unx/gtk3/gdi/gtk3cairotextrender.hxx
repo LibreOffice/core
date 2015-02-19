@@ -7,18 +7,24 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_VCL_UNX_GENERIC_GDI_OPENGLX11CAIROTEXTRENDER_HXX
-#define INCLUDED_VCL_UNX_GENERIC_GDI_OPENGLX11CAIROTEXTRENDER_HXX value
+#ifndef INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
+#define INCLUDED_VCL_UNX_GTK3_GDI_GTK3CAIROTEXTRENDER_HXX
 
-#include "x11cairotextrender.hxx"
+#include "cairotextrender.hxx"
+#include <unx/gtk/gtkgdi.hxx>
 
-class OpenGLX11CairoTextRender : public X11CairoTextRender
+class GtkCairoTextRender : public CairoTextRender
 {
-public:
-    OpenGLX11CairoTextRender(X11SalGraphics& rParent);
+protected:
+    GtkSalGraphics& mrParent;
 
+public:
+    GtkCairoTextRender(GtkSalGraphics& rParent);
+
+    virtual GlyphCache& getPlatformGlyphCache() SAL_OVERRIDE;
     virtual cairo_t* getCairoContext() SAL_OVERRIDE;
     virtual void getSurfaceOffset(double& nDX, double& nDY) SAL_OVERRIDE;
+    virtual void clipRegion(cairo_t* cr) SAL_OVERRIDE;
     virtual void drawSurface(cairo_t* cr) SAL_OVERRIDE;
 };
 

@@ -466,4 +466,9 @@ SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const
     return aSysFontData;
 }
 
+GlyphCache& SvpSalGraphics::getPlatformGlyphCache()
+{
+    return SvpGlyphCache::GetInstance();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

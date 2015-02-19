@@ -32,6 +32,7 @@
 #define SvpSalGraphics AquaSalGraphics
 #else
 
+class GlyphCache;
 class ServerFont;
 
 class SvpSalGraphics : public SalGraphics
@@ -70,6 +71,7 @@ private:
 
 public:
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
+    GlyphCache& getPlatformGlyphCache();
 
 protected:
     vcl::Region                               m_aClipRegion;

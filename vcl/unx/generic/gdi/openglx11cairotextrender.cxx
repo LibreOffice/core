@@ -20,7 +20,7 @@ OpenGLX11CairoTextRender::OpenGLX11CairoTextRender(X11SalGraphics& rParent)
 {
 }
 
-cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
+cairo_t* OpenGLX11CairoTextRender::getCairoContext()
 {
     // static size_t id = 0;
     // OString aFileName = OString("/tmp/libo_logs/text_rendering") + OString::number(id++) + OString(".svg");
@@ -37,7 +37,11 @@ cairo_surface_t* OpenGLX11CairoTextRender::getCairoSurface()
         }
         surface = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, aClipRect.GetWidth(), aClipRect.GetHeight() );
     }
-    return surface;
+    if (!surface)
+        return NULL;
+    cairo_t *cr = cairo_create(surface);
+    cairo_surface_destroy(surface);
+    return cr;
 }
 
 void OpenGLX11CairoTextRender::getSurfaceOffset( double& nDX, double& nDY )

@@ -34,11 +34,9 @@ class ImplLayoutArgs;
 class ServerFontLayout;
 class PhysicalFontCollection;
 class PhysicalFontFace;
-struct _cairo_surface_t;
-typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo cairo_t;
 
-class CairoFontsCache
+class VCL_DLLPUBLIC CairoFontsCache
 {
 public:
     struct CacheId
@@ -68,7 +66,7 @@ public:
     static void*                FindCachedFont(const CacheId &rId);
 };
 
-class CairoTextRender : public TextRenderImpl
+class VCL_DLLPUBLIC CairoTextRender : public TextRenderImpl
 {
     ServerFont*     mpServerFont[ MAX_FALLBACK ];
 
@@ -79,7 +77,7 @@ class CairoTextRender : public TextRenderImpl
 
 protected:
     virtual GlyphCache&         getPlatformGlyphCache() = 0;
-    virtual cairo_surface_t*    getCairoSurface() = 0;
+    virtual cairo_t*            getCairoContext() = 0;
     virtual void                getSurfaceOffset(double& nDX, double& nDY) = 0;
     virtual void                drawSurface(cairo_t* cr) = 0;
 

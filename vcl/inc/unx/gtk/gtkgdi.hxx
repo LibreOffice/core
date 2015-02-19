@@ -26,11 +26,10 @@
 #include <gdk/gdkkeysyms.h>
 #include <postx.h>
 
-#include <unx/salgdi.h>
-
 #if GTK_CHECK_VERSION(3,0,0)
 
 #include <headless/svpgdi.hxx>
+#include "textrender.hxx"
 
 class GtkSalFrame;
 class GtkSalGraphics : public SvpSalGraphics
@@ -57,6 +56,44 @@ public:
     void updateSettings( AllSettings& rSettings );
     static void refreshFontconfig( GtkSettings *pSettings );
     static void signalSettingsNotify( GObject*, GParamSpec *pSpec, gpointer );
+
+    cairo_t* getCairoContext();
+    void clipRegion(cairo_t* cr);
+
+    // font rendering
+    virtual void DrawServerFontLayout( const ServerFontLayout& rLayout ) SAL_OVERRIDE;
+    virtual const FontCharMapPtr GetFontCharMap() const SAL_OVERRIDE;
+    virtual bool GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const SAL_OVERRIDE;
+    virtual sal_uInt16 SetFont( FontSelectPattern *pEntry, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual void SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
+    virtual bool AddTempDevFont( PhysicalFontCollection* pFontCollection,
+                                         const OUString& rFileURL,
+                                         const OUString& rFontName ) SAL_OVERRIDE;
+    virtual void ClearDevFontCache() SAL_OVERRIDE;
+    virtual void GetDevFontList( PhysicalFontCollection* pFontCollection ) SAL_OVERRIDE;
+    virtual void GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual bool GetGlyphBoundRect( sal_GlyphId aGlyphId, Rectangle& rRect ) SAL_OVERRIDE;
+    virtual bool GetGlyphOutline( sal_GlyphId aGlyphId,
+        ::basegfx::B2DPolyPolygon& rPolyPoly ) SAL_OVERRIDE;
+    virtual SalLayout* GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual SystemFontData GetSysFontData( int nFallbackLevel ) const SAL_OVERRIDE;
+    virtual bool CreateFontSubset(
+                                       const OUString& rToFile,
+                                       const PhysicalFontFace* pFont,
+                                       const sal_GlyphId* pGlyphIds,
+                                       const sal_uInt8* pEncoding,
+                                       sal_Int32* pWidths,
+                                       int nGlyphCount,
+                                       FontSubsetInfo& rInfo
+                                       ) SAL_OVERRIDE;
+    virtual const void* GetEmbedFontData( const PhysicalFontFace* pFont, const sal_Ucs* pUnicodes, sal_Int32* pWidths, size_t nLen, FontSubsetInfo& rInfo, long* pDataLen ) SAL_OVERRIDE;
+    virtual void FreeEmbedFontData( const void* pData, long nLen ) SAL_OVERRIDE;
+    virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded, std::set<sal_Unicode> const** ppPriority) SAL_OVERRIDE;
+    virtual void GetGlyphWidths( const PhysicalFontFace* pFont,
+                                       bool bVertical,
+                                       Int32Vector& rWidths,
+                                       Ucs2UIntMap& rUnicodeEnc ) SAL_OVERRIDE;
+
 private:
     GtkWidget       *mpWindow;
     static GtkStyleContext *mpButtonStyle;
@@ -110,9 +147,12 @@ private:
                            ControlType nType);
 
     static bool style_loaded;
+
+    std::unique_ptr<TextRenderImpl> mxTextRenderImpl;
 };
 
 #else
+#include <unx/salgdi.h>
 
 class GdkX11Pixmap;
 class GtkSalGraphics : public X11SalGraphics

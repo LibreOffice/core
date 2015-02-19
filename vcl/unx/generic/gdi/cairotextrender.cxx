@@ -199,20 +199,18 @@ void CairoTextRender::DrawServerFontLayout( const ServerFontLayout& rLayout )
     if (cairo_glyphs.empty())
         return;
 
-    cairo_surface_t *surface = getCairoSurface();
-
-    DBG_ASSERT( surface!=NULL, "no cairo surface for text" );
-    if( !surface )
-        return;
-
     /*
      * It might be ideal to cache surface and cairo context between calls and
      * only destroy it when the drawable changes, but to do that we need to at
      * least change the SalFrame etc impls to dtor the SalGraphics *before* the
      * destruction of the windows they reference
     */
-    cairo_t *cr = cairo_create(surface);
-    cairo_surface_destroy(surface);
+    cairo_t *cr = getCairoContext();
+    if (!cr)
+    {
+        SAL_WARN("vcl", "no cairo context for text");
+        return;
+    }
 
     if (const void *pOptions = Application::GetSettings().GetStyleSettings().GetCairoFontOptions())
         cairo_set_font_options(cr, static_cast<const cairo_font_options_t*>(pOptions));
