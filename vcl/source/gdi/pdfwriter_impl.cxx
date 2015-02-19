@@ -6156,9 +6156,9 @@ const SEC_ASN1Template TimeStampReq_Template[] =
     { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampReq) },
     { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), 0, 0 },
     { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampReq, messageImprint), SEC_ASN1_SUB(MessageImprint_Template), 0 },
-    { SEC_ASN1_OBJECT_ID, offsetof(TimeStampReq, reqPolicy), 0, 0 },
+    { SEC_ASN1_OBJECT_ID | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, reqPolicy), 0, 0 },
     { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), 0, 0 },
-    { SEC_ASN1_BOOLEAN, offsetof(TimeStampReq, certReq), 0, 0 },
+    { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), 0, 0 },
     { SEC_ASN1_XTRN | SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), SEC_ASN1_SUB(Extensions_Template), 0 },
     { 0, 0, 0, 0 }
 };
@@ -6339,10 +6339,9 @@ bool PDFWriterImpl::finalizeSignature()
         src.nonce.data = reinterpret_cast<unsigned char*>(&nNonce);
         src.nonce.len = sizeof(nNonce);
 
-        unsigned char cFalse = false;
-        src.certReq.type = siUnsignedInteger;
-        src.certReq.data = &cFalse;
-        src.certReq.len = sizeof(cFalse);
+        src.certReq.type = siBuffer;
+        src.certReq.data = NULL;
+        src.certReq.len = 0;
 
         src.extensions = NULL;
 
