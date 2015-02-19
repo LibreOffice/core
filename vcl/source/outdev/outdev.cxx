@@ -99,7 +99,6 @@ OutputDevice::OutputDevice() :
     mpOutDevStateStack              = new OutDevStateStack;
     mpPDFWriter                     = NULL;
     mpAlphaVDev                     = NULL;
-    mbTiledRendering                = false;
     mpExtOutDevData                 = NULL;
     mnOutOffX                       = 0;
     mnOutOffY                       = 0;
@@ -396,16 +395,6 @@ bool OutputDevice::SupportsOperation( OutDevSupportType eType ) const
             return false;
     const bool bHasSupport = mpGraphics->supportsOperation( eType );
     return bHasSupport;
-}
-
-void OutputDevice::setTiledRendering(bool bTiledRendering)
-{
-    mbTiledRendering = bTiledRendering;
-}
-
-bool OutputDevice::isTiledRendering() const
-{
-    return mbTiledRendering;
 }
 
 // Direct OutputDevice drawing public functions

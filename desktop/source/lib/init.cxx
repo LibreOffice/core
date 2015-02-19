@@ -607,7 +607,6 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
                 Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
                 aBuffer, true );
-    aDevice.setTiledRendering(true);
 
     pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
                     nTilePosX, nTilePosY, nTileWidth, nTileHeight);

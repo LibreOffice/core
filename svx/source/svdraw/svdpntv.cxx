@@ -736,7 +736,7 @@ void SdrPaintView::DoCompleteRedraw(SdrPaintWindow& rPaintWindow, const vcl::Reg
 void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow, bool bPaintFormLayer)
 {
     std::unique_ptr<SdrPaintWindow> pPaintWindow;
-    if (rPaintWindow.GetOutputDevice().isTiledRendering() && rPaintWindow.getTemporaryTarget())
+    if (GetModel()->isTiledRendering() && rPaintWindow.getTemporaryTarget())
     {
         // Tiled rendering, we must paint the TextEdit to the output device.
         pPaintWindow.reset(&rPaintWindow);
