@@ -150,12 +150,12 @@ void ScDPFieldButton::draw()
 
 void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
 {
-    long nW = maSize.getWidth() / 2;
-    long nH = maSize.getHeight();
-    if (nW > 18)
-        nW = 18;
-    if (nH > 18)
-        nH = 18;
+    sal_Int32 nScaleFactor = mpOutDev->GetDPIScaleFactor();
+
+    long nMaxSize = 18L * nScaleFactor; // Button max size in either dimension
+
+    long nW = std::min(maSize.getWidth() / 2, nMaxSize);
+    long nH = std::min(maSize.getHeight(),    nMaxSize);
 
     // #i114944# AutoFilter button is left-aligned in RTL.
     // DataPilot button is always right-aligned for now, so text output isn't affected.
@@ -163,6 +163,7 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
         rPos.setX(maPos.getX());
     else
         rPos.setX(maPos.getX() + maSize.getWidth() - nW);
+
     rPos.setY(maPos.getY() + maSize.getHeight() - nH);
     rSize.setWidth(nW);
     rSize.setHeight(nH);
@@ -174,64 +175,34 @@ void ScDPFieldButton::drawPopupButton()
     Size aSize;
     getPopupBoundingBox(aPos, aSize);
 
+    sal_Int32 nScaleFactor = mpOutDev->GetDPIScaleFactor();
+
     // Background & outer black border
     mpOutDev->SetLineColor(COL_BLACK);
-    mpOutDev->SetFillColor(mpStyle->GetFaceColor());
+    Color aBackgroundColor = mbPopupPressed ? mpStyle->GetShadowColor() : mpStyle->GetFaceColor();
+    mpOutDev->SetFillColor(aBackgroundColor);
     mpOutDev->DrawRect(Rectangle(aPos, aSize));
-
-    if (!mbPopupPressed)
-    {
-        // border lines
-        mpOutDev->SetLineColor(mpStyle->GetLightColor());
-        mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+1, aPos.Y()+aSize.Height()-2));
-        mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+1), Point(aPos.X()+aSize.Width()-2, aPos.Y()+1));
-
-        mpOutDev->SetLineColor(mpStyle->GetShadowColor());
-        mpOutDev->DrawLine(Point(aPos.X()+1, aPos.Y()+aSize.Height()-2),
-                           Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
-        mpOutDev->DrawLine(Point(aPos.X()+aSize.Width()-2, aPos.Y()+1),
-                           Point(aPos.X()+aSize.Width()-2, aPos.Y()+aSize.Height()-2));
-    }
 
     // the arrowhead
     Color aArrowColor = mbHasHiddenMember ? mpStyle->GetHighlightLinkColor() : mpStyle->GetButtonTextColor();
     mpOutDev->SetLineColor(aArrowColor);
     mpOutDev->SetFillColor(aArrowColor);
-    Point aCenter(aPos.X() + (aSize.Width() >> 1), aPos.Y() + (aSize.Height() >> 1));
-    Point aPos1, aPos2;
-    aPos1.X() = aCenter.X() - 4;
-    aPos2.X() = aCenter.X() + 4;
-    aPos1.Y() = aCenter.Y() - 3;
-    aPos2.Y() = aCenter.Y() - 3;
 
-    if (mbPopupPressed)
-    {
-        aPos1.X() += 1;
-        aPos2.X() += 1;
-        aPos1.Y() += 1;
-        aPos2.Y() += 1;
-    }
+    Point aCenter(aPos.X() + (aSize.Width() / 2), aPos.Y() + (aSize.Height() / 2));
 
-    do
-    {
-        ++aPos1.X();
-        --aPos2.X();
-        ++aPos1.Y();
-        ++aPos2.Y();
-        mpOutDev->DrawLine(aPos1, aPos2);
-    }
-    while (aPos1 != aPos2);
+    Size aArrowSize(4 * nScaleFactor, 2 * nScaleFactor);
+
+    Polygon aPoly(3);
+    aPoly.SetPoint(Point(aCenter.X() - aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 0);
+    aPoly.SetPoint(Point(aCenter.X() + aArrowSize.Width(), aCenter.Y() - aArrowSize.Height()), 1);
+    aPoly.SetPoint(Point(aCenter.X(),                      aCenter.Y() + aArrowSize.Height()), 2);
+    mpOutDev->DrawPolygon(aPoly);
 
     if (mbHasHiddenMember)
     {
         // tiny little box to display in presence of hidden member(s).
-        Point aBoxPos(aPos.X() + aSize.Width() - 5, aPos.Y() + aSize.Height() - 5);
-        if (mbPopupPressed)
-        {
-            aBoxPos.X() += 1;
-            aBoxPos.Y() += 1;
-        }
-        Size aBoxSize(3, 3);
+        Point aBoxPos(aPos.X() + aSize.Width() - 5 * nScaleFactor, aPos.Y() + aSize.Height() - 5 * nScaleFactor);
+        Size aBoxSize(3 * nScaleFactor, 3 * nScaleFactor);
         mpOutDev->DrawRect(Rectangle(aBoxPos, aBoxSize));
     }
 }
