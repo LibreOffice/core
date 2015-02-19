@@ -77,6 +77,9 @@
 #include "sechash.h"
 #include "cms.h"
 #include "cmst.h"
+
+// We use curl for RFC3161 time stamp requests
+#include <curl/curl.h>
 #endif
 
 #ifdef _WIN32
@@ -6163,12 +6166,20 @@ const SEC_ASN1Template TimeStampReq_Template[] =
     { 0, 0, 0, 0 }
 };
 
+size_t AppendToBuffer(char *ptr, size_t size, size_t nmemb, void *userdata)
+{
+    OStringBuffer *pBuffer = reinterpret_cast<OStringBuffer*>(userdata);
+    pBuffer->append(ptr, size*nmemb);
+
+    return size*nmemb;
+}
+
 #if 0
 {
 #endif
 } // anonymous namespace
 
-#endif
+#endif // !defined(ANDROID) && !defined(IOS) && !defined(_WIN32)
 
 #ifdef _WIN32
 
@@ -6345,19 +6356,121 @@ bool PDFWriterImpl::finalizeSignature()
 
         src.extensions = NULL;
 
-        SECItem* item = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
-        SAL_INFO("vcl.pdfwriter", "item=" << item << " data=" << (item ? (void*)item->data : nullptr) << " len=" << (item ? item->len : -1));
+        SECItem* timestamp_request = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
+        if (timestamp_request == NULL)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_ASN1EncodeItem failed");
+            return false;
+        }
+
+        if (timestamp_request->data == NULL)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_ASN1EncodeItem succeeded but got NULL data");
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        SAL_INFO("vcl.pdfwriter", "request  len=" << (timestamp_request ? timestamp_request->len : -1));
 
 #ifdef DBG_UTIL
-        if (item && item->data)
         {
             FILE *out = fopen("PDFWRITER.timestampreq.data", "wb");
-            fwrite(item->data, item->len, 1, out);
+            fwrite(timestamp_request->data, timestamp_request->len, 1, out);
             fclose(out);
         }
 #endif
 
-        SECITEM_FreeItem(item, PR_TRUE);
+        // Send time stamp request to TSA server, receive response
+
+        CURL* curl = curl_easy_init();
+        struct curl_slist* slist = NULL;
+
+        if (!curl)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_init failed");
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1) == CURLE_OK ? "OK" : "FAIL"));
+
+        if (curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr()) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_URL) failed");
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        slist = curl_slist_append(slist, "Content-Type: application/timestamp-query");
+        slist = curl_slist_append(slist, "Accept: application/timestamp-reply");
+
+        if (curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_HTTPHEADER) failed");
+            curl_slist_free_all(slist);
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        if (curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, timestamp_request->len) != CURLE_OK ||
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed");
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        OStringBuffer reply_buffer;
+
+        if (curl_easy_setopt(curl, CURLOPT_WRITEDATA, &reply_buffer) != CURLE_OK ||
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed");
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        if (curl_easy_setopt(curl, CURLOPT_POST, 1) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POST) failed");
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        char error_buffer[CURL_ERROR_SIZE];
+        if (curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_ERRORBUFFER) failed");
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+        if (curl_easy_perform(curl) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_perform failed: " << error_buffer);
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
+#ifdef DBG_UTIL
+        {
+            FILE *out = fopen("PDFWRITER.reply.data", "wb");
+            fwrite(reply_buffer.getStr(), reply_buffer.getLength(), 1, out);
+            fclose(out);
+        }
+#endif
+
+        curl_slist_free_all(slist);
+        curl_easy_cleanup(curl);
+
+        SECITEM_FreeItem(timestamp_request, PR_TRUE);
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
