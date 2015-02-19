@@ -37,11 +37,20 @@ extern "C" {
 #include <JpegWriter.hxx>
 #include <boost/scoped_array.hpp>
 
+#ifdef _MSC_VER
+#pragma warning(push, 1) /* disable to __declspec(align()) aligned warning */
+#pragma warning (disable: 4324)
+#endif
+
 struct ErrorManagerStruct
 {
     jpeg_error_mgr pub;
     jmp_buf setjmp_buffer;
 };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 extern "C" void errorExit (j_common_ptr cinfo)
 {
