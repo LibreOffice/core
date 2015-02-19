@@ -186,6 +186,7 @@ class SvxEMailTabPage : public SfxTabPage
     FixedImage*   m_pMailerURLFI;
     Edit*         m_pMailerURLED;
     PushButton*   m_pMailerURLPB;
+    CheckBox*     m_pSuppressHidden;
 
     OUString      m_sDefaultFilterName;
 
