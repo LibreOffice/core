@@ -2266,6 +2266,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
 
         pIndices[nPos] = nIndex;
         pNextEnd[nPos] = nThisEnd;
+        pPrevColEnd[nPos] = MAXCOL+1; // only for OSL_ENSURE
         ppPatterns[nPos] = pPattern;
     }
 
@@ -2301,7 +2302,10 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
                 rRow = nRow;
                 rCol1 = nCol;
                 if ( bRepeatedRow )
+                {
+                    OSL_ENSURE( pPrevColEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
                     nCol = pPrevColEnd[nCol-nStartCol]; // use the result stored before
+                }
                 else
                 {
                     while ( nCol < nEndCol && ( ppPatterns[nCol+1-nStartCol] == pPat) )
