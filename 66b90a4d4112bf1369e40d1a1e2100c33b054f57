@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a1a9d01_f7e1c0d1",
+        "filename": "distro-configs/LibreOfficeWin64.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-02-19T22:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a1a9d01_978164fe",
+      "revId": "66b90a4d4112bf1369e40d1a1e2100c33b054f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a1a9d01_b786e811",
         "filename": "distro-configs/LibreOfficeWin64.conf",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-02-19T20:30:17Z",
       "side": 1,
       "message": "this too",
+      "revId": "66b90a4d4112bf1369e40d1a1e2100c33b054f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_97e644e7",
+        "filename": "distro-configs/LibreOfficeWin64.conf",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2015-02-19T22:04:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a1a9d01_b786e811",
       "revId": "66b90a4d4112bf1369e40d1a1e2100c33b054f57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
