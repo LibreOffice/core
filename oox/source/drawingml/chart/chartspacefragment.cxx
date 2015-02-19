@@ -81,7 +81,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
             switch( nElement )
             {
                 case C_TOKEN( autoTitleDeleted ):
-                    mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, true );
+                    mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, true ); // TODO: OOXML_spec
                     return 0;
                 case C_TOKEN( backWall ):
                     return new WallFloorContext( *this, mrModel.mxBackWall.create() );
