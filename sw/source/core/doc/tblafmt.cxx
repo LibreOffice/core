@@ -1161,21 +1161,21 @@ bool SwTableAutoFmtTbl::Load( SvStream& rStream )
                 aVersions.Load( rStream, nVal );        // Item versions
 
                 SwTableAutoFmt* pNew;
-                sal_uInt16 nAnz = 0;
-                rStream.ReadUInt16( nAnz );
+                sal_uInt16 nCount = 0;
+                rStream.ReadUInt16( nCount );
 
                 bRet = 0 == rStream.GetError();
                 if (bRet)
                 {
                     const size_t nMinRecordSize = sizeof(sal_uInt16);
                     const size_t nMaxRecords = rStream.remainingSize() / nMinRecordSize;
-                    if (nAnz > nMaxRecords)
+                    if (nCount > nMaxRecords)
                     {
-                        SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
-                                 " max possible entries, but " << nAnz << " claimed, truncating");
-                        nAnz = nMaxRecords;
+                        SAL_WARN("sw.core", "Parsing error: " << nMaxRecords <<
+                                 " max possible entries, but " << nCount << " claimed, truncating");
+                        nCount = nMaxRecords;
                     }
-                    for (sal_uInt16 i = 0; i < nAnz; ++i)
+                    for (sal_uInt16 i = 0; i < nCount; ++i)
                     {
                         pNew = new SwTableAutoFmt( OUString() );
                         bRet = pNew->Load( rStream, aVersions );

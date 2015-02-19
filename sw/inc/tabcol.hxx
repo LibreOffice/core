@@ -69,7 +69,7 @@ public:
 
     void Insert( long nValue, bool bValue, size_t nPos );
     void Insert( long nValue, long nMin, long nMax, bool bValue, size_t nPos );
-    void Remove( size_t nPos, size_t nAnz = 1 );
+    void Remove( size_t nPos, size_t nCount = 1 );
 
     const SwTabColsEntry& GetEntry( size_t nPos ) const { return aData[nPos]; }
           SwTabColsEntry& GetEntry( size_t nPos )  { return aData[nPos]; }

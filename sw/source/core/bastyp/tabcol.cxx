@@ -105,10 +105,10 @@ void SwTabCols::Insert( long nValue, bool bValue, size_t nPos )
 #endif
 }
 
-void SwTabCols::Remove( size_t nPos, size_t nAnz )
+void SwTabCols::Remove( size_t nPos, size_t nCount )
 {
     SwTabColsEntries::iterator aStart = aData.begin() + nPos;
-    aData.erase( aStart, aStart + nAnz );
+    aData.erase( aStart, aStart + nCount );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
