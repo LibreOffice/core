@@ -9,8 +9,6 @@
 
 package org.libreoffice.kit;
 
-import android.util.Log;
-
 import java.nio.ByteBuffer;
 
 public class Document {

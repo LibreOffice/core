@@ -11,8 +11,6 @@ package org.libreoffice.kit;
 // https://code.google.com/p/android/issues/detail?id=16941
 //
 
-import android.util.Log;
-
 import java.nio.ByteBuffer;
 
 public final class DirectBufferAllocator {
