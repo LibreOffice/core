@@ -94,11 +94,7 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
-    public void keyPress(KeyEvent keyEvent) {
-    }
-
-    @Override
-    public void keyRelease(KeyEvent keyEvent) {
+    public void sendKeyEvent(KeyEvent keyEvent) {
 
     }
 

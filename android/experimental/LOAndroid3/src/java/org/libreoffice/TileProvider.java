@@ -69,18 +69,11 @@ public interface TileProvider {
     void registerInvalidationCallback(TileProvider.TileInvalidationCallback tileInvalidationCallback);
 
     /**
-     * Trigger a key press.
+     * Trigger a key event.
      *
      * @param keyEvent - contains information about key event
      */
-    void keyPress(KeyEvent keyEvent);
-
-    /**
-     * Trigger a key release.
-     *
-     * @param keyEvent - contains information about key event
-     */
-    void keyRelease(KeyEvent keyEvent);
+    void sendKeyEvent(KeyEvent keyEvent);
 
     /**
      * Trigger a mouse button down event.

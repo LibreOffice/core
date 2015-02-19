@@ -194,7 +194,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
                 touch(event.mTouchType, event.mMotionEvent, event.mDocumentTouchCoordinate);
                 break;
             case LOEvent.KEY_EVENT:
-                keyEvent(event.mKeyEventType, event.mKeyEvent);
+                keyEvent(event.mKeyEvent);
                 break;
             case LOEvent.TILE_REEVALUATION_REQUEST:
                 tileReevaluationRequest(event.mComposedTileLayer);
@@ -205,18 +205,14 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
     /**
      * Processes key events.
      */
-    private void keyEvent(String keyEventType, KeyEvent keyEvent) {
+    private void keyEvent(KeyEvent keyEvent) {
         if (!LOKitShell.isEditingEnabled()) {
             return;
         }
         if (mTileProvider == null) {
             return;
         }
-        if (keyEventType.equals("KeyPress")) {
-            mTileProvider.keyPress(keyEvent);
-        } else if (keyEventType.equals("KeyRelease")) {
-            mTileProvider.keyRelease(keyEvent);
-        }
+        mTileProvider.sendKeyEvent(keyEvent);
     }
 
     /**

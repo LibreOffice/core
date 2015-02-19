@@ -90,17 +90,10 @@ public class LOKitShell {
     }
 
     /**
-     * Send key press event to LOKitThread.
+     * Send key event to LOKitThread.
      */
-    public static void sendKeyPressEvent(KeyEvent event) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_EVENT, "KeyPress", event));
-    }
-
-    /**
-     * Send key release event to LOKitThread.
-     */
-    public static void sendKeyReleaseEvent(KeyEvent event) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_EVENT, "KeyRelease", event));
+    public static void sendKeyEvent(KeyEvent event) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_EVENT, event));
     }
 
     public static void sendSizeChangedEvent(int width, int height) {

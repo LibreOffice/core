@@ -83,10 +83,9 @@ public class LOEvent implements Comparable<LOEvent> {
         mDocumentTouchCoordinate = documentTouchCoordinate;
     }
 
-    public LOEvent(int type, String keyEventType, KeyEvent keyEvent) {
+    public LOEvent(int type, KeyEvent keyEvent) {
         mType = type;
         mTypeString = "Key Event";
-        mKeyEventType = keyEventType;
         mKeyEvent = keyEvent;
     }
 

@@ -16,13 +16,13 @@ public class LOKitInputConnectionHandler implements InputConnectionHandler {
 
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        LOKitShell.sendKeyPressEvent(event);
+        LOKitShell.sendKeyEvent(event);
         return false;
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LOKitShell.sendKeyPressEvent(event);
+        LOKitShell.sendKeyEvent(event);
         return false;
     }
 
@@ -33,13 +33,13 @@ public class LOKitInputConnectionHandler implements InputConnectionHandler {
 
     @Override
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
-        LOKitShell.sendKeyPressEvent(event);
+        LOKitShell.sendKeyEvent(event);
         return false;
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        LOKitShell.sendKeyReleaseEvent(event);
+        LOKitShell.sendKeyEvent(event);
         return false;
     }
 }
