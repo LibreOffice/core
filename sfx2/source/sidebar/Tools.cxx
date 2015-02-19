@@ -51,8 +51,6 @@ Image Tools::GetImage (
 }
 
 
-
-
 Image Tools::GetImage (
     const ::rtl::OUString& rsURL,
     const Reference<frame::XFrame>& rxFrame)
@@ -96,8 +94,6 @@ Image Tools::GetImage (
 }
 
 
-
-
 css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
 {
     css::awt::Gradient aAwtGradient (
@@ -113,8 +109,6 @@ css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
         aVclGradient.GetSteps());
     return aAwtGradient;
 }
-
-
 
 
 Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
@@ -135,8 +129,6 @@ Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
 }
 
 
-
-
 util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
 {
     util::URL aURL;
@@ -150,8 +142,6 @@ util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
 }
 
 
-
-
 Reference<frame::XDispatch> Tools::GetDispatch (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     const util::URL& rURL)
@@ -160,8 +150,6 @@ Reference<frame::XDispatch> Tools::GetDispatch (
     Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, ::rtl::OUString(), 0));
     return xDispatch;
 }
-
-
 
 
 ::rtl::OUString Tools::GetModuleName (

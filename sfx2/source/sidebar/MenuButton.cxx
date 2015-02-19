@@ -43,12 +43,9 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 
 
 
-
 MenuButton::~MenuButton (void)
 {
 }
-
-
 
 
 void MenuButton::Paint (const Rectangle& rUpdateArea)
@@ -89,16 +86,12 @@ void MenuButton::Paint (const Rectangle& rUpdateArea)
 }
 
 
-
-
 void MenuButton::MouseMove (const MouseEvent& rEvent)
 {
     if (rEvent.IsEnterWindow() || rEvent.IsLeaveWindow())
         Invalidate();
     CheckBox::MouseMove(rEvent);
 }
-
-
 
 
 void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)
@@ -110,8 +103,6 @@ void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
-
 
 
 void MenuButton::MouseButtonUp (const MouseEvent& rMouseEvent)

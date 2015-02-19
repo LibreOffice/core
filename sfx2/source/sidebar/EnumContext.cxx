@@ -49,8 +49,6 @@ EnumContext::EnumContext (void)
 }
 
 
-
-
 EnumContext::EnumContext (
     const Application eApplication,
     const Context eContext)
@@ -58,8 +56,6 @@ EnumContext::EnumContext (
       meContext(eContext)
 {
 }
-
-
 
 
 EnumContext::EnumContext (
@@ -71,14 +67,10 @@ EnumContext::EnumContext (
 }
 
 
-
-
 sal_Int32 EnumContext::GetCombinedContext_DI (void) const
 {
     return CombinedEnumContext(GetApplication_DI(), meContext);
 }
-
-
 
 
 EnumContext::Application EnumContext::GetApplication_DI (void) const
@@ -109,14 +101,11 @@ bool EnumContext::operator== (const EnumContext aOther)
 }
 
 
-
-
 bool EnumContext::operator!= (const EnumContext aOther)
 {
     return meApplication!=aOther.meApplication
         || meContext!=aOther.meContext;
 }
-
 
 
 
@@ -128,8 +117,6 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eAp
         maApplicationVector.resize(eApplication+1);
     maApplicationVector[eApplication]=rsName;
 }
-
-
 
 
 void EnumContext::ProvideApplicationContainers (void)
@@ -153,8 +140,6 @@ void EnumContext::ProvideApplicationContainers (void)
 }
 
 
-
-
 EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString& rsApplicationName)
 {
     ProvideApplicationContainers();
@@ -166,8 +151,6 @@ EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString&
     else
         return EnumContext::Application_None;
 }
-
-
 
 
 const ::rtl::OUString& EnumContext::GetApplicationName (const Application eApplication)
@@ -182,8 +165,6 @@ const ::rtl::OUString& EnumContext::GetApplicationName (const Application eAppli
 }
 
 
-
-
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eApplication)
 {
     maContextMap[rsName] = eApplication;
@@ -192,8 +173,6 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eApplic
         maContextVector.resize(eApplication+1);
     maContextVector[eApplication] = rsName;
 }
-
-
 
 
 void EnumContext::ProvideContextContainers (void)
@@ -235,8 +214,6 @@ void EnumContext::ProvideContextContainers (void)
 }
 
 
-
-
 EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsContextName)
 {
     ProvideContextContainers();
@@ -248,8 +225,6 @@ EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsConte
     else
         return EnumContext::Context_Unknown;
 }
-
-
 
 
 const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)

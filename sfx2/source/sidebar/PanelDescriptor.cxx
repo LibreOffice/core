@@ -39,8 +39,6 @@ PanelDescriptor::PanelDescriptor (void)
 }
 
 
-
-
 PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
     : msTitle(rOther.msTitle),
       mbIsTitleBarOptional(rOther.mbIsTitleBarOptional),
@@ -56,7 +54,6 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
       mbWantsCanvas(rOther.mbWantsCanvas)
 {
 }
-
 
 
 PanelDescriptor::~PanelDescriptor (void)

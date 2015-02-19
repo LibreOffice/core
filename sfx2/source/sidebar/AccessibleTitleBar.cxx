@@ -22,13 +22,13 @@
 #include "TitleBar.hxx"
 
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+
 #include <unotools/accessiblestatesethelper.hxx>
 
 using namespace css;
 using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
-
 
 Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTitleBar)
 {
@@ -41,21 +41,15 @@ Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTit
 }
 
 
-
-
 AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
     : VCLXAccessibleComponent(pWindow)
 {
 }
 
 
-
-
 AccessibleTitleBar::~AccessibleTitleBar (void)
 {
 }
-
-
 
 
 void AccessibleTitleBar::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)

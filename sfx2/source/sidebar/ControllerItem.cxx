@@ -104,8 +104,6 @@ ControllerItem::ControllerItem (
 }
 
 
-
-
 ControllerItem::ControllerItem (
     const sal_uInt16 nSlotId,
     SfxBindings &rBindings,
@@ -119,8 +117,6 @@ ControllerItem::ControllerItem (
       msCommandName(rsCommandName)
 {
 }
-
-
 
 
 ControllerItem::~ControllerItem (void)
@@ -168,8 +164,6 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
 }
 
 
-
-
 void ControllerItem::RequestUpdate (void)
 {
     SfxPoolItem* pState = NULL;
@@ -178,14 +172,10 @@ void ControllerItem::RequestUpdate (void)
 }
 
 
-
-
 void ControllerItem::NotifyFrameContextChange (void)
 {
     RequestUpdate();
 }
-
-
 
 
 void ControllerItem::ResetFrame (void)
@@ -195,15 +185,12 @@ void ControllerItem::ResetFrame (void)
 
 
 
-
 ::rtl::OUString ControllerItem::GetLabel (void) const
 {
     return CommandInfoProvider::Instance().GetLabelForCommand(
         ".uno:" + msCommandName,
         mxFrame);
 }
-
-
 
 
 ::rtl::OUString ControllerItem::GetHelpText (void) const
@@ -222,13 +209,10 @@ void ControllerItem::ResetFrame (void)
 
 
 
-
 Image ControllerItem::GetIcon (void) const
 {
     return GetImage(mxFrame, ".uno:" + msCommandName, false);
 }
-
-
 
 
 ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()

@@ -35,8 +35,6 @@ Context::Context (void)
 }
 
 
-
-
 Context::Context (
     const ::rtl::OUString& rsApplication,
     const ::rtl::OUString& rsContext)
@@ -44,8 +42,6 @@ Context::Context (
       msContext(rsContext)
 {
 }
-
-
 
 
 sal_Int32 Context::EvaluateMatch (
@@ -68,17 +64,11 @@ sal_Int32 Context::EvaluateMatch (
 
 
 
-
-
-
-
 bool Context::operator== (const Context& rOther) const
 {
     return msApplication.equals(rOther.msApplication)
         && msContext.equals(rOther.msContext);
 }
-
-
 
 
 bool Context::operator!= (const Context& rOther) const

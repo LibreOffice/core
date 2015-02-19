@@ -136,8 +136,6 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 }
 
 
-
-
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     ToolBox* pToolBox,
     const OUString& rsCommandName,

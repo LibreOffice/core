@@ -67,13 +67,9 @@ TabBar::TabBar (
 }
 
 
-
-
 TabBar::~TabBar (void)
 {
 }
-
-
 
 
 void TabBar::Paint (const Rectangle& rUpdateArea)
@@ -88,16 +84,12 @@ void TabBar::Paint (const Rectangle& rUpdateArea)
 }
 
 
-
-
 sal_Int32 TabBar::GetDefaultWidth (void)
 {
     return Theme::GetInteger(Theme::Int_TabItemWidth)
         + Theme::GetInteger(Theme::Int_TabBarLeftPadding)
         + Theme::GetInteger(Theme::Int_TabBarRightPadding);
 }
-
-
 
 
 void TabBar::SetDecks (
@@ -114,7 +106,6 @@ void TabBar::SetDecks (
         }
         maItems.clear();
     }
-
     maItems.resize(rDecks.size());
     sal_Int32 nIndex (0);
     for (ResourceManager::DeckContextDescriptorContainer::const_iterator
@@ -144,8 +135,6 @@ void TabBar::SetDecks (
     UpdateButtonIcons();
     Layout();
 }
-
-
 
 
 void TabBar::UpdateButtonIcons (void)
@@ -181,8 +170,6 @@ void TabBar::UpdateButtonIcons (void)
 
     Invalidate();
 }
-
-
 
 
 void TabBar::Layout (void)
@@ -233,8 +220,6 @@ void TabBar::Layout (void)
 }
 
 
-
-
 void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 {
     for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
@@ -249,8 +234,6 @@ void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 }
 
 
-
-
 void TabBar::RemoveDeckHighlight ()
 {
     for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
@@ -262,8 +245,6 @@ void TabBar::RemoveDeckHighlight ()
 }
 
 
-
-
 void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
@@ -273,13 +254,10 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 }
 
 
-
-
 bool TabBar::Notify (NotifyEvent&)
 {
     return false;
 }
-
 
 
 
@@ -293,7 +271,6 @@ RadioButton* TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
 }
 
 
-
 Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
 {
     return Tools::GetImage(
@@ -301,8 +278,6 @@ Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
         rDeckDescriptor.msHighContrastIconURL,
         mxFrame);
 }
-
-
 
 
 
@@ -318,8 +293,6 @@ IMPL_LINK(TabBar::Item, HandleClick, Button*, EMPTYARG)
 }
 
 
-
-
 const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 {
     if (nIndex<0 || static_cast<size_t>(nIndex)>=maItems.size())
@@ -327,8 +300,6 @@ const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
     else
         return maItems[nIndex].msDeckId;
 }
-
-
 
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
@@ -344,8 +315,6 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
         Layout();
     }
 }
-
-
 
 
 void TabBar::RestoreHideFlags (void)
@@ -366,8 +335,6 @@ void TabBar::RestoreHideFlags (void)
 }
 
 
-
-
 void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
 {
     ::std::vector<Button*> aButtons;
@@ -383,8 +350,6 @@ void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
     }
     rFocusManager.SetButtons(aButtons);
 }
-
-
 
 
 IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
@@ -421,7 +386,6 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
 
     return 0;
 }
-
 
 
 } } // end of namespace sfx2::sidebar

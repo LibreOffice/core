@@ -39,11 +39,9 @@ ContextChangeBroadcaster::ContextChangeBroadcaster (void)
 }
 
 
-
 ContextChangeBroadcaster::~ContextChangeBroadcaster (void)
 {
 }
-
 
 
 
@@ -53,15 +51,11 @@ void ContextChangeBroadcaster::Initialize (const ::rtl::OUString& rsContextName)
 }
 
 
-
-
 void ContextChangeBroadcaster::Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (msContextName.getLength() > 0)
         BroadcastContextChange(rxFrame, GetModuleName(rxFrame), msContextName);
 }
-
-
 
 
 void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
@@ -76,16 +70,12 @@ void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame:
 }
 
 
-
-
 bool ContextChangeBroadcaster::SetBroadcasterEnabled (const bool bIsEnabled)
 {
     const bool bWasEnabled (mbIsBroadcasterEnabled);
     mbIsBroadcasterEnabled = bIsEnabled;
     return bWasEnabled;
 }
-
-
 
 
 void ContextChangeBroadcaster::BroadcastContextChange (
@@ -119,8 +109,6 @@ void ContextChangeBroadcaster::BroadcastContextChange (
 }
 
 
-
-
 OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
@@ -137,7 +125,6 @@ OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css:
     }
     return OUString();
 }
-
 
 
 } } // end of namespace ::sd::sidebar

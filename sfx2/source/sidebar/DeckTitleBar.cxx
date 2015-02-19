@@ -55,13 +55,9 @@ DeckTitleBar::DeckTitleBar (
 }
 
 
-
-
 DeckTitleBar::~DeckTitleBar (void)
 {
 }
-
-
 
 
 void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
@@ -86,8 +82,6 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 }
 
 
-
-
 Rectangle DeckTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 {
     Image aGripImage (Theme::GetImage(Theme::Image_Grip));
@@ -99,14 +93,10 @@ Rectangle DeckTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 }
 
 
-
-
 void DeckTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
 {
     (void)rTitleBarBox;
 }
-
-
 
 
 sidebar::Paint DeckTitleBar::GetBackgroundPaint (void)
@@ -115,14 +105,10 @@ sidebar::Paint DeckTitleBar::GetBackgroundPaint (void)
 }
 
 
-
-
 Color DeckTitleBar::GetTextColor (void)
 {
     return Theme::GetColor(Theme::Color_DeckTitleFont);
 }
-
-
 
 
 void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
@@ -134,7 +120,6 @@ void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 
 
-
 css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible (void)
 {
     const ::rtl::OUString sAccessibleName(msTitle);
@@ -142,8 +127,6 @@ css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessi
     SetAccessibleDescription(sAccessibleName);
     return TitleBar::CreateAccessible();
 }
-
-
 
 
 void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)

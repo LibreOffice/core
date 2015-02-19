@@ -45,8 +45,6 @@ ResourceManager& ResourceManager::Instance (void)
 }
 
 
-
-
 ResourceManager::ResourceManager (void)
     : maDecks(),
       maPanels(),
@@ -57,15 +55,11 @@ ResourceManager::ResourceManager (void)
 }
 
 
-
-
 ResourceManager::~ResourceManager (void)
 {
     maPanels.clear();
     maDecks.clear();
 }
-
-
 
 
 const DeckDescriptor* ResourceManager::GetDeckDescriptor (
@@ -84,8 +78,6 @@ const DeckDescriptor* ResourceManager::GetDeckDescriptor (
 }
 
 
-
-
 const PanelDescriptor* ResourceManager::GetPanelDescriptor (
     const ::rtl::OUString& rsPanelId) const
 {
@@ -100,8 +92,6 @@ const PanelDescriptor* ResourceManager::GetPanelDescriptor (
     }
     return NULL;
 }
-
-
 
 
 void ResourceManager::SetIsDeckEnabled (
@@ -121,8 +111,6 @@ void ResourceManager::SetIsDeckEnabled (
         }
     }
 }
-
-
 
 
 const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
@@ -164,8 +152,6 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
 
     return rDecks;
 }
-
-
 
 
 const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatchingPanels (
@@ -212,8 +198,6 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
 
     return rPanelIds;
 }
-
-
 
 
 void ResourceManager::ReadDeckList (void)
@@ -267,8 +251,6 @@ void ResourceManager::ReadDeckList (void)
     if (nWriteIndex<nCount)
         maDecks.resize(nWriteIndex);
 }
-
-
 
 
 void ResourceManager::ReadPanelList (void)
@@ -328,8 +310,6 @@ void ResourceManager::ReadPanelList (void)
     if (nWriteIndex<nCount)
         maPanels.resize(nWriteIndex);
 }
-
-
 
 
 void ResourceManager::ReadContextList (
@@ -477,8 +457,6 @@ void ResourceManager::ReadContextList (
 }
 
 
-
-
 void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 {
     // Get module name for given frame.
@@ -561,8 +539,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 }
 
 
-
-
 void ResourceManager::StorePanelExpansionState (
     const ::rtl::OUString& rsPanelId,
     const bool bExpansionState,
@@ -583,7 +559,6 @@ void ResourceManager::StorePanelExpansionState (
         }
     }
 }
-
 
 
 
@@ -617,8 +592,6 @@ void ResourceManager::StorePanelExpansionState (
 }
 
 
-
-
 void ResourceManager::GetToolPanelNodeNames (
     ::std::vector<OUString>& rMatchingNames,
     const ::utl::OConfigurationTreeRoot& aRoot) const
@@ -631,8 +604,6 @@ void ResourceManager::GetToolPanelNodeNames (
             rMatchingNames.push_back(aChildNodeNames[nIndex]);
     }
 }
-
-
 
 
 bool ResourceManager::IsDeckEnabled (
