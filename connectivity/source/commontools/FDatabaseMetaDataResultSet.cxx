@@ -895,13 +895,6 @@ namespace
         { 0, 0, 0, 0, 0, 0 }
     };
 }
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::registry::XRegistryKey;
-using ::com::sun::star::registry::InvalidRegistryException;
-using ::com::sun::star::registry::InvalidValueException;
-using ::com::sun::star::lang::XMultiServiceFactory;
-
 
 //= registration
 
