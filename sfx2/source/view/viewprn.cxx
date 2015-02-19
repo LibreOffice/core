@@ -579,8 +579,10 @@ SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
     return pDocPrinter;
 }
 
-void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, sal_Bool bIsAPI, sal_Bool bIsDirect )
+void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rProps, bool bIsAPI, bool bIsDirect )
 {
+    assert( pImp->m_xPrinterController.get() == NULL );
+
     // get the current selection; our controller should know it
     Reference< frame::XController > xController( GetController() );
     Reference< view::XSelectionSupplier > xSupplier( xController, UNO_QUERY );
@@ -622,7 +624,11 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( OUString( "JobName"  ),
                         makeAny( OUString( pObjShell->GetTitle(0) ) ) );
+}
 
+void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rProps, sal_Bool bIsAPI, sal_Bool bIsDirect )
+{
+    StartPrint( rProps, bIsAPI, bIsDirect );
     // FIXME: job setup
     SfxPrinter* pDocPrt = GetPrinter(sal_False);
     JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : GetJobSetup();
@@ -630,7 +636,12 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
         aJobSetup.SetValue( String( "IsQuickJob"  ),
                             String( "true"  ) );
 
-    Printer::PrintJob( pController, aJobSetup );
+    Printer::PrintJob( GetPrinterController(), aJobSetup );
+}
+
+boost::shared_ptr< vcl::PrinterController > SfxViewShell::GetPrinterController() const
+{
+    return pImp->m_pPrinterController;
 }
 
 Printer* SfxViewShell::GetActivePrinter() const
