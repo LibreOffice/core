@@ -43,6 +43,7 @@ public:
     void testDelayedCellImport(); // chart range referencing content on later sheets
     void testFlatODSStackedColumnChart();
     void testChartAreaStyleBackgroundXLSX();
+    void testAxisTextRotationXLSX();
     void testNumberFormatsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
@@ -70,6 +71,7 @@ public:
     CPPUNIT_TEST(testDelayedCellImport);
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
     CPPUNIT_TEST(testChartAreaStyleBackgroundXLSX);
+    CPPUNIT_TEST(testAxisTextRotationXLSX);
     CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
@@ -404,6 +406,23 @@ void Chart2ImportTest::testChartAreaStyleBackgroundXLSX()
         eStyle == drawing::FillStyle_SOLID);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
         sal_Int32(0), nColor);
+}
+
+void Chart2ImportTest::testAxisTextRotationXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "axis-label-rotation.xlsx");
+    uno::Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    Reference<chart2::XAxis> xYAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xYAxis.is());
+
+    Reference<beans::XPropertySet> xPS(xYAxis, uno::UNO_QUERY_THROW);
+    double nRotation = 0;
+    bool bSuccess = xPS->getPropertyValue("TextRotation") >>= nRotation;
+
+    CPPUNIT_ASSERT(bSuccess);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(90, nRotation, 1e-10);
 }
 
 
