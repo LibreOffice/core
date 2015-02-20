@@ -6722,12 +6722,48 @@ bool PDFWriterImpl::finalizeSignature()
         }
 
         SAL_INFO("vcl.pdfwriter", "TimeStampResp received and decoded, status=" << PKIStatusInfoToString(response.status));
-#if 0
+
+#if 0   // SEC_StringToOID() and NSS_CMSSignerInfo_AddUnauthAttr() are
+        // not exported from libsmime, need to think of some other
+        // approach. (As such I don't know if the code below would do
+        // the right thing even if they were.)
+
         NSSCMSAttribute timestamp;
-        timestamp.type = ?
-        if (NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, ) != SECSuccess)
+
+        timestamp.type.type = siBuffer;
+        timestamp.type.data = NULL;
+        timestamp.type.len = 0;
+
+        SECItem values[2];
+        values[0] = response.timeStampToken;
+        values[1].type = siBuffer;
+        values[1].data = NULL;
+        values[1].len = 0;
+
+        SECItem *valuesp = values;
+        timestamp.values = &valuesp;
+
+        SECOidData typetag;
+        typetag.oid.data = NULL;
+        // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
+        // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
+        // smime(16) aa(2) 14 }
+        if (SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.14", 0) != SECSuccess)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: can't include cert chain.");
+            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_StringToOID failed");
+            return false;
+        }
+        typetag.offset = SEC_OID_UNKNOWN; // ???
+        typetag.desc = "id-aa-timeStampToken";
+        typetag.mechanism = CKM_INVALID_MECHANISM; // ???
+        typetag.supportedExtension = UNSUPPORTED_CERT_EXTENSION; // ???
+        timestamp.typeTag = &typetag;
+
+        timestamp.encoded = PR_FALSE;
+
+        if (NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: can't add timestamp attribute");
             return false;
         }
 #endif
