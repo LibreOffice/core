@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_57898cc9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Common.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-02-20T14:33:50Z",
+      "side": 1,
+      "message": "this is wrong; the value shall not be obtained from an external backend (and the \"ExternalMailer\" prop is of type string, so doesn\u0027t even fit here); just leave the \"Hidden\" prop out of the .xcu (and instead give it a default value in the .xcs)",
+      "revId": "09c0d9710ab9d7e5290750324a4b2c9f6c2c979e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
