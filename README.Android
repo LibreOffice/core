@@ -21,10 +21,9 @@ In order to have proper acceleration, you need the 32-bit libGL.so:
 
 	Then:
 
-	make cmd cmd=bash
-	cd android/qa/sc
-	make clean all install
-	make run ; adb shell logcat
+	cd android/experimental/LOAndroid3
+	ant debug install
+	adb logcat
 
 	And if all goes well - you should have some nice unit test output to
 enjoy. After a while of this loop you might find that you have lost a lot of
