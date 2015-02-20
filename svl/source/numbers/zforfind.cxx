@@ -2451,16 +2451,35 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                     SkipBlanks( rString, nPos );
                 }
             }
-            else if (nStringPos == 5 && nPos == 0 && rString.getLength() == 1 &&
-                     rString[ 0 ] == 'T' && MayBeIso8601())
+            else if (nPos == 0 && rString.getLength() == 1 && MayBeIso8601())
             {
-                // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
-                ++nPos;
+                if (nStringPos == 5 && rString[0] == 'T')
+                {
+                    // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
+                    ++nPos;
+                }
+                else if (nStringPos == 7 && rString[0] == ':')
+                {
+                    // ISO 8601 combined date and time, the time part; we reach
+                    // here if the locale's separator is not ':' so it couldn't
+                    // be detected above in the time block.
+                    if (nAnzNums >= 5)
+                        eScannedType = NUMBERFORMAT_DATETIME;
+                    ++nPos;
+                }
             }
             break;
-#if NF_RECOGNIZE_ISO8601_TIMEZONES
         case NUMBERFORMAT_DATETIME:
-            if (nPos == 0 && rString.getLength() == 1 && nStringPos >= 9 && MayBeIso8601())
+            if (nPos == 0 && rString.getLength() == 1 && MayBeIso8601())
+            {
+                if (nStringPos == 9 && rString[0] == ':')
+                {
+                    // ISO 8601 combined date and time, the time part continued.
+                    ++nPos;
+                }
+            }
+#if NF_RECOGNIZE_ISO8601_TIMEZONES
+            else if (nPos == 0 && rString.getLength() == 1 && nStringPos >= 9 && MayBeIso8601())
             {
                 // ISO 8601 timezone offset
                 switch (rString[ 0 ])
@@ -2487,8 +2506,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                     break;
                 }
             }
-            break;
 #endif
+            break;
         }
     }
 
