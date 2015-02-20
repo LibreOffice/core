@@ -24,7 +24,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libevtattlo.a", "evtatt_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
-    ("libstocserviceslo.a", "stocservices_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
@@ -152,6 +151,13 @@ core_constructor_list = [
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
 # stoc/source/inspect/introspection.component
     "com_sun_star_comp_stoc_Introspection_get_implementation",
+# stoc/util/stocservices.component -- TODO check if all of these are necessary
+    "com_sun_star_comp_stoc_TypeConverter_get_implementation",
+    "com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation",
+    "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
+    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
+    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
+    "com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_StdTabController_get_implementation",
     "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",
