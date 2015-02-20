@@ -113,14 +113,16 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CLOSE));
     }
 
-    public static void sendRedrawEvent() {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.REDRAW));
-    }
-
+    /**
+     * Send tile reevaluation to LOKitThread.
+     */
     public static void sendTileReevaluationRequest(ComposedTileLayer composedTileLayer) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_REEVALUATION_REQUEST, composedTileLayer));
     }
 
+    /**
+     * Send tile invalidation to LOKitThread.
+     */
     public static void sendTileInvalidationRequest(RectF rect) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_INVALIDATION, rect));
     }

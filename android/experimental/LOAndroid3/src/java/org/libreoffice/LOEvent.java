@@ -11,39 +11,31 @@ import org.mozilla.gecko.gfx.SubTile;
 
 public class LOEvent implements Comparable<LOEvent> {
     public static final int SIZE_CHANGED = 1;
-    public static final int TILE_SIZE = 2;
-    public static final int CHANGE_PART = 3;
-    public static final int LOAD = 4;
-    public static final int CLOSE = 5;
-    public static final int REDRAW = 6;
-    public static final int TILE_REEVALUATION_REQUEST = 7;
-    public static final int THUMBNAIL = 8;
-    public static final int TILE_INVALIDATION = 9;
-    public static final int TOUCH = 10;
-    public static final int KEY_EVENT = 11;
+    public static final int CHANGE_PART = 2;
+    public static final int LOAD = 3;
+    public static final int CLOSE = 4;
+    public static final int TILE_REEVALUATION_REQUEST = 5;
+    public static final int THUMBNAIL = 6;
+    public static final int TILE_INVALIDATION = 7;
+    public static final int TOUCH = 8;
+    public static final int KEY_EVENT = 9;
 
     public final int mType;
     public int mPriority = 0;
+    public String mTypeString;
 
     public ThumbnailCreator.ThumbnailCreationTask mTask;
-    public String mTypeString;
     public int mPartIndex;
     public String mFilename;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
     public MotionEvent mMotionEvent;
     public PointF mDocumentTouchCoordinate;
-    public String mKeyEventType;
     public KeyEvent mKeyEvent;
     public RectF mInvalidationRect;
 
     public LOEvent(int type) {
         mType = type;
-    }
-
-    public LOEvent(int type, int widthPixels, int heightPixels) {
-        mType = type;
-        mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
     public LOEvent(int type, ComposedTileLayer composedTileLayer) {
@@ -56,11 +48,6 @@ public class LOEvent implements Comparable<LOEvent> {
         mType = type;
         mTypeString = "Filename";
         mFilename = filename;
-    }
-
-    public LOEvent(int type, IntSize tileSize) {
-        mType = type;
-        mTypeString = "Tile size";
     }
 
     public LOEvent(int type, int partIndex) {

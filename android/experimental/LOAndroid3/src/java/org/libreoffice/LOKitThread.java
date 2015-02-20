@@ -93,7 +93,9 @@ public class LOKitThread extends Thread {
         mLayerClient.forceRender();
     }
 
-    /** Handle the geometry change + draw. */
+    /**
+     * Handle the geometry change + draw.
+     */
     private void redraw() {
         if (mLayerClient == null || mTileProvider == null) {
             // called too early...
@@ -128,7 +130,9 @@ public class LOKitThread extends Thread {
         }
     }
 
-    /** Invalidate everything + handle the geometry change */
+    /**
+     * Invalidate everything + handle the geometry change
+     */
     private void refresh() {
         mLayerClient.clearAndResetlayers();
         redraw();
@@ -177,7 +181,6 @@ public class LOKitThread extends Thread {
                 closeDocument();
                 break;
             case LOEvent.SIZE_CHANGED:
-                Log.i(LOGTAG, "Size change event!");
                 redraw();
                 break;
             case LOEvent.CHANGE_PART:
