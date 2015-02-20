@@ -6042,6 +6042,9 @@ public:
     HASHContext *get() { return mpPtr; }
 };
 
+// ASN.1 used in the (much simpler) time stamp request. From RFC3161
+// and other sources.
+
 /*
 AlgorithmIdentifier  ::=  SEQUENCE  {
      algorithm  OBJECT IDENTIFIER,
@@ -6078,19 +6081,6 @@ Extensions ::= SEQUENCE SIZE (1..MAX) OF Extension
 */
 
 /*
-Accuracy ::= SEQUENCE {
-    seconds     INTEGER          OPTIONAL,
-    millis  [0] INTEGER (1..999) OPTIONAL,
-    micros  [1] INTEGER (1..999) OPTIONAL  }
-*/
-
-typedef struct {
-    SECItem seconds;
-    SECItem millis;
-    SECItem micros;
-} Accuracy;
-
-/*
 TSAPolicyId ::= OBJECT IDENTIFIER
 
 TimeStampReq ::= SEQUENCE  {
@@ -6103,6 +6093,7 @@ TimeStampReq ::= SEQUENCE  {
     certReq            BOOLEAN             DEFAULT FALSE,
     extensions     [0] IMPLICIT Extensions OPTIONAL  }
 */
+
 typedef struct {
     SECItem version;
     MessageImprint messageImprint;
@@ -6112,9 +6103,167 @@ typedef struct {
     Extension *extensions;
 } TimeStampReq;
 
+// (Partial) ASN.1 for the time stamp responce. Very complicated. Pulled
+// together from varuous RFCs.
+
+/*
+Accuracy ::= SEQUENCE {
+    seconds     INTEGER          OPTIONAL,
+    millis  [0] INTEGER (1..999) OPTIONAL,
+    micros  [1] INTEGER (1..999) OPTIONAL  }
+
+PKIStatus ::= INTEGER {
+    granted                (0),
+    -- when the PKIStatus contains the value zero a TimeStampToken, as requested, is present.
+    grantedWithMods        (1),
+     -- when the PKIStatus contains the value one a TimeStampToken, with modifications, is present.
+    rejection              (2),
+    waiting                (3),
+    revocationWarning      (4),
+     -- this message contains a warning that a revocation is
+     -- imminent
+    revocationNotification (5)
+     -- notification that a revocation has occurred
+}
+
+PKIFreeText ::= SEQUENCE SIZE (1..MAX) OF UTF8String
+    -- text encoded as UTF-8 String [RFC3629] (note: each
+    -- UTF8String MAY include an [RFC3066] language tag
+    -- to indicate the language of the contained text
+    -- see [RFC2482] for details)
+
+PKIFailureInfo ::= BIT STRING {
+    badAlg               (0),
+      -- unrecognized or unsupported Algorithm Identifier
+    badRequest           (2),
+      -- transaction not permitted or supported
+    badDataFormat        (5),
+      -- the data submitted has the wrong format
+    timeNotAvailable    (14),
+      -- the TSA's time source is not available
+    unacceptedPolicy    (15),
+      -- the requested TSA policy is not supported by the TSA.
+    unacceptedExtension (16),
+      -- the requested extension is not supported by the TSA.
+    addInfoNotAvailable (17),
+      -- the additional information requested could not be understood
+      -- or is not available
+    systemFailure       (25)
+      -- the request cannot be handled due to system failure
+}
+
+PKIStatusInfo ::= SEQUENCE {
+    status       PKIStatus,
+    statusString PKIFreeText    OPTIONAL,
+    failInfo     PKIFailureInfo OPTIONAL  }
+
+ContentType ::= OBJECT IDENTIFIER
+
+ContentInfo ::= SEQUENCE {
+    contentType     ContentType,
+    content     [0] EXPLICIT ANY DEFINED BY contentType }
+
+CMSVersion ::= INTEGER { v0(0), v1(1), v2(2), v3(3), v4(4), v5(5) }
+
+DigestAlgorithmIdentifier ::= AlgorithmIdentifier
+
+DigestAlgorithmIdentifiers ::= SET OF DigestAlgorithmIdentifier
+
+ContentType ::= OBJECT IDENTIFIER
+
+EncapsulatedContentInfo ::= SEQUENCE {
+    eContentType     ContentType,
+    eContent     [0] EXPLICIT OCTET STRING OPTIONAL }
+
+OtherCertificateFormat ::= SEQUENCE {
+    otherCertFormat OBJECT IDENTIFIER,
+    otherCert       ANY DEFINED BY otherCertFormat }
+
+CertificateChoices ::= CHOICE {
+    certificate             Certificate,
+    extendedCertificate [0] IMPLICIT ExtendedCertificate, -- Obsolete
+    v1AttrCert          [1] IMPLICIT AttributeCertificateV1,       -- Obsolete
+    v2AttrCert          [2] IMPLICIT AttributeCertificateV2,
+    other               [3] IMPLICIT OtherCertificateFormat }
+
+CertificateSet ::= SET OF CertificateChoices
+
+CertificateList  ::=  SEQUENCE  {
+    tbsCertList        TBSCertList,
+    signatureAlgorithm AlgorithmIdentifier,
+    signatureValue     BIT STRING  }
+
+TBSCertList  ::=  SEQUENCE  {
+    version                 Version OPTIONAL,
+                                  -- if present, MUST be v2
+    signature               AlgorithmIdentifier,
+    issuer                  Name,
+    thisUpdate              Time,
+    nextUpdate              Time OPTIONAL,
+    revokedCertificates     SEQUENCE OF SEQUENCE  {
+        userCertificate         CertificateSerialNumber,
+        revocationDate          Time,
+        crlEntryExtensions      Extensions OPTIONAL
+                                   -- if present, version MUST be v2
+                            }  OPTIONAL,
+    crlExtensions       [0] EXPLICIT Extensions OPTIONAL
+                                   -- if present, version MUST be v2
+                            }
+
+OtherRevocationInfoFormat ::= SEQUENCE {
+  otherRevInfoFormat OBJECT IDENTIFIER,
+  otherRevInfo ANY DEFINED BY otherRevInfoFormat }
+
+RevocationInfoChoice ::= CHOICE {
+    crl       CertificateList,
+    other [1] IMPLICIT OtherRevocationInfoFormat }
+
+RevocationInfoChoices ::= SET OF RevocationInfoChoice
+
+SignerInfos ::= SET OF SignerInfo
+
+SignedData ::= SEQUENCE {
+    version                       CMSVersion,
+    digestAlgorithms              DigestAlgorithmIdentifiers,
+    encapContentInfo              EncapsulatedContentInfo,
+    certificates     [0] IMPLICIT CertificateSet              OPTIONAL,
+    crls             [1] IMPLICIT RevocationInfoChoices       OPTIONAL,
+    signerInfos                   SignerInfos }
+
+TimeStampToken ::= ContentInfo
+    -- contentType is id-signedData as defined in [CMS]
+    -- content is SignedData as defined in([CMS])
+    -- eContentType within SignedData is id-ct-TSTInfo
+    -- eContent within SignedData is TSTInfo
+
+TSTInfo ::= SEQUENCE  {
+    version            INTEGER  { v1(1) },
+    policy             TSAPolicyId,
+    messageImprint     MessageImprint,
+      -- MUST have the same value as the similar field in
+      -- TimeStampReq
+    serialNumber       INTEGER,
+     -- Time-Stamping users MUST be ready to accommodate integers
+     -- up to 160 bits.
+    genTime            GeneralizedTime,
+    accuracy           Accuracy            OPTIONAL,
+    ordering           BOOLEAN             DEFAULT FALSE,
+    nonce              INTEGER             OPTIONAL,
+      -- MUST be present if the similar field was present
+      -- in TimeStampReq.  In that case it MUST have the same value.
+    tsa            [0] GeneralName         OPTIONAL,
+    extensions     [1] IMPLICIT Extensions OPTIONAL   }
+
+TimeStampResp ::= SEQUENCE  {
+     status         PKIStatusInfo,
+     timeStampToken TimeStampToken OPTIONAL  }
+*/
+
 SEC_ASN1_MKSUB(SECOID_AlgorithmIDTemplate)
 SEC_ASN1_MKSUB(MessageImprint_Template)
 SEC_ASN1_MKSUB(Extensions_Template)
+SEC_ASN1_MKSUB(PKIStatusInfo_Template)
+SEC_ASN1_MKSUB(Any_Template)
 
 const SEC_ASN1Template MessageImprint_Template[] =
 {
@@ -6138,7 +6287,58 @@ const SEC_ASN1Template Extensions_Template[] =
     { SEC_ASN1_SEQUENCE_OF, 0, Extension_Template, 0 }
 };
 
-/* "will be used eventually" says tml
+const SEC_ASN1Template TimeStampReq_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampReq) },
+    { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), 0, 0 },
+    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampReq, messageImprint), SEC_ASN1_SUB(MessageImprint_Template), 0 },
+    { SEC_ASN1_OBJECT_ID | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, reqPolicy), 0, 0 },
+    { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), 0, 0 },
+    { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), 0, 0 },
+    { SEC_ASN1_XTRN | SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), SEC_ASN1_SUB(Extensions_Template), 0 },
+    { 0, 0, 0, 0 }
+};
+
+typedef struct {
+    SECItem status;
+    SECItem statusString;
+    SECItem failInfo;
+} PKIStatusInfo;
+
+const SEC_ASN1Template PKIStatusInfo_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(PKIStatusInfo) },
+    { SEC_ASN1_INTEGER, offsetof(PKIStatusInfo, status), 0, 0 },
+    { SEC_ASN1_CONSTRUCTED | SEC_ASN1_SEQUENCE | SEC_ASN1_OPTIONAL, offsetof(PKIStatusInfo, statusString), 0, 0 },
+    { SEC_ASN1_BIT_STRING | SEC_ASN1_OPTIONAL, offsetof(PKIStatusInfo, failInfo), 0, 0 },
+    { 0, 0, 0, 0 }
+};
+
+const SEC_ASN1Template Any_Template[] =
+{
+    { SEC_ASN1_ANY, 0, NULL, sizeof(SECItem) }
+};
+
+typedef struct {
+    PKIStatusInfo status;
+    SECItem timeStampToken;
+} TimeStampResp;
+
+const SEC_ASN1Template TimeStampResp_Template[] =
+{
+    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampResp) },
+    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampResp, status), SEC_ASN1_SUB(PKIStatusInfo_Template), 0 },
+    { SEC_ASN1_ANY | SEC_ASN1_OPTIONAL, offsetof(TimeStampResp, timeStampToken), SEC_ASN1_SUB(Any_Template), 0 },
+    { 0, 0, 0, 0 }
+};
+
+/* Will see if these are needed or not
+typedef struct {
+    SECItem seconds;
+    SECItem millis;
+    SECItem micros;
+} Accuracy;
+
 const SEC_ASN1Template Integer_Template[] =
 {
     { SEC_ASN1_INTEGER, 0, NULL, sizeof(SECItem) }
@@ -6154,24 +6354,47 @@ const SEC_ASN1Template Accuracy_Template[] =
 };
 */
 
-const SEC_ASN1Template TimeStampReq_Template[] =
-{
-    { SEC_ASN1_SEQUENCE, 0, NULL, sizeof(TimeStampReq) },
-    { SEC_ASN1_INTEGER, offsetof(TimeStampReq, version), 0, 0 },
-    { SEC_ASN1_INLINE | SEC_ASN1_XTRN, offsetof(TimeStampReq, messageImprint), SEC_ASN1_SUB(MessageImprint_Template), 0 },
-    { SEC_ASN1_OBJECT_ID | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, reqPolicy), 0, 0 },
-    { SEC_ASN1_INTEGER | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, nonce), 0, 0 },
-    { SEC_ASN1_BOOLEAN | SEC_ASN1_OPTIONAL, offsetof(TimeStampReq, certReq), 0, 0 },
-    { SEC_ASN1_XTRN | SEC_ASN1_OPTIONAL | SEC_ASN1_CONTEXT_SPECIFIC | 0, offsetof(TimeStampReq, extensions), SEC_ASN1_SUB(Extensions_Template), 0 },
-    { 0, 0, 0, 0 }
-};
-
 size_t AppendToBuffer(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
     OStringBuffer *pBuffer = reinterpret_cast<OStringBuffer*>(userdata);
     pBuffer->append(ptr, size*nmemb);
 
     return size*nmemb;
+}
+
+OUString PKIStatusToString(int n)
+{
+    switch (n)
+    {
+    case 0: return OUString("granted");
+    case 1: return OUString("grantedWithMods");
+    case 2: return OUString("rejection");
+    case 3: return OUString("waiting");
+    case 4: return OUString("revocationWarning");
+    case 5: return OUString("revocationNotification");
+    default: return "unknown (" + OUString::number(n) + ")";
+    }
+}
+
+OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
+{
+    OUString result;
+
+    result += "{status=";
+    if (rStatusInfo.status.len == 1)
+        result += PKIStatusToString(rStatusInfo.status.data[0]);
+    else
+        result += "unknown (len=" + OUString::number(rStatusInfo.status.len);
+    if (rStatusInfo.statusString.data != NULL)
+        result += ",statusString='" +
+            OUString::fromUtf8(OString(reinterpret_cast<const sal_Char*>(rStatusInfo.statusString.data), rStatusInfo.statusString.len)) +
+            "'";
+
+    // FIXME: Worth it to decode failInfo to cleartext, probably not at least as long as this is only for a SAL_INFO
+
+    result += "}";
+
+    return result;
 }
 
 #if 0
@@ -6370,7 +6593,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        SAL_INFO("vcl.pdfwriter", "request  len=" << (timestamp_request ? timestamp_request->len : -1));
+        SAL_INFO("vcl.pdfwriter", "request length=" << timestamp_request->len);
 
 #ifdef DBG_UTIL
         {
@@ -6393,7 +6616,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1) == CURLE_OK ? "OK" : "FAIL"));
+        SAL_INFO("vcl.pdfwriter", "Setting curl to verbose: " << (curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L) == CURLE_OK ? "OK" : "FAIL"));
 
         if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
@@ -6415,7 +6638,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        if ((rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, timestamp_request->len)) != CURLE_OK ||
+        if ((rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, static_cast<long>(timestamp_request->len))) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));
@@ -6424,9 +6647,9 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        OStringBuffer reply_buffer;
+        OStringBuffer response_buffer;
 
-        if ((rc = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &reply_buffer)) != CURLE_OK ||
+        if ((rc = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer)) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed: " << curl_easy_strerror(rc));
@@ -6435,7 +6658,7 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1)) != CURLE_OK)
+        if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1l)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
@@ -6452,6 +6675,16 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
+        // Use a ten second timeout
+        if ((rc = curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10l)) != CURLE_OK ||
+            (rc = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10l)) != CURLE_OK)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_TIMEOUT or CURLOPT_CONNECTTIMEOUT) failed: " << curl_easy_strerror(rc));
+            curl_easy_cleanup(curl);
+            SECITEM_FreeItem(timestamp_request, PR_TRUE);
+            return false;
+        }
+
         if (curl_easy_perform(curl) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_perform failed: " << error_buffer);
@@ -6460,18 +6693,44 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
+        SAL_INFO("vcl.pdfwriter", "PDF signing: got response, length=" << response_buffer.getLength());
+
 #ifdef DBG_UTIL
         {
             FILE *out = fopen("PDFWRITER.reply.data", "wb");
-            fwrite(reply_buffer.getStr(), reply_buffer.getLength(), 1, out);
+            fwrite(response_buffer.getStr(), response_buffer.getLength(), 1, out);
             fclose(out);
         }
 #endif
 
         curl_slist_free_all(slist);
         curl_easy_cleanup(curl);
-
         SECITEM_FreeItem(timestamp_request, PR_TRUE);
+
+        TimeStampResp response;
+        memset(&response, 0, sizeof(response));
+
+        SECItem response_item;
+        response_item.type = siBuffer;
+        response_item.data = reinterpret_cast<unsigned char*>(const_cast<char*>(response_buffer.getStr()));
+        response_item.len = response_buffer.getLength();
+
+        if (SEC_ASN1DecodeItem(NULL, &response, TimeStampResp_Template, &response_item) != SECSuccess)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_ASN1DecodeItem failed");
+            return false;
+        }
+
+        SAL_INFO("vcl.pdfwriter", "TimeStampResp received and decoded, status=" << PKIStatusInfoToString(response.status));
+#if 0
+        NSSCMSAttribute timestamp;
+        timestamp.type = ?
+        if (NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, ) != SECSuccess)
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: can't include cert chain.");
+            return false;
+        }
+#endif
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
