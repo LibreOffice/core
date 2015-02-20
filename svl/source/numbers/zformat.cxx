@@ -1711,27 +1711,53 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
     return aTmp;
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString)
+namespace
+{
+void lcl_RemoveZerosInExponent(OUString & rOutString)
+{
+    sal_Int32 nPos = rOutString.indexOf('E') + 1;
+    if( (nPos > 0) && (nPos < rOutString.getLength()) )
+    {
+      if( (rOutString[nPos] == '+') || (rOutString[nPos] == '-') )
+        nPos++;                 // tdf#88835
+      if( rOutString[nPos] == '0' )  // remove useless '0' at begining of exponent
+        rOutString = rOutString.replaceAt( nPos, 1, OUString("") );
+      if( rOutString[nPos] == '0' )  // remove useless '0' at begining of exponent
+        rOutString = rOutString.replaceAt( nPos, 1, OUString("") );
+    }
+}
+
+void lcl_RemoveZerosInExponent(OUStringBuffer & rOutString)
+{
+    OUString sTemp(rOutString.getStr());
+    lcl_RemoveZerosInExponent(sTemp);
+    rOutString = sTemp;
+}
+
+}
+
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString)
 {
     OUString sTemp;
     ImpGetOutputStandard(fNumber, sTemp);
-    OutString = sTemp;
+    rOutString = sTemp;
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& OutString)
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString)
 {
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
 
     if ( fabs(fNumber) > 1.0E15 ) // #58531# was E16
     {
         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
-        OutString = ::rtl::math::doubleToUString( fNumber,
+        rOutString = ::rtl::math::doubleToUString( fNumber,
                                                   rtl_math_StringFormat_E, nStandardPrec /*2*/,
                                                   GetFormatter().GetNumDecimalSep()[0]);
+        lcl_RemoveZerosInExponent(rOutString);
     }
     else
     {
-        ImpGetOutputStdToPrecision(fNumber, OutString, nStandardPrec);
+        ImpGetOutputStdToPrecision(fNumber, rOutString, nStandardPrec);
     }
 }
 
@@ -1959,8 +1985,13 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
 {
     bool bSign = ::rtl::math::isSignBitSet(fNumber);
 
-    // 1.000E+015 (one digit and the decimal point, and the five chars for the exponential part, totalling 7).
-    sal_uInt16 nPrec = nCharCount > 7 ? nCharCount - 7 : 0;
+    // 1.000E+015 (one digit and the decimal point, and the two chars + nExpDigit for the exponential part, totalling 5 to 7).
+    double fExp = log10( fabs(fNumber) );
+    if( fExp < 0.0 )
+      fExp = 1.0 - fExp;
+    sal_uInt16 nExpDigit = static_cast<sal_uInt16>(log10( fabs(fExp) )) + 1;
+    sal_uInt16 nCharFormat = 4 + nExpDigit;
+    sal_uInt16 nPrec = nCharCount > nCharFormat ? nCharCount - nCharFormat : 0;
     if (nPrec && bSign)
     {
         // Make room for the negative sign.
@@ -1970,6 +2001,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
 
     rOutString = ::rtl::math::doubleToUString(fNumber, rtl_math_StringFormat_E,
                                               nPrec, rFormatter.GetNumDecimalSep()[0]);
+    lcl_RemoveZerosInExponent(rOutString);
 }
 
 sal_Int32 lcl_GetForcedDenominator(const ImpSvNumberformatInfo &rInfo, sal_uInt16 nAnz)
@@ -2131,6 +2163,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                         sBuff = ::rtl::math::doubleToUString( fNumber,
                                                               rtl_math_StringFormat_E, nStandardPrec /*2*/,
                                                               GetFormatter().GetNumDecimalSep()[0], true);
+                        lcl_RemoveZerosInExponent(sBuff);
                     }
                 }
                 if (bSign)
