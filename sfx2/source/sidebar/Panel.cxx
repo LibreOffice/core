@@ -38,10 +38,8 @@
 
 #include <boost/bind.hpp>
 
-
 using namespace css;
 using namespace css::uno;
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -71,13 +69,10 @@ Panel::Panel (
 #endif
 }
 
-
 Panel::~Panel (void)
 {
     Dispose();
 }
-
-
 
 void Panel::Dispose (void)
 {
@@ -99,13 +94,10 @@ void Panel::Dispose (void)
     mpTitleBar.reset();
 }
 
-
 PanelTitleBar* Panel::GetTitleBar (void) const
 {
     return mpTitleBar.get();
 }
-
-
 
 void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
 {
@@ -115,7 +107,6 @@ void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)
         mxPanelComponent.set(mxElement->getRealInterface(), UNO_QUERY);
     }
 }
-
 
 void Panel::SetExpanded (const bool bIsExpanded)
 {
@@ -132,20 +123,15 @@ void Panel::SetExpanded (const bool bIsExpanded)
     }
 }
 
-
-
 bool Panel::HasIdPredicate (const ::rtl::OUString& rsId) const
 {
     return msPanelId.equals(rsId);
 }
 
-
-
 void Panel::Paint (const Rectangle& rUpdateArea)
 {
     Window::Paint(rUpdateArea);
 }
-
 
 void Panel::Resize (void)
 {
@@ -165,20 +151,16 @@ void Panel::Resize (void)
     }
 }
 
-
 void Panel::Activate (void)
 {
     Window::Activate();
 }
-
 
 void Panel::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
-
-
 
 Reference<awt::XWindow> Panel::GetElementWindow (void)
 {
@@ -191,7 +173,6 @@ Reference<awt::XWindow> Panel::GetElementWindow (void)
 
     return NULL;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

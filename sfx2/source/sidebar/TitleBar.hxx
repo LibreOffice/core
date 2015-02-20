@@ -24,7 +24,6 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 
-
 namespace sfx2 { namespace sidebar {
 
 class TitleBar
@@ -70,7 +69,6 @@ private:
     void PaintTitle (const Rectangle& rTitleBox);
     DECL_LINK(SelectionHandler, ToolBox*);
 };
-
 
 } } // end of namespace sfx2::sidebar
 

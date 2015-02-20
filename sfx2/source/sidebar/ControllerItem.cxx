@@ -31,10 +31,8 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrameActionListener.hpp>
 
-
 using namespace css;
 using namespace css::uno;
-
 
 namespace
 {
@@ -103,7 +101,6 @@ ControllerItem::ControllerItem (
 {
 }
 
-
 ControllerItem::ControllerItem (
     const sal_uInt16 nSlotId,
     SfxBindings &rBindings,
@@ -118,15 +115,11 @@ ControllerItem::ControllerItem (
 {
 }
 
-
 ControllerItem::~ControllerItem (void)
 {
     if (mxFrameActionListener.is())
         mxFrameActionListener->dispose();
 }
-
-
-
 
 void ControllerItem::StateChanged (
     sal_uInt16 nSID,
@@ -135,9 +128,6 @@ void ControllerItem::StateChanged (
 {
     mrItemUpdateReceiver.NotifyItemUpdate(nSID, eState, pState, IsEnabled(eState));
 }
-
-
-
 
 bool ControllerItem::IsEnabled (SfxItemState eState) const
 {
@@ -163,7 +153,6 @@ bool ControllerItem::IsEnabled (SfxItemState eState) const
         return true;
 }
 
-
 void ControllerItem::RequestUpdate (void)
 {
     SfxPoolItem* pState = NULL;
@@ -171,19 +160,15 @@ void ControllerItem::RequestUpdate (void)
     mrItemUpdateReceiver.NotifyItemUpdate(GetId(), eState, pState, IsEnabled(eState));
 }
 
-
 void ControllerItem::NotifyFrameContextChange (void)
 {
     RequestUpdate();
 }
 
-
 void ControllerItem::ResetFrame (void)
 {
     mxFrame = NULL;
 }
-
-
 
 ::rtl::OUString ControllerItem::GetLabel (void) const
 {
@@ -191,7 +176,6 @@ void ControllerItem::ResetFrame (void)
         ".uno:" + msCommandName,
         mxFrame);
 }
-
 
 ::rtl::OUString ControllerItem::GetHelpText (void) const
 {
@@ -207,18 +191,14 @@ void ControllerItem::ResetFrame (void)
     return ::rtl::OUString();
 }
 
-
-
 Image ControllerItem::GetIcon (void) const
 {
     return GetImage(mxFrame, ".uno:" + msCommandName, false);
 }
 
-
 ControllerItem::ItemUpdateReceiverInterface::~ItemUpdateReceiverInterface()
 {
 }
-
 
 void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nIndex)
 {
@@ -226,7 +206,6 @@ void ControllerItem::SetupToolBoxItem (ToolBox& rToolBox, const sal_uInt16 nInde
     rToolBox.SetHelpText(nIndex, GetHelpText());
     rToolBox.SetItemImage(nIndex, GetIcon());
 }
-
 
 } } // end of namespace sfx2::sidebar
 

@@ -23,17 +23,14 @@ using ::rtl::OUString;
 
 namespace sfx2 { namespace sidebar {
 
-
 ContextList::ContextList (void)
     : maEntries()
 {
 }
 
-
 ContextList::~ContextList (void)
 {
 }
-
 
 const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
 {
@@ -44,7 +41,6 @@ const ContextList::Entry* ContextList::GetMatch (const Context& rContext) const
         return NULL;
 }
 
-
 ContextList::Entry* ContextList::GetMatch (const Context& rContext)
 {
     const ::std::vector<Entry>::const_iterator iEntry = FindBestMatch(rContext);
@@ -53,7 +49,6 @@ ContextList::Entry* ContextList::GetMatch (const Context& rContext)
     else
         return NULL;
 }
-
 
 ::std::vector<ContextList::Entry>::const_iterator ContextList::FindBestMatch (const Context& rContext) const
 {
@@ -79,7 +74,6 @@ ContextList::Entry* ContextList::GetMatch (const Context& rContext)
     return iBestMatch;
 }
 
-
 void ContextList::AddContextDescription (
     const Context& rContext,
     const bool bIsInitiallyVisible,
@@ -90,7 +84,6 @@ void ContextList::AddContextDescription (
     maEntries.back().mbIsInitiallyVisible = bIsInitiallyVisible;
     maEntries.back().msMenuCommand = rsMenuCommand;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

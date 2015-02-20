@@ -34,7 +34,6 @@ Context::Context (void)
 {
 }
 
-
 Context::Context (
     const ::rtl::OUString& rsApplication,
     const ::rtl::OUString& rsContext)
@@ -42,7 +41,6 @@ Context::Context (
       msContext(rsContext)
 {
 }
-
 
 sal_Int32 Context::EvaluateMatch (
     const Context& rOther) const
@@ -62,21 +60,17 @@ sal_Int32 Context::EvaluateMatch (
     return NoMatch;
 }
 
-
-
 bool Context::operator== (const Context& rOther) const
 {
     return msApplication.equals(rOther.msApplication)
         && msContext.equals(rOther.msContext);
 }
 
-
 bool Context::operator!= (const Context& rOther) const
 {
     return ( ! msApplication.equals(rOther.msApplication))
         || ( ! msContext.equals(rOther.msContext));
 }
-
 
 } } // end of namespace sfx2::sidebar
 

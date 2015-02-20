@@ -27,7 +27,6 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 
-
 namespace sfx2 { namespace sidebar {
 
 class Context;
@@ -124,7 +123,6 @@ private:
         const Context& rContext,
         const css::uno::Reference<css::frame::XFrame>& rxFrame) const;
 };
-
 
 } } // end of namespace sfx2::sidebar
 

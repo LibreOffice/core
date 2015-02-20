@@ -55,7 +55,6 @@
 #include <boost/function.hpp>
 #include <boost/scoped_array.hpp>
 
-
 using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;

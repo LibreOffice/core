@@ -27,9 +27,7 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
-
 
 MenuButton::MenuButton (vcl::Window* pParentWindow)
     : CheckBox(pParentWindow),
@@ -41,12 +39,9 @@ MenuButton::MenuButton (vcl::Window* pParentWindow)
 #endif
 }
 
-
-
 MenuButton::~MenuButton (void)
 {
 }
-
 
 void MenuButton::Paint (const Rectangle& rUpdateArea)
 {
@@ -85,14 +80,12 @@ void MenuButton::Paint (const Rectangle& rUpdateArea)
     }
 }
 
-
 void MenuButton::MouseMove (const MouseEvent& rEvent)
 {
     if (rEvent.IsEnterWindow() || rEvent.IsLeaveWindow())
         Invalidate();
     CheckBox::MouseMove(rEvent);
 }
-
 
 void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)
 {
@@ -103,7 +96,6 @@ void MenuButton::MouseButtonDown (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
 
 void MenuButton::MouseButtonUp (const MouseEvent& rMouseEvent)
 {
@@ -125,7 +117,6 @@ void MenuButton::MouseButtonUp (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
 
 } } // end of namespace sfx2::sidebar
 

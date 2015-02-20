@@ -62,7 +62,6 @@ public:
         const Paint& rFillPaint);
 };
 
-
 } } // end of namespace sfx2::sidebar
 
 #endif

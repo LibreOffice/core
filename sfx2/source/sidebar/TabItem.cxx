@@ -28,9 +28,7 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
-
 
 TabItem::TabItem (vcl::Window* pParentWindow)
     : ImageRadioButton(pParentWindow),
@@ -44,11 +42,9 @@ TabItem::TabItem (vcl::Window* pParentWindow)
 #endif
 }
 
-
 TabItem::~TabItem (void)
 {
 }
-
 
 void TabItem::Paint (const Rectangle& rUpdateArea)
 {
@@ -87,15 +83,12 @@ void TabItem::Paint (const Rectangle& rUpdateArea)
     }
 }
 
-
-
 void TabItem::MouseMove (const MouseEvent& rEvent)
 {
     if (rEvent.IsEnterWindow() || rEvent.IsLeaveWindow())
         Invalidate();
     ImageRadioButton::MouseMove(rEvent);
 }
-
 
 void TabItem::MouseButtonDown (const MouseEvent& rMouseEvent)
 {
@@ -106,7 +99,6 @@ void TabItem::MouseButtonDown (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
 
 void TabItem::MouseButtonUp (const MouseEvent& rMouseEvent)
 {
@@ -128,7 +120,6 @@ void TabItem::MouseButtonUp (const MouseEvent& rMouseEvent)
         Invalidate();
     }
 }
-
 
 } } // end of namespace sfx2::sidebar
 

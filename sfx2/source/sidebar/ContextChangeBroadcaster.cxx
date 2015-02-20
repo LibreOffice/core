@@ -24,13 +24,11 @@
 #include <osl/diagnose.h>
 #include <comphelper/processfactory.hxx>
 
-
 using ::rtl::OUString;
 using namespace css;
 using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
-
 
 ContextChangeBroadcaster::ContextChangeBroadcaster (void)
     : msContextName(),
@@ -38,25 +36,20 @@ ContextChangeBroadcaster::ContextChangeBroadcaster (void)
 {
 }
 
-
 ContextChangeBroadcaster::~ContextChangeBroadcaster (void)
 {
 }
-
-
 
 void ContextChangeBroadcaster::Initialize (const ::rtl::OUString& rsContextName)
 {
     msContextName = rsContextName;
 }
 
-
 void ContextChangeBroadcaster::Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (msContextName.getLength() > 0)
         BroadcastContextChange(rxFrame, GetModuleName(rxFrame), msContextName);
 }
-
 
 void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
@@ -69,14 +62,12 @@ void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame:
     }
 }
 
-
 bool ContextChangeBroadcaster::SetBroadcasterEnabled (const bool bIsEnabled)
 {
     const bool bWasEnabled (mbIsBroadcasterEnabled);
     mbIsBroadcasterEnabled = bIsEnabled;
     return bWasEnabled;
 }
-
 
 void ContextChangeBroadcaster::BroadcastContextChange (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
@@ -108,7 +99,6 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         xMultiplexer->broadcastContextChangeEvent(aEvent, rxFrame->getController());
 }
 
-
 OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
@@ -125,7 +115,6 @@ OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css:
     }
     return OUString();
 }
-
 
 } } // end of namespace ::sd::sidebar
 

@@ -34,8 +34,6 @@ class Button;
 class CheckBox;
 class RadioButton;
 
-
-
 namespace sfx2 { namespace sidebar {
 
 class FocusManager;

@@ -28,12 +28,10 @@
 #include <sfx2/sidebar/Tools.hxx>
 #endif
 
-
 namespace sfx2 { namespace sidebar {
 
 static const sal_Int32 gaLeftGripPadding (3);
 static const sal_Int32 gaRightGripPadding (3);
-
 
 DeckTitleBar::DeckTitleBar (
     const ::rtl::OUString& rsTitle,
@@ -54,11 +52,9 @@ DeckTitleBar::DeckTitleBar (
 #endif
 }
 
-
 DeckTitleBar::~DeckTitleBar (void)
 {
 }
-
 
 void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
 {
@@ -81,7 +77,6 @@ void DeckTitleBar::SetCloserVisible (const bool bIsCloserVisible)
     }
 }
 
-
 Rectangle DeckTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 {
     Image aGripImage (Theme::GetImage(Theme::Image_Grip));
@@ -92,24 +87,20 @@ Rectangle DeckTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
         rTitleBarBox.Bottom());
 }
 
-
 void DeckTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
 {
     (void)rTitleBarBox;
 }
-
 
 sidebar::Paint DeckTitleBar::GetBackgroundPaint (void)
 {
     return Theme::GetPaint(Theme::Paint_DeckTitleBarBackground);
 }
 
-
 Color DeckTitleBar::GetTextColor (void)
 {
     return Theme::GetColor(Theme::Color_DeckTitleFont);
 }
-
 
 void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
@@ -117,8 +108,6 @@ void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
         if (maCloserAction)
             maCloserAction();
 }
-
-
 
 css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible (void)
 {
@@ -128,7 +117,6 @@ css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessi
     return TitleBar::CreateAccessible();
 }
 
-
 void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
     maToolBox.SetItemImage(
@@ -136,7 +124,6 @@ void DeckTitleBar::DataChanged (const DataChangedEvent& rEvent)
         Theme::GetImage(Theme::Image_Closer));
     TitleBar::DataChanged(rEvent);
 }
-
 
 } } // end of namespace sfx2::sidebar
 

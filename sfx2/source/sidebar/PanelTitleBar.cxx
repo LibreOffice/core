@@ -36,10 +36,8 @@ using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
-
 static const sal_Int32 gaLeftIconPadding (5);
 static const sal_Int32 gaRightIconPadding (5);
-
 
 PanelTitleBar::PanelTitleBar (
     const ::rtl::OUString& rsTitle,
@@ -60,12 +58,9 @@ PanelTitleBar::PanelTitleBar (
 #endif
 }
 
-
-
 PanelTitleBar::~PanelTitleBar (void)
 {
 }
-
 
 void PanelTitleBar::SetMoreOptionsCommand (
     const ::rtl::OUString& rsCommandName,
@@ -101,7 +96,6 @@ void PanelTitleBar::SetMoreOptionsCommand (
     }
 }
 
-
 Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
 {
     if (mpPanel != NULL)
@@ -119,7 +113,6 @@ Rectangle PanelTitleBar::GetTitleArea (const Rectangle& rTitleBarBox)
         return rTitleBarBox;
 }
 
-
 void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
 {
     (void)rTitleBarBox;
@@ -136,18 +129,15 @@ void PanelTitleBar::PaintDecoration (const Rectangle& rTitleBarBox)
     }
 }
 
-
 Paint PanelTitleBar::GetBackgroundPaint (void)
 {
     return Theme::GetPaint(Theme::Paint_PanelTitleBarBackground);
 }
 
-
 Color PanelTitleBar::GetTextColor (void)
 {
     return Theme::GetColor(Theme::Color_PanelTitleFont);
 }
-
 
 void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
@@ -169,7 +159,6 @@ void PanelTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
         }
 }
 
-
 Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible (void)
 {
     const ::rtl::OUString sAccessibleName(msAccessibleNamePrefix + msTitle);
@@ -177,7 +166,6 @@ Reference<accessibility::XAccessible> PanelTitleBar::CreateAccessible (void)
     SetAccessibleDescription(sAccessibleName);
     return TitleBar::CreateAccessible();
 }
-
 
 void PanelTitleBar::MouseButtonDown (const MouseEvent& rMouseEvent)
 {
@@ -187,7 +175,6 @@ void PanelTitleBar::MouseButtonDown (const MouseEvent& rMouseEvent)
         CaptureMouse();
     }
 }
-
 
 void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
 {
@@ -208,7 +195,6 @@ void PanelTitleBar::MouseButtonUp (const MouseEvent& rMouseEvent)
     if (mbIsLeftButtonDown)
         mbIsLeftButtonDown = false;
 }
-
 
 void PanelTitleBar::DataChanged (const DataChangedEvent& rEvent)
 {

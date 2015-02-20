@@ -25,7 +25,6 @@ using namespace css;
 
 namespace sfx2 { namespace sidebar {
 
-
 void Sidebar::ShowPanel (
     const ::rtl::OUString& rsPanelId,
     const css::uno::Reference<frame::XFrame>& rxFrame)
@@ -43,7 +42,6 @@ void Sidebar::ShowPanel (
         pController->OpenThenSwitchToDeck(pPanelDescriptor->msDeckId);
     }
 }
-
 
 } } // end of namespace sfx2::sidebar
 

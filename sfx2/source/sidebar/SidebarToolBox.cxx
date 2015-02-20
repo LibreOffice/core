@@ -29,14 +29,11 @@
 #include <framework/imageproducer.hxx>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
-
 using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;
 
-
 namespace sfx2 { namespace sidebar {
-
 
 SidebarToolBox::SidebarToolBox (vcl::Window* pParentWindow)
     : ToolBox(pParentWindow, 0),
@@ -115,7 +112,6 @@ void SidebarToolBox::Paint (const Rectangle& rRect)
     }
 }
 
-
 bool SidebarToolBox::Notify (NotifyEvent& rEvent)
 {
     if (rEvent.GetType() == MouseNotifyEvent::KEYINPUT)
@@ -130,7 +126,6 @@ bool SidebarToolBox::Notify (NotifyEvent& rEvent)
     }
     return ToolBox::Notify(rEvent);
 }
-
 
 void SidebarToolBox::CreateController (
     const sal_uInt16 nItemId,
@@ -157,7 +152,6 @@ void SidebarToolBox::CreateController (
     }
 }
 
-
 Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (const sal_uInt16 nItemId) const
 {
     ControllerContainer::const_iterator iController (maControllers.find(nItemId));
@@ -166,7 +160,6 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
     else
         return NULL;
 }
-
 
 void SidebarToolBox::SetController(
     const sal_uInt16 nItemId,
@@ -196,7 +189,6 @@ void SidebarToolBox::SetController(
         RegisterHandlers();
 }
 
-
 sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubToolbarName) const
 {
     for (ControllerContainer::const_iterator iController(maControllers.begin()), iEnd(maControllers.end());
@@ -215,7 +207,6 @@ sal_uInt16 SidebarToolBox::GetItemIdForSubToolbarName (const OUString& rsSubTool
     return 0;
 }
 
-
 void SidebarToolBox::RegisterHandlers (void)
 {
     if ( ! mbAreHandlersRegistered)
@@ -229,7 +220,6 @@ void SidebarToolBox::RegisterHandlers (void)
         SetDeactivateHdl(LINK(this, SidebarToolBox, DeactivateToolBox));
     }
 }
-
 
 IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox)
 {
@@ -246,7 +236,6 @@ IMPL_LINK(SidebarToolBox, DropDownClickHandler, ToolBox*, pToolBox)
     return 1;
 }
 
-
 IMPL_LINK(SidebarToolBox, ClickHandler, ToolBox*, pToolBox)
 {
     if (pToolBox == NULL)
@@ -258,7 +247,6 @@ IMPL_LINK(SidebarToolBox, ClickHandler, ToolBox*, pToolBox)
 
     return 1;
 }
-
 
 IMPL_LINK(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox)
 {
@@ -272,7 +260,6 @@ IMPL_LINK(SidebarToolBox, DoubleClickHandler, ToolBox*, pToolBox)
     return 1;
 }
 
-
 IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox)
 {
     if (pToolBox == NULL)
@@ -285,19 +272,15 @@ IMPL_LINK(SidebarToolBox, SelectHandler, ToolBox*, pToolBox)
     return 1;
 }
 
-
 IMPL_LINK(SidebarToolBox, ActivateToolBox, ToolBox*, EMPTYARG)
 {
     return 1;
 }
 
-
 IMPL_LINK(SidebarToolBox, DeactivateToolBox, ToolBox*, EMPTYARG)
 {
     return 1;
 }
-
-
 
 } } // end of namespace sfx2::sidebar
 

@@ -45,8 +45,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 
-
-
 namespace
 {
     typedef ::cppu::WeakComponentImplHelper4 <
@@ -251,7 +249,6 @@ private:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 };
-
 
 } } // end of namespace sfx2::sidebar
 

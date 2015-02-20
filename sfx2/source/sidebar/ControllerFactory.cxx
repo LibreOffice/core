@@ -31,11 +31,9 @@
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-
 using namespace css;
 using namespace css::uno;
 using ::rtl::OUString;
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -134,7 +132,6 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 
     return xController;
 }
-
 
 Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
     ToolBox* pToolBox,

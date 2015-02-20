@@ -23,9 +23,7 @@
 #include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/toolbox.hxx>
 
-
 namespace sfx2 { namespace sidebar {
-
 
 CheckBox* ControlFactory::CreateMenuButton (vcl::Window* pParentWindow)
 {

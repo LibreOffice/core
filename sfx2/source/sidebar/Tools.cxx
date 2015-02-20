@@ -36,7 +36,6 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
 
 Image Tools::GetImage (
@@ -49,7 +48,6 @@ Image Tools::GetImage (
     else
         return GetImage(rsImageURL, rxFrame);
 }
-
 
 Image Tools::GetImage (
     const ::rtl::OUString& rsURL,
@@ -93,7 +91,6 @@ Image Tools::GetImage (
     return Image();
 }
 
-
 css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
 {
     css::awt::Gradient aAwtGradient (
@@ -109,7 +106,6 @@ css::awt::Gradient Tools::VclToAwtGradient (const Gradient aVclGradient)
         aVclGradient.GetSteps());
     return aAwtGradient;
 }
-
 
 Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
 {
@@ -128,7 +124,6 @@ Gradient Tools::AwtToVclGradient (const css::awt::Gradient aAwtGradient)
     return aVclGradient;
 }
 
-
 util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
 {
     util::URL aURL;
@@ -141,7 +136,6 @@ util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
     return aURL;
 }
 
-
 Reference<frame::XDispatch> Tools::GetDispatch (
     const css::uno::Reference<css::frame::XFrame>& rxFrame,
     const util::URL& rURL)
@@ -150,7 +144,6 @@ Reference<frame::XDispatch> Tools::GetDispatch (
     Reference<frame::XDispatch> xDispatch (xProvider->queryDispatch(rURL, ::rtl::OUString(), 0));
     return xDispatch;
 }
-
 
 ::rtl::OUString Tools::GetModuleName (
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
@@ -170,7 +163,6 @@ Reference<frame::XDispatch> Tools::GetDispatch (
     }
     return ::rtl::OUString();
 }
-
 
 } } // end of namespace sfx2::sidebar
 

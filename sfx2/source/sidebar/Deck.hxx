@@ -35,7 +35,6 @@ namespace sfx2 { namespace sidebar {
 class DeckDescriptor;
 class DeckTitleBar;
 
-
 /** This is the parent window of the panels.
     It displays the deck title.
 */

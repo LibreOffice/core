@@ -48,7 +48,6 @@ private:
     DECL_LINK(HandleUserCall, void*);
 };
 
-
 } } // end of namespace sfx2::sidebar
 
 #endif

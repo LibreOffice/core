@@ -44,7 +44,6 @@ ResourceManager& ResourceManager::Instance (void)
     return maInstance;
 }
 
-
 ResourceManager::ResourceManager (void)
     : maDecks(),
       maPanels(),
@@ -54,13 +53,11 @@ ResourceManager::ResourceManager (void)
     ReadPanelList();
 }
 
-
 ResourceManager::~ResourceManager (void)
 {
     maPanels.clear();
     maDecks.clear();
 }
-
 
 const DeckDescriptor* ResourceManager::GetDeckDescriptor (
     const ::rtl::OUString& rsDeckId) const
@@ -77,7 +74,6 @@ const DeckDescriptor* ResourceManager::GetDeckDescriptor (
     return NULL;
 }
 
-
 const PanelDescriptor* ResourceManager::GetPanelDescriptor (
     const ::rtl::OUString& rsPanelId) const
 {
@@ -92,7 +88,6 @@ const PanelDescriptor* ResourceManager::GetPanelDescriptor (
     }
     return NULL;
 }
-
 
 void ResourceManager::SetIsDeckEnabled (
     const ::rtl::OUString& rsDeckId,
@@ -111,7 +106,6 @@ void ResourceManager::SetIsDeckEnabled (
         }
     }
 }
-
 
 const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatchingDecks (
     DeckContextDescriptorContainer& rDecks,
@@ -152,7 +146,6 @@ const ResourceManager::DeckContextDescriptorContainer& ResourceManager::GetMatch
 
     return rDecks;
 }
-
 
 const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatchingPanels (
     PanelContextDescriptorContainer& rPanelIds,
@@ -198,7 +191,6 @@ const ResourceManager::PanelContextDescriptorContainer& ResourceManager::GetMatc
 
     return rPanelIds;
 }
-
 
 void ResourceManager::ReadDeckList (void)
 {
@@ -251,7 +243,6 @@ void ResourceManager::ReadDeckList (void)
     if (nWriteIndex<nCount)
         maDecks.resize(nWriteIndex);
 }
-
 
 void ResourceManager::ReadPanelList (void)
 {
@@ -310,7 +301,6 @@ void ResourceManager::ReadPanelList (void)
     if (nWriteIndex<nCount)
         maPanels.resize(nWriteIndex);
 }
-
 
 void ResourceManager::ReadContextList (
     const ::utl::OConfigurationNode& rParentNode,
@@ -456,7 +446,6 @@ void ResourceManager::ReadContextList (
     }
 }
 
-
 void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
 {
     // Get module name for given frame.
@@ -538,7 +527,6 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XFrame>& rxFrame)
         maPanels.resize(nPanelWriteIndex);
 }
 
-
 void ResourceManager::StorePanelExpansionState (
     const ::rtl::OUString& rsPanelId,
     const bool bExpansionState,
@@ -559,8 +547,6 @@ void ResourceManager::StorePanelExpansionState (
         }
     }
 }
-
-
 
 ::utl::OConfigurationTreeRoot ResourceManager::GetLegacyAddonRootNode (
     const ::rtl::OUString& rsModuleName) const
@@ -591,7 +577,6 @@ void ResourceManager::StorePanelExpansionState (
     return ::utl::OConfigurationTreeRoot();
 }
 
-
 void ResourceManager::GetToolPanelNodeNames (
     ::std::vector<OUString>& rMatchingNames,
     const ::utl::OConfigurationTreeRoot& aRoot) const
@@ -604,7 +589,6 @@ void ResourceManager::GetToolPanelNodeNames (
             rMatchingNames.push_back(aChildNodeNames[nIndex]);
     }
 }
-
 
 bool ResourceManager::IsDeckEnabled (
     const OUString& rsDeckId,
@@ -632,7 +616,6 @@ bool ResourceManager::IsDeckEnabled (
 
     return false;
 }
-
 
 } } // end of namespace sfx2::sidebar
 
