@@ -255,7 +255,8 @@ namespace dbtools
             if  (   !( lcl_getConnectionSetting( "PrimaryKeySupport", *m_pImpl, setting ) )
                 ||  !( setting >>= doesSupportPrimaryKeys )
                 )
-                doesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar();
+                doesSupportPrimaryKeys = m_pImpl->xConnectionMetaData->supportsCoreSQLGrammar()
+                    || m_pImpl->xConnectionMetaData->supportsANSI92EntryLevelSQL();
         }
         catch( const Exception& )
         {
