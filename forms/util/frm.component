@@ -18,8 +18,8 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="frm" xmlns="http://openoffice.org/2010/uno-components">
-    <implementation name="com.sun.star.comp.form.ONavigationBarControl"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.form.ONavigationBarControl"
         constructor="com_sun_star_comp_form_ONavigationBarControl_get_implementation">
     <service name="com.sun.star.form.control.NavigationToolBar"/>
   </implementation>
