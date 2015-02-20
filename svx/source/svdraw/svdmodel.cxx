@@ -125,6 +125,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     pHitTestOutliner=NULL;
     pRefOutDev=NULL;
     mbTiledRendering = false;
+    mpLibreOfficeKitCallback = 0;
+    mpLibreOfficeKitData = 0;
     nProgressAkt=0;
     nProgressMax=0;
     nProgressOfs=0;
@@ -817,6 +819,18 @@ void SdrModel::setTiledRendering(bool bTiledRendering)
 bool SdrModel::isTiledRendering() const
 {
     return mbTiledRendering;
+}
+
+void SdrModel::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    mpLibreOfficeKitCallback = pCallback;
+    mpLibreOfficeKitData = pData;
+}
+
+void SdrModel::libreOfficeKitCallback(int nType, const char* pPayload) const
+{
+    if (mpLibreOfficeKitCallback)
+        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
 }
 
 void SdrModel::ImpReformatAllTextObjects()
