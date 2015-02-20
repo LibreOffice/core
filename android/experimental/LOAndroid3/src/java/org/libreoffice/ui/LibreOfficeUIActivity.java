@@ -430,7 +430,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
 
         public int getCount() {
             // TODO Auto-generated method stub
-            return filePaths.length;
+            return filePaths != null ? filePaths.length : 0;
         }
 
         public Object getItem(int arg0) {

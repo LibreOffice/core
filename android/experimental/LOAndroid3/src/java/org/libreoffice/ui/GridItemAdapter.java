@@ -59,7 +59,7 @@ public class GridItemAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return filePaths.length;
+        return filePaths != null ? filePaths.length : 0;
     }
 
     public Object getItem(int position) {
