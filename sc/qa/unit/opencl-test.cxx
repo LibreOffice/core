@@ -297,6 +297,7 @@ public:
     void testStatisticalFormulaStDevA1();
     void testStatisticalFormulaStDevPA1();
     void testFinancialMDurationFormula1();
+
     CPPUNIT_TEST_SUITE(ScOpenCLTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -530,7 +531,30 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
+
+    void init(const OUString fileName, sal_Int32 nFormat,
+              bool bReadWrite, ScDocument *rDoc, ScDocument *rDocRes);
 };
+
+void ScOpenCLTest::init(const OUString fileName, sal_Int32 nFormat,
+    bool bReadWrite, ScDocument *rDoc, ScDocument *rDocRes)
+{
+    if(!detectOpenCLDevice())
+        return;
+
+    ScDocShellRef xDocSh = loadDoc(fileName, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
+    *rDoc = xDocSh->GetDocument();
+    enableOpenCL();
+    rDoc->CalcAll();
+
+    ScDocShellRef xDocShRes = loadDoc(xDocStrRes, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
+    *rDocRes = xDocShRes->GetDocument();
+
+    xDocSh->DoClose();
+    xDocShRes->DoClose();
+}
 
 bool ScOpenCLTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
@@ -558,16 +582,11 @@ void ScOpenCLTest::enableOpenCL()
 
 void ScOpenCLTest::testCompilerHorizontal()
 {
-    if (!detectOpenCLDevice())
-        return;
+    ScDocument rDoc;
+    ScDocument rDocRes;
 
-    ScDocShellRef xDocSh = loadDoc("opencl/compiler/horizontal.", ODS);
-    ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
+    init("opencl/compiler/horizontal.", ODS, false, &rDoc, &rDocRes);
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/horizontal.", ODS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
@@ -581,9 +600,8 @@ void ScOpenCLTest::testCompilerHorizontal()
         fExcel = rDocRes.GetValue(ScAddress(14, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
+
 void ScOpenCLTest::testCompilerNested()
 {
     if (!detectOpenCLDevice())
