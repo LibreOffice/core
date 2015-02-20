@@ -602,7 +602,7 @@ public class LibreOfficeUIActivity extends LOAbout implements ActionBar.OnNaviga
         }
 
         public int getCount() {
-            return filePaths.size();
+            return filePaths != null ? filePaths.size() : 0;
         }
 
         public Object getItem(int arg0) {
