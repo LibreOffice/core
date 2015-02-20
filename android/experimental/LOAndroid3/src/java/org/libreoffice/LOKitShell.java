@@ -4,6 +4,7 @@ package org.libreoffice;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -118,5 +119,9 @@ public class LOKitShell {
 
     public static void sendTileReevaluationRequest(ComposedTileLayer composedTileLayer) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_REEVALUATION_REQUEST, composedTileLayer));
+    }
+
+    public static void sendTileInvalidationRequest(RectF rect) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_INVALIDATION, rect));
     }
 }

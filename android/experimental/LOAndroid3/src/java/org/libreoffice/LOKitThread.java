@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class LOKitThread extends Thread implements TileProvider.TileInvalidationCallback {
+public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
     private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
@@ -154,7 +154,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner();
-            mTileProvider.registerInvalidationCallback(this);
             refresh();
             LOKitShell.hideProgressSpinner();
         } else {
@@ -245,11 +244,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     public void clearQueue() {
         mEventQueue.clear();
-    }
-
-    @Override
-    public void invalidate(RectF rect) {
-        queueEvent(new LOEvent(LOEvent.TILE_INVALIDATION, rect));
     }
 }
 

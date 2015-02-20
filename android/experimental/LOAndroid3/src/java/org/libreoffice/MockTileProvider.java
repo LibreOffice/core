@@ -90,10 +90,6 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
-    public void registerInvalidationCallback(TileInvalidationCallback tileInvalidationCallback) {
-    }
-
-    @Override
     public void sendKeyEvent(KeyEvent keyEvent) {
 
     }

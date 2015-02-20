@@ -61,14 +61,6 @@ public interface TileProvider {
     boolean isSpreadsheet();
 
     /**
-     * Register a callback that is invoked when a tile invalidation is
-     * required.
-     *
-     * @param tileInvalidationCallback - the tile invalidation callback
-     */
-    void registerInvalidationCallback(TileProvider.TileInvalidationCallback tileInvalidationCallback);
-
-    /**
      * Trigger a key event.
      *
      * @param keyEvent - contains information about key event
@@ -90,16 +82,4 @@ public interface TileProvider {
      * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
     void mouseButtonUp(PointF documentCoordinate, int numberOfClicks);
-
-    /**
-     * Callback to retrieve invalidation calls
-     */
-    public interface TileInvalidationCallback {
-        /**
-         * Invoked when a region is invalidated.
-         *
-         * @param rect area in pixels which was invalidated and needs to be redrawn
-         */
-        void invalidate(RectF rect);
-    }
 }
