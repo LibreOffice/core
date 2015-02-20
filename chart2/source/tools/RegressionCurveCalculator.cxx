@@ -91,6 +91,16 @@ OUString RegressionCurveCalculator::getFormattedString(
     else
         aResult = NUMBER_TO_STR( fNumber );
 
+    sal_Int32 nPos = aResult.indexOf('E') + 1;
+    if( (nPos > 0) && (nPos < aResult.getLength()) )
+    {
+      if( (aResult[nPos] == '+') || (aResult[nPos] == '-') )
+        nPos++;                 // tdf#88835
+      if( aResult[nPos] == '0' )  // remove useless '0' at begining of exponent
+        aResult = aResult.replaceAt( nPos, 1, OUString("") );
+      if( aResult[nPos] == '0' )  // remove useless '0' at begining of exponent
+        aResult = aResult.replaceAt( nPos, 1, OUString("") );
+    }
     return aResult;
 }
 
