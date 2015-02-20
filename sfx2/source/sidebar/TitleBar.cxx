@@ -28,7 +28,6 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
-
 namespace
 {
     const static sal_Int32 gnLeftIconSpace (3);
@@ -51,11 +50,9 @@ TitleBar::TitleBar (
     maToolBox.SetSelectHdl(LINK(this, TitleBar, SelectionHandler));
 }
 
-
 TitleBar::~TitleBar (void)
 {
 }
-
 
 void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
 {
@@ -63,13 +60,11 @@ void TitleBar::SetTitle (const ::rtl::OUString& rsTitle)
     Invalidate();
 }
 
-
 void TitleBar::SetIcon (const Image& rIcon)
 {
     maIcon = rIcon;
     Invalidate();
 }
-
 
 void TitleBar::Paint (const Rectangle& rUpdateArea)
 {
@@ -90,14 +85,12 @@ void TitleBar::Paint (const Rectangle& rUpdateArea)
     PaintFocus(aTitleBox);
 }
 
-
 void TitleBar::DataChanged (const DataChangedEvent& rEvent)
 {
     (void)rEvent;
 
     SetBackground(GetBackgroundPaint().GetWallpaper());
 }
-
 
 void TitleBar::setPosSizePixel (
     long nX,
@@ -114,20 +107,17 @@ void TitleBar::setPosSizePixel (
     maToolBox.Show();
 }
 
-
 void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     (void)nItemIndex;
     // Any real processing has to be done in derived class.
 }
 
-
 css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible (void)
 {
     SetAccessibleRole(css::accessibility::AccessibleRole::PANEL);
     return AccessibleTitleBar::Create(*this);
 }
-
 
 void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 {
@@ -161,7 +151,6 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
     Pop();
 }
 
-
 void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 {
     Push(PushFlags::FONT | PushFlags::TEXTCOLOR);
@@ -188,7 +177,6 @@ void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 
     Pop();
 }
-
 
 IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox)
 {

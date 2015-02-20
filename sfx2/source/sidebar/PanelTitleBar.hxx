@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <boost/function.hpp>
 
-
 namespace sfx2 { namespace sidebar {
 
 class Panel;
@@ -63,7 +62,6 @@ private:
     ::rtl::OUString msMoreOptionsCommand;
     ::rtl::OUString msAccessibleNamePrefix;
 };
-
 
 } } // end of namespace sfx2::sidebar
 

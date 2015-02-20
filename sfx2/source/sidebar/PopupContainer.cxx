@@ -27,12 +27,9 @@ PopupContainer::PopupContainer (vcl::Window* pParent)
 {
 }
 
-
 PopupContainer::~PopupContainer (void)
 {
 }
-
-
 
 long  PopupContainer::Notify (NotifyEvent& rEvent)
 {
@@ -43,7 +40,6 @@ long  PopupContainer::Notify (NotifyEvent& rEvent)
     }
     return FloatingWindow::Notify(rEvent);
 }
-
 
 } } // end of namespace sfx2::sidebar
 

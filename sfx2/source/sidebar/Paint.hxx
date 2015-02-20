@@ -26,7 +26,6 @@
 
 #include <boost/variant.hpp>
 
-
 namespace sfx2 { namespace sidebar {
 
 /** Abstraction of different ways to fill outlines.
@@ -71,7 +70,6 @@ private:
         Gradient
     > maValue;
 };
-
 
 } } // end of namespace sfx2::sidebar
 

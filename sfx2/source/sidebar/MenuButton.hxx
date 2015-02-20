@@ -21,7 +21,6 @@
 
 #include <vcl/button.hxx>
 
-
 namespace sfx2 { namespace sidebar {
 
 class MenuButton
@@ -46,7 +45,6 @@ private:
         PT_Theme
     } mePaintType;
 };
-
 
 } } // end of namespace sfx2::sidebar
 

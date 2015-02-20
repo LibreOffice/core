@@ -27,7 +27,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-
 namespace
 {
     typedef ::cppu::WeakComponentImplHelper1 <
@@ -53,8 +52,6 @@ public:
     virtual ~Accessible (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
-
-
     // XAccessible
     virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext (void)
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -62,7 +59,6 @@ public:
 private:
     css::uno::Reference<css::accessibility::XAccessibleContext> mxContext;
 };
-
 
 } } // end of namespace sfx2::sidebar
 

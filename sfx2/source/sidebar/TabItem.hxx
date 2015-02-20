@@ -49,7 +49,6 @@ private:
     } mePaintType;
 };
 
-
 } } // end of namespace sfx2::sidebar
 
 #endif

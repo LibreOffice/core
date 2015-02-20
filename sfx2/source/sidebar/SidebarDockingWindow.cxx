@@ -27,9 +27,7 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
-
 
 SidebarDockingWindow::SidebarDockingWindow(
     SfxBindings* pSfxBindings,
@@ -53,12 +51,10 @@ SidebarDockingWindow::SidebarDockingWindow(
     }
 }
 
-
 SidebarDockingWindow::~SidebarDockingWindow (void)
 {
     DoDispose();
 }
-
 
 void SidebarDockingWindow::DoDispose (void)
 {
@@ -70,7 +66,6 @@ void SidebarDockingWindow::DoDispose (void)
     }
 }
 
-
 void SidebarDockingWindow::GetFocus()
 {
     if (mpSidebarController.is())
@@ -79,13 +74,11 @@ void SidebarDockingWindow::GetFocus()
         SfxDockingWindow::GetFocus();
 }
 
-
 // fdo#87217
 bool SidebarDockingWindow::Close (void)
 {
     return SfxDockingWindow::Close();
 }
-
 
 SfxChildAlignment SidebarDockingWindow::CheckAlignment (
     SfxChildAlignment eCurrentAlignment,
@@ -113,7 +106,6 @@ SfxChildAlignment SidebarDockingWindow::CheckAlignment (
             return eRequestedAlignment;
     }
 }
-
 
 } } // end of namespace sfx2::sidebar
 

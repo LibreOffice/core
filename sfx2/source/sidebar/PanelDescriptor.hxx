@@ -23,7 +23,6 @@
 #include "ContextList.hxx"
 #include <boost/shared_ptr.hpp>
 
-
 namespace sfx2 { namespace sidebar {
 
 class PanelDescriptor

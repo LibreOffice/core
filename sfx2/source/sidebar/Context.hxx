@@ -56,7 +56,6 @@ public:
     bool operator!= (const Context& rOther) const;
 };
 
-
 } } // end of namespace sfx2::sidebar
 
 #endif

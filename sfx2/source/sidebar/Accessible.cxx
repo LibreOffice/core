@@ -19,13 +19,10 @@
 
 #include "Accessible.hxx"
 
-
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
-
 
 Accessible::Accessible (
     const Reference<accessibility::XAccessibleContext>& rxContext)
@@ -34,11 +31,9 @@ Accessible::Accessible (
 {
 }
 
-
 Accessible::~Accessible (void)
 {
 }
-
 
 void SAL_CALL Accessible::disposing (void)
 {
@@ -47,13 +42,11 @@ void SAL_CALL Accessible::disposing (void)
         xComponent->dispose();
 }
 
-
 Reference<accessibility::XAccessibleContext> SAL_CALL Accessible::getAccessibleContext (void)
     throw (css::uno::RuntimeException, std::exception)
 {
     return mxContext;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

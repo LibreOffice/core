@@ -31,7 +31,6 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
 
 Reference<ui::XUIElement> SidebarPanelBase::Create (
@@ -48,7 +47,6 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
             rLayoutSize));
     return xUIElement;
 }
-
 
 SidebarPanelBase::SidebarPanelBase (
     const ::rtl::OUString& rsResourceURL,
@@ -76,11 +74,9 @@ SidebarPanelBase::SidebarPanelBase (
     }
 }
 
-
 SidebarPanelBase::~SidebarPanelBase (void)
 {
 }
-
 
 void SAL_CALL SidebarPanelBase::disposing (void)
     throw (css::uno::RuntimeException)
@@ -102,7 +98,6 @@ void SAL_CALL SidebarPanelBase::disposing (void)
     }
 }
 
-
 // XContextChangeEventListener
 void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     const ui::ContextChangeEventObject& rEvent)
@@ -119,7 +114,6 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     }
 }
 
-
 void SAL_CALL SidebarPanelBase::disposing (
     const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException, std::exception)
@@ -130,13 +124,11 @@ void SAL_CALL SidebarPanelBase::disposing (
     mpControl = NULL;
 }
 
-
 css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
     throw(css::uno::RuntimeException, std::exception)
 {
     return mxFrame;
 }
-
 
 ::rtl::OUString SAL_CALL SidebarPanelBase::getResourceURL (void)
     throw(css::uno::RuntimeException, std::exception)
@@ -144,20 +136,17 @@ css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (voi
     return msResourceURL;
 }
 
-
 sal_Int16 SAL_CALL SidebarPanelBase::getType (void)
     throw(css::uno::RuntimeException, std::exception)
 {
     return ui::UIElementType::TOOLPANEL;
 }
 
-
 Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface (void)
     throw(css::uno::RuntimeException, std::exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(this));
 }
-
 
 Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessible (
     const Reference<accessibility::XAccessible>& rxParentAccessible)
@@ -169,7 +158,6 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
     return NULL;
 }
 
-
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
     throw(css::uno::RuntimeException, std::exception)
 {
@@ -180,7 +168,6 @@ Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
     else
         return NULL;
 }
-
 
 ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWidth)
     throw(css::uno::RuntimeException, std::exception)

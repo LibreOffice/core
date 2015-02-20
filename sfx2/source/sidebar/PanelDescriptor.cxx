@@ -19,7 +19,6 @@
 
 #include "PanelDescriptor.hxx"
 
-
 namespace sfx2 { namespace sidebar {
 
 PanelDescriptor::PanelDescriptor (void)
@@ -38,7 +37,6 @@ PanelDescriptor::PanelDescriptor (void)
 {
 }
 
-
 PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
     : msTitle(rOther.msTitle),
       mbIsTitleBarOptional(rOther.mbIsTitleBarOptional),
@@ -55,11 +53,9 @@ PanelDescriptor::PanelDescriptor (const PanelDescriptor& rOther)
 {
 }
 
-
 PanelDescriptor::~PanelDescriptor (void)
 {
 }
-
 
 } } // end of namespace sfx2::sidebar
 

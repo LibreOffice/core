@@ -36,7 +36,6 @@ DeckDescriptor::DeckDescriptor (void)
 {
 }
 
-
 DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
     : msTitle(rOther.msTitle),
       msId(rOther.msId),
@@ -51,7 +50,6 @@ DeckDescriptor::DeckDescriptor (const DeckDescriptor& rOther)
       mnOrderIndex(rOther.mnOrderIndex)
 {
 }
-
 
 DeckDescriptor::~DeckDescriptor (void)
 {

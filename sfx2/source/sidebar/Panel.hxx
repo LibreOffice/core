@@ -30,13 +30,11 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-
 namespace sfx2 { namespace sidebar {
 
 class PanelDescriptor;
 class TitleBar;
 class PanelTitleBar;
-
 
 class Panel
     : public vcl::Window
@@ -79,7 +77,6 @@ private:
 };
 typedef ::boost::shared_ptr<Panel> SharedPanel;
 typedef ::std::vector<SharedPanel> SharedPanelContainer;
-
 
 } } // end of namespace sfx2::sidebar
 

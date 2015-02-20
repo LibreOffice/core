@@ -19,7 +19,6 @@
 #include "AsynchronousCall.hxx"
 #include <vcl/svapp.hxx>
 
-
 namespace sfx2 { namespace sidebar {
 
 AsynchronousCall::AsynchronousCall (void)

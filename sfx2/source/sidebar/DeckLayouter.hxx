@@ -34,7 +34,6 @@ namespace sfx2 { namespace sidebar {
 
 class Panel;
 
-
 /** Helper for layouting the direct and indirect children of a
     deck like title bars, panels, and scroll bars.
 */
@@ -50,7 +49,6 @@ namespace DeckLayouter
         vcl::Window& pFiller,
         ScrollBar& pVerticalScrollBar);
 }
-
 
 } } // end of namespace sfx2::sidebar
 

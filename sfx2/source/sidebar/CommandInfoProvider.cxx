@@ -75,7 +75,6 @@ namespace
     };
 }
 
-
 namespace sfx2 { namespace sidebar {
 
 CommandInfoProvider& CommandInfoProvider::Instance (void)
@@ -83,7 +82,6 @@ CommandInfoProvider& CommandInfoProvider::Instance (void)
     static CommandInfoProvider aProvider;
     return aProvider;
 }
-
 
 CommandInfoProvider::CommandInfoProvider (void)
     : mxContext(comphelper::getProcessComponentContext()),
@@ -95,7 +93,6 @@ CommandInfoProvider::CommandInfoProvider (void)
       mxFrameListener()
 {
 }
-
 
 CommandInfoProvider::~CommandInfoProvider (void)
 {
@@ -121,7 +118,6 @@ OUString CommandInfoProvider::GetLabelForCommand (
         return sLabel;
 }
 
-
 void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
@@ -144,7 +140,6 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
             mxFrameListener = new FrameListener(*this, rxFrame);
     }
 }
-
 
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceleratorConfiguration (void)
 {
@@ -177,7 +172,6 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceler
     return mxCachedDocumentAcceleratorConfiguration;
 }
 
-
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAcceleratorConfiguration (void)
 {
     if ( ! mxCachedModuleAcceleratorConfiguration.is())
@@ -199,7 +193,6 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
     return mxCachedModuleAcceleratorConfiguration;
 }
 
-
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAcceleratorConfiguration (void)
 {
     // Get the global accelerator configuration.
@@ -211,7 +204,6 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAccelerat
     return mxCachedGlobalAcceleratorConfiguration;
 }
 
-
 OUString CommandInfoProvider::GetModuleIdentifier (void)
 {
     if (msCachedModuleIdentifier.getLength() == 0)
@@ -221,7 +213,6 @@ OUString CommandInfoProvider::GetModuleIdentifier (void)
     }
     return msCachedModuleIdentifier;
 }
-
 
 OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName)
 {
@@ -241,7 +232,6 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName)
 
     return OUString();
 }
-
 
 OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
     const Reference<ui::XAcceleratorConfiguration>& rxConfiguration,
@@ -271,7 +261,6 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
     return OUString();
 }
 
-
 Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const OUString& rsCommandName)
 {
     Sequence<beans::PropertyValue> aProperties;
@@ -294,7 +283,6 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties (const 
     return aProperties;
 }
 
-
 OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
 {
     const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
@@ -309,7 +297,6 @@ OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
     }
     return OUString();
 }
-
 
 } } // end of namespace sfx2/framework
 

@@ -22,7 +22,6 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-
 namespace sfx2 { namespace sidebar {
 
 class TitleBar;
@@ -40,7 +39,6 @@ private:
     AccessibleTitleBar (VCLXWindow* pWindow);
     virtual ~AccessibleTitleBar (void);
 };
-
 
 } } // end of namespace sfx2::sidebar
 

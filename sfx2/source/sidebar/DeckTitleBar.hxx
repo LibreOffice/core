@@ -23,7 +23,6 @@
 
 #include <boost/function.hpp>
 
-
 namespace sfx2 { namespace sidebar {
 
 class DeckTitleBar

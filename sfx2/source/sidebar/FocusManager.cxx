@@ -27,7 +27,6 @@
 #include <vcl/toolbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-
 namespace sfx2 { namespace sidebar {
 
 FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, const sal_Int32 nIndex)
@@ -35,7 +34,6 @@ FocusManager::FocusLocation::FocusLocation (const PanelComponent eComponent, con
       mnIndex(nIndex)
 {
 }
-
 
 FocusManager::FocusManager (const ::boost::function<void(const Panel&)>& rShowPanelFunctor)
     : mpDeckTitleBar(),
@@ -48,18 +46,15 @@ FocusManager::FocusManager (const ::boost::function<void(const Panel&)>& rShowPa
 {
 }
 
-
 FocusManager::~FocusManager (void)
 {
     Clear();
 }
 
-
 void FocusManager::GrabFocus (void)
 {
     FocusDeckTitle();
 }
-
 
 void FocusManager::Clear (void)
 {
@@ -67,7 +62,6 @@ void FocusManager::Clear (void)
     ClearPanels();
     ClearButtons();
 }
-
 
 void FocusManager::ClearPanels (void)
 {
@@ -88,7 +82,6 @@ void FocusManager::ClearPanels (void)
     }
 }
 
-
 void FocusManager::ClearButtons (void)
 {
     ::std::vector<Button*> aButtons;
@@ -100,7 +93,6 @@ void FocusManager::ClearButtons (void)
         UnregisterWindow(**iButton);
     }
 }
-
 
 void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
 {
@@ -117,7 +109,6 @@ void FocusManager::SetDeckTitle (DeckTitleBar* pDeckTitleBar)
         RegisterWindow(mpDeckTitleBar->GetToolBox());
     }
 }
-
 
 void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
 {
@@ -140,7 +131,6 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
     }
 }
 
-
 void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
 {
     ClearButtons();
@@ -153,18 +143,15 @@ void FocusManager::SetButtons (const ::std::vector<Button*>& rButtons)
     }
 }
 
-
 void FocusManager::RegisterWindow (vcl::Window& rWindow)
 {
     rWindow.AddEventListener(LINK(this, FocusManager, WindowEventListener));
 }
 
-
 void FocusManager::UnregisterWindow (vcl::Window& rWindow)
 {
     rWindow.RemoveEventListener(LINK(this, FocusManager, WindowEventListener));
 }
-
 
 FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& rWindow) const
 {
@@ -218,12 +205,10 @@ void FocusManager::FocusDeckTitle (void)
         FocusPanel(0, false);
 }
 
-
 bool FocusManager::IsDeckTitleVisible (void) const
 {
     return mpDeckTitleBar != NULL && mpDeckTitleBar->IsVisible();
 }
-
 
 bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
 {
@@ -235,7 +220,6 @@ bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
         return false;
     return pTitleBar->IsVisible();
 }
-
 
 void FocusManager::FocusPanel (
     const sal_Int32 nPanelIndex,
@@ -274,7 +258,6 @@ void FocusManager::FocusPanel (
         maShowPanelFunctor(rPanel);
 }
 
-
 void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
 {
     vcl::Window* pWindow = VCLUnoHelper::GetWindow(maPanels[nPanelIndex]->GetElementWindow());
@@ -286,13 +269,11 @@ void FocusManager::FocusPanelContent (const sal_Int32 nPanelIndex)
     }
 }
 
-
 void FocusManager::FocusButton (const sal_Int32 nButtonIndex)
 {
     maButtons[nButtonIndex]->GrabFocus();
     maButtons[nButtonIndex]->Invalidate();
 }
-
 
 void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
 {
@@ -302,7 +283,6 @@ void FocusManager::ClickButton (const sal_Int32 nButtonIndex)
             FocusPanel(0, true);
     maButtons[nButtonIndex]->GetParent()->Invalidate();
 }
-
 
 void FocusManager::RemoveWindow (vcl::Window& rWindow)
 {
@@ -327,7 +307,6 @@ void FocusManager::RemoveWindow (vcl::Window& rWindow)
         return;
     }
 }
-
 
 bool FocusManager::MoveFocusInsidePanel (
     const FocusLocation& rFocusLocation,
@@ -355,7 +334,6 @@ bool FocusManager::MoveFocusInsidePanel (
             return false;
     }
 }
-
 
 bool FocusManager::MoveFocusInsideDeckTitle (
     const FocusLocation& rFocusLocation,
@@ -387,7 +365,6 @@ bool FocusManager::MoveFocusInsideDeckTitle (
             return false;
     }
 }
-
 
 void FocusManager::HandleKeyEvent (
     const vcl::KeyCode& rKeyCode,
@@ -538,7 +515,6 @@ void FocusManager::HandleKeyEvent (
     }
 }
 
-
 IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
 {
     if (pEvent == NULL)
@@ -576,7 +552,6 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
 
     return 0;
 }
-
 
 IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
 {
@@ -653,7 +628,6 @@ IMPL_LINK(FocusManager, ChildEventListener, VclSimpleEvent*, pEvent)
 
     return 0;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

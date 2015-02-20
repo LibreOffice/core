@@ -40,24 +40,20 @@ Reference<accessibility::XAccessible> AccessibleTitleBar::Create (TitleBar& rTit
         return NULL;
 }
 
-
 AccessibleTitleBar::AccessibleTitleBar (VCLXWindow* pWindow)
     : VCLXAccessibleComponent(pWindow)
 {
 }
 
-
 AccessibleTitleBar::~AccessibleTitleBar (void)
 {
 }
-
 
 void AccessibleTitleBar::FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet)
 {
     VCLXAccessibleComponent::FillAccessibleStateSet(rStateSet);
     rStateSet.AddState(accessibility::AccessibleStateType::FOCUSABLE);
 }
-
 
 } } // end of namespace sfx2::sidebar
 

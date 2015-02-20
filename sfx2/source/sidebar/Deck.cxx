@@ -37,7 +37,6 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
 
 Deck::Deck (
@@ -74,8 +73,6 @@ Deck::Deck (
 #endif
 }
 
-
-
 Deck::~Deck (void)
 {
     Dispose();
@@ -85,7 +82,6 @@ Deck::~Deck (void)
     // without updating maPanels.
     maPanels.clear();
 }
-
 
 void Deck::Dispose (void)
 {
@@ -110,12 +106,10 @@ void Deck::Dispose (void)
     mpVerticalScrollBar.reset();
 }
 
-
 DeckTitleBar* Deck::GetTitleBar (void) const
 {
     return mpTitleBar.get();
 }
-
 
 Rectangle Deck::GetContentArea (void) const
 {
@@ -167,7 +161,6 @@ void Deck::Paint (const Rectangle& rUpdateArea)
         rHorizontalBorderPaint,
         Theme::GetPaint(Theme::Paint_VerticalBorder));
 }
-
 
 void Deck::DataChanged (const DataChangedEvent& rEvent)
 {
@@ -273,7 +266,6 @@ void Deck::ShowPanel (const Panel& rPanel)
     }
 }
 
-
 const OUString GetWindowClassification (const vcl::Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
@@ -286,7 +278,6 @@ const OUString GetWindowClassification (const vcl::Window* pWindow)
         return OUString("window");
     }
 }
-
 
 void Deck::PrintWindowSubTree (vcl::Window* pRoot, int nIndentation)
 {
@@ -323,7 +314,6 @@ IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
     return sal_True;
 }
 
-
 //----- Deck::ScrollContainerWindow -------------------------------------------
 
 Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
@@ -335,11 +325,9 @@ Deck::ScrollContainerWindow::ScrollContainerWindow (vcl::Window* pParentWindow)
 #endif
 }
 
-
 Deck::ScrollContainerWindow::~ScrollContainerWindow (void)
 {
 }
-
 
 void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)
 {
@@ -364,12 +352,10 @@ void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)
     }
 }
 
-
 void Deck::ScrollContainerWindow::SetSeparators (const ::std::vector<sal_Int32>& rSeparators)
 {
     maSeparators = rSeparators;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

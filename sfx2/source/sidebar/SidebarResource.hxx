@@ -19,11 +19,9 @@
 #ifndef INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARRESOURCE_HXX
 #define INCLUDED_SFX2_SOURCE_SIDEBAR_SIDEBARRESOURCE_HXX
 
-
 #include "Sidebar.hrc"
 #include <sfx2/sfxresid.hxx>
 #include <tools/rc.hxx>
-
 
 class SidebarResource : public Resource
 {
@@ -31,7 +29,6 @@ public:
     SidebarResource (void) : Resource(SfxResId(RID_SIDEBAR_RESOURCE)){}
     ~SidebarResource (void) { FreeResource(); }
 };
-
 
 #endif
 

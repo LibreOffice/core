@@ -29,9 +29,7 @@
 using namespace css;
 using namespace css::uno;
 
-
 namespace sfx2 { namespace sidebar {
-
 
 namespace {
     static const sal_Int32 MinimalPanelHeight (25);
@@ -101,7 +99,6 @@ namespace {
                    iEnd(container.end());                               \
         iterator_name!=iEnd;                                            \
         ++iterator_name)
-
 
 void DeckLayouter::LayoutDeck (
     const Rectangle aContentArea,
@@ -246,7 +243,6 @@ Rectangle LayoutPanels (
     return aBox;
 }
 
-
 sal_Int32 PlacePanels (
     ::std::vector<LayoutItem>& rLayoutItems,
     const sal_Int32 nWidth,
@@ -339,7 +335,6 @@ sal_Int32 PlacePanels (
     return nY;
 }
 
-
 void GetRequestedSizes (
     ::std::vector<LayoutItem>& rLayoutItems,
     sal_Int32& rAvailableHeight,
@@ -391,7 +386,6 @@ void GetRequestedSizes (
         iItem->maLayoutSize = aLayoutSize;
     }
 }
-
 
 void DistributeHeights (
     ::std::vector<LayoutItem>& rLayoutItems,
@@ -475,7 +469,6 @@ void DistributeHeights (
     OSL_ASSERT(nRemainingHeightToDistribute==0);
 }
 
-
 Rectangle PlaceDeckTitle (
     vcl::Window& rDeckTitleBar,
     const Rectangle& rAvailableSpace)
@@ -502,7 +495,6 @@ Rectangle PlaceDeckTitle (
             rAvailableSpace.Bottom());
     }
 }
-
 
 Rectangle PlaceVerticalScrollBar (
     ScrollBar& rVerticalScrollBar,
@@ -531,7 +523,6 @@ Rectangle PlaceVerticalScrollBar (
     }
 }
 
-
 void SetupVerticalScrollBar(
     ScrollBar& rVerticalScrollBar,
     const sal_Int32 nContentHeight,
@@ -543,7 +534,6 @@ void SetupVerticalScrollBar(
     rVerticalScrollBar.SetRangeMax(nContentHeight-1);
     rVerticalScrollBar.SetVisibleSize(nVisibleHeight);
 }
-
 
 void UpdateFiller (
     vcl::Window& rFiller,

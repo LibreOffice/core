@@ -34,12 +34,8 @@
 
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
-
 using namespace css;
 using namespace css::uno;
-
-
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -66,11 +62,9 @@ TabBar::TabBar (
 #endif
 }
 
-
 TabBar::~TabBar (void)
 {
 }
-
 
 void TabBar::Paint (const Rectangle& rUpdateArea)
 {
@@ -83,14 +77,12 @@ void TabBar::Paint (const Rectangle& rUpdateArea)
         Point(GetSizePixel().Width()-nHorizontalPadding, mnMenuSeparatorY));
 }
 
-
 sal_Int32 TabBar::GetDefaultWidth (void)
 {
     return Theme::GetInteger(Theme::Int_TabItemWidth)
         + Theme::GetInteger(Theme::Int_TabBarLeftPadding)
         + Theme::GetInteger(Theme::Int_TabBarRightPadding);
 }
-
 
 void TabBar::SetDecks (
     const ResourceManager::DeckContextDescriptorContainer& rDecks)
@@ -136,7 +128,6 @@ void TabBar::SetDecks (
     Layout();
 }
 
-
 void TabBar::UpdateButtonIcons (void)
 {
     Image aImage = Theme::GetImage(Theme::Image_TabBarMenu);
@@ -170,7 +161,6 @@ void TabBar::UpdateButtonIcons (void)
 
     Invalidate();
 }
-
 
 void TabBar::Layout (void)
 {
@@ -219,7 +209,6 @@ void TabBar::Layout (void)
     Invalidate();
 }
 
-
 void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 {
     for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
@@ -233,7 +222,6 @@ void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
     }
 }
 
-
 void TabBar::RemoveDeckHighlight ()
 {
     for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
@@ -244,7 +232,6 @@ void TabBar::RemoveDeckHighlight ()
     }
 }
 
-
 void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());
@@ -253,13 +240,10 @@ void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
     Window::DataChanged(rDataChangedEvent);
 }
 
-
 bool TabBar::Notify (NotifyEvent&)
 {
     return false;
 }
-
-
 
 RadioButton* TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
 {
@@ -270,7 +254,6 @@ RadioButton* TabBar::CreateTabItem (const DeckDescriptor& rDeckDescriptor)
     return pItem;
 }
 
-
 Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
 {
     return Tools::GetImage(
@@ -278,8 +261,6 @@ Image TabBar::GetItemImage (const DeckDescriptor& rDeckDescriptor) const
         rDeckDescriptor.msHighContrastIconURL,
         mxFrame);
 }
-
-
 
 IMPL_LINK(TabBar::Item, HandleClick, Button*, EMPTYARG)
 {
@@ -292,7 +273,6 @@ IMPL_LINK(TabBar::Item, HandleClick, Button*, EMPTYARG)
     return 1;
 }
 
-
 const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
 {
     if (nIndex<0 || static_cast<size_t>(nIndex)>=maItems.size())
@@ -300,7 +280,6 @@ const ::rtl::OUString TabBar::GetDeckIdForIndex (const sal_Int32 nIndex) const
     else
         return maItems[nIndex].msDeckId;
 }
-
 
 void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
 {
@@ -315,7 +294,6 @@ void TabBar::ToggleHideFlag (const sal_Int32 nIndex)
         Layout();
     }
 }
-
 
 void TabBar::RestoreHideFlags (void)
 {
@@ -334,7 +312,6 @@ void TabBar::RestoreHideFlags (void)
         Layout();
 }
 
-
 void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
 {
     ::std::vector<Button*> aButtons;
@@ -350,7 +327,6 @@ void TabBar::UpdateFocusManager (FocusManager& rFocusManager)
     }
     rFocusManager.SetButtons(aButtons);
 }
-
 
 IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
 {
@@ -386,7 +362,6 @@ IMPL_LINK(TabBar, OnToolboxClicked, void*, EMPTYARG)
 
     return 0;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

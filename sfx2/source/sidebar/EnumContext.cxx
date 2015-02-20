@@ -41,13 +41,11 @@ static ContextVector maContextVector;
 const sal_Int32 EnumContext::NoMatch = 4;
 const sal_Int32 EnumContext::OptimalMatch = 0;  // Neither application nor context name is "any".
 
-
 EnumContext::EnumContext (void)
     : meApplication(Application_None),
       meContext(Context_Unknown)
 {
 }
-
 
 EnumContext::EnumContext (
     const Application eApplication,
@@ -57,7 +55,6 @@ EnumContext::EnumContext (
 {
 }
 
-
 EnumContext::EnumContext (
     const ::rtl::OUString& rsApplicationName,
     const ::rtl::OUString& rsContextName)
@@ -66,12 +63,10 @@ EnumContext::EnumContext (
 {
 }
 
-
 sal_Int32 EnumContext::GetCombinedContext_DI (void) const
 {
     return CombinedEnumContext(GetApplication_DI(), meContext);
 }
-
 
 EnumContext::Application EnumContext::GetApplication_DI (void) const
 {
@@ -100,14 +95,11 @@ bool EnumContext::operator== (const EnumContext aOther)
         && meContext==aOther.meContext;
 }
 
-
 bool EnumContext::operator!= (const EnumContext aOther)
 {
     return meApplication!=aOther.meApplication
         || meContext!=aOther.meContext;
 }
-
-
 
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eApplication)
 {
@@ -117,7 +109,6 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Application eAp
         maApplicationVector.resize(eApplication+1);
     maApplicationVector[eApplication]=rsName;
 }
-
 
 void EnumContext::ProvideApplicationContainers (void)
 {
@@ -139,7 +130,6 @@ void EnumContext::ProvideApplicationContainers (void)
     }
 }
 
-
 EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString& rsApplicationName)
 {
     ProvideApplicationContainers();
@@ -152,7 +142,6 @@ EnumContext::Application EnumContext::GetApplicationEnum (const ::rtl::OUString&
         return EnumContext::Application_None;
 }
 
-
 const ::rtl::OUString& EnumContext::GetApplicationName (const Application eApplication)
 {
     ProvideApplicationContainers();
@@ -164,7 +153,6 @@ const ::rtl::OUString& EnumContext::GetApplicationName (const Application eAppli
         return maApplicationVector[nIndex];
 }
 
-
 void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eApplication)
 {
     maContextMap[rsName] = eApplication;
@@ -173,7 +161,6 @@ void EnumContext::AddEntry (const ::rtl::OUString& rsName, const Context eApplic
         maContextVector.resize(eApplication+1);
     maContextVector[eApplication] = rsName;
 }
-
 
 void EnumContext::ProvideContextContainers (void)
 {
@@ -213,7 +200,6 @@ void EnumContext::ProvideContextContainers (void)
     }
 }
 
-
 EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsContextName)
 {
     ProvideContextContainers();
@@ -226,7 +212,6 @@ EnumContext::Context EnumContext::GetContextEnum (const ::rtl::OUString& rsConte
         return EnumContext::Context_Unknown;
 }
 
-
 const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)
 {
     ProvideContextContainers();
@@ -237,7 +222,6 @@ const ::rtl::OUString& EnumContext::GetContextName (const Context eContext)
     else
         return maContextVector[nIndex];
 }
-
 
 } } // end of namespace sfx2::sidebar
 
