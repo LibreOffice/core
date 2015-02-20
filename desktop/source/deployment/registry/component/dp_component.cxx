@@ -1081,12 +1081,7 @@ Reference<XComponentContext> raise_uno_process(
 
     OUString url( util::theMacroExpander::get(xContext)->expandMacros( "$URE_BIN_DIR/uno" ) );
 
-    OUStringBuffer buf;
-    buf.appendAscii( "uno:pipe,name=" );
-    OUString pipeId( generateRandomPipeId() );
-    buf.append( pipeId );
-    buf.appendAscii( ";urp;uno.ComponentContext" );
-    const OUString connectStr( buf.makeStringAndClear() );
+    const OUString connectStr = "uno:pipe,name=" + generateRandomPipeId() + ";urp;uno.ComponentContext";
 
     // raise core UNO process to register/run a component,
     // javavm service uses unorc next to executable to retrieve deployed
