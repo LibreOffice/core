@@ -854,8 +854,10 @@ namespace slideshow
 
             // Shall we render to a sprite, or to a plain canvas?
             // Hack, force use of Sprites in case of ogl canvas
-            uno::Reference< lang::XServiceInfo >  xServiceInfo(mpViewLayer->getCanvas()->getUNOCanvas(),uno::UNO_QUERY_THROW);
-            if( xServiceInfo->getImplementationName() == "com.sun.star.comp.rendering.SpriteCanvas.OGL" ||  isBackgroundDetached() )
+            const uno::Reference< rendering::XCanvas > xCanvas( mpViewLayer->getCanvas()->getUNOCanvas() );
+            const uno::Reference< lang::XServiceInfo >  xServiceInfo(xCanvas ,uno::UNO_QUERY);
+            if(xServiceInfo.is()&&  xServiceInfo->getImplementationName() == "com.sun.star.comp.rendering.SpriteCanvas.OGL"
+               || isBackgroundDetached() )
             {
                 return renderSprite( mpViewLayer,
                                      rMtf,
