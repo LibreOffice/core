@@ -209,7 +209,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
 {
     LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
 
-    pDocument->pClass->setPartMode(pDocument, (LibreOfficeKitPartMode) nPartMode);
+    pDocument->pClass->setPartMode(pDocument, nPartMode);
 }
 
 extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Document_getDocumentTypeNative

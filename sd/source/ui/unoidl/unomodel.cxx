@@ -41,6 +41,7 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
@@ -2302,14 +2303,14 @@ OUString SdXImpressDocument::getPartName( int nPart )
     return pPage->GetName();
 }
 
-void SdXImpressDocument::setPartMode( LibreOfficeKitPartMode ePartMode )
+void SdXImpressDocument::setPartMode( int nPartMode )
 {
     DrawViewShell* pViewSh = GetViewShell();
     if (!pViewSh)
         return;
 
     PageKind aPageKind( PK_STANDARD );
-    switch ( ePartMode )
+    switch ( nPartMode )
     {
     case LOK_PARTMODE_EMBEDDEDOBJ:
         // This will probably be handled higher up, i.e.

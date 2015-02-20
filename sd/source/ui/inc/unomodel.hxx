@@ -238,7 +238,7 @@ public:
     virtual int  getPart() SAL_OVERRIDE;
     virtual int  getParts() SAL_OVERRIDE;
     virtual OUString getPartName( int nPart ) SAL_OVERRIDE;
-    virtual void setPartMode( LibreOfficeKitPartMode ePartMode ) SAL_OVERRIDE;
+    virtual void setPartMode( int nPartMode ) SAL_OVERRIDE;
 
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     virtual void initializeForTiledRendering() SAL_OVERRIDE;

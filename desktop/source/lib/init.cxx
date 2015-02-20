@@ -18,6 +18,7 @@
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>
@@ -182,12 +183,12 @@ extern "C"
 
 static void doc_destroy(LibreOfficeKitDocument* pThis);
 static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
-static LibreOfficeKitDocumentType doc_getDocumentType(LibreOfficeKitDocument* pThis);
+static int doc_getDocumentType(LibreOfficeKitDocument* pThis);
 static int doc_getParts(LibreOfficeKitDocument* pThis);
 static int doc_getPart(LibreOfficeKitDocument* pThis);
 static void doc_setPart(LibreOfficeKitDocument* pThis, int nPart);
 static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart);
-static void doc_setPartMode(LibreOfficeKitDocument* pThis, LibreOfficeKitPartMode ePartMode);
+static void doc_setPartMode(LibreOfficeKitDocument* pThis, int nPartMode);
 void        doc_paintTile(LibreOfficeKitDocument* pThis,
                           unsigned char* pBuffer,
                           const int nCanvasWidth, const int nCanvasHeight,
@@ -450,7 +451,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
     return false;
 }
 
-static LibreOfficeKitDocumentType doc_getDocumentType (LibreOfficeKitDocument* pThis)
+static int doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
@@ -541,7 +542,7 @@ static char* doc_getPartName(LibreOfficeKitDocument* pThis, int nPart)
 }
 
 static void doc_setPartMode(LibreOfficeKitDocument* pThis,
-                            LibreOfficeKitPartMode ePartMode)
+                            int nPartMode)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
     if (!pDoc)
@@ -554,7 +555,7 @@ static void doc_setPartMode(LibreOfficeKitDocument* pThis,
 
     int nCurrentPart = pDoc->getPart();
 
-    pDoc->setPartMode(ePartMode);
+    pDoc->setPartMode(nPartMode);
 
     // We need to make sure the internal state is updated, just changing the mode
     // might not update the relevant shells (i.e. impress will keep rendering the

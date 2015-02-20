@@ -79,9 +79,10 @@ public:
         return OUString("");
     }
 
-    virtual void setPartMode(LibreOfficeKitPartMode ePartMode)
+    /// @see lok::Document::setPartMode().
+    virtual void setPartMode(int nPartMode)
     {
-        (void) ePartMode;
+        (void) nPartMode;
     }
 
     /**

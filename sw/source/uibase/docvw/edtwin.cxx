@@ -68,6 +68,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #include <touch/touch-impl.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>

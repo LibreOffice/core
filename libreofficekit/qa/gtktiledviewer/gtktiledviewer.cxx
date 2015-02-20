@@ -17,6 +17,7 @@
 
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 #include <LibreOfficeKit/LibreOfficeKitInit.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include "../lokdocview_quad/lokdocview_quad.h"
 
 #include <com/sun/star/awt/Key.hpp>

@@ -100,7 +100,7 @@ void            lok_docview_set_part        (LOKDocView* pDocView,
 char*           lok_docview_get_part_name   (LOKDocView* pDocView,
                                              int nPart);
 void            lok_docview_set_partmode    (LOKDocView* pDocView,
-                                             LibreOfficeKitPartMode ePartMode);
+                                             int nPartMode);
 /// Sets if the viewer is actually an editor or not.
 void            lok_docview_set_edit        (LOKDocView* pDocView,
                                              gboolean bEdit);

@@ -54,6 +54,7 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <touch/touch.h>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <paintfrm.hxx>
 
 // Here static members are defined. They will get changed on alteration of the

@@ -44,7 +44,7 @@ public:
     inline LibreOfficeKitDocument *get() { return mpDoc; }
 
 #ifdef LOK_USE_UNSTABLE_API
-    inline LibreOfficeKitDocumentType getDocumentType()
+    inline int getDocumentType()
     {
         return mpDoc->pClass->getDocumentType(mpDoc);
     }

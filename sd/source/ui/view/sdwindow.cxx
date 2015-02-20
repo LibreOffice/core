@@ -40,6 +40,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 namespace sd {
 

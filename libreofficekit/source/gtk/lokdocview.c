@@ -13,7 +13,7 @@
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.h>
-
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <LibreOfficeKit/LibreOfficeKitGtk.h>
 
 #if !GLIB_CHECK_VERSION(2,32,0)
@@ -713,9 +713,9 @@ SAL_DLLPUBLIC_EXPORT char* lok_docview_get_part_name( LOKDocView* pDocView, int 
 }
 
 SAL_DLLPUBLIC_EXPORT void lok_docview_set_partmode( LOKDocView* pDocView,
-                                                    LibreOfficeKitPartMode ePartMode )
+                                                    int nPartMode )
 {
-    pDocView->pDocument->pClass->setPartMode( pDocView->pDocument, ePartMode );
+    pDocView->pDocument->pClass->setPartMode( pDocView->pDocument, nPartMode );
     renderDocument(pDocView, NULL);
 }
 
