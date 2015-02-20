@@ -239,7 +239,7 @@ bootstrap: compilerplugins
 #       with some translations like "build"->"all" for historic reasons
 #
 build: bootstrap fetch $(if $(CROSS_COMPILING),cross-toolset)
-ifneq ($(filter-out WNT MACOSX IOS ANDROID,$(OS)),)
+ifneq ($(filter-out WNT MACOSX IOS,$(OS)),)
 	mkdir -p $(INSTDIR)
 	$(SRCDIR)/solenv/bin/install-gdb-printers -a $(INSTDIR) -c
 endif
