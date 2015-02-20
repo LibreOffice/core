@@ -80,8 +80,6 @@
 #endif
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-// later -> TOOLS\STRING.H (for Grep: WS_TARGET)
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;

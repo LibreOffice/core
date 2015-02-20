@@ -160,13 +160,6 @@ bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
     return bValid;
 }
 
-
-
-
-// Should later be moved to TOOLS/STRING (Current: 303)
-// for Grep: WS_TARGET
-
-
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
         { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
