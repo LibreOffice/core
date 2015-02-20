@@ -66,6 +66,9 @@ ERROR: Could not extract package's data directory. Are you sure that
 and the "pending breakpoints do not work" problems are now resolved with the
 current NDK.
 
+Building with all symbols is also possible but the linking is slow (around 10
+to 15 minutes) and you need lots of memory (around 16GB + some swap).
+
 * Common Errors / Gotchas
 
 lo_dlneeds: Could not read ELF header of /data/data/org.libreoffice...libfoo.so
