@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_b77108e3",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1721,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-20T21:39:34Z",
+      "side": 1,
+      "message": "Please use 4 spaces indentation instead of 2.",
+      "revId": "16d258f91d31912dd7e8ecced68a536a5bfd7698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_1781d48f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1726,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-20T21:39:34Z",
+      "side": 1,
+      "message": "For \"E+009\" this creates and assigns two new strings, of which one is immediately replaced. It would be better to check in advance if one or two 0 need to be removed and do that in one pass.",
+      "revId": "16d258f91d31912dd7e8ecced68a536a5bfd7698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_d7491c90",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1734,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-20T21:39:34Z",
+      "side": 1,
+      "message": "Here we create an OUString from an OUStringBuffer, modify the OUString and then assign it to the OUStringBuffer again. That\u0027s a waste of resources. Instead, the OUStringBuffer should be modified because that already is a buffer, and not an immutable string that needs to be copied to be modified.\n\nSo actually the lcl_RemoveZerosInExponent(OUString \u0026) should call lcl_RemoveZerosInExponent(OUStringBuffer \u0026) instead.",
+      "revId": "16d258f91d31912dd7e8ecced68a536a5bfd7698",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
