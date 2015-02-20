@@ -1087,15 +1087,15 @@ Reference<XComponentContext> raise_uno_process(
     // javavm service uses unorc next to executable to retrieve deployed
     // jar typelibs
 
-    ::std::vector<OUString> args;
+    ::std::vector<OUString> args{
 #if OSL_DEBUG_LEVEL == 0
-    args.push_back( "--quiet" );
+        "--quiet",
 #endif
-    args.push_back( "--singleaccept" );
-    args.push_back( "-u" );
-    args.push_back( connectStr );
-    // don't inherit from unorc:
-    args.push_back( "-env:INIFILENAME=" );
+        "--singleaccept",
+        "-u",
+        connectStr,
+        // don't inherit from unorc:
+        "-env:INIFILENAME=" };
 
     //now add the bootstrap variables which were supplied on the command line
     ::std::vector<OUString> bootvars = getCmdBootstrapVariables();
