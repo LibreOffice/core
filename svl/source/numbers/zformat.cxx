@@ -1711,27 +1711,27 @@ OUString SvNumberformat::StripNewCurrencyDelimiters( const OUString& rStr,
     return aTmp;
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& OutString)
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUStringBuffer& rOutString)
 {
     OUString sTemp;
     ImpGetOutputStandard(fNumber, sTemp);
-    OutString = sTemp;
+    rOutString = sTemp;
 }
 
-void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& OutString)
+void SvNumberformat::ImpGetOutputStandard(double& fNumber, OUString& rOutString)
 {
     sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
 
     if ( fabs(fNumber) > 1.0E15 ) // #58531# was E16
     {
         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
-        OutString = ::rtl::math::doubleToUString( fNumber,
-                                                  rtl_math_StringFormat_E, nStandardPrec /*2*/,
+        rOutString = ::rtl::math::doubleToUString( fNumber,
+                                                  rtl_math_StringFormat_E2, nStandardPrec /*2*/,
                                                   GetFormatter().GetNumDecimalSep()[0]);
     }
     else
     {
-        ImpGetOutputStdToPrecision(fNumber, OutString, nStandardPrec);
+        ImpGetOutputStdToPrecision(fNumber, rOutString, nStandardPrec);
     }
 }
 
@@ -1959,8 +1959,13 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
 {
     bool bSign = ::rtl::math::isSignBitSet(fNumber);
 
-    // 1.000E+015 (one digit and the decimal point, and the five chars for the exponential part, totalling 7).
-    sal_uInt16 nPrec = nCharCount > 7 ? nCharCount - 7 : 0;
+    // 1.000E+015 (one digit and the decimal point, and the two chars +
+    // nExpDigit for the exponential part, totalling 6 or 7).
+    double fExp = log10( fabs(fNumber) );
+    if( fExp < 0.0 )
+      fExp = 1.0 - fExp;
+    sal_uInt16 nCharFormat = 6 + (fExp >= 100.0 ? 1 : 0);
+    sal_uInt16 nPrec = nCharCount > nCharFormat ? nCharCount - nCharFormat : 0;
     if (nPrec && bSign)
     {
         // Make room for the negative sign.
@@ -1968,7 +1973,7 @@ void lcl_GetOutputStringScientific(double fNumber, sal_uInt16 nCharCount,
     }
     nPrec = ::std::min(nPrec, static_cast<sal_uInt16>(14)); // limit to 14 decimals.
 
-    rOutString = ::rtl::math::doubleToUString(fNumber, rtl_math_StringFormat_E,
+    rOutString = ::rtl::math::doubleToUString(fNumber, rtl_math_StringFormat_E2,
                                               nPrec, rFormatter.GetNumDecimalSep()[0]);
 }
 
@@ -2129,7 +2134,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                         sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
                         nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
                         sBuff = ::rtl::math::doubleToUString( fNumber,
-                                                              rtl_math_StringFormat_E, nStandardPrec /*2*/,
+                                                              rtl_math_StringFormat_E2, nStandardPrec /*2*/,
                                                               GetFormatter().GetNumDecimalSep()[0], true);
                     }
                 }

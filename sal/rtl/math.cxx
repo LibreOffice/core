@@ -368,13 +368,20 @@ inline void doubleToString(StringT ** pResult,
         }
         break;
         case rtl_math_StringFormat_G :
+        case rtl_math_StringFormat_G1 :
+        case rtl_math_StringFormat_G2 :
         {   // G-Point, similar to sprintf %G
             if ( nDecPlaces == rtl_math_DecimalPlaces_DefaultSignificance )
                 nDecPlaces = 6;
             if ( nExp < -4 || nExp >= nDecPlaces )
             {
                 nDecPlaces = std::max< sal_Int32 >( 1, nDecPlaces - 1 );
-                eFormat = rtl_math_StringFormat_E;
+                if( eFormat == rtl_math_StringFormat_G )
+                    eFormat = rtl_math_StringFormat_E;
+                else if( eFormat == rtl_math_StringFormat_G2 )
+                    eFormat = rtl_math_StringFormat_E2;
+                else if( eFormat == rtl_math_StringFormat_G1 )
+                    eFormat = rtl_math_StringFormat_E1;
             }
             else
             {
@@ -593,9 +600,9 @@ inline void doubleToString(StringT ** pResult,
     }
 
     // Print the exponent ('E', followed by '+' or '-', followed by exactly
-    // three digits).  The code in rtl_[u]str_valueOf{Float|Double} relies on
-    // this format.
-    if( eFormat == rtl_math_StringFormat_E )
+    // three digits for rtl_math_StringFormat_E).  The code in
+    // rtl_[u]str_valueOf{Float|Double} relies on this format.
+    if( eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || eFormat == rtl_math_StringFormat_E1 )
     {
         if ( p == pBuf )
             *p++ = static_cast< typename T::Char >('1');
@@ -608,12 +615,13 @@ inline void doubleToString(StringT ** pResult,
         }
         else
             *p++ = static_cast< typename T::Char >('+');
-//      if (nExp >= 100 )
-        *p++ = static_cast< typename T::Char >(
-            nExp / 100 + static_cast< typename T::Char >('0') );
+        if ( eFormat == rtl_math_StringFormat_E || nExp >= 100 )
+            *p++ = static_cast< typename T::Char >(
+                nExp / 100 + static_cast< typename T::Char >('0') );
         nExp %= 100;
-        *p++ = static_cast< typename T::Char >(
-            nExp / 10 + static_cast< typename T::Char >('0') );
+        if ( eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || nExp >= 10 )
+            *p++ = static_cast< typename T::Char >(
+                nExp / 10 + static_cast< typename T::Char >('0') );
         *p++ = static_cast< typename T::Char >(
             nExp % 10 + static_cast< typename T::Char >('0') );
     }
