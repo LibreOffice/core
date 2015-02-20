@@ -1101,8 +1101,17 @@ Reference<XComponentContext> raise_uno_process(
     ::std::vector<OUString> bootvars = getCmdBootstrapVariables();
     args.insert(args.end(), bootvars.begin(), bootvars.end());
 
-    oslProcess hProcess = raiseProcess(
-        url, comphelper::containerToSequence(args) );
+    oslProcess hProcess;
+    try {
+        hProcess = raiseProcess(
+            url, comphelper::containerToSequence(args) );
+    }
+    catch (...) {
+        OUString sMsg = "error starting process: " + url;
+        for(auto arg : args)
+            sMsg += " " + arg;
+        throw uno::RuntimeException(sMsg);
+    }
     try {
         return Reference<XComponentContext>(
             resolveUnoURL( connectStr, xContext, abortChannel.get() ),
