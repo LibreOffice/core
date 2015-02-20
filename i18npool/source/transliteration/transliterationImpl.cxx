@@ -326,9 +326,17 @@ TransliterationImpl::transliterate( const OUString& inStr, sal_Int32 startPos, s
 
             nCount = tmpStr.getLength();
 
+            assert(off[from].getLength() == nCount);
             tmp = from; from = to; to = tmp;
+            // tdf#89665: don't use operator[] to write - too slow!
+            // interestingly gcc 4.9 -Os won't even inline the const operator[]
+            sal_Int32 const*const pFrom(off[from].getConstArray());
+            sal_Int32 *const pTo(off[to].getArray());
             for (sal_Int32 j = 0; j < nCount; j++)
-                off[to][j] = off[from][off[to][j]];
+            {
+                assert(pTo[j] < off[from].getLength());
+                pTo[j] = pFrom[pTo[j]];
+            }
         }
         offset = off[to];
         return tmpStr;
