@@ -53,6 +53,26 @@ enum rtl_math_StringFormat
      */
     rtl_math_StringFormat_Automatic,
 
+    /** Same 'E', but with only 1 minimum digits in exponent.
+        @since LibreOffice 4.5
+     */
+    rtl_math_StringFormat_E1,
+
+    /** Same 'E', but with only 2 minimum digits in exponent.
+        @since LibreOffice 4.5
+     */
+    rtl_math_StringFormat_E2,
+
+    /** Same 'G', but with only 1 minimum digits in exponent.
+        @since LibreOffice 4.5
+     */
+    rtl_math_StringFormat_G1,
+
+    /** Same 'G', but with only 2 minimum digits in exponent.
+        @since LibreOffice 4.5
+     */
+    rtl_math_StringFormat_G2,
+
     /** @cond INTERNAL */
     rtl_math_StringFormat_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
     /** @endcond */
