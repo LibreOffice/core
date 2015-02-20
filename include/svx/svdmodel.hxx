@@ -37,6 +37,7 @@
 #include <svx/xtable.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
+#include <vcl/ITiledRenderable.hxx>
 
 class OutputDevice;
 #include <svx/svdtypes.hxx>
@@ -171,6 +172,8 @@ protected:
     OutputDevice*   pRefOutDev;     // ReferenceDevice for the EditEngine
     /// Set if we are doing tiled rendering.
     bool mbTiledRendering;
+    LibreOfficeKitCallback mpLibreOfficeKitCallback;
+    void* mpLibreOfficeKitData;
     sal_uIntPtr           nProgressAkt;   // for the
     sal_uIntPtr           nProgressMax;   // ProgressBar-
     sal_uIntPtr           nProgressOfs;   // -Handler
@@ -338,6 +341,10 @@ public:
     void setTiledRendering(bool bTiledRendering);
     /// Are we doing tiled rendering?
     bool isTiledRendering() const;
+    /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+    /// Invokes the registered callback, if there are any.
+    void libreOfficeKitCallback(int nType, const char* pPayload) const;
     // If a new MapMode is set on the RefDevice (or similar)
     void                 RefDeviceChanged(); // not yet implemented
     // default font heigth in logical units

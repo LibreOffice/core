@@ -137,8 +137,6 @@ ViewShell::ViewShell( SfxViewFrame*, vcl::Window* pParentWindow, ViewShellBase& 
 :   SfxShell(&rViewShellBase)
 ,   mbCenterAllowed(bAllowCenter)
 ,   mpParentWindow(pParentWindow)
-,   mpLibreOfficeKitCallback(0)
-,   mpLibreOfficeKitData(0)
 {
     construct();
 }
@@ -1448,18 +1446,6 @@ void ViewShell::fireSwitchCurrentPage(sal_Int32 pageIndex)
 void ViewShell::NotifyAccUpdate( )
 {
     GetViewShellBase().GetDrawController().NotifyAccUpdate();
-}
-
-void ViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
-{
-    mpLibreOfficeKitCallback = pCallback;
-    mpLibreOfficeKitData = pData;
-}
-
-void ViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
-{
-    if (mpLibreOfficeKitCallback)
-        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
 }
 
 } // end of namespace sd

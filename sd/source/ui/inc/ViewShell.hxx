@@ -23,7 +23,6 @@
 #include <rtl/ref.hxx>
 
 #include <vcl/field.hxx>
-#include <vcl/ITiledRenderable.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/prntypes.hxx>
 #include <svtools/transfer.hxx>
@@ -444,11 +443,6 @@ public:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1);
 
-    /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API for Impress.
-    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
-    /// Invokes the registered callback, if there are any.
-    void libreOfficeKitCallback(int nType, const char* pPayload) const;
-
     class Implementation;
 
 protected:
@@ -582,9 +576,6 @@ private:
     /** Create the rulers.
     */
     void SetupRulers (void);
-
-    LibreOfficeKitCallback mpLibreOfficeKitCallback;
-    void* mpLibreOfficeKitData;
 };
 
 SdrView* ViewShell::GetDrawView (void) const

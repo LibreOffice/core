@@ -992,7 +992,7 @@ void Window::LogicInvalidate(const ::vcl::Region* pRegion)
         sRectangle = "EMPTY";
     else
         sRectangle = pRegion->GetBoundRect().toString();
-    mpViewShell->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    mpViewShell->GetDoc()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 } // end of namespace sd
