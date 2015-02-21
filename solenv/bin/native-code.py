@@ -24,7 +24,6 @@ core_factory_list = [
     ("libembobj.a", "embobj_component_getFactory"),
     ("libevtattlo.a", "evtatt_component_getFactory"),
     ("libreflectionlo.a", "reflection_component_getFactory"),
-    ("libstocserviceslo.a", "stocservices_component_getFactory"),
     ("libcomphelper.a", "comphelp_component_getFactory"),
     ("libconfigmgrlo.a", "configmgr_component_getFactory"),
     ("libdrawinglayerlo.a", "drawinglayer_component_getFactory"),
@@ -90,6 +89,7 @@ core_constructor_list = [
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
+    "com_sun_star_comp_forms_FormOperations_get_implementation",
     "com_sun_star_form_OCheckBoxControl_get_implementation",
     "com_sun_star_form_OCheckBoxModel_get_implementation",
     "com_sun_star_form_OComboBoxControl_get_implementation",
@@ -137,8 +137,14 @@ core_constructor_list = [
 # sfx2/util/sfx.component
     "SfxDocumentMetaData_get_implementation",
     "com_sun_star_comp_office_FrameLoader_get_implementation",
+    "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
+# stoc/util/stocservices.component
+    "com_sun_star_comp_stoc_TypeConverter_get_implementation",
+    "com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation",
+    "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
+    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
 # svtools/util/svt.component
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
