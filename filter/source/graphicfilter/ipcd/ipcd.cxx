@@ -281,12 +281,12 @@ void PCDReader::ReadImage(sal_uLong nMinPercent, sal_uLong nMaxPercent)
             }
         }
 
-        // loop trough both rows of the pair of rows:
+        // loop through both rows of the pair of rows:
         for ( ndy = 0; ndy < 2; ndy++ )
         {
             ny = ( nYPair << 1 ) + ndy;
 
-            // loop trough X:
+            // loop through X:
             for ( nx = 0; nx < nWidth; nx++ )
             {
                 // get/calculate nL,nCb,nCr for the pixel nx,ny:

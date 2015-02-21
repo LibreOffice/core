@@ -511,7 +511,7 @@ void OStatement_Base::GetAssignValues()
         return;
     else if (SQL_ISRULE(m_pParseTree,insert_statement))
     {
-        // Create Row for the values to be set (Reference trough new)
+        // Create Row for the values to be set (Reference through new)
         if(m_aAssignValues.is())
             m_aAssignValues->get().clear();
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();

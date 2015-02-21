@@ -969,7 +969,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
             for ( nc = 0; nc < 4; nc++ )
                 pComp[ nc ] = new sal_uInt8[ nWidth ];
 
-            // loop trough rows:
+            // loop through rows:
             for ( ny = 0; ny < nHeight; ny++ )
             {
                 // read line ny of source into the intermediate data structure
@@ -991,7 +991,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 else
                     pPict->WriteUChar( 0 );
 
-                // loop trough components:
+                // loop through components:
                 for ( nc = 0; nc < 4; nc++ )
                 {
                     // loop through x:
@@ -1146,7 +1146,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
         // remember position of the map-data in the target:
         nDstMapPos=pPict->Tell();
 
-        // loop trough rows:
+        // loop through rows:
         for ( ny = 0; ny < nHeight; ny++ )
         {
             // read line ny of source into the buffer:
@@ -1186,7 +1186,7 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                 else
                     pPict->WriteUChar( 0 );
 
-                // loop trough bytes of the row:
+                // loop through bytes of the row:
                 nx=0;
                 while ( nx < nDstRowBytes && bStatus )
                 {

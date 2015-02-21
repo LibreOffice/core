@@ -99,7 +99,7 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
 
 //! Extracts Basic Codes containted in <bascode> tags.
 /*!
- *  For each <bascode> this method iterates trough it's <paragraph> tags and "inserts" <item> tags according
+ *  For each <bascode> this method iterates through it's <paragraph> tags and "inserts" <item> tags according
  *  to the Basic code syntax found in that paragraph.
  */
 void BasicCodeTagger::tagBasCodeParagraphs()

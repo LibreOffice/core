@@ -957,7 +957,7 @@ BaseContent::setPropertyValues(
                 ret[i] <<= e;
             }
 
-            // NameChanges come back trough a ContentEvent
+            // NameChanges come back through a ContentEvent
             break; // only handling Title
         } // end for
 

@@ -219,7 +219,7 @@ private:
 
         @throw      Any suitable exception if stream should be opened but operation was not successful.
                     Note: If an interactionHandler is part of the given descriptor too, it was already used.
-                    Means: let the exception pass trough the top most interface method!
+                    Means: let the exception pass through the top most interface method!
      */
     void impl_openStream(utl::MediaDescriptor& rDescriptor)
         throw (css::uno::Exception);

@@ -136,7 +136,7 @@ class BaseContainer : public BaseLock
 
             @descr  Because an outside class must use ImplInheritanceHelper2 template to
                     use us a base class ... and there is no way to pass such initializing
-                    parameters trough a required default ctor ... we must be initialized
+                    parameters through a required default ctor ... we must be initialized
                     by this special method. Of course this method must be called first before
                     any other interface method is used.
 
