@@ -173,7 +173,6 @@ public:
 
     void                TryToSwapIn();
     void                GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 };
 
@@ -369,19 +368,6 @@ void GraphicCacheEntry::GraphicObjectWasSwappedOut( const GraphicObject& /*rObj*
         // #119176# also reset SvgData
         maSvgData.reset();
     }
-}
-
-bool GraphicCacheEntry::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
-{
-    bool bRet = false;
-
-    if( !mbSwappedAll && rObj.IsSwappedOut() )
-    {
-        ImplFillSubstitute( rSubstitute );
-        bRet = true;
-    }
-
-    return bRet;
 }
 
 void GraphicCacheEntry::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
@@ -985,16 +971,6 @@ void GraphicCache::GraphicObjectWasSwappedOut( const GraphicObject& rObj )
 
     if( pEntry )
         pEntry->GraphicObjectWasSwappedOut( rObj );
-}
-
-bool GraphicCache::FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
-{
-    GraphicCacheEntry* pEntry = ImplGetCacheEntry( rObj );
-
-    if( !pEntry )
-        return false;
-
-    return pEntry->FillSwappedGraphicObject( rObj, rSubstitute );
 }
 
 void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )

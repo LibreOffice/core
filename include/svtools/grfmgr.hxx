@@ -592,10 +592,6 @@ private:
 
                     // Only used in swap case by GraphicObject
     void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    bool SVT_DLLPRIVATE ImplFillSwappedGraphicObject(
-                            const GraphicObject& rObj,
-                            Graphic& rSubstitute
-                        );
     void SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
     OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;

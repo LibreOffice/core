@@ -74,7 +74,6 @@ public:
     void                    ReleaseGraphicObject( const GraphicObject& rObj );
 
     void                    GraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    bool                FillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void                    GraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
     OString            GetUniqueID( const GraphicObject& rObj ) const;
