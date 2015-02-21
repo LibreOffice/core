@@ -17,9 +17,6 @@
 namespace vcl {
 
 /*static*/ const OUString
-IconThemeSelector::HIGH_CONTRAST_ICON_THEME_ID("hicontrast");
-
-/*static*/ const OUString
 IconThemeSelector::FALLBACK_ICON_THEME_ID("tango");
 
 namespace {
@@ -99,8 +96,8 @@ IconThemeSelector::SelectIconTheme(
         const OUString& theme) const
 {
     if (mUseHighContrastTheme) {
-        if (icon_theme_is_in_installed_themes(HIGH_CONTRAST_ICON_THEME_ID, installedThemes)) {
-            return HIGH_CONTRAST_ICON_THEME_ID;
+        if (icon_theme_is_in_installed_themes(IconThemeInfo::HIGH_CONTRAST_ID, installedThemes)) {
+            return IconThemeInfo::HIGH_CONTRAST_ID;
         }
     }
 
