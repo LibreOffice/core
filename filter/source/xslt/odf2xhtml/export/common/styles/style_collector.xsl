@@ -209,7 +209,7 @@
 		<xsl:copy-of select="$documentLinks/styles-file/*/office:styles" />
 		<xsl:copy-of select="$documentLinks/styles-file/*/office:font-face-decls" />
 
-		<!-- office:automatic-styles may be containted in two files (i.e. content.xml and styles.xml).
+		<!-- office:automatic-styles may be contained in two files (i.e. content.xml and styles.xml).
 			 Wild card necessary as top level element differs from flat office files ("SampleName.fsxw") -->
 		<xsl:copy-of select="/*/office:automatic-styles" />
 
