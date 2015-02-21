@@ -13,3 +13,14 @@ diff -ur jpeg.org/simd/Makefile.in jpeg/simd/Makefile.in
  # Tell versions [3.59,3.63) of GNU make to not export all variables.
  # Otherwise a system limit (for SysV at least) may be exceeded.
  .NOEXPORT:
+--- jpeg-turbo/configure.orig	2015-02-21 19:44:23.639600000 +0100
++++ jpeg-turbo/configure	2015-02-21 19:44:33.764000000 +0100
+@@ -1847,7 +1847,7 @@
+ else
+   cat >conftest.make <<\_ACEOF
+ all:
+-	@echo 'ac_maketemp="$(MAKE)"'
++	@echo 'ac_maketemp=$(MAKE)'
+ _ACEOF
+ # GNU make sometimes prints "make[1]: Entering...", which would confuse us.
+ eval `${MAKE-make} -f conftest.make 2>/dev/null | grep temp=`
