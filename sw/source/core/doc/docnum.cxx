@@ -562,11 +562,10 @@ bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     return MoveParagraph( aPam, nOffs, true );
 }
 
-static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const OUString& rName,
+static sal_uInt16 lcl_FindOutlineName( const SwOutlineNodes& rOutlNds, const OUString& rName,
                             bool bExact )
 {
     sal_uInt16 nSavePos = USHRT_MAX;
-    const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     for( SwOutlineNodes::size_type n = 0; n < rOutlNds.size(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
@@ -590,7 +589,7 @@ static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const OUString& rNam
     return nSavePos;
 }
 
-static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, OUString& rName )
+static sal_uInt16 lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString& rName )
 {
     // Valid numbers are (always just offsets!):
     //  ([Number]+\.)+  (as a regular expression!)
@@ -633,11 +632,12 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, OUString& rName )
     rName = sName;      // that's the follow-up text
 
     // read all levels, so search the document for this outline
-    const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
+
     // Without OutlineNodes searching doesn't pay off
     // and we save a crash
     if( rOutlNds.empty() )
         return USHRT_MAX;
+
     SwTxtNode* pNd;
     nPos = 0;
     // search in the existing outline nodes for the required outline num array
@@ -700,7 +700,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
 
         // 1. step: via the Number:
         OUString sName( rName );
-        sal_uInt16 nFndPos = ::lcl_FindOutlineNum( GetNodes(), sName );
+        sal_uInt16 nFndPos = ::lcl_FindOutlineNum( rOutlNds, sName );
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
@@ -720,7 +720,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
 
             if( sExpandedText != sName )
             {
-                sal_uInt16 nTmp = ::lcl_FindOutlineName( GetNodes(), sName, true );
+                sal_uInt16 nTmp = ::lcl_FindOutlineName( rOutlNds, sName, true );
                 if( USHRT_MAX != nTmp )             // found via the Name
                 {
                     nFndPos = nTmp;
@@ -732,7 +732,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
             return true;
         }
 
-        nFndPos = ::lcl_FindOutlineName( GetNodes(), rName, false );
+        nFndPos = ::lcl_FindOutlineName( rOutlNds, rName, false );
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
@@ -744,7 +744,7 @@ bool SwDoc::GotoOutline( SwPosition& rPos, const OUString& rName ) const
         // #i68289# additional search on hyperlink URL without its outline numbering part
         if ( sName != rName )
         {
-            nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, false );
+            nFndPos = ::lcl_FindOutlineName( rOutlNds, sName, false );
             if( USHRT_MAX != nFndPos )
             {
                 SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
