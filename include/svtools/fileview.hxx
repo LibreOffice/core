@@ -99,7 +99,7 @@ public:
     void                    SetSortColumn( bool bValue ) { bSortColumn = bValue; }
     bool                    GetSortColumn() { return bSortColumn; }
 
-    /** initialize the view with the content of a folder given by URL, and aply an immediate filter
+    /** initialize the view with the content of a folder given by URL, and apply an immediate filter
 
         @param rFolderURL
             the URL of the folder whose content is to be read
