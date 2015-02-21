@@ -1281,6 +1281,17 @@ void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_
     m_rWW8Export.Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::LN_CBrc80, NS_sprm::LN_CBrc, bShadow );
 }
 
+void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
+{
+    if( m_rWW8Export.bWrtWW8 && rBrush.GetColor() != COL_TRANSPARENT )
+    {
+        sal_uInt8 nColor = m_rWW8Export.TransCol( rBrush.GetColor() );
+        // sprmCHighlight
+        m_rWW8Export.InsUInt16( NS_sprm::LN_CHighlight );
+        m_rWW8Export.pO->push_back( nColor );
+    }
+}
+
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
 {
     if ( m_rWW8Export.bWrtWW8 )
