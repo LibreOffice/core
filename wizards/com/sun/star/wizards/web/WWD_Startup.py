@@ -308,7 +308,7 @@ class WWD_Startup(WWD_General):
         for index,item in enumerate(sessions):
             self.settings.savedSessions.add(index, item)
             # add an empty session to the saved session
-            # list which apears in step 1
+            # list which appears in step 1
         sn = CGSessionName()
         sn.cp_Name = self.resources.resSessionNameNone
         self.settings.cp_SavedSessions.add(0, sn)

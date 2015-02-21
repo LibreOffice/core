@@ -269,7 +269,7 @@ class AgendaDocument(TextDocument):
     date of the document (which is document-specific).<br/>
     Initializes the Items Cache map.
     Analyses the document:<br/>
-    -find all "fille-ins" (apear as &gt;xxx&lt; in the document).
+    -find all "fille-ins" (appear as &gt;xxx&lt; in the document).
     -analyze all items sections (and the tables in them).
     -locate the titles and actualize them
     -analyze the topics table
