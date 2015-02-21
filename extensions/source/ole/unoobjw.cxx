@@ -318,7 +318,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 // "_GetValueObject() or Bridge_GetValueObject()" on an UNO wrapper object (class InterfaceOleWrapper_Impl).
 // A value object is appropriately initialized within the script and passed as
 // parameter to an UNO object method or property. The convertDispparamsArgs function
-// can easily find out that a param is such an object by queriing for the
+// can easily find out that a param is such an object by querying for the
 // IJScriptValue interface. By this interface one the type and kind ( out, in/out)
 // can be determined and the right conversion can be applied.
 // Using ValueObjects we spare us the effort of acquiring and examining type information
