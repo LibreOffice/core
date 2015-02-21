@@ -566,9 +566,9 @@ static SwTxtNode* lcl_FindOutlineName( const SwOutlineNodes& rOutlNds, const OUS
                             bool bExact )
 {
     SwTxtNode* pSavedNode = nullptr;
-    for( SwOutlineNodes::size_type n = 0; n < rOutlNds.size(); ++n )
+    for( auto pOutlNd : rOutlNds )
     {
-        SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
+        SwTxtNode* pTxtNd = pOutlNd->GetTxtNode();
         const OUString sTxt( pTxtNd->GetExpandTxt() );
         if (sTxt.startsWith(rName))
         {
@@ -601,22 +601,25 @@ static SwTxtNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString& 
 
     sal_uInt16 nLevelVal[ MAXLEVEL ];       // numbers of all levels
     memset( nLevelVal, 0, MAXLEVEL * sizeof( nLevelVal[0] ));
-    sal_uInt8 nLevel = 0;
+    int nLevel = 0;
     OUString sName( rName );
 
     while( -1 != nPos )
     {
         sal_uInt16 nVal = 0;
-        sal_Unicode c;
         for( sal_Int32 n = 0; n < sNum.getLength(); ++n )
-            if( '0' <= ( c = sNum[ n ]) && c <= '9' )
+        {
+            const sal_Unicode c {sNum[ n ]};
+            if( '0' <= c && c <= '9' )
             {
-                nVal *= 10;  nVal += c - '0';
+                nVal *= 10;
+                nVal += c - '0';
             }
             else if( nLevel )
                 break;                      // "almost" valid number
             else
                 return nullptr;             // invalid number!
+        }
 
         if( MAXLEVEL > nLevel )
             nLevelVal[ nLevel++ ] = nVal;
@@ -626,7 +629,7 @@ static SwTxtNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString& 
         sNum = sName.getToken( 0, '.', nPos );
         // #i4533# without this check all parts delimited by a dot are treated as outline numbers
         if(!comphelper::string::isdigitAsciiString(sNum))
-            nPos = -1;
+            break;
     }
     rName = sName;      // that's the follow-up text
 
@@ -637,32 +640,26 @@ static SwTxtNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString& 
     if( rOutlNds.empty() )
         return nullptr;
 
-    SwTxtNode* pNd;
-    nPos = 0;
     // search in the existing outline nodes for the required outline num array
-    for( ; nPos < (sal_Int32) rOutlNds.size(); ++nPos )
+    for( auto pOutlNd : rOutlNds )
     {
-        pNd = rOutlNds[ nPos ]->GetTxtNode();
-        const int nLvl = pNd->GetAttrOutlineLevel()-1;
-        if( nLvl == nLevel - 1)
+        SwTxtNode* pNd = pOutlNd->GetTxtNode();
+        if ( pNd->GetAttrOutlineLevel() == nLevel )
         {
             // #i51089#, #i68289#
             // Assure, that text node has the correct numbering level. Otherwise,
             // its number vector will not fit to the searched level.
-            if ( pNd->GetNum() &&
-                 pNd->GetActualListLevel() == ( nLevel - 1 ) )
+            if ( pNd->GetNum() && pNd->GetActualListLevel() == nLevel - 1 )
             {
                 const SwNodeNum & rNdNum = *(pNd->GetNum());
                 SwNumberTree::tNumberVector aLevelVal = rNdNum.GetNumberVector();
                 // now compare with the one searched for
-                bool bEqual = true;
-                for( sal_uInt8 n = 0; (n < nLevel) && bEqual; ++n )
+                for( int n = 0; n < nLevel; ++n )
                 {
-                    bEqual = aLevelVal[n] == nLevelVal[n];
-                }
-                if(bEqual)
-                {
-                    break;
+                    if ( aLevelVal[n] == nLevelVal[n] )
+                    {
+                        return pNd;
+                    }
                 }
             }
             else
@@ -676,10 +673,8 @@ static SwTxtNode* lcl_FindOutlineNum( const SwOutlineNodes& rOutlNds, OUString& 
             }
         }
     }
-    if( nPos >= (sal_Int32) rOutlNds.size() )
-        return nullptr;
 
-    return rOutlNds[ nPos ]->GetTxtNode();
+    return nullptr;
 }
 
 // Add this bullet point:
