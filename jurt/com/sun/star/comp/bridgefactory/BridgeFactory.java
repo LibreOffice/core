@@ -49,7 +49,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
     static private final boolean DEBUG = false;
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through
+     * The name of the service, the <code>JavaLoader</code> accesses this through
      * reflection.
      */
     public final static String __serviceName = "com.sun.star.bridge.BridgeFactory";

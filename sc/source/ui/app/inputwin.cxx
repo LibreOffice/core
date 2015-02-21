@@ -870,7 +870,7 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
                 // find the height of the gridwin, we don't wan't to be
                 // able to expand the toolbar too far so we need to
-                // caculate an upper limit
+                // calculate an upper limit
                 // I'd prefer to leave at least a single column header and a
                 // row but I don't know how to get that value in pixels.
                 // Use TBX_WINDOW_HEIGHT for the moment

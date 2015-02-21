@@ -98,7 +98,7 @@
                 <xsl:if test="@table:is-sub-table ='true' ">
                     <w:tblW w:type="dxa">
                         <xsl:variable name="sub-table-width">
-                            <xsl:call-template name="caculate-sub-table-width">
+                            <xsl:call-template name="calculate-sub-table-width">
                                 <xsl:with-param name="sub-table-column-node" select="table:table-column[1]"/>
                                 <xsl:with-param name="total-sub-table-width" select="0"/>
                             </xsl:call-template>
@@ -137,7 +137,7 @@
             <w:p/>
         </xsl:if>
     </xsl:template>
-    <xsl:template name="caculate-sub-table-width">
+    <xsl:template name="calculate-sub-table-width">
         <xsl:param name="sub-table-column-node"/>
         <xsl:param name="total-sub-table-width"/>
         <xsl:variable name="column-width" select="key('table-column-style', $sub-table-column-node/@table:style-name)/style:table-column-properties/@style:column-width"/>
@@ -150,13 +150,13 @@
             <xsl:when test="$sub-table-column-node/following-sibling::table:table-column">
                 <xsl:choose>
                     <xsl:when test="$sub-table-column-node/@table:number-columns-repeated">
-                        <xsl:call-template name="caculate-sub-table-width">
+                        <xsl:call-template name="calculate-sub-table-width">
                             <xsl:with-param name="sub-table-column-node" select="$sub-table-column-node/following-sibling::table:table-column[ 1]"/>
                             <xsl:with-param name="total-sub-table-width" select="$total-sub-table-width + $column-width-in-twip *  $sub-table-column-node/@table:number-columns-repeated"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:call-template name="caculate-sub-table-width">
+                        <xsl:call-template name="calculate-sub-table-width">
                             <xsl:with-param name="sub-table-column-node" select="$sub-table-column-node/following-sibling::table:table-column[1]"/>
                             <xsl:with-param name="total-sub-table-width" select="$total-sub-table-width + $column-width-in-twip "/>
                         </xsl:call-template>
@@ -234,7 +234,7 @@
                     <!--when the table-cell  contains the sub-table -->
                     <xsl:when test="table:table/@table:is-sub-table= 'true' ">
                         <xsl:variable name="table-cell-width">
-                            <xsl:call-template name="caculate-sub-table-width">
+                            <xsl:call-template name="calculate-sub-table-width">
                                 <xsl:with-param name="sub-table-column-node" select="table:table/table:table-column[1]"/>
                                 <xsl:with-param name="total-sub-table-width" select="0"/>
                             </xsl:call-template>
@@ -246,7 +246,7 @@
                     <xsl:otherwise>
                         <!-- when the table-cell doesn't contain the sub-table -->
                         <xsl:variable name="table-cell-width">
-                            <xsl:call-template name="caculate-table-cell-width">
+                            <xsl:call-template name="calculate-table-cell-width">
                                 <xsl:with-param name="table-cell-position" select="position()"/>
                                 <xsl:with-param name="table-column" select="ancestor::table:table[1]/table:table-column[1]"/>
                             </xsl:call-template>
@@ -354,7 +354,7 @@
             <xsl:apply-templates select=" text:p | table:table | text:h | office:annotation"/>
         </xsl:element>
     </xsl:template>
-    <xsl:template name="caculate-table-cell-width">
+    <xsl:template name="calculate-table-cell-width">
         <xsl:param name="table-cell-position"/>
         <xsl:param name="table-column"/>
         <xsl:choose>
@@ -370,7 +370,7 @@
                         <xsl:value-of select="$table-cell-width-in-twip"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:call-template name="caculate-table-cell-width">
+                        <xsl:call-template name="calculate-table-cell-width">
                             <xsl:with-param name="table-cell-position" select="$table-cell-position - $table-column/@table:number-columns-repeated"/>
                             <xsl:with-param name="table-column" select="$table-column/following-sibling::table:table-column[1]"/>
                         </xsl:call-template>
@@ -390,14 +390,14 @@
                         <xsl:value-of select="$table-cell-width-in-twip"/>
                     </xsl:when>
                     <xsl:when test="($table-cell-position - 1) &gt; 0">
-                        <xsl:call-template name="caculate-table-cell-width">
+                        <xsl:call-template name="calculate-table-cell-width">
                             <xsl:with-param name="table-cell-position" select=" $table-cell-position - 1 "/>
                             <xsl:with-param name="table-column" select="$table-column/following-sibling::table:table-column[1]"/>
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:message>
-                            <xsl:value-of select=" 'caculate table cell width wrong ' "/>
+                            <xsl:value-of select=" 'calculate table cell width wrong ' "/>
                         </xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>

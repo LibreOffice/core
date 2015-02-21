@@ -50,7 +50,7 @@ public final class socketConnector implements XConnector {
     /**
      * The name of the service.
      *
-     * <p>The <code>JavaLoader</code> acceses this through reflection.</p>
+     * <p>The <code>JavaLoader</code> accesses this through reflection.</p>
      *
      * @see com.sun.star.comp.loader.JavaLoader
      */

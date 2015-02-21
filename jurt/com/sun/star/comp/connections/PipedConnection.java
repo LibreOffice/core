@@ -41,7 +41,7 @@ public class PipedConnection implements XConnection {
     public static final boolean DEBUG = false;
 
     /**
-     * The name of the service, the <code>JavaLoader</code> acceses this through
+     * The name of the service, the <code>JavaLoader</code> accesses this through
      * reflection.
      */
     static private final String __serviceName = "com.sun.star.connection.PipedConnection";

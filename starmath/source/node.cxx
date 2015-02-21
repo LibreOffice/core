@@ -2608,7 +2608,7 @@ void SmMatrixNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             const SmNode *pCoNode   = pTmpNode->GetLeftMost();
             RectHorAlign  eHorAlign = pCoNode->GetRectHorAlign();
 
-            // caculate horizontal position of element depending on column
+            // calculate horizontal position of element depending on column
             // and horizontal alignment
             switch (eHorAlign)
             {   case RHA_LEFT:
