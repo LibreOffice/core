@@ -142,7 +142,7 @@ bool MultiSelection::operator== ( MultiSelection& rWith )
          aSels.size() != rWith.aSels.size() )
         return false;
 
-    // compare the sub seletions
+    // compare the sub selections
     for ( size_t n = 0; n < aSels.size(); ++n )
         if ( *aSels[ n ] != *rWith.aSels[ n ] )
             return false;

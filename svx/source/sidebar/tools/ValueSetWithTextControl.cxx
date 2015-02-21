@@ -167,7 +167,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     }
 
     {
-        //draw backgroud
+        //draw background
         if ( GetSelectItemId() == nItemId )
         {
             Rectangle aBackRect = aRect;

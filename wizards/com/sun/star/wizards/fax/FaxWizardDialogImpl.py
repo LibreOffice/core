@@ -267,7 +267,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
-        #'Saludation' listbox
+        #'Salutation' listbox
         self.xDialogModel.lstSalutation.StringItemList = \
             tuple(self.resources.SalutationLabels)
 

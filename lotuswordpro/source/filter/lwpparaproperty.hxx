@@ -110,7 +110,7 @@ inline LwpParaProperty* LwpParaProperty::GetPrevious(void)
 }
 
 //align/indent/spacing
-//TO DO:border/backgroud etc
+//TO DO:border/background etc
 
 class LwpParaAlignProperty : public LwpParaProperty
 {

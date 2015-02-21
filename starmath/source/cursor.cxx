@@ -244,7 +244,7 @@ void SmCursor::Delete(){
     if(!HasSelection())
         return;
 
-    //Enter edit setion
+    //Enter edit section
     BeginEdit();
 
     //Set selected on nodes

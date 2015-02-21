@@ -76,7 +76,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
 
     /** Query the current translation offset used to fill the physical screen while keeping aspect ratio.<p>
 
-        This method returns the traslation offset of the view of the
+        This method returns the translation offset of the view of the
         view.<p>
 
         @return the slideshowview will be transformed in order to fill

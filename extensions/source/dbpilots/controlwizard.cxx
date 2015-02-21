@@ -352,7 +352,7 @@ namespace dbp
                     Reference< XController > xController = xModel->getCurrentController();
                     DBG_ASSERT(xController.is(), "OControlWizard::implDeterminePage: no current controller!");
 
-                    // maybe it's a spredsheet
+                    // maybe it's a spreadsheet
                     Reference< XSpreadsheetView > xView(xController, UNO_QUERY);
                     if (xView.is())
                     {   // okay, it is one

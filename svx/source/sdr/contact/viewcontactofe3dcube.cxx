@@ -47,7 +47,7 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
 
-            // get cube geometry and use as traslation and scaling for unit cube
+            // get cube geometry and use as translation and scaling for unit cube
             basegfx::B3DRange aCubeRange;
             const basegfx::B3DVector aCubeSize(GetE3dCubeObj().GetCubeSize());
             const basegfx::B3DPoint aCubePosition(GetE3dCubeObj().GetCubePos());
