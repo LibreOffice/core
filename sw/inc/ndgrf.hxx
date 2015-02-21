@@ -46,7 +46,6 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
 
     bool bGraphicArrived        :1;
     bool bChgTwipSize           :1;
-    bool bChgTwipSizeFromPixel  :1;
     bool bFrameInPaint          :1; ///< To avoid Start-/EndActions in Paint via SwapIn.
     bool bScaleImageMap         :1; ///< Scale image map in SetTwipSize.
 
@@ -144,11 +143,9 @@ public:
     bool IsAnimated() const              { return maGrfObj.IsAnimated(); }
 
     bool IsChgTwipSize() const           { return bChgTwipSize; }
-    bool IsChgTwipSizeFromPixel() const  { return bChgTwipSizeFromPixel; }
-    void SetChgTwipSize( bool b, bool bFromPx=false )
+    void SetChgTwipSize( bool b)
     {
         bChgTwipSize = b;
-        bChgTwipSizeFromPixel = bFromPx;
     }
 
     bool IsGraphicArrived() const        { return bGraphicArrived; }

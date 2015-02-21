@@ -53,7 +53,7 @@
 
 using namespace com::sun::star;
 
-static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd, const Size &rOrigGrfSize );
+static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size &rOrigGrfSize );
 
 TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
@@ -153,17 +153,6 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {
             aGrfSz = ::GetGraphicSizeTwip( aGrf, 0 );
-            if( pSwGrfNode->IsChgTwipSizeFromPixel() )
-            {
-                const MapMode aMapTwip( MAP_TWIP );
-                aFrmFmtSz =
-                    Application::GetDefaultDevice()->PixelToLogic(
-                        aGrf.GetSizePixel(), aMapTwip );
-            }
-            else
-            {
-                aFrmFmtSz = aGrfSz;
-            }
 
             if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
                 ( !aOldSz.Width() || !aOldSz.Height() ) )
@@ -261,13 +250,13 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                                                     IsGraphicArrived() );
 
                         // Adjust the Fly's graphic
-                        if (!::SetGrfFlySize(aGrfSz, aFrmFmtSz, pGrfNd, aPreArriveSize))
+                        if (!::SetGrfFlySize(aGrfSz, pGrfNd, aPreArriveSize))
                             ::lcl_CallModify( *pGrfNd, aMsgHint );
                     }
                     else if (pBLink == this)
                     {
                         assert(pGrfNd == pSwGrfNode && "fdo#87083 needs a different fix");
-                        if (!::SetGrfFlySize(aGrfSz, aFrmFmtSz, pGrfNd, aOldSz))
+                        if (!::SetGrfFlySize(aGrfSz, pGrfNd, aOldSz))
                         {
                             // Adjust the Fly's graphic
                             ::lcl_CallModify( *pGrfNd, aMsgHint );
@@ -300,7 +289,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     return SUCCESS;
 }
 
-static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd, const Size& rOrigGrfSize )
+static bool SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd, const Size& rOrigGrfSize )
 {
     bool bRet = false;
     SwViewShell *pSh = pGrfNd->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -319,15 +308,15 @@ static bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pG
             Size aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )
                 // Calculate the right height
-                aCalcSz.Height() = rFrmSz.Height() *
-                        aSz.Width() / rFrmSz.Width();
+                aCalcSz.Height() = rGrfSz.Height() *
+                        aSz.Width() / rGrfSz.Width();
             else if ( !aSz.Width() && aSz.Height() )
                 // Calculate the right width
-                aCalcSz.Width() = rFrmSz.Width() *
-                        aSz.Height() / rFrmSz.Height();
+                aCalcSz.Width() = rGrfSz.Width() *
+                        aSz.Height() / rGrfSz.Height();
             else
                 // Take over height and width
-                aCalcSz = rFrmSz;
+                aCalcSz = rGrfSz;
 
             const SvxBoxItem     &rBox = pFmt->GetBox();
             aCalcSz.Width() += rBox.CalcLineSpace(BOX_LINE_LEFT) +

@@ -74,7 +74,7 @@ SwGrfNode::SwGrfNode(
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
-    bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
+    bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
 
     bGraphicArrived = true;
@@ -92,7 +92,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     mbIsStreamReadOnly( false )
 {
     maGrfObj.SetSwapStreamHdl( LINK(this, SwGrfNode, SwapGraphic) );
-    bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
+    bInSwapIn = bChgTwipSize  =
         bFrameInPaint = bScaleImageMap = false;
     bGraphicArrived = true;
 }
@@ -119,7 +119,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     Graphic aGrf; aGrf.SetDefaultType();
     maGrfObj.SetGraphic( aGrf, rGrfName );
 
-    bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel =
+    bInSwapIn = bChgTwipSize =
         bFrameInPaint = bScaleImageMap = false;
     bGraphicArrived = true;
 

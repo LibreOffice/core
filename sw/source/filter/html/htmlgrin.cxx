@@ -754,7 +754,7 @@ IMAGE_SETEVENT:
         if( bSetTwipSize )
             pGrfNd->SetTwipSize( aGrfSz );
 
-        pGrfNd->SetChgTwipSize( bChangeFrmSize, bChangeFrmSize );
+        pGrfNd->SetChgTwipSize( bChangeFrmSize );
 
         if( bSetScaleImageMap )
             pGrfNd->SetScaleImageMap( true );
