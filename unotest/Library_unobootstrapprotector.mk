@@ -29,4 +29,9 @@ $(eval $(call gb_Library_add_exception_objects,unobootstrapprotector,\
 	unotest/source/cpp/unobootstrapprotector/unobootstrapprotector \
 ))
 
+# runtime dependency: needs unorc/uno.ini
+$(eval $(call gb_Library_use_package,unobootstrapprotector,\
+	instsetoo_native_setup_ure \
+))
+
 # vim: set noet sw=4 ts=4:
