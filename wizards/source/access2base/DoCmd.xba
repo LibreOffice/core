@@ -31,6 +31,7 @@ Type _Window
 	Frame					As Object		&apos;	com.sun.star.comp.framework.Frame
 	_Name					As String		&apos;	Object Name
 	WindowType				As Integer		&apos;	One of the object types
+	DocumentType			As String		&apos;	Writer, Calc, ... - Only if WindowType = acDocument
 End Type	
 
 REM VBA allows call to actions with missing arguments e.g. OpenForm(&quot;aaa&quot;,,&quot;[field]=2&quot;)
@@ -2160,7 +2161,7 @@ Public Function _SelectWindow(Optional ByVal piWindowType As Integer, Optional B
 &apos;	Return a _Window object type describing the found window
 
 Dim oEnum As Object, oDesk As Object, oComp As Object, oFrame As Object, i As Integer
-Dim bFound As Boolean, bActive As Boolean, bName As Boolean, sName As String, iType As Integer
+Dim bFound As Boolean, bActive As Boolean, sName As String, iType As Integer, sDocumentType As String
 Dim sImplementation As String, vLocation() As Variant
 Dim oWindow As _Window
 
@@ -2169,8 +2170,9 @@ Dim oWindow As _Window
 	bActive = IsMissing(piWindowType)
 	If IsMissing(psWindow) Then psWindow = &quot;&quot;
 	Set oWindow.Frame = Nothing
+	oWindow.DocumentType = &quot;&quot;
 	If bActive Then
-		oWindow.WindowType = -1
+		oWindow.WindowType = acDefault
 		oWindow._Name = &quot;&quot;
 	Else
 		oWindow.WindowType = piWindowType
@@ -2179,7 +2181,8 @@ Dim oWindow As _Window
 			Case Else							:	oWindow._Name = psWindow
 		End Select
 	End If
-	
+	iType = acDefault
+	sDocumentType = &quot;&quot;
 
 	Set oDesk = CreateUnoService(&quot;com.sun.star.frame.Desktop&quot;)
 	Set oEnum = oDesk.Components().createEnumeration
@@ -2196,7 +2199,6 @@ Dim oWindow As _Window
 				iType = acDatabaseWindow
 				sName = &quot;&quot;
 			Case &quot;SwXTextDocument&quot;
-				bName = False
 				If HasUnoInterfaces(oComp, &quot;com.sun.star.frame.XModule&quot;) Then
 					Select Case oComp.Identifier
 						Case &quot;com.sun.star.sdb.FormDesign&quot;			&apos;	Form
@@ -2205,11 +2207,11 @@ Dim oWindow As _Window
 							iType = acReport
 						Case &quot;com.sun.star.text.TextDocument&quot;		&apos;	Writer
 							vLocation = Split(oComp.getLocation(), &quot;/&quot;)
-							sName = Join(Split(vLocation(UBound(vLocation)), &quot;%20&quot;), &quot; &quot;)
-							bName = True
+							If UBound(vLocation) &gt;= 0 Then sName = Join(Split(vLocation(UBound(vLocation)), &quot;%20&quot;), &quot; &quot;) Else sName = &quot;&quot;
 							iType = acDocument
+							sDocumentType = docWriter
 					End Select
-					If Not bName Then		&apos;	Identify Form or Report name
+					If iType = acForm Or iType = acReport Then		&apos;	Identify Form or Report name
 						For i = 0 To UBound(oComp.Args())
 							If oComp.Args(i).Name = &quot;DocumentTitle&quot; Then
 								sName = oComp.Args(i).Value
@@ -2258,8 +2260,17 @@ Dim oWindow As _Window
 			Case Else		&apos;	Other Calc, ..., whatever documents
 				If Utils._hasUNOProperty(oComp, &quot;Location&quot;) Then
 					vLocation = Split(oComp.getLocation(), &quot;/&quot;)
-					sName = Join(Split(vLocation(UBound(vLocation)), &quot;%20&quot;), &quot; &quot;)
+					If UBound(vLocation) &gt;= 0 Then sName = Join(Split(vLocation(UBound(vLocation)), &quot;%20&quot;), &quot; &quot;) Else sName = &quot;&quot;
 					iType = acDocument
+					If Utils._hasUNOProperty(oComp, &quot;Identifier&quot;) Then
+						Select Case oComp.Identifier
+							Case &quot;com.sun.star.sheet.SpreadsheetDocument&quot;			:	sDocumentType = docCalc
+							Case &quot;com.sun.star.presentation.PresentationDocument&quot;	:	sDocumentType = docImpress
+							Case &quot;com.sun.star.drawing.DrawingDocument&quot;				:	sDocumentType = docDraw
+							Case &quot;com.sun.star.formula.FormulaProperties&quot;			:	sDocumentType = docMath
+							Case Else												:	sDocumentType = &quot;&quot;
+						End Select
+					End If
 					Set oFrame = oComp.CurrentController.Frame
 				End If
 		End Select
@@ -2278,6 +2289,7 @@ Dim oWindow As _Window
 		Set oWindow.Frame = oFrame
 		oWindow._Name = sName
 		oWindow.WindowType = iType
+		oWindow.DocumentType = sDocumentType
 	Else
 		Set oWindow.Frame = Nothing
 	End If

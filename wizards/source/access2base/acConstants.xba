@@ -53,6 +53,12 @@ Global Const acTable = 0
 Global Const acBasicIDE = 101
 Global Const acDatabaseWindow = 102
 Global Const acDocument = 111
+&apos;			Subtype if acDocument
+Global Const docWriter = &quot;Writer&quot;
+Global Const docCalc = &quot;Calc&quot;
+Global Const docImpress = &quot;Impress&quot;
+Global Const docDraw = &quot;Draw&quot;
+Global Const docMath = &quot;Math&quot;
 
 REM AcWindowMode
 REM -----------------------------------------------------------------
