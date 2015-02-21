@@ -620,7 +620,7 @@ public class ParcelContainer implements XNameAccess {
             String pathToParcel = PathUtils.make_url(getParcelContainerDir(), name);
             m_xSFA.kill(pathToParcel);
         } catch (Exception e) {
-            LogUtils.DEBUG("Error deleteing parcel " + name);
+            LogUtils.DEBUG("Error deleting parcel " + name);
             throw new com.sun.star.lang.WrappedTargetException(e);
         }
 

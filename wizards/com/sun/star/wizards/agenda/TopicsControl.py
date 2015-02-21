@@ -39,7 +39,7 @@ Important behaiviour of this control is that there is always a
 blank row at the end, in which the user can enter data.<br/>
 Once the row is not blank (thus, the user entered data...),
 a new blank row is added.<br/>
-Once the user removes the last *unempty* row, binsertRowy deleteing its data, it becomes
+Once the user removes the last *unempty* row, binsertRowy deleting its data, it becomes
 the *last empty row* and the one after is being automatically removed.<br/><br/>
 The contorl shows 5 rows at a time.<br/>
 If, for example, only 2 rows exist (from which the 2ed one is empty...)

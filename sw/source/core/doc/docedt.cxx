@@ -340,7 +340,7 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
             // (see sw_GetJoinFlags)
             {
                 // If PageBreaks are deleted/set, it must not be added to the Undo history!
-                // Also, deleteing the Node is not added to the Undo histroy!
+                // Also, deleting the Node is not added to the Undo histroy!
                 ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
                 /* PageBreaks, PageDesc, ColumnBreaks */

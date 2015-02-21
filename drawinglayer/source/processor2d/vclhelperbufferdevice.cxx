@@ -40,7 +40,7 @@ namespace
         // available buffers
         aBuffers            maFreeBuffers;
 
-        // allocated/used buffers (remembered to allow deleteing them in destructor)
+        // allocated/used buffers (remembered to allow deleting them in destructor)
         aBuffers            maUsedBuffers;
 
     public:

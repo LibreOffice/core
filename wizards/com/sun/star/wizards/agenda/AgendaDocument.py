@@ -691,7 +691,7 @@ class ItemsTable(object):
             return
 
         '''
-        now before deleteing i move the cursor up so it
+        now before deleting i move the cursor up so it
         does not disappear, because it will crash office.
         '''
         cursor.gotoStart(False)
