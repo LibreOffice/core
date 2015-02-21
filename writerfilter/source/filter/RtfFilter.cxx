@@ -17,20 +17,64 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <RtfFilter.hxx>
-#include <cppuhelper/implementationentry.hxx>
-#include <unotools/mediadescriptor.hxx>
-#include <cppuhelper/supportsservice.hxx>
-#include <dmapper/DomainMapperFactory.hxx>
-#include <rtftok/RTFDocument.hxx>
+#include <memory>
+
+#include <com/sun/star/document/XExporter.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#include <memory>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <cppuhelper/implbase.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+
+#include <dmapper/DomainMapperFactory.hxx>
+#include <rtftok/RTFDocument.hxx>
 
 using namespace ::com::sun::star;
+
+/// Invokes the RTF tokenizer + dmapper or RtfExportFilter in sw via UNO.
+class RtfFilter : public cppu::WeakImplHelper
+    <
+    document::XFilter,
+    document::XImporter,
+    document::XExporter,
+    lang::XInitialization,
+    lang::XServiceInfo
+    >
+{
+    uno::Reference<uno::XComponentContext> m_xContext;
+    uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
+
+public:
+    RtfFilter(const uno::Reference<uno::XComponentContext>& xContext);
+    virtual ~RtfFilter();
+
+    // XFilter
+    virtual sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XImporter
+    virtual void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XInitialization
+    virtual void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) throw (uno::Exception, uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+};
 
 RtfFilter::RtfFilter(const uno::Reference< uno::XComponentContext >& rxContext)
     : m_xContext(rxContext)
@@ -103,8 +147,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::SourceDocumentType::RTF;
         writerfilter::Stream::Pointer_t pStream(
             writerfilter::dmapper::DomainMapperFactory::createMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, xInsertTextRange, aMediaDesc));
-        writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
-            writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
+        writerfilter::rtftok::RTFDocument::Pointer_t pDocument(writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);
         bResult = true;
         sal_uInt32 nEndTime = osl_getGlobalTimer();
@@ -148,7 +191,7 @@ void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/) thro
 
 OUString RtfFilter::getImplementationName() throw(uno::RuntimeException, std::exception)
 {
-    return RtfFilter_getImplementationName();
+    return OUString("com.sun.star.comp.Writer.RtfFilter");
 }
 
 sal_Bool RtfFilter::supportsService(const OUString& rServiceName) throw(uno::RuntimeException, std::exception)
@@ -156,18 +199,7 @@ sal_Bool RtfFilter::supportsService(const OUString& rServiceName) throw(uno::Run
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > RtfFilter::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
-{
-    return RtfFilter_getSupportedServiceNames();
-}
-
-/* Helpers, used by shared lib exports. */
-OUString RtfFilter_getImplementationName() throw(uno::RuntimeException)
-{
-    return OUString("com.sun.star.comp.Writer.RtfFilter");
-}
-
-uno::Sequence<OUString> RtfFilter_getSupportedServiceNames() throw(uno::RuntimeException)
+uno::Sequence<OUString> RtfFilter::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aRet =
     {
@@ -177,10 +209,8 @@ uno::Sequence<OUString> RtfFilter_getSupportedServiceNames() throw(uno::RuntimeE
     return aRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_RtfFilter_get_implementation(::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Writer_RtfFilter_get_implementation(uno::XComponentContext* pComponent, uno::Sequence<uno::Any> const&)
 {
-    return cppu::acquire(new RtfFilter(component));
+    return cppu::acquire(new RtfFilter(pComponent));
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
