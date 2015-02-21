@@ -313,7 +313,7 @@ public:
         Only one sprite can be edited at one time */
     sal_uInt16 startSprite();
 
-    /** ends editing of the curent sprites and adds it to the movie stream */
+    /** ends editing of the current sprites and adds it to the movie stream */
     void endSprite();
 
     /** inserts a doaction tag with an ActionStop */

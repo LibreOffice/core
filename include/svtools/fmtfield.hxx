@@ -77,7 +77,7 @@ protected:
     double              m_dSpinFirst;
     double              m_dSpinLast;
 
-    // There is a difference, when text formatting is enabled, if LostFocus fotmattes the curent String and display it,
+    // There is a difference, when text formatting is enabled, if LostFocus formats the current String and displays it,
     // or if a double is created from the String and then
     bool                m_bTreatAsNumber;
     // And with the following members we can use it for formatted text output as well ...

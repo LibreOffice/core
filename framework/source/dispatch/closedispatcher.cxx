@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
     FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
 
-    // a) If the curent frame (where the close dispatch was requested for) does not have
+    // a) If the current frame (where the close dispatch was requested for) does not have
     //    any parent frame ... it will close this frame only. Such frame isn't part of the
     //    global desktop tree ... and such frames are used as "implementation details" only.
     //    E.g. the live previews of our wizards doing such things. And then the owner of the frame
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
 
     // b) The help window can't disagree with any request.
     //    Because it doesn't implement a controller - it uses a window only.
-    //    Further t can't be the last open frame - if we do all other things
+    //    Further it can't be the last open frame - if we do all other things
     //    right inside this CloseDispatcher implementation.
     //    => close it!
     else if (aCheck1.m_bReferenceIsHelp)

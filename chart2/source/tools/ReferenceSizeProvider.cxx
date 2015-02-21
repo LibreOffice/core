@@ -186,7 +186,7 @@ void ReferenceSizeProvider::getAutoResizeFromPropSet(
         }
     }
 
-    // curent state unknown => nothing changes.  Otherwise if current state
+    // current state unknown => nothing changes.  Otherwise if current state
     // differs from state so far, we have an ambiguity
     if( rInOutState == AUTO_RESIZE_UNKNOWN )
     {

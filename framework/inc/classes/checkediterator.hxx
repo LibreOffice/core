@@ -231,7 +231,7 @@ class CheckedIterator
 
     private:
 
-        // These enum defines our four states for an iterator position in curent container.
+        // This enum defines our four states for an iterator position in current container.
         enum EEndState
         {
             E_UNKNOWN   ,

@@ -545,7 +545,7 @@ public:
     void endParagraphGroup();
 
     /**
-       Handle an SPRM at curent handle.
+       Handle an SPRM at current handle.
 
        @param rSprm   the SPRM
      */
