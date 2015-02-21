@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_d717dc52",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-21T01:33:27Z",
+      "side": 1,
+      "message": "Should be SCROW instead of SCCOL.",
+      "revId": "dec19b9241cea6a63622432313646083132bc6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_372c18ab",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1238,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-21T01:33:27Z",
+      "side": 1,
+      "message": "Please use indentation of 4 spaces instead of 2.",
+      "revId": "dec19b9241cea6a63622432313646083132bc6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_f71c6079",
+        "filename": "sc/qa/unit/ucalc.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1246,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-21T01:33:27Z",
+      "side": 1,
+      "message": "Should be nCol1, nCol2, nRow instead. r... prefix is only used in the function where the parameter is passed as reference.",
+      "revId": "dec19b9241cea6a63622432313646083132bc6fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
