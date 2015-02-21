@@ -2359,7 +2359,7 @@ void SmParser::Error(SmParseError eError)
 }
 
 
-// end gramar
+// end grammar
 
 
 SmParser::SmParser()
