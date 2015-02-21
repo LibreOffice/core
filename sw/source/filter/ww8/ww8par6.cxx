@@ -3822,7 +3822,7 @@ void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, sho
 {
     if( nLen <= 0 )
     {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_BACKGROUND );
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_HIGHLIGHT );
     }
     else
     {
@@ -3832,7 +3832,7 @@ void SwWW8ImplReader::Read_CharHighlight(sal_uInt16, const sal_uInt8* pData, sho
             b = 0;                  // Auto -> Black
 
         Color aCol(GetCol(b));
-        NewAttr( SvxBrushItem( aCol , RES_CHRATR_BACKGROUND ));
+        NewAttr( SvxBrushItem( aCol , RES_CHRATR_HIGHLIGHT ));
     }
 }
 
