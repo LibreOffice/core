@@ -35,7 +35,7 @@ mainly in converting the topics and time boxes
 from combobox and time box to normal textboxes,
 so in the code they might be referenced as combobox or timebox. This should be
 rather understood as topicstextbox and timetextbox.<br/><br/>
-Important behaiviour of this control is that there is always a
+Important behaviour of this control is that there is always a
 blank row at the end, in which the user can enter data.<br/>
 Once the row is not blank (thus, the user entered data...),
 a new blank row is added.<br/>
