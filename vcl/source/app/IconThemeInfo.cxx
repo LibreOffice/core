@@ -34,6 +34,13 @@ static const char ICON_THEME_PACKAGE_PREFIX[] = "images_";
 
 static const char EXTENSION_FOR_ICON_PACKAGES[] = ".zip";
 
+const OUString IconThemeInfo::HIGH_CONTRAST_ID = "hicontrast";
+static const OUString HIGH_CONTRAST_DISPLAY_NAME = "High Contrast";
+
+
+static const OUString TANGO_TESTING_ID = "tango_testing";
+static const OUString TANGO_TESTING_DISPLAY_NAME = "Tango Testing";
+
 IconThemeInfo::IconThemeInfo()
 {
 }
@@ -111,6 +118,14 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         throw std::runtime_error("IconThemeInfo::ThemeIdToDisplayName() called with invalid id.");
     }
 
+    // sepcial cases
+    if (themeId.equalsIgnoreAsciiCase(HIGH_CONTRAST_ID)) {
+        return HIGH_CONTRAST_DISPLAY_NAME;
+    }
+    else if (themeId.equalsIgnoreAsciiCase(TANGO_TESTING_ID)) {
+        return TANGO_TESTING_DISPLAY_NAME;
+    }
+
     // make the first letter uppercase
     OUString r;
     sal_Unicode firstLetter = themeId[0];
@@ -121,6 +136,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
     else {
         r = themeId;
     }
+
     return r;
 }
 
