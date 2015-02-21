@@ -57,7 +57,7 @@ core_factory_list = [
     ("libxsec_xmlsec.a", "xsec_xmlsec_component_getFactory", "#ifndef ANDROID"),
     ("libxstor.a", "xstor_component_getFactory"),
     ("libcanvasfactorylo.a", "canvasfactory_component_getFactory"),
-    ("libvbaeventslo.a", "vbaevents_component_getFactory"),
+    ("libvbaeventslo.a", "vbaevents_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
     ("libvclcanvaslo.a", "vclcanvas_component_getFactory"),
     ("libmtfrendererlo.a", "mtfrenderer_component_getFactory"),
     ]
@@ -116,6 +116,7 @@ core_constructor_list = [
     "com_sun_star_comp_framework_UIElementFactoryManager_get_implementation",
     "com_sun_star_comp_framework_URLTransformer_get_implementation",
     "com_sun_star_comp_framework_WindowStateConfiguration_get_implementation",
+    "com_sun_star_comp_framework_ModuleAcceleratorConfiguration_get_implementation",
     "org_apache_openoffice_comp_framework_ContextChangeEventMultiplexer_get_implementation",
 # i18npool/util/i18npool.component
     "com_sun_star_i18n_BreakIterator_get_implementation",
@@ -140,6 +141,8 @@ core_constructor_list = [
     "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
+# stoc/source/inspect/introspection.component
+    "com_sun_star_comp_stoc_Introspection_get_implementation",
 # stoc/util/stocservices.component
     "com_sun_star_comp_stoc_TypeConverter_get_implementation",
     "com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation",
@@ -155,8 +158,6 @@ core_constructor_list = [
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
-# stoc/source/inspect/introspection.component
-    "com_sun_star_comp_stoc_Introspection_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_StdTabController_get_implementation",
     "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",
@@ -212,7 +213,7 @@ draw_constructor_list = [
     ]
 
 writer_factory_list = [
-    ("libsblo.a", "sb_component_getFactory"),
+    ("libsblo.a", "sb_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
     ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ]
