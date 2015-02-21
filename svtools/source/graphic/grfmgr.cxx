@@ -210,9 +210,6 @@ void GraphicObject::ImplAutoSwapIn()
 {
     if( IsSwappedOut() )
     {
-        if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
-            mbAutoSwapped = false;
-        else
         {
             mbIsInSwapIn = true;
 
@@ -1035,10 +1032,6 @@ bool GraphicObject::SwapIn()
     if( mbAutoSwapped )
     {
         ImplAutoSwapIn();
-        bRet = true;
-    }
-    else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
-    {
         bRet = true;
     }
     else
