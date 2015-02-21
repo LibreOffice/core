@@ -1228,10 +1228,14 @@ void Test::testHorizontalAttrIterator()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    // Set the background color of B2:C3 to blue
+    // Set the background color of B2:C3,D2,E3,C4:D4,B5:D5 to blue
     ScPatternAttr aCellBackColor(m_pDoc->GetPool());
     aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 1, 2, 2, 0, aCellBackColor);
+    m_pDoc->ApplyPatternAreaTab(3, 1, 3, 1, 0, aCellBackColor);
+    m_pDoc->ApplyPatternAreaTab(4, 2, 4, 2, 0, aCellBackColor);
+    m_pDoc->ApplyPatternAreaTab(2, 3, 3, 3, 0, aCellBackColor);
+    m_pDoc->ApplyPatternAreaTab(1, 4, 4, 4, 0, aCellBackColor);
 
     // some numeric data
     for (SCCOL i = 1; i <= 4; ++i)
@@ -1239,10 +1243,10 @@ void Test::testHorizontalAttrIterator()
             m_pDoc->SetValue(ScAddress(i,j,0), i*10+j);
 
     {
-        const int aChecks[][3] = { {1, 2, 1}, {1, 2, 2} };
+        const int aChecks[][3] = { {1, 3, 1}, {1, 2, 2}, {4, 4, 2}, {2, 3, 3}, {1, 4, 4} };
         size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
 
-        ScHorizontalAttrIterator aIter(m_pDoc, 0, 0, 0, 3, 3);
+        ScHorizontalAttrIterator aIter(m_pDoc, 0, 0, 0, 5, 5);
         SCCOL nCol1, nCol2;
         SCROW nRow;
         size_t nCheckPos = 0;
