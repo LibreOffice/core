@@ -157,19 +157,21 @@ void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubst
     maObjList.push_back( (GraphicObject*)&rObj );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
     if( !rObj.IsSwappedOut() )
-        mnUsedSize += rObj.GetSizeBytes();
+        mnUsedSize += rObj.maGraphic.GetSizeBytes();
 }
 
 void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
 {
     mpCache->ReleaseGraphicObject( rObj );
+    if( !rObj.IsSwappedOut() )
+    {
+        assert(mnUsedSize >= rObj.maGraphic.GetSizeBytes());
+        mnUsedSize -= rObj.maGraphic.GetSizeBytes();
+    }
     for( GraphicObjectList_impl::iterator it = maObjList.begin(); it != maObjList.end(); ++it )
     {
         if ( *it == &rObj ) {
             maObjList.erase( it );
-
-            if( !rObj.IsSwappedOut() )
-                mnUsedSize -= rObj.GetSizeBytes();
             return;
         }
     }
@@ -179,6 +181,7 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
 void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedOut( rObj );
+    assert(mnUsedSize >= rObj.GetSizeBytes());
     mnUsedSize -= rObj.GetSizeBytes();
 }
 
@@ -236,15 +239,10 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics(const GraphicObject* pGrap
     }
 }
 
-bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
-{
-    return mpCache->FillSwappedGraphicObject(rObj, rSubstitute);
-}
-
 void GraphicManager::ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj )
 {
     mpCache->GraphicObjectWasSwappedIn( rObj );
-    mnUsedSize += rObj.GetSizeBytes();
+    mnUsedSize += rObj.maGraphic.GetSizeBytes();
 }
 
 bool GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt,
