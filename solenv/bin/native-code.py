@@ -89,6 +89,7 @@ core_constructor_list = [
 # dbaccess/util/dba.component
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
+    "com_sun_star_comp_forms_FormOperations_get_implementation",
     "com_sun_star_form_OCheckBoxControl_get_implementation",
     "com_sun_star_form_OCheckBoxModel_get_implementation",
     "com_sun_star_form_OComboBoxControl_get_implementation",
@@ -137,8 +138,16 @@ core_constructor_list = [
 # sfx2/util/sfx.component
     "SfxDocumentMetaData_get_implementation",
     "com_sun_star_comp_office_FrameLoader_get_implementation",
+    "com_sun_star_comp_sfx2_AppDispatchProvider_get_implementation",
     "com_sun_star_comp_sfx2_DocumentTemplates_get_implementation",
     "com_sun_star_comp_sfx2_GlobalEventBroadcaster_get_implementation",
+# stoc/source/inspect/introspection.component
+    "com_sun_star_comp_stoc_Introspection_get_implementation",
+# stoc/util/stocservices.component
+    "com_sun_star_comp_stoc_TypeConverter_get_implementation",
+    "com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation",
+    "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
+    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
 # svtools/util/svt.component
     "com_sun_star_graphic_GraphicObject_get_implementation",
     "com_sun_star_comp_graphic_GraphicProvider_get_implementation",
@@ -149,15 +158,6 @@ core_constructor_list = [
     "com_sun_star_comp_Draw_GraphicExporter_get_implementation",
     "com_sun_star_comp_Svx_GraphicExportHelper_get_implementation",
     "com_sun_star_comp_Svx_GraphicImportHelper_get_implementation",
-# stoc/source/inspect/introspection.component
-    "com_sun_star_comp_stoc_Introspection_get_implementation",
-# stoc/util/stocservices.component -- TODO check if all of these are necessary
-    "com_sun_star_comp_stoc_TypeConverter_get_implementation",
-    "com_sun_star_comp_uri_ExternalUriReferenceTranslator_get_implementation",
-    "com_sun_star_comp_uri_UriReferenceFactory_get_implementation",
-    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation",
-    "com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation",
-    "com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation",
 # toolkit/util/tk.component
     "stardiv_Toolkit_StdTabController_get_implementation",
     "stardiv_Toolkit_UnoCheckBoxControl_get_implementation",
