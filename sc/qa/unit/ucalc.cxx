@@ -1235,23 +1235,23 @@ void Test::testHorizontalAttrIterator()
 
     // some numeric data
     for (SCCOL i = 1; i <= 4; ++i)
-      for (SCCOL j = 1; j <= 4; ++j)
-        m_pDoc->SetValue(ScAddress(i,j,0), i*10+j);
+        for (SCROW j = 1; j <= 4; ++j)
+            m_pDoc->SetValue(ScAddress(i,j,0), i*10+j);
 
     {
         const int aChecks[][3] = { {1, 2, 1}, {1, 2, 2} };
         size_t nCheckLen = SAL_N_ELEMENTS(aChecks);
 
         ScHorizontalAttrIterator aIter(m_pDoc, 0, 0, 0, 3, 3);
-        SCCOL rCol1, rCol2;
-        SCROW rRow;
+        SCCOL nCol1, nCol2;
+        SCROW nRow;
         size_t nCheckPos = 0;
-        for (const ScPatternAttr* pAttr = aIter.GetNext(rCol1, rCol2, rRow); pAttr; pAttr = aIter.GetNext(rCol1, rCol2, rRow), ++nCheckPos)
+        for (const ScPatternAttr* pAttr = aIter.GetNext(nCol1, nCol2, nRow); pAttr; pAttr = aIter.GetNext(nCol1, nCol2, nRow), ++nCheckPos)
         {
               CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
-              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][0], static_cast<int>(rCol1));
-              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][1], static_cast<int>(rCol2));
-              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][2], static_cast<int>(rRow));
+              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][0], static_cast<int>(nCol1));
+              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][1], static_cast<int>(nCol2));
+              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][2], static_cast<int>(nRow));
         }
     }
 
