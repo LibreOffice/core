@@ -326,7 +326,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
 
 // Normal JScript object parameter can be mixed with JScriptValue object. If an
 // VARIANT contains an VT_DISPATCH that is no JScriptValue than the type information
-// is used to find out about the reqired type.
+// is used to find out about the required type.
 void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
     unsigned short /*wFlags*/, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
