@@ -1016,7 +1016,7 @@ void DbGridControl::Select()
 {
     DbGridControl_Base::Select();
 
-    // as the selected rows may have changed, udate the according display in our navigation bar
+    // as the selected rows may have changed, update the according display in our navigation bar
     m_aBar.InvalidateState(NavigationBar::RECORD_COUNT);
 
     if (m_pGridListener)
