@@ -97,7 +97,10 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			tout = _GLOBAL_DEFAULT_TIMEOUT
 		if dbg:
 			print("Timeout: " + str(tout), file=dbgout)
-		self.server = smtplib.SMTP(server, port,timeout=tout)
+		if connectiontype.upper() == 'SSL':
+			self.server = smtplib.SMTP_SSL(server, port,timeout=tout)
+		else:
+			self.server = smtplib.SMTP(server, port,timeout=tout)
 
 		#stderr not available for us under windows, but
 		#set_debuglevel outputs there, and so throw
@@ -111,7 +114,11 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 			print("ConnectionType: " + connectiontype, file=dbgout)
 		if connectiontype.upper() == 'SSL':
 			self.server.ehlo()
-			self.server.starttls()
+			try:
+				self.server.starttls()
+			except:
+				# older use, see http://en.wikipedia.org/wiki/SMTPS
+				self.server.use_ssl = True
 			self.server.ehlo()
 
 		user = xAuthenticator.getUserName()
