@@ -76,10 +76,6 @@ private:
     static OUString
     ReturnFallback(const std::vector<IconThemeInfo>& installedThemes);
 
-    /** The name of the icon theme to use for high contrast mode */
-    static const OUString
-    HIGH_CONTRAST_ICON_THEME_ID;
-
     /** The name of the icon theme which is used as fallback */
     static const OUString
     FALLBACK_ICON_THEME_ID;

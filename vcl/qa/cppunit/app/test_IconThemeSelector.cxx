@@ -80,7 +80,7 @@ IconThemeSelectorTest::GetFakeInstalledThemes()
     r.push_back(a);
     a.mThemeId = "oxygen";
     r.push_back(a);
-    a.mThemeId = vcl::IconThemeSelector::HIGH_CONTRAST_ICON_THEME_ID;
+    a.mThemeId = "hicontrast";
     r.push_back(a);
     return r;
 }
@@ -122,7 +122,7 @@ IconThemeSelectorTest::ThemeIsOverriddenByHighContrastMode()
     std::vector<vcl::IconThemeInfo> themes = GetFakeInstalledThemes();
     OUString selected = s.SelectIconTheme(themes, "tango");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'tango' theme is overridden by high contrast mode",
-            vcl::IconThemeSelector::HIGH_CONTRAST_ICON_THEME_ID, selected);
+            OUString("hicontrast"), selected);
     s.SetUseHighContrastTheme(false);
     selected = s.SelectIconTheme(themes, "tango");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'tango' theme is no longer overridden by high contrast mode",

@@ -13,7 +13,16 @@
 #include <stdexcept>
 #include <algorithm>
 
+// constants for theme ids and display names. Only the theme id for hicontrast is used
+// outside of this class and hence made public.
+
+const OUString vcl::IconThemeInfo::HIGH_CONTRAST_ID = "hicontrast";
+
 namespace {
+
+static const OUString HIGH_CONTRAST_DISPLAY_NAME = "High Contrast";
+static const OUString TANGO_TESTING_ID = "tango_testing";
+static const OUString TANGO_TESTING_DISPLAY_NAME = "Tango Testing";
 
 OUString
 filename_from_url(const OUString& url)
@@ -26,7 +35,7 @@ filename_from_url(const OUString& url)
     return filename;
 }
 
-}
+} // end anonymous namespace
 
 namespace vcl {
 
@@ -111,6 +120,14 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         throw std::runtime_error("IconThemeInfo::ThemeIdToDisplayName() called with invalid id.");
     }
 
+    // sepcial cases
+    if (themeId.equalsIgnoreAsciiCase(HIGH_CONTRAST_ID)) {
+        return HIGH_CONTRAST_DISPLAY_NAME;
+    }
+    else if (themeId.equalsIgnoreAsciiCase(TANGO_TESTING_ID)) {
+        return TANGO_TESTING_DISPLAY_NAME;
+    }
+
     // make the first letter uppercase
     OUString r;
     sal_Unicode firstLetter = themeId[0];
@@ -121,6 +138,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
     else {
         r = themeId;
     }
+
     return r;
 }
 
