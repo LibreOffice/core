@@ -79,7 +79,7 @@ void SfxApplication::Exit()
     after Execute() has finished and
     - the configuration (SfxConfigManager) was already saved,
     - the window positions etc. in the SfxIniManager were written,
-    - the Application widow still exists, but is hidden
+    - the Application window still exists, but is hidden
     - all Documents and their Views already are closed.
     - Dispatcher, Bindings etc. already destroyed.
 

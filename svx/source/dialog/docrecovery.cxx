@@ -634,7 +634,7 @@ SaveDialog::SaveDialog(vcl::Window* pParent, RecoveryCore* pCore)
     get(m_pOkBtn, "ok");
 
     // Prepare the office for the following crash save step.
-    // E.g. hide all open widows so the user can't influence our
+    // E.g. hide all open windows so the user can't influence our
     // operation .-)
     m_pCore->doEmergencySavePrepare();
 
