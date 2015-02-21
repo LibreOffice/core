@@ -215,7 +215,7 @@ void doTestCode()
     aWriter.SetTextColor( Color( COL_BLACK ) );
     aWriter.SetFont( Font( OUString( "Times" ), Size( 0, 500 ) ) );
     aWriter.DrawText( Rectangle( Point( 4500, 1500 ), Size( 12000, 3000 ) ),
-                      "Here's where all things come to an end ... well at least the paragaph from the last page.",
+                      "Here's where all things come to an end ... well at least the paragraph from the last page.",
                       TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK
                       );
     aWriter.EndStructureElement();

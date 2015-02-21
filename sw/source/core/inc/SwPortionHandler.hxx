@@ -80,7 +80,7 @@ public:
     virtual void LineBreak(sal_Int32 nWidth) = 0;
 
     /** skip characters. The SwTxtFrame may only display partially
-     * display a certain paragraph (e.g. when the paragaph is split
+     * display a certain paragraph (e.g. when the paragraph is split
      * across multiple pages). In this case, the Skip() method must be
      * called to inform the portion handler to ignore a certain run of
      * characters in the 'model string'. Skip(), if used at all, must
