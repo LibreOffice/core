@@ -565,19 +565,16 @@ SwConditionTxtFmtColl::~SwConditionTxtFmtColl()
 const SwCollCondition* SwConditionTxtFmtColl::HasCondition(
                         const SwCollCondition& rCond ) const
 {
-    const SwCollCondition* pFnd = 0;
-    sal_uInt16 n;
+    for( const auto &rFnd : aCondColls )
+        if( rFnd == rCond )
+            return &rFnd;
 
-    for( n = 0; n < aCondColls.size(); ++n )
-        if( *( pFnd = &aCondColls[ n ]) == rCond )
-            break;
-
-    return n < aCondColls.size() ? pFnd : 0;
+    return nullptr;
 }
 
 void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 {
-    for( sal_uInt16 n = 0; n < aCondColls.size(); ++n )
+    for( SwFmtCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
         if( aCondColls[ n ] == rCond )
         {
             aCondColls.erase( aCondColls.begin() + n );
@@ -592,7 +589,7 @@ void SwConditionTxtFmtColl::InsertCondition( const SwCollCondition& rCond )
 bool SwConditionTxtFmtColl::RemoveCondition( const SwCollCondition& rCond )
 {
     bool bRet = false;
-    for( sal_uInt16 n = 0; n < aCondColls.size(); ++n )
+    for( SwFmtCollConditions::size_type n = 0; n < aCondColls.size(); ++n )
         if( aCondColls[ n ] == rCond )
         {
             aCondColls.erase( aCondColls.begin() + n );
@@ -607,19 +604,18 @@ void SwConditionTxtFmtColl::SetConditions( const SwFmtCollConditions& rCndClls )
     // Copy the Conditions, but first delete the old ones
     aCondColls.clear();
     SwDoc& rDoc = *GetDoc();
-    for( sal_uInt16 n = 0; n < rCndClls.size(); ++n )
+    for( const auto &rFnd : rCndClls )
     {
-        const SwCollCondition* pFnd = &rCndClls[ n ];
-        SwTxtFmtColl* pTmpColl = pFnd->GetTxtFmtColl()
-                                    ? rDoc.CopyTxtColl( *pFnd->GetTxtFmtColl() )
+        SwTxtFmtColl* pTmpColl = rFnd.GetTxtFmtColl()
+                                    ? rDoc.CopyTxtColl( *rFnd.GetTxtFmtColl() )
                                     : 0;
         SwCollCondition* pNew;
-        if( USRFLD_EXPRESSION & pFnd->GetCondition() )
-            pNew = new SwCollCondition( pTmpColl, pFnd->GetCondition(),
-                                        *pFnd->GetFldExpression() );
+        if( USRFLD_EXPRESSION & rFnd.GetCondition() )
+            pNew = new SwCollCondition( pTmpColl, rFnd.GetCondition(),
+                                        *rFnd.GetFldExpression() );
         else
-            pNew = new SwCollCondition( pTmpColl, pFnd->GetCondition(),
-                                        pFnd->GetSubCondition() );
+            pNew = new SwCollCondition( pTmpColl, rFnd.GetCondition(),
+                                        rFnd.GetSubCondition() );
         aCondColls.push_back( pNew );
     }
 }
