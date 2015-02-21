@@ -200,7 +200,7 @@ public class _XTextCursor extends MultiMethodTest {
     }
 
     /**
-     * First the cusor is moved to start without expanding
+     * First the cursor is moved to start without expanding
      * (must be collapsed), and then it's expanded to the
      * whole text (must not be collapsed). <p>
      *

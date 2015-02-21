@@ -1588,7 +1588,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 
 #if OSL_DEBUG_LEVEL > 1
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // for switching curor behaviour in ReadOnly regions
+            // for switching cursor behaviour in ReadOnly regions
             if( 0x7210 == rKeyCode.GetFullCode() )
                 rSh.SetReadOnlyAvailable( !rSh.IsReadOnlyAvailable() );
             else
@@ -3082,7 +3082,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
         CaptureMouse();
 
-        // reset curor position if applicable
+        // reset cursor position if applicable
         rSh.ResetCursorStack();
 
         switch ( rMEvt.GetModifier() + rMEvt.GetButtons() )
@@ -5012,7 +5012,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_aTemplateIdle.SetIdleHdl(LINK(this, SwEditWin, TemplateTimerHdl));
 
     // temporary solution!!! Should set the font of the current
-    // insert position at every curor movement!
+    // insert position at every cursor movement!
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
         vcl::Font aFont;
