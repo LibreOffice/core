@@ -570,17 +570,20 @@ static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const OUString& rNam
     for( SwOutlineNodes::size_type n = 0; n < rOutlNds.size(); ++n )
     {
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
-        OUString sTxt( pTxtNd->GetExpandTxt() );
-        if (sTxt == rName)
+        const OUString sTxt( pTxtNd->GetExpandTxt() );
+        if (sTxt.startsWith(rName))
         {
-            // Found "exact", set Pos to the Node
-            nSavePos = n;
-            break;
-        }
-        else if( !bExact && USHRT_MAX == nSavePos && sTxt.startsWith(rName) )
-        {
-            // maybe we just found the text's first part
-            nSavePos = n;
+            if (sTxt.getLength() == rName.getLength())
+            {
+                // Found "exact", set Pos to the Node
+                nSavePos = n;
+                break;
+            }
+            else if( !bExact && USHRT_MAX == nSavePos )
+            {
+                // maybe we just found the text's first part
+                nSavePos = n;
+            }
         }
     }
 
