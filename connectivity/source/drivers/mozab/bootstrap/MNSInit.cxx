@@ -213,7 +213,7 @@ void MNS_XPCOM_EventLoop()
     if (NS_FAILED(rv)) return ;
 
     PLEvent* event = nsnull;
-    m_aUI_Thread_Condition.set(); //we are ready to recive event
+    m_aUI_Thread_Condition.set(); //we are ready to receive event
     do
     {
         rv = eventQ->GetEvent(&event);
