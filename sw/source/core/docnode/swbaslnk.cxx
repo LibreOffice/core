@@ -129,7 +129,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     bool bGraphicArrived = false;
     bool bGraphicPieceArrived = false;
     bool bDontNotify = false;
-    Size aGrfSz, aOldSz, aFrmFmtSz;
+    Size aGrfSz, aOldSz;
 
     SwGrfNode* pSwGrfNode = NULL;
 
