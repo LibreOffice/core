@@ -10,6 +10,8 @@
 #include "ToxWhitespaceStripper.hxx"
 
 #include "rtl/ustrbuf.hxx"
+#include "sal/log.hxx"
+
 #include <boost/numeric/conversion/cast.hpp>
 
 namespace sw {
@@ -50,6 +52,11 @@ sal_Int32
 ToxWhitespaceStripper::GetPositionInStrippedString(sal_Int32 pos) const
 {
     size_t upos = boost::numeric_cast<size_t>(pos);
+    if (upos >= mNewPositions.size()) {
+        SAL_WARN("sw.core", "Requested position of TOX entry text which does not exist. "
+                            "Maybe the formatting hint is corrupt?");
+        return mNewPositions.back();
+    }
     return mNewPositions.at(upos);
 }
 

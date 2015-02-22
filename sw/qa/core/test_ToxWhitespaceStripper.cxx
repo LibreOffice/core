@@ -32,10 +32,14 @@ class ToxWhitespaceStripperTest : public CppUnit::TestFixture
     void
     PositionAfterStringCanBeRequested();
 
+    void
+    InvalidPositionIsMappedToLastEntry();
+
     CPPUNIT_TEST_SUITE(ToxWhitespaceStripperTest);
     CPPUNIT_TEST(MappingCharactersToVariousStrippedStringsWorks);
     CPPUNIT_TEST(StrippingWhitespacesFromVariousStringsWorks);
     CPPUNIT_TEST(PositionAfterStringCanBeRequested);
+    CPPUNIT_TEST(InvalidPositionIsMappedToLastEntry);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -139,6 +143,16 @@ ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
     ToxWhitespaceStripper sut(test);
     sal_Int32 expected = test.getLength();
     CPPUNIT_ASSERT_EQUAL(expected, sut.GetPositionInStrippedString(test.getLength()));
+}
+
+void
+ToxWhitespaceStripperTest::InvalidPositionIsMappedToLastEntry()
+{
+    OUString test("ab  c");
+    ToxWhitespaceStripper sut(test);
+    sal_Int32 expected = 4; // the length of the string after merging the two whitespaces
+    sal_Int32 result = sut.GetPositionInStrippedString(40); // a value past the original string length
+    CPPUNIT_ASSERT_EQUAL(expected, result);
 }
 
 // Put the test suite in the registry
