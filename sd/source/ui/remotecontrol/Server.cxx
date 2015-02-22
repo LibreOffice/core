@@ -327,7 +327,7 @@ bool RemoteServer::connectClient( ::boost::shared_ptr< ClientInfo > pClient, con
             if ( pClient == *aIt )
             {
                 spServer->mAvailableClients.erase( aIt );
-            break;
+                break;
             }
         }
         pCommunicator->launch();
