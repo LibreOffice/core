@@ -105,7 +105,7 @@ static void ImplCalendarSelectDateRange( IntDateSet* pTable,
                 break;
 
             if ( aDate >= aStartDate )
-                pTable->erase( it++ );
+                it = pTable->erase(it);
             else
                 ++it;
         }
@@ -135,7 +135,7 @@ static void ImplCalendarUnSelectDateRange( IntDateSet* pTable,
             break;
 
         if ( aDate >= aStartDate )
-            pTable->erase( it++ );
+            it = pTable->erase(it);
         else
             ++it;
     }
