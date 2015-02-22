@@ -390,7 +390,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 // Added the aFrmRect.HasArea() hack, because
                 // the environment of the ole object does not have to be valid
                 // at this moment, or even worse, it does not have to have a
-                // resonable size. In this case we do not want to change to
+                // reasonable size. In this case we do not want to change to
                 // attributes permanentely. Maybe one day somebody dares to remove
                 // this code.
                 if ( aFrmRect.HasArea() &&
