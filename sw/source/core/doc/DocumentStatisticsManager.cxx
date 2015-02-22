@@ -123,6 +123,8 @@ void DocumentStatisticsManager::UpdateDocStat( bool bCompleteAsync, bool bFields
         }
         else if (IncrementalDocStatCalculate(5000, bFields))
             maStatsUpdateTimer.Start();
+        else
+            maStatsUpdateTimer.Stop();
     }
 }
 
@@ -223,7 +225,7 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
         pType->UpdateFlds();
     }
 
-    return nChars <= 0;
+    return nChars < 0;
 }
 
 IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer )
