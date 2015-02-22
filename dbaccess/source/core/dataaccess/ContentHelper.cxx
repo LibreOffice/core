@@ -542,14 +542,12 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
             PropertyEventSequence* pSeq = (*it).second;
 
             // Remove current element.
-            aListeners.erase( it );
+            it = aListeners.erase( it );
 
             // Propagate event.
             pListener->propertiesChange( *pSeq );
 
             delete pSeq;
-
-            it = aListeners.begin();
         }
     }
 }
