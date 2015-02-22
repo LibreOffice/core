@@ -503,9 +503,12 @@ AC_SUBST(ANDROID_NDK_GDBSERVER)
 AC_SUBST(ANDROID_APP_ABI)
 
 dnl ===================================================================
-dnl Also --with-android-sdk is mandatory
+dnl --with-android-sdk
 dnl ===================================================================
 ANDROID_SDK_HOME=
+if test -z "$with_android_sdk" -a -e "$SRC_ROOT/external/android-sdk-linux"; then
+    with_android_sdk="$SRC_ROOT/external/android-sdk-linux"
+fi
 if test -n "$with_android_sdk"; then
     ANDROID_SDK_HOME=$with_android_sdk
     PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
@@ -780,7 +783,7 @@ esac
 
 if echo "$host_os" | grep -q linux-android ; then
     if test -z "$with_android_sdk"; then
-        AC_MSG_ERROR([the --with-android-sdk option is mandatory])
+        AC_MSG_ERROR([the --with-android-sdk option is mandatory, unless it is available at external/android-sdk-linux/.])
     fi
 
     if test ! -d "$ANDROID_SDK_HOME/platforms"; then
