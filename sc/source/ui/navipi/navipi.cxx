@@ -772,7 +772,7 @@ void ScNavigatorDlg::DoResize()
     }
 
     //  even if the content is not visible, adapt the size,
-    //  so the widht fit
+    //  so the width fit
 
     Point aEntryPos = aLbEntries.GetPosPixel();
     Point aListPos = aLbDocuments.GetPosPixel();
