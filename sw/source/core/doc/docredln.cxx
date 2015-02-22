@@ -572,47 +572,9 @@ void SwRedlineTbl::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
     for (sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < size(); ++nCurRedlinePos)
-    {
-        const SwRangeRedline* pRedline = operator[](nCurRedlinePos);
-        xmlTextWriterStartElement(pWriter, BAD_CAST("swRangeRedline"));
+        operator[](nCurRedlinePos)->dumpAsXml(pWriter);
 
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pRedline);
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(pRedline->GetSeqNo()).getStr()));
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(pRedline->GetAuthor()).toUtf8().getStr()));
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(pRedline->GetTimeStamp()).getStr()));
-
-        OString sRedlineType;
-        switch (pRedline->GetType())
-        {
-            case nsRedlineType_t::REDLINE_INSERT:
-                sRedlineType = "REDLINE_INSERT";
-                break;
-            case nsRedlineType_t::REDLINE_DELETE:
-                sRedlineType = "REDLINE_DELETE";
-                break;
-            case nsRedlineType_t::REDLINE_FORMAT:
-                sRedlineType = "REDLINE_FORMAT";
-                break;
-            default:
-                sRedlineType = "UNKNOWN";
-                break;
-        }
-        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
-
-        xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
-        pRedline->GetPoint()->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
-        xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
-        pRedline->GetMark()->dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
-
-        const SwRedlineExtraData* pExtraRedlineData = pRedline->GetExtraData();
-        xmlTextWriterStartElement(pWriter, BAD_CAST("swRedlineExtraData"));
-        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(pExtraRedlineData).name()));
-        xmlTextWriterEndElement(pWriter); // swRadlineExtraData
-        xmlTextWriterEndElement(pWriter); // swRangeRedline
-    }
-    xmlTextWriterEndElement(pWriter); // swRedlineTbl
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwRedlineExtraData::~SwRedlineExtraData()
@@ -1649,6 +1611,47 @@ OUString SwRangeRedline::GetDescr(sal_uInt16 nPos)
         delete pPaM;
 
     return aResult;
+}
+
+void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swRangeRedline"));
+
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("id"), BAD_CAST(OString::number(GetSeqNo()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("author"), BAD_CAST(SW_MOD()->GetRedlineAuthor(GetAuthor()).toUtf8().getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("date"), BAD_CAST(DateTimeToOString(GetTimeStamp()).getStr()));
+
+    OString sRedlineType;
+    switch (GetType())
+    {
+        case nsRedlineType_t::REDLINE_INSERT:
+            sRedlineType = "REDLINE_INSERT";
+            break;
+        case nsRedlineType_t::REDLINE_DELETE:
+            sRedlineType = "REDLINE_DELETE";
+            break;
+        case nsRedlineType_t::REDLINE_FORMAT:
+            sRedlineType = "REDLINE_FORMAT";
+            break;
+        default:
+            sRedlineType = "UNKNOWN";
+            break;
+    }
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
+    GetPoint()->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+    xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
+    GetMark()->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    const SwRedlineExtraData* pExtraRedlineData = GetExtraData();
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swRedlineExtraData"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(pExtraRedlineData).name()));
+    xmlTextWriterEndElement(pWriter); // swRadlineExtraData
+    xmlTextWriterEndElement(pWriter);
 }
 
 bool SwExtraRedlineTbl::Insert( SwExtraRedline* p )

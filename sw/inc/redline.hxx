@@ -293,6 +293,7 @@ public:
 
     bool operator==( const SwRangeRedline& ) const;
     bool operator<( const SwRangeRedline& ) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 /// Base object for 'Redlines' that are not of 'Ranged' type (like table row insert\delete)
