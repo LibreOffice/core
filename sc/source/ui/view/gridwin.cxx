@@ -5867,7 +5867,7 @@ void ScGridWindow::UpdateSelectionOverlay()
     std::vector<Rectangle> aPixelRects;
     GetSelectionRects( aPixelRects );
 
-    if ( aPixelRects.size() && pViewData->IsActive() )
+    if (!aPixelRects.empty() && pViewData->IsActive())
     {
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
@@ -5876,13 +5876,25 @@ void ScGridWindow::UpdateSelectionOverlay()
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
+            ScDocument* pDoc = pViewData->GetDocument();
+            SCTAB nTab = pViewData->GetTabNo();
+            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
             for(sal_uInt32 a(0); a < aPixelRects.size(); a++)
             {
                 const Rectangle aRA(aPixelRects[a]);
-                basegfx::B2DRange aRB(aRA.Left() - 1, aRA.Top() - 1, aRA.Right(), aRA.Bottom());
-                aRB.transform(aTransform);
-                aRanges.push_back(aRB);
+                if (bLayoutRTL)
+                {
+                    basegfx::B2DRange aRB(aRA.Left(), aRA.Top() - 1, aRA.Right() + 1, aRA.Bottom());
+                    aRB.transform(aTransform);
+                    aRanges.push_back(aRB);
+                }
+                else
+                {
+                    basegfx::B2DRange aRB(aRA.Left() - 1, aRA.Top() - 1, aRA.Right(), aRA.Bottom());
+                    aRB.transform(aTransform);
+                    aRanges.push_back(aRB);
+                }
             }
 
             // get the system's highlight color
