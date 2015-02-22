@@ -1577,17 +1577,18 @@ void SubsetMap::ApplyCharMap( const FontCharMapPtr pFontCharMap )
         return;
 
     // remove subsets that are not matched in any range
-    SubsetList::iterator it_next = maSubsets.begin();
-    while( it_next != maSubsets.end() )
+    SubsetList::iterator it = maSubsets.begin();
+    while( it != maSubsets.end() )
     {
-        SubsetList::iterator it = it_next++;
         const Subset& rSubset = *it;
         sal_uInt32 cMin = rSubset.GetRangeMin();
         sal_uInt32 cMax = rSubset.GetRangeMax();
 
         int nCount =  pFontCharMap->CountCharsInRange( cMin, cMax );
         if( nCount <= 0 )
-            maSubsets.erase( it );
+            it = maSubsets.erase(it);
+        else
+            ++it;
     }
 }
 
