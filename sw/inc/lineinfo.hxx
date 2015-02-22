@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwLineNumberInfo : public SwClient /**< purpose of derivation
                                                          character style for displaying the numbers. */
 {
     SvxNumberType       aType;                  ///< e.g. roman linenumbers
-    OUString            aDivider;               ///< String for aditional interval (vert. lines user defined)
+    OUString            aDivider;               ///< String for additional interval (vert. lines user defined)
     sal_uInt16              nPosFromLeft;       ///< Position for paint
     sal_uInt16              nCountBy;           ///< Paint only for every n line
     sal_uInt16              nDividerCountBy;    /**< Interval for display of an user defined

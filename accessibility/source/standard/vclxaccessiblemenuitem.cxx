@@ -183,7 +183,7 @@ Sequence< OUString > VCLXAccessibleMenuItem::getSupportedServiceNames() throw (R
 sal_Int16 VCLXAccessibleMenuItem::getAccessibleRole(  ) throw (RuntimeException, std::exception)
 {
     OExternalLockGuard aGuard( this );
-    // IA2 CWS. MT: We had the aditional roles in UAA for ever, but never used them anywhere.
+    // IA2 CWS. MT: We had the additional roles in UAA for ever, but never used them anywhere.
     // Looks reasonable, but need to verify in Orca and VoiceOver.
     sal_Int16 nRole = AccessibleRole::MENU_ITEM;
     if ( m_pParent )
