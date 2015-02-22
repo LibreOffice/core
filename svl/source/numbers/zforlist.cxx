@@ -380,7 +380,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     while ( it != aFTable.end() && (nKey = it->first) >= nCLOffset && nKey <= nMaxBuiltin )
     {
         delete it->second;
-        aFTable.erase( it++ );
+        it = aFTable.erase(it);
     }
 
     // move additional and user defined to temporary table
@@ -388,7 +388,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     while ( it != aFTable.end() && (nKey = it->first) >= nCLOffset && nKey < nNextCL )
     {
         aOldTable[ nKey ] = it->second;
-        aFTable.erase( it++ );
+        it = aFTable.erase(it);
     }
 
     // generate new old builtin formats
