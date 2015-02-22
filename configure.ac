@@ -294,6 +294,9 @@ AC_ARG_WITH(android-sdk,
 ,)
 
 ANDROID_NDK_HOME=
+if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk"; then
+    with_android_ndk="$SRC_ROOT/external/android-ndk"
+fi
 if test -n "$with_android_ndk"; then
     ANDROID_NDK_HOME=$with_android_ndk
 
@@ -760,7 +763,7 @@ linux-android*)
     _os=Android
 
     if test -z "$with_android_ndk"; then
-        AC_MSG_ERROR([the --with-android-ndk option is mandatory])
+        AC_MSG_ERROR([the --with-android-ndk option is mandatory, unless it is available at external/android-ndk/.])
     fi
 
     if test -z "$with_android_ndk_toolchain_version"; then
