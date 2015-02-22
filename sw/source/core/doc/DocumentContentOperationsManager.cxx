@@ -3382,7 +3382,7 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
                 pSNd->GetIndex() < rStartIdx.GetIndex() &&
                 rStartIdx.GetIndex() < pSNd->EndOfSectionIndex() )
             {
-                aSet.erase (it++);
+                it = aSet.erase(it);
                 continue;
             }
         }
