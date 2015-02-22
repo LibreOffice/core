@@ -112,8 +112,8 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/dmapper/ThemeTable \
     writerfilter/source/dmapper/WrapPolygonHandler \
     writerfilter/source/dmapper/util \
-    writerfilter/source/filter/ImportFilter \
     writerfilter/source/filter/RtfFilter \
+    writerfilter/source/filter/WriterFilter \
     writerfilter/source/filter/WriterFilterDetection \
     writerfilter/source/ooxml/Handler \
     writerfilter/source/ooxml/OOXMLBinaryObjectReference \
