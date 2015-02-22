@@ -67,6 +67,8 @@ endif
 gb_LinkTarget_LDFLAGS += \
 	-L$(SYSBASE)/lib \
 	-L$(SYSBASE)/usr/lib \
+	-Wl,-B,direct \
+	-Wl,-z,defs \
 	-Wl,-z,combreloc \
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
