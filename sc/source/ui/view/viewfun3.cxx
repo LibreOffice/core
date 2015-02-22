@@ -475,76 +475,108 @@ void ScViewFunc::PasteFromSystem()
             sal_uLong nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
             sal_uLong nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
 
+            sal_uInt16 nDestination = EXCHG_DEST_SCDOC_FREE_AREA;
+            sal_uInt16 nSourceOptions = EXCHG_IN_ACTION_COPY;
+            sal_uLong nFormat;          // output param for GetExchangeAction
+            sal_uInt16 nEventAction;    // output param for GetExchangeAction
+
+            uno::Reference<com::sun::star::datatransfer::XTransferable> xTransferable( aDataHelper.GetXTransferable() );
+            sal_uInt16 nAction = SotExchange::GetExchangeAction(
+                                    aDataHelper.GetDataFlavorExVector(),
+                                    nDestination,
+                                    nSourceOptions,
+                                    EXCHG_IN_ACTION_DEFAULT,
+                                    nFormat, nEventAction, 0,
+                                    &xTransferable );
+
+            if ( nAction != EXCHG_INOUT_ACTION_NONE )
+            {
+                nAction = ( nAction & EXCHG_ACTION_MASK );
+
+                switch( nAction )
+                {
+                case EXCHG_OUT_ACTION_INSERT_SVXB:
+                case EXCHG_OUT_ACTION_INSERT_GDIMETAFILE:
+                case EXCHG_OUT_ACTION_INSERT_BITMAP:
+                case EXCHG_OUT_ACTION_INSERT_GRAPH:
+                    // FORMAT_BITMAP
+                    // SOT_FORMATSTR_ID_PNG
+                    // FORMAT_GDIMETAFILE
+                    // SOT_FORMATSTR_ID_SVXB
+                    PasteFromSystem(nFormat);
+                    break;
+                default:
+                    nAction = EXCHG_INOUT_ACTION_NONE;
+                }
+            }
+
+            if ( nAction == EXCHG_INOUT_ACTION_NONE )
+            {
                 //  first SvDraw-model, then drawing
                 //  (only one drawing is allowed)
 
-            if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
-            {
-                // special case for tables from drawing
-                if( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
                 {
-                    PasteFromSystem( FORMAT_RTF );
+                    // special case for tables from drawing
+                    if( aDataHelper.HasFormat( SOT_FORMAT_RTF ) )
+                    {
+                        PasteFromSystem( FORMAT_RTF );
+                    }
+                    else
+                    {
+                        PasteFromSystem( SOT_FORMATSTR_ID_DRAWING );
+                    }
                 }
-                else
+                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
                 {
-                    PasteFromSystem( SOT_FORMATSTR_ID_DRAWING );
-                }
-            }
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
-                PasteFromSystem( SOT_FORMATSTR_ID_SVXB );
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
-            {
-                //  If it's a Writer object, insert RTF instead of OLE
+                    //  If it's a Writer object, insert RTF instead of OLE
 
-                //  Else, if the class id is all-zero, and SYLK is available,
-                //  it probably is spreadsheet cells that have been put
-                //  on the clipboard by OOo, so use the SYLK. (fdo#31077)
+                    //  Else, if the class id is all-zero, and SYLK is available,
+                    //  it probably is spreadsheet cells that have been put
+                    //  on the clipboard by OOo, so use the SYLK. (fdo#31077)
 
-                bool bDoRtf = false;
-                TransferableObjectDescriptor aObjDesc;
-                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
-                {
-                    bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
-                                 aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
-                               && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                    bool bDoRtf = false;
+                    TransferableObjectDescriptor aObjDesc;
+                    if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) )
+                    {
+                        bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
+                                     aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
+                                   && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                    }
+                    if ( bDoRtf )
+                        PasteFromSystem( FORMAT_RTF );
+                    else if ( aObjDesc.maClassName == SvGlobalName( 0,0,0,0,0,0,0,0,0,0,0 )
+                              && aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ))
+                        PasteFromSystem( SOT_FORMATSTR_ID_SYLK );
+                    else
+                        PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE );
                 }
-                if ( bDoRtf )
-                    PasteFromSystem( FORMAT_RTF );
-                else if ( aObjDesc.maClassName == SvGlobalName( 0,0,0,0,0,0,0,0,0,0,0 )
-                          && aDataHelper.HasFormat( SOT_FORMATSTR_ID_SYLK ))
-                    PasteFromSystem( SOT_FORMATSTR_ID_SYLK );
-                else
-                    PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE );
+                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
+                    PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
+                    // the following format can not affect scenario from #89579#
+                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ))
+                    PasteFromSystem( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
+                    // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
+                else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
+                    PasteFromSystem(nBiff8);
+                else if (aDataHelper.HasFormat(nBiff5))
+                    PasteFromSystem(nBiff5);
+                else if (aDataHelper.HasFormat(FORMAT_RTF))
+                    PasteFromSystem(FORMAT_RTF);
+                else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
+                    PasteFromSystem(SOT_FORMATSTR_ID_HTML);
+                else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
+                    PasteFromSystem(SOT_FORMATSTR_ID_HTML_SIMPLE);
+                else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_SYLK))
+                    PasteFromSystem(SOT_FORMATSTR_ID_SYLK);
+                else if (aDataHelper.HasFormat(FORMAT_STRING))
+                    PasteFromSystem(FORMAT_STRING);
+                // xxx_OLE formats come last, like in SotExchange tables
+                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
+                    PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
+                else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
+                    PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
             }
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
-                PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE );
-            // the following format can not affect scenario from #89579#
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ))
-                PasteFromSystem( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE );
-            // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
-            else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
-                PasteFromSystem(nBiff8);
-            else if (aDataHelper.HasFormat(nBiff5))
-                PasteFromSystem(nBiff5);
-            else if (aDataHelper.HasFormat(FORMAT_RTF))
-                PasteFromSystem(FORMAT_RTF);
-            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
-                PasteFromSystem(SOT_FORMATSTR_ID_HTML);
-            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
-                PasteFromSystem(SOT_FORMATSTR_ID_HTML_SIMPLE);
-            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_SYLK))
-                PasteFromSystem(SOT_FORMATSTR_ID_SYLK);
-            else if (aDataHelper.HasFormat(FORMAT_STRING))
-                PasteFromSystem(FORMAT_STRING);
-            else if (aDataHelper.HasFormat(FORMAT_GDIMETAFILE))
-                PasteFromSystem(FORMAT_GDIMETAFILE);
-            else if (aDataHelper.HasFormat(FORMAT_BITMAP))
-                PasteFromSystem(FORMAT_BITMAP);
-            // xxx_OLE formats come last, like in SotExchange tables
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
-                PasteFromSystem( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE );
-            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
-                PasteFromSystem( SOT_FORMATSTR_ID_LINK_SOURCE_OLE );
         }
     }
     //  no exception-> SID_PASTE has FastCall-flag from idl
