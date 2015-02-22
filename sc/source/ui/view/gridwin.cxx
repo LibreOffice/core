@@ -5948,18 +5948,30 @@ void ScGridWindow::UpdateAutoFillOverlay()
         ScDocument* pDoc = pViewData->GetDocument();
         bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
+        sal_Int32 nScale = GetDPIScaleFactor();
+        // Size should be even
+        Size aFillHandleSize = Size(6 * nScale, 6 * nScale);
+
         Point aFillPos = pViewData->GetScrPos( nX, nY, eWhich, true );
         long nSizeXPix;
         long nSizeYPix;
         pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
-        if ( bLayoutRTL )
-            aFillPos.X() -= nSizeXPix + 3;
+
+        if (bLayoutRTL)
+            aFillPos.X() -= nSizeXPix - 2 + (aFillHandleSize.Width() / 2);
         else
-            aFillPos.X() += nSizeXPix - 2;
+            aFillPos.X() += nSizeXPix - (aFillHandleSize.Width() / 2);
 
         aFillPos.Y() += nSizeYPix;
-        aFillPos.Y() -= 2;
-        mpAutoFillRect.reset(new Rectangle(aFillPos, Size(6, 6)));
+        aFillPos.Y() -= (aFillHandleSize.Height() / 2);
+
+        Rectangle aFillRect(aFillPos, aFillHandleSize);
+
+        // expand rect to increase hit area
+        mpAutoFillRect.reset(new Rectangle(aFillRect.Left()   - nScale,
+                                           aFillRect.Top()    - nScale,
+                                           aFillRect.Right()  + nScale,
+                                           aFillRect.Bottom() + nScale));
 
         // #i70788# get the OverlayManager safely
         rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
@@ -5972,7 +5984,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
                 aHandleColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::CALCPAGEBREAKAUTOMATIC).nColor;
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
-            basegfx::B2DRange aRB(mpAutoFillRect->Left(), mpAutoFillRect->Top(), mpAutoFillRect->Right() + 1, mpAutoFillRect->Bottom() + 1);
+            basegfx::B2DRange aRB(aFillRect.Left(), aFillRect.Top(), aFillRect.Right(), aFillRect.Bottom());
 
             aRB.transform(aTransform);
             aRanges.push_back(aRB);
