@@ -5797,19 +5797,39 @@ void ScGridWindow::UpdateCursorOverlay()
             long nSizeYPix;
             pViewData->GetMergeSizePixel( nX, nY, nSizeXPix, nSizeYPix );
 
-            if ( bLayoutRTL )
+            if (bLayoutRTL)
                 aScrPos.X() -= nSizeXPix - 2;       // move instead of mirroring
 
-            // Now, draw the cursor.
+            Rectangle aRect( aScrPos, Size( nSizeXPix - 1, nSizeYPix - 1) );
 
-            aScrPos.X() -= 2;
-            aScrPos.Y() -= 2;
-            Rectangle aRect( aScrPos, Size( nSizeXPix + 3, nSizeYPix + 3 ) );
+            sal_Int32 nScale = GetDPIScaleFactor();
 
-            aPixelRects.push_back(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
-            aPixelRects.push_back(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
-            aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
-            aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
+            long aCursorWidth = 1 * nScale;
+
+            Rectangle aLeft = Rectangle(aRect);
+            aLeft.Top()    -= aCursorWidth;
+            aLeft.Bottom() += aCursorWidth;
+            aLeft.Right()   = aLeft.Left();
+            aLeft.Left()   -= aCursorWidth;
+
+            Rectangle aRight = Rectangle(aRect);
+            aRight.Top()    -= aCursorWidth;
+            aRight.Bottom() += aCursorWidth;
+            aRight.Left()    = aRight.Right();
+            aRight.Right()  += aCursorWidth;
+
+            Rectangle aTop = Rectangle(aRect);
+            aTop.Bottom()  = aTop.Top();
+            aTop.Top()    -= aCursorWidth;
+
+            Rectangle aBottom = Rectangle(aRect);
+            aBottom.Top()     = aBottom.Bottom();
+            aBottom.Bottom() += aCursorWidth;
+
+            aPixelRects.push_back(aLeft);
+            aPixelRects.push_back(aRight);
+            aPixelRects.push_back(aTop);
+            aPixelRects.push_back(aBottom);
         }
     }
 
