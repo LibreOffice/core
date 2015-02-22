@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import org.json.JSONException;
-import org.mozilla.gecko.gfx.PointUtils;
 
 import java.util.LinkedList;
 import java.util.ListIterator;

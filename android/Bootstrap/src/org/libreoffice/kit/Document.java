@@ -9,8 +9,6 @@
 
 package org.libreoffice.kit;
 
-import android.util.Log;
-
 import java.nio.ByteBuffer;
 
 public class Document {
@@ -26,9 +24,28 @@ public class Document {
     public static final int DOCTYPE_DRAWING = 3;
     public static final int DOCTYPE_OTHER = 4;
 
+    /**
+     * Mouse event types
+     */
     public static final int MOUSE_BUTTON_DOWN = 0;
     public static final int MOUSE_BUTTON_UP = 1;
     public static final int MOUSE_MOVE = 2;
+
+    /**
+     * Callback message types
+     */
+    public static final int CALLBACK_INVALIDATE_TILES = 0;
+    public static final int CALLBACK_INVALIDATE_VISIBLE_CURSOR = 1;
+    public static final int CALLBACK_INVALIDATE_TEXT_SELECTION = 2;
+    public static final int CALLBACK_INVALIDATE_TEXT_SELECTION_START = 3;
+    public static final int CALLBACK_INVALIDATE_TEXT_SELECTION_END = 4;
+
+    /**
+     * Text selection types
+     */
+    public static final int TEXT_SELECTION_START = 0;
+    public static final int TEXT_SELECTION_END = 1;
+    public static final int TEXT_SELECTION_RESET = 2;
 
     private final ByteBuffer handle;
     private MessageCallback messageCallback = null;
@@ -94,8 +111,9 @@ public class Document {
      * @param type - mouse event type
      * @param x - x coordinate
      * @param y - y coordinate
+     * @param count - number of events
      */
-    public native void postMouseEvent(int type, int x, int y);
+    public native void postMouseEvent(int type, int x, int y, int count);
 
     /**
      * Callback to retrieve messages from LOK

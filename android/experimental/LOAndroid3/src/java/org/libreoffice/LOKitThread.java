@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import org.mozilla.gecko.gfx.CairoImage;
@@ -12,12 +13,15 @@ import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.SubTile;
 
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
-public class LOKitThread extends Thread implements TileProvider.TileInvalidationCallback {
+public class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
-    private PriorityBlockingQueue<LOEvent> mEventQueue = new PriorityBlockingQueue<LOEvent>();
+    private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
+
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ImmutableViewportMetrics mViewportMetrics;
@@ -27,35 +31,66 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         TileProviderFactory.initialize();
     }
 
-    private void tileRequest(ComposedTileLayer composedTileLayer, TileIdentifier tileId, boolean forceRedraw) {
-        if (mTileProvider == null)
-            return;
-
-        if (composedTileLayer.isStillValid(tileId)) {
-            CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
-            if (image != null) {
-                mLayerClient.beginDrawing();
-                SubTile tile = new SubTile(image, tileId);
-                composedTileLayer.addTile(tile);
-                mLayerClient.endDrawing(mViewportMetrics);
-                mLayerClient.forceRender();
+    @Override
+    public void run() {
+        while (true) {
+            LOEvent event;
+            try {
+                event = mEventQueue.take();
+                processEvent(event);
+            } catch (InterruptedException exception) {
+                throw new RuntimeException(exception);
             }
-        } else {
-            composedTileLayer.cleanupInvalidTile(tileId);
         }
     }
 
-    private void tileRerender(ComposedTileLayer composedTileLayer, SubTile tile) {
-        if (mTileProvider == null)
+    /* Viewport changed, recheck if tiles need to be added / removed */
+    private void tileReevaluationRequest(ComposedTileLayer composedTileLayer) {
+        if (mTileProvider == null) {
             return;
+        }
+        List<SubTile> tiles = new ArrayList<SubTile>();
 
-        if (composedTileLayer.isStillValid(tile.id) && !tile.markedForRemoval) {
+        mLayerClient.beginDrawing();
+        composedTileLayer.addNewTiles(tiles);
+        mLayerClient.endDrawing();
+
+        for (SubTile tile : tiles) {
+            TileIdentifier tileId = tile.id;
+            CairoImage image = mTileProvider.createTile(tileId.x, tileId.y, tileId.size, tileId.zoom);
             mLayerClient.beginDrawing();
-            mTileProvider.rerenderTile(tile.getImage(), tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
-            tile.invalidate();
-            mLayerClient.endDrawing(mViewportMetrics);
+            if (image != null) {
+                tile.setImage(image);
+            }
+            mLayerClient.endDrawing();
             mLayerClient.forceRender();
         }
+
+        mLayerClient.beginDrawing();
+        composedTileLayer.markTiles();
+        composedTileLayer.clearMarkedTiles();
+        mLayerClient.endDrawing();
+        mLayerClient.forceRender();
+    }
+
+    /* Invalidate tiles that intersect the input rect */
+    private void tileInvalidation(RectF rect) {
+        if (mLayerClient == null || mTileProvider == null) {
+            return;
+        }
+
+        mLayerClient.beginDrawing();
+
+        List<SubTile> tiles = new ArrayList<SubTile>();
+        mLayerClient.invalidateTiles(tiles, rect);
+
+        for (SubTile tile : tiles) {
+            CairoImage image = mTileProvider.createTile(tile.id.x, tile.id.y, tile.id.size, tile.id.zoom);
+            tile.setImage(image);
+            tile.invalidate();
+        }
+        mLayerClient.endDrawing();
+        mLayerClient.forceRender();
     }
 
     /** Handle the geometry change + draw. */
@@ -72,6 +107,7 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         zoomAndRepositionTheDocument();
 
         mLayerClient.forceRedraw();
+        mLayerClient.forceRender();
     }
 
     private void zoomAndRepositionTheDocument() {
@@ -118,7 +154,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner();
-            mTileProvider.registerInvalidationCallback(this);
             refresh();
             LOKitShell.hideProgressSpinner();
         } else {
@@ -130,15 +165,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
         if (mTileProvider != null) {
             mTileProvider.close();
             mTileProvider = null;
-        }
-    }
-
-    public void run() {
-        try {
-            while (true) {
-                processEvent(mEventQueue.take());
-            }
-        } catch (InterruptedException ex) {
         }
     }
 
@@ -157,32 +183,54 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
             case LOEvent.CHANGE_PART:
                 changePart(event.mPartIndex);
                 break;
-            case LOEvent.TILE_REQUEST:
-                tileRequest(event.mComposedTileLayer, event.mTileId, event.mForceRedraw);
-                break;
-            case LOEvent.TILE_RERENDER:
-                tileRerender(event.mComposedTileLayer, event.mTile);
+            case LOEvent.TILE_INVALIDATION:
+                tileInvalidation(event.mInvalidationRect);
                 break;
             case LOEvent.THUMBNAIL:
                 createThumbnail(event.mTask);
                 break;
             case LOEvent.TOUCH:
-                if (!LOKitShell.isEditingEnabled()) {
-                    return;
-                }
-                touch(event.mTouchType, event.mMotionEvent);
+                touch(event.mTouchType, event.mMotionEvent, event.mDocumentTouchCoordinate);
                 break;
-            case LOEvent.KEY_PRESS:
-                if (!LOKitShell.isEditingEnabled()) {
-                    return;
-                }
-                mTileProvider.keyPress(event.mKeyEvent);
+            case LOEvent.KEY_EVENT:
+                keyEvent(event.mKeyEvent);
+                break;
+            case LOEvent.TILE_REEVALUATION_REQUEST:
+                tileReevaluationRequest(event.mComposedTileLayer);
                 break;
         }
     }
 
-    private void touch(String touchType, MotionEvent motionEvent) {
-        LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+    /**
+     * Processes key events.
+     */
+    private void keyEvent(KeyEvent keyEvent) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
+        if (mTileProvider == null) {
+            return;
+        }
+        mTileProvider.sendKeyEvent(keyEvent);
+    }
+
+    /**
+     * Processes touch events.
+     */
+    private void touch(String touchType, MotionEvent motionEvent, PointF mDocumentTouchCoordinate) {
+        if (!LOKitShell.isEditingEnabled()) {
+            return;
+        }
+        if (mTileProvider == null) {
+            return;
+        }
+        if (touchType.equals("LongPress")) {
+            LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+            mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 2);
+        } else { // "SingleTap"
+            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+            mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 1);
+        }
     }
 
     private void createThumbnail(final ThumbnailCreator.ThumbnailCreationTask task) {
@@ -196,18 +244,6 @@ public class LOKitThread extends Thread implements TileProvider.TileInvalidation
 
     public void clearQueue() {
         mEventQueue.clear();
-    }
-
-    @Override
-    public void invalidate(RectF rect) {
-        if (!LOKitShell.isEditingEnabled()) {
-            return;
-        }
-
-        Log.i(LOGTAG, "Invalidate request: " + rect);
-
-        mLayerClient = mApplication.getLayerClient();
-        mLayerClient.invalidateTiles(rect);
     }
 }
 

@@ -3,10 +3,16 @@ package org.libreoffice;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
+import org.mozilla.gecko.gfx.ComposedTileLayer;
+import org.mozilla.gecko.gfx.LayerView;
+import org.mozilla.gecko.gfx.SubTile;
 
 
 public class LOKitShell {
@@ -54,6 +60,14 @@ public class LOKitShell {
         return metrics;
     }
 
+    public static boolean isEditingEnabled() {
+        return false;
+    }
+
+    public static LayerView getLayerView() {
+        return LibreOfficeMainActivity.mAppContext.getLayerClient().getView();
+    }
+
     // EVENTS
 
     /**
@@ -72,18 +86,42 @@ public class LOKitShell {
     /**
      * Send touch event to LOKitThread.
      */
-    public static void sentTouchEvent(String touchType, MotionEvent motionEvent) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, "SingleTap", motionEvent));
+    public static void sentTouchEvent(String touchType, MotionEvent motionEvent, PointF pointF) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, touchType, motionEvent, pointF));
     }
 
     /**
-     * Send key press event to LOKitThread.
+     * Send key event to LOKitThread.
      */
-    public static void sendKeyPressEvent(KeyEvent event) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_PRESS, event));
+    public static void sendKeyEvent(KeyEvent event) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.KEY_EVENT, event));
     }
 
-    public static boolean isEditingEnabled() {
-        return false;
+    public static void sendSizeChangedEvent(int width, int height) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.SIZE_CHANGED, width, height));
+    }
+
+    public static void sendChangePartEvent(int part) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_PART, part));
+    }
+
+    public static void sendLoadEvent(String inputFile) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.LOAD, inputFile));
+    }
+
+    public static void sendCloseEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.CLOSE));
+    }
+
+    public static void sendRedrawEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.REDRAW));
+    }
+
+    public static void sendTileReevaluationRequest(ComposedTileLayer composedTileLayer) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_REEVALUATION_REQUEST, composedTileLayer));
+    }
+
+    public static void sendTileInvalidationRequest(RectF rect) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_INVALIDATION, rect));
     }
 }

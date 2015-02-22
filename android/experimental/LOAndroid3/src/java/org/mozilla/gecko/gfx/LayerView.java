@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,14 +23,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
-
-import java.lang.reflect.Method;
-import java.nio.IntBuffer;
+import org.mozilla.gecko.OnInterceptTouchListener;
 
 /**
  * A view rendered by the layer compositor.
@@ -45,19 +41,20 @@ public class LayerView extends FrameLayout {
     private static String LOGTAG = LayerView.class.getName();
 
     private GeckoLayerClient mLayerClient;
-    private TouchEventHandler mTouchEventHandler;
+    private PanZoomController mPanZoomController;
     private GLController mGLController;
     private InputConnectionHandler mInputConnectionHandler;
     private LayerRenderer mRenderer;
-    private long mRenderTime;
-    private boolean mRenderTimeReset;
+
     /* Must be a PAINT_xxx constant */
     private int mPaintState = PAINT_NONE;
+    private boolean mFullScreen = false;
 
     private SurfaceView mSurfaceView;
     private TextureView mTextureView;
 
     private Listener mListener;
+    private OnInterceptTouchListener mTouchIntercepter;
 
     /* Flags used to determine when to show the painted surface. The integer
      * order must correspond to the order in which these states occur. */
@@ -105,7 +102,7 @@ public class LayerView extends FrameLayout {
 
     void connect(GeckoLayerClient layerClient) {
         mLayerClient = layerClient;
-        mTouchEventHandler = new TouchEventHandler(getContext(), this, layerClient);
+        mPanZoomController = mLayerClient.getPanZoomController();
         mRenderer = new LayerRenderer(this);
         mInputConnectionHandler = null;
 
@@ -115,24 +112,82 @@ public class LayerView extends FrameLayout {
         createGLThread();
     }
 
+    public void show() {
+        // Fix this if TextureView support is turned back on above
+        mSurfaceView.setVisibility(View.VISIBLE);
+    }
+
+    public void hide() {
+        // Fix this if TextureView support is turned back on above
+        mSurfaceView.setVisibility(View.INVISIBLE);
+    }
+
+    public void destroy() {
+        if (mLayerClient != null) {
+            mLayerClient.destroy();
+        }
+        if (mRenderer != null) {
+            mRenderer.destroy();
+        }
+    }
+
+    public void setTouchIntercepter(final OnInterceptTouchListener touchIntercepter) {
+        // this gets run on the gecko thread, but for thread safety we want the assignment
+        // on the UI thread.
+        post(new Runnable() {
+            public void run() {
+                mTouchIntercepter = touchIntercepter;
+            }
+        });
+    }
+
+    public void setInputConnectionHandler(InputConnectionHandler inputConnectionHandler) {
+        mInputConnectionHandler = inputConnectionHandler;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
+        if (event.getActionMasked() == MotionEvent.ACTION_DOWN) {
             requestFocus();
-        return mTouchEventHandler.handleEvent(event);
+        }
+
+        if (mTouchIntercepter != null && mTouchIntercepter.onInterceptTouchEvent(this, event)) {
+            return true;
+        }
+        if (mPanZoomController != null && mPanZoomController.onTouchEvent(event)) {
+            return true;
+        }
+        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public boolean onHoverEvent(MotionEvent event) {
-        return mTouchEventHandler.handleEvent(event);
+        if (mTouchIntercepter != null && mTouchIntercepter.onTouch(this, event)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (mPanZoomController != null && mPanZoomController.onMotionEvent(event)) {
+            return true;
+        }
+        return false;
     }
 
     public GeckoLayerClient getLayerClient() { return mLayerClient; }
-    public TouchEventHandler getTouchEventHandler() { return mTouchEventHandler; }
+    public PanZoomController getPanZoomController() { return mPanZoomController; }
 
-    /** The LayerRenderer calls this to indicate that the window has changed size. */
     public void setViewportSize(IntSize size) {
         mLayerClient.setViewportSize(new FloatSize(size));
+    }
+
+    public ImmutableViewportMetrics getViewportMetrics() {
+        return mLayerClient.getViewportMetrics();
     }
 
     @Override
@@ -177,19 +232,16 @@ public class LayerView extends FrameLayout {
         return false;
     }
 
+    public boolean isIMEEnabled() {
+        /*if (mInputConnectionHandler != null) {
+            return mInputConnectionHandler.isIMEEnabled();
+        }*/
+        return false;
+    }
+
     public void requestRender() {
-        if (mRenderControllerThread != null) {
-            mRenderControllerThread.renderFrame();
-        }
         if (mListener != null) {
             mListener.renderRequested();
-        }
-
-        synchronized(this) {
-            if (!mRenderTimeReset) {
-                mRenderTimeReset = true;
-                mRenderTime = System.nanoTime();
-            }
         }
     }
 
@@ -201,24 +253,8 @@ public class LayerView extends FrameLayout {
         mRenderer.removeLayer(layer);
     }
 
-    /**
-     * Returns the time elapsed between the first call of requestRender() after
-     * the last call of getRenderTime(), in nanoseconds.
-     */
-    public long getRenderTime() {
-        synchronized(this) {
-            mRenderTimeReset = false;
-            return System.nanoTime() - mRenderTime;
-        }
-    }
-
     public int getMaxTextureSize() {
         return mRenderer.getMaxTextureSize();
-    }
-
-    /** Used by robocop for testing purposes. Not for production use! This is called via reflection by robocop. */
-    public IntBuffer getPixels() {
-        return mRenderer.getPixels();
     }
 
     public void setLayerRenderer(LayerRenderer renderer) {
@@ -241,7 +277,6 @@ public class LayerView extends FrameLayout {
     public int getPaintState() {
         return mPaintState;
     }
-
 
     public LayerRenderer getRenderer() {
         return mRenderer;
@@ -280,9 +315,7 @@ public class LayerView extends FrameLayout {
     private void onSizeChanged(int width, int height) {
         mGLController.surfaceChanged(width, height);
 
-        if (mRenderControllerThread != null) {
-            mRenderControllerThread.surfaceChanged(width, height);
-        }
+        mLayerClient.setViewportSize(new FloatSize(width, height));
 
         if (mListener != null) {
             mListener.surfaceChanged(width, height);
@@ -291,10 +324,6 @@ public class LayerView extends FrameLayout {
 
     private void onDestroyed() {
         mGLController.surfaceDestroyed();
-
-        if (mRenderControllerThread != null) {
-            mRenderControllerThread.surfaceDestroyed();
-        }
 
         if (mListener != null) {
             mListener.compositionPauseRequested();
@@ -386,6 +415,7 @@ public class LayerView extends FrameLayout {
         Log.e(LOGTAG, "### Creating GL thread!");
         mRenderControllerThread = new RenderControllerThread(mGLController);
         mRenderControllerThread.start();
+        setListener(mRenderControllerThread);
         notifyAll();
     }
 
@@ -403,16 +433,9 @@ public class LayerView extends FrameLayout {
         Log.e(LOGTAG, "### Destroying GL thread!");
         Thread thread = mRenderControllerThread;
         mRenderControllerThread.shutdown();
+        setListener(null);
         mRenderControllerThread = null;
         return thread;
-    }
-
-    public synchronized void recreateSurface() {
-        if (mRenderControllerThread == null) {
-            throw new LayerViewException("recreateSurface() called with no GL thread active!");
-        }
-
-        mRenderControllerThread.recreateSurface();
     }
 
     public static class LayerViewException extends RuntimeException {
@@ -421,5 +444,13 @@ public class LayerView extends FrameLayout {
         LayerViewException(String e) {
             super(e);
         }
+    }
+
+    public void setFullScreen(boolean fullScreen) {
+        mFullScreen = fullScreen;
+    }
+
+    public boolean isFullScreen() {
+        return mFullScreen;
     }
 }

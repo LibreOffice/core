@@ -1,5 +1,7 @@
 package org.libreoffice;
 
+import android.graphics.PointF;
+import android.graphics.RectF;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -14,11 +16,11 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int LOAD = 4;
     public static final int CLOSE = 5;
     public static final int REDRAW = 6;
-    public static final int TILE_REQUEST = 7;
+    public static final int TILE_REEVALUATION_REQUEST = 7;
     public static final int THUMBNAIL = 8;
-    public static final int TILE_RERENDER = 9;
+    public static final int TILE_INVALIDATION = 9;
     public static final int TOUCH = 10;
-    public static final int KEY_PRESS = 11;
+    public static final int KEY_EVENT = 11;
 
     public final int mType;
     public int mPriority = 0;
@@ -27,13 +29,13 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mTypeString;
     public int mPartIndex;
     public String mFilename;
-    public TileIdentifier mTileId;
     public ComposedTileLayer mComposedTileLayer;
-    public boolean mForceRedraw;
-    public SubTile mTile;
     public String mTouchType;
     public MotionEvent mMotionEvent;
+    public PointF mDocumentTouchCoordinate;
+    public String mKeyEventType;
     public KeyEvent mKeyEvent;
+    public RectF mInvalidationRect;
 
     public LOEvent(int type) {
         mType = type;
@@ -44,12 +46,10 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
     }
 
-    public LOEvent(int type, ComposedTileLayer composedTileLayer, TileIdentifier tileId, boolean forceRedraw) {
+    public LOEvent(int type, ComposedTileLayer composedTileLayer) {
         mType = type;
-        mTypeString = "Tile Request";
+        mTypeString = "Tile Reevaluation";
         mComposedTileLayer = composedTileLayer;
-        mTileId = tileId;
-        mForceRedraw = forceRedraw;
     }
 
     public LOEvent(int type, String filename) {
@@ -72,25 +72,27 @@ public class LOEvent implements Comparable<LOEvent> {
     public LOEvent(int type, ThumbnailCreator.ThumbnailCreationTask task) {
         mType = type;
         mTask = task;
+        mTypeString = "Thumbnail";
     }
 
-    public LOEvent(int type, ComposedTileLayer composedTileLayer, SubTile tile) {
-        mType = type;
-        mTypeString = "Tile Rerender";
-        mComposedTileLayer = composedTileLayer;
-        mTile = tile;
-    }
-
-    public LOEvent(int type, String touchType, MotionEvent motionEvent) {
+    public LOEvent(int type, String touchType, MotionEvent motionEvent, PointF documentTouchCoordinate) {
         mType = type;
         mTypeString = "Touch";
         mTouchType = touchType;
         mMotionEvent = motionEvent;
+        mDocumentTouchCoordinate = documentTouchCoordinate;
     }
 
     public LOEvent(int type, KeyEvent keyEvent) {
         mType = type;
+        mTypeString = "Key Event";
         mKeyEvent = keyEvent;
+    }
+
+    public LOEvent(int type, RectF rect) {
+        mType = type;
+        mTypeString = "Tile Invalidation";
+        mInvalidationRect = rect;
     }
 
     public String getTypeString() {

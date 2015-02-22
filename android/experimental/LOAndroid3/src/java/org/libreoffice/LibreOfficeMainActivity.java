@@ -1,6 +1,5 @@
 package org.libreoffice;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,10 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import org.mozilla.gecko.ZoomConstraints;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -28,7 +23,6 @@ import org.mozilla.gecko.gfx.LayerView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -53,6 +47,8 @@ public class LibreOfficeMainActivity extends LOAbout {
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
     private DocumentPartViewListAdapter mDocumentPartViewListAdapter;
     private String mInputFile;
+    //private TextSelection mTextSelection;
+    //private TextCursorLayer mTextCursorLayer;
     private File mTempFile = null;
 
     public LibreOfficeMainActivity() {
@@ -102,8 +98,6 @@ public class LibreOfficeMainActivity extends LOAbout {
 
         mMainHandler = new Handler();
 
-        LayoutInflater.from(this).setFactory(ViewFactory.getInstance());
-
         if (getIntent().getData() != null) {
             if (getIntent().getData().getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
                 if (copyFileToTemp() && mTempFile != null) {
@@ -141,10 +135,16 @@ public class LibreOfficeMainActivity extends LOAbout {
             sLOKitThread.clearQueue();
         }
 
+        /*
+        mTextSelection = new TextSelection(mAppContext);
+        mTextCursorLayer = new TextCursorLayer(mAppContext);
+        */
+
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerClient.setView(layerView);
+        layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
         mLayerClient.notifyReady();
     }
 
@@ -193,13 +193,14 @@ public class LibreOfficeMainActivity extends LOAbout {
     protected void onStart() {
         Log.i(LOGTAG, "onStart..");
         super.onStart();
-        LOKitShell.sendEvent(LOEventFactory.load(mInputFile));
+        LOKitShell.sendLoadEvent(mInputFile);
     }
 
     @Override
     protected void onStop() {
         Log.i(LOGTAG, "onStop..");
-        LOKitShell.sendEvent(LOEventFactory.close());
+        hideSoftKeyboardDirect();
+        LOKitShell.sendCloseEvent();
         super.onStop();
     }
 
@@ -243,8 +244,6 @@ public class LibreOfficeMainActivity extends LOAbout {
      * Force the request on main thread.
      */
     public void showSoftKeyboard() {
-        Log.i(LOGTAG, "SoftKeyboard show request..");
-
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
@@ -256,6 +255,30 @@ public class LibreOfficeMainActivity extends LOAbout {
                 }
             }
         });
+    }
+
+    /**
+     * Hides software keyboard on UI thread.
+     */
+    public void hideSoftKeyboard() {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                hideSoftKeyboardDirect();
+            }
+        });
+    }
+
+    /**
+     * Hides software keyboard.
+     */
+    private void hideSoftKeyboardDirect() {
+        LayerView layerView = (LayerView) findViewById(R.id.layer_view);
+
+        if (getCurrentFocus() != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 
     public void showProgressSpinner() {
@@ -282,23 +305,23 @@ public class LibreOfficeMainActivity extends LOAbout {
         alertDialog.show();
     }
 
+    /*
+    public TextSelection getTextSelection() {
+        return mTextSelection;
+    }
+
+    public TextCursorLayer getTextCursorLayer() {
+        return mTextCursorLayer;
+    }
+    */
+
     private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DocumentPartView partView = mDocumentPartViewListAdapter.getItem(position);
-            LOKitShell.sendEvent(LOEventFactory.changePart(partView.partIndex));
+            LOKitShell.sendChangePartEvent(partView.partIndex);
             mDrawerLayout.closeDrawer(mDrawerList);
         }
-    }
-
-
-    /**
-     * Listen to key presses and send event to LOK.
-     */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LOKitShell.sendKeyPressEvent(event);
-        return super.onKeyDown(keyCode, event);
     }
 }
 

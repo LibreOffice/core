@@ -2,6 +2,7 @@ package org.libreoffice;
 
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.KeyEvent;
 
@@ -30,12 +31,14 @@ public interface TileProvider {
 
     /**
      * Change the document part to the one specified by the partIndex input parameter.
+     *
      * @param partIndex - part index to change to
      */
     void changePart(int partIndex);
 
     /**
      * Get the current document part number.
+     *
      * @return
      */
     int getCurrentPartNumber();
@@ -58,27 +61,25 @@ public interface TileProvider {
     boolean isSpreadsheet();
 
     /**
-     * Register a callback that is invoked when a tile invalidation is
-     * required.
+     * Trigger a key event.
      *
-     * @param tileInvalidationCallback - the tile invalidation callback
+     * @param keyEvent - contains information about key event
      */
-    void registerInvalidationCallback(TileProvider.TileInvalidationCallback tileInvalidationCallback);
+    void sendKeyEvent(KeyEvent keyEvent);
 
     /**
-     * Trigger a key press.
-     * @param keyEvent - contains the
+     * Trigger a mouse button down event.
+     *
+     * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
+     * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
-    void keyPress(KeyEvent keyEvent);
+    void mouseButtonDown(PointF documentCoordinate, int numberOfClicks);
 
     /**
-     * Callback to retrieve invalidation calls
+     * Trigger a mouse button up event.
+     *
+     * @param documentCoordinate - coordinate relative to the document where the mouse button should be triggered
+     * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
-    public interface TileInvalidationCallback {
-        /**
-         * Invoked when a region is invalidated.
-         * @param rect area in pixels which was invalidated and needs to be redrawn
-         */
-        void invalidate(RectF rect);
-    }
+    void mouseButtonUp(PointF documentCoordinate, int numberOfClicks);
 }

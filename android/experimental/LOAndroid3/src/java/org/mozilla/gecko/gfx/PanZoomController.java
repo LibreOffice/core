@@ -6,6 +6,8 @@
 package org.mozilla.gecko.gfx;
 
 import android.graphics.PointF;
+import android.view.MotionEvent;
+import android.view.View;
 
 import org.libreoffice.LOKitShell;
 
@@ -15,12 +17,16 @@ public interface PanZoomController {
     public static final float PAN_THRESHOLD = 1/16f * LOKitShell.getDpi();
 
     static class Factory {
-        static PanZoomController create(PanZoomTarget target) {
-            return new JavaPanZoomController(target);
+        static PanZoomController create(PanZoomTarget target, View view) {
+            return new JavaPanZoomController(target, view);
         }
     }
 
     public void destroy();
+
+    public boolean onTouchEvent(MotionEvent event);
+    public boolean onMotionEvent(MotionEvent event);
+    public void notifyDefaultActionPrevented(boolean prevented);
 
     public boolean getRedrawHint();
     public PointF getVelocityVector();
