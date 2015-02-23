@@ -105,11 +105,7 @@ bool ExcelFilter::importDocument() throw()
     if( aWorkbookPath.isEmpty() )
         return false;
 
-    /*  Construct the WorkbookGlobals object referred to by every instance of
-        the class WorkbookHelper, and execute the import filter by constructing
-        an instance of WorkbookFragment and loading the file. */
-    WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this );
-    if ( xBookGlob.get() && importFragment( new WorkbookFragment( *xBookGlob, aWorkbookPath ) ) )
+    try
     {
         try
         {
@@ -119,8 +115,23 @@ bool ExcelFilter::importDocument() throw()
         {
             SAL_WARN("sc", "exception when importing document properties " << e.Message);
         }
-        return true;
+        catch( ... )
+        {
+            SAL_WARN("sc", "exception when importing document properties");
+        }
+        /*  Construct the WorkbookGlobals object referred to by every instance of
+            the class WorkbookHelper, and execute the import filter by constructing
+            an instance of WorkbookFragment and loading the file. */
+        WorkbookGlobalsRef xBookGlob(WorkbookHelper::constructGlobals(*this));
+        if (xBookGlob.get() && importFragment(new WorkbookFragment(*xBookGlob, aWorkbookPath)))
+        {
+            return true;
+        }
     }
+    catch (...)
+    {
+    }
+
     return false;
 }
 
