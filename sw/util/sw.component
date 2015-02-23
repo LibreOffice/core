@@ -43,49 +43,64 @@
   <implementation name="com.sun.star.comp.Writer.WriterModule">
     <service name="com.sun.star.text.ModuleDispatcher"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLContentExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLContentExporter"
+      constructor="com_sun_star_comp_Writer_XMLContentExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLContentExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLExporter"
+      constructor="com_sun_star_comp_Writer_XMLExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLMetaExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLMetaExporter"
+      constructor="com_sun_star_comp_Writer_XMLMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLMetaExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisContentExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisContentExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisContentExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisContentImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisContentImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisMetaExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisMetaExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisMetaImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisSettingsExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisSettingsExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisSettingsImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesExporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisStylesExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesImporter">
+  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesImporter"
+      constructor="com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLOasisStylesImporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLSettingsExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLSettingsExporter"
+      constructor="com_sun_star_comp_Writer_XMLSettingsExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLSettingsExporter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.XMLStylesExporter">
+  <implementation name="com.sun.star.comp.Writer.XMLStylesExporter"
+      constructor="com_sun_star_comp_Writer_XMLStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLStylesExporter"/>
   </implementation>
   <implementation name="com.sun.star.util.comp.FinalThreadManager">
