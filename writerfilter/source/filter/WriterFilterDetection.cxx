@@ -17,120 +17,132 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <comphelper/storagehelper.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <WriterFilterDetection.hxx>
-#include <comphelper/storagehelper.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <osl/diagnose.h>
 #include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 using namespace ::com::sun::star;
 
-WriterFilterDetection::WriterFilterDetection(
-    const uno::Reference< uno::XComponentContext >& rxContext) :
-    m_xContext( rxContext )
+/// File format detection service for DOCX.
+class WriterFilterDetection : public cppu::WeakImplHelper
+    <
+    document::XExtendedFilterDetection,
+    lang::XServiceInfo
+    >
+{
+    uno::Reference<uno::XComponentContext> m_xContext;
+
+public:
+    WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext);
+    virtual ~WriterFilterDetection();
+
+    //XExtendedFilterDetection
+    virtual OUString SAL_CALL detect(uno::Sequence<beans::PropertyValue>& Descriptor) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
+};
+
+bool SAL_CALL WriterFilterDetection_supportsService(const OUString& ServiceName) throw (uno::RuntimeException);
+
+uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException);
+
+WriterFilterDetection::WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext)
+    : m_xContext(rxContext)
 {
 }
-
 
 WriterFilterDetection::~WriterFilterDetection()
 {
 }
 
-
-OUString WriterFilterDetection_getImplementationName () throw (uno::RuntimeException)
-{
-   return OUString ( "com.sun.star.comp.Writer.WriterFilterDetector"  );
-}
-
-
-
-OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& rDescriptor )
-   throw( uno::RuntimeException, std::exception )
+OUString WriterFilterDetection::detect(uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception)
 {
     OUString sTypeName;
     bool bWord = false;
     sal_Int32 nPropertyCount = rDescriptor.getLength();
     const beans::PropertyValue* pValues = rDescriptor.getConstArray();
     OUString sURL;
-    uno::Reference < io::XStream > xStream;
-    uno::Reference < io::XInputStream > xInputStream;
-    for( sal_Int32 nProperty = 0; nProperty < nPropertyCount; ++nProperty )
+    uno::Reference<io::XStream> xStream;
+    uno::Reference<io::XInputStream> xInputStream;
+    for (sal_Int32 nProperty = 0; nProperty < nPropertyCount; ++nProperty)
     {
-        if ( pValues[nProperty].Name == "TypeName" )
+        if (pValues[nProperty].Name == "TypeName")
             rDescriptor[nProperty].Value >>= sTypeName;
-        else if ( pValues[nProperty].Name == "URL" )
+        else if (pValues[nProperty].Name == "URL")
             pValues[nProperty].Value >>= sURL;
-        else if ( pValues[nProperty].Name == "Stream" )
+        else if (pValues[nProperty].Name == "Stream")
             pValues[nProperty].Value >>= xStream;
-        else if ( pValues[nProperty].Name == "InputStream" )
+        else if (pValues[nProperty].Name == "InputStream")
             pValues[nProperty].Value >>= xInputStream;
     }
     try
     {
-        uno::Reference< embed::XStorage > xDocStorage;
-        if ( sURL == "private:stream" )
-            xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream( xInputStream );
+        uno::Reference<embed::XStorage> xDocStorage;
+        if (sURL == "private:stream")
+            xDocStorage = comphelper::OStorageHelper::GetStorageFromInputStream(xInputStream);
         else
-            xDocStorage = comphelper::OStorageHelper::GetStorageFromURL( sURL, embed::ElementModes::READ );
-        if( xDocStorage.is() )
+            xDocStorage = comphelper::OStorageHelper::GetStorageFromURL(sURL, embed::ElementModes::READ);
+        if (xDocStorage.is())
         {
-            uno::Sequence< OUString > aNames = xDocStorage->getElementNames();
+            uno::Sequence<OUString> aNames = xDocStorage->getElementNames();
             const OUString* pNames = aNames.getConstArray();
-            for(sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
+            for (sal_Int32 nName = 0; nName < aNames.getLength(); ++nName)
             {
-                if ( pNames[nName] == "word" )
+                if (pNames[nName] == "word")
                 {
                     bWord = true;
-                    if( sTypeName.isEmpty() )
+                    if (sTypeName.isEmpty())
                         sTypeName = "writer_MS_Word_2007";
                     break;
                 }
             }
         }
     }
-    catch(const uno::Exception&)
+    catch (const uno::Exception&)
     {
-        OSL_FAIL("exception while opening storage");
+        SAL_WARN("writerfilter", "exception while opening storage");
     }
-    if( !bWord )
+    if (!bWord)
         sTypeName.clear();
-   return sTypeName;
+    return sTypeName;
 }
 
-
-uno::Sequence< OUString > WriterFilterDetection_getSupportedServiceNames(  ) throw (uno::RuntimeException)
+uno::Sequence<OUString> WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException)
 {
-   uno::Sequence < OUString > aRet(1);
-   OUString* pArray = aRet.getArray();
-   pArray[0] = "com.sun.star.document.ExtendedTypeDetection";
-   return aRet;
+    uno::Sequence<OUString> aRet =
+    {
+        OUString("com.sun.star.document.ExtendedTypeDetection")
+    };
+    return aRet;
 }
 
-OUString WriterFilterDetection::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
+OUString WriterFilterDetection::getImplementationName() throw (uno::RuntimeException, std::exception)
 {
-   return WriterFilterDetection_getImplementationName();
+    return OUString("com.sun.star.comp.Writer.WriterFilterDetector");
 }
 
-
-sal_Bool WriterFilterDetection::supportsService( const OUString& rServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool WriterFilterDetection::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
 {
-    return cppu::supportsService( this, rServiceName );
+    return cppu::supportsService(this, rServiceName);
 }
 
-
-uno::Sequence< OUString > WriterFilterDetection::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> WriterFilterDetection::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
     return WriterFilterDetection_getSupportedServiceNames();
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_Writer_WriterFilterDetector_get_implementation( ::com::sun::star::uno::XComponentContext* component,
-        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL com_sun_star_comp_Writer_WriterFilterDetector_get_implementation(uno::XComponentContext* pComp, uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new WriterFilterDetection(component));
+    return cppu::acquire(new WriterFilterDetection(pComp));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
