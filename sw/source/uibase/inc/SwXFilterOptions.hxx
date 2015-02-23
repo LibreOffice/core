@@ -92,11 +92,6 @@ public:
 
 };
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-    SwXFilterOptions_createInstance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >& );
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

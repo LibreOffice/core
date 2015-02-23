@@ -20,11 +20,14 @@
 #include <config_features.h>
 
 #include "SwXFilterOptions.hxx"
+#include "swdll.hxx"
 #include "unofreg.hxx"
+#include "unomailmerge.hxx"
 #include <sal/types.h>
 #include <osl/diagnose.h>
 #include <cppuhelper/factory.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
+#include <vcl/svapp.hxx>
 
 #include <string.h>
 
@@ -38,18 +41,10 @@ using namespace ::com::sun::star::lang;
 extern "C"
 {
 
-static ::cppu::ImplementationEntry const entries[] = {
-    { &comp_FinalThreadManager::_create,
-      &comp_FinalThreadManager::_getImplementationName,
-      &comp_FinalThreadManager::_getSupportedServiceNames,
-      &::cppu::createSingleComponentFactory, 0, 0 },
-    { 0, 0, 0, 0, 0, 0 }
-};
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
     const sal_Char * pImplName,
     void * pServiceManager,
-    void * pRegistryKey )
+    void * )
 {
     void * pRet = 0;
     if( pServiceManager )
@@ -60,41 +55,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
         uno::Reference< XSingleServiceFactory > xFactory;
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
-        if( SwXAutoTextContainer_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwXAutoTextContainer_getImplementationName(),
-                SwXAutoTextContainer_createInstance,
-                SwXAutoTextContainer_getSupportedServiceNames() );
-        }
-        else if( SwXModule_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwXModule_getImplementationName(),
-                SwXModule_createInstance,
-                SwXModule_getSupportedServiceNames() );
-        }
-#if HAVE_FEATURE_DBCONNECTIVITY
-        else if( SwXMailMerge_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwXMailMerge_getImplementationName(),
-                SwXMailMerge_createInstance,
-                SwXMailMerge_getSupportedServiceNames() );
-        }
-#endif
-        else if( SwXFilterOptions::getImplementationName_Static().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwXFilterOptions::getImplementationName_Static(),
-                SwXFilterOptions_createInstance,
-                SwXFilterOptions::getSupportedServiceNames_Static() );
-        }
-        else if( SwTextDocument_getImplementationName().equalsAsciiL(
+        if( SwTextDocument_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {
             xFactory = ::sfx2::createSfxModelFactory( xMSF,
@@ -110,20 +71,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
                 SwUnoModule_createInstance,
                 SwUnoModule_getSupportedServiceNames() );
         }
-        else if( LayoutDumpFilter_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                LayoutDumpFilter_getImplementationName(),
-                LayoutDumpFilter_createInstance,
-                LayoutDumpFilter_getSupportedServiceNames() );
-        }
-        else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            pRet = ::cppu::component_getFactoryHelper(
-                        pImplName, pServiceManager, pRegistryKey, entries);
-        }
 
         if( xFactory.is())
         {
@@ -135,5 +82,20 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
 }
 
 } // extern "C"
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SwXMailMerge_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+#if HAVE_FEATURE_DBCONNECTIVITY
+    SolarMutexGuard aGuard;
+
+    //the module may not be loaded
+    SwGlobals::ensure();
+    return cppu::acquire(new SwXMailMerge());
+#else
+    return nullptr;
+#endif
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
