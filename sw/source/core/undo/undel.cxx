@@ -54,12 +54,10 @@ static void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
 {
     if( !rSpzArr.empty() )
     {
-        SwFlyFrmFmt* pFmt;
-        const SwFmtAnchor* pAnchor;
         for( size_t n = 0; n < rSpzArr.size(); ++n )
         {
-            pFmt = static_cast<SwFlyFrmFmt*>(rSpzArr[n]);
-            pAnchor = &pFmt->GetAnchor();
+            SwFrmFmt * pFmt = rSpzArr[n];
+            const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
             if (pAnchor->GetAnchorId() == FLY_AT_CHAR)
             {
                 const SwPosition* pAPos = pAnchor->GetCntntAnchor();
