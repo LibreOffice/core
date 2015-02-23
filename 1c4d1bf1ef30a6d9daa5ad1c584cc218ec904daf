@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_bab48dd1",
+        "filename": "include/rtl/math.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-23T20:25:04Z",
+      "side": 1,
+      "message": "As rtl is part of the UDK the new enums should get a tag \"@since LibreOffice 4.5\".",
+      "revId": "1c4d1bf1ef30a6d9daa5ad1c584cc218ec904daf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_1ac4993e",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 604,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-23T20:25:04Z",
+      "side": 1,
+      "message": "Adapt the comment to reality, the \"exactly three digits\" holds only for rtl_math_StringFormat_E.",
+      "revId": "1c4d1bf1ef30a6d9daa5ad1c584cc218ec904daf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_5aca1151",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1738,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-23T20:25:04Z",
+      "side": 1,
+      "message": "Remove instead of commenting it out.",
+      "revId": "1c4d1bf1ef30a6d9daa5ad1c584cc218ec904daf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_3ac15d2f",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1987,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-23T20:25:04Z",
+      "side": 1,
+      "message": "Please wrap comments at column 80 for readability.",
+      "revId": "1c4d1bf1ef30a6d9daa5ad1c584cc218ec904daf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_dadce11a",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1991,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-23T20:25:04Z",
+      "side": 1,
+      "message": "Some spaces would make this more readable, i.e.\n\n (fExp \u003e\u003d 100.0 ? 1 : 0)",
+      "revId": "1c4d1bf1ef30a6d9daa5ad1c584cc218ec904daf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
