@@ -1022,6 +1022,9 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
+    SwXMLTableColContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableColContext_Impl();
 
@@ -1079,6 +1082,58 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
                                                         &pItem ) )
         {
             const SwFormatFrmSize *pSize = static_cast<const SwFormatFrmSize *>(pItem);
+            nWidth = pSize->GetWidth();
+            bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
+        }
+    }
+
+    if( nWidth )
+    {
+        while( nColRep-- && GetTable()->IsInsertColPossible() )
+            GetTable()->InsertColumn( nWidth, bRelWidth, &aDfltCellStyleName );
+    }
+}
+
+SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
+    SwXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SwXMLTableContext *pTable )
+:   SvXMLImportContext( rImport ),
+    xMyTable( pTable )
+{
+    sal_uInt32 nColRep = 1UL;
+    OUString aStyleName, aDfltCellStyleName;
+
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name ) )
+            aStyleName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name );
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_repeated ) )
+            nColRep = static_cast< sal_uInt32 >(xAttrList->getValue(
+                FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_columns_repeated ).toInt32());
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_default_cell_style_name ) )
+            aDfltCellStyleName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_default_cell_style_name );
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_XML | XML_id ) )
+        {
+            ;
+        }
+            //FIXME where to put this??? columns do not actually exist in writer...
+    }
+
+    sal_Int32 nWidth = MINLAY;
+    bool bRelWidth = true;
+    if( !aStyleName.isEmpty() )
+    {
+        const SfxPoolItem *pItem;
+        const SfxItemSet *pAutoItemSet = 0;
+        if( GetSwImport().FindAutomaticStyle(
+                    XML_STYLE_FAMILY_TABLE_COLUMN,
+                                              aStyleName, &pAutoItemSet ) &&
+            pAutoItemSet &&
+            SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
+                                                        &pItem ) )
+        {
+            const SwFmtFrmSize *pSize = static_cast<const SwFmtFrmSize *>(pItem);
             nWidth = pSize->GetWidth();
             bRelWidth = ATT_VAR_SIZE == pSize->GetHeightSizeType();
         }
