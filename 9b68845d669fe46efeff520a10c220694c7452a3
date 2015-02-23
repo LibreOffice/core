@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_7a79152f",
+        "filename": "scripting/source/pyprov/mailmerge.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2015-02-23T17:22:30Z",
+      "side": 1,
+      "message": "Here you start SSL. This is already a secure connection!",
+      "revId": "9b68845d669fe46efeff520a10c220694c7452a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_1a76d93e",
+        "filename": "scripting/source/pyprov/mailmerge.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2015-02-23T17:22:30Z",
+      "side": 1,
+      "message": "Here you try to start TLS on the already secure connection. Not sure what will happen in this case, but I hope it won\u0027t run TLS inside SSL... which probably would even work.\n\nI hope you tested this, so I guess it worked.",
+      "revId": "9b68845d669fe46efeff520a10c220694c7452a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_3a739d4f",
+        "filename": "scripting/source/pyprov/mailmerge.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2015-02-23T17:22:30Z",
+      "side": 1,
+      "message": "I couldn\u0027t find any reference to use_ssl in the online python docs of smtplib, but smtplib.SMTP_SSL should already establish a secure connection. I guess it\u0027s not needed.",
+      "revId": "9b68845d669fe46efeff520a10c220694c7452a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
