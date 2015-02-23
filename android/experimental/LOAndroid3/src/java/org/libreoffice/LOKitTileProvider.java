@@ -37,6 +37,8 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     private float mWidthTwip;
     private float mHeightTwip;
 
+    private InvalidationHandler mInvalidationHandler = new InvalidationHandler();
+
     private long objectCreationTime = System.currentTimeMillis();
 
     public LOKitTileProvider(GeckoLayerClient layerClient, String input) {
@@ -133,11 +135,11 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         }
     }
 
-    private float twipToPixel(float input, float dpi) {
+    public static float twipToPixel(float input, float dpi) {
         return input / 1440.0f * dpi;
     }
 
-    private float pixelToTwip(float input, float dpi) {
+    public static float pixelToTwip(float input, float dpi) {
         return (input / dpi) * 1440.0f;
     }
 
@@ -359,117 +361,16 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
         return mDocument.getPart();
     }
 
-    private RectF convertCallbackMessageStringToRectF(String text) {
-        if (text.equals("EMPTY")) {
-            return null;
-        }
-
-        String[] coordinates = text.split(",");
-
-        if (coordinates.length != 4) {
-            return null;
-        }
-        int width = Integer.decode(coordinates[0].trim());
-        int height = Integer.decode(coordinates[1].trim());
-        int x = Integer.decode(coordinates[2].trim());
-        int y = Integer.decode(coordinates[3].trim());
-        RectF rect = new RectF(
-                twipToPixel(x, mDPI),
-                twipToPixel(y, mDPI),
-                twipToPixel(x + width, mDPI),
-                twipToPixel(y + height, mDPI)
-        );
-        return rect;
-    }
-
     /**
      * Process the retrieved messages from LOK
      */
     @Override
-    public void messageRetrieved(int signalNumber, String payload) {
+    public void messageRetrieved(int messageID, String payload) {
         if (!LOKitShell.isEditingEnabled()) {
             return;
         }
 
-        switch (signalNumber) {
-            case Document.CALLBACK_INVALIDATE_TILES:
-                invalidateTiles(payload);
-                break;
-            case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-                invalidateCursor(payload);
-                break;
-            case Document.CALLBACK_INVALIDATE_TEXT_SELECTION:
-                Log.i(LOGTAG, "Selection: " + payload);
-                invalidateSelection(payload);
-                break;
-            case Document.CALLBACK_INVALIDATE_TEXT_SELECTION_START:
-                Log.i(LOGTAG, "Selection start: " + payload);
-                invalidateSelectionStart(payload);
-                break;
-            case Document.CALLBACK_INVALIDATE_TEXT_SELECTION_END:
-                Log.i(LOGTAG, "Selection end: " + payload);
-                invalidateSelectionEnd(payload);
-                break;
-        }
-    }
-
-    private void invalidateCursor(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-            textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, underSelection);
-            textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
-
-            TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
-            textCursorLayer.positionCursor(rect);
-            textCursorLayer.showCursor();
-        }
-    }
-
-    private void invalidateTiles(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            LOKitShell.sendTileInvalidationRequest(rect);
-        }
-    }
-
-    private void invalidateSelectionStart(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-            textSelection.positionHandle(TextSelectionHandle.HandleType.START, underSelection);
-            textSelection.showHandle(TextSelectionHandle.HandleType.START);
-
-            textSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
-
-            TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
-            textCursorLayer.hideCursor();
-        }
-    }
-
-    private void invalidateSelectionEnd(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-            textSelection.positionHandle(TextSelectionHandle.HandleType.END, underSelection);
-            textSelection.showHandle(TextSelectionHandle.HandleType.END);
-
-            textSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
-
-            TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
-            textCursorLayer.hideCursor();
-        }
-    }
-
-    private void invalidateSelection(String payload) {
-        if (payload.isEmpty()) {
-            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-            textSelection.hideHandle(TextSelectionHandle.HandleType.START);
-            textSelection.hideHandle(TextSelectionHandle.HandleType.END);
-        }
+        mInvalidationHandler.processMessage(messageID, payload);
     }
 }
 
