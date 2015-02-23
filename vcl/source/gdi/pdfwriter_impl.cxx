@@ -6941,6 +6941,13 @@ bool PDFWriterImpl::finalizeSignature()
 
         SAL_INFO("vcl.pdfwriter", "TimeStampResp received and decoded, status=" << PKIStatusInfoToString(response.status));
 
+        if (response.status.status.len != 1 ||
+            (response.status.status.data[0] != 0 && response.status.status.data[0] != 1))
+        {
+            SAL_WARN("vcl.pdfwriter", "PDF signing: Timestamp request was not granted");
+            return false;
+        }
+
         NSSCMSAttribute timestamp;
 
         timestamp.type.type = siBuffer;
