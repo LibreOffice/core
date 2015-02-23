@@ -102,24 +102,24 @@ bool ExcelFilter::importDocument()
 
     try
     {
+        try
+        {
+            importDocumentProperties();
+        }
+        catch( const Exception& e )
+        {
+            SAL_WARN("sc", "exception when importing document properties " << e.Message);
+        }
+        catch( ... )
+        {
+            SAL_WARN("sc", "exception when importing document properties");
+        }
         /*  Construct the WorkbookGlobals object referred to by every instance of
             the class WorkbookHelper, and execute the import filter by constructing
             an instance of WorkbookFragment and loading the file. */
         WorkbookGlobalsRef xBookGlob(WorkbookHelper::constructGlobals(*this));
         if (xBookGlob.get() && importFragment(new WorkbookFragment(*xBookGlob, aWorkbookPath)))
         {
-            try
-            {
-                importDocumentProperties();
-            }
-            catch( const Exception& e )
-            {
-                SAL_WARN("sc", "exception when importing document properties " << e.Message);
-            }
-            catch( ... )
-            {
-                SAL_WARN("sc", "exception when importing document properties");
-            }
             return true;
         }
     }
