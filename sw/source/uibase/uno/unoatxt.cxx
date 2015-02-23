@@ -1111,4 +1111,11 @@ void SwAutoTextEventDescriptor::getByName(
     }
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SwXAutoTextContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SwXAutoTextContainer());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
