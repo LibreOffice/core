@@ -75,16 +75,6 @@ OUString SAL_CALL SwWebDocument_getImplementationName() throw()
     return OUString( "com.sun.star.comp.Writer.WebDocument" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & )
-        throw( uno::Exception )
-{
-    SolarMutexGuard aGuard;
-    SwGlobals::ensure();
-    SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
-}
-
 // com.sun.star.comp.Writer.GlobalDocument
 
 uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw()
@@ -101,14 +91,25 @@ OUString SAL_CALL SwGlobalDocument_getImplementationName() throw()
     return OUString( "com.sun.star.comp.Writer.GlobalDocument" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > &)
-        throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_WebDocument_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    SolarMutexGuard aGuard;
+    SwGlobals::ensure();
+    SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() ).get();
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_GlobalDocument_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    return uno::Reference< uno::XInterface >( pShell->GetModel() ).get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
