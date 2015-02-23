@@ -446,13 +446,22 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
+    SwXMLTableCellContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableCellContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -591,6 +600,133 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     }
 }
 
+SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
+    SwXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList > & xAttrList,
+    SwXMLTableContext *pTable )
+:   SvXMLImportContext( rImport ),
+    sFormula(),
+    xMyTable( pTable ),
+    fValue( 0.0 ),
+    bHasValue( false ),
+    m_bHasStringValue(false),
+    m_bValueTypeIsString(false),
+    bProtect( false ),
+    nRowSpan( 1UL ),
+    nColSpan( 1UL ),
+    nColRepeat( 1UL ),
+    bHasTextContent( false ),
+    bHasTableContent( false )
+{
+    sSaveParaDefault = GetImport().GetTextImport()->GetCellParaStyleDefault();
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        const SvXMLTokenMap& rTokenMap =
+            GetSwImport().GetTableCellAttrTokenMap();
+        switch( rTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_TABLE_XMLID:
+            mXmlId = attribute.Value;
+            break;
+        case XML_TOK_TABLE_STYLE_NAME:
+            aStyleName = attribute.Value;
+            GetImport().GetTextImport()->SetCellParaStyleDefault(attribute.Value);
+            break;
+        case XML_TOK_TABLE_NUM_COLS_SPANNED:
+            nColSpan = (sal_uInt32)attribute.Value.toInt32();
+            if( nColSpan < 1UL )
+                nColSpan = 1UL;
+            break;
+        case XML_TOK_TABLE_NUM_ROWS_SPANNED:
+            nRowSpan = (sal_uInt32)attribute.Value.toInt32();
+            if( nRowSpan < 1UL )
+                nRowSpan = 1UL;
+            break;
+        case XML_TOK_TABLE_NUM_COLS_REPEATED:
+            nColRepeat = (sal_uInt32)attribute.Value.toInt32();
+            if( nColRepeat < 1UL )
+                nColRepeat = 1UL;
+            break;
+        case XML_TOK_TABLE_FORMULA:
+            {
+                OUString sTmp;
+                const sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().
+                        _GetKeyByAttrName( attribute.Value, &sTmp, false );
+                sFormula = XML_NAMESPACE_OOOW == nPrefix2 ? sTmp : attribute.Value;
+            }
+            break;
+        case XML_TOK_TABLE_VALUE:
+            {
+                double fTmp;
+                if (::sax::Converter::convertDouble(fTmp, attribute.Value))
+                {
+                    fValue = fTmp;
+                    bHasValue = true;
+                }
+            }
+            break;
+        case XML_TOK_TABLE_TIME_VALUE:
+            {
+                double fTmp;
+                if (::sax::Converter::convertDuration(fTmp, attribute.Value))
+                {
+                    fValue = fTmp;
+                    bHasValue = true;
+                }
+            }
+            break;
+        case XML_TOK_TABLE_DATE_VALUE:
+            {
+                double fTmp;
+                if (GetImport().GetMM100UnitConverter().convertDateTime(fTmp,
+                                                                      attribute.Value))
+                {
+                    fValue = fTmp;
+                    bHasValue = true;
+                }
+            }
+            break;
+        case XML_TOK_TABLE_BOOLEAN_VALUE:
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, attribute.Value))
+                {
+                    fValue = (bTmp ? 1.0 : 0.0);
+                    bHasValue = true;
+                }
+            }
+            break;
+        case XML_TOK_TABLE_PROTECTED:
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(bTmp, attribute.Value))
+                {
+                    bProtect = bTmp;
+                }
+            }
+            break;
+        case XML_TOK_TABLE_STRING_VALUE:
+            {
+                m_StringValue = attribute.Value;
+                m_bHasStringValue = true;
+            }
+            break;
+        case XML_TOK_TABLE_VALUE_TYPE:
+            {
+                if ("string" == attribute.Value)
+                {
+                    m_bValueTypeIsString = true;
+                }
+                // ignore other types - it would be correct to require
+                // matching value-type and $type-value attributes,
+                // but we've been reading those without checking forever.
+            }
+            break;
+        }
+    }
+}
+
 SwXMLTableCellContext_Impl::~SwXMLTableCellContext_Impl()
 {
 }
@@ -696,6 +832,66 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     return pContext;
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLTableCellContext_Impl::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    OUString sXmlId;
+    bool bSubTable = false;
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table) )
+    {
+        uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+        for( xml::FastAttribute attribute : attributes )
+        {
+            if( attribute.Token == (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_is_sub_table)
+                && attribute.Value.equals( "true" ) )
+            {
+                bSubTable = true;
+            }
+            else if( attribute.Token == (FastToken::NAMESPACE | XML_NAMESPACE_XML | XML_id) )
+            {
+                sXmlId = attribute.Value;
+            }
+        //FIXME: RDFa
+        }
+    }
+
+    if( bSubTable )
+    {
+        if( !HasContent() )
+        {
+            SwXMLTableContext *pTblContext =
+                new SwXMLTableContext( GetSwImport(), Element,
+                                       xAttrList, GetTable() );
+            pContext = pTblContext;
+            if( GetTable()->IsValid() )
+                InsertContent( pTblContext );
+
+            GetTable()->SetHasSubTables( true );
+        }
+    }
+    else
+    {
+        if( GetTable()->IsValid() )
+            InsertContentIfNotThere();
+        // fdo#60842: "office:string-value" overrides text content -> no import
+        if (!(m_bValueTypeIsString && m_bHasStringValue))
+        {
+            pContext = GetImport().GetTextImport()->CreateTextChildContext(
+                        GetImport(), Element, xAttrList,
+                        XML_TEXT_TYPE_CELL  );
+        }
+    }
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
 void SwXMLTableCellContext_Impl::EndElement()
 {
     if( GetTable()->IsValid() )
@@ -753,6 +949,66 @@ void SwXMLTableCellContext_Impl::EndElement()
     }
     GetImport().GetTextImport()->SetCellParaStyleDefault(sSaveParaDefault);
 }
+
+void SAL_CALL SwXMLTableCellContext_Impl::endFastElement( sal_Int32 /*Element*/)
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( GetTable()->IsValid() )
+    {
+        if( bHasTextContent )
+        {
+            GetImport().GetTextImport()->DeleteParagraph();
+            if( nColRepeat > 1 && nColSpan == 1 )
+            {
+                // The original text is invalid after deleting the last
+                // paragraph
+                Reference < XTextCursor > xSrcTxtCursor =
+                    GetImport().GetTextImport()->GetText()->createTextCursor();
+                xSrcTxtCursor->gotoEnd( sal_True );
+
+                // Until we have an API for copying we have to use the core.
+                Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTxtCursor, UNO_QUERY);
+                assert(xSrcCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
+                OTextCursorHelper *pSrcTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                        sal::static_int_cast< sal_IntPtr >( xSrcCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+                assert(pSrcTxtCrsr && "SwXTextCursor missing");
+                SwDoc *pDoc = pSrcTxtCrsr->GetDoc();
+                const SwPaM *pSrcPaM = pSrcTxtCrsr->GetPaM();
+
+                while( nColRepeat > 1 && GetTable()->IsInsertCellPossible() )
+                {
+                    _InsertContent();
+
+                    Reference<XUnoTunnel> xDstCrsrTunnel(
+                        GetImport().GetTextImport()->GetCursor(), UNO_QUERY);
+                    assert(xDstCrsrTunnel.is() && "missing XUnoTunnel for Cursor");
+                    OTextCursorHelper *pDstTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
+                            sal::static_int_cast< sal_IntPtr >( xDstCrsrTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )) );
+                    assert(pDstTxtCrsr && "SwXTextCursor missing");
+                    SwPaM aSrcPaM(*pSrcPaM->GetMark(), *pSrcPaM->GetPoint());
+                    SwPosition aDstPos( *pDstTxtCrsr->GetPaM()->GetPoint() );
+                    pDoc->getIDocumentContentOperations().CopyRange( aSrcPaM, aDstPos, false );
+
+                    nColRepeat--;
+                }
+            }
+        }
+        else if( !bHasTableContent )
+        {
+            InsertContent();
+            if( nColRepeat > 1 && nColSpan == 1 )
+            {
+                while( nColRepeat > 1 && GetTable()->IsInsertCellPossible() )
+                {
+                    _InsertContent();
+                    nColRepeat--;
+                }
+            }
+        }
+    }
+    GetImport().GetTextImport()->SetCellParaStyleDefault(sSaveParaDefault);
+}
+
 
 class SwXMLTableColContext_Impl : public SvXMLImportContext
 {
