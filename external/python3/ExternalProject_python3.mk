@@ -81,7 +81,7 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSBASE), -I$(SYSBASE)/usr/include) \
 			)" \
 		$(if $(python3_cflags),CFLAGS='$(python3_cflags)') \
-		$(if $(filter -fsanitize=address,$(CC)),LINKCC="$(CXX)") \
+		$(if $(filter -fsanitize=%,$(CC)),LINKCC="$(CXX)") \
 		LDFLAGS="$(strip $(LDFLAGS) \
 			$(if $(SYSTEM_OPENSSL),,-L$(call gb_UnpackedTarball_get_dir,openssl)) \
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
