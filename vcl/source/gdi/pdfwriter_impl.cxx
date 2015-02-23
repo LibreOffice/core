@@ -6833,6 +6833,14 @@ bool PDFWriterImpl::finalizeSignature()
 
     free(pass);
 
+#ifdef DBG_UTIL
+    {
+        FILE *out = fopen("PDFWRITER.cms.data", "wb");
+        fwrite(cms_output.data, cms_output.len, 1, out);
+        fclose(out);
+    }
+#endif
+
     OStringBuffer cms_hexbuffer;
 
     for (unsigned int i = 0; i < cms_output.len ; i++)
