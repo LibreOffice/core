@@ -1044,11 +1044,6 @@ bool SvtModuleOptions::IsImpress() const
     return m_pDataContainer->IsModuleInstalled( E_SIMPRESS );
 }
 
-bool SvtModuleOptions::IsBasicIDE() const
-{
-    return true;
-}
-
 bool SvtModuleOptions::IsDataBase() const
 {
     ::osl::MutexGuard aGuard( impl_GetOwnStaticMutex() );

@@ -380,7 +380,7 @@ long HandleBasicError( StarBASIC* pBasic )
 
     long nRet = 0;
     Shell* pShell = 0;
-    if ( SvtModuleOptions().IsBasicIDE() )
+    if ( SvtModuleOptions::IsBasicIDE() )
     {
         BasicManager* pBasMgr = FindBasicManager( pBasic );
         if ( pBasMgr )

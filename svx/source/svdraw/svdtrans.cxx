@@ -867,7 +867,7 @@ void SdrFormatter::TakeStr(long nVal, OUString& rStr) const
             aStr.insert(0, aNullCode);
 
         // remove superfluous decimal points
-        sal_Int32 nNumDigits(rLoc.getNumDigits());
+        sal_Int32 nNumDigits(LocaleDataWrapper::getNumDigits());
         sal_Int32 nWeg(nC - nNumDigits);
 
         if(nWeg > 0)

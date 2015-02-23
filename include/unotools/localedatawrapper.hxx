@@ -296,12 +296,12 @@ public:
     // dummy returns, to be implemented
     inline  sal_Unicode         getCurrZeroChar() const
                                     { return cCurrZeroChar; }
-    inline  bool                isNumLeadingZero() const
+    static inline  bool         isNumLeadingZero()
                                     { return true; }
                                 /// standard decimal places
-    inline  sal_uInt16              getNumDigits() const
+    static inline sal_uInt16    getNumDigits()
                                     { return 2; }
-    inline  bool                isNumTrailingZeros() const
+    static inline  bool         isNumTrailingZeros()
                                     { return true; }
 
     // reserved words
