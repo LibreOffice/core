@@ -1555,11 +1555,15 @@ public:
 
     SwXMLDDETableContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName);
+    SwXMLDDETableContext_Impl( SwXMLImport& rImport, sal_Int32 Element);
 
     virtual ~SwXMLDDETableContext_Impl();
 
     virtual void StartElement(
         const Reference<xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList)
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     OUString& GetConnectionName()   { return sConnectionName; }
     OUString& GetDDEApplication()   { return sDDEApplication; }
@@ -1578,6 +1582,17 @@ SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
         sDDEItem(),
         sDDETopic(),
         bIsAutomaticUpdate(false)
+{
+}
+
+SwXMLDDETableContext_Impl::SwXMLDDETableContext_Impl(
+    SwXMLImport& rImport, sal_Int32 /*Element*/ )
+:   SvXMLImportContext(rImport),
+    sConnectionName(),
+    sDDEApplication(),
+    sDDEItem(),
+    sDDETopic(),
+    bIsAutomaticUpdate(false)
 {
 }
 
@@ -1628,6 +1643,45 @@ void SwXMLDDETableContext_Impl::StartElement(
             // else: unknown attribute
         }
         // else: unknown attribute namespace
+    }
+}
+
+void SAL_CALL SwXMLDDETableContext_Impl::startFastElement( sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_application ) )
+        {
+            sDDEApplication = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_application );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_topic ) )
+        {
+            sDDETopic = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_topic );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_item ) )
+        {
+            sDDEItem = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_item );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_name ) )
+        {
+            sConnectionName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_name );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_application ) )
+        {
+            sDDEApplication = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_dde_application );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_update ) )
+        {
+            bool bTmp(false);
+            if( ::sax::Converter::convertBool(bTmp,
+                xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_update )) )
+            {
+                bIsAutomaticUpdate = bTmp;
+            }
+        }
+        // else: unknown attibute
     }
 }
 
