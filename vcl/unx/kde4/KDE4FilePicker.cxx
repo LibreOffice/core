@@ -128,8 +128,7 @@ KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
 #endif
 
     setMultiSelectionMode( false );
-    //default mode
-    _dialog->setOperationMode(KFileDialog::Opening);
+    _dialog->setConfirmOverwrite( true );
 
     // XExecutableDialog functions
     connect( this, SIGNAL( setTitleSignal( const OUString & ) ),
@@ -719,8 +718,7 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
                     1 );
     }
 
-    _dialog->setOperationMode(operationMode);
-    _dialog->setConfirmOverwrite(true);
+    _dialog->setOperationMode( operationMode );
 }
 
 void SAL_CALL KDE4FilePicker::cancel()
