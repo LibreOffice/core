@@ -1163,12 +1163,19 @@ public:
             const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable );
+    SwXMLTableColsContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        SwXMLTableContext *pTable );
 
     virtual ~SwXMLTableColsContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix, const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -1178,6 +1185,15 @@ SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    xMyTable( pTable )
+{
+}
+
+SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
+    SwXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >&,
+    SwXMLTableContext *pTable )
+:   SvXMLImportContext( rImport ),
     xMyTable( pTable )
 {
 }
@@ -1202,6 +1218,24 @@ SvXMLImportContext *SwXMLTableColsContext_Impl::CreateChildContext(
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLTableColsContext_Impl::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column)
+        && GetTable()->IsInsertColPossible() )
+        pContext = new SwXMLTableColContext_Impl( GetSwImport(),
+                Element, xAttrList, GetTable() );
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
