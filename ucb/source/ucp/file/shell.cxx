@@ -2440,7 +2440,14 @@ shell::commit( const shell::ContentMap::iterator& it,
 
             // Convert system time to local time (for EA)
             TimeValue myLocalTime;
-            osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
+            if (!osl_getLocalTimeFromSystemTime( &temp, &myLocalTime ))
+            {
+                SAL_WARN(
+                    "ucb.ucp.file",
+                    "cannot convert (" << temp.Seconds << ", " << temp.Nanosec
+                        << ") to local time");
+                myLocalTime = temp;
+            }
 
             oslDateTime myDateTime;
             osl_getDateTimeFromTimeValue( &myLocalTime, &myDateTime );
