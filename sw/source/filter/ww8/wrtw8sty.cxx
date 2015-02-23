@@ -1140,7 +1140,7 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
     aSet.SetParent( &rSet );
 
     //0xffffffff, what the hell is going on with that!, fixme most terribly
-    if ( rInfo.pSectionFmt && reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) != rInfo.pSectionFmt )
+    if ( rInfo.pSectionFmt && reinterpret_cast<SwSectionFmt*>(sal_IntPtr(-1)) != rInfo.pSectionFmt )
         aSet.Put( rInfo.pSectionFmt->GetFmtAttr( RES_COL ) );
 
     const SwFmtCol& rCol = static_cast<const SwFmtCol&>(aSet.Get( RES_COL ));
@@ -1327,7 +1327,7 @@ bool WW8_SepInfo::IsProtected() const
     bool bRet = false;
     if (
          pSectionFmt &&
-         (reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) != pSectionFmt)
+         (reinterpret_cast<SwSectionFmt*>(sal_IntPtr(-1)) != pSectionFmt)
        )
     {
         const SwSection *pSection = pSectionFmt->GetSection();
@@ -1663,7 +1663,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             }
         }
 
-        if ( reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF) != rSepInfo.pSectionFmt )
+        if ( reinterpret_cast<SwSectionFmt*>(sal_IntPtr(-1)) != rSepInfo.pSectionFmt )
         {
             if ( nBreakCode == 0 )
                 bOutPgDscSet = false;

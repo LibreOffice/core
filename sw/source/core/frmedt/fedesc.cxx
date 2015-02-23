@@ -185,7 +185,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 {
     const SwCntntNode* pCNd;
     const SwFrm* pMkFrm, *pPtFrm;
-    const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(0xffffffff);
+    const SwPageDesc* pFnd, *pRetDesc = reinterpret_cast<SwPageDesc*>(sal_IntPtr(-1));
     const Point aNulPt;
 
     for(SwPaM& rPaM : GetCrsr()->GetRingContainer())
@@ -227,7 +227,7 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
             }
         }
 
-        if( reinterpret_cast<SwPageDesc*>(0xffffffff) == pRetDesc )
+        if( reinterpret_cast<SwPageDesc*>(sal_IntPtr(-1)) == pRetDesc )
             pRetDesc = pFnd;
         else if( pFnd != pRetDesc )
         {

@@ -2621,7 +2621,7 @@ void MSWordExportBase::WriteText()
 
                     const SwSectionFmt* pParentFmt = rSect.GetFmt()->GetParent();
                     if ( !pParentFmt )
-                        pParentFmt = reinterpret_cast<SwSectionFmt*>(0xFFFFFFFF);
+                        pParentFmt = reinterpret_cast<SwSectionFmt*>(sal_IntPtr(-1));
 
                     sal_uLong nRstLnNum;
                     if ( aIdx.GetNode().IsCntntNode() )

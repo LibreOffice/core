@@ -27,7 +27,7 @@
 
 // parameter to pass to the dialog constructor if really no parent is wanted
 // whereas NULL chooses the default dialog parent
-#define DIALOG_NO_PARENT (reinterpret_cast<vcl::Window*>(0xffffffff))
+#define DIALOG_NO_PARENT (reinterpret_cast<vcl::Window*>(sal_IntPtr(-1)))
 
 
 // - Dialog -

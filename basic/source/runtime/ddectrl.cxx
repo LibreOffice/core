@@ -22,7 +22,7 @@
 #include "ddectrl.hxx"
 #include <basic/sberrors.hxx>
 
-#define DDE_FREECHANNEL (reinterpret_cast<DdeConnection*>(0xffffffff))
+#define DDE_FREECHANNEL (reinterpret_cast<DdeConnection*>(sal_IntPtr(-1)))
 
 #define DDE_FIRSTERR    0x4000
 #define DDE_LASTERR     0x4011
