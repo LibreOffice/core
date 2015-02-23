@@ -83,6 +83,8 @@ core_constructor_list = [
     "com_sun_star_comp_chart2_Diagram_get_implementation",
     "com_sun_star_comp_chart2_LabeledDataSequence_get_implementation",
     "com_sun_star_comp_chart2_Legend_get_implementation",
+    "com_sun_star_comp_chart2_LinearRegressionCurve_get_implementation",
+    "com_sun_star_comp_chart2_Title_get_implementation",
     "com_sun_star_comp_chart2_XMLFilter_get_implementation",
 # chart2/source/controller/chartcontroller.component
     "com_sun_star_comp_chart2_ChartDocumentWrapper_get_implementation",
