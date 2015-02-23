@@ -2602,10 +2602,27 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     return pContext;
 }
 
+SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    XMLTextType eType )
+{
+    SvXMLImportContext *pContext = 0;
+
+    return pContext;
+}
+
 SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
         SvXMLImport&,
         sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/,
         const Reference< XAttributeList > & )
+{
+    return 0;
+}
+
+SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
+    SvXMLImport&, sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& )
 {
     return 0;
 }

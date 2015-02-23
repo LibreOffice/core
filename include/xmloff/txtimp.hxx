@@ -62,7 +62,8 @@ namespace text {
 namespace frame { class XModel; }
 namespace container { class XNameContainer; class XIndexReplace; class XNameAccess; }
 namespace beans { class XPropertySet; }
-namespace xml { namespace sax { class XAttributeList; } }
+namespace xml { namespace sax { class XAttributeList;
+                                class XFastAttributeList; } }
 namespace util { struct DateTime; }
 namespace lang { class XMultiServiceFactory; }
 } } }
@@ -384,6 +385,9 @@ protected:
                 sal_uInt16 nPrefix, const OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    virtual SvXMLImportContext *CreateTableChildContext(
+        SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList);
 
     // access, lazy initialization and destruction of backpatchers
     // Code is implemented in XMLPropertyBackpatcher.cxx
@@ -416,6 +420,10 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             XMLTextType eType = XML_TEXT_TYPE_SHAPE );
+    SvXMLImportContext *CreateTextChildContext(
+        SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        XMLTextType eType = XML_TEXT_TYPE_SHAPE );
 
     SvXMLTokenMap const& GetTextElemTokenMap();
     SvXMLTokenMap const& GetTextPElemTokenMap();
