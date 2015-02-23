@@ -45,59 +45,6 @@ css::uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceName
 OUString SAL_CALL SwGlobalDocument_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL SwGlobalDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr ) throw( css::uno::Exception );
 
-// xml import
-css::uno::Sequence< OUString > SAL_CALL SwXMLImport_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLImport_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLImport_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)  throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLImportStyles_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLImportStyles_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)    throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLImportContent_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLImportContent_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)   throw( css::uno::Exception );
-
-css::uno::Sequence< OUString > SAL_CALL     SwXMLImportMeta_getSupportedServiceNames() throw();
-OUString SAL_CALL     SwXMLImportMeta_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)  throw( css::uno::Exception );
-
-css::uno::Sequence< OUString > SAL_CALL SwXMLImportSettings_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLImportSettings_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)  throw( css::uno::Exception );
-
-// xml export (OOo)
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)   throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportContentOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportContentOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportContentOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)    throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportStylesOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportStylesOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportStylesOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportMetaOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportMetaOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportMetaOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)   throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportSettingsOOO_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportSettingsOOO_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)   throw( css::uno::Exception );
-
-// xml export (OASIS)
-css::uno::Sequence< OUString > SAL_CALL SwXMLExport_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExport_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExport_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)  throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportContent_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportContent_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportContent_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)   throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportStyles_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportStyles_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportStyles_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)    throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportMeta_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportMeta_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportMeta_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)  throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwXMLExportSettings_getSupportedServiceNames() throw();
-OUString SAL_CALL SwXMLExportSettings_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwXMLExportSettings_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)  throw( css::uno::Exception );
-
 //API objects
 css::uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw();
 OUString SAL_CALL SwXAutoTextContainer_getImplementationName() throw();
