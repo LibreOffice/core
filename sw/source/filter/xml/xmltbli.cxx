@@ -1438,6 +1438,29 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 }
 
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
+    sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList > & xAttrList )
+:   XMLTextTableContext( rImport, Element ),
+    pColumnDefaultCellStyleNames( 0 ),
+    pRows( new SwXMLTableRows_Impl ),
+    pTableNode( 0 ),
+    pBox1( 0 ),
+    pSttNd1( 0 ),
+    pBoxFmt( 0 ),
+    pLineFmt( 0 ),
+    pSharedBoxFormats(NULL),
+    pDDESource(NULL),
+    bFirstSection( true ),
+    bRelWidth( true ),
+    bHasSubTables( false ),
+    nHeaderRows( 0 ),
+    nCurRow( 0UL ),
+    nCurCol( 0UL ),
+    nWidth( 0UL )
+{
+}
+
+SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > &,
@@ -1450,6 +1473,30 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pSttNd1( 0 ),
     pBoxFormat( 0 ),
     pLineFormat( 0 ),
+    pSharedBoxFormats(NULL),
+    xParentTable( pTable ),
+    pDDESource(NULL),
+    bFirstSection( false ),
+    bRelWidth( true ),
+    bHasSubTables( false ),
+    nHeaderRows( 0 ),
+    nCurRow( 0UL ),
+    nCurCol( 0UL ),
+    nWidth( 0UL )
+{
+}
+
+SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
+    sal_Int32 Element, const Reference< xml::sax::XFastAttributeList >&,
+    SwXMLTableContext *pTable )
+:   XMLTextTableContext( rImport, Element ),
+    pColumnDefaultCellStyleNames( 0 ),
+    pRows( new SwXMLTableRows_Impl ),
+    pTableNode( pTable->pTableNode ),
+    pBox1( 0 ),
+    pSttNd1( 0 ),
+    pBoxFmt( 0 ),
+    pLineFmt( 0 ),
     pSharedBoxFormats(NULL),
     xParentTable( pTable ),
     pDDESource(NULL),
@@ -1528,6 +1575,19 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLTableContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
