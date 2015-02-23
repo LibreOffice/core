@@ -7,12 +7,21 @@ import org.libreoffice.kit.Document;
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.TextSelectionHandle;
 
+/**
+ * Parses (interprets) and handles invalidation messages from LibreOffice.
+ */
 public class InvalidationHandler {
     private static String LOGTAG = InvalidationHandler.class.getSimpleName();
 
     public InvalidationHandler() {
     }
 
+    /**
+     * Processes invalidation message
+     *
+     * @param messageID - ID of the message
+     * @param payload - additional invalidation message payload
+     */
     public void processMessage(int messageID, String payload) {
         switch (messageID) {
             case Document.CALLBACK_INVALIDATE_TILES:
@@ -36,12 +45,18 @@ public class InvalidationHandler {
         }
     }
 
-    private RectF convertCallbackMessageStringToRectF(String text) {
-        if (text.equals("EMPTY")) {
+    /**
+     * Parses the invalidation message text and converts to rectangle in pixel coordinates
+     *
+     * @param messageText - invalidation message text
+     * @return rectangle in pixel coordinates
+     */
+    private RectF convertCallbackMessageStringToRectF(String messageText) {
+        if (messageText.equals("EMPTY")) {
             return null;
         }
 
-        String[] coordinates = text.split(",");
+        String[] coordinates = messageText.split(",");
 
         if (coordinates.length != 4) {
             return null;
@@ -63,6 +78,10 @@ public class InvalidationHandler {
         return rect;
     }
 
+    /**
+     * Handles the cursor invalidation message
+     * @param payload
+     */
     private void invalidateCursor(String payload) {
         RectF rect = convertCallbackMessageStringToRectF(payload);
         if (rect != null) {
@@ -77,6 +96,10 @@ public class InvalidationHandler {
         }
     }
 
+    /**
+     * Handles the tile invalidation message
+     * @param payload
+     */
     private void invalidateTiles(String payload) {
         RectF rect = convertCallbackMessageStringToRectF(payload);
         if (rect != null) {
@@ -84,6 +107,10 @@ public class InvalidationHandler {
         }
     }
 
+    /**
+     * Handles the selection start invalidation message
+     * @param payload
+     */
     private void invalidateSelectionStart(String payload) {
         RectF rect = convertCallbackMessageStringToRectF(payload);
         if (rect != null) {
@@ -99,6 +126,10 @@ public class InvalidationHandler {
         }
     }
 
+    /**
+     * Handles the selection end invalidation message
+     * @param payload
+     */
     private void invalidateSelectionEnd(String payload) {
         RectF rect = convertCallbackMessageStringToRectF(payload);
         if (rect != null) {
@@ -114,6 +145,10 @@ public class InvalidationHandler {
         }
     }
 
+    /**
+     * Handles the selection invalidation message
+     * @param payload
+     */
     private void invalidateSelection(String payload) {
         if (payload.isEmpty()) {
             TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
