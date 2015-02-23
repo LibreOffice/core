@@ -34,13 +34,6 @@ uno::Sequence< OUString > SAL_CALL LayoutDumpFilter_getSupportedServiceNames() t
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL LayoutDumpFilter_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & )
-    throw (css::uno::Exception)
-{
-    return static_cast< cppu::OWeakObject* >( new sw::LayoutDumpFilter( ) );
-}
-
 namespace
 {
     int writeCallback( void* pContext, const char* sBuffer, int nLen )
@@ -180,4 +173,11 @@ namespace sw
 
 } // Namespace sw
 
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_LayoutDump_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sw::LayoutDumpFilter());
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
