@@ -457,12 +457,14 @@ namespace comp_FinalThreadManager {
         return s;
     }
 
-    css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
-        const css::uno::Reference< css::uno::XComponentContext > & context)
-    {
-        return static_cast< ::cppu::OWeakObject * >(new FinalThreadManager(context));
-    }
-
 } // closing component helper namespace
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_util_comp_FinalThreadManager_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new FinalThreadManager(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
