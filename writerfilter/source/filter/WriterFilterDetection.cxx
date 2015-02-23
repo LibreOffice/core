@@ -51,8 +51,6 @@ public:
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-bool SAL_CALL WriterFilterDetection_supportsService(const OUString& ServiceName) throw (uno::RuntimeException);
-
 uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException);
 
 WriterFilterDetection::WriterFilterDetection(const uno::Reference<uno::XComponentContext>& rxContext)
