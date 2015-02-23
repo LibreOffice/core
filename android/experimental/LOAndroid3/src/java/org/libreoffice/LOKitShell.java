@@ -61,7 +61,7 @@ public class LOKitShell {
     }
 
     public static boolean isEditingEnabled() {
-        return false;
+        return true;
     }
 
     public static LayerView getLayerView() {
