@@ -74,19 +74,25 @@ gboolean lcl_signalMotion(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
     {
         g_info("lcl_signalMotion: dragging the middle handle");
         lcl_getDragPoint(&pDocView->m_aHandleMiddleRect, pEvent, &aPoint);
-        pDocView->pDocument->pClass->setTextSelection(pDocView->pDocument, LOK_SETTEXTSELECTION_RESET, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+        pDocView->pDocument->pClass->setTextSelection(
+                pDocView->pDocument, LOK_SETTEXTSELECTION_RESET,
+                pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
     }
     else if (pDocView->m_bInDragStartHandle)
     {
         g_info("lcl_signalMotion: dragging the start handle");
         lcl_getDragPoint(&pDocView->m_aHandleStartRect, pEvent, &aPoint);
-        pDocView->pDocument->pClass->setTextSelection(pDocView->pDocument, LOK_SETTEXTSELECTION_START, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+        pDocView->pDocument->pClass->setTextSelection(
+                pDocView->pDocument, LOK_SETTEXTSELECTION_START,
+                pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
     }
     else if (pDocView->m_bInDragEndHandle)
     {
         g_info("lcl_signalMotion: dragging the end handle");
         lcl_getDragPoint(&pDocView->m_aHandleEndRect, pEvent, &aPoint);
-        pDocView->pDocument->pClass->setTextSelection(pDocView->pDocument, LOK_SETTEXTSELECTION_END, pixelToTwip(aPoint.x), pixelToTwip(aPoint.y));
+        pDocView->pDocument->pClass->setTextSelection(
+                pDocView->pDocument, LOK_SETTEXTSELECTION_END,
+                pixelToTwip(aPoint.x) / pDocView->fZoom, pixelToTwip(aPoint.y) / pDocView->fZoom);
     }
     return FALSE;
 }
@@ -159,7 +165,10 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         if ((pEvent->time - pDocView->m_nLastButtonPressTime) < 250)
             nCount++;
         pDocView->m_nLastButtonPressTime = pEvent->time;
-        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        pDocView->pDocument->pClass->postMouseEvent(
+                pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
+                pixelToTwip(pEvent->x) / pDocView->fZoom,
+                pixelToTwip(pEvent->y) / pDocView->fZoom, nCount);
         break;
     }
     case GDK_BUTTON_RELEASE:
@@ -168,7 +177,10 @@ gboolean lcl_signalButton(GtkWidget* pEventBox, GdkEventButton* pEvent, LOKDocVi
         if ((pEvent->time - pDocView->m_nLastButtonReleaseTime) < 250)
             nCount++;
         pDocView->m_nLastButtonReleaseTime = pEvent->time;
-        pDocView->pDocument->pClass->postMouseEvent(pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP, pixelToTwip(pEvent->x), pixelToTwip(pEvent->y), nCount);
+        pDocView->pDocument->pClass->postMouseEvent(
+                pDocView->pDocument, LOK_MOUSEEVENT_MOUSEBUTTONUP,
+                pixelToTwip(pEvent->x) / pDocView->fZoom,
+                pixelToTwip(pEvent->y) / pDocView->fZoom, nCount);
         break;
     }
     default:
@@ -303,7 +315,8 @@ static gboolean lcl_handleTimeout(gpointer pData)
 }
 
 /// Renders pHandle below a pCursor rectangle on pCairo.
-static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle, GdkRectangle* pRectangle)
+static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surface_t* pHandle,
+                             GdkRectangle* pRectangle, float fZoom)
 {
     GdkPoint aCursorBottom;
     int nHandleWidth, nHandleHeight;
@@ -312,10 +325,10 @@ static void lcl_renderHandle(cairo_t* pCairo, GdkRectangle* pCursor, cairo_surfa
     nHandleWidth = cairo_image_surface_get_width(pHandle);
     nHandleHeight = cairo_image_surface_get_height(pHandle);
     // We want to scale down the handle, so that its height is the same as the cursor caret.
-    fHandleScale = twipToPixel(pCursor->height) / nHandleHeight;
+    fHandleScale = twipToPixel(pCursor->height) * fZoom / nHandleHeight;
     // We want the top center of the handle bitmap to be at the bottom center of the cursor rectangle.
-    aCursorBottom.x = twipToPixel(pCursor->x) + twipToPixel(pCursor->width) / 2 - (nHandleWidth * fHandleScale) / 2;
-    aCursorBottom.y = twipToPixel(pCursor->y) + twipToPixel(pCursor->height);
+    aCursorBottom.x = twipToPixel(pCursor->x) * fZoom + twipToPixel(pCursor->width) * fZoom / 2 - (nHandleWidth * fHandleScale) / 2;
+    aCursorBottom.y = twipToPixel(pCursor->y) * fZoom + twipToPixel(pCursor->height) * fZoom;
     cairo_save(pCairo);
     cairo_translate(pCairo, aCursorBottom.x, aCursorBottom.y);
     cairo_scale(pCairo, fHandleScale, fHandleScale);
@@ -350,10 +363,10 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
 
         cairo_set_source_rgb(pCairo, 0, 0, 0);
         cairo_rectangle(pCairo,
-                        twipToPixel(pDocView->m_aVisibleCursor.x),
-                        twipToPixel(pDocView->m_aVisibleCursor.y),
-                        twipToPixel(pDocView->m_aVisibleCursor.width),
-                        twipToPixel(pDocView->m_aVisibleCursor.height));
+                        twipToPixel(pDocView->m_aVisibleCursor.x) * pDocView->fZoom,
+                        twipToPixel(pDocView->m_aVisibleCursor.y) * pDocView->fZoom,
+                        twipToPixel(pDocView->m_aVisibleCursor.width) * pDocView->fZoom,
+                        twipToPixel(pDocView->m_aVisibleCursor.height) * pDocView->fZoom);
         cairo_fill(pCairo);
 
     }
@@ -363,7 +376,9 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
         // Have a cursor, but no selection: we need the middle handle.
         if (!pDocView->m_pHandleMiddle)
             pDocView->m_pHandleMiddle = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_middle.png");
-        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor, pDocView->m_pHandleMiddle, &pDocView->m_aHandleMiddleRect);
+        lcl_renderHandle(pCairo, &pDocView->m_aVisibleCursor,
+                         pDocView->m_pHandleMiddle, &pDocView->m_aHandleMiddleRect,
+                         pDocView->fZoom);
     }
 
     if (pDocView->m_pTextSelectionRectangles)
@@ -375,7 +390,11 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
             GdkRectangle* pRectangle = i->data;
             // Blue with 75% transparency.
             cairo_set_source_rgba(pCairo, ((double)0x43)/255, ((double)0xac)/255, ((double)0xe8)/255, 0.25);
-            cairo_rectangle(pCairo, twipToPixel(pRectangle->x), twipToPixel(pRectangle->y), twipToPixel(pRectangle->width), twipToPixel(pRectangle->height));
+            cairo_rectangle(pCairo,
+                            twipToPixel(pRectangle->x) * pDocView->fZoom,
+                            twipToPixel(pRectangle->y) * pDocView->fZoom,
+                            twipToPixel(pRectangle->width) * pDocView->fZoom,
+                            twipToPixel(pRectangle->height) * pDocView->fZoom);
             cairo_fill(pCairo);
         }
 
@@ -385,14 +404,18 @@ static gboolean renderOverlay(GtkWidget* pWidget, GdkEventExpose* pEvent, gpoint
             // Have a start position: we need a start handle.
             if (!pDocView->m_pHandleStart)
                 pDocView->m_pHandleStart = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_start.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart, pDocView->m_pHandleStart, &pDocView->m_aHandleStartRect);
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionStart,
+                             pDocView->m_pHandleStart, &pDocView->m_aHandleStartRect,
+                             pDocView->fZoom);
         }
         if (!lcl_isEmptyRectangle(&pDocView->m_aTextSelectionEnd))
         {
             // Have a start position: we need an end handle.
             if (!pDocView->m_pHandleEnd)
                 pDocView->m_pHandleEnd = cairo_image_surface_create_from_png(CURSOR_HANDLE_DIR "handle_end.png");
-            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd, pDocView->m_pHandleEnd, &pDocView->m_aHandleEndRect);
+            lcl_renderHandle(pCairo, &pDocView->m_aTextSelectionEnd,
+                             pDocView->m_pHandleEnd, &pDocView->m_aHandleEndRect,
+                             pDocView->fZoom);
         }
     }
 
@@ -565,6 +588,7 @@ static GList* lcl_payloadToRectangles(const char* pPayload)
     g_strfreev(ppRectangles);
     return pRet;
 }
+
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
 {
