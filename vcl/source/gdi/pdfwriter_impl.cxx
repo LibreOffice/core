@@ -74,6 +74,7 @@
 #include "nss.h"
 #include "cert.h"
 #include "hasht.h"
+#include "secerr.h"
 #include "sechash.h"
 #include "cms.h"
 #include "cmst.h"
@@ -6399,6 +6400,221 @@ OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
     return result;
 }
 
+// SEC_StringToOID() and NSS_CMSSignerInfo_AddUnauthAttr() are
+// not exported from libsmime, so copy them here. Sigh.
+
+SECStatus
+my_SEC_StringToOID(PLArenaPool *pool, SECItem *to, const char *from, PRUint32 len)
+{
+    PRUint32 decimal_numbers = 0;
+    PRUint32 result_bytes = 0;
+    SECStatus rv;
+    PRUint8 result[1024];
+
+    static const PRUint32 max_decimal = (0xffffffff / 10);
+    static const char OIDstring[] = {"OID."};
+
+    if (!from || !to) {
+        PORT_SetError(SEC_ERROR_INVALID_ARGS);
+    return SECFailure;
+    }
+    if (!len) {
+        len = PL_strlen(from);
+    }
+    if (len >= 4 && !PL_strncasecmp(from, OIDstring, 4)) {
+        from += 4; /* skip leading "OID." if present */
+    len  -= 4;
+    }
+    if (!len) {
+bad_data:
+        PORT_SetError(SEC_ERROR_BAD_DATA);
+    return SECFailure;
+    }
+    do {
+    PRUint32 decimal = 0;
+        while (len > 0 && isdigit(*from)) {
+        PRUint32 addend = (*from++ - '0');
+        --len;
+        if (decimal > max_decimal)  /* overflow */
+            goto bad_data;
+        decimal = (decimal * 10) + addend;
+        if (decimal < addend)   /* overflow */
+        goto bad_data;
+    }
+    if (len != 0 && *from != '.') {
+        goto bad_data;
+    }
+    if (decimal_numbers == 0) {
+        if (decimal > 2)
+            goto bad_data;
+        result[0] = decimal * 40;
+        result_bytes = 1;
+    } else if (decimal_numbers == 1) {
+        if (decimal > 40)
+            goto bad_data;
+        result[0] += decimal;
+    } else {
+        /* encode the decimal number,  */
+        PRUint8 * rp;
+        PRUint32 num_bytes = 0;
+        PRUint32 tmp = decimal;
+        while (tmp) {
+            num_bytes++;
+        tmp >>= 7;
+        }
+        if (!num_bytes )
+            ++num_bytes;  /* use one byte for a zero value */
+        if (num_bytes + result_bytes > sizeof result)
+            goto bad_data;
+        tmp = num_bytes;
+        rp = result + result_bytes - 1;
+        rp[tmp] = (PRUint8)(decimal & 0x7f);
+        decimal >>= 7;
+        while (--tmp > 0) {
+        rp[tmp] = (PRUint8)(decimal | 0x80);
+        decimal >>= 7;
+        }
+        result_bytes += num_bytes;
+    }
+    ++decimal_numbers;
+    if (len > 0) { /* skip trailing '.' */
+        ++from;
+        --len;
+    }
+    } while (len > 0);
+    /* now result contains result_bytes of data */
+    if (to->data && to->len >= result_bytes) {
+        PORT_Memcpy(to->data, result, to->len = result_bytes);
+    rv = SECSuccess;
+    } else {
+        SECItem result_item = {siBuffer, NULL, 0 };
+    result_item.data = result;
+    result_item.len  = result_bytes;
+    rv = SECITEM_CopyItem(pool, to, &result_item);
+    }
+    return rv;
+}
+
+NSSCMSAttribute *
+my_NSS_CMSAttributeArray_FindAttrByOidTag(NSSCMSAttribute **attrs, SECOidTag oidtag, PRBool only)
+{
+    SECOidData *oid;
+    NSSCMSAttribute *attr1, *attr2;
+
+    if (attrs == NULL)
+        return NULL;
+
+    oid = SECOID_FindOIDByTag(oidtag);
+    if (oid == NULL)
+        return NULL;
+
+    while ((attr1 = *attrs++) != NULL) {
+    if (attr1->type.len == oid->oid.len && PORT_Memcmp (attr1->type.data,
+                                oid->oid.data,
+                                oid->oid.len) == 0)
+        break;
+    }
+
+    if (attr1 == NULL)
+        return NULL;
+
+    if (!only)
+        return attr1;
+
+    while ((attr2 = *attrs++) != NULL) {
+    if (attr2->type.len == oid->oid.len && PORT_Memcmp (attr2->type.data,
+                                oid->oid.data,
+                                oid->oid.len) == 0)
+        break;
+    }
+
+    if (attr2 != NULL)
+        return NULL;
+
+    return attr1;
+}
+
+SECStatus
+my_NSS_CMSArray_Add(PLArenaPool *poolp, void ***array, void *obj)
+{
+    void **p;
+    int n;
+    void **dest;
+
+    PORT_Assert(array != NULL);
+    if (array == NULL)
+        return SECFailure;
+
+    if (*array == NULL) {
+    dest = (void **)PORT_ArenaAlloc(poolp, 2 * sizeof(void *));
+    n = 0;
+    } else {
+    n = 0; p = *array;
+    while (*p++)
+        n++;
+    dest = (void **)PORT_ArenaGrow (poolp,
+                  *array,
+                  (n + 1) * sizeof(void *),
+                  (n + 2) * sizeof(void *));
+    }
+
+    if (dest == NULL)
+        return SECFailure;
+
+    dest[n] = obj;
+    dest[n+1] = NULL;
+    *array = dest;
+    return SECSuccess;
+}
+
+SECOidTag
+my_NSS_CMSAttribute_GetType(NSSCMSAttribute *attr)
+{
+    SECOidData *typetag;
+
+    typetag = SECOID_FindOID(&(attr->type));
+    if (typetag == NULL)
+        return SEC_OID_UNKNOWN;
+
+    return typetag->offset;
+}
+
+SECStatus
+my_NSS_CMSAttributeArray_AddAttr(PLArenaPool *poolp, NSSCMSAttribute ***attrs, NSSCMSAttribute *attr)
+{
+    NSSCMSAttribute *oattr;
+    void *mark;
+    SECOidTag type;
+
+    mark = PORT_ArenaMark(poolp);
+
+    /* find oidtag of attr */
+    type = my_NSS_CMSAttribute_GetType(attr);
+
+    /* see if we have one already */
+    oattr = my_NSS_CMSAttributeArray_FindAttrByOidTag(*attrs, type, PR_FALSE);
+    PORT_Assert (oattr == NULL);
+    if (oattr != NULL)
+        goto loser; /* XXX or would it be better to replace it? */
+
+    /* no, shove it in */
+    if (my_NSS_CMSArray_Add(poolp, reinterpret_cast<void ***>(attrs), (void *)attr) != SECSuccess)
+        goto loser;
+
+    PORT_ArenaUnmark(poolp, mark);
+    return SECSuccess;
+
+loser:
+    PORT_ArenaRelease(poolp, mark);
+    return SECFailure;
+}
+
+SECStatus
+my_NSS_CMSSignerInfo_AddUnauthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute *attr)
+{
+    return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->unAuthAttr), attr);
+}
+
 #if 0
 {
 #endif
@@ -6725,11 +6941,6 @@ bool PDFWriterImpl::finalizeSignature()
 
         SAL_INFO("vcl.pdfwriter", "TimeStampResp received and decoded, status=" << PKIStatusInfoToString(response.status));
 
-#if 0   // SEC_StringToOID() and NSS_CMSSignerInfo_AddUnauthAttr() are
-        // not exported from libsmime, need to think of some other
-        // approach. (As such I don't know if the code below would do
-        // the right thing even if they were.)
-
         NSSCMSAttribute timestamp;
 
         timestamp.type.type = siBuffer;
@@ -6750,7 +6961,7 @@ bool PDFWriterImpl::finalizeSignature()
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
         // smime(16) aa(2) 14 }
-        if (SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.14", 0) != SECSuccess)
+        if (my_SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.14", 0) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_StringToOID failed");
             return false;
@@ -6761,14 +6972,13 @@ bool PDFWriterImpl::finalizeSignature()
         typetag.supportedExtension = UNSUPPORTED_CERT_EXTENSION; // ???
         timestamp.typeTag = &typetag;
 
-        timestamp.encoded = PR_FALSE;
+        timestamp.encoded = PR_TRUE;
 
-        if (NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
+        if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "PDF signing: can't add timestamp attribute");
             return false;
         }
-#endif
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
