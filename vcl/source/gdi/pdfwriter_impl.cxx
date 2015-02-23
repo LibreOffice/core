@@ -6693,7 +6693,7 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!cert)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: Error occurred, certificate cannot be reconstructed.");
+        SAL_WARN("vcl.pdfwriter", "CERT_DecodeCertFromPackage failed");
         return false;
     }
 
@@ -6703,7 +6703,7 @@ bool PDFWriterImpl::finalizeSignature()
     HashContextScope hc(HASH_Create(HASH_AlgSHA1));
     if (!hc.get())
     {
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: SHA1 HASH_Create failed!");
+        SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
         return false;
     }
 
@@ -6715,7 +6715,7 @@ bool PDFWriterImpl::finalizeSignature()
     //FIXME: Check if SHA1 is calculated from the correct byterange
     CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), m_nSignatureContentOffset - 1 , bytesRead)) );
     if (bytesRead != (sal_uInt64)m_nSignatureContentOffset - 1)
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: First buffer read failed!");
+        SAL_WARN("vcl.pdfwriter", "First buffer read failed");
 
     HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
@@ -6723,7 +6723,7 @@ bool PDFWriterImpl::finalizeSignature()
     buffer.reset(new char[nLastByteRangeNo + 1]);
     CHECK_RETURN( (osl::File::E_None == m_aFile.read(buffer.get(), nLastByteRangeNo, bytesRead)) );
     if (bytesRead != (sal_uInt64) nLastByteRangeNo)
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: Second buffer read failed!");
+        SAL_WARN("vcl.pdfwriter", "Second buffer read failed");
 
     HASH_Update(hc.get(), reinterpret_cast<const unsigned char*>(buffer.get()), bytesRead);
 
@@ -6736,21 +6736,21 @@ bool PDFWriterImpl::finalizeSignature()
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't create new CMS message.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSMessage_Create failed");
         return false;
     }
 
     NSSCMSSignedData *cms_sd = NSS_CMSSignedData_Create(cms_msg);
     if (!cms_sd)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't create CMS SignedData.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_Create failed");
         return false;
     }
 
     NSSCMSContentInfo *cms_cinfo = NSS_CMSMessage_GetContentInfo(cms_msg);
     if (NSS_CMSContentInfo_SetContent_SignedData(cms_msg, cms_cinfo, cms_sd) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: Can't set CMS content signed data.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_SignedData failed");
         return false;
     }
 
@@ -6758,14 +6758,14 @@ bool PDFWriterImpl::finalizeSignature()
     //attach NULL data as detached data
     if (NSS_CMSContentInfo_SetContent_Data(cms_msg, cms_cinfo, NULL, PR_TRUE) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: Can't set CMS content data.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_Data failed");
         return false;
     }
 
     NSSCMSSignerInfo *cms_signer = NSS_CMSSignerInfo_Create(cms_msg, cert, SEC_OID_SHA1);
     if (!cms_signer)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't create CMS SignerInfo.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_Create failed");
         return false;
     }
 
@@ -6800,13 +6800,13 @@ bool PDFWriterImpl::finalizeSignature()
         SECItem* timestamp_request = SEC_ASN1EncodeItem(NULL, NULL, &src, TimeStampReq_Template);
         if (timestamp_request == NULL)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_ASN1EncodeItem failed");
+            SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem failed");
             return false;
         }
 
         if (timestamp_request->data == NULL)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_ASN1EncodeItem succeeded but got NULL data");
+            SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem succeeded but got NULL data");
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
@@ -6829,7 +6829,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (!curl)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_init failed");
+            SAL_WARN("vcl.pdfwriter", "curl_easy_init failed");
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
@@ -6838,7 +6838,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_URL) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_URL) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6849,7 +6849,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if ((rc = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_HTTPHEADER) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_HTTPHEADER) failed: " << curl_easy_strerror(rc));
             curl_slist_free_all(slist);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
@@ -6859,7 +6859,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, static_cast<long>(timestamp_request->len))) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6870,7 +6870,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_buffer)) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6878,7 +6878,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1l)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6887,7 +6887,7 @@ bool PDFWriterImpl::finalizeSignature()
         char error_buffer[CURL_ERROR_SIZE];
         if ((rc = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_ERRORBUFFER) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_ERRORBUFFER) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6897,7 +6897,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_TIMEOUT, 10l)) != CURLE_OK ||
             (rc = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10l)) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_setopt(CURLOPT_TIMEOUT or CURLOPT_CONNECTTIMEOUT) failed: " << curl_easy_strerror(rc));
+            SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_TIMEOUT or CURLOPT_CONNECTTIMEOUT) failed: " << curl_easy_strerror(rc));
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6905,7 +6905,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (curl_easy_perform(curl) != CURLE_OK)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: curl_easy_perform failed: " << error_buffer);
+            SAL_WARN("vcl.pdfwriter", "curl_easy_perform failed: " << error_buffer);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6935,7 +6935,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (SEC_ASN1DecodeItem(NULL, &response, TimeStampResp_Template, &response_item) != SECSuccess)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_ASN1DecodeItem failed");
+            SAL_WARN("vcl.pdfwriter", "SEC_ASN1DecodeItem failed");
             return false;
         }
 
@@ -6944,7 +6944,7 @@ bool PDFWriterImpl::finalizeSignature()
         if (response.status.status.len != 1 ||
             (response.status.status.data[0] != 0 && response.status.status.data[0] != 1))
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: Timestamp request was not granted");
+            SAL_WARN("vcl.pdfwriter", "Timestamp request was not granted");
             return false;
         }
 
@@ -6970,7 +6970,7 @@ bool PDFWriterImpl::finalizeSignature()
         // smime(16) aa(2) 14 }
         if (my_SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.14", 0) != SECSuccess)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: SEC_StringToOID failed");
+            SAL_WARN("vcl.pdfwriter", "SEC_StringToOID failed");
             return false;
         }
         typetag.offset = SEC_OID_UNKNOWN; // ???
@@ -6983,37 +6983,37 @@ bool PDFWriterImpl::finalizeSignature()
 
         if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
         {
-            SAL_WARN("vcl.pdfwriter", "PDF signing: can't add timestamp attribute");
+            SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddUnauthAttr failed");
             return false;
         }
     }
     else if (NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signing time.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddSigningTime failed");
         return false;
     }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't include cert chain.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_IncludeCerts failed");
         return false;
     }
 
     if (NSS_CMSSignedData_AddCertificate(cms_sd, cert) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signer certificate.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddCertificate failed");
         return false;
     }
 
     if (NSS_CMSSignedData_AddSignerInfo(cms_sd, cms_signer) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signer info.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddSignerInfo failed");
         return false;
     }
 
     if (NSS_CMSSignedData_SetDigestValue(cms_sd, SEC_OID_SHA1, &digest) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't set PDF digest value.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_SetDigestValue failed");
         return false;
     }
 
@@ -7037,14 +7037,14 @@ bool PDFWriterImpl::finalizeSignature()
 
     if (!cms_ecx)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: can't start DER encoder.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSEncoder_Start failed");
         free(pass);
         return false;
     }
 
     if (NSS_CMSEncoder_Finish(cms_ecx) != SECSuccess)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: can't finish DER encoder.");
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSEncoder_Finish failed");
         free(pass);
         return false;
     }
@@ -7092,7 +7092,7 @@ bool PDFWriterImpl::finalizeSignature()
     if (osl::File::E_None != m_aFile.read(buffer1.get(), m_nSignatureContentOffset - 1 , bytesRead1) ||
         bytesRead1 != (sal_uInt64)m_nSignatureContentOffset - 1)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: First buffer read failed!");
+        SAL_WARN("vcl.pdfwriter", "First buffer read failed");
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -7104,7 +7104,7 @@ bool PDFWriterImpl::finalizeSignature()
         osl::File::E_None != m_aFile.read(buffer2.get(), nLastByteRangeNo, bytesRead2) ||
         bytesRead2 != (sal_uInt64) nLastByteRangeNo)
     {
-        SAL_WARN("vcl.pdfwriter", "PDF Signing: Second buffer read failed!");
+        SAL_WARN("vcl.pdfwriter", "Second buffer read failed");
         CertFreeCertificateContext(pCertContext);
         return false;
     }
