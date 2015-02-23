@@ -33,6 +33,12 @@ XMLTextTableContext::XMLTextTableContext(
 {
 }
 
+XMLTextTableContext::XMLTextTableContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport )
+{
+}
+
 XMLTextTableContext::~XMLTextTableContext()
 {
 }
