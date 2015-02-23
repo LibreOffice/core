@@ -65,17 +65,10 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
         {
             case SC_SPLIT_NONE:
             {
-                // Draw 3D border
                 SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawLine(rRect.TopRight(), rRect.BottomRight());
-                DrawLine(rRect.BottomLeft(), rRect.BottomRight());
-                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
-                DrawLine(rRect.TopLeft(), rRect.TopRight());
-                DrawLine(rRect.TopLeft(), rRect.BottomLeft());
-                // Fill internal rectangle
-                SetLineColor();
-                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
-                DrawRect(Rectangle(rRect.Left()+1, rRect.Top()+1, rRect.Right()-1, rRect.Bottom()-1));
+                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
+
                 // Draw handle
                 SetLineColor(Color(COL_BLACK));
                 SetFillColor(Color(COL_BLACK));
@@ -87,13 +80,9 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
                 break;
             }
             case SC_SPLIT_NORMAL:
-                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
-                DrawLine(rRect.TopLeft(), rRect.BottomLeft());
                 SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawLine(rRect.TopRight(), rRect.BottomRight());
-                SetLineColor();
-                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
-                DrawRect(Rectangle(Point(rRect.Left()+1, rRect.Top()), Point(rRect.Right()-1, rRect.Bottom())));
+                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
                 break;
             case SC_SPLIT_FIX:
                 // Nothing to draw
@@ -106,18 +95,11 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
         {
             case SC_SPLIT_NONE:
             {
-                // Draw 3D border
                 SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawLine(rRect.TopRight(), rRect.BottomRight());
-                DrawLine(rRect.BottomLeft(), rRect.BottomRight());
-                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
-                DrawLine(rRect.TopLeft(), rRect.TopRight());
-                DrawLine(rRect.TopLeft(), rRect.BottomLeft());
-                // Fill internal rectangle
-                SetLineColor();
-                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
-                DrawRect(Rectangle(rRect.Left()+1, rRect.Top()+1, rRect.Right()-1, rRect.Bottom()-1));
-                // Draw handle
+                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
+
+                 // Draw handle
                 SetLineColor(Color(COL_BLACK));
                 SetFillColor(Color(COL_BLACK));
                 const long yc = rRect.Top()+rRect.Bottom();
@@ -128,13 +110,9 @@ void ScTabSplitter::Paint( const Rectangle& rRect )
                 break;
             }
             case SC_SPLIT_NORMAL:
-                SetLineColor(GetSettings().GetStyleSettings().GetLightColor());
-                DrawLine(rRect.TopLeft(), rRect.TopRight());
                 SetLineColor(GetSettings().GetStyleSettings().GetShadowColor());
-                DrawLine(rRect.BottomLeft(), rRect.BottomRight());
-                SetLineColor();
-                SetFillColor(GetSettings().GetStyleSettings().GetFaceColor());
-                DrawRect(Rectangle(Point(rRect.Left(), rRect.Top()+1), Point(rRect.Right(), rRect.Bottom()-1)));
+                SetFillColor(GetSettings().GetStyleSettings().GetShadowColor());
+                DrawRect(Rectangle(rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom()));
                 break;
             case SC_SPLIT_FIX:
                 // Nothing to draw
