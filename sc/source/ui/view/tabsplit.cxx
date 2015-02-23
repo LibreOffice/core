@@ -43,18 +43,6 @@ void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
         Splitter::MouseButtonDown( rMEvt );
 }
 
-void ScTabSplitter::Splitting( Point& rSplitPos )
-{
-    vcl::Window* pParent = GetParent();
-    Point aScreenPos = pParent->OutputToNormalizedScreenPixel( rSplitPos );
-    pViewData->GetView()->SnapSplitPos( aScreenPos );
-    Point aNew = pParent->NormalizedScreenToOutputPixel( aScreenPos );
-    if ( IsHorizontal() )
-        rSplitPos.X() = aNew.X();
-    else
-        rSplitPos.Y() = aNew.Y();
-}
-
 void ScTabSplitter::SetFixed(bool bSet)
 {
     bFixed = bSet;

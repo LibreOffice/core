@@ -32,7 +32,6 @@ private:
 
 protected:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void    Splitting( Point& rSplitPos ) SAL_OVERRIDE;
 
 public:
                     ScTabSplitter( vcl::Window* pParent, WinBits nWinStyle,
