@@ -77,7 +77,7 @@
     <FormatElement msgid="FixedFormatskey6" default="false" type="short" usage="FIXED_NUMBER" formatindex="5">
       <FormatCode>#,###.00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="ScientificFormatskey1" default="true" type="long" usage="SCIENTIFIC_NUMBER" formatindex="6">
+    <FormatElement msgid="ScientificFormatskey1" default="false" type="long" usage="SCIENTIFIC_NUMBER" formatindex="6">
       <FormatCode>0.00E+000</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
