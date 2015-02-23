@@ -303,6 +303,8 @@ void GraphicObjectTest::testTdf88935()
         CPPUNIT_ASSERT(!pGraphObj1->IsSwappedOut());
         CPPUNIT_ASSERT(!pGraphObj2->IsSwappedOut());
     }
+
+    xComponent->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(GraphicObjectTest);
