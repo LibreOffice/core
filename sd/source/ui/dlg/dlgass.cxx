@@ -601,7 +601,7 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link& rFinishLin
 
     UpdatePreview( true );
 
-    //check whether we should start with a template document initialy and preselect it
+    //check whether we should start with a template document initially and preselect it
     const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
     OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
     if( !aStandardTemplate.isEmpty() )
