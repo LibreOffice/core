@@ -41,8 +41,6 @@ class KFileDialog;
 class QWidget;
 class QLayout;
 
-class ResMgr;
-
 typedef ::cppu::WeakComponentImplHelper5
 <   ::com::sun::star::ui::dialogs::XFilePicker2
 ,   ::com::sun::star::ui::dialogs::XFilePicker3
@@ -60,8 +58,6 @@ class KDE4FilePicker
 protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener > m_xListener;
-
-    ResMgr *_resMgr;
 
     //the dialog to display
     KFileDialog* _dialog;
@@ -224,6 +220,8 @@ private:
 
     //add a custom control widget to the file dialog
     void addCustomControl(sal_Int16 controlId);
+
+    QString getResString( sal_Int16 aRedId );
 
 private Q_SLOTS:
     void cleanupProxy();

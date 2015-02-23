@@ -58,6 +58,8 @@
 
 #include "generic/geninst.h"
 
+#include "svids.hrc"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::ui::dialogs::TemplateDescription;
@@ -109,7 +111,6 @@ QString toQString(const OUString& s)
 
 KDE4FilePicker::KDE4FilePicker( const uno::Reference<uno::XComponentContext>& )
     : KDE4FilePicker_Base(_helperMutex)
-    , _resMgr( ResMgr::CreateResMgr("fps_office") )
     , allowRemoteUrls( false )
 {
     _extraControls = new QWidget();
@@ -201,7 +202,6 @@ void KDE4FilePicker::cleanupProxy()
         SalYieldMutexReleaser aReleaser;
         return Q_EMIT cleanupProxySignal();
     }
-    delete _resMgr;
     delete _dialog;
 }
 
@@ -523,6 +523,24 @@ OUString SAL_CALL KDE4FilePicker::getLabel(sal_Int16 controlId)
     return toOUString(label);
 }
 
+QString KDE4FilePicker::getResString( sal_Int16 aRedId )
+{
+    QString aResString;
+
+    if( aRedId < 0 )
+        return aResString;
+
+    try
+    {
+        aResString = toQString(ResId(aRedId, *ImplGetResMgr()).toString());
+    }
+    catch(...)
+    {
+    }
+
+    return aResString.replace('~', '&');
+}
+
 void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
 {
     QWidget* widget = 0;
@@ -531,37 +549,37 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
     switch (controlId)
     {
         case CHECKBOX_AUTOEXTENSION:
-            resId = STR_SVT_FILEPICKER_AUTO_EXTENSION;
+            resId = STR_FPICKER_AUTO_EXTENSION;
             break;
         case CHECKBOX_PASSWORD:
-            resId = STR_SVT_FILEPICKER_PASSWORD;
+            resId = STR_FPICKER_PASSWORD;
             break;
         case CHECKBOX_FILTEROPTIONS:
-            resId = STR_SVT_FILEPICKER_FILTER_OPTIONS;
+            resId = STR_FPICKER_FILTER_OPTIONS;
             break;
         case CHECKBOX_READONLY:
-            resId = STR_SVT_FILEPICKER_READONLY;
+            resId = STR_FPICKER_READONLY;
             break;
         case CHECKBOX_LINK:
-            resId = STR_SVT_FILEPICKER_INSERT_AS_LINK;
+            resId = STR_FPICKER_INSERT_AS_LINK;
             break;
         case CHECKBOX_PREVIEW:
-            resId = STR_SVT_FILEPICKER_SHOW_PREVIEW;
+            resId = STR_FPICKER_SHOW_PREVIEW;
             break;
         case CHECKBOX_SELECTION:
-            resId = STR_SVT_FILEPICKER_SELECTION;
+            resId = STR_FPICKER_SELECTION;
             break;
         case PUSHBUTTON_PLAY:
-            resId = STR_SVT_FILEPICKER_PLAY;
+            resId = STR_FPICKER_PLAY;
             break;
         case LISTBOX_VERSION:
-            resId = STR_SVT_FILEPICKER_VERSION;
+            resId = STR_FPICKER_VERSION;
             break;
         case LISTBOX_TEMPLATE:
-            resId = STR_SVT_FILEPICKER_TEMPLATES;
+            resId = STR_FPICKER_TEMPLATES;
             break;
         case LISTBOX_IMAGE_TEMPLATE:
-            resId = STR_SVT_FILEPICKER_IMAGE_TEMPLATE;
+            resId = STR_FPICKER_IMAGE_TEMPLATE;
             break;
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
@@ -580,16 +598,7 @@ void KDE4FilePicker::addCustomControl(sal_Int16 controlId)
         case CHECKBOX_PREVIEW:
         case CHECKBOX_SELECTION:
         {
-            QString label;
-
-            if (_resMgr && resId != -1)
-            {
-                OUString s(ResId(resId, *_resMgr).toString());
-                label = toQString(s);
-                label.replace("~", "&");
-            }
-
-            widget = new QCheckBox(label, _extraControls);
+            widget = new QCheckBox(getResString(resId), _extraControls);
 
             // the checkbox is created even for CHECKBOX_AUTOEXTENSION to simplify
             // code, but the checkbox is hidden and ignored
@@ -719,6 +728,21 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     }
 
     _dialog->setOperationMode( operationMode );
+
+    sal_Int16 resId = -1;
+    switch (_dialog->operationMode())
+    {
+    case KFileDialog::Opening:
+        resId = STR_FPICKER_OPEN;
+        break;
+    case KFileDialog::Saving:
+        resId = STR_FPICKER_SAVE;
+        break;
+    default:
+        break;
+    }
+
+    _dialog->setCaption(getResString(resId));
 }
 
 void SAL_CALL KDE4FilePicker::cancel()
