@@ -1214,7 +1214,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
 
     if( -1 == nNumDigits )
     {
-        nNumDigits = rLoc.getNumDigits();
+        nNumDigits = LocaleDataWrapper::getNumDigits();
     }
 
     sal_Int32 nKomma(nUIUnitKomma);
@@ -1257,7 +1257,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
         // if necessary, add zeros before the decimal point
         sal_Int32 nAnz = nKomma - aBuf.getLength();
 
-        if(nAnz >= 0 && rLoc.isNumLeadingZero())
+        if(nAnz >= 0 && LocaleDataWrapper::isNumLeadingZero())
             nAnz++;
 
         for(sal_Int32 i=0; i<nAnz; i++)
@@ -1272,7 +1272,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     if(nKomma > 0)
         aBuf.insert(nVorKomma, cDec);
 
-    if(!rLoc.isNumTrailingZeros())
+    if(!LocaleDataWrapper::isNumTrailingZeros())
     {
         // Remove all trailing zeros.
         while (!aBuf.isEmpty() && aBuf[aBuf.getLength()-1] == '0')
@@ -1328,7 +1328,7 @@ void SdrModel::TakeAngleStr(long nAngle, OUString& rStr, bool bNoDegChar) const
     const LocaleDataWrapper& rLoc = aSysLoc.GetLocaleData();
     sal_Int32 nAnz = 2;
 
-    if(rLoc.isNumLeadingZero())
+    if(LocaleDataWrapper::isNumLeadingZero())
         nAnz++;
 
     while(aBuf.getLength() < nAnz)
