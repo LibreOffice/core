@@ -870,7 +870,7 @@ bool SdrAngleItem::GetPresentation(
             pIntlWrapper = pMyIntlWrapper = new IntlWrapper(
                 Application::GetSettings().GetLanguageTag() );
 
-        if(pIntlWrapper->getLocaleData()->isNumLeadingZero())
+        if(LocaleDataWrapper::isNumLeadingZero())
             nAnz++;
 
         while(aText.getLength() < nAnz)
