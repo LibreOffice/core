@@ -1254,14 +1254,23 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
             const Reference< xml::sax::XAttributeList > & xAttrList,
             SwXMLTableContext *pTable, bool bInHead=false );
+    SwXMLTableRowContext_Impl( SwXMLImport& rImport, sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList,
+        SwXMLTableContext *pTable, bool bInHead=false );
 
     virtual ~SwXMLTableRowContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
             const OUString& rLocalName,
             const Reference< xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual Reference< xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const Reference< xml::sax::XFastAttributeList >& xAttrList )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(RuntimeException, xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     SwXMLImport& GetSwImport() { return static_cast<SwXMLImport&>(GetImport()); }
 };
@@ -1317,7 +1326,57 @@ SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl( SwXMLImport& rImport,
                                sXmlId );
 }
 
+SwXMLTableRowContext_Impl::SwXMLTableRowContext_Impl(
+    SwXMLImport& rImport, sal_Int32 /*Element*/,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    SwXMLTableContext *pTable, bool bInHead )
+:   SvXMLImportContext( rImport ),
+    xMyTable( pTable ),
+    nRowRepeat( 1 )
+{
+    OUString aStyleName, aDfltCellStyleName;
+    OUString sXmlId;
+
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name ) )
+        {
+            aStyleName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_style_name );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_rows_repeated ) )
+        {
+            nRowRepeat = static_cast< sal_Int32 >( xAttrList->getValue(
+                FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_number_rows_repeated ).toInt32() );
+            if( nRowRepeat < 1UL )
+                nRowRepeat = 1UL;
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_default_cell_style_name ) )
+        {
+            aDfltCellStyleName = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_default_cell_style_name );
+        }
+        else if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_XML | XML_id ) )
+        {
+            sXmlId = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_XML | XML_id );
+        }
+    }
+    if( GetTable()->IsValid() )
+        GetTable()->InsertRow( aStyleName, aDfltCellStyleName, bInHead,
+                               sXmlId );
+}
+
 void SwXMLTableRowContext_Impl::EndElement()
+{
+    if( GetTable()->IsValid() )
+    {
+        GetTable()->FinishRow();
+
+        if( nRowRepeat > 1UL )
+            GetTable()->InsertRepRows( nRowRepeat );
+    }
+}
+
+void SAL_CALL SwXMLTableRowContext_Impl::endFastElement( sal_Int32 /*Element*/ )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
 {
     if( GetTable()->IsValid() )
     {
@@ -1356,6 +1415,31 @@ SvXMLImportContext *SwXMLTableRowContext_Impl::CreateChildContext(
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+
+    return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    SwXMLTableRowContext_Impl::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< xml::sax::XFastContextHandler > pContext = 0;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_table_cell)
+     || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_table_cell) )
+    {
+        pContext = new SwXMLTableCellContext_Impl( GetSwImport(),
+                Element, xAttrList, GetTable() );
+    }
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_TABLE | XML_covered_table_cell)
+          || Element == (FastToken::NAMESPACE | XML_NAMESPACE_LO_EXT | XML_covered_table_cell) )
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
