@@ -102,22 +102,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sw_component_getFactory(
                 SwTextDocument_createInstance,
                 SwTextDocument_getSupportedServiceNames() );
         }
-        else if( SwWebDocument_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwWebDocument_getImplementationName(),
-                SwWebDocument_createInstance,
-                SwWebDocument_getSupportedServiceNames() );
-        }
-        else if( SwGlobalDocument_getImplementationName().equalsAsciiL(
-                                                    pImplName, nImplNameLen ) )
-        {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SwGlobalDocument_getImplementationName(),
-                SwGlobalDocument_createInstance,
-                SwGlobalDocument_getSupportedServiceNames() );
-        }
         else if( SwUnoModule_getImplementationName().equalsAsciiL(
                                                     pImplName, nImplNameLen ) )
         {

@@ -31,13 +31,15 @@
   <implementation name="com.sun.star.comp.Writer.FilterOptionsDialog">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.GlobalDocument">
+  <implementation name="com.sun.star.comp.Writer.GlobalDocument"
+      constructor="com_sun_star_comp_Writer_GlobalDocument_get_implementation">
     <service name="com.sun.star.text.GlobalDocument"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.TextDocument">
     <service name="com.sun.star.text.TextDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.WebDocument">
+  <implementation name="com.sun.star.comp.Writer.WebDocument"
+      constructor="com_sun_star_comp_Writer_WebDocument_get_implementation">
     <service name="com.sun.star.text.WebDocument"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.WriterModule">

@@ -26,6 +26,7 @@
 #include "wdocsh.hxx"
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <cppuhelper/weak.hxx>
 
 using namespace ::com::sun::star;
 
@@ -57,58 +58,29 @@ uno::Reference< uno::XInterface > SAL_CALL SwTextDocument_createInstance(
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
-// com.sun.star.comp.Writer.WebDocument
-
-uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw()
-{
-    // return only top level services here! All others must be
-    // resolved by rtti!
-    uno::Sequence< OUString > aRet ( 1 );
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.WebDocument";
-
-    return aRet;
-}
-
-OUString SAL_CALL SwWebDocument_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Writer.WebDocument" );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SwWebDocument_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & )
-        throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_WebDocument_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     SfxObjectShell* pShell = new SwWebDocShell( SFX_CREATE_MODE_STANDARD );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    uno::Reference< uno::XInterface > model( pShell->GetModel() );
+    model->acquire();
+    return model.get();
 }
 
-// com.sun.star.comp.Writer.GlobalDocument
 
-uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw()
-{
-    uno::Sequence< OUString > aRet ( 1 );
-    OUString* pArray = aRet.getArray();
-    pArray[0] = "com.sun.star.text.GlobalDocument";
-
-    return aRet;
-}
-
-OUString SAL_CALL SwGlobalDocument_getImplementationName() throw()
-{
-    return OUString( "com.sun.star.comp.Writer.GlobalDocument" );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SwGlobalDocument_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > &)
-        throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_GlobalDocument_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     SfxObjectShell* pShell = new SwGlobalDocShell( SFX_CREATE_MODE_STANDARD );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    uno::Reference< uno::XInterface > model( pShell->GetModel() );
+    model->acquire();
+    return model.get();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

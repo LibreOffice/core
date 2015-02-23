@@ -38,12 +38,6 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL SwUnoModule_createInstance(
 css::uno::Sequence< OUString > SAL_CALL SwTextDocument_getSupportedServiceNames() throw();
 OUString SAL_CALL SwTextDocument_getImplementationName() throw();
 css::uno::Reference< css::uno::XInterface > SAL_CALL SwTextDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr, const sal_uInt64 _nCreationFlags ) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwWebDocument_getSupportedServiceNames() throw();
-OUString SAL_CALL SwWebDocument_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwWebDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr ) throw( css::uno::Exception );
-css::uno::Sequence< OUString > SAL_CALL SwGlobalDocument_getSupportedServiceNames() throw();
-OUString SAL_CALL SwGlobalDocument_getImplementationName() throw();
-css::uno::Reference< css::uno::XInterface > SAL_CALL SwGlobalDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &rSMgr ) throw( css::uno::Exception );
 
 //API objects
 css::uno::Sequence< OUString > SAL_CALL SwXAutoTextContainer_getSupportedServiceNames() throw();
