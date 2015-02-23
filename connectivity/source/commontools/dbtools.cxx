@@ -68,6 +68,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <connectivity/conncleanup.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <connectivity/dbexception.hxx>
@@ -410,11 +411,10 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
                     xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
                 if (!sUser.isEmpty())
                 {   // use user and pwd together with the url
-                    Sequence< PropertyValue> aInfo(2);
-                    aInfo.getArray()[0].Name = "user";
-                    aInfo.getArray()[0].Value <<= sUser;
-                    aInfo.getArray()[1].Name = "password";
-                    aInfo.getArray()[1].Value <<= sPwd;
+                    auto aInfo(::comphelper::InitPropertySequence({
+                        { "user", makeAny(sUser) },
+                        { "password", makeAny(sPwd) }
+                    }));
                     xPureConnection = xDriverManager->getConnectionWithInfo( sURL, aInfo );
                 }
                 else
