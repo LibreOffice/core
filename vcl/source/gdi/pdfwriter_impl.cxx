@@ -6385,10 +6385,12 @@ OUString PKIStatusInfoToString(const PKIStatusInfo& rStatusInfo)
         result += PKIStatusToString(rStatusInfo.status.data[0]);
     else
         result += "unknown (len=" + OUString::number(rStatusInfo.status.len);
-    if (rStatusInfo.statusString.data != NULL)
-        result += ",statusString='" +
-            OUString::fromUtf8(OString(reinterpret_cast<const sal_Char*>(rStatusInfo.statusString.data), rStatusInfo.statusString.len)) +
-            "'";
+
+    // FIXME: Perhaps look at rStatusInfo.statusString.data but note
+    // that we of course can't assume it contains proper UTF-8. After
+    // all, it is data from an external source. Also, RFC3161 claims
+    // it should be a SEQUENCE (1..MAX) OF UTF8String, but another
+    // source claimed it would be a single UTF8String, hmm?
 
     // FIXME: Worth it to decode failInfo to cleartext, probably not at least as long as this is only for a SAL_INFO
 
