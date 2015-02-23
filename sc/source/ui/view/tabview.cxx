@@ -332,10 +332,12 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     if ( bMinimized )
         return;
 
-    long nSplitSizeX = SPLIT_HANDLE_SIZE;
+    sal_Int32 aScaleFactor = pFrameWin->GetDPIScaleFactor();
+
+    long nSplitSizeX = SPLIT_HANDLE_SIZE * aScaleFactor;
     if ( aViewData.GetHSplitMode() == SC_SPLIT_FIX )
         nSplitSizeX = 1;
-    long nSplitSizeY = SPLIT_HANDLE_SIZE;
+    long nSplitSizeY = SPLIT_HANDLE_SIZE * aScaleFactor;
     if ( aViewData.GetVSplitMode() == SC_SPLIT_FIX )
         nSplitSizeY = 1;
 
