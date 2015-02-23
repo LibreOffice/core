@@ -98,7 +98,7 @@ public class LOKitShell {
     }
 
     public static void sendSizeChangedEvent(int width, int height) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.SIZE_CHANGED, width, height));
+        LOKitShell.sendEvent(new LOEvent(LOEvent.SIZE_CHANGED));
     }
 
     public static void sendChangePartEvent(int part) {
