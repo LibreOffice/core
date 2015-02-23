@@ -156,6 +156,9 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
     case GDK_Escape:
         nKeyCode = com::sun::star::awt::Key::ESCAPE;
         break;
+    case GDK_Tab:
+        nKeyCode = com::sun::star::awt::Key::TAB;
+        break;
     default:
         if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
             nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
