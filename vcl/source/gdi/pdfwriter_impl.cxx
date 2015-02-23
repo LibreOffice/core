@@ -6987,16 +6987,15 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
     }
+    else if (NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signing time.");
+        return false;
+    }
 
     if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "PDF signing: can't include cert chain.");
-        return false;
-    }
-
-    if (NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "PDF signing: can't add signing time.");
         return false;
     }
 
