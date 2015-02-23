@@ -1223,16 +1223,16 @@ OUString SAL_CALL SwXMailMerge_getImplementationName()
     return OUString( "SwXMailMerge" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(
-        const uno::Reference< XMultiServiceFactory > & /*rSMgr*/)
-    throw( uno::Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SwXMailMerge_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
 
     //the module may not be loaded
     SwGlobals::ensure();
-    uno::Reference< uno::XInterface > xRef = (cppu::OWeakObject *) new SwXMailMerge();
-    return xRef;
+    return cppu::acquire(new SwXMailMerge());
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -166,12 +166,16 @@ uno::Sequence< OUString > SwXFilterOptions::getSupportedServiceNames()
     return SwXFilterOptions::getSupportedServiceNames_Static();
 }
 
-uno::Reference<uno::XInterface> SAL_CALL SwXFilterOptions_createInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Writer_FilterOptionsDialog_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     SolarMutexGuard aGuard;
+
+    //the module may not be loaded
     SwGlobals::ensure();
-    return (::cppu::OWeakObject*) new SwXFilterOptions;
+    return cppu::acquire(new SwXFilterOptions());
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -40,8 +40,6 @@ namespace comp_FinalThreadManager {
 // component and service helper functions:
 OUString SAL_CALL _getImplementationName();
 com::sun::star::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _create(
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
 
 } // closing service helper namespace
 

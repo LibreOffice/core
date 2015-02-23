@@ -18,17 +18,18 @@
  -->
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="sw" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="SwXAutoTextContainer">
+  <implementation name="SwXAutoTextContainer" constructor="SwXAutoTextContainer_get_implementation">
     <service name="com.sun.star.text.AutoTextContainer"/>
   </implementation>
-  <implementation name="SwXMailMerge">
+  <implementation name="SwXMailMerge" constructor="SwXMailMerge_get_implementation">
     <service name="com.sun.star.sdb.DataAccessDescriptor"/>
     <service name="com.sun.star.text.MailMerge"/>
   </implementation>
-  <implementation name="SwXModule">
+  <implementation name="SwXModule" constructor="SwXModule_get_implementation">
     <service name="com.sun.star.text.GlobalSettings"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.FilterOptionsDialog">
+  <implementation name="com.sun.star.comp.Writer.FilterOptionsDialog"
+      constructor="com_sun_star_comp_Writer_FilterOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
   </implementation>
   <implementation name="com.sun.star.comp.Writer.GlobalDocument"
@@ -105,10 +106,12 @@
       constructor="com_sun_star_comp_Writer_XMLStylesExporter_get_implementation">
     <service name="com.sun.star.comp.Writer.XMLStylesExporter"/>
   </implementation>
-  <implementation name="com.sun.star.util.comp.FinalThreadManager">
+  <implementation name="com.sun.star.util.comp.FinalThreadManager"
+      constructor="com_sun_star_util_comp_FinalThreadManager_get_implementation">
     <service name="com.sun.star.util.JobManager"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Writer.LayoutDump">
+  <implementation name="com.sun.star.comp.Writer.LayoutDump"
+      constructor="com_sun_star_comp_Writer_LayoutDump_get_implementation">
     <service name="com.sun.star.comp.Writer.LayoutDump"/>
   </implementation>
   <implementation name="org.apache.openoffice.comp.sw.sidebar.SwPanelFactory"

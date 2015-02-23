@@ -1002,4 +1002,11 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
     return aRet;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+SwXModule_get_implementation(::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SwXModule());
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
