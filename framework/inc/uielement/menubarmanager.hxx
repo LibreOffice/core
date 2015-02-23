@@ -81,17 +81,10 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
-            AddonMenu*          pAddonMenu,
+            Menu*           pAddonMenu,
             bool            bDelete,
-            bool            bDeleteChildren );
-
-        MenuBarManager(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
-            const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& _xURLTransformer,
-            AddonPopupMenu*     pAddonMenu,
-            bool            bDelete,
-            bool            bDeleteChildren );
+            bool            bDeleteChildren,
+            bool popup);
 
     public:
         MenuBarManager(
@@ -211,7 +204,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
         void             AddMenu(MenuBarManager* pSubMenuManager,const OUString& _sItemCommand,sal_uInt16 _nItemId);
         sal_uInt16           FillItemCommand(OUString& _rItemCommand, Menu* _pMenu,sal_uInt16 _nIndex) const;
-        void             Init(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,AddonMenu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp = false);
+        void             Init(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,Menu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp);
         void             SetHdl();
 
         bool                                                                               m_bDisposed : 1,

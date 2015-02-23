@@ -153,9 +153,10 @@ MenuBarManager::MenuBarManager(
     const Reference< XComponentContext >& rxContext,
     const Reference< XFrame >& rFrame,
     const Reference< XURLTransformer >& _xURLTransformer,
-    AddonMenu* pAddonMenu,
+    Menu* pAddonMenu,
     bool bDelete,
-    bool bDeleteChildren ):
+    bool bDeleteChildren,
+    bool popup):
     OWeakObject()
     , m_bDisposed( false )
     , m_bRetrieveImages( true )
@@ -166,27 +167,7 @@ MenuBarManager::MenuBarManager(
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
 {
-    Init(rFrame,pAddonMenu,bDelete,bDeleteChildren);
-}
-
-MenuBarManager::MenuBarManager(
-    const Reference< XComponentContext >& rxContext,
-    const Reference< XFrame >& rFrame,
-    const Reference< XURLTransformer >& _xURLTransformer,
-    AddonPopupMenu* pAddonPopupMenu,
-    bool bDelete,
-    bool bDeleteChildren ):
-    OWeakObject()
-    , m_bDisposed( false )
-    , m_bRetrieveImages( true )
-    , m_bAcceleratorCfg( false )
-    , m_bModuleIdentified( false )
-    , m_aListenerContainer( m_mutex )
-    , m_xContext(rxContext)
-    , m_xURLTransformer(_xURLTransformer)
-    , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
-{
-    Init(rFrame,pAddonPopupMenu,bDelete,bDeleteChildren,true);
+    Init(rFrame,pAddonMenu,bDelete,bDeleteChildren, popup);
 }
 
 Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( RuntimeException, std::exception )
@@ -1247,7 +1228,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             {
                 // A special addon popup menu, must be created with a different ctor
                 MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,
-                                                          static_cast<AddonPopupMenu *>(pPopup), bDeleteChildren, bDeleteChildren );
+                                                          pPopup, bDeleteChildren, bDeleteChildren, true );
                 AddMenu(pSubMenuManager,aItemCommand,nItemId);
             }
             else
@@ -1294,7 +1275,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                     AddonMenu* pSubMenu = dynamic_cast< AddonMenu* >( pPopup );
                     if ( pSubMenu )
                     {
-                        MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, true, false );
+                        MenuBarManager* pSubMenuManager = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer,pSubMenu, true, false, false );
                         AddMenu(pSubMenuManager,aItemCommand,nItemId);
                         (pSubMenuManager->m_aMenuItemCommand).clear();
 
@@ -1899,7 +1880,7 @@ sal_uInt16 MenuBarManager::FillItemCommand(OUString& _rItemCommand, Menu* _pMenu
     }
     return nItemId;
 }
-void MenuBarManager::Init(const Reference< XFrame >& rFrame,AddonMenu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp)
+void MenuBarManager::Init(const Reference< XFrame >& rFrame,Menu* pAddonMenu,bool bDelete,bool bDeleteChildren,bool _bHandlePopUp)
 {
     m_bActive           = false;
     m_bDeleteMenu       = bDelete;
