@@ -1582,12 +1582,11 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                 rCntntAtPos.sStr += ":";
                 rCntntAtPos.sStr += OUString::number( aPos.nContent.GetIndex());
                 rCntntAtPos.sStr += ")";
-                rCntntAtPos.sStr += "\nAbs.Vorl.: "; // translation *might be* "paragraph template"
+                rCntntAtPos.sStr += "\nParagraph Style: ";
                 rCntntAtPos.sStr += pTxtNd->GetFmtColl()->GetName();
                 if( pTxtNd->GetCondFmtColl() )
                 {
-                     // translation *might be* "conditional template"
-                    rCntntAtPos.sStr += "\nBed.Vorl.: " + pTxtNd->GetCondFmtColl()->GetName();
+                    rCntntAtPos.sStr += "\nConditional Style: " + pTxtNd->GetCondFmtColl()->GetName();
                 }
 
                 if( aSet.Count() )
