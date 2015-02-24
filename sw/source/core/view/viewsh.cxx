@@ -1828,19 +1828,6 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     mpOut = pSaveOut;
     mbInLibreOfficeKitCallback = false;
     mbTiledRendering = bTiledRendering;
-
-    static bool bDebug = getenv("SW_DEBUG_TILEDRENDERING") != 0;
-    if (bDebug)
-    {
-        // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
-        Rectangle aRect(0, 0, 5, 5);
-        aRect = rDevice.PixelToLogic(aRect);
-        rDevice.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
-        rDevice.SetFillColor(COL_LIGHTRED);
-        rDevice.SetLineColor();
-        rDevice.DrawRect(aRect);
-        rDevice.Pop();
-    }
 }
 
 #if !HAVE_FEATURE_DESKTOP

@@ -628,6 +628,19 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
     (void) pRowStride;
 #endif
 
+    static bool bDebug = getenv("LOK_DEBUG") != 0;
+    if (bDebug)
+    {
+        // Draw a small red rectangle in the top left corner so that it's easy to see where a new tile begins.
+        Rectangle aRect(0, 0, 5, 5);
+        aRect = aDevice.PixelToLogic(aRect);
+        aDevice.Push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        aDevice.SetFillColor(COL_LIGHTRED);
+        aDevice.SetLineColor();
+        aDevice.DrawRect(aRect);
+        aDevice.Pop();
+    }
+
 #else
     (void) pBuffer;
     (void) nCanvasWidth;
