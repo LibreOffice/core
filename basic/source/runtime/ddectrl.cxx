@@ -133,6 +133,7 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
         return SbERR_DDE_NO_CHANNEL;
     }
     delete pConv;
+    aConvList[nChannel-1] = DDE_FREECHANNEL;
 
     return 0L;
 }
