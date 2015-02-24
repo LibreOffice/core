@@ -22,7 +22,10 @@ service IconSet
 
     [property] boolean Reverse;
 
-    [property] IconSetType Icons;
+    /**
+      * See com.sun.star.sheet.IconSetType for possible values.
+      */
+    [property] long Icons;
 
     [property] sequence<XIconSetEntry> IconSetEntries;
 

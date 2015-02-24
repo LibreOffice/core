@@ -18,11 +18,17 @@ interface XIconSetEntry
 {
     string getFormula();
 
-    void setFormula(string Formula);
+    void setFormula([in] string Formula);
 
-    IconSetEntryType getType();
+    /**
+      * See com.sun.star.sheet.IconSetEntryType for possible values.
+      */
+    long getType();
 
-    void setType(IconSetEntryType Type);
+    /**
+      * See com.sun.star.sheet.IconSetEntryType for possible values.
+      */
+    void setType([in] long Type);
 };
 
 

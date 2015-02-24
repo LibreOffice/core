@@ -16,13 +16,16 @@ service ConditionFormatEntry
 {
     interface XConditionEntry;
 
-    [property] ConditionFormatOperator Operator;
+    /**
+      * See com.sun.star.sheet.ConditionFormatOperator for valid values
+      */
+    [property] long Operator;
 
     [property] string StyleName;
 
-    [optional, property] Formula1;
+    [optional, property] string Formula1;
 
-    [optional, property] Formula2;
+    [optional, property] string Formula2;
 };
 
 

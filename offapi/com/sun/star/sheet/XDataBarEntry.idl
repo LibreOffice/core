@@ -16,11 +16,17 @@ interface XDataBarEntry
 {
     string getFormula();
 
-    void setFormula(string Formula);
+    void setFormula( [in] string Formula);
 
-    DataBarEntryType getType();
+    /**
+      * See com.sun.star.sheet.DataBarEntryType for possible values
+      */
+    long getType();
 
-    void setType(DataBarEntryType Type);
+    /**
+      * See com.sun.star.sheet.DataBarEntryType for possible values
+      */
+    void setType( [in] long Type);
 };
 
 

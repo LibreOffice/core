@@ -1171,9 +1171,13 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
 	Cells \
 	CellsEnumeration \
 	ConsolidationDescriptor \
+	ConditionalFormat \
+	ConditionFormatEntry \
+	ColorScale \
 	DDELink \
 	DDELinks \
 	DDELinksEnumeration \
+	DataBar \
 	DataPilotDescriptor \
 	DataPilotField \
 	DataPilotFieldGroup \
@@ -1209,6 +1213,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/sheet,\
 	FunctionDescriptionEnumeration \
 	FunctionDescriptions \
 	HeaderFooterContent \
+	IconSet \
 	LabelRange \
 	LabelRanges \
 	LabelRangesEnumeration \
@@ -3356,9 +3361,14 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	CellDeleteMode \
 	CellFlags \
 	CellInsertMode \
+	ColorScaleEntryType \
 	ComplexReference \
+	ConditionEntryType \
+	ConditionFormatOperator \
 	ConditionOperator \
 	ConditionOperator2 \
+	DataBarAxis \
+	DataBarEntryType \
 	DDEItemInfo \
 	DDELinkInfo \
 	DDELinkMode \
@@ -3404,6 +3414,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	FunctionCategory \
 	GeneralFunction \
 	GoalResult \
+	IconSetFormatEntry \
+	IconSetType \
 	LocalizedName \
 	MemberResult \
 	MemberResultFlags \
@@ -3448,12 +3460,15 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XCellRangesAccess \
 	XCellRangesQuery \
 	XCellSeries \
+	XColorScaleEntry \
 	XCompatibilityNames \
+	XConditionEntry \
 	XConditionalFormat \
 	XConditionalFormats \
 	XConditionEntry \
 	XConsolidatable \
 	XConsolidationDescriptor \
+	XDataBarEntry \
 	XDDELink \
 	XDDELinkResults \
 	XDDELinks \
@@ -3489,6 +3504,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sheet,\
 	XGoalSeek \
 	XHeaderFooterContent \
 	XHierarchiesSupplier \
+	XIconSetEntry \
 	XLabelRange \
 	XLabelRanges \
 	XLevelsSupplier \
