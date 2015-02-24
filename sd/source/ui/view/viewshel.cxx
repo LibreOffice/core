@@ -510,7 +510,7 @@ void ViewShell::LogicMouseButtonDown(const MouseEvent& rMouseEvent)
     bool bMap = mpActiveWindow->IsMapModeEnabled();
     mpActiveWindow->EnableMapMode(false);
     Point aPoint = mpActiveWindow->GetPointerPosPixel();
-    mpActiveWindow->SetPointerPosPixel(rMouseEvent.GetPosPixel());
+    mpActiveWindow->SetLastMousePos(rMouseEvent.GetPosPixel());
 
     MouseButtonDown(rMouseEvent, 0);
 
