@@ -162,9 +162,32 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
                                 static_cast<__cxxabiv1::__class_type_info *>(
                                     bases[0]));
                             break;
-                        case 2:
-                            //TODO
-                            break;
+                        default:
+                            {
+                                char * pad = new char[
+                                    sizeof (__cxxabiv1::__vmi_class_type_info)
+                                    + ((itd.nBaseTypes - 1)
+                                       * sizeof (
+                                           __cxxabiv1::__base_class_type_info))];
+                                __cxxabiv1::__vmi_class_type_info * info
+                                    = new(pad)
+                                        __cxxabiv1::__vmi_class_type_info(
+                                            strdup(rttiName),
+                                            __cxxabiv1::__vmi_class_type_info::__flags_unknown_mask);
+                                info->__base_count = itd.nBaseTypes;
+                                for (sal_Int32 i = 0; i != itd.nBaseTypes; ++i)
+                                {
+                                    info->__base_info[i].__base_type
+                                        = static_cast<
+                                            __cxxabiv1::__class_type_info *>(
+                                                bases[i]);
+                                    info->__base_info[i].__offset_flags
+                                        = (__cxxabiv1::__base_class_type_info::__public_mask
+                                           | ((8 * i) << __cxxabiv1::__base_class_type_info::__offset_shift));
+                                }
+                                rtti = info;
+                                break;
+                            }
                         }
                         break;
                     }
