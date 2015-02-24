@@ -2362,6 +2362,30 @@ void SdXImpressDocument::registerCallback(LibreOfficeKitCallback pCallback, void
     mpDoc->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
+void SdXImpressDocument::postMouseEvent(int nType, int nX, int nY, int nCount)
+{
+    SolarMutexGuard aGuard;
+
+    DrawViewShell* pViewShell = GetViewShell();
+    if (!pViewShell)
+        return;
+
+    MouseEvent aEvent(Point(convertTwipToMm100(nX), convertTwipToMm100(nY)), nCount, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT);
+
+    switch (nType)
+    {
+    case LOK_MOUSEEVENT_MOUSEBUTTONDOWN:
+        pViewShell->LogicMouseButtonDown(aEvent);
+        break;
+    case LOK_MOUSEEVENT_MOUSEBUTTONUP:
+        pViewShell->LogicMouseButtonUp(aEvent);
+        break;
+    default:
+        assert(false);
+        break;
+    }
+}
+
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
     uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);

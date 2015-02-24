@@ -443,6 +443,11 @@ public:
         SdPage* pPage,
         const sal_Int32 nInsertPosition = -1);
 
+    /// Same as MouseButtonDown(), but coordinates are in logic unit.
+    void LogicMouseButtonDown(const MouseEvent& rMouseEvent);
+    /// Same as MouseButtonUp(), but coordinates are in logic unit.
+    void LogicMouseButtonUp(const MouseEvent& rMouseEvent);
+
     class Implementation;
 
 protected:

@@ -244,6 +244,8 @@ public:
     virtual void initializeForTiledRendering() SAL_OVERRIDE;
     /// @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
+    /// @see vcl::ITiledRenderable::postMouseEvent().
+    virtual void postMouseEvent(int nType, int nX, int nY, int nCount) SAL_OVERRIDE;
 
     // XComponent
 
