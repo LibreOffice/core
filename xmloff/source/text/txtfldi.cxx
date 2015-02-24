@@ -3006,6 +3006,13 @@ XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
 {
 }
 
+XMLDdeFieldDeclsImportContext::XMLDdeFieldDeclsImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport ),
+    aTokenMap(aDdeDeclAttrTokenMap)
+{
+}
+
 SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -3025,7 +3032,21 @@ SvXMLImportContext * XMLDdeFieldDeclsImportContext::CreateChildContext(
     }
 }
 
-
+Reference< XFastContextHandler > SAL_CALL
+    XMLDdeFieldDeclsImportContext::createFastChildContext(
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_dde_connection_decl) )
+    {
+        return new XMLDdeFieldDeclImportContext( GetImport(), Element,
+                            aTokenMap );
+    }
+    else
+    {
+        return SvXMLImportContext::createFastChildContext( Element, xAttrList );
+    }
+}
 
 
 // import dde field declaration
