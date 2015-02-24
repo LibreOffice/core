@@ -1756,12 +1756,16 @@ public:
 
 class SmXMLActionContext_Impl : public SmXMLRowContext_Impl
 {
+    size_t mnSelection; // 1-based
+
 public:
     SmXMLActionContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName) :
         SmXMLRowContext_Impl(rImport,nPrefix,rLName)
+      , mnSelection(1)
         {}
 
+    void StartElement(const uno::Reference<xml::sax::XAttributeList> &xAttrList) SAL_OVERRIDE;
     void EndElement() SAL_OVERRIDE;
 };
 
@@ -1957,6 +1961,13 @@ static const SvXMLTokenMapEntry aColorTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static const SvXMLTokenMapEntry aActionAttrTokenMap[] =
+{
+    { XML_NAMESPACE_MATH,   XML_SELECTION,      XML_TOK_SELECTION },
+    XML_TOKEN_MAP_END
+};
+
+
 const SvXMLTokenMap& SmXMLImport::GetPresLayoutElemTokenMap()
 {
     if (!pPresLayoutElemTokenMap)
@@ -2022,6 +2033,12 @@ const SvXMLTokenMap& SmXMLImport::GetColorTokenMap()
     return *pColorTokenMap;
 }
 
+const SvXMLTokenMap& SmXMLImport::GetActionAttrTokenMap()
+{
+    if (!pActionAttrTokenMap)
+        pActionAttrTokenMap = new SvXMLTokenMap(aActionAttrTokenMap);
+    return *pActionAttrTokenMap;
+}
 
 
 SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
@@ -2589,18 +2606,58 @@ void SmXMLMultiScriptsContext_Impl::EndElement()
     ProcessSubSupPairs(bHasPrescripts);
 }
 
+void SmXMLActionContext_Impl::StartElement(const uno::Reference<xml::sax::XAttributeList> & xAttrList)
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i=0;i<nAttrCount;i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName(sAttrName,&aLocalName);
+
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap &rAttrTokenMap =
+            GetSmImport().GetActionAttrTokenMap();
+        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        {
+            case XML_TOK_SELECTION:
+                {
+                    sal_uInt32 n = sValue.toUInt32();
+                    if (n > 0) mnSelection = static_cast<size_t>(n);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 void SmXMLActionContext_Impl::EndElement()
 {
-    /*For now we will just assume that the
-     selected attribute is one, and then just display
-     that expression alone, i.e. remove all expect the
-     first pushed one*/
-
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    for (auto i=rNodeStack.size()-nElementCount;i > 1;i--)
+    auto nSize = rNodeStack.size();
+    if (nSize <= nElementCount) {
+        // not compliant to maction's specification, e.g., no subexpressions
+        return;
+    }
+    assert(mnSelection > 0);
+    if (nSize < nElementCount + mnSelection) {
+        // No selected subexpression exists, which is a MathML error;
+        // fallback to selecting the first
+        mnSelection = 1;
+    }
+    assert(nSize >= nElementCount + mnSelection);
+    for (auto i=nSize-(nElementCount+mnSelection); i > 0; i--)
     {
         rNodeStack.pop_front();
     }
+    auto pSelected = rNodeStack.pop_front();
+    for (auto i=rNodeStack.size()-nElementCount; i > 0; i--)
+    {
+        rNodeStack.pop_front();
+    }
+    rNodeStack.push_front(pSelected.release());
 }
 
 SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
@@ -2858,6 +2915,7 @@ SmXMLImport::~SmXMLImport() throw ()
     delete pColorTokenMap;
     delete pOperatorAttrTokenMap;
     delete pAnnotationAttrTokenMap;
+    delete pActionAttrTokenMap;
 }
 
 void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)

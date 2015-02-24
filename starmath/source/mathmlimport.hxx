@@ -80,6 +80,7 @@ class SmXMLImport : public SvXMLImport
         SvXMLTokenMap *pPresScriptEmptyElemTokenMap;
         SvXMLTokenMap *pPresTableElemTokenMap;
         SvXMLTokenMap *pColorTokenMap;
+        SvXMLTokenMap *pActionAttrTokenMap;
 
         SmNodeStack aNodeStack;
         bool bSuccess;
@@ -241,6 +242,7 @@ public:
     const SvXMLTokenMap &GetPresScriptEmptyElemTokenMap();
     const SvXMLTokenMap &GetPresTableElemTokenMap();
     const SvXMLTokenMap &GetColorTokenMap();
+    const SvXMLTokenMap &GetActionAttrTokenMap();
 
     SmNodeStack & GetNodeStack()    { return aNodeStack; }
     SmNode *GetTree()
@@ -339,6 +341,10 @@ enum SmXMLAnnotationAttrTokenMap
     XML_TOK_ENCODING
 };
 
+enum SmXMLActionAttrTokenMap
+{
+    XML_TOK_SELECTION
+};
 
 
 #endif
