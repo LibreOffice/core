@@ -315,8 +315,6 @@ bool SdModule::OutlineToImpress(SfxRequest& rRequest)
     return rRequest.IsDone();
 }
 
-static bool bOnce = false;
-
 void SdModule::GetState(SfxItemSet& rItemSet)
 {
     // disable Autopilot during presentation
@@ -403,7 +401,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CTL ), SID_ATTR_CHAR_CTL_LANGUAGE ) );
     }
 
-    if ( !bOnce )
+    if ( !mbEventListenerAdded )
     {
         ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocShell ) // Impress or Draw ?
@@ -414,7 +412,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             {
                 // add our event listener as soon as possible
                 Application::AddEventListener( LINK( this, SdModule, EventListenerHdl ) );
-                bOnce = true;
+                mbEventListenerAdded = true;
             }
         }
     }

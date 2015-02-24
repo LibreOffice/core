@@ -78,7 +78,8 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
     bWaterCan(false),
-    mpResourceContainer(new ::sd::SdGlobalResourceContainer())
+    mpResourceContainer(new ::sd::SdGlobalResourceContainer()),
+    mbEventListenerAdded(false)
 {
     SetName( OUString( "StarDraw" ) );  // Do not translate!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
@@ -105,15 +106,9 @@ SdModule::~SdModule()
     delete pSearchItem;
     delete pNumberFormatter;
 
-    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
-    if( pDocShell )
+    if (mbEventListenerAdded)
     {
-        ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
-        if (pViewShell)
-        {
-            // Removing our event listener
-            Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
-        }
+        Application::RemoveEventListener( LINK( this, SdModule, EventListenerHdl ) );
     }
 
     mpResourceContainer.reset();

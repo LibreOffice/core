@@ -159,6 +159,8 @@ private:
     */
     ::std::unique_ptr< ::sd::SdGlobalResourceContainer> mpResourceContainer;
 
+    bool mbEventListenerAdded;
+
     /** Create a new summary page.  When the document has been created in
         the kiosk mode with automatical transitions then this method adds
         this kind of transition to the new summary page.
