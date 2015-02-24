@@ -6950,9 +6950,7 @@ bool PDFWriterImpl::finalizeSignature()
 
         NSSCMSAttribute timestamp;
 
-        timestamp.type.type = siBuffer;
-        timestamp.type.data = NULL;
-        timestamp.type.len = 0;
+        // timestamp.type filled in below
 
         SECItem values[2];
         values[0] = response.timeStampToken;
@@ -6975,11 +6973,13 @@ bool PDFWriterImpl::finalizeSignature()
         }
         typetag.offset = SEC_OID_UNKNOWN; // ???
         typetag.desc = "id-aa-timeStampToken";
-        typetag.mechanism = CKM_INVALID_MECHANISM; // ???
+        typetag.mechanism = CKM_SHA256; // ???
         typetag.supportedExtension = UNSUPPORTED_CERT_EXTENSION; // ???
         timestamp.typeTag = &typetag;
 
-        timestamp.encoded = PR_TRUE;
+        timestamp.type = typetag.oid; // ???
+
+        timestamp.encoded = PR_TRUE; // ???
 
         if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
         {
