@@ -35,17 +35,22 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 const sal_Char sAPI_CreateFromLabels[] = "CreateFromLabels";
 const sal_Char sAPI_LabelCategory[] = "LabelCategory";
@@ -70,6 +75,20 @@ XMLIndexTableSourceContext::XMLIndexTableSourceContext(
 {
 }
 
+XMLIndexTableSourceContext::XMLIndexTableSourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexSourceBaseContext( rImport, Element, rPropSet, false ),
+    sCreateFromLabels(sAPI_CreateFromLabels),
+    sLabelCategory(sAPI_LabelCategory),
+    sLabelDisplayType(sAPI_LabelDisplayType),
+    nDisplayFormat(0),
+    bSequenceOK(false),
+    bDisplayFormatOK(false),
+    bUseCaption(true)
+{
+}
+
 XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
@@ -85,7 +104,7 @@ static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
     { XML_CHAPTER,              ReferenceFieldPart::CATEGORY_AND_NUMBER },
     { XML_PAGE,                 ReferenceFieldPart::ONLY_CAPTION },
 
-    { XML_TOKEN_INVALID,        0 }
+    { xmloff::token::XML_TOKEN_INVALID,        0 }
 };
 
 void XMLIndexTableSourceContext::ProcessAttribute(
@@ -149,6 +168,28 @@ void XMLIndexTableSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
+void SAL_CALL XMLIndexTableSourceContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Any aAny;
+
+    aAny.setValue(&bUseCaption, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromLabels, aAny);
+
+    if (bSequenceOK)
+    {
+        aAny <<= sSequence;
+        rIndexPropertySet->setPropertyValue(sLabelCategory, aAny);
+    }
+
+    if (bDisplayFormatOK)
+    {
+        aAny <<= nDisplayFormat;
+        rIndexPropertySet->setPropertyValue(sLabelDisplayType, aAny);
+    }
+
+    XMLIndexSourceBaseContext::EndElement();
+}
 
 SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -161,7 +202,7 @@ SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
                                            aLevelNameTableMap,
-                                           XML_TOKEN_INVALID, // no outline-level attr
+                                           xmloff::token::XML_TOKEN_INVALID, // no outline-level attr
                                            aLevelStylePropNameTableMap,
                                            aAllowedTokenTypesTable);
     }
@@ -172,6 +213,24 @@ SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
                                                              xAttrList);
     }
 
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexTableSourceContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_table_index_entry_template) )
+    {
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
+                Element, aLevelNameTableMap,
+                xmloff::token::XML_TOKEN_INVALID, // no outline-level attr
+                aLevelStylePropNameTableMap,
+                aAllowedTokenTypesTable );
+    }
+    else
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
