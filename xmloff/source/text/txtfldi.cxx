@@ -3048,6 +3048,20 @@ XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
     DBG_ASSERT(IsXMLToken(sLocalName, XML_DDE_CONNECTION_DECL), "wrong name");
 }
 
+XMLDdeFieldDeclImportContext::XMLDdeFieldDeclImportContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const SvXMLTokenMap& rMap )
+:   SvXMLImportContext( rImport ),
+    sPropertyIsAutomaticUpdate(sAPI_is_automatic_update),
+    sPropertyName(sAPI_name),
+    sPropertyDDECommandType(sAPI_dde_command_type),
+    sPropertyDDECommandFile(sAPI_dde_command_file),
+    sPropertyDDECommandElement(sAPI_dde_command_element),
+    rTokenMap(rMap)
+{
+    DBG_ASSERT( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_dde_connection_decl), "wrong xml-tag");
+}
+
 void XMLDdeFieldDeclImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
@@ -3166,7 +3180,119 @@ void XMLDdeFieldDeclImportContext::StartElement(
     // else: ignore
 }
 
+void SAL_CALL XMLDdeFieldDeclImportContext::startFastElement(
+    sal_Int32 /*Element*/, const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    OUString sName;
+    OUString sCommandApplication;
+    OUString sCommandTopic;
+    OUString sCommandItem;
 
+    sal_Bool bUpdate = sal_False;
+    bool bNameOK = false;
+    bool bCommandApplicationOK = false;
+    bool bCommandTopicOK = false;
+    bool bCommandItemOK = false;
+
+    // process attributes
+    Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        switch (rTokenMap.Get(attribute.Token))
+        {
+            case XML_TOK_DDEFIELD_NAME:
+                sName = attribute.Value;
+                bNameOK = true;
+                break;
+            case XML_TOK_DDEFIELD_APPLICATION:
+                sCommandApplication = attribute.Value;
+                bCommandApplicationOK = true;
+                break;
+            case XML_TOK_DDEFIELD_TOPIC:
+                sCommandTopic = attribute.Value;
+                bCommandTopicOK = true;
+                break;
+            case XML_TOK_DDEFIELD_ITEM:
+                sCommandItem = attribute.Value;
+                bCommandItemOK = true;
+                break;
+            case XML_TOK_DDEFIELD_UPDATE:
+            {
+                bool bTmp(false);
+                if (::sax::Converter::convertBool(
+                    bTmp, attribute.Value) )
+                {
+                    bUpdate = bTmp;
+                }
+                break;
+            }
+        }
+    }
+
+    // valid data?
+    if (bNameOK && bCommandApplicationOK && bCommandTopicOK && bCommandItemOK)
+    {
+        // make service name
+        OUStringBuffer sBuf;
+        sBuf.appendAscii(sAPI_fieldmaster_prefix);
+        sBuf.appendAscii(sAPI_dde);
+
+        // create DDE TextFieldMaster
+        Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
+                                                 UNO_QUERY);
+        if( xFactory.is() )
+        {
+            /* #i6432# There might be multiple occurrences of one DDE
+               declaration if it is used in more than one of
+               header/footer/body. createInstance will throw an exception if we
+               try to create the second, third, etc. instance of such a
+               declaration. Thus we ignore the exception. Otherwise this will
+               lead to an unloadable document. */
+            try
+            {
+                Reference<XInterface> xIfc =
+                    xFactory->createInstance(sBuf.makeStringAndClear());
+                if( xIfc.is() )
+                {
+                    Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
+                    if (xPropSet.is() &&
+                        xPropSet->getPropertySetInfo()->hasPropertyByName(
+                                                                          sPropertyDDECommandType))
+                    {
+                        Any aAny;
+
+                        aAny <<= sName;
+                        xPropSet->setPropertyValue(sPropertyName, aAny);
+
+                        aAny <<= sCommandApplication;
+                        xPropSet->setPropertyValue(sPropertyDDECommandType, aAny);
+
+                        aAny <<= sCommandTopic;
+                        xPropSet->setPropertyValue(sPropertyDDECommandFile, aAny);
+
+                        aAny <<= sCommandItem;
+                        xPropSet->setPropertyValue(sPropertyDDECommandElement,
+                                                   aAny);
+
+                        aAny.setValue(&bUpdate, ::getBooleanCppuType());
+                        xPropSet->setPropertyValue(sPropertyIsAutomaticUpdate,
+                                                   aAny);
+                    }
+                    // else: ignore (can't get XPropertySet, or DDE
+                    //               properties are not supported)
+                }
+                // else: ignore
+            }
+            catch (const Exception&)
+            {
+                //ignore
+            }
+        }
+        // else: ignore
+    }
+    // else: ignore
+}
 
 
 // DDE field import

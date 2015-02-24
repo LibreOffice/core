@@ -35,7 +35,8 @@
 #include <rtl/ustrbuf.hxx>
 
 namespace com { namespace sun { namespace star {
-    namespace xml { namespace sax { class XAttributeList; } }
+    namespace xml { namespace sax { class XAttributeList;
+                                    class XFastAttributeList;} }
     namespace text { class XTextField; }
     namespace beans { class XPropertySet; struct PropertyValue; }
 } } }
@@ -1073,11 +1074,16 @@ public:
                                  sal_uInt16 nPrfx,
                                  const OUString& sLocalName,
                                  const SvXMLTokenMap& rMap);
+    XMLDdeFieldDeclImportContext( SvXMLImport& rImport,
+        sal_Int32 Element, const SvXMLTokenMap& rMap );
 
     // create fieldmaster
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 /** import dde fields (<text:dde-connection>) */
