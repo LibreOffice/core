@@ -34,7 +34,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using utl::MediaDescriptor;
 
-SwFilterDetect::SwFilterDetect( const Reference < XMultiServiceFactory >& /*xFactory*/ )
+SwFilterDetect::SwFilterDetect()
 {
 }
 
@@ -144,10 +144,11 @@ OUString SwFilterDetect::impl_getStaticImplementationName()
     return OUString("com.sun.star.comp.writer.FormatDetector" );
 }
 
-/* Helper for registry */
-Reference< XInterface > SAL_CALL SwFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_writer_FormatDetector_get_implementation(::com::sun::star::uno::XComponentContext* component,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return Reference< XInterface >( *new SwFilterDetect( xServiceManager ) );
+    return cppu::acquire(new SwFilterDetect());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

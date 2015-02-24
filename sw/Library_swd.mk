@@ -42,7 +42,6 @@ $(eval $(call gb_Library_use_libraries,swd,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,swd,\
-    sw/source/ui/uno/detreg \
     sw/source/ui/uno/swdetect \
 ))
 
