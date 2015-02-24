@@ -320,9 +320,9 @@ void SbiExprNode::FoldConstants()
                     else if( nl < SbxMINLNG ) err = true, nl = SbxMINLNG;
                     if( nr > SbxMAXLNG ) err = true, nr = SbxMAXLNG;
                     else if( nr < SbxMINLNG ) err = true, nr = SbxMINLNG;
-                    ll = (long) nl; lr = (long) nr;
-                    llMod = (long) (nl < 0 ? nl - 0.5 : nl + 0.5);
-                    lrMod = (long) (nr < 0 ? nr - 0.5 : nr + 0.5);
+                    ll = static_cast<long>(nl); lr = static_cast<long>(nr);
+                    llMod = static_cast<long>(nl);
+                    lrMod = static_cast<long>(nr);
                     if( err )
                     {
                         pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
@@ -387,7 +387,7 @@ void SbiExprNode::FoldConstants()
                         {
                             pGen->GetParser()->Error( SbERR_ZERODIV ); nVal = HUGE_VAL;
                             bError = true;
-                        } else nVal = llMod % lrMod;
+                        } else nVal = llMod - lrMod * (llMod/lrMod);
                         eType = SbxLONG; break;
                     case AND:
                         nVal = (double) ( ll & lr ); eType = SbxLONG; break;
