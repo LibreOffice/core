@@ -6769,6 +6769,11 @@ bool PDFWriterImpl::finalizeSignature()
         return false;
     }
 
+    NSSCMSAttribute timestamp;
+    SECItem values[2];
+    SECItem *valuesp = values;
+    SECOidData typetag;
+
     // Now we have the hash algorithm as a SECItem available in cms_siger->digestAlg
     if( !m_aContext.SignTSA.isEmpty() )
     {
@@ -6948,20 +6953,15 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
 
-        NSSCMSAttribute timestamp;
-
         // timestamp.type filled in below
 
-        SECItem values[2];
         values[0] = response.timeStampToken;
         values[1].type = siBuffer;
         values[1].data = NULL;
         values[1].len = 0;
 
-        SECItem *valuesp = values;
         timestamp.values = &valuesp;
 
-        SECOidData typetag;
         typetag.oid.data = NULL;
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
