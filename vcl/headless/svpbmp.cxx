@@ -52,8 +52,9 @@ bool SvpSalBitmap::Create( const Size& rSize,
         aSize.setX( 1 );
     if( aSize.getY() == 0 )
         aSize.setY( 1 );
+    sal_Int32 nStride = getBitmapDeviceStrideForWidth(nFormat, aSize.getX());
     if( nBitCount > 8 )
-        m_aBitmap = createBitmapDevice( aSize, false, nFormat );
+        m_aBitmap = createBitmapDevice( aSize, false, nFormat, nStride );
     else
     {
         // prepare palette
@@ -66,7 +67,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
             const BitmapColor& rCol = rPalette[i];
             (*pPalette)[i] = basebmp::Color( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
         }
-        m_aBitmap = createBitmapDevice( aSize, false, nFormat,
+        m_aBitmap = createBitmapDevice( aSize, false, nFormat, nStride,
                                         basebmp::RawMemorySharedArray(),
                                         basebmp::PaletteMemorySharedVector( pPalette )
                                         );
@@ -326,6 +327,7 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode 
             m_aBitmap = basebmp::createBitmapDevice( m_aBitmap->getSize(),
                                                      m_aBitmap->isTopDown(),
                                                      m_aBitmap->getScanlineFormat(),
+                                                     m_aBitmap->getScanlineStride(),
                                                      m_aBitmap->getBuffer(),
                                                      pPal );
         }

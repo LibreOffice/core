@@ -1933,14 +1933,12 @@ inline sal_uInt32 nextPow2( sal_uInt32 x )
     return ++x;
 }
 
-
-
-
 namespace
 {
 BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&                  rSize,
                                                    bool                                       bTopDown,
                                                    Format                                     nScanlineFormat,
+                                                   sal_Int32                                  nScanlineStride,
                                                    boost::shared_array< sal_uInt8 >           pMem,
                                                    PaletteMemorySharedVector                  pPal,
                                                    const basegfx::B2IBox*                     pSubset,
@@ -1960,15 +1958,6 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                  rSize.getX() << " for depth " << nBitsPerPixel);
         return BitmapDeviceSharedPtr();
     }
-    // round up to full 8 bit, divide by 8
-    sal_Int32 nScanlineStride = (rSize.getX()*nBitsPerPixel + 7) >> 3;
-
-    // rounded up to next full power-of-two number of bytes
-    const sal_uInt32 bytesPerPixel = nextPow2(
-        (bitsPerPixel[nScanlineFormat] + 7) >> 3);
-
-    // now make nScanlineStride a multiple of bytesPerPixel
-    nScanlineStride = (nScanlineStride + bytesPerPixel - 1) / bytesPerPixel * bytesPerPixel;
 
     // factor in bottom-up scanline order case
     nScanlineStride *= bTopDown ? 1 : -1;
@@ -2130,13 +2119,14 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&                  rSize,
                                               bool                                       bTopDown,
                                               Format                                     nScanlineFormat,
+                                              sal_Int32                                  nScanlineStride,
                                               boost::shared_array< sal_uInt8 >           pMem,
                                               PaletteMemorySharedVector                  pPal,
                                               const basegfx::B2IBox*                     pSubset,
                                               const IBitmapDeviceDamageTrackerSharedPtr& rDamage,
                                               bool bBlack = true)
 {
-    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, pMem, pPal, pSubset, rDamage, bBlack ) );
+    BitmapDeviceSharedPtr result( createBitmapDeviceImplInner( rSize, bTopDown, nScanlineFormat, nScanlineStride, pMem, pPal, pSubset, rDamage, bBlack ) );
 
 #ifdef SAL_LOG_INFO
     std::ostringstream subset;
@@ -2156,14 +2146,30 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
 }
 } // namespace
 
+sal_Int32 getBitmapDeviceStrideForWidth(Format nScanlineFormat, sal_Int32 nWidth)
+{
+    sal_uInt8 nBitsPerPixel = bitsPerPixel[nScanlineFormat];
+    // round up to full 8 bit, divide by 8
+    sal_Int32 nScanlineStride = (nWidth*nBitsPerPixel + 7) >> 3;
+
+    // rounded up to next full power-of-two number of bytes
+    const sal_uInt32 bytesPerPixel = nextPow2(
+        (bitsPerPixel[nScanlineFormat] + 7) >> 3);
+
+    // now make nScanlineStride a multiple of bytesPerPixel
+    nScanlineStride = (nScanlineStride + bytesPerPixel - 1) / bytesPerPixel * bytesPerPixel;
+    return nScanlineStride;
+}
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
                                           bool                      bTopDown,
-                                          Format                    nScanlineFormat )
+                                          Format                    nScanlineFormat,
+                                          sal_Int32                 nScanlineStride )
 {
     return createBitmapDeviceImpl( rSize,
                                    bTopDown,
                                    nScanlineFormat,
+                                   nScanlineStride,
                                    boost::shared_array< sal_uInt8 >(),
                                    PaletteMemorySharedVector(),
                                    NULL,
@@ -2173,11 +2179,13 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
                                           bool                             bTopDown,
                                           Format                           nScanlineFormat,
+                                          sal_Int32                        nScanlineStride,
                                           const PaletteMemorySharedVector& rPalette )
 {
     return createBitmapDeviceImpl( rSize,
                                    bTopDown,
                                    nScanlineFormat,
+                                   nScanlineStride,
                                    boost::shared_array< sal_uInt8 >(),
                                    rPalette,
                                    NULL,
@@ -2187,12 +2195,14 @@ BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector&        rSize,
                                           bool                             bTopDown,
                                           Format                           nScanlineFormat,
+                                          sal_Int32                        nScanlineStride,
                                           const RawMemorySharedArray&      rMem,
                                           const PaletteMemorySharedVector& rPalette )
 {
     return createBitmapDeviceImpl( rSize,
                                    bTopDown,
                                    nScanlineFormat,
+                                   nScanlineStride,
                                    rMem,
                                    rPalette,
                                    NULL,
@@ -2205,6 +2215,7 @@ BitmapDeviceSharedPtr createClipDevice( const basegfx::B2IVector&        rSize )
              createBitmapDeviceImpl( rSize,
                                      false, /* bTopDown */
                                      basebmp::FORMAT_ONE_BIT_MSB_GREY,
+                                     getBitmapDeviceStrideForWidth(basebmp::FORMAT_ONE_BIT_MSB_GREY, rSize.getX()),
                                      boost::shared_array< sal_uInt8 >(),
                                      PaletteMemorySharedVector(),
                                      NULL,
@@ -2220,6 +2231,7 @@ BitmapDeviceSharedPtr subsetBitmapDevice( const BitmapDeviceSharedPtr& rProto,
     return createBitmapDeviceImpl( rProto->getSize(),
                                    rProto->isTopDown(),
                                    rProto->getScanlineFormat(),
+                                   rProto->getScanlineStride(),
                                    rProto->getBuffer(),
                                    rProto->getPalette(),
                                    &rSubset,
@@ -2232,6 +2244,7 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
     return createBitmapDeviceImpl( rSize,
                                    rProto->isTopDown(),
                                    rProto->getScanlineFormat(),
+                                   rProto->getScanlineStride(),
                                    boost::shared_array< sal_uInt8 >(),
                                    rProto->getPalette(),
                                    NULL,

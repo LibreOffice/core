@@ -659,11 +659,17 @@ private:
     std::unique_ptr< ImplBitmapDevice > mpImpl;
 };
 
+/** Function to calculate a suitable BitmapDevice Scanline Stride for a given scanline format and width
+ *  you can provide this value or any larger value.
+ */
+sal_Int32 BASEBMP_DLLPUBLIC getBitmapDeviceStrideForWidth(Format nScanlineFormat, sal_Int32 nWidth);
+
 /** Function to create a BitmapDevice for given scanline format
  */
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector& rSize,
                                                             bool                      bTopDown,
-                                                            Format                    nScanlineFormat );
+                                                            Format                    nScanlineFormat,
+                                                            sal_Int32                 nScanlineStride );
 
 /** Function to create a BitmapDevice for given scanline format
     with the given palette
@@ -675,6 +681,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
                                                             Format                           nScanlineFormat,
+                                                            sal_Int32                        nScanlineStride,
                                                             const PaletteMemorySharedVector& rPalette );
 
 /** Function to create a BitmapDevice for given scanline format
@@ -686,6 +693,7 @@ BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVe
 BitmapDeviceSharedPtr BASEBMP_DLLPUBLIC createBitmapDevice( const basegfx::B2IVector&        rSize,
                                                             bool                             bTopDown,
                                                             Format                           nScanlineFormat,
+                                                            sal_Int32                        nScanlineStride,
                                                             const RawMemorySharedArray&      rMem,
                                                             const PaletteMemorySharedVector& rPalette );
 

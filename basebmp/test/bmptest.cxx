@@ -148,19 +148,23 @@ public:
     void setUp() SAL_OVERRIDE
     {
         const basegfx::B2ISize aSize(10,10);
+        sal_Int32 nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX());
         mpDevice1bpp = createBitmapDevice( aSize,
                                            true,
-                                           FORMAT_ONE_BIT_MSB_PAL );
+                                           FORMAT_ONE_BIT_MSB_PAL, nStride );
+        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX());
         mpDevice32bpp = createBitmapDevice( aSize,
                                             true,
-                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
+                                            FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, nStride );
 
+        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX());
         mpBmp1bpp = createBitmapDevice( aSize,
                                         true,
-                                        FORMAT_ONE_BIT_MSB_PAL );
+                                        FORMAT_ONE_BIT_MSB_PAL, nStride );
+        nStride = basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX());
         mpBmp32bpp = createBitmapDevice( aSize,
                                          true,
-                                         FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
+                                         FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, nStride );
 
         OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 

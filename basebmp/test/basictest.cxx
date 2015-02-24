@@ -83,7 +83,8 @@ public:
         basegfx::B2ISize       aSize2(aSize);
         BitmapDeviceSharedPtr pDevice( createBitmapDevice( aSize,
                                                            true,
-                                                           FORMAT_ONE_BIT_MSB_PAL ));
+                                                           FORMAT_ONE_BIT_MSB_PAL,
+                                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX())));
         CPPUNIT_ASSERT_MESSAGE("right size",
                                pDevice->getSize() == aSize2 );
         CPPUNIT_ASSERT_MESSAGE("Top down format",
@@ -106,7 +107,8 @@ public:
         basegfx::B2ISize       aSize2(3,3);
         BitmapDeviceSharedPtr  pDevice( createBitmapDevice( aSize,
                                                             true,
-                                                            FORMAT_ONE_BIT_MSB_PAL ));
+                                                            FORMAT_ONE_BIT_MSB_PAL,
+                                                            basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX())));
 
         BitmapDeviceSharedPtr  pClone( cloneBitmapDevice(
                                            aSize2,
@@ -121,7 +123,8 @@ public:
         const basegfx::B2ISize aSize(64,64);
         BitmapDeviceSharedPtr pDevice( createBitmapDevice( aSize,
                                                            true,
-                                                           FORMAT_ONE_BIT_MSB_PAL ));
+                                                           FORMAT_ONE_BIT_MSB_PAL,
+                                                           basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_MSB_PAL, aSize.getX())));
 
         const basegfx::B2IPoint aPt(3,3);
         CPPUNIT_ASSERT_MESSAGE("getPixelData for virgin device",
@@ -168,7 +171,8 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          FORMAT_ONE_BIT_LSB_PAL );
+                                          FORMAT_ONE_BIT_LSB_PAL,
+                                          basebmp::getBitmapDeviceStrideForWidth(FORMAT_ONE_BIT_LSB_PAL, aSize.getX()));
 
             pDevice->setPixel( aPt2, aCol, DrawMode_PAINT );
             CPPUNIT_ASSERT_MESSAGE("get/setPixel roundtrip #4",
@@ -193,7 +197,8 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          FORMAT_EIGHT_BIT_GREY );
+                                          FORMAT_EIGHT_BIT_GREY,
+                                          basebmp::getBitmapDeviceStrideForWidth(FORMAT_EIGHT_BIT_GREY, aSize.getX()));
 
             const Color aCol4(0x010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
@@ -215,7 +220,8 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          FORMAT_SIXTEEN_BIT_LSB_TC_MASK );
+                                          FORMAT_SIXTEEN_BIT_LSB_TC_MASK,
+                                          basebmp::getBitmapDeviceStrideForWidth(FORMAT_SIXTEEN_BIT_LSB_TC_MASK, aSize.getX()));
             const Color aCol7(0);
             pDevice->clear( aCol7 );
 
@@ -239,7 +245,8 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          FORMAT_TWENTYFOUR_BIT_TC_MASK );
+                                          FORMAT_TWENTYFOUR_BIT_TC_MASK,
+                                          basebmp::getBitmapDeviceStrideForWidth(FORMAT_TWENTYFOUR_BIT_TC_MASK, aSize.getX()));
 
             const Color aCol4(0x01010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
@@ -266,7 +273,8 @@ public:
         {
             pDevice = createBitmapDevice( aSize,
                                           true,
-                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA );
+                                          FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
+                                          basebmp::getBitmapDeviceStrideForWidth(FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA, aSize.getX()));
 
             const Color aCol4(0x01010101);
             pDevice->setPixel( aPt, aCol4, DrawMode_PAINT );
