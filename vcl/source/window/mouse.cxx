@@ -532,6 +532,15 @@ void Window::SetPointerPosPixel( const Point& rPos )
     mpWindowImpl->mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
 }
 
+void Window::SetLastMousePos(const Point& rPos)
+{
+    // Do this conversion, so when GetPointerPosPixel() calls
+    // ImplFrameToOutput(), we get back the original position.
+    Point aPos = ImplOutputToFrame(rPos);
+    mpWindowImpl->mpFrameData->mnLastMouseX = aPos.X();
+    mpWindowImpl->mpFrameData->mnLastMouseY = aPos.Y();
+}
+
 Point Window::GetPointerPosPixel()
 {
 
