@@ -33,7 +33,6 @@
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include "dlgcont.hxx"
 #include "sbmodule.hxx"
-#include "sbservices.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <osl/mutex.hxx>
@@ -450,11 +449,6 @@ SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ ) thr
 
 // Service
 
-void createRegistryInfo_SfxDialogLibraryContainer()
-{
-    static OAutoRegistration< SfxDialogLibraryContainer > aAutoRegistration;
-}
-
 OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( ) throw (RuntimeException, std::exception)
 {
     return getImplementationName_static();
@@ -478,14 +472,6 @@ OUString SfxDialogLibraryContainer::getImplementationName_static()
 {
     return OUString("com.sun.star.comp.sfx2.DialogLibraryContainer");
 }
-
-Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Reference< XComponentContext >& ) throw( Exception )
-{
-    Reference< XInterface > xRet =
-        static_cast< XInterface* >( static_cast< OWeakObject* >(new SfxDialogLibraryContainer()) );
-    return xRet;
-}
-
 
 
 // Implementation class SfxDialogLibrary
@@ -607,5 +593,13 @@ bool SAL_CALL SfxDialogLibrary::isLibraryElementValid( ::com::sun::star::uno::An
 }
 
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                           ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new basic::SfxDialogLibraryContainer());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
