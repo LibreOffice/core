@@ -70,7 +70,7 @@ protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
-    virtual void    settingOptimalLayoutSize(VclBox *pBox) SAL_OVERRIDE;
+    virtual void    settingOptimalLayoutSize(Window *pBox) SAL_OVERRIDE;
 
 protected:
     friend class VclBuilder;

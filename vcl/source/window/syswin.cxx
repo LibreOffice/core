@@ -1065,7 +1065,7 @@ OUString SystemWindow::GetText() const
     return Window::GetText();
 }
 
-void SystemWindow::settingOptimalLayoutSize(VclBox* /*pBox*/)
+void SystemWindow::settingOptimalLayoutSize(Window* /*pBox*/)
 {
 }
 
@@ -1074,7 +1074,7 @@ void SystemWindow::setOptimalLayoutSize()
     maLayoutIdle.Stop();
 
     //resize SystemWindow to fit requisition on initial show
-    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    Window *pBox = GetWindow(WINDOW_FIRSTCHILD);
 
     settingOptimalLayoutSize(pBox);
 

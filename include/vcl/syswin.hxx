@@ -29,7 +29,6 @@ class ModalDialog;
 class MenuBar;
 class TaskPaneList;
 class VclContainer;
-class VclBox;
 
 // - Icon-Types -
 #define ICON_LO_DEFAULT                 1
@@ -168,7 +167,7 @@ protected:
 
     void     SetWindowStateData( const WindowStateData& rData );
 
-    virtual void settingOptimalLayoutSize(VclBox *pBox);
+    virtual void settingOptimalLayoutSize(Window *pBox);
 
     SAL_DLLPRIVATE void DoInitialLayout();
 public:

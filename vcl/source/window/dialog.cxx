@@ -523,12 +523,13 @@ void Dialog::set_content_area(VclBox* pContentArea)
     mpContentArea = pContentArea;
 }
 
-void Dialog::settingOptimalLayoutSize(VclBox *pBox)
+void Dialog::settingOptimalLayoutSize(Window *pBox)
 {
     const DialogStyle& rDialogStyle =
         GetSettings().GetStyleSettings().GetDialogStyle();
-    pBox->set_border_width(rDialogStyle.content_area_border);
-    pBox->set_spacing(pBox->get_spacing() +
+    VclBox * pBox2 = static_cast<VclBox*>(pBox);
+    pBox2->set_border_width(rDialogStyle.content_area_border);
+    pBox2->set_spacing(pBox2->get_spacing() +
         rDialogStyle.content_area_spacing);
 
     VclButtonBox *pActionArea = getActionArea(this);
