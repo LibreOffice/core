@@ -441,7 +441,8 @@ void HbLayoutEngine::LayoutImpl(ImplLayoutArgs& rArgs, GlyphVector & rGlyphs,
     assert(rArgs.mnEndCharPos <= rArgs.mnLength);
     assert(0 <= rArgs.mnMinCharPos);
     assert(rArgs.mnMinCharPos <= rArgs.mnEndCharPos);
-    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnEndCharPos);
+    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr),
+            rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos);
 
     Point aCurrPos(0, 0);
     while (true)
