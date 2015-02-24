@@ -112,7 +112,7 @@ sub get_maximum_filenumber
 
 sub create_media_table
 {
-    my ($filesref, $basedir, $allvariables, $alludpatelastsequences, $allupdatediskids) = @_;
+    my ($filesref, $basedir, $allvariables, $allupdatelastsequences, $allupdatediskids) = @_;
 
     my @mediatable = ();
 
