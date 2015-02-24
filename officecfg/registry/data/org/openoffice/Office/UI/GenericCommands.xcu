@@ -2813,7 +2813,7 @@
       </node>
       <node oor:name=".uno:SetBorderStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Borders, add lines; SHIFT to add and remove</value>
+          <value xml:lang="en-US">Borders (Shift to overwrite)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2960,7 +2960,7 @@
       </node>
       <node oor:name=".uno:LineStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Line Style</value>
+          <value xml:lang="en-US">Border Style</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2968,7 +2968,7 @@
       </node>
       <node oor:name=".uno:FrameLineColor" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Line Color (of the border)</value>
+          <value xml:lang="en-US">Border Color</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
