@@ -25,6 +25,8 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::XFastAttributeList;
+using css::xml::sax::XFastContextHandler;
 
 
 TYPEINIT1( XMLIndexBodyContext, SvXMLImportContext);
@@ -35,6 +37,13 @@ XMLIndexBodyContext::XMLIndexBodyContext(
     const OUString& rLocalName ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         bHasContent(false)
+{
+}
+
+XMLIndexBodyContext::XMLIndexBodyContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport ),
+    bHasContent(false)
 {
 }
 
@@ -55,6 +64,27 @@ SvXMLImportContext* XMLIndexBodyContext::CreateChildContext(
     if (NULL == pContext)
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+    else
+        bHasContent = true;
+
+    return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexBodyContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = 0;
+
+    // return text content (if possible)
+    pContext = GetImport().GetTextImport()->CreateTextChildContext(
+            GetImport(), Element, xAttrList, XML_TEXT_TYPE_SECTION );
+
+    if( !pContext.is() )
+    {
+        pContext = new SvXMLImportContext( GetImport() );
     }
     else
         bHasContent = true;
