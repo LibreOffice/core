@@ -368,7 +368,7 @@ public:
     virtual sal_Int32 SAL_CALL getFormulaCellNumberLimit()
                                 throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // ITiledRenderable
+    // @see vcl::ITiledRenderable::paintTile().
     virtual void paintTile( VirtualDevice& rDevice,
                             int nOutputWidth,
                             int nOutputHeight,
@@ -376,10 +376,21 @@ public:
                             int nTilePosY,
                             long nTileWidth,
                             long nTileHeight ) SAL_OVERRIDE;
+
+    // @see vcl::ITiledRenderable::getDocumentSize().
     virtual Size getDocumentSize() SAL_OVERRIDE;
-    virtual void setPart(   int nPart ) SAL_OVERRIDE;
-    virtual int  getPart() SAL_OVERRIDE;
-    virtual int  getParts() SAL_OVERRIDE;
+
+    // @see vcl::ITiledRenderable::setPart().
+    virtual void setPart(int nPart) SAL_OVERRIDE;
+
+    // @see vcl::ITiledRenderable::getPart().
+    virtual int getPart() SAL_OVERRIDE;
+
+    // @see vcl::ITiledRenderable::getParts().
+    virtual int getParts() SAL_OVERRIDE;
+
+    // @see vcl::ITiledRenderable::registerCallback().
+    virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<

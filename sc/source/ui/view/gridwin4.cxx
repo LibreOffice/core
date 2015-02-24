@@ -29,6 +29,9 @@
 #include <sfx2/printer.hxx>
 #include <vcl/settings.hxx>
 
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+
 #include <svx/svdview.hxx>
 #include "tabvwsh.hxx"
 
@@ -951,6 +954,16 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aOutData.DrawEdit(true);
 
     rDevice.SetMapMode(aOldMapMode);
+}
+
+void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)
+{
+    OString sRectangle;
+    if (!pRegion)
+        sRectangle = "EMPTY";
+    else
+        sRectangle = pRegion->GetBoundRect().toString();
+    pViewData->GetViewShell()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void ScGridWindow::CheckNeedsRepaint()

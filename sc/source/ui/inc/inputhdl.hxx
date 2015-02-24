@@ -56,7 +56,7 @@ class ScInputHandler : boost::noncopyable
 private:
     ScInputWindow*          pInputWin;
 
-    ScEditEngineDefaulter*  pEngine;                // edited data in the sheet
+    ScEditEngineDefaulter*  pEngine;                    ///< Edited data in the sheet (when the user clicks into the sheet, and starts writing there).
     EditView*               pTableView;                 // associated active EditView
     EditView*               pTopView;                   // EditView in dthe input row
 
