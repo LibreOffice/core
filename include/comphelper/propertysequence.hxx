@@ -18,18 +18,18 @@
 
 namespace comphelper
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InitPropertySequence(
+    inline ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InitPropertySequence(
         ::std::initializer_list< ::std::pair< OUString, ::com::sun::star::uno::Any > > vInit)
     {
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> vResult{static_cast<sal_Int32>(vInit.size())};
         size_t nCount{0};
-        for(auto aEntry : vInit)
+        for(const auto& aEntry : vInit)
         {
-            vResult[nCount].Name = std::move(aEntry.first);
-            vResult[nCount].Value = std::move(aEntry.second);
+            vResult[nCount].Name = aEntry.first;
+            vResult[nCount].Value = aEntry.second;
             ++nCount;
         }
-        return std::move(vResult);
+        return vResult;
     }
 }   // namespace comphelper
 
