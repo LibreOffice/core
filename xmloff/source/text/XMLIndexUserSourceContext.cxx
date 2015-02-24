@@ -31,7 +31,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustring.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
@@ -40,6 +43,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_USER_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_OUTLINE_LEVEL;
+using xmloff::XML_user_index_entry_template;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 const sal_Char sAPI_CreateFromEmbeddedObjects[] = "CreateFromEmbeddedObjects";
@@ -77,6 +82,28 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
         bUseFrames(false),
         bUseLevelFromSource(false),
         bUseLevelParagraphStyles(false)
+{
+}
+
+XMLIndexUserSourceContext::XMLIndexUserSourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexSourceBaseContext( rImport, Element, rPropSet, true ),
+    sCreateFromEmbeddedObjects(sAPI_CreateFromEmbeddedObjects),
+    sCreateFromGraphicObjects(sAPI_CreateFromGraphicObjects),
+    sCreateFromMarks(sAPI_CreateFromMarks),
+    sCreateFromTables(sAPI_CreateFromTables),
+    sCreateFromTextFrames(sAPI_CreateFromTextFrames),
+    sUseLevelFromSource(sAPI_UseLevelFromSource),
+    sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles),
+    sUserIndexName(sAPI_UserIndexName),
+    bUseObjects(false),
+    bUseGraphic(false),
+    bUseMarks(false),
+    bUseTables(false),
+    bUseFrames(false),
+    bUseLevelFromSource(false),
+    bUseLevelParagraphStyles(false)
 {
 }
 
@@ -186,6 +213,41 @@ void XMLIndexUserSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
+void SAL_CALL XMLIndexUserSourceContext::endFastElement( sal_Int32 Element )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Any aAny;
+
+    aAny.setValue(&bUseObjects, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromEmbeddedObjects, aAny);
+
+    aAny.setValue(&bUseGraphic, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromGraphicObjects, aAny);
+
+    aAny.setValue(&bUseLevelFromSource, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseLevelFromSource, aAny);
+
+    aAny.setValue(&bUseMarks, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
+
+    aAny.setValue(&bUseTables, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromTables, aAny);
+
+    aAny.setValue(&bUseFrames, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromTextFrames, aAny);
+
+    aAny.setValue(&bUseLevelParagraphStyles, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
+
+    if( !sIndexName.isEmpty() )
+    {
+        aAny <<= sIndexName;
+        rIndexPropertySet->setPropertyValue(sUserIndexName, aAny);
+    }
+
+    XMLIndexSourceBaseContext::endFastElement(Element);
+}
+
 
 SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -209,6 +271,24 @@ SvXMLImportContext* XMLIndexUserSourceContext::CreateChildContext(
                                                              xAttrList);
     }
 
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexUserSourceContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_user_index_entry_template) )
+    {
+        return new XMLIndexTemplateContext( GetImport(), rIndexPropertySet,
+                Element, aSvLevelNameTOCMap, XML_OUTLINE_LEVEL,
+                aLevelStylePropNameTOCMap, aAllowedTokenTypesUser );
+    }
+    else
+    {
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
