@@ -4961,7 +4961,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     m_aActHitType(SDRHIT_NONE),
     m_nDropFormat( 0 ),
     m_nDropAction( 0 ),
-    m_nDropDestination( 0 ),
+    m_nDropDestination( SotExchangeDest::NONE ),
 
     m_eBezierMode(SID_BEZIER_INSERT),
     m_nInsFrmColCount( 1 ),
@@ -5368,9 +5368,10 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 break;
 
             sal_uLong nDropFormat;
-            sal_uInt16 nEventAction, nDropAction, nDropDestination;
+            sal_uInt16 nEventAction, nDropAction;
+            SotExchangeDest nDropDestination;
             nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );
-            if( !nDropDestination )
+            if( !bool(nDropDestination) )
                 break;
 
             nDropAction = SotExchange::GetExchangeAction(

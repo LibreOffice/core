@@ -86,7 +86,7 @@ class SW_DLLPUBLIC SwTransferable : public TransferableHelper
     static bool _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 OUString& rFileName, OUString* pTitle = 0 );
     static bool _TestAllowedFormat( const TransferableDataHelper& rData,
-                                        sal_uLong nFormat, sal_uInt16 nDestination );
+                                        sal_uLong nFormat, SotExchangeDest nDestination );
 
     static bool _PasteFileContent( TransferableDataHelper&,
                                     SwWrtShell& rSh, sal_uLong nFmt, bool bMsg );
@@ -149,7 +149,7 @@ public:
     SwTransferable( SwWrtShell& );
     virtual ~SwTransferable();
 
-    static sal_uInt16 GetSotDestination( const SwWrtShell& rSh, const Point* = 0 );
+    static SotExchangeDest GetSotDestination( const SwWrtShell& rSh, const Point* = 0 );
 
     // set properties on the document, like PageMargin, VisArea.
     // And set real Size
@@ -170,7 +170,7 @@ public:
     static bool Paste( SwWrtShell&, TransferableDataHelper& );
     static bool PasteData( TransferableDataHelper& rData,
                           SwWrtShell& rSh, sal_uInt16 nAction, sal_uLong nFormat,
-                          sal_uInt16 nDestination, bool bIsPasteFmt,
+                          SotExchangeDest nDestination, bool bIsPasteFmt,
                           bool bIsDefault,
                           const Point* pDDPos = 0, sal_Int8 nDropAction = 0,
                           bool bPasteSelection = false );

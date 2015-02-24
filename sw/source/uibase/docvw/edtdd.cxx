@@ -242,14 +242,14 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
-sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
+SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppObj )
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rPixPnt ) );
     if( rSh.ChgCurrPam( aDocPt )
         || rSh.IsOverReadOnlyPos( aDocPt )
         || rSh.DocPtInsideInputFld( aDocPt ) )
-        return 0;
+        return SotExchangeDest::NONE;
 
     SdrObject *pObj = NULL;
     const ObjCntType eType = rSh.GetObjCntType( aDocPt, pObj );
@@ -264,12 +264,12 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
             aRect.Union( pObj->GetLogicRect() );
             const Point aPos = pOLV->GetWindow()->PixelToLogic( rPixPnt );
             if( aRect.IsInside( aPos ) )
-                return 0;
+                return SotExchangeDest::NONE;
         }
     }
 
     //What do we want to drop on now?
-    sal_uInt16 nDropDestination = 0;
+    SotExchangeDest nDropDestination = SotExchangeDest::NONE;
 
     //Did anything else arrive from the DrawingEngine?
     if( OBJCNT_NONE != eType )
@@ -283,36 +283,36 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
                 OUString aDummy;
                 rSh.GetGrfAtPos( aDocPt, aDummy, bLink );
                 if ( bLink && bIMap )
-                    nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP;
+                    nDropDestination = SotExchangeDest::DOC_LNKD_GRAPH_W_IMAP;
                 else if ( bLink )
-                    nDropDestination = EXCHG_DEST_DOC_LNKD_GRAPHOBJ;
+                    nDropDestination = SotExchangeDest::DOC_LNKD_GRAPHOBJ;
                 else if ( bIMap )
-                    nDropDestination = EXCHG_DEST_DOC_GRAPH_W_IMAP;
+                    nDropDestination = SotExchangeDest::DOC_GRAPH_W_IMAP;
                 else
-                    nDropDestination = EXCHG_DEST_DOC_GRAPHOBJ;
+                    nDropDestination = SotExchangeDest::DOC_GRAPHOBJ;
             }
             break;
         case OBJCNT_FLY:
             if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
-                nDropDestination = EXCHG_DEST_DOC_TEXTFRAME_WEB;
+                nDropDestination = SotExchangeDest::DOC_TEXTFRAME_WEB;
             else
-                nDropDestination = EXCHG_DEST_DOC_TEXTFRAME;
+                nDropDestination = SotExchangeDest::DOC_TEXTFRAME;
             break;
-        case OBJCNT_OLE:        nDropDestination = EXCHG_DEST_DOC_OLEOBJ; break;
+        case OBJCNT_OLE:        nDropDestination = SotExchangeDest::DOC_OLEOBJ; break;
         case OBJCNT_CONTROL:    /* no Action avail */
-        case OBJCNT_SIMPLE:     nDropDestination = EXCHG_DEST_DOC_DRAWOBJ; break;
-        case OBJCNT_URLBUTTON:  nDropDestination = EXCHG_DEST_DOC_URLBUTTON; break;
-        case OBJCNT_GROUPOBJ:   nDropDestination = EXCHG_DEST_DOC_GROUPOBJ;     break;
+        case OBJCNT_SIMPLE:     nDropDestination = SotExchangeDest::DOC_DRAWOBJ; break;
+        case OBJCNT_URLBUTTON:  nDropDestination = SotExchangeDest::DOC_URLBUTTON; break;
+        case OBJCNT_GROUPOBJ:   nDropDestination = SotExchangeDest::DOC_GROUPOBJ;     break;
 
         default: OSL_ENSURE( false, "new ObjectType?" );
         }
     }
-    if ( !nDropDestination )
+    if ( !bool(nDropDestination) )
     {
         if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
-            nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
+            nDropDestination = SotExchangeDest::SWDOC_FREE_AREA_WEB;
         else
-            nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA;
+            nDropDestination = SotExchangeDest::SWDOC_FREE_AREA;
     }
     if( ppObj )
         *ppObj = pObj;
@@ -371,7 +371,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     SdrObject *pObj = NULL;
     m_nDropDestination = GetDropDestination( aPixPt, &pObj );
-    if( !m_nDropDestination )
+    if( !bool(m_nDropDestination) )
         return DND_ACTION_NONE;
 
     sal_uInt16 nEventAction;
@@ -444,8 +444,8 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             nUserOpt = (sal_Int8)nEventAction;
 
         // show DropCursor or UserMarker ?
-        if( EXCHG_DEST_SWDOC_FREE_AREA_WEB == m_nDropDestination ||
-            EXCHG_DEST_SWDOC_FREE_AREA == m_nDropDestination )
+        if( SotExchangeDest::SWDOC_FREE_AREA_WEB == m_nDropDestination ||
+            SotExchangeDest::SWDOC_FREE_AREA == m_nDropDestination )
         {
             CleanupDropUserMarker();
             SwContentAtPos aCont( SwContentAtPos::SW_CONTENT_CHECK );

@@ -109,7 +109,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
 
     sal_uLong       m_nDropFormat;   // format from the last QueryDrop
     sal_uInt16      m_nDropAction;   // action from the last QueryDrop
-    sal_uInt16      m_nDropDestination;  // destination from the last QueryDrop
+    SotExchangeDest m_nDropDestination;  // destination from the last QueryDrop
 
     sal_uInt16      m_eBezierMode;
     sal_uInt16      m_nInsFrmColCount; // column number for interactive frame
@@ -153,7 +153,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     // helper function for D&D
     void            DropCleanup();
     void            CleanupDropUserMarker();
-    sal_uInt16      GetDropDestination( const Point& rPixPnt,
+    SotExchangeDest GetDropDestination( const Point& rPixPnt,
                                         SdrObject ** ppObj = 0 );
     //select the object/cursor at the mouse position of the context menu request
     bool            SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos );

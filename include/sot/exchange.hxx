@@ -27,7 +27,6 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sot/sotdllapi.h>
 #include <tools/solar.h>
-#include <o3tl/typed_flags_set.hxx>
 
 class SotDataObject;
 
@@ -112,23 +111,27 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 #define EXCHG_OUT_ACTION_FLAG_INSERT_TARGETURL  ((sal_uInt16)0x2000)
 
 // destinations
-#define EXCHG_DEST_DOC_OLEOBJ               1
-#define EXCHG_DEST_CHARTDOC_OLEOBJ          2
-#define EXCHG_DEST_DOC_TEXTFRAME            3
-#define EXCHG_DEST_DOC_GRAPHOBJ             4
-#define EXCHG_DEST_DOC_LNKD_GRAPHOBJ        5
-#define EXCHG_DEST_DOC_GRAPH_W_IMAP         6
-#define EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP    7
-#define EXCHG_DEST_DOC_IMAPREGION           8
-#define EXCHG_DEST_DOC_DRAWOBJ              9
-#define EXCHG_DEST_DOC_URLBUTTON           10
-#define EXCHG_DEST_DOC_URLFIELD            11
-#define EXCHG_DEST_DOC_GROUPOBJ            12
-#define EXCHG_DEST_SWDOC_FREE_AREA         13
-#define EXCHG_DEST_SCDOC_FREE_AREA         14
-#define EXCHG_DEST_SDDOC_FREE_AREA         15
-#define EXCHG_DEST_DOC_TEXTFRAME_WEB       16
-#define EXCHG_DEST_SWDOC_FREE_AREA_WEB     17
+enum class SotExchangeDest
+{
+    NONE                     =  0,
+    DOC_OLEOBJ               =  1,
+    CHARTDOC_OLEOBJ          =  2,
+    DOC_TEXTFRAME            =  3,
+    DOC_GRAPHOBJ             =  4,
+    DOC_LNKD_GRAPHOBJ        =  5,
+    DOC_GRAPH_W_IMAP         =  6,
+    DOC_LNKD_GRAPH_W_IMAP    =  7,
+    DOC_IMAPREGION           =  8,
+    DOC_DRAWOBJ              =  9,
+    DOC_URLBUTTON            = 10,
+    DOC_URLFIELD             = 11,
+    DOC_GROUPOBJ             = 12,
+    SWDOC_FREE_AREA          = 13,
+    SCDOC_FREE_AREA          = 14,
+    SDDOC_FREE_AREA          = 15,
+    DOC_TEXTFRAME_WEB        = 16,
+    SWDOC_FREE_AREA_WEB      = 17,
+};
 
 class SvGlobalName;
 
@@ -150,8 +153,8 @@ public:
     static sal_uInt16   GetExchangeAction(
         // XTransferable
         const DataFlavorExVector& rDataFlavorExVector,
-        // destination of an action (EXCHG_DEST_*)
-        sal_uInt16 nDestination,
+        // destination of an action
+        SotExchangeDest nDestination,
         // action for a source
         sal_uInt16 nSourceOptions,
         // user action (EXCHG_IN_*, EXCHG_INOUT_*)

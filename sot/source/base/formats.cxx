@@ -57,7 +57,7 @@ struct SotAction_Impl
 
 struct SotDestinationEntry_Impl
 {
-    sal_uInt16                  nDestination;
+    SotExchangeDest         nDestination;
     const SotAction_Impl*   aDefaultActions;
     const SotAction_Impl*   aMoveActions;
     const SotAction_Impl*   aCopyActions;
@@ -1184,110 +1184,110 @@ EXCHG_DEST_SWDOC_FREE_AREA_WEB_ARRAY                                      \
 #define IMPL_DATA_ARRAY_3                                                 \
 static SotDestinationEntry_Impl const aDestinationArray[] =     \
 {                                                                         \
-    { EXCHG_DEST_DOC_OLEOBJ,                                              \
+    { SotExchangeDest::DOC_OLEOBJ,                                              \
         aEXCHG_DEST_DOC_OLEOBJ_Def,                                       \
         aEXCHG_DEST_DOC_OLEOBJ_Move,                                      \
         aEmptyArr,                                                        \
         aEXCHG_DEST_DOC_OLEOBJ_Link                                       \
     },                                                                    \
-    { EXCHG_DEST_CHARTDOC_OLEOBJ,                                         \
+    { SotExchangeDest::CHARTDOC_OLEOBJ,                                         \
         aEXCHG_DEST_CHARTDOC_OLEOBJ_Def,                                  \
         aEXCHG_DEST_CHARTDOC_OLEOBJ_Move,                                 \
         aEmptyArr,                                                        \
         aEXCHG_DEST_CHARTDOC_OLEOBJ_Link                                  \
     },                                                                    \
-    { EXCHG_DEST_DOC_TEXTFRAME,                                           \
+    { SotExchangeDest::DOC_TEXTFRAME,                                           \
         aEXCHG_DEST_DOC_TEXTFRAME_Def,                                    \
         aEXCHG_DEST_DOC_TEXTFRAME_Move,                                   \
         aEXCHG_DEST_DOC_TEXTFRAME_Copy,                                   \
         aEXCHG_DEST_DOC_TEXTFRAME_Link                                    \
     },                                                                    \
-    { EXCHG_DEST_DOC_GRAPHOBJ,                                            \
+    { SotExchangeDest::DOC_GRAPHOBJ,                                            \
         aEXCHG_DEST_DOC_GRAPHOBJ_Def,                                     \
         aEXCHG_DEST_DOC_GRAPHOBJ_Move,                                    \
         aEXCHG_DEST_DOC_GRAPHOBJ_Copy,                                    \
         aEXCHG_DEST_DOC_GRAPHOBJ_Link                                     \
     },                                                                    \
-    { EXCHG_DEST_DOC_LNKD_GRAPHOBJ,                                       \
+    { SotExchangeDest::DOC_LNKD_GRAPHOBJ,                                       \
         aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Def,                                \
         aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Move,                               \
         aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Copy,                               \
         aEXCHG_DEST_DOC_LNKD_GRAPHOBJ_Link                                \
     },                                                                    \
-    { EXCHG_DEST_DOC_GRAPH_W_IMAP,                                        \
+    { SotExchangeDest::DOC_GRAPH_W_IMAP,                                        \
         aEXCHG_DEST_DOC_GRAPH_W_IMAP_Def,                                 \
         aEXCHG_DEST_DOC_GRAPH_W_IMAP_Move,                                \
         aEXCHG_DEST_DOC_GRAPH_W_IMAP_Copy,                                \
         aEXCHG_DEST_DOC_GRAPH_W_IMAP_Link                                 \
     },                                                                    \
-    { EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP,                                   \
+    { SotExchangeDest::DOC_LNKD_GRAPH_W_IMAP,                                   \
         aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Def,                            \
         aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Move,                           \
         aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Copy,                           \
         aEXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP_Link                            \
     },                                                                    \
-    { EXCHG_DEST_DOC_IMAPREGION,                                          \
+    { SotExchangeDest::DOC_IMAPREGION,                                          \
         aEXCHG_DEST_DOC_IMAPREGION_Def,                                   \
         aEXCHG_DEST_DOC_IMAPREGION_Copy,                                  \
         aEmptyArr,                                                        \
         aEmptyArr                                                         \
     },                                                                    \
-    { EXCHG_DEST_DOC_DRAWOBJ,                                             \
+    { SotExchangeDest::DOC_DRAWOBJ,                                             \
         aEXCHG_DEST_DOC_DRAWOBJ_Def,                                      \
         aEXCHG_DEST_DOC_DRAWOBJ_Copy,                                     \
         aEXCHG_DEST_DOC_DRAWOBJ_Move,                                     \
         aEXCHG_DEST_DOC_DRAWOBJ_Link                                      \
     },                                                                    \
-    { EXCHG_DEST_DOC_URLBUTTON,                                           \
+    { SotExchangeDest::DOC_URLBUTTON,                                           \
         aEXCHG_DEST_DOC_URLBUTTON_Def,                                    \
         aEXCHG_DEST_DOC_URLBUTTON_Move,                                   \
         aEXCHG_DEST_DOC_URLBUTTON_Copy,                                   \
         aEmptyArr                                                         \
     },                                                                    \
-    { EXCHG_DEST_DOC_URLFIELD,                                            \
+    { SotExchangeDest::DOC_URLFIELD,                                            \
         aEXCHG_DEST_DOC_URLFIELD_Def,                                     \
         aEmptyArr,                                                        \
         aEXCHG_DEST_DOC_URLFIELD_Copy,                                    \
         aEXCHG_DEST_DOC_URLFIELD_Link                                     \
     },                                                                    \
-    { EXCHG_DEST_DOC_GROUPOBJ,                                            \
+    { SotExchangeDest::DOC_GROUPOBJ,                                            \
         aEXCHG_DEST_DOC_GROUPOBJ_Def,                                     \
         aEXCHG_DEST_DOC_GROUPOBJ_Move,                                    \
         aEXCHG_DEST_DOC_GROUPOBJ_Copy,                                    \
         aEXCHG_DEST_DOC_GROUPOBJ_Link                                     \
     },                                                                    \
-    { EXCHG_DEST_SWDOC_FREE_AREA,                                         \
+    { SotExchangeDest::SWDOC_FREE_AREA,                                         \
         aEXCHG_DEST_SWDOC_FREE_AREA_Def,                                  \
         aEXCHG_DEST_SWDOC_FREE_AREA_Move,                                 \
         aEXCHG_DEST_SWDOC_FREE_AREA_Copy,                                 \
         aEXCHG_DEST_SWDOC_FREE_AREA_Link                                  \
     },                                                                    \
-    { EXCHG_DEST_SCDOC_FREE_AREA,                                         \
+    { SotExchangeDest::SCDOC_FREE_AREA,                                         \
         aEXCHG_DEST_SCDOC_FREE_AREA_Def,                                  \
         aEXCHG_DEST_SCDOC_FREE_AREA_Move,                                 \
         aEXCHG_DEST_SCDOC_FREE_AREA_Copy,                                 \
         aEXCHG_DEST_SCDOC_FREE_AREA_Link                                  \
     },                                                                    \
-    { EXCHG_DEST_SDDOC_FREE_AREA,                                         \
+    { SotExchangeDest::SDDOC_FREE_AREA,                                         \
         aEXCHG_DEST_SDDOC_FREE_AREA_Def,                                  \
         aEXCHG_DEST_SDDOC_FREE_AREA_Move,                                 \
         aEXCHG_DEST_SDDOC_FREE_AREA_Copy,                                 \
         aEXCHG_DEST_SDDOC_FREE_AREA_Link                                  \
     },                                                                    \
-    { EXCHG_DEST_DOC_TEXTFRAME_WEB,                                       \
+    { SotExchangeDest::DOC_TEXTFRAME_WEB,                                       \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Def,                                \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Move,                               \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Copy,                               \
         aEXCHG_DEST_DOC_TEXTFRAME_WEB_Link                                \
     },                                                                    \
-    { EXCHG_DEST_SWDOC_FREE_AREA_WEB,                                     \
+    { SotExchangeDest::SWDOC_FREE_AREA_WEB,                                     \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Def,                              \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Move,                             \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Copy,                             \
         aEXCHG_DEST_SWDOC_FREE_AREA_WEB_Link                              \
     },                                                                    \
     {                                                                     \
-        0xffff, 0, 0, 0, 0                                                \
+        static_cast<SotExchangeDest>(0xffff), 0, 0, 0, 0                                                \
     }                                                                     \
 };
 
@@ -1468,7 +1468,7 @@ static sal_uInt16 GetTransferableAction_Impl(
 
 
 sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavorExVector,
-                                       sal_uInt16 nDestination,
+                                       SotExchangeDest nDestination,
                                        sal_uInt16 nSourceOptions,
                                        sal_uInt16 nUserAction,
                                        sal_uLong& rFormat,
@@ -1485,14 +1485,14 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
 
     //Todo: Binaere Suche einbauen
     const SotDestinationEntry_Impl* pEntry = aDestinationArray;
-    while( 0xffff != pEntry->nDestination )
+    while( static_cast<SotExchangeDest>(0xffff) != pEntry->nDestination )
     {
         if( pEntry->nDestination == nDestination )
             break;
         ++pEntry;
     }
 
-    if( 0xffff == pEntry->nDestination )
+    if( static_cast<SotExchangeDest>(0xffff) == pEntry->nDestination )
     {
         return EXCHG_INOUT_ACTION_NONE;
     }

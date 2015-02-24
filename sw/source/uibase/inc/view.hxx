@@ -77,6 +77,7 @@ struct SwConversionArgs;
 class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
+enum class SotExchangeDest;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -232,7 +233,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     sal_uInt16          m_nDrawSfxId;
     OUString            m_sDrawCustom; //some drawing types are marked with strings!
     sal_uInt16          m_nFormSfxId;
-    sal_uInt16          m_nLastPasteDestination;
+    SotExchangeDest     m_nLastPasteDestination;
 
     // save the border distance status from SwView::StateTabWin to re-use it in SwView::ExecTabWin()
     sal_uInt16          m_nLeftBorderDistance;

@@ -715,7 +715,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     m_nPageCnt(0),
     m_nDrawSfxId( USHRT_MAX ),
     m_nFormSfxId( USHRT_MAX ),
-    m_nLastPasteDestination( 0xFFFF ),
+    m_nLastPasteDestination( static_cast<SotExchangeDest>(0xFFFF) ),
     m_nLeftBorderDistance( 0 ),
     m_nRightBorderDistance( 0 ),
     m_bWheelScrollInProgress(false),
@@ -1736,7 +1736,7 @@ bool SwView::PrepareClose( bool bUI )
 // Status changes now notified from the clipboard.
 bool SwView::IsPasteAllowed()
 {
-    sal_uInt16 nPasteDestination = SwTransferable::GetSotDestination( *m_pWrtShell );
+    SotExchangeDest nPasteDestination = SwTransferable::GetSotDestination( *m_pWrtShell );
     if( m_nLastPasteDestination != nPasteDestination )
     {
         TransferableDataHelper aDataHelper(
@@ -1751,7 +1751,7 @@ bool SwView::IsPasteAllowed()
         else
             m_bPasteState = m_bPasteSpecialState = false;
 
-        if( 0xFFFF == m_nLastPasteDestination )  // the init value
+        if( static_cast<SotExchangeDest>(0xFFFF) == m_nLastPasteDestination )  // the init value
             m_pViewImpl->AddClipboardListener();
         m_nLastPasteDestination = nPasteDestination;
     }
@@ -1763,7 +1763,7 @@ bool SwView::IsPasteSpecialAllowed()
     if ( m_pFormShell && m_pFormShell->IsActiveControl() )
         return false;
 
-    sal_uInt16 nPasteDestination = SwTransferable::GetSotDestination( *m_pWrtShell );
+    SotExchangeDest nPasteDestination = SwTransferable::GetSotDestination( *m_pWrtShell );
     if( m_nLastPasteDestination != nPasteDestination )
     {
         TransferableDataHelper aDataHelper(
@@ -1778,7 +1778,7 @@ bool SwView::IsPasteSpecialAllowed()
         else
             m_bPasteState = m_bPasteSpecialState = false;
 
-        if( 0xFFFF == m_nLastPasteDestination )  // the init value
+        if( static_cast<SotExchangeDest>(0xFFFF) == m_nLastPasteDestination )  // the init value
             m_pViewImpl->AddClipboardListener();
     }
     return m_bPasteSpecialState;

@@ -1105,12 +1105,12 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
         // determine the proper paste action, and return true if we find one
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
 
-        sal_uInt16 nDestination = SwTransferable::GetSotDestination( rSh );
+        SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
         sal_uInt16 nSourceOptions =
-                    (( EXCHG_DEST_DOC_TEXTFRAME == nDestination ||
-                       EXCHG_DEST_SWDOC_FREE_AREA == nDestination ||
-                       EXCHG_DEST_DOC_TEXTFRAME_WEB == nDestination ||
-                       EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
+                    (( SotExchangeDest::DOC_TEXTFRAME == nDestination ||
+                       SotExchangeDest::SWDOC_FREE_AREA == nDestination ||
+                       SotExchangeDest::DOC_TEXTFRAME_WEB == nDestination ||
+                       SotExchangeDest::SWDOC_FREE_AREA_WEB == nDestination )
                                     ? EXCHG_IN_ACTION_COPY
                      : EXCHG_IN_ACTION_MOVE);
 
@@ -1133,8 +1133,8 @@ bool SwTransferable::IsPaste( const SwWrtShell& rSh,
 
 bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 {
-    sal_uInt16 nEventAction, nAction=0,
-           nDestination = SwTransferable::GetSotDestination( rSh );
+    sal_uInt16 nEventAction, nAction=0;
+    SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
     sal_uLong nFormat = 0;
 
     if( GetSwTransferable( rData ) )
@@ -1144,10 +1144,10 @@ bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
     else
     {
         sal_uInt16 nSourceOptions =
-                    (( EXCHG_DEST_DOC_TEXTFRAME == nDestination ||
-                    EXCHG_DEST_SWDOC_FREE_AREA == nDestination ||
-                    EXCHG_DEST_DOC_TEXTFRAME_WEB == nDestination ||
-                    EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
+                    (( SotExchangeDest::DOC_TEXTFRAME == nDestination ||
+                    SotExchangeDest::SWDOC_FREE_AREA == nDestination ||
+                    SotExchangeDest::DOC_TEXTFRAME_WEB == nDestination ||
+                    SotExchangeDest::SWDOC_FREE_AREA_WEB == nDestination )
                                     ? EXCHG_IN_ACTION_COPY
                                     : EXCHG_IN_ACTION_MOVE);
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
@@ -1177,7 +1177,7 @@ bool SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
 
 bool SwTransferable::PasteData( TransferableDataHelper& rData,
                             SwWrtShell& rSh, sal_uInt16 nAction, sal_uLong nFormat,
-                            sal_uInt16 nDestination, bool bIsPasteFmt,
+                            SotExchangeDest nDestination, bool bIsPasteFmt,
                             bool bIsDefault,
                             const Point* pPt, sal_Int8 nDropAction,
                             bool bPasteSelection )
@@ -1196,14 +1196,14 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         {
             switch( nDestination )
             {
-            case EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP:
-            case EXCHG_DEST_DOC_LNKD_GRAPHOBJ:
-            case EXCHG_DEST_DOC_GRAPH_W_IMAP:
-            case EXCHG_DEST_DOC_GRAPHOBJ:
-            case EXCHG_DEST_DOC_OLEOBJ:
-            case EXCHG_DEST_DOC_DRAWOBJ:
-            case EXCHG_DEST_DOC_URLBUTTON:
-            case EXCHG_DEST_DOC_GROUPOBJ:
+            case SotExchangeDest::DOC_LNKD_GRAPH_W_IMAP:
+            case SotExchangeDest::DOC_LNKD_GRAPHOBJ:
+            case SotExchangeDest::DOC_GRAPH_W_IMAP:
+            case SotExchangeDest::DOC_GRAPHOBJ:
+            case SotExchangeDest::DOC_OLEOBJ:
+            case SotExchangeDest::DOC_DRAWOBJ:
+            case SotExchangeDest::DOC_URLBUTTON:
+            case SotExchangeDest::DOC_GROUPOBJ:
                 // select frames/objects
                 SwTransferable::SetSelInShell( rSh, true, pPt );
                 break;
@@ -1227,12 +1227,13 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
         bool bDelSel = false;
         switch( nDestination )
         {
-        case EXCHG_DEST_DOC_TEXTFRAME:
-        case EXCHG_DEST_SWDOC_FREE_AREA:
-        case EXCHG_DEST_DOC_TEXTFRAME_WEB:
-        case EXCHG_DEST_SWDOC_FREE_AREA_WEB:
+        case SotExchangeDest::DOC_TEXTFRAME:
+        case SotExchangeDest::SWDOC_FREE_AREA:
+        case SotExchangeDest::DOC_TEXTFRAME_WEB:
+        case SotExchangeDest::SWDOC_FREE_AREA_WEB:
             bDelSel = true;
             break;
+        default: break;
         }
 
         if( bDelSel )
@@ -1552,10 +1553,10 @@ bool SwTransferable::PasteData( TransferableDataHelper& rData,
     return nRet;
 }
 
-sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
+SotExchangeDest SwTransferable::GetSotDestination( const SwWrtShell& rSh,
                                             const Point* pPt )
 {
-    sal_uInt16 nRet = EXCHG_INOUT_ACTION_NONE;
+    SotExchangeDest nRet = SotExchangeDest::NONE;
 
     ObjCntType eOType;
     if( pPt )
@@ -1586,36 +1587,36 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
             }
 
             if( bLink && bIMap )
-                nRet = EXCHG_DEST_DOC_LNKD_GRAPH_W_IMAP;
+                nRet = SotExchangeDest::DOC_LNKD_GRAPH_W_IMAP;
             else if( bLink )
-                nRet = EXCHG_DEST_DOC_LNKD_GRAPHOBJ;
+                nRet = SotExchangeDest::DOC_LNKD_GRAPHOBJ;
             else if( bIMap )
-                nRet = EXCHG_DEST_DOC_GRAPH_W_IMAP;
+                nRet = SotExchangeDest::DOC_GRAPH_W_IMAP;
             else
-                nRet = EXCHG_DEST_DOC_GRAPHOBJ;
+                nRet = SotExchangeDest::DOC_GRAPHOBJ;
         }
         break;
 
     case OBJCNT_FLY:
         if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
-            nRet = EXCHG_DEST_DOC_TEXTFRAME_WEB;
+            nRet = SotExchangeDest::DOC_TEXTFRAME_WEB;
         else
-            nRet = EXCHG_DEST_DOC_TEXTFRAME;
+            nRet = SotExchangeDest::DOC_TEXTFRAME;
         break;
-    case OBJCNT_OLE:        nRet = EXCHG_DEST_DOC_OLEOBJ;       break;
+    case OBJCNT_OLE:        nRet = SotExchangeDest::DOC_OLEOBJ;       break;
 
     case OBJCNT_CONTROL:    /* no Action avail */
-    case OBJCNT_SIMPLE:     nRet = EXCHG_DEST_DOC_DRAWOBJ;      break;
-    case OBJCNT_URLBUTTON:  nRet = EXCHG_DEST_DOC_URLBUTTON;    break;
-    case OBJCNT_GROUPOBJ:   nRet = EXCHG_DEST_DOC_GROUPOBJ;     break;
+    case OBJCNT_SIMPLE:     nRet = SotExchangeDest::DOC_DRAWOBJ;      break;
+    case OBJCNT_URLBUTTON:  nRet = SotExchangeDest::DOC_URLBUTTON;    break;
+    case OBJCNT_GROUPOBJ:   nRet = SotExchangeDest::DOC_GROUPOBJ;     break;
 
     // what do we do at multiple selections???
     default:
         {
             if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
-                nRet = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
+                nRet = SotExchangeDest::SWDOC_FREE_AREA_WEB;
             else
-                nRet = EXCHG_DEST_SWDOC_FREE_AREA;
+                nRet = SotExchangeDest::SWDOC_FREE_AREA;
         }
     }
 
@@ -2814,16 +2815,16 @@ bool SwTransferable::PasteFormat( SwWrtShell& rSh,
     else if( rData.HasFormat( nFormat ) )
     {
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
-        sal_uInt16 nEventAction,
-               nDestination = SwTransferable::GetSotDestination( rSh ),
-               nSourceOptions =
-                    (( EXCHG_DEST_DOC_TEXTFRAME == nDestination ||
-                       EXCHG_DEST_SWDOC_FREE_AREA == nDestination ||
-                       EXCHG_DEST_DOC_TEXTFRAME_WEB == nDestination ||
-                       EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
+        sal_uInt16      nEventAction;
+        SotExchangeDest nDestination = SwTransferable::GetSotDestination( rSh );
+        sal_uInt16      nSourceOptions =
+                    (( SotExchangeDest::DOC_TEXTFRAME == nDestination ||
+                       SotExchangeDest::SWDOC_FREE_AREA == nDestination ||
+                       SotExchangeDest::DOC_TEXTFRAME_WEB == nDestination ||
+                       SotExchangeDest::SWDOC_FREE_AREA_WEB == nDestination )
                                         ? EXCHG_IN_ACTION_COPY
-                                        : EXCHG_IN_ACTION_MOVE),
-               nAction = SotExchange::GetExchangeAction(
+                                        : EXCHG_IN_ACTION_MOVE);
+        sal_uInt16      nAction = SotExchange::GetExchangeAction(
                                     rData.GetDataFlavorExVector(),
                                     nDestination,
                                     nSourceOptions,             /* ?? */
@@ -2839,7 +2840,7 @@ bool SwTransferable::PasteFormat( SwWrtShell& rSh,
 }
 
 bool SwTransferable::_TestAllowedFormat( const TransferableDataHelper& rData,
-                                        sal_uLong nFormat, sal_uInt16 nDestination )
+                                        sal_uLong nFormat, SotExchangeDest nDestination )
 {
     sal_uInt16 nAction = EXCHG_INOUT_ACTION_NONE, nEventAction;
     if( rData.HasFormat( nFormat )) {
@@ -2891,7 +2892,7 @@ bool SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rDat
     DataFlavorExVector aFormats( rData.GetDataFlavorExVector() );
     TransferableObjectDescriptor aDesc;
 
-    sal_uInt16 nDest = SwTransferable::GetSotDestination( rSh );
+    SotExchangeDest nDest = SwTransferable::GetSotDestination( rSh );
 
     SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard )
@@ -2958,7 +2959,7 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
                                 const TransferableDataHelper& rData,
                                 SvxClipboardFmtItem & rToFill )
 {
-    sal_uInt16 nDest = SwTransferable::GetSotDestination( rSh );
+    SotExchangeDest nDest = SwTransferable::GetSotDestination( rSh );
 
     SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard )
