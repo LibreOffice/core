@@ -29,17 +29,21 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <sax/tools/converter.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
-
+using namespace xmloff;
+using namespace css::xml::sax;
 using namespace ::xmloff::token;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
 const sal_Char sAPI_IsRelativeTabstops[] = "IsRelativeTabstops";
@@ -139,6 +143,19 @@ XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
 {
 }
 
+XMLIndexSourceBaseContext::XMLIndexSourceBaseContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    Reference< XPropertySet >& rPropSet, bool bLevelFormats )
+:   SvXMLImportContext( rImport ),
+    sCreateFromChapter(sAPI_CreateFromChapter),
+    sIsRelativeTabstops(sAPI_IsRelativeTabstops),
+    bUseLevelFormats(bLevelFormats),
+    bChapterIndex(false),
+    bRelativeTabs(true),
+    rIndexPropertySet(rPropSet)
+{
+}
+
 XMLIndexSourceBaseContext::~XMLIndexSourceBaseContext()
 {
 }
@@ -161,6 +178,24 @@ void XMLIndexSourceBaseContext::StartElement(
         // process attribute
         ProcessAttribute((enum IndexSourceParamEnum)nToken,
                          xAttrList->getValueByIndex(i));
+    }
+}
+
+void XMLIndexSourceBaseContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    SvXMLTokenMap aTokenMap(aIndexSourceTokenMap);
+
+    css::uno::Sequence< css::xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( css::xml::FastAttribute attribute : attributes )
+    {
+        // map to IndexSourceParamEnum
+        sal_uInt16 nToken = aTokenMap.Get( attribute.Token );
+
+        // process attribute
+        ProcessAttribute((enum IndexSourceParamEnum)nToken,
+                         attribute.Value );
     }
 }
 
@@ -204,6 +239,18 @@ void XMLIndexSourceBaseContext::EndElement()
     rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);
 }
 
+void SAL_CALL XMLIndexSourceBaseContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Any aAny;
+
+    aAny.setValue(&bRelativeTabs, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sIsRelativeTabstops, aAny);
+
+    aAny.setValue(&bChapterIndex, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromChapter, aAny);
+}
+
 SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -236,6 +283,31 @@ SvXMLImportContext* XMLIndexSourceBaseContext::CreateChildContext(
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                           xAttrList);
     }
+
+    return pContext;
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexSourceBaseContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = 0;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_index_title_template) )
+    {
+        pContext = new XMLIndexTitleTemplateContext( GetImport(),
+                    rIndexPropertySet, Element );
+    }
+    else if( bUseLevelFormats &&
+        Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_index_source_styles) )
+    {
+        pContext = new XMLIndexTOCStylesContext( GetImport(),
+                rIndexPropertySet, Element );
+    }
+
+    if( !pContext.is() )
+        pContext = SvXMLImportContext::createFastChildContext( Element, xAttrList );
 
     return pContext;
 }
