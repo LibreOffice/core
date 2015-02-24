@@ -41,13 +41,13 @@ For example
 
 .../update/simple/update
 .../update/license/update
-.../update/updatefeed/udpate
+.../update/updatefeed/update
 
 
 The different test folders for the update are also committed in project extensions/www
 so that the files can be obtain via an URL. The structure and the contents is about the
 same as the content
-of desktop/test/deployment/udpate
+of desktop/test/deployment/update
 For example in
 
 extensions/www/testarea/desktop

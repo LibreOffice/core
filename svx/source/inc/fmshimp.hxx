@@ -500,7 +500,7 @@ private:
     */
     SAL_DLLPRIVATE void    impl_defaultCurrentForm_nothrow();
 
-    /** sets m_xCurrentForm to the provided form, and udpates everything which
+    /** sets m_xCurrentForm to the provided form, and updates everything which
         depends on the current form
     */
     SAL_DLLPRIVATE void    impl_updateCurrentForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxNewCurForm );

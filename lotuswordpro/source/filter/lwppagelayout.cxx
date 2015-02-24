@@ -683,7 +683,7 @@ double LwpPageLayout::GetHeight()
     return fHeight;
 }
 /**
-* @descr:  Compare the position of layout. If the poistion of this layout is earlier than other layout,return ture, or return false
+* @descr:  Compare the position of layout. If the position of this layout is earlier than other layout,return true, or return false
 *
 */
 bool LwpPageLayout::operator<(LwpPageLayout& Other)

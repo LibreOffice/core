@@ -433,7 +433,7 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
             for(; iter != m_vRunData.end(); ++iter)
             {
                 CTRunRef run = iter->m_pRun;
-                /* if we do not have Ajusted Poistions for a run, just use CoreText to draw it */
+                /* if we do not have Adjusted Positions for a run, just use CoreText to draw it */
                 if(iter->m_pAdjPositions)
                 {
                     CTFontRef runFont = iter->m_pFont;

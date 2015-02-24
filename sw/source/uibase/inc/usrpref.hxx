@@ -113,7 +113,7 @@ class SwMasterUsrPref : public SwViewOption
     friend class SwCursorConfig;
     friend class SwWebColorConfig;
 
-    SwFldUpdateFlags eFldUpdateFlags;    //udpate of fields and charts
+    SwFldUpdateFlags eFldUpdateFlags;    //update of fields and charts
     sal_Int32   nLinkUpdateMode;
     FieldUnit   eUserMetric;
     FieldUnit   eHScrollMetric;

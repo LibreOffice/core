@@ -56,7 +56,7 @@ Repository:
 
 -Create the new extension in the repository. 
 -Provide a company name and a URL to the company website. This setting should be ignored
- when generating the udpate feed. Instead the publisher name from the extension is used.
+ when generating the update feed. Instead the publisher name from the extension is used.
  Enter "Publisher Title" : some arbitrary company
  "Publisher URL": any arbitrary URL but not:
  http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-US.html
@@ -103,7 +103,7 @@ Repository:
 
 -Create the new extension in the repository. 
 -Provide a company name and a URL to the company website. This setting should be ignored
- when generating the udpate feed. Instead the publisher name from the extension is used.
+ when generating the update feed. Instead the publisher name from the extension is used.
  Enter "Publisher Title" : some arbitrary company name
  "Publisher URL": any arbitrary URL but not:
  http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-US.html
@@ -147,7 +147,7 @@ Test
 Repository:
 
 -Create the new extension in the repository. 
--Provide a company name and a URL to the company website. They should then be in the udpate 
+-Provide a company name and a URL to the company website. They should then be in the update 
  feed. 
   
 -Create a new release for the extension. Upload the version 2.0 (update/pub10.oxt). 
@@ -190,7 +190,7 @@ Test
 Repository:
 
 -Create the new extension in the repository. 
--Provide a company name and a URL to the company website. They should then be in the udpate 
+-Provide a company name and a URL to the company website. They should then be in the update 
  feed. 
   
 -Create a new release for the extension. Upload the version 2.0 (update/pub11.oxt). 

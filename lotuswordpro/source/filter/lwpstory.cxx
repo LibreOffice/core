@@ -318,7 +318,7 @@ bool LwpStory::IsNeedSection()
                 }
             }
 
-            //if bColumns is ture, the page layout doesn't need columns, set the xfcolumns to NULL in page master
+            //if bColumns is true, the page layout doesn't need columns, set the xfcolumns to NULL in page master
             if(!bColumns)
             {
                 m_pCurrentLayout->ResetXFColumns();

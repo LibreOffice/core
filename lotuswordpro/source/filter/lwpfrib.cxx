@@ -379,7 +379,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
 
 /**
 *  @descr:   Whether there are other fribs following current frib.
-*  @return:  Ture if having following fribs, or false.
+*  @return:  True if having following fribs, or false.
 */
 bool LwpFrib::HasNextFrib()
 {

@@ -132,7 +132,7 @@ sub create_media_table
         my $counter = 0;
 
         # Sorting of files collector files required !
-        # Attention: The order in the cab file is not guaranteed (especially in udpate process)
+        # Attention: The order in the cab file is not guaranteed (especially in update process)
 
         for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {

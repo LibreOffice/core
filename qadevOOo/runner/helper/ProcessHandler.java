@@ -210,7 +210,7 @@ public class ProcessHandler
      * log stream where debug info and output of external command is printed.
      * If log stream is null, logging is printed to stdout.
      * From the <CODE>TestParameters</CODE> the <CODE>OfficeWachter</CODE> get a ping.
-     * @param shortWait If this parameter is ture the <CODE>mTimeOut</CODE> is set to 5000 ms, else it is set to
+     * @param shortWait If this parameter is true the <CODE>mTimeOut</CODE> is set to 5000 ms, else it is set to
      *        half of time out from parameter timeout.
      * @param param the TestParameters
      * @see lib.TestParameters

@@ -75,7 +75,7 @@ namespace dbaui
         bool     reset( ::dbtools::SQLExceptionInfo* _pErrorInfo );
         void     GrabFocus();
 
-        // returs the add table dialog from the design view
+        // returns the add table dialog from the design view
         OAddTableDlg* getAddTableDialog();
 
         OQueryDesignView*       getDesignView() const { return m_pDesignView; }

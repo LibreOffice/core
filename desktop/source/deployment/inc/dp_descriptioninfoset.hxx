@@ -149,7 +149,7 @@ public:
         returns the download website URL from the update information.
 
         There can be multiple URLs where each is assigned to a particular locale.
-        The function returs the URL which locale matches best the one used in the office.
+        The function returns the URL which locale matches best the one used in the office.
 
         The return value is an optional because it may be necessary to find out if there
         was a value provided or not. This is necessary to flag the extension in the update dialog
