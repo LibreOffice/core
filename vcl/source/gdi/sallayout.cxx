@@ -501,6 +501,7 @@ ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     mpStr( pStr ),
     mpDXArray( NULL ),
     mnLayoutWidth( 0 ),
+    mnBreakLimitWidth( 0 ),
     mnOrientation( 0 )
 {
     if( mnFlags & SAL_LAYOUT_BIDI_STRONG )
@@ -923,14 +924,19 @@ DeviceCoordinate GenericSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) 
 // the text width is the maximum logical extent of all glyphs
 DeviceCoordinate GenericSalLayout::GetTextWidth() const
 {
-    if( m_GlyphItems.empty() )
+    return GetTextWidthFromGlyphs(m_GlyphItems);
+}
+
+DeviceCoordinate GetTextWidthFromGlyphs(GlyphVector const& rGlyphItems)
+{
+    if (rGlyphItems.empty())
         return 0;
 
     // initialize the extent
     DeviceCoordinate nMinPos = 0;
     DeviceCoordinate nMaxPos = 0;
 
-    for( GlyphVector::const_iterator pGlyphIter = m_GlyphItems.begin(), end = m_GlyphItems.end(); pGlyphIter != end ; ++pGlyphIter )
+    for (GlyphVector::const_iterator pGlyphIter = rGlyphItems.begin(), end = rGlyphItems.end(); pGlyphIter != end ; ++pGlyphIter)
     {
         // update the text extent with the glyph extent
         DeviceCoordinate nXPos = pGlyphIter->maLinearPos.X();

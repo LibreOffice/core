@@ -79,6 +79,7 @@ public:
     // positioning related inputs
     const DeviceCoordinate* mpDXArray;     // in pixel units
     DeviceCoordinate    mnLayoutWidth;      // in pixel units
+    DeviceCoordinate    mnBreakLimitWidth;  // in pixel units
     int                 mnOrientation;      // in 0-3600 system
 
     // data for bidi and glyph+script fallback
@@ -91,6 +92,7 @@ public:
                                 const LanguageTag& rLanguageTag );
 
     void        SetLayoutWidth( DeviceCoordinate nWidth )       { mnLayoutWidth = nWidth; }
+    void        SetBreakLimitWidth( DeviceCoordinate nWidth )   { mnBreakLimitWidth = nWidth; }
     void        SetDXArray( const DeviceCoordinate* pDXArray )  { mpDXArray = pDXArray; }
     void        SetOrientation( int nOrientation )  { mnOrientation = nOrientation; }
 
@@ -319,6 +321,8 @@ public:
 
 typedef std::list<GlyphItem> GlyphList;
 typedef std::vector<GlyphItem> GlyphVector;
+
+DeviceCoordinate GetTextWidthFromGlyphs(GlyphVector const& rGlyphItems);
 
 class VCL_PLUGIN_PUBLIC GenericSalLayout : public SalLayout
 {

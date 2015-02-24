@@ -310,6 +310,10 @@ private:
     hb_face_t*              mpHbFace;
     int                     mnUnitsPerEM;
 
+    void LayoutImpl(ImplLayoutArgs& rArgs, GlyphVector & rGlyphs,
+            std::vector<std::pair<sal_Int32, bool>> & rNeedFallbacks,
+            ServerFont & rFont, hb_font_t *const pHbFont);
+
 public:
                             HbLayoutEngine(ServerFont&);
     virtual                 ~HbLayoutEngine();
@@ -370,6 +374,73 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
+    GlyphVector glyphs;
+    std::vector<std::pair<sal_Int32, bool>> needFallbacks;
+    int nGuessEnd(rArgs.mnEndCharPos);
+    int nIncrement = 256;
+    if (rArgs.mnBreakLimitWidth) // check if max. width given (TextBreak)
+    {
+        // assumption: 256 characters should fill up a line;
+        // if not, iterate (to handle pathological case with ZWSP)
+        nGuessEnd = std::min(rArgs.mnMinCharPos + nIncrement, rArgs.mnEndCharPos);
+    }
+    while (true)
+    {
+        ImplLayoutArgs args(rArgs); // copy to catch side-effects
+        args.mnEndCharPos = nGuessEnd; // TODO: are the runs in there bounded by original mnEndCharPos? better construct a new one?
+        LayoutImpl(args, glyphs, needFallbacks, rFont, pHbFont);
+
+        if (nGuessEnd < rArgs.mnEndCharPos)
+        {
+            // performance hack: speed up Writer's line breaking by stopping
+            // once the requested width is reached (plus some safety margin)
+            DeviceCoordinate const nWidth = GetTextWidthFromGlyphs(glyphs);
+            if (nWidth < 1.5 * rArgs.mnBreakLimitWidth)
+            {
+                nGuessEnd = std::min(nGuessEnd + nIncrement, rArgs.mnEndCharPos);
+                nIncrement *= 2;
+                glyphs.clear();
+                needFallbacks.clear();
+                // retry!
+                continue;
+            }
+        }
+        args.mnEndCharPos = rArgs.mnEndCharPos; // restore that
+        rArgs = args; // commit: update inout-parameter
+        break; // done
+    }
+    // commit vectors
+    for (auto const& rPair : needFallbacks)
+    {
+        rLayout.SetNeedFallback(rArgs, rPair.first, rPair.second);
+    }
+    for (auto const& rGlyph : glyphs)
+    {
+        rLayout.AppendGlyph(rGlyph);
+    }
+
+    hb_font_destroy(pHbFont);
+
+    // sort glyphs in visual order
+    // and then in logical order (e.g. diacritics after cluster start)
+    // XXX: why?
+    rLayout.SortGlyphItems();
+
+    // determine need for kashida justification
+    if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
+    && ((maHbScript == HB_SCRIPT_ARABIC) || (maHbScript == HB_SCRIPT_SYRIAC)))
+        rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
+
+    return true;
+}
+
+void HbLayoutEngine::LayoutImpl(ImplLayoutArgs& rArgs, GlyphVector & rGlyphs,
+        std::vector<std::pair<sal_Int32, bool>> & rNeedFallbacks,
+        ServerFont & rFont, hb_font_t *const pHbFont)
+{
+    assert(rArgs.mnEndCharPos <= rArgs.mnLength);
+    assert(0 <= rArgs.mnMinCharPos);
+    assert(rArgs.mnMinCharPos <= rArgs.mnEndCharPos);
     vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnEndCharPos);
 
     Point aCurrPos(0, 0);
@@ -379,6 +450,10 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
         bool bRightToLeft;
         if (!rArgs.GetNextRun(&nBidiMinRunPos, &nBidiEndRunPos, &bRightToLeft))
             break;
+
+        // mnEndCharPos may have been overwritten by HbLayoutEngine::Layout
+        if (rArgs.mnEndCharPos < nBidiEndRunPos )
+            nBidiEndRunPos = rArgs.mnEndCharPos;
 
         // Find script subruns.
         int nCurrentPos = nBidiMinRunPos;
@@ -444,7 +519,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
                 // if needed request glyph fallback by updating LayoutArgs
                 if (!nGlyphIndex)
                 {
-                    rLayout.SetNeedFallback(rArgs, nCharPos, bRightToLeft);
+                    rNeedFallbacks.push_back(std::make_pair(nCharPos, bRightToLeft));
                     if (SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags)
                         continue;
                 }
@@ -513,7 +588,7 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
                 Point aNewPos = Point(aCurrPos.X() + nXOffset, -(aCurrPos.Y() + nYOffset));
                 const GlyphItem aGI(nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nXAdvance, nXOffset, nYOffset);
-                rLayout.AppendGlyph(aGI);
+                rGlyphs.push_back(aGI);
 
                 aCurrPos.X() += nXAdvance;
                 aCurrPos.Y() += nYAdvance;
@@ -522,20 +597,6 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
             hb_buffer_destroy(pHbBuffer);
         }
     }
-
-    hb_font_destroy(pHbFont);
-
-    // sort glyphs in visual order
-    // and then in logical order (e.g. diacritics after cluster start)
-    // XXX: why?
-    rLayout.SortGlyphItems();
-
-    // determine need for kashida justification
-    if((rArgs.mpDXArray || rArgs.mnLayoutWidth)
-    && ((maHbScript == HB_SCRIPT_ARABIC) || (maHbScript == HB_SCRIPT_SYRIAC)))
-        rArgs.mnFlags |= SAL_LAYOUT_KASHIDA_JUSTIFICATON;
-
-    return true;
 }
 
 ServerFontLayoutEngine* ServerFont::GetLayoutEngine()

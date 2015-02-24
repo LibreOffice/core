@@ -1295,7 +1295,10 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     int nOrientation = mpFontEntry ? mpFontEntry->mnOrientation : 0;
     aLayoutArgs.SetOrientation( nOrientation );
 
-    aLayoutArgs.SetLayoutWidth( nPixelWidth );
+    if (SAL_LAYOUT_HACK_USE_WIDTH_AS_LIMIT)
+        aLayoutArgs.SetBreakLimitWidth( nPixelWidth );
+    else // note that this causes some justification to be done
+        aLayoutArgs.SetLayoutWidth( nPixelWidth );
     aLayoutArgs.SetDXArray( pDXArray );
 
     return aLayoutArgs;
@@ -1420,9 +1423,12 @@ bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_
 
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                       long nCharExtra ) const
+                                       long nCharExtra,
+                                       bool const useWidthAsLimit) const
 {
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
+    SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
+        Point(0,0), (useWidthAsLimit) ? nTextWidth : 0, nullptr,
+        (useWidthAsLimit) ? SAL_LAYOUT_HACK_USE_WIDTH_AS_LIMIT : 0);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
@@ -1451,11 +1457,14 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
 sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, long nTextWidth,
                                        sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
                                        sal_Int32 nIndex, sal_Int32 nLen,
-                                       long nCharExtra ) const
+                                       long nCharExtra,
+                                       bool const useWidthAsLimit) const
 {
     rHyphenPos = -1;
 
-    SalLayout* pSalLayout = ImplLayout( rStr, nIndex, nLen );
+    SalLayout *const pSalLayout = ImplLayout(rStr, nIndex, nLen,
+        Point(0,0), (useWidthAsLimit) ? nTextWidth : 0, nullptr,
+        (useWidthAsLimit) ? SAL_LAYOUT_HACK_USE_WIDTH_AS_LIMIT : 0);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {

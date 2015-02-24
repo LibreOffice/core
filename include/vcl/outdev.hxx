@@ -109,6 +109,7 @@ struct SalTwoRect;
 #define SAL_LAYOUT_DISABLE_GLYPH_PROCESSING (1<<12)
 #define SAL_LAYOUT_FOR_FALLBACK             (1<<13)
 #define SAL_LAYOUT_DRAW_BULLET              (1<<14)
+#define SAL_LAYOUT_HACK_USE_WIDTH_AS_LIMIT  (1<<15)
 
 namespace com {
 namespace sun {
@@ -1079,11 +1080,13 @@ public:
                                                  sal_Int32 nIndex = 0, sal_Int32 nLen = -1);
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Int32 nIndex = 0, sal_Int32 nLen = -1,
-                                              long nCharExtra = 0 ) const;
+                                              long nCharExtra = 0,
+                                              bool useWidthAsLimit = false) const;
     sal_Int32                   GetTextBreak( const OUString& rStr, long nTextWidth,
                                               sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                               sal_Int32 nIndex, sal_Int32 nLen,
-                                              long nCharExtra = 0 ) const;
+                                              long nCharExtra = 0,
+                                              bool useWidthAsLimit = false) const;
 
 private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
