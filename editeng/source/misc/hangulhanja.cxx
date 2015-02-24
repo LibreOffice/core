@@ -456,7 +456,7 @@ namespace editeng
                 m_eCurrentConversionDirection = eDialogDirection;
             }
 
-            // save curently used value for possible later use
+            // save currently used value for possible later use
             m_pAntiImpl->m_bTryBothDirectionsSave = m_bTryBothDirections;
             m_pAntiImpl->m_ePrimaryConversionDirectionSave = m_eCurrentConversionDirection;
         }

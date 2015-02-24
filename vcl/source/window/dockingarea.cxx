@@ -155,7 +155,7 @@ WindowAlign DockingAreaWindow::GetAlign() const
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
-    EnableNativeWidget( true ); // only required because the toolkit curently switches this flag off
+    EnableNativeWidget( true ); // only required because the toolkit currently switches this flag off
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         ToolbarValue        aControlValue;

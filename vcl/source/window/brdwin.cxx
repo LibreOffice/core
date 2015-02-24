@@ -1267,7 +1267,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
             nState |= ControlState::FOCUSED;
         else if( mbNWFBorder )
         {
-            // FIXME: this is curently only on OS X, see if other platforms can profit
+            // FIXME: this is currently only on OS X, see if other platforms can profit
 
             // FIXME: for OS X focus rings all controls need to support GetNativeControlRegion
             // for the dropdown style

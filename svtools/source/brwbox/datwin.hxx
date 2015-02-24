@@ -128,7 +128,7 @@ public:
     bool            bInUpdateScrollbars;  // prevents recursions
     bool            bHadRecursion;        // a recursion occurred
     bool            bOwnDataChangedHdl;   // dont change colors in DataChanged
-    bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop curently
+    bool            bCallingDropCallback; // we're in a callback to AcceptDrop or ExecuteDrop currently
     sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new counter for DoHide/ShowCursor
 

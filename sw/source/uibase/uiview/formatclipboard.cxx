@@ -287,7 +287,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     if( nSelectionType == nsSelectionType::SEL_TXT )
     {
         // get the current PaM, the cursor
-        // if there several selection it curently point
+        // if there several selection it currently point
         // on the last (sort by there creation time) selection
         SwPaM* pCrsr = rWrtShell.GetCrsr();
 
