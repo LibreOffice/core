@@ -752,7 +752,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     pSlot = rSlotPool.GetUnoSlot( aMasterCommand );
                 else
                     pSlot = rSlotPool.GetUnoSlot( aURL.Path );
-                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
+                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SfxSlotMode::CONTAINER ) ) )
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, bMasterCommand );
                 else
                 {
@@ -809,7 +809,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
                 SfxSlotPool& rSlotPool = SfxSlotPool::GetSlotPool( pAct );
                 const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
-                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SFX_SLOT_CONTAINER ) ) )
+                if ( pSlot && ( !pAct->GetFrame().IsInPlace() || !pSlot->IsMode( SfxSlotMode::CONTAINER ) ) )
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, false );
                 else
                 {
@@ -1137,7 +1137,7 @@ throw (RuntimeException, std::exception)
     SfxSlotPool*  pPool = &SfxSlotPool::GetSlotPool( pViewFrame );
 
     SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+    const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
     // Select Group ( Group 0 is internal )
     for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
@@ -1169,7 +1169,7 @@ throw (RuntimeException, std::exception)
     SolarMutexGuard aGuard;
     if ( m_pData->m_pViewShell )
     {
-        const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));

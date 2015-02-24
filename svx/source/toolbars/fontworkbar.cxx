@@ -169,7 +169,7 @@ void SetFontWorkShapeTypeState( SdrView* pSdrView, SfxItemSet& rSet )
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 SFX_SLOTMAP(FontworkBar)
 {
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, SfxSlotMode::NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(FontworkBar, SfxShell)

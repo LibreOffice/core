@@ -510,7 +510,7 @@ void SfxBindings::Update
                 const SfxSlotServer* pMsgServer = pDispatcher ? pCache->GetSlotServer(*pDispatcher, pImp->xProv) : NULL;
                 if ( !pCache->IsControllerDirty() &&
                     ( !pMsgServer ||
-                    !pMsgServer->GetSlot()->IsMode(SFX_SLOT_VOLATILE) ) )
+                    !pMsgServer->GetSlot()->IsMode(SfxSlotMode::VOLATILE) ) )
                 {
                     pImp->bInUpdate = false;
                     InvalidateSlotsInMap_Impl();
@@ -1204,7 +1204,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
         // Which value has to be mapped for Attribute slots
         const sal_uInt16 nSlotId = pSlot->GetSlotId();
         aReq.SetSlot( nSlotId );
-        if ( pSlot->IsMode(SFX_SLOT_TOGGLE) )
+        if ( pSlot->IsMode(SfxSlotMode::TOGGLE) )
         {
             // The value is attached to a toggleable attribute (Bools)
             sal_uInt16 nWhich = pSlot->GetWhich(rPool);
@@ -1651,7 +1651,7 @@ IMPL_LINK( SfxBindings, NextJob_Impl, Timer *, pTimer )
     {
         SfxStateCache* pCache = (*pImp->pCaches)[n];
         const SfxSlotServer *pSlotServer = pCache->GetSlotServer(*pDispatcher, pImp->xProv);
-        if ( pSlotServer && pSlotServer->GetSlot()->IsMode(SFX_SLOT_VOLATILE) )
+        if ( pSlotServer && pSlotServer->GetSlot()->IsMode(SfxSlotMode::VOLATILE) )
         {
             pCache->Invalidate(false);
             bVolatileSlotsPresent = true;

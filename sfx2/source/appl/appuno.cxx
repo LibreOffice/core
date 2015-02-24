@@ -188,7 +188,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         return;
 
     const beans::PropertyValue* pPropsVal = rArgs.getConstArray();
-    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+    if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // slot is a property
         const SfxType* pType = pSlot->GetType();
@@ -936,7 +936,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
 #endif
 
     const SfxType *pType = pSlot->GetType();
-    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+    if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // slot is a property
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
@@ -1126,7 +1126,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     // not really set
                     continue;
 
-                if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
+                if ( !pSlot->IsMode(SfxSlotMode::METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
                     continue;
 
                 bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
@@ -1273,7 +1273,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     beans::PropertyValue *pValue = aSequ.getArray();
 
     sal_Int32 nActProp=0;
-    if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
+    if ( !pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // slot is a property
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);

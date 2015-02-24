@@ -570,7 +570,7 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
 
         // Verb slots must be executed asynchronously, so that they can be
         // destroyed while executing.
-        pNewSlot->nFlags = SFX_SLOT_ASYNCHRON | SFX_SLOT_CONTAINER;
+        pNewSlot->nFlags = SfxSlotMode::ASYNCHRON | SfxSlotMode::CONTAINER;
         pNewSlot->nMasterSlotId = 0;
         pNewSlot->nValue = 0;
         pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);

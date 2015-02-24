@@ -25,53 +25,47 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
 #include <svl/itemset.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
+enum class SfxSlotMode {
+    NONE            =    0x0000L, // exclusiv to VOLATILE, default
+    CACHABLE        =    0x0001L, // exclusiv to VOLATILE, default
+    VOLATILE        =    0x0002L, // per Timer every 2s get new, exclusive to CACHABLE
 
-#define SFX_SLOT_CACHABLE      0x0001L // exclusiv to VOLATILE, default
-#define SFX_SLOT_VOLATILE      0x0002L // per Timer every 2s get new,
-                                       // exclusiv to CACHABLE
-#define SFX_SLOT_TOGGLE        0x0004L // inverted for Execute old value
-#define SFX_SLOT_AUTOUPDATE    0x0008L // invalidated the status automatically
-                                       // after execute
+    TOGGLE          =    0x0004L, // inverted for Execute old value
+    AUTOUPDATE      =    0x0008L, // invalidated the status automatically after execute
+    SYNCHRON        =    0x0010L, // exclusive to ASYNCHRON, default
+    ASYNCHRON       =    0x0020L, // via Post-Message, exclusive to SYNCHRON
+    HASDIALOG       =    0x0080L, // Coordinates for dialogue after recofig
 
-#define SFX_SLOT_SYNCHRON      0x0010L // exclusiv to ASYNCHRON, default
-#define SFX_SLOT_ASYNCHRON     0x0020L // via Post-Message, exclusiv
-                                       // to SYNCHRON
+    NORECORD        =    0x0100L, // no recording
+    RECORDPERITEM   =    0x0200L, // each item, one statement
+    RECORDPERSET    =    0x0400L, // The whole Set is a Statement, default
+    RECORDMANUAL    =    0x0800L, // Recording by the application developer is default
+    RECORDABSOLUTE  = 0x1000000L, // Recording with absolute Target
+    STANDARD        =   0x00411L, // CACHABLE | SYNCHRON | RECORDPERSET;
 
-#define SFX_SLOT_HASDIALOG     0x0080L // Coordinates for dialogue after recofig
+    PROPGET         =    0x1000L, // get property
+    PROPSET         =    0x2000L, // set property, exclusive to METHOD
+    METHOD          =    0x4000L, // Method, exclusiv to PROPSET
 
-#define SFX_SLOT_NORECORD      0x0100L // no recording
-#define SFX_SLOT_RECORDPERITEM 0x0200L // each item, one statement
-#define SFX_SLOT_RECORDPERSET  0x0400L // The whole Set is a Statement, default
-#define SFX_SLOT_RECORDMANUAL  0x0800L // Recording by the application
-                                       // developer is default
+    FASTCALL        =    0x8000L, // No test if disabled before Execute
 
-#define SFX_SLOT_RECORDABSOLUTE 0x1000000L // Recording with absolute Target
-#define SFX_SLOT_STANDARD       ( SFX_SLOT_CACHABLE | \
-                                  SFX_SLOT_SYNCHRON | \
-                                  SFX_SLOT_RECORDPERSET )
+    STATUSBARCONFIG =   0x10000L, // configurable status row
+    MENUCONFIG      =   0x20000L, // configurable Menu
+    TOOLBOXCONFIG   =   0x40000L, // configurable Toolboxen
+    ACCELCONFIG     =   0x80000L, // configurable keys
 
-#define SFX_SLOT_PROPGET       0x1000L  // get property
-#define SFX_SLOT_PROPSET       0x2000L  // set property, exclusiv to
-                                        // SFX_SLOT_METHOD
-#define SFX_SLOT_METHOD        0x4000L  // Method, exclusiv to SFX_SLOT_PROPSET
+    CONTAINER       =  0x100000L, // Operated by the container at InPlace
+    READONLYDOC     =  0x200000L, // also available for read-only Documents
+    IMAGEROTATION   =  0x400000L, // Rotate image on Vertical/Bi-directional writing
+    IMAGEREFLECTION =  0x800000L  // Mirror image on Vertical/Bi-directional writing
+};
 
-#define SFX_SLOT_FASTCALL      0x8000L  // No test if disabled before Execute
-
-#define SFX_SLOT_STATUSBARCONFIG 0x10000L  // configurable status row
-#define SFX_SLOT_MENUCONFIG      0x20000L  // configurable Menu
-#define SFX_SLOT_TOOLBOXCONFIG   0x40000L  // configurable Toolboxen
-#define SFX_SLOT_ACCELCONFIG     0x80000L  // configurable keys
-
-#define SFX_SLOT_CONTAINER      0x100000L  // Operated by the container at
-                                           // InPlace
-#define SFX_SLOT_READONLYDOC    0x200000L  // also available for
-                                           // read-only Documents
-#define SFX_SLOT_IMAGEROTATION  0x400000L  // Rotate image on Vertical/
-                                           // Bi-directional writing
-#define SFX_SLOT_IMAGEREFLECTION  0x800000L // Mirror image on Vertical/
-                                           // Bi-directional writing
-
+namespace o3tl
+{
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x1ffffbfL> {};
+}
 
 
 class SfxRequest;
@@ -228,7 +222,7 @@ public:
     sal_uInt16    nSlotId;   // Unique slot-ID in Shell
     sal_uInt16    nGroupId;  // for configuration region
     sal_uIntPtr   nHelpId;   // Usually == nSlotId
-    sal_uIntPtr   nFlags;    // artihmetic ordered Flags
+    SfxSlotMode   nFlags;    // artihmetic ordered Flags
 
     sal_uInt16    nMasterSlotId;  // Enum-Slot for example Which-Id
     sal_uInt16    nValue;         // Value, in case of Enum-Slot
@@ -250,11 +244,11 @@ public:
 
 public:
 
-    SfxSlotKind     GetKind() const;
+    SfxSlotKind         GetKind() const;
     sal_uInt16          GetSlotId() const;
     sal_uIntPtr         GetHelpId() const;
-    sal_uIntPtr         GetMode() const;
-    bool                IsMode( sal_uIntPtr nMode ) const;
+    SfxSlotMode         GetMode() const;
+    bool                IsMode( SfxSlotMode nMode ) const;
     sal_uInt16          GetGroupId() const;
     sal_uInt16          GetMasterSlotId() const { return nMasterSlotId; }
     sal_uInt16          GetWhich( const SfxItemPool &rPool ) const;
@@ -295,7 +289,7 @@ inline sal_uIntPtr SfxSlot::GetHelpId() const
 
 // returns  a bitfield with flags
 
-inline sal_uIntPtr SfxSlot::GetMode() const
+inline SfxSlotMode SfxSlot::GetMode() const
 {
     return nFlags;
 }
@@ -303,9 +297,9 @@ inline sal_uIntPtr SfxSlot::GetMode() const
 
 // determines if the specified mode is assigned
 
-inline bool SfxSlot::IsMode( sal_uIntPtr nMode ) const
+inline bool SfxSlot::IsMode( SfxSlotMode nMode ) const
 {
-    return (nFlags & nMode) != 0;
+    return bool(nFlags & nMode);
 }
 
 

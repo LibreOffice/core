@@ -28,7 +28,7 @@
 
 #ifdef DBG_UTIL
 
-void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
+void SfxControllerItem::CheckConfigure_Impl( SfxSlotMode nType )
 {
     // Real Slot? (i.e. no Separator etc.)
     if ( !nId )

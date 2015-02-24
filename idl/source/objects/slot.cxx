@@ -640,9 +640,9 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const OString& rPrefix,
 
 static OString MakeSlotName( SvStringHashEntry * pEntry )
 {
-    OStringBuffer aName("SFX_SLOT_");
-    aName.append(pEntry->GetName());
-    return aName.makeStringAndClear().toAsciiUpperCase();
+    OStringBuffer aName("SfxSlotMode::");
+    aName.append(pEntry->GetName().toAsciiUpperCase());
+    return aName.makeStringAndClear();
 };
 
 void SvMetaSlot::WriteSlotStubs( const OString& rShellName,
@@ -882,7 +882,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_ImageRotation() ).getStr() ).WriteChar( '|' );
     if( GetImageReflection() )
         rOutStm.WriteCharPtr( MakeSlotName( SvHash_ImageReflection() ).getStr() ).WriteChar( '|' );
-    rOutStm.WriteChar( '0' );
+    rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
 
     rOutStm.WriteChar( ',' ) << endl;
        WriteTab( rOutStm, 4 );
@@ -949,15 +949,15 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
 
         // Method/Property flags
         if( IsMethod() )
-            rOutStm.WriteCharPtr( "SFX_SLOT_METHOD|" );
+            rOutStm.WriteCharPtr( "SfxSlotMode::METHOD|" );
         if( IsVariable() )
         {
-            rOutStm.WriteCharPtr( "SFX_SLOT_PROPGET|" );
+            rOutStm.WriteCharPtr( "SfxSlotMode::PROPGET|" );
             if( !GetReadonly() )
-                rOutStm.WriteCharPtr( "SFX_SLOT_PROPSET|" );
+                rOutStm.WriteCharPtr( "SfxSlotMode::PROPSET|" );
         }
 
-        rOutStm.WriteChar( '0' );
+        rOutStm.WriteCharPtr( "SfxSlotMode::NONE" );
     }
 
     {

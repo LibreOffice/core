@@ -23,6 +23,9 @@
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
 #include <svl/poolitem.hxx>
+#if defined( DBG_UTIL )
+#include <sfx2/msg.hxx>
+#endif
 
 class SfxPoolItem;
 class SfxBindings;
@@ -37,7 +40,7 @@ private:
 
 protected:
 #if defined( DBG_UTIL )
-    SAL_DLLPRIVATE void CheckConfigure_Impl( sal_uIntPtr nType );
+    SAL_DLLPRIVATE void CheckConfigure_Impl( SfxSlotMode nType );
 #endif
 
 public:

@@ -196,7 +196,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 SfxImageItem aImgItem(nWhich, bWeb ? SwView::m_nWebInsertCtrlState : SwView::m_nInsertCtrlState);
                 SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
                 const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
-                if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
+                if(pSlot && pSlot->IsMode( SfxSlotMode::IMAGEROTATION ))
                 {
                     if(m_pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
@@ -218,7 +218,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     SfxImageItem aImgItem(nWhich, SwView::m_nInsertObjectCtrlState);
                     SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( GetViewFrame() );
                     const SfxSlot* pSlot = rPool.GetSlot( aImgItem.GetValue() );
-                    if(pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ))
+                    if(pSlot && pSlot->IsMode( SfxSlotMode::IMAGEROTATION ))
                     {
                         if (m_pWrtShell->IsInVerticalText())
                             aImgItem.SetRotation(2700);

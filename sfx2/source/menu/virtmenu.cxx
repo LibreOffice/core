@@ -96,13 +96,13 @@ void SfxMenuImageControl_Impl::Update()
     {
         sal_uInt16 nslotId = pSVMenu->GetItemId( nPos );
         const SfxSlot* pSlot = pPool->GetSlot( nslotId );
-        if ( pSlot && pSlot->IsMode( SFX_SLOT_IMAGEROTATION ) )
+        if ( pSlot && pSlot->IsMode( SfxSlotMode::IMAGEROTATION ) )
         {
             pSVMenu->SetItemImageMirrorMode( nslotId, false );
             pSVMenu->SetItemImageAngle( nslotId, lRotation );
         }
 
-        if ( pSlot && pSlot->IsMode( SFX_SLOT_IMAGEREFLECTION ) )
+        if ( pSlot && pSlot->IsMode( SfxSlotMode::IMAGEREFLECTION ) )
             pSVMenu->SetItemImageMirrorMode( nslotId, bIsMirrored );
     }
 }

@@ -216,7 +216,7 @@ int SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest 
     SFX_STACK(SfxDispatcher::Call_Impl);
 
     // The slot may be called (meaning enabled)
-    if ( rSlot.IsMode(SFX_SLOT_FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) )
+    if ( rSlot.IsMode(SfxSlotMode::FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) )
     {
         if ( GetFrame() )
         {
@@ -238,13 +238,13 @@ int SfxDispatcher::Call_Impl(SfxShell& rShell, const SfxSlot &rSlot, SfxRequest 
                 if(xSupplier.is())
                     xRecorder = xSupplier->getDispatchRecorder();
 
-                if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
+                if ( bRecord && xRecorder.is() && !rSlot.IsMode(SfxSlotMode::NORECORD) )
                     rReq.Record_Impl( rShell, rSlot, xRecorder, GetFrame() );
             }
         }
         // Get all that is needed, because the slot may not have survived the
         // Execute if it is a 'pseudo slot' for macros or verbs.
-        bool bAutoUpdate = rSlot.IsMode(SFX_SLOT_AUTOUPDATE);
+        bool bAutoUpdate = rSlot.IsMode(SfxSlotMode::AUTOUPDATE);
 
         // API-call parentheses and document-lock during the calls
         {
@@ -835,7 +835,7 @@ void SfxDispatcher::_Execute(SfxShell& rShell, const SfxSlot& rSlot,
 
     if ( bool(eCallMode & SfxCallMode::ASYNCHRON) ||
          ( (eCallMode & SfxCallMode::SYNCHRON) == SfxCallMode::SLOT &&
-           rSlot.IsMode(SFX_SLOT_ASYNCHRON) ) )
+           rSlot.IsMode(SfxSlotMode::ASYNCHRON) ) )
     {
         SfxDispatcher *pDispat = this;
         while ( pDispat )
@@ -1344,7 +1344,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             if ( bReadOnlyShell )
             {
                 // only show ChildWindows if their slot is allowed for readonly documents
-                if ( pSlot && !pSlot->IsMode( SFX_SLOT_READONLYDOC ) )
+                if ( pSlot && !pSlot->IsMode( SfxSlotMode::READONLYDOC ) )
                     continue;
             }
 
@@ -1356,7 +1356,7 @@ void SfxDispatcher::_Update_Impl( bool bUIActive, bool bIsMDIApp, bool bIsIPOwne
             sal_uInt16 nMode = SFX_VISIBILITY_STANDARD;
             if( pSlot )
             {
-                if ( pSlot->IsMode(SFX_SLOT_CONTAINER) )
+                if ( pSlot->IsMode(SfxSlotMode::CONTAINER) )
                 {
                     if ( pWorkWin->IsVisible_Impl( SFX_VISIBILITY_CLIENT ) )
                         nMode |= SFX_VISIBILITY_CLIENT;
@@ -1795,13 +1795,13 @@ bool SfxDispatcher::_FindServer(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
         if ( pSlot && pSlot->nDisableFlags && ( pSlot->nDisableFlags & pObjShell->GetDisableFlags() ) != 0 )
             return false;
 
-        if ( pSlot && !( pSlot->nFlags & SFX_SLOT_READONLYDOC ) && bReadOnly )
+        if ( pSlot && !( pSlot->nFlags & SfxSlotMode::READONLYDOC ) && bReadOnly )
             return false;
 
         if ( pSlot )
         {
             // Slot belongs to Container?
-            bool bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+            bool bIsContainerSlot = pSlot->IsMode(SfxSlotMode::CONTAINER);
             bool bIsInPlace = xImp->pFrame && xImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell belongs to Server?

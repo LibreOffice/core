@@ -698,7 +698,7 @@ void SfxRequest::Done_Impl
     SfxItemPool &rPool = pImp->pShell->GetPool();
 
     // Property-Slot?
-    if ( !pImp->pSlot->IsMode(SFX_SLOT_METHOD) )
+    if ( !pImp->pSlot->IsMode(SfxSlotMode::METHOD) )
     {
         // get the property as SfxPoolItem
         const SfxPoolItem *pItem;
@@ -719,7 +719,7 @@ void SfxRequest::Done_Impl
     }
 
     // record everything in a single statement?
-    else if ( pImp->pSlot->IsMode(SFX_SLOT_RECORDPERSET) )
+    else if ( pImp->pSlot->IsMode(SfxSlotMode::RECORDPERSET) )
     {
         uno::Sequence < beans::PropertyValue > aSeq;
         if ( pSet )
@@ -728,7 +728,7 @@ void SfxRequest::Done_Impl
     }
 
     // record each item as a single statement
-    else if ( pImp->pSlot->IsMode(SFX_SLOT_RECORDPERITEM) )
+    else if ( pImp->pSlot->IsMode(SfxSlotMode::RECORDPERITEM) )
     {
         if ( pSet )
         {
@@ -743,8 +743,8 @@ void SfxRequest::Done_Impl
                     // play it safe; repair the wrong flags
                     OSL_FAIL( "recursion RecordPerItem - use RecordPerSet!" );
                     SfxSlot *pSlot = (SfxSlot*) pImp->pSlot;
-                    pSlot->nFlags &= ~((sal_uIntPtr)SFX_SLOT_RECORDPERITEM);
-                    pSlot->nFlags &=  SFX_SLOT_RECORDPERSET;
+                    pSlot->nFlags &= ~(SfxSlotMode::RECORDPERITEM);
+                    pSlot->nFlags &=  SfxSlotMode::RECORDPERSET;
                 }
 
                 // Record a Sub-Request

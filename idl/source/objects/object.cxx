@@ -434,7 +434,7 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
                .WriteCharPtr( ", 0, 0, " )
                .WriteCharPtr( "SFX_STUB_PTR_EXEC_NONE," )
                .WriteCharPtr( "SFX_STUB_PTR_STATE_NONE," )
-               .WriteCharPtr( "0, SfxVoidItem, 0, 0, \"\", 0 )" ) << endl;
+               .WriteCharPtr( "SfxSlotMode::NONE, SfxVoidItem, 0, 0, \"\", SfxSlotMode::NONE )" ) << endl;
     }
     rOutStm << endl;
     rOutStm.WriteCharPtr( "};" ) << endl;

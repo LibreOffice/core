@@ -184,7 +184,7 @@ throw (uno::RuntimeException, std::exception)
     std::list< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SfxGetpApp()->GetAppSlotPool_Impl();
 
-    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+    const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
 
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
     for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
@@ -219,7 +219,7 @@ throw (uno::RuntimeException, std::exception)
 
     if ( pAppSlotPool )
     {
-        const sal_uIntPtr   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        const SfxSlotMode nMode( SfxSlotMode::TOOLBOXCONFIG|SfxSlotMode::ACCELCONFIG|SfxSlotMode::MENUCONFIG );
         OUString aCmdPrefix( ".uno:" );
 
         // Gruppe anw"ahlen ( Gruppe 0 ist intern )
