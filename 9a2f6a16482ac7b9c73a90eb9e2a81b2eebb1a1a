@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_faf2056f",
+        "filename": "basic/util/sb.component",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-02-24T08:26:15Z",
+      "side": 1,
+      "message": "drop the now-unused prefix",
+      "revId": "9a2f6a16482ac7b9c73a90eb9e2a81b2eebb1a1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
