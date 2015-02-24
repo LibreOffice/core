@@ -117,7 +117,7 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
         if ( rURL.GetMap() )
         {
             ImageMap *pMap = (ImageMap*)rURL.GetMap();
-            for( sal_uInt16 i = 0; i < pMap->GetIMapObjectCount(); i++ )
+            for( size_t i = 0; i < pMap->GetIMapObjectCount(); ++i )
             {
                 IMapObject *pObj = pMap->GetIMapObject( i );
                 if( rSh.GetDoc()->IsVisitedURL( pObj->GetURL() ) )
@@ -190,9 +190,9 @@ static void lcl_ClearArea( const SwFrm &rFrm,
 
             if(!bDone)
             {
-                for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+                for( const auto &rRegion : aRegion )
                 {
-                    ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
+                    ::DrawGraphic( pItem, &rOut, aOrigRect, rRegion );
                 }
             }
         }
@@ -201,8 +201,8 @@ static void lcl_ClearArea( const SwFrm &rFrm,
             rOut.Push( PushFlags::FILLCOLOR|PushFlags::LINECOLOR );
             rOut.SetFillColor( rFrm.getRootFrm()->GetCurrShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
-            for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
-                rOut.DrawRect( aRegion[i].SVRect() );
+            for( const auto &rRegion : aRegion )
+                rOut.DrawRect( rRegion.SVRect() );
             rOut.Pop();
         }
     }
