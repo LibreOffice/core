@@ -1047,18 +1047,19 @@ bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
                 const long nScanlineSize = pWriteAcc->GetScanlineSize();
                 const long nNewWidth1 = nNewWidth - 1L;
                 const long nNewHeight1 = nNewHeight - 1L;
-                const long nWidth = pReadAcc->Width();
-                const long nHeight = pReadAcc->Height();
-                boost::scoped_array<long> pLutX(new long[ nNewWidth ]);
-                boost::scoped_array<long> pLutY(new long[ nNewHeight ]);
 
                 if( nNewWidth1 && nNewHeight1 )
                 {
+                    const double nWidth = pReadAcc->Width();
+                    const double nHeight = pReadAcc->Height();
+                    boost::scoped_array<long> pLutX(new long[ nNewWidth ]);
+                    boost::scoped_array<long> pLutY(new long[ nNewHeight ]);
+
                     for( long nX = 0L; nX < nNewWidth; nX++ )
-                        pLutX[ nX ] = nX * nWidth / nNewWidth;
+                        pLutX[ nX ] = long(nX * nWidth / nNewWidth);
 
                     for( long nY = 0L; nY < nNewHeight; nY++ )
-                        pLutY[ nY ] = nY * nHeight / nNewHeight;
+                        pLutY[ nY ] = long(nY * nHeight / nNewHeight);
 
                     long nActY = 0L;
                     while( nActY < nNewHeight )
