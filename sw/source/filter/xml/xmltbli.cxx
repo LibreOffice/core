@@ -601,7 +601,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
 }
 
 SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
-    SwXMLImport& rImport, sal_Int32 Element,
+    SwXMLImport& rImport, sal_Int32 /*Element*/,
     const Reference< xml::sax::XFastAttributeList > & xAttrList,
     SwXMLTableContext *pTable )
 :   SvXMLImportContext( rImport ),
@@ -1095,7 +1095,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
 }
 
 SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
-    SwXMLImport& rImport, sal_Int32 Element,
+    SwXMLImport& rImport, sal_Int32 /*Element*/,
     const Reference< xml::sax::XFastAttributeList >& xAttrList,
     SwXMLTableContext *pTable )
 :   SvXMLImportContext( rImport ),
