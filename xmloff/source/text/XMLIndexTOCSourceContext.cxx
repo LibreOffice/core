@@ -30,16 +30,21 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 
 using namespace ::xmloff::token;
+using namespace xmloff;
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
 const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
@@ -64,6 +69,22 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
 ,   bUseOutline(true)
 ,   bUseMarks(true)
 ,   bUseParagraphStyles(false)
+{
+}
+
+XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexSourceBaseContext( rImport, Element, rPropSet, true ),
+    sCreateFromMarks(sAPI_CreateFromMarks),
+    sLevel(sAPI_Level),
+    sCreateFromOutline(sAPI_CreateFromOutline),
+    sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles),
+    // use all chapters by default
+    nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount()),
+    bUseOutline(true),
+    bUseMarks(true),
+    bUseParagraphStyles(false)
 {
 }
 
@@ -156,6 +177,27 @@ void XMLIndexTOCSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
+void SAL_CALL XMLIndexTOCSourceContext::endFastElement( sal_Int32 Element )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Any aAny;
+
+    aAny.setValue(&bUseMarks, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
+
+    aAny.setValue(&bUseOutline, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromOutline, aAny);
+
+    aAny.setValue(&bUseParagraphStyles, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
+
+    aAny <<= (sal_Int16)nOutlineLevel;
+    rIndexPropertySet->setPropertyValue(sLevel, aAny);
+
+    // process common attributes
+    XMLIndexSourceBaseContext::endFastElement(Element);
+}
+
 
 SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -177,6 +219,24 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
         return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
                                                              rLocalName,
                                                              xAttrList);
+    }
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexTOCSourceContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_table_of_content_entry_template) )
+    {
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
+            Element, aSvLevelNameTOCMap, XML_OUTLINE_LEVEL,
+            aLevelStylePropNameTOCMap, aAllowedTokenTypesTOC, true );
+    }
+    else
+    {
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
     }
 }
 
