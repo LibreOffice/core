@@ -162,7 +162,7 @@
         {                                                                   \
             Identifier = FN_EDIT_IDX_ENTRY_DLG ;                            \
             HelpId = CMD_FN_EDIT_IDX_ENTRY_DLG ;                                \
-            Text [ en-US ] = "Inde~x Entry..." ;                       \
+            Text [ en-US ] = "Edit Inde~x Entry..." ;                       \
     };
 
 #define _MN_EDIT_BIB_ENTRY_DLG                                              \
@@ -300,19 +300,19 @@
         {                                                                   \
             Identifier = FN_UPDATE_CUR_TOX ;                                \
             HelpId = CMD_FN_UPDATE_CUR_TOX ;                                    \
-            Text [ en-US ] = "~Update Index/Table";                         \
+            Text [ en-US ] = "~Update Index or Table";                         \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_EDIT_CURRENT_TOX;                               \
             HelpId = CMD_FN_EDIT_CURRENT_TOX;                                   \
-            Text [ en-US ] = "~Edit Index/Table";                           \
+            Text [ en-US ] = "~Edit Index or Table";                           \
         };                                                                  \
         MenuItem                                                            \
         {                                                                   \
             Identifier = FN_REMOVE_CUR_TOX;                                 \
             HelpId = CMD_FN_REMOVE_CUR_TOX;                                     \
-            Text [ en-US ] = "Delete Index/Table";                          \
+            Text [ en-US ] = "Delete Index or Table";                          \
         };                                                                  \
         SEPARATOR ;
 

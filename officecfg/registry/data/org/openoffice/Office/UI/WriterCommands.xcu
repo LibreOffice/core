@@ -150,10 +150,16 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Current ~Index</value>
         </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
       </node>
       <node oor:name=".uno:RemoveTableOf" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete index</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
         </prop>
       </node>
       <node oor:name=".uno:ProtectTraceChangeMode" oor:op="replace">
