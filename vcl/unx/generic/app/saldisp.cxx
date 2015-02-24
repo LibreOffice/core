@@ -2317,14 +2317,7 @@ Time SalDisplay::GetLastUserEventTime( bool i_bAlwaysReget ) const
         Atom nAtom = getWMAdaptor()->getAtom( WMAdaptor::SAL_GETTIMEEVENT );
         XChangeProperty( GetDisplay(), GetDrawable( GetDefaultXScreen() ),
                          nAtom, nAtom, 8, PropModeReplace, &c, 1 );
-        XFlush( GetDisplay() );
-
-        if( ! XIfEventWithTimeout( &aEvent, reinterpret_cast<XPointer>(const_cast<SalDisplay *>(this)), timestamp_predicate ) )
-        {
-            // this should not happen at all; still sometimes it happens
-            aEvent.xproperty.time = CurrentTime;
-        }
-
+        XIfEvent( GetDisplay(), &aEvent, timestamp_predicate, reinterpret_cast<XPointer>(const_cast<SalDisplay *>(this)));
         m_nLastUserEventTime = aEvent.xproperty.time;
     }
     return m_nLastUserEventTime;
