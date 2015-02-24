@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_d64cc478",
+        "filename": "offapi/com/sun/star/sheet/SpreadsheetDocumentSettings.idl",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-24T17:25:52Z",
+      "side": 1,
+      "message": "May sound like nitpicking, but I\u0027d name that property differently. We Have no property with Has...Protection in the API (actually neither the settings nor the RecordChanges own the protection ;-), but we have some with ...Protected. I suggest IsRecordChangesProtected instead.",
+      "revId": "2c991e2d1d8c31615a57881b0c116dcb9b30bee3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
