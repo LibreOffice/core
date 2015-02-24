@@ -6796,9 +6796,9 @@ bool PDFWriterImpl::finalizeSignature()
         src.nonce.data = reinterpret_cast<unsigned char*>(&nNonce);
         src.nonce.len = sizeof(nNonce);
 
-        src.certReq.type = siBuffer;
-        src.certReq.data = NULL;
-        src.certReq.len = 0;
+        src.certReq.type = siUnsignedInteger;
+        src.certReq.data = &cOne;
+        src.certReq.len = sizeof(cOne);
 
         src.extensions = NULL;
 
