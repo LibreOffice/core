@@ -6968,7 +6968,7 @@ bool PDFWriterImpl::finalizeSignature()
         // id-aa-timeStampToken OBJECT IDENTIFIER ::= { iso(1)
         // member-body(2) us(840) rsadsi(113549) pkcs(1) pkcs-9(9)
         // smime(16) aa(2) 14 }
-        if (my_SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.14", 0) != SECSuccess)
+        if (my_SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_StringToOID failed");
             return false;
