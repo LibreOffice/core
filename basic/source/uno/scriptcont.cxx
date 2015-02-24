@@ -19,7 +19,6 @@
 
 #include "scriptcont.hxx"
 #include "sbmodule.hxx"
-#include "sbservices.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -1191,11 +1190,6 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString&
 
 
 // Service
-void createRegistryInfo_SfxScriptLibraryContainer()
-{
-    static OAutoRegistration< SfxScriptLibraryContainer > aAutoRegistration;
-}
-
 OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( )
     throw (RuntimeException, std::exception)
 {
@@ -1221,14 +1215,6 @@ OUString SfxScriptLibraryContainer::getImplementationName_static()
 {
     return OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
 }
-
-Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create( const Reference< XComponentContext >& )
-    throw( Exception )
-{
-    Reference< XInterface > xRet = static_cast< XInterface* >( static_cast< OWeakObject* >(new SfxScriptLibraryContainer()) );
-    return xRet;
-}
-
 
 // Implementation class SfxScriptLibrary
 
@@ -1352,9 +1338,15 @@ void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
     mModuleInfos.erase( mModuleInfos.find( ModuleName ) );
 }
 
-
-
-
 }   // namespace basic
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                 ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new basic::SfxScriptLibraryContainer());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
