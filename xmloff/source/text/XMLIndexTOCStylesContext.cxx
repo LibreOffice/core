@@ -26,12 +26,16 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <sax/tools/converter.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::xmloff::token;
+using namespace xmloff;
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
@@ -39,6 +43,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 const sal_Char sAPI_LevelParagraphStyles[] = "LevelParagraphStyles";
@@ -53,6 +58,16 @@ XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
     , sLevelParagraphStyles(sAPI_LevelParagraphStyles)
     , rTOCPropertySet(rPropSet)
     , nOutlineLevel(0)
+{
+}
+
+XMLIndexTOCStylesContext::XMLIndexTOCStylesContext(
+    SvXMLImport& rImport, Reference< XPropertySet >& rPropSet,
+    sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport ),
+    sLevelParagraphStyles(sAPI_LevelParagraphStyles),
+    rTOCPropertySet(rPropSet),
+    nOutlineLevel(0)
 {
 }
 
@@ -87,7 +102,53 @@ void XMLIndexTOCStylesContext::StartElement(
     }
 }
 
+void SAL_CALL XMLIndexTOCStylesContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    // find text:ouline-level attribute
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_outline_level) )
+    {
+        sal_Int32 nTmp;
+        if( ::sax::Converter::convertNumber( nTmp,
+            xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_outline_level),
+            1, GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
+        {
+            // API numbers 0..9, we number 1..10
+            nOutlineLevel = nTmp-1;
+        }
+    }
+}
+
 void XMLIndexTOCStylesContext::EndElement()
+{
+    // if valid...
+    if (nOutlineLevel >= 0)
+    {
+        // copy vector into sequence
+        const sal_Int32 nCount = aStyleNames.size();
+        Sequence<OUString> aStyleNamesSequence(nCount);
+        for(sal_Int32 i = 0; i < nCount; i++)
+        {
+            aStyleNamesSequence[i] = GetImport().GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                               aStyleNames[i] );
+        }
+
+        // get index replace
+        Any aAny = rTOCPropertySet->getPropertyValue(sLevelParagraphStyles);
+        Reference<XIndexReplace> xIndexReplace;
+        aAny >>= xIndexReplace;
+
+        // set style names
+        aAny <<= aStyleNamesSequence;
+        xIndexReplace->replaceByIndex(nOutlineLevel, aAny);
+    }
+}
+
+void SAL_CALL XMLIndexTOCStylesContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
 {
     // if valid...
     if (nOutlineLevel >= 0)
@@ -141,6 +202,25 @@ SvXMLImportContext *XMLIndexTOCStylesContext::CreateChildContext(
     // always return default context; we already got the interesting info
     return SvXMLImportContext::CreateChildContext(p_nPrefix, rLocalName,
                                                   xAttrList);
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexTOCStylesContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    // check for index-source-style
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_index_source_style) )
+    {
+        // find text:style-name attribute and record in aStyleNames
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name) )
+        {
+            aStyleNames.push_back( xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) );
+        }
+    }
+
+    // always return default context; we already got the interesting info
+    return SvXMLImportContext::createFastChildContext( Element, xAttrList );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
