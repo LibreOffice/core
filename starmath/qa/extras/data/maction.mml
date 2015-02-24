@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mrow>
+     <mtable>
+        <mtr><maction actiontype="toggle"><mn>1</mn><mn>0</mn><mn>0</mn></maction></mtr>
+        <mtr><maction actiontype="toggle" selection="2"><mn>0</mn><mn>2</mn><mn>0</mn></maction></mtr>
+        <mtr><maction actiontype="toggle" selection="3"><mn>0</mn><mn>0</mn><mn>3</mn></maction></mtr>
+     </mtable>
+  </mrow>
+</math>
