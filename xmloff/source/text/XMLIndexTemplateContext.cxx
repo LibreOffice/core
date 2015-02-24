@@ -29,15 +29,19 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::std;
 using namespace ::xmloff::token;
+using namespace xmloff;
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::PropertyValue;
@@ -47,6 +51,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::container::XIndexReplace;
+using css::xml::sax::FastToken::NAMESPACE;
 
 const sal_Char sAPI_TokenEntryNumber[] =    "TokenEntryNumber";
 const sal_Char sAPI_TokenEntryText[] =      "TokenEntryText";
@@ -105,8 +110,63 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
 ,   sLevelFormat("LevelFormat")
 ,   sParaStyleLevel("ParaStyleLevel")
 {
-    DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (NULL != pLevelNameMap))
-                || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (NULL == pLevelNameMap)),
+    DBG_ASSERT( ((xmloff::token::XML_TOKEN_INVALID != eLevelAttrName) &&  (NULL != pLevelNameMap))
+                || ((xmloff::token::XML_TOKEN_INVALID == eLevelAttrName) &&  (NULL == pLevelNameMap)),
+                "need both, attribute name and value map, or neither" );
+    DBG_ASSERT( NULL != pOutlineLevelStylePropMap, "need property name map" );
+    DBG_ASSERT( NULL != pAllowedTokenTypes, "need allowed tokens map" );
+
+    // no map for outline-level? then use 1
+    if (NULL == pLevelNameMap)
+    {
+        nOutlineLevel = 1;
+        bOutlineLevelOK = true;
+    }
+}
+
+XMLIndexTemplateContext::XMLIndexTemplateContext(
+    SvXMLImport& rImport, Reference< XPropertySet >& rPropSet,
+    sal_Int32 /*Element*/,
+    const SvXMLEnumMapEntry* pLevelNameMap,
+    enum XMLTokenEnum eLevelAttrName,
+    const sal_Char** pLevelStylePropMap,
+    const sal_Bool* pAllowedTokenTypes,
+    bool bT )
+:   SvXMLImportContext( rImport )
+,   pOutlineLevelNameMap(pLevelNameMap)
+,   eOutlineLevelAttrName(eLevelAttrName)
+,   pOutlineLevelStylePropMap(pLevelStylePropMap)
+,   pAllowedTokenTypesMap(pAllowedTokenTypes)
+,   nOutlineLevel(1)    // all indices have level 1 (0 is for header)
+,   bStyleNameOK(false)
+,   bOutlineLevelOK(false)
+,   bTOC( bT )
+,   rPropertySet(rPropSet)
+,   sTokenEntryNumber(sAPI_TokenEntryNumber)
+,   sTokenEntryText(sAPI_TokenEntryText)
+,   sTokenTabStop(sAPI_TokenTabStop)
+,   sTokenText(sAPI_TokenText)
+,   sTokenPageNumber(sAPI_TokenPageNumber)
+,   sTokenChapterInfo(sAPI_TokenChapterInfo)
+,   sTokenHyperlinkStart(sAPI_TokenHyperlinkStart)
+,   sTokenHyperlinkEnd(sAPI_TokenHyperlinkEnd)
+,   sTokenBibliographyDataField(sAPI_TokenBibliographyDataField)
+
+,   sCharacterStyleName("CharacterStyleName")
+,   sTokenType("TokenType")
+,   sText("Text")
+,   sTabStopRightAligned("TabStopRightAligned")
+,   sTabStopPosition("TabStopPosition")
+,   sTabStopFillCharacter("TabStopFillCharacter")
+,   sBibliographyDataField("BibliographyDataField")
+,   sChapterFormat("ChapterFormat")
+,   sChapterLevel("ChapterLevel") //#i53420
+
+,   sLevelFormat("LevelFormat")
+,   sParaStyleLevel("ParaStyleLevel")
+{
+    DBG_ASSERT( ((xmloff::token::XML_TOKEN_INVALID != eLevelAttrName) &&  (NULL != pLevelNameMap))
+                || ((xmloff::token::XML_TOKEN_INVALID == eLevelAttrName) &&  (NULL == pLevelNameMap)),
                 "need both, attribute name and value map, or neither" );
     DBG_ASSERT( NULL != pOutlineLevelStylePropMap, "need property name map" );
     DBG_ASSERT( NULL != pAllowedTokenTypes, "need allowed tokens map" );
@@ -150,7 +210,7 @@ void XMLIndexTemplateContext::StartElement(
                 sStyleName = xAttrList->getValueByIndex(nAttr);
                 bStyleNameOK = true;
             }
-            else if (eOutlineLevelAttrName != XML_TOKEN_INVALID)
+            else if (eOutlineLevelAttrName != xmloff::token::XML_TOKEN_INVALID)
             {
                 // we have an attr name! Then see if we have the attr, too.
                 if (IsXMLToken(sLocalName, eOutlineLevelAttrName))
@@ -171,6 +231,28 @@ void XMLIndexTemplateContext::StartElement(
             // else: we don't care about outline-level -> ignore
         }
         // else: attribute not in text namespace -> ignore
+    }
+}
+
+void SAL_CALL XMLIndexTemplateContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    // process two attributes: style-name, outline-level
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) )
+        {
+            // style name
+            sStyleName = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name );
+            bStyleNameOK = true;
+        }
+        else if( eOutlineLevelAttrName != xmloff::token::XML_TOKEN_INVALID )
+        {
+            // we have an attr name! Then see if we have the attr, too.
+            //TODO
+            ;
+        }
     }
 }
 
@@ -221,7 +303,53 @@ void XMLIndexTemplateContext::EndElement()
     }
 }
 
+void SAL_CALL XMLIndexTemplateContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if (bOutlineLevelOK)
+    {
+        const sal_Int32 nCount = aValueVector.size();
+        Sequence<PropertyValues> aValueSequence(nCount);
+        for(sal_Int32 i = 0; i<nCount; i++)
+        {
+            aValueSequence[i] = aValueVector[i];
+        }
 
+        // get LevelFormat IndexReplace ...
+        Any aAny = rPropertySet->getPropertyValue(sLevelFormat);
+        Reference<XIndexReplace> xIndexReplace;
+        aAny >>= xIndexReplace;
+
+        // ... and insert
+        aAny <<= aValueSequence;
+        xIndexReplace->replaceByIndex(nOutlineLevel, aAny);
+
+        if (bStyleNameOK)
+        {
+            const sal_Char* pStyleProperty =
+                pOutlineLevelStylePropMap[nOutlineLevel];
+
+            DBG_ASSERT(NULL != pStyleProperty, "need property name");
+            if (NULL != pStyleProperty)
+            {
+                OUString sDisplayStyleName =
+                        GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                        sStyleName );
+                // #i50288#: Check if style exists
+                const Reference < ::com::sun::star::container::XNameContainer > & rStyles =
+                    GetImport().GetTextImport()->GetParaStyles();
+                if( rStyles.is() &&
+                    rStyles->hasByName( sDisplayStyleName ) )
+                {
+                    aAny <<= sDisplayStyleName;
+                    rPropertySet->setPropertyValue(
+                        OUString::createFromAscii(pStyleProperty), aAny);
+                }
+            }
+        }
+    }
+}
 
 /// template token types; used for aTokenTypeMap parameter
 enum TemplateTokenType
@@ -247,7 +375,7 @@ SvXMLEnumMapEntry aTemplateTokenTypeMap[] =
     { XML_INDEX_ENTRY_LINK_START,   XML_TOK_INDEX_TYPE_LINK_START },
     { XML_INDEX_ENTRY_LINK_END,     XML_TOK_INDEX_TYPE_LINK_END },
     { XML_INDEX_ENTRY_BIBLIOGRAPHY, XML_TOK_INDEX_TYPE_BIBLIOGRAPHY },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
@@ -330,6 +458,23 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
     return pContext;
 }
 
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexTemplateContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = 0;
+
+    //TODO
+
+    // ignore unknwon
+    if( !pContext.is() )
+    {
+        return SvXMLImportContext::createFastChildContext(Element, xAttrList);
+    }
+
+    return pContext;
+}
 
 
 
@@ -351,7 +496,7 @@ const SvXMLEnumMapEntry aSvLevelNameTOCMap[] =
     { XML_8, 8 },
     { XML_9, 9 },
     { XML_10, 10 },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 const sal_Char* aLevelStylePropNameTOCMap[] =
@@ -393,7 +538,7 @@ const SvXMLEnumMapEntry aLevelNameAlphaMap[] =
     { XML_1, 2 },
     { XML_2, 3 },
     { XML_3, 4 },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 const sal_Char* aLevelStylePropNameAlphaMap[] =
@@ -439,7 +584,7 @@ const SvXMLEnumMapEntry aLevelNameBibliographyMap[] =
     { XML_TECHREPORT, 20 },
     { XML_UNPUBLISHED, 21 },
     { XML_WWW, 22 },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 // TODO: replace with real property names, when available

@@ -125,6 +125,14 @@ public:
         const sal_Char** aLevelStylePropNameMap,
         const sal_Bool* aAllowedTokenTypes,
         bool bTOC=false);
+    XMLIndexTemplateContext( SvXMLImport& rImport,
+        css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+        sal_Int32 Element,
+        const SvXMLEnumMapEntry* aLevelNameMap,
+        enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
+        const sal_Char** aLevelStylePropNameMap,
+        const sal_Bool* aAllowedTokenTypes,
+        bool bTOC=false);
 
     virtual ~XMLIndexTemplateContext();
 
@@ -137,14 +145,23 @@ protected:
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif
