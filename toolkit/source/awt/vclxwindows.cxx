@@ -236,8 +236,7 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
 {
     SolarMutexGuard aGuard;
 
-    Button* pButton = static_cast< Button* >( GetWindow() );
-    if ( !pButton )
+    if ( !GetWindow() )
         return;
     sal_uInt16 nPropType = GetPropertyId( PropertyName );
     switch ( nPropType )
@@ -261,7 +260,10 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
             {
                 sal_Int16 nAlignment = sal_Int16();
                 if ( Value >>= nAlignment )
+                {
+                    Button* pButton = static_cast< Button* >( GetWindow() );
                     pButton->SetImageAlign( static_cast< ImageAlign >( nAlignment ) );
+                }
             }
         }
         break;
@@ -275,6 +277,7 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const ::com:
             {
                 sal_Int16 nImagePosition = 2;
                 OSL_VERIFY( Value >>= nImagePosition );
+                Button* pButton = static_cast< Button* >( GetWindow() );
                 pButton->SetImageAlign( ::toolkit::translateImagePosition( nImagePosition ) );
             }
         }
