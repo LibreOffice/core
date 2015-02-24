@@ -62,6 +62,9 @@ public:
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
+     XMLIndexTitleTemplateContext( SvXMLImport& rImport,
+            css::uno::Reference< css::beans::XPropertySet >& rPropSet,
+            sal_Int32 Element );
 
     virtual ~XMLIndexTitleTemplateContext();
 
@@ -71,12 +74,19 @@ protected:
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /** set values */
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     /** pick up title characters */
     virtual void Characters(const OUString& sString) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& sString )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

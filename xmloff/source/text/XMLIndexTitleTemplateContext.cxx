@@ -23,7 +23,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -31,6 +34,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_STYLE_NAME;
+using xmloff::XML_style_name;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 TYPEINIT1( XMLIndexTitleTemplateContext, SvXMLImportContext );
@@ -48,6 +53,16 @@ XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
 {
 }
 
+XMLIndexTitleTemplateContext::XMLIndexTitleTemplateContext(
+    SvXMLImport& rImport, Reference< XPropertySet >& rPropSet,
+    sal_Int32 /*Element*/ )
+:   SvXMLImportContext( rImport ),
+    sTitle("Title"),
+    sParaStyleHeading("ParaStyleHeading"),
+    bStyleNameOK(false),
+    rTOCPropertySet(rPropSet)
+{
+}
 
 XMLIndexTitleTemplateContext::~XMLIndexTitleTemplateContext()
 {
@@ -77,7 +92,41 @@ void XMLIndexTitleTemplateContext::StartElement(
     }
 }
 
+void SAL_CALL XMLIndexTitleTemplateContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    // there's only one attribute: style-name
+    if( xAttrList.is() &&
+        xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name ) )
+    {
+        sStyleName = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_style_name );
+        OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
+            XML_STYLE_FAMILY_TEXT_PARAGRAPH, sStyleName );
+        const Reference< css::container::XNameContainer >&
+            rStyles = GetImport().GetTextImport()->GetParaStyles();
+        bStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
+    }
+}
+
 void XMLIndexTitleTemplateContext::EndElement()
+{
+    Any aAny;
+
+    aAny <<= sContent.makeStringAndClear();
+    rTOCPropertySet->setPropertyValue(sTitle, aAny);
+
+    if (bStyleNameOK)
+    {
+        aAny <<= GetImport().GetStyleDisplayName(
+                                XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                                sStyleName );
+        rTOCPropertySet->setPropertyValue(sParaStyleHeading, aAny);
+    }
+}
+
+void SAL_CALL XMLIndexTitleTemplateContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
 {
     Any aAny;
 
@@ -95,6 +144,12 @@ void XMLIndexTitleTemplateContext::EndElement()
 
 void XMLIndexTitleTemplateContext::Characters(
     const OUString& sString)
+{
+    sContent.append(sString);
+}
+
+void SAL_CALL XMLIndexTitleTemplateContext::characters( const OUString& sString )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
 {
     sContent.append(sString);
 }
