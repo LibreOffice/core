@@ -180,6 +180,10 @@ private:
     bool    mbInSwitch;
     OUString   maName;
     OUString   maScope;
+
+    LibreOfficeKitCallback mpLibreOfficeKitCallback;
+    void* mpLibreOfficeKitData;
+
 private:
     void    Construct( sal_uInt8 nForceDesignMode = SC_FORCEMODE_NONE );
 
@@ -413,6 +417,12 @@ public:
     // #i123629#
     bool    GetForceFocusOnCurCell() const { return bForceFocusOnCurCell; }
     void SetForceFocusOnCurCell(bool bFlag) { bForceFocusOnCurCell=bFlag; }
+
+    /// The actual implementation of the vcl::ITiledRenderable::registerCallback() API.
+    void registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pLibreOfficeKitData);
+
+    /// Invokes the registered callback, if there are any.
+    void libreOfficeKitCallback(int nType, const char* pPayload) const;
 };
 
 #endif

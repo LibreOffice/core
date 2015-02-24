@@ -324,6 +324,9 @@ public:
                                int nTilePosX, int nTilePosY,
                                long nTileWidth, long nTileHeight );
 
+    /// @see OutputDevice::LogicInvalidate().
+    void LogicInvalidate(const ::vcl::Region* pRegion) SAL_OVERRIDE;
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void            FakeButtonUp();

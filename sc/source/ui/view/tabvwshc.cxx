@@ -477,4 +477,16 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     return pResult;
 }
 
+void ScTabViewShell::registerLibreOfficeKitCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    mpLibreOfficeKitCallback = pCallback;
+    mpLibreOfficeKitData = pData;
+}
+
+void ScTabViewShell::libreOfficeKitCallback(int nType, const char* pPayload) const
+{
+    if (mpLibreOfficeKitCallback)
+        mpLibreOfficeKitCallback(nType, pPayload, mpLibreOfficeKitData);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

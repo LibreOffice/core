@@ -510,6 +510,12 @@ Size ScModelObj::getDocumentSize()
     return aSize;
 }
 
+void ScModelObj::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
+{
+    SolarMutexGuard aGuard;
+    pDocShell->GetBestViewShell()->registerLibreOfficeKitCallback(pCallback, pData);
+}
+
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException, std::exception)
 {

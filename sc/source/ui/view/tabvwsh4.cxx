@@ -1449,53 +1449,6 @@ bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return TabKeyInput( rKeyEvent );
 }
 
-#define __INIT_ScTabViewShell \
-    eCurOST(OST_NONE),          \
-    nDrawSfxId(0),              \
-    nCtrlSfxId(USHRT_MAX),      \
-    nFormSfxId(USHRT_MAX),      \
-    pDrawShell(NULL),           \
-    pDrawTextShell(NULL),       \
-    pEditShell(NULL),           \
-    pPivotShell(NULL),          \
-    pAuditingShell(NULL),       \
-    pDrawFormShell(NULL),       \
-    pCellShell(NULL),           \
-    pOleObjectShell(NULL),      \
-    pChartShell(NULL),          \
-    pGraphicShell(NULL),        \
-    pMediaShell(NULL),          \
-    pPageBreakShell(NULL),      \
-    pExtrusionBarShell(NULL),   \
-    pFontworkBarShell(NULL),    \
-    pFormShell(NULL),           \
-    pInputHandler(NULL),        \
-    pCurFrameLine(NULL),        \
-    aTarget( this ),            \
-    pDialogDPObject(NULL),      \
-    pNavSettings(NULL),         \
-    bActiveDrawSh(false),       \
-    bActiveDrawTextSh(false),   \
-    bActivePivotSh(false),      \
-    bActiveAuditingSh(false),   \
-    bActiveDrawFormSh(false),   \
-    bActiveOleObjectSh(false),  \
-    bActiveChartSh(false),      \
-    bActiveGraphicSh(false),    \
-    bActiveMediaSh(false),      \
-    bActiveEditSh(false),       \
-    bFormShellAtTop(false),     \
-    bDontSwitch(false),         \
-    bInFormatDialog(false),     \
-    bPrintSelected(false),      \
-    bReadOnly(false),           \
-    pScSbxObject(NULL),         \
-    bChartAreaValid(false),     \
-    bForceFocusOnCurCell(false),\
-    nCurRefDlgId(0),            \
-    pAccessibilityBroadcaster(NULL), \
-    mbInSwitch(false)
-
 void ScTabViewShell::Construct( sal_uInt8 nForceDesignMode )
 {
     SfxApplication* pSfxApp  = SfxGetpApp();
@@ -1698,7 +1651,53 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
     SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     ScDBFunc( &pViewFrame->GetWindow(), static_cast<ScDocShell&>(*pViewFrame->GetObjectShell()), this ),
-    __INIT_ScTabViewShell
+    eCurOST(OST_NONE),
+    nDrawSfxId(0),
+    nCtrlSfxId(USHRT_MAX),
+    nFormSfxId(USHRT_MAX),
+    pDrawShell(NULL),
+    pDrawTextShell(NULL),
+    pEditShell(NULL),
+    pPivotShell(NULL),
+    pAuditingShell(NULL),
+    pDrawFormShell(NULL),
+    pCellShell(NULL),
+    pOleObjectShell(NULL),
+    pChartShell(NULL),
+    pGraphicShell(NULL),
+    pMediaShell(NULL),
+    pPageBreakShell(NULL),
+    pExtrusionBarShell(NULL),
+    pFontworkBarShell(NULL),
+    pFormShell(NULL),
+    pInputHandler(NULL),
+    pCurFrameLine(NULL),
+    aTarget(this),
+    pDialogDPObject(NULL),
+    pNavSettings(NULL),
+    bActiveDrawSh(false),
+    bActiveDrawTextSh(false),
+    bActivePivotSh(false),
+    bActiveAuditingSh(false),
+    bActiveDrawFormSh(false),
+    bActiveOleObjectSh(false),
+    bActiveChartSh(false),
+    bActiveGraphicSh(false),
+    bActiveMediaSh(false),
+    bActiveEditSh(false),
+    bFormShellAtTop(false),
+    bDontSwitch(false),
+    bInFormatDialog(false),
+    bPrintSelected(false),
+    bReadOnly(false),
+    pScSbxObject(NULL),
+    bChartAreaValid(false),
+    bForceFocusOnCurCell(false),
+    nCurRefDlgId(0),
+    pAccessibilityBroadcaster(NULL),
+    mbInSwitch(false),
+    mpLibreOfficeKitCallback(NULL),
+    mpLibreOfficeKitData(NULL)
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 
@@ -1743,8 +1742,6 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     // #114409#
     MakeDrawLayer();
 }
-
-#undef __INIT_ScTabViewShell
 
 ScTabViewShell::~ScTabViewShell()
 {
