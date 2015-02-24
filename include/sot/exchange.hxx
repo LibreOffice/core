@@ -27,6 +27,7 @@
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sot/sotdllapi.h>
 #include <tools/solar.h>
+#include <o3tl/typed_flags_set.hxx>
 
 class SotDataObject;
 
@@ -67,15 +68,6 @@ SOT_DLLPUBLIC bool IsFormatSupported( const DataFlavorExVector& rDataFlavorExVec
 
 // further formats (only via CopyData/PasteData)
 #define FORMAT_RTF              10
-
-// source options
-#define EXCHG_SOURCE_MOVEABLE       ((sal_uInt16)0x0001)
-#define EXCHG_SOURCE_COPYABLE       ((sal_uInt16)0x0002)
-#define EXCHG_SOURCE_LINKABLE       ((sal_uInt16)0x0004)
-#define EXCHG_SOURCE_PRINTABLE      ((sal_uInt16)0x0008)
-#define EXCHG_SOURCE_DISCARDABLE    ((sal_uInt16)0x0010)
-#define EXCHG_SOURCE_ALL            ((sal_uInt16)0x001F)
-#define EXCHG_SOURCE_DEF_COPYABLE   ((sal_uInt16)0x0020)
 
 // actions
 #define EXCHG_ACTION_MASK                       ((sal_uInt16)0x00FF)
@@ -169,7 +161,7 @@ public:
         const DataFlavorExVector& rDataFlavorExVector,
         // destination of an action (EXCHG_DEST_*)
         sal_uInt16 nDestination,
-        // action for a source (EXCHG_SOURCE_...)
+        // action for a source
         sal_uInt16 nSourceOptions,
         // user action (EXCHG_IN_*, EXCHG_INOUT_*)
         sal_uInt16 nUserAction,
