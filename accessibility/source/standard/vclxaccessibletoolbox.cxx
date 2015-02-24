@@ -528,12 +528,12 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
     // to prevent an early release of the toolbox (VCLEVENT_OBJECT_DYING)
     Reference< XAccessibleContext > xTemp = this;
 
-    ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     switch ( rVclWindowEvent.GetId() )
     {
         case VCLEVENT_TOOLBOX_CLICK:
         case VCLEVENT_TOOLBOX_SELECT:
         {
+            ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
             if ( rVclWindowEvent.GetData() )
             {
                 UpdateChecked_Impl( (sal_Int32)reinterpret_cast<sal_IntPtr>(rVclWindowEvent.GetData()) );
@@ -617,14 +617,14 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
         case VCLEVENT_OBJECT_DYING :
         {
             // if this toolbox is a subtoolbox, we have to relese it from its parent
-            ToolBox* pBox = static_cast< ToolBox* >( GetWindow() );
-            if ( pBox && pBox->GetParent() &&
-                 pBox->GetParent()->GetType() == WINDOW_TOOLBOX )
+            vcl::Window * pWin = GetWindow();
+            if ( pWin && pWin->GetParent() &&
+                 pWin->GetParent()->GetType() == WINDOW_TOOLBOX )
             {
                 VCLXAccessibleToolBox* pParent = static_cast< VCLXAccessibleToolBox* >(
-                    pBox->GetParent()->GetAccessible()->getAccessibleContext().get() );
+                    pWin->GetParent()->GetAccessible()->getAccessibleContext().get() );
                 if ( pParent )
-                    pParent->ReleaseSubToolBox( pBox );
+                    pParent->ReleaseSubToolBox(static_cast<ToolBox *>(pWin));
             }
 
             // dispose all items
