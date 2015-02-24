@@ -3424,7 +3424,7 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
     cairo_save( cr );
 
     int cairo_stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, area->width);
-    unsigned char *p, *src, *mem = (unsigned char *)malloc (32 * cairo_stride * area->height);
+    unsigned char *p, *src, *mem = (unsigned char *)malloc (cairo_stride * area->height);
     p = mem;
     src = data.get();
     src += (int)ay * nStride + (int)ax * 3;
