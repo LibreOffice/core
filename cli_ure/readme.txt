@@ -80,7 +80,7 @@ assembly in the GAC then leave it at that.
 
 The values have to be adjusted as follows:
 
-XYZ_NEW_VERSION : increse the value of the version 
+XYZ_NEW_VERSION : increase the value of the version
 GAC. "XYZ_" would be "CLI_URETYPES", "CLI_URE", etc.
 XYZ_OLD_VERSION : must be changes so that the right version part is one less than 
 XYZ_NEW_VERSION. For example
