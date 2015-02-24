@@ -30,7 +30,7 @@ module com {  module sun {  module star {  module sheet {
 service ConditionalFormat
 {
     interface com::sun::star::beans::XPropertySet;
-    interface com::sun::star::uno::XConditionalFormat;
+    interface com::sun::star::sheet::XConditionalFormat;
 
     /** represents the range for the conditional format
       All ranges have to be in the same sheet.

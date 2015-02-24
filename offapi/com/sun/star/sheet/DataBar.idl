@@ -13,6 +13,7 @@
 #include <com/sun/star/sheet/XConditionEntry.idl>
 #include <com/sun/star/sheet/XColorScaleEntry.idl>
 #include <com/sun/star/sheet/DataBarAxis.idl>
+#include <com/sun/star/util/Color.idl>
 
 module com {  module sun {  module star {  module sheet {
 
@@ -22,7 +23,10 @@ service DataBar
 
     [property] boolean ShowValue;
 
-    [property] DataBarAxis AxisPosition;
+    /**
+      * See com.sun.star.sheet.DataBarAxis for possible values
+      */
+    [property] long AxisPosition;
 
     [property] boolean Gradient;
 

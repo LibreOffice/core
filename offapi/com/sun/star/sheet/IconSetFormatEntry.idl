@@ -12,7 +12,7 @@
 
 module com {  module sun {  module star {  module sheet {
 
-constants IconSetEntryType
+constants IconSetFormatEntry
 {
     const long ICONSET_PERCENTILE = 0;
 

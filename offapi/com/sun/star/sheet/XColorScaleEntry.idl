@@ -10,21 +10,29 @@
 #ifndef __com_sun_star_sheet_XColorScaleEntry_idl__
 #define __com_sun_star_sheet_XColorScaleEntry_idl__
 
+#include <com/sun/star/util/Color.idl>
+
 module com { module sun { module star { module sheet {
 
 interface XColorScaleEntry
 {
     com::sun::star::util::Color getColor();
 
-    void setColor(com::sun::star::util::Color Color);
+    void setColor( [in] com::sun::star::util::Color Color);
 
     string getFormula();
 
-    void setFormula(string Formula);
+    void setFormula( [in] string Formula);
 
-    ColorScaleEntryType getType();
+    /**
+      * See com.sun.star.sheet.ColorScaleEntryType for possible values
+      */
+    long getType();
 
-    void setType(ColorScaleEntryType Type);
+    /**
+      * See com.sun.star.sheet.ColorScaleEntryType for possible values
+      */
+    void setType( [in] long Type);
 };
 
 
