@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_3ae2bda0",
+        "filename": "sw/source/core/inc/unofreg.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-02-24T08:20:50Z",
+      "side": 0,
+      "message": "all the below functions should be unnecessary now:",
+      "revId": "8c693312f211a2046e433079cddaca811cae4a78",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
