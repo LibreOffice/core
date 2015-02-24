@@ -125,10 +125,6 @@ public:
     // Service
     static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static();
     static OUString getImplementationName_static();
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL Create
-        ( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xServiceManager )
-            throw( ::com::sun::star::uno::Exception );
-
 };
 
 

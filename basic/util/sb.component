@@ -19,11 +19,13 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="sb" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.sfx2.DialogLibraryContainer">
+  <implementation name="com.sun.star.comp.sfx2.DialogLibraryContainer"
+       constructor="com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation">
     <service name="com.sun.star.script.DialogLibraryContainer"/>
     <service name="com.sun.star.script.DocumentDialogLibraryContainer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sfx2.ScriptLibraryContainer">
+  <implementation name="com.sun.star.comp.sfx2.ScriptLibraryContainer"
+      constructor="com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation">
     <service name="com.sun.star.script.DocumentScriptLibraryContainer"/>
     <service name="com.sun.star.script.ScriptLibraryContainer"/>
   </implementation>
