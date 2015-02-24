@@ -1640,12 +1640,7 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(sRedlineType.getStr()));
 
-    xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
-    GetPoint()->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
-    xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
-    GetMark()->dumpAsXml(pWriter);
-    xmlTextWriterEndElement(pWriter);
+    SwPaM::dumpAsXml(pWriter);
 
     const SwRedlineExtraData* pExtraRedlineData = GetExtraData();
     xmlTextWriterStartElement(pWriter, BAD_CAST("swRedlineExtraData"));

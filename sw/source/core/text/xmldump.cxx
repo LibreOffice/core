@@ -299,16 +299,8 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer ) const
             const SwRootFrm* const pRootFrm = static_cast<const SwRootFrm* const>(this);
             SwEditShell* pEditShell = pRootFrm->GetCurrShell()->GetDoc()->GetEditShell();
             xmlTextWriterStartElement(writer, BAD_CAST("shellCrsr"));
-            for(SwPaM& rPaM : pEditShell->getShellCrsr(false)->GetRingContainer())
-            {
-                xmlTextWriterStartElement(writer, BAD_CAST("swpam"));
-                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointNodeIndex"), "%ld", rPaM.GetPoint()->nNode.GetIndex());
-                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("pointContentIndex"), "%" SAL_PRIdINT32, rPaM.GetPoint()->nContent.GetIndex());
-
-                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markNodeIndex"), "%ld", rPaM.GetMark()->nNode.GetIndex());
-                xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("markContentIndex"), "%" SAL_PRIdINT32, rPaM.GetMark()->nContent.GetIndex());
-                xmlTextWriterEndElement(writer);
-            }
+            for (SwPaM& rPaM : pEditShell->getShellCrsr(false)->GetRingContainer())
+                rPaM.dumpAsXml(writer);
             xmlTextWriterEndElement(writer);
         }
 

@@ -1098,6 +1098,24 @@ void SwPaM::InvalidatePaM()
     }
 }
 
+void SwPaM::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swPaM"));
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("point"));
+    GetPoint()->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
+
+    if (HasMark())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("mark"));
+        GetMark()->dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 std::ostream &operator <<(std::ostream& s, const SwPaM& pam)
 {
     if( pam.HasMark())
