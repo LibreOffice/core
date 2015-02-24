@@ -58,10 +58,17 @@ class SfxFilter;
 class SwFilterDetect : public ::cppu::WeakImplHelper2< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
-                            SwFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
+                            SwFilterDetect();
     virtual                 ~SwFilterDetect();
 
-    SFX_DECL_XSERVICEINFO_NOFACTORY
+    /* XServiceInfo */
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
+    /* Helper for XServiceInfo */
+    static css::uno::Sequence< OUString > impl_getStaticSupportedServiceNames();
+    static OUString impl_getStaticImplementationName();
 
     // XExtendedFilterDetect
     virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
