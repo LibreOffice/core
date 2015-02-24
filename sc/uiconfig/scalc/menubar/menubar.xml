@@ -435,6 +435,7 @@
             <menu:menu menu:id=".uno:CellContentsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Calculate"/>
+                    <menu:menuitem menu:id=".uno:CalculateHard"/>
                     <menu:menuitem menu:id=".uno:ConvertFormulaToValue"/>
                     <menu:menuitem menu:id=".uno:AutomaticCalculation"/>
                     <menu:menuseparator/>
@@ -452,9 +453,7 @@
                     <menu:menuitem menu:id=".uno:MacroOrganizer?TabId:short=1"/>
                 </menu:menupopup>
             </menu:menu>
-
             <menu:menuitem menu:id="service:com.sun.star.deployment.ui.PackageManagerDialog"/>
-
             <menu:menuitem menu:id=".uno:OpenXMLFilterSettings"/>
             <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
             <menu:menuitem menu:id=".uno:ConfigureDialog"/>
