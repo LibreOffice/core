@@ -193,6 +193,21 @@ published service SpreadsheetDocumentSettings
      */
     [readonly, optional, property] com::sun::star::awt::XDevice ReferenceDevice;
 
+    /** specifies whether changes record is enabled.
+
+        <p>No modification applied if the record changes protection is activated
+        information given by SpreadsheetDocumentSettings::IsRecordChangesProtected</p>
+
+        @since LibreOffice 4.5
+     */
+    [optional, property] boolean RecordChanges;
+
+    /** specifies whether changes record is protected.
+
+        @since LibreOffice 4.5
+     */
+    [readonly,optional, property] boolean IsRecordChangesProtected;
+
 };
 
 

@@ -70,6 +70,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
     JunitTest_sc_unoapi \
     CppunitTest_sc_outlineobj \
     CppunitTest_sc_styleloaderobj \
+    CppunitTest_sc_recordchanges \
     CppunitTest_sc_annotationobj \
     CppunitTest_sc_annotationsobj \
     CppunitTest_sc_cellrangeobj \
