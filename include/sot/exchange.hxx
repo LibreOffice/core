@@ -146,15 +146,6 @@ public:
     static bool         IsInternal( const SvGlobalName& );
     static sal_uLong    GetFormatIdFromMimeType( const OUString& rMimeType );
 
-    // determine the SotFormatStringId for the registered format
-//FIXME JP 12.11.98: this three methods are obsolete as all ClipboardIds are static and equvialent to the SotFormatStringIds!
-    static SotFormatStringId GetFormatStringId( sal_uLong nFormat )
-        { return nFormat; }
-    static SotFormatStringId GetFormatStringId( const OUString& rName )
-        { return SotExchange::RegisterFormatMimeType( rName ); }
-    static sal_uLong RegisterSotFormatName( SotFormatStringId nId )
-        { return nId; }
-
     // same for XTransferable interface
     static sal_uInt16   GetExchangeAction(
         // XTransferable

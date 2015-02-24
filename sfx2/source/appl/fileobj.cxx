@@ -76,7 +76,7 @@ bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                                 const OUString & rMimeType,
                                 bool bGetSynchron )
 {
-    sal_uIntPtr nFmt = SotExchange::GetFormatStringId( rMimeType );
+    sal_uIntPtr nFmt = SotExchange::RegisterFormatMimeType( rMimeType );
     switch( nType )
     {
     case FILETYPE_TEXT:
