@@ -48,6 +48,8 @@ public:
         const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet);
+    XMLIndexIllustrationSourceContext( SvXMLImport& rImport, sal_Int32 Element,
+        css::uno::Reference< css::beans::XPropertySet >& rPropSet );
 
     virtual ~XMLIndexIllustrationSourceContext();
 
@@ -58,6 +60,10 @@ protected:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 #endif

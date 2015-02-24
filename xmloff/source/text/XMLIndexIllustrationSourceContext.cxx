@@ -26,8 +26,12 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <rtl/ustring.hxx>
+
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
@@ -36,6 +40,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_ILLUSTRATION_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_TOKEN_INVALID;
+using xmloff::XML_illustration_index_entry_template;
+using css::xml::sax::FastToken::NAMESPACE;
 
 TYPEINIT1(XMLIndexIllustrationSourceContext, XMLIndexTableSourceContext);
 
@@ -46,6 +52,13 @@ XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
         XMLIndexTableSourceContext(rImport, nPrfx, rLocalName, rPropSet)
+{
+}
+
+XMLIndexIllustrationSourceContext::XMLIndexIllustrationSourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexTableSourceContext( rImport, Element, rPropSet )
 {
 }
 
@@ -75,6 +88,26 @@ SvXMLImportContext* XMLIndexIllustrationSourceContext::CreateChildContext(
                                                              xAttrList);
     }
 
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexIllustrationSourceContext::createFastChildContext(
+    sal_Int32 Element, const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_illustration_index_entry_template) )
+    {
+        return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
+                Element, aLevelNameTableMap,
+                XML_TOKEN_INVALID, // no outline-level attr
+                aLevelStylePropNameTableMap,
+                aAllowedTokenTypesTable );
+    }
+    else
+    {
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
