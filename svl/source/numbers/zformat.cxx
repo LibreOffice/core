@@ -27,7 +27,6 @@
 #include <osl/diagnose.h>
 #include <i18nlangtag/mslangid.hxx>
 #include <rtl/math.hxx>
-#include <rtl/instance.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/nativenumberwrapper.hxx>
@@ -50,13 +49,8 @@
 using namespace svt;
 
 namespace {
-struct Gregorian : public rtl::StaticWithInit<const OUString, Gregorian>
-{
-    const OUString operator () ()
-        {
-            return OUString("gregorian");
-        }
-};
+
+char const GREGORIAN[] = "gregorian";
 
 const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
 const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.
@@ -3035,7 +3029,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
 
 bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
-    if ( GetCal().getUniqueID() != Gregorian::get() )
+    if ( GetCal().getUniqueID() != GREGORIAN )
     {
         return false;
     }
@@ -3064,8 +3058,7 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
                                             double& fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    const OUString &rGregorian = Gregorian::get();
-    if ( rCal.getUniqueID() == rGregorian )
+    if ( rCal.getUniqueID() == GREGORIAN )
     {
         using namespace ::com::sun::star::i18n;
         ::com::sun::star::uno::Sequence< OUString > xCals = rCal.getAllCalendars(
@@ -3075,7 +3068,7 @@ void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
         {
             for ( sal_Int32 j=0; j < nCnt; j++ )
             {
-                if ( xCals[j] != rGregorian )
+                if ( xCals[j] != GREGORIAN )
                 {
                     if ( !rOrgCalendar.getLength() )
                     {
@@ -3095,10 +3088,9 @@ void SvNumberformat::SwitchToGregorianCalendar( const OUString& rOrgCalendar,
                                                 double fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
-    const OUString &rGregorian = Gregorian::get();
-    if ( rOrgCalendar.getLength() && rCal.getUniqueID() != rGregorian )
+    if ( rOrgCalendar.getLength() && rCal.getUniqueID() != GREGORIAN )
     {
-        rCal.loadCalendar( rGregorian, rLoc().getLanguageTag().getLocale() );
+        rCal.loadCalendar( GREGORIAN, rLoc().getLanguageTag().getLocale() );
         rCal.setDateTime( fOrgDateTime );
     }
 }
@@ -3107,8 +3099,7 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
-    const OUString &rGregorian = Gregorian::get();
-    if ( rCal.getUniqueID() != rGregorian )
+    if ( rCal.getUniqueID() != GREGORIAN )
     {
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
         if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID == "Dummy" )
@@ -3118,11 +3109,11 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, dou
                 rOrgCalendar = rCal.getUniqueID();
                 fOrgDateTime = rCal.getDateTime();
             }
-            else if ( rOrgCalendar == rGregorian )
+            else if ( rOrgCalendar == GREGORIAN )
             {
                 rOrgCalendar.clear();
             }
-            rCal.loadCalendar( rGregorian, rLoc().getLanguageTag().getLocale() );
+            rCal.loadCalendar( GREGORIAN, rLoc().getLanguageTag().getLocale() );
             rCal.setDateTime( fOrgDateTime );
             return true;
         }
