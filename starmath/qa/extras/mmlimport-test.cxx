@@ -30,9 +30,11 @@ public:
     virtual void tearDown() SAL_OVERRIDE;
 
     void testSimple();
+    void testMaction();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimple);
+    CPPUNIT_TEST(testMaction);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -81,6 +83,13 @@ void Test::tearDown()
 void Test::testSimple()
 {
     loadURL(getURLFromSrc("starmath/qa/extras/data/simple.mml"));
+}
+
+void Test::testMaction()
+{
+    loadURL(getURLFromSrc("starmath/qa/extras/data/maction.mml"));
+    OUString sExpected("matrix {italic \"1\" ## italic \"2\" ## italic \"3\"}");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("loaded text", sExpected, mxDocShell->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
