@@ -506,6 +506,9 @@
 #define SC_UNO_REFERENCEDEVICE          "ReferenceDevice"
 #define SC_UNO_CODENAME                 "CodeName"
 #define SC_UNO_INTEROPGRABBAG           "InteropGrabBag"
+#define SC_UNO_RECORDCHANGES            "RecordChanges"
+#define SC_UNO_ISRECORDCHANGESPROTECTED "IsRecordChangesProtected"
+
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"

@@ -150,6 +150,8 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {OUString(SC_UNO_HASVALIDSIGNATURES),      0, getBooleanCppuType(),                                             beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_ISLOADED),                0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISUNDOENABLED),           0, getBooleanCppuType(),                                             0, 0},
+        {OUString(SC_UNO_RECORDCHANGES),           0, getBooleanCppuType(),                                             0, 0},
+        {OUString(SC_UNO_ISRECORDCHANGESPROTECTED),0, getBooleanCppuType(),            beans::PropertyAttribute::READONLY, 0},
         {OUString(SC_UNO_ISADJUSTHEIGHTENABLED),   0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISEXECUTELINKENABLED),    0, getBooleanCppuType(),                                             0, 0},
         {OUString(SC_UNO_ISCHANGEREADONLYENABLED), 0, getBooleanCppuType(),                                             0, 0},
@@ -1742,6 +1744,17 @@ void SAL_CALL ScModelObj::setPropertyValue(
                 bUndoEnabled
                 ? officecfg::Office::Common::Undo::Steps::get() : 0);
         }
+        else if ( aString == SC_UNO_RECORDCHANGES )
+        {
+            bool bRecordChangesEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+
+            bool bChangeAllowed = true;
+            if (!bRecordChangesEnabled)
+                bChangeAllowed = !pDocShell->HasChangeRecordProtection();
+
+            if (bChangeAllowed)
+                pDocShell->SetChangeRecording(bRecordChangesEnabled);
+        }
         else if ( aString == SC_UNO_ISADJUSTHEIGHTENABLED )
         {
             bool bOldAdjustHeightEnabled = rDoc.IsAdjustHeightEnabled();
@@ -1924,6 +1937,14 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const OUString& aPropertyName )
         else if ( aString == SC_UNO_ISUNDOENABLED )
         {
             ScUnoHelpFunctions::SetBoolInAny( aRet, rDoc.IsUndoEnabled() );
+        }
+        else if ( aString == SC_UNO_RECORDCHANGES )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->IsChangeRecording() );
+        }
+        else if ( aString == SC_UNO_ISRECORDCHANGESPROTECTED )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasChangeRecordProtection() );
         }
         else if ( aString == SC_UNO_ISADJUSTHEIGHTENABLED )
         {
