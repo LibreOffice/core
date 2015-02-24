@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a1a9d01_5adbf1ed",
+        "filename": "sw/source/uibase/uno/unodoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-02-24T08:18:28Z",
+      "side": 1,
+      "message": "you fail to acquire the return value",
+      "revId": "ab87f1d5a172fdaae2b4349e28fab8f3bf331574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a1a9d01_7ad835f0",
+        "filename": "sw/source/uibase/uno/unodoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2015-02-24T08:18:28Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "ab87f1d5a172fdaae2b4349e28fab8f3bf331574",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
