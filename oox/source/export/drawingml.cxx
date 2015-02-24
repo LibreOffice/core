@@ -2503,7 +2503,36 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
         }
     }
     if( aEffects.getLength() == 0 )
+    {
+        bool bHasShadow = false;
+        rXPropSet->getPropertyValue( "Shadow" ) >>= bHasShadow;
+        if( bHasShadow )
+        {
+            Sequence< PropertyValue > aShadowGrabBag( 3 );
+            Sequence< PropertyValue > aShadowAttribsGrabBag( 2 );
+
+            double dX, dY;
+            rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
+            rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
+
+            aShadowAttribsGrabBag[0].Name = "dist";
+            aShadowAttribsGrabBag[0].Value = Any(static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360));
+            aShadowAttribsGrabBag[1].Name = "dir";
+            aShadowAttribsGrabBag[1].Value = Any(static_cast< sal_Int32 >(atan2(dY,dX) * 180 * 60000 / M_PI));
+
+            aShadowGrabBag[0].Name = "Attribs";
+            aShadowGrabBag[0].Value = Any(aShadowAttribsGrabBag);
+            aShadowGrabBag[1].Name = "RgbClr";
+            aShadowGrabBag[1].Value = rXPropSet->getPropertyValue( "ShadowColor" );
+            aShadowGrabBag[2].Name = "RgbClrTransparency";
+            aShadowGrabBag[2].Value = rXPropSet->getPropertyValue( "ShadowTransparence" );
+
+            mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
+            WriteShapeEffect( "outerShdw", aShadowGrabBag );
+            mpFS->endElementNS(XML_a, XML_effectLst);
+        }
         return;
+    }
 
     mpFS->startElementNS(XML_a, XML_effectLst, FSEND);
 
