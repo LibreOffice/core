@@ -299,7 +299,7 @@ namespace rptui
         */
         void createDefaultControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aArgs);
 
-        /** fills the state for the feture request.
+        /** fills the state for the feature request.
             @param  _sProperty  the property which should be filled in the value
             @param  _rState     the state to fill
         */
