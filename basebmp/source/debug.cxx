@@ -63,6 +63,8 @@ namespace basebmp
             return "SIXTEEN_BIT_MSB_TC_MASK";
         case FORMAT_TWENTYFOUR_BIT_TC_MASK:
             return "TWENTYFOUR_BIT_TC_MASK";
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRU:
+            return "THIRTYTWO_BIT_TC_MASK_BGRU";
         case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
             return "THIRTYTWO_BIT_TC_MASK_BGRA";
         case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
