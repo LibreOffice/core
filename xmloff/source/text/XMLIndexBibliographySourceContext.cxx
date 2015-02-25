@@ -29,16 +29,21 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::xmloff::token;
+using namespace xmloff;
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
+using css::xml::sax::FastToken::NAMESPACE;
 
 
 TYPEINIT1(XMLIndexBibliographySourceContext, XMLIndexSourceBaseContext);
@@ -51,6 +56,13 @@ XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
                                   rPropSet, false)
+{
+}
+
+XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexSourceBaseContext( rImport, Element, rPropSet, false )
 {
 }
 
@@ -71,6 +83,11 @@ void XMLIndexBibliographySourceContext::EndElement()
     // No attributes, no properties.
 }
 
+void SAL_CALL XMLIndexBibliographySourceContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    // No attributes, no properties.
+}
 
 SvXMLImportContext* XMLIndexBibliographySourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
@@ -94,6 +111,26 @@ SvXMLImportContext* XMLIndexBibliographySourceContext::CreateChildContext(
                                                              xAttrList);
     }
 
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexBibliographySourceContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_bibliography_entry_template) )
+    {
+        return new XMLIndexTemplateContext( GetImport(), rIndexPropertySet,
+                    Element, aLevelNameBibliographyMap,
+                    XML_BIBLIOGRAPHY_TYPE,
+                    aLevelStylePropNameBibliographyMap,
+                    aAllowedTokenTypesBibliography );
+    }
+    else
+    {
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
