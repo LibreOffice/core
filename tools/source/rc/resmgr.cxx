@@ -725,20 +725,20 @@ void ImpRCStack::Init( ResMgr* pMgr, const Resource* pObj, sal_uInt32 Id )
 {
     pResource       = NULL;
     pClassRes       = NULL;
-    Flags           = RC_NOTYPE;
+    Flags           = RCFlags::NONE;
     aResHandle      = NULL;
     pResObj         = pObj;
     nId             = Id & ~RSC_DONTRELEASE; //TLX: Besser Init aendern
     pResMgr         = pMgr;
     if ( !(Id & RSC_DONTRELEASE) )
-        Flags      |= RC_AUTORELEASE;
+        Flags      |= RCFlags::AUTORELEASE;
 }
 
 void ImpRCStack::Clear()
 {
     pResource       = NULL;
     pClassRes       = NULL;
-    Flags           = RC_NOTYPE;
+    Flags           = RCFlags::NONE;
     aResHandle      = NULL;
     pResObj         = NULL;
     nId             = 0;
@@ -845,7 +845,7 @@ ResMgr::~ResMgr()
     // clean up possible left rc stack frames
     while( nCurStack > 0 )
     {
-        if( ( aStack[nCurStack].Flags & (RC_GLOBAL | RC_NOTFOUND) ) == RC_GLOBAL )
+        if( ( aStack[nCurStack].Flags & (RCFlags::GLOBAL | RCFlags::NOTFOUND) ) == RCFlags::GLOBAL )
             InternalResMgr::FreeGlobalRes( aStack[nCurStack].aResHandle,
                                     aStack[nCurStack].pResource );
         nCurStack--;
@@ -865,7 +865,7 @@ void ResMgr::incStack()
 void ResMgr::decStack()
 {
     DBG_ASSERT( nCurStack > 0, "resource stack underrun  !" );
-    if( (aStack[nCurStack].Flags & RC_FALLBACK_UP) )
+    if( (aStack[nCurStack].Flags & RCFlags::FALLBACK_UP) )
     {
         nCurStack--;
         // warning: this will delete *this, see below
@@ -874,7 +874,7 @@ void ResMgr::decStack()
     else
     {
         ImpRCStack& rTop = aStack[nCurStack];
-        if( (rTop.Flags & RC_FALLBACK_DOWN) )
+        if( (rTop.Flags & RCFlags::FALLBACK_DOWN) )
         {
             #if OSL_DEBUG_LEVEL > 1
             OSL_TRACE( "returning from fallback %s",
@@ -986,9 +986,9 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
         return pMgr->GetResource( rId, pResObj );
 
     // normally Increment will pop the context; this is
-    // not possible in RC_NOTFOUND case, so pop a frame here
+    // not possible in RCFlags::NOTFOUND case, so pop a frame here
     ImpRCStack* pTop = &aStack[nCurStack];
-    if( (pTop->Flags & RC_NOTFOUND) )
+    if( (pTop->Flags & RCFlags::NOTFOUND) )
     {
         decStack();
     }
@@ -1012,7 +1012,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             RscError_Impl( "Different class and resource type!",
                            this, nRT, nId, aStack, nCurStack-1 );
 #endif
-            pTop->Flags |= RC_NOTFOUND;
+            pTop->Flags |= RCFlags::NOTFOUND;
             pTop->pClassRes = getEmptyBuffer();
             pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
             return false;
@@ -1032,7 +1032,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
         pTop->pClassRes = pImpRes->LoadGlobalRes( nRT, nId, &pTop->aResHandle );
         if ( pTop->pClassRes )
         {
-            pTop->Flags |= RC_GLOBAL;
+            pTop->Flags |= RCFlags::GLOBAL;
             pTop->pResource = (RSHEADER_TYPE *)pTop->pClassRes;
         }
         else
@@ -1041,7 +1041,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             pFallbackResMgr = CreateFallbackResMgr( rId, pResObj );
             if( pFallbackResMgr )
             {
-                pTop->Flags |= RC_FALLBACK_DOWN;
+                pTop->Flags |= RCFlags::FALLBACK_DOWN;
 #ifdef DBG_UTIL
                 OStringBuffer aMess("found resource ");
                 aMess.append(static_cast<sal_Int32>(nId));
@@ -1060,7 +1060,7 @@ bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                 RscError_Impl( "Cannot load resource! ",
                               this, nRT, nId, aStack, nCurStack-1 );
                 #endif
-                pTop->Flags |= RC_NOTFOUND;
+                pTop->Flags |= RCFlags::NOTFOUND;
                 pTop->pClassRes = getEmptyBuffer();
                 pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
                 return false;
@@ -1107,7 +1107,7 @@ void ResMgr::PopContext( const Resource* pResObj )
     {
         ImpRCStack* pTop = &aStack[nCurStack];
 #ifdef DBG_UTIL
-        if ( DbgIsResource() && !(pTop->Flags & RC_NOTFOUND) )
+        if ( DbgIsResource() && !(pTop->Flags & RCFlags::NOTFOUND) )
         {
             void* pRes = reinterpret_cast<sal_uInt8*>(pTop->pResource) +
                          pTop->pResource->GetLocalOff();
@@ -1123,7 +1123,7 @@ void ResMgr::PopContext( const Resource* pResObj )
 #endif
 
         // free resource
-        if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
+        if( (pTop->Flags & (RCFlags::GLOBAL | RCFlags::NOTFOUND)) == RCFlags::GLOBAL )
             // free global resource if resource is foreign
             InternalResMgr::FreeGlobalRes( pTop->aResHandle, pTop->pResource );
         decStack();
@@ -1242,7 +1242,7 @@ void* ResMgr::Increment( sal_uInt32 nSize )
         return pFallbackResMgr->Increment( nSize );
 
     ImpRCStack& rStack = aStack[nCurStack];
-    if( (rStack.Flags & RC_NOTFOUND) )
+    if( (rStack.Flags & RCFlags::NOTFOUND) )
         return rStack.pClassRes;
 
     sal_uInt8* pClassRes = (sal_uInt8*)rStack.pClassRes + nSize;
@@ -1254,7 +1254,7 @@ void* ResMgr::Increment( sal_uInt32 nSize )
     sal_uInt32 nLocalOff = pRes->GetLocalOff();
     if ( (pRes->GetGlobOff() == nLocalOff) &&
          ((reinterpret_cast<char*>(pRes) + nLocalOff) == rStack.pClassRes) &&
-         (rStack.Flags & RC_AUTORELEASE))
+         (rStack.Flags & RCFlags::AUTORELEASE))
     {
         PopContext( rStack.pResObj );
     }
@@ -1311,7 +1311,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                 if( !pFallback->GetResource( aId, pResource ) )
                     bHaveStack = false;
                 else
-                    pFallback->aStack[pFallback->nCurStack].Flags |= RC_FALLBACK_UP;
+                    pFallback->aStack[pFallback->nCurStack].Flags |= RCFlags::FALLBACK_UP;
             }
             if( !bHaveStack )
             {
@@ -1387,7 +1387,7 @@ OUString ResMgr::ReadStringWithoutHook()
     OUString aRet;
 
     const ImpRCStack& rTop = aStack[nCurStack];
-    if( (rTop.Flags & RC_NOTFOUND) )
+    if( (rTop.Flags & RCFlags::NOTFOUND) )
     {
         #if OSL_DEBUG_LEVEL > 0
         aRet = "<resource not found>";
@@ -1417,7 +1417,7 @@ OString ResMgr::ReadByteString()
     OString aRet;
 
     const ImpRCStack& rTop = aStack[nCurStack];
-    if( (rTop.Flags & RC_NOTFOUND) )
+    if( (rTop.Flags & RCFlags::NOTFOUND) )
     {
         #if OSL_DEBUG_LEVEL > 0
         aRet = OString( "<resource not found>" );

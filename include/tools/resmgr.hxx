@@ -22,6 +22,7 @@
 #include <tools/toolsdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/resid.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <vector>
 
@@ -47,13 +48,19 @@ public:
 typedef OUString (*ResHookProc)( const OUString& rStr );
 
 // Initialization
-#define RC_NOTYPE               0x00
-// Global resource
-#define RC_GLOBAL               0x01
-#define RC_AUTORELEASE          0x02
-#define RC_NOTFOUND             0x04
-#define RC_FALLBACK_DOWN        0x08
-#define RC_FALLBACK_UP          0x10
+enum class RCFlags
+{
+    NONE                 = 0x00,
+    GLOBAL               = 0x01,  // Global resource
+    AUTORELEASE          = 0x02,
+    NOTFOUND             = 0x04,
+    FALLBACK_DOWN        = 0x08,
+    FALLBACK_UP          = 0x10,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<RCFlags> : is_typed_flags<RCFlags, 0x1f> {};
+}
 
 class Resource;
 class ResMgr;
@@ -63,7 +70,7 @@ struct ImpRCStack
     // pResource and pClassRes equal NULL: resource was not loaded
     RSHEADER_TYPE * pResource;  ///< pointer to resource
     void          * pClassRes;  ///< pointer to class specified init data
-    short           Flags;      ///< resource status
+    RCFlags         Flags;      ///< resource status
     void *          aResHandle; ///< Resource-Identifier from InternalResMgr
     const Resource* pResObj;    ///< pointer to Resource object
     sal_uInt32      nId;        ///< ResId used for error message
