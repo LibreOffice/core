@@ -959,7 +959,6 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     }
 
-    cairo_surface_flush(surface); //remove in a bit
     cairo_destroy(cr); // unref
     renderAreaToPix(surface, &translatedRegion);
     cairo_surface_destroy(surface); // unref
@@ -992,7 +991,6 @@ void GtkSalGraphics::renderAreaToPix( cairo_surface_t *source,
     cairo_rectangle( cr, ax, ay, awidth, aheight );
     cairo_fill( cr );
     cairo_destroy(cr);
-    cairo_surface_flush(target);
     cairo_surface_destroy(target);
 
     if ( !mpFrame->isDuringRender() )
