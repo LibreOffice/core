@@ -19,37 +19,48 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="animcore" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="animcore::Animate">
+  <implementation name="animcore::Animate"
+      constructor="com_sun_star_animations_Animate_get_implementation">>
     <service name="com.sun.star.animations.Animate"/>
   </implementation>
-  <implementation name="animcore::AnimateColor">
+  <implementation name="animcore::AnimateColor"
+      constructor="com_sun_star_animations_AnimateColor_get_implementation">
     <service name="com.sun.star.animations.AnimateColor"/>
   </implementation>
-  <implementation name="animcore::AnimateMotion">
+  <implementation name="animcore::AnimateMotion"
+      constructor="com_sun_star_animations_AnimateMotion_get_implementation">
     <service name="com.sun.star.animations.AnimateMotion"/>
   </implementation>
-  <implementation name="animcore::AnimateSet">
+  <implementation name="animcore::AnimateSet"
+      constructor="com_sun_star_animations_AnimateSet_get_implementation">
     <service name="com.sun.star.animations.AnimateSet"/>
   </implementation>
-  <implementation name="animcore::AnimateTransform">
+  <implementation name="animcore::AnimateTransform"
+      constructor="com_sun_star_animations_AnimateTransform_get_implementation">
     <service name="com.sun.star.animations.AnimateTransform"/>
   </implementation>
-  <implementation name="animcore::Audio">
+  <implementation name="animcore::Audio"
+      constructor="com_sun_star_animations_Audio_get_implementation">
     <service name="com.sun.star.animations.Audio"/>
   </implementation>
-  <implementation name="animcore::Command">
+  <implementation name="animcore::Command"
+      constructor="com_sun_star_animations_Command_get_implementation">
     <service name="com.sun.star.animations.Command"/>
   </implementation>
-  <implementation name="animcore::IterateContainer">
+  <implementation name="animcore::IterateContainer"
+      constructor="com_sun_star_animations_IterateContainer_get_implementation">
     <service name="com.sun.star.animations.IterateContainer"/>
   </implementation>
-  <implementation name="animcore::ParallelTimeContainer">
+  <implementation name="animcore::ParallelTimeContainer"
+      constructor="com_sun_star_animations_ParallelTimeContainer_get_implementation">
     <service name="com.sun.star.animations.ParallelTimeContainer"/>
   </implementation>
-  <implementation name="animcore::SequenceTimeContainer">
+  <implementation name="animcore::SequenceTimeContainer"
+      constructor="com_sun_star_animations_SequenceTimeContainer_get_implementation">
     <service name="com.sun.star.animations.SequenceTimeContainer"/>
   </implementation>
-  <implementation name="animcore::TransitionFilter">
+  <implementation name="animcore::TransitionFilter"
+      constructor="com_sun_star_animations_TransitionFilter_get_implementation">
     <service name="com.sun.star.animations.TransitionFilter"/>
   </implementation>
 </component>
