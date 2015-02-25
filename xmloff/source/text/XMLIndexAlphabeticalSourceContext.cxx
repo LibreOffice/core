@@ -34,10 +34,12 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
-
+using namespace css::xml::sax;
 
 
 using ::com::sun::star::beans::XPropertySet;
@@ -47,6 +49,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_ALPHABETICAL_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_OUTLINE_LEVEL;
+using xmloff::XML_alphabetical_index_entry_template;
+using css::xml::sax::FastToken::NAMESPACE;
 
 const sal_Char sAPI_MainEntryCharacterStyleName[] = "MainEntryCharacterStyleName";
 const sal_Char sAPI_UseAlphabeticalSeparators[] = "UseAlphabeticalSeparators";
@@ -88,6 +92,33 @@ XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
 ,   bCombineDash(false)
 ,   bCombinePP(true)
 ,   bCommaSeparated(false)
+{
+}
+
+XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexSourceBaseContext( rImport, Element, rPropSet, false ),
+    sMainEntryCharacterStyleName(sAPI_MainEntryCharacterStyleName),
+    sUseAlphabeticalSeparators(sAPI_UseAlphabeticalSeparators),
+    sUseCombinedEntries(sAPI_UseCombinedEntries),
+    sIsCaseSensitive(sAPI_IsCaseSensitive),
+    sUseKeyAsEntry(sAPI_UseKeyAsEntry),
+    sUseUpperCase(sAPI_UseUpperCase),
+    sUseDash(sAPI_UseDash),
+    sUsePP(sAPI_UsePP),
+    sIsCommaSeparated("IsCommaSeparated"),
+    sSortAlgorithm(sAPI_SortAlgorithm),
+    sLocale(sAPI_Locale),
+    bMainEntryStyleNameOK(false),
+    bSeparators(false),
+    bCombineEntries(true),
+    bCaseSensitive(true),
+    bEntry(false),
+    bUpperCase(false),
+    bCombineDash(false),
+    bCombinePP(true),
+    bCommaSeparated(false)
 {
 }
 
@@ -243,6 +274,58 @@ void XMLIndexAlphabeticalSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
+void SAL_CALL XMLIndexAlphabeticalSourceContext::endFastElement( sal_Int32 Element )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Any aAny;
+
+    if (bMainEntryStyleNameOK)
+    {
+        aAny <<= GetImport().GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
+        rIndexPropertySet->setPropertyValue(sMainEntryCharacterStyleName,aAny);
+    }
+
+    aAny.setValue(&bSeparators, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseAlphabeticalSeparators, aAny);
+
+    aAny.setValue(&bCombineEntries, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseCombinedEntries, aAny);
+
+    aAny.setValue(&bCaseSensitive, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sIsCaseSensitive, aAny);
+
+    aAny.setValue(&bEntry, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseKeyAsEntry, aAny);
+
+    aAny.setValue(&bUpperCase, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseUpperCase, aAny);
+
+    aAny.setValue(&bCombineDash, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseDash, aAny);
+
+    aAny.setValue(&bCombinePP, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUsePP, aAny);
+
+    aAny.setValue(&bCommaSeparated, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sIsCommaSeparated, aAny);
+
+
+    if (!sAlgorithm.isEmpty())
+    {
+        aAny <<= sAlgorithm;
+        rIndexPropertySet->setPropertyValue(sSortAlgorithm, aAny);
+    }
+
+    if ( !maLanguageTagODF.isEmpty() )
+    {
+        aAny <<= maLanguageTagODF.getLanguageTag().getLocale( false);
+        rIndexPropertySet->setPropertyValue(sLocale, aAny);
+    }
+
+    XMLIndexSourceBaseContext::endFastElement(Element);
+}
+
 SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -263,6 +346,24 @@ SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext(
         return XMLIndexSourceBaseContext::CreateChildContext(nPrefix,
                                                              rLocalName,
                                                              xAttrList);
+    }
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexAlphabeticalSourceContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_alphabetical_index_entry_template) )
+    {
+        return new XMLIndexTemplateContext( GetImport(), rIndexPropertySet,
+                Element, aLevelNameAlphaMap, XML_OUTLINE_LEVEL,
+                aLevelStylePropNameAlphaMap, aAllowedTokenTypesAlpha );
+    }
+    else
+    {
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
     }
 }
 
