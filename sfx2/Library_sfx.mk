@@ -214,6 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/doctempl \
     sfx2/source/doc/doctemplates \
     sfx2/source/doc/doctemplateslocal \
+    sfx2/source/doc/exoticfileloadexception \
     sfx2/source/doc/frmdescr \
     sfx2/source/doc/graphhelp \
     sfx2/source/doc/guisaveas \

@@ -9,7 +9,7 @@
 
 <node oor:name="MWAW_Text_Document" oor:op="replace">
     <prop oor:name="Flags">
-        <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED</value>
+        <value>IMPORT ALIEN 3RDPARTYFILTER PREFERRED EXOTIC</value>
     </prop>
     <prop oor:name="FilterService">
         <value>com.sun.star.comp.Writer.MWAWImportFilter</value>

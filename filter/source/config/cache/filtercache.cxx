@@ -1864,6 +1864,7 @@ css::uno::Sequence< OUString > FilterCache::impl_convertFlagField2FlagNames(SfxF
     if (nFlags & SfxFilterFlags::COMBINED         ) lFlagNames.emplace_back(FLAGNAME_COMBINED         );
     if (nFlags & SfxFilterFlags::SUPPORTSSIGNING) lFlagNames.emplace_back(FLAGNAME_SUPPORTSSIGNING);
     if (nFlags & SfxFilterFlags::GPGENCRYPTION) lFlagNames.emplace_back(FLAGNAME_GPGENCRYPTION);
+    if (nFlags & SfxFilterFlags::EXOTIC) lFlagNames.emplace_back(FLAGNAME_EXOTIC);
 
     return comphelper::containerToSequence(lFlagNames);
 }
@@ -1902,6 +1903,11 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
         if (pNames[i] == FLAGNAME_ENCRYPTION)
         {
             nField |= SfxFilterFlags::ENCRYPTION;
+            continue;
+        }
+        if (pNames[i] == FLAGNAME_EXOTIC)
+        {
+            nField |= SfxFilterFlags::EXOTIC;
             continue;
         }
         if (pNames[i] == FLAGNAME_EXPORT)

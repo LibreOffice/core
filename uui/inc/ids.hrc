@@ -34,6 +34,8 @@ const std::pair<const char*, ErrCode> RID_UUI_ERRHDL[] =
       ERRCODE_UUI_IO_TARGETALREADYEXISTS },
     { NC_("RID_UUI_ERRHDL", "You are about to save/export a password protected basic library containing module(s) \n$(ARG1)\nwhich are too large to store in binary format. If you wish users that don't have access to the library password to be able to run macros in those module(s) you must split those modules into a number of smaller modules. Do you wish to continue to save/export this library?"),
       ERRCODE_UUI_IO_MODULESIZEEXCEEDED },
+    { NC_("RID_UUI_ERRHDL", "Beware!\n\nYou are about to load a very unusual sort of file ($(ARG2)) from the URL:\n\n$(ARG1)\n\nAre you certain that this file is a legacy document created many years ago?"),
+      ERRCODE_UUI_IO_EXOTICFILEFORMAT },
     { NC_("RID_UUI_ERRHDL", "The data from $(ARG1) has an incorrect checksum."),
       ERRCODE_UUI_IO_BADCRC },
     { NC_("RID_UUI_ERRHDL", "The object $(ARG1) cannot be created in directory $(ARG2)."),
