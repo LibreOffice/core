@@ -52,9 +52,11 @@ class DLLEXPORT HIODev
 /* gzip routine wrapper */
         virtual bool setCompressed( bool ) = 0;
 
-        virtual int read1b() = 0;
-        virtual int read2b() = 0;
-        virtual int read4b() = 0;
+        virtual bool read1b(unsigned char &out) = 0;
+        virtual bool read1b(char &out) = 0;
+        virtual bool read2b(unsigned short &out) = 0;
+        virtual bool read4b(unsigned int &out) = 0;
+        virtual bool read4b(int &out) = 0;
         virtual int readBlock( void *ptr, int size ) = 0;
         virtual int skipBlock( int size ) = 0;
 
@@ -104,17 +106,19 @@ class HStreamIODev : public HIODev
  * Read one byte from stream
  */
         using HIODev::read1b;
-        virtual int read1b() SAL_OVERRIDE;
+        virtual bool read1b(unsigned char &out) SAL_OVERRIDE;
+        virtual bool read1b(char &out) SAL_OVERRIDE;
 /**
  * Read 2 bytes from stream
  */
         using HIODev::read2b;
-        virtual int read2b() SAL_OVERRIDE;
+        virtual bool read2b(unsigned short &out) SAL_OVERRIDE;
 /**
  * Read 4 bytes from stream
  */
         using HIODev::read4b;
-        virtual int read4b() SAL_OVERRIDE;
+        virtual bool read4b(unsigned int &out) SAL_OVERRIDE;
+        virtual bool read4b(int &out) SAL_OVERRIDE;
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
@@ -150,11 +154,13 @@ class HMemIODev : public HIODev
 /* gzip routine wrapper */
         virtual bool setCompressed( bool ) SAL_OVERRIDE;
         using HIODev::read1b;
-        virtual int read1b() SAL_OVERRIDE;
+        virtual bool read1b(unsigned char &out) SAL_OVERRIDE;
+        virtual bool read1b(char &out) SAL_OVERRIDE;
         using HIODev::read2b;
-        virtual int read2b() SAL_OVERRIDE;
+        virtual bool read2b(unsigned short &out) SAL_OVERRIDE;
         using HIODev::read4b;
-        virtual int read4b() SAL_OVERRIDE;
+        virtual bool read4b(unsigned int &out) SAL_OVERRIDE;
+        virtual bool read4b(int &out) SAL_OVERRIDE;
         virtual int readBlock( void *ptr, int size ) SAL_OVERRIDE;
         virtual int skipBlock( int size ) SAL_OVERRIDE;
     protected:
