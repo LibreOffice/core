@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_d6cfe4b1",
+        "filename": "sc/qa/extras/recordchanges-test.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-25T00:22:58Z",
+      "side": 1,
+      "message": "In an --enable-werror build this gives\n\nerror: macro \"NUMBER_OF_TESTS\" is not used [-Werror\u003dunused-\nmacros]\n\nRightly, because the setUp() and tearDown() member functions are not implemented as in the other tests where this would be used. Apparently not needed here because the document is loaded and discarded in only one test.\n\nI\u0027ll submit an amended patch with this removed.",
+      "revId": "8be271c8787fb7fc3df375d9558dbf87a3131372",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
