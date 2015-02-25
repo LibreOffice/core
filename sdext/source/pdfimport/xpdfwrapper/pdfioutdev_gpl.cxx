@@ -533,7 +533,8 @@ void PDFOutDev::printPath( GfxPath* pPath ) const
 PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
     m_pDoc( pDoc ),
     m_aFontMap(),
-    m_pUtf8Map( new UnicodeMap((char*)"UTF-8", gTrue, &mapUTF8) )
+    m_pUtf8Map( new UnicodeMap((char*)"UTF-8", gTrue, &mapUTF8) ),
+    m_bSkipImages(false)
 {
 }
 PDFOutDev::~PDFOutDev()
@@ -633,6 +634,8 @@ void PDFOutDev::updateCTM(GfxState* state,
 
 void PDFOutDev::updateLineDash(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     double* dashArray; int arrayLen; double startOffset;
@@ -650,36 +653,48 @@ void PDFOutDev::updateLineDash(GfxState *state)
 
 void PDFOutDev::updateFlatness(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
     printf( "updateFlatness %d\n", state->getFlatness() );
 }
 
 void PDFOutDev::updateLineJoin(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
     printf( "updateLineJoin %d\n", state->getLineJoin() );
 }
 
 void PDFOutDev::updateLineCap(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
     printf( "updateLineCap %d\n", state->getLineCap() );
 }
 
 void PDFOutDev::updateMiterLimit(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
     printf( "updateMiterLimit %f\n", normalize(state->getMiterLimit()) );
 }
 
 void PDFOutDev::updateLineWidth(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
     printf( "updateLineWidth %f\n", normalize(state->getLineWidth()) );
 }
 
 void PDFOutDev::updateFillColor(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     GfxRGB aRGB;
@@ -694,6 +709,8 @@ void PDFOutDev::updateFillColor(GfxState *state)
 
 void PDFOutDev::updateStrokeColor(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     GfxRGB aRGB;
@@ -708,11 +725,15 @@ void PDFOutDev::updateStrokeColor(GfxState *state)
 
 void PDFOutDev::updateFillOpacity(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     updateFillColor(state);
 }
 
 void PDFOutDev::updateStrokeOpacity(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     updateStrokeColor(state);
 }
 
@@ -775,6 +796,8 @@ void PDFOutDev::updateRender(GfxState *state)
 
 void PDFOutDev::stroke(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     printf( "strokePath" );
@@ -784,6 +807,8 @@ void PDFOutDev::stroke(GfxState *state)
 
 void PDFOutDev::fill(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     printf( "fillPath" );
@@ -793,6 +818,8 @@ void PDFOutDev::fill(GfxState *state)
 
 void PDFOutDev::eoFill(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     printf( "eoFillPath" );
@@ -802,6 +829,8 @@ void PDFOutDev::eoFill(GfxState *state)
 
 void PDFOutDev::clip(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     printf( "clipPath" );
@@ -811,6 +840,8 @@ void PDFOutDev::clip(GfxState *state)
 
 void PDFOutDev::eoClip(GfxState *state)
 {
+    if (m_bSkipImages)
+        return;
     assert(state);
 
     printf( "eoClipPath" );
@@ -896,6 +927,8 @@ void PDFOutDev::drawImageMask(GfxState* pState, Object*, Stream* str,
 #endif
                               GBool /*inlineImg*/ )
 {
+    if (m_bSkipImages)
+        return;
     OutputBuffer aBuf; initBuf(aBuf);
 
     printf( "drawMask %d %d %d", width, height, invert );
@@ -925,6 +958,8 @@ void PDFOutDev::drawImage(GfxState*, Object*, Stream* str,
 #endif
                           int* maskColors, GBool /*inlineImg*/ )
 {
+    if (m_bSkipImages)
+        return;
     OutputBuffer aBuf; initBuf(aBuf);
     OutputBuffer aMaskBuf;
 
@@ -980,6 +1015,8 @@ void PDFOutDev::drawMaskedImage(GfxState*, Object*, Stream* str,
 #endif
                                )
 {
+    if (m_bSkipImages)
+        return;
     OutputBuffer aBuf;     initBuf(aBuf);
     printf( "drawImage %d %d 0", width, height );
     writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskInvert, true );
@@ -1000,6 +1037,8 @@ void PDFOutDev::drawSoftMaskedImage(GfxState*, Object*, Stream* str,
 #endif
                                    )
 {
+    if (m_bSkipImages)
+        return;
     OutputBuffer aBuf;     initBuf(aBuf);
     printf( "drawImage %d %d 0", width, height );
     writePng_( aBuf, str, width, height, colorMap, maskStr, maskWidth, maskHeight, maskColorMap, true );
@@ -1010,6 +1049,11 @@ void PDFOutDev::setPageNum( int nNumPages )
 {
     // TODO(F3): printf might format int locale-dependent!
     printf("setPageNum %d\n", nNumPages);
+}
+
+void PDFOutDev::setSkipImages( bool bSkipImages )
+{
+    m_bSkipImages = bSkipImages;
 }
 
 }

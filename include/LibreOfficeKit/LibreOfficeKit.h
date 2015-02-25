@@ -64,6 +64,9 @@ struct _LibreOfficeKitClass
   void                    (*destroy)       (LibreOfficeKit *pThis);
   LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit *pThis, const char *pURL);
   char*                   (*getError)      (LibreOfficeKit *pThis);
+  LibreOfficeKitDocument* (*documentLoadWithOptions)  (LibreOfficeKit* pThis,
+                                                       const char* pURL,
+                                                       const char* pOptions);
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
