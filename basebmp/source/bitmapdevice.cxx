@@ -107,7 +107,7 @@ static const sal_uInt8 bitsPerPixel[] =
     16, // SIXTEEN_BIT_LSB_TC_MASK
     16, // SIXTEEN_BIT_MSB_TC_MASK
     24, // TWENTYFOUR_BIT_TC_MASK
-    32, // TWENTYFOUR_BIT_TC_MASK_BGRU
+    32, // TWENTYFOUR_BIT_TC_MASK_BGRX
     32, // THIRTYTWO_BIT_TC_MASK_BGRA
     32, // THIRTYTWO_BIT_TC_MASK_ARGB
     32, // THIRTYTWO_BIT_TC_MASK_ABGR
@@ -2083,13 +2083,13 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
-        // hybrid cairo 24bits used out of 32bit format
-        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRU:
-            return createRenderer<PixelFormatTraits_BGRU32_8888,StdMasks>(
+        // thirtytwo bit formats
+
+        // 8 red bits, 8 green bits, 8 blue bits, and 8 ignored bits like CAIRO_FORMAT_RGB24
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
+            return createRenderer<PixelFormatTraits_BGRX32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
-
-        // thirtytwo bit formats
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
             return createRenderer<PixelFormatTraits_BGRA32_8888,StdMasks>(

@@ -45,7 +45,7 @@ enum Format
     // CAIRO_FORMAT_RGB24, each pixel is a 32-bit quantity, with the upper 8
     // bits unused. Red, Green, and Blue are stored in the remaining 24 bits in
     // that order (below U is for unused)
-    FORMAT_THIRTYTWO_BIT_TC_MASK_BGRU,
+    FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
     // The order of the channels code letters indicates the order of the
     // channel bytes in memory
     FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA,
