@@ -25,6 +25,4 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:OutlineFormat"/>
  <toolbar:toolbaritem xlink:href=".uno:ColorView"/>
- <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Presentation"/>
 </toolbar:toolbar>
