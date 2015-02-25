@@ -83,6 +83,7 @@
 // Preferred               - preferred filter for a particular type
 // 3rdPartyFilter          - implemented as a UNO component
 // Default                 - default filter for this document type
+// Exotic                  - an unusual/legacy file-format, we don't normally see
 //
 // (The 3rdPartyFilter flag is here called StarONE)
 //
@@ -106,6 +107,7 @@ enum class SfxFilterFlags
     CONSULTSERVICE    = 0x00040000L,
     STARONEFILTER     = 0x00080000L,
     PACKED            = 0x00100000L,
+    EXOTIC            = 0x00200000L,
     COMBINED          = 0x00800000L,
 
     ENCRYPTION        = 0x01000000L,

@@ -81,6 +81,7 @@
 #include <unotools/saveopt.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/pathoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbhelper.hxx>
@@ -130,6 +131,7 @@
 #include <appbaslib.hxx>
 #include <appdata.hxx>
 #include "objstor.hxx"
+#include "exoticfileloadexception.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -649,6 +651,11 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     if (pFilter && !pFilter->IsEnabled())
     {
         SetError( ERRCODE_IO_FILTERDISABLED );
+    }
+
+    if ( pFilter && pFilter->IsExoticFormat() && !QueryAllowExoticFormat_Impl( getInteractionHandler(), aBaseURL, pMed->GetFilter()->GetUIName() ) )
+    {
+        SetError( ERRCODE_IO_ABORT );
     }
 
     // initialize static language table so language-related extensions are learned before the document loads
@@ -3557,7 +3564,35 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
     return true;
 }
 
-// comphelper::IEmbeddedHelper
+bool SfxObjectShell::QueryAllowExoticFormat_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& rURL, const OUString& rFilterUIName )
+{
+    if ( SvtSecurityOptions().isTrustedLocationUri( rURL ) )
+    {
+        // Always load from trusted location
+        return true;
+    }
+    if ( officecfg::Office::Common::Security::LoadExoticFileFormats::get() == 0 )
+    {
+        // Refuse loading without question
+        return false;
+    }
+    else if ( officecfg::Office::Common::Security::LoadExoticFileFormats::get() == 2 )
+    {
+        // Always load without question
+        return true;
+    }
+    else if ( officecfg::Office::Common::Security::LoadExoticFileFormats::get() == 1 && xHandler.is() )
+    {
+        // Display a warning and let the user decide
+        rtl::Reference<ExoticFileLoadException> xException(new ExoticFileLoadException( rURL, rFilterUIName ));
+        uno::Reference< task::XInteractionRequest > xReq( xException.get() );
+        xHandler->handle( xReq );
+        return xException.get()->isApprove();
+    }
+    // No interaction handler, default is to continue to load
+    return true;
+}
+
 uno::Reference< task::XInteractionHandler > SfxObjectShell::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet;
