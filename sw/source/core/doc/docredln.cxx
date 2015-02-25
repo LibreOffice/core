@@ -1644,10 +1644,6 @@ void SwRangeRedline::dumpAsXml(xmlTextWriterPtr pWriter) const
 
     SwPaM::dumpAsXml(pWriter);
 
-    const SwRedlineExtraData* pExtraRedlineData = GetExtraData();
-    xmlTextWriterStartElement(pWriter, BAD_CAST("swRedlineExtraData"));
-    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(pExtraRedlineData).name()));
-    xmlTextWriterEndElement(pWriter); // swRadlineExtraData
     xmlTextWriterEndElement(pWriter);
 }
 

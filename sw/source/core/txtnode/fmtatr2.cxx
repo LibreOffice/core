@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
 #include <hintids.hxx>
 #include <poolfmt.hxx>
 #include "unomid.h"
@@ -144,6 +145,15 @@ bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
 {
     //the format is not renameable via API
     return false;
+}
+
+void SwFmtAutoFmt::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtAutoFmt"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    mpHandle->dumpAsXml(pWriter);
+    xmlTextWriterEndElement(pWriter);
 }
 
 SwFmtINetFmt::SwFmtINetFmt()

@@ -322,12 +322,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
                 writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
 
             if (pHint->Which() == RES_TXTATR_AUTOFMT)
-            {
-                std::shared_ptr<SfxItemSet> const pSet(pHint->GetAutoFmt().GetStyleHandle());
-                writer.startElement("autofmt");
-                pSet->dumpAsXml(writer);
-                writer.endElement();
-            }
+                pHint->GetAutoFmt().dumpAsXml(writer);
 
             writer.endElement();
         }
