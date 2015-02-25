@@ -61,12 +61,12 @@ bool SkipData::Read(HWPFile & hwpf)
 // Field code(5)
 bool FieldCode::Read(HWPFile & hwpf)
 {
-    ulong size;
+    uint size;
     hchar dummy;
-    ulong len1;       /* hchar타입의 문자열 테이터 #1의 길이 */
-    ulong len2;       /* hchar타입의 문자열 테이터 #2의 길이 */
-    ulong len3;       /* hchar타입의 문자열 테이터 #3의 길이 */
-    ulong binlen;     /* 임의 형식의 바이너리 데이타 길이 */
+    uint len1;       /* hchar타입의 문자열 테이터 #1의 길이 */
+    uint len2;       /* hchar타입의 문자열 테이터 #2의 길이 */
+    uint len3;       /* hchar타입의 문자열 테이터 #3의 길이 */
+    uint binlen;     /* 임의 형식의 바이너리 데이타 길이 */
 
     hwpf.Read4b(&size, 1);
     hwpf.Read2b(&dummy, 1);
@@ -79,9 +79,9 @@ bool FieldCode::Read(HWPFile & hwpf)
     hwpf.Read4b(&len3, 1);
     hwpf.Read4b(&binlen, 1);
 
-    ulong const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
-    ulong const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
-    ulong const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
+    uint const len1_ = ((len1 > 1024) ? 1024 : len1) / sizeof(hchar);
+    uint const len2_ = ((len2 > 1024) ? 1024 : len2) / sizeof(hchar);
+    uint const len3_ = ((len3 > 1024) ? 1024 : len3) / sizeof(hchar);
 
     str1 = new hchar[len1_ ? len1_ : 1];
     str2 = new hchar[len2_ ? len2_ : 1];
@@ -114,14 +114,14 @@ bool FieldCode::Read(HWPFile & hwpf)
     return true;
 }
 
-
 // book mark(6)
 bool Bookmark::Read(HWPFile & hwpf)
 {
     long len;
 
     hwpf.Read4b(&len, 1);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
 
     if (!(len == 34))// 2 * (BMK_COMMENT_LEN + 1) + 2
      {
@@ -133,31 +133,28 @@ bool Bookmark::Read(HWPFile & hwpf)
 
     hwpf.Read2b(id, BMK_COMMENT_LEN + 1);
     hwpf.Read2b(&type, 1);
-//return hwpf.Read2b(&type, 1);
     return true;
 }
 
-
 // date format(7)
-
 bool DateFormat::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_DATE_FORM == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
 }
 
-
 // date code(8)
-
 bool DateCode::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(format, DATE_SIZE);
     hwpf.Read2b(date, 6);
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_DATE_CODE == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -165,29 +162,29 @@ bool DateCode::Read(HWPFile & hwpf)
     return true;
 }
 
-
 // tab(9)
-
 bool Tab::Read(HWPFile & hwpf)
 {
-    width = hwpf.Read2b();
-    leader = sal::static_int_cast<unsigned short>(hwpf.Read2b());
-    dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    width = tmp16;
+    if (!hwpf.Read2b(leader))
+        return false;
+    if (!hwpf.Read2b(dummy))
+        return false;
     if (!(hh == dummy && CH_TAB == dummy)){
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
     return true;
 }
 
-
 // tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
-
 static void UpdateBBox(FBox * fbox)
 {
     fbox->boundsy = fbox->pgy;
     fbox->boundey = fbox->pgy + fbox->ys - 1;
 }
-
 
 void Cell::Read(HWPFile & hwpf)
 {
@@ -413,10 +410,19 @@ bool Picture::Read(HWPFile & hwpf)
 
     hwpf.Read1b(&pictype, 1);                     /* 그림종류 */
 
-    skip[0] = (short) hwpf.Read2b();              /* 그림에서 실제 표시를 시작할 위치 가로 */
-    skip[1] = (short) hwpf.Read2b();              /* 세로 */
-    scale[0] = (short) hwpf.Read2b();             /* 확대비율 : 0 고정, 이외 퍼센트 단위 가로 */
-    scale[1] = (short) hwpf.Read2b();             /* 세로 */
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* 그림에서 실제 표시를 시작할 위치 가로 */
+        return false;
+    skip[0] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* 세로 */
+        return false;
+    skip[1] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* 확대비율 : 0 고정, 이외 퍼센트 단위 가로 */
+        return false;
+    scale[0] = tmp16;
+    if (!hwpf.Read2b(tmp16))                      /* 세로 */
+        return false;
+    scale[1] = tmp16;
 
     hwpf.Read1b(picinfo.picun.path, 256);         /* 그림파일 이름 : 종류가 Drawing이 아닐때. */
     hwpf.Read1b(reserved3, 9);                    /* 밝기/명암/그림효과 등 */
@@ -602,7 +608,10 @@ bool Footnote::Read(HWPFile & hwpf)
     hwpf.Read1b(info, 8);
     hwpf.Read2b(&number, 1);
     hwpf.Read2b(&type, 1);
-    width = (short) hwpf.Read2b();
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    width = tmp16;
     hwpf.ReadParaList(plist, CH_FOOTNOTE);
 
     return !hwpf.State();

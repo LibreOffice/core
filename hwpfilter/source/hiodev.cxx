@@ -64,13 +64,13 @@ int HIODev::read1b(void *ptr, int nmemb)
         return -1;
     for (ii = 0; ii < nmemb; ii++)
     {
-        p[ii] = sal::static_int_cast<uchar>(read1b());
+        if (!read1b(p[ii]))
+            break;
         if (state())
             break;
     }
     return ii;
 }
-
 
 int HIODev::read2b(void *ptr, int nmemb)
 {
@@ -81,24 +81,25 @@ int HIODev::read2b(void *ptr, int nmemb)
         return -1;
     for (ii = 0; ii < nmemb; ii++)
     {
-        p[ii] = sal::static_int_cast<uchar>(read2b());
+        if (!read2b(p[ii]))
+            break;
         if (state())
             break;
     }
     return ii;
 }
 
-
 int HIODev::read4b(void *ptr, int nmemb)
 {
-    ulong *p = (ulong *) ptr;
+    uint *p = (uint *) ptr;
     int ii;
 
     if (state())
         return -1;
     for (ii = 0; ii < nmemb; ii++)
     {
-        p[ii] = read4b();
+        if (!read4b(p[ii]))
+            break;
         if (state())
             break;
     }
@@ -179,39 +180,57 @@ bool HStreamIODev::setCompressed(bool flag)
 
 #define GZREAD(ptr,len) (_gzfp?gz_read(_gzfp,ptr,len):0)
 
-int HStreamIODev::read1b()
+bool HStreamIODev::read1b(unsigned char &out)
 {
     int res = (compressed) ? GZREAD(rBuf, 1) : _stream.readBytes(rBuf, 1);
 
-    if (res <= 0)
-        return -1;
-    else
-        return (unsigned char) rBuf[0];
+    if (res < 1)
+        return false;
+
+    out = (unsigned char)rBuf[0];
+    return true;
 }
 
+bool HStreamIODev::read1b(char &out)
+{
+    unsigned char tmp8;
+    if (!read1b(tmp8))
+        return false;
+    out = tmp8;
+    return true;
+}
 
-int HStreamIODev::read2b()
+bool HStreamIODev::read2b(unsigned short &out)
 {
     int res = (compressed) ? GZREAD(rBuf, 2) : _stream.readBytes(rBuf, 2);
 
-    if (res <= 0)
-        return -1;
-    else
-        return ((unsigned char) rBuf[1] << 8 | (unsigned char) rBuf[0]);
+    if (res < 2)
+        return false;
+
+    out = ((unsigned char) rBuf[1] << 8 | (unsigned char) rBuf[0]);
+    return true;
 }
 
-
-long HStreamIODev::read4b()
+bool HStreamIODev::read4b(unsigned int &out)
 {
     int res = (compressed) ? GZREAD(rBuf, 4) : _stream.readBytes(rBuf, 4);
 
-    if (res <= 0)
-        return -1;
-    else
-        return ((unsigned char) rBuf[3] << 24 | (unsigned char) rBuf[2] << 16 |
-            (unsigned char) rBuf[1] << 8 | (unsigned char) rBuf[0]);
+    if (res < 4)
+        return false;
+
+    out = ((unsigned char) rBuf[3] << 24 | (unsigned char) rBuf[2] << 16 |
+        (unsigned char) rBuf[1] << 8 | (unsigned char) rBuf[0]);
+    return true;
 }
 
+bool HStreamIODev::read4b(int &out)
+{
+    unsigned int tmp32;
+    if (!read4b(tmp32))
+        return false;
+    out = tmp32;
+    return true;
+}
 
 int HStreamIODev::readBlock(void *ptr, int size)
 {
@@ -222,7 +241,6 @@ int HStreamIODev::readBlock(void *ptr, int size)
 
     return count;
 }
-
 
 int HStreamIODev::skipBlock(int size)
 {
@@ -298,36 +316,56 @@ bool HMemIODev::setCompressed(bool )
     return false;
 }
 
-
-int HMemIODev::read1b()
+bool HMemIODev::read1b(unsigned char &out)
 {
     if (pos <= length)
-         return ptr[pos++];
-     else
-         return 0;
+    {
+        out = ptr[pos++];
+        return true;
+    }
+    return false;
 }
 
+bool HMemIODev::read1b(char &out)
+{
+    unsigned char tmp8;
+    if (!read1b(tmp8))
+        return false;
+    out = tmp8;
+    return true;
+}
 
-int HMemIODev::read2b()
+bool HMemIODev::read2b(unsigned short &out)
 {
     pos += 2;
     if (pos <= length)
-         return ptr[pos - 1] << 8 | ptr[pos - 2];
-     else
-         return 0;
+    {
+         out = ptr[pos - 1] << 8 | ptr[pos - 2];
+         return true;
+    }
+    return false;
 }
 
-
-long HMemIODev::read4b()
+bool HMemIODev::read4b(unsigned int &out)
 {
     pos += 4;
     if (pos <= length)
-         return DWORD(ptr[pos - 1] << 24 | ptr[pos - 2] << 16 |
-        ptr[pos - 3] << 8 | ptr[pos - 4]);
-     else
-         return 0;
+    {
+        out = static_cast<unsigned int>(ptr[pos - 1] << 24 | ptr[pos - 2] << 16 |
+                    ptr[pos - 3] << 8 | ptr[pos - 4]);
+        return true;
+    }
+    return false;
 }
 
+bool HMemIODev::read4b(int &out)
+{
+    unsigned int tmp32;
+    if (!read4b(tmp32))
+        return false;
+    out = tmp32;
+    return true;
+}
 
 int HMemIODev::readBlock(void *p, int size)
 {
@@ -337,7 +375,6 @@ int HMemIODev::readBlock(void *p, int size)
     pos += size;
     return size;
 }
-
 
 int HMemIODev::skipBlock(int size)
 {

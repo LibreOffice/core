@@ -71,7 +71,7 @@ struct HBox
  */
 struct SkipData: public HBox
 {
-    ulong data_block_len;
+    uint data_block_len;
     hchar dummy;
     char  *data_block;
 
@@ -631,7 +631,7 @@ struct Picture: public FBox
  * follow_block_size is the size information of the Drawing object of hwp.
  * It's value is greater than 0 if the pictype is PICTYPE_DRAW.
  */
-    ulong     follow_block_size;                  /* 추가정보 길이. */
+    uint      follow_block_size;                  /* 추가정보 길이. */
     short     dummy1;                             // to not change structure size */
     short     dummy2;                             // to not change structure size */
     uchar     reserved1;

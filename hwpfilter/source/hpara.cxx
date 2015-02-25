@@ -31,14 +31,28 @@
 
 bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 {
-    pos = sal::static_int_cast<unsigned short>(hwpf.Read2b());
-    space_width = (short) hwpf.Read2b();
-    height = (short) hwpf.Read2b();
+    if (!hwpf.Read2b(pos))
+        return false;
+    unsigned short tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    space_width = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    height = tmp16;
 // internal information
-    pgy = (short) hwpf.Read2b();
-    sx = (short) hwpf.Read2b();
-    psx = (short) hwpf.Read2b();
-    pex = (short) hwpf.Read2b();
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    pgy = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    sx = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    psx = tmp16;
+    if (!hwpf.Read2b(tmp16))
+        return false;
+    pex = tmp16;
     height_sp = 0;
 
     if( pex >> 15 & 0x01 )
@@ -210,7 +224,10 @@ ParaShape *HWPPara::GetParaShape(void)
 
 HBox *HWPPara::readHBox(HWPFile & hwpf)
 {
-    hchar hh = sal::static_int_cast<hchar>(hwpf.Read2b());
+    hchar hh;
+    if (!hwpf.Read2b(hh))
+        return 0;
+
     HBox *hbox = 0;
 
     if (hwpf.State() != HWP_NoError)
