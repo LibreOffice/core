@@ -94,48 +94,49 @@ struct ImplTabBarItem
 class ImplTabButton : public PushButton
 {
 public:
-                    ImplTabButton( TabBar* pParent, WinBits nWinStyle = 0 ) :
-                    PushButton( pParent, nWinStyle | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS  ) {}
+    ImplTabButton(TabBar* pParent, WinBits nWinStyle = 0)
+        : PushButton(pParent, nWinStyle | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS)
+    {}
 
-    TabBar*         GetParent() const { return static_cast<TabBar*>(Window::GetParent()); }
+    TabBar* GetParent() const
+    {
+        return static_cast<TabBar*>(Window::GetParent());
+    }
 
-    virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-
-    virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual bool PreNotify(NotifyEvent& rNotifyEvent) SAL_OVERRIDE;
+    virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void Command(const CommandEvent& rCommandEvent) SAL_OVERRIDE;
 };
 
-void ImplTabButton::MouseButtonDown( const MouseEvent& rMEvt )
+void ImplTabButton::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
-    PushButton::MouseButtonDown(rMEvt);
+    PushButton::MouseButtonDown(rMouseEvent);
 }
 
-void ImplTabButton::Command( const CommandEvent& rCEvt )
+
+void ImplTabButton::Command(const CommandEvent& rCommandEvent)
 {
-    sal_uInt16 nCmd = rCEvt.GetCommand();
-    if ( nCmd == COMMAND_CONTEXTMENU )
+    sal_uInt16 nCommand = rCommandEvent.GetCommand();
+    if (nCommand == COMMAND_CONTEXTMENU)
     {
-        TabBar *pParent = GetParent();
-        pParent->maScrollAreaContextHdl.Call((void*)&rCEvt);
+        TabBar* pParent = GetParent();
+        pParent->maScrollAreaContextHdl.Call((void*)&rCommandEvent);
     }
-    PushButton::Command(rCEvt);
+    PushButton::Command(rCommandEvent);
 }
 
-
-
-bool ImplTabButton::PreNotify( NotifyEvent& rNEvt )
+bool ImplTabButton::PreNotify(NotifyEvent& rNotifyEvent)
 {
-    if ( rNEvt.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN )
+    if (rNotifyEvent.GetType() == MouseNotifyEvent::MOUSEBUTTONDOWN)
     {
-        if ( GetParent()->IsInEditMode() )
+        if (GetParent()->IsInEditMode())
         {
             GetParent()->EndEditMode();
             return true;
         }
     }
 
-    return PushButton::PreNotify( rNEvt );
+    return PushButton::PreNotify(rNotifyEvent);
 }
 
 
