@@ -2511,9 +2511,9 @@ void DrawingML::WriteShapeEffects( Reference< XPropertySet > rXPropSet )
             Sequence< PropertyValue > aShadowGrabBag( 3 );
             Sequence< PropertyValue > aShadowAttribsGrabBag( 2 );
 
-            double dX, dY;
-            rXPropSet->getPropertyValue( "ShadowXDistance" ) >>= dX;
-            rXPropSet->getPropertyValue( "ShadowYDistance" ) >>= dY;
+            double dX, dY = +0.0;
+            rXPropSet->getPropertyValue( "ShadowXDistance" ) >> dX;
+            rXPropSet->getPropertyValue( "ShadowYDistance" ) >> dY;
 
             aShadowAttribsGrabBag[0].Name = "dist";
             aShadowAttribsGrabBag[0].Value = Any(static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360));
