@@ -29,6 +29,7 @@
 #include <comphelper/string.hxx>
 
 #include <stdio.h>
+#include <map>
 
 inline bool ascii_isDigit( sal_Unicode ch )
 {
@@ -87,24 +88,24 @@ void INetMIMEMessage::SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }
 
-static const char * ImplINetRFC822MessageHeaderData[] =
+static std::map<InetMessageField, const char *> ImplINetRFC822MessageHeaderData =
 {
-    "BCC",
-    "CC",
-    "Comments",
-    "Date",
-    "From",
-    "In-Reply-To",
-    "Keywords",
-    "Message-ID",
-    "References",
-    "Reply-To",
-    "Return-Path",
-    "Subject",
-    "Sender",
-    "To",
-    "X-Mailer",
-    "Return-Receipt-To"
+    { InetMessageField::BCC, "BCC" } ,
+    { InetMessageField::CC, "CC" } ,
+    { InetMessageField::COMMENTS, "Comments" } ,
+    { InetMessageField::DATE, "Date" } ,
+    { InetMessageField::FROM, "From" } ,
+    { InetMessageField::IN_REPLY_TO, "In-Reply-To" } ,
+    { InetMessageField::KEYWORDS, "Keywords" } ,
+    { InetMessageField::MESSAGE_ID, "Message-ID" } ,
+    { InetMessageField::REFERENCES, "References" } ,
+    { InetMessageField::REPLY_TO, "Reply-To" } ,
+    { InetMessageField::RETURN_PATH, "Return-Path" } ,
+    { InetMessageField::SUBJECT, "Subject" } ,
+    { InetMessageField::SENDER, "Sender" } ,
+    { InetMessageField::TO, "To" } ,
+    { InetMessageField::X_MAILER, "X-Mailer" } ,
+    { InetMessageField::RETURN_RECEIPT_TO, "Return-Receipt-To" } ,
 };
 
 enum _ImplINetRFC822MessageHeaderState
@@ -282,7 +283,7 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
 
-    sal_uIntPtr       nIdx     = CONTAINER_APPEND;
+    InetMessageField nIdx = static_cast<InetMessageField>(CONTAINER_APPEND);
     int         eState   = INETMSG_RFC822_BEGIN;
     int         eOkState = INETMSG_RFC822_OK;
 
@@ -298,7 +299,7 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     case 'b':
                         check = "cc";
-                        nIdx = INETMSG_RFC822_BCC;
+                        nIdx = InetMessageField::BCC;
                         break;
 
                     case 'c':
@@ -307,27 +308,27 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
 
                     case 'd':
                         check = "ate";
-                        nIdx = INETMSG_RFC822_DATE;
+                        nIdx = InetMessageField::DATE;
                         break;
 
                     case 'f':
                         check = "rom";
-                        nIdx = INETMSG_RFC822_FROM;
+                        nIdx = InetMessageField::FROM;
                         break;
 
                     case 'i':
                         check = "n-reply-to";
-                        nIdx = INETMSG_RFC822_IN_REPLY_TO;
+                        nIdx = InetMessageField::IN_REPLY_TO;
                         break;
 
                     case 'k':
                         check = "eywords";
-                        nIdx = INETMSG_RFC822_KEYWORDS;
+                        nIdx = InetMessageField::KEYWORDS;
                         break;
 
                     case 'm':
                         check = "essage-id";
-                        nIdx = INETMSG_RFC822_MESSAGE_ID;
+                        nIdx = InetMessageField::MESSAGE_ID;
                         break;
 
                     case 'r':
@@ -341,7 +342,7 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
 
                     case 't':
                         check = "o";
-                        nIdx = INETMSG_RFC822_TO;
+                        nIdx = InetMessageField::TO;
                         break;
 
                     case 'x':
@@ -364,12 +365,12 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     case 'f':
                         check = "erences";
-                        nIdx = INETMSG_RFC822_REFERENCES;
+                        nIdx = InetMessageField::REFERENCES;
                         break;
 
                     case 'p':
                         check = "ly-to";
-                        nIdx = INETMSG_RFC822_REPLY_TO;
+                        nIdx = InetMessageField::REPLY_TO;
                         break;
 
                     case 't':
@@ -392,12 +393,12 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     case 'p':
                         check = "ath";
-                        nIdx = INETMSG_RFC822_RETURN_PATH;
+                        nIdx = InetMessageField::RETURN_PATH;
                         break;
 
                     case 'r':
                         check = "eceipt-to";
-                        nIdx = INETMSG_RFC822_RETURN_RECEIPT_TO;
+                        nIdx = InetMessageField::RETURN_RECEIPT_TO;
                         break;
 
                     default:
@@ -415,7 +416,7 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     case 'm':
                         check = "ailer";
-                        nIdx = INETMSG_RFC822_X_MAILER;
+                        nIdx = InetMessageField::X_MAILER;
                         break;
 
                     default:
@@ -433,12 +434,12 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     case 'c':
                         check = "";
-                        nIdx = INETMSG_RFC822_CC;
+                        nIdx = InetMessageField::CC;
                         break;
 
                     case 'o':
                         check = "mments";
-                        nIdx = INETMSG_RFC822_COMMENTS;
+                        nIdx = InetMessageField::COMMENTS;
                         break;
 
                     default:
@@ -456,12 +457,12 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     case 'e':
                         check = "nder";
-                        nIdx = INETMSG_RFC822_SENDER;
+                        nIdx = InetMessageField::SENDER;
                         break;
 
                     case 'u':
                         check = "bject";
-                        nIdx = INETMSG_RFC822_SUBJECT;
+                        nIdx = InetMessageField::SUBJECT;
                         break;
 
                     default:
@@ -532,8 +533,8 @@ INetMIMEMessage::INetMIMEMessage()
       pParent(NULL),
       bHeaderParsed(false)
 {
-    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        m_nRFC822Index[i] = CONTAINER_ENTRY_NOTFOUND;
+    for (sal_uInt16 i = 0; i < static_cast<int>(InetMessageField::NUMHDR); i++)
+        m_nRFC822Index[static_cast<InetMessageField>(i)] = CONTAINER_ENTRY_NOTFOUND;
     for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
         m_nMIMEIndex[i] = CONTAINER_ENTRY_NOTFOUND;
 }
@@ -545,8 +546,7 @@ INetMIMEMessage::INetMIMEMessage (const INetMIMEMessage& rMsg)
       pParent(NULL)
 {
     ListCopy (rMsg);
-    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-        m_nRFC822Index[i] = rMsg.m_nRFC822Index[i];
+    m_nRFC822Index = rMsg.m_nRFC822Index;
     CopyImp (rMsg);
 }
 
@@ -559,8 +559,7 @@ INetMIMEMessage& INetMIMEMessage::operator= (
         m_aDocName = rMsg.m_aDocName;
         m_xDocLB   = rMsg.m_xDocLB;
         ListCopy (rMsg);
-        for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
-            m_nRFC822Index[i] = rMsg.m_nRFC822Index[i];
+        m_nRFC822Index = rMsg.m_nRFC822Index;
         CleanupImp();
         CopyImp (rMsg);
     }

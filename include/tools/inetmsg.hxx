@@ -27,6 +27,7 @@
 #include <tools/stream.hxx>
 
 #include <vector>
+#include <map>
 
 class DateTime;
 
@@ -81,23 +82,29 @@ public:
 
 typedef ::std::vector< INetMessageHeader* > HeaderList_impl;
 
-#define INETMSG_RFC822_BCC                 0
-#define INETMSG_RFC822_CC                  1
-#define INETMSG_RFC822_COMMENTS            2
-#define INETMSG_RFC822_DATE                3
-#define INETMSG_RFC822_FROM                4
-#define INETMSG_RFC822_IN_REPLY_TO         5
-#define INETMSG_RFC822_KEYWORDS            6
-#define INETMSG_RFC822_MESSAGE_ID          7
-#define INETMSG_RFC822_REFERENCES          8
-#define INETMSG_RFC822_REPLY_TO            9
-#define INETMSG_RFC822_RETURN_PATH        10
-#define INETMSG_RFC822_SENDER             11
-#define INETMSG_RFC822_SUBJECT            12
-#define INETMSG_RFC822_TO                 13
-#define INETMSG_RFC822_X_MAILER           14
-#define INETMSG_RFC822_RETURN_RECEIPT_TO  15
-#define INETMSG_RFC822_NUMHDR             16
+/**
+  RFC822 fields
+*/
+enum class InetMessageField
+{
+    BCC                =  0,
+    CC                 =  1,
+    COMMENTS           =  2,
+    DATE               =  3,
+    FROM               =  4,
+    IN_REPLY_TO        =  5,
+    KEYWORDS           =  6,
+    MESSAGE_ID         =  7,
+    REFERENCES         =  8,
+    REPLY_TO           =  9,
+    RETURN_PATH        = 10,
+    SENDER             = 11,
+    SUBJECT            = 12,
+    TO                 = 13,
+    X_MAILER           = 14,
+    RETURN_RECEIPT_TO  = 15,
+    NUMHDR             = 16,
+};
 
 #define INETMSG_MIME_VERSION                    0
 #define INETMSG_MIME_CONTENT_DESCRIPTION        1
@@ -132,7 +139,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
     void ListCleanup_Impl();
     void ListCopy (const INetMIMEMessage& rMsg);
 
-    sal_uIntPtr m_nRFC822Index[INETMSG_RFC822_NUMHDR];
+    ::std::map<InetMessageField, sal_uIntPtr> m_nRFC822Index;
 
     sal_uIntPtr             m_nMIMEIndex[INETMSG_MIME_NUMHDR];
     INetMIMEMessage*        pParent;
@@ -249,105 +256,105 @@ public:
     OUString GetBCC() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_BCC],
+            m_nRFC822Index.at(InetMessageField::BCC),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetCC() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_CC],
+            m_nRFC822Index.at(InetMessageField::CC),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetComments() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_COMMENTS],
+            m_nRFC822Index.at(InetMessageField::COMMENTS),
             INetMIME::HEADER_FIELD_TEXT);
     }
 
     OUString GetDate() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_DATE],
+            m_nRFC822Index.at(InetMessageField::DATE),
             INetMIME::HEADER_FIELD_STRUCTURED);
     }
 
     OUString GetFrom() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_FROM],
+            m_nRFC822Index.at(InetMessageField::FROM),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetInReplyTo() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_IN_REPLY_TO],
+            m_nRFC822Index.at(InetMessageField::REPLY_TO),
             INetMIME::HEADER_FIELD_ADDRESS); // ??? MESSAGE_ID ???
     }
 
     OUString GetKeywords() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_KEYWORDS],
+            m_nRFC822Index.at(InetMessageField::KEYWORDS),
             INetMIME::HEADER_FIELD_PHRASE);
     }
 
     OUString GetMessageID() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_MESSAGE_ID],
+            m_nRFC822Index.at(InetMessageField::MESSAGE_ID),
             INetMIME::HEADER_FIELD_MESSAGE_ID);
     }
 
     OUString GetReferences() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_REFERENCES],
+            m_nRFC822Index.at(InetMessageField::REFERENCES),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetReplyTo() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_REPLY_TO],
+            m_nRFC822Index.at(InetMessageField::REPLY_TO),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetReturnPath() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_RETURN_PATH],
+            m_nRFC822Index.at(InetMessageField::RETURN_PATH),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetReturnReceiptTo() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_RETURN_RECEIPT_TO],
+            m_nRFC822Index.at(InetMessageField::RETURN_RECEIPT_TO),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetSender() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_SENDER],
+            m_nRFC822Index.at(InetMessageField::SENDER),
             INetMIME::HEADER_FIELD_ADDRESS);
     }
 
     OUString GetSubject() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_SUBJECT],
+            m_nRFC822Index.at(InetMessageField::SUBJECT),
             INetMIME::HEADER_FIELD_TEXT);
     }
 
     OUString GetTo() const
     {
         return GetHeaderValue_Impl (
-            m_nRFC822Index[INETMSG_RFC822_TO],
+            m_nRFC822Index.at(InetMessageField::TO),
             INetMIME::HEADER_FIELD_TEXT);
     }
 
