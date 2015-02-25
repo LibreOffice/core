@@ -93,9 +93,12 @@ struct ImplTabBarItem
 
 class ImplTabButton : public PushButton
 {
+    bool mbModKey : 1;
+
 public:
     ImplTabButton(TabBar* pParent, WinBits nWinStyle = 0)
         : PushButton(pParent, nWinStyle | WB_FLATBUTTON | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS)
+        , mbModKey(false)
     {}
 
     TabBar* GetParent() const
@@ -103,16 +106,28 @@ public:
         return static_cast<TabBar*>(Window::GetParent());
     }
 
+    bool isModKeyPressed()
+    {
+        return mbModKey;
+    }
+
     virtual bool PreNotify(NotifyEvent& rNotifyEvent) SAL_OVERRIDE;
     virtual void MouseButtonDown(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
+    virtual void MouseButtonUp(const MouseEvent& rMouseEvent) SAL_OVERRIDE;
     virtual void Command(const CommandEvent& rCommandEvent) SAL_OVERRIDE;
 };
 
 void ImplTabButton::MouseButtonDown(const MouseEvent& rMouseEvent)
 {
+    mbModKey = rMouseEvent.IsMod1();
     PushButton::MouseButtonDown(rMouseEvent);
 }
 
+void ImplTabButton::MouseButtonUp(const MouseEvent& rMouseEvent)
+{
+    mbModKey = false;
+    PushButton::MouseButtonUp(rMouseEvent);
+}
 
 void ImplTabButton::Command(const CommandEvent& rCommandEvent)
 {
@@ -818,28 +833,35 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
 
     sal_uInt16 nNewPos = mnFirstPos;
 
-    if ( pBtn == mpFirstBtn )
-        nNewPos = 0;
-    else if ( pBtn == mpPrevBtn )
+    if (pBtn == mpFirstBtn || (pBtn == mpPrevBtn && pBtn->isModKeyPressed()))
     {
-        if ( mnFirstPos )
-            nNewPos = mnFirstPos-1;
+        nNewPos = 0;
     }
-    else if ( pBtn == mpNextBtn )
+    else if (pBtn == mpLastBtn || (pBtn == mpNextBtn && pBtn->isModKeyPressed()))
     {
         sal_uInt16 nCount = GetPageCount();
-        if ( mnFirstPos <  nCount )
+        if (nCount)
+            nNewPos = nCount - 1;
+    }
+    else if (pBtn == mpPrevBtn)
+    {
+        if (mnFirstPos)
+            nNewPos = mnFirstPos - 1;
+    }
+    else if (pBtn == mpNextBtn)
+    {
+        sal_uInt16 nCount = GetPageCount();
+        if (mnFirstPos <  nCount)
             nNewPos = mnFirstPos+1;
     }
     else
     {
-        sal_uInt16 nCount = GetPageCount();
-        if ( nCount )
-            nNewPos = nCount-1;
+        return 0;
     }
 
-    if ( nNewPos != mnFirstPos )
-        SetFirstPageId( GetPageId( nNewPos ) );
+    if (nNewPos != mnFirstPos)
+        SetFirstPageId(GetPageId(nNewPos));
+
     return 0;
 }
 
