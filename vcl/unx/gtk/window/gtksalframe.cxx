@@ -1965,10 +1965,7 @@ void GtkSalFrame::AllocateFrame()
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        sal_Int32 nStride(basebmp::getBitmapDeviceStrideForWidth(basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK, aFrameSize.getX()));
         int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, aFrameSize.getX());
-        assert(cairo_stride >= basebmp::getBitmapDeviceStrideForWidth(basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX,
-            aFrameSize.getX()));
         m_aFrame = basebmp::createBitmapDevice(aFrameSize, true,
                                                basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, cairo_stride);
         m_aFrame->setDamageTracker(
