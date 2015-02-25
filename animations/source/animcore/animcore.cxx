@@ -510,37 +510,137 @@ AnimationNode::~AnimationNode()
 {
 }
 
-
-
-#define IMPL_NODE_FACTORY(N,IN,SN)\
-Reference< XInterface > SAL_CALL createInstance_##N( const Reference< XComponentContext > &  ) throw (Exception)\
-{\
-    return static_cast< ::cppu::OWeakObject *  >(new AnimationNode( N ));\
-}\
-OUString getImplementationName_##N()\
-{\
-    return OUString( IN );\
-}\
-Sequence<OUString> getSupportedServiceNames_##N(void)\
-{\
-    Sequence<OUString> aRet(1);\
-    aRet.getArray()[0] = SN;\
-    return aRet;\
+Sequence<OUString> getSupportedServiceNames_PAR()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.ParallelTimeContainer";
+    return aRet;
 }
 
-IMPL_NODE_FACTORY( PAR, "animcore::ParallelTimeContainer", "com.sun.star.animations.ParallelTimeContainer" )
-IMPL_NODE_FACTORY( SEQ, "animcore::SequenceTimeContainer", "com.sun.star.animations.SequenceTimeContainer" )
-IMPL_NODE_FACTORY( ITERATE, "animcore::IterateContainer", "com.sun.star.animations.IterateContainer" )
-IMPL_NODE_FACTORY( ANIMATE, "animcore::Animate", "com.sun.star.animations.Animate" )
-IMPL_NODE_FACTORY( SET, "animcore::AnimateSet", "com.sun.star.animations.AnimateSet" )
-IMPL_NODE_FACTORY( ANIMATECOLOR, "animcore::AnimateColor", "com.sun.star.animations.AnimateColor" )
-IMPL_NODE_FACTORY( ANIMATEMOTION, "animcore::AnimateMotion", "com.sun.star.animations.AnimateMotion" )
-IMPL_NODE_FACTORY( ANIMATETRANSFORM, "animcore::AnimateTransform", "com.sun.star.animations.AnimateTransform" )
-IMPL_NODE_FACTORY( TRANSITIONFILTER, "animcore::TransitionFilter", "com.sun.star.animations.TransitionFilter" )
-IMPL_NODE_FACTORY( AUDIO, "animcore::Audio", "com.sun.star.animations.Audio" );
-IMPL_NODE_FACTORY( COMMAND, "animcore::Command", "com.sun.star.animations.Command" );
+OUString getImplementationName_PAR()
+{
+    return OUString( "animcore::ParallelTimeContainer" );
+}
 
+Sequence<OUString> getSupportedServiceNames_SEQ()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.SequenceTimContainer";
+    return aRet;
+}
 
+OUString getImplementationName_SEQ()
+{
+    return OUString( "animcore::SequenceTimeContainer" );
+}
+
+Sequence<OUString> getSupportedServiceNames_ITERATE()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.IterateContainer";
+    return aRet;
+}
+
+OUString getImplementationName_ITERATE()
+{
+    return OUString( "animcore::IterateContainer" );
+}
+
+Sequence<OUString> getSupportedServiceNames_ANIMATE()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.Animate";
+    return aRet;
+}
+
+OUString getImplementationName_ANIMATE()
+{
+        return OUString( "animcore::Animate" );
+}
+
+Sequence<OUString> getSupportedServiceNames_SET()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.AnimateSet";
+    return aRet;
+}
+
+OUString getImplementationName_SET()
+{
+    return OUString( "animcore::AnimateSet" );
+}
+
+Sequence<OUString> getSupportedServiceNames_ANIMATECOLOR(void)
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.AnimateColor";
+    return aRet;
+}
+
+OUString getImplementationName_ANIMATECOLOR()
+{
+    return OUString( "animcore::AnimateColor" );
+}
+
+Sequence<OUString> getSupportedServiceNames_ANIMATEMOTION(void)
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.AnimateMotion";
+    return aRet;
+}
+
+OUString getImplementationName_ANIMATEMOTION()
+{
+    return OUString( "animcore::AnimateMotion" );
+}
+
+Sequence<OUString> getSupportedServiceNames_ANIMATETRANSFORM()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.AnimateTransform";
+    return aRet;
+}
+
+OUString getImplementationName_ANIMATETRANSFORM()
+{
+    return OUString( "animcore::AnimateTransform" );
+}
+
+Sequence<OUString> getSupportedServiceNames_TRANSITIONFILTER()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.TransitionFilter";
+    return aRet;
+}
+
+OUString getImplementationName_TRANSITIONFILTER()
+{
+        return OUString( "animcore::TransitionFilter" );
+}
+
+Sequence<OUString> getSupportedServiceNames_AUDIO()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.Audio";
+    return aRet;
+}
+
+OUString getImplementationName_AUDIO()
+{
+        return OUString( "animcore::Audio" );
+}
+
+Sequence<OUString> getSupportedServiceNames_COMMAND()
+{
+    Sequence<OUString> aRet(1);
+    aRet.getArray()[0] = "com.sun.star.animations.Command";
+    return aRet;
+}
+
+OUString getImplementationName_COMMAND()
+{
+    return OUString( "animcore::Command" );
+}
 
 // XInterface
 Any SAL_CALL AnimationNode::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
@@ -2066,5 +2166,83 @@ void AnimationNode::fireChangeListener()
 
 
 } // namespace animcore
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_ParallelTimeContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(PAR));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_SequenceTimeContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(SEQ));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_IterateContainer_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(ITERATE));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_Animate_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(ANIMATE));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_AnimateSet_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(SET));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_AnimateColor_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(ANIMATECOLOR));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_AnimateMotion_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(ANIMATEMOTION));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_AnimateTransform_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(ANIMATETRANSFORM));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_TransitionFilter_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(TRANSITIONFILTER));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_Audio_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(AUDIO));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_animations_Command_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                             ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new animcore::AnimationNode(COMMAND));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
