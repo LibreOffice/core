@@ -232,7 +232,7 @@ void ScDLL::Init()
 
     // Child Windows
 
-    ScInputWindowWrapper        ::RegisterChildWindow(true, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
+    ScInputWindowWrapper        ::RegisterChildWindow(true, pMod, SfxChildWindowFlags::TASK|SfxChildWindowFlags::FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(static_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
     ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
@@ -267,7 +267,7 @@ void ScDLL::Init()
 
     // Redlining Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);
-    ScSimpleRefDlgWrapper       ::RegisterChildWindow(false, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
+    ScSimpleRefDlgWrapper       ::RegisterChildWindow(false, pMod, SfxChildWindowFlags::ALWAYSAVAILABLE|SfxChildWindowFlags::NEVERHIDE );
     ScHighlightChgDlgWrapper    ::RegisterChildWindow(false, pMod);
 
     SvxSearchDialogWrapper      ::RegisterChildWindow(false, pMod);

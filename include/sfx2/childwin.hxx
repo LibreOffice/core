@@ -23,6 +23,7 @@
 
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
@@ -39,13 +40,24 @@ class SfxShell;
 class SfxChildWindow;
 class SfxChildWindowContext;
 
-#define SFX_CHILDWIN_ZOOMIN          0x01  // Fully retracted Float
-#define SFX_CHILDWIN_FORCEDOCK       0x04  // Float forbidden
-#define SFX_CHILDWIN_TASK            0x10  // ChildWindow inside the Task
-#define SFX_CHILDWIN_CANTGETFOCUS    0x20  // ChildWindow can not get focus
-#define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled
-#define SFX_CHILDWIN_NEVERHIDE       0x80  // ChildWindow is can always made
-                                           // visible/is visible
+enum class SfxChildWindowFlags
+{
+    NONE            = 0x00,
+    ZOOMIN          = 0x01, // Fully retracted Float
+    FORCEDOCK       = 0x04, // Float forbidden
+    TASK            = 0x10, // ChildWindow inside the Task
+    CANTGETFOCUS    = 0x20, // ChildWindow can not get focus
+    ALWAYSAVAILABLE = 0x40, // ChildWindow is never disabled
+    NEVERHIDE       = 0x80  // ChildWindow is can always made
+                            // visible/is visible
+};
+
+namespace o3tl
+{
+    template<> struct typed_flags<SfxChildWindowFlags> : is_typed_flags<SfxChildWindowFlags, 0xf5> {};
+}
+
+
 #define CHILDWIN_NOPOS            USHRT_MAX
 
 // ChildWindow Configuration
@@ -54,7 +66,7 @@ struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
     bool                bVisible;
     Point               aPos;
     Size                aSize;
-    sal_uInt16          nFlags;
+    SfxChildWindowFlags nFlags;
     OUString            aExtraString;
     OUString            aModule;
     OString             aWinState;
@@ -62,7 +74,7 @@ struct SAL_DLLPUBLIC_RTTI SfxChildWinInfo
                         SfxChildWinInfo()
                         {
                             bVisible = false;
-                            nFlags = 0;
+                            nFlags = SfxChildWindowFlags::NONE;
                         }
     bool                GetExtraData_Impl( SfxChildAlignment    *pAlign,
                                            SfxChildAlignment    *pLastAlign = 0,
@@ -173,7 +185,7 @@ public:
                         { return pWindow->GetPosPixel(); }
     virtual void        Hide();
     virtual void        Show( sal_uInt16 nFlags );
-    sal_uInt16          GetFlags() const
+    SfxChildWindowFlags GetFlags() const
                         { return GetInfo().nFlags; }
     bool                CanGetFocus() const;
     sal_uInt16          GetPosition();
@@ -271,7 +283,7 @@ public:
     public  :   \
         static  SfxChildWindow* CreateImpl(vcl::Window *pParent, sal_uInt16 nId, \
                     SfxBindings *pBindings, SfxChildWinInfo* pInfo ); \
-        static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=NULL, sal_uInt16 nFlags=0); \
+        static  void RegisterChildWindow (bool bVisible=false, SfxModule *pMod=NULL, SfxChildWindowFlags nFlags=SfxChildWindowFlags::NONE); \
         virtual SfxChildWinInfo GetInfo() const SAL_OVERRIDE
 
 #define SFX_DECL_CHILDWINDOW_WITHID(Class) \
@@ -291,7 +303,7 @@ public:
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
                     return pWin; \
                 } \
-        void    Class::RegisterChildWindow (bool bVis, SfxModule *pMod, sal_uInt16 nFlags)   \
+        void    Class::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)   \
                 {   \
                     SfxChildWinFactory *pFact = new SfxChildWinFactory( \
                         Class::CreateImpl, MyID, Pos );   \

@@ -67,7 +67,7 @@ SvxRubyChildWindow::SvxRubyChildWindow( vcl::Window* _pParent, sal_uInt16 nId,
     SvxRubyDialog* pDlg = new SvxRubyDialog(pBindings, this, _pParent);
     pWindow = pDlg;
 
-    if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
+    if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;

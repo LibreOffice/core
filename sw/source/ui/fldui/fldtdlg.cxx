@@ -127,7 +127,7 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
         aSize = GetSizePixel();
 
         // should the FloatingWindow get zoomed?
-        if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
+        if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
             RollUp();
     }
     else

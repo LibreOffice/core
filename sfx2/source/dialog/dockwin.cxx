@@ -217,7 +217,7 @@ vcl::Window *pParent, sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* p
     return pWin;
 }
 
-void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, sal_uInt16 nFlags)
+void SfxDockingWrapper::RegisterChildWindow (bool bVis, SfxModule *pMod, SfxChildWindowFlags nFlags)
 {
     // pre-register a couple of docking windows
     for (int i=0; i < NUM_OF_DOCKINGWINDOWS; i++ )
@@ -1007,7 +1007,7 @@ void SfxDockingWindow::Initialize(SfxChildWinInfo *pInfo)
         return;
     }
 
-    if (pInfo && (pInfo->nFlags & SFX_CHILDWIN_FORCEDOCK))
+    if (pInfo && (pInfo->nFlags & SfxChildWindowFlags::FORCEDOCK))
         pImp->bDockingPrevented = true;
 
     pImp->aSplitSize = GetOutputSizePixel();

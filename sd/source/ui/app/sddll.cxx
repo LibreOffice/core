@@ -193,7 +193,7 @@ void SdDLL::RegisterControllers()
 
     Svx3DChildWindow::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(false, pMod);
-    SvxColorChildWindow::RegisterChildWindow(false, pMod, SFX_CHILDWIN_TASK);
+    SvxColorChildWindow::RegisterChildWindow(false, pMod, SfxChildWindowFlags::TASK);
     SvxSearchDialogWrapper::RegisterChildWindow(false, pMod);
     SvxBmpMaskChildWindow::RegisterChildWindow(false, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(false, pMod);

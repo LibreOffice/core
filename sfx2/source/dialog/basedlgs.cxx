@@ -403,7 +403,7 @@ void SfxModelessDialog::FillInfo(SfxChildWinInfo& rInfo) const
 {
     rInfo.aSize  = aSize;
     if ( IsRollUp() )
-        rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
+        rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
 }
 
 
@@ -611,7 +611,7 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
 {
     rInfo.aSize  = aSize;
     if ( IsRollUp() )
-        rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
+        rInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
 }
 
 // SfxSingleTabDialog ----------------------------------------------------

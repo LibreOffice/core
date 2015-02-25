@@ -362,7 +362,7 @@ void SwDLL::RegisterControls()
     SwFldDataOnlyDlgWrapper::RegisterChildWindow( false, pMod );
     SvxContourDlgChildWindow::RegisterChildWindow( false, pMod );
     SwNavigationChild::RegisterChildWindowContext( pMod );
-    SwInputChild::RegisterChildWindow( false, pMod, SFX_CHILDWIN_FORCEDOCK );
+    SwInputChild::RegisterChildWindow( false, pMod, SfxChildWindowFlags::FORCEDOCK );
     SwRedlineAcceptChild::RegisterChildWindow( false, pMod );
     SwSyncChildWin::RegisterChildWindow( true, pMod );
     SwMailMergeChildWindow::RegisterChildWindow( false, pMod );

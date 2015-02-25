@@ -51,7 +51,7 @@ public:
     static void RegisterChildWindow (
                     bool   bVisible = false,
                     SfxModule* pModule  = NULL,
-                    sal_uInt16 nFlags   = 0)
+                    SfxChildWindowFlags nFlags = SfxChildWindowFlags::NONE)
     {
         SfxChildWinFactory* pFactory = new SfxChildWinFactory(ChildWindowWrapper::CreateImpl, WindowID, CHILDWIN_NOPOS );
         pFactory->aInfo.nFlags |= nFlags;

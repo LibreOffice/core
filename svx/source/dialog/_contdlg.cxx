@@ -70,7 +70,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( vcl::Window* _pParent, sal_u
     SvxSuperContourDlg* pDlg = new SvxSuperContourDlg(pBindings, this, _pParent);
     pWindow = pDlg;
 
-    if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
+    if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;

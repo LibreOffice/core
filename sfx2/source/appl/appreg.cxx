@@ -53,10 +53,10 @@ void SfxApplication::Registrations_Impl()
 
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
-    SfxNavigatorWrapper::RegisterChildWindow( false, NULL, SFX_CHILDWIN_NEVERHIDE );
+    SfxNavigatorWrapper::RegisterChildWindow( false, NULL, SfxChildWindowFlags::NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxDockingWrapper::RegisterChildWindow();
-    SfxInfoBarContainerChild::RegisterChildWindow( true, NULL, SFX_CHILDWIN_NEVERHIDE );
+    SfxInfoBarContainerChild::RegisterChildWindow( true, NULL, SfxChildWindowFlags::NEVERHIDE );
 
     // Controller
     SfxToolBoxControl::RegisterControl(SID_REPEAT);

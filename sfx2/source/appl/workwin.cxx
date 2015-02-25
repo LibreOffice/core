@@ -1061,8 +1061,8 @@ void SfxWorkWindow::ShowChildren_Impl()
                 // Check flag SFX_CHILDWIN_NEVERHIDE that forces us to show
                 // the child window even in situations where no child window is
                 // visible.
-                sal_uInt16 nFlags = pCW->aInfo.nFlags;
-                bVisible = !bInvisible || (( nFlags & SFX_CHILDWIN_NEVERHIDE ) != 0 );
+                SfxChildWindowFlags nFlags = pCW->aInfo.nFlags;
+                bVisible = !bInvisible || ( nFlags & SfxChildWindowFlags::NEVERHIDE );
             }
 
             if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) && bVisible )
@@ -1419,7 +1419,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
         SfxChildWin_Impl *pCW = aChildWins[n];
         SfxChildWindow *pChildWin = pCW->pWin;
         bool bCreate = false;
-        if ( pCW->nId && !pCW->bDisabled  && (pCW->aInfo.nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
+        if ( pCW->nId && !pCW->bDisabled  && (pCW->aInfo.nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE || IsVisible_Impl( pCW->nVisibility ) ) )
         {
             // In the context is an appropriate ChildWindow allowed;
             // it is also turned on?
@@ -1432,7 +1432,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                 {
                     // Special case for all non-floatable child windows. We have
                     // to prevent the creation here!
-                    bCreate = !( pCW->aInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
+                    bCreate = !( pCW->aInfo.nFlags & SfxChildWindowFlags::FORCEDOCK );
                 }
                 else if ( !IsDockingAllowed() || bIsFullScreen ) // || !bInternalDocking )
                 {
@@ -1573,7 +1573,7 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
     SfxChildWindow *pChildWin = pCW->pWin;
 
     // Save the information in the INI file
-    sal_uInt16 nFlags = pCW->aInfo.nFlags;
+    SfxChildWindowFlags nFlags = pCW->aInfo.nFlags;
     pCW->aInfo = pChildWin->GetInfo();
     pCW->aInfo.nFlags |= nFlags;
     SaveStatus_Impl(pChildWin, pCW->aInfo);
@@ -1901,7 +1901,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( pCW && pCW->pWin )
             {
                 // store changed configuration
-                sal_uInt16 nFlags = pCW->aInfo.nFlags;
+                SfxChildWindowFlags nFlags = pCW->aInfo.nFlags;
                 pCW->aInfo = pCW->pWin->GetInfo();
                 pCW->aInfo.nFlags |= nFlags;
                 if ( eConfig != SFX_MOVEDOCKINGWINDOW )
@@ -1959,7 +1959,7 @@ void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, bool bEnabled, s
         pCW = new SfxChildWin_Impl( lId );
         pCW->nId = nId;
         InitializeChild_Impl( pCW );
-        if ( pWork && !( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) )
+        if ( pWork && !( pCW->aInfo.nFlags & SfxChildWindowFlags::TASK ) )
             pWork->aChildWins.push_back( pCW );
         else
             aChildWins.push_back( pCW );
@@ -1995,7 +1995,7 @@ void SfxWorkWindow::ToggleChildWindow_Impl(sal_uInt16 nId, bool bSetFocus)
         {
             // Special case for all non-floatable child windows. We have
             // to prevent the creation here!
-            bCreationAllowed = !( pCW->aInfo.nFlags & SFX_CHILDWIN_FORCEDOCK );
+            bCreationAllowed = !( pCW->aInfo.nFlags & SfxChildWindowFlags::FORCEDOCK );
         }
 
         if ( bCreationAllowed )
@@ -2151,7 +2151,7 @@ bool SfxWorkWindow::IsFloating( sal_uInt16 nId )
         pCW->nId = 0;
         pCW->nVisibility = 0;
         InitializeChild_Impl( pCW );
-        if ( pWork && !( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) )
+        if ( pWork && !( pCW->aInfo.nFlags & SfxChildWindowFlags::TASK ) )
             pWork->aChildWins.push_back( pCW );
         else
             aChildWins.push_back( pCW );
@@ -2180,7 +2180,7 @@ bool SfxWorkWindow::KnowsChildWindow_Impl(sal_uInt16 nId)
 
     if (n<nCount)
     {
-        if ( !(pCW->aInfo.nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE) && !IsVisible_Impl(  pCW->nVisibility ) )
+        if ( !(pCW->aInfo.nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE) && !IsVisible_Impl(  pCW->nVisibility ) )
             return false;
         return pCW->bEnable;
     }
@@ -2233,7 +2233,7 @@ void SfxWorkWindow::SetChildWindow_Impl(sal_uInt16 nId, bool bOn, bool bSetFocus
         // the Parent
         pCW = new SfxChildWin_Impl( nId );
         InitializeChild_Impl( pCW );
-        if ( !pWork || pCW->aInfo.nFlags & SFX_CHILDWIN_TASK )
+        if ( !pWork || pCW->aInfo.nFlags & SfxChildWindowFlags::TASK )
             pWork = this;
         pWork->aChildWins.push_back( pCW );
     }
@@ -2297,7 +2297,7 @@ void SfxWorkWindow::ShowChildWindow_Impl(sal_uInt16 nId, bool bVisible, bool bSe
         if ( pChildWin )
         {
             pChildWin->SetVisible_Impl( bVisible );
-            sal_uInt16 nFlags = pCW->aInfo.nFlags;
+            SfxChildWindowFlags nFlags = pCW->aInfo.nFlags;
             pCW->aInfo = pChildWin->GetInfo();
             pCW->aInfo.nFlags |= nFlags;
             if ( !pCW->bCreate )
@@ -2434,13 +2434,13 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                 SfxChildWindow::InitializeChildWinFactory_Impl(
                                             pCW->nSaveId, pCW->aInfo);
                 pCW->bCreate = pCW->aInfo.bVisible;
-                sal_uInt16 nFlags = pFact->aInfo.nFlags;
-                if ( nFlags & SFX_CHILDWIN_TASK )
-                    pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
-                if ( nFlags & SFX_CHILDWIN_CANTGETFOCUS )
-                    pCW->aInfo.nFlags |= SFX_CHILDWIN_CANTGETFOCUS;
-                if ( nFlags & SFX_CHILDWIN_FORCEDOCK )
-                    pCW->aInfo.nFlags |= SFX_CHILDWIN_FORCEDOCK;
+                SfxChildWindowFlags nFlags = pFact->aInfo.nFlags;
+                if ( nFlags & SfxChildWindowFlags::TASK )
+                    pCW->aInfo.nFlags |= SfxChildWindowFlags::TASK;
+                if ( nFlags & SfxChildWindowFlags::CANTGETFOCUS )
+                    pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
+                if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
+                    pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
                 pFact->aInfo = pCW->aInfo;
                 return;
             }
@@ -2463,15 +2463,15 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
                     SfxChildWindow::InitializeChildWinFactory_Impl(
                                                 pCW->nSaveId, pCW->aInfo);
                     pCW->bCreate = pCW->aInfo.bVisible;
-                    sal_uInt16 nFlags = pFact->aInfo.nFlags;
-                    if ( nFlags & SFX_CHILDWIN_TASK )
-                        pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
-                    if ( nFlags & SFX_CHILDWIN_CANTGETFOCUS )
-                        pCW->aInfo.nFlags |= SFX_CHILDWIN_CANTGETFOCUS;
-                    if ( nFlags & SFX_CHILDWIN_FORCEDOCK )
-                        pCW->aInfo.nFlags |= SFX_CHILDWIN_FORCEDOCK;
-                    if ( nFlags & SFX_CHILDWIN_ALWAYSAVAILABLE )
-                        pCW->aInfo.nFlags |= SFX_CHILDWIN_ALWAYSAVAILABLE;
+                    SfxChildWindowFlags nFlags = pFact->aInfo.nFlags;
+                    if ( nFlags & SfxChildWindowFlags::TASK )
+                        pCW->aInfo.nFlags |= SfxChildWindowFlags::TASK;
+                    if ( nFlags & SfxChildWindowFlags::CANTGETFOCUS )
+                        pCW->aInfo.nFlags |= SfxChildWindowFlags::CANTGETFOCUS;
+                    if ( nFlags & SfxChildWindowFlags::FORCEDOCK )
+                        pCW->aInfo.nFlags |= SfxChildWindowFlags::FORCEDOCK;
+                    if ( nFlags & SfxChildWindowFlags::ALWAYSAVAILABLE )
+                        pCW->aInfo.nFlags |= SfxChildWindowFlags::ALWAYSAVAILABLE;
                     pFact->aInfo = pCW->aInfo;
                     return;
                 }

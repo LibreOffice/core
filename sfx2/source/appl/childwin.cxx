@@ -351,7 +351,7 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     }
 
     aInfo.bVisible = pImp->bVisible;
-    aInfo.nFlags = 0;
+    aInfo.nFlags = SfxChildWindowFlags::NONE;
     return aInfo;
 }
 
@@ -416,12 +416,12 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
             if ( nNextPos != -1 )
             {
                 // there is extra information
-                rInfo.nFlags = (sal_uInt16)aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32();
+                rInfo.nFlags = static_cast<SfxChildWindowFlags>((sal_uInt16)aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32());
                 aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
                 rInfo.aExtraString = aWinData;
             }
             else
-                rInfo.nFlags = (sal_uInt16)aWinData.copy( nPos+1 ).toInt32();
+                rInfo.nFlags = static_cast<SfxChildWindowFlags>((sal_uInt16)aWinData.copy( nPos+1 ).toInt32());
         }
     }
 }
@@ -755,7 +755,7 @@ void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::su
 
 bool SfxChildWindow::CanGetFocus() const
 {
-    return !(pImp->pFact->aInfo.nFlags & SFX_CHILDWIN_CANTGETFOCUS);
+    return !(pImp->pFact->aInfo.nFlags & SfxChildWindowFlags::CANTGETFOCUS);
 }
 
 void SfxChildWindowContext::RegisterChildWindowContext(SfxModule* pMod, sal_uInt16 nId, SfxChildWinContextFactory* pFact)

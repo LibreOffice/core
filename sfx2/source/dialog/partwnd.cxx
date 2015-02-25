@@ -63,7 +63,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     eChildAlignment = SFX_ALIGN_TOP;
 
     assert(pInfo);
-    pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
+    pInfo->nFlags |= SfxChildWindowFlags::FORCEDOCK;
 
     static_cast<SfxDockingWindow*>(pWindow)->SetFloatingSize( Size( 175, 175 ) );
     pWindow->SetSizePixel( Size( 175, 175 ) );

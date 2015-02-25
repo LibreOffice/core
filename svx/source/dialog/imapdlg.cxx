@@ -98,7 +98,7 @@ SvxIMapDlgChildWindow::SvxIMapDlgChildWindow( vcl::Window* _pParent, sal_uInt16 
     pWindow = new SvxIMapDlg( pBindings, this, _pParent );
     SvxIMapDlg* pDlg = static_cast<SvxIMapDlg*>(pWindow);
 
-    if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
+    if ( pInfo->nFlags & SfxChildWindowFlags::ZOOMIN )
         pDlg->RollUp();
 
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;

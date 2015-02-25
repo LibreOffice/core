@@ -61,7 +61,7 @@ SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 
         if( pWnd->IsDialog() )
             if ( static_cast<Dialog*>(pWnd)->IsRollUp() )
-                anInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
+                anInfo.nFlags |= SfxChildWindowFlags::ZOOMIN;
     }
 
     return anInfo;
