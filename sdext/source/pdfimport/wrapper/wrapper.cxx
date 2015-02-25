@@ -1011,7 +1011,8 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
                           const ContentSinkSharedPtr&                        rSink,
                           const uno::Reference< task::XInteractionHandler >& xIHdl,
                           const OUString&                               rPwd,
-                          const uno::Reference< uno::XComponentContext >&    xContext )
+                          const uno::Reference< uno::XComponentContext >&    xContext,
+                          const OUString&                                    rFilterOptions )
 {
     OSL_ASSERT(rSink);
 
@@ -1054,8 +1055,10 @@ bool xpdf_ImportFromFile( const OUString&                             rURL,
 
     // spawn separate process to keep LGPL/GPL code apart.
 
-    rtl_uString*  args[] = { aSysUPath.pData, errPathname.pData };
-    sal_Int32 nArgs = 2;
+    OUString aOptFlag("-o");
+    rtl_uString*  args[] = { aSysUPath.pData, errPathname.pData,
+                             aOptFlag.pData, rFilterOptions.pData };
+    sal_Int32 nArgs = rFilterOptions.isEmpty() ? 2 : 4;
 
     oslProcess    aProcess;
     oslFileHandle pIn  = NULL;
@@ -1160,7 +1163,8 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
                             const ContentSinkSharedPtr&                       rSink,
                             const uno::Reference<task::XInteractionHandler >& xIHdl,
                             const OUString&                              rPwd,
-                            const uno::Reference< uno::XComponentContext >&   xContext )
+                            const uno::Reference< uno::XComponentContext >&   xContext,
+                            const OUString&                                   rFilterOptions )
 {
     OSL_ASSERT(xInput.is());
     OSL_ASSERT(rSink);
@@ -1203,7 +1207,7 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
     osl_closeFile( aFile );
 
     if ( bSuccess )
-        bSuccess = xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext );
+        bSuccess = xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext, rFilterOptions );
     osl_removeFile( aURL.pData );
 
     return bSuccess;
