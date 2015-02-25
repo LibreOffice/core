@@ -41,6 +41,7 @@
 #include <com/sun/star/animations/Event.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -57,6 +58,7 @@
 #include <xmloff/xmltypes.hxx>
 #include "sdpropls.hxx"
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -78,6 +80,7 @@ using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::beans::NamedValue;
@@ -88,6 +91,7 @@ using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::lang::XInitialization;
+using css::xml::sax::FastToken::NAMESPACE;
 
 Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
 {
@@ -151,17 +155,28 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
     {
         static const SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
         {
-            { XML_NAMESPACE_ANIMATION,  XML_PAR,                (sal_uInt16)AnimationNodeType::PAR },
-            { XML_NAMESPACE_ANIMATION,  XML_SEQ,                (sal_uInt16)AnimationNodeType::SEQ },
-            { XML_NAMESPACE_ANIMATION,  XML_ITERATE,            (sal_uInt16)AnimationNodeType::ITERATE },
-            { XML_NAMESPACE_ANIMATION,  XML_ANIMATE,            (sal_uInt16)AnimationNodeType::ANIMATE },
-            { XML_NAMESPACE_ANIMATION,  XML_SET,                (sal_uInt16)AnimationNodeType::SET },
-            { XML_NAMESPACE_ANIMATION,  XML_ANIMATEMOTION,      (sal_uInt16)AnimationNodeType::ANIMATEMOTION },
-            { XML_NAMESPACE_ANIMATION,  XML_ANIMATECOLOR,       (sal_uInt16)AnimationNodeType::ANIMATECOLOR },
-            { XML_NAMESPACE_ANIMATION,  XML_ANIMATETRANSFORM,   (sal_uInt16)AnimationNodeType::ANIMATETRANSFORM },
-            { XML_NAMESPACE_ANIMATION,  XML_TRANSITIONFILTER,   (sal_uInt16)AnimationNodeType::TRANSITIONFILTER },
-            { XML_NAMESPACE_ANIMATION,  XML_AUDIO,              (sal_uInt16)AnimationNodeType::AUDIO },
-            { XML_NAMESPACE_ANIMATION,  XML_COMMAND,            (sal_uInt16)AnimationNodeType::COMMAND },
+            { XML_NAMESPACE_ANIMATION,  XML_PAR,                (sal_uInt16)AnimationNodeType::PAR,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_par) },
+            { XML_NAMESPACE_ANIMATION,  XML_SEQ,                (sal_uInt16)AnimationNodeType::SEQ,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_seq) },
+            { XML_NAMESPACE_ANIMATION,  XML_ITERATE,            (sal_uInt16)AnimationNodeType::ITERATE,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_iterate) },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATE,            (sal_uInt16)AnimationNodeType::ANIMATE,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_animate) },
+            { XML_NAMESPACE_ANIMATION,  XML_SET,                (sal_uInt16)AnimationNodeType::SET,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_set) },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATEMOTION,      (sal_uInt16)AnimationNodeType::ANIMATEMOTION,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_animateMotion) },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATECOLOR,       (sal_uInt16)AnimationNodeType::ANIMATECOLOR,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_animateColor) },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATETRANSFORM,   (sal_uInt16)AnimationNodeType::ANIMATETRANSFORM,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_animateTransform) },
+            { XML_NAMESPACE_ANIMATION,  XML_TRANSITIONFILTER,   (sal_uInt16)AnimationNodeType::TRANSITIONFILTER,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_transitionFilter) },
+            { XML_NAMESPACE_ANIMATION,  XML_AUDIO,              (sal_uInt16)AnimationNodeType::AUDIO,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_audio) },
+            { XML_NAMESPACE_ANIMATION,  XML_COMMAND,            (sal_uInt16)AnimationNodeType::COMMAND,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_command) },
             XML_TOKEN_MAP_END
         };
 
@@ -230,56 +245,106 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
     {
         static const SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
         {
-            { XML_NAMESPACE_SMIL, XML_BEGIN,                    (sal_uInt16)ANA_Begin },
-            { XML_NAMESPACE_SMIL, XML_DUR,                      (sal_uInt16)ANA_Dur },
-            { XML_NAMESPACE_SMIL, XML_END,                      (sal_uInt16)ANA_End },
-            { XML_NAMESPACE_SMIL, XML_FILL,                     (sal_uInt16)ANA_Fill },
-            { XML_NAMESPACE_SMIL, XML_FILLDEFAULT,              (sal_uInt16)ANA_FillDefault },
-            { XML_NAMESPACE_SMIL, XML_RESTART,                  (sal_uInt16)ANA_Restart },
-            { XML_NAMESPACE_SMIL, XML_RESTARTDEFAULT,           (sal_uInt16)ANA_RestartDefault },
-            { XML_NAMESPACE_SMIL, XML_ACCELERATE,               (sal_uInt16)ANA_Accelerate },
-            { XML_NAMESPACE_SMIL, XML_DECELERATE,               (sal_uInt16)ANA_Decelerate },
-            { XML_NAMESPACE_SMIL, XML_AUTOREVERSE,              (sal_uInt16)ANA_AutoReverse },
-            { XML_NAMESPACE_SMIL, XML_REPEATCOUNT,              (sal_uInt16)ANA_RepeatCount },
-            { XML_NAMESPACE_SMIL, XML_REPEATDUR,                (sal_uInt16)ANA_RepeatDur },
-            { XML_NAMESPACE_SMIL, XML_ENDSYNC,                  (sal_uInt16)ANA_EndSync },
-            { XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE,        (sal_uInt16)ANA_Node_Type },
-            { XML_NAMESPACE_PRESENTATION, XML_PRESET_ID,        (sal_uInt16)ANA_Preset_ID },
-            { XML_NAMESPACE_PRESENTATION, XML_PRESET_SUB_TYPE,  (sal_uInt16)ANA_Preset_Sub_Type },
-            { XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS,     (sal_uInt16)ANA_Preset_Class },
-            { XML_NAMESPACE_PRESENTATION, XML_AFTER_EFFECT,     (sal_uInt16)ANA_After_Effect },
-            { XML_NAMESPACE_SMIL, XML_TARGETELEMENT,            (sal_uInt16)ANA_Target },
-            { XML_NAMESPACE_XLINK, XML_HREF,                    (sal_uInt16)ANA_XLink },
-            { XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT,   (sal_uInt16)ANA_MasterElement },
-            { XML_NAMESPACE_ANIMATION, XML_SUB_ITEM,            (sal_uInt16)ANA_SubItem },
-            { XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME,            (sal_uInt16)ANA_AttributeName },
-            { XML_NAMESPACE_SMIL, XML_VALUES,                   (sal_uInt16)ANA_Values },
-            { XML_NAMESPACE_SMIL, XML_FROM,                     (sal_uInt16)ANA_From },
-            { XML_NAMESPACE_SMIL, XML_BY,                       (sal_uInt16)ANA_By },
-            { XML_NAMESPACE_SMIL, XML_TO,                       (sal_uInt16)ANA_To },
-            { XML_NAMESPACE_SMIL, XML_KEYTIMES,                 (sal_uInt16)ANA_KeyTimes },
-            { XML_NAMESPACE_SMIL, XML_CALCMODE,                 (sal_uInt16)ANA_CalcMode },
-            { XML_NAMESPACE_SMIL, XML_ACCUMULATE,               (sal_uInt16)ANA_Accumulate },
-            { XML_NAMESPACE_PRESENTATION, XML_ADDITIVE,         (sal_uInt16)ANA_AdditiveMode },
-            { XML_NAMESPACE_SMIL, XML_ADDITIVE,                 (sal_uInt16)ANA_AdditiveMode },
-            { XML_NAMESPACE_SMIL, XML_KEYSPLINES,               (sal_uInt16)ANA_KeySplines },
-            { XML_NAMESPACE_SVG, XML_PATH,                      (sal_uInt16)ANA_Path },
-            { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION, (sal_uInt16)ANA_ColorSpace },
-            { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION_DIRECTION,       (sal_uInt16)ANA_ColorDirection },
-            { XML_NAMESPACE_SVG, XML_TYPE,                      (sal_uInt16)ANA_TransformType },
-            { XML_NAMESPACE_SMIL, XML_TYPE,                     (sal_uInt16)ANA_TransitionType },
-            { XML_NAMESPACE_SMIL, XML_SUBTYPE,                  (sal_uInt16)ANA_TransitionSubType },
-            { XML_NAMESPACE_SMIL, XML_MODE,                     (sal_uInt16)ANA_Mode },
-            { XML_NAMESPACE_SMIL, XML_DIRECTION,                (sal_uInt16)ANA_Direction },
-            { XML_NAMESPACE_SMIL, XML_FADECOLOR,                (sal_uInt16)ANA_FadeColor },
-            { XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE,        (sal_uInt16)ANA_IterateType },
-            { XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL,    (sal_uInt16)ANA_IterateInterval },
-            { XML_NAMESPACE_ANIMATION, XML_FORMULA,             (sal_uInt16)ANA_Formula },
-            { XML_NAMESPACE_ANIMATION, XML_ID,                  (sal_uInt16)ANA_ANIMID },
-            { XML_NAMESPACE_XML, XML_ID,                        (sal_uInt16)ANA_XMLID },
-            { XML_NAMESPACE_PRESENTATION, XML_GROUP_ID,         (sal_uInt16)ANA_Group_Id },
-            { XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL,         (sal_uInt16)ANA_Volume },
-            { XML_NAMESPACE_ANIMATION, XML_COMMAND,             (sal_uInt16)ANA_Command },
+            { XML_NAMESPACE_SMIL, XML_BEGIN,                    (sal_uInt16)ANA_Begin,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_begin) },
+            { XML_NAMESPACE_SMIL, XML_DUR,                      (sal_uInt16)ANA_Dur,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_dur) },
+            { XML_NAMESPACE_SMIL, XML_END,                      (sal_uInt16)ANA_End,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_end) },
+            { XML_NAMESPACE_SMIL, XML_FILL,                     (sal_uInt16)ANA_Fill,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_fill) },
+            { XML_NAMESPACE_SMIL, XML_FILLDEFAULT,              (sal_uInt16)ANA_FillDefault,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_fillDefault) },
+            { XML_NAMESPACE_SMIL, XML_RESTART,                  (sal_uInt16)ANA_Restart,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_restart) },
+            { XML_NAMESPACE_SMIL, XML_RESTARTDEFAULT,           (sal_uInt16)ANA_RestartDefault,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_restartDefault) },
+            { XML_NAMESPACE_SMIL, XML_ACCELERATE,               (sal_uInt16)ANA_Accelerate,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_accelerate) },
+            { XML_NAMESPACE_SMIL, XML_DECELERATE,               (sal_uInt16)ANA_Decelerate,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_decelerate) },
+            { XML_NAMESPACE_SMIL, XML_AUTOREVERSE,              (sal_uInt16)ANA_AutoReverse,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_autoReverse) },
+            { XML_NAMESPACE_SMIL, XML_REPEATCOUNT,              (sal_uInt16)ANA_RepeatCount,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_repeatCount) },
+            { XML_NAMESPACE_SMIL, XML_REPEATDUR,                (sal_uInt16)ANA_RepeatDur,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_repeatDur) },
+            { XML_NAMESPACE_SMIL, XML_ENDSYNC,                  (sal_uInt16)ANA_EndSync,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_endsync) },
+            { XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE,        (sal_uInt16)ANA_Node_Type,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_node_type) },
+            { XML_NAMESPACE_PRESENTATION, XML_PRESET_ID,        (sal_uInt16)ANA_Preset_ID,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_preset_id) },
+            { XML_NAMESPACE_PRESENTATION, XML_PRESET_SUB_TYPE,  (sal_uInt16)ANA_Preset_Sub_Type,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_preset_sub_type) },
+            { XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS,     (sal_uInt16)ANA_Preset_Class,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_preset_class) },
+            { XML_NAMESPACE_PRESENTATION, XML_AFTER_EFFECT,     (sal_uInt16)ANA_After_Effect,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_after_effect) },
+            { XML_NAMESPACE_SMIL, XML_TARGETELEMENT,            (sal_uInt16)ANA_Target,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_targetElement) },
+            { XML_NAMESPACE_XLINK, XML_HREF,                    (sal_uInt16)ANA_XLink,
+                (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+            { XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT,   (sal_uInt16)ANA_MasterElement,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_master_element) },
+            { XML_NAMESPACE_ANIMATION, XML_SUB_ITEM,            (sal_uInt16)ANA_SubItem,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_sub_item) },
+            { XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME,            (sal_uInt16)ANA_AttributeName,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_attributeName) },
+            { XML_NAMESPACE_SMIL, XML_VALUES,                   (sal_uInt16)ANA_Values,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_values) },
+            { XML_NAMESPACE_SMIL, XML_FROM,                     (sal_uInt16)ANA_From,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_from) },
+            { XML_NAMESPACE_SMIL, XML_BY,                       (sal_uInt16)ANA_By,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_by) },
+            { XML_NAMESPACE_SMIL, XML_TO,                       (sal_uInt16)ANA_To,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_to) },
+            { XML_NAMESPACE_SMIL, XML_KEYTIMES,                 (sal_uInt16)ANA_KeyTimes,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_keyTimes) },
+            { XML_NAMESPACE_SMIL, XML_CALCMODE,                 (sal_uInt16)ANA_CalcMode,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_calcMode) },
+            { XML_NAMESPACE_SMIL, XML_ACCUMULATE,               (sal_uInt16)ANA_Accumulate,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_accumulate) },
+            { XML_NAMESPACE_PRESENTATION, XML_ADDITIVE,         (sal_uInt16)ANA_AdditiveMode,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_additive) },
+            { XML_NAMESPACE_SMIL, XML_ADDITIVE,                 (sal_uInt16)ANA_AdditiveMode,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_additive) },
+            { XML_NAMESPACE_SMIL, XML_KEYSPLINES,               (sal_uInt16)ANA_KeySplines,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_keySplines) },
+            { XML_NAMESPACE_SVG, XML_PATH,                      (sal_uInt16)ANA_Path,
+                (NAMESPACE | XML_NAMESPACE_SVG | XML_path) },
+            { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION, (sal_uInt16)ANA_ColorSpace,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_color_interpolation) },
+            { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION_DIRECTION,       (sal_uInt16)ANA_ColorDirection,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_color_interpolation_direction) },
+            { XML_NAMESPACE_SVG, XML_TYPE,                      (sal_uInt16)ANA_TransformType,
+                (NAMESPACE | XML_NAMESPACE_SVG | XML_type) },
+            { XML_NAMESPACE_SMIL, XML_TYPE,                     (sal_uInt16)ANA_TransitionType,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_type) },
+            { XML_NAMESPACE_SMIL, XML_SUBTYPE,                  (sal_uInt16)ANA_TransitionSubType,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_subtype) },
+            { XML_NAMESPACE_SMIL, XML_MODE,                     (sal_uInt16)ANA_Mode,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_mode) },
+            { XML_NAMESPACE_SMIL, XML_DIRECTION,                (sal_uInt16)ANA_Direction,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_direction) },
+            { XML_NAMESPACE_SMIL, XML_FADECOLOR,                (sal_uInt16)ANA_FadeColor,
+                (NAMESPACE | XML_NAMESPACE_SMIL | XML_fadeColor) },
+            { XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE,        (sal_uInt16)ANA_IterateType,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_iterate_type) },
+            { XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL,    (sal_uInt16)ANA_IterateInterval,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_iterate_interval) },
+            { XML_NAMESPACE_ANIMATION, XML_FORMULA,             (sal_uInt16)ANA_Formula,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_formula) },
+            { XML_NAMESPACE_ANIMATION, XML_ID,                  (sal_uInt16)ANA_ANIMID,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_id) },
+            { XML_NAMESPACE_XML, XML_ID,                        (sal_uInt16)ANA_XMLID,
+                (NAMESPACE | XML_NAMESPACE_XML | XML_id) },
+            { XML_NAMESPACE_PRESENTATION, XML_GROUP_ID,         (sal_uInt16)ANA_Group_Id,
+                (NAMESPACE | XML_NAMESPACE_PRESENTATION | XML_group_id) },
+            { XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL,         (sal_uInt16)ANA_Volume,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_audio_level) },
+            { XML_NAMESPACE_ANIMATION, XML_COMMAND,             (sal_uInt16)ANA_Command,
+                (NAMESPACE | XML_NAMESPACE_ANIMATION | XML_command) },
 
             XML_TOKEN_MAP_END
         };
@@ -754,7 +819,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
         Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
 
         std::list< NamedValue > aUserData;
-        XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
+        XMLTokenEnum meAttributeName = xmloff::token::XML_TOKEN_INVALID;
         OUString aFrom, aBy, aTo, aValues;
         bool bHaveXmlId( false );
         OUString sXmlId;
