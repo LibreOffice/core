@@ -22,22 +22,38 @@
 
 namespace animcore {
 
-#define DECL_NODE_FACTORY(N)\
-extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstance_##N( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rSMgr ) throw (::com::sun::star::uno::Exception);\
-extern OUString getImplementationName_##N();\
-extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_##N(void)
+extern OUString getImplementationName_PAR();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_PAR();
 
-DECL_NODE_FACTORY( PAR );
-DECL_NODE_FACTORY( SEQ );
-DECL_NODE_FACTORY( ITERATE );
-DECL_NODE_FACTORY( ANIMATE );
-DECL_NODE_FACTORY( SET );
-DECL_NODE_FACTORY( ANIMATECOLOR );
-DECL_NODE_FACTORY( ANIMATEMOTION );
-DECL_NODE_FACTORY( ANIMATETRANSFORM );
-DECL_NODE_FACTORY( TRANSITIONFILTER );
-DECL_NODE_FACTORY( AUDIO );
-DECL_NODE_FACTORY( COMMAND );
+extern OUString getImplementationName_SEQ();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_SEQ();
+
+extern OUString getImplementationName_ITERATE();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_ITERATE();
+
+extern OUString getImplementationName_ANIMATE();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_ANIMATE();
+
+extern OUString getImplementationName_SET();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_SET();
+
+extern OUString getImplementationName_ANIMATECOLOR();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_ANIMATECOLOR();
+
+extern OUString getImplementationName_ANIMATEMOTION();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_ANIMATEMOTION();
+
+extern OUString getImplementationName_ANIMATETRANSFORM();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_ANIMATETRANSFORM();
+
+extern OUString getImplementationName_TRANSITIONFILTER();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_TRANSITIONFILTER();
+
+extern OUString getImplementationName_AUDIO();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_AUDIO();
+
+extern OUString getImplementationName_COMMAND();
+extern ::com::sun::star::uno::Sequence< OUString> getSupportedServiceNames_COMMAND();
 
 }
 
