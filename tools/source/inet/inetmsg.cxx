@@ -88,7 +88,7 @@ void INetMIMEMessage::SetHeaderField_Impl (
         INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
 }
 
-static std::map<InetMessageField, const char *> ImplINetRFC822MessageHeaderData =
+static const std::map<InetMessageField, const char *> ImplINetRFC822MessageHeaderData =
 {
     { InetMessageField::BCC, "BCC" } ,
     { InetMessageField::CC, "CC" } ,
@@ -492,7 +492,7 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
             case INETMSG_RFC822_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    INetMessageHeader( ImplINetRFC822MessageHeaderData[nIdx], rHeader.GetValue() ),
+                    INetMessageHeader( ImplINetRFC822MessageHeaderData.at(nIdx), rHeader.GetValue() ),
                     m_nRFC822Index[nIdx]);
                 nNewIndex = m_nRFC822Index[nIdx];
                 break;
@@ -506,14 +506,14 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
     return nNewIndex;
 }
 
-static const char* ImplINetMIMEMessageHeaderData[] =
+static const std::map<InetMessageMime, const char*> ImplINetMIMEMessageHeaderData =
 {
-    "MIME-Version",
-    "Content-Description",
-    "Content-Disposition",
-    "Content-ID",
-    "Content-Type",
-    "Content-Transfer-Encoding"
+    { InetMessageMime::VERSION, "MIME-Version"},
+    { InetMessageMime::CONTENT_DESCRIPTION, "Content-Description"},
+    { InetMessageMime::CONTENT_DISPOSITION, "Content-Disposition"},
+    { InetMessageMime::CONTENT_ID, "Content-ID"},
+    { InetMessageMime::CONTENT_TYPE, "Content-Type"},
+    { InetMessageMime::CONTENT_TRANSFER_ENCODING, "Content-Transfer-Encoding"}
 };
 
 enum _ImplINetMIMEMessageHeaderState
@@ -535,8 +535,8 @@ INetMIMEMessage::INetMIMEMessage()
 {
     for (sal_uInt16 i = 0; i < static_cast<int>(InetMessageField::NUMHDR); i++)
         m_nRFC822Index[static_cast<InetMessageField>(i)] = CONTAINER_ENTRY_NOTFOUND;
-    for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        m_nMIMEIndex[i] = CONTAINER_ENTRY_NOTFOUND;
+    for (sal_uInt16 i = 0; i < static_cast<int>(InetMessageMime::NUMHDR); i++)
+        m_nMIMEIndex[static_cast<InetMessageMime>(i)] = CONTAINER_ENTRY_NOTFOUND;
 }
 
 INetMIMEMessage::INetMIMEMessage (const INetMIMEMessage& rMsg)
@@ -585,9 +585,7 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
     bHeaderParsed = rMsg.bHeaderParsed;
 
     size_t i;
-    for (i = 0; i < INETMSG_MIME_NUMHDR; i++)
-        m_nMIMEIndex[i] = rMsg.m_nMIMEIndex[i];
-
+    m_nMIMEIndex = rMsg.m_nMIMEIndex;
     m_aBoundary = rMsg.m_aBoundary;
 
     for (i = 0; i < rMsg.aChildren.size(); i++)
@@ -618,7 +616,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
 
-    sal_uIntPtr      nIdx     = CONTAINER_APPEND;
+    InetMessageMime nIdx = static_cast<InetMessageMime>(CONTAINER_APPEND);
     int        eState   = INETMSG_MIME_BEGIN;
     int        eOkState = INETMSG_MIME_OK;
 
@@ -639,7 +637,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
 
                     case 'm':
                         check = "ime-version";
-                        nIdx = INETMSG_MIME_VERSION;
+                        nIdx = InetMessageMime::VERSION;
                         break;
 
                     default:
@@ -661,7 +659,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
 
                     case 'i':
                         check = "d";
-                        nIdx = INETMSG_MIME_CONTENT_ID;
+                        nIdx = InetMessageMime::CONTENT_ID;
                         break;
 
                     case 't':
@@ -683,12 +681,12 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
                 {
                     case 'e':
                         check = "scription";
-                        nIdx = INETMSG_MIME_CONTENT_DESCRIPTION;
+                        nIdx = InetMessageMime::CONTENT_DESCRIPTION;
                         break;
 
                     case 'i':
                         check = "sposition";
-                        nIdx = INETMSG_MIME_CONTENT_DISPOSITION;
+                        nIdx = InetMessageMime::CONTENT_DISPOSITION;
                         break;
 
                     default:
@@ -706,12 +704,12 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
                 {
                     case 'r':
                         check = "ansfer-encoding";
-                        nIdx = INETMSG_MIME_CONTENT_TRANSFER_ENCODING;
+                        nIdx = InetMessageMime::CONTENT_TRANSFER_ENCODING;
                         break;
 
                     case 'y':
                         check = "pe";
-                        nIdx = INETMSG_MIME_CONTENT_TYPE;
+                        nIdx = InetMessageMime::CONTENT_TYPE;
                         break;
 
                     default:
@@ -741,7 +739,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
             case INETMSG_MIME_OK:
                 pData = pStop;
                 SetHeaderField_Impl (
-                    INetMessageHeader( ImplINetMIMEMessageHeaderData[nIdx], rHeader.GetValue()),
+                    INetMessageHeader( ImplINetMIMEMessageHeaderData.at(nIdx), rHeader.GetValue()),
                     m_nMIMEIndex[nIdx]);
                 nNewIndex = m_nMIMEIndex[nIdx];
                 break;
@@ -759,24 +757,24 @@ void INetMIMEMessage::SetMIMEVersion (const OUString& rVersion)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        ImplINetMIMEMessageHeaderData[INETMSG_MIME_VERSION], rVersion,
-        m_nMIMEIndex[INETMSG_MIME_VERSION]);
+        ImplINetMIMEMessageHeaderData.at(InetMessageMime::VERSION), rVersion,
+        m_nMIMEIndex[InetMessageMime::VERSION]);
 }
 
 void INetMIMEMessage::SetContentDisposition (const OUString& rDisposition)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_DISPOSITION], rDisposition,
-        m_nMIMEIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
+        ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_DISPOSITION), rDisposition,
+        m_nMIMEIndex[InetMessageMime::CONTENT_DISPOSITION]);
 }
 
 void INetMIMEMessage::SetContentType (const OUString& rType)
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_TYPE], rType,
-        m_nMIMEIndex[INETMSG_MIME_CONTENT_TYPE]);
+        ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TYPE), rType,
+        m_nMIMEIndex[InetMessageMime::CONTENT_TYPE]);
 }
 
 void INetMIMEMessage::SetContentTransferEncoding (
@@ -784,8 +782,8 @@ void INetMIMEMessage::SetContentTransferEncoding (
 {
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
-        ImplINetMIMEMessageHeaderData[INETMSG_MIME_CONTENT_TRANSFER_ENCODING], rEncoding,
-        m_nMIMEIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
+        ImplINetMIMEMessageHeaderData.at(InetMessageMime::CONTENT_TRANSFER_ENCODING), rEncoding,
+        m_nMIMEIndex[InetMessageMime::CONTENT_TRANSFER_ENCODING]);
 }
 
 OUString INetMIMEMessage::GetDefaultContentType()

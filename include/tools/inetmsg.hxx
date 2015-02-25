@@ -106,13 +106,16 @@ enum class InetMessageField
     NUMHDR             = 16,
 };
 
-#define INETMSG_MIME_VERSION                    0
-#define INETMSG_MIME_CONTENT_DESCRIPTION        1
-#define INETMSG_MIME_CONTENT_DISPOSITION        2
-#define INETMSG_MIME_CONTENT_ID                 3
-#define INETMSG_MIME_CONTENT_TYPE               4
-#define INETMSG_MIME_CONTENT_TRANSFER_ENCODING  5
-#define INETMSG_MIME_NUMHDR                     6
+enum class InetMessageMime
+{
+    VERSION                    = 0,
+    CONTENT_DESCRIPTION        = 1,
+    CONTENT_DISPOSITION        = 2,
+    CONTENT_ID                 = 3,
+    CONTENT_TYPE               = 4,
+    CONTENT_TRANSFER_ENCODING  = 5,
+    NUMHDR                     = 6,
+};
 
 enum INetMessageContainerType
 {
@@ -141,7 +144,7 @@ class TOOLS_DLLPUBLIC INetMIMEMessage
 
     ::std::map<InetMessageField, sal_uIntPtr> m_nRFC822Index;
 
-    sal_uIntPtr             m_nMIMEIndex[INETMSG_MIME_NUMHDR];
+    ::std::map<InetMessageMime, sal_uIntPtr>  m_nMIMEIndex;
     INetMIMEMessage*        pParent;
     INetMIMEMessgeList_impl aChildren;
     OString                 m_aBoundary;
@@ -361,35 +364,35 @@ public:
     void     SetMIMEVersion (const OUString& rVersion);
     OUString GetMIMEVersion() const
     {
-        return GetHeaderValue (m_nMIMEIndex[INETMSG_MIME_VERSION]);
+        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::VERSION));
     }
 
     OUString GetContentDescription() const
     {
-        return GetHeaderValue (m_nMIMEIndex[INETMSG_MIME_CONTENT_DESCRIPTION]);
+        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_DESCRIPTION));
     }
 
     void     SetContentDisposition (const OUString& rDisposition);
     OUString GetContentDisposition() const
     {
-        return GetHeaderValue (m_nMIMEIndex[INETMSG_MIME_CONTENT_DISPOSITION]);
+        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_DISPOSITION));
     }
 
     OUString GetContentID() const
     {
-        return GetHeaderValue (m_nMIMEIndex[INETMSG_MIME_CONTENT_ID]);
+        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_ID));
     }
 
     void     SetContentType (const OUString& rType);
     OUString GetContentType() const
     {
-        return GetHeaderValue (m_nMIMEIndex[INETMSG_MIME_CONTENT_TYPE]);
+        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_TYPE));
     }
 
     void     SetContentTransferEncoding (const OUString& rEncoding);
     OUString GetContentTransferEncoding() const
     {
-        return GetHeaderValue (m_nMIMEIndex[INETMSG_MIME_CONTENT_TRANSFER_ENCODING]);
+        return GetHeaderValue (m_nMIMEIndex.at(InetMessageMime::CONTENT_TRANSFER_ENCODING));
     }
 
     OUString GetDefaultContentType ();
