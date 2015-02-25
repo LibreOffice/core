@@ -38,7 +38,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
-    : TabBar(pParent, WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG)
+    : TabBar(pParent, WB_3DLOOK | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG)
     , DropTargetHelper(this)
     , DragSourceHelper(this)
     , pViewData(pData)
