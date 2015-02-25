@@ -2191,6 +2191,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/document,\
 	DocumentEvent \
 	EmptyUndoStackException \
 	EventObject \
+	ExoticFileLoadException \
 	FilterOptionsRequest \
 	LinkUpdateModes \
 	LockFileCorruptRequest \
