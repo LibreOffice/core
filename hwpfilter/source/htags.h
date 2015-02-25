@@ -54,7 +54,7 @@ struct HyperText
 struct OlePicture
 {
     int   size;
-    ulong signature;
+    uint signature;
 #ifdef WIN32
     IStorage *pis;
 #else
