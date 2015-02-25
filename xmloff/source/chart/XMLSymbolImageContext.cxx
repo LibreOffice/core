@@ -19,16 +19,20 @@
 
 #include "XMLSymbolImageContext.hxx"
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 TYPEINIT1( XMLSymbolImageContext, XMLElementPropertyContext );
 
 using namespace ::com::sun::star;
+using namespace xmloff;
+using css::xml::sax::FastToken::NAMESPACE;
 
 enum SvXMLTokenMapAttrs
 {
@@ -41,10 +45,14 @@ enum SvXMLTokenMapAttrs
 
 static const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF    },
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE    },
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_ACTUATE,  XML_TOK_SYMBOL_IMAGE_ACTUATE },
-    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_SHOW,     XML_TOK_SYMBOL_IMAGE_SHOW },
+    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_HREF,     XML_TOK_SYMBOL_IMAGE_HREF,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_TYPE,     XML_TOK_SYMBOL_IMAGE_TYPE,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
+    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_ACTUATE,  XML_TOK_SYMBOL_IMAGE_ACTUATE,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_actuate) },
+    { XML_NAMESPACE_XLINK,  ::xmloff::token::XML_SHOW,     XML_TOK_SYMBOL_IMAGE_SHOW,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_show) },
     XML_TOKEN_MAP_END
 };
 

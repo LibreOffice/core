@@ -28,6 +28,7 @@
 #include <comphelper/processfactory.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -44,6 +45,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -52,9 +54,11 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
+using namespace xmloff;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
+using css::xml::sax::FastToken::NAMESPACE;
 
 namespace
 {
@@ -150,10 +154,14 @@ const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
     {
         static const SvXMLTokenMapEntry aDocElemTokenMap[] =
         {
-            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES  },
-            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META    },
-            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY    },
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_automatic_styles) },
+            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_styles) },
+            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_meta) },
+            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY,
+                (NAMESPACE | XML_NAMESPACE_OFFICE | XML_body) },
             XML_TOKEN_MAP_END
         };
 
@@ -169,12 +177,18 @@ const SvXMLTokenMap& SchXMLImportHelper::GetTableElemTokenMap()
     {
         static const SvXMLTokenMapEntry aTableElemTokenMap[] =
     {
-        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,   XML_TOK_TABLE_HEADER_COLS   },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,          XML_TOK_TABLE_COLUMNS       },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,           XML_TOK_TABLE_COLUMN        },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,      XML_TOK_TABLE_HEADER_ROWS   },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,             XML_TOK_TABLE_ROWS          },
-        { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,              XML_TOK_TABLE_ROW           },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,   XML_TOK_TABLE_HEADER_COLS,
+            (NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_columns) },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,          XML_TOK_TABLE_COLUMNS,
+            (NAMESPACE | XML_NAMESPACE_TABLE | XML_table_columns) },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,           XML_TOK_TABLE_COLUMN,
+            (NAMESPACE | XML_NAMESPACE_TABLE | XML_table_column) },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,      XML_TOK_TABLE_HEADER_ROWS,
+            (NAMESPACE | XML_NAMESPACE_TABLE | XML_table_header_rows) },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,             XML_TOK_TABLE_ROWS,
+            (NAMESPACE | XML_NAMESPACE_TABLE | XML_table_rows) },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,              XML_TOK_TABLE_ROW,
+            (NAMESPACE | XML_NAMESPACE_TABLE | XML_table_row) },
         XML_TOKEN_MAP_END
     };
 
@@ -190,11 +204,16 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartElemTokenMap()
     {
         static const SvXMLTokenMapEntry aChartElemTokenMap[] =
         {
-            { XML_NAMESPACE_CHART,  XML_PLOT_AREA,              XML_TOK_CHART_PLOT_AREA     },
-            { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_CHART_TITLE         },
-            { XML_NAMESPACE_CHART,  XML_SUBTITLE,               XML_TOK_CHART_SUBTITLE      },
-            { XML_NAMESPACE_CHART,  XML_LEGEND,             XML_TOK_CHART_LEGEND        },
-            { XML_NAMESPACE_TABLE,  XML_TABLE,                  XML_TOK_CHART_TABLE         },
+            { XML_NAMESPACE_CHART,  XML_PLOT_AREA,              XML_TOK_CHART_PLOT_AREA,
+                (NAMESPACE | XML_NAMESPACE_CHART | XML_plot_area) },
+            { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_CHART_TITLE,
+                (NAMESPACE | XML_NAMESPACE_CHART | XML_title) },
+            { XML_NAMESPACE_CHART,  XML_SUBTITLE,               XML_TOK_CHART_SUBTITLE,
+                (NAMESPACE | XML_NAMESPACE_CHART | XML_subtitle) },
+            { XML_NAMESPACE_CHART,  XML_LEGEND,             XML_TOK_CHART_LEGEND,
+                (NAMESPACE | XML_NAMESPACE_CHART | XML_legend) },
+            { XML_NAMESPACE_TABLE,  XML_TABLE,                  XML_TOK_CHART_TABLE,
+                (NAMESPACE | XML_NAMESPACE_TABLE | XML_table) },
             XML_TOKEN_MAP_END
         };
 
@@ -210,16 +229,26 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
     {
         static const SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
 {
-    { XML_NAMESPACE_CHART_EXT,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION_EXT },
-    { XML_NAMESPACE_CHART,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION },
-    { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
-    { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
-    { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },
-    { XML_NAMESPACE_CHART,  XML_FLOOR,                  XML_TOK_PA_FLOOR            },
-    { XML_NAMESPACE_DR3D,   XML_LIGHT,                  XML_TOK_PA_LIGHT_SOURCE     },
-    { XML_NAMESPACE_CHART,  XML_STOCK_GAIN_MARKER,      XML_TOK_PA_STOCK_GAIN       },
-    { XML_NAMESPACE_CHART,  XML_STOCK_LOSS_MARKER,      XML_TOK_PA_STOCK_LOSS       },
-    { XML_NAMESPACE_CHART,  XML_STOCK_RANGE_LINE,       XML_TOK_PA_STOCK_RANGE      },
+    { XML_NAMESPACE_CHART_EXT,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION_EXT,
+        (NAMESPACE | XML_NAMESPACE_CHART_EXT | XML_coordinate_region) },
+    { XML_NAMESPACE_CHART,  XML_COORDINATE_REGION,      XML_TOK_PA_COORDINATE_REGION,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_coordinate_region) },
+    { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_axis) },
+    { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_series) },
+    { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_wall) },
+    { XML_NAMESPACE_CHART,  XML_FLOOR,                  XML_TOK_PA_FLOOR,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_floor) },
+    { XML_NAMESPACE_DR3D,   XML_LIGHT,                  XML_TOK_PA_LIGHT_SOURCE,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_light) },
+    { XML_NAMESPACE_CHART,  XML_STOCK_GAIN_MARKER,      XML_TOK_PA_STOCK_GAIN,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_stock_gain_marker) },
+    { XML_NAMESPACE_CHART,  XML_STOCK_LOSS_MARKER,      XML_TOK_PA_STOCK_LOSS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_stock_loss_marker) },
+    { XML_NAMESPACE_CHART,  XML_STOCK_RANGE_LINE,       XML_TOK_PA_STOCK_RANGE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_stock_range_line) },
     XML_TOKEN_MAP_END
 };
 
@@ -235,12 +264,18 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     {
         static const SvXMLTokenMapEntry aSeriesElemTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT       },
-    { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN           },
-    { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
-    { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
-    { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
-    { XML_NAMESPACE_LO_EXT, XML_PROPERTY_MAPPING, XML_TOK_SERIES_PROPERTY_MAPPING },
+    { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_data_point) },
+    { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_domain) },
+    { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_mean_value) },
+    { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_regression_curve) },
+    { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_error_indicator) },
+    { XML_NAMESPACE_LO_EXT, XML_PROPERTY_MAPPING, XML_TOK_SERIES_PROPERTY_MAPPING,
+        (NAMESPACE | XML_NAMESPACE_LO_EXT | XML_property_mapping) },
     XML_TOKEN_MAP_END
 };
 
@@ -256,13 +291,20 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aChartAttrTokenMap[] =
 {
-    { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_CHART_HREF          },
-    { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS         },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH         },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT        },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
-    { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
-    { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
+    { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_CHART_HREF,
+        (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+    { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_class) },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_width) },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_height) },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_style_name) },
+    { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_column_mapping) },
+    { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_row_mapping) },
     XML_TOKEN_MAP_END
 };
 
@@ -278,24 +320,42 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
 {
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_PA_X                 },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_PA_Y                 },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_PA_WIDTH             },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_PA_HEIGHT            },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_PA_STYLE_NAME        },
-    { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_PA_CHART_ADDRESS     },
-    { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS, XML_TOK_PA_DS_HAS_LABELS     },
-    { XML_NAMESPACE_DR3D,   XML_TRANSFORM,              XML_TOK_PA_TRANSFORM         },
-    { XML_NAMESPACE_DR3D,   XML_VRP,                    XML_TOK_PA_VRP               },
-    { XML_NAMESPACE_DR3D,   XML_VPN,                    XML_TOK_PA_VPN               },
-    { XML_NAMESPACE_DR3D,   XML_VUP,                    XML_TOK_PA_VUP               },
-    { XML_NAMESPACE_DR3D,   XML_PROJECTION,             XML_TOK_PA_PROJECTION        },
-    { XML_NAMESPACE_DR3D,   XML_DISTANCE,               XML_TOK_PA_DISTANCE          },
-    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,           XML_TOK_PA_FOCAL_LENGTH      },
-    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,           XML_TOK_PA_SHADOW_SLANT      },
-    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,             XML_TOK_PA_SHADE_MODE        },
-    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,          XML_TOK_PA_AMBIENT_COLOR     },
-    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,          XML_TOK_PA_LIGHTING_MODE     },
+    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_PA_X,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_x) },
+    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_PA_Y,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_y) },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_PA_WIDTH,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_width) },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_PA_HEIGHT,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_height) },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_PA_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_style_name) },
+    { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_PA_CHART_ADDRESS,
+        (NAMESPACE | XML_NAMESPACE_TABLE | XML_cell_range_address) },
+    { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS, XML_TOK_PA_DS_HAS_LABELS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_data_source_has_labels) },
+    { XML_NAMESPACE_DR3D,   XML_TRANSFORM,              XML_TOK_PA_TRANSFORM,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_transform) },
+    { XML_NAMESPACE_DR3D,   XML_VRP,                    XML_TOK_PA_VRP,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_vrp) },
+    { XML_NAMESPACE_DR3D,   XML_VPN,                    XML_TOK_PA_VPN,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_vpn) },
+    { XML_NAMESPACE_DR3D,   XML_VUP,                    XML_TOK_PA_VUP,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_vup) },
+    { XML_NAMESPACE_DR3D,   XML_PROJECTION,             XML_TOK_PA_PROJECTION,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_projection) },
+    { XML_NAMESPACE_DR3D,   XML_DISTANCE,               XML_TOK_PA_DISTANCE,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_distance) },
+    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,           XML_TOK_PA_FOCAL_LENGTH,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_focal_length) },
+    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,           XML_TOK_PA_SHADOW_SLANT,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_shadow_slant) },
+    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,             XML_TOK_PA_SHADE_MODE,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_shade_mode) },
+    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,          XML_TOK_PA_AMBIENT_COLOR,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_ambient_color) },
+    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,          XML_TOK_PA_LIGHTING_MODE,
+        (NAMESPACE | XML_NAMESPACE_DR3D | XML_lighting_mode) },
     XML_TOKEN_MAP_END
 };
 
@@ -311,8 +371,10 @@ const SvXMLTokenMap& SchXMLImportHelper::GetCellAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aCellAttrTokenMap[] =
 {
-    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
-    { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE          },
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE,
+        (NAMESPACE | XML_NAMESPACE_OFFICE | XML_value_type) },
+    { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE,
+        (NAMESPACE | XML_NAMESPACE_OFFICE | XML_value) },
     XML_TOKEN_MAP_END
 };
 
@@ -328,12 +390,18 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE    },
-    { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
-    { XML_NAMESPACE_LO_EXT,  XML_LABEL_STRING,         XML_TOK_SERIES_LABEL_STRING },
-    { XML_NAMESPACE_CHART,  XML_ATTACHED_AXIS,              XML_TOK_SERIES_ATTACHED_AXIS },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,                 XML_TOK_SERIES_STYLE_NAME    },
-    { XML_NAMESPACE_CHART,  XML_CLASS,                      XML_TOK_SERIES_CHART_CLASS   },
+    { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_values_cell_range_address) },
+    { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_label_cell_address) },
+    { XML_NAMESPACE_LO_EXT,  XML_LABEL_STRING,         XML_TOK_SERIES_LABEL_STRING,
+        (NAMESPACE | XML_NAMESPACE_LO_EXT | XML_label_string) },
+    { XML_NAMESPACE_CHART,  XML_ATTACHED_AXIS,              XML_TOK_SERIES_ATTACHED_AXIS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_attached_axis) },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,                 XML_TOK_SERIES_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_style_name) },
+    { XML_NAMESPACE_CHART,  XML_CLASS,                      XML_TOK_SERIES_CHART_CLASS,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_class) },
     XML_TOKEN_MAP_END
 };
 
@@ -349,8 +417,10 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPropMappingAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aPropMappingAttrTokenMap[] =
         {
-            { XML_NAMESPACE_LO_EXT, XML_PROPERTY, XML_TOK_PROPERTY_MAPPING_PROPERTY },
-            { XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS, XML_TOK_PROPERTY_MAPPING_RANGE },
+            { XML_NAMESPACE_LO_EXT, XML_PROPERTY, XML_TOK_PROPERTY_MAPPING_PROPERTY,
+                (NAMESPACE | XML_NAMESPACE_LO_EXT | XML_property) },
+            { XML_NAMESPACE_LO_EXT, XML_CELL_RANGE_ADDRESS, XML_TOK_PROPERTY_MAPPING_RANGE,
+                (NAMESPACE | XML_NAMESPACE_LO_EXT | XML_cell_range_address) },
             XML_TOKEN_MAP_END
         };
 
@@ -366,11 +436,16 @@ const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
     {
         static const SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME         },
-    { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION   },
-    { XML_NAMESPACE_CHART,  XML_DISPLAY_R_SQUARE,       XML_TOK_REGEQ_DISPLAY_R_SQUARE   },
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_REGEQ_POS_X              },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_REGEQ_POS_Y              },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_style_name)},
+    { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_display_equation) },
+    { XML_NAMESPACE_CHART,  XML_DISPLAY_R_SQUARE,       XML_TOK_REGEQ_DISPLAY_R_SQUARE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_display_r_square) },
+    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_REGEQ_POS_X,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_x) },
+    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_REGEQ_POS_Y,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_y) },
     XML_TOKEN_MAP_END
 };
 

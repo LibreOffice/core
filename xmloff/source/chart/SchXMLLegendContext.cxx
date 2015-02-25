@@ -25,14 +25,18 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 using namespace ::xmloff::token;
 using namespace com::sun::star;
+using namespace xmloff;
 
+using css::xml::sax::FastToken::NAMESPACE;
 using com::sun::star::uno::Reference;
 
 namespace
@@ -54,16 +58,26 @@ enum LegendAttributeTokens
 
 const SvXMLTokenMapEntry aLegendAttributeTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,      XML_LEGEND_POSITION,    XML_TOK_LEGEND_POSITION     },
-    { XML_NAMESPACE_SVG,        XML_X,                  XML_TOK_LEGEND_X            },
-    { XML_NAMESPACE_SVG,        XML_Y,                  XML_TOK_LEGEND_Y            },
-    { XML_NAMESPACE_CHART,      XML_STYLE_NAME,         XML_TOK_LEGEND_STYLE_NAME   },
-    { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION,   XML_TOK_LEGEND_EXPANSION    },
-    { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION_ASPECT_RATIO,   XML_TOK_LEGEND_EXPANSION_ASPECT_RATIO    },
-    { XML_NAMESPACE_SVG,        XML_WIDTH,              XML_TOK_LEGEND_WIDTH        },
-    { XML_NAMESPACE_CHART_EXT,  XML_WIDTH,              XML_TOK_LEGEND_WIDTH_EXT    },
-    { XML_NAMESPACE_SVG,        XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT       },
-    { XML_NAMESPACE_CHART_EXT,  XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT_EXT   },
+    { XML_NAMESPACE_CHART,      XML_LEGEND_POSITION,    XML_TOK_LEGEND_POSITION,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_legend_position) },
+    { XML_NAMESPACE_SVG,        XML_X,                  XML_TOK_LEGEND_X,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_x) },
+    { XML_NAMESPACE_SVG,        XML_Y,                  XML_TOK_LEGEND_Y,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_y) },
+    { XML_NAMESPACE_CHART,      XML_STYLE_NAME,         XML_TOK_LEGEND_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_style_name) },
+    { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION,   XML_TOK_LEGEND_EXPANSION,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_legend_expansion) },
+    { XML_NAMESPACE_STYLE,      XML_LEGEND_EXPANSION_ASPECT_RATIO,   XML_TOK_LEGEND_EXPANSION_ASPECT_RATIO,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_legend_expansion_aspect_ratio) },
+    { XML_NAMESPACE_SVG,        XML_WIDTH,              XML_TOK_LEGEND_WIDTH,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_width) },
+    { XML_NAMESPACE_CHART_EXT,  XML_WIDTH,              XML_TOK_LEGEND_WIDTH_EXT,
+        (NAMESPACE | XML_NAMESPACE_CHART_EXT | XML_width) },
+    { XML_NAMESPACE_SVG,        XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT,
+        (NAMESPACE | XML_NAMESPACE_SVG | XML_height) },
+    { XML_NAMESPACE_CHART_EXT,  XML_HEIGHT,             XML_TOK_LEGEND_HEIGHT_EXT,
+        (NAMESPACE | XML_NAMESPACE_CHART_EXT | XML_height) },
     XML_TOKEN_MAP_END
 };
 

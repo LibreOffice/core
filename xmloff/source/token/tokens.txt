@@ -1923,10 +1923,10 @@ proceedings
 product
 projection
 properties
-propertry-mapping
 property
 property-is-list
 property-is-void
+property-mapping
 property-name
 property-type
 property-value

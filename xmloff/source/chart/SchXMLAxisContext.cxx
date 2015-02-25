@@ -28,6 +28,7 @@
 #include <xmloff/prstylei.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <xmloff/token/tokens.hxx>
 
 #include <tools/color.hxx>
 
@@ -43,20 +44,23 @@
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 
 using namespace ::xmloff::token;
 using namespace com::sun::star;
+using namespace xmloff;
 
 using com::sun::star::uno::Reference;
+using css::xml::sax::FastToken::NAMESPACE;
 
 static const SvXMLEnumMapEntry aXMLAxisDimensionMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },
     { XML_Z,  SCH_XML_AXIS_Z  },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 static const SvXMLEnumMapEntry aXMLAxisTypeMap[] =
@@ -64,7 +68,7 @@ static const SvXMLEnumMapEntry aXMLAxisTypeMap[] =
     { XML_AUTO,  ::com::sun::star::chart::ChartAxisType::AUTOMATIC },
     { XML_TEXT,  ::com::sun::star::chart::ChartAxisType::CATEGORY },
     { XML_DATE,  ::com::sun::star::chart::ChartAxisType::DATE },
-    { XML_TOKEN_INVALID, 0 }
+    { xmloff::token::XML_TOKEN_INVALID, 0 }
 };
 
 class SchXMLCategoriesContext : public SvXMLImportContext
@@ -247,11 +251,16 @@ enum AxisAttributeTokens
 
 const SvXMLTokenMapEntry aAxisAttributeTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,      XML_DIMENSION,  XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,      XML_NAME,       XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,      XML_STYLE_NAME, XML_TOK_AXIS_STYLE_NAME     },
-    { XML_NAMESPACE_CHART,      XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE           },
-    { XML_NAMESPACE_CHART_EXT,  XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE_EXT       },
+    { XML_NAMESPACE_CHART,      XML_DIMENSION,  XML_TOK_AXIS_DIMENSION,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_dimension) },
+    { XML_NAMESPACE_CHART,      XML_NAME,       XML_TOK_AXIS_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_name) },
+    { XML_NAMESPACE_CHART,      XML_STYLE_NAME, XML_TOK_AXIS_STYLE_NAME,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_style_name) },
+    { XML_NAMESPACE_CHART,      XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_axis_type) },
+    { XML_NAMESPACE_CHART_EXT,  XML_AXIS_TYPE,  XML_TOK_AXIS_TYPE_EXT,
+        (NAMESPACE | XML_NAMESPACE_CHART_EXT | XML_axis_type) },
     XML_TOKEN_MAP_END
 };
 
@@ -603,11 +612,16 @@ enum AxisChildTokens
 
 const SvXMLTokenMapEntry aAxisChildTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,      XML_TITLE,              XML_TOK_AXIS_TITLE          },
-    { XML_NAMESPACE_CHART,      XML_CATEGORIES,         XML_TOK_AXIS_CATEGORIES     },
-    { XML_NAMESPACE_CHART,      XML_GRID,               XML_TOK_AXIS_GRID           },
-    { XML_NAMESPACE_CHART,      XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE     },
-    { XML_NAMESPACE_CHART_EXT,  XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE_EXT },
+    { XML_NAMESPACE_CHART,      XML_TITLE,              XML_TOK_AXIS_TITLE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_title) },
+    { XML_NAMESPACE_CHART,      XML_CATEGORIES,         XML_TOK_AXIS_CATEGORIES,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_categories) },
+    { XML_NAMESPACE_CHART,      XML_GRID,               XML_TOK_AXIS_GRID,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_grid) },
+    { XML_NAMESPACE_CHART,      XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_date_scale) },
+    { XML_NAMESPACE_CHART_EXT,  XML_DATE_SCALE,         XML_TOK_AXIS_DATE_SCALE_EXT,
+        (NAMESPACE | XML_NAMESPACE_CHART_EXT | XML_date_scale) },
     XML_TOKEN_MAP_END
 };
 
@@ -907,11 +921,16 @@ enum DateScaleAttributeTokens
 
 const SvXMLTokenMapEntry aDateScaleAttributeTokenMap[] =
 {
-    { XML_NAMESPACE_CHART,  XML_BASE_TIME_UNIT,         XML_TOK_DATESCALE_BASE_TIME_UNIT  },
-    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE  },
-    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT  },
-    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE  },
-    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT  },
+    { XML_NAMESPACE_CHART,  XML_BASE_TIME_UNIT,         XML_TOK_DATESCALE_BASE_TIME_UNIT,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_base_time_unit) },
+    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MAJOR_INTERVAL_VALUE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_major_interval_value) },
+    { XML_NAMESPACE_CHART,  XML_MAJOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MAJOR_INTERVAL_UNIT,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_major_interval_unit) },
+    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_VALUE,   XML_TOK_DATESCALE_MINOR_INTERVAL_VALUE,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_minor_interval_value) },
+    { XML_NAMESPACE_CHART,  XML_MINOR_INTERVAL_UNIT,    XML_TOK_DATESCALE_MINOR_INTERVAL_UNIT,
+        (NAMESPACE | XML_NAMESPACE_CHART | XML_minor_interval_unit) },
     XML_TOKEN_MAP_END
 };
 
