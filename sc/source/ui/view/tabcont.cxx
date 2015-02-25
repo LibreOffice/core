@@ -37,15 +37,14 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData ) :
-    TabBar( pParent,
-            WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG ) ),
-            DropTargetHelper( this ),
-            DragSourceHelper( this ),
-            pViewData( pData ),
-            nMouseClickPageId( TabBar::PAGE_NOT_FOUND ),
-            nSelPageIdByMouse( TabBar::PAGE_NOT_FOUND ),
-            bErrorShown( false )
+ScTabControl::ScTabControl( vcl::Window* pParent, ScViewData* pData )
+    : TabBar(pParent, WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG)
+    , DropTargetHelper(this)
+    , DragSourceHelper(this)
+    , pViewData(pData)
+    , nMouseClickPageId(TabBar::PAGE_NOT_FOUND)
+    , nSelPageIdByMouse(TabBar::PAGE_NOT_FOUND)
+    , bErrorShown(false)
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
