@@ -130,7 +130,7 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
 
     long nButtonY = bTextBelow ? aInner.Bottom() : aOuter.Top();
 
-    ScDDComboBoxButton aComboButton(static_cast<vcl::Window*>(pDev));
+    ScDDComboBoxButton aComboButton(pDev);
     aComboButton.SetOptSizePixel();
     long nBWidth  = ( aComboButton.GetSizePixel().Width() * rZoomY.GetNumerator() )
                         / rZoomY.GetDenominator();
