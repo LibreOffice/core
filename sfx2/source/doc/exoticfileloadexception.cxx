@@ -1,0 +1,48 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "exoticfileloadexception.hxx"
+
+#include <comphelper/interaction.hxx>
+#include <com/sun/star/ucb/ExoticFileLoadException.hpp>
+
+using namespace com::sun::star;
+using namespace cppu;
+using namespace osl;
+
+ExoticFileLoadException::ExoticFileLoadException( const OUString& rName )
+{
+    ucb::ExoticFileLoadException aReq;
+    aReq.Name = rName;
+
+    m_aRequest <<= aReq;
+
+    m_xAbort.set( uno::Reference< task::XInteractionAbort >(new comphelper::OInteractionAbort), uno::UNO_QUERY );
+    m_xApprove.set( uno::Reference< task::XInteractionApprove >(new comphelper::OInteractionApprove ), uno::UNO_QUERY );
+    m_lContinuations.realloc( 2 );
+    m_lContinuations[0] =  m_xApprove;
+    m_lContinuations[1] = m_xAbort;
+}
+
+bool
+ExoticFileLoadException::isAbort() const
+{
+    comphelper::OInteractionAbort* pBase = static_cast< comphelper::OInteractionAbort* >( m_xAbort.get() );
+    return pBase->wasSelected();
+}
+
+bool
+ExoticFileLoadException::isApprove() const
+{
+    comphelper::OInteractionApprove* pBase = static_cast< comphelper::OInteractionApprove* >( m_xApprove.get() );
+    return pBase->wasSelected();
+}
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

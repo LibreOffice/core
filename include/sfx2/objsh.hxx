@@ -743,6 +743,7 @@ public:
 
     SAL_DLLPRIVATE void ImplSign( bool bScriptingContent = false );
     SAL_DLLPRIVATE bool QuerySaveSizeExceededModules_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE bool QueryAllowExoticFormat_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler, const OUString& rFileURL );
 
     SAL_DLLPRIVATE void CheckOut( );
     SAL_DLLPRIVATE void CancelCheckOut( );

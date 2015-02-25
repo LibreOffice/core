@@ -41,6 +41,7 @@
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/ucb/AuthenticationFallbackRequest.hpp>
+#include <com/sun/star/ucb/ExoticFileLoadException.hpp>
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingLockedException.hpp>
 #include <com/sun/star/ucb/InteractiveLockingNotLockedException.hpp>
@@ -426,6 +427,26 @@ UUIInteractionHelper::handleRequest_impl(
             }
             handleErrorHandlerRequest( task::InteractionClassification_WARNING,
                                        ERRCODE_UUI_IO_MODULESIZEEXCEEDED,
+                                       aArguments,
+                                       rRequest->getContinuations(),
+                                       bObtainErrorStringOnly,
+                                       bHasErrorString,
+                                       rErrorString);
+            return true;
+        }
+
+        ucb::ExoticFileLoadException aExoticFileLoadException;
+        if (aAnyRequest >>= aExoticFileLoadException)
+        {
+            std::vector< OUString > aArguments;
+
+            if( !aExoticFileLoadException.Name.isEmpty() )
+            {
+                aArguments.push_back( aExoticFileLoadException.Name );
+            }
+
+            handleErrorHandlerRequest( task::InteractionClassification_WARNING,
+                                       ERRCODE_UUI_IO_EXOTICFILEFORMAT,
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,

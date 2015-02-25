@@ -129,6 +129,8 @@
 #include <appbaslib.hxx>
 #include <appdata.hxx>
 #include "objstor.hxx"
+#include "exoticfileloadexception.hxx"
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -645,6 +647,9 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     pImpl->nLoadedFlags = SfxLoadedFlags::NONE;
     pImpl->bModelInitialized = false;
 
+    if ( pFilter && pFilter->IsExoticFormat() && !QueryAllowExoticFormat_Impl( getInteractionHandler(), aBaseURL ) )
+        SetError( ERRCODE_IO_ABORT );
+
     // initialize static language table so language-related extensions are learned before the document loads
     (void)SvtLanguageTable::GetLanguageEntryCount();
 
@@ -866,6 +871,7 @@ ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell const *
     SfxItemSet* pSet = pMedium->GetItemSet();
     const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FILE_FILTEROPTIONS, false);
     const SfxUnoAnyItem* pData = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_FILTER_DATA, false);
+
     if ( !pData && !pOptions )
     {
         css::uno::Reference< XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
@@ -3549,7 +3555,30 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
     return true;
 }
 
-// comphelper::IEmbeddedHelper
+bool SfxObjectShell::QueryAllowExoticFormat_Impl( const uno::Reference< task::XInteractionHandler >& xHandler, const OUString& rFileURL )
+{
+    if ( officecfg::Office::Common::Load::LoadExoticFileFormats::get() == 0 )
+    {
+        // Refuse loading without question
+        return false;
+    }
+    else if ( officecfg::Office::Common::Load::LoadExoticFileFormats::get() == 2 )
+    {
+        // Always load without question
+        return true;
+    }
+    else if ( officecfg::Office::Common::Load::LoadExoticFileFormats::get() == 1 && xHandler.is() )
+    {
+        // Display a warning and let the user decide
+        ExoticFileLoadException* pReq = new ExoticFileLoadException( rFileURL );
+        uno::Reference< task::XInteractionRequest > xReq( pReq );
+        xHandler->handle( xReq );
+        return pReq->isApprove();
+    }
+    // No interaction handler, default is to continue to load
+    return true;
+}
+
 uno::Reference< task::XInteractionHandler > SfxObjectShell::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet;

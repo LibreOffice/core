@@ -3843,6 +3843,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ucb,\
 	DuplicateCommandIdentifierException \
 	DuplicateProviderException \
 	Error \
+	ExoticFileLoadException \
 	ExportStreamInfo \
 	FetchError \
 	FetchResult \
