@@ -36,7 +36,10 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
+using namespace css::xml::sax;
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
@@ -45,6 +48,8 @@ using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_OBJECT_INDEX_ENTRY_TEMPLATE;
 using ::xmloff::token::XML_TOKEN_INVALID;
+using xmloff::XML_object_index_entry_template;
+using css::xml::sax::FastToken::NAMESPACE;
 
 const sal_Char sAPI_CreateFromStarCalc[] = "CreateFromStarCalc";
 const sal_Char sAPI_CreateFromStarChart[] = "CreateFromStarChart";
@@ -72,6 +77,23 @@ XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
         bUseDraw(false),
         bUseMath(false),
         bUseOtherObjects(false)
+{
+}
+
+XMLIndexObjectSourceContext::XMLIndexObjectSourceContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XPropertySet >& rPropSet )
+:   XMLIndexSourceBaseContext( rImport, Element, rPropSet, false ),
+    sCreateFromStarCalc(sAPI_CreateFromStarCalc),
+    sCreateFromStarChart(sAPI_CreateFromStarChart),
+    sCreateFromStarDraw(sAPI_CreateFromStarDraw),
+    sCreateFromStarMath(sAPI_CreateFromStarMath),
+    sCreateFromOtherEmbeddedObjects(sAPI_CreateFromOtherEmbeddedObjects),
+    bUseCalc(false),
+    bUseChart(false),
+    bUseDraw(false),
+    bUseMath(false),
+    bUseOtherObjects(false)
 {
 }
 
@@ -150,6 +172,30 @@ void XMLIndexObjectSourceContext::EndElement()
     XMLIndexSourceBaseContext::EndElement();
 }
 
+void SAL_CALL XMLIndexObjectSourceContext::endFastElement( sal_Int32 Element )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Any aAny;
+
+    aAny.setValue(&bUseCalc, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromStarCalc, aAny);
+
+    aAny.setValue(&bUseChart, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromStarChart, aAny);
+
+    aAny.setValue(&bUseDraw, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromStarDraw, aAny);
+
+    aAny.setValue(&bUseMath, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromStarMath, aAny);
+
+    aAny.setValue(&bUseOtherObjects, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromOtherEmbeddedObjects, aAny);
+
+    XMLIndexSourceBaseContext::endFastElement(Element);
+}
+
+
 SvXMLImportContext* XMLIndexObjectSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
@@ -172,6 +218,25 @@ SvXMLImportContext* XMLIndexObjectSourceContext::CreateChildContext(
                                                              xAttrList);
     }
 
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLIndexObjectSourceContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_object_index_entry_template) )
+    {
+        return new XMLIndexTemplateContext( GetImport(), rIndexPropertySet,
+                    Element, aLevelNameTableMap,
+                    XML_TOKEN_INVALID, // no outline-level attr
+                    aLevelStylePropNameTableMap, aAllowedTokenTypesTable );
+    }
+    else
+    {
+        return XMLIndexSourceBaseContext::createFastChildContext(
+                Element, xAttrList );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
