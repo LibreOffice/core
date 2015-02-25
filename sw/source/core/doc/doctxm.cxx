@@ -19,6 +19,7 @@
 
 #include <limits.h>
 #include <hintids.hxx>
+#include <boost/scoped_ptr.hpp>
 #include <comphelper/string.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/formatbreakitem.hxx>
@@ -162,6 +163,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     SwTxtNode& rTxtNd = const_cast<SwTxtNode&>(pTxtTOXMark->GetTxtNode());
     OSL_ENSURE( rTxtNd.GetpSwpHints(), "cannot be deleted" );
 
+    boost::scoped_ptr<SwRegHistory> aRHst;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         // save attributes for Undo
@@ -170,8 +172,8 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
             RES_TXTATR_TOXMARK );
         GetIDocumentUndoRedo().AppendUndo( pUndo );
 
-        SwRegHistory aRHst( rTxtNd, &pUndo->GetHistory() );
-        rTxtNd.GetpSwpHints()->Register( &aRHst );
+        aRHst.reset(new SwRegHistory(rTxtNd, &pUndo->GetHistory()));
+        rTxtNd.GetpSwpHints()->Register(aRHst.get());
     }
 
     rTxtNd.DeleteAttribute( const_cast<SwTxtTOXMark*>(pTxtTOXMark) );
