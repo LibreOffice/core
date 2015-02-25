@@ -205,7 +205,6 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
         return false;
     if (!hmem->read4b(hdo->extent.w))
         return false;
-        return false;
     if (!hmem->read4b(hdo->extent.h))
         return false;
     if (!hmem->read4b(hdo->offset2.x))
