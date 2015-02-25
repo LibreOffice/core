@@ -95,7 +95,7 @@ class ImplTabButton : public PushButton
 {
 public:
     ImplTabButton(TabBar* pParent, WinBits nWinStyle = 0)
-        : PushButton(pParent, nWinStyle | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS)
+        : PushButton(pParent, nWinStyle | WB_FLATBUTTON | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOLIGHTBORDER | WB_NOPOINTERFOCUS)
     {}
 
     TabBar* GetParent() const
