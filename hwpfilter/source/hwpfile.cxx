@@ -132,12 +132,10 @@ int HWPFile::Open(HStream & stream)
     return HWP_NoError;
 }
 
-
 int HWPFile::State(void) const
 {
     return error_code;
 }
-
 
 int HWPFile::SetState(int errcode)
 {
@@ -145,30 +143,43 @@ int HWPFile::SetState(int errcode)
     return error_code;
 }
 
-
-int HWPFile::Read1b(void)
+bool HWPFile::Read1b(unsigned char &out)
 {
-    return hiodev ? hiodev->read1b() : -1;
+    return hiodev ? hiodev->read1b(out) : false;
 }
 
-
-int HWPFile::Read2b(void)
+bool HWPFile::Read1b(char &out)
 {
-    return hiodev ? hiodev->read2b() : -1;
+    unsigned char tmp8;
+    if (!Read1b(tmp8))
+        return false;
+    out = tmp8;
+    return true;
 }
 
-
-long HWPFile::Read4b(void)
+bool HWPFile::Read2b(unsigned short &out)
 {
-    return hiodev ? hiodev->read4b() : -1;
+    return hiodev ? hiodev->read2b(out) : false;
 }
 
+bool HWPFile::Read4b(unsigned int &out)
+{
+    return hiodev ? hiodev->read4b(out) : false;
+}
+
+bool HWPFile::Read4b(int &out)
+{
+    unsigned int tmp32;
+    if (!Read4b(tmp32))
+        return false;
+    out = tmp32;
+    return true;
+}
 
 int HWPFile::Read1b(void *ptr, size_t nmemb)
 {
     return hiodev ? hiodev->read1b(ptr, nmemb) : 0;
 }
-
 
 int HWPFile::Read2b(void *ptr, size_t nmemb)
 {
@@ -271,23 +282,23 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
     return true;
 }
 
-
-bool HWPFile::TagsRead(void)
+void HWPFile::TagsRead(void)
 {
-    ulong tag;
-    long size;
-
     while (true)
     {
-        tag = Read4b();
-        size = Read4b();
+        uint tag;
+        if (!Read4b(tag))
+            return;
+        uint size;
+        if (!Read4b(size))
+            return;
         if (size <= 0 && tag > 0){
             continue;
           }
 
         if (tag == FILETAG_END_OF_COMPRESSED ||
             tag == FILETAG_END_OF_UNCOMPRESSED)
-            return true;
+            return;
         switch (tag)
         {
             case FILETAG_EMBEDDED_PICTURE:
@@ -311,29 +322,39 @@ bool HWPFile::TagsRead(void)
                 if( (size % 617) != 0 )
                     SkipBlock( size );
                 else
-                    for( int i = 0 ; i < size/617 ; i++)
                 {
-                    HyperText *hypert = new HyperText;
-                    hypert->Read(*this);
-                    hyperlist.push_back(hypert);
+                    for( uint i = 0 ; i < size/617 ; i++)
+                    {
+                        HyperText *hypert = new HyperText;
+                        hypert->Read(*this);
+                        hyperlist.push_back(hypert);
+                    }
                 }
                 break;
             }
                 case 6:
                 {
                      ReadBlock(_hwpInfo.back_info.reserved1, 8);
-                     _hwpInfo.back_info.luminance = Read4b();
-                     _hwpInfo.back_info.contrast = Read4b();
-                     _hwpInfo.back_info.effect = sal::static_int_cast<char>(Read1b());
+                     if (!Read4b(_hwpInfo.back_info.luminance))
+                        return;
+                     if (!Read4b(_hwpInfo.back_info.contrast))
+                        return;
+                     if (!Read1b(_hwpInfo.back_info.effect))
+                        return;
                      ReadBlock(_hwpInfo.back_info.reserved2, 7);
                      ReadBlock(_hwpInfo.back_info.filename, 260);
                      ReadBlock(_hwpInfo.back_info.color, 3);
-                     unsigned short nFlag = sal::static_int_cast<unsigned short>(Read2b());
+                     unsigned short nFlag;
+                     if (!Read2b(nFlag))
+                        return;
                      _hwpInfo.back_info.flag = nFlag >> 8 ;
-                     int nRange = Read4b();
+                     int nRange;
+                     if (!Read4b(nRange))
+                        return;
                      _hwpInfo.back_info.range = nRange >> 24;
                      ReadBlock(_hwpInfo.back_info.reserved3, 27);
-                     _hwpInfo.back_info.size = Read4b();
+                     if (!Read4b(_hwpInfo.back_info.size))
+                        return;
 
                      _hwpInfo.back_info.data = new char[(unsigned int)_hwpInfo.back_info.size];
                      ReadBlock(_hwpInfo.back_info.data, _hwpInfo.back_info.size);
@@ -664,7 +685,8 @@ int HWPFile::compareParaShape(ParaShape *shape)
                 shape->outline == pshape->outline  &&
                      shape->pagebreak == pshape->pagebreak)
             {
-                    if( shape->cshape->size == pshape->cshape->size &&
+                    if( shape->cshape && pshape->cshape &&
+                         shape->cshape->size == pshape->cshape->size &&
                          shape->cshape->font[0] == pshape->cshape->font[0] &&
                          shape->cshape->ratio[0] == pshape->cshape->ratio[0] &&
                          shape->cshape->space[0] == pshape->cshape->space[0] &&
