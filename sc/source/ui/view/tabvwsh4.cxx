@@ -1695,9 +1695,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     bForceFocusOnCurCell(false),
     nCurRefDlgId(0),
     pAccessibilityBroadcaster(NULL),
-    mbInSwitch(false),
-    mpLibreOfficeKitCallback(NULL),
-    mpLibreOfficeKitData(NULL)
+    mbInSwitch(false)
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
 

@@ -513,7 +513,7 @@ Size ScModelObj::getDocumentSize()
 void ScModelObj::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
 {
     SolarMutexGuard aGuard;
-    pDocShell->GetBestViewShell()->registerLibreOfficeKitCallback(pCallback, pData);
+    pDocShell->GetDocument().GetDrawLayer()->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
 void ScModelObj::initializeForTiledRendering()
