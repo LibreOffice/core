@@ -631,9 +631,12 @@ void ScInputHandler::ImplCreateEditEngine()
 
     // set the EditEngine so that it invalidates the view instead of direct
     // paint
-    EditView *pEditView = pEngine->GetActiveView();
-    if (pEditView && !pEditView->isTiledRendering())
-        pEditView->setTiledRendering(true);
+    if (pActiveViewSh)
+    {
+        ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
+        if (EditView* pEditView = pEngine->GetActiveView())
+            pEditView->setTiledRendering(rDoc.GetDrawLayer()->isTiledRendering());
+    }
 }
 
 void ScInputHandler::UpdateAutoCorrFlag()
