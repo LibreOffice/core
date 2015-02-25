@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_b6afc893",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2521,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-02-25T08:24:01Z",
+      "side": 1,
+      "message": "Can\u0027t you use M_PI here?",
+      "revId": "c3e5fa9a10e5023b8327aeb0f079a62c8cd13c5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
