@@ -370,7 +370,12 @@ bool HbLayoutEngine::Layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
     rLayout.Reserve(nGlyphCapacity);
 
-    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr), rArgs.mnEndCharPos);
+    assert(rArgs.mnEndCharPos <= rArgs.mnLength);
+    assert(0 <= rArgs.mnMinCharPos);
+    assert(rArgs.mnMinCharPos <= rArgs.mnEndCharPos);
+
+    vcl::ScriptRun aScriptRun(reinterpret_cast<const UChar *>(rArgs.mpStr),
+            rArgs.mnMinCharPos, rArgs.mnEndCharPos - rArgs.mnMinCharPos);
 
     Point aCurrPos(0, 0);
     while (true)
