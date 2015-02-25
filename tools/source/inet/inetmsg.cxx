@@ -108,18 +108,21 @@ static const std::map<InetMessageField, const char *> ImplINetRFC822MessageHeade
     { InetMessageField::RETURN_RECEIPT_TO, "Return-Receipt-To" } ,
 };
 
-enum _ImplINetRFC822MessageHeaderState
+/*
+    State of RFC822 header parsing
+*/
+enum class HeaderState
 {
-    INETMSG_RFC822_BEGIN,
-    INETMSG_RFC822_CHECK,
-    INETMSG_RFC822_OK,
-    INETMSG_RFC822_JUNK,
+    BEGIN,
+    CHECK,
+    OK,
+    JUNK,
 
-    INETMSG_RFC822_TOKEN_RE,
-    INETMSG_RFC822_TOKEN_RETURNMINUS,
-    INETMSG_RFC822_TOKEN_XMINUS,
-    INETMSG_RFC822_LETTER_C,
-    INETMSG_RFC822_LETTER_S
+    TOKEN_RE,
+    TOKEN_RETURNMINUS,
+    TOKEN_XMINUS,
+    LETTER_C,
+    LETTER_S
 };
 
 /* ParseDateField and local helper functions.
@@ -283,17 +286,17 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
     const sal_Char *pStop = pData + aName.getLength() + 1;
     const sal_Char *check = "";
 
-    InetMessageField nIdx = static_cast<InetMessageField>(CONTAINER_APPEND);
-    int         eState   = INETMSG_RFC822_BEGIN;
-    int         eOkState = INETMSG_RFC822_OK;
+    InetMessageField nIdx   = static_cast<InetMessageField>(CONTAINER_APPEND);
+    HeaderState      eState = HeaderState::BEGIN;
+    HeaderState      eOkState = HeaderState::OK;
 
     while (pData < pStop)
     {
         switch (eState)
         {
-            case INETMSG_RFC822_BEGIN:
-                eState = INETMSG_RFC822_CHECK;
-                eOkState = INETMSG_RFC822_OK;
+            case HeaderState::BEGIN:
+                eState = HeaderState::CHECK;
+                eOkState = HeaderState::OK;
 
                 switch (ascii_toLowerCase (*pData))
                 {
@@ -303,7 +306,7 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                         break;
 
                     case 'c':
-                        eState = INETMSG_RFC822_LETTER_C;
+                        eState = HeaderState::LETTER_C;
                         break;
 
                     case 'd':
@@ -333,11 +336,11 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
 
                     case 'r':
                         check = "e";
-                        eOkState = INETMSG_RFC822_TOKEN_RE;
+                        eOkState = HeaderState::TOKEN_RE;
                         break;
 
                     case 's':
-                        eState = INETMSG_RFC822_LETTER_S;
+                        eState = HeaderState::LETTER_S;
                         break;
 
                     case 't':
@@ -347,19 +350,19 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
 
                     case 'x':
                         check = "-";
-                        eOkState = INETMSG_RFC822_TOKEN_XMINUS;
+                        eOkState = HeaderState::TOKEN_XMINUS;
                         break;
 
                     default:
-                        eState = INETMSG_RFC822_JUNK;
+                        eState = HeaderState::JUNK;
                         break;
                 }
                 pData++;
                 break;
 
-            case INETMSG_RFC822_TOKEN_RE:
-                eState = INETMSG_RFC822_CHECK;
-                eOkState = INETMSG_RFC822_OK;
+            case HeaderState::TOKEN_RE:
+                eState = HeaderState::CHECK;
+                eOkState = HeaderState::OK;
 
                 switch (ascii_toLowerCase (*pData))
                 {
@@ -375,19 +378,19 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
 
                     case 't':
                         check = "urn-";
-                        eOkState = INETMSG_RFC822_TOKEN_RETURNMINUS;
+                        eOkState = HeaderState::TOKEN_RETURNMINUS;
                         break;
 
                     default:
-                        eState = INETMSG_RFC822_JUNK;
+                        eState = HeaderState::JUNK;
                         break;
                 }
                 pData++;
                 break;
 
-            case INETMSG_RFC822_TOKEN_RETURNMINUS:
-                eState = INETMSG_RFC822_CHECK;
-                eOkState = INETMSG_RFC822_OK;
+            case HeaderState::TOKEN_RETURNMINUS:
+                eState = HeaderState::CHECK;
+                eOkState = HeaderState::OK;
 
                 switch (ascii_toLowerCase (*pData))
                 {
@@ -402,15 +405,15 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                         break;
 
                     default:
-                        eState = INETMSG_RFC822_JUNK;
+                        eState = HeaderState::JUNK;
                         break;
                 }
                 pData++;
                 break;
 
-            case INETMSG_RFC822_TOKEN_XMINUS:
-                eState = INETMSG_RFC822_CHECK;
-                eOkState = INETMSG_RFC822_OK;
+            case HeaderState::TOKEN_XMINUS:
+                eState = HeaderState::CHECK;
+                eOkState = HeaderState::OK;
 
                 switch (ascii_toLowerCase (*pData))
                 {
@@ -420,15 +423,15 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                         break;
 
                     default:
-                        eState = INETMSG_RFC822_JUNK;
+                        eState = HeaderState::JUNK;
                         break;
                 }
                 pData++;
                 break;
 
-            case INETMSG_RFC822_LETTER_C:
-                eState = INETMSG_RFC822_CHECK;
-                eOkState = INETMSG_RFC822_OK;
+            case HeaderState::LETTER_C:
+                eState = HeaderState::CHECK;
+                eOkState = HeaderState::OK;
 
                 switch (ascii_toLowerCase (*pData))
                 {
@@ -443,15 +446,15 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                         break;
 
                     default:
-                        eState = INETMSG_RFC822_JUNK;
+                        eState = HeaderState::JUNK;
                         break;
                 }
                 pData++;
                 break;
 
-            case INETMSG_RFC822_LETTER_S:
-                eState = INETMSG_RFC822_CHECK;
-                eOkState = INETMSG_RFC822_OK;
+            case HeaderState::LETTER_S:
+                eState = HeaderState::CHECK;
+                eOkState = HeaderState::OK;
 
                 switch (ascii_toLowerCase (*pData))
                 {
@@ -466,13 +469,13 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                         break;
 
                     default:
-                        eState = INETMSG_RFC822_JUNK;
+                        eState = HeaderState::JUNK;
                         break;
                 }
                 pData++;
                 break;
 
-            case INETMSG_RFC822_CHECK:
+            case HeaderState::CHECK:
                 if (*check)
                 {
                     while (*pData && *check &&
@@ -486,10 +489,10 @@ sal_uIntPtr INetMIMEMessage::SetRFC822HeaderField (
                 {
                     check = pData;
                 }
-                eState = (*check == '\0') ? eOkState : INETMSG_RFC822_JUNK;
+                eState = (*check == '\0') ? eOkState : HeaderState::JUNK;
                 break;
 
-            case INETMSG_RFC822_OK:
+            case HeaderState::OK:
                 pData = pStop;
                 SetHeaderField_Impl (
                     INetMessageHeader( ImplINetRFC822MessageHeaderData.at(nIdx), rHeader.GetValue() ),
