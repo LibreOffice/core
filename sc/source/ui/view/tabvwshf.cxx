@@ -83,7 +83,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         bVisible = static_cast<const SfxBoolItem*>(pItem)->GetValue();
                 }
 
-                if( ! bVisible )            // ausblenden
+                if( ! bVisible )            // fade out
                 {
                     if ( pDoc->IsDocEditable() )
                     {
@@ -91,7 +91,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         HideTable( rMark );
                     }
                 }
-                else                        // einblenden
+                else                        // fade in
                 {
                     std::vector<OUString> rNames;
                     rNames.push_back(aName);
@@ -171,9 +171,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB   nTabNr       = nCurrentTab;
 
                 if ( !pDoc->IsDocEditable() )
-                    break;                          // gesperrt
+                    break;                          // locked
 
-                if ( pReqArgs != NULL )             // von Basic
+                if ( pReqArgs != NULL )             // from basic
                 {
                     bool bOk = false;
                     const SfxPoolItem*  pTabItem;
@@ -183,7 +183,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if ( pReqArgs->HasItem( FN_PARAM_1, &pTabItem ) &&
                          pReqArgs->HasItem( nSlot, &pNameItem ) )
                     {
-                        //  Tabellennr. von Basic: 1-basiert
+                        //  tablenumber from basic: 1-based
 
                         aName = static_cast<const SfxStringItem*>(pNameItem)->GetValue();
                         nTabNr = static_cast<const SfxUInt16Item*>(pTabItem)->GetValue() - 1;
@@ -193,9 +193,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if (bOk)
                         rReq.Done( *pReqArgs );
-                    //! sonst Fehler setzen
+                    //! else set error
                 }
-                else                                // Dialog
+                else                                // dialog
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -300,23 +300,23 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TAB_RENAME:
         case FID_TAB_MENU_RENAME:
             {
-                //  FID_TAB_MENU_RENAME - "umbenennen" im Menu
-                //  FID_TAB_RENAME      - "Name"-Property fuer Basic
-                //  Execute ist gleich, aber im GetState wird MENU_RENAME evtl. disabled
+                //  FID_TAB_MENU_RENAME - "rename" in menu
+                //  FID_TAB_RENAME      - "name"-property for basic
+                //  equal execute, but MENU_RENAME may be disabled inside GetState
 
                 if ( nSlot == FID_TAB_MENU_RENAME )
-                    nSlot = FID_TAB_RENAME;             // Execute ist gleich
+                    nSlot = FID_TAB_RENAME;             // equal execute
 
                 SCTAB nTabNr = rViewData.GetTabNo();
                 ScMarkData& rMark = rViewData.GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
                 if ( !pDoc->IsDocEditable() )
-                    break; // alles gesperrt
+                    break; // evrything locked
 
                 if ( nSlot != FID_TAB_APPEND &&
                         ( pDoc->IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
-                    break; // kein Rename
+                    break; // no rename
 
                 if( pReqArgs != NULL )
                 {
@@ -407,7 +407,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if( rReq.IsAPI() )
                                 {
 #if HAVE_FEATURE_SCRIPTING
-                                    StarBASIC::Error( SbERR_SETPROP_FAILED ); // XXX Fehlerbehandlung???
+                                    StarBASIC::Error( SbERR_SETPROP_FAILED ); // XXX error handling???
 #endif
                                 }
                                 else
@@ -426,7 +426,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TAB_MOVE:
             {
                 if ( pDoc->GetChangeTrack() != NULL )
-                    break;      // bei aktiviertem ChangeTracking kein TabMove
+                    break;    // if ChangeTracking is active, then no TabMove
 
                 bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
@@ -444,7 +444,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         aDocName = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     {
-                        //  Tabelle ist 1-basiert
+                        //  table is 1-based
                         nTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue() - 1;
                         if ( nTab >= nTableCount )
                             nTab = SC_TAB_APPEND;
@@ -475,18 +475,18 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     break;
                                 }
 
-                                i++;        // nur die ScDocShell's zaehlen
+                                i++;        // only count ScDocShell
                             }
                             pSh = SfxObjectShell::GetNext( *pSh );
                         }
                     }
-                    else // Kein Dokumentname -> neues Dokument
+                    else // no doc-name -> new doc
                     {
                         nDoc = SC_DOC_NEW;
                         bDoIt = true;
                     }
 
-                    if ( bDoIt && nTab >= nTableCount )     // ggf. anhaengen
+                    if ( bDoIt && nTab >= nTableCount )     // if necessary append
                         nTab = SC_TAB_APPEND;
                 }
                 else
@@ -542,7 +542,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             }
                         }
                         rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
-                        //  Tabelle ist 1-basiert, wenn nicht APPEND
+                        // 1-based table, if not APPEND
                         SCTAB nBasicTab = ( nTab <= MAXTAB ) ? (nTab+1) : nTab;
                         rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
                         rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bCpy ) );
@@ -551,7 +551,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( bDoIt )
                 {
-                    rReq.Done();        // aufzeichnen, solange das Dokument noch aktiv ist
+                    rReq.Done();        // record, while doc is active
 
                     MoveTable( nDoc, nTab, bCpy, &aTabName );
                 }
@@ -560,12 +560,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_DELETE_TABLE:
             {
-                //  Parameter war ueberfluessig, weil die Methode an der Table haengt
+                //  unnecessary parameter ->  method depends on table
 
                 bool bDoIt = rReq.IsAPI();
                 if( !bDoIt )
                 {
-                    //  wenn's nicht von Basic kommt, nochmal nachfragen:
+                    //  source isn't basic -> ask again
 
                         bDoIt = ( RET_YES ==
                                   QueryBox( GetDialogParent(),
@@ -854,8 +854,8 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                     rSet.DisableItem( nWhich );
                 break;
 
-            //  FID_TAB_MENU_RENAME - "umbenennen" im Menu
-            //  FID_TAB_RENAME      - "Name"-Property fuer Basic
+            //  FID_TAB_MENU_RENAME - "rename" from Menu
+            //  FID_TAB_RENAME      - "name"-property for Basic
 
             case FID_TAB_MENU_RENAME:
                 if ( !pDoc->IsDocEditable() ||
