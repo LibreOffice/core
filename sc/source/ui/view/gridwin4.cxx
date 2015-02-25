@@ -954,6 +954,37 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aOutData.DrawEdit(true);
 
     rDevice.SetMapMode(aOldMapMode);
+
+    EditView*   pEditView = NULL;
+    {
+        SCCOL nEditCol;
+        SCROW nEditRow;
+        pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
+    }
+    //  InPlace Edit-View
+    // moved after EndDrawLayers() to get it outside the overlay buffer and
+    // on top of everything
+    if (pEditView)
+    {
+        //! use pContentDev for EditView?
+        rDevice.SetMapMode(MAP_PIXEL);
+        SCCOL nEditCol1 = pViewData->GetEditStartCol();
+        SCROW nEditRow1 = pViewData->GetEditStartRow();
+        SCCOL nEditCol2 = pViewData->GetEditEndCol();
+        SCROW nEditRow2 = pViewData->GetEditEndRow();
+        rDevice.SetLineColor();
+        rDevice.SetFillColor( pEditView->GetBackgroundColor() );
+        Point aStart = pViewData->GetScrPos( nEditCol1, nEditRow1, eWhich );
+        Point aEnd = pViewData->GetScrPos( nEditCol2+1, nEditRow2+1, eWhich );
+        aEnd.X() -= 2;        // don't overwrite grid
+        aEnd.Y() -= 2;
+        rDevice.DrawRect( Rectangle( aStart,aEnd ) );
+
+        rDevice.SetMapMode(pViewData->GetLogicMode());
+        pEditView->Paint( PixelToLogic( Rectangle( Point( fTilePosXPixel, fTilePosYPixel ),
+                            Size( aOutData.GetScrW(), aOutData.GetScrH() ) ) ), &rDevice );
+        rDevice.SetMapMode(MAP_PIXEL);
+    }
 }
 
 void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)

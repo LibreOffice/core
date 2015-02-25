@@ -628,6 +628,12 @@ void ScInputHandler::ImplCreateEditEngine()
         pEngine->SetControlWord( pEngine->GetControlWord() | EE_CNTRL_AUTOCORRECT );
         pEngine->SetModifyHdl( LINK( this, ScInputHandler, ModifyHdl ) );
     }
+
+    // set the EditEngine so that it invalidates the view instead of direct
+    // paint
+    EditView *pEditView = pEngine->GetActiveView();
+    if (pEditView && !pEditView->isTiledRendering())
+        pEditView->setTiledRendering(true);
 }
 
 void ScInputHandler::UpdateAutoCorrFlag()
