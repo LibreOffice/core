@@ -193,9 +193,9 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     {
         SwDoc* pDoc;
         if( aCharFmtDep.GetRegisteredIn() )
-            pDoc = static_cast<SwCharFmt*>(aCharFmtDep.GetRegisteredIn())->GetDoc();
+            pDoc = static_cast<SwFmt*>(aCharFmtDep.GetRegisteredIn())->GetDoc();
         else
-            pDoc = static_cast<SwCharFmt*>(aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
+            pDoc = static_cast<SwFmt*>(aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
         SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
         for( size_t nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
         {
