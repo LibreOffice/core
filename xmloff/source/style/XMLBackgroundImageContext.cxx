@@ -32,6 +32,8 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include "XMLBackgroundImageContext.hxx"
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::com::sun::star;
@@ -39,6 +41,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
+using namespace xmloff;
+
+using css::xml::sax::FastToken::NAMESPACE;
 
 enum SvXMLTokenMapAttrs
 {
@@ -56,14 +61,22 @@ static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 {
     static const SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     {
-        { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF      },
-        { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE      },
-        { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE   },
-        { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW      },
-        { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION  },
-        { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT    },
-        { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER    },
-        { XML_NAMESPACE_DRAW,  XML_OPACITY,     XML_TOK_BGIMG_OPACITY   },
+        { XML_NAMESPACE_XLINK, XML_HREF,        XML_TOK_BGIMG_HREF,
+            (NAMESPACE | XML_NAMESPACE_XLINK | XML_href) },
+        { XML_NAMESPACE_XLINK, XML_TYPE,        XML_TOK_BGIMG_TYPE,
+            (NAMESPACE | XML_NAMESPACE_XLINK | XML_type) },
+        { XML_NAMESPACE_XLINK, XML_ACTUATE,     XML_TOK_BGIMG_ACTUATE,
+            (NAMESPACE | XML_NAMESPACE_XLINK | XML_actuate) },
+        { XML_NAMESPACE_XLINK, XML_SHOW,        XML_TOK_BGIMG_SHOW,
+            (NAMESPACE | XML_NAMESPACE_XLINK | XML_show) },
+        { XML_NAMESPACE_STYLE, XML_POSITION,    XML_TOK_BGIMG_POSITION,
+            (NAMESPACE | XML_NAMESPACE_STYLE | XML_position) },
+        { XML_NAMESPACE_STYLE, XML_REPEAT,      XML_TOK_BGIMG_REPEAT,
+            (NAMESPACE | XML_NAMESPACE_STYLE | XML_repeat) },
+        { XML_NAMESPACE_STYLE, XML_FILTER_NAME, XML_TOK_BGIMG_FILTER,
+            (NAMESPACE | XML_NAMESPACE_STYLE | XML_filter_name) },
+        { XML_NAMESPACE_DRAW,  XML_OPACITY,     XML_TOK_BGIMG_OPACITY,
+            (NAMESPACE | XML_NAMESPACE_DRAW | XML_opacity) },
         XML_TOKEN_MAP_END
     };
     return aBGImgAttributesAttrTokenMap;
@@ -75,14 +88,14 @@ static const SvXMLEnumMapEntry psXML_BrushHoriPos[] =
 {
     { XML_LEFT,         GraphicLocation_LEFT_MIDDLE },
     { XML_RIGHT,        GraphicLocation_RIGHT_MIDDLE    },
-    { XML_TOKEN_INVALID,                    0           }
+    { xmloff::token::XML_TOKEN_INVALID,                    0           }
 };
 
 static const SvXMLEnumMapEntry psXML_BrushVertPos[] =
 {
     { XML_TOP,          GraphicLocation_MIDDLE_TOP  },
     { XML_BOTTOM,       GraphicLocation_MIDDLE_BOTTOM   },
-    { XML_TOKEN_INVALID,                    0           }
+    { xmloff::token::XML_TOKEN_INVALID,                    0           }
 };
 
 static void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
@@ -292,7 +305,7 @@ void XMLBackgroundImageContext::ProcessAttrs(
                     { XML_BACKGROUND_REPEAT,        GraphicLocation_TILED   },
                     { XML_BACKGROUND_NO_REPEAT,     GraphicLocation_MIDDLE_MIDDLE       },
                     { XML_BACKGROUND_STRETCH,       GraphicLocation_AREA    },
-                    { XML_TOKEN_INVALID,            0           }
+                    { xmloff::token::XML_TOKEN_INVALID,            0           }
                 };
                 if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                 psXML_BrushRepeat ) )

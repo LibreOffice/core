@@ -28,10 +28,15 @@
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmltabi.hxx"
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
+using namespace xmloff;
+
+using css::xml::sax::FastToken::NAMESPACE;
 
 enum SvXMLTokenMapAttrs
 {
@@ -45,11 +50,16 @@ enum SvXMLTokenMapAttrs
 
 static SvXMLTokenMapEntry aTabsAttributesAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION },
-    { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE },
-    { XML_NAMESPACE_STYLE, XML_CHAR,         XML_TOK_TABSTOP_CHAR },
-    { XML_NAMESPACE_STYLE, XML_LEADER_TEXT,  XML_TOK_TABSTOP_LEADER_TEXT },
-    { XML_NAMESPACE_STYLE, XML_LEADER_STYLE,  XML_TOK_TABSTOP_LEADER_STYLE },
+    { XML_NAMESPACE_STYLE, XML_POSITION,     XML_TOK_TABSTOP_POSITION,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_position) },
+    { XML_NAMESPACE_STYLE, XML_TYPE,         XML_TOK_TABSTOP_TYPE,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_type) },
+    { XML_NAMESPACE_STYLE, XML_CHAR,         XML_TOK_TABSTOP_CHAR,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_char) },
+    { XML_NAMESPACE_STYLE, XML_LEADER_TEXT,  XML_TOK_TABSTOP_LEADER_TEXT,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_leader_text) },
+    { XML_NAMESPACE_STYLE, XML_LEADER_STYLE,  XML_TOK_TABSTOP_LEADER_STYLE,
+        (NAMESPACE | XML_NAMESPACE_STYLE | XML_leader_style) },
     XML_TOKEN_MAP_END
 };
 
