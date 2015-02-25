@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_56caf450",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1898,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-25T11:01:42Z",
+      "side": 1,
+      "message": "This doesn\u0027t work for several reasons.\n\n1. the page size is only known when page breaks were calculated, either manually or the document was printed.\n\n2. if the page size isn\u0027t known yet, ScDocument::GetPageSize() returns a 0 size. The SnapVisArea() below then takes whatever cells it finds there, which may result in a big thumbnail of one empty cell.\n\n3. the page size is exactly that, if it is known it can be any size and dimension, which certainly is not what you want as thumbnail. In fact it looks ugly in previews of thumbnails.\n\n4. thumbnails are stored in ODF for previews, the size is specified.\n\nFor implementation details:\n\naDocument.GetPageSize() should not be called twice, instead the Size remembered.\n\naDocument.GetVisibleTab() should not be called twice.",
+      "revId": "016ae211b46551d4ffeb98dae7aa20b2a9258d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
