@@ -6231,6 +6231,31 @@ RevocationInfoChoice ::= CHOICE {
 
 RevocationInfoChoices ::= SET OF RevocationInfoChoice
 
+SignerIdentifier ::= CHOICE {
+    issuerAndSerialNumber IssuerAndSerialNumber,
+    subjectKeyIdentifier [0] SubjectKeyIdentifier }
+
+AttributeValue ::= ANY
+
+Attribute ::= SEQUENCE {
+    attrType OBJECT IDENTIFIER,
+    attrValues SET OF AttributeValue }
+
+SignedAttributes ::= SET SIZE (1..MAX) OF Attribute
+
+SignatureValue ::= OCTET STRING
+
+UnsignedAttributes ::= SET SIZE (1..MAX) OF Attribute
+
+SignerInfo ::= SEQUENCE {
+    version CMSVersion,
+    sid SignerIdentifier,
+    digestAlgorithm DigestAlgorithmIdentifier,
+    signedAttrs [0] IMPLICIT SignedAttributes OPTIONAL,
+    signatureAlgorithm SignatureAlgorithmIdentifier,
+    signature SignatureValue,
+    unsignedAttrs [1] IMPLICIT UnsignedAttributes OPTIONAL }
+
 SignerInfos ::= SET OF SignerInfo
 
 SignedData ::= SEQUENCE {
@@ -6625,7 +6650,8 @@ my_NSS_CMSSignerInfo_AddUnauthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute
     return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->unAuthAttr), attr);
 }
 
-NSSCMSMessage *CreateCMSMessage(NSSCMSSignedData **cms_sd,
+NSSCMSMessage *CreateCMSMessage(PRTime time,
+                                NSSCMSSignedData **cms_sd,
                                 NSSCMSSignerInfo **cms_signer,
                                 CERTCertificate *cert,
                                 SECItem *digest)
@@ -6674,7 +6700,7 @@ NSSCMSMessage *CreateCMSMessage(NSSCMSSignedData **cms_sd,
         return NULL;
     }
 
-    if (NSS_CMSSignerInfo_AddSigningTime(*cms_signer, PR_Now()) != SECSuccess)
+    if (NSS_CMSSignerInfo_AddSigningTime(*cms_signer, time) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddSigningTime failed");
         NSS_CMSSignedData_Destroy(*cms_sd);
@@ -6835,20 +6861,93 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
 
+#ifdef DBG_UTIL
+    {
+        FILE *out = fopen("PDFWRITER.hash.data", "wb");
+        fwrite(hash, SHA1_LENGTH, 1, out);
+        fclose(out);
+    }
+#endif
+
+    PRTime now = PR_Now();
     NSSCMSSignedData *cms_sd;
     NSSCMSSignerInfo *cms_signer;
-    NSSCMSMessage *cms_msg = CreateCMSMessage(&cms_sd, &cms_signer, cert, &digest);
+    NSSCMSMessage *cms_msg = CreateCMSMessage(now, &cms_sd, &cms_signer, cert, &digest);
     if (!cms_msg)
         return false;
+
+    char *pass(strdup(OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
 
     NSSCMSAttribute timestamp;
     SECItem values[2];
     SECItem *valuesp = values;
     SECOidData typetag;
 
-    // Now we have the hash algorithm as a SECItem available in cms_siger->digestAlg
     if( !m_aContext.SignTSA.isEmpty() )
     {
+        // Create another CMS message with the same contents as cms_msg, because it doesn't seem
+        // possible to encode a message twice (once to get something to timestamp, and then after
+        // adding the timestamp attribute).
+
+        NSSCMSSignedData *ts_cms_sd;
+        NSSCMSSignerInfo *ts_cms_signer;
+        NSSCMSMessage *ts_cms_msg = CreateCMSMessage(now, &ts_cms_sd, &ts_cms_signer, cert, &digest);
+        if (!ts_cms_msg)
+        {
+            free(pass);
+            return false;
+        }
+
+        SECItem ts_cms_output;
+        ts_cms_output.data = 0;
+        ts_cms_output.len = 0;
+        PLArenaPool *ts_arena = PORT_NewArena(MAX_SIGNATURE_CONTENT_LENGTH);
+        NSSCMSEncoderContext *ts_cms_ecx;
+        ts_cms_ecx = NSS_CMSEncoder_Start(ts_cms_msg, NULL, NULL, &ts_cms_output, ts_arena, PDFSigningPKCS7PasswordCallback, pass, NULL, NULL, NULL, NULL);
+
+        if (NSS_CMSEncoder_Finish(ts_cms_ecx) != SECSuccess)
+        {
+            SAL_WARN("vcl.pdfwriter", "NSS_CMSEncoder_Finish failed");
+            free(pass);
+            return false;
+        }
+
+        // I have compared the ts_cms_output produced here with the cms_output produced below, with
+        // the DONTCALLADDUNAUTHATTR env var set (i.e. without actually calling
+        // my_NSS_CMSSignerInfo_AddUnauthAttr()), and they are identical.
+
+#ifdef DBG_UTIL
+        {
+            FILE *out = fopen("PDFWRITER.ts_cms.data", "wb");
+            fwrite(ts_cms_output.data, ts_cms_output.len, 1, out);
+            fclose(out);
+        }
+#endif
+
+        HashContextScope ts_hc(HASH_Create(HASH_AlgSHA1));
+        if (!ts_hc.get())
+        {
+            SAL_WARN("vcl.pdfwriter", "HASH_Create failed");
+            free(pass);
+            return false;
+        }
+
+        HASH_Begin(ts_hc.get());
+        HASH_Update(ts_hc.get(), reinterpret_cast<const unsigned char*>(ts_cms_output.data), ts_cms_output.len);
+        SECItem ts_digest;
+        unsigned char ts_hash[SHA1_LENGTH];
+        ts_digest.type = siBuffer;
+        ts_digest.data = ts_hash;
+        HASH_End(ts_hc.get(), ts_digest.data, &ts_digest.len, SHA1_LENGTH);
+        ts_hc.clear();
+
+#ifdef DBG_UTIL
+        {
+            FILE *out = fopen("PDFWRITER.ts_hash.data", "wb");
+            fwrite(ts_hash, SHA1_LENGTH, 1, out);
+            fclose(out);
+        }
+#endif
         TimeStampReq src;
 
         unsigned char cOne = 1;
@@ -6856,8 +6955,8 @@ bool PDFWriterImpl::finalizeSignature()
         src.version.data = &cOne;
         src.version.len = sizeof(cOne);
 
-        src.messageImprint.hashAlgorithm = cms_signer->digestAlg;
-        src.messageImprint.hashedMessage = digest;
+        src.messageImprint.hashAlgorithm = ts_cms_signer->digestAlg;
+        src.messageImprint.hashedMessage = ts_digest;
 
         src.reqPolicy.type = siBuffer;
         src.reqPolicy.data = NULL;
@@ -6878,12 +6977,14 @@ bool PDFWriterImpl::finalizeSignature()
         if (timestamp_request == NULL)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem failed");
+            free(pass);
             return false;
         }
 
         if (timestamp_request->data == NULL)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem succeeded but got NULL data");
+            free(pass);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
@@ -6907,6 +7008,7 @@ bool PDFWriterImpl::finalizeSignature()
         if (!curl)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_init failed");
+            free(pass);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
         }
@@ -6916,6 +7018,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_URL, OUStringToOString(m_aContext.SignTSA, RTL_TEXTENCODING_UTF8).getStr())) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_URL) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6927,6 +7030,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_HTTPHEADER, slist)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_HTTPHEADER) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_slist_free_all(slist);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
@@ -6937,6 +7041,7 @@ bool PDFWriterImpl::finalizeSignature()
             (rc = curl_easy_setopt(curl, CURLOPT_POSTFIELDS, timestamp_request->data)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POSTFIELDSIZE or CURLOPT_POSTFIELDS) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6948,6 +7053,7 @@ bool PDFWriterImpl::finalizeSignature()
             (rc = curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, AppendToBuffer)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_WRITEDATA or CURLOPT_WRITEFUNCTION) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6956,6 +7062,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_POST, 1l)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_POST) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6965,6 +7072,7 @@ bool PDFWriterImpl::finalizeSignature()
         if ((rc = curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, error_buffer)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_ERRORBUFFER) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6975,6 +7083,7 @@ bool PDFWriterImpl::finalizeSignature()
             (rc = curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 10l)) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_setopt(CURLOPT_TIMEOUT or CURLOPT_CONNECTTIMEOUT) failed: " << curl_easy_strerror(rc));
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -6983,6 +7092,7 @@ bool PDFWriterImpl::finalizeSignature()
         if (curl_easy_perform(curl) != CURLE_OK)
         {
             SAL_WARN("vcl.pdfwriter", "curl_easy_perform failed: " << error_buffer);
+            free(pass);
             curl_easy_cleanup(curl);
             SECITEM_FreeItem(timestamp_request, PR_TRUE);
             return false;
@@ -7013,6 +7123,7 @@ bool PDFWriterImpl::finalizeSignature()
         if (SEC_ASN1DecodeItem(NULL, &response, TimeStampResp_Template, &response_item) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_ASN1DecodeItem failed");
+            free(pass);
             return false;
         }
 
@@ -7022,6 +7133,7 @@ bool PDFWriterImpl::finalizeSignature()
             (response.status.status.data[0] != 0 && response.status.status.data[0] != 1))
         {
             SAL_WARN("vcl.pdfwriter", "Timestamp request was not granted");
+            free(pass);
             return false;
         }
 
@@ -7041,11 +7153,12 @@ bool PDFWriterImpl::finalizeSignature()
         if (my_SEC_StringToOID(NULL, &typetag.oid, "1.2.840.113549.1.9.16.2.14", 0) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "SEC_StringToOID failed");
+            free(pass);
             return false;
         }
         typetag.offset = SEC_OID_UNKNOWN; // ???
         typetag.desc = "id-aa-timeStampToken";
-        typetag.mechanism = CKM_SHA256; // ???
+        typetag.mechanism = CKM_SHA_1; // ???
         typetag.supportedExtension = UNSUPPORTED_CERT_EXTENSION; // ???
         timestamp.typeTag = &typetag;
 
@@ -7053,28 +7166,30 @@ bool PDFWriterImpl::finalizeSignature()
 
         timestamp.encoded = PR_TRUE; // ???
 
+#ifdef DBG_UTIL
+        if (getenv("DONTCALLADDUNAUTHATTR"))
+            ;
+        else
+#endif
         if (my_NSS_CMSSignerInfo_AddUnauthAttr(cms_signer, &timestamp) != SECSuccess)
         {
             SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddUnauthAttr failed");
+            free(pass);
             return false;
         }
     }
+
     SECItem cms_output;
     cms_output.data = 0;
     cms_output.len = 0;
     PLArenaPool *arena = PORT_NewArena(MAX_SIGNATURE_CONTENT_LENGTH);
     NSSCMSEncoderContext *cms_ecx;
 
-    //FIXME: Check if password is passed correctly to SEC_PKCS7CreateSignedData function
+    // Possibly it would work to even just pass NULL for the password callback function and its
+    // argument here. After all, at least with the hardware token and associated software I tested
+    // with, the software itself pops up a dialog asking for the PIN (password). But I am not going
+    // to test it and risk locking up my token...
 
-    // Inded, it was not, I think, and that caused a crash as described in fdo#83937.
-    // Unfortunately I could not test this fix fully before my hardware token decided to
-    // block itself thanks to too many wrong PIN attempts. Possibly it would work to
-    // even just pass NULL for the password callback function and its argument here.
-    // After all, at least with the hardware token and associated software I tested
-    // with, the software itself pops up a dialog asking for the PIN (password).
-
-    char *pass(strdup(OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr()));
     cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, PDFSigningPKCS7PasswordCallback, pass, NULL, NULL, NULL, NULL);
 
     if (!cms_ecx)
