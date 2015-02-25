@@ -233,6 +233,7 @@ public class LOKitThread extends Thread {
         } else { // "SingleTap"
             LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
             mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 1);
+            mTileProvider.mouseButtonUp(mDocumentTouchCoordinate, 1);
         }
     }
 
