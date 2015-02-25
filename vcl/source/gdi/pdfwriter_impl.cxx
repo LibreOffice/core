@@ -6625,6 +6625,98 @@ my_NSS_CMSSignerInfo_AddUnauthAttr(NSSCMSSignerInfo *signerinfo, NSSCMSAttribute
     return my_NSS_CMSAttributeArray_AddAttr(signerinfo->cmsg->poolp, &(signerinfo->unAuthAttr), attr);
 }
 
+NSSCMSMessage *CreateCMSMessage(NSSCMSSignedData **cms_sd,
+                                NSSCMSSignerInfo **cms_signer,
+                                CERTCertificate *cert,
+                                SECItem *digest)
+{
+    NSSCMSMessage *result = NSS_CMSMessage_Create(NULL);
+    if (!result)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSMessage_Create failed");
+        return NULL;
+    }
+
+    *cms_sd = NSS_CMSSignedData_Create(result);
+    if (!*cms_sd)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_Create failed");
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    NSSCMSContentInfo *cms_cinfo = NSS_CMSMessage_GetContentInfo(result);
+    if (NSS_CMSContentInfo_SetContent_SignedData(result, cms_cinfo, *cms_sd) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_SignedData failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    cms_cinfo = NSS_CMSSignedData_GetContentInfo(*cms_sd);
+
+    // Attach NULL data as detached data
+    if (NSS_CMSContentInfo_SetContent_Data(result, cms_cinfo, NULL, PR_TRUE) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_Data failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA1);
+    if (!*cms_signer)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_Create failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    if (NSS_CMSSignerInfo_AddSigningTime(*cms_signer, PR_Now()) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddSigningTime failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    if (NSS_CMSSignerInfo_IncludeCerts(*cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_IncludeCerts failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    if (NSS_CMSSignedData_AddCertificate(*cms_sd, cert) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddCertificate failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    if (NSS_CMSSignedData_AddSignerInfo(*cms_sd, *cms_signer) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddSignerInfo failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    if (NSS_CMSSignedData_SetDigestValue(*cms_sd, SEC_OID_SHA1, digest) != SECSuccess)
+    {
+        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_SetDigestValue failed");
+        NSS_CMSSignedData_Destroy(*cms_sd);
+        NSS_CMSMessage_Destroy(result);
+        return NULL;
+    }
+
+    return result;
+}
+
 #if 0
 {
 #endif
@@ -6743,41 +6835,11 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
 
-    NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
+    NSSCMSSignedData *cms_sd;
+    NSSCMSSignerInfo *cms_signer;
+    NSSCMSMessage *cms_msg = CreateCMSMessage(&cms_sd, &cms_signer, cert, &digest);
     if (!cms_msg)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSMessage_Create failed");
         return false;
-    }
-
-    NSSCMSSignedData *cms_sd = NSS_CMSSignedData_Create(cms_msg);
-    if (!cms_sd)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_Create failed");
-        return false;
-    }
-
-    NSSCMSContentInfo *cms_cinfo = NSS_CMSMessage_GetContentInfo(cms_msg);
-    if (NSS_CMSContentInfo_SetContent_SignedData(cms_msg, cms_cinfo, cms_sd) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_SignedData failed");
-        return false;
-    }
-
-    cms_cinfo = NSS_CMSSignedData_GetContentInfo(cms_sd);
-    //attach NULL data as detached data
-    if (NSS_CMSContentInfo_SetContent_Data(cms_msg, cms_cinfo, NULL, PR_TRUE) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSContentInfo_SetContent_Data failed");
-        return false;
-    }
-
-    NSSCMSSignerInfo *cms_signer = NSS_CMSSignerInfo_Create(cms_msg, cert, SEC_OID_SHA1);
-    if (!cms_signer)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_Create failed");
-        return false;
-    }
 
     NSSCMSAttribute timestamp;
     SECItem values[2];
@@ -6997,36 +7059,6 @@ bool PDFWriterImpl::finalizeSignature()
             return false;
         }
     }
-    else if (NSS_CMSSignerInfo_AddSigningTime(cms_signer, PR_Now()) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_AddSigningTime failed");
-        return false;
-    }
-
-    if (NSS_CMSSignerInfo_IncludeCerts(cms_signer, NSSCMSCM_CertChain, certUsageEmailSigner) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignerInfo_IncludeCerts failed");
-        return false;
-    }
-
-    if (NSS_CMSSignedData_AddCertificate(cms_sd, cert) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddCertificate failed");
-        return false;
-    }
-
-    if (NSS_CMSSignedData_AddSignerInfo(cms_sd, cms_signer) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_AddSignerInfo failed");
-        return false;
-    }
-
-    if (NSS_CMSSignedData_SetDigestValue(cms_sd, SEC_OID_SHA1, &digest) != SECSuccess)
-    {
-        SAL_WARN("vcl.pdfwriter", "NSS_CMSSignedData_SetDigestValue failed");
-        return false;
-    }
-
     SECItem cms_output;
     cms_output.data = 0;
     cms_output.len = 0;
