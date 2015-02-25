@@ -391,6 +391,9 @@ public:
 
     // @see vcl::ITiledRenderable::registerCallback().
     virtual void registerCallback(LibreOfficeKitCallback pCallback, void* pData) SAL_OVERRIDE;
+
+    /// @see vcl::ITiledRenderable::initializeForTiledRendering().
+    virtual void initializeForTiledRendering() SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<

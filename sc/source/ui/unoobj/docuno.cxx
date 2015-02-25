@@ -516,6 +516,12 @@ void ScModelObj::registerCallback(LibreOfficeKitCallback pCallback, void* pData)
     pDocShell->GetBestViewShell()->registerLibreOfficeKitCallback(pCallback, pData);
 }
 
+void ScModelObj::initializeForTiledRendering()
+{
+    SolarMutexGuard aGuard;
+    pDocShell->GetDocument().GetDrawLayer()->setTiledRendering(true);
+}
+
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
                                                 throw(uno::RuntimeException, std::exception)
 {
