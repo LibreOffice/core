@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_566d1431",
+        "filename": "sc/source/ui/view/tabvwshf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2015-02-25T14:23:51Z",
+      "side": 1,
+      "message": "Isn\u0027t \"table is 1-based\" better here? Assuming that the information is that it\u0027s not 0-based, but 1-based.",
+      "revId": "a056087ec34d76529ef4fb09e22046b9222ed377",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
