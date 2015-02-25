@@ -994,7 +994,7 @@ void ScGridWindow::LogicInvalidate(const ::vcl::Region* pRegion)
         sRectangle = "EMPTY";
     else
         sRectangle = pRegion->GetBoundRect().toString();
-    pViewData->GetViewShell()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
+    pViewData->GetDocument()->GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_INVALIDATE_TILES, sRectangle.getStr());
 }
 
 void ScGridWindow::CheckNeedsRepaint()
