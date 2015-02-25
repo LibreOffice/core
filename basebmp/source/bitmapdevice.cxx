@@ -2092,22 +2092,22 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         // thirtytwo bit formats
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
-            return createRenderer<PixelFormatTraits_BGRX32_8888,StdMasks>(
+            return createRenderer<PixelFormatTraits_BGRA32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
-            return createRenderer<PixelFormatTraits_XRGB32_8888,StdMasks>(
+            return createRenderer<PixelFormatTraits_ARGB32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
-            return createRenderer<PixelFormatTraits_XBGR32_8888,StdMasks>(
+            return createRenderer<PixelFormatTraits_ABGR32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
-            return createRenderer<PixelFormatTraits_RGBX32_8888,StdMasks>(
+            return createRenderer<PixelFormatTraits_RGBA32_8888,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 

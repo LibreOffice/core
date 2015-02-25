@@ -296,9 +296,9 @@ typedef PixelFormatTraitsTemplate_RGBMask<
     0x00FF0000,
     0x0000FF00,
     0x000000FF,
-    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_BGRX32_8888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRX32_8888::getter_type,
-                                  PixelFormatTraits_BGRX32_8888::setter_type);
+    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_BGRA32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRA32_8888::getter_type,
+                                  PixelFormatTraits_BGRA32_8888::setter_type);
 
 // This one used to be called PixelFormatTraits_BGR32_888.
 
@@ -308,9 +308,9 @@ typedef PixelFormatTraitsTemplate_RGBMask<
     0x00FF0000,
     0x0000FF00,
     0x000000FF,
-    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_XRGB32_8888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_XRGB32_8888::getter_type,
-                                  PixelFormatTraits_XRGB32_8888::setter_type);
+    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_ARGB32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_ARGB32_8888::getter_type,
+                                  PixelFormatTraits_ARGB32_8888::setter_type);
 
 // The following two ones were added for Android needs and for completeness
 
@@ -320,9 +320,9 @@ typedef PixelFormatTraitsTemplate_RGBMask<
     0xFF000000,
     0x00FF0000,
     0x0000FF00,
-    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_XBGR32_8888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_XBGR32_8888::getter_type,
-                                  PixelFormatTraits_XBGR32_8888::setter_type);
+    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_ABGR32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_ABGR32_8888::getter_type,
+                                  PixelFormatTraits_ABGR32_8888::setter_type);
 
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt32,
@@ -330,9 +330,9 @@ typedef PixelFormatTraitsTemplate_RGBMask<
     0xFF000000,
     0x00FF0000,
     0x0000FF00,
-    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_RGBX32_8888;
-BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGBX32_8888::getter_type,
-                                  PixelFormatTraits_RGBX32_8888::setter_type);
+    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_RGBA32_8888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGBA32_8888::getter_type,
+                                  PixelFormatTraits_RGBA32_8888::setter_type);
 
 // The following hybrid 24bits used out of 32bit was added for Cairo needs
 
