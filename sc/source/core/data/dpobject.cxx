@@ -173,7 +173,7 @@ OUString DBConnector::getColumnLabel(long nCol) const
 
 void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) const
 {
-    rNumType = NUMBERFORMAT_NUMBER;
+    rNumType = css::util::NumberFormat::NUMBER;
     sal_Int32 nType = mxMetaData->getColumnType(nCol+1);
 
     try
@@ -184,7 +184,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
             {
-                rNumType = NUMBERFORMAT_LOGICAL;
+                rNumType = css::util::NumberFormat::LOGICAL;
                 fValue  = mxRow->getBoolean(nCol+1) ? 1 : 0;
                 rData.SetValue(fValue);
                 break;
@@ -206,7 +206,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             }
             case sdbc::DataType::DATE:
             {
-                rNumType = NUMBERFORMAT_DATE;
+                rNumType = css::util::NumberFormat::DATE;
 
                 util::Date aDate = mxRow->getDate(nCol+1);
                 fValue = Date(aDate.Day, aDate.Month, aDate.Year) - maNullDate;
@@ -215,7 +215,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             }
             case sdbc::DataType::TIME:
             {
-                rNumType = NUMBERFORMAT_TIME;
+                rNumType = css::util::NumberFormat::TIME;
 
                 util::Time aTime = mxRow->getTime(nCol+1);
                 fValue = aTime.Hours       / static_cast<double>(::tools::Time::hourPerDay)   +
@@ -227,7 +227,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
             }
             case sdbc::DataType::TIMESTAMP:
             {
-                rNumType = NUMBERFORMAT_DATETIME;
+                rNumType = css::util::NumberFormat::DATETIME;
 
                 util::DateTime aStamp = mxRow->getTimestamp(nCol+1);
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - maNullDate ) +

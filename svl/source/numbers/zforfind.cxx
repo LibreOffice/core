@@ -79,8 +79,8 @@ ImpSvNumberInputScan::ImpSvNumberInputScan( SvNumberFormatter* pFormatterP )
         bTextInitialized( false ),
         bScanGenitiveMonths( false ),
         bScanPartitiveMonths( false ),
-        eScannedType( NUMBERFORMAT_UNDEFINED ),
-        eSetType( NUMBERFORMAT_UNDEFINED )
+        eScannedType( css::util::NumberFormat::UNDEFINED ),
+        eSetType( css::util::NumberFormat::UNDEFINED )
 {
     pFormatter = pFormatterP;
     pNullDate = new Date(30,12,1899);
@@ -117,7 +117,7 @@ void ImpSvNumberInputScan::Reset()
     nAnzStrings  = 0;
     nAnzNums     = 0;
     nThousand    = 0;
-    eScannedType = NUMBERFORMAT_UNDEFINED;
+    eScannedType = css::util::NumberFormat::UNDEFINED;
     nAmPm        = 0;
     nPosThousandString = 0;
     nLogical     = 0;
@@ -1489,7 +1489,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
     using namespace ::com::sun::star::i18n;
     NfEvalDateFormat eEDF;
     int nFormatOrder;
-    if ( pFormat && ((pFormat->GetType() & NUMBERFORMAT_DATE) == NUMBERFORMAT_DATE) )
+    if ( pFormat && (pFormat->GetType() & css::util::NumberFormat::DATE) )
     {
         eEDF = pFormatter->GetEvalDateFormat();
         switch ( eEDF )
@@ -2079,7 +2079,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
     }
     else if ( GetCurrency(rString, nPos, pFormat) ) // currency (DM 1)?
     {
-        eScannedType = NUMBERFORMAT_CURRENCY;       // !!! it IS currency !!!
+        eScannedType = css::util::NumberFormat::CURRENCY;       // !!! it IS currency !!!
         SkipBlanks(rString, nPos);
         if (nSign == 0)                             // no sign yet
         {
@@ -2103,7 +2103,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
         {
             if (nPos < rString.getLength())         // Jan1 without separator is not a date
             {
-                eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date !!!
+                eScannedType = css::util::NumberFormat::DATE;   // !!! it IS a date !!!
                 nMonth = nTempMonth;
                 nMonthPos = 1;                      // month at the beginning
                 if ( nMonth < 0 )
@@ -2123,7 +2123,7 @@ bool ImpSvNumberInputScan::ScanStartString( const OUString& rString,
             if ( nDayOfWeek )
             {
                 // day of week is just parsed away
-                eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
+                eScannedType = css::util::NumberFormat::DATE;       // !!! it IS a date !!!
                 if ( nPos < rString.getLength() )
                 {
                     if ( nDayOfWeek < 0 )
@@ -2226,15 +2226,15 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
             if (bDecSepInDateSeps ||                // . also date separator
                 SkipDatePatternSeparator( nStringPos, nPos))
             {
-                if ( eScannedType != NUMBERFORMAT_UNDEFINED &&
-                     eScannedType != NUMBERFORMAT_DATE &&
-                     eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+                if ( eScannedType != css::util::NumberFormat::UNDEFINED &&
+                     eScannedType != css::util::NumberFormat::DATE &&
+                     eScannedType != css::util::NumberFormat::DATETIME)  // already another type
                 {
                     return MatchedReturn();
                 }
-                if (eScannedType == NUMBERFORMAT_UNDEFINED)
+                if (eScannedType == css::util::NumberFormat::UNDEFINED)
                 {
-                    eScannedType = NUMBERFORMAT_DATE; // !!! it IS a date
+                    eScannedType = css::util::NumberFormat::DATE; // !!! it IS a date
                 }
                 SkipBlanks(rString, nPos);
             }
@@ -2249,7 +2249,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
             SkipBlanks(rString, nPos);
         }
     }
-    else if ( ((eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME) &&
+    else if ( (eScannedType & css::util::NumberFormat::TIME) &&
               GetTime100SecSep( rString, nPos ) )
     {                                               // hundredth seconds separator
         if ( nDecPos )
@@ -2262,13 +2262,13 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
 
     if (SkipChar('/', rString, nPos))               // fraction?
     {
-        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
-             eScannedType != NUMBERFORMAT_DATE)       // except date
+        if ( eScannedType != css::util::NumberFormat::UNDEFINED &&  // already another type
+             eScannedType != css::util::NumberFormat::DATE)       // except date
         {
             return MatchedReturn();                     // => jan/31/1994
         }
-        else if (eScannedType != NUMBERFORMAT_DATE &&    // analyzed no date until now
-                 ( eSetType == NUMBERFORMAT_FRACTION ||  // and preset was fraction
+        else if (eScannedType != css::util::NumberFormat::DATE &&    // analyzed no date until now
+                 ( eSetType == css::util::NumberFormat::FRACTION ||  // and preset was fraction
                    (nAnzNums == 3 &&                     // or 3 numbers
                     (nStringPos == 3 ||                  // and 3rd string particle
                      (nStringPos == 4 && nSign)))))      // or 4th  if signed
@@ -2276,8 +2276,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
             SkipBlanks(rString, nPos);
             if (nPos == rString.getLength())
             {
-                eScannedType = NUMBERFORMAT_FRACTION;   // !!! it IS a fraction (so far)
-                if (eSetType == NUMBERFORMAT_FRACTION &&
+                eScannedType = css::util::NumberFormat::FRACTION;   // !!! it IS a fraction (so far)
+                if (eSetType == css::util::NumberFormat::FRACTION &&
                     nAnzNums == 2 &&
                     (nStringPos == 1 ||                     // for 4/5
                      (nStringPos == 2 && nSign)))           // or signed -4/5
@@ -2294,8 +2294,8 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
 
     if (GetThousandSep(rString, nPos, nStringPos))  // 1,000
     {
-        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&   // already another type
-             eScannedType != NUMBERFORMAT_CURRENCY)      // except currency
+        if ( eScannedType != css::util::NumberFormat::UNDEFINED &&   // already another type
+             eScannedType != css::util::NumberFormat::CURRENCY)      // except currency
         {
             return MatchedReturn();
         }
@@ -2313,13 +2313,13 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
     if (bDate || ((MayBeIso8601() || MayBeMonthDate()) &&    // 1999-12-31  31-Dec-1999
                   SkipChar( '-', rString, nPos)))
     {
-        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
-             eScannedType != NUMBERFORMAT_DATE)       // except date
+        if ( eScannedType != css::util::NumberFormat::UNDEFINED &&  // already another type
+             eScannedType != css::util::NumberFormat::DATE)       // except date
         {
             return MatchedReturn();
         }
         SkipBlanks(rString, nPos);
-        eScannedType = NUMBERFORMAT_DATE;           // !!! it IS a date
+        eScannedType = css::util::NumberFormat::DATE;           // !!! it IS a date
         short nTmpMonth = GetMonth(rString, nPos);  // 10. Jan 94
         if (nMonth && nTmpMonth)                    // month dup
         {
@@ -2350,14 +2350,14 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         {
             return MatchedReturn();
         }
-        if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
-             eScannedType != NUMBERFORMAT_DATE)         // except date
+        if ( eScannedType != css::util::NumberFormat::UNDEFINED &&  // already another type
+             eScannedType != css::util::NumberFormat::DATE)         // except date
         {
             return MatchedReturn();
         }
         if (nMonthStart > 0 && nPos < rString.getLength())  // 10Jan or Jan94 without separator are not dates
         {
-            eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date
+            eScannedType = css::util::NumberFormat::DATE;       // !!! it IS a date
             nMonth = nTempMonth;
             nMonthPos = 2;                          // month in the middle
             if ( nMonth < 0 )
@@ -2376,14 +2376,14 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
     if ( SkipChar('E', rString, nPos) ||            // 10E, 10e, 10,Ee
          SkipChar('e', rString, nPos) )
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
+        if (eScannedType != css::util::NumberFormat::UNDEFINED) // already another type
         {
             return MatchedReturn();
         }
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_SCIENTIFIC; // !!! it IS scientific
+            eScannedType = css::util::NumberFormat::SCIENTIFIC; // !!! it IS scientific
             if ( nThousand+2 == nAnzNums && nDecPos == 2 ) // special case 1.E2
             {
                 nDecPos = 3;                        // 1,100.E2 1,100,100.E3
@@ -2400,12 +2400,12 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
         {
             if (bDecSepInDateSeps)                  // . also date sep
             {
-                if ( eScannedType != NUMBERFORMAT_DATE &&    // already another type than date
-                     eScannedType != NUMBERFORMAT_DATETIME)  // or date time
+                if ( eScannedType != css::util::NumberFormat::DATE &&    // already another type than date
+                     eScannedType != css::util::NumberFormat::DATETIME)  // or date time
                 {
                     return MatchedReturn();
                 }
-                if (eScannedType == NUMBERFORMAT_DATE)
+                if (eScannedType == css::util::NumberFormat::DATE)
                 {
                     nDecPos = 0;                    // reset for time transition
                 }
@@ -2415,22 +2415,22 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                 return MatchedReturn();
             }
         }
-        if ((eScannedType == NUMBERFORMAT_DATE ||        // already date type
-             eScannedType == NUMBERFORMAT_DATETIME) &&   // or date time
+        if ((eScannedType == css::util::NumberFormat::DATE ||        // already date type
+             eScannedType == css::util::NumberFormat::DATETIME) &&   // or date time
             nAnzNums > 3)                                // and more than 3 numbers? (31.Dez.94 8:23)
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_DATETIME;   // !!! it IS date with time
+            eScannedType = css::util::NumberFormat::DATETIME;   // !!! it IS date with time
         }
-        else if ( eScannedType != NUMBERFORMAT_UNDEFINED &&  // already another type
-                  eScannedType != NUMBERFORMAT_TIME)         // except time
+        else if ( eScannedType != css::util::NumberFormat::UNDEFINED &&  // already another type
+                  eScannedType != css::util::NumberFormat::TIME)         // except time
         {
             return MatchedReturn();
         }
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_TIME;       // !!! it IS a time
+            eScannedType = css::util::NumberFormat::TIME;       // !!! it IS a time
         }
         if ( !nTimePos )
         {
@@ -2442,7 +2442,7 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
     {
         switch (eScannedType)
         {
-        case NUMBERFORMAT_DATE:
+        case css::util::NumberFormat::DATE:
             if (nMonthPos == 1 && pLoc->getLongDateFormat() == MDY)
             {
                 // #68232# recognize long date separators like ", " in "September 5, 1999"
@@ -2464,12 +2464,12 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString,
                     // here if the locale's separator is not ':' so it couldn't
                     // be detected above in the time block.
                     if (nAnzNums >= 5)
-                        eScannedType = NUMBERFORMAT_DATETIME;
+                        eScannedType = css::util::NumberFormat::DATETIME;
                     ++nPos;
                 }
             }
             break;
-        case NUMBERFORMAT_DATETIME:
+        case css::util::NumberFormat::DATETIME:
             if (nPos == 0 && rString.getLength() == 1 && MayBeIso8601())
             {
                 if (nStringPos == 9 && rString[0] == ':')
@@ -2563,15 +2563,15 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
             if (bDecSepInDateSeps ||                // . also date separator
                 SkipDatePatternSeparator( nAnzStrings-1, nPos))
             {
-                if ( eScannedType != NUMBERFORMAT_UNDEFINED &&
-                     eScannedType != NUMBERFORMAT_DATE &&
-                     eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+                if ( eScannedType != css::util::NumberFormat::UNDEFINED &&
+                     eScannedType != css::util::NumberFormat::DATE &&
+                     eScannedType != css::util::NumberFormat::DATETIME)  // already another type
                 {
                     return MatchedReturn();
                 }
-                if (eScannedType == NUMBERFORMAT_UNDEFINED)
+                if (eScannedType == css::util::NumberFormat::UNDEFINED)
                 {
-                    eScannedType = NUMBERFORMAT_DATE;   // !!! it IS a date
+                    eScannedType = css::util::NumberFormat::DATE;   // !!! it IS a date
                 }
                 SkipBlanks(rString, nPos);
             }
@@ -2589,7 +2589,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
 
     bool bSignDetectedHere = false;
     if ( nSign == 0  &&                             // conflict - not signed
-         eScannedType != NUMBERFORMAT_DATE)         // and not date
+         eScannedType != css::util::NumberFormat::DATE)         // and not date
                                                     //!? catch time too?
     {                                               // not signed yet
         nSign = GetSign(rString, nPos);             // 1- DM
@@ -2612,14 +2612,14 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
 
     if ( GetCurrency(rString, nPos, pFormat) )      // currency symbol?
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED) // currency dup
+        if (eScannedType != css::util::NumberFormat::UNDEFINED) // currency dup
         {
             return MatchedReturn();
         }
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_CURRENCY;
+            eScannedType = css::util::NumberFormat::CURRENCY;
         }                                           // behind currency a '-' is allowed
         if (nSign == 0)                             // not signed yet
         {
@@ -2630,7 +2630,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
                 return MatchedReturn();
             }
         }
-        if ( nNegCheck && eScannedType == NUMBERFORMAT_CURRENCY &&
+        if ( nNegCheck && eScannedType == css::util::NumberFormat::CURRENCY &&
              SkipChar(')', rString, nPos) )
         {
             nNegCheck = 0;                          // ')' skipped
@@ -2640,12 +2640,12 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
 
     if ( SkipChar('%', rString, nPos) )             // 1%
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED) // already another type
+        if (eScannedType != css::util::NumberFormat::UNDEFINED) // already another type
         {
             return MatchedReturn();
         }
         SkipBlanks(rString, nPos);
-        eScannedType = NUMBERFORMAT_PERCENT;
+        eScannedType = css::util::NumberFormat::PERCENT;
     }
 
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
@@ -2656,20 +2656,20 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         {
             return MatchedReturn();
         }
-        if (eScannedType == NUMBERFORMAT_DATE && nAnzNums > 2) // 31.Dez.94 8:
+        if (eScannedType == css::util::NumberFormat::DATE && nAnzNums > 2) // 31.Dez.94 8:
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_DATETIME;
+            eScannedType = css::util::NumberFormat::DATETIME;
         }
-        else if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-                 eScannedType != NUMBERFORMAT_TIME) // already another type
+        else if (eScannedType != css::util::NumberFormat::UNDEFINED &&
+                 eScannedType != css::util::NumberFormat::TIME) // already another type
         {
             return MatchedReturn();
         }
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_TIME;
+            eScannedType = css::util::NumberFormat::TIME;
         }
         if ( !nTimePos )
         {
@@ -2690,15 +2690,15 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
     if (bDate || ((MayBeIso8601() || MayBeMonthDate())
                   && SkipChar( '-', rString, nPos)))
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-            eScannedType != NUMBERFORMAT_DATE)          // already another type
+        if (eScannedType != css::util::NumberFormat::UNDEFINED &&
+            eScannedType != css::util::NumberFormat::DATE)          // already another type
         {
             return MatchedReturn();
         }
         else
         {
             SkipBlanks(rString, nPos);
-            eScannedType = NUMBERFORMAT_DATE;
+            eScannedType = css::util::NumberFormat::DATE;
         }
         short nTmpMonth = GetMonth(rString, nPos);  // 10. Jan
         if (nMonth && nTmpMonth)                    // month dup
@@ -2725,14 +2725,14 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         {
             return MatchedReturn();
         }
-        if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-            eScannedType != NUMBERFORMAT_DATE)      // already another type
+        if (eScannedType != css::util::NumberFormat::UNDEFINED &&
+            eScannedType != css::util::NumberFormat::DATE)      // already another type
         {
             return MatchedReturn();
         }
         if (nMonthStart > 0)                        // 10Jan without separator is not a date
         {
-            eScannedType = NUMBERFORMAT_DATE;
+            eScannedType = css::util::NumberFormat::DATE;
             nMonth = nTempMonth;
             nMonthPos = 3;                          // month at end
             if ( nMonth < 0 )
@@ -2750,9 +2750,9 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
     sal_Int32 nOrigPos = nPos;
     if (GetTimeAmPm(rString, nPos))
     {
-        if (eScannedType != NUMBERFORMAT_UNDEFINED &&
-            eScannedType != NUMBERFORMAT_TIME &&
-            eScannedType != NUMBERFORMAT_DATETIME)  // already another type
+        if (eScannedType != css::util::NumberFormat::UNDEFINED &&
+            eScannedType != css::util::NumberFormat::TIME &&
+            eScannedType != css::util::NumberFormat::DATETIME)  // already another type
         {
             return MatchedReturn();
         }
@@ -2760,16 +2760,16 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
         {
             // If not already scanned as time, 6.78am does not result in 6
             // seconds and 78 hundredths in the morning. Keep as suffix.
-            if (eScannedType != NUMBERFORMAT_TIME && nDecPos == 2 && nAnzNums == 2)
+            if (eScannedType != css::util::NumberFormat::TIME && nDecPos == 2 && nAnzNums == 2)
             {
                 nPos = nOrigPos; // rewind am/pm
             }
             else
             {
                 SkipBlanks(rString, nPos);
-                if ( eScannedType != NUMBERFORMAT_DATETIME )
+                if ( eScannedType != css::util::NumberFormat::DATETIME )
                 {
-                    eScannedType = NUMBERFORMAT_TIME;
+                    eScannedType = css::util::NumberFormat::TIME;
                 }
             }
         }
@@ -2777,7 +2777,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
 
     if ( nNegCheck && SkipChar(')', rString, nPos) )
     {
-        if (eScannedType == NUMBERFORMAT_CURRENCY)  // only if currency
+        if (eScannedType == css::util::NumberFormat::CURRENCY)  // only if currency
         {
             nNegCheck = 0;                          // skip ')'
             SkipBlanks(rString, nPos);
@@ -2789,8 +2789,8 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
     }
 
     if ( nPos < rString.getLength() &&
-         (eScannedType == NUMBERFORMAT_DATE ||
-          eScannedType == NUMBERFORMAT_DATETIME) )
+         (eScannedType == css::util::NumberFormat::DATE ||
+          eScannedType == css::util::NumberFormat::DATETIME) )
     {
         // day of week is just parsed away
         sal_Int32 nOldPos = nPos;
@@ -2822,7 +2822,7 @@ bool ImpSvNumberInputScan::ScanEndString( const OUString& rString,
     }
 
 #if NF_RECOGNIZE_ISO8601_TIMEZONES
-    if (nPos == 0 && eScannedType == NUMBERFORMAT_DATETIME &&
+    if (nPos == 0 && eScannedType == css::util::NumberFormat::DATETIME &&
         rString.getLength() == 1 && rString[ 0 ] == (sal_Unicode)'Z' && MayBeIso8601())
     {
         // ISO 8601 timezone UTC yyyy-mm-ddThh:mmZ
@@ -2978,7 +2978,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             nLogical = GetLogical( rStrArray );
             if ( nLogical )
             {
-                eScannedType = NUMBERFORMAT_LOGICAL; // !!! it's a BOOLEAN
+                eScannedType = css::util::NumberFormat::LOGICAL; // !!! it's a BOOLEAN
                 nMatchedAllStrings &= ~nMatchedVirgin;
                 return true;
             }
@@ -3002,12 +3002,12 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         // nAnzStrings >= 1
         if (GetNextNumber(i,j)) // i=1,0
         {   // Number at start
-            if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction 1 = 1/1
+            if (eSetType == css::util::NumberFormat::FRACTION)  // Fraction 1 = 1/1
             {
                 if (i >= nAnzStrings || // no end string nor decimal separator
                     sStrArray[i] == pFormatter->GetNumDecimalSep())
                 {
-                    eScannedType = NUMBERFORMAT_FRACTION;
+                    eScannedType = css::util::NumberFormat::FRACTION;
                     nMatchedAllStrings &= ~nMatchedVirgin;
                     return true;
                 }
@@ -3022,16 +3022,16 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             i++;                            // next symbol, i=1
         }
         GetNextNumber(i,j);                 // i=1,2
-        if (eSetType == NUMBERFORMAT_FRACTION)  // Fraction -1 = -1/1
+        if (eSetType == css::util::NumberFormat::FRACTION)  // Fraction -1 = -1/1
         {
             if (nSign && !nNegCheck &&      // Sign +, -
-                eScannedType == NUMBERFORMAT_UNDEFINED &&   // not date or currency
+                eScannedType == css::util::NumberFormat::UNDEFINED &&   // not date or currency
                 nDecPos == 0 &&             // no previous decimal separator
                 (i >= nAnzStrings ||        // no end string nor decimal separator
                  sStrArray[i] == pFormatter->GetNumDecimalSep())
                 )
             {
-                eScannedType = NUMBERFORMAT_FRACTION;
+                eScannedType = css::util::NumberFormat::FRACTION;
                 nMatchedAllStrings &= ~nMatchedVirgin;
                 return true;
             }
@@ -3060,14 +3060,14 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         {
             return false;
         }
-        if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200. as fraction
+        if (eSetType == css::util::NumberFormat::FRACTION)  // -1,200. as fraction
         {
             if (!nNegCheck  &&                  // no sign '('
-                eScannedType == NUMBERFORMAT_UNDEFINED &&
+                eScannedType == css::util::NumberFormat::UNDEFINED &&
                 (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
                 )
             {
-                eScannedType = NUMBERFORMAT_FRACTION;
+                eScannedType = css::util::NumberFormat::FRACTION;
                 nMatchedAllStrings &= ~nMatchedVirgin;
                 return true;
             }
@@ -3093,7 +3093,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
             return false;
         }
         i++;                                // i=2,3
-        if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at end
+        if (eScannedType == css::util::NumberFormat::SCIENTIFIC)    // E only at end
         {
             return false;
         }
@@ -3108,19 +3108,19 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         {
             return false;
         }
-        if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200,100. as fraction
+        if (eSetType == css::util::NumberFormat::FRACTION)  // -1,200,100. as fraction
         {
             if (!nNegCheck  &&                  // no sign '('
-                eScannedType == NUMBERFORMAT_UNDEFINED &&
+                eScannedType == css::util::NumberFormat::UNDEFINED &&
                 (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
                 )
             {
-                eScannedType = NUMBERFORMAT_FRACTION;
+                eScannedType = css::util::NumberFormat::FRACTION;
                 nMatchedAllStrings &= ~nMatchedVirgin;
                 return true;
             }
         }
-        if ( eScannedType == NUMBERFORMAT_FRACTION && nDecPos )
+        if ( eScannedType == css::util::NumberFormat::FRACTION && nDecPos )
         {
             return false;                   // #36857# not a real fraction
         }
@@ -3147,7 +3147,7 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                                                           // but leave one number.
             {                                             // Loop over group separators
                 nThOld = nThousand;
-                if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at end
+                if (eScannedType == css::util::NumberFormat::SCIENTIFIC)    // E only at end
                 {
                     return false;
                 }
@@ -3159,13 +3159,13 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
                 i++;
             }
         }
-        if (eScannedType == NUMBERFORMAT_DATE ||    // long date or
-            eScannedType == NUMBERFORMAT_TIME ||    // long time or
-            eScannedType == NUMBERFORMAT_UNDEFINED) // long number
+        if (eScannedType == css::util::NumberFormat::DATE ||    // long date or
+            eScannedType == css::util::NumberFormat::TIME ||    // long time or
+            eScannedType == css::util::NumberFormat::UNDEFINED) // long number
         {
             for (sal_uInt16 k = j; k < nAnzNums-1; k++)
             {
-                if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at endd
+                if (eScannedType == css::util::NumberFormat::SCIENTIFIC)    // E only at endd
                 {
                     return false;
                 }
@@ -3182,26 +3182,26 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         {
             return false;
         }
-        if (eSetType == NUMBERFORMAT_FRACTION)  // -1,200,100. as fraction
+        if (eSetType == css::util::NumberFormat::FRACTION)  // -1,200,100. as fraction
         {
             if (!nNegCheck  &&                  // no sign '('
-                eScannedType == NUMBERFORMAT_UNDEFINED &&
+                eScannedType == css::util::NumberFormat::UNDEFINED &&
                 (nDecPos == 0 || nDecPos == 3)  // no decimal separator or at end
                 )
             {
-                eScannedType = NUMBERFORMAT_FRACTION;
+                eScannedType = css::util::NumberFormat::FRACTION;
                 nMatchedAllStrings &= ~nMatchedVirgin;
                 return true;
             }
         }
-        if ( eScannedType == NUMBERFORMAT_FRACTION && nDecPos )
+        if ( eScannedType == css::util::NumberFormat::FRACTION && nDecPos )
         {
             return false;                       // #36857# not a real fraction
         }
         break;
     }
 
-    if (eScannedType == NUMBERFORMAT_UNDEFINED)
+    if (eScannedType == css::util::NumberFormat::UNDEFINED)
     {
         nMatchedAllStrings &= ~nMatchedVirgin;
         // did match including nMatchedUsedAsReturn
@@ -3225,11 +3225,11 @@ bool ImpSvNumberInputScan::IsNumberFormatMain( const OUString& rString,        /
         }
         else
         {
-            eScannedType = NUMBERFORMAT_NUMBER;
+            eScannedType = css::util::NumberFormat::NUMBER;
             // everything else should have been recognized by now
         }
     }
-    else if ( eScannedType == NUMBERFORMAT_DATE )
+    else if ( eScannedType == css::util::NumberFormat::DATE )
     {
         // the very relaxed date input checks may interfere with a preset format
         nMatchedAllStrings &= ~nMatchedVirgin;
@@ -3421,8 +3421,8 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     if (res)
     {
         if ( nNegCheck ||                             // ')' not found for '('
-             (nSign && (eScannedType == NUMBERFORMAT_DATE ||
-                        eScannedType == NUMBERFORMAT_DATETIME))) // signed date/datetime
+             (nSign && (eScannedType == css::util::NumberFormat::DATE ||
+                        eScannedType == css::util::NumberFormat::DATETIME))) // signed date/datetime
         {
             res = false;
         }
@@ -3430,9 +3430,9 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
         {                                           // check count of partial number strings
             switch (eScannedType)
             {
-            case NUMBERFORMAT_PERCENT:
-            case NUMBERFORMAT_CURRENCY:
-            case NUMBERFORMAT_NUMBER:
+            case css::util::NumberFormat::PERCENT:
+            case css::util::NumberFormat::CURRENCY:
+            case css::util::NumberFormat::NUMBER:
                 if (nDecPos == 1)               // .05
                 {
                     // matched MidStrings function like group separators
@@ -3471,7 +3471,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 break;
 
-            case NUMBERFORMAT_SCIENTIFIC:       // 1.0e-2
+            case css::util::NumberFormat::SCIENTIFIC:       // 1.0e-2
                 if (nDecPos == 1)               // .05
                 {
                     if (nAnzNums != 2)
@@ -3495,7 +3495,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 break;
 
-            case NUMBERFORMAT_DATE:
+            case css::util::NumberFormat::DATE:
                 if (nMonth)
                 {                               // month name and numbers
                     if (nAnzNums > 2)
@@ -3524,7 +3524,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 break;
 
-            case NUMBERFORMAT_TIME:
+            case css::util::NumberFormat::TIME:
                 if (nDecPos)
                 {                               // hundredth seconds included
                     if (nAnzNums > 4)
@@ -3541,7 +3541,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 break;
 
-            case NUMBERFORMAT_DATETIME:
+            case css::util::NumberFormat::DATETIME:
                 if (nMonth)
                 {                               // month name and numbers
                     if (nDecPos)
@@ -3594,7 +3594,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     {                                       // we finally have a number
         switch (eScannedType)
         {
-        case NUMBERFORMAT_LOGICAL:
+        case css::util::NumberFormat::LOGICAL:
             if (nLogical ==  1)
             {
                 fOutNumber = 1.0;           // True
@@ -3609,11 +3609,11 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             }
             break;
 
-        case NUMBERFORMAT_PERCENT:
-        case NUMBERFORMAT_CURRENCY:
-        case NUMBERFORMAT_NUMBER:
-        case NUMBERFORMAT_SCIENTIFIC:
-        case NUMBERFORMAT_DEFINED:          // if no category detected handle as number
+        case css::util::NumberFormat::PERCENT:
+        case css::util::NumberFormat::CURRENCY:
+        case css::util::NumberFormat::NUMBER:
+        case css::util::NumberFormat::SCIENTIFIC:
+        case css::util::NumberFormat::DEFINED:          // if no category detected handle as number
             if ( nDecPos == 1 )             // . at start
             {
                 sResString.append("0.");
@@ -3626,7 +3626,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             if ( nDecPos == 2 && k < nAnzNums )     // . somewhere
             {
                 sResString.append('.');
-                sal_uInt16 nStop = (eScannedType == NUMBERFORMAT_SCIENTIFIC ?
+                sal_uInt16 nStop = (eScannedType == css::util::NumberFormat::SCIENTIFIC ?
                                     nAnzNums-1 : nAnzNums);
                 for ( ; k < nStop; k++)
                 {
@@ -3634,7 +3634,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
             }
 
-            if (eScannedType != NUMBERFORMAT_SCIENTIFIC)
+            if (eScannedType != css::util::NumberFormat::SCIENTIFIC)
             {
                 fOutNumber = StringToDouble(sResString.makeStringAndClear());
             }
@@ -3650,7 +3650,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 fOutNumber = ::rtl::math::stringToDouble( sResString.makeStringAndClear(), '.', ',', &eStatus, NULL );
                 if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
                 {
-                    F_Type = NUMBERFORMAT_TEXT;         // overflow/underflow -> Text
+                    F_Type = css::util::NumberFormat::TEXT;         // overflow/underflow -> Text
                     if (nESign == -1)
                     {
                         fOutNumber = 0.0;
@@ -3679,13 +3679,13 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 fOutNumber = -fOutNumber;
             }
 
-            if (eScannedType == NUMBERFORMAT_PERCENT)
+            if (eScannedType == css::util::NumberFormat::PERCENT)
             {
                 fOutNumber/= 100.0;
             }
             break;
 
-        case NUMBERFORMAT_FRACTION:
+        case css::util::NumberFormat::FRACTION:
             if (nAnzNums == 1)
             {
                 fOutNumber = StringToDouble(sStrArray[nNums[0]]);
@@ -3757,7 +3757,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             }
             break;
 
-        case NUMBERFORMAT_TIME:
+        case css::util::NumberFormat::TIME:
             res = GetTimeRef(fOutNumber, 0, nAnzNums);
             if ( nSign < 0 )
             {
@@ -3765,11 +3765,11 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
             }
             break;
 
-        case NUMBERFORMAT_DATE:
+        case css::util::NumberFormat::DATE:
             res = GetDateRef( fOutNumber, k, pFormat );
             break;
 
-        case NUMBERFORMAT_DATETIME:
+        case css::util::NumberFormat::DATETIME:
             res = GetDateRef( fOutNumber, k, pFormat );
             if ( res )
             {
@@ -3790,13 +3790,13 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
     {
         if (fOutNumber < -DBL_MAX) // -1.7E308
         {
-            F_Type = NUMBERFORMAT_TEXT;
+            F_Type = css::util::NumberFormat::TEXT;
             fOutNumber = -DBL_MAX;
             return true;
         }
         else if (fOutNumber >  DBL_MAX) // 1.7E308
         {
-            F_Type = NUMBERFORMAT_TEXT;
+            F_Type = css::util::NumberFormat::TEXT;
             fOutNumber = DBL_MAX;
             return true;
         }
@@ -3804,7 +3804,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
 
     if (res == false)
     {
-        eScannedType = NUMBERFORMAT_TEXT;
+        eScannedType = css::util::NumberFormat::TEXT;
         fOutNumber = 0.0;
     }
 

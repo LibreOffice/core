@@ -1675,7 +1675,7 @@ sal_uLong SwFldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberF
 
             fValue += (double)nNumFmtTime / 86400.0;
 
-            nDefFormat = (nTypeId == TYP_DATEFLD) ? NUMBERFORMAT_DATE : NUMBERFORMAT_TIME;
+            nDefFormat = (nTypeId == TYP_DATEFLD) ? css::util::NumberFormat::DATE : css::util::NumberFormat::TIME;
         }
         break;
 
@@ -1683,12 +1683,12 @@ sal_uLong SwFldMgr::GetDefaultFormat(sal_uInt16 nTypeId, bool bIsText, SvNumberF
             if (bIsText)
             {
                 fValue = 0.0;
-                nDefFormat = NUMBERFORMAT_TEXT;
+                nDefFormat = css::util::NumberFormat::TEXT;
             }
             else
             {
                 fValue = 0.0;
-                nDefFormat = NUMBERFORMAT_ALL;
+                nDefFormat = css::util::NumberFormat::ALL;
             }
             break;
     }

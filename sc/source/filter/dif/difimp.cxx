@@ -948,7 +948,7 @@ void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
                 {
                     pPatt.reset(new ScPatternAttr( rDoc.GetPool() ));
                     pPatt->GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT,
-                        rDoc.GetFormatTable()->GetStandardFormat( NUMBERFORMAT_LOGICAL ) ) );
+                        rDoc.GetFormatTable()->GetStandardFormat( css::util::NumberFormat::LOGICAL ) ) );
                 }
 
                 ppCols[ nCol ]->Apply( rDoc, nCol, nTab, *pPatt );

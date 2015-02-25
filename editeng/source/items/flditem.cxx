@@ -499,7 +499,7 @@ OUString SvxDateField::GetFormatted( Date& aDate, SvxDateFormat eFormat, SvNumbe
             nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, eLang );
         break;
         default:
-            nFormatKey = rFormatter.GetStandardFormat( NUMBERFORMAT_DATE, eLang );
+            nFormatKey = rFormatter.GetStandardFormat( css::util::NumberFormat::DATE, eLang );
     }
 
     double fDiffDate = aDate - *(rFormatter.GetNullDate());
@@ -915,7 +915,7 @@ OUString SvxExtTimeField::GetFormatted( tools::Time& aTime, SvxTimeFormat eForma
             break;
         case SVXTIMEFORMAT_STANDARD:
         default:
-            nFormatKey = rFormatter.GetStandardFormat( NUMBERFORMAT_TIME, eLang );
+            nFormatKey = rFormatter.GetStandardFormat( css::util::NumberFormat::TIME, eLang );
     }
 
     double fFracTime = aTime.GetTimeInDays();

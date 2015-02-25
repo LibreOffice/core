@@ -797,7 +797,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                     Any aAny = xCellPropertySet->getPropertyValue(sNumberFormat);
                     aAny >>= nNumberFormat;
 
-                    if (NUMBERFORMAT_TEXT == nNumberFormat)
+                    if (css::util::NumberFormat::TEXT == nNumberFormat)
                     {
                         // text format
                         AddAttribute( XML_NAMESPACE_OFFICE,

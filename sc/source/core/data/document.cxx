@@ -3412,7 +3412,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
             {
                 double fVal = pFCell->GetValue();
                 sal_uInt32 nIndex = pFormatter->GetStandardFormat(
-                                    NUMBERFORMAT_NUMBER,
+                                    css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge);
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
             }
@@ -3424,7 +3424,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, OUString& rSt
         {
             double fVal = aCell.mfValue;
             sal_uInt32 nIndex = pFormatter->GetStandardFormat(
-                                    NUMBERFORMAT_NUMBER,
+                                    css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge);
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
         }
@@ -3541,7 +3541,7 @@ void ScDocument::GetNumberFormatInfo( short& nType, sal_uLong& nIndex,
     }
     else
     {
-        nType = NUMBERFORMAT_UNDEFINED;
+        nType = css::util::NumberFormat::UNDEFINED;
         nIndex = 0;
     }
 }

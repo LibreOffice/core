@@ -460,7 +460,7 @@ void SvXMLNumImpData::RemoveVolatileFormats()
         if ( pObj->bRemoveAfterUse )
         {
             const SvNumberformat* pFormat = pFormatter->GetEntry(pObj->nKey);
-            if (pFormat && (pFormat->GetType() & NUMBERFORMAT_DEFINED))
+            if (pFormat && (pFormat->GetType() & css::util::NumberFormat::DEFINED))
                 pFormatter->DeleteEntry( pObj->nKey );
         }
     }

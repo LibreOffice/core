@@ -949,7 +949,7 @@ static bool lcl_PutString(
         if (pFormatter->IsNumberFormat(rStr, nIndex, fDummy))
         {
             // Set the format of this cell to Text.
-            sal_uInt32 nFormat = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
+            sal_uInt32 nFormat = pFormatter->GetStandardFormat(css::util::NumberFormat::TEXT);
             ScPatternAttr aNewAttrs(pDoc->GetPool());
             SfxItemSet& rSet = aNewAttrs.GetItemSet();
             rSet.Put( SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat) );
@@ -1172,7 +1172,7 @@ static bool lcl_PutString(
                     pDoc->GetLanguage( eLatin, eCjk, eCtl );
                     LanguageType eDocLang = eLatin;     //! which language for date formats?
 
-                    short nType = (nFound > 3 ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE);
+                    short nType = (nFound > 3 ? css::util::NumberFormat::DATETIME : css::util::NumberFormat::DATE);
                     sal_uLong nFormat = pDocFormatter->GetStandardFormat( nType, eDocLang );
                     // maybe there is a special format including seconds or milliseconds
                     if (nFound > 5)

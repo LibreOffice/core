@@ -227,7 +227,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (eCellType == CELLTYPE_VALUE)
     {
         sal_uInt32 nFormat = static_cast<const SfxUInt32Item*>(GetAttr(nCol,nRow,ATTR_VALUE_FORMAT))->GetValue();
-        bool bDate = ( pDocument->GetFormatTable()->GetType(nFormat) == NUMBERFORMAT_DATE );
+        bool bDate = ( pDocument->GetFormatTable()->GetType(nFormat) == css::util::NumberFormat::DATE );
         if (bDate)
         {
             if (nCount > 1)

@@ -1160,25 +1160,25 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
 // for DATE, TIME, DATETIME
 static void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 {
-    if ( nFmt1 != NUMBERFORMAT_UNDEFINED || nFmt2 != NUMBERFORMAT_UNDEFINED )
+    if ( nFmt1 != css::util::NumberFormat::UNDEFINED || nFmt2 != css::util::NumberFormat::UNDEFINED )
     {
         if ( nFmt1 == nFmt2 )
         {
-            if ( nFmt1 == NUMBERFORMAT_TIME || nFmt1 == NUMBERFORMAT_DATETIME )
-                nFuncFmt = NUMBERFORMAT_TIME;   // times result in time
+            if ( nFmt1 == css::util::NumberFormat::TIME || nFmt1 == css::util::NumberFormat::DATETIME )
+                nFuncFmt = css::util::NumberFormat::TIME;   // times result in time
             // else: nothing special, number (date - date := days)
         }
-        else if ( nFmt1 == NUMBERFORMAT_UNDEFINED )
+        else if ( nFmt1 == css::util::NumberFormat::UNDEFINED )
             nFuncFmt = nFmt2;   // e.g. date + days := date
-        else if ( nFmt2 == NUMBERFORMAT_UNDEFINED )
+        else if ( nFmt2 == css::util::NumberFormat::UNDEFINED )
             nFuncFmt = nFmt1;
         else
         {
-            if ( nFmt1 == NUMBERFORMAT_DATE || nFmt2 == NUMBERFORMAT_DATE ||
-                nFmt1 == NUMBERFORMAT_DATETIME || nFmt2 == NUMBERFORMAT_DATETIME )
+            if ( nFmt1 == css::util::NumberFormat::DATE || nFmt2 == css::util::NumberFormat::DATE ||
+                nFmt1 == css::util::NumberFormat::DATETIME || nFmt2 == css::util::NumberFormat::DATETIME )
             {
-                if ( nFmt1 == NUMBERFORMAT_TIME || nFmt2 == NUMBERFORMAT_TIME )
-                    nFuncFmt = NUMBERFORMAT_DATETIME;   // date + time
+                if ( nFmt1 == css::util::NumberFormat::TIME || nFmt2 == css::util::NumberFormat::TIME )
+                    nFuncFmt = css::util::NumberFormat::DATETIME;   // date + time
             }
         }
     }
@@ -1199,7 +1199,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     ScMatrixRef pMat2 = NULL;
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmt1, nFmt2;
-    nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
+    nFmt1 = nFmt2 = css::util::NumberFormat::UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     short nFmtPercentType = nCurFmtType;
@@ -1210,17 +1210,17 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         fVal2 = GetDouble();
         switch ( nCurFmtType )
         {
-            case NUMBERFORMAT_DATE :
-            case NUMBERFORMAT_TIME :
-            case NUMBERFORMAT_DATETIME :
+            case css::util::NumberFormat::DATE :
+            case css::util::NumberFormat::TIME :
+            case css::util::NumberFormat::DATETIME :
                 nFmt2 = nCurFmtType;
             break;
-            case NUMBERFORMAT_CURRENCY :
+            case css::util::NumberFormat::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
             break;
-            case NUMBERFORMAT_PERCENT :
-                nFmtPercentType = NUMBERFORMAT_PERCENT;
+            case css::util::NumberFormat::PERCENT :
+                nFmtPercentType = css::util::NumberFormat::PERCENT;
             break;
         }
     }
@@ -1231,17 +1231,17 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         fVal1 = GetDouble();
         switch ( nCurFmtType )
         {
-            case NUMBERFORMAT_DATE :
-            case NUMBERFORMAT_TIME :
-            case NUMBERFORMAT_DATETIME :
+            case css::util::NumberFormat::DATE :
+            case css::util::NumberFormat::TIME :
+            case css::util::NumberFormat::DATETIME :
                 nFmt1 = nCurFmtType;
             break;
-            case NUMBERFORMAT_CURRENCY :
+            case css::util::NumberFormat::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
             break;
-            case NUMBERFORMAT_PERCENT :
-                nFmtPercentType = NUMBERFORMAT_PERCENT;
+            case css::util::NumberFormat::PERCENT :
+                nFmtPercentType = css::util::NumberFormat::PERCENT;
             break;
         }
     }
@@ -1308,7 +1308,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
         PushDouble( ::rtl::math::approxSub( fVal1, fVal2 ) );
     else
         PushDouble( ::rtl::math::approxAdd( fVal1, fVal2 ) );
-    if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY )
+    if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;
         nFuncFmtIndex = nFmtCurrencyIndex;
@@ -1316,8 +1316,8 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     else
     {
         lcl_GetDiffDateTimeFmtType( nFuncFmtType, nFmt1, nFmt2 );
-        if ( nFmtPercentType == NUMBERFORMAT_PERCENT && nFuncFmtType == NUMBERFORMAT_NUMBER )
-            nFuncFmtType = NUMBERFORMAT_PERCENT;
+        if ( nFmtPercentType == css::util::NumberFormat::PERCENT && nFuncFmtType == css::util::NumberFormat::NUMBER )
+            nFuncFmtType = css::util::NumberFormat::PERCENT;
     }
 }
 
@@ -1433,7 +1433,7 @@ void ScInterpreter::ScMul()
         fVal2 = GetDouble();
         switch ( nCurFmtType )
         {
-            case NUMBERFORMAT_CURRENCY :
+            case css::util::NumberFormat::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
             break;
@@ -1446,7 +1446,7 @@ void ScInterpreter::ScMul()
         fVal1 = GetDouble();
         switch ( nCurFmtType )
         {
-            case NUMBERFORMAT_CURRENCY :
+            case css::util::NumberFormat::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
             break;
@@ -1489,7 +1489,7 @@ void ScInterpreter::ScMul()
     }
     else
         PushDouble(fVal1 * fVal2);
-    if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY )
+    if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY )
     {
         nFuncFmtType = nFmtCurrencyType;
         nFuncFmtIndex = nFmtCurrencyIndex;
@@ -1503,7 +1503,7 @@ void ScInterpreter::ScDiv()
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
-    short nFmtCurrencyType2 = NUMBERFORMAT_UNDEFINED;
+    short nFmtCurrencyType2 = css::util::NumberFormat::UNDEFINED;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
@@ -1519,7 +1519,7 @@ void ScInterpreter::ScDiv()
         fVal1 = GetDouble();
         switch ( nCurFmtType )
         {
-            case NUMBERFORMAT_CURRENCY :
+            case css::util::NumberFormat::CURRENCY :
                 nFmtCurrencyType = nCurFmtType;
                 nFmtCurrencyIndex = nCurFmtIndex;
             break;
@@ -1578,7 +1578,7 @@ void ScInterpreter::ScDiv()
     {
         PushDouble( div( fVal1, fVal2) );
     }
-    if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY && nFmtCurrencyType2 != NUMBERFORMAT_CURRENCY )
+    if ( nFmtCurrencyType == css::util::NumberFormat::CURRENCY && nFmtCurrencyType2 != css::util::NumberFormat::CURRENCY )
     {   // even USD/USD is not USD
         nFuncFmtType = nFmtCurrencyType;
         nFuncFmtIndex = nFmtCurrencyIndex;
@@ -3220,7 +3220,7 @@ void ScInterpreter::ScMatRef()
             {
                 if (ScMatrix::IsEmptyPathType( nMatValType))
                 {   // result of empty false jump path
-                    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+                    nFuncFmtType = css::util::NumberFormat::LOGICAL;
                     PushInt(0);
                 }
                 else if (ScMatrix::IsEmptyType( nMatValType))

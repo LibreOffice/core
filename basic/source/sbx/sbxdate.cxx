@@ -134,8 +134,8 @@ double ImpGetDate( const SbxValues* p )
             if ( bSuccess )
             {
                 short nType_ = pFormatter->GetType( nIndex );
-                if(!(nType_ & ( NUMBERFORMAT_DATETIME | NUMBERFORMAT_DATE |
-                                NUMBERFORMAT_TIME | NUMBERFORMAT_DEFINED )))
+                if(!(nType_ & ( css::util::NumberFormat::DATETIME | css::util::NumberFormat::DATE |
+                                css::util::NumberFormat::TIME | css::util::NumberFormat::DEFINED )))
                 {
                     bSuccess = false;
                 }

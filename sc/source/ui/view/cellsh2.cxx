@@ -815,8 +815,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             sal_uLong nNumFmt = 0;
                             if ( eMode == SC_VALID_DATE || eMode == SC_VALID_TIME )
                             {
-                                short nType = ( eMode == SC_VALID_DATE ) ? NUMBERFORMAT_DATE
-                                                                         : NUMBERFORMAT_TIME;
+                                short nType = ( eMode == SC_VALID_DATE ) ? css::util::NumberFormat::DATE
+                                                                         : css::util::NumberFormat::TIME;
                                 nNumFmt = pDoc->GetFormatTable()->GetStandardFormat(
                                                                     nType, ScGlobal::eLnge );
                             }

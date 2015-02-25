@@ -2149,7 +2149,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
     : SwUndo(UNDO_TBLNUMFMT)
     , pBoxSet(0)
     , pHistory(0)
-    , nFmtIdx(NUMBERFORMAT_TEXT)
+    , nFmtIdx(css::util::NumberFormat::TEXT)
     , nNewFmtIdx(0)
     , fNum(0.0)
     , fNewNum(0.0)
@@ -2358,7 +2358,7 @@ void SwUndoTblNumFmt::RedoImpl(::sw::UndoRedoContext & rContext)
         RedlineModeInternGuard aGuard( rDoc, nsRedlineMode_t::REDLINE_NONE, nsRedlineMode_t::REDLINE_IGNORE );
         pBoxFmt->SetFmtAttr( aBoxSet );
     }
-    else if( NUMBERFORMAT_TEXT != nFmtIdx )
+    else if( css::util::NumberFormat::TEXT != nFmtIdx )
     {
         SfxItemSet aBoxSet( rDoc.GetAttrPool(),
                             RES_BOXATR_FORMAT, RES_BOXATR_VALUE );

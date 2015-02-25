@@ -719,7 +719,7 @@ void sw_setString( SwXCell &rCell, const OUString &rTxt,
         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
         pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
         if (!bKeepNumberFmt)
-            pBoxFmt->SetFmtAttr( SwTblBoxNumFormat(NUMBERFORMAT_TEXT) );
+            pBoxFmt->SetFmtAttr( SwTblBoxNumFormat(css::util::NumberFormat::TEXT) );
         pBoxFmt->UnlockModify();
     }
     rCell.SwXText::setString(rTxt);
@@ -757,7 +757,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
         // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
         if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
             ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue())
-            ||  static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue() == NUMBERFORMAT_TEXT)
+            ||  static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue() == css::util::NumberFormat::TEXT)
         {
             aSet.Put(SwTblBoxNumFormat(0));
         }

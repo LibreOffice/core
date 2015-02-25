@@ -477,7 +477,7 @@ ScExternalRefCache::TableName::TableName(const OUString& rUpper, const OUString&
 }
 
 ScExternalRefCache::CellFormat::CellFormat() :
-    mbIsSet(false), mnType(NUMBERFORMAT_ALL), mnIndex(0)
+    mbIsSet(false), mnType(css::util::NumberFormat::ALL), mnIndex(0)
 {
 }
 
@@ -2090,7 +2090,7 @@ void ScExternalRefManager::fillCellFormat(sal_uLong nFmtIndex, ScExternalRefCach
         return;
 
     short nFmtType = mpDoc->GetFormatTable()->GetType(nFmtIndex);
-    if (nFmtType != NUMBERFORMAT_UNDEFINED)
+    if (nFmtType != css::util::NumberFormat::UNDEFINED)
     {
         pFmt->mbIsSet = true;
         pFmt->mnIndex = nFmtIndex;

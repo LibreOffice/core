@@ -71,7 +71,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , eValType ( eNumValType )
     , bUndoAddList ( true )
     , nCurFormatKey ( nFormatKey )
-    , nCurCategory (NUMBERFORMAT_ALL)
+    , nCurCategory (css::util::NumberFormat::ALL)
     , eCurLanguage (LANGUAGE_NONE)
     , pCurCurrencyEntry(NULL)
     , bBankingSymbol  (false)
@@ -104,7 +104,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , eValType ( eNumValType )
     , bUndoAddList ( true )
     , nCurFormatKey ( nFormatKey )
-    , nCurCategory (NUMBERFORMAT_ALL)
+    , nCurCategory (css::util::NumberFormat::ALL)
     , eCurLanguage (LANGUAGE_NONE)
     , pCurCurrencyEntry(NULL)
     , bBankingSymbol  (false)
@@ -184,7 +184,7 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
                                                  nCurFormatKey,
                                                  eCurLanguage ) );
     // reinitialize currency if category newly entered
-    if ( nCurCategory == NUMBERFORMAT_CURRENCY && nOldCategory != nCurCategory )
+    if ( nCurCategory == css::util::NumberFormat::CURRENCY && nOldCategory != nCurCategory )
         pCurCurrencyEntry = NULL;
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
@@ -216,7 +216,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
         {
             GetPreviewString_Impl( rPreviewStr, rpFontColor );
         }
-        else if( nCurCategory == NUMBERFORMAT_CURRENCY )
+        else if( nCurCategory == css::util::NumberFormat::CURRENCY )
         {
             if( static_cast<size_t>(nFmtLbPos) < aCurrencyFormatList.size() )
             {
@@ -431,7 +431,7 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
 
         //  #50441# if a string was set in addition to the value, use it for text formats
         bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
-                            ( !aValStr.isEmpty() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
+                            ( !aValStr.isEmpty() && ( pFormatter->GetType(nExistingFormat) & css::util::NumberFormat::TEXT ) ) );
         if ( bUseText )
         {
             pFormatter->GetOutputString( aValStr, nExistingFormat,
@@ -520,7 +520,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
     if ( (eValType == SVX_VALUE_TYPE_UNDEFINED) && (nCurFormatKey == 0) )
         PosToCategory_Impl( CAT_ALL, nCurCategory );        // Kategorie = Alle
     else
-        nCurCategory = NUMBERFORMAT_UNDEFINED;      // Kategorie = Undefiniert
+        nCurCategory = css::util::NumberFormat::UNDEFINED;      // Kategorie = Undefiniert
 
     pCurFmtTable =  &(pFormatter->GetFirstEntryTable( nCurCategory,
                                                       nCurFormatKey,
@@ -554,7 +554,7 @@ short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
 
     aCurEntryList.clear();
 
-    if(nCurCategory==NUMBERFORMAT_ALL)
+    if(nCurCategory==css::util::NumberFormat::ALL)
     {
         FillEListWithStd_Impl(rList,CAT_NUMBER,nSelPos);
         FillEListWithStd_Impl(rList,CAT_PERCENT,nSelPos);
@@ -671,7 +671,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
 
         if(pNumEntry==NULL) continue;
 
-        nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+        nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
         aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -709,7 +709,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
         pNumEntry   = pFormatter->GetEntry(nNFEntry);
         if(pNumEntry!=NULL)
         {
-            nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+            nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
             aStrComment=pNumEntry->GetComment();
             CategoryToPos_Impl(nMyCat,nMyType);
             aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -746,9 +746,9 @@ short SvxNumberFormatShell::FillEListWithCurrency_Impl( std::vector<OUString>& r
 
     if( (!bFlag && pCurCurrencyEntry==NULL) ||
         (bFlag && pTmpCurrencyEntry==NULL && rSymbol.isEmpty()) ||
-        (nCurCategory==NUMBERFORMAT_ALL))
+        (nCurCategory==css::util::NumberFormat::ALL))
     {
-        if ( nCurCategory == NUMBERFORMAT_ALL )
+        if ( nCurCategory == css::util::NumberFormat::ALL )
             FillEListWithUserCurrencys(rList,nSelPos);
         nSelPos=FillEListWithSysCurrencys(rList,nSelPos);
     }
@@ -794,7 +794,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
         if(pNumEntry==NULL) continue;
 
-        nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+        nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
         aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -808,7 +808,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
         aCurEntryList.push_back( nNFEntry );
     }
 
-    if(nCurCategory!=NUMBERFORMAT_ALL)
+    if(nCurCategory!=css::util::NumberFormat::ALL)
     {
         SvNumberFormatTable::iterator it = pCurFmtTable->begin();
 
@@ -833,9 +833,9 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
                     bUserNewCurrency=(pTmpCurrencyEntry!=NULL);
                 }
 
-                if(!bUserNewCurrency &&(pNumEntry->GetType() & NUMBERFORMAT_DEFINED))
+                if(!bUserNewCurrency &&(pNumEntry->GetType() & css::util::NumberFormat::DEFINED))
                 {
-                    nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+                    nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
                     aStrComment=pNumEntry->GetComment();
                     CategoryToPos_Impl(nMyCat,nMyType);
                     aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -919,10 +919,10 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
         if ( !IsRemoved_Impl( nKey ) )
         {
-            if( pNumEntry->GetType() & NUMBERFORMAT_DEFINED ||
+            if( pNumEntry->GetType() & css::util::NumberFormat::DEFINED ||
                 pNumEntry->IsAdditionalBuiltin() )
             {
-                nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+                nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
                 aStrComment = pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo =  pNumEntry->GetFormatstring();
@@ -967,7 +967,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
     NfWSStringsDtor aWSStringsDtor;
     sal_uInt16 nDefault;
-    if ( pTmpCurrencyEntry && nCurCategory != NUMBERFORMAT_ALL )
+    if ( pTmpCurrencyEntry && nCurCategory != css::util::NumberFormat::ALL )
     {
         nDefault = pFormatter->GetCurrencyFormatStrings(
             aWSStringsDtor, *pTmpCurrencyEntry, bTmpBanking );
@@ -977,7 +977,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
     }
     else
         nDefault = 0;
-    if ( !bTmpBanking && nCurCategory != NUMBERFORMAT_ALL )
+    if ( !bTmpBanking && nCurCategory != css::util::NumberFormat::ALL )
     {   // append formats for all currencies defined in the current I18N locale
         const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nCurrCount = rCurrencyTable.size();
@@ -1038,7 +1038,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
             nSelPos = i;
     }
 
-    if ( nSelPos == SELPOS_NONE && nCurCategory != NUMBERFORMAT_ALL )
+    if ( nSelPos == SELPOS_NONE && nCurCategory != css::util::NumberFormat::ALL )
         nSelPos = nDefault;
 
     return nSelPos;
@@ -1062,7 +1062,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 
     short           nMyCat      = SELPOS_NONE;
     bool            bAdditional = (nPrivCat != CAT_USERDEFINED &&
-                                    nCurCategory != NUMBERFORMAT_ALL);
+                                    nCurCategory != css::util::NumberFormat::ALL);
 
     SvNumberFormatTable::iterator it = pCurFmtTable->begin();
     while ( it != pCurFmtTable->end() )
@@ -1072,10 +1072,10 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 
         if ( !IsRemoved_Impl( nKey ) )
         {
-            if( (pNumEntry->GetType() & NUMBERFORMAT_DEFINED) ||
+            if( (pNumEntry->GetType() & css::util::NumberFormat::DEFINED) ||
                     (bAdditional && pNumEntry->IsAdditionalBuiltin()) )
             {
-                nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+                nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
                 aStrComment=pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -1109,7 +1109,7 @@ void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpC
 
     //  #50441# if a string was set in addition to the value, use it for text formats
     bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
-                        ( !aValStr.isEmpty() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
+                        ( !aValStr.isEmpty() && ( pFormatter->GetType(nCurFormatKey) & css::util::NumberFormat::TEXT ) ) );
 
     if ( bUseText )
     {
@@ -1155,18 +1155,18 @@ void SvxNumberFormatShell::PosToCategory_Impl(sal_uInt16 nPos, short& rCategory)
     // Kategorie ::com::sun::star::form-Positionen abbilden (->Resource)
     switch ( nPos )
     {
-        case CAT_USERDEFINED:   rCategory = NUMBERFORMAT_DEFINED;       break;
-        case CAT_NUMBER:        rCategory = NUMBERFORMAT_NUMBER;        break;
-        case CAT_PERCENT:       rCategory = NUMBERFORMAT_PERCENT;       break;
-        case CAT_CURRENCY:      rCategory = NUMBERFORMAT_CURRENCY;      break;
-        case CAT_DATE:          rCategory = NUMBERFORMAT_DATE;          break;
-        case CAT_TIME:          rCategory = NUMBERFORMAT_TIME;          break;
-        case CAT_SCIENTIFIC:    rCategory = NUMBERFORMAT_SCIENTIFIC;    break;
-        case CAT_FRACTION:      rCategory = NUMBERFORMAT_FRACTION;      break;
-        case CAT_BOOLEAN:       rCategory = NUMBERFORMAT_LOGICAL;       break;
-        case CAT_TEXT:          rCategory = NUMBERFORMAT_TEXT;          break;
+        case CAT_USERDEFINED:   rCategory = css::util::NumberFormat::DEFINED;       break;
+        case CAT_NUMBER:        rCategory = css::util::NumberFormat::NUMBER;        break;
+        case CAT_PERCENT:       rCategory = css::util::NumberFormat::PERCENT;       break;
+        case CAT_CURRENCY:      rCategory = css::util::NumberFormat::CURRENCY;      break;
+        case CAT_DATE:          rCategory = css::util::NumberFormat::DATE;          break;
+        case CAT_TIME:          rCategory = css::util::NumberFormat::TIME;          break;
+        case CAT_SCIENTIFIC:    rCategory = css::util::NumberFormat::SCIENTIFIC;    break;
+        case CAT_FRACTION:      rCategory = css::util::NumberFormat::FRACTION;      break;
+        case CAT_BOOLEAN:       rCategory = css::util::NumberFormat::LOGICAL;       break;
+        case CAT_TEXT:          rCategory = css::util::NumberFormat::TEXT;          break;
         case CAT_ALL:
-        default:    rCategory = NUMBERFORMAT_ALL; break;
+        default:    rCategory = css::util::NumberFormat::ALL; break;
     }
 }
 
@@ -1175,18 +1175,18 @@ void SvxNumberFormatShell::CategoryToPos_Impl(short nCategory, sal_uInt16& rPos)
     // Kategorie auf ::com::sun::star::form-Positionen abbilden (->Resource)
     switch ( nCategory )
     {
-        case NUMBERFORMAT_DEFINED:      rPos = CAT_USERDEFINED; break;
-        case NUMBERFORMAT_NUMBER:       rPos = CAT_NUMBER;      break;
-        case NUMBERFORMAT_PERCENT:      rPos = CAT_PERCENT;     break;
-        case NUMBERFORMAT_CURRENCY:     rPos = CAT_CURRENCY;    break;
-        case NUMBERFORMAT_DATETIME:
-        case NUMBERFORMAT_DATE:         rPos = CAT_DATE;        break;
-        case NUMBERFORMAT_TIME:         rPos = CAT_TIME;        break;
-        case NUMBERFORMAT_SCIENTIFIC:   rPos = CAT_SCIENTIFIC;  break;
-        case NUMBERFORMAT_FRACTION:     rPos = CAT_FRACTION;    break;
-        case NUMBERFORMAT_LOGICAL:      rPos = CAT_BOOLEAN;     break;
-        case NUMBERFORMAT_TEXT:         rPos = CAT_TEXT;        break;
-        case NUMBERFORMAT_ALL:
+        case css::util::NumberFormat::DEFINED:      rPos = CAT_USERDEFINED; break;
+        case css::util::NumberFormat::NUMBER:       rPos = CAT_NUMBER;      break;
+        case css::util::NumberFormat::PERCENT:      rPos = CAT_PERCENT;     break;
+        case css::util::NumberFormat::CURRENCY:     rPos = CAT_CURRENCY;    break;
+        case css::util::NumberFormat::DATETIME:
+        case css::util::NumberFormat::DATE:         rPos = CAT_DATE;        break;
+        case css::util::NumberFormat::TIME:         rPos = CAT_TIME;        break;
+        case css::util::NumberFormat::SCIENTIFIC:   rPos = CAT_SCIENTIFIC;  break;
+        case css::util::NumberFormat::FRACTION:     rPos = CAT_FRACTION;    break;
+        case css::util::NumberFormat::LOGICAL:      rPos = CAT_BOOLEAN;     break;
+        case css::util::NumberFormat::TEXT:         rPos = CAT_TEXT;        break;
+        case css::util::NumberFormat::ALL:
         default:                        rPos = CAT_ALL;
     }
 }
@@ -1263,7 +1263,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
             sal_uInt16 nMyCat,nMyType;
             if(pNumEntry!=NULL)
             {
-                nMyCat=pNumEntry->GetType() & ~NUMBERFORMAT_DEFINED;
+                nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
                 CategoryToPos_Impl(nMyCat,nMyType);
 
                 return (short) nMyType;
@@ -1295,7 +1295,7 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 
         if(pNumEntry!=NULL)
         {
-            if((pNumEntry->GetType() & NUMBERFORMAT_DEFINED)>0)
+            if((pNumEntry->GetType() & css::util::NumberFormat::DEFINED)>0)
             {
                 return true;
             }

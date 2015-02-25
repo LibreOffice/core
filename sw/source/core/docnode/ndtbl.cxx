@@ -4024,7 +4024,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
                 SvNumberFormatter* pNumFmtr = GetNumberFormatter();
 
                 short nFmtType = pNumFmtr->GetType( nFmtIdx );
-                if( nFmtType == pNumFmtr->GetType( nOldNumFmt ) || NUMBERFORMAT_NUMBER == nFmtType )
+                if( nFmtType == pNumFmtr->GetType( nOldNumFmt ) || css::util::NumberFormat::NUMBER == nFmtType )
                 {
                     // Current and specified NumFormat match
                     // -> keep old Format

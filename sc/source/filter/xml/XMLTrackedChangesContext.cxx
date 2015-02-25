@@ -728,7 +728,7 @@ ScXMLCellContentDeletionContext::ScXMLCellContentDeletionContext(  ScXMLImport& 
     nMatrixCols(0),
     nMatrixRows(0),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
-    nType(NUMBERFORMAT_ALL),
+    nType(css::util::NumberFormat::ALL),
     nMatrixFlag(MM_NONE),
     bBigRange(false),
     bContainsCell(false)
@@ -1114,12 +1114,12 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
                     bString = false;
                 else if (IsXMLToken(sValue, XML_DATE))
                 {
-                    rType = NUMBERFORMAT_DATE;
+                    rType = css::util::NumberFormat::DATE;
                     bString = false;
                 }
                 else if (IsXMLToken(sValue, XML_TIME))
                 {
-                    rType = NUMBERFORMAT_TIME;
+                    rType = css::util::NumberFormat::TIME;
                     bString = false;
                 }
             }
@@ -1246,7 +1246,7 @@ void ScXMLChangeCellContext::EndElement()
                     mrOldCell.meType = CELLTYPE_VALUE;
                     mrOldCell.mfValue = fValue;
                 }
-                if (rType == NUMBERFORMAT_DATE || rType == NUMBERFORMAT_TIME)
+                if (rType == css::util::NumberFormat::DATE || rType == css::util::NumberFormat::TIME)
                     rInputString = sText;
             }
         }
@@ -1267,7 +1267,7 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
     nMatrixCols(0),
     nMatrixRows(0),
     eGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT),
-    nType(NUMBERFORMAT_ALL),
+    nType(css::util::NumberFormat::ALL),
     nMatrixFlag(MM_NONE)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);

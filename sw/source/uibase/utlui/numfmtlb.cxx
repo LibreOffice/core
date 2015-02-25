@@ -65,7 +65,7 @@ NumFormatListBox::NumFormatListBox(vcl::Window* pWin, WinBits nStyle) :
     bShowLanguageControl(false),
     bUseAutomaticLanguage(true)
 {
-    Init(NUMBERFORMAT_NUMBER, true);
+    Init(css::util::NumberFormat::NUMBER, true);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeNumFormatListBox(vcl::Window *pParent, VclBuilder::stringmap &rMap)
@@ -145,57 +145,57 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
 
         switch( nFormatType )
         {
-        case NUMBERFORMAT_NUMBER:
+        case css::util::NumberFormat::NUMBER:
             eOffsetStart=NF_NUMBER_START;
             eOffsetEnd=NF_NUMBER_END;
             break;
 
-        case NUMBERFORMAT_PERCENT:
+        case css::util::NumberFormat::PERCENT:
             eOffsetStart=NF_PERCENT_START;
             eOffsetEnd=NF_PERCENT_END;
             break;
 
-        case NUMBERFORMAT_CURRENCY:
+        case css::util::NumberFormat::CURRENCY:
             eOffsetStart=NF_CURRENCY_START;
             eOffsetEnd=NF_CURRENCY_END;
             break;
 
-        case NUMBERFORMAT_DATETIME:
+        case css::util::NumberFormat::DATETIME:
             eOffsetStart=NF_DATE_START;
             eOffsetEnd=NF_TIME_END;
             break;
 
-        case NUMBERFORMAT_DATE:
+        case css::util::NumberFormat::DATE:
             eOffsetStart=NF_DATE_START;
             eOffsetEnd=NF_DATE_END;
             break;
 
-        case NUMBERFORMAT_TIME:
+        case css::util::NumberFormat::TIME:
             eOffsetStart=NF_TIME_START;
             eOffsetEnd=NF_TIME_END;
             break;
 
-        case NUMBERFORMAT_SCIENTIFIC:
+        case css::util::NumberFormat::SCIENTIFIC:
             eOffsetStart=NF_SCIENTIFIC_START;
             eOffsetEnd=NF_SCIENTIFIC_END;
             break;
 
-        case NUMBERFORMAT_FRACTION:
+        case css::util::NumberFormat::FRACTION:
             eOffsetStart=NF_FRACTION_START;
             eOffsetEnd=NF_FRACTION_END;
             break;
 
-        case NUMBERFORMAT_LOGICAL:
+        case css::util::NumberFormat::LOGICAL:
             eOffsetStart=NF_BOOLEAN;
             eOffsetEnd=NF_BOOLEAN;
             break;
 
-        case NUMBERFORMAT_TEXT:
+        case css::util::NumberFormat::TEXT:
             eOffsetStart=NF_TEXT;
             eOffsetEnd=NF_TEXT;
             break;
 
-        case NUMBERFORMAT_ALL:
+        case css::util::NumberFormat::ALL:
             eOffsetStart=NF_NUMERIC_START;
             eOffsetEnd = NfIndexTableOffset( NF_INDEX_TABLE_ENTRIES - 1 );
             break;
@@ -228,11 +228,11 @@ void NumFormatListBox::SetFormatType(const short nFormatType)
             if( nFormat == pFormatter->GetFormatIndex( NF_NUMBER_STANDARD,
                                                         eCurLanguage )
                 || ((SvNumberformat*)pFmt)->GetOutputString( fVal, sValue, &pCol )
-                || nFormatType == NUMBERFORMAT_UNDEFINED )
+                || nFormatType == css::util::NumberFormat::UNDEFINED )
             {
                 sValue = pFmt->GetFormatstring();
             }
-            else if( nFormatType == NUMBERFORMAT_TEXT )
+            else if( nFormatType == css::util::NumberFormat::TEXT )
             {
                 pFormatter->GetOutputString( "\"ABC\"", nFormat, sValue, &pCol);
             }
@@ -306,7 +306,7 @@ void NumFormatListBox::SetDefFormat(const sal_uLong nDefFmt)
     OUString sValue;
     Color* pCol = 0;
 
-    if (nType == NUMBERFORMAT_TEXT)
+    if (nType == css::util::NumberFormat::TEXT)
     {
         pFormatter->GetOutputString("\"ABC\"", nDefFmt, sValue, &pCol);
     }
@@ -387,7 +387,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         aCoreSet.Put( SvxNumberInfoItem( pFormatter, fValue,
                                             SID_ATTR_NUMBERFORMAT_INFO ) );
 
-        if( (NUMBERFORMAT_DATE | NUMBERFORMAT_TIME) & nCurrFormatType )
+        if( (css::util::NumberFormat::DATE | css::util::NumberFormat::TIME) & nCurrFormatType )
             aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, bOneArea));
 
         aCoreSet.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_NOLANGUAGE, !bShowLanguageControl));
@@ -444,29 +444,29 @@ double NumFormatListBox::GetDefValue(const short nFormatType) const
 
     switch (nFormatType)
     {
-        case NUMBERFORMAT_DATE:
-        case NUMBERFORMAT_DATE|NUMBERFORMAT_TIME:
+        case css::util::NumberFormat::DATE:
+        case css::util::NumberFormat::DATE|css::util::NumberFormat::TIME:
             fDefValue = SVX_NUMVAL_DATE;
             break;
 
-        case NUMBERFORMAT_TIME:
+        case css::util::NumberFormat::TIME:
             fDefValue = SVX_NUMVAL_TIME;
             break;
 
-        case NUMBERFORMAT_TEXT:
-        case NUMBERFORMAT_UNDEFINED:
+        case css::util::NumberFormat::TEXT:
+        case css::util::NumberFormat::UNDEFINED:
             fDefValue = 0;
             break;
 
-        case NUMBERFORMAT_CURRENCY:
+        case css::util::NumberFormat::CURRENCY:
             fDefValue = SVX_NUMVAL_CURRENCY;
             break;
 
-        case NUMBERFORMAT_PERCENT:
+        case css::util::NumberFormat::PERCENT:
             fDefValue = SVX_NUMVAL_PERCENT;
             break;
 
-        case NUMBERFORMAT_LOGICAL:
+        case css::util::NumberFormat::LOGICAL:
             fDefValue = SVX_NUMVAL_BOOLEAN;
             break;
 

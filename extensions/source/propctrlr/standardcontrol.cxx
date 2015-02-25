@@ -261,7 +261,7 @@ namespace pcr
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
         SvNumberFormatter* pFormatter = getTypedControlWindow()->GetFormatter();
-        sal_uLong nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
+        sal_uLong nStandardDateTimeFormat = pFormatter->GetStandardFormat( css::util::NumberFormat::DATETIME, eSysLanguage );
 
         getTypedControlWindow()->SetFormatKey( nStandardDateTimeFormat );
     }

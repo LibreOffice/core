@@ -2088,7 +2088,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         const SfxPoolItem* pItem;
 
         Color* pCol = 0;
-        if( NUMBERFORMAT_TEXT != nFmt )
+        if( css::util::NumberFormat::TEXT != nFmt )
         {
             // special text format:
             OUString sTmp;
@@ -2174,7 +2174,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         const SwTblBoxNumFormat *pNewFmt = 0;
         const SwTblBoxFormula *pNewFml = 0;
         const SwTblBoxValue *pNewVal = 0;
-        sal_uLong nOldFmt = NUMBERFORMAT_TEXT;
+        sal_uLong nOldFmt = css::util::NumberFormat::TEXT;
 
         switch( pNew ? pNew->Which() : 0 )
         {
@@ -2240,14 +2240,14 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     // is it newer or has the current been removed?
                     if( pNewVal )
                     {
-                        if( NUMBERFORMAT_TEXT != nNewFmt )
+                        if( css::util::NumberFormat::TEXT != nNewFmt )
                         {
                             if( SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ))
-                                nOldFmt = NUMBERFORMAT_TEXT;
+                                nOldFmt = css::util::NumberFormat::TEXT;
                             else
-                                nNewFmt = NUMBERFORMAT_TEXT;
+                                nNewFmt = css::util::NumberFormat::TEXT;
                         }
-                        else if( NUMBERFORMAT_TEXT == nNewFmt )
+                        else if( css::util::NumberFormat::TEXT == nNewFmt )
                             nOldFmt = 0;
                     }
 
@@ -2263,7 +2263,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     //          - align top for vertical alignment, if BOTTOM is set
                     SvNumberFormatter* pNumFmtr = GetDoc()->GetNumberFormatter();
                     bool bNewIsTxtFmt = pNumFmtr->IsTextFormat( nNewFmt ) ||
-                                        NUMBERFORMAT_TEXT == nNewFmt;
+                                        css::util::NumberFormat::TEXT == nNewFmt;
 
                     if( (!bNewIsTxtFmt && nOldFmt != nNewFmt) || pNewFml )
                     {
@@ -2289,14 +2289,14 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                     // JP 22.04.98: Bug 49659 -
                                     //  Special casing for percent
                                     bool bIsNumFmt = false;
-                                    if( NUMBERFORMAT_PERCENT ==
+                                    if( css::util::NumberFormat::PERCENT ==
                                         pNumFmtr->GetType( nNewFmt ))
                                     {
                                         sal_uInt32 nTmpFmt = 0;
                                         if( pNumFmtr->IsNumberFormat(
                                                     aTxt, nTmpFmt, fVal ))
                                         {
-                                            if( NUMBERFORMAT_NUMBER ==
+                                            if( css::util::NumberFormat::NUMBER ==
                                                 pNumFmtr->GetType( nTmpFmt ))
                                                 aTxt += "%";
 
@@ -2390,11 +2390,11 @@ bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
         {
             rFmtIndex = static_cast<const SwTblBoxNumFormat*>(pItem)->GetValue();
             // Special casing for percent
-            if( !rIsEmptyTxtNd && NUMBERFORMAT_PERCENT == pNumFmtr->GetType( rFmtIndex ))
+            if( !rIsEmptyTxtNd && css::util::NumberFormat::PERCENT == pNumFmtr->GetType( rFmtIndex ))
             {
                 sal_uInt32 nTmpFmt = 0;
                 if( pNumFmtr->IsNumberFormat( aTxt, nTmpFmt, rNum ) &&
-                    NUMBERFORMAT_NUMBER == pNumFmtr->GetType( nTmpFmt ))
+                    css::util::NumberFormat::NUMBER == pNumFmtr->GetType( nTmpFmt ))
                     aTxt += "%";
             }
         }

@@ -195,7 +195,7 @@ void ScInterpreter::ScIfJump()
                 }
                 else
                 {   // no parameter given for THEN
-                    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+                    nFuncFmtType = css::util::NumberFormat::LOGICAL;
                     PushInt(1);
                     aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
                 }
@@ -208,7 +208,7 @@ void ScInterpreter::ScIfJump()
                 }
                 else
                 {   // no parameter given for ELSE
-                    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+                    nFuncFmtType = css::util::NumberFormat::LOGICAL;
                     PushInt(0);
                     aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
                 }
@@ -888,7 +888,7 @@ double ScInterpreter::Compare()
     }
     if( nGlobalError )
         return 0;
-    nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nCurFmtType = nFuncFmtType = css::util::NumberFormat::LOGICAL;
     return sc::CompareFunc(aComp.maCells[0], aComp.maCells[1], aComp.mbIgnoreCase);
 }
 
@@ -958,7 +958,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
 
     if (nGlobalError)
     {
-        nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
+        nCurFmtType = nFuncFmtType = css::util::NumberFormat::LOGICAL;
         return aRes;
     }
 
@@ -1049,7 +1049,7 @@ sc::RangeMatrix ScInterpreter::CompareMat( ScQueryOp eOp, sc::CompareOptions* pO
             return aRes;
     }
 
-    nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nCurFmtType = nFuncFmtType = css::util::NumberFormat::LOGICAL;
     return aRes;
 }
 
@@ -1179,7 +1179,7 @@ void ScInterpreter::ScGreaterEqual()
 
 void ScInterpreter::ScAnd()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
@@ -1278,7 +1278,7 @@ void ScInterpreter::ScAnd()
 
 void ScInterpreter::ScOr()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
@@ -1379,7 +1379,7 @@ void ScInterpreter::ScOr()
 void ScInterpreter::ScXor()
 {
 
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     short nParamCount = GetByte();
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
@@ -1523,7 +1523,7 @@ void ScInterpreter::ScNeg()
 
 void ScInterpreter::ScPercentSign()
 {
-    nFuncFmtType = NUMBERFORMAT_PERCENT;
+    nFuncFmtType = css::util::NumberFormat::PERCENT;
     const FormulaToken* pSaveCur = pCur;
     sal_uInt8 nSavePar = cPar;
     PushInt( 100 );
@@ -1537,7 +1537,7 @@ void ScInterpreter::ScPercentSign()
 
 void ScInterpreter::ScNot()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     switch ( GetStackType() )
     {
         case svMatrix :
@@ -1678,13 +1678,13 @@ void ScInterpreter::ScRandom()
 
 void ScInterpreter::ScTrue()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     PushInt(1);
 }
 
 void ScInterpreter::ScFalse()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     PushInt(0);
 }
 
@@ -1827,7 +1827,7 @@ void ScInterpreter::ScSqrt()
 void ScInterpreter::ScIsEmpty()
 {
     short nRes = 0;
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     switch ( GetRawStackType() )
     {
         case svEmptyCell:
@@ -1881,7 +1881,7 @@ void ScInterpreter::ScIsEmpty()
 
 bool ScInterpreter::IsString()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetRawStackType() )
     {
@@ -1968,7 +1968,7 @@ void ScInterpreter::ScIsLogical()
                 if (aCell.hasNumeric())
                 {
                     sal_uLong nFormat = GetCellNumberFormat(aAdr, aCell);
-                    nRes = (pFormatter->GetType(nFormat) == NUMBERFORMAT_LOGICAL);
+                    nRes = (pFormatter->GetType(nFormat) == css::util::NumberFormat::LOGICAL);
                 }
             }
         }
@@ -1980,9 +1980,9 @@ void ScInterpreter::ScIsLogical()
         default:
             PopError();
             if ( !nGlobalError )
-                nRes = ( nCurFmtType == NUMBERFORMAT_LOGICAL );
+                nRes = ( nCurFmtType == css::util::NumberFormat::LOGICAL );
     }
-    nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nCurFmtType = nFuncFmtType = css::util::NumberFormat::LOGICAL;
     nGlobalError = 0;
     PushInt( int(nRes) );
 }
@@ -2013,7 +2013,7 @@ void ScInterpreter::ScType()
                     case CELLTYPE_VALUE :
                     {
                         sal_uLong nFormat = GetCellNumberFormat(aAdr, aCell);
-                        if (pFormatter->GetType(nFormat) == NUMBERFORMAT_LOGICAL)
+                        if (pFormatter->GetType(nFormat) == css::util::NumberFormat::LOGICAL)
                             nType = 4;
                         else
                             nType = 1;
@@ -2086,10 +2086,10 @@ void getFormatString(SvNumberFormatter* pFormatter, sal_uLong nFormat, OUString&
 
     switch( pFormatter->GetType( nFormat ) )
     {
-        case NUMBERFORMAT_NUMBER:       if(bThousand) rFmtStr = ","; else rFmtStr = "F"; break;
-        case NUMBERFORMAT_CURRENCY:     rFmtStr = "C";                                   break;
-        case NUMBERFORMAT_SCIENTIFIC:   rFmtStr = "S";                                   break;
-        case NUMBERFORMAT_PERCENT:      rFmtStr = "P";                                   break;
+        case css::util::NumberFormat::NUMBER:       if(bThousand) rFmtStr = ","; else rFmtStr = "F"; break;
+        case css::util::NumberFormat::CURRENCY:     rFmtStr = "C";                                   break;
+        case css::util::NumberFormat::SCIENTIFIC:   rFmtStr = "S";                                   break;
+        case css::util::NumberFormat::PERCENT:      rFmtStr = "P";                                   break;
         default:
         {
             bAppendPrec = false;
@@ -2458,7 +2458,7 @@ void ScInterpreter::ScCellExternal()
 
 void ScInterpreter::ScIsRef()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetStackType() )
     {
@@ -2494,7 +2494,7 @@ void ScInterpreter::ScIsRef()
 
 void ScInterpreter::ScIsValue()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetRawStackType() )
     {
@@ -2557,7 +2557,7 @@ void ScInterpreter::ScIsValue()
 
 void ScInterpreter::ScIsFormula()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetStackType() )
     {
@@ -2611,7 +2611,7 @@ void ScInterpreter::ScFormula()
 
 void ScInterpreter::ScIsNV()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetStackType() )
     {
@@ -2659,7 +2659,7 @@ void ScInterpreter::ScIsNV()
 
 void ScInterpreter::ScIsErr()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetStackType() )
     {
@@ -2713,7 +2713,7 @@ void ScInterpreter::ScIsErr()
 
 void ScInterpreter::ScIsError()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     switch ( GetStackType() )
     {
@@ -2764,7 +2764,7 @@ void ScInterpreter::ScIsError()
 
 bool ScInterpreter::IsEven()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     bool nRes = false;
     double fVal = 0.0;
     switch ( GetStackType() )
@@ -3333,7 +3333,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             {
                 nVal = GetDouble();
                 if (nMin > nVal) nMin = nVal;
-                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                nFuncFmtType = css::util::NumberFormat::NUMBER;
             }
             break;
             case svSingleRef :
@@ -3381,7 +3381,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
-                    nFuncFmtType = NUMBERFORMAT_NUMBER;
+                    nFuncFmtType = css::util::NumberFormat::NUMBER;
                     nVal = pMat->GetMinValue(bTextAsZero);
                     if (nMin > nVal)
                         nMin = nVal;
@@ -3429,7 +3429,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             {
                 nVal = GetDouble();
                 if (nMax < nVal) nMax = nVal;
-                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                nFuncFmtType = css::util::NumberFormat::NUMBER;
             }
             break;
             case svSingleRef :
@@ -3477,7 +3477,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
                 {
-                    nFuncFmtType = NUMBERFORMAT_NUMBER;
+                    nFuncFmtType = css::util::NumberFormat::NUMBER;
                     nVal = pMat->GetMaxValue(bTextAsZero);
                     if (nMax < nVal)
                         nMax = nVal;
@@ -7650,7 +7650,7 @@ void ScInterpreter::ScCurrency()
         if ( fDec < 0.0 )
             fDec = 0.0;
         sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                        NUMBERFORMAT_CURRENCY,
+                                        css::util::NumberFormat::CURRENCY,
                                         ScGlobal::eLnge);
         if ( (sal_uInt16) fDec != pFormatter->GetFormatPrecision( nIndex ) )
         {
@@ -7740,7 +7740,7 @@ void ScInterpreter::ScFixed()
         if (fDec < 0.0)
             fDec = 0.0;
         sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                            NUMBERFORMAT_NUMBER,
+                                            css::util::NumberFormat::NUMBER,
                                             ScGlobal::eLnge);
         OUString sFormatString = pFormatter->GenerateFormat(
                                                nIndex,
@@ -7786,7 +7786,7 @@ void ScInterpreter::ScFind()
 
 void ScInterpreter::ScExact()
 {
-    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+    nFuncFmtType = css::util::NumberFormat::LOGICAL;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
         svl::SharedString s1 = GetString();

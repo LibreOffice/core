@@ -111,7 +111,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
             sal_Int32 nFormat = (sal_Int32)
                 static_cast<const SwTblBoxNumFormat *>(pItem)->GetValue();
 
-            if ( (nFormat != -1) && (nFormat != NUMBERFORMAT_TEXT) )
+            if ( (nFormat != -1) && (nFormat != css::util::NumberFormat::TEXT) )
             {
                 // if we have a format, register and then export
                 // (Careful: here we assume that data styles will be

@@ -622,16 +622,16 @@ void lcl_GetColumnTypes(
                 rDoc.GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
                 switch ( pNumFmt->GetType( nFormat ) )
                 {
-                    case NUMBERFORMAT_LOGICAL :
+                    case css::util::NumberFormat::LOGICAL :
                         nDbType = sdbc::DataType::BIT;
                         nFieldLen = 1;
                         break;
-                    case NUMBERFORMAT_DATE :
+                    case css::util::NumberFormat::DATE :
                         nDbType = sdbc::DataType::DATE;
                         nFieldLen = 8;
                         break;
-                    case NUMBERFORMAT_TIME :
-                    case NUMBERFORMAT_DATETIME :
+                    case css::util::NumberFormat::TIME :
+                    case css::util::NumberFormat::DATETIME :
                         nDbType = sdbc::DataType::VARCHAR;
                         break;
                     default:

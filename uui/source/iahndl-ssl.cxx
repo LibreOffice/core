@@ -122,12 +122,12 @@ getLocalizedDatTimeStr(
     Color*      pColor = NULL;
     Date*       pNullDate = pNumberFormatter->GetNullDate();
     sal_uInt32  nFormat
-        = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
+        = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::DATE, eUILang );
 
     pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
     aDateTimeStr = aTmpStr + " ";
 
-    nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
+    nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eUILang );
     pNumberFormatter->GetOutputString(
         aTime.GetTimeInDays(), nFormat, aTmpStr, &pColor );
     aDateTimeStr += aTmpStr;

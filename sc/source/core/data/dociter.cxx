@@ -109,7 +109,7 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
     , mnTab(0)
     , nAttrEndRow(0)
     , mnSubTotalFlags(nSubTotalFlags)
-    , nNumFmtType(NUMBERFORMAT_UNDEFINED)
+    , nNumFmtType(css::util::NumberFormat::UNDEFINED)
     , bNumValid(false)
     , bCalcAsShown(pDocument->GetDocOptions().IsCalcAsShown())
     , bTextAsZero(bTextZero)
@@ -253,7 +253,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                 {
                     rErr = 0;
                     rValue = 0.0;
-                    nNumFmtType = NUMBERFORMAT_NUMBER;
+                    nNumFmtType = css::util::NumberFormat::NUMBER;
                     nNumFmtIndex = 0;
                     bNumValid = true;
                     return true;
@@ -427,7 +427,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                             nAttrEndRow, pNewAttrArray, nRow, mpDoc );
                         rValue.mfValue = mpDoc->RoundValueAsShown( rValue.mfValue, nNumFormat );
                     }
-                    nNumFmtType = NUMBERFORMAT_NUMBER;
+                    nNumFmtType = css::util::NumberFormat::NUMBER;
                     nNumFmtIndex = 0;
                     rValue.mnError = 0;
                     return true; // Found it!
@@ -2109,7 +2109,7 @@ ScHorizontalValueIterator::ScHorizontalValueIterator( ScDocument* pDocument,
     pDoc( pDocument ),
     nNumFmtIndex(0),
     nEndTab( rRange.aEnd.Tab() ),
-    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
+    nNumFmtType( css::util::NumberFormat::UNDEFINED ),
     bNumValid( false ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
     bTextAsZero( bTextZero )
@@ -2204,7 +2204,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
                     {
                         rErr = 0;
                         rValue = 0.0;
-                        nNumFmtType = NUMBERFORMAT_NUMBER;
+                        nNumFmtType = css::util::NumberFormat::NUMBER;
                         nNumFmtIndex = 0;
                         bNumValid = true;
                         bFound = true;

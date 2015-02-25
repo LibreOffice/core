@@ -323,7 +323,7 @@ bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const
 {
     sal_uLong nNumIndex = static_cast<const SfxUInt32Item*>(rCol.GetAttr(nRow, ATTR_VALUE_FORMAT))->GetValue();
     short nType = mpClipDoc->GetFormatTable()->GetType(nNumIndex);
-    return (nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME);
+    return (nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) || (nType == css::util::NumberFormat::DATETIME);
 }
 
 CopyToClipContext::CopyToClipContext(

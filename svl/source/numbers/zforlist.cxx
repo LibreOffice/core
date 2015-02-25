@@ -427,13 +427,13 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
         else
         {
             short eCheckType = pNewEntry->GetType();
-            if ( eCheckType != NUMBERFORMAT_UNDEFINED )
+            if ( eCheckType != css::util::NumberFormat::UNDEFINED )
             {
-                pNewEntry->SetType( eCheckType | NUMBERFORMAT_DEFINED );
+                pNewEntry->SetType( eCheckType | css::util::NumberFormat::DEFINED );
             }
             else
             {
-                pNewEntry->SetType( NUMBERFORMAT_DEFINED );
+                pNewEntry->SetType( css::util::NumberFormat::DEFINED );
             }
 
             if ( !aFTable.insert( make_pair( nKey, pNewEntry) ).second )
@@ -522,15 +522,15 @@ bool SvNumberFormatter::PutEntry(OUString& rString,
     if (nCheckPos == 0)                         // Format ok
     {                                           // Type comparison:
         short eCheckType = p_Entry->GetType();
-        if ( eCheckType != NUMBERFORMAT_UNDEFINED)
+        if ( eCheckType != css::util::NumberFormat::UNDEFINED)
         {
-            p_Entry->SetType(eCheckType | NUMBERFORMAT_DEFINED);
+            p_Entry->SetType(eCheckType | css::util::NumberFormat::DEFINED);
             nType = eCheckType;
         }
         else
         {
-            p_Entry->SetType(NUMBERFORMAT_DEFINED);
-            nType = NUMBERFORMAT_DEFINED;
+            p_Entry->SetType(css::util::NumberFormat::DEFINED);
+            nType = css::util::NumberFormat::DEFINED;
         }
 
         sal_uInt32 CLOffset = ImpGenerateCL(eLge);  // create new standard formats if necessary
@@ -664,7 +664,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, 
     rType = GetType( nKey);
     // Convert any (!) old "automatic" currency format to new fixed currency
     // default format.
-    if ((rType & NUMBERFORMAT_CURRENCY) != 0)
+    if ((rType & css::util::NumberFormat::CURRENCY) != 0)
     {
         const SvNumberformat* pFormat = GetEntry( nKey);
         if (!pFormat->HasNewCurrency())
@@ -674,7 +674,7 @@ sal_uInt32 SvNumberFormatter::GetIndexPuttingAndConverting( OUString & rString, 
                 DeleteEntry( nKey);     // don't leave trails of rubbish
                 rNewInserted = false;
             }
-            nKey = GetStandardFormat( NUMBERFORMAT_CURRENCY, eLnge);
+            nKey = GetStandardFormat( css::util::NumberFormat::CURRENCY, eLnge);
         }
     }
     return nKey;
@@ -778,7 +778,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
                                                       LanguageType& rLnge)
 {
     short eTypetmp = eType;
-    if (eType == NUMBERFORMAT_ALL)                  // empty cell or don't care
+    if (eType == css::util::NumberFormat::ALL)                  // empty cell or don't care
     {
         rLnge = IniLnge;
     }
@@ -788,22 +788,22 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
         if (!pFormat)
         {
             rLnge = IniLnge;
-            eType = NUMBERFORMAT_ALL;
+            eType = css::util::NumberFormat::ALL;
             eTypetmp = eType;
         }
         else
         {
             rLnge = pFormat->GetLanguage();
-            eType = pFormat->GetType()&~NUMBERFORMAT_DEFINED;
+            eType = pFormat->GetType()&~css::util::NumberFormat::DEFINED;
             if (eType == 0)
             {
-                eType = NUMBERFORMAT_DEFINED;
+                eType = css::util::NumberFormat::DEFINED;
                 eTypetmp = eType;
             }
-            else if (eType == NUMBERFORMAT_DATETIME)
+            else if (eType == css::util::NumberFormat::DATETIME)
             {
                 eTypetmp = eType;
-                eType = NUMBERFORMAT_DATE;
+                eType = css::util::NumberFormat::DATE;
             }
             else
             {
@@ -906,7 +906,7 @@ SvNumberFormatTable& SvNumberFormatter::GetEntryTable(
 
     SvNumberFormatTable::iterator it = aFTable.find( CLOffset);
 
-    if (eType == NUMBERFORMAT_ALL)
+    if (eType == css::util::NumberFormat::ALL)
     {
         while (it != aFTable.end() && it->second->GetLanguage() == ActLnge)
         {   // copy all entries to output table
@@ -944,21 +944,21 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
     if (!pFormat)
     {
         ChangeIntl(IniLnge);
-        FType = NUMBERFORMAT_NUMBER;
+        FType = css::util::NumberFormat::NUMBER;
     }
     else
     {
-        FType = pFormat->GetType() &~NUMBERFORMAT_DEFINED;
+        FType = pFormat->GetType() &~css::util::NumberFormat::DEFINED;
         if (FType == 0)
         {
-            FType = NUMBERFORMAT_DEFINED;
+            FType = css::util::NumberFormat::DEFINED;
         }
         ChangeIntl(pFormat->GetLanguage());
     }
 
     bool res;
     short RType = FType;
-    if (RType == NUMBERFORMAT_TEXT)
+    if (RType == css::util::NumberFormat::TEXT)
     {
         res = false;        // type text preset => no conversion to number
     }
@@ -970,7 +970,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
     {
         switch ( RType )
         {
-        case NUMBERFORMAT_DATE :
+        case css::util::NumberFormat::DATE :
             // Preserve ISO 8601 input.
             if (pStringScanner->CanForceToIso8601( DMY))
             {
@@ -981,7 +981,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
                 F_Index = GetStandardFormat( RType, ActLnge );
             }
             break;
-        case NUMBERFORMAT_TIME :
+        case css::util::NumberFormat::TIME :
             if ( pStringScanner->GetDecPos() )
             {
                 // 100th seconds
@@ -1022,7 +1022,7 @@ bool SvNumberFormatter::IsCompatible(short eOldType,
     {
         return true;
     }
-    else if (eOldType == NUMBERFORMAT_DEFINED)
+    else if (eOldType == css::util::NumberFormat::DEFINED)
     {
         return true;
     }
@@ -1030,43 +1030,43 @@ bool SvNumberFormatter::IsCompatible(short eOldType,
     {
         switch (eNewType)
         {
-        case NUMBERFORMAT_NUMBER:
+        case css::util::NumberFormat::NUMBER:
             switch (eOldType)
             {
-            case NUMBERFORMAT_PERCENT:
-            case NUMBERFORMAT_CURRENCY:
-            case NUMBERFORMAT_SCIENTIFIC:
-            case NUMBERFORMAT_FRACTION:
-//          case NUMBERFORMAT_LOGICAL:
-            case NUMBERFORMAT_DEFINED:
+            case css::util::NumberFormat::PERCENT:
+            case css::util::NumberFormat::CURRENCY:
+            case css::util::NumberFormat::SCIENTIFIC:
+            case css::util::NumberFormat::FRACTION:
+//          case css::util::NumberFormat::LOGICAL:
+            case css::util::NumberFormat::DEFINED:
                 return true;
             default:
                 return false;
             }
             break;
-        case NUMBERFORMAT_DATE:
+        case css::util::NumberFormat::DATE:
             switch (eOldType)
             {
-            case NUMBERFORMAT_DATETIME:
+            case css::util::NumberFormat::DATETIME:
                 return true;
             default:
                 return false;
             }
             break;
-        case NUMBERFORMAT_TIME:
+        case css::util::NumberFormat::TIME:
             switch (eOldType)
             {
-            case NUMBERFORMAT_DATETIME:
+            case css::util::NumberFormat::DATETIME:
                 return true;
             default:
                 return false;
             }
             break;
-        case NUMBERFORMAT_DATETIME:
+        case css::util::NumberFormat::DATETIME:
             switch (eOldType)
             {
-            case NUMBERFORMAT_TIME:
-            case NUMBERFORMAT_DATE:
+            case css::util::NumberFormat::TIME:
+            case css::util::NumberFormat::DATE:
                 return true;
             default:
                 return false;
@@ -1085,19 +1085,19 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
     sal_uInt32 nSearch;
     switch( nType )
     {
-    case NUMBERFORMAT_DATE:
+    case css::util::NumberFormat::DATE:
         nSearch = CLOffset + ZF_STANDARD_DATE;
         break;
-    case NUMBERFORMAT_TIME:
+    case css::util::NumberFormat::TIME:
         nSearch = CLOffset + ZF_STANDARD_TIME;
         break;
-    case NUMBERFORMAT_DATETIME:
+    case css::util::NumberFormat::DATETIME:
         nSearch = CLOffset + ZF_STANDARD_DATETIME;
         break;
-    case NUMBERFORMAT_PERCENT:
+    case css::util::NumberFormat::PERCENT:
         nSearch = CLOffset + ZF_STANDARD_PERCENT;
         break;
-    case NUMBERFORMAT_SCIENTIFIC:
+    case css::util::NumberFormat::SCIENTIFIC:
         nSearch = CLOffset + ZF_STANDARD_SCIENTIFIC;
         break;
     default:
@@ -1117,7 +1117,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         {
             const SvNumberformat* pEntry = it2->second;
             if ( pEntry->IsStandard() && ((pEntry->GetType() &
-                            ~NUMBERFORMAT_DEFINED) == nType) )
+                            ~css::util::NumberFormat::DEFINED) == nType) )
             {
                 nDefaultFormat = nKey;
                 break;  // while
@@ -1129,19 +1129,19 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         {   // none found, use old fixed standards
             switch( nType )
             {
-            case NUMBERFORMAT_DATE:
+            case css::util::NumberFormat::DATE:
                 nDefaultFormat = CLOffset + ZF_STANDARD_DATE;
                 break;
-            case NUMBERFORMAT_TIME:
+            case css::util::NumberFormat::TIME:
                 nDefaultFormat = CLOffset + ZF_STANDARD_TIME+1;
                 break;
-            case NUMBERFORMAT_DATETIME:
+            case css::util::NumberFormat::DATETIME:
                 nDefaultFormat = CLOffset + ZF_STANDARD_DATETIME;
                 break;
-            case NUMBERFORMAT_PERCENT:
+            case css::util::NumberFormat::PERCENT:
                 nDefaultFormat = CLOffset + ZF_STANDARD_PERCENT+1;
                 break;
-            case NUMBERFORMAT_SCIENTIFIC:
+            case css::util::NumberFormat::SCIENTIFIC:
                 nDefaultFormat = CLOffset + ZF_STANDARD_SCIENTIFIC;
                 break;
             default:
@@ -1163,24 +1163,24 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( short eType, LanguageType eLnge
     sal_uInt32 CLOffset = ImpGenerateCL(eLnge);
     switch(eType)
     {
-    case NUMBERFORMAT_CURRENCY:
+    case css::util::NumberFormat::CURRENCY:
         return ( eLnge == LANGUAGE_SYSTEM ) ? ImpGetDefaultSystemCurrencyFormat() : ImpGetDefaultCurrencyFormat();
-    case NUMBERFORMAT_DATE:
-    case NUMBERFORMAT_TIME:
-    case NUMBERFORMAT_DATETIME:
-    case NUMBERFORMAT_PERCENT:
-    case NUMBERFORMAT_SCIENTIFIC:
+    case css::util::NumberFormat::DATE:
+    case css::util::NumberFormat::TIME:
+    case css::util::NumberFormat::DATETIME:
+    case css::util::NumberFormat::PERCENT:
+    case css::util::NumberFormat::SCIENTIFIC:
         return ImpGetDefaultFormat( eType );
-    case NUMBERFORMAT_FRACTION:
+    case css::util::NumberFormat::FRACTION:
         return CLOffset + ZF_STANDARD_FRACTION;
-    case NUMBERFORMAT_LOGICAL:
+    case css::util::NumberFormat::LOGICAL:
         return CLOffset + ZF_STANDARD_LOGICAL;
-    case NUMBERFORMAT_TEXT:
+    case css::util::NumberFormat::TEXT:
         return CLOffset + ZF_STANDARD_TEXT;
-    case NUMBERFORMAT_ALL:
-    case NUMBERFORMAT_DEFINED:
-    case NUMBERFORMAT_NUMBER:
-    case NUMBERFORMAT_UNDEFINED:
+    case css::util::NumberFormat::ALL:
+    case css::util::NumberFormat::DEFINED:
+    case css::util::NumberFormat::NUMBER:
+    case css::util::NumberFormat::UNDEFINED:
     default:
         return CLOffset + ZF_STANDARD;
     }
@@ -1213,7 +1213,7 @@ sal_uInt32 SvNumberFormatter::GetStandardFormat( double fNumber, sal_uInt32 nFIn
 
     switch( eType )
     {
-        case NUMBERFORMAT_TIME :
+        case css::util::NumberFormat::TIME :
         {
             bool bSign;
             if ( fNumber < 0.0 )
@@ -1252,7 +1252,7 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
     switch ( eType )
     {
     // #61619# always edit using 4-digit year
-    case NUMBERFORMAT_DATE :
+    case css::util::NumberFormat::DATE :
         if (rtl::math::approxFloor( fNumber) != fNumber)
             nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
         // fdo#34977 preserve time when editing even if only date was
@@ -1273,7 +1273,7 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
                 nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
         }
         break;
-    case NUMBERFORMAT_TIME :
+    case css::util::NumberFormat::TIME :
         if (fNumber < 0.0 || fNumber >= 1.0)
         {
             /* XXX NOTE: this is a purely arbitrary value within the limits
@@ -1290,7 +1290,7 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
         else
             nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
         break;
-    case NUMBERFORMAT_DATETIME :
+    case css::util::NumberFormat::DATETIME :
         nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
         /* FIXME: in case an ISO 8601 format was used, editing should
          * also use such. Unfortunately we have no builtin combined
@@ -1316,23 +1316,23 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     LanguageType eLang = pFormat->GetLanguage();
     ChangeIntl( eLang );
 
-    short eType = pFormat->GetType() & ~NUMBERFORMAT_DEFINED;
+    short eType = pFormat->GetType() & ~css::util::NumberFormat::DEFINED;
     if (eType == 0)
     {
-        eType = NUMBERFORMAT_DEFINED;
+        eType = css::util::NumberFormat::DEFINED;
     }
 
     sal_uInt16 nOldPrec = pFormatScanner->GetStandardPrec();
     bool bPrecChanged = false;
-    if (eType == NUMBERFORMAT_NUMBER ||
-        eType == NUMBERFORMAT_PERCENT ||
-        eType == NUMBERFORMAT_CURRENCY ||
-        eType == NUMBERFORMAT_SCIENTIFIC ||
-        eType == NUMBERFORMAT_FRACTION)
+    if (eType == css::util::NumberFormat::NUMBER ||
+        eType == css::util::NumberFormat::PERCENT ||
+        eType == css::util::NumberFormat::CURRENCY ||
+        eType == css::util::NumberFormat::SCIENTIFIC ||
+        eType == css::util::NumberFormat::FRACTION)
     {
-        if (eType != NUMBERFORMAT_PERCENT)  // special treatment of % later
+        if (eType != css::util::NumberFormat::PERCENT)  // special treatment of % later
         {
-            eType = NUMBERFORMAT_NUMBER;
+            eType = css::util::NumberFormat::NUMBER;
         }
         ChangeStandardPrec(INPUTSTRING_PRECISION);
         bPrecChanged = true;
@@ -1345,7 +1345,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     }
     if (pFormat)
     {
-        if ( eType == NUMBERFORMAT_TIME && pFormat->GetFormatPrecision() )
+        if ( eType == css::util::NumberFormat::TIME && pFormat->GetFormatPrecision() )
         {
             ChangeStandardPrec(INPUTSTRING_PRECISION);
             bPrecChanged = true;
@@ -2098,12 +2098,12 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if (pStdFormat)
     {
         // This is _the_ standard format.
-        if (LocaleDataWrapper::areChecksEnabled() && pStdFormat->GetType() != NUMBERFORMAT_NUMBER)
+        if (LocaleDataWrapper::areChecksEnabled() && pStdFormat->GetType() != css::util::NumberFormat::NUMBER)
         {
             LocaleDataWrapper::outputCheckMessage( xLocaleData->
                                                    appendLocaleInfo( "SvNumberFormatter::ImpGenerateFormats: General format not NUMBER"));
         }
-        pStdFormat->SetType( NUMBERFORMAT_NUMBER );
+        pStdFormat->SetType( css::util::NumberFormat::NUMBER );
         pStdFormat->SetStandard();
         pStdFormat->SetLastInsertKey( SV_MAX_ANZ_STANDARD_FORMATE );
     }
@@ -2122,7 +2122,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
 
     pNewFormat = new SvNumberformat( aFormatCode, pFormatScanner,
                                      pStringScanner, nCheckPos, ActLnge );
-    pNewFormat->SetType(NUMBERFORMAT_LOGICAL);
+    pNewFormat->SetType(css::util::NumberFormat::LOGICAL);
     pNewFormat->SetStandard();
     if ( !aFTable.insert(make_pair(
                              CLOffset + SetIndexTable( NF_BOOLEAN, ZF_STANDARD_LOGICAL ),
@@ -2136,7 +2136,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     aFormatCode = "@";
     pNewFormat = new SvNumberformat( aFormatCode, pFormatScanner,
                                      pStringScanner, nCheckPos, ActLnge );
-    pNewFormat->SetType(NUMBERFORMAT_TEXT);
+    pNewFormat->SetType(css::util::NumberFormat::TEXT);
     pNewFormat->SetStandard();
     if ( !aFTable.insert(make_pair(
                              CLOffset + SetIndexTable( NF_TEXT, ZF_STANDARD_TEXT ),
@@ -2648,11 +2648,11 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         sString.append(GetNumDecimalSep());
         padToLength(sString, sString.getLength() + nPrecision, '0');
     }
-    if (eType == NUMBERFORMAT_PERCENT)
+    if (eType == css::util::NumberFormat::PERCENT)
     {
         sString.append('%');
     }
-    else if (eType == NUMBERFORMAT_SCIENTIFIC)
+    else if (eType == css::util::NumberFormat::SCIENTIFIC)
     {
       OUStringBuffer sOldFormatString = pFormat->GetFormatstring();
       sal_Int32 nIndexE = sOldFormatString.indexOf('E');
@@ -2665,7 +2665,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
             sString.append( sOldFormatString.copy(nIndexE) );
       }
     }
-    else if (eType == NUMBERFORMAT_CURRENCY)
+    else if (eType == css::util::NumberFormat::CURRENCY)
     {
         OUStringBuffer sNegStr(sString);
         OUString aCurr;
@@ -2716,10 +2716,10 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         }
         sString.append(sNegStr.makeStringAndClear());
     }
-    if (eType != NUMBERFORMAT_CURRENCY)
+    if (eType != css::util::NumberFormat::CURRENCY)
     {
         bool insertBrackets = false;
-        if ( eType != NUMBERFORMAT_UNDEFINED)
+        if ( eType != css::util::NumberFormat::UNDEFINED)
         {
             insertBrackets = pFormat->IsNegativeInBracket();
         }
@@ -2774,7 +2774,7 @@ bool SvNumberFormatter::IsUserDefined(const OUString& sStr,
         return true;
     }
     SvNumberformat* pEntry = GetFormatEntry( nKey );
-    if ( pEntry && ((pEntry->GetType() & NUMBERFORMAT_DEFINED) != 0) )
+    if ( pEntry && ((pEntry->GetType() & css::util::NumberFormat::DEFINED) != 0) )
     {
         return true;
     }
@@ -2798,7 +2798,7 @@ sal_uInt32 SvNumberFormatter::GetStandardIndex(LanguageType eLnge)
     {
         eLnge = IniLnge;
     }
-    return GetStandardFormat(NUMBERFORMAT_NUMBER, eLnge);
+    return GetStandardFormat(css::util::NumberFormat::NUMBER, eLnge);
 }
 
 short SvNumberFormatter::GetType(sal_uInt32 nFIndex)
@@ -2807,14 +2807,14 @@ short SvNumberFormatter::GetType(sal_uInt32 nFIndex)
     SvNumberformat* pFormat = GetFormatEntry( nFIndex );
     if (!pFormat)
     {
-        eType = NUMBERFORMAT_UNDEFINED;
+        eType = css::util::NumberFormat::UNDEFINED;
     }
     else
     {
-        eType = pFormat->GetType() &~NUMBERFORMAT_DEFINED;
+        eType = pFormat->GetType() &~css::util::NumberFormat::DEFINED;
         if (eType == 0)
         {
-            eType = NUMBERFORMAT_DEFINED;
+            eType = css::util::NumberFormat::DEFINED;
         }
     }
     return eType;
@@ -3211,7 +3211,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
         while ( it2 != aFTable.end() && (nKey = it2->first) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
-            if ( pEntry->IsStandard() && (pEntry->GetType() & NUMBERFORMAT_CURRENCY) )
+            if ( pEntry->IsStandard() && (pEntry->GetType() & css::util::NumberFormat::CURRENCY) )
             {
                 nDefaultCurrencyFormat = nKey;
                 break;  // while

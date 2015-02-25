@@ -1089,7 +1089,7 @@ void ImpSvNumberformatScan::Reset()
 {
     nAnzStrings = 0;
     nAnzResStrings = 0;
-    eScannedType = NUMBERFORMAT_UNDEFINED;
+    eScannedType = css::util::NumberFormat::UNDEFINED;
     nRepPos = 0;
     bExp = false;
     bThousand = false;
@@ -1137,7 +1137,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             switch (nTypeArray[i])
             {
             case NF_KEY_E:                          // E
-                eNewType = NUMBERFORMAT_SCIENTIFIC;
+                eNewType = css::util::NumberFormat::SCIENTIFIC;
                 break;
             case NF_KEY_AMPM:                       // AM,A,PM,P
             case NF_KEY_AP:
@@ -1145,7 +1145,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NF_KEY_HH:                         // HH
             case NF_KEY_S:                          // S
             case NF_KEY_SS:                         // SS
-                eNewType = NUMBERFORMAT_TIME;
+                eNewType = css::util::NumberFormat::TIME;
                 break;
             case NF_KEY_M:                          // M
             case NF_KEY_MM:                         // MM
@@ -1159,12 +1159,12 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     nIndexNex == NF_KEY_SS  ||      // SS
                     cChar == '['  )                 // [M
                 {
-                    eNewType = NUMBERFORMAT_TIME;
+                    eNewType = css::util::NumberFormat::TIME;
                     nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
                 }
                 else
                 {
-                    eNewType = NUMBERFORMAT_DATE;
+                    eNewType = css::util::NumberFormat::DATE;
                 }
                 break;
             case NF_KEY_MMM:                        // MMM
@@ -1191,17 +1191,17 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NF_KEY_GGG :                       // GGG
             case NF_KEY_R :                         // R
             case NF_KEY_RR :                        // RR
-                eNewType = NUMBERFORMAT_DATE;
+                eNewType = css::util::NumberFormat::DATE;
                 break;
             case NF_KEY_CCC:                        // CCC
-                eNewType = NUMBERFORMAT_CURRENCY;
+                eNewType = css::util::NumberFormat::CURRENCY;
                 break;
             case NF_KEY_GENERAL:                    // Standard
-                eNewType = NUMBERFORMAT_NUMBER;
+                eNewType = css::util::NumberFormat::NUMBER;
                 bHaveGeneral = true;
                 break;
             default:
-                eNewType = NUMBERFORMAT_UNDEFINED;
+                eNewType = css::util::NumberFormat::UNDEFINED;
                 break;
             }
         }
@@ -1211,15 +1211,15 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             {
             case '#':
             case '?':
-                eNewType = NUMBERFORMAT_NUMBER;
+                eNewType = css::util::NumberFormat::NUMBER;
                 break;
             case '0':
-                if ( (eScannedType & NUMBERFORMAT_TIME) == NUMBERFORMAT_TIME )
+                if ( (eScannedType & css::util::NumberFormat::TIME) == css::util::NumberFormat::TIME )
                 {
                     if ( Is100SecZero( i, bDecSep ) )
                     {
                         bDecSep = true;                 // subsequent 0's
-                        eNewType = NUMBERFORMAT_TIME;
+                        eNewType = css::util::NumberFormat::TIME;
                     }
                     else
                     {
@@ -1228,28 +1228,28 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 }
                 else
                 {
-                    eNewType = NUMBERFORMAT_NUMBER;
+                    eNewType = css::util::NumberFormat::NUMBER;
                 }
                 break;
             case '%':
-                eNewType = NUMBERFORMAT_PERCENT;
+                eNewType = css::util::NumberFormat::PERCENT;
                 break;
             case '/':
-                eNewType = NUMBERFORMAT_FRACTION;
+                eNewType = css::util::NumberFormat::FRACTION;
                 break;
             case '[':
                 if ( i < nAnzStrings-1 &&
                      nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                      sStrArray[i+1][0] == '$' )
                 {
-                    eNewType = NUMBERFORMAT_CURRENCY;
+                    eNewType = css::util::NumberFormat::CURRENCY;
                     bMatchBracket = true;
                 }
                 else if ( i < nAnzStrings-1 &&
                           nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                           sStrArray[i+1][0] == '~' )
                 {
-                    eNewType = NUMBERFORMAT_DATE;
+                    eNewType = css::util::NumberFormat::DATE;
                     bMatchBracket = true;
                 }
                 else
@@ -1261,7 +1261,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                         nIndexNex == NF_KEY_MM  ||  // MM
                         nIndexNex == NF_KEY_S   ||  // S
                         nIndexNex == NF_KEY_SS   )  // SS
-                        eNewType = NUMBERFORMAT_TIME;
+                        eNewType = css::util::NumberFormat::TIME;
                     else
                     {
                         return nPos;                // Error
@@ -1269,44 +1269,44 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 }
                 break;
             case '@':
-                eNewType = NUMBERFORMAT_TEXT;
+                eNewType = css::util::NumberFormat::TEXT;
                 break;
             default:
                 if (pLoc->getTime100SecSep().equals(sStrArray[i]))
                 {
                     bDecSep = true;                  // for SS,0
                 }
-                eNewType = NUMBERFORMAT_UNDEFINED;
+                eNewType = css::util::NumberFormat::UNDEFINED;
                 break;
             }
         }
-        if (eScannedType == NUMBERFORMAT_UNDEFINED)
+        if (eScannedType == css::util::NumberFormat::UNDEFINED)
         {
             eScannedType = eNewType;
         }
-        else if (eScannedType == NUMBERFORMAT_TEXT || eNewType == NUMBERFORMAT_TEXT)
+        else if (eScannedType == css::util::NumberFormat::TEXT || eNewType == css::util::NumberFormat::TEXT)
         {
-            eScannedType = NUMBERFORMAT_TEXT; // Text always remains text
+            eScannedType = css::util::NumberFormat::TEXT; // Text always remains text
         }
-        else if (eNewType == NUMBERFORMAT_UNDEFINED)
+        else if (eNewType == css::util::NumberFormat::UNDEFINED)
         { // Remains as is
         }
         else if (eScannedType != eNewType)
         {
             switch (eScannedType)
             {
-            case NUMBERFORMAT_DATE:
+            case css::util::NumberFormat::DATE:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_TIME:
-                    eScannedType = NUMBERFORMAT_DATETIME;
+                case css::util::NumberFormat::TIME:
+                    eScannedType = css::util::NumberFormat::DATETIME;
                     break;
-                case NUMBERFORMAT_FRACTION:         // DD/MM
+                case css::util::NumberFormat::FRACTION:         // DD/MM
                     break;
                 default:
                     if (nCurrPos >= 0)
                     {
-                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                        eScannedType = css::util::NumberFormat::UNDEFINED;
                     }
                     else if ( sStrArray[i] != OUString(pFormatter->GetDateSep()) )
                     {
@@ -1314,18 +1314,18 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     }
                 }
                 break;
-            case NUMBERFORMAT_TIME:
+            case css::util::NumberFormat::TIME:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_DATE:
-                    eScannedType = NUMBERFORMAT_DATETIME;
+                case css::util::NumberFormat::DATE:
+                    eScannedType = css::util::NumberFormat::DATETIME;
                     break;
-                case NUMBERFORMAT_FRACTION:         // MM/SS
+                case css::util::NumberFormat::FRACTION:         // MM/SS
                     break;
                 default:
                     if (nCurrPos >= 0)
                     {
-                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                        eScannedType = css::util::NumberFormat::UNDEFINED;
                     }
                     else if (!pLoc->getTimeSep().equals(sStrArray[i]))
                     {
@@ -1334,18 +1334,18 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     break;
                 }
                 break;
-            case NUMBERFORMAT_DATETIME:
+            case css::util::NumberFormat::DATETIME:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_TIME:
-                case NUMBERFORMAT_DATE:
+                case css::util::NumberFormat::TIME:
+                case css::util::NumberFormat::DATE:
                     break;
-                case NUMBERFORMAT_FRACTION:         // DD/MM
+                case css::util::NumberFormat::FRACTION:         // DD/MM
                     break;
                 default:
                     if (nCurrPos >= 0)
                     {
-                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                        eScannedType = css::util::NumberFormat::UNDEFINED;
                     }
                     else if ( OUString(pFormatter->GetDateSep()) != sStrArray[i] &&
                               !pLoc->getTimeSep().equals(sStrArray[i]) )
@@ -1354,37 +1354,37 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     }
                 }
                 break;
-            case NUMBERFORMAT_PERCENT:
+            case css::util::NumberFormat::PERCENT:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_NUMBER:   // Only number to percent
+                case css::util::NumberFormat::NUMBER:   // Only number to percent
                     break;
                 default:
                     return nPos;
                 }
                 break;
-            case NUMBERFORMAT_SCIENTIFIC:
+            case css::util::NumberFormat::SCIENTIFIC:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_NUMBER:   // Only number to E
+                case css::util::NumberFormat::NUMBER:   // Only number to E
                     break;
                 default:
                     return nPos;
                 }
                 break;
-            case NUMBERFORMAT_NUMBER:
+            case css::util::NumberFormat::NUMBER:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_SCIENTIFIC:
-                case NUMBERFORMAT_PERCENT:
-                case NUMBERFORMAT_FRACTION:
-                case NUMBERFORMAT_CURRENCY:
+                case css::util::NumberFormat::SCIENTIFIC:
+                case css::util::NumberFormat::PERCENT:
+                case css::util::NumberFormat::FRACTION:
+                case css::util::NumberFormat::CURRENCY:
                     eScannedType = eNewType;
                     break;
                 default:
                     if (nCurrPos >= 0)
                     {
-                        eScannedType = NUMBERFORMAT_UNDEFINED;
+                        eScannedType = css::util::NumberFormat::UNDEFINED;
                     }
                     else
                     {
@@ -1392,10 +1392,10 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                     }
                 }
                 break;
-            case NUMBERFORMAT_FRACTION:
+            case css::util::NumberFormat::FRACTION:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_NUMBER:   // Only number to fraction
+                case css::util::NumberFormat::NUMBER:   // Only number to fraction
                     break;
                 default:
                     return nPos;
@@ -1431,15 +1431,15 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
         SkipStrings(i, nPos);
     }
 
-    if ((eScannedType == NUMBERFORMAT_NUMBER ||
-         eScannedType == NUMBERFORMAT_UNDEFINED) &&
+    if ((eScannedType == css::util::NumberFormat::NUMBER ||
+         eScannedType == css::util::NumberFormat::UNDEFINED) &&
         nCurrPos >= 0 && !bHaveGeneral)
     {
-        eScannedType = NUMBERFORMAT_CURRENCY; // old "automatic" currency
+        eScannedType = css::util::NumberFormat::CURRENCY; // old "automatic" currency
     }
-    if (eScannedType == NUMBERFORMAT_UNDEFINED)
+    if (eScannedType == css::util::NumberFormat::UNDEFINED)
     {
-        eScannedType = NUMBERFORMAT_DEFINED;
+        eScannedType = css::util::NumberFormat::DEFINED;
     }
     return 0; // All is fine
 }
@@ -1567,8 +1567,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 
     switch (eScannedType)
     {
-    case NUMBERFORMAT_TEXT:
-    case NUMBERFORMAT_DEFINED:
+    case css::util::NumberFormat::TEXT:
+    case css::util::NumberFormat::DEFINED:
         while (i < nAnzStrings)
         {
             switch (nTypeArray[i])
@@ -1591,16 +1591,16 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         } // of while
         break;
 
-    case NUMBERFORMAT_NUMBER:
-    case NUMBERFORMAT_PERCENT:
-    case NUMBERFORMAT_CURRENCY:
-    case NUMBERFORMAT_SCIENTIFIC:
-    case NUMBERFORMAT_FRACTION:
+    case css::util::NumberFormat::NUMBER:
+    case css::util::NumberFormat::PERCENT:
+    case css::util::NumberFormat::CURRENCY:
+    case css::util::NumberFormat::SCIENTIFIC:
+    case css::util::NumberFormat::FRACTION:
         while (i < nAnzStrings)
         {
             // TODO: rechecking eScannedType is unnecessary.
-            // This switch-case is for eScannedType == NUMBERFORMAT_FRACTION anyway
-            if (eScannedType == NUMBERFORMAT_FRACTION &&        // special case
+            // This switch-case is for eScannedType == css::util::NumberFormat::FRACTION anyway
+            if (eScannedType == css::util::NumberFormat::FRACTION &&        // special case
                 nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           // # ### #/#
                 StringEqualsChar( sOldThousandSep, ' ' ) &&     // e.g. France or Sweden
                 StringEqualsChar( sStrArray[i], ' ' ) &&
@@ -1629,7 +1629,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             else if (nTypeArray[i] == NF_SYMBOLTYPE_STRING ||   // No Strings or
                      nTypeArray[i] > 0)                         // Keywords
             {
-                if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
+                if (eScannedType == css::util::NumberFormat::SCIENTIFIC &&
                     nTypeArray[i] == NF_KEY_E)                  // E+
                 {
                     if (bExp)                                   // Double
@@ -1649,7 +1649,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     nCounter = 0;
                     nTypeArray[i] = NF_SYMBOLTYPE_EXP;
                 }
-                else if (eScannedType == NUMBERFORMAT_FRACTION &&
+                else if (eScannedType == css::util::NumberFormat::FRACTION &&
                          sStrArray[i][0] == ' ')
                 {
                     if (!bBlank && !bFrac) // Not double or after a /
@@ -1696,7 +1696,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             nCounter = nCntPre;
                         }
                         // don't artificially increment nCntPre for forced denominator
-                        if ( ( eScannedType != NUMBERFORMAT_FRACTION ) && (!nCntPre) )
+                        if ( ( eScannedType != css::util::NumberFormat::FRACTION ) && (!nCntPre) )
                         {
                             nCntPre++;
                         }
@@ -1774,7 +1774,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             // currency formats the last dash will be
                             // interpreted literally as a minus sign.
                             // Has to be this ugly. Period.
-                            if ( eScannedType == NUMBERFORMAT_CURRENCY
+                            if ( eScannedType == css::util::NumberFormat::CURRENCY
                                  && rStr.getLength() >= 2 &&
                                  (i == nAnzStrings-1 ||
                                   sStrArray[i+1][0] != '-') )
@@ -1971,7 +1971,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     else // . without meaning
                     {
                         if (cSaved == ' ' &&
-                            eScannedType == NUMBERFORMAT_FRACTION &&
+                            eScannedType == css::util::NumberFormat::FRACTION &&
                             StringEqualsChar( sStrArray[i], ' ' ) )
                         {
                             if (!bBlank && !bFrac)  // no dups
@@ -2005,7 +2005,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     break;
                 case '/':
-                    if (eScannedType == NUMBERFORMAT_FRACTION)
+                    if (eScannedType == css::util::NumberFormat::FRACTION)
                     {
                         if ( i == 0 ||
                              (nTypeArray[i-1] != NF_SYMBOLTYPE_DIGIT &&
@@ -2035,7 +2035,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     break;
                 case '[' :
-                    if ( eScannedType == NUMBERFORMAT_CURRENCY &&
+                    if ( eScannedType == css::util::NumberFormat::CURRENCY &&
                          i < nAnzStrings-1 &&
                          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                          sStrArray[i+1][0] == '$' )
@@ -2101,7 +2101,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     break;
                 default: // Other Dels
-                    if (eScannedType == NUMBERFORMAT_PERCENT && cHere == '%')
+                    if (eScannedType == css::util::NumberFormat::PERCENT && cHere == '%')
                     {
                         nTypeArray[i] = NF_SYMBOLTYPE_PERCENT;
                     }
@@ -2121,7 +2121,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 i++;
             }
         } // of while
-        if (eScannedType == NUMBERFORMAT_FRACTION)
+        if (eScannedType == css::util::NumberFormat::FRACTION)
         {
             if (bFrac)
             {
@@ -2228,8 +2228,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 }
             }
         }
-        break; // of NUMBERFORMAT_NUMBER
-    case NUMBERFORMAT_DATE:
+        break; // of css::util::NumberFormat::NUMBER
+    case css::util::NumberFormat::DATE:
         while (i < nAnzStrings)
         {
             int nCalRet;
@@ -2306,8 +2306,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             }
         } // of while
-        break; // of NUMBERFORMAT_DATE
-    case NUMBERFORMAT_TIME:
+        break; // of css::util::NumberFormat::DATE
+    case css::util::NumberFormat::TIME:
         while (i < nAnzStrings)
         {
             sal_Unicode cChar;
@@ -2447,8 +2447,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         {
             nCntExp = 1;                        // Remembers AM/PM
         }
-        break;                                 // of NUMBERFORMAT_TIME
-    case NUMBERFORMAT_DATETIME:
+        break;                                 // of css::util::NumberFormat::TIME
+    case css::util::NumberFormat::DATETIME:
         while (i < nAnzStrings)
         {
             int nCalRet;
@@ -2612,16 +2612,16 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         {
             nCntExp = 1; // Remembers AM/PM
         }
-        break; // of NUMBERFORMAT_DATETIME
+        break; // of css::util::NumberFormat::DATETIME
     default:
         break;
     }
-    if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
+    if (eScannedType == css::util::NumberFormat::SCIENTIFIC &&
         (nCntPre + nCntPost == 0 || nCntExp == 0))
     {
         return nPos;
     }
-    else if (eScannedType == NUMBERFORMAT_FRACTION && (nCntExp > 8 || nCntExp == 0))
+    else if (eScannedType == css::util::NumberFormat::FRACTION && (nCntExp > 8 || nCntExp == 0))
     {
         return nPos;
     }
@@ -2638,7 +2638,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             if ( nTypeArray[i] == NF_SYMBOLTYPE_STRING &&
                  sStrArray[i][0] != '\"' )
             {
-                if ( bConvertSystemToSystem && eScannedType == NUMBERFORMAT_CURRENCY )
+                if ( bConvertSystemToSystem && eScannedType == css::util::NumberFormat::CURRENCY )
                 {
                     // don't stringize automatic currency, will be converted
                     if ( sStrArray[i] == sOldCurSymbol )
@@ -2718,7 +2718,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     case ' ':
                     case '.':
                     case '/':
-                        if (((eScannedType & NUMBERFORMAT_DATE) == 0) &&
+                        if (((eScannedType & css::util::NumberFormat::DATE) == 0) &&
                             (StringEqualsChar( pFormatter->GetNumThousandSep(), c) ||
                              StringEqualsChar( pFormatter->GetNumDecimalSep(), c) ||
                              (c == ' ' &&
@@ -2727,18 +2727,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         {
                             rString += sStrArray[i];
                         }
-                        else if ((eScannedType & NUMBERFORMAT_DATE) &&
+                        else if ((eScannedType & css::util::NumberFormat::DATE) &&
                                  StringEqualsChar( pFormatter->GetDateSep(), c))
                         {
                             rString += sStrArray[i];
                         }
-                        else if ((eScannedType & NUMBERFORMAT_TIME) &&
+                        else if ((eScannedType & css::util::NumberFormat::TIME) &&
                                  (StringEqualsChar( pLoc->getTimeSep(), c) ||
                                   StringEqualsChar( pLoc->getTime100SecSep(), c)))
                         {
                             rString += sStrArray[i];
                         }
-                        else if (eScannedType & NUMBERFORMAT_FRACTION)
+                        else if (eScannedType & css::util::NumberFormat::FRACTION)
                         {
                             rString += sStrArray[i];
                         }
@@ -2758,7 +2758,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 if ( RemoveQuotes( sStrArray[i] ) > 0 )
                 {
                     // update currency up to quoted string
-                    if ( eScannedType == NUMBERFORMAT_CURRENCY )
+                    if ( eScannedType == css::util::NumberFormat::CURRENCY )
                     {
                         // dM -> DM  or  DM -> $  in old automatic
                         // currency formats, oh my ..., why did we ever introduce them?
@@ -2801,7 +2801,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             {
                 i--; // enter switch on next symbol again
             }
-            if ( eScannedType == NUMBERFORMAT_CURRENCY && nStringPos < rString.getLength() )
+            if ( eScannedType == css::util::NumberFormat::CURRENCY && nStringPos < rString.getLength() )
             {
                 // same as above, since last RemoveQuotes
                 OUString aTmp( pChrCls->uppercase( sStrArray[iPos], nArrPos,

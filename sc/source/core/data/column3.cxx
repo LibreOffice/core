@@ -1588,7 +1588,7 @@ namespace {
 
 void applyTextNumFormat( ScColumn& rCol, SCROW nRow, SvNumberFormatter* pFormatter )
 {
-    sal_uInt32 nFormat = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT);
+    sal_uInt32 nFormat = pFormatter->GetStandardFormat(css::util::NumberFormat::TEXT);
     ScPatternAttr aNewAttrs(rCol.GetDoc().GetPool());
     SfxItemSet& rSet = aNewAttrs.GetItemSet();
     rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
@@ -1620,7 +1620,7 @@ bool ScColumn::ParseString(
 
     nIndex = nOldIndex = GetNumberFormat( nRow );
     if ( rString.getLength() > 1
-            && aParam.mpNumFormatter->GetType(nIndex) != NUMBERFORMAT_TEXT )
+            && aParam.mpNumFormatter->GetType(nIndex) != css::util::NumberFormat::TEXT )
         cFirstChar = rString[0];
     else
         cFirstChar = 0; // Text
@@ -1690,9 +1690,9 @@ bool ScColumn::ParseString(
                     bool bOverwrite = false;
                     if ( pOldFormat )
                     {
-                        short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
-                        if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
-                             nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
+                        short nOldType = pOldFormat->GetType() & ~css::util::NumberFormat::DEFINED;
+                        if ( nOldType == css::util::NumberFormat::NUMBER || nOldType == css::util::NumberFormat::DATE ||
+                             nOldType == css::util::NumberFormat::TIME || nOldType == css::util::NumberFormat::LOGICAL )
                         {
                             if ( nOldIndex == aParam.mpNumFormatter->GetStandardFormat(
                                                 nOldType, pOldFormat->GetLanguage() ) )
@@ -1701,7 +1701,7 @@ bool ScColumn::ParseString(
                             }
                         }
                     }
-                    if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
+                    if ( !bOverwrite && aParam.mpNumFormatter->GetType( nIndex ) == css::util::NumberFormat::LOGICAL )
                     {
                         bOverwrite = true; // overwrite anything if boolean was detected
                     }
@@ -2013,7 +2013,7 @@ class FilterEntriesHandler
 
         short nType = pFormatter->GetType(nFormat);
         bool bDate = false;
-        if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+        if ((nType & css::util::NumberFormat::DATE) && !(nType & css::util::NumberFormat::TIME))
         {
             // special case for date values.  Disregard the time
             // element if the number format is of date type.

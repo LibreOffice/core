@@ -710,7 +710,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             }
             else if (nTypeId == TYP_GETFLD || nTypeId == TYP_FORMELFLD)
             {
-                m_pNumFormatLB->SetFormatType(NUMBERFORMAT_NUMBER);
+                m_pNumFormatLB->SetFormatType(css::util::NumberFormat::NUMBER);
             }
         }
         else
@@ -718,7 +718,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
             if (nOldNumFormat && nOldNumFormat != ULONG_MAX)
                 m_pNumFormatLB->SetDefFormat(nOldNumFormat);
             else
-                m_pNumFormatLB->SetFormatType(NUMBERFORMAT_NUMBER);
+                m_pNumFormatLB->SetFormatType(css::util::NumberFormat::NUMBER);
         }
     }
 

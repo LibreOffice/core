@@ -1225,7 +1225,7 @@ bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, InsertDeleteFla
 {
     sal_uInt32 nNumIndex = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(rPos, ATTR_VALUE_FORMAT))->GetValue();
     short nType = rDoc.GetFormatTable()->GetType(nNumIndex);
-    if ((nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME))
+    if ((nType == css::util::NumberFormat::DATE) || (nType == css::util::NumberFormat::TIME) || (nType == css::util::NumberFormat::DATETIME))
         return ((nFlags & IDF_DATETIME) != IDF_NONE);
 
     return (nFlags & IDF_VALUE) != IDF_NONE;

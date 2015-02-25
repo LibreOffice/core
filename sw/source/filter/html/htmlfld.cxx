@@ -389,8 +389,8 @@ void SwHTMLParser::NewField()
             short nFmtType = pFormatter->GetType( nNumFmt );
             switch( nFmtType )
             {
-            case NUMBERFORMAT_DATE: nSub = DATEFLD; break;
-            case NUMBERFORMAT_TIME: nSub = TIMEFLD; break;
+            case css::util::NumberFormat::DATE: nSub = DATEFLD; break;
+            case css::util::NumberFormat::TIME: nSub = TIMEFLD; break;
             }
 
             if( nSub )

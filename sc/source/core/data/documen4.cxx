@@ -655,8 +655,8 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
 {
     short nType;
-    if ( (nType = GetFormatTable()->GetType( nFormat )) != NUMBERFORMAT_DATE
-      && nType != NUMBERFORMAT_TIME && nType != NUMBERFORMAT_DATETIME )
+    if ( (nType = GetFormatTable()->GetType( nFormat )) != css::util::NumberFormat::DATE
+      && nType != css::util::NumberFormat::TIME && nType != css::util::NumberFormat::DATETIME )
     {
         short nPrecision;
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
@@ -664,10 +664,10 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
             nPrecision = (short)GetFormatTable()->GetFormatPrecision( nFormat );
             switch ( nType )
             {
-                case NUMBERFORMAT_PERCENT:      // 0.41% == 0.0041
+                case css::util::NumberFormat::PERCENT:      // 0.41% == 0.0041
                     nPrecision += 2;
                     break;
-                case NUMBERFORMAT_SCIENTIFIC:   // 1.23e-3 == 0.00123
+                case css::util::NumberFormat::SCIENTIFIC:   // 1.23e-3 == 0.00123
                 {
                     if ( fVal > 0.0 )
                         nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( fVal ) ) );

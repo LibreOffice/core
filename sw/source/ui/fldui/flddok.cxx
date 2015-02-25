@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             case TYP_DATEFLD:
                 bFormat = bNumFmt = bOneArea = bOffset = true;
 
-                nFmtType = NUMBERFORMAT_DATE;
+                nFmtType = css::util::NumberFormat::DATE;
 
                 m_pDateFT->Show();
 
@@ -326,7 +326,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             case TYP_TIMEFLD:
                 bFormat = bNumFmt = bOneArea = bOffset = true;
 
-                nFmtType = NUMBERFORMAT_TIME;
+                nFmtType = css::util::NumberFormat::TIME;
 
                 m_pTimeFT->Show();
 
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
             {
                 m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
 
-                if (m_pNumFormatLB->GetFormatType() == (NUMBERFORMAT_DATE|NUMBERFORMAT_TIME))
+                if (m_pNumFormatLB->GetFormatType() == (css::util::NumberFormat::DATE|css::util::NumberFormat::TIME))
                 {
                     // always set Format-Type because otherwise when date/time formats are combined,
                     // both formats would be displayed at the same time

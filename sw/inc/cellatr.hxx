@@ -32,7 +32,7 @@ class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
     bool bAuto;     ///< automatically given flag
 public:
-    SwTblBoxNumFormat( sal_uInt32 nFormat = NUMBERFORMAT_TEXT,
+    SwTblBoxNumFormat( sal_uInt32 nFormat = css::util::NumberFormat::TEXT,
                         bool bAuto = false );
 
     // "pure virtual methods" of SfxPoolItem

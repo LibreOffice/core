@@ -326,7 +326,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
                     sal_Int32 nUnit[done] = {0,0,0,0,0,0,0};
                     const sal_Int32 nLimit[done] = {0,12,31,0,59,59,0};
                     State eState = (bDate ? month : minute);
-                    nCurFmtType = (bDate ? NUMBERFORMAT_DATE : NUMBERFORMAT_TIME);
+                    nCurFmtType = (bDate ? css::util::NumberFormat::DATE : css::util::NumberFormat::TIME);
                     nUnit[eState-1] = aStr.copy( 0, nParseEnd).toInt32();
                     const sal_Unicode* pLastStart = p;
                     // Ensure there's no preceding sign. Negative dates
@@ -341,7 +341,7 @@ double ScInterpreter::ConvertStringToValue( const OUString& rStr )
                     while (p < pStop && !nGlobalError && eState < blank)
                     {
                         if (eState == minute)
-                            nCurFmtType |= NUMBERFORMAT_TIME;
+                            nCurFmtType |= css::util::NumberFormat::TIME;
                         if (rtl::isAsciiDigit(*p))
                         {
                             // Maximum 2 digits per unit, except fractions.
@@ -544,7 +544,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
             {
                 double fVal = pFCell->GetValue();
                 sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    NUMBERFORMAT_NUMBER,
+                                    css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge);
                 OUString aStr;
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -558,7 +558,7 @@ void ScInterpreter::GetCellString( svl::SharedString& rStr, ScRefCellValue& rCel
         {
             double fVal = rCell.mfValue;
             sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    NUMBERFORMAT_NUMBER,
+                                    css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge);
             OUString aStr;
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -883,7 +883,7 @@ void ScInterpreter::PushWithoutError( FormulaToken& r )
         SetError( errStackOverflow );
     else
     {
-        nCurFmtType = NUMBERFORMAT_UNDEFINED;
+        nCurFmtType = css::util::NumberFormat::UNDEFINED;
         r.IncRef();
         if( sp >= maxsp )
             maxsp = sp + 1;
@@ -994,7 +994,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
     {
         PushError( nErr);
         if (pRetTypeExpr)
-            *pRetTypeExpr = NUMBERFORMAT_UNDEFINED;
+            *pRetTypeExpr = css::util::NumberFormat::UNDEFINED;
         if (pRetIndexExpr)
             *pRetIndexExpr = 0;
     }
@@ -1004,7 +1004,7 @@ void ScInterpreter::PushCellResultToken( bool bDisplayEmptyAsString,
         GetCellString( aRes, aCell);
         PushString( aRes);
         if (pRetTypeExpr)
-            *pRetTypeExpr = NUMBERFORMAT_TEXT;
+            *pRetTypeExpr = css::util::NumberFormat::TEXT;
         if (pRetIndexExpr)
             *pRetIndexExpr = 0;
     }
@@ -1060,7 +1060,7 @@ FormulaTokenRef ScInterpreter::PopToken()
 
 double ScInterpreter::PopDouble()
 {
-    nCurFmtType = NUMBERFORMAT_NUMBER;
+    nCurFmtType = css::util::NumberFormat::NUMBER;
     nCurFmtIndex = 0;
     if( sp )
     {
@@ -1087,7 +1087,7 @@ double ScInterpreter::PopDouble()
 
 svl::SharedString ScInterpreter::PopString()
 {
-    nCurFmtType = NUMBERFORMAT_TEXT;
+    nCurFmtType = css::util::NumberFormat::TEXT;
     nCurFmtIndex = 0;
     if( sp )
     {
@@ -1850,7 +1850,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
             {   // result of empty FALSE jump path
                 FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-                rRetTypeExpr = NUMBERFORMAT_LOGICAL;
+                rRetTypeExpr = css::util::NumberFormat::LOGICAL;
             }
             else if ( xMat->IsEmptyResult( 0, 0))
             {   // empty formula result
@@ -1867,7 +1867,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
                 svl::SharedString aStr( nMatVal.GetString());
                 FormulaTokenRef xRes = new FormulaStringToken( aStr);
                 PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-                rRetTypeExpr = NUMBERFORMAT_TEXT;
+                rRetTypeExpr = css::util::NumberFormat::TEXT;
             }
         }
         else
@@ -1879,8 +1879,8 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, sal_
             else
                 xRes = new FormulaDoubleToken( nMatVal.fVal);
             PushTempToken( new ScMatrixFormulaCellToken(nCols, nRows, xMat, xRes.get()));
-            if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
-                rRetTypeExpr = NUMBERFORMAT_NUMBER;
+            if ( rRetTypeExpr != css::util::NumberFormat::LOGICAL )
+                rRetTypeExpr = css::util::NumberFormat::NUMBER;
         }
         rRetIndexExpr = 0;
         xMat->SetErrorInterpreter( NULL);
@@ -2283,7 +2283,7 @@ svl::SharedString ScInterpreter::GetString()
         {
             double fVal = PopDouble();
             sal_uLong nIndex = pFormatter->GetStandardFormat(
-                                    NUMBERFORMAT_NUMBER,
+                                    css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge);
             OUString aStr;
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -3793,7 +3793,7 @@ double applyImplicitIntersection(const sc::RangeMatrix& rMat, const ScAddress& r
 
 StackVar ScInterpreter::Interpret()
 {
-    short nRetTypeExpr = NUMBERFORMAT_UNDEFINED;
+    short nRetTypeExpr = css::util::NumberFormat::UNDEFINED;
     sal_uLong nRetIndexExpr = 0;
     sal_uInt16 nErrorFunction = 0;
     sal_uInt16 nErrorFunctionCount = 0;
@@ -3801,8 +3801,8 @@ StackVar ScInterpreter::Interpret()
 
     nGlobalError = 0;
     nStackBase = sp = maxsp = 0;
-    nRetFmtType = NUMBERFORMAT_UNDEFINED;
-    nFuncFmtType = NUMBERFORMAT_UNDEFINED;
+    nRetFmtType = css::util::NumberFormat::UNDEFINED;
+    nFuncFmtType = css::util::NumberFormat::UNDEFINED;
     nFuncFmtIndex = nCurFmtIndex = nRetFmtIndex = 0;
     xResult = NULL;
     pJumpMatrix = NULL;
@@ -3846,7 +3846,7 @@ StackVar ScInterpreter::Interpret()
             nCurFmtType = nRetTypeExpr;
             nCurFmtIndex = nRetIndexExpr;
             // default function's format, others are set if needed
-            nFuncFmtType = NUMBERFORMAT_NUMBER;
+            nFuncFmtType = css::util::NumberFormat::NUMBER;
             nFuncFmtIndex = 0;
 
             if ( eOp == ocIf || eOp == ocChoose || eOp == ocIfError || eOp == ocIfNA )
@@ -4268,7 +4268,7 @@ StackVar ScInterpreter::Interpret()
                 case ocBitLshift        : ScBitLshift();                break;
                 case ocTTT              : ScTTT();                      break;
                 case ocDebugVar         : ScDebugVar();                 break;
-                case ocNone : nFuncFmtType = NUMBERFORMAT_UNDEFINED;    break;
+                case ocNone : nFuncFmtType = css::util::NumberFormat::UNDEFINED;    break;
                 default : PushError( errUnknownOpCode);                 break;
             }
 
@@ -4289,11 +4289,11 @@ StackVar ScInterpreter::Interpret()
                             pStack[sp-1]));
 
             // outer function determines format of an expression
-            if ( nFuncFmtType != NUMBERFORMAT_UNDEFINED )
+            if ( nFuncFmtType != css::util::NumberFormat::UNDEFINED )
             {
                 nRetTypeExpr = nFuncFmtType;
                 // inherit the format index only for currency formats
-                nRetIndexExpr = ( nFuncFmtType == NUMBERFORMAT_CURRENCY ?
+                nRetIndexExpr = ( nFuncFmtType == css::util::NumberFormat::CURRENCY ?
                     nFuncFmtIndex : 0 );
             }
         }
@@ -4392,14 +4392,14 @@ StackVar ScInterpreter::Interpret()
                     nGlobalError = pCur->GetError();
                 break;
                 case svDouble :
-                    if ( nFuncFmtType == NUMBERFORMAT_UNDEFINED )
+                    if ( nFuncFmtType == css::util::NumberFormat::UNDEFINED )
                     {
-                        nRetTypeExpr = NUMBERFORMAT_NUMBER;
+                        nRetTypeExpr = css::util::NumberFormat::NUMBER;
                         nRetIndexExpr = 0;
                     }
                 break;
                 case svString :
-                    nRetTypeExpr = NUMBERFORMAT_TEXT;
+                    nRetTypeExpr = css::util::NumberFormat::TEXT;
                     nRetIndexExpr = 0;
                 break;
                 case svSingleRef :
@@ -4485,18 +4485,18 @@ StackVar ScInterpreter::Interpret()
     else
         SetError( errNoCode);
 
-    if( nRetTypeExpr != NUMBERFORMAT_UNDEFINED )
+    if( nRetTypeExpr != css::util::NumberFormat::UNDEFINED )
     {
         nRetFmtType = nRetTypeExpr;
         nRetFmtIndex = nRetIndexExpr;
     }
-    else if( nFuncFmtType != NUMBERFORMAT_UNDEFINED )
+    else if( nFuncFmtType != css::util::NumberFormat::UNDEFINED )
     {
         nRetFmtType = nFuncFmtType;
         nRetFmtIndex = nFuncFmtIndex;
     }
     else
-        nRetFmtType = NUMBERFORMAT_NUMBER;
+        nRetFmtType = css::util::NumberFormat::NUMBER;
 
     if (nGlobalError && GetStackType() != svError )
         PushError( nGlobalError);

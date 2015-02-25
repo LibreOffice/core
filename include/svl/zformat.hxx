@@ -179,7 +179,7 @@ public:
 
     ~SvNumberformat();
 
-    /// Get type of format, may include NUMBERFORMAT_DEFINED bit
+    /// Get type of format, may include css::util::NumberFormat::DEFINED bit
     short GetType() const                       { return eType; }
 
     void SetType(const short eSetType)          { eType = eSetType; }
@@ -215,12 +215,12 @@ public:
     bool GetOutputString( const OUString& sString, OUString& OutString, Color** ppColor );
 
     // True if type text
-    bool IsTextFormat() const { return (eType & NUMBERFORMAT_TEXT) != 0; }
+    bool IsTextFormat() const { return (eType & css::util::NumberFormat::TEXT) != 0; }
     // True if 4th subformat present
     bool HasTextFormat() const
         {
             return (NumFor[3].GetCount() > 0) ||
-                (NumFor[3].Info().eScannedType == NUMBERFORMAT_TEXT);
+                (NumFor[3].Info().eScannedType == css::util::NumberFormat::TEXT);
         }
 
     void GetFormatSpecialInfo(bool& bThousand,
@@ -316,7 +316,7 @@ public:
                                                 bool bQuoteSymbol );
 
     // If a new SYMBOLTYPE_CURRENCY is contained if the format is of type
-    // NUMBERFORMAT_CURRENCY, and if so the symbol xxx and the extension nnn
+    // css::util::NumberFormat::CURRENCY, and if so the symbol xxx and the extension nnn
     // of [$xxx-nnn] are returned
     bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
 

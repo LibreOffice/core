@@ -628,7 +628,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                     {
                         short nPrivType = pPrivEntry->GetType();
-                        if ( ( nPrivType & NUMBERFORMAT_DATE)>0)
+                        if ( ( nPrivType & css::util::NumberFormat::DATE)>0)
                         {
                            eFillCmd=FILL_DATE;
                         }
@@ -770,7 +770,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         }
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aPara ) );
 
-                        sal_uLong nFormatKey = pFormatter->GetStandardFormat(NUMBERFORMAT_NUMBER,
+                        sal_uLong nFormatKey = pFormatter->GetStandardFormat(css::util::NumberFormat::NUMBER,
                                     ScGlobal::eLnge );
 
                         pFormatter->GetOutputString( fIncVal, nFormatKey, aPara, &pColor );
@@ -1679,11 +1679,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
         case SID_INSERT_CURRENT_DATE:
             pTabViewShell->InsertCurrentTime(
-                NUMBERFORMAT_DATE, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_DATE));
+                css::util::NumberFormat::DATE, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_DATE));
             break;
         case SID_INSERT_CURRENT_TIME:
             pTabViewShell->InsertCurrentTime(
-                NUMBERFORMAT_TIME, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_TIME));
+                css::util::NumberFormat::TIME, ScGlobal::GetRscString(STR_UNDO_INSERT_CURRENT_TIME));
             break;
 
         case SID_SPELL_DIALOG:

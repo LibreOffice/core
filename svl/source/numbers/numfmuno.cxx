@@ -601,7 +601,7 @@ sal_Int32 SAL_CALL SvNumberFormatsObj::getStandardFormat( sal_Int16 nType, const
         LanguageType eLang = lcl_GetLanguage( nLocale );
         // Mask out "defined" bit, so type from an existing number format
         // can directly be used for getStandardFormat
-        nType &= ~NUMBERFORMAT_DEFINED;
+        nType &= ~css::util::NumberFormat::DEFINED;
         nRet = pFormatter->GetStandardFormat(nType, eLang);
     }
     else
@@ -756,7 +756,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
         }
         else if (aPropertyName == PROPERTYNAME_USERDEF)
         {
-            sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
+            sal_Bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
             aRet.setValue( &bUserDef, getBooleanCppuType() );
         }
         else if (aPropertyName == PROPERTYNAME_DECIMALS)
@@ -868,7 +868,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         OUString aComment = pFormat->GetComment();
         sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
         //! Pass through SvNumberformat Member bStandard?
-        sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
+        sal_Bool bUserDef = ( ( pFormat->GetType() & css::util::NumberFormat::DEFINED ) != 0 );
         bool bThousand, bRed;
         sal_uInt16 nDecimals, nLeading;
         pFormat->GetFormatSpecialInfo( bThousand, bRed, nDecimals, nLeading );

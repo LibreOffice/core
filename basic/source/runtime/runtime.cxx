@@ -417,7 +417,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     rpNumberFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
 
     sal_Int32 nCheckPos = 0; short nType;
-    rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eLangType );
+    rnStdTimeIdx = rpNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eLangType );
 
     // the formatter's standard templates have only got a two-digit date
     // -> registering an own format

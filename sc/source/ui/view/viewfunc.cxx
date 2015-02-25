@@ -513,7 +513,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
             aPos.SetTab( i );
             sal_uLong nIndex = (sal_uLong) static_cast<const SfxUInt32Item*>( pDoc->GetAttr(
                 nCol, nRow, i, ATTR_VALUE_FORMAT ))->GetValue();
-            if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
+            if ( pFormatter->GetType( nIndex ) == css::util::NumberFormat::TEXT ||
                  ( ( rString[0] == '+' || rString[0] == '-' ) && nError && rString == aFormula ) )
             {
                 if ( pData )
@@ -2504,7 +2504,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
 
     short nOldType = pOldEntry->GetType();
     if ( 0 == ( nOldType & (
-                NUMBERFORMAT_NUMBER |  NUMBERFORMAT_CURRENCY | NUMBERFORMAT_PERCENT | NUMBERFORMAT_SCIENTIFIC ) ) )
+                css::util::NumberFormat::NUMBER |  css::util::NumberFormat::CURRENCY | css::util::NumberFormat::PERCENT | css::util::NumberFormat::SCIENTIFIC ) ) )
     {
         //  date, time, fraction, logical, text can not be changed
         bError = true;

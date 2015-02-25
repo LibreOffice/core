@@ -1377,7 +1377,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
         {
             //  if the string starts with a "'", add another one because setFormula
             //  strips one (like text input, except for "text" number formats)
-            if ( bEnglish || ( pFormatter->GetType(nNumFmt) != NUMBERFORMAT_TEXT ) )
+            if ( bEnglish || ( pFormatter->GetType(nNumFmt) != css::util::NumberFormat::TEXT ) )
                 aTempString = "'" + aTempString;
         }
         aVal = aTempString;
@@ -3577,8 +3577,8 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
                             sal_uLong nIndex = (sal_uLong)static_cast<const SfxUInt32Item*>(rDoc.GetAttr(
                                         aIter.GetPos(), ATTR_VALUE_FORMAT))->GetValue();
                             short nTyp = rDoc.GetFormatTable()->GetType(nIndex);
-                            if ((nTyp == NUMBERFORMAT_DATE) || (nTyp == NUMBERFORMAT_TIME) ||
-                                    (nTyp == NUMBERFORMAT_DATETIME))
+                            if ((nTyp == css::util::NumberFormat::DATE) || (nTyp == css::util::NumberFormat::TIME) ||
+                                    (nTyp == css::util::NumberFormat::DATETIME))
                             {
                                 if ( nContentFlags & sheet::CellFlags::DATETIME )
                                     bAdd = true;
@@ -6224,7 +6224,7 @@ void ScCellObj::InputEnglishString( const OUString& rText )
     ScDocument& rDoc = pDocSh->GetDocument();
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     sal_uInt32 nOldFormat = rDoc.GetNumberFormat( aCellPos );
-    if (pFormatter->GetType(nOldFormat) == NUMBERFORMAT_TEXT)
+    if (pFormatter->GetType(nOldFormat) == css::util::NumberFormat::TEXT)
     {
         SetString_Impl(aString, false, false);      // text cell
         return;

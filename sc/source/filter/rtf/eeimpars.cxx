@@ -347,7 +347,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     {
                         sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pNumFmt)->GetValue();
                         sal_uInt16 nType = pFormatter->GetType(nNumFmt);
-                        if (nType == NUMBERFORMAT_TEXT)
+                        if (nType == css::util::NumberFormat::TEXT)
                             // Format is set to Text.
                             bTextFormat = true;
                     }

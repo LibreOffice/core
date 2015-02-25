@@ -1435,15 +1435,15 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
             }
         }
         break;
-    case FN_NUMBER_STANDARD:        nFmtType = NUMBERFORMAT_NUMBER; break;
-    case FN_NUMBER_SCIENTIFIC:      nFmtType = NUMBERFORMAT_SCIENTIFIC; break;
-    case FN_NUMBER_DATE:            nFmtType = NUMBERFORMAT_DATE; break;
-    case FN_NUMBER_TIME:            nFmtType = NUMBERFORMAT_TIME; break;
-    case FN_NUMBER_CURRENCY:        nFmtType = NUMBERFORMAT_CURRENCY; break;
-    case FN_NUMBER_PERCENT:         nFmtType = NUMBERFORMAT_PERCENT; break;
+    case FN_NUMBER_STANDARD:        nFmtType = css::util::NumberFormat::NUMBER; break;
+    case FN_NUMBER_SCIENTIFIC:      nFmtType = css::util::NumberFormat::SCIENTIFIC; break;
+    case FN_NUMBER_DATE:            nFmtType = css::util::NumberFormat::DATE; break;
+    case FN_NUMBER_TIME:            nFmtType = css::util::NumberFormat::TIME; break;
+    case FN_NUMBER_CURRENCY:        nFmtType = css::util::NumberFormat::CURRENCY; break;
+    case FN_NUMBER_PERCENT:         nFmtType = css::util::NumberFormat::PERCENT; break;
 
     case FN_NUMBER_TWODEC:          // #.##0,00
-        nFmtType = NUMBERFORMAT_NUMBER;
+        nFmtType = css::util::NumberFormat::NUMBER;
         nOffset = NF_NUMBER_1000DEC2;
         break;
 

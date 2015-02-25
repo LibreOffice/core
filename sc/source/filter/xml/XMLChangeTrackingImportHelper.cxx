@@ -65,13 +65,13 @@ const ScCellValue& ScMyCellInfo::CreateCell( ScDocument* pDoc )
         maCell.mpFormula->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
     }
 
-    if ((nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME) && sInputString.isEmpty())
+    if ((nType == css::util::NumberFormat::DATE || nType == css::util::NumberFormat::TIME) && sInputString.isEmpty())
     {
         sal_uInt32 nFormat(0);
-        if (nType == NUMBERFORMAT_DATE)
-            nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-        else if (nType == NUMBERFORMAT_TIME)
-            nFormat = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_TIME, ScGlobal::eLnge );
+        if (nType == css::util::NumberFormat::DATE)
+            nFormat = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::DATE, ScGlobal::eLnge );
+        else if (nType == css::util::NumberFormat::TIME)
+            nFormat = pDoc->GetFormatTable()->GetStandardFormat( css::util::NumberFormat::TIME, ScGlobal::eLnge );
         pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
     }
 

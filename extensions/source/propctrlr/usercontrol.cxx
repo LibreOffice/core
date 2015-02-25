@@ -118,17 +118,17 @@ namespace pcr
     double OFormatSampleControl::getPreviewValue( const SvNumberformat& i_rEntry )
     {
         double nValue = 1234.56789;
-        switch ( i_rEntry.GetType() & ~NUMBERFORMAT_DEFINED )
+        switch ( i_rEntry.GetType() & ~css::util::NumberFormat::DEFINED )
         {
-            case NUMBERFORMAT_DATE:
+            case css::util::NumberFormat::DATE:
                 {
                     Date aCurrentDate( Date::SYSTEM );
                     static ::com::sun::star::util::Date STANDARD_DB_DATE(30,12,1899);
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
                 }
                 break;
-            case NUMBERFORMAT_TIME:
-            case NUMBERFORMAT_DATETIME:
+            case css::util::NumberFormat::TIME:
+            case css::util::NumberFormat::DATETIME:
                 {
                     tools::Time aCurrentTime( tools::Time::SYSTEM );
                     nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
@@ -225,18 +225,18 @@ namespace pcr
             DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
             if ( pEntry )
             {
-                switch (pEntry->GetType() & ~NUMBERFORMAT_DEFINED)
+                switch (pEntry->GetType() & ~css::util::NumberFormat::DEFINED)
                 {
-                    case NUMBERFORMAT_NUMBER:
-                    case NUMBERFORMAT_CURRENCY:
-                    case NUMBERFORMAT_SCIENTIFIC:
-                    case NUMBERFORMAT_FRACTION:
-                    case NUMBERFORMAT_PERCENT:
+                    case css::util::NumberFormat::NUMBER:
+                    case css::util::NumberFormat::CURRENCY:
+                    case css::util::NumberFormat::SCIENTIFIC:
+                    case css::util::NumberFormat::FRACTION:
+                    case css::util::NumberFormat::PERCENT:
                         m_nLastDecimalDigits = getTypedControlWindow()->GetDecimalDigits();
                         break;
-                    case NUMBERFORMAT_DATETIME:
-                    case NUMBERFORMAT_DATE:
-                    case NUMBERFORMAT_TIME:
+                    case css::util::NumberFormat::DATETIME:
+                    case css::util::NumberFormat::DATE:
+                    case css::util::NumberFormat::TIME:
                         m_nLastDecimalDigits = 7;
                         break;
                     default:

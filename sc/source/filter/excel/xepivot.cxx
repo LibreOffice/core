@@ -343,9 +343,9 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
         {
             double fValue = rDoc.GetValue( aPos );
             short nFmtType = rFormatter.GetType( rDoc.GetNumberFormat( aPos ) );
-            if( nFmtType == NUMBERFORMAT_LOGICAL )
+            if( nFmtType == css::util::NumberFormat::LOGICAL )
                 InsertOrigBoolItem( fValue != 0 );
-            else if( nFmtType & NUMBERFORMAT_DATETIME )
+            else if( nFmtType & css::util::NumberFormat::DATETIME )
                 InsertOrigDateTimeItem( GetDateTimeFromDouble( ::std::max( fValue, 0.0 ) ) );
             else
                 InsertOrigDoubleItem( fValue );

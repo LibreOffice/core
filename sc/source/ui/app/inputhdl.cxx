@@ -1897,7 +1897,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
                 {
                     sal_uLong nFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-                    bCellHasPercentFormat = ( NUMBERFORMAT_PERCENT ==
+                    bCellHasPercentFormat = ( css::util::NumberFormat::PERCENT ==
                                               rDoc.GetFormatTable()->GetType( nFormat ) );
                 }
                 else

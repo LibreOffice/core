@@ -827,7 +827,7 @@ bool ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                         sal_uLong nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
                                         nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT))->GetValue();
                         short nType = pDoc->GetFormatTable()->GetType(nIndex);
-                        if ( nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME || nType == NUMBERFORMAT_DATETIME )
+                        if ( nType == css::util::NumberFormat::DATE || nType == css::util::NumberFormat::TIME || nType == css::util::NumberFormat::DATETIME )
                         {
                             bFound = true;
                             // use currently selected value for automatic limits

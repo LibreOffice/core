@@ -83,15 +83,15 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocIsEven:
         case ocIsOdd:
         case ocExact:
-            return NUMBERFORMAT_LOGICAL;
+            return css::util::NumberFormat::LOGICAL;
         case ocGetActDate:
         case ocGetDate:
         case ocEasterSunday :
-            return NUMBERFORMAT_DATE;
+            return css::util::NumberFormat::DATE;
         case ocGetActTime:
-            return NUMBERFORMAT_DATETIME;
+            return css::util::NumberFormat::DATETIME;
         case ocGetTime:
-            return NUMBERFORMAT_TIME;
+            return css::util::NumberFormat::TIME;
         case ocNPV:
         case ocPV:
         case ocSYD:
@@ -105,7 +105,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocPpmt:
         case ocCumIpmt:
         case ocCumPrinc:
-            return NUMBERFORMAT_CURRENCY;
+            return css::util::NumberFormat::CURRENCY;
         case ocRate:
         case ocIRR:
         case ocMIRR:
@@ -113,9 +113,9 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocEffective:
         case ocNominal:
         case ocPercentSign:
-            return NUMBERFORMAT_PERCENT;
+            return css::util::NumberFormat::PERCENT;
         default:
-            return NUMBERFORMAT_NUMBER;
+            return css::util::NumberFormat::NUMBER;
     }
 }
 
@@ -532,7 +532,7 @@ FormulaCompiler::FormulaCompiler( FormulaTokenArray& rArr )
         pStack( NULL ),
         eLastOp( ocPush ),
         nRecursion( 0 ),
-        nNumFmt( NUMBERFORMAT_UNDEFINED ),
+        nNumFmt( css::util::NumberFormat::UNDEFINED ),
         pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
@@ -550,7 +550,7 @@ FormulaCompiler::FormulaCompiler()
         pStack( NULL ),
         eLastOp( ocPush ),
         nRecursion(0),
-        nNumFmt( NUMBERFORMAT_UNDEFINED ),
+        nNumFmt( css::util::NumberFormat::UNDEFINED ),
         pc( 0 ),
         meGrammar( formula::FormulaGrammar::GRAM_UNSPECIFIED ),
         bAutoCorrect( false ),
@@ -1174,7 +1174,7 @@ void FormulaCompiler::Factor()
     }
     else
     {
-        if( nNumFmt == NUMBERFORMAT_UNDEFINED )
+        if( nNumFmt == css::util::NumberFormat::UNDEFINED )
             nNumFmt = lcl_GetRetFormat( eOp );
 
         if ( IsOpCodeVolatile( eOp) )
@@ -1238,8 +1238,8 @@ void FormulaCompiler::Factor()
         {
             pFacToken = mpToken;
             eOp = NextToken();
-            if( nNumFmt == NUMBERFORMAT_UNDEFINED && eOp == ocNot )
-                nNumFmt = NUMBERFORMAT_LOGICAL;
+            if( nNumFmt == css::util::NumberFormat::UNDEFINED && eOp == ocNot )
+                nNumFmt = css::util::NumberFormat::LOGICAL;
             if (eOp == ocOpen)
             {
                 NextToken();
@@ -1688,8 +1688,8 @@ bool FormulaCompiler::CompileTokenArray()
         if ( bWasForced )
             pArr->SetRecalcModeForced();
     }
-    if( nNumFmt == NUMBERFORMAT_UNDEFINED )
-        nNumFmt = NUMBERFORMAT_NUMBER;
+    if( nNumFmt == css::util::NumberFormat::UNDEFINED )
+        nNumFmt = css::util::NumberFormat::NUMBER;
     return glSubTotal;
 }
 

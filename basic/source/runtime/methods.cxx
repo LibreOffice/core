@@ -2159,9 +2159,9 @@ RTLFUNC(DateValue)
             nType = aFormatter.GetType( nIndex );
         }
 
-        if(bSuccess && (nType==NUMBERFORMAT_DATE || nType==NUMBERFORMAT_DATETIME))
+        if(bSuccess && (nType==css::util::NumberFormat::DATE || nType==css::util::NumberFormat::DATETIME))
         {
-            if ( nType == NUMBERFORMAT_DATETIME )
+            if ( nType == css::util::NumberFormat::DATETIME )
             {
                 // cut time
                 if ( fResult  > 0.0 )
@@ -2212,9 +2212,9 @@ RTLFUNC(TimeValue)
         bool bSuccess = pFormatter->IsNumberFormat( rPar.Get(1)->GetOUString(),
                                                    nIndex, fResult );
         short nType = pFormatter->GetType(nIndex);
-        if(bSuccess && (nType==NUMBERFORMAT_TIME||nType==NUMBERFORMAT_DATETIME))
+        if(bSuccess && (nType==css::util::NumberFormat::TIME||nType==css::util::NumberFormat::DATETIME))
         {
-            if ( nType == NUMBERFORMAT_DATETIME )
+            if ( nType == css::util::NumberFormat::DATETIME )
             {
                 // cut days
                 fResult = fmod( fResult, 1 );

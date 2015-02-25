@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
 #include <tools/link.hxx>
@@ -53,24 +54,6 @@ namespace com { namespace sun { namespace star {
 #define SV_COUNTRY_LANGUAGE_OFFSET 10000    // Max count of formats per country/language
 #define SV_MAX_ANZ_STANDARD_FORMATE  100    // Max count of builtin default formats per CL
 
-// Format types
-#ifndef NUMBERFORMAT_ALL
-//  also defined in com/sun/star/util/NumberFormat.hpp
-//! => put in single .idl file and include here
-#define NUMBERFORMAT_ALL             0x000  /// Just for Output of total list, not a real format type
-#define NUMBERFORMAT_DEFINED         0x001  /// Format defined by user
-#define NUMBERFORMAT_DATE            0x002  /// Number as date
-#define NUMBERFORMAT_TIME            0x004  /// Number as time
-#define NUMBERFORMAT_CURRENCY        0x008  /// Number as currency
-#define NUMBERFORMAT_NUMBER          0x010  /// Any "normal" number format
-#define NUMBERFORMAT_SCIENTIFIC      0x020  /// Number as scientific
-#define NUMBERFORMAT_FRACTION        0x040  /// Number as fraction
-#define NUMBERFORMAT_PERCENT         0x080  /// Number as percent
-#define NUMBERFORMAT_TEXT            0x100  /// Text format
-#define NUMBERFORMAT_DATETIME        0x006  /// Number as date and time
-#define NUMBERFORMAT_LOGICAL         0x400  /// Number as boolean value
-#define NUMBERFORMAT_UNDEFINED       0x800  /// Format undefined yet in analyzing
-#endif
 #define NUMBERFORMAT_ENTRY_NOT_FOUND (sal_uInt32)(0xffffffff)   /// MAX_ULONG
 
 
@@ -597,8 +580,8 @@ public:
     sal_uInt16 GetStandardPrec();
     /// Return whether zero suppression is switched on
     bool GetNoZero();
-    /** Get the type of a format (or NUMBERFORMAT_UNDEFINED if no entry),
-         but with NUMBERFORMAT_DEFINED masked out */
+    /** Get the type of a format (or css::util::NumberFormat::UNDEFINED if no entry),
+         but with css::util::NumberFormat::DEFINED masked out */
     short GetType(sal_uInt32 nFIndex);
 
     /// As the name says
@@ -720,7 +703,7 @@ public:
     sal_uInt16  GetCurrencyFormatStrings( NfWSStringsDtor&, const NfCurrencyEntry&,
                                           bool bBank ) const;
 
-    /** Whether nFormat is of type NUMBERFORMAT_CURRENCY and the format code
+    /** Whether nFormat is of type css::util::NumberFormat::CURRENCY and the format code
         contains a new SYMBOLTYPE_CURRENCY and if so which one [$xxx-nnn].
         If ppEntry is not NULL and exactly one entry is found, a [$xxx-nnn] is
         returned, even if the format code only contains [$xxx] !

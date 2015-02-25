@@ -174,7 +174,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     sal_uInt8       nL, nH; // Low-/High-Nibble
     sal_uInt8       nForm = nFormat;
     OUString          aFormString;
-    sal_Int16       eType = NUMBERFORMAT_ALL;
+    sal_Int16       eType = css::util::NumberFormat::ALL;
     sal_uInt32      nIndex1;
     sal_uInt32      nHandle;
     NfIndexTableOffset eIndexTableOffset = NF_NUMERIC_START;
@@ -193,49 +193,49 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
         case 0x00:  // fixed-point number
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_NUMBER, eLanguage );
+                css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
         case 0x01:  // scientific notation
             //fExponent;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_SCIENTIFIC, eLanguage );
+                css::util::NumberFormat::SCIENTIFIC, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
         case 0x02:  // currency
             //fMoney;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_CURRENCY, eLanguage );
+                css::util::NumberFormat::CURRENCY, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
         case 0x03:  // percentage
             //fPercent;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_PERCENT, eLanguage );
+                css::util::NumberFormat::PERCENT, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
         case 0x04:  // Decimal
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_NUMBER, eLanguage );
+                css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, true, false, nL, 1);
             break;
         case 0x05:  // unspecified
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_NUMBER, eLanguage );
+                css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
         case 0x06:  // unspecified
             //fStandard;nL;
             nIndex1 = pFormTable->GetStandardFormat(
-                NUMBERFORMAT_NUMBER, eLanguage );
+                css::util::NumberFormat::NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             nIndex1 = 0;
@@ -246,74 +246,74 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
                 case 0x00:  // +/-
                     //fStandard;nSt;
                     nIndex1 = pFormTable->GetStandardFormat(
-                        NUMBERFORMAT_NUMBER, eLanguage );
+                        css::util::NumberFormat::NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
                         eLanguage, false, true, nSt, 1);
                     break;
                 case 0x01:  // general Format
                     //fStandard;nSt;
                     nIndex1 = pFormTable->GetStandardFormat(
-                        NUMBERFORMAT_NUMBER, eLanguage );
+                        css::util::NumberFormat::NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
                         eLanguage, false, false, nSt, 1);
                     break;
                 case 0x02:  // Date: Day, Month, Year
                     //fDate;dfDayMonthYearLong;
-                    eType = NUMBERFORMAT_DATE;
+                    eType = css::util::NumberFormat::DATE;
                     eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
                 case 0x03:  // Date: Day, Month
                     //fDate;dfDayMonthLong;
-                    eType = NUMBERFORMAT_DATE;
+                    eType = css::util::NumberFormat::DATE;
                     aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_DD);
                     aFormString += pFormTable->GetDateSep();    // matches last eLanguage
                     aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_MMMM);
                     break;
                 case 0x04:  // Date: Month, Year
                     //fDate;dfMonthYearLong;
-                    eType = NUMBERFORMAT_DATE;
+                    eType = css::util::NumberFormat::DATE;
                     aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_MM);
                     aFormString += pFormTable->GetDateSep();    // matches last eLanguage
                     aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_YYYY);
                     break;
                 case 0x05:  // Text formats
                     //fString;nSt;
-                    eType = NUMBERFORMAT_TEXT;
+                    eType = css::util::NumberFormat::TEXT;
                     eIndexTableOffset = NF_TEXT;
                     break;
                 case 0x06:  // hidden
                     //wFlag |= paHideAll;bSetFormat = sal_False;
-                    eType = NUMBERFORMAT_NUMBER;
+                    eType = css::util::NumberFormat::NUMBER;
                     aFormString = "\"\"";
                     break;
                 case 0x07:  // Time: hour, min, sec
                     //fTime;tfHourMinSec24;
-                    eType = NUMBERFORMAT_TIME;
+                    eType = css::util::NumberFormat::TIME;
                     eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
                 case 0x08:  // Time: hour, min
                     //fTime;tfHourMin24;
-                    eType = NUMBERFORMAT_TIME;
+                    eType = css::util::NumberFormat::TIME;
                     eIndexTableOffset = NF_TIME_HHMM;
                     break;
                 case 0x09:  // Date, intern sal_Int32 1
                     //fDate;dfDayMonthYearLong;
-                    eType = NUMBERFORMAT_DATE;
+                    eType = css::util::NumberFormat::DATE;
                     eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
                 case 0x0A:  // Date, intern sal_Int32 2
                     //fDate;dfDayMonthYearLong;
-                    eType = NUMBERFORMAT_DATE;
+                    eType = css::util::NumberFormat::DATE;
                     eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
                 case 0x0B:  // Time, intern sal_Int32 1
                     //fTime;tfHourMinSec24;
-                    eType = NUMBERFORMAT_TIME;
+                    eType = css::util::NumberFormat::TIME;
                     eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
                 case 0x0C:  // Time, intern sal_Int32 2
                     //fTime;tfHourMinSec24;
-                    eType = NUMBERFORMAT_TIME;
+                    eType = css::util::NumberFormat::TIME;
                     eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
                 case 0x0F:  // Default

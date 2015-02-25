@@ -123,11 +123,11 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessComponentContext(), eUILang );
         Color*      pColor = NULL;
         Date*       pNullDate = pNumberFormatter->GetNullDate();
-        sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
+        sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::DATE, eUILang );
 
         pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aDateStr, &pColor );
 
-        nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
+        nFormat = pNumberFormatter->GetStandardFormat( css::util::NumberFormat::TIME, eUILang );
         pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTimeStr, &pColor );
 
         delete pColor;

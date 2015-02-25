@@ -253,15 +253,15 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
                         const uno::Type& rValueType = aVal.getValueType();
                         if( rValueType == ::cppu::UnoType<util::DateTime>::get())
                         {
-                            nNewType = NUMBERFORMAT_DATETIME;
+                            nNewType = css::util::NumberFormat::DATETIME;
                         }
                         else if( rValueType == ::cppu::UnoType<util::Date>::get())
                         {
-                            nNewType = NUMBERFORMAT_DATE;
+                            nNewType = css::util::NumberFormat::DATE;
                         }
                         else if( rValueType == ::cppu::UnoType<util::Time>::get())
                         {
-                            nNewType = NUMBERFORMAT_TIME;
+                            nNewType = css::util::NumberFormat::TIME;
                         }
                     }
                     catch( const uno::Exception& )
@@ -292,12 +292,12 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
             break;
 
         case DI_SUB_DATE:
-            nNewType = NUMBERFORMAT_DATE;
+            nNewType = css::util::NumberFormat::DATE;
             bOneArea = true;
             break;
 
         case DI_SUB_TIME:
-            nNewType = NUMBERFORMAT_TIME;
+            nNewType = css::util::NumberFormat::TIME;
             bOneArea = true;
             break;
     }
@@ -329,16 +329,16 @@ IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
             nOldSubType &= ~DI_SUB_FIXED;
             if (nOldSubType == nSubType)
             {
-                if (!nFormat && (nNewType == NUMBERFORMAT_DATE || nNewType == NUMBERFORMAT_TIME))
+                if (!nFormat && (nNewType == css::util::NumberFormat::DATE || nNewType == css::util::NumberFormat::TIME))
                 {
                     SwWrtShell *pSh = GetWrtShell();
                     if(pSh)
                     {
                         SvNumberFormatter* pFormatter = pSh->GetNumberFormatter();
                         LanguageType eLang = m_pFormatLB->GetCurLanguage();
-                        if (nNewType == NUMBERFORMAT_DATE)
+                        if (nNewType == css::util::NumberFormat::DATE)
                             nFormat = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang);
-                        else if (nNewType == NUMBERFORMAT_TIME)
+                        else if (nNewType == css::util::NumberFormat::TIME)
                             nFormat = pFormatter->GetFormatIndex( NF_TIME_HHMM, eLang);
                     }
                 }

@@ -595,7 +595,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
                 return svl::SharedString::getEmptyString();
 
             // result of empty FALSE jump path
-            sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
+            sal_uLong nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::LOGICAL,
                     ScGlobal::eLnge);
             OUString aStr;
             Color* pColor = NULL;
@@ -617,7 +617,7 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
         return ScGlobal::GetErrorString( nError);
     }
 
-    sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
+    sal_uLong nKey = rFormatter.GetStandardFormat( css::util::NumberFormat::NUMBER,
             ScGlobal::eLnge);
     OUString aStr;
     rFormatter.GetInputLineString( fVal, nKey, aStr);

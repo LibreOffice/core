@@ -217,15 +217,15 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
             SvNumberFormatter* pNumFmtr = pDoc->GetNumberFormatter();
 
-            if( NUMBERFORMAT_TEXT == nFmtIndex )
+            if( css::util::NumberFormat::TEXT == nFmtIndex )
                 nFmtIndex = 0;
             // JP 22.04.98: Bug 49659 - special treatment for percentages
             else if( !sTxt.isEmpty() &&
-                    NUMBERFORMAT_PERCENT == pNumFmtr->GetType( nFmtIndex ))
+                    css::util::NumberFormat::PERCENT == pNumFmtr->GetType( nFmtIndex ))
             {
                 sal_uInt32 nTmpFmt = 0;
                 if( pNumFmtr->IsNumberFormat( sTxt, nTmpFmt, aNum ) &&
-                    NUMBERFORMAT_NUMBER == pNumFmtr->GetType( nTmpFmt ))
+                    css::util::NumberFormat::NUMBER == pNumFmtr->GetType( nTmpFmt ))
                     sTxt += OUString('%');
             }
 

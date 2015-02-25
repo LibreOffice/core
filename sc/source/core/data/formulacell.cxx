@@ -454,7 +454,7 @@ ScFormulaCellGroup::ScFormulaCellGroup() :
     mpCompiledFormula(NULL),
     mpTopCell(NULL),
     mnLength(0),
-    mnFormatType(NUMBERFORMAT_NUMBER),
+    mnFormatType(css::util::NumberFormat::NUMBER),
     mbInvariant(false),
     mbSubTotal(false),
     meCalcState(sc::GroupCalcEnabled),
@@ -595,7 +595,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos ) :
     pPreviousTrack(0),
     pNextTrack(0),
     nSeenInIteration(0),
-    nFormatType(NUMBERFORMAT_NUMBER),
+    nFormatType(css::util::NumberFormat::NUMBER),
     cMatrixFlag(MM_NONE),
     bDirty(false),
     bChanged(false),
@@ -625,7 +625,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
     pPreviousTrack(0),
     pNextTrack(0),
     nSeenInIteration(0),
-    nFormatType ( NUMBERFORMAT_NUMBER ),
+    nFormatType ( css::util::NumberFormat::NUMBER ),
     cMatrixFlag ( cMatInd ),
     bDirty( true ), // -> Because of the use of the Auto Pilot Function was: cMatInd != 0
     bChanged( false ),
@@ -659,7 +659,7 @@ ScFormulaCell::ScFormulaCell(
     pPreviousTrack(0),
     pNextTrack(0),
     nSeenInIteration(0),
-    nFormatType ( NUMBERFORMAT_NUMBER ),
+    nFormatType ( css::util::NumberFormat::NUMBER ),
     cMatrixFlag ( cMatInd ),
     bDirty( true ),
     bChanged( false ),
@@ -708,7 +708,7 @@ ScFormulaCell::ScFormulaCell(
     pPreviousTrack(0),
     pNextTrack(0),
     nSeenInIteration(0),
-    nFormatType ( NUMBERFORMAT_NUMBER ),
+    nFormatType ( css::util::NumberFormat::NUMBER ),
     cMatrixFlag ( cMatInd ),
     bDirty( true ),
     bChanged( false ),
@@ -1795,7 +1795,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             sal_Int32 nFormatIndex = p->GetRetFormatIndex();
 
             // don't set text format as hard format
-            if(nFormatType == NUMBERFORMAT_TEXT)
+            if(nFormatType == css::util::NumberFormat::TEXT)
                 nFormatIndex = 0;
             else if((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
@@ -1880,9 +1880,9 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // Precision as shown?
         if ( aResult.IsValue() && !p->GetError()
           && pDocument->GetDocOptions().IsCalcAsShown()
-          && nFormatType != NUMBERFORMAT_DATE
-          && nFormatType != NUMBERFORMAT_TIME
-          && nFormatType != NUMBERFORMAT_DATETIME )
+          && nFormatType != css::util::NumberFormat::DATE
+          && nFormatType != css::util::NumberFormat::TIME
+          && nFormatType != css::util::NumberFormat::DATETIME )
         {
             sal_uLong nFormat = pDocument->GetNumberFormat( aPos );
             aResult.SetDouble( pDocument->RoundValueAsShown(
@@ -2298,7 +2298,7 @@ void ScFormulaCell::GetURLResult( OUString& rURL, OUString& rCellText )
     sal_uLong nCellFormat = pDocument->GetNumberFormat( aPos );
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
 
-    sal_uLong nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, NUMBERFORMAT_NUMBER);
+    sal_uLong nURLFormat = ScGlobal::GetStandardFormat( *pFormatter, nCellFormat, css::util::NumberFormat::NUMBER);
 
     if ( IsValue() )
     {

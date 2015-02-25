@@ -1095,7 +1095,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 aTblSet.ClearItem( RES_BOXATR_VALUE );
                             else
                             {
-                                if(rNumFmtr.GetType(aNumFmt.GetValue()) & NUMBERFORMAT_DATE)
+                                if(rNumFmtr.GetType(aNumFmt.GetValue()) & css::util::NumberFormat::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
                                     if (*rNumFmtr.GetNullDate() != aStandard)
@@ -1323,7 +1323,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                 DBL_MAX != nValue )
                             {
                                 Color* pCol;
-                                if(rNumFmtr.GetType(pDBCol->DB_ColumnData.nFormat) & NUMBERFORMAT_DATE)
+                                if(rNumFmtr.GetType(pDBCol->DB_ColumnData.nFormat) & css::util::NumberFormat::DATE)
                                 {
                                     ::Date aStandard(1,1,1900);
                                     if (*rNumFmtr.GetNullDate() != aStandard)

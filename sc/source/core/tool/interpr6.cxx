@@ -357,7 +357,7 @@ void IterateMatrix(
         return;
 
     // TODO fdo73148 take mnSubTotalFlags into account
-    rFuncFmtType = NUMBERFORMAT_NUMBER;
+    rFuncFmtType = css::util::NumberFormat::NUMBER;
     switch (eFunc)
     {
         case ifAVERAGE:
@@ -490,7 +490,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     case ifPRODUCT: fRes *= fVal; break;
                     default: ; // nothing
                 }
-                nFuncFmtType = NUMBERFORMAT_NUMBER;
+                nFuncFmtType = css::util::NumberFormat::NUMBER;
                 break;
             case svExternalSingleRef:
             {
@@ -801,8 +801,8 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     }
     // Bei Summen etc. macht ein bool-Ergebnis keinen Sinn
     // und Anzahl ist immer Number (#38345#)
-    if( eFunc == ifCOUNT || nFuncFmtType == NUMBERFORMAT_LOGICAL )
-        nFuncFmtType = NUMBERFORMAT_NUMBER;
+    if( eFunc == ifCOUNT || nFuncFmtType == css::util::NumberFormat::LOGICAL )
+        nFuncFmtType = css::util::NumberFormat::NUMBER;
     return fRes;
 }
 
@@ -837,7 +837,7 @@ void ScInterpreter::ScSum()
                 case svDouble    :
                     fVal = GetDouble();
                     fRes += fVal;
-                    nFuncFmtType = NUMBERFORMAT_NUMBER;
+                    nFuncFmtType = css::util::NumberFormat::NUMBER;
                     break;
                 case svExternalSingleRef:
                 {
@@ -938,8 +938,8 @@ void ScInterpreter::ScSum()
             }
         }
 
-        if (nFuncFmtType == NUMBERFORMAT_LOGICAL)
-            nFuncFmtType = NUMBERFORMAT_NUMBER;
+        if (nFuncFmtType == css::util::NumberFormat::LOGICAL)
+            nFuncFmtType = css::util::NumberFormat::NUMBER;
 
         PushDouble(fRes);
     }
@@ -989,7 +989,7 @@ void ScInterpreter::ScCount()
                 case svDouble    :
                     GetDouble();
                     nCount++;
-                    nFuncFmtType = NUMBERFORMAT_NUMBER;
+                    nFuncFmtType = css::util::NumberFormat::NUMBER;
                     break;
                 case svExternalSingleRef:
                 {
@@ -1103,7 +1103,7 @@ void ScInterpreter::ScCount()
             }
         }
 
-        nFuncFmtType = NUMBERFORMAT_NUMBER;
+        nFuncFmtType = css::util::NumberFormat::NUMBER;
 
         PushDouble(nCount);
     }

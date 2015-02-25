@@ -353,15 +353,15 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, 
         {
             switch (comphelper::getNumberFormatType(m_xNumberFormatter,nIndex))
             {
-                case NUMBERFORMAT_DATE:
+                case css::util::NumberFormat::DATE:
                     io_nType = DataType::DATE;
                     o_sTypeName = "DATE";
                     break;
-                case NUMBERFORMAT_DATETIME:
+                case css::util::NumberFormat::DATETIME:
                     io_nType = DataType::TIMESTAMP;
                     o_sTypeName = "TIMESTAMP";
                     break;
-                case NUMBERFORMAT_TIME:
+                case css::util::NumberFormat::TIME:
                     io_nType = DataType::TIME;
                     o_sTypeName = "TIME";
                     break;

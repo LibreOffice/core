@@ -1290,7 +1290,7 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
 
     if( const SvNumberformat* pEntry = rRoot.GetFormatter().GetEntry( nScNumFmt ) )
     {
-        if( pEntry->GetType() == NUMBERFORMAT_LOGICAL )
+        if( pEntry->GetType() == css::util::NumberFormat::LOGICAL )
         {
             // build Boolean number format
             Color* pColor = 0;
@@ -1306,7 +1306,7 @@ OUString GetNumberFormatCode(XclRoot& rRoot, const sal_uInt16 nScNumFmt, SvNumbe
             if( eLang != LANGUAGE_ENGLISH_US )
             {
                 sal_Int32 nCheckPos;
-                short nType = NUMBERFORMAT_DEFINED;
+                short nType = css::util::NumberFormat::DEFINED;
                 sal_uInt32 nKey;
                 OUString aTemp( pEntry->GetFormatstring() );
                 xFormatter->PutandConvertEntry( aTemp, nCheckPos, nType, nKey, eLang, LANGUAGE_ENGLISH_US );

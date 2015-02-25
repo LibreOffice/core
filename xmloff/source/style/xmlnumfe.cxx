@@ -959,20 +959,20 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     sal_uInt16 nPrecision = 0;
     sal_uInt16 nLeading = 0;
     rFormat.GetNumForInfo( nPart, nFmtType, bThousand, nPrecision, nLeading);
-    nFmtType &= ~NUMBERFORMAT_DEFINED;
+    nFmtType &= ~css::util::NumberFormat::DEFINED;
 
     //  special treatment of builtin formats that aren't detected by normal parsing
     //  (the same formats that get the type set in SvNumberFormatter::ImpGenerateFormats)
     if ( eBuiltIn == NF_NUMBER_STANDARD )
-        nFmtType = NUMBERFORMAT_NUMBER;
+        nFmtType = css::util::NumberFormat::NUMBER;
     else if ( eBuiltIn == NF_BOOLEAN )
-        nFmtType = NUMBERFORMAT_LOGICAL;
+        nFmtType = css::util::NumberFormat::LOGICAL;
     else if ( eBuiltIn == NF_TEXT )
-        nFmtType = NUMBERFORMAT_TEXT;
+        nFmtType = css::util::NumberFormat::TEXT;
 
     // #101606# An empty subformat is a valid number-style resulting in an
     // empty display string for the condition of the subformat.
-    if ( nFmtType == NUMBERFORMAT_UNDEFINED && rFormat.GetNumForType( nPart,
+    if ( nFmtType == css::util::NumberFormat::UNDEFINED && rFormat.GetNumForType( nPart,
                 0, false ) == 0 )
         nFmtType = 0;
 
@@ -982,35 +982,35 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         // type is 0 if a format contains no recognized elements
         // (like text only) - this is handled as a number-style.
         case 0:
-        case NUMBERFORMAT_NUMBER:
-        case NUMBERFORMAT_SCIENTIFIC:
-        case NUMBERFORMAT_FRACTION:
+        case css::util::NumberFormat::NUMBER:
+        case css::util::NumberFormat::SCIENTIFIC:
+        case css::util::NumberFormat::FRACTION:
             eType = XML_NUMBER_STYLE;
             break;
-        case NUMBERFORMAT_PERCENT:
+        case css::util::NumberFormat::PERCENT:
             eType = XML_PERCENTAGE_STYLE;
             break;
-        case NUMBERFORMAT_CURRENCY:
+        case css::util::NumberFormat::CURRENCY:
             eType = XML_CURRENCY_STYLE;
             break;
-        case NUMBERFORMAT_DATE:
-        case NUMBERFORMAT_DATETIME:
+        case css::util::NumberFormat::DATE:
+        case css::util::NumberFormat::DATETIME:
             eType = XML_DATE_STYLE;
             break;
-        case NUMBERFORMAT_TIME:
+        case css::util::NumberFormat::TIME:
             eType = XML_TIME_STYLE;
             break;
-        case NUMBERFORMAT_TEXT:
+        case css::util::NumberFormat::TEXT:
             eType = XML_TEXT_STYLE;
             break;
-        case NUMBERFORMAT_LOGICAL:
+        case css::util::NumberFormat::LOGICAL:
             eType = XML_BOOLEAN_STYLE;
             break;
     }
     DBG_ASSERT( eType != XML_TOKEN_INVALID, "unknown format type" );
 
     OUString sAttrValue;
-    bool bUserDef = ( ( rFormat.GetType() & NUMBERFORMAT_DEFINED ) != 0 );
+    bool bUserDef = ( rFormat.GetType() & css::util::NumberFormat::DEFINED );
 
     //  common attributes for format
 
@@ -1055,14 +1055,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     bool bLongSysDate = ( eBuiltIn == NF_DATE_SYSTEM_LONG );
 
     // check if the format definition matches the key
-    if ( bAutoOrder && ( nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) &&
+    if ( bAutoOrder && ( nFmtType == css::util::NumberFormat::DATE || nFmtType == css::util::NumberFormat::DATETIME ) &&
             !lcl_IsDefaultDateFormat( rFormat, bSystemDate, eBuiltIn ) )
     {
         bAutoOrder = bSystemDate = bLongSysDate = false;        // don't write automatic-order attribute then
     }
 
     if ( bAutoOrder &&
-        ( nFmtType == NUMBERFORMAT_CURRENCY || nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) )
+        ( nFmtType == css::util::NumberFormat::CURRENCY || nFmtType == css::util::NumberFormat::DATE || nFmtType == css::util::NumberFormat::DATETIME ) )
     {
         //  #85109# format type must be checked to avoid dtd errors if
         //  locale data contains other format types at the built-in positions
@@ -1072,7 +1072,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     }
 
     if ( bSystemDate && bAutoOrder &&
-        ( nFmtType == NUMBERFORMAT_DATE || nFmtType == NUMBERFORMAT_DATETIME ) )
+        ( nFmtType == css::util::NumberFormat::DATE || nFmtType == css::util::NumberFormat::DATETIME ) )
     {
         //  #85109# format type must be checked to avoid dtd errors if
         //  locale data contains other format types at the built-in positions
@@ -1084,7 +1084,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //  overflow for time formats as in [hh]:mm
     //  controlled by bThousand from number format info
     //  default for truncate-on-overflow is true
-    if ( nFmtType == NUMBERFORMAT_TIME && bThousand )
+    if ( nFmtType == css::util::NumberFormat::TIME && bThousand )
     {
         rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_TRUNCATE_ON_OVERFLOW,
                               XML_FALSE );
@@ -1214,9 +1214,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
 
         //  collect strings for embedded-text (must be known before number element is written)
 
-        bool bAllowEmbedded = ( nFmtType == 0 || nFmtType == NUMBERFORMAT_NUMBER ||
-                                        nFmtType == NUMBERFORMAT_CURRENCY ||
-                                        nFmtType == NUMBERFORMAT_PERCENT );
+        bool bAllowEmbedded = ( nFmtType == 0 || nFmtType == css::util::NumberFormat::NUMBER ||
+                                        nFmtType == css::util::NumberFormat::CURRENCY ||
+                                        nFmtType == css::util::NumberFormat::PERCENT );
         if ( bAllowEmbedded )
         {
             sal_Int32 nDigitsPassed = 0;
@@ -1301,7 +1301,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  text is written as embedded-text child of the number,
                             //  don't create a text element
                         }
-                        else if ( nFmtType == NUMBERFORMAT_CURRENCY && !bCurrFound && !bCurrencyWritten )
+                        else if ( nFmtType == css::util::NumberFormat::CURRENCY && !bCurrFound && !bCurrencyWritten )
                         {
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
@@ -1365,9 +1365,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             // for type 0 (not recognized as a special type),
                             // write a "normal" number
                             case 0:
-                            case NUMBERFORMAT_NUMBER:
-                            case NUMBERFORMAT_CURRENCY:
-                            case NUMBERFORMAT_PERCENT:
+                            case css::util::NumberFormat::NUMBER:
+                            case css::util::NumberFormat::CURRENCY:
+                            case css::util::NumberFormat::PERCENT:
                                 {
                                     //  decimals
                                     //  only some built-in formats have automatic decimals
@@ -1397,14 +1397,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     bAnyContent = true;
                                 }
                                 break;
-                            case NUMBERFORMAT_SCIENTIFIC:
+                            case css::util::NumberFormat::SCIENTIFIC:
                                 // #i43959# for scientific numbers, count all integer symbols ("0" and "#")
                                 // as integer digits: use nIntegerSymbols instead of nLeading
                                 // (use of '#' to select multiples in exponent might be added later)
                                 WriteScientificElement_Impl( nPrecision, nIntegerSymbols, bThousand, nExpDigits );
                                 bAnyContent = true;
                                 break;
-                            case NUMBERFORMAT_FRACTION:
+                            case css::util::NumberFormat::FRACTION:
                                 {
                                     sal_Int32 nInteger = nLeading;
                                     if ( pElemStr && (*pElemStr)[0] == '?' )
@@ -1692,7 +1692,7 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
 
             sal_uInt32 nDefaultIndex = 0;
             SvNumberFormatTable& rTable = pFormatter->GetEntryTable(
-                                            NUMBERFORMAT_DEFINED, nDefaultIndex, nLang );
+                                            css::util::NumberFormat::DEFINED, nDefaultIndex, nLang );
             SvNumberFormatTable::iterator it2 = rTable.begin();
             while (it2 != rTable.end())
             {
@@ -1700,7 +1700,7 @@ void SvXMLNumFmtExport::Export( bool bIsAutoStyle )
                 pFormat = it2->second;
                 if (!pUsedList->IsUsed(nKey))
                 {
-                    DBG_ASSERT((pFormat->GetType() & NUMBERFORMAT_DEFINED) != 0, "a not user defined numberformat found");
+                    DBG_ASSERT((pFormat->GetType() & css::util::NumberFormat::DEFINED), "a not user defined numberformat found");
                     //  user-defined and used formats are exported
                     ExportFormat_Impl( *pFormat, nKey );
                     // if it is a user-defined Format it will be added else nothing will happen

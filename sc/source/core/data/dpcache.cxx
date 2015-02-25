@@ -415,7 +415,7 @@ bool ScDPCache::InitFromDataBase(DBConnector& rDB)
             SCROW nRow = 0;
             do
             {
-                short nFormatType = NUMBERFORMAT_UNDEFINED;
+                short nFormatType = css::util::NumberFormat::UNDEFINED;
                 aData.SetEmpty();
                 rDB.getValue(nCol, aData, nFormatType);
                 aBuckets.push_back(Bucket(aData, 0, nRow));
@@ -884,7 +884,7 @@ bool ScDPCache::IsDateDimension( long nDim ) const
         return false;
 
     short eType = pFormatter->GetType(maFields[nDim].mnNumFormat);
-    return (eType == NUMBERFORMAT_DATE) || (eType == NUMBERFORMAT_DATETIME);
+    return (eType == css::util::NumberFormat::DATE) || (eType == css::util::NumberFormat::DATETIME);
 }
 
 long ScDPCache::GetDimMemberCount(long nDim) const

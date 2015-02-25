@@ -2337,12 +2337,12 @@ public:
             {
                 short nNumFmtType = pEntry->GetType();
                 /* NOTE: Omitting the check for absence of
-                 * NUMBERFORMAT_TIME would include also date+time formatted
+                 * css::util::NumberFormat::TIME would include also date+time formatted
                  * values of the same day. That may be desired in some
                  * cases, querying all time values of a day, but confusing
                  * in other cases. A user can always setup a standard
                  * filter query for x >= date AND x < date+1 */
-                if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
+                if ((nNumFmtType & css::util::NumberFormat::DATE) && !(nNumFmtType & css::util::NumberFormat::TIME))
                 {
                     // The format is of date type.  Strip off the time
                     // element.
@@ -2871,7 +2871,7 @@ public:
             if (pEntry)
             {
                 short nNumFmtType = pEntry->GetType();
-                if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
+                if (!((nNumFmtType & css::util::NumberFormat::DATE) && !(nNumFmtType & css::util::NumberFormat::TIME)))
                     rItem.meType = ScQueryEntry::ByValue;    // not a date only
             }
             else

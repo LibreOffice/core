@@ -2553,10 +2553,10 @@ bool ScCompiler::IsValue( const OUString& rSym )
     // to serial, because the serial would be wrong if null-date changed.
     // Usually it wouldn't be accepted anyway because the date separator
     // clashed with other separators or operators.
-    if (nType & (NUMBERFORMAT_TIME | NUMBERFORMAT_DATE))
+    if (nType & (css::util::NumberFormat::TIME | css::util::NumberFormat::DATE))
         return false;
 
-    if (nType == NUMBERFORMAT_LOGICAL)
+    if (nType == css::util::NumberFormat::LOGICAL)
     {
         const sal_Unicode* p = aFormula.getStr() + nSrcPos;
         while( *p == ' ' )
@@ -2565,7 +2565,7 @@ bool ScCompiler::IsValue( const OUString& rSym )
             return false;   // Boolean function instead.
     }
 
-    if( nType == NUMBERFORMAT_TEXT )
+    if( nType == css::util::NumberFormat::TEXT )
         // HACK: number too big!
         SetError( errIllegalArgument );
     maRawToken.SetDouble( fVal );
