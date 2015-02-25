@@ -92,13 +92,17 @@ core_constructor_list = [
     "com_sun_star_comp_dba_ORowSet_get_implementation",
 # forms/util/frm.component
     "com_sun_star_comp_forms_FormOperations_get_implementation",
+    "com_sun_star_comp_forms_ODatabaseForm_get_implementation",
+    "com_sun_star_comp_forms_OFormattedFieldWrapper_ForcedFormatted_get_implementation",
+    "com_sun_star_comp_forms_ORichTextModel_get_implementation",
     "com_sun_star_form_OCheckBoxControl_get_implementation",
     "com_sun_star_form_OCheckBoxModel_get_implementation",
     "com_sun_star_form_OComboBoxControl_get_implementation",
     "com_sun_star_form_OComboBoxModel_get_implementation",
     "com_sun_star_form_ODateControl_get_implementation",
     "com_sun_star_form_ODateModel_get_implementation",
-    "com_sun_star_comp_forms_ODatabaseForm_get_implementation",
+    "com_sun_star_form_OEditControl_get_implementation",
+    "com_sun_star_form_OEditModel_get_implementation",
     "com_sun_star_form_OFormsCollection_get_implementation",
 # framework/util/fwk.component
     "com_sun_star_comp_framework_AutoRecovery_get_implementation",
