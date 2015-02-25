@@ -124,7 +124,6 @@ inline bool HAS_PAT(HWPDrawingObject * hdo)
         HAVE_GRADATION(hdo) || HAVE_BITMAP_PATTERN(hdo);
 }
 
-
 static void SetHdoParallRgn(HWPDrawingObject * hdo, int width, int height)
 {
     hdo->property.parall.pt[0].x = 0;
@@ -135,23 +134,23 @@ static void SetHdoParallRgn(HWPDrawingObject * hdo, int width, int height)
     hdo->property.parall.pt[2].y = height;
 }
 
-
 static bool SkipPrivateBlock(int type)
 {
     int n;
 
     if (type == OBJRET_FILE_NO_PRIVATE_BLOCK)
     {
-        n = hmem->read4b();
+        if (!hmem->read4b(n))
+            return false;
         if (hmem->state() || hmem->skipBlock(n) != n)
             return false;
     }
-    n = hmem->read4b();
+    if (!hmem->read4b(n))
+        return false;
     if (hmem->state())
         return false;
     return hmem->skipBlock(n) == n;
 }
-
 
 static int SizeExpected;
 static int SizeRead;
@@ -159,12 +158,12 @@ static int SizeRead;
 static int ReadSizeField(int size)
 {
     SizeExpected = size;
-    SizeRead = hmem->read4b();
+    if (!hmem->read4b(SizeRead))
+        return -1;
     if (hmem->state())
         return -1;
     return SizeRead;
 }
-
 
 static bool SkipUnusedField(void)
 {
@@ -179,62 +178,93 @@ static bool SkipUnusedField(void)
 #define HDOFILE_HAS_NEXT    0x01
 #define HDOFILE_HAS_CHILD   0x02
 
-static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
+static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
 {
     uint size, common_size;
 
-     if( !hmem )
-         return FALSE;
-    size = hmem->read4b();
+    if (!hmem)
+        return false;
+    if (!hmem->read4b(size))
+        return false;
     if (hmem->state())
-    {
-        return FALSE;
-    }
+        return false;
     if (size < HDOFILE_COMMON_SIZE)
-    {
-        return FALSE;
-    }
+        return false;
 
     common_size = HDOFILE_COMMON_SIZE;
-    hdo->type = hmem->read2b();
-    *link_info = sal::static_int_cast<WORD>(hmem->read2b());
-    hdo->offset.x = hmem->read4b();
-    hdo->offset.y = hmem->read4b();
-    hdo->extent.w = hmem->read4b();
-    hdo->extent.h = hmem->read4b();
-    hdo->offset2.x = hmem->read4b();
-    hdo->offset2.y = hmem->read4b();
+    unsigned short tmp16;
+    if (!hmem->read2b(tmp16))
+        return false;
+    hdo->type = tmp16;
+    if (!hmem->read2b(tmp16))
+        return false;
+    *link_info = tmp16;
+    if (!hmem->read4b(hdo->offset.x))
+        return false;
+    if (!hmem->read4b(hdo->offset.y))
+        return false;
+    if (!hmem->read4b(hdo->extent.w))
+        return false;
+    if (!hmem->read4b(hdo->extent.h))
+        return false;
+    if (!hmem->read4b(hdo->offset2.x))
+        return false;
+    if (!hmem->read4b(hdo->offset2.y))
+        return false;
 
     if (hmem->state())
-        return FALSE;
+        return false;
 
-    hdo->vrect.x = hmem->read4b();
-    hdo->vrect.y = hmem->read4b();
-    hdo->vrect.w = hmem->read4b();
-    hdo->vrect.h = hmem->read4b();
+    if (!hmem->read4b(hdo->vrect.x))
+        return false;
+    if (!hmem->read4b(hdo->vrect.y))
+        return false;
+    if (!hmem->read4b(hdo->vrect.w))
+        return false;
+    if (!hmem->read4b(hdo->vrect.h))
+        return false;
 
 // read bare property 44 bytes
-    hdo->property.line_pstyle = hmem->read4b();
-    hdo->property.line_hstyle = hmem->read4b();
-    hdo->property.line_tstyle = hmem->read4b();
-    hdo->property.line_color = hmem->read4b();
-    hdo->property.line_width = (hunit) hmem->read4b();
-    hdo->property.fill_color = hmem->read4b();
-    hdo->property.pattern_type = hmem->read4b();
-    hdo->property.pattern_color = hmem->read4b();
-    hdo->property.hmargin = (hunit) hmem->read4b();
-    hdo->property.vmargin = (hunit) hmem->read4b();
-    hdo->property.flag = hmem->read4b();
-// read ratation property 32 bytes
+    if (!hmem->read4b(hdo->property.line_pstyle))
+        return false;
+    if (!hmem->read4b(hdo->property.line_hstyle))
+        return false;
+    if (!hmem->read4b(hdo->property.line_tstyle))
+        return false;
+    if (!hmem->read4b(hdo->property.line_color))
+        return false;
+    unsigned int tmp32;
+    if (!hmem->read4b(tmp32))
+        return false;
+    hdo->property.line_width = static_cast<hunit>(tmp32);
+    if (!hmem->read4b(hdo->property.fill_color))
+        return false;
+    if (!hmem->read4b(hdo->property.pattern_type))
+        return false;
+    if (!hmem->read4b(hdo->property.pattern_color))
+        return false;
+    if (!hmem->read4b(tmp32))
+        return false;
+    hdo->property.hmargin = static_cast<hunit>(tmp32);
+    if (!hmem->read4b(tmp32))
+        return false;
+    hdo->property.vmargin = static_cast<hunit>(tmp32);
+    if (!hmem->read4b(hdo->property.flag))
+        return false;
+// read rotation property 32 bytes
     if ((size >= common_size + 32)
         && (hdo->property.flag & HWPDO_FLAG_ROTATION))
     {
-        hdo->property.rot_originx = hmem->read4b();
-        hdo->property.rot_originy = hmem->read4b();
-        for (int ii = 0; ii < 3; ii++)
+        if (!hmem->read4b(hdo->property.rot_originx))
+            return false;
+        if (!hmem->read4b(hdo->property.rot_originy))
+            return false;
+        for (int ii = 0; ii < 3; ++ii)
         {
-            hdo->property.parall.pt[ii].x = hmem->read4b();
-            hdo->property.parall.pt[ii].y = hmem->read4b();
+            if (!hmem->read4b(hdo->property.parall.pt[ii].x))
+                return false;
+            if (!hmem->read4b(hdo->property.parall.pt[ii].y))
+                return false;
         }
         common_size += 32;
     }
@@ -245,13 +275,20 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
     if ((size >= common_size + 28) &&
         (hdo->property.flag & HWPDO_FLAG_GRADATION))
     {
-        hdo->property.fromcolor = hmem->read4b();
-        hdo->property.tocolor = hmem->read4b();
-        hdo->property.gstyle = hmem->read4b();
-        hdo->property.angle = hmem->read4b();
-        hdo->property.center_x = hmem->read4b();
-        hdo->property.center_y = hmem->read4b();
-        hdo->property.nstep = hmem->read4b();
+        if (!hmem->read4b(hdo->property.fromcolor))
+            return false;
+        if (!hmem->read4b(hdo->property.tocolor))
+            return false;
+        if (!hmem->read4b(hdo->property.gstyle))
+            return false;
+        if (!hmem->read4b(hdo->property.angle))
+            return false;
+        if (!hmem->read4b(hdo->property.center_x))
+            return false;
+        if (!hmem->read4b(hdo->property.center_y))
+            return false;
+        if (!hmem->read4b(hdo->property.nstep))
+            return false;
         common_size += 28;
     }
 
@@ -259,54 +296,67 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
     if ((size >= common_size + 278) && \
         (hdo->property.flag & HWPDO_FLAG_BITMAP))
     {
-        hdo->property.offset1.x = hmem->read4b();
-        hdo->property.offset1.y = hmem->read4b();
-        hdo->property.offset2.x = hmem->read4b();
-        hdo->property.offset2.y = hmem->read4b();
+        if (!hmem->read4b(hdo->property.offset1.x))
+            return false;
+        if (!hmem->read4b(hdo->property.offset1.y))
+            return false;
+        if (!hmem->read4b(hdo->property.offset2.x))
+            return false;
+        if (!hmem->read4b(hdo->property.offset2.y))
+            return false;
         if (!hmem->readBlock(hdo->property.szPatternFile, 261))
-            return FALSE;
-        hdo->property.pictype = sal::static_int_cast<char>(hmem->read1b());
+            return false;
+        if (!hmem->read1b(hdo->property.pictype))
+            return false;
         common_size += 278;
     }
      if( ( size >= common_size + 3 ) && ( hdo->property.flag & HWPDO_FLAG_WATERMARK ) )
      //if( ( size >= common_size ) && ( hdo->property.flag >> 20 & 0x01 ) )
      {
-          if( size - common_size >= 5 )
-              hmem->skipBlock( 2 );
-         hdo->property.luminance = hmem->read1b();
-         hdo->property.contrast = hmem->read1b();
-         hdo->property.greyscale = hmem->read1b();
-         common_size += 5;
-     }
-    else{
-         hdo->property.luminance = 0;
-         hdo->property.contrast = 0;
-         hdo->property.greyscale = 0;
+        if (size - common_size >= 5)
+            hmem->skipBlock(2);
+        unsigned char tmp8;
+        if (!hmem->read1b(tmp8))
+            return false;
+        hdo->property.luminance = tmp8;
+        if (!hmem->read1b(tmp8))
+            return false;
+        hdo->property.contrast = tmp8;
+        if (!hmem->read1b(tmp8))
+            return false;
+        hdo->property.greyscale = tmp8;
+
+        common_size += 5;
     }
-     hdo->property.pPara = 0L;
+    else
+    {
+        hdo->property.luminance = 0;
+        hdo->property.contrast = 0;
+        hdo->property.greyscale = 0;
+    }
+    hdo->property.pPara = 0L;
 
-     if( ( size > common_size ) && (hdo->property.flag & HWPDO_FLAG_AS_TEXTBOX) )
-     {
-          hmem->skipBlock(8);
-          hdo->property.pPara = LoadParaList();
-          if( hdo->property.pPara )
-                return TRUE;
-          else
-                return FALSE;
+    if( ( size > common_size ) && (hdo->property.flag & HWPDO_FLAG_AS_TEXTBOX) )
+    {
+        hmem->skipBlock(8);
+        hdo->property.pPara = LoadParaList();
+        if( hdo->property.pPara )
+            return true;
+        else
+            return false;
      }
 
-     if( size <= common_size )
-          return TRUE;
+     if (size <= common_size)
+          return true;
      return hmem->skipBlock(size - common_size ) != 0;
 }
-
 
 static HWPDrawingObject *LoadDrawingObject(void)
 {
     HWPDrawingObject *hdo, *head, *prev;
     int res;
 
-    WORD link_info;
+    unsigned short link_info;
 
     head = prev = NULL;
     do
@@ -365,6 +415,11 @@ static HWPDrawingObject *LoadDrawingObject(void)
 
     if (hdo != NULL)
     {
+        if (hdo->type < 0 || hdo->type >= HWPDO_NITEMS)
+        {
+            hdo->type = HWPDO_RECT;
+        }
+
         HWPDOFunc(hdo, OBJFUNC_FREE, NULL, 0);
         delete hdo;
     }
@@ -380,17 +435,25 @@ static HWPDrawingObject *LoadDrawingObject(void)
 
 static bool LoadDrawingObjectBlock(Picture * pic)
 {
-    int size = hmem->read4b();
+    int size;
+    if (!hmem->read4b(size))
+        return false;
 
     if (hmem->state() || size < HDOFILE_HEADER_SIZE)
         return false;
 
-    pic->picinfo.picdraw.zorder = hmem->read4b();
-    pic->picinfo.picdraw.mbrcnt = hmem->read4b();
-    pic->picinfo.picdraw.vrect.x = hmem->read4b();
-    pic->picinfo.picdraw.vrect.y = hmem->read4b();
-    pic->picinfo.picdraw.vrect.w = hmem->read4b();
-    pic->picinfo.picdraw.vrect.h = hmem->read4b();
+    if (!hmem->read4b(pic->picinfo.picdraw.zorder))
+        return false;
+    if (!hmem->read4b(pic->picinfo.picdraw.mbrcnt))
+        return false;
+    if (!hmem->read4b(pic->picinfo.picdraw.vrect.x))
+        return false;
+    if (!hmem->read4b(pic->picinfo.picdraw.vrect.y))
+        return false;
+    if (!hmem->read4b(pic->picinfo.picdraw.vrect.w))
+        return false;
+    if (!hmem->read4b(pic->picinfo.picdraw.vrect.h))
+        return false;
 
     if (size > HDOFILE_HEADER_SIZE &&
         !hmem->skipBlock(size - HDOFILE_HEADER_SIZE))
@@ -402,9 +465,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
     return true;
 }
 
-
 // object manipulation function
-
 static int
 HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
 {
@@ -412,7 +473,6 @@ HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
         return OBJRET_FILE_NO_PRIVATE_BLOCK;
     return OBJRET_FILE_OK;
 }
-
 
 static int
 HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
@@ -423,7 +483,8 @@ HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
         case OBJFUNC_LOAD:
             if (ReadSizeField(4) < 4)
                 return OBJRET_FILE_ERROR;
-            hdo->u.line_arc.flip = hmem->read4b();
+            if (!hmem->read4b(hdo->u.line_arc.flip))
+                return OBJRET_FILE_ERROR;
             if (hmem->state())
                 return OBJRET_FILE_ERROR;
             if (!SkipUnusedField())
@@ -466,11 +527,14 @@ int cmd, void *argp, int argv)
         case OBJFUNC_LOAD:
             if (ReadSizeField(16) < 16)
                 return OBJRET_FILE_ERROR;
-            hdo->u.arc.radial[0].x = hmem->read4b();
-            hdo->u.arc.radial[0].y = hmem->read4b();
-            hdo->u.arc.radial[1].x = hmem->read4b();
-            hdo->u.arc.radial[1].y = hmem->read4b();
-
+            if (!hmem->read4b(hdo->u.arc.radial[0].x))
+                return OBJRET_FILE_ERROR;
+            if (!hmem->read4b(hdo->u.arc.radial[0].y))
+                return OBJRET_FILE_ERROR;
+            if (!hmem->read4b(hdo->u.arc.radial[1].x))
+                return OBJRET_FILE_ERROR;
+            if (!hmem->read4b(hdo->u.arc.radial[1].y))
+                return OBJRET_FILE_ERROR;
             if (ReadSizeField(0) < 0)
                 return OBJRET_FILE_ERROR;
             break;
@@ -491,7 +555,8 @@ HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
         case OBJFUNC_LOAD:
             if (ReadSizeField(4) < 4)
                 return OBJRET_FILE_ERROR;
-            hdo->u.line_arc.flip = hmem->read4b();
+            if (!hmem->read4b(hdo->u.line_arc.flip))
+                return OBJRET_FILE_ERROR;
             if (hmem->state())
                 return OBJRET_FILE_ERROR;
             if (!SkipUnusedField())
@@ -532,7 +597,8 @@ int cmd, void *argp, int argv)
             hdo->u.freeform.pt = 0;
             if (ReadSizeField(4) < 4)
                 return OBJRET_FILE_ERROR;
-            hdo->u.freeform.npt = hmem->read4b();
+            if (!hmem->read4b(hdo->u.freeform.npt))
+                return OBJRET_FILE_ERROR;
             if (hmem->state())
                 return OBJRET_FILE_ERROR;
             if (!SkipUnusedField())
@@ -551,11 +617,16 @@ int cmd, void *argp, int argv)
                     hdo->u.freeform.npt = 0;
                     return OBJRET_FILE_ERROR;
                 }
-                for (int ii = 0; ii < hdo->u.freeform.npt; ii++)
+                for (int ii = 0; ii < hdo->u.freeform.npt; ++ii)
                 {
-                    hdo->u.freeform.pt[ii].x = hmem->read4b();
-                    hdo->u.freeform.pt[ii].y = hmem->read4b();
+                    bool bFailure = false;
+                    if (!hmem->read4b(hdo->u.freeform.pt[ii].x))
+                        bFailure = true;
+                    if (!hmem->read4b(hdo->u.freeform.pt[ii].y))
+                        bFailure = true;
                     if (hmem->state())
+                        bFailure = true;
+                    if (bFailure)
                     {
                         delete[]hdo->u.freeform.pt;
                         hdo->u.freeform.npt = 0;
