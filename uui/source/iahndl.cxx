@@ -26,6 +26,7 @@
 #include <com/sun/star/configuration/backend/StratumCreationException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/document/BrokenPackageRequest.hpp>
+#include <com/sun/star/document/ExoticFileLoadException.hpp>
 #include <com/sun/star/task/DocumentMacroConfirmationRequest.hpp>
 #include <com/sun/star/java/WrongJavaVersionException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -426,6 +427,30 @@ UUIInteractionHelper::handleRequest_impl(
             }
             handleErrorHandlerRequest( task::InteractionClassification_WARNING,
                                        ERRCODE_UUI_IO_MODULESIZEEXCEEDED,
+                                       aArguments,
+                                       rRequest->getContinuations(),
+                                       bObtainErrorStringOnly,
+                                       bHasErrorString,
+                                       rErrorString);
+            return true;
+        }
+
+        document::ExoticFileLoadException aExoticFileLoadException;
+        if (aAnyRequest >>= aExoticFileLoadException)
+        {
+            std::vector< OUString > aArguments;
+
+            if( !aExoticFileLoadException.URL.isEmpty() )
+            {
+                aArguments.push_back( aExoticFileLoadException.URL );
+            }
+            if( !aExoticFileLoadException.FilterUIName.isEmpty() )
+            {
+                aArguments.push_back( aExoticFileLoadException.FilterUIName );
+            }
+
+            handleErrorHandlerRequest( task::InteractionClassification_WARNING,
+                                       ERRCODE_UUI_IO_EXOTICFILEFORMAT,
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
