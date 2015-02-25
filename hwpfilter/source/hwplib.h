@@ -40,7 +40,7 @@ typedef unsigned short  BOOL;
 #endif                                            /* _BOOL_T_ */
 typedef unsigned short  WORD;
 typedef int     SIZE;
-typedef unsigned long   DWORD;
+typedef unsigned int    DWORD;
 typedef long        LONG;
 #endif                                            /* WIN32 */
 
@@ -49,7 +49,6 @@ typedef long        LONG;
 typedef unsigned char   uchar;
 typedef unsigned short  ushort;
 typedef unsigned int    uint;
-typedef unsigned long   ulong;
 #endif                                            /* _UTYPE_ */
 
 typedef ::std::basic_string<hchar> hchar_string;
