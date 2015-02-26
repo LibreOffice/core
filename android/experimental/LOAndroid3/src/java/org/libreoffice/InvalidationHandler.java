@@ -141,19 +141,16 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateCursor(String payload) {
-        if (mState == OverlayState.CURSOR) {
-            RectF cursorRectangle = convertPayloadToRectangle(payload);
-            if (cursorRectangle != null) {
-                TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-                textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, createRectangleUnderSelection(cursorRectangle));
-                textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
-                textSelection.hideHandle(TextSelectionHandle.HandleType.START);
-                textSelection.hideHandle(TextSelectionHandle.HandleType.END);
-
-                TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
-                textCursorLayer.positionCursor(cursorRectangle);
-                textCursorLayer.showCursor();
+        RectF cursorRectangle = convertPayloadToRectangle(payload);
+        if (cursorRectangle != null) {
+            if (mState == OverlayState.CURSOR) {
+                mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, createRectangleUnderSelection(cursorRectangle));
+                mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+                mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
+                mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
             }
+            mTextCursorLayer.positionCursor(cursorRectangle);
+            mTextCursorLayer.showCursor();
         }
     }
 
