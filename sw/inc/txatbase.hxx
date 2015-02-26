@@ -119,6 +119,7 @@ public:
     inline const SwFmtRuby              &GetRuby() const;
     inline const SwFmtMeta              &GetMeta() const;
 
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwTxtAttrEnd : public virtual SwTxtAttr

@@ -283,49 +283,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
         writer.startElement("hints");
         const SwpHints& rHints = GetSwpHints();
         for (size_t i = 0; i < rHints.Count(); ++i)
-        {
-            writer.startElement("hint");
-            const SwTxtAttr* pHint = rHints.GetTextHint(i);
-
-            if (pHint->GetStart())
-                writer.writeFormatAttribute("start", TMP_FORMAT, pHint->GetStart());
-            if (pHint->End())
-                writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->End());
-            writer.writeFormatAttribute("whichId", TMP_FORMAT, pHint->Which());
-
-            const char* pWhich = 0;
-            boost::optional<OString> oValue;
-            switch (pHint->Which())
-            {
-                case RES_TXTATR_AUTOFMT:
-                    pWhich = "autofmt";
-                    break;
-                case RES_TXTATR_ANNOTATION:
-                    pWhich = "annotation";
-                    break;
-                case RES_TXTATR_FLYCNT:
-                    pWhich = "fly content";
-                    break;
-                case RES_TXTATR_CHARFMT:
-                {
-                    pWhich = "character format";
-                    if (SwCharFmt* pCharFmt = pHint->GetCharFmt().GetCharFmt())
-                        oValue = "name: " + OUStringToOString(pCharFmt->GetName(), RTL_TEXTENCODING_UTF8);
-                    break;
-                }
-                default:
-                    break;
-            }
-            if (pWhich)
-                writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
-            if (oValue)
-                writer.writeFormatAttribute("value", "%s", BAD_CAST(oValue->getStr()));
-
-            if (pHint->Which() == RES_TXTATR_AUTOFMT)
-                pHint->GetAutoFmt().dumpAsXml(writer);
-
-            writer.endElement();
-        }
+            rHints.GetTextHint(i)->dumpAsXml(w);
         writer.endElement();
     }
     if (GetNumRule())

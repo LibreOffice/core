@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/optional.hpp>
+#include <libxml/xmlwriter.h>
 #include <svl/itempool.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>
@@ -71,6 +73,47 @@ SwTxtAttrEnd::SwTxtAttrEnd( SfxPoolItem& rAttr,
 sal_Int32* SwTxtAttrEnd::GetEnd()
 {
     return & m_nEnd;
+}
+
+void SwTxtAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtAttr"));
+
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("start"), BAD_CAST(OString::number(m_nStart).getStr()));
+    if (End())
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"), BAD_CAST(OString::number(*End()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    const char* pWhich = 0;
+    boost::optional<OString> oValue;
+    switch (Which())
+    {
+    case RES_TXTATR_AUTOFMT:
+        pWhich = "autofmt";
+        break;
+    case RES_TXTATR_ANNOTATION:
+        pWhich = "annotation";
+        break;
+    case RES_TXTATR_FLYCNT:
+        pWhich = "fly content";
+        break;
+    case RES_TXTATR_CHARFMT:
+        {
+            pWhich = "character format";
+            if (SwCharFmt* pCharFmt = GetCharFmt().GetCharFmt())
+                oValue = "name: " + OUStringToOString(pCharFmt->GetName(), RTL_TEXTENCODING_UTF8);
+            break;
+        }
+    default:
+        break;
+    }
+    if (pWhich)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(pWhich));
+    if (oValue)
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(oValue->getStr()));
+    if (Which() == RES_TXTATR_AUTOFMT)
+        GetAutoFmt().dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
