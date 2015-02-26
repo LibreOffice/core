@@ -452,7 +452,7 @@ short ActualizeProgress::Execute()
     if ( pIdle )
     {
         pIdle->SetIdleHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
-        pIdle->SetPriority( IdlePriority::LOWEST );
+        pIdle->SetPriority( SchedulerPriority::LOWEST );
         pIdle->Start();
     }
 

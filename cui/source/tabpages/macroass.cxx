@@ -192,7 +192,7 @@ void _SfxMacroTabPage::LaunchFillGroup()
     if (!mpImpl->maFillGroupIdle.GetIdleHdl().IsSet())
     {
         mpImpl->maFillGroupIdle.SetIdleHdl( STATIC_LINK( this, _SfxMacroTabPage, TimeOut_Impl ) );
-        mpImpl->maFillGroupIdle.SetPriority( IdlePriority::HIGHEST );
+        mpImpl->maFillGroupIdle.SetPriority( SchedulerPriority::HIGHEST );
         mpImpl->maFillGroupIdle.Start();
     }
 }

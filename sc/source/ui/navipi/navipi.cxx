@@ -657,7 +657,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, vcl
     aWndScenarios.SetPosPixel( aLbEntries.GetPosPixel() );
 
     aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
-    aContentIdle.SetPriority( IdlePriority::LOWEST );
+    aContentIdle.SetPriority( SchedulerPriority::LOWEST );
 
     FreeResource();
 

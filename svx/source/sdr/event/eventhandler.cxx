@@ -121,7 +121,7 @@ namespace sdr
 {
     namespace event
     {
-        TimerEventHandler::TimerEventHandler(IdlePriority ePriority)
+        TimerEventHandler::TimerEventHandler(SchedulerPriority ePriority)
         {
             SetPriority(ePriority);
             Stop();

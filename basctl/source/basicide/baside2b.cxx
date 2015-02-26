@@ -969,7 +969,7 @@ void EditorWindow::CreateEditEngine()
 
     ImplSetFont();
 
-    aSyntaxIdle.SetPriority( IdlePriority::LOWER );
+    aSyntaxIdle.SetPriority( SchedulerPriority::LOWER );
     aSyntaxIdle.SetIdleHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;

@@ -365,7 +365,7 @@ void SvxSearchDialog::Construct_Impl()
 {
     // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl();
-    pImpl->aSelectionIdle.SetPriority( IdlePriority::LOWEST );
+    pImpl->aSelectionIdle.SetPriority( SchedulerPriority::LOWEST );
     pImpl->aSelectionIdle.SetIdleHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
     EnableControls_Impl( 0 );

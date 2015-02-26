@@ -84,7 +84,7 @@ PagePrimitiveExtractor::PagePrimitiveExtractor(
     setPreviewRenderer(true);
 
     // init timer
-    SetPriority(IdlePriority::HIGH);
+    SetPriority(SchedulerPriority::HIGH);
     Stop();
 }
 

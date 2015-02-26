@@ -576,7 +576,7 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
     }
     ::comphelper::decrement(m_refCount);
 
-    m_aTabActivationIdle.SetPriority( IdlePriority::LOWEST );
+    m_aTabActivationIdle.SetPriority( SchedulerPriority::LOWEST );
     m_aTabActivationIdle.SetIdleHdl( LINK( this, FormController, OnActivateTabOrder ) );
 
     m_aFeatureInvalidationTimer.SetTimeout( 200 );

@@ -1028,10 +1028,10 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         mpWindowImpl->mpFrameData->mbSysObjFocus      = false;
         if (!ImplDoTiledRendering())
         {
-            mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( IdlePriority::REPAINT );
+            mpWindowImpl->mpFrameData->maPaintIdle.SetPriority( SchedulerPriority::REPAINT );
             mpWindowImpl->mpFrameData->maPaintIdle.SetIdleHdl( LINK( this, Window, ImplHandlePaintHdl ) );
         }
-        mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( IdlePriority::RESIZE );
+        mpWindowImpl->mpFrameData->maResizeIdle.SetPriority( SchedulerPriority::RESIZE );
         mpWindowImpl->mpFrameData->maResizeIdle.SetIdleHdl( LINK( this, Window, ImplHandleResizeTimerHdl ) );
         mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = false;
 

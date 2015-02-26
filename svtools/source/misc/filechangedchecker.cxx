@@ -34,7 +34,7 @@ void FileChangedChecker::resetTimer()
         mIdle.Start();
 
     // Set lowest Priority
-    mIdle.SetPriority(IdlePriority::LOWEST);
+    mIdle.SetPriority(SchedulerPriority::LOWEST);
 }
 
 bool FileChangedChecker::getCurrentModTime(TimeValue& o_rValue) const

@@ -251,7 +251,7 @@ struct SvxCharNamePage_Impl
         m_bInSearchMode ( false )
 
     {
-        m_aUpdateIdle.SetPriority( IdlePriority::LOWEST );
+        m_aUpdateIdle.SetPriority( SchedulerPriority::LOWEST );
     }
 
     ~SvxCharNamePage_Impl()

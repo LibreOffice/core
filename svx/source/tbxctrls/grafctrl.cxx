@@ -139,7 +139,7 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
         SetSpinSize( 1 );
     }
 
-    maIdle.SetPriority( IdlePriority::LOW );
+    maIdle.SetPriority( SchedulerPriority::LOW );
     maIdle.SetIdleHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
 }
 

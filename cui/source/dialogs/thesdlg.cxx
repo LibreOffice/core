@@ -61,7 +61,7 @@ LookUpComboBox::LookUpComboBox(vcl::Window *pParent)
     EnableAutoSize(true);
 
     m_aModifyIdle.SetIdleHdl( LINK( this, LookUpComboBox, ModifyTimer_Hdl ) );
-    m_aModifyIdle.SetPriority( IdlePriority::LOWEST );
+    m_aModifyIdle.SetPriority( SchedulerPriority::LOWEST );
 
     EnableAutocomplete( false );
 }

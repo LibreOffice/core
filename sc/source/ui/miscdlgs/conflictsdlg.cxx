@@ -420,7 +420,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     m_pLbConflicts->SetSelectionMode( MULTIPLE_SELECTION );
     m_pLbConflicts->SetHighlightRange();
 
-    maSelectionIdle.SetPriority( IdlePriority::LOW );
+    maSelectionIdle.SetPriority( SchedulerPriority::LOW );
     maSelectionIdle.SetIdleHdl( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
 
     m_pLbConflicts->SetSelectHdl( LINK( this, ScConflictsDlg, SelectHandle ) );

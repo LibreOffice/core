@@ -331,7 +331,7 @@ ScExtIButton::ScExtIButton(vcl::Window* pParent, WinBits nBits )
     : ImageButton(pParent,nBits), pPopupMenu(NULL)
 {
     nSelected=0;
-    aIdle.SetPriority(IdlePriority::LOWEST);
+    aIdle.SetPriority(SchedulerPriority::LOWEST);
     SetDropDown(PUSHBUTTON_DROPDOWN_TOOLBOX);
 }
 

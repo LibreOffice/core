@@ -233,7 +233,7 @@ void SvInplaceEdit2::LoseFocus()
     )
     {
         bCanceled = false;
-        aIdle.SetPriority(IdlePriority::REPAINT);
+        aIdle.SetPriority(SchedulerPriority::REPAINT);
         aIdle.SetIdleHdl(LINK(this,SvInplaceEdit2,Timeout_Impl));
         aIdle.Start();
     }

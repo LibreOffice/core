@@ -191,7 +191,7 @@ void SdrPaintView::ImpClearVars()
     pDefaultStyleSheet=NULL;
     bSomeObjChgdFlag=false;
     nGraphicManagerDrawMode = GRFMGR_DRAW_STANDARD;
-    aComeBackIdle.SetPriority(IdlePriority::REPAINT);
+    aComeBackIdle.SetPriority(SchedulerPriority::REPAINT);
     aComeBackIdle.SetIdleHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
 
     if (pMod)

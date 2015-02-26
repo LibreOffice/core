@@ -560,7 +560,7 @@ GL3DBarChart::GL3DBarChart(
         {
             mbAutoFly = atoi(aAutoFly);
         }
-        maIdle.SetPriority(IdlePriority::REPAINT);
+        maIdle.SetPriority(SchedulerPriority::REPAINT);
         maIdle.SetIdleHdl(LINK(this, GL3DBarChart, UpdateTimerHdl));
         maIdle.Start();
         osl_getSystemTime(&maFPSRenderStartTime);
