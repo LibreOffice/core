@@ -27,12 +27,14 @@ public:
     void testMultiDispose();
     void testIsolatedWidgets();
     void testParentedWidgets();
+    void testChildDispose();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
     CPPUNIT_TEST(testMultiDispose);
     CPPUNIT_TEST(testIsolatedWidgets);
     CPPUNIT_TEST(testParentedWidgets);
+    CPPUNIT_TEST(testChildDispose);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -92,6 +94,27 @@ void LifecycleTest::testParentedWidgets()
     CPPUNIT_ASSERT(xWin.get() != NULL);
     xWin->Show();
     testWidgets(xWin);
+}
+
+class DisposableChild : public vcl::Window
+{
+public:
+    DisposableChild(vcl::Window *pParent) : vcl::Window(pParent) {}
+    virtual ~DisposableChild()
+    {
+        dispose();
+    }
+};
+
+void LifecycleTest::testChildDispose()
+{
+    VclPtr<WorkWindow> xWin(new WorkWindow((vcl::Window *)NULL,
+                                                 WB_APP|WB_STDWORK));
+    CPPUNIT_ASSERT(xWin.get() != NULL);
+    VclPtr<DisposableChild> xChild(new DisposableChild(xWin.get()));
+    xWin->Show();
+    xChild->dispose();
+    xWin->dispose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);
