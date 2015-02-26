@@ -513,7 +513,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             aSet.Put(makeSdrTextAutoGrowWidthItem(true));
             aSet.Put(makeSdrTextAutoGrowHeightItem(false));
 
-            // Set defaults for vertical klick-n'drag text object, pool defaults are:
+            // Set defaults for vertical click-n'drag text object, pool defaults are:
             // SdrTextVertAdjustItem: SDRTEXTVERTADJUST_TOP
             // SdrTextHorzAdjustItem: SDRTEXTHORZADJUST_BLOCK
             // Analog to that:
@@ -796,10 +796,10 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 {
                     // Here, all items which need to be different from pool default need to be set
                     // again on the newly created text object.
-                    // Since this is a simple klick text object, it is first created, then SetVertical()
+                    // Since this is a simple click text object, it is first created, then SetVertical()
                     // is used, then ImpSetAttributesForNewTextObject is called and then the object is
                     // deleted again since not the minimum drag distance was travelled. Then, a new
-                    // klick text object is created and thus all that stuff needs to be set again here.
+                    // click text object is created and thus all that stuff needs to be set again here.
 
                     // Before using the new object the vertical writing mode
                     // needs to be set. This is done here at the OutlinerParaObject

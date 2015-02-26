@@ -310,9 +310,9 @@ public class RecoveryTest extends ComplexTestCase {
       * office is started after a crash. It waits until the "next>>" button is enabled
       * and click it then to continue.
       * @param expectedDocumentCount the amount of documents which must be displayed in the recovery dialog
-      * @param recover If the documenst should be recoverd this variable must be true. If it is fasle
-      * the recovery process was stopped and the button cancel was klicked.
-      * @param cancel If the recovery is fifnished, this parameter desicdes to klick the "Next" button
+      * @param recover If the document should be recovered this variable must be true. If it is false
+      * the recovery process was stopped and the button cancel was clicked.
+      * @param cancel If the recovery is finished, this parameter decides to click the "Next" button
       * or the click cancel. If the value is true, the cancel button was clicked.
       */
     private void handleRecoveryDialogAtRestart(int expectedDocumentCount, boolean recover, boolean cancel){

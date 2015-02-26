@@ -454,10 +454,10 @@ public class EventTest {
             }
         }
         /**
-         * This method cklicks into the middel of a document. It uses Accessibility
+         * This method clicks into the middle of a document. It uses Accessibility
          * to get the document and query for its position and its range to calculate
          * the middle. This values was used for <CODE>Robot</CODE> Class. This
-         * Robot class is able to move the mouse and to cklick a mouse button
+         * Robot class is able to move the mouse and to click a mouse button
          * @see java.awt.Robot
         */
         private void clickIntoDoc(){
@@ -484,7 +484,7 @@ public class EventTest {
                     Robot rob = new Robot();
                     int x = point.X + (rect.Width / 2);
                     int y = point.Y + (rect.Height / 2);
-                    System.out.println("try to klick into the middle of the document");
+                    System.out.println("try to click into the middle of the document");
                     rob.mouseMove(x, y);
                     rob.mousePress(InputEvent.BUTTON1_MASK);
                     rob.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -520,7 +520,7 @@ public class EventTest {
     */
     private interface EventTriggerType{
 
-        /** klick the mouse into the scroll bar*/
+        /** click the mouse into the scroll bar*/
         int MOUSE_KLICK_INTO_DOC = 1;
 
         /** write some text into a spread sheet*/

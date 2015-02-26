@@ -798,7 +798,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     switch (Just) {
         case THJustLeft: break;                                // left
         case THJustCenter: {
-            BoxRest=BoxRest /2;                                // middel
+            BoxRest=BoxRest /2;                                // middle
             for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
         case THJustRight: {                                    // right

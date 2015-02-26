@@ -859,7 +859,7 @@ void TabBar::MouseMove( const MouseEvent& rMEvt )
 
 void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // Only terminate EditModus and do not execute Klick
+    // Only terminate EditModus and do not execute click
     // if clicked inside our window,
     if ( IsInEditMode() )
     {

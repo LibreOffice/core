@@ -298,7 +298,7 @@ public class CheckContextMenuInterceptor
         point = window.getLocationOnScreen();
         Rectangle rect = window.getBounds();
 
-        System.out.println("klick mouse button...");
+        System.out.println("click mouse button...");
         try
         {
             Robot rob = new Robot();

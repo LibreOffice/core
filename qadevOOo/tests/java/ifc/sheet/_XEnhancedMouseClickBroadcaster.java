@@ -88,7 +88,7 @@ public class _XEnhancedMouseClickBroadcaster extends MultiMethodTest {
         Point point = window.getLocationOnScreen();
         Rectangle rect = window.getBounds();
 
-        log.println("klick mouse button...");
+        log.println("click mouse button...");
         try {
             Robot rob = new Robot();
             int x = point.X + (rect.Width / 2)+50;

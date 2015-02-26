@@ -174,7 +174,7 @@ public class _XUserInputInterception extends MultiMethodTest {
     }
 
     /**
-     * This test adds two different mouse klick listener to the object. <p>
+     * This test adds two different mouse click listener to the object. <p>
      *
      * Has <b> OK </b> if no exception is thrown.
      */
@@ -194,7 +194,7 @@ public class _XUserInputInterception extends MultiMethodTest {
 
     /**
      *  The test requires <CODE>addMouseClickHandler()</CODE> which adds two key listener.
-     * Then one of them will be removed. In a second thread a mouse klick event is released
+     * Then one of them will be removed. In a second thread a mouse click event is released
      * by the <CODE>robot</CODE> class.<p>
      * Has <b> OK </b> status if only one of the listener are triggered. <p>
      * The following method tests are to be completed successfully before :
@@ -452,10 +452,10 @@ public class _XUserInputInterception extends MultiMethodTest {
             }
         }
         /**
-         * This method cklicks into the middel of a document. It uses Accessibility
+         * This method clicks into the middle of a document. It uses Accessibility
          * to get the document and query for its position and its range to calculate
          * the middle. This values was used for <CODE>Robot</CODE> Class. This
-         * Robot class is able to move the mouse and to cklick a mouse button
+         * Robot class is able to move the mouse and to click a mouse button
          * @see java.awt.Robot
         */
         private void clickIntoDoc(){
@@ -483,7 +483,7 @@ public class _XUserInputInterception extends MultiMethodTest {
                     Robot rob = new Robot();
                     int x = point.X + (rect.Width / 2);
                     int y = point.Y + (rect.Height / 2);
-                    log.println("try to klick into the middle of the document");
+                    log.println("try to click into the middle of the document");
                     rob.mouseMove(x, y);
                     rob.mousePress(InputEvent.BUTTON1_MASK);
                     rob.mouseRelease(InputEvent.BUTTON1_MASK);
@@ -519,7 +519,7 @@ public class _XUserInputInterception extends MultiMethodTest {
     */
     private interface EventTriggerType{
 
-        /** klick the mouse into the scroll bar*/
+        /** click the mouse into the scroll bar*/
         int MOUSE_KLICK_INTO_DOC = 1;
 
         /** write some text into a spread sheet*/

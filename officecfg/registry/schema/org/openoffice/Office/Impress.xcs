@@ -655,7 +655,7 @@
       <group oor:name="DefaultObjectSize">
         <!-- OldPath: -->
         <!-- OldLocation: -->
-        <!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Klick -->
+        <!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Click -->
         <info>
           <desc>Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
           <label>Default Object Size</label>
