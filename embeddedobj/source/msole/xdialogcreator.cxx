@@ -104,28 +104,6 @@ uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_In
 }
 
 
-uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.MSOLEObjectSystemCreator";
-    aRet[1] = "com.sun.star.comp.embed.MSOLEObjectSystemCreator";
-    return aRet;
-}
-
-
-OUString SAL_CALL MSOLEDialogObjectCreator::impl_staticGetImplementationName()
-{
-    return OUString("com.sun.star.comp.embed.MSOLEObjectSystemCreator");
-}
-
-
-uno::Reference< uno::XInterface > SAL_CALL MSOLEDialogObjectCreator::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new MSOLEDialogObjectCreator( xServiceManager ) );
-}
-
-
 embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDialog(
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
@@ -351,5 +329,15 @@ uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedService
 {
     return impl_staticGetSupportedServiceNames();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_MSOLEObjectSystemCreator_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
+    return cppu::acquire(new MSOLEObjectSystemCreator(xSM));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

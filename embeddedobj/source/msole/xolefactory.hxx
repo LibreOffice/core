@@ -42,15 +42,6 @@ public:
         OSL_ENSURE( xFactory.is(), "No service manager is provided!\n" );
     }
 
-    static ::com::sun::star::uno::Sequence< OUString > SAL_CALL impl_staticGetSupportedServiceNames();
-
-    static OUString SAL_CALL impl_staticGetImplementationName();
-
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
-
-
     // XEmbedObjectCreator
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceInitNew( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID, const OUString& aClassName, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceInitFromEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage, const OUString& sEntName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMedDescr, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
