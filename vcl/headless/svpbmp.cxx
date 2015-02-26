@@ -185,6 +185,15 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( BitmapAccessMode )
                 nBitCount = 24;
                 pBuf->mnFormat = BMP_FORMAT_24BIT_TC_BGR;
                 break;
+            case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
+                nBitCount = 32;
+                pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
+#ifdef OSL_BIGENDIAN
+                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
+#else
+                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+#endif
+                break;
             case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
@@ -389,6 +398,7 @@ sal_uInt32 SvpSalBitmap::getBitCountFromScanlineFormat( basebmp::Format nFormat 
         case FORMAT_TWENTYFOUR_BIT_TC_MASK:
             nBitCount = 24;
             break;
+        case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
         case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
         case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
         case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
