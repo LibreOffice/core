@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
@@ -204,6 +205,22 @@ public class LOKitThread extends Thread {
             case LOEvent.TILE_REEVALUATION_REQUEST:
                 tileReevaluationRequest(event.mComposedTileLayer);
                 break;
+            case LOEvent.CHANGE_HANDLE_POSITION:
+                changeHandlePosition(event.mHandleType, event.mDocumentCoordinate);
+                break;
+        }
+    }
+
+    private void changeHandlePosition(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
+        if (handleType == TextSelectionHandle.HandleType.MIDDLE) {
+            LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
+            mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.CURSOR);
+            mTileProvider.mouseButtonDown(documentCoordinate, 1);
+            mTileProvider.mouseButtonUp(documentCoordinate, 1);
+        } else if (handleType == TextSelectionHandle.HandleType.START) {
+            mTileProvider.setTextSelectionStart(documentCoordinate);
+        } else if (handleType == TextSelectionHandle.HandleType.END) {
+            mTileProvider.setTextSelectionEnd(documentCoordinate);
         }
     }
 
