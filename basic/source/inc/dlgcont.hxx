@@ -91,9 +91,6 @@ public:
     // XLibraryQueryExecutable
     virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    // Service
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static();
-    static OUString getImplementationName_static();
 };
 
 

@@ -32,7 +32,6 @@
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/document/GraphicObjectResolver.hpp>
 #include "dlgcont.hxx"
-#include "sbmodule.hxx"
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <osl/mutex.hxx>
@@ -451,15 +450,10 @@ SfxDialogLibraryContainer:: HasExecutableCode( const OUString& /*Library*/ ) thr
 
 OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( ) throw (RuntimeException, std::exception)
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.comp.sfx2.DialogLibraryContainer");
 }
 
 Sequence< OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( ) throw (RuntimeException, std::exception)
-{
-    return getSupportedServiceNames_static();
-}
-
-Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
     aServiceNames[0] = "com.sun.star.script.DocumentDialogLibraryContainer";
@@ -467,12 +461,6 @@ Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames_static(
     aServiceNames[1] = "com.sun.star.script.DialogLibraryContainer";
     return aServiceNames;
 }
-
-OUString SfxDialogLibraryContainer::getImplementationName_static()
-{
-    return OUString("com.sun.star.comp.sfx2.DialogLibraryContainer");
-}
-
 
 // Implementation class SfxDialogLibrary
 
