@@ -216,7 +216,8 @@ void SvtIconChoiceCtrl::GetFocus()
 
 void SvtIconChoiceCtrl::LoseFocus()
 {
-    _pImp->LoseFocus();
+    if (_pImp)
+        _pImp->LoseFocus();
     Control::LoseFocus();
 }
 

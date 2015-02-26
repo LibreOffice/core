@@ -214,10 +214,17 @@ OApplicationView::~OApplicationView()
 
 void OApplicationView::dispose()
 {
-    stopComponentListening(m_xObject);
-    m_pWin->Hide();
-    boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
-    m_pWin = NULL;
+    if (m_xObject.is())
+    {
+        stopComponentListening(m_xObject);
+        m_xObject.clear();
+    }
+    if (m_pWin)
+    {
+        m_pWin->Hide();
+        boost::scoped_ptr<vcl::Window> aTemp(m_pWin);
+        m_pWin = NULL;
+    }
     ODataView::dispose();
 }
 

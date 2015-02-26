@@ -86,6 +86,7 @@ namespace dbaui
     {
         m_rController.release();
         m_aSeparator.disposeAndClear();
+        m_pAccel.reset();
         vcl::Window::dispose();
     }
 
