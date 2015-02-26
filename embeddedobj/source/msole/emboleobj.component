@@ -19,7 +19,8 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="emboleobj" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.embed.OLEEmbeddedObjectFactory">
+    <implementation name="com.sun.star.comp.embed.OLEEmbeddedObjectFactory"
+        constructor="com_sun_star_comp_embed_OLEEmbeddedObjectFactory_get_implementation">
     <service name="com.sun.star.comp.embed.OLEEmbeddedObjectFactory"/>
     <service name="com.sun.star.embed.OLEEmbeddedObjectFactory"/>
   </implementation>
