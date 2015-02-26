@@ -448,16 +448,29 @@ public:
             sal_uInt16 nType,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::xml::sax::XAttributeList > & rFrameAttrList );
+    XMLTextFrameContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& rAttrList,
+        css::text::TextContentAnchorType eAnchorType,
+        sal_uInt16 nType,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& rFrameAttrList );
     virtual ~XMLTextFrameContext_Impl();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     virtual void Characters( const OUString& rChars ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const OUString& rLocalName,
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     void SetHyperlink( const OUString& rHRef,
                        const OUString& rName,
@@ -1119,6 +1132,41 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
     Create( true );
 }
 
+XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& rAttrList,
+    TextContentAnchorType eATyp,
+    sal_uInt16 nNewType,
+    const Reference< XFastAttributeList >& rFrameAttrList )
+:   SvXMLImportContext( rImport )
+,   mbListContextPushed( false )
+,   sWidth("Width")
+,   sWidthType("WidthType")
+,   sRelativeWidth("RelativeWidth")
+,   sHeight("Height")
+,   sRelativeHeight("RelativeHeight")
+,   sSizeType("SizeType")
+,   sIsSyncWidthToHeight("IsSyncWidthToHeight")
+,   sIsSyncHeightToWidth("IsSyncHeightToWidth")
+,   sHoriOrient("HoriOrient")
+,   sHoriOrientPosition("HoriOrientPosition")
+,   sVertOrient("VertOrient")
+,   sVertOrientPosition("VertOrientPosition")
+,   sAnchorType("AnchorType")
+,   sAnchorPageNo("AnchorPageNo")
+,   sGraphicURL("GraphicURL")
+,   sGraphicFilter("GraphicFilter")
+,   sTitle("Title")
+,   sDescription("Description")
+,   sFrameStyleName("FrameStyleName")
+,   sGraphicRotation("GraphicRotation")
+,   sTextBoxServiceName("com.sun.star.text.TextFrame")
+,   sGraphicServiceName("com.sun.star.text.GraphicObject")
+,   nType( nNewType )
+,   eAnchorType( eATyp )
+{
+}
+
 XMLTextFrameContext_Impl::~XMLTextFrameContext_Impl()
 {
 }
@@ -1140,6 +1188,11 @@ void XMLTextFrameContext_Impl::EndElement()
 
     if (( nType == XML_TEXT_FRAME_APPLET || nType == XML_TEXT_FRAME_PLUGIN ) && xPropSet.is())
         GetImport().GetTextImport()->endAppletOrPlugin( xPropSet, aParamMap);
+}
+
+void SAL_CALL XMLTextFrameContext_Impl::endFastElement( sal_Int32 Element )
+    throw(RuntimeException, SAXException, std::exception)
+{
 }
 
 SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
@@ -1224,6 +1277,14 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
     return pContext;
 }
 
+Reference< XFastContextHandler > SAL_CALL
+    XMLTextFrameContext_Impl::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    return 0;
+}
+
 void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
 {
     if( ( XML_TEXT_FRAME_OBJECT_OLE == nType ||
@@ -1270,6 +1331,11 @@ void XMLTextFrameContext_Impl::Characters( const OUString& rChars )
             }
         }
     }
+}
+
+void SAL_CALL XMLTextFrameContext_Impl::characters( const OUString& rChars )
+    throw(RuntimeException, SAXException, std::exception)
+{
 }
 
 void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
