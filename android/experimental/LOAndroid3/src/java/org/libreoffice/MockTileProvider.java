@@ -115,6 +115,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void setTextSelectionReset() {
+
+    }
+
+    @Override
     public void changePart(int partIndex) {
     }
 

@@ -354,6 +354,11 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     }
 
     @Override
+    public void setTextSelectionReset() {
+        mDocument.setTextSelection(Document.TEXT_SELECTION_RESET, 0, 0);
+    }
+
+    @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();

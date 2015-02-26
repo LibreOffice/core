@@ -86,4 +86,6 @@ public interface TileProvider {
     void setTextSelectionStart(PointF documentCoordinate);
 
     void setTextSelectionEnd(PointF documentCoordinate);
+
+    void setTextSelectionReset();
 }
