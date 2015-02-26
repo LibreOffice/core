@@ -327,9 +327,17 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xFrameAttrList);
-    static SvXMLImportContext* CreateFrameChildContext(
+    SvXMLShapeContext* CreateFrameChildContext(
+        SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        css::uno::Reference< css::drawing::XShapes >& rShapes,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xFrameAttrList );
+    SvXMLImportContext* CreateFrameChildContext(
         SvXMLImportContext *pThisContext, sal_uInt16 nPrefix, const OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    SvXMLImportContext* CreateFrameChildContext(
+        SvXMLImportContext *pThisContext, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList );
 
     SvXMLShapeContext* Create3DSceneChildContext(
         SvXMLImport& rImport, sal_uInt16 nPrefix, const OUString& rLocalName,
