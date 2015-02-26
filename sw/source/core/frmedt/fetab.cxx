@@ -84,8 +84,10 @@ const SwFrm     *pRowCacheLastCellFrm = 0;
 class TblWait
 {
     const ::std::unique_ptr<SwWait> m_pWait;
+    // this seems really fishy: do some locking, if an arbitrary number of lines is exceeded
+    static const size_t our_kLineLimit = 20;
     bool ShouldWait(size_t nCnt, SwFrm *pFrm, size_t nCnt2)
-        { return 20 < nCnt || 20 < nCnt2 || (pFrm && 20 < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().size()); }
+        { return our_kLineLimit < nCnt || our_kLineLimit < nCnt2 || (pFrm && our_kLineLimit < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().size()); }
 public:
     TblWait(size_t nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t nCnt2 = 0)
         : m_pWait( ShouldWait(nCnt, pFrm, nCnt2) ? ::std::unique_ptr<SwWait>(new SwWait( rDocShell, true )) : nullptr )
