@@ -364,7 +364,6 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     {
         PK11SlotInfo *slot = *is;
         SECKEYPrivateKeyList* priKeyList ;
-        SECKEYPrivateKeyListNode* curPri ;
 
         if( PK11_NeedLogin(slot ) ) {
             SECStatus nRet = PK11_Authenticate(slot, PR_TRUE, NULL);
@@ -379,9 +378,9 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
         priKeyList = PK11_ListPrivateKeysInSlot(slot) ;
         if( priKeyList != NULL )
         {
-            for( curPri = PRIVKEY_LIST_HEAD( priKeyList );
-                !PRIVKEY_LIST_END( curPri, priKeyList ) && curPri != NULL ;
-                curPri = PRIVKEY_LIST_NEXT( curPri ) )
+            for (SECKEYPrivateKeyListNode* curPri = PRIVKEY_LIST_HEAD(priKeyList);
+                !PRIVKEY_LIST_END( curPri, priKeyList ) && curPri != NULL;
+                curPri = PRIVKEY_LIST_NEXT(curPri))
             {
                 xcert = NssPrivKeyToXCert( curPri->key ) ;
                 if( xcert != NULL )
