@@ -334,9 +334,14 @@ void Ruler::dispose()
     if ( mnUpdateEvtId )
         Application::RemoveUserEvent( mnUpdateEvtId );
     delete mpSaveData;
+    mpSaveData = NULL;
     delete mpDragData;
+    mpDragData = NULL;
     if( pAccContext )
+    {
         pAccContext->release();
+        pAccContext = NULL;
+    }
     Window::dispose();
 }
 

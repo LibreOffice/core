@@ -353,11 +353,16 @@ void SvxRuler::dispose()
 
     pBindings->EnterRegistrations();
 
-    for(sal_uInt16 i = 0; i < CTRL_ITEM_COUNT  && pCtrlItem[i]; ++i)
-        delete pCtrlItem[i];
-    delete[] pCtrlItem;
+    if (pCtrlItem)
+    {
+        for(sal_uInt16 i = 0; i < CTRL_ITEM_COUNT  && pCtrlItem[i]; ++i)
+            delete pCtrlItem[i];
+        delete[] pCtrlItem;
+        pCtrlItem = NULL;
+    }
 
     pBindings->LeaveRegistrations();
+
     Ruler::dispose();
 }
 
