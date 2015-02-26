@@ -1,0 +1,6 @@
+#ifndef CONFIG_CUPS_H
+#define CONFIG_CUPS_H
+
+#define ENABLE_CUPS 0
+
+#endif

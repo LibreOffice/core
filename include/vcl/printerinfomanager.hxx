@@ -229,6 +229,16 @@ public:
     // gets m_bDisableCUPS, initialized from printer config
     bool isCUPSDisabled() const;
 
+    // Starts printing in a batch mode, in which all printing will be done together instead of separate jobs.
+    // If the implementation supports it, calls to endSpool() will only delay the printing until flushBatchPrint()
+    // is called to print all delayed jobs.
+    // Returns false if failed or not supported (in which case endSpool() will print normally).
+    virtual bool startBatchPrint();
+    // Actually spools all delayed print jobs, if enabled, and disables batch mode.
+    virtual bool flushBatchPrint();
+    // Returns true batch printing is supported at all.
+    virtual bool supportsBatchPrint() const;
+
     virtual ~PrinterInfoManager();
 };
 

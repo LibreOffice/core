@@ -52,6 +52,24 @@ JobData& JobData::operator=(const JobData& rRight)
     return *this;
 }
 
+bool psp::operator==(const psp::JobData& rLeft, const psp::JobData& rRight)
+{
+    return rLeft.m_nCopies == rRight.m_nCopies
+//        && rLeft.m_bCollate == rRight.m_bCollate
+        && rLeft.m_nLeftMarginAdjust == rRight.m_nLeftMarginAdjust
+        && rLeft.m_nRightMarginAdjust == rRight.m_nRightMarginAdjust
+        && rLeft.m_nTopMarginAdjust == rRight.m_nTopMarginAdjust
+        && rLeft.m_nBottomMarginAdjust == rRight.m_nBottomMarginAdjust
+        && rLeft.m_nColorDepth == rRight.m_nColorDepth
+        && rLeft.m_eOrientation == rRight.m_eOrientation
+        && rLeft.m_aPrinterName == rRight.m_aPrinterName
+        && rLeft.m_pParser == rRight.m_pParser
+//        && rLeft.m_aContext == rRight.m_aContext
+        && rLeft.m_nPSLevel == rRight.m_nPSLevel
+        && rLeft.m_nPDFDevice == rRight.m_nPDFDevice
+        && rLeft.m_nColorDevice == rRight.m_nColorDevice;
+}
+
 void JobData::setCollate( bool bCollate )
 {
     const PPDParser* pParser = m_aContext.getParser();
