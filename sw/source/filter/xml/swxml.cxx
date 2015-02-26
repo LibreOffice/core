@@ -23,6 +23,8 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/FastParser.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -60,6 +62,8 @@
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 #include <statstr.hrc>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/fasttokenhandler.hxx>
 
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
@@ -1005,11 +1009,16 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
             aParserInput.aInputStream = xStm->getInputStream();
 
             // get filter
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xContext, rStrings );
+            uno::Reference< xml::sax::XFastDocumentHandler > xFilter = new SwXMLSectionList( xContext, rStrings );
+            uno::Reference< xml::sax::XFastTokenHandler > xTokenHandler = new xmloff::token::FastTokenHandler();
 
             // connect parser and filter
-            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-            xParser->setDocumentHandler( xFilter );
+            uno::Reference< xml::sax::XFastParser > xParser = xml::sax::FastParser::create(xContext);
+            xParser->setFastDocumentHandler( xFilter );
+            xParser->setTokenHandler( xTokenHandler );
+
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:office:1.0", FastToken::NAMESPACE | XML_NAMESPACE_OFFICE );
+            xParser->registerNamespace( "urn:oasis:names:tc:opendocument:xmlns:text:1.0", FastToken::NAMESPACE | XML_NAMESPACE_TEXT );
 
             // parse
             xParser->parseStream( aParserInput );
