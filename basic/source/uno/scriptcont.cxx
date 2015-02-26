@@ -18,7 +18,6 @@
  */
 
 #include "scriptcont.hxx"
-#include "sbmodule.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -1193,27 +1192,17 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const OUString&
 OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( )
     throw (RuntimeException, std::exception)
 {
-    return getImplementationName_static();
+    return OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
 }
 
 Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceNames( )
     throw (RuntimeException, std::exception)
-{
-    return getSupportedServiceNames_static();
-}
-
-Sequence< OUString > SfxScriptLibraryContainer::getSupportedServiceNames_static()
 {
     Sequence< OUString > aServiceNames( 2 );
     aServiceNames[0] = "com.sun.star.script.DocumentScriptLibraryContainer";
     // plus, for compatibility:
     aServiceNames[1] = "com.sun.star.script.ScriptLibraryContainer";
     return aServiceNames;
-}
-
-OUString SfxScriptLibraryContainer::getImplementationName_static()
-{
-    return OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
 }
 
 // Implementation class SfxScriptLibrary

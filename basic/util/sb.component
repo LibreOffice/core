@@ -18,9 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="sb" xmlns="http://openoffice.org/2010/uno-components">
+    xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.sfx2.DialogLibraryContainer"
-       constructor="com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation">
+      constructor="com_sun_star_comp_sfx2_DialogLibraryContainer_get_implementation">
     <service name="com.sun.star.script.DialogLibraryContainer"/>
     <service name="com.sun.star.script.DocumentDialogLibraryContainer"/>
   </implementation>

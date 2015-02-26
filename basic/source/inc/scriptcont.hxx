@@ -121,10 +121,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // Service
-    static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_static();
-    static OUString getImplementationName_static();
 };
 
 

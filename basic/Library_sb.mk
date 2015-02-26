@@ -92,7 +92,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/uno/dlgcont \
 	basic/source/uno/modsizeexceeded \
 	basic/source/uno/namecont \
-	basic/source/uno/sbmodule \
 	basic/source/uno/scriptcont \
 	basic/source/runtime/comenumwrapper \
 	basic/source/runtime/ddectrl \
