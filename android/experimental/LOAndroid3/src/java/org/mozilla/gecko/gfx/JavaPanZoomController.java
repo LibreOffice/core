@@ -941,7 +941,7 @@ public class JavaPanZoomController
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
-        LOKitShell.sentTouchEvent("LongPress", motionEvent, getMotionInDocumentCoordinates(motionEvent));
+        LOKitShell.sendTouchEvent("LongPress", motionEvent, getMotionInDocumentCoordinates(motionEvent));
     }
 
     @Override
@@ -949,7 +949,7 @@ public class JavaPanZoomController
         // When double-tapping is allowed, we have to wait to see if this is
         // going to be a double-tap.
         if (!mWaitForDoubleTap) {
-            LOKitShell.sentTouchEvent("SingleTap", motionEvent, getMotionInDocumentCoordinates(motionEvent));
+            LOKitShell.sendTouchEvent("SingleTap", motionEvent, getMotionInDocumentCoordinates(motionEvent));
         }
         // return false because we still want to get the ACTION_UP event that triggers this
         return false;
@@ -959,14 +959,14 @@ public class JavaPanZoomController
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
         // In cases where we don't wait for double-tap, we handle this in onSingleTapUp.
         if (mWaitForDoubleTap) {
-            LOKitShell.sentTouchEvent("SingleTap", motionEvent, getMotionInDocumentCoordinates(motionEvent));
+            LOKitShell.sendTouchEvent("SingleTap", motionEvent, getMotionInDocumentCoordinates(motionEvent));
         }
         return true;
     }
 
     @Override
     public boolean onDoubleTap(MotionEvent motionEvent) {
-        LOKitShell.sentTouchEvent("DoubleTap", motionEvent, getMotionInDocumentCoordinates(motionEvent));
+        LOKitShell.sendTouchEvent("DoubleTap", motionEvent, getMotionInDocumentCoordinates(motionEvent));
         return true;
     }
 
