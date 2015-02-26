@@ -90,6 +90,10 @@ String RID_XODOTY           { Text = "<?> odot <?> " ; };
 String RID_XOMINUSY         { Text = "<?> ominus <?> " ; };
 String RID_XOPLUSY          { Text = "<?> oplus <?> " ; };
 String RID_XOTIMESY         { Text = "<?> otimes <?> " ; };
+String RID_XOTIMESY_HELP
+{
+    Text [ en-US ] = "Tensor Product" ;
+};
 String RID_XANDY            { Text = "<?> and <?> " ; };
 String RID_XANDY_HELP
 {
