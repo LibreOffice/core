@@ -8,7 +8,6 @@ public class TileProviderFactory {
     private static TileProviderID currentTileProvider = TileProviderID.LOKIT;
 
     private TileProviderFactory() {
-
     }
 
     public static void initialize() {
@@ -17,9 +16,9 @@ public class TileProviderFactory {
         }
     }
 
-    public static TileProvider create(GeckoLayerClient layerClient, String filename) {
+    public static TileProvider create(GeckoLayerClient layerClient, InvalidationHandler invalidationHandler, String filename) {
         if (currentTileProvider == TileProviderID.LOKIT) {
-            return new LOKitTileProvider(layerClient, filename);
+            return new LOKitTileProvider(layerClient, invalidationHandler, filename);
         } else {
             return new MockTileProvider(layerClient, filename);
         }

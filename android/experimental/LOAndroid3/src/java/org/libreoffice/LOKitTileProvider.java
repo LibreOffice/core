@@ -37,12 +37,13 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     private float mWidthTwip;
     private float mHeightTwip;
 
-    private InvalidationHandler mInvalidationHandler = new InvalidationHandler();
+    private InvalidationHandler mInvalidationHandler;
 
     private long objectCreationTime = System.currentTimeMillis();
 
-    public LOKitTileProvider(GeckoLayerClient layerClient, String input) {
+    public LOKitTileProvider(GeckoLayerClient layerClient, InvalidationHandler invalidationHandler, String input) {
         mLayerClient = layerClient;
+        mInvalidationHandler = invalidationHandler;
         mDPI = (float) LOKitShell.getDpi();
         mTileWidth = pixelToTwip(TILE_SIZE, mDPI);
         mTileHeight = pixelToTwip(TILE_SIZE, mDPI);

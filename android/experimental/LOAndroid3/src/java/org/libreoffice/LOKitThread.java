@@ -24,10 +24,12 @@ public class LOKitThread extends Thread {
 
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
+    private InvalidationHandler mInvalidationHandler;
     private ImmutableViewportMetrics mViewportMetrics;
     private GeckoLayerClient mLayerClient;
 
     public LOKitThread() {
+        mInvalidationHandler = null;
         TileProviderFactory.initialize();
     }
 
@@ -154,7 +156,8 @@ public class LOKitThread extends Thread {
 
         mLayerClient = mApplication.getLayerClient();
 
-        mTileProvider = TileProviderFactory.create(mLayerClient, filename);
+        mInvalidationHandler = new InvalidationHandler(LibreOfficeMainActivity.mAppContext);
+        mTileProvider = TileProviderFactory.create(mLayerClient, mInvalidationHandler, filename);
 
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner();
