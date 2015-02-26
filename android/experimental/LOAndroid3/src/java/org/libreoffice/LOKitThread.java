@@ -196,7 +196,7 @@ public class LOKitThread extends Thread {
                 createThumbnail(event.mTask);
                 break;
             case LOEvent.TOUCH:
-                touch(event.mTouchType, event.mDocumentTouchCoordinate);
+                touch(event.mTouchType, event.mDocumentCoordinate);
                 break;
             case LOEvent.KEY_EVENT:
                 keyEvent(event.mKeyEvent);
@@ -223,7 +223,7 @@ public class LOKitThread extends Thread {
     /**
      * Processes touch events.
      */
-    private void touch(String touchType, PointF mDocumentTouchCoordinate) {
+    private void touch(String touchType, PointF documentCoordinate) {
         if (!LOKitShell.isEditingEnabled()) {
             return;
         }
@@ -233,12 +233,12 @@ public class LOKitThread extends Thread {
         if (touchType.equals("LongPress")) {
             LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
             mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.SELECTION);
-            mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 2);
+            mTileProvider.mouseButtonDown(documentCoordinate, 2);
         } else { // "SingleTap"
             LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
             mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.CURSOR);
-            mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 1);
-            mTileProvider.mouseButtonUp(mDocumentTouchCoordinate, 1);
+            mTileProvider.mouseButtonDown(documentCoordinate, 1);
+            mTileProvider.mouseButtonUp(documentCoordinate, 1);
         }
     }
 

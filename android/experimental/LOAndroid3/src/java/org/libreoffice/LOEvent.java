@@ -5,6 +5,7 @@ import android.graphics.RectF;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.IntSize;
 import org.mozilla.gecko.gfx.SubTile;
@@ -19,6 +20,7 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int TILE_INVALIDATION = 7;
     public static final int TOUCH = 8;
     public static final int KEY_EVENT = 9;
+    public static final int CHANGE_HANDLE_POSITION = 10;
 
     public final int mType;
     public int mPriority = 0;
@@ -29,9 +31,10 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mFilename;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
-    public PointF mDocumentTouchCoordinate;
+    public PointF mDocumentCoordinate;
     public KeyEvent mKeyEvent;
     public RectF mInvalidationRect;
+    public TextSelectionHandle.HandleType mHandleType;
 
     public LOEvent(int type) {
         mType = type;
@@ -65,7 +68,7 @@ public class LOEvent implements Comparable<LOEvent> {
         mType = type;
         mTypeString = "Touch";
         mTouchType = touchType;
-        mDocumentTouchCoordinate = documentTouchCoordinate;
+        mDocumentCoordinate = documentTouchCoordinate;
     }
 
     public LOEvent(int type, KeyEvent keyEvent) {
@@ -78,6 +81,12 @@ public class LOEvent implements Comparable<LOEvent> {
         mType = type;
         mTypeString = "Tile Invalidation";
         mInvalidationRect = rect;
+    }
+
+    public LOEvent(int type, TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
+        mType = type;
+        mHandleType = handleType;
+        mDocumentCoordinate = documentCoordinate;
     }
 
     public String getTypeString() {

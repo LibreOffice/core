@@ -10,6 +10,7 @@ import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.ComposedTileLayer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.gfx.SubTile;
@@ -125,5 +126,12 @@ public class LOKitShell {
      */
     public static void sendTileInvalidationRequest(RectF rect) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.TILE_INVALIDATION, rect));
+    }
+
+    /**
+     * Send change handle position event to LOKitThread.
+     */
+    public static void sendChangeHandlePositionEvent(TextSelectionHandle.HandleType handleType, PointF documentCoordinate) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_HANDLE_POSITION, handleType, documentCoordinate));
     }
 }
