@@ -2279,6 +2279,27 @@ public:
     }
 };
 
+class UpdateRefExpandGroupBoundChecker : public SharedTopFormulaCellPicker
+{
+    const sc::RefUpdateContext& mrCxt;
+    std::vector<SCROW>& mrBounds;
+
+public:
+    UpdateRefExpandGroupBoundChecker(const sc::RefUpdateContext& rCxt, std::vector<SCROW>& rBounds) :
+        mrCxt(rCxt), mrBounds(rBounds) {}
+
+    virtual ~UpdateRefExpandGroupBoundChecker() {}
+
+    virtual void processSharedTop( ScFormulaCell** ppCells, size_t /*nRow*/, size_t /*nLength*/ ) SAL_OVERRIDE
+    {
+        // Check its tokens and record its reference boundaries.
+        ScFormulaCell& rCell = **ppCells;
+        const ScTokenArray& rCode = *rCell.GetCode();
+        rCode.CheckExpandReferenceBounds(
+            mrCxt, rCell.aPos, rCell.GetSharedLength(), mrBounds);
+    }
+};
+
 class FormulaGroupPicker : public SharedTopFormulaCellPicker
 {
     std::vector<sc::FormulaGroupEntry>& mrGroups;
@@ -2363,6 +2384,14 @@ bool ScColumn::UpdateReference( sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc
     // references.
     UpdateRefGroupBoundChecker aBoundChecker(rCxt, aBounds);
     std::for_each(maCells.begin(), maCells.end(), aBoundChecker);
+
+    // If expand reference edges is on, splitting groups may happen anywhere
+    // where a reference points to an adjacent row of the insertion.
+    if (rCxt.mnRowDelta > 0 && rCxt.mrDoc.IsExpandRefs())
+    {
+        UpdateRefExpandGroupBoundChecker aExpandChecker(rCxt, aBounds);
+        std::for_each(maCells.begin(), maCells.end(), aExpandChecker);
+    }
 
     // Do the actual splitting.
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
