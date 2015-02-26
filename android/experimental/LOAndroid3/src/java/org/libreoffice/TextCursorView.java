@@ -1,10 +1,14 @@
 package org.libreoffice;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
@@ -14,22 +18,38 @@ import org.mozilla.gecko.gfx.RectUtils;
 /**
  * Text cursor view responsible to show the cursor drawable on the screen.
  */
-public class TextCursorView extends ImageView {
+public class TextCursorView extends View {
     private static final String LOGTAG = TextCursorView.class.getSimpleName();
 
-    private RectF mPosition;
-    private RelativeLayout.LayoutParams mLayoutParams;
+    private boolean mCursorAnimationEnabled = false;
+    private RectF mCursorPosition = new RectF();
+    private PointF mCursorScaledPosition = new PointF();
 
-    private int mLeft;
-    private int mTop;
+    private float mCursorHeight = 0f;
+    private float mCursorWidth = 2f;
 
-    private int mWidth;
-    private int mHeight;
-    private int mAlpha = 0;
+    private int mCursorAlpha = 0;
+
+    public TextCursorView(Context context) {
+        super(context);
+        startCursorAnimation();
+    }
 
     public TextCursorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        postDelayed(cursorAnimation, 500);
+        startCursorAnimation();
+    }
+
+    public TextCursorView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        startCursorAnimation();
+    }
+
+    private void startCursorAnimation() {
+        if (!mCursorAnimationEnabled) {
+            mCursorAnimationEnabled = true;
+            postDelayed(cursorAnimation, 500);
+        }
     }
 
     public void changePosition(RectF position) {
@@ -39,45 +59,37 @@ public class TextCursorView extends ImageView {
             return;
         }
 
-        mPosition = position;
-
-        mWidth = Math.round(position.width());
-        mHeight = Math.round(position.height());
-
+        mCursorPosition = position;
         ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
     public void repositionWithViewport(float x, float y, float zoom) {
-        RectF scaled = RectUtils.scale(mPosition, zoom);
+        RectF scaledRectangle = RectUtils.scale(mCursorPosition, zoom);
 
-        mLeft = Math.round(scaled.centerX() - x);
-        mTop = Math.round(scaled.centerY() - y);
+        mCursorScaledPosition = new PointF(scaledRectangle.left - x, scaledRectangle.top - y);
+        mCursorHeight = scaledRectangle.height();
 
-        setScaleY(scaled.height());
-        setLayoutPosition();
+        invalidate();
     }
 
-    private void setLayoutPosition() {
-        if (mLayoutParams == null) {
-            mLayoutParams = (RelativeLayout.LayoutParams) getLayoutParams();
-            // Set negative right/bottom margins so that the handles can be dragged outside of
-            // the content area (if they are dragged to the left/top, the dyanmic margins set
-            // below will take care of that).
-            mLayoutParams.rightMargin = 0 - mWidth;
-            mLayoutParams.bottomMargin = 0 - mHeight;
-        }
-
-        mLayoutParams.leftMargin = mLeft;
-        mLayoutParams.topMargin = mTop;
-
-        setLayoutParams(mLayoutParams);
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setAlpha(mCursorAlpha);
+        RectF cursorRect = new RectF(
+                mCursorScaledPosition.x,
+                mCursorScaledPosition.y,
+                mCursorScaledPosition.x + mCursorWidth,
+                mCursorScaledPosition.y + mCursorHeight);
+        canvas.drawRect(cursorRect, paint);
     }
 
     private Runnable cursorAnimation = new Runnable() {
         public void run() {
-            mAlpha = mAlpha == 0 ? 0xFF : 0;
-            getDrawable().setAlpha(mAlpha);
+            mCursorAlpha = mCursorAlpha == 0 ? 0xFF : 0;
             invalidate();
             postDelayed(cursorAnimation, 500);
         }
