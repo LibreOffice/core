@@ -1965,9 +1965,9 @@ void GtkSalFrame::AllocateFrame()
             aFrameSize.setX( 1 );
         if( aFrameSize.getY() == 0 )
             aFrameSize.setY( 1 );
-        int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, aFrameSize.getX());
+        sal_Int32 nStride(basebmp::getBitmapDeviceStrideForWidth(basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK, aFrameSize.getX()));
         m_aFrame = basebmp::createBitmapDevice(aFrameSize, true,
-                                               basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX, cairo_stride);
+                                               basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK, nStride);
         m_aFrame->setDamageTracker(
             basebmp::IBitmapDeviceDamageTrackerSharedPtr(new DamageTracker(*this)) );
         fprintf( stderr, "allocated m_aFrame size of %dx%d \n",
@@ -3423,28 +3423,41 @@ void GtkSalFrame::renderArea( cairo_t *cr, cairo_rectangle_t *area )
 
     cairo_save( cr );
 
-    unsigned char *src = data.get();
-    assert(cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX()) == nStride);
+    int cairo_stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, area->width);
+    unsigned char *p, *src, *mem = (unsigned char *)malloc (cairo_stride * area->height);
+    p = mem;
+    src = data.get();
+    src += (int)ay * nStride + (int)ax * 3;
+
+    for (int y = 0; y < aheight; ++y)
+    {
+        for (int x = 0; x < awidth; ++x)
+        {
+            p[x*4 + 0] = src[x*3 + 0]; // B
+            p[x*4 + 1] = src[x*3 + 1]; // G
+            p[x*4 + 2] = src[x*3 + 2]; // R
+            p[x*4 + 3] = 255; // A
+        }
+        src += nStride;
+        p += cairo_stride;
+    }
     cairo_surface_t *pSurface =
-        cairo_image_surface_create_for_data(src,
-                                            CAIRO_FORMAT_RGB24,
-                                            size.getX(), size.getY(),
-                                            nStride);
-    /*
-        int cairo_stride = cairo_format_stride_for_width(CAIRO_FORMAT_RGB24, size.getX());
-        g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
+        cairo_image_surface_create_for_data( mem,
+                                             CAIRO_FORMAT_ARGB32,
+                                             awidth, aheight,
+                                             cairo_stride );
+    /*    g_warning( "Fixed cairo status %d %d strides: %d vs %d, mask %d\n",
                (int) cairo_status( cr ),
                (int) cairo_surface_status( pSurface ),
                (int) nStride,
                (int) cairo_stride,
-               (int) (cairo_stride & (sizeof (uint32_t)-1)) );
-    */
+               (int) (cairo_stride & (sizeof (uint32_t)-1)) ); */
 
     cairo_set_operator( cr, CAIRO_OPERATOR_OVER );
-    cairo_set_source_surface( cr, pSurface, 0, 0 );
-    cairo_rectangle( cr, ax, ay, awidth, aheight );
-    cairo_fill( cr );
+    cairo_set_source_surface( cr, pSurface, ax, ay );
+    cairo_paint( cr );
     cairo_surface_destroy( pSurface );
+    free (mem);
     cairo_restore( cr );
 
     // Render red rectangles to show what was re-rendered ...

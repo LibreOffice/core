@@ -74,7 +74,7 @@ private:
     static GtkStyleContext *mpComboboxStyle;
     static GtkStyleContext *mpListboxStyle;
 
-    void renderAreaToPix( cairo_surface_t* source, cairo_rectangle_int_t *region );
+    void renderAreaToPix( cairo_t* cr, cairo_rectangle_int_t *region );
     void getStyleContext( GtkStyleContext** style, GtkWidget* widget );
     Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
     Rectangle NWGetSpinButtonRect( ControlPart nPart, Rectangle aAreaRect);

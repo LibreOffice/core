@@ -27,7 +27,7 @@
 
 #include <salbmp.hxx>
 
-#define SVP_DEFAULT_BITMAP_FORMAT basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX
+#define SVP_DEFAULT_BITMAP_FORMAT basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK
 
 class SvpSalBitmap : public SalBitmap
 {

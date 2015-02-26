@@ -439,14 +439,14 @@ Format SvpSalInstance::getFormatForBitCount( sal_uInt16 nBitCount )
             return FORMAT_SIXTEEN_BIT_LSB_TC_MASK;
 #endif
         case 24:
-            return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX;
+            return FORMAT_TWENTYFOUR_BIT_TC_MASK;
         case 32:
             return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA;
         case 0:
 #ifdef ANDROID
             return FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA;
 #else
-            return FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX;
+            return FORMAT_TWENTYFOUR_BIT_TC_MASK;
 #endif
         default:
             return SVP_DEFAULT_BITMAP_FORMAT;

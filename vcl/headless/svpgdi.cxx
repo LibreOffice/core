@@ -126,7 +126,6 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
         case basebmp::FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
         case basebmp::FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
         case basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
         case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
         case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
         case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:

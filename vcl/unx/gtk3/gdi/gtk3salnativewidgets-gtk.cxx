@@ -912,6 +912,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                                           translatedRegion.width, translatedRegion.height);
     cairo_t *cr = cairo_create(surface);
+    cairo_surface_destroy(surface); // unref
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
@@ -959,14 +960,18 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
         break;
     }
 
+    gtk_style_context_restore(context);
+
+    renderAreaToPix(cr, &translatedRegion);
     cairo_destroy(cr); // unref
-    renderAreaToPix(surface, &translatedRegion);
-    cairo_surface_destroy(surface); // unref
 
     return true;
 }
 
-void GtkSalGraphics::renderAreaToPix( cairo_surface_t *source,
+// FIXME: This is incredibly lame... but so is cairo's insistence on - exactly -
+// its own stride - neither more nor less - particularly not more aligned
+// we like 8byte aligned, it likes 4 - most odd.
+void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
                                       cairo_rectangle_int_t *region)
 {
     if( !mpFrame->m_aFrame.get() )
@@ -977,22 +982,33 @@ void GtkSalGraphics::renderAreaToPix( cairo_surface_t *source,
     sal_Int32 nStride = mpFrame->m_aFrame->getScanlineStride();
     long ax = region->x;
     long ay = region->y;
-    long awidth = MIN (region->width, size.getX() - ax);
+    long awidth = region->width;
+
+    /* Get the cairo surface and the data */
+    cairo_surface_t* surface = cairo_get_target(cr);
+    g_assert(surface != NULL);
+    cairo_surface_flush(surface);
+    unsigned char* cairo_data = cairo_image_surface_get_data(surface);
+    g_assert(cairo_data != NULL);
+    int cairo_stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, awidth);
+
+    unsigned char *src = data.get();
+    src += (int)ay * nStride + (int)ax * 3;
+    awidth = MIN (region->width, size.getX() - ax);
     long aheight = MIN (region->height, size.getY() - ay);
 
-    cairo_surface_t *target =
-        cairo_image_surface_create_for_data(data.get(),
-                                        CAIRO_FORMAT_RGB24,
-                                        size.getX(), size.getY(),
-                                        nStride);
-    cairo_t *cr = cairo_create(target);
-
-    cairo_set_source_surface( cr, source, ax, ay );
-    cairo_rectangle( cr, ax, ay, awidth, aheight );
-    cairo_fill( cr );
-    cairo_destroy(cr);
-    cairo_surface_destroy(target);
-
+    for (int y = 0; y < aheight; ++y)
+    {
+        for (int x = 0; x < awidth && y < aheight; ++x)
+        {
+            double alpha = ((float)cairo_data[x*4 + 3])/255.0;
+            src[x*3 + 0] = src[x*3 + 0] * (1.0 - alpha) + cairo_data[x*4+0];
+            src[x*3 + 1] = src[x*3 + 1] * (1.0 - alpha) + cairo_data[x*4+1];
+            src[x*3 + 2] = src[x*3 + 2] * (1.0 - alpha) + cairo_data[x*4+2];
+        }
+        src += nStride;
+        cairo_data += cairo_stride;
+    }
     if ( !mpFrame->isDuringRender() )
         gtk_widget_queue_draw_area( mpFrame->getWindow(), ax, ay, awidth, aheight );
 }
