@@ -2642,9 +2642,18 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
             // Selected range is only partially overlapping in vertical direction. Bail out.
             return false;
 
-        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Col() <= rRefRange.aStart.Col())
-            // Selected range is at the left end and the edge expansion is turned off.  No expansion.
-            return false;
+        if (rCxt.mrDoc.IsExpandRefs())
+        {
+            if (rRefRange.aEnd.Col() - rRefRange.aStart.Col() < 1)
+                // Reference must be at least two columns wide.
+                return false;
+        }
+        else
+        {
+            if (rSelectedRange.aStart.Col() <= rRefRange.aStart.Col())
+                // Selected range is at the left end and the edge expansion is turned off.  No expansion.
+                return false;
+        }
 
         // Move the last column position to the right.
         SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
@@ -2658,9 +2667,18 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
             // Selected range is only partially overlapping in horizontal direction. Bail out.
             return false;
 
-        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Row() <= rRefRange.aStart.Row())
-            // Selected range is at the top end and the edge expansion is turned off.  No expansion.
-            return false;
+        if (rCxt.mrDoc.IsExpandRefs())
+        {
+            if (rRefRange.aEnd.Row() - rRefRange.aStart.Row() < 1)
+                // Reference must be at least two rows tall.
+                return false;
+        }
+        else
+        {
+            if (rSelectedRange.aStart.Row() <= rRefRange.aStart.Row())
+                // Selected range is at the top end and the edge expansion is turned off.  No expansion.
+                return false;
+        }
 
         // Move the last row position down.
         SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
@@ -2683,6 +2701,11 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     if (rCxt.mnColDelta > 0)
     {
         // Insert and shift right.
+
+        if (rRefRange.aEnd.Col() - rRefRange.aStart.Col() < 1)
+            // Reference must be at least two columns wide.
+            return false;
+
         if (rRefRange.aStart.Row() < rSelectedRange.aStart.Row() || rSelectedRange.aEnd.Row() < rRefRange.aEnd.Row())
             // Selected range is only partially overlapping in vertical direction. Bail out.
             return false;
@@ -2698,6 +2721,10 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     }
     else if (rCxt.mnRowDelta > 0)
     {
+        if (rRefRange.aEnd.Row() - rRefRange.aStart.Row() < 1)
+            // Reference must be at least two rows tall.
+            return false;
+
         if (rRefRange.aStart.Col() < rSelectedRange.aStart.Col() || rSelectedRange.aEnd.Col() < rRefRange.aEnd.Col())
             // Selected range is only partially overlapping in horizontal direction. Bail out.
             return false;
@@ -3818,6 +3845,99 @@ void ScTokenArray::CheckRelativeReferenceBounds(
                 const ScComplexRefData& rRef = pToken->GetDoubleRef();
                 checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds);
                 checkBounds(rPos, nGroupLen, rRange, rRef.Ref2, rBounds);
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+void ScTokenArray::CheckExpandReferenceBounds(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const
+{
+    const SCROW nInsRow = rCxt.maRange.aStart.Row();
+    const FormulaToken* const * p = pCode;
+    const FormulaToken* const * pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svDoubleRef:
+            {
+                const ScToken* pToken = static_cast<const ScToken*>(*p);
+                const ScComplexRefData& rRef = pToken->GetDoubleRef();
+                bool bStartRowRelative = rRef.Ref1.IsRowRel();
+                bool bEndRowRelative = rRef.Ref2.IsRowRel();
+
+                // For absolute references nothing needs to be done, they stay
+                // the same for all and if to be expanded the group will be
+                // adjusted later.
+                if (!bStartRowRelative && !bEndRowRelative)
+                    break;  // switch
+
+                ScRange aAbsStart(rRef.toAbs(rPos));
+                ScAddress aPos(rPos);
+                aPos.IncRow(nGroupLen);
+                ScRange aAbsEnd(rRef.toAbs(aPos));
+                // References must be at least two rows to be expandable.
+                if ((aAbsStart.aEnd.Row() - aAbsStart.aStart.Row() < 1) &&
+                        (aAbsEnd.aEnd.Row() - aAbsEnd.aStart.Row() < 1))
+                    break;  // switch
+
+                // Only need to process if an edge may be touching the
+                // insertion row anywhere within the run of the group.
+                if (!((aAbsStart.aStart.Row() <= nInsRow && nInsRow <= aAbsEnd.aStart.Row()) ||
+                            (aAbsStart.aEnd.Row() <= nInsRow && nInsRow <= aAbsEnd.aEnd.Row())))
+                    break;  // switch
+
+                SCROW nStartRow = aAbsStart.aStart.Row();
+                SCROW nEndRow = aAbsStart.aEnd.Row();
+                // Position on first relevant range.
+                SCROW nOffset = 0;
+                if (nEndRow + 1 < nInsRow)
+                {
+                    if (bEndRowRelative)
+                    {
+                        nOffset = nInsRow - nEndRow - 1;
+                        nEndRow += nOffset;
+                        if (bStartRowRelative)
+                            nStartRow += nOffset;
+                    }
+                    else    // bStartRowRelative==true
+                    {
+                        nOffset = nInsRow - nStartRow;
+                        nStartRow += nOffset;
+                        // Start is overtaking End, swap.
+                        bStartRowRelative = false;
+                        bEndRowRelative = true;
+                    }
+                }
+                for (SCROW i = nOffset; i < nGroupLen; ++i)
+                {
+                    bool bSplit = (nStartRow == nInsRow || nEndRow + 1 == nInsRow);
+                    if (bSplit)
+                        rBounds.push_back( rPos.Row() + i);
+
+                    if (bEndRowRelative)
+                        ++nEndRow;
+                    if (bStartRowRelative)
+                    {
+                        ++nStartRow;
+                        if (!bEndRowRelative && nStartRow == nEndRow)
+                        {
+                            // Start is overtaking End, swap.
+                            bStartRowRelative = false;
+                            bEndRowRelative = true;
+                        }
+                    }
+                    if (nInsRow < nStartRow || (!bStartRowRelative && nInsRow <= nEndRow))
+                    {
+                        if (bSplit && (++i < nGroupLen))
+                            rBounds.push_back( rPos.Row() + i);
+                        break;  // for, out of range now
+                    }
+                }
             }
             break;
             default:
