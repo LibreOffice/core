@@ -416,7 +416,7 @@ bool Picture::Read(HWPFile & hwpf)
     skip[0] = tmp16;
     if (!hwpf.Read2b(tmp16))                      /* 세로 */
         return false;
-    skip[0] = tmp16;
+    skip[1] = tmp16;
     if (!hwpf.Read2b(tmp16))                      /* 확대비율 : 0 고정, 이외 퍼센트 단위 가로 */
         return false;
     scale[0] = tmp16;
