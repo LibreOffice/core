@@ -58,6 +58,23 @@ class CUPSManager : public PrinterInfoManager
     osl::Mutex                                                  m_aGetPPDMutex;
     bool                                                        m_bPPDThreadRunning;
 
+    struct PendingJob
+    {
+        OUString printerName;
+        OUString jobTitle;
+        JobData jobData;
+        bool banner;
+        OUString faxNumber;
+        OString file;
+        PendingJob( const OUString& printerName_, const OUString& jobTitle_, const JobData& jobData_,
+            bool banner_, const OUString& faxNumber_, const OString& file_ )
+            : printerName( printerName_ ), jobTitle( jobTitle_ ), jobData( jobData_ ), banner( banner_ ), faxNumber( faxNumber_ ), file( file_ )
+            {}
+        PendingJob() : banner( false ) {}
+    };
+    std::list< PendingJob > pendingJobs;
+    bool batchMode;
+
     CUPSManager();
     virtual ~CUPSManager();
 
@@ -66,6 +83,9 @@ class CUPSManager : public PrinterInfoManager
     void getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner, int& rNumOptions, void** rOptions ) const;
     void runDests();
     OString threadedCupsGetPPD(const char* pPrinter);
+
+    bool processPendingJobs();
+    bool printJobs( const PendingJob& job, const std::vector< OString >& files );
 public:
     static void runDestThread(void* pMgr);
 
@@ -79,6 +99,10 @@ public:
     virtual FILE* startSpool( const OUString& rPrinterName, bool bQuickCommand ) SAL_OVERRIDE;
     virtual bool endSpool( const OUString& rPrinterName, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData, bool bBanner, const OUString& rFaxNumber ) SAL_OVERRIDE;
     virtual void setupJobContextData( JobData& rData ) SAL_OVERRIDE;
+
+    virtual bool startBatchPrint() SAL_OVERRIDE;
+    virtual bool flushBatchPrint() SAL_OVERRIDE;
+    virtual bool supportsBatchPrint() const SAL_OVERRIDE;
 
     /// changes the info about a named printer
     virtual void changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo ) SAL_OVERRIDE;

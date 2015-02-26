@@ -626,8 +626,6 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
                rDocumentJobData.m_nCopies
                );
 
-    int nJobID = 0;
-
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
     std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
@@ -639,32 +637,105 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
     }
 
     std::unordered_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
-    if( it != m_aSpoolFiles.end() )
+    if( it == m_aSpoolFiles.end() )
+        return false;
+    fclose( pFile );
+    PendingJob job( rPrintername, rJobTitle, rDocumentJobData, bBanner, rFaxNumber, it->second );
+    m_aSpoolFiles.erase( pFile );
+    pendingJobs.push_back( job );
+    if( !batchMode ) // process immediately, otherwise will be handled by flushBatchPrint()
+        return processPendingJobs();
+    return true;
+}
+
+bool CUPSManager::startBatchPrint()
+{
+    batchMode = true;
+    return true;
+}
+
+bool CUPSManager::supportsBatchPrint() const
+{
+    return true;
+}
+
+bool CUPSManager::flushBatchPrint()
+{
+    osl::MutexGuard aGuard( m_aCUPSMutex );
+    return processPendingJobs();
+}
+
+bool CUPSManager::processPendingJobs()
+{
+    // Print all jobs that have the same data using one CUPS call (i.e. merge all jobs that differ only in files to print).
+    PendingJob currentJobData;
+    bool first = true;
+    std::vector< OString > files;
+    bool ok = true;
+    while( !pendingJobs.empty())
     {
-        fclose( pFile );
+        if( first )
+        {
+            currentJobData = pendingJobs.front();
+            first = false;
+        }
+        else if( currentJobData.printerName != pendingJobs.front().printerName
+                || currentJobData.jobTitle != pendingJobs.front().jobTitle
+                || currentJobData.jobData != pendingJobs.front().jobData
+                || currentJobData.banner != pendingJobs.front().banner )
+        {
+            if( !printJobs( currentJobData, files ))
+                ok = false;
+            files.clear();
+            currentJobData = pendingJobs.front();
+        }
+        files.push_back( pendingJobs.front().file );
+        pendingJobs.pop_front();
+    }
+    if( !first )
+    {
+        if( !printJobs( currentJobData, files )) // print the last batch
+            ok = false;
+    }
+    return ok;
+}
+
+bool CUPSManager::printJobs( const PendingJob& job, const std::vector< OString >& files )
+{
+    std::unordered_map< OUString, int, OUStringHash >::iterator dest_it =
+        m_aCUPSDestMap.find( job.printerName );
+
         rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
 
         // setup cups options
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
-        getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, reinterpret_cast<void**>(&pOptions) );
+        getOptionsFromDocumentSetup( job.jobData, job.banner, nNumOptions, reinterpret_cast<void**>(&pOptions) );
 
-        OString sJobName(OUStringToOString(rJobTitle, aEnc));
+        OString sJobName(OUStringToOString(job.jobTitle, aEnc));
 
         //fax4CUPS, "the job name will be dialled for you"
         //so override the jobname with the desired number
-        if (!rFaxNumber.isEmpty())
+        if (!job.faxNumber.isEmpty())
         {
-            sJobName = OUStringToOString(rFaxNumber, aEnc);
+            sJobName = OUStringToOString(job.faxNumber, aEnc);
         }
 
         cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + dest_it->second;
-        nJobID = cupsPrintFile(pDest->name,
-            it->second.getStr(),
+
+        std::vector< const char* > fnames;
+        for( std::vector< OString >::const_iterator it = files.begin();
+             it != files.end();
+             ++it )
+            fnames.push_back( it->getStr());
+
+        int nJobID = cupsPrintFiles(pDest->name,
+            fnames.size(),
+            fnames.data(),
             sJobName.getStr(),
             nNumOptions, pOptions);
         SAL_INFO("vcl.unx.print", "cupsPrintFile( " << pDest->name << ", "
-                << it->second << ", " << rJobTitle << ", " << nNumOptions
+                << ( fnames.size() == 1 ? files.front() : OString::number( fnames.size()) ).getStr() << ", " << sJobName << ", " << nNumOptions
                 << ", " << pOptions << " ) returns " << nJobID);
         for( int n = 0; n < nNumOptions; n++ )
             SAL_INFO("vcl.unx.print",
@@ -676,11 +747,13 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         system( aCmd.getStr() );
 #endif
 
-        unlink( it->second.getStr() );
-        m_aSpoolFiles.erase( pFile );
+        for( std::vector< OString >::const_iterator it = files.begin();
+             it != files.end();
+             ++it )
+            unlink( it->getStr());
+
         if( pOptions )
             cupsFreeOptions( nNumOptions, pOptions );
-    }
 
     return nJobID != 0;
 }
