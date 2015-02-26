@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_796fe392",
+        "filename": "hwpfilter/source/hwpread.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-26T14:45:28Z",
+      "side": 1,
+      "message": "this one should be skip[1]",
+      "revId": "063763a424f4be7ff878dd1e67bc18469c52fe44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
