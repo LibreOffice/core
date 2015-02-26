@@ -589,6 +589,24 @@ static GList* lcl_payloadToRectangles(const char* pPayload)
     return pRet;
 }
 
+static const gchar* lcl_LibreOfficeKitCallbackTypeToString(int nType)
+{
+    switch (nType)
+    {
+    case LOK_CALLBACK_INVALIDATE_TILES:
+        return "LOK_CALLBACK_INVALIDATE_TILES";
+    case LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR:
+        return "LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR";
+    case LOK_CALLBACK_TEXT_SELECTION:
+        return "LOK_CALLBACK_TEXT_SELECTION";
+    case LOK_CALLBACK_TEXT_SELECTION_START:
+        return "LOK_CALLBACK_TEXT_SELECTION_START";
+    case LOK_CALLBACK_TEXT_SELECTION_END:
+        return "LOK_CALLBACK_TEXT_SELECTION_END";
+    }
+    return 0;
+}
+
 /// Invoked on the main thread if lok_docview_callback_worker() requests so.
 static gboolean lok_docview_callback(gpointer pData)
 {
@@ -665,7 +683,7 @@ static void lok_docview_callback_worker(int nType, const char* pPayload, void* p
     pCallback->m_nType = nType;
     pCallback->m_pPayload = g_strdup(pPayload);
     pCallback->m_pDocView = pDocView;
-    g_info("lok_docview_callback_worker: %d, '%s'", nType, pPayload);
+    g_info("lok_docview_callback_worker: %s, '%s'", lcl_LibreOfficeKitCallbackTypeToString(nType), pPayload);
 #if GTK_CHECK_VERSION(2,12,0)
     gdk_threads_add_idle(lok_docview_callback, pCallback);
 #else
