@@ -15,47 +15,58 @@ import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.gfx.RectUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Text cursor view responsible to show the cursor drawable on the screen.
  */
 public class TextCursorView extends View {
     private static final String LOGTAG = TextCursorView.class.getSimpleName();
+    private static final float CURSOR_WIDTH = 2f;
 
-    private boolean mCursorAnimationEnabled = false;
+    private boolean mInitialized = false;
     private RectF mCursorPosition = new RectF();
-    private PointF mCursorScaledPosition = new PointF();
-
-    private float mCursorHeight = 0f;
-    private float mCursorWidth = 2f;
-
+    private RectF mCursorScaledPosition = new RectF();
     private int mCursorAlpha = 0;
+
+    private List<RectF> mSelections = new ArrayList<RectF>();
+    private List<RectF> mScaledSelections = new ArrayList<RectF>();
+    private Paint mCursorPaint = new Paint();
+    private Paint mSelectionPaint = new Paint();
 
     public TextCursorView(Context context) {
         super(context);
-        startCursorAnimation();
+        initialize();
     }
 
     public TextCursorView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        startCursorAnimation();
+        initialize();
     }
 
     public TextCursorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        startCursorAnimation();
+        initialize();
     }
 
-    private void startCursorAnimation() {
-        if (!mCursorAnimationEnabled) {
-            mCursorAnimationEnabled = true;
+    private void initialize() {
+        if (!mInitialized) {
             postDelayed(cursorAnimation, 500);
+
+            mCursorPaint.setColor(Color.BLACK);
+            mCursorPaint.setAlpha(0);
+            mSelectionPaint.setColor(Color.BLUE);
+            mSelectionPaint.setAlpha(50);
+
+            mInitialized = true;
         }
     }
 
-    public void changePosition(RectF position) {
+    public void changeCursorPosition(RectF position) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
-            Log.e(LOGTAG, "Can't position handle because layerView is null");
+            Log.e(LOGTAG, "Can't position cursor because layerView is null");
             return;
         }
 
@@ -64,32 +75,46 @@ public class TextCursorView extends View {
         repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
     }
 
+    public void changeSelections(List<RectF> selectionRects) {
+        LayerView layerView = LOKitShell.getLayerView();
+        if (layerView == null) {
+            Log.e(LOGTAG, "Can't position selections because layerView is null");
+            return;
+        }
+
+        mSelections = selectionRects;
+
+        ImmutableViewportMetrics metrics = layerView.getViewportMetrics();
+        repositionWithViewport(metrics.viewportRectLeft, metrics.viewportRectTop, metrics.zoomFactor);
+    }
+
     public void repositionWithViewport(float x, float y, float zoom) {
-        RectF scaledRectangle = RectUtils.scale(mCursorPosition, zoom);
+        mCursorScaledPosition = RectUtils.scale(mCursorPosition, zoom);
+        mCursorScaledPosition.offset(-x, -y);
+        mCursorScaledPosition.right = mCursorScaledPosition.left + CURSOR_WIDTH;
 
-        mCursorScaledPosition = new PointF(scaledRectangle.left - x, scaledRectangle.top - y);
-        mCursorHeight = scaledRectangle.height();
-
+        mScaledSelections.clear();
+        for (RectF selection : mSelections) {
+            RectF scaledSelection = RectUtils.scale(selection, zoom);
+            scaledSelection.offset(-x, -y);
+            mScaledSelections.add(scaledSelection);
+        }
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setAlpha(mCursorAlpha);
-        RectF cursorRect = new RectF(
-                mCursorScaledPosition.x,
-                mCursorScaledPosition.y,
-                mCursorScaledPosition.x + mCursorWidth,
-                mCursorScaledPosition.y + mCursorHeight);
-        canvas.drawRect(cursorRect, paint);
+        canvas.drawRect(mCursorScaledPosition, mCursorPaint);
+
+        for (RectF selection : mScaledSelections) {
+            canvas.drawRect(selection, mSelectionPaint);
+        }
     }
 
     private Runnable cursorAnimation = new Runnable() {
         public void run() {
-            mCursorAlpha = mCursorAlpha == 0 ? 0xFF : 0;
+            mCursorPaint.setAlpha(mCursorPaint.getAlpha() == 0 ? 0xFF : 0);
             invalidate();
             postDelayed(cursorAnimation, 500);
         }

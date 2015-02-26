@@ -9,6 +9,8 @@ import org.mozilla.gecko.gfx.Layer;
 import org.mozilla.gecko.gfx.LayerView;
 import org.mozilla.gecko.util.FloatUtils;
 
+import java.util.List;
+
 /**
  * The TextCursorLayer is a layer which is responsible for showing the cursor and
  * controls its position, height and visibility.
@@ -74,7 +76,15 @@ public class TextCursorLayer extends Layer {
     public void positionCursor(final RectF position) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
-                mCursorView.changePosition(position);
+                mCursorView.changeCursorPosition(position);
+            }
+        });
+    }
+
+    public void changeSelections(final List<RectF> selections) {
+        LOKitShell.getMainHandler().post(new Runnable() {
+            public void run() {
+                mCursorView.changeSelections(selections);
             }
         });
     }
