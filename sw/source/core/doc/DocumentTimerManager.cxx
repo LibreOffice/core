@@ -41,44 +41,44 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
                                                                 mbStartIdleTimer( false ),
                                                                 mIdleBlockCount( 0 )
 {
-    maIdleTimer.SetTimeout( 600 );
-    maIdleTimer.SetTimeoutHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
+    maIdle.SetPriority( SchedulerPriority::LOWEST );
+    maIdle.SetIdleHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
 }
 
 void DocumentTimerManager::StartIdling()
 {
     mbStartIdleTimer = true;
     if( !mIdleBlockCount )
-        maIdleTimer.Start();
+        maIdle.Start();
 }
 
 void DocumentTimerManager::StopIdling()
 {
     mbStartIdleTimer = false;
-    maIdleTimer.Stop();
+    maIdle.Stop();
 }
 
 void DocumentTimerManager::BlockIdling()
 {
-    maIdleTimer.Stop();
+    maIdle.Stop();
     ++mIdleBlockCount;
 }
 
 void DocumentTimerManager::UnblockIdling()
 {
     --mIdleBlockCount;
-    if( !mIdleBlockCount && mbStartIdleTimer && !maIdleTimer.IsActive() )
-        maIdleTimer.Start();
+    if( !mIdleBlockCount && mbStartIdleTimer && !maIdle.IsActive() )
+        maIdle.Start();
 }
 
 void DocumentTimerManager::StartBackgroundJobs()
 {
     // Trigger DoIdleJobs(), asynchronously.
-    if (!maIdleTimer.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
-        maIdleTimer.Start();
+    if (!maIdle.IsActive()) //fdo#73165 if the timer is already running don't restart from 0
+        maIdle.Start();
 }
 
-IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pTimer )
+IMPL_LINK( DocumentTimerManager, DoIdleJobs, Idle*, pIdle )
 {
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = 0;
@@ -95,7 +95,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pTimer )
         {
             if( rSh.ActionPend() )
             {
-                pTimer->Start();
+                pIdle->Start();
                 return 0;
             }
         }
@@ -119,7 +119,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pTimer )
                 (*pLayIter)->GetCurrShell()->LayoutIdle();
 
                 // Defer the remaining work.
-                pTimer->Start();
+                pIdle->Start();
                 return 0;
             }
         }
@@ -135,7 +135,7 @@ IMPL_LINK( DocumentTimerManager, DoIdleJobs, Timer*, pTimer )
             if ( m_rDoc.getIDocumentFieldsAccess().GetUpdtFlds().IsInUpdateFlds() ||
                  m_rDoc.getIDocumentFieldsAccess().IsExpFldsLocked() )
             {
-                pTimer->Start();
+                pIdle->Start();
                 return 0;
             }
 
