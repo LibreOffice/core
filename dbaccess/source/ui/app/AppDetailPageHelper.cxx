@@ -257,9 +257,11 @@ void OAppDetailPageHelper::dispose()
     }
     m_aFL.disposeAndClear();
     m_aTBPreview.disposeAndClear();
-    m_aBorder.disposeAndClear();
     m_aPreview.disposeAndClear();
     m_aDocumentInfo.disposeAndClear();
+    m_aBorder.disposeAndClear();
+    m_aMenu.reset();
+
     vcl::Window::dispose();
 }
 

@@ -1546,29 +1546,43 @@ SvTreeListBox::~SvTreeListBox()
 
 void SvTreeListBox::dispose()
 {
-
-    pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
-    delete pImp;
-    delete mpImpl->m_pLink;
-    ClearTabList();
-
-    delete pEdCtrl;
-    pEdCtrl = 0;
-    pModel->RemoveView( this );
-    if ( pModel->GetRefCount() == 0 )
+    if( pImp )
     {
-        pModel->Clear();
-        delete pModel;
-        pModel = NULL;
+        pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
+        delete pImp;
+        pImp = NULL;
+    }
+    if( mpImpl )
+    {
+        delete mpImpl->m_pLink;
+        mpImpl->m_pLink = NULL;
+
+        ClearTabList();
+
+        delete pEdCtrl;
+        pEdCtrl = NULL;
+
+        if( pModel )
+        {
+            pModel->RemoveView( this );
+            if ( pModel->GetRefCount() == 0 )
+            {
+                pModel->Clear();
+                delete pModel;
+                pModel = NULL;
+            }
+        }
+
+        SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
+
+        if( this == pDDSource )
+            pDDSource = 0;
+        if( this == pDDTarget )
+            pDDTarget = 0;
+        delete mpImpl;
+        mpImpl = NULL;
     }
 
-    SvTreeListBox::RemoveBoxFromDDList_Impl( *this );
-
-    if( this == pDDSource )
-        pDDSource = 0;
-    if( this == pDDTarget )
-        pDDTarget = 0;
-    delete mpImpl;
     Control::dispose();
 }
 
