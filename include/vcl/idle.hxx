@@ -21,62 +21,23 @@
 #define INCLUDED_VCL_IDLE_HXX
 
 #include <tools/link.hxx>
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
+#include <vcl/scheduler.hxx>
 
-struct ImplIdleData;
-struct ImplSVData;
-
-enum class IdlePriority {
-    HIGHEST   = 0,
-    HIGH      = 1,
-    REPAINT   = 2,
-    RESIZE    = 3,
-    MEDIUM    = 3,
-    LOW       = 4,
-    LOWER     = 5,
-    LOWEST    = 6
-};
-
-class VCL_DLLPUBLIC Idle
+class VCL_DLLPUBLIC Idle : public Scheduler
 {
 protected:
-    ImplIdleData*   mpIdleData;         // Pointer to element in idle list
-    sal_Int32       miPriority;         // Idle priority ( maybe divergent to default)
-    IdlePriority    meDefaultPriority;  // Default idle priority
-    bool            mbActive;           // Currently in the scheduler
     Link            maIdleHdl;          // Callback Link
-
-    friend struct ImplIdleData;
 
 public:
     Idle();
     Idle( const Idle& rIdle );
-    virtual ~Idle();
-
-    void SetPriority( IdlePriority ePriority );
-    void SetSchedulingPriority( sal_Int32 iPriority );
-    sal_Int32    GetPriority() const { return miPriority; }
-    IdlePriority GetDefaultPriority() const { return meDefaultPriority; }
 
     /// Make it possible to associate a callback with this idle handler
-    /// of course, you can also sub-class and override 'DoIdle'
+    /// of course, you can also sub-class and override 'Invoke'
     void            SetIdleHdl( const Link& rLink ) { maIdleHdl = rLink; }
     const Link&     GetIdleHdl() const { return maIdleHdl; }
-
-    // Call idle handler
-    virtual void    DoIdle();
-
-    void            Start();
-    void            Stop();
-
-    bool            IsActive() const { return mbActive; }
-
-    Idle&          operator=( const Idle& rIdle );
-    static void ImplDeInitIdle();
-
-    /// Process all pending idle tasks ahead of time in priority order.
-    static void ProcessAllIdleHandlers();
+    virtual void    Invoke() SAL_OVERRIDE;
+    Idle&           operator=( const Idle& rIdle );
 };
 
 #endif // INCLUDED_VCL_IDLE_HXX

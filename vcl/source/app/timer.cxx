@@ -18,82 +18,13 @@
  */
 
 #include <tools/time.hxx>
-
-#include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
-
 #include <saltimer.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
+#include <vcl/scheduler.hxx>
 
 #define MAX_TIMER_PERIOD    ((sal_uLong)0xFFFFFFFF)
-
-struct ImplTimerData
-{
-    ImplTimerData*  mpNext;         // Pointer to the next Instance
-    Timer*          mpTimer;        // Pointer to VCL Timer instance
-    sal_uLong       mnUpdateTime;   // Last Update Time
-    sal_uLong       mnTimerUpdate;  // TimerCallbackProcs on stack
-    bool            mbDelete;       // Was timer deleted during Update()?
-    bool            mbInTimeout;    // Are we in a timeout handler?
-
-    void Invoke()
-    {
-        if (mbDelete || mbInTimeout )
-            return;
-
-        // if no AutoTimer than stop
-        if ( !mpTimer->mbAuto )
-        {
-            mbDelete = true;
-            mpTimer->mbActive = false;
-        }
-
-        // invoke it
-        mbInTimeout = true;
-        mpTimer->Timeout();
-        mbInTimeout = false;
-    }
-
-    sal_uLong GetDeadline()
-    {
-        return mnUpdateTime + mpTimer->mnTimeout;
-    }
-};
-
-void Timer::ImplDeInitTimer()
-{
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplTimerData*  pTimerData = pSVData->mpFirstTimerData;
-
-    // on WNT the timer queue thread needs killing
-    if (pSVData->mpSalTimer)
-    {
-        pSVData->mpSalTimer->Stop();
-    }
-
-    if ( pTimerData )
-    {
-        do
-        {
-            ImplTimerData* pTempTimerData = pTimerData;
-            if ( pTimerData->mpTimer )
-            {
-                pTimerData->mpTimer->mbActive = false;
-                pTimerData->mpTimer->mpTimerData = NULL;
-            }
-            pTimerData = pTimerData->mpNext;
-            delete pTempTimerData;
-        }
-        while ( pTimerData );
-
-        pSVData->mpFirstTimerData   = NULL;
-        pSVData->mnTimerPeriod      = 0;
-    }
-
-    delete pSVData->mpSalTimer;
-    pSVData->mpSalTimer = 0;
-}
 
 static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
 {
@@ -108,159 +39,59 @@ static void ImplStartTimer( ImplSVData* pSVData, sal_uLong nMS )
     }
 }
 
-void Timer::ImplTimerCallbackProc( bool idle )
+void Timer::SetDeletionFlags()
 {
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplTimerData*  pTimerData;
-    ImplTimerData*  pPrevTimerData;
-    sal_uLong       nMinPeriod = MAX_TIMER_PERIOD;
-    sal_uLong       nDeltaTime;
-    sal_uLong       nTime = tools::Time::GetSystemTicks();
-
-    pSVData->mnTimerUpdate++;
-    pSVData->mbNotAllTimerCalled = true;
-
-    Timer::CheckExpiredTimer(true);
-
-    // determine new time
-    sal_uLong nNewTime = tools::Time::GetSystemTicks();
-    pPrevTimerData = NULL;
-    pTimerData = pSVData->mpFirstTimerData;
-    while ( pTimerData )
-    {
-        // ignore if timer is still in timeout handler
-        if ( pTimerData->mbInTimeout )
+        // if no AutoTimer than stop
+        if ( !mbAuto )
         {
-            pPrevTimerData = pTimerData;
-            pTimerData = pTimerData->mpNext;
+            mpSchedulerData->mbDelete = true;
+            mbActive = false;
         }
-        // Was timer destroyed in the meantime?
-        else if ( pTimerData->mbDelete )
-        {
-            if ( pPrevTimerData )
-                pPrevTimerData->mpNext = pTimerData->mpNext;
-            else
-                pSVData->mpFirstTimerData = pTimerData->mpNext;
-            if ( pTimerData->mpTimer )
-                pTimerData->mpTimer->mpTimerData = NULL;
-            ImplTimerData* pTempTimerData = pTimerData;
-            pTimerData = pTimerData->mpNext;
-            delete pTempTimerData;
-        }
-        else
-        {
-            pTimerData->mnTimerUpdate = 0;
-            // determine smallest time slot
-            if ( pTimerData->mnUpdateTime == nTime )
-            {
-                nDeltaTime = pTimerData->mpTimer->mnTimeout;
-                if ( nDeltaTime < nMinPeriod )
-                    nMinPeriod = nDeltaTime;
-            }
-            else
-            {
-                nDeltaTime = pTimerData->mnUpdateTime + pTimerData->mpTimer->mnTimeout;
-                if ( nDeltaTime < nNewTime )
-                    nMinPeriod = 1;
-                else
-                {
-                    nDeltaTime -= nNewTime;
-                    if ( nDeltaTime < nMinPeriod )
-                        nMinPeriod = nDeltaTime;
-                }
-            }
-            pPrevTimerData = pTimerData;
-            pTimerData = pTimerData->mpNext;
-        }
-    }
-
-    // delete clock if no more timers available
-    if ( !pSVData->mpFirstTimerData )
-    {
-        pSVData->mpSalTimer->Stop();
-        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
-    }
-    else
-        ImplStartTimer( pSVData, nMinPeriod );
-
-    pSVData->mnTimerUpdate--;
-    pSVData->mbNotAllTimerCalled = false;
 }
 
-bool Timer::TimerReady()
+bool Timer::ReadyForSchedule( bool bTimer )
 {
-    return Timer::CheckExpiredTimer(false);
+    (void)bTimer;
+    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= tools::Time::GetSystemTicks();
 }
 
-bool Timer::CheckExpiredTimer(bool bDoInvoke)
+Timer::Timer() : Scheduler()
 {
-// find timer where the timer handler needs to be called
-    ImplSVData*     pSVData = ImplGetSVData();
-    ImplTimerData* pTimerData = pSVData->mpFirstTimerData;
-    sal_uLong       nTime = tools::Time::GetSystemTicks();
-    bool            timerExpired = false;
-    while ( pTimerData )
-    {
-        // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
-        // call the handler as soon as the time is up.
-        if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
-             !pTimerData->mbDelete && !pTimerData->mbInTimeout)
-        {
-            // time has expired
-            if ( pTimerData->GetDeadline() <= nTime )
-            {
-                if(bDoInvoke)
-                {
-                    //Set new update Timer
-                    pTimerData->mnUpdateTime = nTime;
-                    pTimerData->Invoke();
-                }
-                timerExpired = true;
-            }
-        }
-
-        pTimerData = pTimerData->mpNext;
-    }
-    return timerExpired;
+    mnTimeout = 1;
+    mbAuto = false;
+    miPriority= static_cast<sal_Int32>(SchedulerPriority::HIGHEST);
+    meDefaultPriority = SchedulerPriority::HIGHEST;
 }
 
-Timer::Timer():
-    mpTimerData(NULL),
-    mnTimeout(1),
-    mbActive(false),
-    mbAuto(false)
+Timer::Timer( const Timer& rTimer ) : Scheduler(rTimer)
 {
+    mnTimeout = rTimer.mnTimeout;
+    mbAuto = rTimer.mbAuto;
+    maTimeoutHdl = rTimer.maTimeoutHdl;
 }
 
-Timer::Timer( const Timer& rTimer ):
-    mpTimerData(NULL),
-    mnTimeout(rTimer.mnTimeout),
-    mbActive(false),
-    mbAuto(false),
-    maTimeoutHdl(rTimer.maTimeoutHdl)
-{
-    if ( rTimer.IsActive() )
-        Start();
-}
-
-Timer::~Timer()
-{
-    if ( mpTimerData )
-    {
-        mpTimerData->mbDelete = true;
-        mpTimerData->mpTimer = NULL;
-     }
-}
-
-void Timer::Timeout()
+void Timer::Invoke()
 {
     maTimeoutHdl.Call( this );
+}
+
+void Timer::Start()
+{
+    Scheduler::Start();
+    ImplSVData*     pSVData = ImplGetSVData();
+    if( ! pSVData->mpSalTimer )
+    {
+        pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
+        pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
+        pSVData->mpSalTimer->SetCallback( CallbackTaskScheduling );
+    }
+    if ( mnTimeout < pSVData->mnTimerPeriod )
+        ImplStartTimer( pSVData, mnTimeout );
 }
 
 void Timer::SetTimeout( sal_uLong nNewTimeout )
 {
     mnTimeout = nNewTimeout;
-
     // if timer is active then renew clock
     if ( mbActive )
     {
@@ -270,80 +101,12 @@ void Timer::SetTimeout( sal_uLong nNewTimeout )
     }
 }
 
-void Timer::Start()
-{
-    mbActive = true;
-
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !mpTimerData )
-    {
-        if ( !pSVData->mpFirstTimerData )
-        {
-            pSVData->mnTimerPeriod = MAX_TIMER_PERIOD;
-            if( ! pSVData->mpSalTimer )
-            {
-                pSVData->mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
-                pSVData->mpSalTimer->SetCallback( ImplTimerCallbackProc );
-            }
-        }
-
-        // insert timer and start
-        mpTimerData = new ImplTimerData;
-        mpTimerData->mpTimer        = this;
-        mpTimerData->mnUpdateTime   = tools::Time::GetSystemTicks();
-        mpTimerData->mnTimerUpdate  = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete       = false;
-        mpTimerData->mbInTimeout    = false;
-
-        // insert last due to SFX!
-        ImplTimerData* pPrev = NULL;
-        ImplTimerData* pData = pSVData->mpFirstTimerData;
-        while ( pData )
-        {
-            pPrev = pData;
-            pData = pData->mpNext;
-        }
-        mpTimerData->mpNext = NULL;
-        if ( pPrev )
-            pPrev->mpNext = mpTimerData;
-        else
-            pSVData->mpFirstTimerData = mpTimerData;
-
-        if ( mnTimeout < pSVData->mnTimerPeriod )
-            ImplStartTimer( pSVData, mnTimeout );
-    }
-    else if( !mpTimerData->mpTimer ) // TODO: remove when guilty found
-    {
-        OSL_FAIL( "Timer::Start() on a destroyed Timer!" );
-    }
-    else
-    {
-        mpTimerData->mnUpdateTime    = tools::Time::GetSystemTicks();
-        mpTimerData->mnTimerUpdate   = pSVData->mnTimerUpdate;
-        mpTimerData->mbDelete        = false;
-    }
-}
-
-void Timer::Stop()
-{
-    mbActive = false;
-
-    if ( mpTimerData )
-        mpTimerData->mbDelete = true;
-}
-
 Timer& Timer::operator=( const Timer& rTimer )
 {
-    if ( IsActive() )
-        Stop();
-
-    mbActive        = false;
-    mnTimeout       = rTimer.mnTimeout;
-    maTimeoutHdl    = rTimer.maTimeoutHdl;
-
-    if ( rTimer.IsActive() )
-        Start();
-
+    Scheduler::operator=(rTimer);
+    maTimeoutHdl = rTimer.maTimeoutHdl;
+    mnTimeout = rTimer.mnTimeout;
+    mbAuto = rTimer.mbAuto;
     return *this;
 }
 
