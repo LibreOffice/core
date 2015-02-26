@@ -80,24 +80,19 @@ transliteration_commonclass::compareSubstring(
         const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 throw(RuntimeException, std::exception)
 {
-    const sal_Unicode* unistr1 = NULL;
-    const sal_Unicode* unistr2 = NULL;
-    sal_uInt32 strlen1;
-    sal_uInt32 strlen2;
-
     Sequence <sal_Int32> offset1(2*len1);
     Sequence <sal_Int32> offset2(2*len2);
 
     OUString in_str1 = this->transliterate(str1, off1, len1, offset1);
     OUString in_str2 = this->transliterate(str2, off2, len2, offset2);
-    strlen1 = in_str1.getLength();
-    strlen2 = in_str2.getLength();
-    unistr1 = in_str1.getStr();
-    unistr2 = in_str2.getStr();
+    sal_Int32 strlen1 = in_str1.getLength();
+    sal_Int32 strlen2 = in_str2.getLength();
+    const sal_Unicode* unistr1 = in_str1.getStr();
+    const sal_Unicode* unistr2 = in_str2.getStr();
 
     while (strlen1 && strlen2)
     {
-        sal_uInt32 ret = *unistr1 - *unistr2;
+        sal_Int32 ret = *unistr1 - *unistr2;
         if (ret)
             return ret;
 
