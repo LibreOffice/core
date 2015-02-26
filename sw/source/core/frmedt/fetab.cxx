@@ -83,19 +83,18 @@ const SwFrm     *pRowCacheLastCellFrm = 0;
 
 class TblWait
 {
-    SwWait *pWait;
+    ::std::unique_ptr<SwWait> m_pWait;
 public:
     TblWait(size_t nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t nCnt2 = 0);
-    ~TblWait() { delete pWait; }
 };
 
 TblWait::TblWait(size_t const nCnt, SwFrm *pFrm, SwDocShell &rDocShell, size_t const nCnt2):
-    pWait( 0 )
+    m_pWait( nullptr )
 {
-    bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
+    const bool bWait = 20 < nCnt || 20 < nCnt2 || (pFrm &&
                  20 < pFrm->ImplFindTabFrm()->GetTable()->GetTabLines().size());
     if( bWait )
-        pWait = new SwWait( rDocShell, true );
+        m_pWait = ::std::unique_ptr<SwWait>(new SwWait( rDocShell, true ));
 }
 
 void SwFEShell::ParkCursorInTab()
