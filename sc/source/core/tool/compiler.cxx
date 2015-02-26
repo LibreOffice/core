@@ -2450,8 +2450,9 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
             { "ZGZ",            ocZGZ },            // ZGZ -> RRI
             { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
-            { "GOALSEEK",       ocBackSolver }      // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
-            // Renamed new names, prepare to read future names:
+            { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
+             // Renamed new names, prepare to read future names:
+            { "FDIST",          ocFDist_LT },       // COM.MICROSOFT.F.DIST  -> FDIST
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
         static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
@@ -3732,10 +3733,10 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
         OpCode  eOp;
         short   nSep;
     };
-    // FunctionStack only used if PODF or OOXML!
     bool bPODF = FormulaGrammar::isPODF( meGrammar);
+    bool bODFF = FormulaGrammar::isODFF( meGrammar);
     bool bOOXML = FormulaGrammar::isOOXML( meGrammar);
-    bool bUseFunctionStack = (bPODF || bOOXML);
+    bool bUseFunctionStack = (bPODF || bOOXML || bODFF);
     const size_t nAlloc = 512;
     FunctionStack aFuncs[ nAlloc ];
     FunctionStack* pFunctionStack = (bUseFunctionStack && static_cast<size_t>(rFormula.getLength()) > nAlloc ?
@@ -3841,23 +3842,42 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                 SetError(errCodeOverflow); break;
             }
         }
-        if (bOOXML)
+        // append arguments if neccessary
+        if ( eOp == ocClose )
         {
-            // Append a parameter for CEILING, FLOOR and WEEKNUM, all 1.0
-            // Function is already closed, parameter count is nSep+1
-            size_t nFunc = nFunction + 1;
-            if (eOp == ocClose && (
-                    (pFunctionStack[ nFunc ].eOp == ocCeil &&   // 3rd Excel mode
+            if ( bOOXML )
+            {
+                // Append a parameter for CEILING, FLOOR and WEEKNUM, all 1.0
+                // Function is already closed, parameter count is nSep+1
+                size_t nFunc = nFunction + 1;
+                if ((pFunctionStack[ nFunc ].eOp == ocCeil &&   // 3rd Excel mode
                      pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocFloor &&  // 3rd Excel mode
                      pFunctionStack[ nFunc ].nSep == 1) ||
                     (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
-                     pFunctionStack[ nFunc ].nSep == 0)))
-            {
-                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
-                        !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
+                     pFunctionStack[ nFunc ].nSep == 0))
                 {
-                    SetError(errCodeOverflow); break;
+                    if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
+                            !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
+                    {
+                        SetError(errCodeOverflow); break;
+                    }
+                }
+            }
+            else if ( bODFF )
+            {
+                // ensure backward compatibility for F.DIST:
+                // 4th argument (cumulative) in version 4.5 and up is optional (defaulting to true),
+                // but in version 4.4 and before it is required
+                size_t nFunc = nFunction + 1;
+                if ( (pFunctionStack[ nFunc ].eOp == ocFDist_LT &&
+                      pFunctionStack[ nFunc ].nSep == 2) )
+                {
+                    if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
+                            !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
+                    {
+                        SetError(errCodeOverflow); break;
+                    }
                 }
             }
         }
