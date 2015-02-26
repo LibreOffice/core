@@ -21,16 +21,21 @@
 
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
+#include <sax/fastattribs.hxx>
+
+using namespace css::xml::sax;
+using namespace xmloff::token;
 
 class SwXMLSectionList : public SvXMLImport
 {
 protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
-    virtual SvXMLImportContext *CreateContext( sal_uInt16 nPrefix,
-                  const OUString& rLocalName,
-                  const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
+    virtual SvXMLImportContext *CreateFastContext( sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList ) SAL_OVERRIDE;
 public:
     std::vector<OUString*> &rSectionList;
 
@@ -47,16 +52,12 @@ class SvXMLSectionListContext : public SvXMLImportContext
 private:
     SwXMLSectionList & rLocalRef;
 public:
-    SvXMLSectionListContext ( SwXMLSectionList& rImport,
-                           sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
-    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
-                           const OUString& rLocalName,
-                           const ::com::sun::star::uno::Reference<
-                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList ) SAL_OVERRIDE;
-    virtual ~SvXMLSectionListContext();
+    SvXMLSectionListContext ( SwXMLSectionList& rImport, sal_Int32 Element,
+        const ::css::uno::Reference< ::css::xml::sax::XFastAttributeList > & xAttrList );
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 Element, const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList )
+        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
+    virtual ~SvXMLSectionListContext ( void );
 };
 
 #endif
