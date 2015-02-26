@@ -176,9 +176,15 @@ inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
 #endif
 }
 
-inline clang::NamedDecl * const * begin(
-    clang::DeclContextLookupConstResult const & result)
-{
+#if (__clang_major__ == 3 && __clang_minor__ >= 7) || __clang_major__ > 3
+typedef clang::DeclContext::lookup_result DeclContextLookupResult;
+typedef clang::DeclContext::lookup_iterator DeclContextLookupIterator;
+#else
+typedef clang::DeclContext::lookup_const_result DeclContextLookupResult;
+typedef clang::DeclContext::lookup_const_iterator DeclContextLookupIterator;
+#endif
+
+inline DeclContextLookupIterator begin(DeclContextLookupResult const & result) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
     return result.begin();
 #else
@@ -186,9 +192,7 @@ inline clang::NamedDecl * const * begin(
 #endif
 }
 
-inline clang::NamedDecl * const * end(
-    clang::DeclContextLookupConstResult const & result)
-{
+inline DeclContextLookupIterator end(DeclContextLookupResult const & result) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
     return result.end();
 #else
