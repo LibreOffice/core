@@ -255,6 +255,9 @@ public class LOKitThread extends Thread {
             mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.CURSOR);
             mTileProvider.mouseButtonDown(documentCoordinate, 1);
             mTileProvider.mouseButtonUp(documentCoordinate, 1);
+            if (mInvalidationHandler.getOverlayState() == InvalidationHandler.OverlayState.SELECTION) {
+                mTileProvider.setTextSelectionReset();
+            }
         }
     }
 

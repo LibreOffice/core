@@ -52,6 +52,10 @@ public class InvalidationHandler {
         }
     }
 
+    public OverlayState getOverlayState() {
+        return mState;
+    }
+
     public void setOverlayState(OverlayState state) {
         this.mState = state;
     }
