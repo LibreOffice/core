@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "xolefactory.hxx"
 #include "oleembobj.hxx"
@@ -32,28 +33,6 @@
 using namespace ::com::sun::star;
 
 // TODO: do not create OLE objects that represent OOo documents
-
-
-uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
-{
-    uno::Sequence< OUString > aRet(2);
-    aRet[0] = "com.sun.star.embed.OLEEmbeddedObjectFactory";
-    aRet[1] = "com.sun.star.comp.embed.OLEEmbeddedObjectFactory";
-    return aRet;
-}
-
-
-OUString SAL_CALL OleEmbeddedObjectFactory::impl_staticGetImplementationName()
-{
-    return OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
-}
-
-
-uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
-{
-    return uno::Reference< uno::XInterface >( *new OleEmbeddedObjectFactory( xServiceManager ) );
-}
 
 
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromEntry(
@@ -293,7 +272,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 OUString SAL_CALL OleEmbeddedObjectFactory::getImplementationName()
     throw ( uno::RuntimeException, std::exception )
 {
-    return impl_staticGetImplementationName();
+    return OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
 }
 
 sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& ServiceName )
@@ -306,7 +285,20 @@ sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& Ser
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException, std::exception )
 {
-    return impl_staticGetSupportedServiceNames();
+    uno::Sequence< OUString > aRet(2);
+    aRet[0] = "com.sun.star.embed.OLEEmbeddedObjectFactory";
+    aRet[1] = "com.sun.star.comp.embed.OLEEmbeddedObjectFactory";
+    return aRet;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_OLEEmbeddedObjectFactory_get_implementation(uno::XComponentContext* context,
+                                                                    uno::Sequence<uno::Any> const &)
+{
+    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
+    return cppu::acquire(new OleEmbeddedObjectFactory(xSM));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
