@@ -363,7 +363,7 @@ sal_Int32 ReadThroughComponent(
     }
     catch ( uno::Exception& )
     {
-        OSL_FAIL( "Error on import!\n" );
+        OSL_FAIL( "Error on import" );
         // TODO/LATER: error handling
     }
 
