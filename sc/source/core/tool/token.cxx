@@ -2479,9 +2479,18 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
             // Selected range is only partially overlapping in vertical direction. Bail out.
             return false;
 
-        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Col() <= rRefRange.aStart.Col())
-            // Selected range is at the left end and the edge expansion is turned off.  No expansion.
-            return false;
+        if (rCxt.mrDoc.IsExpandRefs())
+        {
+            if (rRefRange.aEnd.Col() - rRefRange.aStart.Col() < 1)
+                // Reference must be at least two columns wide.
+                return false;
+        }
+        else
+        {
+            if (rSelectedRange.aStart.Col() <= rRefRange.aStart.Col())
+                // Selected range is at the left end and the edge expansion is turned off.  No expansion.
+                return false;
+        }
 
         // Move the last column position to the right.
         SCCOL nDelta = rSelectedRange.aEnd.Col() - rSelectedRange.aStart.Col() + 1;
@@ -2495,9 +2504,18 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
             // Selected range is only partially overlapping in horizontal direction. Bail out.
             return false;
 
-        if (!rCxt.mrDoc.IsExpandRefs() && rSelectedRange.aStart.Row() <= rRefRange.aStart.Row())
-            // Selected range is at the top end and the edge expansion is turned off.  No expansion.
-            return false;
+        if (rCxt.mrDoc.IsExpandRefs())
+        {
+            if (rRefRange.aEnd.Row() - rRefRange.aStart.Row() < 1)
+                // Reference must be at least two rows tall.
+                return false;
+        }
+        else
+        {
+            if (rSelectedRange.aStart.Row() <= rRefRange.aStart.Row())
+                // Selected range is at the top end and the edge expansion is turned off.  No expansion.
+                return false;
+        }
 
         // Move the last row position down.
         SCROW nDelta = rSelectedRange.aEnd.Row() - rSelectedRange.aStart.Row() + 1;
@@ -2524,6 +2542,11 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     if (rCxt.mnColDelta > 0)
     {
         // Insert and shift right.
+
+        if (rRefRange.aEnd.Col() - rRefRange.aStart.Col() < 1)
+            // Reference must be at least two columns wide.
+            return false;
+
         if (rRefRange.aStart.Row() < rSelectedRange.aStart.Row() || rSelectedRange.aEnd.Row() < rRefRange.aEnd.Row())
             // Selected range is only partially overlapping in vertical direction. Bail out.
             return false;
@@ -2539,6 +2562,10 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     }
     else if (rCxt.mnRowDelta > 0)
     {
+        if (rRefRange.aEnd.Row() - rRefRange.aStart.Row() < 1)
+            // Reference must be at least two rows tall.
+            return false;
+
         if (rRefRange.aStart.Col() < rSelectedRange.aStart.Col() || rSelectedRange.aEnd.Col() < rRefRange.aEnd.Col())
             // Selected range is only partially overlapping in horizontal direction. Bail out.
             return false;
