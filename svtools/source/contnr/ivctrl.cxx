@@ -268,12 +268,12 @@ void SvtIconChoiceCtrl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIc
 
 sal_uLong SvtIconChoiceCtrl::GetEntryCount() const
 {
-    return _pImp->GetEntryCount();
+    return _pImp ? _pImp->GetEntryCount() : 0;
 }
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetEntry( sal_uLong nPos ) const
 {
-    return _pImp->GetEntry( nPos );
+    return _pImp ? _pImp->GetEntry( nPos ) : NULL;
 }
 
 void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics )
@@ -283,7 +283,7 @@ void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics 
 
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( sal_uLong& rPos ) const
 {
-    return _pImp->GetFirstSelectedEntry( rPos );
+    return _pImp ? _pImp->GetFirstSelectedEntry( rPos ) : NULL;
 }
 
 void SvtIconChoiceCtrl::ClickIcon()

@@ -185,6 +185,8 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 
 TaskPaneList* SystemWindow::GetTaskPaneList()
 {
+    if( !mpImplData )
+        return NULL;
     if( mpImplData->mpTaskPaneList )
         return mpImplData->mpTaskPaneList ;
     else

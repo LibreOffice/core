@@ -156,8 +156,12 @@ Splitter::~Splitter()
 
 void Splitter::dispose()
 {
-    TaskPaneList *pTList = GetSystemWindow()->GetTaskPaneList();
-    pTList->RemoveWindow( this );
+    SystemWindow *pSysWin = GetSystemWindow();
+    if(pSysWin)
+    {
+        TaskPaneList *pTList = pSysWin->GetTaskPaneList();
+        pTList->RemoveWindow(this);
+    }
     Window::dispose();
 }
 
