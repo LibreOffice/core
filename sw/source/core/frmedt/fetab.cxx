@@ -211,7 +211,7 @@ bool SwFEShell::InsertRow( sal_uInt16 nCnt, bool bBehind )
     }
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_ROW );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
+    TblWait aWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
     bool bRet = false;
     if ( aBoxes.size() )
@@ -249,7 +249,7 @@ bool SwFEShell::InsertCol( sal_uInt16 nCnt, bool bBehind )
     SwSelBoxes aBoxes;
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
 
-    TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
+    TblWait aWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
     bool bRet = false;
     if( !aBoxes.empty() )
@@ -299,7 +299,7 @@ bool SwFEShell::DeleteCol()
     GetTblSel( *this, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
     if ( !aBoxes.empty() )
     {
-        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait aWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
         // remove crsr from the deletion area.
         // Put them behind/on the table; via the
@@ -351,7 +351,7 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
     if( !aBoxes.empty() )
     {
-        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait aWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
         // Delete cursors from the deletion area.
         // Then the cursor is:
@@ -463,7 +463,7 @@ sal_uInt16 SwFEShell::MergeTab()
             SET_CURR_SHELL( this );
             StartAllAction();
 
-            TblWait(pTableCrsr->GetSelectedBoxesCount(), 0,
+            TblWait aWait(pTableCrsr->GetSelectedBoxesCount(), 0,
                     *GetDoc()->GetDocShell(),
                      pTblNd->GetTable().GetTabLines().size() );
 
@@ -506,7 +506,7 @@ bool SwFEShell::SplitTab( bool bVert, sal_uInt16 nCnt, bool bSameHeight )
     GetTblSel( *this, aBoxes );
     if( !aBoxes.empty() )
     {
-        TblWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
+        TblWait aWait( nCnt, pFrm, *GetDoc()->GetDocShell(), aBoxes.size() );
 
         // now delete the columns
         bRet = GetDoc()->SplitTbl( aBoxes, bVert, nCnt, bSameHeight );
@@ -1262,7 +1262,7 @@ bool SwFEShell::DeleteTblSel()
     GetTblSelCrs( *this, aBoxes );
     if( !aBoxes.empty() )
     {
-        TblWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
+        TblWait aWait( aBoxes.size(), pFrm, *GetDoc()->GetDocShell() );
 
         // cursor should be removed from deletion area.
         // Put them behind/on the table; via the document
