@@ -857,7 +857,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         aMemStm.ReadUInt32( nColsUsed );
 
         nPalCount = ( nBitCount <= 8 ) ? ( nColsUsed ? nColsUsed : ( 1 << (sal_uInt32) nBitCount ) ) :
-                                         ( ( 3 == nCompression ) ? 12 : 0 );
+                                         ( ( 3 == nCompression ) ? 3 : 0 );
 
         m_rStm.Write( aMemStm.GetData(), nDIBSize );
 
