@@ -18,10 +18,12 @@ public class InvalidationHandler {
 
     private TextCursorLayer mTextCursorLayer;
     private TextSelection mTextSelection;
+    private OverlayState mState;
 
     public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
         mTextCursorLayer = mainActivity.getTextCursorLayer();
         mTextSelection = mainActivity.getTextSelection();
+        mState = OverlayState.NONE;
     }
 
     /**
@@ -52,6 +54,10 @@ public class InvalidationHandler {
                 invalidateSelectionEnd(payload);
                 break;
         }
+    }
+
+    public void setOverlayState(OverlayState state) {
+        this.mState = state;
     }
 
     /**
@@ -133,18 +139,19 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateCursor(String payload) {
-        RectF cursorRectangle = convertPayloadToRectangle(payload);
-        if (cursorRectangle != null) {
-            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
-            textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, createRectangleUnderSelection(cursorRectangle));
-            textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+        if (mState == OverlayState.CURSOR) {
+            RectF cursorRectangle = convertPayloadToRectangle(payload);
+            if (cursorRectangle != null) {
+                TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
+                textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, createRectangleUnderSelection(cursorRectangle));
+                textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+                textSelection.hideHandle(TextSelectionHandle.HandleType.START);
+                textSelection.hideHandle(TextSelectionHandle.HandleType.END);
 
-            textSelection.hideHandle(TextSelectionHandle.HandleType.START);
-            textSelection.hideHandle(TextSelectionHandle.HandleType.END);
-
-            TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
-            textCursorLayer.positionCursor(cursorRectangle);
-            textCursorLayer.showCursor();
+                TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
+                textCursorLayer.positionCursor(cursorRectangle);
+                textCursorLayer.showCursor();
+            }
         }
     }
 
@@ -154,12 +161,15 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateSelectionStart(String payload) {
+        if (mState == OverlayState.NONE) {
+            return;
+        }
         RectF selectionRectangle = convertPayloadToRectangle(payload);
         if (selectionRectangle != null) {
             mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, createRectangleUnderSelection(selectionRectangle));
             mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
-            mTextCursorLayer.hideCursor();
+            mState = OverlayState.SELECTION;
         }
     }
 
@@ -169,12 +179,15 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateSelectionEnd(String payload) {
+        if (mState == OverlayState.NONE) {
+            return;
+        }
         RectF selectionRect = convertPayloadToRectangle(payload);
         if (selectionRect != null) {
             mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, createRectangleUnderSelection(selectionRect));
             mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
-            mTextCursorLayer.hideCursor();
+            mState = OverlayState.SELECTION;
         }
     }
 
@@ -184,12 +197,23 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateSelection(String payload) {
+        if (mState == OverlayState.NONE) {
+            return;
+        }
         if (payload.isEmpty()) {
+            mState = OverlayState.CURSOR;
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
         } else {
+            mState = OverlayState.SELECTION;
             List<RectF> rects = convertPayloadToRectangles(payload);
             mTextCursorLayer.changeSelections(rects);
         }
+    }
+
+    public enum OverlayState {
+        NONE,
+        CURSOR,
+        SELECTION
     }
 }

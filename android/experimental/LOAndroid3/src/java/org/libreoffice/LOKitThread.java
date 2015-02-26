@@ -233,10 +233,12 @@ public class LOKitThread extends Thread {
         if (touchType.equals("LongPress")) {
             LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
             mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 2);
+            mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.SELECTION);
         } else { // "SingleTap"
             LibreOfficeMainActivity.mAppContext.showSoftKeyboard();
             mTileProvider.mouseButtonDown(mDocumentTouchCoordinate, 1);
             mTileProvider.mouseButtonUp(mDocumentTouchCoordinate, 1);
+            mInvalidationHandler.setOverlayState(InvalidationHandler.OverlayState.CURSOR);
         }
     }
 
