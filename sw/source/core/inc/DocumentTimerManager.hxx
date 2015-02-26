@@ -23,7 +23,7 @@
 #include <IDocumentTimerAccess.hxx>
 #include <boost/utility.hpp>
 
-#include <vcl/timer.hxx>
+#include <vcl/idle.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
 
@@ -50,7 +50,7 @@ public:
     void StartBackgroundJobs() SAL_OVERRIDE;
 
     // Our own 'IdleTimer' calls the following method
-    DECL_LINK( DoIdleJobs, Timer * );
+    DECL_LINK( DoIdleJobs, Idle * );
 
     virtual ~DocumentTimerManager();
 
@@ -60,7 +60,7 @@ private:
 
      bool mbStartIdleTimer; //< idle timer mode start/stop
      sal_Int32 mIdleBlockCount;
-     Timer  maIdleTimer;
+     Idle  maIdle;
 };
 
 }
