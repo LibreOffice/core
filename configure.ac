@@ -365,19 +365,29 @@ if test -n "$with_android_ndk"; then
     # (A 64-bit ld.gold grows to much over 10 gigabytes of virtual space when linking such a .so if
     # all objects have been built with debug information.)
     toolchain_system='*'
-    if test $build_os = linux-gnu; then
-        ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/linux-x86/bin
-        ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/linux-x86
-        if test $build_cpu = x86_64; then
-            if test -d $ANDROID_COMPILER_DIR/prebuilt/linux-x86_64; then
-                ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/linux-x86_64/bin
-            fi
-            if test -d $ANDROID_BINUTILS_DIR/prebuilt/linux-x86_64; then
-                ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/linux-x86_64
-            fi
+    case $build_os in
+    linux-gnu*)
+        ndk_build_os=linux
+        ;;
+    darwin*)
+        ndk_build_os=darwin
+        ;;
+    *)
+        AC_MSG_ERROR([We only support building for Android from Linux or OS X])
+        ;;
+    esac
+
+    ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86/bin
+    ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/$ndk_build_os-x86
+    if test $build_cpu = x86_64; then
+        if test -d $ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64; then
+            ANDROID_COMPILER_BIN=$ANDROID_COMPILER_DIR/prebuilt/$ndk_build_os-x86_64/bin
         fi
-        ANDROID_BINUTILS_BIN=$ANDROID_BINUTILS_PREBUILT_ROOT/bin
+        if test -d $ANDROID_BINUTILS_DIR/prebuilt/$ndk_build_os-x86_64; then
+            ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_BINUTILS_DIR/prebuilt/$ndk_build_os-x86_64
+        fi
     fi
+    ANDROID_BINUTILS_BIN=$ANDROID_BINUTILS_PREBUILT_ROOT/bin
 
     # This stays empty if there is just one version of the toolchain in the NDK
     ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR=
