@@ -329,6 +329,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 	vcl/source/app/idle \
     vcl/source/app/idlemgr \
     vcl/source/app/salvtables \
+	vcl/source/app/scheduler \
     vcl/source/app/session \
     vcl/source/app/settings \
     vcl/source/app/IconThemeInfo \

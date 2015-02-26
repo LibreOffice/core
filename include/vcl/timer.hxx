@@ -21,50 +21,32 @@
 #define INCLUDED_VCL_TIMER_HXX
 
 #include <tools/link.hxx>
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
+#include <vcl/scheduler.hxx>
 
-struct ImplTimerData;
-struct ImplSVData;
-
-/// Base-class for timers - usually a simple, one-shot timeout
-class VCL_DLLPUBLIC Timer
+class VCL_DLLPUBLIC Timer : public Scheduler
 {
 protected:
-    ImplTimerData*  mpTimerData;
+    Link            maTimeoutHdl;          // Callback Link
     sal_uLong       mnTimeout;
-    bool            mbActive;
     bool            mbAuto;
-    Link            maTimeoutHdl;
 
-    friend struct ImplTimerData;
+    void SetDeletionFlags() SAL_OVERRIDE;
+    bool ReadyForSchedule( bool bTimer ) SAL_OVERRIDE;
 
 public:
-                    Timer();
-                    Timer( const Timer& rTimer );
-    virtual         ~Timer();
+    Timer();
+    Timer( const Timer& rTimer );
 
-    virtual void    Timeout();
-
-    void            Start();
-    void            Stop();
-
-    /// set the timeout in milliseconds
+    /// Make it possible to associate a callback with this timer handler
+    /// of course, you can also sub-class and override 'Invoke'
     void            SetTimeout( sal_uLong nTimeoutMs );
     sal_uLong       GetTimeout() const { return mnTimeout; }
-    bool            IsActive() const { return mbActive; }
-
-    /// Make it possible to associate a callback with this timeout
     void            SetTimeoutHdl( const Link& rLink ) { maTimeoutHdl = rLink; }
     const Link&     GetTimeoutHdl() const { return maTimeoutHdl; }
-
+    virtual void    Invoke() SAL_OVERRIDE;
+    virtual void    Timeout() { Invoke(); }
     Timer&          operator=( const Timer& rTimer );
-
-    /// @internal
-    static void ImplDeInitTimer();
-    static void ImplTimerCallbackProc();
-    static bool TimerReady();
-    static bool CheckExpiredTimer(const bool bDoInvoke);
+    void            Start() SAL_OVERRIDE;
 };
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
@@ -77,6 +59,7 @@ public:
 
     AutoTimer&      operator=( const AutoTimer& rTimer );
 };
+
 #endif // INCLUDED_VCL_TIMER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

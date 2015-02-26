@@ -45,7 +45,7 @@
 #include "vcl/cvtgrf.hxx"
 #include "vcl/unowrap.hxx"
 #include "vcl/timer.hxx"
-#include "vcl/idle.hxx"
+#include "vcl/scheduler.hxx"
 #include "vcl/unohelp.hxx"
 #include "vcl/lazydelete.hxx"
 
@@ -343,11 +343,11 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     ImplSVData* pSVData = ImplGetSVData();
 
     // run timers that have timed out
-    while ( pSVData->mbNotAllTimerCalled )
-        Timer::ImplTimerCallbackProc();
+    //while ( pSVData->mbNotAllTimerCalled )
+    //    Timer::ImplTimerCallbackProc();
 
     //Process all idles
-    Idle::Idle::ProcessAllIdleHandlers();
+    Scheduler::ProcessTaskScheduling(false);
 
     pSVData->maAppData.mnDispatchLevel++;
     // do not wait for events if application was already quit; in that
@@ -367,11 +367,7 @@ inline void ImplYield( bool i_bWait, bool i_bAllEvents )
     // e.g. on OS X; need to trigger timer checks manually
     if( pSVData->maAppData.mbNoYield )
     {
-        do
-        {
-            Timer::ImplTimerCallbackProc( !i_bWait );
-        }
-        while( pSVData->mbNotAllTimerCalled );
+        Scheduler::ProcessTaskScheduling(true);
     }
 
     // call post yield listeners

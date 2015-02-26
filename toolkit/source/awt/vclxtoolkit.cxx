@@ -91,7 +91,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/group.hxx>
-#include <vcl/idle.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/longcurr.hxx>
 #include <vcl/lstbox.hxx>
@@ -1869,7 +1869,7 @@ void SAL_CALL VCLXToolkit::processEventsToIdle()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
-    Idle::ProcessAllIdleHandlers();
+    Scheduler::ProcessTaskScheduling(false);
 }
 
 }

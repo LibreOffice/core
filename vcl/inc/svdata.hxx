@@ -311,8 +311,7 @@ struct ImplSVData
     bool                    mbDeInit;                       // Is VCL deinitializing
     sal_uLong               mnThreadCount;                  // is VCL MultiThread enabled
     ImplConfigData*         mpFirstConfigData;              // pointer to the first config block
-    ImplTimerData*          mpFirstTimerData;               // list of all running timers
-    ImplIdleData*           mpFirstIdleData;                // list of all running idles
+    ImplSchedulerData*      mpFirstSchedulerData;           // list of all running tasks
     SalTimer*               mpSalTimer;                     // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus;                    // interface to ime status window
     SalSystem*              mpSalSystem;                    // SalSystem interface
