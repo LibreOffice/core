@@ -38,19 +38,15 @@ public class InvalidationHandler {
                 invalidateTiles(payload);
                 break;
             case Document.CALLBACK_INVALIDATE_VISIBLE_CURSOR:
-                Log.i(LOGTAG, "Cursor: " + payload);
                 invalidateCursor(payload);
                 break;
             case Document.CALLBACK_INVALIDATE_TEXT_SELECTION:
-                Log.i(LOGTAG, "Selection: " + payload);
                 invalidateSelection(payload);
                 break;
             case Document.CALLBACK_INVALIDATE_TEXT_SELECTION_START:
-                Log.i(LOGTAG, "Selection start: " + payload);
                 invalidateSelectionStart(payload);
                 break;
             case Document.CALLBACK_INVALIDATE_TEXT_SELECTION_END:
-                Log.i(LOGTAG, "Selection end: " + payload);
                 invalidateSelectionEnd(payload);
                 break;
         }
@@ -67,19 +63,22 @@ public class InvalidationHandler {
      * @return rectangle in pixel coordinates
      */
     private RectF convertPayloadToRectangle(String payload) {
-        if (payload.equals("EMPTY")) {
+        String payloadWithoutWhitespace = payload.replaceAll("\\s",""); // remove all whitespace from the string
+
+        if (payloadWithoutWhitespace.isEmpty() || payloadWithoutWhitespace.equals("EMPTY")) {
             return null;
         }
 
-        String[] coordinates = payload.split(",");
+        String[] coordinates = payloadWithoutWhitespace.split(",");
 
         if (coordinates.length != 4) {
             return null;
         }
-        int width = Integer.decode(coordinates[0].trim());
-        int height = Integer.decode(coordinates[1].trim());
-        int x = Integer.decode(coordinates[2].trim());
-        int y = Integer.decode(coordinates[3].trim());
+
+        int width = Integer.decode(coordinates[0]);
+        int height = Integer.decode(coordinates[1]);
+        int x = Integer.decode(coordinates[2]);
+        int y = Integer.decode(coordinates[3]);
 
         float dpi = (float) LOKitShell.getDpi();
 
@@ -104,8 +103,11 @@ public class InvalidationHandler {
         String[] rectangleArray = payload.split(";");
 
         for (String coordinates : rectangleArray) {
-            RectF rectangle = convertPayloadToRectangle(payload);
-            rectangles.add(rectangle);
+            RectF rectangle = convertPayloadToRectangle(coordinates);
+            if (rectangle != null) {
+                rectangles.add(rectangle);
+            }
+
         }
 
         return rectangles;
