@@ -126,9 +126,13 @@ public:
                                          sal_uInt16 nPrfx,
                                          const OUString& rLName,
                                          OUString& rTitleOrDesc );
+    XMLTextFrameTitleOrDescContext_Impl( SvXMLImport& rImport,
+            sal_Int32 Element, OUString& rTitleOrDesc );
     virtual ~XMLTextFrameTitleOrDescContext_Impl();
 
     virtual void Characters( const OUString& rText ) SAL_OVERRIDE;
+    virtual void SAL_CALL characters( const OUString& rChars )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 TYPEINIT1( XMLTextFrameTitleOrDescContext_Impl, SvXMLImportContext );
@@ -143,6 +147,14 @@ XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
 {
 }
 
+XMLTextFrameTitleOrDescContext_Impl::XMLTextFrameTitleOrDescContext_Impl(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    OUString& rTitleOrDesc )
+:   SvXMLImportContext( rImport ),
+    mrTitleOrDesc( rTitleOrDesc )
+{
+}
+
 XMLTextFrameTitleOrDescContext_Impl::~XMLTextFrameTitleOrDescContext_Impl()
 {
 }
@@ -150,6 +162,12 @@ XMLTextFrameTitleOrDescContext_Impl::~XMLTextFrameTitleOrDescContext_Impl()
 void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
 {
     mrTitleOrDesc += rText;
+}
+
+void SAL_CALL XMLTextFrameTitleOrDescContext_Impl::characters( const OUString& rChars )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    mrTitleOrDesc += rChars;
 }
 
 class XMLTextFrameParam_Impl : public SvXMLImportContext
