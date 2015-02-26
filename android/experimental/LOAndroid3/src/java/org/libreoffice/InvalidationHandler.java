@@ -116,6 +116,18 @@ public class InvalidationHandler {
     }
 
     /**
+     * Handles the tile invalidation message
+     *
+     * @param payload
+     */
+    private void invalidateTiles(String payload) {
+        RectF rectangle = convertPayloadToRectangle(payload);
+        if (rectangle != null) {
+            LOKitShell.sendTileInvalidationRequest(rectangle);
+        }
+    }
+
+    /**
      * Handles the cursor invalidation message
      *
      * @param payload
@@ -133,18 +145,6 @@ public class InvalidationHandler {
             TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
             textCursorLayer.positionCursor(cursorRectangle);
             textCursorLayer.showCursor();
-        }
-    }
-
-    /**
-     * Handles the tile invalidation message
-     *
-     * @param payload
-     */
-    private void invalidateTiles(String payload) {
-        RectF rectangle = convertPayloadToRectangle(payload);
-        if (rectangle != null) {
-            LOKitShell.sendTileInvalidationRequest(rectangle);
         }
     }
 
