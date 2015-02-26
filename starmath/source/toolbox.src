@@ -80,7 +80,7 @@
             {
                 Identifier = RID_XCDOTY ;
                 HelpId = HID_SMA_XCDOTY ;
-                Text [ en-US ] = "Multiplication (Dot )" ;
+                Text [ en-US ] = "Multiplication (Dot)" ;
             };
             ToolBoxItem
             {
