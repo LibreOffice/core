@@ -340,6 +340,20 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
     }
 
     @Override
+    public void setTextSelectionStart(PointF documentCoordinate) {
+        int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
+        int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
+        mDocument.setTextSelection(Document.TEXT_SELECTION_START, x, y);
+    }
+
+    @Override
+    public void setTextSelectionEnd(PointF documentCoordinate) {
+        int x = (int) pixelToTwip(documentCoordinate.x, mDPI);
+        int y = (int) pixelToTwip(documentCoordinate.y, mDPI);
+        mDocument.setTextSelection(Document.TEXT_SELECTION_END, x, y);
+    }
+
+    @Override
     protected void finalize() throws Throwable {
         close();
         super.finalize();

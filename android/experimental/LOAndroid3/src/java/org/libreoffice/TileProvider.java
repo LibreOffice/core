@@ -82,4 +82,8 @@ public interface TileProvider {
      * @param numberOfClicks     - number of clicks (1 - single click, 2 - double click)
      */
     void mouseButtonUp(PointF documentCoordinate, int numberOfClicks);
+
+    void setTextSelectionStart(PointF documentCoordinate);
+
+    void setTextSelectionEnd(PointF documentCoordinate);
 }

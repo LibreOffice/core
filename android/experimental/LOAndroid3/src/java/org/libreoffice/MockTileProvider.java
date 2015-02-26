@@ -105,6 +105,16 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void setTextSelectionStart(PointF documentCoordinate) {
+
+    }
+
+    @Override
+    public void setTextSelectionEnd(PointF documentCoordinate) {
+
+    }
+
+    @Override
     public void changePart(int partIndex) {
     }
 
