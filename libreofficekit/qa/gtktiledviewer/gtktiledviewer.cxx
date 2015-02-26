@@ -21,6 +21,7 @@
 #include "../lokdocview_quad/lokdocview_quad.h"
 
 #include <com/sun/star/awt/Key.hpp>
+#include <rsc/rsc-vcl-shared-types.hxx>
 
 #ifndef g_info
 #define g_info(...) g_log(G_LOG_DOMAIN, G_LOG_LEVEL_INFO, __VA_ARGS__)
@@ -177,6 +178,12 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
         else
             nCharCode = gdk_keyval_to_unicode(pEvent->keyval);
     }
+
+    // rsc is not public API, but should be good enough for debugging purposes.
+    // If this is needed for real, then probably a new param of type
+    // css::awt::KeyModifier is needed in postKeyEvent().
+    if (pEvent->state & GDK_SHIFT_MASK)
+        nKeyCode |= KEY_SHIFT;
 
     if (pEvent->type == GDK_KEY_RELEASE)
         pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
