@@ -1982,21 +1982,17 @@ DECLARE_OOXMLIMPORT_TEST(testPictureWithSchemeColor, "picture-with-schemecolor.d
     // it's color during import.
     uno::Reference<beans::XPropertySet> xImage(getShape(1), uno::UNO_QUERY);
     uno::Reference<graphic::XGraphic> xGraphic = getProperty<uno::Reference<graphic::XGraphic> >(xImage, "Graphic");
-    uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(341), xBitmap->getSize().Width );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int32>(181), xBitmap->getSize().Height );
-
-    // Check some bits of the bitmap which change when color is imported.
-    const uno::Sequence< sal_Int8 > aDIB = xBitmap->getDIB();
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(-91), aDIB[54] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(110), aDIB[55] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(49), aDIB[56] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(-36), aDIB[96] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(-57), aDIB[97] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(-80), aDIB[98] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(-91), aDIB[135] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(110), aDIB[136] );
-    CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int8>(49), aDIB[137] );
+    Graphic aVclGraphic(xGraphic);
+    Bitmap aBitmap(aVclGraphic.GetBitmap());
+    BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
+    CPPUNIT_ASSERT(pAccess);
+    CPPUNIT_ASSERT_EQUAL(341L, pAccess->Width());
+    CPPUNIT_ASSERT_EQUAL(181L, pAccess->Height());
+    Color aColor(pAccess->GetPixel(30, 120));
+    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xb1, 0xc8, 0xdd ));
+    aColor = pAccess->GetPixel(130, 260);
+    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xb1, 0xc8, 0xdd ));
+    aBitmap.ReleaseAccess(pAccess);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo69656, "Table_cell_auto_width_fdo69656.docx")
