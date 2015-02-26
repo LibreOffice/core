@@ -7,6 +7,9 @@ import org.libreoffice.kit.Document;
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.TextSelectionHandle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Parses (interprets) and handles invalidation messages from LibreOffice.
  */
@@ -52,17 +55,17 @@ public class InvalidationHandler {
     }
 
     /**
-     * Parses the invalidation message text and converts to rectangle in pixel coordinates
+     * Parses the payload text with rectangle coordinates and converts to rectangle in pixel coordinates
      *
-     * @param messageText - invalidation message text
+     * @param payload - invalidation message payload text
      * @return rectangle in pixel coordinates
      */
-    private RectF convertCallbackMessageStringToRectF(String messageText) {
-        if (messageText.equals("EMPTY")) {
+    private RectF convertPayloadToRectangle(String payload) {
+        if (payload.equals("EMPTY")) {
             return null;
         }
 
-        String[] coordinates = messageText.split(",");
+        String[] coordinates = payload.split(",");
 
         if (coordinates.length != 4) {
             return null;
@@ -85,18 +88,51 @@ public class InvalidationHandler {
     }
 
     /**
+     * Parses the payload text with more rectangles (separated by ';') and converts to a list of rectangles.
+     *
+     * @param payload - invalidation message payload text
+     * @return list of rectangles
+     */
+    private List<RectF> convertPayloadToRectangles(String payload) {
+        List<RectF> rectangles = new ArrayList<RectF>();
+        String[] rectangleArray = payload.split(";");
+
+        for (String coordinates : rectangleArray) {
+            RectF rectangle = convertPayloadToRectangle(payload);
+            rectangles.add(rectangle);
+        }
+
+        return rectangles;
+    }
+
+    /**
+     * From input rectangle, create a new rectangle which positions under the input rectangle.
+     *
+     * @param rectangle - input rectangle
+     * @return new rectangle positioned under the input rectangle
+     */
+    private RectF createRectangleUnderSelection(RectF rectangle) {
+        return new RectF(rectangle.centerX(), rectangle.bottom, rectangle.centerX(), rectangle.bottom);
+    }
+
+    /**
      * Handles the cursor invalidation message
      *
      * @param payload
      */
     private void invalidateCursor(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, underSelection);
-            mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
-            mTextCursorLayer.positionCursor(rect);
-            mTextCursorLayer.showCursor();
+        RectF cursorRectangle = convertPayloadToRectangle(payload);
+        if (cursorRectangle != null) {
+            TextSelection textSelection = LibreOfficeMainActivity.mAppContext.getTextSelection();
+            textSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, createRectangleUnderSelection(cursorRectangle));
+            textSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
+
+            textSelection.hideHandle(TextSelectionHandle.HandleType.START);
+            textSelection.hideHandle(TextSelectionHandle.HandleType.END);
+
+            TextCursorLayer textCursorLayer = LibreOfficeMainActivity.mAppContext.getTextCursorLayer();
+            textCursorLayer.positionCursor(cursorRectangle);
+            textCursorLayer.showCursor();
         }
     }
 
@@ -106,9 +142,9 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateTiles(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            LOKitShell.sendTileInvalidationRequest(rect);
+        RectF rectangle = convertPayloadToRectangle(payload);
+        if (rectangle != null) {
+            LOKitShell.sendTileInvalidationRequest(rectangle);
         }
     }
 
@@ -118,10 +154,9 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateSelectionStart(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, underSelection);
+        RectF selectionRectangle = convertPayloadToRectangle(payload);
+        if (selectionRectangle != null) {
+            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, createRectangleUnderSelection(selectionRectangle));
             mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
             mTextCursorLayer.hideCursor();
@@ -134,10 +169,9 @@ public class InvalidationHandler {
      * @param payload
      */
     private void invalidateSelectionEnd(String payload) {
-        RectF rect = convertCallbackMessageStringToRectF(payload);
-        if (rect != null) {
-            RectF underSelection = new RectF(rect.centerX(), rect.bottom, rect.centerX(), rect.bottom);
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, underSelection);
+        RectF selectionRect = convertPayloadToRectangle(payload);
+        if (selectionRect != null) {
+            mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, createRectangleUnderSelection(selectionRect));
             mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
             mTextCursorLayer.hideCursor();
@@ -153,7 +187,9 @@ public class InvalidationHandler {
         if (payload.isEmpty()) {
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
+        } else {
+            List<RectF> rects = convertPayloadToRectangles(payload);
+            mTextCursorLayer.changeSelections(rects);
         }
     }
-
 }
