@@ -40,6 +40,25 @@ public:
     virtual bool                IsValid() = 0;
 };
 
+class PaletteASE : public Palette
+{
+    bool        mbValidPalette;
+    OUString    maFName;
+    OUString    maFPath;
+    OUString    maName;
+    ColorList   maColors;
+
+    void        LoadPalette();
+public:
+    PaletteASE( const OUString &rFPath, const OUString &rFName );
+    virtual ~PaletteASE();
+
+    virtual const OUString&     GetName() SAL_OVERRIDE;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) SAL_OVERRIDE;
+
+    virtual bool                IsValid() SAL_OVERRIDE;
+};
+
 class PaletteGPL : public Palette
 {
     bool        mbLoadedPalette;

@@ -24,6 +24,146 @@ Palette::~Palette()
 {
 }
 
+PaletteASE::~PaletteASE()
+{
+}
+
+PaletteASE::PaletteASE( const OUString &rFPath, const OUString &rFName ) :
+    mbValidPalette( false ),
+    maFName ( rFName ),
+    maFPath ( rFPath ),
+    maName  ( rFName )
+{
+    LoadPalette();
+}
+
+void PaletteASE::LoadColorSet( SvxColorValueSet& rColorSet )
+{
+    rColorSet.Clear();
+    int nIx = 1;
+    for (ColorList::const_iterator it = maColors.begin(); it != maColors.end(); ++it)
+    {
+        rColorSet.InsertItem(nIx, it->first, it->second);
+        ++nIx;
+    }
+}
+
+const OUString& PaletteASE::GetName()
+{
+    return maName;
+}
+
+bool PaletteASE::IsValid()
+{
+    return mbValidPalette;
+}
+
+// CMYK values from 0 to 1
+// TODO: Deduplicate me (taken from core/cui/source/dialogs/colorpicker.cxx)
+static void lcl_CMYKtoRGB( float fCyan, float fMagenta, float fYellow, float fKey, float& dR, float& dG, float& dB )
+{
+    fCyan = (fCyan * ( 1.0 - fKey )) + fKey;
+    fMagenta = (fMagenta * ( 1.0 - fKey )) + fKey;
+    fYellow = (fYellow * ( 1.0 - fKey )) + fKey;
+
+    dR = std::max( std::min( ( 1.0 - fCyan ), 1.0), 0.0 );
+    dG = std::max( std::min( ( 1.0 - fMagenta ), 1.0), 0.0 );
+    dB = std::max( std::min( ( 1.0 - fYellow ), 1.0), 0.0 );
+}
+
+void PaletteASE::LoadPalette()
+{
+    SvFileStream aFile(maFPath, StreamMode::READ);
+    aFile.SetEndian(SvStreamEndian::BIG);
+
+    // Verify magic first 4 characters
+    sal_Char cMagic[5] = {0};
+    if ((aFile.Read(cMagic, 4) != 4) || (strncmp(cMagic, "ASEF", 4) != 0))
+    {
+        mbValidPalette = false;
+        return;
+    }
+
+    // Ignore the version number
+    aFile.SeekRel(4);
+
+    sal_uInt32 nBlocks = 0;
+    aFile.ReadUInt32(nBlocks);
+    for (sal_uInt32 nI = 0; nI < nBlocks; nI++) {
+        sal_uInt32 nChunkType = 0;
+        aFile.ReadUInt32(nChunkType);
+        // End chunk
+        if (nChunkType == 0)
+           break;
+
+        // Grab chunk size, name length
+        sal_uInt16 nChunkSize = 0;
+        sal_uInt16 nChars = 0;
+        aFile.ReadUInt16(nChunkSize);
+        aFile.ReadUInt16(nChars);
+
+        OUString aName("");
+        if (nChars > 1)
+            aName = read_uInt16s_ToOUString(aFile, nChars);
+        else
+            aFile.SeekRel(2);
+
+        if (nChunkType == 0xC0010000)
+        {
+            // Got a start chunk, so set palette name
+            maName = aName;
+            // Is there color data? (shouldn't happen in a start block, but check anyway)
+            if (nChunkSize > ((nChars * 2) + 2))
+                aName = "";
+            else
+                continue;
+        }
+
+        sal_Char cColorModel[5] = {0};
+        aFile.Read(cColorModel, 4);
+        OString aColorModel(cColorModel);
+        // r, g, and b are floats ranging from 0 to 1
+        float r = 0, g = 0, b = 0;
+
+        if (aColorModel.equalsIgnoreAsciiCase("cmyk"))
+        {
+            float c = 0, m = 0, y = 0, k = 0;
+            aFile.ReadFloat(c);
+            aFile.ReadFloat(m);
+            aFile.ReadFloat(y);
+            aFile.ReadFloat(k);
+            lcl_CMYKtoRGB(c, m, y, k, r, g, b);
+        }
+        else if (aColorModel.equalsIgnoreAsciiCase("rgb "))
+        {
+            aFile.ReadFloat(r);
+            aFile.ReadFloat(g);
+            aFile.ReadFloat(b);
+        }
+        else if (aColorModel.equalsIgnoreAsciiCase("gray"))
+        {
+            float nVal = 0;
+            aFile.ReadFloat(nVal);
+            r = g = b = nVal;
+        }
+        else
+        {
+            float nL = 0, nA = 0, nB = 0;
+            aFile.ReadFloat(nL);
+            aFile.ReadFloat(nA);
+            aFile.ReadFloat(nB);
+            // TODO: How to convert LAB to RGB?
+            r = g = b = 0;
+        }
+
+        // Ignore color type
+        aFile.SeekRel(2);
+        maColors.push_back(std::make_pair(Color(r * 255, g * 255, b * 255), aName));
+    }
+
+    mbValidPalette = true;
+}
+
 // PaletteGPL ------------------------------------------------------------------
 
 OString lcl_getToken(const OString& rStr, sal_Int32& index);
