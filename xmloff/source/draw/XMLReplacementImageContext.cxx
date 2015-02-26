@@ -19,9 +19,11 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/token/tokens.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
@@ -29,8 +31,10 @@
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
+using css::xml::sax::FastToken::NAMESPACE;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
+using namespace css::uno;
 
 TYPEINIT1( XMLReplacementImageContext, SvXMLImportContext );
 
@@ -67,11 +71,62 @@ XMLReplacementImageContext::XMLReplacementImageContext(
     }
 }
 
+XMLReplacementImageContext::XMLReplacementImageContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    const Reference< XPropertySet >& rPropSet )
+:   SvXMLImportContext( rImport ),
+    m_xPropSet( rPropSet ),
+    m_sGraphicURL("GraphicURL")
+{
+    const SvXMLTokenMap& rTokenMap = GetImport().GetTextImport()->
+            GetTextFrameAttrTokenMap();
+
+    Sequence< css::xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( css::xml::FastAttribute attribute : attributes )
+    {
+        switch( rTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_TEXT_FRAME_HREF:
+            m_sHRef = attribute.Value;
+            break;
+        }
+    }
+}
+
 XMLReplacementImageContext::~XMLReplacementImageContext()
 {
 }
 
 void XMLReplacementImageContext::EndElement()
+{
+    OSL_ENSURE( !m_sHRef.isEmpty() || m_xBase64Stream.is(),
+                "neither URL nor base64 image data given" );
+    rtl::Reference < XMLTextImportHelper > xTxtImport =
+        GetImport().GetTextImport();
+    OUString sHRef;
+    if( !m_sHRef.isEmpty() )
+    {
+        bool bForceLoad = xTxtImport->IsInsertMode() ||
+                              xTxtImport->IsBlockMode() ||
+                              xTxtImport->IsStylesOnlyMode() ||
+                              xTxtImport->IsOrganizerMode();
+        sHRef = GetImport().ResolveGraphicObjectURL( m_sHRef, !bForceLoad );
+    }
+    else if( m_xBase64Stream.is() )
+    {
+        sHRef = GetImport().ResolveGraphicObjectURLFromBase64( m_xBase64Stream );
+        m_xBase64Stream = 0;
+    }
+
+    Reference < XPropertySetInfo > xPropSetInfo =
+        m_xPropSet->getPropertySetInfo();
+    if( xPropSetInfo->hasPropertyByName( m_sGraphicURL ) )
+        m_xPropSet->setPropertyValue( m_sGraphicURL, makeAny( sHRef ) );
+}
+
+void SAL_CALL XMLReplacementImageContext::endFastElement( sal_Int32 Element )
+    throw(RuntimeException, SAXException, std::exception)
 {
     OSL_ENSURE( !m_sHRef.isEmpty() || m_xBase64Stream.is(),
                 "neither URL nor base64 image data given" );
@@ -122,5 +177,26 @@ SvXMLImportContext *XMLReplacementImageContext::CreateChildContext(
     return pContext;
 }
 
+Reference< XFastContextHandler > SAL_CALL
+    XMLReplacementImageContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(RuntimeException, SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = 0;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_OFFICE | xmloff::XML_binary_data)
+        && !m_xBase64Stream.is() )
+    {
+        m_xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+        if( m_xBase64Stream.is() )
+            pContext = new XMLBase64ImportContext( GetImport(), Element,
+                    xAttrList, m_xBase64Stream );
+    }
+
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
