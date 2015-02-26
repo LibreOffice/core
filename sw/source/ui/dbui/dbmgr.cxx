@@ -132,6 +132,9 @@
 #include <calc.hxx>
 #include <dbfld.hxx>
 
+#include <config_cups.h>
+#include <vcl/printerinfomanager.hxx>
+
 using namespace ::osl;
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -848,6 +851,27 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     sal_Bool bNoError = sal_True;
     const bool bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_EMAIL;
     const bool bMergeShell = rMergeDescriptor.nMergeType == DBMGR_MERGE_SHELL;
+    bool bCreateSingleFile = rMergeDescriptor.bCreateSingleFile;
+
+    if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
+    {
+        // It is possible to do MM printing in both modes for the same result, but the singlefile mode
+        // is slower because of all the temporary document copies and merging them together
+        // into the single file, while the other mode simply updates fields and prints for every record.
+        // However, this would cause one print job for every record, and e.g. CUPS refuses new jobs
+        // if it has many jobs enqueued (500 by default), and with the current printing framework
+        // (which uses a pull model) it's rather complicated to create a single print job
+        // in steps.
+        // To handle this, CUPS backend has been changed to cache all the documents to print
+        // and send them to CUPS only as one job at the very end. Therefore, with CUPS, it's ok
+        // to use the faster mode. As I have no idea about other platforms, keep them using
+        // the slower singlefile mode (or feel free to check them, or rewrite the printing code).
+#if ENABLE_CUPS
+        bCreateSingleFile = !psp::PrinterInfoManager::get().supportsBatchPrint();
+#else
+        bCreateSingleFile = true;
+#endif
+    }
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     OUString sBodyMimeType;
@@ -966,7 +990,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     Application::Reschedule();
             }
 
-            if(rMergeDescriptor.bCreateSingleFile)
+            if(bCreateSingleFile)
             {
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
@@ -1065,7 +1089,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     }
 
                     // create a new temporary file name - only done once in case of bCreateSingleFile
-                    if( createTempFile && ( 1 == nDocNo || !rMergeDescriptor.bCreateSingleFile ))
+                    if( createTempFile && ( 1 == nDocNo || !bCreateSingleFile ))
                     {
                         INetURLObject aEntry(sPath);
                         String sLeading;
@@ -1115,7 +1139,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         // Create a copy of the source document and work with that one instead of the source.
                         // If we're not in the single file mode (which requires modifying the document for the merging),
                         // it is enough to do this just once.
-                        if( 1 == nDocNo || rMergeDescriptor.bCreateSingleFile )
+                        if( 1 == nDocNo || bCreateSingleFile )
                         {
                             assert( !xWorkDocSh.Is());
                             // copy the source document
@@ -1155,7 +1179,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 pEvtSrc->LaunchMailMergeEvent( aEvt );
                             }
 
-                            if(rMergeDescriptor.bCreateSingleFile)
+                            if(bCreateSingleFile)
                             {
                                 OSL_ENSURE( pTargetShell, "no target shell available!" );
                                 // copy created file into the target document
@@ -1214,6 +1238,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                             }
                         else if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
                         {
+                            assert(!bCreateSingleFile);
                             if( 1 == nDocNo ) // set up printing only once at the beginning
                             {
                                 // printing should be done synchronously otherwise the document
@@ -1243,6 +1268,9 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 SfxPrinter* pDocPrt = pWorkView->GetPrinter(false);
                                 JobSetup aJobSetup = pDocPrt ? pDocPrt->GetJobSetup() : pWorkView->GetJobSetup();
                                 Printer::PreparePrintJob( pWorkView->GetPrinterController(), aJobSetup );
+#if ENABLE_CUPS
+                                psp::PrinterInfoManager::get().startBatchPrint();
+#endif
                             }
                             if( !Printer::ExecutePrintJob( pWorkView->GetPrinterController()))
                                 bCancel = true;
@@ -1354,7 +1382,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                             }
-                        if( rMergeDescriptor.bCreateSingleFile )
+                        if( bCreateSingleFile )
                         {
                             pWorkDoc->SetNewDBMgr( pOldDBManager );
                             xWorkDocSh->DoClose();
@@ -1367,7 +1395,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
                 // Freeze the layouts of the target document after the first inserted
                 // sub-document, to get the correct PageDesc.
-                if(!bFreezedLayouts && (rMergeDescriptor.bCreateSingleFile))
+                if(!bFreezedLayouts && bCreateSingleFile)
                 {
                     std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
                     std::for_each( aAllLayouts.begin(), aAllLayouts.end(),
@@ -1377,15 +1405,20 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
 
-            if( !rMergeDescriptor.bCreateSingleFile )
+            if( !bCreateSingleFile )
             {
                 if( rMergeDescriptor.nMergeType == DBMGR_MERGE_PRINTER )
+                {
                     Printer::FinishPrintJob( pWorkView->GetPrinterController());
+#if ENABLE_CUPS
+                    psp::PrinterInfoManager::get().flushBatchPrint();
+#endif
+                }
                 pWorkDoc->SetNewDBMgr( pOldDBManager );
                 xWorkDocSh->DoClose();
             }
 
-            if (rMergeDescriptor.bCreateSingleFile)
+            if (bCreateSingleFile)
             {
                 // sw::DocumentLayoutManager::CopyLayoutFmt() did not generate
                 // unique fly names, do it here once.
@@ -1397,7 +1430,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 Application::Reschedule();
 
             // Unfreeze target document layouts and correct all PageDescs.
-            if(rMergeDescriptor.bCreateSingleFile)
+            if(bCreateSingleFile)
             {
                 pTargetShell->CalcLayout();
                 std::set<SwRootFrm*> aAllLayouts = pTargetShell->GetDoc()->GetAllLayouts();
@@ -1413,7 +1446,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             {
                 rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
             }
-            else if(rMergeDescriptor.bCreateSingleFile)
+            else if(bCreateSingleFile)
             {
                 if( rMergeDescriptor.nMergeType != DBMGR_MERGE_PRINTER )
                 {
