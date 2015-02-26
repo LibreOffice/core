@@ -819,7 +819,7 @@ IMAGE_SETEVENT:
     if (bRequestGrfNow && pGrfNd)
     {
         Size aUpdatedSize = pGrfNd->GetTwipSize();  //trigger a swap-in
-        SAL_WARN_IF(!aUpdatedSize.Width() || !aUpdatedSize.Width(), "sw.html", "html image with no width or height");
+        SAL_WARN_IF(!aUpdatedSize.Width() || !aUpdatedSize.Height(), "sw.html", "html image with no width or height");
     }
 
     // Ggf. Frames anlegen und Auto-gebundenen Rahmen registrieren
