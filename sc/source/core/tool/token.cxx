@@ -3682,6 +3682,99 @@ void ScTokenArray::CheckRelativeReferenceBounds(
     }
 }
 
+void ScTokenArray::CheckExpandReferenceBounds(
+    const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const
+{
+    const SCROW nInsRow = rCxt.maRange.aStart.Row();
+    const FormulaToken* const * p = pCode;
+    const FormulaToken* const * pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svDoubleRef:
+            {
+                const formula::FormulaToken* pToken = *p;
+                const ScComplexRefData& rRef = *pToken->GetDoubleRef();
+                bool bStartRowRelative = rRef.Ref1.IsRowRel();
+                bool bEndRowRelative = rRef.Ref2.IsRowRel();
+
+                // For absolute references nothing needs to be done, they stay
+                // the same for all and if to be expanded the group will be
+                // adjusted later.
+                if (!bStartRowRelative && !bEndRowRelative)
+                    break;  // switch
+
+                ScRange aAbsStart(rRef.toAbs(rPos));
+                ScAddress aPos(rPos);
+                aPos.IncRow(nGroupLen);
+                ScRange aAbsEnd(rRef.toAbs(aPos));
+                // References must be at least two rows to be expandable.
+                if ((aAbsStart.aEnd.Row() - aAbsStart.aStart.Row() < 1) &&
+                        (aAbsEnd.aEnd.Row() - aAbsEnd.aStart.Row() < 1))
+                    break;  // switch
+
+                // Only need to process if an edge may be touching the
+                // insertion row anywhere within the run of the group.
+                if (!((aAbsStart.aStart.Row() <= nInsRow && nInsRow <= aAbsEnd.aStart.Row()) ||
+                            (aAbsStart.aEnd.Row() <= nInsRow && nInsRow <= aAbsEnd.aEnd.Row())))
+                    break;  // switch
+
+                SCROW nStartRow = aAbsStart.aStart.Row();
+                SCROW nEndRow = aAbsStart.aEnd.Row();
+                // Position on first relevant range.
+                SCROW nOffset = 0;
+                if (nEndRow + 1 < nInsRow)
+                {
+                    if (bEndRowRelative)
+                    {
+                        nOffset = nInsRow - nEndRow - 1;
+                        nEndRow += nOffset;
+                        if (bStartRowRelative)
+                            nStartRow += nOffset;
+                    }
+                    else    // bStartRowRelative==true
+                    {
+                        nOffset = nInsRow - nStartRow;
+                        nStartRow += nOffset;
+                        // Start is overtaking End, swap.
+                        bStartRowRelative = false;
+                        bEndRowRelative = true;
+                    }
+                }
+                for (SCROW i = nOffset; i < nGroupLen; ++i)
+                {
+                    bool bSplit = (nStartRow == nInsRow || nEndRow + 1 == nInsRow);
+                    if (bSplit)
+                        rBounds.push_back( rPos.Row() + i);
+
+                    if (bEndRowRelative)
+                        ++nEndRow;
+                    if (bStartRowRelative)
+                    {
+                        ++nStartRow;
+                        if (!bEndRowRelative && nStartRow == nEndRow)
+                        {
+                            // Start is overtaking End, swap.
+                            bStartRowRelative = false;
+                            bEndRowRelative = true;
+                        }
+                    }
+                    if (nInsRow < nStartRow || (!bStartRowRelative && nInsRow <= nEndRow))
+                    {
+                        if (bSplit && (++i < nGroupLen))
+                            rBounds.push_back( rPos.Row() + i);
+                        break;  // for, out of range now
+                    }
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
 namespace {
 
 void appendDouble( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, double fVal )
