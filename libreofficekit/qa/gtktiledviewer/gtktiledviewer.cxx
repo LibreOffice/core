@@ -159,6 +159,18 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
     case GDK_Tab:
         nKeyCode = com::sun::star::awt::Key::TAB;
         break;
+    case GDK_Down:
+        nKeyCode = com::sun::star::awt::Key::DOWN;
+        break;
+    case GDK_Up:
+        nKeyCode = com::sun::star::awt::Key::UP;
+        break;
+    case GDK_Left:
+        nKeyCode = com::sun::star::awt::Key::LEFT;
+        break;
+    case GDK_Right:
+        nKeyCode = com::sun::star::awt::Key::RIGHT;
+        break;
     default:
         if (pEvent->keyval >= GDK_F1 && pEvent->keyval <= GDK_F26)
             nKeyCode = com::sun::star::awt::Key::F1 + (pEvent->keyval - GDK_F1);
