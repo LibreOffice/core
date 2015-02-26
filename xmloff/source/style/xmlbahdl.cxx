@@ -186,12 +186,9 @@ XMLMeasurePropHdl::~XMLMeasurePropHdl()
 
 bool XMLMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    bool bRet = false;
-
     sal_Int32 nValue = 0;
-    bRet = rUnitConverter.convertMeasureToCore( nValue, rStrImpValue );
+    bool bRet = rUnitConverter.convertMeasureToCore( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
-
     return bRet;
 }
 
@@ -407,7 +404,6 @@ bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 }
 
 // class XMLMeasurePxPropHdl
-
 XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl()
 {
     // nothing to do
@@ -415,12 +411,9 @@ XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl()
 
 bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bRet = false;
-
     sal_Int32 nValue = 0;
-    bRet = ::sax::Converter::convertMeasurePx( nValue, rStrImpValue );
+    bool bRet = ::sax::Converter::convertMeasurePx( nValue, rStrImpValue );
     lcl_xmloff_setAny( rValue, nValue, nBytes );
-
     return bRet;
 }
 
@@ -558,12 +551,8 @@ XMLStringPropHdl::~XMLStringPropHdl()
 
 bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    bool bRet = false;
-
     rValue <<= rStrImpValue;
-    bRet = true;
-
-    return bRet;
+    return true;
 }
 
 bool XMLStringPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
