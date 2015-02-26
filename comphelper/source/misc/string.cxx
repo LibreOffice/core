@@ -323,17 +323,12 @@ sal_Int32 compareNatural( const OUString & rLHS, const OUString & rRHS,
         sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen));
         sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen));
 
-        nRet = nLHS-nRHS;
-        if (nRet != 0)
+        if (nLHS != nRHS)
+        {
+            nRet = (nLHS < nRHS) ? -1 : 1;
             break;
+        }
     }
-
-    //Squeeze these down to -1, 0, 1 in case there is an assumption those are
-    //the only valid returns
-    if (nRet > 0)
-        nRet = 1;
-    else if (nRet < 0)
-        nRet = -1;
 
     return nRet;
 }
