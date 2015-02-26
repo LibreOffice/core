@@ -233,6 +233,9 @@ public:
     void CheckRelativeReferenceBounds(
         const ScAddress& rPos, SCROW nGroupLen, const ScRange& rRange, std::vector<SCROW>& rBounds ) const;
 
+    void CheckExpandReferenceBounds(
+        const sc::RefUpdateContext& rCxt, const ScAddress& rPos, SCROW nGroupLen, std::vector<SCROW>& rBounds ) const;
+
     /**
      * Create a string representation of formula token array without modifying
      * the internal state of the token array.
