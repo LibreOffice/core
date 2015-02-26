@@ -856,15 +856,29 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         aMemStm.SeekRel( 8 );
         aMemStm.ReadUInt32( nColsUsed );
 
-        nPalCount = ( nBitCount <= 8 ) ? ( nColsUsed ? nColsUsed : ( 1 << (sal_uInt32) nBitCount ) ) :
-                                         ( ( 3 == nCompression ) ? 3 : 0 );
+        if (nBitCount <= 8)
+        {
+            if (nColsUsed)
+                nPalCount = nColsUsed;
+            else
+                nPalCount = 1 << (sal_uInt32)nBitCount;
+        }
+        else
+        {
+            if (nCompression == BITFIELDS)
+                nPalCount = 3;
+            else
+                nPalCount = 0;
+        }
+
+        sal_uInt32 nPalSize = nPalCount * 4;
 
         m_rStm.Write( aMemStm.GetData(), nDIBSize );
 
         const sal_uLong nEndPos = m_rStm.Tell();
         m_rStm.Seek( nOffPos );
-        m_rStm.WriteUInt32( 80 ).WriteUInt32( nHeaderSize + ( nPalCount << 2 ) );
-        m_rStm.WriteUInt32( 80 + ( nHeaderSize + ( nPalCount << 2 ) ) ).WriteUInt32( nImageSize );
+        m_rStm.WriteUInt32( 80 ).WriteUInt32( nHeaderSize + nPalSize );
+        m_rStm.WriteUInt32( 80 + nHeaderSize + nPalSize ).WriteUInt32( nImageSize );
         m_rStm.Seek( nEndPos );
 
         ImplEndRecord();
