@@ -240,6 +240,9 @@ public:
                 ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
             const Reference < XPropertySet >& rPropSet,
             bool bPath );
+    XMLTextFrameContourContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
+        const Reference< XPropertySet >& rPropSet, bool bPath );
     virtual ~XMLTextFrameContourContext_Impl();
 };
 
@@ -365,6 +368,123 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
         {
             aAny.setValue( &bAuto, cppu::UnoType<bool>::get() );
+            xPropSet->setPropertyValue( sIsAutomaticContour, aAny );
+        }
+    }
+}
+
+XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList,
+    const Reference< XPropertySet >& rPropSet,
+    bool bPath )
+:   SvXMLImportContext( rImport ),
+    xPropSet( rPropSet )
+{
+    OUString sD, sPoints, sViewBox;
+    bool bPixelWidth = false, bPixelHeight = false;
+    sal_Bool bAuto = sal_False;
+    sal_Int32 nWidth = 0;
+    sal_Int32 nHeight = 0;
+
+    const SvXMLTokenMap& rTokenMap =
+        GetImport().GetTextImport()->GetTextContourAttrTokenMap();
+
+    Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        switch( rTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_TEXT_CONTOUR_VIEWBOX:
+            sViewBox = attribute.Value;
+            break;
+        case XML_TOK_TEXT_CONTOUR_D:
+            if( bPath )
+                sD = attribute.Value;
+            break;
+        case XML_TOK_TEXT_CONTOUR_POINTS:
+            if( !bPath )
+                sPoints = attribute.Value;
+            break;
+        case XML_TOK_TEXT_CONTOUR_WIDTH:
+            if( ::sax::Converter::convertMeasurePx( nWidth, attribute.Value ) )
+                bPixelWidth = true;
+            else
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nWidth, attribute.Value );
+            break;
+        case XML_TOK_TEXT_CONTOUR_HEIGHT:
+            if( ::sax::Converter::convertMeasurePx( nHeight, attribute.Value ) )
+                bPixelHeight = true;
+            else
+                GetImport().GetMM100UnitConverter().convertMeasureToCore(
+                        nHeight, attribute.Value );
+            break;
+        case XML_TOK_TEXT_CONTOUR_AUTO:
+            bAuto = attribute.Value.equals( "true" );
+            break;
+        }
+    }
+
+    OUString sContourPolyPolygon("ContourPolyPolygon");
+    Reference < XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
+
+    if(xPropSetInfo->hasPropertyByName(sContourPolyPolygon) && nWidth > 0 && nHeight > 0 && bPixelWidth == bPixelHeight && (bPath ? sD : sPoints).getLength())
+    {
+        const SdXMLImExViewBox aViewBox( sViewBox, GetImport().GetMM100UnitConverter());
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        Any aAny;
+
+        if( bPath )
+        {
+            basegfx::tools::importFromSvgD(aPolyPolygon, sD, GetImport().needFixPositionAfterZ(), 0);
+        }
+        else
+        {
+            basegfx::B2DPolygon aPolygon;
+
+            if(basegfx::tools::importFromSvgPoints(aPolygon, sPoints))
+            {
+                aPolyPolygon = basegfx::B2DPolyPolygon(aPolygon);
+            }
+        }
+
+        if(aPolyPolygon.count())
+        {
+            const basegfx::B2DRange aSourceRange(
+                aViewBox.GetX(), aViewBox.GetY(),
+                aViewBox.GetX() + aViewBox.GetWidth(), aViewBox.GetY() + aViewBox.GetHeight());
+            const basegfx::B2DRange aTargetRange(
+                0.0, 0.0,
+                nWidth, nHeight);
+
+            if(!aSourceRange.equal(aTargetRange))
+            {
+                aPolyPolygon.transform(
+                    basegfx::tools::createSourceRangeTargetRangeTransform(
+                        aSourceRange,
+                        aTargetRange));
+            }
+
+            com::sun::star::drawing::PointSequenceSequence aPointSequenceSequence;
+            basegfx::tools::B2DPolyPolygonToUnoPointSequenceSequence(aPolyPolygon, aPointSequenceSequence);
+            aAny <<= aPointSequenceSequence;
+            xPropSet->setPropertyValue( sContourPolyPolygon, aAny );
+        }
+
+        const OUString sIsPixelContour("IsPixelContour");
+
+        if( xPropSetInfo->hasPropertyByName( sIsPixelContour ) )
+        {
+            aAny.setValue( &bPixelWidth, ::getBooleanCppuType() );
+            xPropSet->setPropertyValue( sIsPixelContour, aAny );
+        }
+
+        const OUString sIsAutomaticContour("IsAutomaticContour");
+
+        if( xPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
+        {
+            aAny.setValue( &bAuto, ::getBooleanCppuType() );
             xPropSet->setPropertyValue( sIsAutomaticContour, aAny );
         }
     }
