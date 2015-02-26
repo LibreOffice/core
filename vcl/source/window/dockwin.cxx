@@ -106,7 +106,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
     SetBackground();
 
     maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
-    maDockIdle.SetPriority( IdlePriority::MEDIUM );
+    maDockIdle.SetPriority( SchedulerPriority::MEDIUM );
 }
 
 ImplDockFloatWin::~ImplDockFloatWin()
@@ -332,7 +332,7 @@ void DockingWindow::ImplInitDockingWindowData()
     mpDialogParent = NULL;
 
     //To-Do, reuse maResizeTimer
-    maLayoutIdle.SetPriority(IdlePriority::RESIZE);
+    maLayoutIdle.SetPriority(SchedulerPriority::RESIZE);
     maLayoutIdle.SetIdleHdl( LINK( this, DockingWindow, ImplHandleLayoutTimerHdl ) );
 }
 

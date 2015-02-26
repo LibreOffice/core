@@ -144,7 +144,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
  */
 short BreakDlg::Execute()
 {
-  aIdle.SetPriority( IdlePriority::REPAINT );
+  aIdle.SetPriority( SchedulerPriority::REPAINT );
   aIdle.SetIdleHdl( LINK( this, BreakDlg, InitialUpdate ) );
   aIdle.Start();
 

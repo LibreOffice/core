@@ -72,7 +72,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
 
         // Prepare the printer polling.
         maPrinterPollingIdle.SetIdleHdl(LINK(this,ShellStackGuard,TimeoutHandler));
-        maPrinterPollingIdle.SetPriority(IdlePriority::LOWER);
+        maPrinterPollingIdle.SetPriority(SchedulerPriority::LOWER);
     }
 }
 

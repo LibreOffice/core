@@ -461,7 +461,7 @@ RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits 
     , pLabelWidget(pShrinkModeLabel)
 {
     aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
-    aIdle.SetPriority( IdlePriority::LOW );
+    aIdle.SetPriority( SchedulerPriority::LOW );
 }
 
 RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
@@ -471,7 +471,7 @@ RefEdit::RefEdit( vcl::Window* _pParent,IControlReferenceHandler* pParent,
     , pLabelWidget(pShrinkModeLabel)
 {
     aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
-    aIdle.SetPriority( IdlePriority::LOW );
+    aIdle.SetPriority( SchedulerPriority::LOW );
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT vcl::Window* SAL_CALL makeRefEdit(vcl::Window *pParent, VclBuilder::stringmap &)
@@ -523,7 +523,7 @@ void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel
     if( pDlg )
     {
         aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
-        aIdle.SetPriority( IdlePriority::LOW );
+        aIdle.SetPriority( SchedulerPriority::LOW );
     }
     else
     {

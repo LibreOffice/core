@@ -107,12 +107,12 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyIdle.SetIdleHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
-    aModifyIdle.SetPriority(IdlePriority::LOWEST);
+    aModifyIdle.SetPriority(SchedulerPriority::LOWEST);
 
     if (!IsInlineEditEnabled())
     {
         aCursorMoveIdle.SetIdleHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
-        aCursorMoveIdle.SetPriority(IdlePriority::LOWEST);
+        aCursorMoveIdle.SetPriority(SchedulerPriority::LOWEST);
     }
 
     // if not called explicitly the this edit window within the

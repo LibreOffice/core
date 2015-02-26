@@ -89,7 +89,7 @@ public:
     IdleBool( bool &rBool ) :
         Idle(), mrBool( rBool )
     {
-        SetPriority( IdlePriority::LOWEST );
+        SetPriority( SchedulerPriority::LOWEST );
         Start();
         mrBool = false;
     }

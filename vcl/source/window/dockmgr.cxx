@@ -90,9 +90,9 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
     maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
-    maDockIdle.SetPriority( IdlePriority::MEDIUM );
+    maDockIdle.SetPriority( SchedulerPriority::MEDIUM );
     maEndDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
-    maEndDockIdle.SetPriority( IdlePriority::MEDIUM );
+    maEndDockIdle.SetPriority( SchedulerPriority::MEDIUM );
 }
 
 ImplDockFloatWin2::~ImplDockFloatWin2()
