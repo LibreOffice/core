@@ -704,6 +704,8 @@ void SwShellTableCrsr::FillRects()
         return;
 
     SwRegionRects aReg( GetShell()->VisArea() );
+    if (GetShell()->isTiledRendering())
+        aReg = GetShell()->getIDocumentLayoutAccess()->GetCurrentLayout()->Frm();
     SwNodes& rNds = GetDoc()->GetNodes();
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
