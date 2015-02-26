@@ -8,6 +8,7 @@ import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.TextSelectionHandle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -207,6 +208,7 @@ public class InvalidationHandler {
             mState = OverlayState.CURSOR;
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
+            mTextCursorLayer.changeSelections(Collections.EMPTY_LIST);
         } else {
             mState = OverlayState.SELECTION;
             List<RectF> rects = convertPayloadToRectangles(payload);
