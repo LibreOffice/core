@@ -219,14 +219,22 @@ draw_constructor_list = [
     ]
 
 writer_factory_list = [
-    ("libsblo.a", "sb_component_getFactory", "#if HAVE_FEATURE_SCRIPTING"),
-    ("libswdlo.a", "swd_component_getFactory"),
     ("libswlo.a", "sw_component_getFactory"),
     ]
 
 writer_constructor_list = [
+# basic/util/sb.component
+    "com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation",
 # filter/source/textfilterdetect/textfd.component 
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
+# sw/util/sw.component
+    "com_sun_star_comp_Writer_XMLOasisContentImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisMetaImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisSettingsImporter_get_implementation",
+    "com_sun_star_comp_Writer_XMLOasisStylesImporter_get_implementation",
+# sw/util/swd.component
+    "com_sun_star_comp_writer_FormatDetector_get_implementation",
 # writerfilter/util/writerfilter.component
     "com_sun_star_comp_Writer_RtfFilter_get_implementation",
     "com_sun_star_comp_Writer_WriterFilter_get_implementation",
