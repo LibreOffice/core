@@ -60,6 +60,7 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <vcl/svapp.hxx>
+#include <unotest/assertion_traits.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
