@@ -59,6 +59,7 @@
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
 #include <unotest/assertion_traits.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -2208,15 +2209,15 @@ DECLARE_OOXMLIMPORT_TEST(testMsoBrightnessContrast, "msobrightnesscontrast.docx"
     uno::Reference<graphic::XGraphic> graphic;
     imageProperties->getPropertyValue( "Graphic" ) >>= graphic;
     uno::Reference<awt::XBitmap> bitmap(graphic, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(58), bitmap->getSize().Width );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(320), bitmap->getSize().Height );
-    const uno::Sequence< sal_Int8 > data = bitmap->getDIB(); // as .bmp data
-    CPPUNIT_ASSERT_EQUAL( sal_Int32(56374), data.getLength());
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e0])); // -50 = 206 pixel value
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e1]));
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e2]));
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e3]));
-    CPPUNIT_ASSERT_EQUAL( -50, int(data[0x6e4]));
+    Graphic aVclGraphic(graphic);
+    Bitmap aBitmap(aVclGraphic.GetBitmap());
+    BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
+    CPPUNIT_ASSERT(pAccess);
+    CPPUNIT_ASSERT_EQUAL(58L, pAccess->Width());
+    CPPUNIT_ASSERT_EQUAL(320L, pAccess->Height());
+    Color aColor(pAccess->GetPixel(30, 20));
+    CPPUNIT_ASSERT_EQUAL(aColor.GetColor(), RGB_COLORDATA( 0xce, 0xce, 0xce ));
+    aBitmap.ReleaseAccess(pAccess);
 }
 
 DECLARE_OOXMLIMPORT_TEST(testChartSize, "chart-size.docx")
