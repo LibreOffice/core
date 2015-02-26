@@ -8485,7 +8485,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_F_DIST_LT );
-            4;  0;  0;  0; 0;
+            4;  0;  0;  0; 1;
             0;
         };
         String 2 // Name of Parameter 1

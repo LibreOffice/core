@@ -1055,6 +1055,7 @@ inline bool MissingConventionOOXML::isRewriteNeeded( OpCode eOp ) const
         case ocIndex:
 
         case ocGammaDist:
+        case ocFDist_LT:
         case ocPoissonDist:
         case ocNormDist:
         case ocLogNormDist:
@@ -1166,6 +1167,7 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
                         break;
 
                     case ocGammaDist:
+                    case ocFDist_LT:
                     case ocNormDist:
                         if (mnCurArg == 2)
                         {

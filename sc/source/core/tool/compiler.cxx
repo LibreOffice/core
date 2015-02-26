@@ -2499,7 +2499,8 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
             { "ZGZ",            ocRRI },            // ZGZ -> RRI
             { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
-            { "GOALSEEK",       ocBackSolver }      // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
+            { "GOALSEEK",       ocBackSolver },     // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
+            { "COM.MICROSOFT.F.DIST", ocFDist_LT }, // fdo#40835, -> FDIST -> COM.MICROSOFT.F.DIST
             // Renamed new names, prepare to read future names:
             //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
