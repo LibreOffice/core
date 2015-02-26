@@ -113,7 +113,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 /* XServiceInfo */
 OUString SAL_CALL SwFilterDetect::getImplementationName() throw( RuntimeException, std::exception )
 {
-    return impl_getStaticImplementationName();
+    return OUString("com.sun.star.comp.writer.FormatDetector" );
 }
 
 /* XServiceInfo */
@@ -125,12 +125,6 @@ sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName 
 /* XServiceInfo */
 Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
-    return impl_getStaticSupportedServiceNames();
-}
-
-/* Helper for XServiceInfo */
-Sequence< OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
-{
     Sequence< OUString > seqServiceNames( 3 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";
     seqServiceNames.getArray() [1] = "com.sun.star.text.FormatDetector";
@@ -138,14 +132,8 @@ Sequence< OUString > SwFilterDetect::impl_getStaticSupportedServiceNames()
     return seqServiceNames ;
 }
 
-/* Helper for XServiceInfo */
-OUString SwFilterDetect::impl_getStaticImplementationName()
-{
-    return OUString("com.sun.star.comp.writer.FormatDetector" );
-}
-
 extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
-com_sun_star_comp_writer_FormatDetector_get_implementation(::com::sun::star::uno::XComponentContext* component,
+com_sun_star_comp_writer_FormatDetector_get_implementation(::com::sun::star::uno::XComponentContext*,
                                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
     return cppu::acquire(new SwFilterDetect());
