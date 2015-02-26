@@ -1702,9 +1702,14 @@ void ScInterpreter::ScFDist()
 
 void ScInterpreter::ScFDist_LT()
 {
-    if ( !MustHaveParamCount( GetByte(), 4 ) )
+    int nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 3, 4 ) )
         return;
-    bool   bCum = GetBool();
+    bool bCum;
+    if ( nParamCount == 3 || GetRawStackType() == svMissing )
+        bCum = true;
+    else
+        bCum = GetBool();
     double fF2 = ::rtl::math::approxFloor( GetDouble() );
     double fF1 = ::rtl::math::approxFloor( GetDouble() );
     double fF  = GetDouble();
