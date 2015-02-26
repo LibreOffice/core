@@ -74,51 +74,33 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
             case MotionEvent.ACTION_UP: {
                 mTouchStartX = 0;
                 mTouchStartY = 0;
-
-                // Reposition handles to line up with ends of selection
-                JSONObject args = new JSONObject();
-                try {
-                    args.put("handleType", mHandleType.toString());
-                } catch (Exception e) {
-                    Log.e(LOGTAG, "Error building JSON arguments for TextSelection:Position");
-                }
-                //GeckoAppShell.sendEventToGecko(GeckoEvent.createBroadcastEvent("TextSelection:Position", args.toString()));
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                move(Math.round(event.getX()), Math.round(event.getY()));
+                move(event.getX(), event.getY());
                 break;
             }
         }
         return true;
     }
 
-    private void move(int newX, int newY) {
-        mLeft = mLeft + newX - mTouchStartX;
-        mTop = mTop + newY - mTouchStartY;
-
+    private void move(float newX, float newY) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
             Log.e(LOGTAG, "Can't move selection because layerView is null");
             return;
         }
+
+        float newLeft = mLeft + newX - mTouchStartX;
+        float newTop  = mTop + newY - mTouchStartY;
+
         // Send x coordinate on the right side of the start handle, left side of the end handle.
-        float left = (float) mLeft + adjustLeftForHandle();
+        float left = (float) newLeft + adjustLeftForHandle();
 
-        PointF geckoPoint = new PointF(left, (float) mTop);
-        geckoPoint = layerView.getLayerClient().convertViewPointToLayerPoint(geckoPoint);
+        PointF documentPoint = new PointF(left, newTop);
+        documentPoint = layerView.getLayerClient().convertViewPointToLayerPoint(documentPoint);
 
-        JSONObject args = new JSONObject();
-        try {
-            args.put("handleType", mHandleType.toString());
-            args.put("x", Math.round(geckoPoint.x));
-            args.put("y", Math.round(geckoPoint.y));
-        } catch (Exception e) {
-            Log.e(LOGTAG, "Error building JSON arguments for TextSelection:Move");
-        }
-        //GeckoAppShell.sendEventToGecko(GeckoEvent.createBroadcastEvent("TextSelection:Move", args.toString()));
-
-        setLayoutPosition();
+        LOKitShell.sendChangeHandlePositionEvent(mHandleType, documentPoint);
     }
 
     void positionFromGecko(int left, int top, boolean rtl) {
