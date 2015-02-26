@@ -18,9 +18,9 @@
  -->
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
-    prefix="swd" xmlns="http://openoffice.org/2010/uno-components">
-    <implementation name="com.sun.star.comp.writer.FormatDetector"
-        constructor="com_sun_star_comp_writer_FormatDetector_get_implementation">
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.writer.FormatDetector"
+      constructor="com_sun_star_comp_writer_FormatDetector_get_implementation">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
     <service name="com.sun.star.text.FormatDetector"/>
     <service name="com.sun.star.text.W4WFormatDetector"/>
