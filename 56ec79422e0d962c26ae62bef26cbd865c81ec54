@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_594b072c",
+        "filename": "hwpfilter/source/drawing.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2015-02-26T14:08:29Z",
+      "side": 1,
+      "message": "eeek a printf ! please use SAL_DEBUG",
+      "revId": "56ec79422e0d962c26ae62bef26cbd865c81ec54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
