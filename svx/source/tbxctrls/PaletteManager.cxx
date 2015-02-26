@@ -67,6 +67,8 @@ void PaletteManager::LoadPalettes()
                     pPalette = new PaletteGPL( aFileStat.getFileURL(), aFName );
                 else if( aFName.endsWithIgnoreAsciiCase(".soc") )
                     pPalette = new PaletteSOC( aFileStat.getFileURL(), aFName );
+                else if ( aFName.endsWithIgnoreAsciiCase(".ase") )
+                    pPalette = new PaletteASE( aFileStat.getFileURL(), aFName );
 
                 if( pPalette && pPalette->IsValid() )
                     maPalettes.push_back( pPalette );
