@@ -29,7 +29,6 @@ public class LOEvent implements Comparable<LOEvent> {
     public String mFilename;
     public ComposedTileLayer mComposedTileLayer;
     public String mTouchType;
-    public MotionEvent mMotionEvent;
     public PointF mDocumentTouchCoordinate;
     public KeyEvent mKeyEvent;
     public RectF mInvalidationRect;
@@ -62,11 +61,10 @@ public class LOEvent implements Comparable<LOEvent> {
         mTypeString = "Thumbnail";
     }
 
-    public LOEvent(int type, String touchType, MotionEvent motionEvent, PointF documentTouchCoordinate) {
+    public LOEvent(int type, String touchType, PointF documentTouchCoordinate) {
         mType = type;
         mTypeString = "Touch";
         mTouchType = touchType;
-        mMotionEvent = motionEvent;
         mDocumentTouchCoordinate = documentTouchCoordinate;
     }
 

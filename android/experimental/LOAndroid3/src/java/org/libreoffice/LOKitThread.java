@@ -196,7 +196,7 @@ public class LOKitThread extends Thread {
                 createThumbnail(event.mTask);
                 break;
             case LOEvent.TOUCH:
-                touch(event.mTouchType, event.mMotionEvent, event.mDocumentTouchCoordinate);
+                touch(event.mTouchType, event.mDocumentTouchCoordinate);
                 break;
             case LOEvent.KEY_EVENT:
                 keyEvent(event.mKeyEvent);
@@ -223,7 +223,7 @@ public class LOKitThread extends Thread {
     /**
      * Processes touch events.
      */
-    private void touch(String touchType, MotionEvent motionEvent, PointF mDocumentTouchCoordinate) {
+    private void touch(String touchType, PointF mDocumentTouchCoordinate) {
         if (!LOKitShell.isEditingEnabled()) {
             return;
         }

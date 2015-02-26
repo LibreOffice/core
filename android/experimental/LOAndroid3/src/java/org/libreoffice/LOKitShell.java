@@ -86,8 +86,8 @@ public class LOKitShell {
     /**
      * Send touch event to LOKitThread.
      */
-    public static void sendTouchEvent(String touchType, MotionEvent motionEvent, PointF pointF) {
-        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, touchType, motionEvent, pointF));
+    public static void sendTouchEvent(String touchType, PointF documentTouchCoordinate) {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.TOUCH, touchType, documentTouchCoordinate));
     }
 
     /**
