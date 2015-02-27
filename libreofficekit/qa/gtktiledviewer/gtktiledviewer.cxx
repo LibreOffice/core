@@ -186,9 +186,9 @@ static void signalKey(GtkWidget* /*pWidget*/, GdkEventKey* pEvent, gpointer /*pD
         nKeyCode |= KEY_SHIFT;
 
     if (pEvent->type == GDK_KEY_RELEASE)
-        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
+        pLOKDocView->pDocument->pClass->postKeyEvent(pLOKDocView->pDocument, LOK_KEYEVENT_KEYUP, nCharCode, nKeyCode);
     else
-        pLOKDocView->pOffice->pClass->postKeyEvent(pLOKDocView->pOffice, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
+        pLOKDocView->pDocument->pClass->postKeyEvent(pLOKDocView->pDocument, LOK_KEYEVENT_KEYINPUT, nCharCode, nKeyCode);
 }
 
 // GtkComboBox requires gtk 2.24 or later

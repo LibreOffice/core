@@ -49,9 +49,6 @@ struct _LibreOfficeKitClass
   LibreOfficeKitDocument* (*documentLoadWithOptions)  (LibreOfficeKit* pThis,
                                                       const char* pURL,
                                                       const char* pOptions);
-#ifdef LOK_USE_UNSTABLE_API
-  void                    (*postKeyEvent)  (LibreOfficeKit* pThis, int nType, int nCharCode, int nKeyCode);
-#endif // LOK_USE_UNSTABLE_API
 };
 
 #define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
@@ -125,6 +122,11 @@ struct _LibreOfficeKitDocumentClass
                               LibreOfficeKitCallback pCallback,
                               void* pData);
 
+  /// @see lok::Document::postKeyEvent
+  void (*postKeyEvent)(LibreOfficeKitDocument* pThis,
+                       int nType,
+                       int nCharCode,
+                       int nKeyCode);
   /// @see lok::Document::postMouseEvent
   void (*postMouseEvent)(LibreOfficeKitDocument* pThis,
                          int nType,

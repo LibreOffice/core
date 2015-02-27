@@ -203,6 +203,10 @@ static void doc_initializeForRendering(LibreOfficeKitDocument* pThis);
 static void doc_registerCallback(LibreOfficeKitDocument* pThis,
                                 LibreOfficeKitCallback pCallback,
                                 void* pData);
+static void doc_postKeyEvent(LibreOfficeKitDocument* pThis,
+                             int nType,
+                             int nCharCode,
+                             int nKeyCode);
 static void doc_postMouseEvent (LibreOfficeKitDocument* pThis,
                                 int nType,
                                 int nX,
@@ -239,6 +243,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
             m_pDocumentClass->getDocumentSize = doc_getDocumentSize;
             m_pDocumentClass->initializeForRendering = doc_initializeForRendering;
             m_pDocumentClass->registerCallback = doc_registerCallback;
+            m_pDocumentClass->postKeyEvent = doc_postKeyEvent;
             m_pDocumentClass->postMouseEvent = doc_postMouseEvent;
             m_pDocumentClass->setTextSelection = doc_setTextSelection;
 
@@ -266,7 +271,6 @@ static char *                  lo_getError      (LibreOfficeKit* pThis);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
                                                            const char* pURL,
                                                            const char* pOptions);
-static void                    lo_postKeyEvent  (LibreOfficeKit* pThis, int nType, int nCharCode, int nKeyCode);
 
 
 struct LibLibreOffice_Impl : public _LibreOfficeKit
@@ -286,7 +290,6 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
-            m_pOfficeClass->postKeyEvent = lo_postKeyEvent;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -693,6 +696,25 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
     pDoc->registerCallback(pCallback, pData);
 }
 
+static void doc_postKeyEvent(LibreOfficeKitDocument* /*pThis*/, int nType, int nCharCode, int nKeyCode)
+{
+#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
+    if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
+    {
+        KeyEvent aEvent(nCharCode, nKeyCode, 0);
+        switch (nType)
+        {
+        case LOK_KEYEVENT_KEYINPUT:
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
+            break;
+        case LOK_KEYEVENT_KEYUP:
+            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
+            break;
+        }
+    }
+#endif
+}
+
 static void doc_postMouseEvent(LibreOfficeKitDocument* pThis, int nType, int nX, int nY, int nCount)
 {
     ITiledRenderable* pDoc = getTiledRenderable(pThis);
@@ -724,25 +746,6 @@ static char* lo_getError (LibreOfficeKit *pThis)
     char* pMemory = (char*) malloc(aString.getLength() + 1);
     strcpy(pMemory, aString.getStr());
     return pMemory;
-}
-
-static void lo_postKeyEvent(LibreOfficeKit* /*pThis*/, int nType, int nCharCode, int nKeyCode)
-{
-#if defined(UNX) && !defined(MACOSX) && !defined(ENABLE_HEADLESS)
-    if (SalFrame *pFocus = SvpSalFrame::GetFocusFrame())
-    {
-        KeyEvent aEvent(nCharCode, nKeyCode, 0);
-        switch (nType)
-        {
-        case LOK_KEYEVENT_KEYINPUT:
-            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYINPUT, pFocus->GetWindow(), &aEvent);
-            break;
-        case LOK_KEYEVENT_KEYUP:
-            Application::PostKeyEvent(VCLEVENT_WINDOW_KEYUP, pFocus->GetWindow(), &aEvent);
-            break;
-        }
-    }
-#endif
 }
 
 static void force_c_locale(void)

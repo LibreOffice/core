@@ -75,13 +75,6 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroyAn
     _exit(0);
 }
 
-extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_postKeyEvent
-    (JNIEnv* pEnv, jobject aObject, jint nType, jint nCharCode, jint nKeyCode)
-{
-    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
-    pLibreOfficeKit->pClass->postKeyEvent(pLibreOfficeKit, nType, nCharCode, nKeyCode);
-}
-
 namespace
 {
 
@@ -275,6 +268,13 @@ extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs
     pEnv->ReleaseStringUTFChars(sOptions, pOptions);
 
     return result;
+}
+
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postKeyEvent
+    (JNIEnv* pEnv, jobject aObject, jint nType, jint nCharCode, jint nKeyCode)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->postKeyEvent(pDocument, nType, nCharCode, nKeyCode);
 }
 
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_postMouseEvent

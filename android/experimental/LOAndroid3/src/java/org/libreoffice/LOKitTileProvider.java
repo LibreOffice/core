@@ -313,12 +313,12 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
             String keyString = keyEvent.getCharacters();
             for (int i = 0; i < keyString.length(); i++) {
                 int codePoint = keyString.codePointAt(i);
-                mOffice.postKeyEvent(Office.KEY_PRESS, codePoint, getKeyCode(keyEvent));
+                mDocument.postKeyEvent(Office.KEY_PRESS, codePoint, getKeyCode(keyEvent));
             }
         } else if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-            mOffice.postKeyEvent(Office.KEY_PRESS, getCharCode(keyEvent), getKeyCode(keyEvent));
+            mDocument.postKeyEvent(Office.KEY_PRESS, getCharCode(keyEvent), getKeyCode(keyEvent));
         } else if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
-            mOffice.postKeyEvent(Office.KEY_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
+            mDocument.postKeyEvent(Office.KEY_RELEASE, getCharCode(keyEvent), getKeyCode(keyEvent));
         }
     }
 
