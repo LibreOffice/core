@@ -151,18 +151,30 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap,
         const sal_Char* pServiceName);
+    XMLImageMapObjectContext( SvXMLImport& rImport, sal_Int32 Element,
+        css::uno::Reference< css::container::XIndexContainer > xMap,
+        const sal_Char* pServiceName );
 
     void StartElement(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList >& xAttrList ) SAL_OVERRIDE;
+    virtual void SAL_CALL startFastElement( sal_Int32 Element,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
     SvXMLImportContext *CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList ) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
+        createFastChildContext( sal_Int32 Element,
+                const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 
 protected:
 
@@ -220,6 +232,47 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
     // else: can't even get factory -> ignore
 }
 
+XMLImageMapObjectContext::XMLImageMapObjectContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    Reference<XIndexContainer> xMap,
+    const sal_Char* pServiceName)
+:   SvXMLImportContext(rImport),
+    sBoundary("Boundary"),
+    sCenter("Center"),
+    sTitle("Title"),
+    sDescription("Description"),
+    sImageMap("ImageMap"),
+    sIsActive("IsActive"),
+    sName("Name"),
+    sPolygon("Polygon"),
+    sRadius("Radius"),
+    sTarget("Target"),
+    sURL("URL"),
+    xImageMap(xMap),
+    bIsActive(true),
+    bValid(false)
+{
+    DBG_ASSERT(NULL != pServiceName,
+               "Please supply the image map object service name");
+
+    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
+    if( xFactory.is() )
+    {
+        Reference<XInterface> xIfc = xFactory->createInstance(
+            OUString::createFromAscii(pServiceName));
+        DBG_ASSERT(xIfc.is(), "can't create image map object!");
+        if( xIfc.is() )
+        {
+            Reference<XPropertySet> xPropertySet( xIfc, UNO_QUERY );
+
+            xMapEntry = xPropertySet;
+        }
+        // else: can't create service -> ignore
+    }
+    // else: can't even get factory -> ignore
+}
+
+
 void XMLImageMapObjectContext::StartElement(
     const Reference<XAttributeList >& xAttrList )
 {
@@ -239,7 +292,39 @@ void XMLImageMapObjectContext::StartElement(
     }
 }
 
+void SAL_CALL XMLImageMapObjectContext::startFastElement( sal_Int32 /*Element*/,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    SvXMLTokenMap aMap(aImageMapObjectTokenMap);
+
+    css::uno::Sequence< css::xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( css::xml::FastAttribute attribute : attributes )
+    {
+        ProcessAttribute((enum XMLImageMapToken)aMap.Get( attribute.Token ),
+                attribute.Value );
+    }
+}
+
 void XMLImageMapObjectContext::EndElement()
+{
+    // only create and insert image map object if validity flag is set
+    // (and we actually have an image map)
+    if ( bValid && xImageMap.is() && xMapEntry.is() )
+    {
+        // set values
+        Prepare( xMapEntry );
+
+        // insert into image map
+        Any aAny;
+        aAny <<= xMapEntry;
+        xImageMap->insertByIndex( xImageMap->getCount(), aAny );
+    }
+    // else: not valid -> don't create and insert
+}
+
+void SAL_CALL XMLImageMapObjectContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
 {
     // only create and insert image map object if validity flag is set
     // (and we actually have an image map)
@@ -284,6 +369,32 @@ SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
         return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                       xAttrList);
 
+}
+
+Reference< XFastContextHandler > SAL_CALL
+    XMLImageMapObjectContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) )
+    {
+        Reference< XEventsSupplier > xEvents( xMapEntry, UNO_QUERY );
+        return new XMLEventsImportContext(
+                GetImport(), Element, xEvents );
+    }
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_title) )
+    {
+        return new XMLStringBufferImportContext(
+                GetImport(), Element, sTitleBuffer );
+    }
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_SVG | XML_desc) )
+    {
+        return new XMLStringBufferImportContext(
+                GetImport(), Element, sDescriptionBuffer );
+    }
+    else
+        return SvXMLImportContext::createFastChildContext(
+                Element, xAttrList );
 }
 
 void XMLImageMapObjectContext::ProcessAttribute(
