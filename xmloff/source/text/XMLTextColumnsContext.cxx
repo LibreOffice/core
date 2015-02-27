@@ -116,6 +116,9 @@ public:
                                const uno::Reference<
                                        xml::sax::XAttributeList > & xAttrList,
                                const SvXMLTokenMap& rTokenMap );
+    XMLTextColumnContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+        const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+        const SvXMLTokenMap& rTokenMap );
 
     virtual ~XMLTextColumnContext_Impl();
 
@@ -170,6 +173,50 @@ XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
 
             if( GetImport().GetMM100UnitConverter().
                                 convertMeasureToCore( nVal, rValue ) )
+                aColumn.RightMargin = nVal;
+            break;
+        default:
+            break;
+        }
+    }
+}
+
+XMLTextColumnContext_Impl::XMLTextColumnContext_Impl(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const SvXMLTokenMap& rTokenMap )
+:   SvXMLImportContext( rImport )
+{
+    aColumn.Width = 0;
+    aColumn.LeftMargin = 0;
+    aColumn.RightMargin = 0;
+
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        sal_Int32 nVal;
+        switch( rTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_COLUMN_WIDTH:
+            {
+                sal_Int32 nPos = attribute.Value.indexOf( (sal_Unicode)'*' );
+                if( nPos != -1 && nPos+1 == attribute.Value.getLength() )
+                {
+                    OUString sTmp( attribute.Value.copy( 0, nPos ) );
+                    if( ::sax::Converter::convertNumber(
+                                nVal, sTmp, 0, USHRT_MAX ) )
+                        aColumn.Width = nVal;
+                }
+            }
+            break;
+        case XML_TOK_COLUMN_MARGIN_LEFT:
+            if( GetImport().GetMM100UnitConverter().
+                    convertMeasureToCore( nVal, attribute.Value ) )
+                aColumn.LeftMargin = nVal;
+            break;
+        case XML_TOK_COLUMN_MARGIN_RIGHT:
+            if( GetImport().GetMM100UnitConverter().
+                    convertMeasureToCore( nVal, attribute.Value ) )
                 aColumn.RightMargin = nVal;
             break;
         default:
