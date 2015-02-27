@@ -276,6 +276,13 @@ static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition
     return aRect;
 }
 
+void SwShellCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd)
+{
+    const SwShellCrsr* pCursor = GetShell()->getShellCrsr(false);
+    rStart = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
+    rEnd = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
+}
+
 #endif
 
 void SwSelPaintRects::Show()
@@ -345,13 +352,20 @@ void SwSelPaintRects::Show()
                 // events, if there is a real selection.
                 // This can be used to easily show selection handles on the
                 // client side.
-                const SwShellCrsr* pCursor = GetShell()->getShellCrsr(false);
-                SwRect aStartRect = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
-                OString sRect = aStartRect.SVRect().toString();
-                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
-                SwRect aEndRect = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
-                sRect = aEndRect.SVRect().toString();
-                GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
+                SwRect aStartRect;
+                SwRect aEndRect;
+                FillStartEnd(aStartRect, aEndRect);
+
+                if (aStartRect.Height())
+                {
+                    OString sRect = aStartRect.SVRect().toString();
+                    GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_START, sRect.getStr());
+                }
+                if (aEndRect.Height())
+                {
+                    OString sRect = aEndRect.SVRect().toString();
+                    GetShell()->libreOfficeKitCallback(LOK_CALLBACK_TEXT_SELECTION_END, sRect.getStr());
+                }
             }
 
             std::stringstream ss;
@@ -703,10 +717,12 @@ void SwShellTableCrsr::FillRects()
     if (m_SelectedBoxes.empty() || bParked || !GetPoint()->nNode.GetIndex())
         return;
 
+    bool bStart = true;
     SwRegionRects aReg( GetShell()->VisArea() );
     if (GetShell()->isTiledRendering())
         aReg = GetShell()->getIDocumentLayoutAccess()->GetCurrentLayout()->Frm();
     SwNodes& rNds = GetDoc()->GetNodes();
+    SwFrm* pEndFrm = 0;
     for (size_t n = 0; n < m_SelectedBoxes.size(); ++n)
     {
         const SwStartNode* pSttNd = m_SelectedBoxes[n]->GetSttNd();
@@ -738,13 +754,29 @@ void SwShellTableCrsr::FillRects()
         while ( pFrm )
         {
             if( aReg.GetOrigin().IsOver( pFrm->Frm() ) )
+            {
                 aReg -= pFrm->Frm();
+                if (bStart)
+                {
+                    bStart = false;
+                    m_aStart = SwRect(pFrm->Frm().Left(), pFrm->Frm().Top(), 0, pFrm->Frm().Height());
+                }
+            }
 
+            pEndFrm = pFrm;
             pFrm = pFrm->GetNextCellLeaf( MAKEPAGE_NONE );
         }
     }
+    if (pEndFrm)
+        m_aEnd = SwRect(pEndFrm->Frm().Right(), pEndFrm->Frm().Top(), 0, pEndFrm->Frm().Height());
     aReg.Invert();
     insert( begin(), aReg.begin(), aReg.end() );
+}
+
+void SwShellTableCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd)
+{
+    rStart = m_aStart;
+    rEnd = m_aEnd;
 }
 
 // Check if the SPoint is within the Table-SSelection.
