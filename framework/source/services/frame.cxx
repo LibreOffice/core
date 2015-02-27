@@ -415,7 +415,7 @@ protected:
     FrameContainer                                                          m_aChildFrameContainer;   /// array of child frames
 };
 
-css::uno::WeakReference< css::frame::XFrame2 > Frame::m_xCloserFrame = css::uno::WeakReference< css::frame::XFrame2 >();
+css::uno::WeakReference< css::frame::XFrame2 > Frame::m_xCloserFrame;
 
 //  XInterface, XTypeProvider, XServiceInfo
 
