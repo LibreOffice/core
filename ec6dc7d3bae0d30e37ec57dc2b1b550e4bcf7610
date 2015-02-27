@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_79ffe334",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1901,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T23:37:06Z",
+      "side": 1,
+      "message": "Somehow you got our conventions mixed up. We use a... if it is an instance of an object, and p... if it is a pointer.",
+      "revId": "ec6dc7d3bae0d30e37ec57dc2b1b550e4bcf7610",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_19fcaf3d",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1904,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T23:37:06Z",
+      "side": 1,
+      "message": "Allocating with new on the heap and returning an instance by dereferencing the pointer (which upon function return will actually copy the object) will leak the allocated object.",
+      "revId": "ec6dc7d3bae0d30e37ec57dc2b1b550e4bcf7610",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_39f96b4e",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1910,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T23:37:06Z",
+      "side": 1,
+      "message": "Same here, this leaks. What you could do instead of allocating new Rectangles, is create the Rectangle aArea like before, then check the Size of GetPageSize(), and if Width() \u003e Height() then swap the Rectangle\u0027s Right() with Bottom().",
+      "revId": "ec6dc7d3bae0d30e37ec57dc2b1b550e4bcf7610",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
