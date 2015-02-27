@@ -238,7 +238,7 @@ Reference< XFastContextHandler > SAL_CALL
     {
         //create and remember events import context
         //(for delayed processing of events)
-        pEventContext = new XMLEventsImportContext( GetImport() );
+        pEventContext = new XMLEventsImportContext( GetImport(), Element );
         pEventContext->AddFirstRef();
         pContext = pEventContext;
     }

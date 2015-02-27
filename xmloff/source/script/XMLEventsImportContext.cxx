@@ -52,7 +52,8 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
-XMLEventsImportContext::XMLEventsImportContext( SvXMLImport& rImport )
+XMLEventsImportContext::XMLEventsImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/ )
     : SvXMLImportContext( rImport )
 {
 }
@@ -67,7 +68,8 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
-XMLEventsImportContext::XMLEventsImportContext( SvXMLImport& rImport,
+XMLEventsImportContext::XMLEventsImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
     const Reference< XEventsSupplier >& xEventsSupplier )
 :   SvXMLImportContext( rImport ),
     xEvents( xEventsSupplier->getEvents() )
@@ -84,7 +86,8 @@ XMLEventsImportContext::XMLEventsImportContext(
 {
 }
 
-XMLEventsImportContext::XMLEventsImportContext( SvXMLImport& rImport,
+XMLEventsImportContext::XMLEventsImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
     const Reference< XNameReplace >& xNameReplace )
 :   SvXMLImportContext( rImport ),
     xEvents( xNameReplace )

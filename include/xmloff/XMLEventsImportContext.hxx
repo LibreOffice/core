@@ -70,7 +70,7 @@ public:
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLocalName);
-    XMLEventsImportContext( SvXMLImport& rImport );
+    XMLEventsImportContext( SvXMLImport& rImport, sal_Int32 Element );
 
     XMLEventsImportContext(
         SvXMLImport& rImport,
@@ -78,7 +78,7 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::document::XEventsSupplier> & xEventsSupplier);
-    XMLEventsImportContext( SvXMLImport& rImport,
+    XMLEventsImportContext( SvXMLImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::document::XEventsSupplier >& xEventsSupplier );
 
     XMLEventsImportContext(
@@ -87,7 +87,7 @@ public:
         const OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XNameReplace> & xNameRepl);
-    XMLEventsImportContext( SvXMLImport& rImport,
+    XMLEventsImportContext( SvXMLImport& rImport, sal_Int32 Element,
         const css::uno::Reference< css::container::XNameReplace >& xNameRepl);
 
     virtual ~XMLEventsImportContext();
