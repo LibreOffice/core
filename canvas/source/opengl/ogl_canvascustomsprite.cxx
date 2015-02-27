@@ -218,14 +218,17 @@ namespace oglcanvas
                                 aSpriteSizePixel.x,
                                 aSpriteSizePixel.y)));
 
-                    std::vector<glm::vec2> vertices;
-                    vertices.reserve(rTriangulatedPolygon.count());
-                    for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+                    if(rTriangulatedPolygon.count()!=0)
                     {
-                        const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
-                        vertices.push_back(glm::vec2(rPt.getX(), rPt.getY()));
+                        std::vector<glm::vec2> vertices;
+                        vertices.reserve(rTriangulatedPolygon.count());
+                        for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
+                        {
+                            const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
+                            vertices.push_back(glm::vec2(rPt.getX(), rPt.getY()));
+                        }
+                        pRenderHelper->renderVertexTex( vertices, fWidth, fHeight,  color, GL_TRIANGLES);
                     }
-                    pRenderHelper->renderVertexTex( vertices, fWidth, fHeight,  color, GL_TRIANGLES);
                 }
                 else
                 {

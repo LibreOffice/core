@@ -48,7 +48,8 @@ namespace oglcanvas
                 vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
             }
 
-            renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
+            if(vertices.size() !=0)
+                renderHelper->renderVertexConstColor(vertices, color, GL_TRIANGLES);
         }
     }
 
@@ -72,7 +73,8 @@ namespace oglcanvas
                 const ::basegfx::B2DPoint& rPt( rTriangulatedPolygon.getB2DPoint(i) );
                 vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
             }
-            renderHelper->renderTextureTransform( vertices, nWidth, nHeight,  color, GL_TRIANGLES, transform);
+            if(vertices.size()!=0)
+                renderHelper->renderTextureTransform( vertices, nWidth, nHeight,  color, GL_TRIANGLES, transform);
         }
     }
 
@@ -102,7 +104,8 @@ namespace oglcanvas
                     const ::basegfx::B2DPoint& rPt( rPolygon.getB2DPoint( j % nPts ) );
                     vertices.push_back(glm::vec2(rPt.getX(),rPt.getY()));
                 }
-                renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
+                if(vertices.size()!=0)
+                    renderHelper->renderVertexConstColor(vertices, color, GL_LINE_STRIP);
             }
         }
 
