@@ -57,6 +57,8 @@ constants ConditionFormatOperator
     const long CONTAINS = 20;
 
     const long NOT_CONTAINS = 21;
+
+    const long EXPRESSION = 22;
 };
 
 

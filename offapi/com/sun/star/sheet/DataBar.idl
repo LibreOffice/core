@@ -28,7 +28,7 @@ service DataBar
       */
     [property] long AxisPosition;
 
-    [property] boolean Gradient;
+    [property] boolean UseGradient;
 
     [property] com::sun::star::util::Color Color;
 

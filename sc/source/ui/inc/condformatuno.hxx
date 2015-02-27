@@ -16,6 +16,9 @@
 #include <com/sun/star/sheet/XConditionalFormats.hpp>
 #include <com/sun/star/sheet/XConditionalFormat.hpp>
 #include <com/sun/star/sheet/XConditionEntry.hpp>
+#include <com/sun/star/sheet/XColorScaleEntry.hpp>
+#include <com/sun/star/sheet/XDataBarEntry.hpp>
+#include <com/sun/star/sheet/XIconSetEntry.hpp>
 
 #include <cppuhelper/weak.hxx>
 #include <svl/itemprop.hxx>
@@ -26,6 +29,7 @@ class ScConditionalFormat;
 class ScIconSetFormat;
 class ScDataBarFormat;
 class ScColorScale;
+class ScCondFormatEntry;
 
 using namespace com::sun::star;
 
@@ -139,6 +143,7 @@ class ScConditionEntryObj : public com::sun::star::beans::XPropertySet,
 {
 public:
 
+    ScConditionEntryObj();
     virtual ~ScConditionEntryObj();
 
     // XConditionEntry
@@ -188,6 +193,7 @@ public:
 
 private:
     SfxItemPropertySet maPropSet;
+    ScCondFormatEntry* pFormat;
 };
 
 class ScColorScaleFormatObj : public com::sun::star::beans::XPropertySet,
@@ -195,6 +201,7 @@ class ScColorScaleFormatObj : public com::sun::star::beans::XPropertySet,
 {
 public:
 
+    ScColorScaleFormatObj();
     virtual ~ScColorScaleFormatObj();
 
                             // XPropertySet
@@ -247,6 +254,7 @@ class ScDataBarFormatObj : public com::sun::star::beans::XPropertySet,
                          public cppu::OWeakObject
 {
 public:
+    ScDataBarFormatObj();
     virtual ~ScDataBarFormatObj();
 
                             // XPropertySet
@@ -291,7 +299,7 @@ public:
                                     ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    ScDataBarFormat* pDataBar;
+    ScDataBarFormat* mpDataBar;
     SfxItemPropertySet maPropSet;
 };
 
@@ -299,6 +307,7 @@ class ScIconSetFormatObj : public com::sun::star::beans::XPropertySet,
                          public cppu::OWeakObject
 {
 public:
+    ScIconSetFormatObj();
     virtual ~ScIconSetFormatObj();
 
                             // XPropertySet
@@ -344,7 +353,7 @@ public:
 
 private:
 
-    ScIconSetFormat* pIconSet;
+    ScIconSetFormat* mpIconSet;
     SfxItemPropertySet maPropSet;
 };
 
