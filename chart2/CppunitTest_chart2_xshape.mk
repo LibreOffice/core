@@ -127,6 +127,4 @@ $(eval $(call gb_CppunitTest_use_components,chart2_xshape,\
 
 $(eval $(call gb_CppunitTest_use_configuration,chart2_xshape))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,chart2_xshape))
-
 # vim: set noet sw=4 ts=4:

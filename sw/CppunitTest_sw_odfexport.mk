@@ -86,6 +86,4 @@ $(eval $(call gb_CppunitTest_use_custom_headers,sw_odfexport,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_odfexport))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_odfexport))
-
 # vim: set noet sw=4 ts=4:

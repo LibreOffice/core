@@ -101,8 +101,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlexport$(1),\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlexport$(1)))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ooxmlexport$(1)))
-
 $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlexport$(1),\
 	oox_customshapes \
 	oox_generated \

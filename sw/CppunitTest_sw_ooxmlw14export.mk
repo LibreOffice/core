@@ -47,6 +47,4 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlw14export,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlw14export))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ooxmlw14export))
-
 # vim: set noet sw=4 ts=4:

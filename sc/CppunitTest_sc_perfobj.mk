@@ -72,6 +72,4 @@ $(eval $(call gb_CppunitTest_use_rdb,sc_perfobj,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_perfobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_perfobj))
-
 # vim: set noet sw=4 ts=4:

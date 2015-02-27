@@ -105,8 +105,6 @@ $(eval $(call gb_CppunitTest_use_configuration,dbaccess_empty_stdlib_save))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_empty_stdlib_save))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,dbaccess_empty_stdlib_save))
-
 $(call gb_CppunitTest_get_target,dbaccess_empty_stdlib_save) : $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb
 $(WORKDIR)/CppunitTest/testEmptyStdlibSave.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/testDialogSave.odb
 	mkdir -p $(dir $@)
