@@ -579,6 +579,8 @@ public:
         const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap);
+    XMLImageMapPolygonContext( SvXMLImport& rImport, sal_Int32 Element,
+        css::uno::Reference< css::container::XIndexContainer > xMap );
 
     virtual ~XMLImageMapPolygonContext();
 
@@ -605,6 +607,16 @@ XMLImageMapPolygonContext::XMLImageMapPolygonContext(
                                  "com.sun.star.image.ImageMapPolygonObject"),
         bViewBoxOK(false),
         bPointsOK(false)
+{
+}
+
+XMLImageMapPolygonContext::XMLImageMapPolygonContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XIndexContainer > xMap )
+:   XMLImageMapObjectContext( rImport, Element, xMap,
+        "com.sun.star.image.ImageMapPolygonObject" ),
+    bViewBoxOK(false),
+    bPointsOK(false)
 {
 }
 
