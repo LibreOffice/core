@@ -404,7 +404,7 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const OUString& url )
         return sal_False;
 
     // here we have to look whether we support this URL format
-    return url.startsWith("sdbc:address:kab:");
+    return url.startsWith("sdbc:address:kab");
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException, std::exception)
