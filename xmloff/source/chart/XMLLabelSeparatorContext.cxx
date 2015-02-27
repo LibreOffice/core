@@ -25,6 +25,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/token/tokens.hxx>
 
 TYPEINIT1( XMLLabelSeparatorContext, XMLElementPropertyContext );
 
@@ -41,10 +42,25 @@ XMLLabelSeparatorContext::XMLLabelSeparatorContext(
 {
 }
 
+XMLLabelSeparatorContext::XMLLabelSeparatorContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const XMLPropertyState& rProp,
+    ::std::vector< XMLPropertyState >& rProps )
+:   XMLElementPropertyContext( rImport, Element, rProp, rProps ),
+    m_aSeparator()
+{
+}
+
 XMLLabelSeparatorContext::~XMLLabelSeparatorContext()
 {}
 
 void XMLLabelSeparatorContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
+{
+}
+
+void SAL_CALL XMLLabelSeparatorContext::startFastElement( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 }
 
@@ -64,6 +80,23 @@ SvXMLImportContext* XMLLabelSeparatorContext::CreateChildContext(
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLLabelSeparatorContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/ )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    uno::Reference< xml::sax::XFastContextHandler > pContext = NULL;
+    if( xmloff::XML_p == (Element & xmloff::XML_p) )
+    {
+        pContext = new SchXMLParagraphContext( GetImport(), Element,
+                m_aSeparator );
+    }
+    if( !pContext.is() )
+        pContext = new SvXMLImportContext( GetImport() );
+
+    return pContext;
+}
+
 void XMLLabelSeparatorContext::EndElement()
 {
     if( !m_aSeparator.isEmpty() )
@@ -74,6 +107,19 @@ void XMLLabelSeparatorContext::EndElement()
     }
 
     XMLElementPropertyContext::EndElement();
+}
+
+void SAL_CALL XMLLabelSeparatorContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( !m_aSeparator.isEmpty() )
+    {
+        // aProp is a member of XMLElementPropertyContext
+        aProp.maValue <<= m_aSeparator;
+        SetInsert( true );
+    }
+
+    XMLElementPropertyContext::endFastElement( Element );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
