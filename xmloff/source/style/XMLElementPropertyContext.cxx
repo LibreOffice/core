@@ -34,11 +34,29 @@ XMLElementPropertyContext::XMLElementPropertyContext (
 {
 }
 
+XMLElementPropertyContext::XMLElementPropertyContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const XMLPropertyState& rProp,
+    std::vector< XMLPropertyState >& rProps )
+:   SvXMLImportContext( rImport ),
+    bInsert( false ),
+    rProperties( rProps ),
+    aProp( rProp )
+{
+}
+
 XMLElementPropertyContext::~XMLElementPropertyContext()
 {
 }
 
 void XMLElementPropertyContext::EndElement( )
+{
+    if( bInsert )
+        rProperties.push_back( aProp );
+}
+
+void SAL_CALL XMLElementPropertyContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
     if( bInsert )
         rProperties.push_back( aProp );

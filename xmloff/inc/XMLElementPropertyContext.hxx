@@ -46,10 +46,15 @@ public:
                                const OUString& rLName,
                                const XMLPropertyState& rProp,
                                 ::std::vector< XMLPropertyState > &rProps );
+    XMLElementPropertyContext( SvXMLImport& rImport, sal_Int32 Element,
+            const XMLPropertyState& rProp,
+            ::std::vector< XMLPropertyState >& rProps );
 
     virtual ~XMLElementPropertyContext();
 
     virtual void EndElement() SAL_OVERRIDE;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element )
+        throw(css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) SAL_OVERRIDE;
 };
 
 
