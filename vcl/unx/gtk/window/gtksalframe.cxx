@@ -1350,8 +1350,7 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
         guint32 nUserTime = 0;
         if( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
         {
-            /* #i99360# ugly workaround an X11 library bug */
-            nUserTime= getDisplay()->GetLastUserEventTime( true );
+            nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
         }
         lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime);
     }
@@ -1806,9 +1805,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
 
             guint32 nUserTime = 0;
             if( ! bNoActivate && (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-                /* #i99360# ugly workaround an X11 library bug */
-                nUserTime= getDisplay()->GetLastUserEventTime( true );
-                //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
 
             //For these floating windows we don't want the main window to lose focus, and metacity has...
             // metacity-2.24.0/src/core/window.c
@@ -1833,9 +1830,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
             // awesome.
             if( nUserTime == 0 )
             {
-                /* #i99360# ugly workaround an X11 library bug */
-                nUserTime= getDisplay()->GetLastUserEventTime( true );
-                //nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+                nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
             }
             lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime );
 
@@ -2631,8 +2626,7 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
             else
             {
-                /* #i99360# ugly workaround an X11 library bug */
-                guint32 nUserTime= getDisplay()->GetLastUserEventTime( true );
+                guint32 nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
                 gdk_window_focus( widget_get_window(m_pWindow), nUserTime );
             }
 #if !GTK_CHECK_VERSION(3,0,0)
