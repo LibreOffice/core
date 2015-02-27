@@ -154,7 +154,7 @@ Reference< XFastContextHandler >
     switch( mxMapper->getPropertySetMapper()->GetEntryContextId( rProp.mnIndex ) )
     {
     case CTF_TEXTCOLUMNS:
-        //pContext = new XMLTextColumnsContext( GetImport(), Element, xAttrList, rProp, rProperties );
+        pContext = new XMLTextColumnsContext( GetImport(), Element, xAttrList, rProp, rProperties );
         break;
     case CTF_BACKGROUND_URL:
         DBG_ASSERT( rProp.mnIndex >= 3 &&
@@ -166,9 +166,9 @@ Reference< XFastContextHandler >
                     CTF_BACKGROUND_FILTER == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!" );
-        //pContext = new XMLBackgroundImageContext( GetImport(), Element,
-        //    xAttrList, rProp, rProp.mnIndex-2, rProp.mnIndex-1,
-        //    rProp.mnIndex-3, rProperties );
+        pContext = new XMLBackgroundImageContext( GetImport(), Element,
+            xAttrList, rProp, rProp.mnIndex-2, rProp.mnIndex-1,
+            rProp.mnIndex-3, rProperties );
         break;
     }
 
