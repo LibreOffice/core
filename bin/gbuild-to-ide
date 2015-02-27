@@ -146,6 +146,7 @@ class GbuildParser:
                 if len(defparts) == 1:
                     defparts.append(None)
                 state.defs[defparts[0]] = defparts[1]
+            state.defs["LIBO_INTERNAL_ONLY"] = None
             return state
         cxxmatch = GbuildParser.cxxpattern.match(line)
         if cxxmatch:
