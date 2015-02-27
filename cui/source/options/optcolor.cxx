@@ -174,6 +174,8 @@ class ColorConfigWindow_Impl
 {
 public:
     ColorConfigWindow_Impl(vcl::Window* pParent);
+    ~ColorConfigWindow_Impl() { dispose(); }
+    virtual void dispose() SAL_OVERRIDE;
 
 public:
     void SetLinks (Link const&, Link const&, Link const&);
@@ -506,6 +508,12 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(vcl::Window* pParent)
     get(m_pGrid, "ColorConfigWindow");
     CreateEntries();
     SetAppearance();
+}
+
+void ColorConfigWindow_Impl::dispose()
+{
+    disposeBuilder();
+    VclContainer::dispose();
 }
 
 Size ColorConfigWindow_Impl::calculateRequisition() const
@@ -913,9 +921,14 @@ ColorConfigCtrl_Impl::~ColorConfigCtrl_Impl()
 void ColorConfigCtrl_Impl::dispose()
 {
     delete m_pVScroll;
+    m_pVScroll = NULL;
     delete m_pScrollWindow;
+    m_pScrollWindow = NULL;
     delete m_pBody;
+    m_pBody = NULL;
     delete m_pHeaderHB;
+    m_pHeaderHB = NULL;
+
     VclVBox::dispose();
 }
 

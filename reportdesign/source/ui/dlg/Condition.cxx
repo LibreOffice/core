@@ -162,6 +162,7 @@ OColorPopup::~OColorPopup()
 void OColorPopup::dispose()
 {
     m_aColorSet.disposeAndClear();
+    disposeBuilder();
     FloatingWindow::dispose();
 }
 

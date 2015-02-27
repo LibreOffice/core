@@ -16,6 +16,7 @@
 #include <tools/fldunit.hxx>
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
+#include <vcl/vclptr.hxx>
 #include <map>
 #include <set>
 #include <stack>
@@ -54,6 +55,9 @@ public:
                             const OString& sID = OString(),
                             const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                     ~VclBuilder();
+
+    ///releases references and disposes all children.
+    void disposeBuilder();
 
     //sID must exist and be of type T
     template <typename T> T* get(T*& ret, const OString& sID);
@@ -146,7 +150,7 @@ private:
     struct WinAndId
     {
         OString m_sID;
-        vcl::Window *m_pWindow;
+        VclPtr<vcl::Window> m_pWindow;
         short m_nResponseId;
         PackingData m_aPackingData;
         WinAndId(const OString &rId, vcl::Window *pWindow, bool bVertical)
@@ -445,12 +449,17 @@ inline PopupMenu* VclBuilder::get_menu(PopupMenu*& ret, const OString& sID)
 //
 //i.e.  class Dialog : public SystemWindow, public VclBuilderContainer
 //not   class Dialog : public VclBuilderContainer, public SystemWindow
+//
+//With the new 'dispose' framework, it is necessary to force the builder
+//dispose before the Window dispose; so a Dialog::dispose() method would
+//finish: disposeBuilder(); SystemWindow::dispose() to capture this ordering.
 
 class VCL_DLLPUBLIC VclBuilderContainer
 {
 public:
                     VclBuilderContainer();
     virtual         ~VclBuilderContainer();
+    void            disposeBuilder();
 
     static OUString getUIRootDir();
     bool            hasBuilder() const { return m_pUIBuilder != NULL; }

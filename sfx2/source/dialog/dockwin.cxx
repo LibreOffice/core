@@ -259,6 +259,8 @@ SfxTitleDockingWindow::~SfxTitleDockingWindow()
 void SfxTitleDockingWindow::dispose()
 {
     delete m_pWrappedWindow;
+    m_pWrappedWindow = NULL;
+
     SfxDockingWindow::dispose();
 }
 

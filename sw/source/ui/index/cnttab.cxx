@@ -2658,6 +2658,8 @@ void SwTokenWindow::dispose()
         pControl->SetLoseFocusHdl( Link() );
         delete pControl;
     }
+    aControlList.clear();
+    disposeBuilder();
     VclHBox::dispose();
 }
 

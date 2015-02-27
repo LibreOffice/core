@@ -1457,6 +1457,9 @@ void SfxHelpIndexWindow_Impl::dispose()
 
     SvtViewOptions aViewOpt( E_TABDIALOG, CONFIGNAME_INDEXWIN );
     aViewOpt.SetPageID( (sal_Int32)m_pTabCtrl->GetCurPageId() );
+
+    disposeBuilder();
+
     vcl::Window::dispose();
 }
 

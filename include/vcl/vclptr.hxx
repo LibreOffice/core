@@ -70,6 +70,9 @@ public:
 
 /**
  * A thin wrapper around rtl::Reference to implement the acquire and dispose semantics we want for references to vcl::Window subclasses.
+ *
+ * For more details on the design please see vcl/README.lifecycle
+ *
  * @param reference_type must be a subclass of vcl::Window
  */
 template <class reference_type>
@@ -136,6 +139,11 @@ public:
         m_rInnerRef.set(pBody);
     }
 
+    inline void SAL_CALL reset(reference_type *pBody)
+    {
+        m_rInnerRef.set(pBody);
+    }
+
     inline VclPtr<reference_type>& SAL_CALL operator= (reference_type * pBody)
     {
         m_rInnerRef.set(pBody);
@@ -150,6 +158,16 @@ public:
     inline SAL_CALL operator bool () const
     {
         return m_rInnerRef.get() != NULL;
+    }
+
+    inline void SAL_CALL clear()
+    {
+        m_rInnerRef.clear();
+    }
+
+    inline void SAL_CALL reset()
+    {
+        m_rInnerRef.clear();
     }
 
     inline void disposeAndClear()

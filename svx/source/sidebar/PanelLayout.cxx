@@ -33,6 +33,7 @@ void PanelLayout::dispose()
 {
     m_bInClose = true;
     m_aPanelLayoutIdle.Stop();
+    disposeBuilder();
     Control::dispose();
 }
 

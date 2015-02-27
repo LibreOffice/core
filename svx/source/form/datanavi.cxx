@@ -1419,17 +1419,23 @@ namespace svxform
         aViewOpt.SetUserItem(CFGNAME_SHOWDETAILS,aAny);
 
         delete m_pInstPage;
+        m_pInstPage = NULL;
         delete m_pSubmissionPage;
+        m_pSubmissionPage = NULL;
         delete m_pBindingPage;
+        m_pBindingPage = NULL;
 
         sal_Int32 i, nCount = m_aPageList.size();
         for ( i = 0; i < nCount; ++i )
             delete m_aPageList[i];
+        m_aPageList.clear();
+
         Reference< XFrameActionListener > xListener(
             static_cast< XFrameActionListener* >( m_xDataListener.get() ), UNO_QUERY );
         m_xFrame->removeFrameActionListener( xListener );
         RemoveBroadcaster();
         m_xDataListener.clear();
+        disposeBuilder();
         vcl::Window::dispose();
     }
 

@@ -217,6 +217,7 @@ void BackingWindow::dispose()
         }
         mxDropTargetListener = css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >();
     }
+    disposeBuilder();
     vcl::Window::dispose();
 }
 

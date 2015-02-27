@@ -85,6 +85,17 @@ TabPage::TabPage(vcl::Window *pParent, const OString& rID, const OUString& rUIXM
     set_expand(true);
 }
 
+TabPage::~TabPage()
+{
+    dispose();
+}
+
+void TabPage::dispose()
+{
+    disposeBuilder();
+    vcl::Window::dispose();
+}
+
 void TabPage::StateChanged( StateChangedType nType )
 {
     Window::StateChanged( nType );

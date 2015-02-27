@@ -456,6 +456,12 @@ Dialog::Dialog( WindowType nType )
     ImplInitDialogData();
 }
 
+void VclBuilderContainer::disposeBuilder()
+{
+    if (m_pUIBuilder)
+        m_pUIBuilder->disposeBuilder();
+}
+
 OUString VclBuilderContainer::getUIRootDir()
 {
     /*to-do, check if user config has an override before using shared one, etc*/

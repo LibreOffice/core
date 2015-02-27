@@ -525,17 +525,24 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
 
 VclBuilder::~VclBuilder()
 {
+    disposeBuilder();
+}
+
+void VclBuilder::disposeBuilder()
+{
     for (std::vector<WinAndId>::reverse_iterator aI = m_aChildren.rbegin(),
          aEnd = m_aChildren.rend(); aI != aEnd; ++aI)
     {
-        delete aI->m_pWindow;
+        aI->m_pWindow.disposeAndClear();
     }
+    m_aChildren.clear();
 
     for (std::vector<MenuAndId>::reverse_iterator aI = m_aMenus.rbegin(),
          aEnd = m_aMenus.rend(); aI != aEnd; ++aI)
     {
         delete aI->m_pMenu;
     }
+    m_aMenus.clear();
 }
 
 void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
@@ -3213,7 +3220,7 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMa
 
 vcl::Window *VclBuilder::get_widget_root()
 {
-    return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
+    return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow.get();
 }
 
 vcl::Window *VclBuilder::get_by_name(const OString& sID)

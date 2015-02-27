@@ -206,7 +206,15 @@ PagePropertyPanel::~PagePropertyPanel()
 void PagePropertyPanel::dispose()
 {
     delete[] maImgSize;
+    maImgSize = NULL;
     delete[] maImgSize_L;
+    maImgSize_L = NULL;
+
+    mpPageItem.reset();
+    mpPageLRMarginItem.reset();
+    mpPageULMarginItem.reset();
+    mpPageSizeItem.reset();
+
     PanelLayout::dispose();
 }
 

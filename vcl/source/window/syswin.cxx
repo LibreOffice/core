@@ -118,6 +118,7 @@ void SystemWindow::dispose()
     // Hack to make sure code called from base ~Window does not interpret this
     // as a SystemWindow (which it no longer is by then):
     mpWindowImpl->mbSysWin = false;
+    disposeBuilder();
 
     Window::dispose();
 }
