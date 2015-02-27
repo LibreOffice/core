@@ -573,16 +573,6 @@ int MathType::Parse(SotStorage *pStor)
     if (nVersion > 3)   // allow only supported versions of MathType to be parsed
         return 0;
 
-#ifdef STANDALONE
-    *pOut << "Format Version is " << int(nVersion) << endl;
-    *pOut << "Generating Platform is " << (nPlatform ? "Windows"
-        : "Mac") << endl;
-    *pOut << "Generating Product is " << (nPlatform ? "Equation Editor"
-        : "Equation Editor") << endl;
-    *pOut << "Prod Version is " << int(nProdVersion) << "." <<
-        int(nProdSubVersion) << endl << endl;
-#endif
-
     int nRet = HandleRecords();
     //little crude hack to close occasionally open expressions
     //a sophisticated system to determine what expressions are
