@@ -88,35 +88,37 @@ struct ConvertData;
 
 //  Info class for all supported file formats
 
-#define GFF_NOT ( (sal_uInt16)0x0000 )
-#define GFF_BMP ( (sal_uInt16)0x0001 )
-#define GFF_GIF ( (sal_uInt16)0x0002 )
-#define GFF_JPG ( (sal_uInt16)0x0003 )
-#define GFF_PCD ( (sal_uInt16)0x0004 )
-#define GFF_PCX ( (sal_uInt16)0x0005 )
-#define GFF_PNG ( (sal_uInt16)0x0006 )
-#define GFF_TIF ( (sal_uInt16)0x0007 )
-#define GFF_XBM ( (sal_uInt16)0x0008 )
-#define GFF_XPM ( (sal_uInt16)0x0009 )
-#define GFF_PBM ( (sal_uInt16)0x000a )
-#define GFF_PGM ( (sal_uInt16)0x000b )
-#define GFF_PPM ( (sal_uInt16)0x000c )
-#define GFF_RAS ( (sal_uInt16)0x000d )
-#define GFF_TGA ( (sal_uInt16)0x000e )
-#define GFF_PSD ( (sal_uInt16)0x000f )
-#define GFF_EPS ( (sal_uInt16)0x0010 )
-#define GFF_DXF ( (sal_uInt16)0x00f1 )
-#define GFF_MET ( (sal_uInt16)0x00f2 )
-#define GFF_PCT ( (sal_uInt16)0x00f3 )
-#define GFF_SGF ( (sal_uInt16)0x00f4 )
-#define GFF_SVM ( (sal_uInt16)0x00f5 )
-#define GFF_WMF ( (sal_uInt16)0x00f6 )
-#define GFF_SGV ( (sal_uInt16)0x00f7 )
-#define GFF_EMF ( (sal_uInt16)0x00f8 )
-#define GFF_SVG ( (sal_uInt16)0x00f9 )
-#define GFF_MOV ( (sal_uInt16)0x00fa )
-#define GFF_XXX ( (sal_uInt16)0xffff )
-
+enum class GraphicFileFormat
+{
+    NOT = 0x0000,
+    BMP = 0x0001,
+    GIF = 0x0002,
+    JPG = 0x0003,
+    PCD = 0x0004,
+    PCX = 0x0005,
+    PNG = 0x0006,
+    TIF = 0x0007,
+    XBM = 0x0008,
+    XPM = 0x0009,
+    PBM = 0x000a,
+    PGM = 0x000b,
+    PPM = 0x000c,
+    RAS = 0x000d,
+    TGA = 0x000e,
+    PSD = 0x000f,
+    EPS = 0x0010,
+    DXF = 0x00f1,
+    MET = 0x00f2,
+    PCT = 0x00f3,
+    SGF = 0x00f4,
+    SVM = 0x00f5,
+    WMF = 0x00f6,
+    SGV = 0x00f7,
+    EMF = 0x00f8,
+    SVG = 0x00f9,
+    MOV = 0x00fa,
+    XXX = 0xffff
+};
 
 // - GraphicDescriptor -
 
@@ -130,7 +132,7 @@ class VCL_DLLPUBLIC GraphicDescriptor
     Size                aLogSize;
     sal_uInt16          nBitsPerPixel;
     sal_uInt16          nPlanes;
-    sal_uInt16          nFormat;
+    GraphicFileFormat   nFormat;
     bool            bCompressed;
     bool            bOwnStream;
 
@@ -190,8 +192,8 @@ public:
         as many properties as possible (size, color, etc.) */
     bool    Detect( bool bExtendedInfo = false );
 
-    /** @return the file format, GFF_NOT if no format was recognized */
-    sal_uInt16          GetFileFormat() const { return nFormat; }
+    /** @return the file format, GraphicFileFormat::NOT if no format was recognized */
+    GraphicFileFormat  GetFileFormat() const { return nFormat; }
 
     /** @return graphic size in pixels or 0 size */
     const Size&     GetSizePixel() const { return (Size&) aPixSize; }
@@ -209,7 +211,7 @@ public:
     bool            IsCompressed() const { return bCompressed; }
 
     /** @return filter number that is needed by the GraphFilter to read this format */
-    static OUString GetImportFormatShortName( sal_uInt16 nFormat );
+    static OUString GetImportFormatShortName( GraphicFileFormat nFormat );
 };
 
 /** Information about errors during the GraphicFilter operation. */

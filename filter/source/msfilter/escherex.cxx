@@ -1585,18 +1585,18 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                 INetURLObject   aTmp( aGraphicUrl );
                 GraphicDescriptor aDescriptor(aTmp);
                 aDescriptor.Detect();
-                const sal_uInt16 nFormat = aDescriptor.GetFileFormat();
+                const GraphicFileFormat nFormat = aDescriptor.GetFileFormat();
 
                 // can MSO handle it?
                 if ( bMirrored || nAngle || nTransparency || nRed || nGreen || nBlue || (1.0 != fGamma) ||
-                     (nFormat != GFF_BMP &&
-                      nFormat != GFF_GIF &&
-                      nFormat != GFF_JPG &&
-                      nFormat != GFF_PNG &&
-                      nFormat != GFF_TIF &&
-                      nFormat != GFF_PCT &&
-                      nFormat != GFF_WMF &&
-                      nFormat != GFF_EMF) )
+                     (nFormat != GraphicFileFormat::BMP &&
+                      nFormat != GraphicFileFormat::GIF &&
+                      nFormat != GraphicFileFormat::JPG &&
+                      nFormat != GraphicFileFormat::PNG &&
+                      nFormat != GraphicFileFormat::TIF &&
+                      nFormat != GraphicFileFormat::PCT &&
+                      nFormat != GraphicFileFormat::WMF &&
+                      nFormat != GraphicFileFormat::EMF) )
                 {
                     boost::scoped_ptr<SvStream> pIn(::utl::UcbStreamHelper::CreateStream(
                         aTmp.GetMainURL( INetURLObject::NO_DECODE ), StreamMode::READ ));
