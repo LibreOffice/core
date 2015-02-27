@@ -245,6 +245,9 @@ public:
                                const uno::Reference<
                                        xml::sax::XAttributeList > & xAttrList,
                                const SvXMLTokenMap& rTokenMap );
+    XMLTextColumnSepContext_Impl( SvXMLImport& rImport, sal_Int32 Element,
+            const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+            const SvXMLTokenMap& rTokenMap );
 
     virtual ~XMLTextColumnSepContext_Impl();
 
@@ -311,6 +314,58 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
                 sal_uInt16 nStyleVal;
                 if( SvXMLUnitConverter::convertEnum( nStyleVal, rValue,
                                                        pXML_Sep_Style_Enum ) )
+                    nStyle = (sal_Int8)nStyleVal;
+            }
+            break;
+        }
+    }
+}
+
+XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const SvXMLTokenMap& rTokenMap )
+:   SvXMLImportContext( rImport ),
+    nWidth( 2 ),
+    nColor( 0 ),
+    nHeight( 100 ),
+    nStyle( 1 ),
+    eVertAlign( VerticalAlignment_TOP )
+{
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        sal_Int32 nVal;
+        switch( rTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_COLUMN_SEP_WIDTH:
+            if( GetImport().GetMM100UnitConverter().
+                    convertMeasureToCore( nVal, attribute.Value ) )
+                nWidth = nVal;
+            break;
+        case XML_TOK_COLUMN_SEP_HEIGHT:
+            if( ::sax::Converter::convertPercent( nVal, attribute.Value )
+                && nVal >= 1 && nVal <= 100 )
+                nHeight = (sal_Int8)nVal;
+            break;
+        case XML_TOK_COLUMN_SEP_COLOR:
+            {
+                ::sax::Converter::convertColor( nColor, attribute.Value );
+            }
+            break;
+        case XML_TOK_COLUMN_SEP_ALIGN:
+            {
+                sal_uInt16 nAlign;
+                if( SvXMLUnitConverter::convertEnum( nAlign, attribute.Value,
+                            pXML_Sep_Align_Enum ) )
+                    eVertAlign = (VerticalAlignment)nAlign;
+            }
+            break;
+        case XML_TOK_COLUMN_SEP_STYLE:
+            {
+                sal_uInt16 nStyleVal;
+                if( SvXMLUnitConverter::convertEnum( nStyleVal, attribute.Value,
+                            pXML_Sep_Style_Enum ) )
                     nStyle = (sal_Int8)nStyleVal;
             }
             break;
