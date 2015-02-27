@@ -367,12 +367,30 @@ SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPr
 }
 
 uno::Reference< xml::sax::XFastContextHandler >
-    XMLTableCellPropsContext::createFastChildContext( sal_Int32 /*Element*/,
-    const uno::Reference< xml::sax::XFastAttributeList >& /*xAttrList*/,
-    std::vector< XMLPropertyState >& /*rProperties*/,
-    const XMLPropertyState& /*rProp*/ )
+    XMLTableCellPropsContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
+    std::vector< XMLPropertyState >& rProperties,
+    const XMLPropertyState& rProp )
 {
-    return uno::Reference< xml::sax::XFastContextHandler >();
+    // no need for a custom context or indeed a SvXMLTokenMap to grab just the
+    // single attribute ( href ) that we are interested in.
+    // still though, we will check namespaces etd.
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_STYLE | XML_hyperlink) )
+    {
+        OUString sURL;
+        if( xAttrList->hasAttribute( FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href) )
+        {
+            sURL = xAttrList->getValue( FastToken::NAMESPACE | XML_NAMESPACE_XLINK | XML_href );
+        }
+        if( !sURL.isEmpty() )
+        {
+            XMLPropertyState aProp( rProp );
+            aProp.maValue <<= sURL;
+            rProperties.push_back( aProp );
+        }
+    }
+    return SvXMLPropertySetContext::createFastChildContext( Element,
+            xAttrList, rProperties, rProp );
 }
 
 class ScXMLMapContext : public SvXMLImportContext
