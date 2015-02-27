@@ -1656,6 +1656,35 @@ XMLTextFrameContext::XMLTextFrameContext(
     m_HasAutomaticStyleWithoutParentStyle( false ),
     m_bSupportsReplacement( false )
 {
+    if( xAttrList.is() )
+    {
+        if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_DRAW | XML_style_name ) )
+        {
+            OUString aStyleName = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_DRAW | XML_style_name );
+            if( !aStyleName.isEmpty() )
+            {
+                rtl::Reference< XMLTextImportHelper > xTxtImport =
+                    GetImport().GetTextImport();
+                XMLPropStyleContext* pStyle( 0L );
+                pStyle = xTxtImport->FindAutoFrameStyle( aStyleName );
+                if( pStyle && pStyle->GetParentName().isEmpty() )
+                {
+                    m_HasAutomaticStyleWithoutParentStyle = true;
+                }
+            }
+        }
+        else if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_TEXT | XML_anchor_type ) )
+        {
+            TextContentAnchorType eNew;
+            if( XMLAnchorTypePropHdl::convert(
+                    xAttrList->getValue( NAMESPACE | XML_NAMESPACE_TEXT | XML_anchor_type ), eNew )
+                && ( TextContentAnchorType_AT_PARAGRAPH == eNew ||
+                     TextContentAnchorType_AT_CHARACTER == eNew ||
+                     TextContentAnchorType_AS_CHARACTER == eNew ||
+                     TextContentAnchorType_AT_PAGE == eNew ) )
+                m_eDefaultAnchorType = eNew;
+        }
+    }
 }
 
 XMLTextFrameContext::~XMLTextFrameContext()
@@ -1706,6 +1735,43 @@ void XMLTextFrameContext::EndElement()
 void SAL_CALL XMLTextFrameContext::endFastElement( sal_Int32 /*Element*/ )
     throw(RuntimeException, SAXException, std::exception)
 {
+    /// solve if multiple image child contexts were imported
+    SvXMLImportContextRef const pMultiContext(solveMultipleImages());
+
+    SvXMLImportContext const*const pContext =
+        (pMultiContext) ? &pMultiContext : &m_xImplContext;
+    XMLTextFrameContext_Impl *pImpl = const_cast<XMLTextFrameContext_Impl*>(PTR_CAST( XMLTextFrameContext_Impl, pContext ));
+    assert(!pMultiContext || pImpl);
+    if( pImpl )
+    {
+        pImpl->CreateIfNotThere();
+
+        // fdo#68839: in case the surviving image was not the first one,
+        // it will have a counter added to its name - set the original name
+        if (pMultiContext) // do this only when necessary; esp. not for text
+        {                  // frames that may have entries in GetRenameMap()!
+            pImpl->SetName();
+        }
+
+        if( !m_sTitle.isEmpty() )
+        {
+            pImpl->SetTitle( m_sTitle );
+        }
+        if( !m_sDesc.isEmpty() )
+        {
+            pImpl->SetDesc( m_sDesc );
+        }
+
+        if( m_pHyperlink )
+        {
+            pImpl->SetHyperlink( m_pHyperlink->GetHRef(), m_pHyperlink->GetName(),
+                          m_pHyperlink->GetTargetFrameName(), m_pHyperlink->GetMap() );
+            delete m_pHyperlink;
+            m_pHyperlink = 0;
+        }
+
+    }
+
 }
 
 SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
@@ -1918,11 +1984,186 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 }
 
 Reference< XFastContextHandler > SAL_CALL
-    XMLTextFrameContext::createFastChildContext( sal_Int32 /*Element*/,
-    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    XMLTextFrameContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
     throw(RuntimeException, SAXException, std::exception)
 {
-    Reference< XFastContextHandler > pContext = 0;
+    SvXMLImportContext *pContext = 0;
+
+    if( !m_xImplContext.Is() )
+    {
+        // no child exists
+        sal_uInt16 nFrameType = USHRT_MAX;
+        if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_text_box) )
+            nFrameType = XML_TEXT_FRAME_TEXTBOX;
+        else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_image) )
+            nFrameType = XML_TEXT_FRAME_GRAPHIC;
+        else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_object) )
+            nFrameType = XML_TEXT_FRAME_OBJECT;
+        else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_object_ole) )
+            nFrameType = XML_TEXT_FRAME_OBJECT_OLE;
+        else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_applet) )
+            nFrameType = XML_TEXT_FRAME_APPLET;
+        else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_plugin) )
+            nFrameType = XML_TEXT_FRAME_PLUGIN;
+        else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_floating_frame) )
+            nFrameType = XML_TEXT_FRAME_FLOATING_FRAME;
+
+        if( USHRT_MAX != nFrameType )
+        {
+            // Shapes in Writer cannot be named via context menu (#i51726#)
+            if( ( XML_TEXT_FRAME_TEXTBOX == nFrameType ||
+                  XML_TEXT_FRAME_GRAPHIC == nFrameType ) &&
+                m_HasAutomaticStyleWithoutParentStyle )
+            {
+                Reference< XShapes > xShapes;
+                pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                        GetImport(), Element, xAttrList, xShapes, m_xFastAttrList );
+            }
+            else if( XML_TEXT_FRAME_PLUGIN == nFrameType )
+            {
+                bool bMedia = false;
+
+                // check, if we have a media object
+                if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_DRAW | XML_mime_type ) )
+                {
+                    bMedia = xAttrList->getValue( NAMESPACE | XML_NAMESPACE_DRAW | XML_mime_type ).equals(
+                            "application/vnd.sun.star.media" );
+                }
+
+                if( bMedia )
+                {
+                    Reference< XShapes > xShapes;
+                    pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                        GetImport(), Element, xAttrList, xShapes, m_xFastAttrList );
+                }
+            }
+            else if( XML_TEXT_FRAME_OBJECT == nFrameType ||
+                     XML_TEXT_FRAME_OBJECT_OLE == nFrameType )
+            {
+                m_bSupportsReplacement = true;
+            }
+            else if( XML_TEXT_FRAME_GRAPHIC == nFrameType )
+            {
+                setSupportsMultipleContents( xAttrList->hasAttribute(
+                    NAMESPACE | XML_NAMESPACE_DRAW | XML_image ) );
+            }
+
+            if( !pContext )
+            {
+                pContext = new XMLTextFrameContext_Impl( GetImport(),
+                        Element, xAttrList, m_eDefaultAnchorType,
+                        nFrameType, m_xFastAttrList );
+            }
+
+            m_xImplContext = pContext;
+
+            if( getSupportsMultipleContents()
+                && XML_TEXT_FRAME_GRAPHIC == nFrameType )
+            {
+                addContent(*m_xImplContext);
+            }
+        }
+    }
+    else if( getSupportsMultipleContents() &&
+            Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_image) )
+    {
+        // read another image
+        pContext = new XMLTextFrameContext_Impl(
+            GetImport(), Element, xAttrList,
+            m_eDefaultAnchorType, XML_TEXT_FRAME_GRAPHIC, m_xFastAttrList );
+
+        m_xImplContext = pContext;
+        addContent(*m_xImplContext);
+    }
+    else if( m_bSupportsReplacement && !m_xReplImplContext &&
+            Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_image) )
+    {
+        // read replacement image
+        Reference< XPropertySet > xPropSet;
+        if( CreateIfNotThere( xPropSet ) )
+        {
+            pContext = new XMLReplacementImageContext( GetImport(),
+                    Element, xAttrList, xPropSet );
+            m_xReplImplContext = pContext;
+        }
+    }
+    else if( m_xImplContext-ISA( XMLTextFrameContext_Impl ) )
+    {
+        // the child is a writer frame
+        // Implement Title/Description Elements UI (#i73249#)
+        const bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
+        if( Element == (NAMESPACE | XML_NAMESPACE_SVG | XML_desc) )
+        {
+            if( bOld )
+            {
+                pContext = new XMLTextFrameTitleOrDescContext_Impl(
+                        GetImport(), Element, m_sTitle );
+            }
+            else
+            {
+                pContext = new XMLTextFrameTitleOrDescContext_Impl(
+                        GetImport(), Element, m_sDesc );
+            }
+        }
+        else if( Element == (NAMESPACE | XML_NAMESPACE_SVG | XML_title) )
+        {
+            pContext= new XMLTextFrameTitleOrDescContext_Impl(
+                    GetImport(), Element, m_sTitle );
+        }
+        else
+        {
+            Reference< XPropertySet > xPropSet;
+            if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_contour_polygon) )
+            {
+                if( CreateIfNotThere( xPropSet ) )
+                    pContext = new XMLTextFrameContourContext_Impl(
+                        GetImport(), Element, xAttrList, xPropSet, false );
+            }
+            else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_contour_path) )
+            {
+                if( CreateIfNotThere( xPropSet ) )
+                    pContext = new XMLTextFrameContourContext_Impl(
+                        GetImport(), Element, xAttrList, xPropSet, true );
+            }
+            else if( Element == (NAMESPACE | XML_NAMESPACE_DRAW | XML_image_map) )
+            {
+                if( CreateIfNotThere( xPropSet ) )
+                    pContext = new XMLImageMapContext(
+                            GetImport(), Element, xPropSet );
+            }
+            else if( Element == (NAMESPACE | XML_NAMESPACE_OFFICE | XML_event_listeners) )
+            {
+                // do we still have the frame object?
+                if( CreateIfNotThere( xPropSet ) )
+                {
+                    // is it an event supplier?
+                    Reference< XEventsSupplier > xEventsSupplier(xPropSet, UNO_QUERY);
+                    if( xEventsSupplier.is() )
+                    {
+                        // OK, we have the events, so create the context
+                        pContext = new XMLEventsImportContext(
+                                GetImport(), Element, xEventsSupplier );
+                    }
+                }
+            }
+        }
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_SVG | XML_title) // #i68101#
+          || Element == (NAMESPACE | XML_NAMESPACE_SVG | XML_desc) )
+    {
+        pContext = static_cast< SvXMLImportContext* >(
+            m_xImplContext->createFastChildContext( Element, xAttrList ).get() );
+    }
+    else
+    {
+        // the child is a drawing shape
+        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                &m_xImplContext, Element, xAttrList );
+    }
+
+    if( !pContext )
+        pContext = new SvXMLImportContext( GetImport() );
 
     return pContext;
 }
