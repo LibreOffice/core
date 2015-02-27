@@ -337,6 +337,155 @@ void XMLBackgroundImageContext::ProcessAttrs(
 
 }
 
+void XMLBackgroundImageContext::ProcessAttrs(
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+{
+    SvXMLTokenMap aTokenMap( lcl_getBGImgAttributesAttrTokenMap() );
+
+    ePos = GraphicLocation_NONE;
+
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+    for( xml::FastAttribute attribute : attributes )
+    {
+        switch( aTokenMap.Get( attribute.Token ) )
+        {
+        case XML_TOK_BGIMG_HREF:
+            sURL = attribute.Value;
+            if( GraphicLocation_NONE == ePos )
+                ePos = GraphicLocation_TILED;
+            break;
+        case XML_TOK_BGIMG_TYPE:
+        case XML_TOK_BGIMG_ACTUATE:
+        case XML_TOK_BGIMG_SHOW:
+            break;
+        case XML_TOK_BGIMG_POSITION:
+        {
+            GraphicLocation eNewPos = GraphicLocation_NONE, eTmp;
+            sal_uInt16 nTmp;
+            SvXMLTokenEnumerator aTokenEnum( attribute.Value );
+            OUString aToken;
+            bool bHori = false, bVert = false;
+            bool bOK = true;
+            while( bOK && aTokenEnum.getNextToken( aToken ) )
+            {
+                if( bHori && bVert )
+                {
+                    bOK = false;
+                }
+                else if( -1 != aToken.indexOf( '%' ) )
+                {
+                    sal_Int32 nPrc = 50;
+                    if (::sax::Converter::convertPercent( nPrc, aToken ))
+                    {
+                        if( !bHori )
+                        {
+                            eNewPos = nPrc < 25
+                                ? GraphicLocation_LEFT_TOP
+                                : (nPrc < 75 ? GraphicLocation_MIDDLE_MIDDLE
+                                            : GraphicLocation_RIGHT_BOTTOM);
+                            bHori = true;
+                        }
+                        else
+                        {
+                            eTmp = nPrc < 25
+                                ? GraphicLocation_LEFT_TOP
+                                : (nPrc < 75 ? GraphicLocation_LEFT_MIDDLE
+                                             : GraphicLocation_LEFT_BOTTOM);
+                            lcl_xmlbic_MergeVertPos( eNewPos, eTmp );
+                            bVert = true;
+                        }
+                    }
+                    else
+                    {
+                        // wrong percentage
+                        bOK = false;
+                    }
+                }
+                else if( aToken.equals( "center" ) )
+                {
+                    if( bHori )
+                        lcl_xmlbic_MergeVertPos( eNewPos,
+                                GraphicLocation_MIDDLE_MIDDLE );
+                    else if( bVert )
+                        lcl_xmlbic_MergeHoriPos( eNewPos,
+                                GraphicLocation_MIDDLE_MIDDLE );
+                    else
+                        eNewPos = GraphicLocation_MIDDLE_MIDDLE;
+                }
+                else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
+                            psXML_BrushHoriPos ) )
+                {
+                    if( bVert )
+                        lcl_xmlbic_MergeHoriPos( eNewPos,
+                                    (GraphicLocation)nTmp );
+                    else if( !bHori )
+                        eNewPos = (GraphicLocation)nTmp;
+                    else
+                        bOK = false;
+                    bHori = true;
+                }
+                else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
+                                                     psXML_BrushVertPos ) )
+                {
+                    if( bHori )
+                        lcl_xmlbic_MergeVertPos( eNewPos,
+                                        (GraphicLocation)nTmp );
+                    else if( !bVert )
+                        eNewPos = (GraphicLocation)nTmp;
+                    else
+                        bOK = false;
+                    bVert = true;
+                }
+                else
+                {
+                    bOK = false;
+                }
+            }
+
+            bOK &= GraphicLocation_NONE != eNewPos;
+            if( bOK )
+                ePos = eNewPos;
+        }
+        break;
+        case XML_TOK_BGIMG_REPEAT:
+            {
+                sal_uInt16 nPos = GraphicLocation_NONE;
+                static const SvXMLEnumMapEntry psXML_BrushRepeat[] =
+                {
+                    { XML_BACKGROUND_REPEAT,        GraphicLocation_TILED   },
+                    { XML_BACKGROUND_NO_REPEAT,     GraphicLocation_MIDDLE_MIDDLE       },
+                    { XML_BACKGROUND_STRETCH,       GraphicLocation_AREA    },
+                    { xmloff::token::XML_TOKEN_INVALID,            0           }
+                };
+                if( SvXMLUnitConverter::convertEnum( nPos, attribute.Value,
+                            psXML_BrushRepeat ) )
+                {
+                    if( GraphicLocation_MIDDLE_MIDDLE != nPos ||
+                        GraphicLocation_NONE == ePos ||
+                        GraphicLocation_AREA == ePos ||
+                        GraphicLocation_TILED == ePos )
+                        ePos = (GraphicLocation)nPos;
+                }
+            }
+            break;
+        case XML_TOK_BGIMG_FILTER:
+            sFilter = attribute.Value;
+            break;
+        case XML_TOK_BGIMG_OPACITY:
+            {
+                sal_Int32 nTmp;
+                // convert from percent and clip
+                if( ::sax::Converter::convertPercent( nTmp, attribute.Value ) )
+                {
+                    if( (nTmp >= 0) && (nTmp <= 100) )
+                        nTransparency = static_cast<sal_Int8>( 100-nTmp );
+                }
+            }
+            break;
+        }
+    }
+}
+
 XMLBackgroundImageContext::XMLBackgroundImageContext(
         SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -347,6 +496,21 @@ XMLBackgroundImageContext::XMLBackgroundImageContext(
         sal_Int32 nTransparencyIdx,
         ::std::vector< XMLPropertyState > &rProps ) :
     XMLElementPropertyContext( rImport, nPrfx, rLName, rProp, rProps ),
+    aPosProp( nPosIdx ),
+    aFilterProp( nFilterIdx ),
+    aTransparencyProp( nTransparencyIdx ),
+    nTransparency( 0 )
+{
+    ProcessAttrs( xAttrList );
+}
+
+XMLBackgroundImageContext::XMLBackgroundImageContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const XMLPropertyState& rProp, sal_Int32 nPosIdx,
+    sal_Int32 nFilterIdx, sal_Int32 nTransparencyIdx,
+    ::std::vector< XMLPropertyState >& rProps )
+:   XMLElementPropertyContext( rImport, Element, rProp, rProps ),
     aPosProp( nPosIdx ),
     aFilterProp( nFilterIdx ),
     aTransparencyProp( nTransparencyIdx ),
@@ -385,6 +549,31 @@ SvXMLImportContext *XMLBackgroundImageContext::CreateChildContext(
     return pContext;
 }
 
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLBackgroundImageContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = NULL;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_OFFICE | XML_binary_data) )
+    {
+        if( sURL.isEmpty() && !xBase64Stream.is() )
+        {
+            xBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( xBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(),
+                        Element, xAttrList, xBase64Stream );
+        }
+    }
+    if( !pContext.is() )
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    return pContext;
+}
+
 void XMLBackgroundImageContext::EndElement()
 {
     if( !sURL.isEmpty() )
@@ -410,6 +599,40 @@ void XMLBackgroundImageContext::EndElement()
 
     SetInsert( true );
     XMLElementPropertyContext::EndElement();
+
+    if( -1 != aPosProp.mnIndex )
+        rProperties.push_back( aPosProp );
+    if( -1 != aFilterProp.mnIndex )
+        rProperties.push_back( aFilterProp );
+    if( -1 != aTransparencyProp.mnIndex )
+        rProperties.push_back( aTransparencyProp );
+}
+
+void SAL_CALL XMLBackgroundImageContext::endFastElement( sal_Int32 Element )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    if( !sURL.isEmpty() )
+    {
+        sURL = GetImport().ResolveGraphicObjectURL( sURL, false );
+    }
+    else if( xBase64Stream.is() )
+    {
+        sURL = GetImport().ResolveGraphicObjectURLFromBase64( xBase64Stream );
+        xBase64Stream = 0;
+    }
+
+    if( sURL.isEmpty() )
+        ePos = GraphicLocation_NONE;
+    else if( GraphicLocation_NONE == ePos )
+        ePos = GraphicLocation_TILED;
+
+    aProp.maValue <<= sURL;
+    aPosProp.maValue <<= ePos;
+    aFilterProp.maValue <<= sFilter;
+    aTransparencyProp.maValue <<= nTransparency;
+
+    SetInsert( true );
+    XMLElementPropertyContext::endFastElement(Element);
 
     if( -1 != aPosProp.mnIndex )
         rProperties.push_back( aPosProp );
