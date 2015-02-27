@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_f9f2136f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T22:46:54Z",
+      "side": 1,
+      "message": "For the final commit remove \"[part 2of 2]\" and join the \"ODFF function FDIST\" to the first summary line.",
+      "revId": "12534608d382071c90f37705c76e7ac2c293cd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_b9d57bba",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2455,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T22:46:54Z",
+      "side": 1,
+      "message": "I\u0027d prefer if we don\u0027t clutter this with fdo#... (btw, it is now tdf#... ;-)  If someone is interested in for which bug ID something was added there\u0027s always git blame.",
+      "range": {
+        "startLine": 2455,
+        "startChar": 32,
+        "endLine": 2455,
+        "endChar": 42
+      },
+      "revId": "12534608d382071c90f37705c76e7ac2c293cd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_39e2cba0",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3736,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T22:46:54Z",
+      "side": 1,
+      "message": "Synchronize the comment, now also ODFF uses the FunctionStack. Or remove, the code is quite obvious.",
+      "revId": "12534608d382071c90f37705c76e7ac2c293cd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_59db07ee",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3846,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T22:46:54Z",
+      "side": 1,
+      "message": "Also here, just omit the tdf#. It is not applicable to the entire if() block anyway. Also \"4th argument\" doesn\u0027t apply to the entire block. Better use a generic comment like \"Append arguments if necessary\".",
+      "revId": "12534608d382071c90f37705c76e7ac2c293cd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_19e58fa7",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3870,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T22:46:54Z",
+      "side": 1,
+      "message": "tdf#...",
+      "revId": "12534608d382071c90f37705c76e7ac2c293cd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_79d843f0",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3874,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T22:46:54Z",
+      "side": 1,
+      "message": "It is not \"3rd Excel mode\" ... remove.",
+      "revId": "12534608d382071c90f37705c76e7ac2c293cd8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
