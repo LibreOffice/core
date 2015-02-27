@@ -393,7 +393,6 @@ void GtkSalMenu::UpdateFull()
 GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     mbMenuBar( bMenuBar ),
     mpVCLMenu( NULL ),
-    mpOldSalMenu( NULL ),
     mpParentSalMenu( NULL ),
     mpFrame( NULL ),
     mpMenuModel( NULL ),
@@ -509,7 +508,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     // if we had a menu on the GtkSalMenu we have to free it as we generate a
     // full menu anyway and we might need to reuse an existing model and
     // actiongroup
-    mpOldSalMenu = static_cast< GtkSalMenu* >( pFrameNonConst->GetMenu() );
     pFrameNonConst->SetMenu( this );
     pFrameNonConst->EnsureAppMenuWatch();
 

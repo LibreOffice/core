@@ -42,7 +42,6 @@ private:
 
     bool                        mbMenuBar;
     Menu*                           mpVCLMenu;
-    GtkSalMenu*                     mpOldSalMenu;
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;
 
