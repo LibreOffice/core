@@ -34,6 +34,11 @@ SwFrameControlsManager::SwFrameControlsManager( const SwFrameControlsManager& rC
 {
 }
 
+void SwFrameControlsManager::dispose()
+{
+    m_aControls.clear();
+}
+
 const SwFrameControlsManager& SwFrameControlsManager::operator=( const SwFrameControlsManager& rCopy )
 {
     m_pEditWin = rCopy.m_pEditWin;

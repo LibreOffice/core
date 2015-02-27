@@ -4974,16 +4974,29 @@ SwEditWin::~SwEditWin()
 void SwEditWin::dispose()
 {
     m_aKeyInputTimer.Stop();
+
     delete m_pShadCrsr;
+    m_pShadCrsr = NULL;
+
     delete m_pRowColumnSelectionStart;
+    m_pRowColumnSelectionStart = NULL;
+
     if( m_pQuickHlpData->m_bIsDisplayed && m_rView.GetWrtShellPtr() )
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
     g_bExecuteDrag = false;
     delete m_pApplyTempl;
+    m_pApplyTempl = NULL;
+
     m_rView.SetDrawFuncPtr(NULL);
 
     delete m_pUserMarker;
+    m_pUserMarker = NULL;
+
     delete m_pAnchorMarker;
+    m_pAnchorMarker = NULL;
+
+    m_aFrameControlsManager.dispose();
+
     vcl::Window::dispose();
 }
 

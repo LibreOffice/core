@@ -142,6 +142,9 @@ SwSidebarWin::~SwSidebarWin()
 
 void SwSidebarWin::dispose()
 {
+    if (IsDisposed())
+        return;
+
     mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
                                        *this );
 
@@ -206,6 +209,7 @@ void SwSidebarWin::dispose()
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );
+
     vcl::Window::dispose();
 }
 

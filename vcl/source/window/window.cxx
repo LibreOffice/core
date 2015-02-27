@@ -2530,6 +2530,8 @@ void Window::GetBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
 
 void Window::Enable( bool bEnable, bool bChild )
 {
+    if ( IsDisposed() )
+        return;
 
     if ( !bEnable )
     {

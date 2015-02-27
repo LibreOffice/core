@@ -35,7 +35,8 @@ class SwFrameControlsManager
 
     public:
         SwFrameControlsManager( SwEditWin* pEditWin );
-        ~SwFrameControlsManager( );
+        ~SwFrameControlsManager();
+        void dispose();
 
         SwFrameControlsManager( const SwFrameControlsManager& rCopy );
         const SwFrameControlsManager& operator=( const SwFrameControlsManager& rCopy );
