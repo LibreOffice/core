@@ -74,6 +74,4 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_embeddeddb_performancetest,
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_embeddeddb_performancetest))
 
-$(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_embeddeddb_performancetest))
-
 # vim: set noet sw=4 ts=4:
