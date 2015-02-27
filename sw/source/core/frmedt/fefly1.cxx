@@ -1857,14 +1857,14 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
            after pFmt.
         */
 
-        int nChainState;
+        SwChainRet nChainState;
 
         if (bSuccessors)
             nChainState = mpDoc->Chainable(rFmt, rFmt1);
         else
             nChainState = mpDoc->Chainable(rFmt1, rFmt);
 
-        if (nChainState == SW_CHAIN_OK)
+        if (nChainState == SwChainRet::OK)
         {
             aTmpSpzArray.push_back(&rFmt1);
 

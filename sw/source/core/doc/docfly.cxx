@@ -929,45 +929,45 @@ bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
     return bUnmark;
 }
 
-int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
+SwChainRet SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     // The Source must not yet have a Follow.
     const SwFmtChain &rOldChain = rSource.GetChain();
     if ( rOldChain.GetNext() )
-        return SW_CHAIN_SOURCE_CHAINED;
+        return SwChainRet::SOURCE_CHAINED;
 
     // Target must not be equal to Source and we also must not have a closed chain.
     const SwFrmFmt *pFmt = &rDest;
     do {
         if( pFmt == &rSource )
-            return SW_CHAIN_SELF;
+            return SwChainRet::SELF;
         pFmt = pFmt->GetChain().GetNext();
     } while ( pFmt );
 
     // There must not be a chaining from outside to inside or the other way around.
     if( rDest.IsLowerOf( rSource ) || rSource .IsLowerOf( rDest ) )
-        return SW_CHAIN_SELF;
+        return SwChainRet::SELF;
 
     // The Target must not yet have a Master.
     const SwFmtChain &rChain = rDest.GetChain();
     if( rChain.GetPrev() )
-        return SW_CHAIN_IS_IN_CHAIN;
+        return SwChainRet::IS_IN_CHAIN;
 
     // Target must be empty.
     const SwNodeIndex* pCntIdx = rDest.GetCntnt().GetCntntIdx();
     if( !pCntIdx )
-        return SW_CHAIN_NOT_FOUND;
+        return SwChainRet::NOT_FOUND;
 
     SwNodeIndex aNxtIdx( *pCntIdx, 1 );
     const SwTxtNode* pTxtNd = aNxtIdx.GetNode().GetTxtNode();
     if( !pTxtNd )
-        return SW_CHAIN_NOT_FOUND;
+        return SwChainRet::NOT_FOUND;
 
     const sal_uLong nFlySttNd = pCntIdx->GetIndex();
     if( 2 != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
         pTxtNd->GetTxt().getLength() )
     {
-        return SW_CHAIN_NOT_EMPTY;
+        return SwChainRet::NOT_EMPTY;
     }
 
     for( auto pSpzFrmFm : *GetSpzFrmFmts() )
@@ -982,7 +982,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
                          rAnchor.GetCntntAnchor()->nNode.GetIndex() ) &&
              nTstSttNd < nFlySttNd + 2 )
         {
-            return SW_CHAIN_NOT_EMPTY;
+            return SwChainRet::NOT_EMPTY;
         }
     }
 
@@ -1023,13 +1023,13 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
             bAllowed = true;
     }
 
-    return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;
+    return bAllowed ? SwChainRet::OK : SwChainRet::WRONG_AREA;
 }
 
-int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
+SwChainRet SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
-    int nErr = Chainable( rSource, rDest );
-    if ( !nErr )
+    SwChainRet nErr = Chainable( rSource, rDest );
+    if ( nErr == SwChainRet::OK )
     {
         GetIDocumentUndoRedo().StartUndo( UNDO_CHAINE, NULL );
 

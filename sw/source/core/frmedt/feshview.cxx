@@ -2496,7 +2496,7 @@ void SwFEShell::SetCalcFieldValueHdl(Outliner* pOutliner)
     GetDoc()->SetCalcFieldValueHdl(pOutliner);
 }
 
-int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
+SwChainRet SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
                             const Point &rPt ) const
 {
     rRect.Clear();
@@ -2504,9 +2504,9 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
     // The source is not allowed to have a follow.
     const SwFmtChain &rChain = rSource.GetChain();
     if ( rChain.GetNext() )
-        return SW_CHAIN_SOURCE_CHAINED;
+        return SwChainRet::SOURCE_CHAINED;
 
-    int nRet = SW_CHAIN_NOT_FOUND;
+    SwChainRet nRet = SwChainRet::NOT_FOUND;
     if( Imp()->HasDrawView() )
     {
         SdrObject* pObj;
@@ -2530,16 +2530,16 @@ int SwFEShell::Chainable( SwRect &rRect, const SwFrmFmt &rSource,
     return nRet;
 }
 
-int SwFEShell::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
+SwChainRet SwFEShell::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     return GetDoc()->Chain(rSource, rDest);
 }
 
-int SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )
+SwChainRet SwFEShell::Chain( SwFrmFmt &rSource, const Point &rPt )
 {
     SwRect aDummy;
-    int nErr = Chainable( aDummy, rSource, rPt );
-    if ( !nErr )
+    SwChainRet nErr = Chainable( aDummy, rSource, rPt );
+    if ( nErr == SwChainRet::OK )
     {
         StartAllAction();
         SdrObject* pObj;

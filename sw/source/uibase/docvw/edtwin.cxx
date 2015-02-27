@@ -385,10 +385,10 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     if ( IsChainMode() )
     {
         SwRect aRect;
-        int nChainable = rSh.Chainable( aRect, *rSh.GetFlyFrmFmt(), rLPt );
-        PointerStyle eStyle = nChainable
+        SwChainRet nChainable = rSh.Chainable( aRect, *rSh.GetFlyFrmFmt(), rLPt );
+        PointerStyle eStyle = nChainable != SwChainRet::OK
                 ? POINTER_CHAIN_NOTALLOWED : POINTER_CHAIN;
-        if ( !nChainable )
+        if ( nChainable == SwChainRet::OK )
         {
             Rectangle aTmp( aRect.SVRect() );
 
@@ -2957,7 +2957,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         SetChainMode( false );
         SwRect aDummy;
         SwFlyFrmFmt *pFmt = static_cast<SwFlyFrmFmt*>(rSh.GetFlyFrmFmt());
-        if ( !rSh.Chainable( aDummy, *pFmt, aDocPos ) )
+        if ( rSh.Chainable( aDummy, *pFmt, aDocPos ) == SwChainRet::OK )
             rSh.Chain( *pFmt, aDocPos );
         UpdatePointer( aDocPos, rMEvt.GetModifier() );
         return;

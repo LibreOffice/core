@@ -447,9 +447,9 @@ public:
 
     /** For Chain always connect Fly specified by format with that hit by point.
      rRect contains rect of Fly (for its highlight). */
-    int Chainable( SwRect &rRect, const SwFrmFmt &rSource, const Point &rPt ) const;
-    int Chain( SwFrmFmt &rSource, const Point &rPt );
-    int Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
+    SwChainRet Chainable( SwRect &rRect, const SwFrmFmt &rSource, const Point &rPt ) const;
+    SwChainRet Chain( SwFrmFmt &rSource, const Point &rPt );
+    SwChainRet Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
     void Unchain( SwFrmFmt &rFmt );
     void HideChainMarker();
     void SetChainMarker();

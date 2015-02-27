@@ -1532,8 +1532,8 @@ public:
     sal_uInt16 GetBoxAlign( const SwCursor& rCursor ) const;
     void AdjustCellWidth( const SwCursor& rCursor, bool bBalance = false );
 
-    int Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest );
-    int Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
+    SwChainRet Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest );
+    SwChainRet Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
     void Unchain( SwFrmFmt &rFmt );
 
     // For Copy/Move from FrmShell.
