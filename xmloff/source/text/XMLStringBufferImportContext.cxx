@@ -20,12 +20,17 @@
 #include "XMLStringBufferImportContext.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
+#include <xmloff/token/tokens.hxx>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_P;
+using xmloff::XML_p;
+using css::xml::sax::FastToken::NAMESPACE;
+using namespace css::xml::sax;
 
 
 TYPEINIT1(XMLStringBufferImportContext, SvXMLImportContext);
@@ -36,6 +41,14 @@ XMLStringBufferImportContext::XMLStringBufferImportContext(
     const OUString& sLocalName,
     OUStringBuffer& rBuffer) :
     SvXMLImportContext(rImport, nPrefix, sLocalName),
+    rTextBuffer(rBuffer)
+{
+}
+
+XMLStringBufferImportContext::XMLStringBufferImportContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    OUStringBuffer& rBuffer )
+:   SvXMLImportContext( rImport ),
     rTextBuffer(rBuffer)
 {
 }
@@ -53,8 +66,23 @@ SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
                                             rLocalName, rTextBuffer);
 }
 
+Reference< XFastContextHandler > SAL_CALL
+    XMLStringBufferImportContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& /*xAttrList*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    return new XMLStringBufferImportContext( GetImport(),
+            Element, rTextBuffer );
+}
+
 void XMLStringBufferImportContext::Characters(
     const OUString& rChars )
+{
+    rTextBuffer.append(rChars);
+}
+
+void SAL_CALL XMLStringBufferImportContext::characters( const OUString& rChars )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
 {
     rTextBuffer.append(rChars);
 }
@@ -65,6 +93,16 @@ void XMLStringBufferImportContext::EndElement()
     if ( (XML_NAMESPACE_TEXT == GetPrefix() ||
                 XML_NAMESPACE_LO_EXT == GetPrefix()) &&
          (IsXMLToken(GetLocalName(), XML_P))    )
+    {
+        rTextBuffer.append(sal_Unicode(0x0a));
+    }
+}
+
+void SAL_CALL XMLStringBufferImportContext::endFastElement( sal_Int32 Element )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    // add return for paragraph elements
+    if( Element == (NAMESPACE | XML_NAMESPACE_TEXT | XML_p) )
     {
         rTextBuffer.append(sal_Unicode(0x0a));
     }
