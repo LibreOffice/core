@@ -21,7 +21,7 @@ ScXMLEditAttributeMap::Entry aEntries[] = {
     { XML_NAMESPACE_STYLE, "font-charset-complex", "CharFontCharSetComplex", EE_CHAR_FONTINFO_CTL, MID_FONT_CHAR_SET },
     { XML_NAMESPACE_FO, "font-family", "CharFontName", EE_CHAR_FONTINFO, MID_FONT_FAMILY_NAME },
     { XML_NAMESPACE_STYLE, "font-family-asian", "CharFontNameAsian", EE_CHAR_FONTINFO_CJK, MID_FONT_FAMILY_NAME },
-    { XML_NAMESPACE_STYLE, "font-family-complex", "CharFontNameAsian", EE_CHAR_FONTINFO_CTL, MID_FONT_FAMILY_NAME },
+    { XML_NAMESPACE_STYLE, "font-family-complex", "CharFontNameComplex", EE_CHAR_FONTINFO_CTL, MID_FONT_FAMILY_NAME },
     { XML_NAMESPACE_STYLE, "font-family-generic", "CharFontFamily", EE_CHAR_FONTINFO, MID_FONT_FAMILY },
     { XML_NAMESPACE_STYLE, "font-family-generic-asian", "CharFontFamilyAsian", EE_CHAR_FONTINFO_CJK, MID_FONT_FAMILY },
     { XML_NAMESPACE_STYLE, "font-family-generic-complex", "CharFontFamilyComplex", EE_CHAR_FONTINFO_CTL, MID_FONT_FAMILY },
