@@ -292,34 +292,4 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
     writer.endElement();
 }
 
-void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w ) const
-{
-    WriterHelper writer( w );
-
-    writer.startElement( "swextraredlinetbl" );
-    writer.writeFormatAttribute( "ptr", "%p", this );
-
-    const SwExtraRedlineTbl& extraRedlineTbl = (*this);
-
-    for( sal_uInt16 nCurExtraRedlinePos = 0; nCurExtraRedlinePos < GetSize(); ++nCurExtraRedlinePos )
-    {
-        const SwExtraRedline* pExtraRedline = extraRedlineTbl.GetRedline( nCurExtraRedlinePos );
-
-        writer.startElement( "swextraredline" );
-        {
-            const SwTableRowRedline*           pTableRowRedline           = dynamic_cast<const SwTableRowRedline*>(pExtraRedline);
-            const SwTableCellRedline*          pTableCellRedline          = dynamic_cast<const SwTableCellRedline*>(pExtraRedline);
-            if (pTableRowRedline)
-                writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "table row" ) );
-            else if (pTableCellRedline)
-                writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "table cell" ) );
-            else
-                writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "UNKNOWN" ) );
-        }
-        writer.endElement( );    // extra_redline_data
-    }
-
-    writer.endElement( );    // swextraredlinetbl
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

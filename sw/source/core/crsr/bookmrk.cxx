@@ -182,9 +182,12 @@ namespace sw { namespace mark
         xmlTextWriterStartElement(pWriter, BAD_CAST("markPos"));
         GetMarkPos().dumpAsXml(pWriter);
         xmlTextWriterEndElement(pWriter);
-        xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
-        GetOtherMarkPos().dumpAsXml(pWriter);
-        xmlTextWriterEndElement(pWriter);
+        if (IsExpanded())
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST("otherMarkPos"));
+            GetOtherMarkPos().dumpAsXml(pWriter);
+            xmlTextWriterEndElement(pWriter);
+        }
         xmlTextWriterEndElement(pWriter);
     }
 

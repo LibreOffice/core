@@ -204,7 +204,7 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     /** Search next or previous Redline with the same Seq. No.
        Search can be restricted via Lookahaed.

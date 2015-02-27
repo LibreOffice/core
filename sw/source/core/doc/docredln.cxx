@@ -76,6 +76,22 @@ SwExtraRedlineTbl::~SwExtraRedlineTbl()
     DeleteAndDestroyAll();
 }
 
+void SwExtraRedlineTbl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swExtraRedlineTbl"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    for (sal_uInt16 nCurExtraRedlinePos = 0; nCurExtraRedlinePos < GetSize(); ++nCurExtraRedlinePos)
+    {
+        const SwExtraRedline* pExtraRedline = GetRedline(nCurExtraRedlinePos);
+        xmlTextWriterStartElement(pWriter, BAD_CAST("swExtraRedline"));
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+        xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*pExtraRedline).name()));
+        xmlTextWriterEndElement(pWriter);
+    }
+    xmlTextWriterEndElement(pWriter);
+}
+
 #if OSL_DEBUG_LEVEL > 0
 bool CheckPosition( const SwPosition* pStt, const SwPosition* pEnd )
 {
