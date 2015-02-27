@@ -276,7 +276,7 @@ static SwRect lcl_getLayoutRect(const Point& rPoint, const SwPosition& rPosition
     return aRect;
 }
 
-void SwShellCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd)
+void SwShellCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 {
     const SwShellCrsr* pCursor = GetShell()->getShellCrsr(false);
     rStart = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
@@ -773,7 +773,7 @@ void SwShellTableCrsr::FillRects()
     insert( begin(), aReg.begin(), aReg.end() );
 }
 
-void SwShellTableCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd)
+void SwShellTableCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
 {
     rStart = m_aStart;
     rEnd = m_aEnd;

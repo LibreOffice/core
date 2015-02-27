@@ -90,7 +90,7 @@ public:
 
     virtual void FillRects() = 0;
     /// Fill rStart and rEnd with a rectangle that represents the start and end for selection handles.
-    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) = 0;
+    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const = 0;
 
     // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
     // make a complete swap access to mpCursorOverlay is needed there
@@ -129,7 +129,7 @@ public:
 
     virtual void FillRects() SAL_OVERRIDE;   // For Table- und normal cursors.
     /// @see SwSelPaintRects::FillStartEnd(), override for text selections.
-    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) SAL_OVERRIDE;
+    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const SAL_OVERRIDE;
 
     void Show();            // Update and display all selections.
     void Hide();            // Hide all selections.
@@ -180,7 +180,7 @@ public:
 
     virtual void FillRects() SAL_OVERRIDE;   // For table and normal cursor.
     /// @see SwSelPaintRects::FillStartEnd(), override for table selections.
-    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) SAL_OVERRIDE;
+    virtual void FillStartEnd(SwRect& rStart, SwRect& rEnd) const SAL_OVERRIDE;
 
     // Check if SPoint is within table SSelection.
     bool IsInside( const Point& rPt ) const;
