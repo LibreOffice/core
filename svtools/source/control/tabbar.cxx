@@ -1337,7 +1337,6 @@ void TabBar::Paint( const Rectangle& rect )
         // Draw the insert tab at the right end.
         Rectangle aRect = ImplGetInsertTabRect(pItem);
         aDrawer.setRect(aRect);
-        aDrawer.drawTab();
         aDrawer.drawPlusImage();
     }
 
