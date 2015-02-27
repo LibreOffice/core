@@ -689,6 +689,8 @@ public:
         const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap);
+    XMLImageMapCircleContext( SvXMLImport& rImport, sal_Int32 Element,
+        css::uno::Reference< css::container::XIndexContainer > xMap );
 
     virtual ~XMLImageMapCircleContext();
 
@@ -715,6 +717,18 @@ XMLImageMapCircleContext::XMLImageMapCircleContext(
     , bXOK(false)
     , bYOK(false)
     , bRadiusOK(false)
+{
+}
+
+XMLImageMapCircleContext::XMLImageMapCircleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XIndexContainer > xMap )
+:   XMLImageMapObjectContext( rImport, Element, xMap,
+        "com.sun.star.image.ImageMapCircleObject" ),
+    nRadius(0),
+    bXOK(false),
+    bYOK(false),
+    bRadiusOK(false)
 {
 }
 
