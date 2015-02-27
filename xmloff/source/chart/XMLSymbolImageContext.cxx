@@ -66,6 +66,14 @@ XMLSymbolImageContext::XMLSymbolImageContext(
 {
 }
 
+XMLSymbolImageContext::XMLSymbolImageContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const XMLPropertyState& rProp,
+    ::std::vector< XMLPropertyState >& rProps )
+:   XMLElementPropertyContext( rImport, Element, rProp, rProps )
+{
+}
+
 XMLSymbolImageContext::~XMLSymbolImageContext()
 {}
 
@@ -87,6 +95,30 @@ void XMLSymbolImageContext::StartElement( const uno::Reference< xml::sax::XAttri
         {
             case XML_TOK_SYMBOL_IMAGE_HREF:
                 msURL = rValue;
+                break;
+            case XML_TOK_SYMBOL_IMAGE_ACTUATE:
+            case XML_TOK_SYMBOL_IMAGE_TYPE:
+            case XML_TOK_SYMBOL_IMAGE_SHOW:
+                // these values are currently not interpreted
+                // it is always assumed 'actuate=onLoad', 'type=simple', 'show=embed'
+                break;
+        }
+    }
+}
+
+void SAL_CALL XMLSymbolImageContext::startFastElement( sal_Int32 /*Element*/,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLTokenMap aTokenMap( aSymbolImageAttrTokenMap );
+    uno::Sequence< xml::FastAttribute > attributes = xAttrList->getFastAttributes();
+
+    for( xml::FastAttribute atrribute : attributes )
+    {
+        switch( aTokenMap.Get( atrribute.Token ) )
+        {
+            case XML_TOK_SYMBOL_IMAGE_HREF:
+                msURL = atrribute.Value;
                 break;
             case XML_TOK_SYMBOL_IMAGE_ACTUATE:
             case XML_TOK_SYMBOL_IMAGE_TYPE:
@@ -123,6 +155,31 @@ SvXMLImportContext* XMLSymbolImageContext::CreateChildContext(
     return pContext;
 }
 
+uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLSymbolImageContext::createFastChildContext( sal_Int32 Element,
+    const uno::Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    uno::Reference< xml::sax::XFastContextHandler > pContext = NULL;
+    if( XML_binary_data == (Element & XML_binary_data) )
+    {
+        if( msURL.isEmpty() && !mxBase64Stream.is() )
+        {
+            mxBase64Stream = GetImport().GetStreamForGraphicObjectURLFromBase64();
+            if( mxBase64Stream.is() )
+                pContext = new XMLBase64ImportContext( GetImport(),
+                        Element, xAttrList, mxBase64Stream );
+        }
+    }
+
+    if( !pContext.is() )
+    {
+        pContext = new SvXMLImportContext( GetImport() );
+    }
+
+    return pContext;
+}
+
 void XMLSymbolImageContext::EndElement()
 {
     OUString sResolvedURL;
@@ -146,5 +203,31 @@ void XMLSymbolImageContext::EndElement()
 
     XMLElementPropertyContext::EndElement();
 }
+
+void SAL_CALL XMLSymbolImageContext::endFastElement( sal_Int32 Element )
+    throw(uno::RuntimeException, xml::sax::SAXException, std::exception)
+{
+    OUString sResolvedURL;
+
+    if( !msURL.isEmpty() )
+    {
+        sResolvedURL = GetImport().ResolveGraphicObjectURL( msURL, false );
+    }
+    else if( mxBase64Stream.is() )
+    {
+        sResolvedURL = GetImport().ResolveGraphicObjectURLFromBase64( mxBase64Stream );
+        mxBase64Stream = 0;
+    }
+
+    if( !sResolvedURL.isEmpty())
+    {
+        // aProp is a member of XMLElementPropertyContext
+        aProp.maValue <<= sResolvedURL;
+        SetInsert( true );
+    }
+
+    XMLElementPropertyContext::endFastElement(Element);
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
