@@ -108,8 +108,6 @@ $(eval $(call gb_CppunitTest_use_components,sd_import_tests,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_import_tests))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sd_import_tests))
-
 $(eval $(call gb_CppunitTest_add_arguments,sd_import_tests,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))

@@ -59,6 +59,4 @@ $(eval $(call gb_CppunitTest_use_rdb,sw_uiwriter,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_uiwriter))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_uiwriter))
-
 # vim: set noet sw=4 ts=4:

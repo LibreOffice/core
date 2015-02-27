@@ -273,8 +273,8 @@ $(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS += $(2):$(call gb_
 
 endef
 
-# Use standard configuration.
-define gb_CppunitTest_use_configuration
+# Use instdir configuration
+define gb_CppunitTest_use_instdir_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,postprocess_registry)
 $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry)
 
@@ -284,6 +284,13 @@ endef
 define gb_CppunitTest_use_unittest_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,test_unittest)
 $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(WORKDIR)/unittest/registry)
+
+endef
+
+# Use standard configuration: instdir config + unittest config (in this order!)
+define gb_CppunitTest_use_configuration
+$(call gb_CppunitTest_use_instdir_configuration,$(1))
+$(call gb_CppunitTest_use_unittest_configuration,$(1))
 
 endef
 

@@ -41,8 +41,6 @@ endif
 
 $(eval $(call gb_CppunitTest_use_configuration,services))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,services))
-
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_CppunitTest_use_java_ure,services))
 

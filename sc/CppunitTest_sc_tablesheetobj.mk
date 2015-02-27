@@ -105,6 +105,4 @@ $(eval $(call gb_CppunitTest_use_components,sc_tablesheetobj,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_tablesheetobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_tablesheetobj))
-
 # vim: set noet sw=4 ts=4:

@@ -73,6 +73,4 @@ $(eval $(call gb_CppunitTest_use_components,sw_ww8import,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ww8import))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ww8import))
-
 # vim: set noet sw=4 ts=4:

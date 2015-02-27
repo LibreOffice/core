@@ -108,8 +108,6 @@ $(eval $(call gb_CppunitTest_use_configuration,dbaccess_RowSetClones))
 
 $(eval $(call gb_CppunitTest_use_filter_configuration,dbaccess_RowSetClones))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,dbaccess_RowSetClones))
-
 $(call gb_CppunitTest_get_target,dbaccess_RowSetClones) : $(WORKDIR)/CppunitTest/RowSetClones.odb
 $(WORKDIR)/CppunitTest/RowSetClones.odb : $(SRCDIR)/dbaccess/qa/extras/testdocuments/RowSetClones.odb
 	mkdir -p $(dir $@)

@@ -107,6 +107,4 @@ $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_macros_test))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_macros_test))
-
 # vim: set noet sw=4 ts=4:

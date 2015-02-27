@@ -104,6 +104,4 @@ $(eval $(call gb_CppunitTest_use_components,sc_namedrangesobj,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_namedrangesobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_namedrangesobj))
-
 # vim: set noet sw=4 ts=4:

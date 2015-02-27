@@ -105,6 +105,4 @@ $(eval $(call gb_CppunitTest_use_components,sc_recordchanges,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sc_recordchanges))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_recordchanges))
-
 # vim: set noet sw=4 ts=4:

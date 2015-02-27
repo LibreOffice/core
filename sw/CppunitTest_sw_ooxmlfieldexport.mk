@@ -48,8 +48,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_ooxmlfieldexport,\
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_ooxmlfieldexport))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sw_ooxmlfieldexport))
-
 $(eval $(call gb_CppunitTest_use_packages,sw_ooxmlfieldexport,\
 	oox_generated \
 ))
