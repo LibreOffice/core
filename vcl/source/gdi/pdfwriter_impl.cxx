@@ -7249,13 +7249,6 @@ bool PDFWriterImpl::finalizeSignature()
     // Prepare buffer and calculate PDF file digest
     CHECK_RETURN( (osl::File::E_None == m_aFile.setPos(osl_Pos_Absolut, 0)) );
 
-    PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
-    if (pCertContext == NULL)
-    {
-        SAL_WARN("vcl.pdfwriter", "CertCreateCertificateContext failed: " << WindowsError(GetLastError()));
-        return false;
-    }
-
     boost::scoped_array<char> buffer1(new char[m_nSignatureContentOffset - 1]);
     sal_uInt64 bytesRead1;
 
@@ -7263,7 +7256,6 @@ bool PDFWriterImpl::finalizeSignature()
         bytesRead1 != (sal_uInt64)m_nSignatureContentOffset - 1)
     {
         SAL_WARN("vcl.pdfwriter", "First buffer read failed");
-        CertFreeCertificateContext(pCertContext);
         return false;
     }
 
@@ -7275,11 +7267,17 @@ bool PDFWriterImpl::finalizeSignature()
         bytesRead2 != (sal_uInt64) nLastByteRangeNo)
     {
         SAL_WARN("vcl.pdfwriter", "Second buffer read failed");
-        CertFreeCertificateContext(pCertContext);
         return false;
     }
 
     OString pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 );
+
+    PCCERT_CONTEXT pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, reinterpret_cast<const BYTE*>(n_derArray), n_derLength);
+    if (pCertContext == NULL)
+    {
+        SAL_WARN("vcl.pdfwriter", "CertCreateCertificateContext failed: " << WindowsError(GetLastError()));
+        return false;
+    }
 
     CRYPT_SIGN_MESSAGE_PARA aPara;
 
@@ -7292,17 +7290,247 @@ bool PDFWriterImpl::finalizeSignature()
     aPara.cMsgCert = 1;
     aPara.rgpMsgCert = &pCertContext;
 
-    const BYTE *aBuffers[] =
-        { reinterpret_cast<BYTE*>(buffer1.get()), reinterpret_cast<BYTE*>(buffer2.get()) };
-    DWORD aBufferLens[] =
-        { bytesRead1, bytesRead2 };
-    assert(SAL_N_ELEMENTS(aBuffers) == SAL_N_ELEMENTS(aBufferLens));
+    HCRYPTPROV hCryptProv;
+    DWORD nKeySpec;
+    BOOL bFreeNeeded;
 
-    DWORD nSigLen(0);
-
-    if (!CryptSignMessage(&aPara, TRUE, SAL_N_ELEMENTS(aBuffers), aBuffers, aBufferLens, NULL, &nSigLen))
+    if (!CryptAcquireCertificatePrivateKey(pCertContext,
+                                           CRYPT_ACQUIRE_CACHE_FLAG,
+                                           NULL,
+                                           &hCryptProv,
+                                           &nKeySpec,
+                                           &bFreeNeeded))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptSignMessage failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptAcquireCertificatePrivateKey failed: " << WindowsError(GetLastError()));
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+    assert(!bFreeNeeded);
+
+    CMSG_SIGNER_ENCODE_INFO aSignerInfo;
+
+    memset(&aSignerInfo, 0, sizeof(aSignerInfo));
+    aSignerInfo.cbSize = sizeof(aSignerInfo);
+    aSignerInfo.pCertInfo = pCertContext->pCertInfo;
+    aSignerInfo.hCryptProv = hCryptProv;
+    aSignerInfo.dwKeySpec = nKeySpec;
+    aSignerInfo.HashAlgorithm.pszObjId = szOID_RSA_SHA1RSA;
+    aSignerInfo.HashAlgorithm.Parameters.cbData = 0;
+
+    CMSG_SIGNED_ENCODE_INFO aSignedInfo;
+    memset(&aSignedInfo, 0, sizeof(aSignedInfo));
+    aSignedInfo.cbSize = sizeof(aSignedInfo);
+    aSignedInfo.cSigners = 1;
+    aSignedInfo.rgSigners = &aSignerInfo;
+
+    CERT_BLOB aCertBlob;
+
+    aCertBlob.cbData = pCertContext->cbCertEncoded;
+    aCertBlob.pbData = pCertContext->pbCertEncoded;
+
+    aSignedInfo.cCertEncoded = 1;
+    aSignedInfo.rgCertEncoded = &aCertBlob;
+
+    HCRYPTMSG hMsg;
+    if (!(hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                      CMSG_DETACHED_FLAG,
+                                      CMSG_SIGNED,
+                                      &aSignedInfo,
+                                      NULL,
+                                      NULL)))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToEncode failed: " << WindowsError(GetLastError()));
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    if (!CryptMsgUpdate(hMsg, (const BYTE *)buffer1.get(), bytesRead1, FALSE) ||
+        !CryptMsgUpdate(hMsg, (const BYTE *)buffer2.get(), bytesRead2, TRUE))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsError(GetLastError()));
+        CryptMsgClose(hMsg);
+        CertFreeCertificateContext(pCertContext);
+        return false;
+    }
+
+    PCRYPT_TIMESTAMP_CONTEXT pTsContext = NULL;
+
+    if( !m_aContext.SignTSA.isEmpty() )
+    {
+        PointerTo_CryptRetrieveTimeStamp crts = (PointerTo_CryptRetrieveTimeStamp) GetProcAddress(LoadLibrary("crypt32.dll"), "CryptRetrieveTimeStamp");
+        if (!crts)
+        {
+            SAL_WARN("vcl.pdfwriter", "Could not find the CryptRetrieveTimeStamp function in crypt32.dll: " << WindowsError(GetLastError()));
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        HCRYPTMSG hDecodedMsg;
+        if (!(hDecodedMsg = CryptMsgOpenToDecode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                                 CMSG_DETACHED_FLAG,
+                                                 CMSG_SIGNED,
+                                                 NULL,
+                                                 NULL,
+                                                 NULL)))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptMsgOpenToDecode failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        DWORD nTsSigLen = 0;
+
+        if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, NULL, &nTsSigLen))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        if (nTsSigLen*2 > MAX_SIGNATURE_CONTENT_LENGTH)
+        {
+            SAL_WARN("vcl.pdfwriter", "Signature requires more space (" << nTsSigLen*2 << ") than we reserved (" << MAX_SIGNATURE_CONTENT_LENGTH << ")");
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        SAL_INFO("vcl.pdfwriter", "nTsSigLen=" << nTsSigLen);
+
+        boost::scoped_array<BYTE> pTsSig(new BYTE[nTsSigLen]);
+
+        if (!CryptMsgGetParam(hMsg, CMSG_BARE_CONTENT_PARAM, 0, pTsSig.get(), &nTsSigLen))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_BARE_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        if (!CryptMsgUpdate(hDecodedMsg, pTsSig.get(), nTsSigLen, TRUE))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptMsgUpdate failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        DWORD nDecodedSignerInfoLen = 0;
+        if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, NULL, &nDecodedSignerInfoLen))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        boost::scoped_array<BYTE> pDecodedSignerInfoBuf(new BYTE[nDecodedSignerInfoLen]);
+
+        if (!CryptMsgGetParam(hDecodedMsg, CMSG_SIGNER_INFO_PARAM, 0, pDecodedSignerInfoBuf.get(), &nDecodedSignerInfoLen))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_SIGNER_INFO_PARAM) failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        CMSG_SIGNER_INFO *pDecodedSignerInfo = (CMSG_SIGNER_INFO *) pDecodedSignerInfoBuf.get();
+
+        CRYPT_TIMESTAMP_PARA aTsPara;
+        unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
+
+        aTsPara.pszTSAPolicyId = NULL;
+        aTsPara.fRequestCerts = TRUE;
+        aTsPara.Nonce.cbData = sizeof(nNonce);
+        aTsPara.Nonce.pbData = (BYTE *)&nNonce;
+        aTsPara.cExtension = 0;
+        aTsPara.rgExtension = NULL;
+
+        if (!(*crts)(m_aContext.SignTSA.getStr(),
+                     0,
+                     10000,
+                     szOID_NIST_sha256,
+                     &aTsPara,
+                     pDecodedSignerInfo->EncryptedHash.pbData,
+                     pDecodedSignerInfo->EncryptedHash.cbData,
+                     &pTsContext,
+                     NULL,
+                     NULL))
+        {
+            SAL_WARN("vcl.pdfwriter", "CryptRetrieveTimeStamp failed: " << WindowsError(GetLastError()));
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        SAL_INFO("vcl.pdfwriter", "Time stamp size is " << pTsContext->cbEncoded << " bytes");
+
+#ifdef DBG_UTIL
+        {
+            FILE *out = fopen("PDFWRITER.tstoken.data", "wb");
+            fwrite(pTsContext->pbEncoded, pTsContext->cbEncoded, 1, out);
+            fclose(out);
+        }
+#endif
+
+        // I tried to use CryptMsgControl() with CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR to add the
+        // timestamp, but that failed with "The parameter is incorrect". Probably it is too late to
+        // modify the message once its data has already been encoded as part of the
+        // CryptMsgGetParam() with CMSG_BARE_CONTENT_PARAM above. So close the message and re-do its
+        // creation steps, but now with an amended aSignerInfo.
+
+        CRYPT_INTEGER_BLOB aTimestampBlob;
+        aTimestampBlob.cbData = pTsContext->cbEncoded;
+        aTimestampBlob.pbData = pTsContext->pbEncoded;
+
+        CRYPT_ATTRIBUTE aTimestampAttribute;
+        aTimestampAttribute.pszObjId = "1.2.840.113549.1.9.16.2.14";
+        aTimestampAttribute.cValue = 1;
+        aTimestampAttribute.rgValue = &aTimestampBlob;
+
+        aSignerInfo.cUnauthAttr = 1;
+        aSignerInfo.rgUnauthAttr = &aTimestampAttribute;
+
+        CryptMsgClose(hMsg);
+
+        if (!(hMsg = CryptMsgOpenToEncode(PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
+                                          CMSG_DETACHED_FLAG,
+                                          CMSG_SIGNED,
+                                          &aSignedInfo,
+                                          NULL,
+                                          NULL)) ||
+            !CryptMsgUpdate(hMsg, (const BYTE *)buffer1.get(), bytesRead1, FALSE) ||
+            !CryptMsgUpdate(hMsg, (const BYTE *)buffer2.get(), bytesRead2, TRUE))
+        {
+            SAL_WARN("vcl.pdfwriter", "Re-creating the message failed: " << WindowsError(GetLastError()));
+            CryptMemFree(pTsContext);
+            CryptMsgClose(hDecodedMsg);
+            CryptMsgClose(hMsg);
+            CertFreeCertificateContext(pCertContext);
+            return false;
+        }
+
+        CryptMsgClose(hDecodedMsg);
+    }
+
+    DWORD nSigLen = 0;
+
+    if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, NULL, &nSigLen))
+    {
+        SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+        if (pTsContext)
+            CryptMemFree(pTsContext);
+        CryptMsgClose(hMsg);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -7310,16 +7538,22 @@ bool PDFWriterImpl::finalizeSignature()
     if (nSigLen*2 > MAX_SIGNATURE_CONTENT_LENGTH)
     {
         SAL_WARN("vcl.pdfwriter", "Signature requires more space (" << nSigLen*2 << ") than we reserved (" << MAX_SIGNATURE_CONTENT_LENGTH << ")");
+        if (pTsContext)
+            CryptMemFree(pTsContext);
+        CryptMsgClose(hMsg);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
 
     SAL_INFO("vcl.pdfwriter", "Signature size is " << nSigLen << " bytes");
-
     boost::scoped_array<BYTE> pSig(new BYTE[nSigLen]);
-    if (!CryptSignMessage(&aPara, TRUE, SAL_N_ELEMENTS(aBuffers), aBuffers, aBufferLens, pSig.get(), &nSigLen))
+
+    if (!CryptMsgGetParam(hMsg, CMSG_CONTENT_PARAM, 0, pSig.get(), &nSigLen))
     {
-        SAL_WARN("vcl.pdfwriter", "CryptSignMessage failed: " << WindowsError(GetLastError()));
+        SAL_WARN("vcl.pdfwriter", "CryptMsgGetParam(CMSG_CONTENT_PARAM) failed: " << WindowsError(GetLastError()));
+        if (pTsContext)
+            CryptMemFree(pTsContext);
+        CryptMsgClose(hMsg);
         CertFreeCertificateContext(pCertContext);
         return false;
     }
@@ -7332,110 +7566,10 @@ bool PDFWriterImpl::finalizeSignature()
     }
 #endif
 
-    if( !m_aContext.SignTSA.isEmpty() )
-    {
-        PointerTo_CryptRetrieveTimeStamp crts = (PointerTo_CryptRetrieveTimeStamp) GetProcAddress(LoadLibrary("crypt32.dll"), "CryptRetrieveTimeStamp");
-        if (!crts)
-        {
-            SAL_WARN("vcl.pdfwriter", "Could not find the CryptRetrieveTimeStamp function in crypt32.dll: " << WindowsError(GetLastError()));
-            CertFreeCertificateContext(pCertContext);
-            return false;
-        }
-        else
-        {
-            CRYPT_TIMESTAMP_PARA aTsPara;
-
-            unsigned int nNonce = comphelper::rng::uniform_uint_distribution(0, SAL_MAX_UINT32);
-
-            aTsPara.pszTSAPolicyId = NULL;
-            aTsPara.fRequestCerts = TRUE;
-            aTsPara.Nonce.cbData = sizeof(nNonce);
-            aTsPara.Nonce.pbData = (BYTE *)&nNonce;
-            aTsPara.cExtension = 0;
-            aTsPara.rgExtension = NULL;
-
-            PCRYPT_TIMESTAMP_CONTEXT pTsContext = NULL;
-
-            if (!(*crts)(m_aContext.SignTSA.getStr(),
-                         0,
-                         10000,
-                         szOID_NIST_sha256,
-                         &aTsPara,
-                         pSig.get(),
-                         nSigLen,
-                         &pTsContext,
-                         NULL,
-                         NULL))
-            {
-                SAL_WARN("vcl.pdfwriter", "CryptRetrieveTimeStamp failed: " << WindowsError(GetLastError()));
-                CertFreeCertificateContext(pCertContext);
-                return false;
-            }
-
-            SAL_INFO("vcl.pdfwriter", "Time stamp size is " << pTsContext->cbEncoded << " bytes");
-
-#ifdef DBG_UTIL
-            {
-                FILE *out = fopen("PDFWRITER.tstoken.data", "wb");
-                fwrite(pTsContext->pbEncoded, pTsContext->cbEncoded, 1, out);
-                fclose(out);
-            }
-#endif
-
-            CRYPT_INTEGER_BLOB aTimestampBlob;
-            aTimestampBlob.cbData = pTsContext->cbEncoded;
-            aTimestampBlob.pbData = pTsContext->pbEncoded;
-
-            CRYPT_ATTRIBUTE aTimestampAttribute;
-            aTimestampAttribute.pszObjId = "1.2.840.113549.1.9.16.2.14";
-            aTimestampAttribute.cValue = 1;
-            aTimestampAttribute.rgValue = &aTimestampBlob;
-
-            aPara.cUnauthAttr = 1;
-            aPara.rgUnauthAttr = &aTimestampAttribute;
-
-            nSigLen = 0;
-            if (!CryptSignMessage(&aPara, TRUE, SAL_N_ELEMENTS(aBuffers), aBuffers, aBufferLens, NULL, &nSigLen))
-            {
-                SAL_WARN("vcl.pdfwriter", "CryptSignMessage failed: " << WindowsError(GetLastError()));
-                CryptMemFree(pTsContext);
-                CertFreeCertificateContext(pCertContext);
-                return false;
-            }
-
-            if (nSigLen*2 > MAX_SIGNATURE_CONTENT_LENGTH)
-            {
-                SAL_WARN("vcl.pdfwriter", "Signature requires more space (" << nSigLen*2 << ") than we reserved (" << MAX_SIGNATURE_CONTENT_LENGTH << ")");
-                CryptMemFree(pTsContext);
-                CertFreeCertificateContext(pCertContext);
-                return false;
-            }
-
-            SAL_INFO("vcl.pdfwriter", "Signature size including timestamp is " << nSigLen << " bytes");
-
-            pSig.reset(new BYTE[nSigLen]);
-
-            if (!CryptSignMessage(&aPara, TRUE, SAL_N_ELEMENTS(aBuffers), aBuffers, aBufferLens, pSig.get(), &nSigLen))
-            {
-                SAL_WARN("vcl.pdfwriter", "CryptSignMessage failed: " << WindowsError(GetLastError()));
-                CryptMemFree(pTsContext);
-                CertFreeCertificateContext(pCertContext);
-                return false;
-            }
-
-#ifdef DBG_UTIL
-            {
-                FILE *out = fopen("PDFWRITER.ts_signature.data", "wb");
-                fwrite(pSig.get(), nSigLen, 1, out);
-                fclose(out);
-            }
-#endif
-
-            CryptMemFree(pTsContext);
-        }
-    }
-
     // Release resources
+    if (pTsContext)
+        CryptMemFree(pTsContext);
+    CryptMsgClose(hMsg);
     CertFreeCertificateContext(pCertContext);
 
     OStringBuffer cms_hexbuffer;
