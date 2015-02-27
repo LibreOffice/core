@@ -428,6 +428,45 @@ XMLTextColumnsContext::XMLTextColumnsContext(
     }
 }
 
+XMLTextColumnsContext::XMLTextColumnsContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList,
+    const XMLPropertyState& rProp,
+    ::std::vector< XMLPropertyState >& rProps )
+:   XMLElementPropertyContext( rImport, Element, rProp, rProps )
+,   sSeparatorLineIsOn("SeparatorLineIsOn")
+,   sSeparatorLineWidth("SeparatorLineWidth")
+,   sSeparatorLineColor("SeparatorLineColor")
+,   sSeparatorLineRelativeHeight("SeparatorLineRelativeHeight")
+,   sSeparatorLineVerticalAlignment("SeparatorLineVerticalAlignment")
+,   sAutomaticDistance("AutomaticDistance")
+,   sSeparatorLineStyle("SeparatorLineStyle")
+,   pColumns( 0 )
+,   pColumnSep( 0 )
+,   pColumnAttrTokenMap( new SvXMLTokenMap(aColAttrTokenMap) )
+,   pColumnSepAttrTokenMap( new SvXMLTokenMap(aColSepAttrTokenMap) )
+,   nCount( 0 )
+,   bAutomatic( false )
+,   nAutomaticDistance( 0 )
+{
+    sal_Int32 nVal;
+    if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_FO | XML_column_count ) )
+    {
+        if( ::sax::Converter::convertNumber( nVal,
+            xAttrList->getValue( NAMESPACE | XML_NAMESPACE_FO | XML_column_count ),
+            0, SHRT_MAX ) )
+        {
+            nCount = static_cast< sal_Int16 >( nVal );
+        }
+    }
+    else if( xAttrList->hasAttribute( NAMESPACE | XML_NAMESPACE_FO | XML_column_gap ) )
+    {
+        bAutomatic = GetImport().GetMM100UnitConverter().
+            convertMeasureToCore( nAutomaticDistance,
+            xAttrList->getValue( NAMESPACE | XML_NAMESPACE_FO | XML_column_gap ) );
+    }
+}
+
 XMLTextColumnsContext::~XMLTextColumnsContext()
 {
     if( pColumns )
@@ -482,6 +521,44 @@ SvXMLImportContext *XMLTextColumnsContext::CreateChildContext(
     else
     {
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+    }
+
+    return pContext;
+}
+
+Reference< xml::sax::XFastContextHandler > SAL_CALL
+    XMLTextColumnsContext::createFastChildContext( sal_Int32 Element,
+    const Reference< xml::sax::XFastAttributeList >& xAttrList )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    SvXMLImportContext *pContext = 0;
+
+    if( Element == (NAMESPACE | XML_NAMESPACE_STYLE | XML_column) )
+    {
+        XMLTextColumnContext_Impl *pColumn =
+            new XMLTextColumnContext_Impl( GetImport(), Element,
+                    xAttrList, *pColumnAttrTokenMap );
+
+        // add new tabstop to array of tabstops
+        if( !pColumns )
+            pColumns = new XMLTextColumnsArray_Impl;
+
+        pColumns->push_back( pColumn );
+        pColumn->AddFirstRef();
+
+        pContext = pColumn;
+    }
+    else if( Element == (NAMESPACE | XML_NAMESPACE_STYLE  | XML_column_sep) )
+    {
+        pColumnSep = new XMLTextColumnSepContext_Impl( GetImport(),
+                Element, xAttrList, *pColumnSepAttrTokenMap );
+        pColumnSep->AddFirstRef();
+
+        pContext = pColumnSep;
+    }
+    else
+    {
+        pContext = new SvXMLImportContext( GetImport() );
     }
 
     return pContext;
@@ -605,6 +682,128 @@ void XMLTextColumnsContext::EndElement( )
 
     SetInsert( true );
     XMLElementPropertyContext::EndElement();
+
+}
+
+void SAL_CALL XMLTextColumnsContext::endFastElement( sal_Int32 Element )
+    throw(RuntimeException, xml::sax::SAXException, std::exception)
+{
+    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
+    if( !xFactory.is() )
+        return;
+
+    Reference<XInterface> xIfc = xFactory->createInstance("com.sun.star.text.TextColumns");
+    if( !xIfc.is() )
+        return;
+
+    Reference< XTextColumns > xColumns( xIfc, UNO_QUERY );
+    if ( 0 == nCount )
+    {
+        // zero columns = no columns -> 1 column
+        xColumns->setColumnCount( 1 );
+    }
+    else if( !bAutomatic && pColumns &&
+             pColumns->size() == (sal_uInt16)nCount )
+    {
+        // if we have column descriptions, one per column, and we don't use
+        // automatic width, then set the column widths
+
+        sal_Int32 nRelWidth = 0;
+        sal_uInt16 nColumnsWithWidth = 0;
+        sal_Int16 i;
+
+        for( i = 0; i < nCount; i++ )
+        {
+            const TextColumn& rColumn =
+                (*pColumns)[(sal_uInt16)i]->getTextColumn();
+            if( rColumn.Width > 0 )
+            {
+                nRelWidth += rColumn.Width;
+                nColumnsWithWidth++;
+            }
+        }
+        if( nColumnsWithWidth < nCount )
+        {
+            sal_Int32 nColWidth = 0==nRelWidth
+                                        ? USHRT_MAX / nCount
+                                        : nRelWidth / nColumnsWithWidth;
+
+            for( i=0; i < nCount; i++ )
+            {
+                TextColumn& rColumn =
+                    (*pColumns)[(sal_uInt16)i]->getTextColumn();
+                if( rColumn.Width == 0 )
+                {
+                    rColumn.Width = nColWidth;
+                    nRelWidth += rColumn.Width;
+                    if( 0 == --nColumnsWithWidth )
+                        break;
+                }
+            }
+        }
+
+        Sequence< TextColumn > aColumns( (sal_Int32)nCount );
+        TextColumn *pTextColumns = aColumns.getArray();
+        for( i=0; i < nCount; i++ )
+            *pTextColumns++ = (*pColumns)[(sal_uInt16)i]->getTextColumn();
+
+        xColumns->setColumns( aColumns );
+    }
+    else
+    {
+        // only set column count (and let the columns be distributed
+        // automatically)
+
+        xColumns->setColumnCount( nCount );
+    }
+
+    Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
+    if( xPropSet.is() )
+    {
+        Any aAny;
+        sal_Bool bOn = pColumnSep != 0;
+
+        aAny.setValue( &bOn, ::getBooleanCppuType() );
+        xPropSet->setPropertyValue( sSeparatorLineIsOn, aAny );
+
+        if( pColumnSep )
+        {
+            if( pColumnSep->GetWidth() )
+            {
+                aAny <<= pColumnSep->GetWidth();
+                xPropSet->setPropertyValue( sSeparatorLineWidth, aAny );
+            }
+            if( pColumnSep->GetHeight() )
+            {
+                aAny <<= pColumnSep->GetHeight();
+                xPropSet->setPropertyValue( sSeparatorLineRelativeHeight,
+                                            aAny );
+            }
+            if ( pColumnSep->GetStyle() )
+            {
+                aAny <<= pColumnSep->GetStyle();
+                xPropSet->setPropertyValue( sSeparatorLineStyle, aAny );
+            }
+
+            aAny <<= pColumnSep->GetColor();
+            xPropSet->setPropertyValue( sSeparatorLineColor, aAny );
+
+            aAny <<= pColumnSep->GetVertAlign();
+            xPropSet->setPropertyValue( sSeparatorLineVerticalAlignment, aAny );
+        }
+
+        // handle 'automatic columns': column distance
+        if( bAutomatic )
+        {
+            aAny <<= nAutomaticDistance;
+            xPropSet->setPropertyValue( sAutomaticDistance, aAny );
+        }
+    }
+
+    aProp.maValue <<= xColumns;
+
+    SetInsert( true );
+    XMLElementPropertyContext::endFastElement(Element);
 
 }
 
