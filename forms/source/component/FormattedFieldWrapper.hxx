@@ -41,9 +41,6 @@ class OFormattedFieldWrapper : public OFormattedFieldWrapper_Base
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xContext;
 
-public:
-    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
-
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
 
@@ -51,10 +48,19 @@ protected:
     // if we act as formatted this is used to write the EditModel part
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersistObject>     m_xFormattedPart;
 
+private:
+    OFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory);
+
 protected:
     virtual ~OFormattedFieldWrapper();
 
 public:
+    // if we act as formatted, this is the PersistObject interface of our aggregate, used
+    // to read and write the FormattedModel part
+    // if bActAsFormatted is false, the state is undetermined until somebody calls
+    // ::read or does anything which requires a living aggregate
+    static InterfaceRef createFormattedFieldWrapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory, bool bActAsFormatted);
+
     // UNO
     DECLARE_UNO3_AGG_DEFAULTS(OFormattedFieldWrapper, OWeakAggObject)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
