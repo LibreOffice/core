@@ -825,6 +825,27 @@ XMLImageMapContext::XMLImageMapContext(
     }
 }
 
+XMLImageMapContext::XMLImageMapContext(
+    SvXMLImport& rImport, sal_Int32 /*Element*/,
+    Reference< XPropertySet >& rPropertySet )
+:   SvXMLImportContext( rImport ),
+    sImageMap("ImageMap"),
+    xPropertySet(rPropertySet)
+{
+    try
+    {
+        Reference< XPropertySetInfo > xInfo =
+            xPropertySet->getPropertySetInfo();
+        if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
+            xPropertySet->getPropertyValue(sImageMap) >>= xImageMap;
+    }
+    catch(const com::sun::star::uno::Exception& e)
+    {
+        uno::Sequence<OUString> aSeq(0);
+        rImport.SetError( XMLERROR_FLAG_WARNING | XMLERROR_API , aSeq, e.Message, NULL );
+    }
+}
+
 XMLImageMapContext::~XMLImageMapContext()
 {
 }
@@ -861,6 +882,35 @@ SvXMLImportContext *XMLImageMapContext::CreateChildContext(
     return pContext;
 }
 
+Reference< XFastContextHandler > SAL_CALL
+    XMLImageMapContext::createFastChildContext( sal_Int32 Element,
+    const Reference< XFastAttributeList >& xAttrList )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Reference< XFastContextHandler > pContext = NULL;
+
+    if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_area_rectangle) )
+    {
+        pContext = new XMLImageMapRectangleContext(
+                GetImport(), Element, xImageMap );
+    }
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_area_polygon) )
+    {
+        pContext = new XMLImageMapPolygonContext(
+                GetImport(), Element, xImageMap );
+    }
+    else if( Element == (FastToken::NAMESPACE | XML_NAMESPACE_DRAW | XML_area_circle) )
+    {
+        pContext = new XMLImageMapCircleContext(
+                GetImport(), Element, xImageMap );
+    }
+    else
+        pContext = SvXMLImportContext::createFastChildContext(
+                Element, xAttrList );
+
+    return pContext;
+}
+
 void XMLImageMapContext::EndElement()
 {
     Reference < XPropertySetInfo > xInfo =
@@ -868,5 +918,15 @@ void XMLImageMapContext::EndElement()
     if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
         xPropertySet->setPropertyValue(sImageMap, uno::makeAny( xImageMap ) );
 }
+
+void SAL_CALL XMLImageMapContext::endFastElement( sal_Int32 /*Element*/ )
+    throw(css::uno::RuntimeException, SAXException, std::exception)
+{
+    Reference < XPropertySetInfo > xInfo =
+        xPropertySet->getPropertySetInfo();
+    if( xInfo.is() && xInfo->hasPropertyByName( sImageMap ) )
+        xPropertySet->setPropertyValue(sImageMap, uno::makeAny( xImageMap ) );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
