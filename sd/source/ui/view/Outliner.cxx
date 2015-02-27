@@ -483,8 +483,8 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 
         Initialize ( ! mpSearchItem->GetBackward());
 
-        const sal_uInt16 nCommand (mpSearchItem->GetCommand());
-        if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+        const SvxSearchCmd nCommand (mpSearchItem->GetCommand());
+        if (nCommand == SvxSearchCmd::REPLACE_ALL)
             bEndOfSearch = SearchAndReplaceAll ();
         else
         {
@@ -653,19 +653,19 @@ bool Outliner::SearchAndReplaceOnce (void)
             // following call to StartSearchAndReplace will then search for
             // the next match.
             if (meMode == SEARCH
-                && mpSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
+                && mpSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
                 if (pOutlinerView->GetSelection().HasRange())
                     pOutlinerView->StartSearchAndReplace(*mpSearchItem);
 
             // Search for the next match.
             sal_uLong nMatchCount = 0;
-            if (mpSearchItem->GetCommand() != SVX_SEARCHCMD_REPLACE_ALL)
+            if (mpSearchItem->GetCommand() != SvxSearchCmd::REPLACE_ALL)
                 nMatchCount = pOutlinerView->StartSearchAndReplace(*mpSearchItem);
 
             // Go to the next text object when there have been no matches in
             // the current object or the whole object has already been
             // processed.
-            if (nMatchCount==0 || mpSearchItem->GetCommand()==SVX_SEARCHCMD_REPLACE_ALL)
+            if (nMatchCount==0 || mpSearchItem->GetCommand()==SvxSearchCmd::REPLACE_ALL)
             {
                 ProvideNextTextObject ();
 
@@ -1084,9 +1084,9 @@ bool Outliner::ShowWrapArroundDialog (void)
     if (mpSearchItem != NULL)
     {
         // When searching display the dialog only for single find&replace.
-        const sal_uInt16 nCommand (mpSearchItem->GetCommand());
-        bShowDialog = (nCommand==SVX_SEARCHCMD_REPLACE)
-            || (nCommand==SVX_SEARCHCMD_FIND);
+        const SvxSearchCmd nCommand (mpSearchItem->GetCommand());
+        bShowDialog = (nCommand==SvxSearchCmd::REPLACE)
+            || (nCommand==SvxSearchCmd::FIND);
     }
     else
         // Spell checking needs the dialog, too.

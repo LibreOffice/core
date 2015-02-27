@@ -87,7 +87,7 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
             // memorize item because of the adjustments...
             GetExtraData()->SetSearchItem(rSearchItem);
             sal_Int32 nFound = 0;
-            if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
+            if (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL)
             {
                 sal_uInt16 nActModWindows = 0;
                 for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)

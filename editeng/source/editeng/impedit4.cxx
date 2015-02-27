@@ -2516,13 +2516,13 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
 
     // FIND_ALL is not possible without multiple selection.
-    if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
-         ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
+    if ( ( rSearchItem.GetCommand() == SvxSearchCmd::FIND ) ||
+         ( rSearchItem.GetCommand() == SvxSearchCmd::FIND_ALL ) )
     {
         if ( Search( rSearchItem, pEditView ) )
             nFound++;
     }
-    else if ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE )
+    else if ( rSearchItem.GetCommand() == SvxSearchCmd::REPLACE )
     {
         // The word is selected if the user not altered the selection
         // in between:
@@ -2535,7 +2535,7 @@ sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSe
             if( Search( rSearchItem, pEditView ) )
                 nFound = 1;
     }
-    else if ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL )
+    else if ( rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL )
     {
         // The Writer replaces all front beginning to end ...
         SvxSearchItem aTmpItem( rSearchItem );

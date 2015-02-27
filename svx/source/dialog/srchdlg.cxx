@@ -1241,13 +1241,13 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         }
 
         if (pBtn == m_pSearchBtn)
-            pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
+            pSearchItem->SetCommand( SvxSearchCmd::FIND );
         else if ( pBtn == m_pSearchAllBtn )
-            pSearchItem->SetCommand( SVX_SEARCHCMD_FIND_ALL );
+            pSearchItem->SetCommand( SvxSearchCmd::FIND_ALL );
         else if ( pBtn == m_pReplaceBtn )
-            pSearchItem->SetCommand( SVX_SEARCHCMD_REPLACE );
+            pSearchItem->SetCommand( SvxSearchCmd::REPLACE );
         else if ( pBtn == m_pReplaceAllBtn )
-            pSearchItem->SetCommand( SVX_SEARCHCMD_REPLACE_ALL );
+            pSearchItem->SetCommand( SvxSearchCmd::REPLACE_ALL );
 
         // when looking for templates, delete format lists
         if ( !bFormat && pSearchItem->GetPattern() )
@@ -2189,7 +2189,7 @@ void SvxSearchDialog::SaveToModule_Impl()
         pSearchItem->SetAllTables( m_pAllSheetsCB->IsChecked() );
     }
 
-    pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
+    pSearchItem->SetCommand( SvxSearchCmd::FIND );
     nModifyFlag = 0;
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     rBindings.GetDispatcher()->Execute( SID_SEARCH_ITEM, SfxCallMode::SLOT, ppArgs );

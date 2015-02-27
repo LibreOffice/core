@@ -132,8 +132,8 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
 
     sal_uInt8 cMatrixFlag = MM_NONE;
     if ( bFound &&
-        ( (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE)
-        ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) ) &&
+        ( (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE)
+        ||(rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL) ) &&
             // Don't split the matrix, only replace Matrix formulas
             !( (eCellType == CELLTYPE_FORMULA &&
             ((cMatrixFlag = aCell.mpFormula->GetMatrixFlag()) == MM_REFERENCE))
@@ -142,7 +142,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
          IsBlockEditable(nCol, nRow, nCol, nRow)
         )
     {
-        if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE )
+        if ( cMatrixFlag == MM_NONE && rSearchItem.GetCommand() == SvxSearchCmd::REPLACE )
             rUndoStr = aString;
         else if (pUndoDoc)
         {
@@ -189,7 +189,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             //  continue search ?
             if (bRepeat)
             {
-                if ( rSearchItem.GetCommand() != SVX_SEARCHCMD_REPLACE_ALL || nStart >= nEnd )
+                if ( rSearchItem.GetCommand() != SvxSearchCmd::REPLACE_ALL || nStart >= nEnd )
                     bRepeat = false;
                 else if (bDoBack)
                 {
@@ -289,8 +289,8 @@ bool ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
                      const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
-    bool bAll =  (rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL)
-               ||(rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL);
+    bool bAll =  (rSearchItem.GetCommand() == SvxSearchCmd::FIND_ALL)
+               ||(rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL);
     SCCOL nCol = rCol;
     SCROW nRow = rRow;
 
@@ -695,10 +695,10 @@ bool ScTable::SearchAndReplace(
     const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow, const ScMarkData& rMark,
     ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
-    sal_uInt16 nCommand = rSearchItem.GetCommand();
+    SvxSearchCmd nCommand = rSearchItem.GetCommand();
     bool bFound = false;
     if ( ValidColRow(rCol, rRow) ||
-         ((nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE) &&
+         ((nCommand == SvxSearchCmd::FIND || nCommand == SvxSearchCmd::REPLACE) &&
            (((rCol == MAXCOLCOUNT || rCol == -1) && ValidRow(rRow)) ||
             ((rRow == MAXROWCOUNT || rRow == -1) && ValidCol(rCol))
            )
@@ -708,13 +708,13 @@ bool ScTable::SearchAndReplace(
         bool bStyles = rSearchItem.GetPattern();
         if (bStyles)
         {
-            if (nCommand == SVX_SEARCHCMD_FIND)
+            if (nCommand == SvxSearchCmd::FIND)
                 bFound = SearchStyle(rSearchItem, rCol, rRow, rMark);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE)
+            else if (nCommand == SvxSearchCmd::REPLACE)
                 bFound = ReplaceStyle(rSearchItem, rCol, rRow, rMark, false);
-            else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
+            else if (nCommand == SvxSearchCmd::FIND_ALL)
                 bFound = SearchAllStyle(rSearchItem, rMark, rMatchedRanges);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+            else if (nCommand == SvxSearchCmd::REPLACE_ALL)
                 bFound = ReplaceAllStyle(rSearchItem, rMark, rMatchedRanges, pUndoDoc);
         }
         else
@@ -739,13 +739,13 @@ bool ScTable::SearchAndReplace(
 
             pSearchText = new utl::TextSearch( aSearchOptions );
 
-            if (nCommand == SVX_SEARCHCMD_FIND)
+            if (nCommand == SvxSearchCmd::FIND)
                 bFound = Search(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
-            else if (nCommand == SVX_SEARCHCMD_FIND_ALL)
+            else if (nCommand == SvxSearchCmd::FIND_ALL)
                 bFound = SearchAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE)
+            else if (nCommand == SvxSearchCmd::REPLACE)
                 bFound = Replace(rSearchItem, rCol, rRow, rMark, rUndoStr, pUndoDoc);
-            else if (nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+            else if (nCommand == SvxSearchCmd::REPLACE_ALL)
                 bFound = ReplaceAll(rSearchItem, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
 
             delete pSearchText;
@@ -799,8 +799,8 @@ bool ScTable::SearchAndReplaceEmptyCells(
         aRanges = aNewRanges;
     }
 
-    sal_uInt16 nCommand = rSearchItem.GetCommand();
-    if (nCommand == SVX_SEARCHCMD_FIND || nCommand == SVX_SEARCHCMD_REPLACE)
+    SvxSearchCmd nCommand = rSearchItem.GetCommand();
+    if (nCommand == SvxSearchCmd::FIND || nCommand == SvxSearchCmd::REPLACE)
     {
         if (rSearchItem.GetBackward())
         {
@@ -821,7 +821,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
             }
         }
     }
-    else if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+    else if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
     {
         bool bFound = false;
         for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
@@ -845,7 +845,7 @@ bool lcl_maybeReplaceCellString(
         // empty cell found.
         rCol = nCol;
         rRow = nRow;
-        if (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE &&
+        if (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE &&
             !rSearchItem.GetReplaceString().isEmpty())
         {
             rColObj.SetRawString(nRow, rSearchItem.GetReplaceString());
@@ -862,7 +862,7 @@ bool ScTable::SearchRangeForEmptyCell(
     const ScRange& rRange, const SvxSearchItem& rSearchItem,
     SCCOL& rCol, SCROW& rRow, OUString& rUndoStr)
 {
-    sal_uInt16 nCmd = rSearchItem.GetCommand();
+    SvxSearchCmd nCmd = rSearchItem.GetCommand();
     bool bSkipFiltered = rSearchItem.IsSearchFiltered();
     if (rSearchItem.GetBackward())
     {
@@ -882,7 +882,7 @@ bool ScTable::SearchRangeForEmptyCell(
                 SCCOL nBeginCol = rRange.aEnd.Col();
                 if (nRow == rRow && nBeginCol >= rCol)
                     // always start from one cell before the cursor.
-                    nBeginCol = rCol - (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                    nBeginCol = rCol - (nCmd == SvxSearchCmd::FIND ? 1 : 0);
 
                 for (SCCOL nCol = nBeginCol; nCol >= rRange.aStart.Col(); --nCol)
                 {
@@ -901,7 +901,7 @@ bool ScTable::SearchRangeForEmptyCell(
                 SCROW nBeginRow = rRange.aEnd.Row();
                 if (nCol == rCol && nBeginRow >= rRow)
                     // always start from one cell before the cursor.
-                    nBeginRow = rRow - (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                    nBeginRow = rRow - (nCmd == SvxSearchCmd::FIND ? 1 : 0);
                 for (SCROW nRow = nBeginRow; nRow >= rRange.aStart.Row(); --nRow)
                 {
                     if (bSkipFiltered)
@@ -933,7 +933,7 @@ bool ScTable::SearchRangeForEmptyCell(
                 SCCOL nBeginCol = rRange.aStart.Col();
                 if (nRow == rRow && nBeginCol <= rCol)
                     // always start from one cell past the cursor.
-                    nBeginCol = rCol + (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                    nBeginCol = rCol + (nCmd == SvxSearchCmd::FIND ? 1 : 0);
                 for (SCCOL nCol = nBeginCol; nCol <= rRange.aEnd.Col(); ++nCol)
                 {
                     if (lcl_maybeReplaceCellString(aCol[nCol], rCol, rRow, rUndoStr, nCol, nRow, rSearchItem))
@@ -951,7 +951,7 @@ bool ScTable::SearchRangeForEmptyCell(
                 SCROW nBeginRow = rRange.aStart.Row();
                 if (nCol == rCol && nBeginRow <= rRow)
                     // always start from one cell past the cursor.
-                    nBeginRow = rRow + (nCmd == SVX_SEARCHCMD_FIND ? 1 : 0);
+                    nBeginRow = rRow + (nCmd == SvxSearchCmd::FIND ? 1 : 0);
                 for (SCROW nRow = nBeginRow; nRow <= rRange.aEnd.Row(); ++nRow)
                 {
                     if (bSkipFiltered)
@@ -973,7 +973,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
     ScRangeList& rMatchedRanges, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
     bool bFound = false;
-    bool bReplace = (rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL) &&
+    bool bReplace = (rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL) &&
                     !rSearchItem.GetReplaceString().isEmpty();
     bool bSkipFiltered = rSearchItem.IsSearchFiltered();
 

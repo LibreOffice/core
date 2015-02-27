@@ -112,7 +112,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
                           2, 2, 2,
                           TransliterationModules_IGNORE_CASE ),
     eFamily         ( SFX_STYLE_FAMILY_PARA ),
-    nCommand        ( 0 ),
+    nCommand        ( SvxSearchCmd::FIND ),
     nCellType       ( SVX_SEARCHIN_FORMULA ),
     nAppFlag        ( SVX_SEARCHAPP_WRITER ),
     bRowDirection   ( true ),
@@ -373,7 +373,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             aSeq[1].Name = SRCH_PARA_FAMILY;
             aSeq[1].Value <<= sal_Int16( eFamily );
             aSeq[2].Name = SRCH_PARA_COMMAND;
-            aSeq[2].Value <<= nCommand;
+            aSeq[2].Value <<= static_cast<sal_uInt16>(nCommand);
             aSeq[3].Name = SRCH_PARA_CELLTYPE;
             aSeq[3].Value <<= nCellType;
             aSeq[4].Name = SRCH_PARA_APPFLAG;
@@ -483,8 +483,12 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_COMMAND )
                     {
-                        if ( aSeq[i].Value >>= nCommand )
+                        sal_uInt16 nTmp;
+                        if ( aSeq[i].Value >>= nTmp )
+                        {
+                            nCommand = static_cast<SvxSearchCmd>(nTmp);
                             ++nConvertedCount;
+                        }
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_CELLTYPE )
                     {
@@ -538,7 +542,7 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
             break;
         }
         case MID_SEARCH_COMMAND:
-            bRet = (rVal >>= nInt); nCommand = (sal_uInt16) nInt; break;
+            bRet = (rVal >>= nInt); nCommand = static_cast<SvxSearchCmd>(nInt); break;
         case MID_SEARCH_STYLEFAMILY:
             bRet = (rVal >>= nInt); eFamily =  (SfxStyleFamily) (sal_Int16) nInt; break;
         case MID_SEARCH_CELLTYPE:

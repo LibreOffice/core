@@ -594,13 +594,13 @@ sal_uInt16 SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
     bool bAll = false;
     switch( rSearchItem.GetCommand() )
     {
-    case SVX_SEARCHCMD_FIND:
-    case SVX_SEARCHCMD_FIND_ALL:
+    case SvxSearchCmd::FIND:
+    case SvxSearchCmd::FIND_ALL:
         nFound = pTextView->Search( aSearchOpt, bForward ) ? 1 : 0;
         break;
 
-    case SVX_SEARCHCMD_REPLACE_ALL: bAll = true;
-    case SVX_SEARCHCMD_REPLACE:
+    case SvxSearchCmd::REPLACE_ALL: bAll = true;
+    case SvxSearchCmd::REPLACE:
         nFound = pTextView->Replace( aSearchOpt, bAll, bForward );
         break;
 

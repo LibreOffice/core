@@ -186,7 +186,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
             }
             switch (m_pSrchItem->GetCommand())
             {
-            case SVX_SEARCHCMD_FIND:
+            case SvxSearchCmd::FIND:
             {
                 bool bRet = SearchAndWrap(bApi);
                 if( bRet )
@@ -206,7 +206,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
 #endif
             }
             break;
-            case SVX_SEARCHCMD_FIND_ALL:
+            case SvxSearchCmd::FIND_ALL:
             {
                 bool bRet = SearchAll();
                 if( !bRet )
@@ -233,14 +233,14 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
 #endif
             }
             break;
-            case SVX_SEARCHCMD_REPLACE:
+            case SvxSearchCmd::REPLACE:
                 {
 
                     // 1) Replace selection (Not if only attributes should be replaced)
 //JP 27.04.95: Why?
 //      what if you only want to assign attributes to the found??
 
-                    sal_uInt16 nCmd = SVX_SEARCHCMD_FIND;
+                    SvxSearchCmd nCmd = SvxSearchCmd::FIND;
                     if( !m_pSrchItem->GetReplaceString().isEmpty() ||
                         !m_pReplList )
                     {
@@ -267,11 +267,11 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
                         }
                     }
                     else if( m_pReplList )
-                        nCmd = SVX_SEARCHCMD_REPLACE;
+                        nCmd = SvxSearchCmd::REPLACE;
 
                     // 2) Search further (without replacing!)
 
-                    sal_uInt16 nOldCmd = m_pSrchItem->GetCommand();
+                    SvxSearchCmd nOldCmd = m_pSrchItem->GetCommand();
                     m_pSrchItem->SetCommand( nCmd );
                     bool bRet = SearchAndWrap(bApi);
                     if( bRet )
@@ -294,7 +294,7 @@ void SwView::ExecSearch(SfxRequest& rReq, bool bNoMessage)
 #endif
                 break;
 
-            case SVX_SEARCHCMD_REPLACE_ALL:
+            case SvxSearchCmd::REPLACE_ALL:
                 {
                     SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
                     m_bExtra = false;
@@ -613,10 +613,10 @@ void SwView::Replace()
             SwPosition aStartPos = (* m_pWrtShell->GetSwCrsr()->Start());
             SwPosition aEndPos = (* m_pWrtShell->GetSwCrsr()->End());
             bool   bHasSelection = m_pSrchItem->GetSelection();
-            sal_uInt16 nOldCmd = m_pSrchItem->GetCommand();
+            SvxSearchCmd nOldCmd = m_pSrchItem->GetCommand();
 
             //set state for checking if current selection has a match
-            m_pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
+            m_pSrchItem->SetCommand( SvxSearchCmd::FIND );
             m_pSrchItem->SetSelection(true);
 
             //check if it matchs
@@ -692,13 +692,13 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 #if HAVE_FEATURE_DESKTOP
     SvxSearchDialogWrapper::SetSearchLabel(SL_Empty);
 #endif
-    bool bDoReplace = m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE ||
-                      m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+    bool bDoReplace = m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE ||
+                      m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL;
 
     int eRanges = m_pSrchItem->GetSelection() ?
         FND_IN_SEL : m_bExtra ? FND_IN_OTHER : FND_IN_BODY;
-    if (m_pSrchItem->GetCommand() == SVX_SEARCHCMD_FIND_ALL    ||
-        m_pSrchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL)
+    if (m_pSrchItem->GetCommand() == SvxSearchCmd::FIND_ALL    ||
+        m_pSrchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL)
         eRanges |= FND_IN_SELALL;
 
     m_pWrtShell->SttSelect();

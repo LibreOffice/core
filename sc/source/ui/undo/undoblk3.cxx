@@ -979,7 +979,7 @@ void ScUndoReplace::Undo()
 
     if (pUndoDoc)       // only for ReplaceAll !!
     {
-        OSL_ENSURE(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
+        OSL_ENSURE(pSearchItem->GetCommand() == SvxSearchCmd::REPLACE_ALL,
                    "ScUndoReplace:: Wrong Mode");
 
         SetViewMarkData( aMarkData );
@@ -997,7 +997,7 @@ void ScUndoReplace::Undo()
         pDocShell->PostPaintGridAll();
     }
     else if (pSearchItem->GetPattern() &&
-             pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
+             pSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
     {
         OUString aTempStr = pSearchItem->GetSearchString();       // toggle
         pSearchItem->SetSearchString(pSearchItem->GetReplaceString());
@@ -1066,7 +1066,7 @@ void ScUndoReplace::Redo()
         }
     }
     else if (pSearchItem->GetPattern() &&
-             pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
+             pSearchItem->GetCommand() == SvxSearchCmd::REPLACE)
     {
         rDoc.ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),

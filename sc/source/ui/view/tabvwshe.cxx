@@ -287,13 +287,13 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                         aSearchItem.SetReplaceString(static_cast<const SfxStringItem*>(pItem)->GetValue());
 
                     if (nSlot == FID_SEARCH)
-                        aSearchItem.SetCommand(SVX_SEARCHCMD_FIND);
+                        aSearchItem.SetCommand(SvxSearchCmd::FIND);
                     else if(nSlot == FID_REPLACE)
-                        aSearchItem.SetCommand(SVX_SEARCHCMD_REPLACE);
+                        aSearchItem.SetCommand(SvxSearchCmd::REPLACE);
                     else if(nSlot == FID_REPLACE_ALL)
-                        aSearchItem.SetCommand(SVX_SEARCHCMD_REPLACE_ALL);
+                        aSearchItem.SetCommand(SvxSearchCmd::REPLACE_ALL);
                     else
-                        aSearchItem.SetCommand(SVX_SEARCHCMD_FIND_ALL);
+                        aSearchItem.SetCommand(SvxSearchCmd::FIND_ALL);
 
                     //  Request ausfuehren (dabei wird das SearchItem gespeichert)
 

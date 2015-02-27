@@ -115,7 +115,7 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     lArgs[3].Value <<= nFlags;
     lArgs[4].Name = SEARCHITEM_COMMAND;
     lArgs[4].Value <<= (sal_Int16)(aFindAll ?
-        SVX_SEARCHCMD_FIND_ALL : SVX_SEARCHCMD_FIND );
+        SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND );
     lArgs[5].Name = SEARCHITEM_ALGORITHMTYPE;
     lArgs[5].Value <<= (sal_Int16)0;  // 0 == SearchAlgorithms_ABSOLUTE
 

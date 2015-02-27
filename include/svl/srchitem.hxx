@@ -33,10 +33,13 @@
 // defines ---------------------------------------------------------------
 
 // commands
-#define     SVX_SEARCHCMD_FIND          ((sal_uInt16)0)
-#define     SVX_SEARCHCMD_FIND_ALL      ((sal_uInt16)1)
-#define     SVX_SEARCHCMD_REPLACE       ((sal_uInt16)2)
-#define     SVX_SEARCHCMD_REPLACE_ALL   ((sal_uInt16)3)
+enum class SvxSearchCmd
+{
+    FIND          = 0,
+    FIND_ALL      = 1,
+    REPLACE       = 2,
+    REPLACE_ALL   = 3,
+};
 
 // search flags
 #define     SVX_SEARCHIN_FORMULA        ((sal_uInt16)0)
@@ -57,7 +60,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
 
     SfxStyleFamily  eFamily;            // style family
 
-    sal_uInt16      nCommand;           // command (Search, Search all, Replace, Replace all)
+    SvxSearchCmd    nCommand;           // command (Search, Search all, Replace, Replace all)
 
     // Calc-specific
     sal_uInt16      nCellType;          // Search in Formulas/Values/Notes
@@ -94,8 +97,8 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence< OUString > &rPropertyNames ) SAL_OVERRIDE;
     virtual void            Commit() SAL_OVERRIDE;
 
-            sal_uInt16      GetCommand() const { return nCommand; }
-            void            SetCommand(sal_uInt16 nNewCommand) { nCommand = nNewCommand; }
+            SvxSearchCmd    GetCommand() const { return nCommand; }
+            void            SetCommand(SvxSearchCmd nNewCommand) { nCommand = nNewCommand; }
 
     inline  const OUString  GetSearchString() const;
     inline  void            SetSearchString(const OUString& rNewString);

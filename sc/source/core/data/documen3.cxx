@@ -1155,9 +1155,9 @@ void ScDocument::GetAutoFormatData(SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 void ScDocument::GetSearchAndReplaceStart( const SvxSearchItem& rSearchItem,
         SCCOL& rCol, SCROW& rRow )
 {
-    sal_uInt16 nCommand = rSearchItem.GetCommand();
-    bool bReplace = ( nCommand == SVX_SEARCHCMD_REPLACE ||
-        nCommand == SVX_SEARCHCMD_REPLACE_ALL );
+    SvxSearchCmd nCommand = rSearchItem.GetCommand();
+    bool bReplace = ( nCommand == SvxSearchCmd::REPLACE ||
+        nCommand == SvxSearchCmd::REPLACE_ALL );
     if ( rSearchItem.GetBackward() )
     {
         if ( rSearchItem.GetRowDirection() )
@@ -1252,9 +1252,9 @@ bool ScDocument::SearchAndReplace(
         SCCOL nCol;
         SCROW nRow;
         SCTAB nTab;
-        sal_uInt16 nCommand = rSearchItem.GetCommand();
-        if ( nCommand == SVX_SEARCHCMD_FIND_ALL ||
-             nCommand == SVX_SEARCHCMD_REPLACE_ALL )
+        SvxSearchCmd nCommand = rSearchItem.GetCommand();
+        if ( nCommand == SvxSearchCmd::FIND_ALL ||
+             nCommand == SvxSearchCmd::REPLACE_ALL )
         {
             SCTAB nMax = maTabs.size();
             ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();

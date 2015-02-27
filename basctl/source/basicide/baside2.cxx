@@ -1273,17 +1273,17 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
 
     bool const bForward = !rSearchItem.GetBackward();
     sal_uInt16 nFound = 0;
-    if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND ) ||
-         ( rSearchItem.GetCommand() == SVX_SEARCHCMD_FIND_ALL ) )
+    if ( ( rSearchItem.GetCommand() == SvxSearchCmd::FIND ) ||
+         ( rSearchItem.GetCommand() == SvxSearchCmd::FIND_ALL ) )
     {
         nFound = pView->Search( rSearchItem.GetSearchOptions() , bForward ) ? 1 : 0;
     }
-    else if ( ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE ) ||
-              ( rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL ) )
+    else if ( ( rSearchItem.GetCommand() == SvxSearchCmd::REPLACE ) ||
+              ( rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL ) )
     {
         if ( !IsReadOnly() )
         {
-            bool const bAll = rSearchItem.GetCommand() == SVX_SEARCHCMD_REPLACE_ALL;
+            bool const bAll = rSearchItem.GetCommand() == SvxSearchCmd::REPLACE_ALL;
             nFound = pView->Replace( rSearchItem.GetSearchOptions() , bAll , bForward );
         }
     }

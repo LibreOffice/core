@@ -3924,7 +3924,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
             if (pSearchItem)
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
-                pSearchItem->SetCommand( SVX_SEARCHCMD_FIND_ALL );
+                pSearchItem->SetCommand( SvxSearchCmd::FIND_ALL );
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
@@ -3962,7 +3962,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
             if (pSearchItem)
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
-                pSearchItem->SetCommand( SVX_SEARCHCMD_FIND );
+                pSearchItem->SetCommand( SvxSearchCmd::FIND );
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
@@ -4049,7 +4049,7 @@ sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSea
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
                 bool bUndo(rDoc.IsUndoEnabled());
-                pSearchItem->SetCommand( SVX_SEARCHCMD_REPLACE_ALL );
+                pSearchItem->SetCommand( SvxSearchCmd::REPLACE_ALL );
                 //  immer nur innerhalb dieses Objekts
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 

@@ -4306,7 +4306,7 @@ void Test::testSearchCells()
 
     SvxSearchItem aItem(SID_SEARCH_ITEM);
     aItem.SetSearchString(OUString("A"));
-    aItem.SetCommand(SVX_SEARCHCMD_FIND_ALL);
+    aItem.SetCommand(SvxSearchCmd::FIND_ALL);
     ScMarkData aMarkData;
     aMarkData.SelectOneTable(0);
     SCCOL nCol = 0;

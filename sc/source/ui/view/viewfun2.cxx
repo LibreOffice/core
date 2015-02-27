@@ -1504,7 +1504,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     nRow = nOldRow = GetViewData().GetCurY();
     nTab = nOldTab = GetViewData().GetTabNo();
 
-    sal_uInt16 nCommand = pSearchItem->GetCommand();
+    SvxSearchCmd nCommand = pSearchItem->GetCommand();
     bool bAllTables = pSearchItem->IsAllTables();
     std::set<SCTAB> aOldSelectedTables;
     SCTAB nLastTab = rDoc.GetTableCount() - 1;
@@ -1522,8 +1522,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         nEndTab = rMark.GetLastSelected();
     }
 
-    if (   nCommand == SVX_SEARCHCMD_FIND
-        || nCommand == SVX_SEARCHCMD_FIND_ALL)
+    if (   nCommand == SvxSearchCmd::FIND
+        || nCommand == SvxSearchCmd::FIND_ALL)
         bAddUndo = false;
 
     //!     account for bAttrib during Undo !!!
@@ -1534,7 +1534,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     if (bAddUndo)
     {
         pUndoMark.reset(new ScMarkData(rMark));                // Mark is being modified
-        if ( nCommand == SVX_SEARCHCMD_REPLACE_ALL )
+        if ( nCommand == SvxSearchCmd::REPLACE_ALL )
         {
             pUndoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
             pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
@@ -1574,7 +1574,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                                         aUndoStr, pUndoDoc.release(), pSearchItem ) );
             }
 
-            if (nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL)
+            if (nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL)
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 if (pViewFrm)
@@ -1600,8 +1600,8 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
 
             break;                  // break 'while (TRUE)'
         }
-        else if ( bFirst && (nCommand == SVX_SEARCHCMD_FIND ||
-                nCommand == SVX_SEARCHCMD_REPLACE) )
+        else if ( bFirst && (nCommand == SvxSearchCmd::FIND ||
+                nCommand == SvxSearchCmd::REPLACE) )
         {
             bFirst = false;
             GetFrameWin()->LeaveWait();
@@ -1625,7 +1625,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
         else                            // nothing found
         {
-            if ( nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL )
+            if ( nCommand == SvxSearchCmd::FIND_ALL || nCommand == SvxSearchCmd::REPLACE_ALL )
             {
                 pDocSh->PostPaintGridAll();                             // Mark
             }
@@ -1673,10 +1673,10 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
         SetCursor( nCol, nRow, true );
 
-        if (   nCommand == SVX_SEARCHCMD_REPLACE
-            || nCommand == SVX_SEARCHCMD_REPLACE_ALL )
+        if (   nCommand == SvxSearchCmd::REPLACE
+            || nCommand == SvxSearchCmd::REPLACE_ALL )
         {
-            if ( nCommand == SVX_SEARCHCMD_REPLACE )
+            if ( nCommand == SvxSearchCmd::REPLACE )
             {
                 pDocSh->PostPaint( nCol,nRow,nTab, nCol,nRow,nTab, PAINT_GRID );
 
@@ -1685,7 +1685,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 if ( nCol == nOldCol && nRow == nOldRow && nTab == nOldTab )
                 {
                     SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
-                    aSearchItem.SetCommand(SVX_SEARCHCMD_FIND);
+                    aSearchItem.SetCommand(SvxSearchCmd::FIND);
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
 
                     ScRangeList aMatchedRanges;
@@ -1702,7 +1702,7 @@ bool ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 pDocSh->PostPaintGridAll();
             pDocSh->SetDocumentModified();
         }
-        else if ( nCommand == SVX_SEARCHCMD_FIND_ALL )
+        else if ( nCommand == SvxSearchCmd::FIND_ALL )
             pDocSh->PostPaintGridAll();                             // mark
         GetFrameWin()->LeaveWait();
     }
