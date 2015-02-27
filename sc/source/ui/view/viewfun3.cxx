@@ -475,7 +475,7 @@ void ScViewFunc::PasteFromSystem()
             sal_uLong nBiff8 = SotExchange::RegisterFormatName(OUString("Biff8"));
             sal_uLong nBiff5 = SotExchange::RegisterFormatName(OUString("Biff5"));
 
-            sal_uInt16 nDestination = EXCHG_DEST_SCDOC_FREE_AREA;
+            SotExchangeDest nDestination = SotExchangeDest::SCDOC_FREE_AREA;
             sal_uInt16 nSourceOptions = EXCHG_IN_ACTION_COPY;
             sal_uLong nFormat;          // output param for GetExchangeAction
             sal_uInt16 nEventAction;    // output param for GetExchangeAction
