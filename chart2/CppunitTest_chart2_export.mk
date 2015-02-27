@@ -132,6 +132,4 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
 
 $(eval $(call gb_CppunitTest_use_configuration,chart2_export))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,chart2_export))
-
 # vim: set noet sw=4 ts=4:
