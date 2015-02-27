@@ -19,4 +19,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
 	external/libmwaw/ubsan.patch.0 \
 ))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,libmwaw, \
+    external/libmwaw/ubsan-visibility.patch.0 \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:

@@ -18,4 +18,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libvisio,\
        external/libvisio/ubsan.patch \
 ))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,libvisio, \
+    external/libvisio/ubsan-visibility.patch \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:

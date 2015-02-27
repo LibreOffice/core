@@ -89,7 +89,13 @@ ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE
 # If CC or CXX already include -fvisibility=hidden, don't duplicate it
 ifeq (,$(filter -fvisibility=hidden,$(CC)))
-gb_VISIBILITY_FLAGS += -fvisibility=hidden
+gb__visibility_hidden := -fvisibility=hidden
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+gb__visibility_hidden := -fvisibility-ms-compat
+endif
+endif
+gb_VISIBILITY_FLAGS += $(gb__visibility_hidden)
 endif
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
 gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden

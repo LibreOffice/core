@@ -18,4 +18,12 @@ $(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
 	external/libodfgen/rtti.patch \
 ))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,libodfgen, \
+    external/libodfgen/ubsan-visibility.patch \
+))
+endif
+endif
+
 # vim: set noet sw=4 ts=4:
