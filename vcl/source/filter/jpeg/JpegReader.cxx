@@ -207,7 +207,7 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
     if (pParam->nWidth > SAL_MAX_INT32 / 8 || pParam->nHeight > SAL_MAX_INT32 / 8)
         return NULL; // avoid overflows later
 
-    if (pParam->nWidth <= 0 || pParam->nHeight <=0)
+    if (pParam->nWidth == 0 || pParam->nHeight == 0)
         return NULL;
 
     Size        aSize( pParam->nWidth, pParam->nHeight );
