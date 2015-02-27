@@ -92,9 +92,10 @@ ifeq (,$(filter -fvisibility=hidden,$(CC)))
 gb_VISIBILITY_FLAGS += -fvisibility=hidden
 endif
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
-gb_CXXFLAGS_COMMON += -fvisibility-inlines-hidden
+gb_VISIBILITY_FLAGS_CXX := -fvisibility-inlines-hidden
 endif
 endif
+gb_CXXFLAGS_COMMON += $(gb_VISIBILITY_FLAGS_CXX)
 
 ifeq ($(HAVE_GCC_STACK_PROTECTOR_STRONG),TRUE)
 gb_CFLAGS_COMMON += -fstack-protector-strong

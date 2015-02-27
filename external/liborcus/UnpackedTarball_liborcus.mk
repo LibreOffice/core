@@ -21,9 +21,9 @@ liborcus_patches :=
 # don't use dllimport
 liborcus_patches += liborcus_0.1.0-dllimport.patch
 
-ifneq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
+# Any -fvisibility= etc. settings are passed into liborcus' CXXFLAGS via
+# gb_VISIBILITY_FLAGS[_CXX]:
 liborcus_patches += visibility.patch
-endif
 
 # <https://gitorious.org/orcus/orcus/merge_requests/2#
 # f60d6eecee72349993a392a9a63ddf3383d3b8c8-

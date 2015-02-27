@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,poppler,\
 
 $(call gb_ExternalProject_get_state_target,poppler,build) :
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)") \
+		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_COMPILEROPTFLAGS)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(gb_COMPILEROPTFLAGS)") \
 		MAKE=$(MAKE) ./configure \
 			--with-pic \
 			--enable-static \
