@@ -3192,7 +3192,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
         {
             // recalculate text rectangle
             SvLBoxTab* pTab;
-            SvLBoxString* pItem = static_cast<SvLBoxString*>(pView->GetItem( pEntry, aPos.X(), &pTab ));
+            SvLBoxItem* pItem = pView->GetItem( pEntry, aPos.X(), &pTab );
             if (!pItem || pItem->GetType() != SV_ITEM_ID_LBOXSTRING)
                 return false;
 
@@ -3225,7 +3225,7 @@ bool SvImpLBox::RequestHelp( const HelpEvent& rHEvt )
                 aItemRect.Bottom() = aPt.Y();
 
                 Help::ShowQuickHelp( pView, aItemRect,
-                                     pItem->GetText(), QUICKHELP_LEFT | QUICKHELP_VCENTER );
+                                     static_cast<SvLBoxString*>(pItem)->GetText(), QUICKHELP_LEFT | QUICKHELP_VCENTER );
                 return true;
             }
         }
