@@ -35,7 +35,7 @@ service ConditionalFormat
     /** represents the range for the conditional format
       All ranges have to be in the same sheet.
      */
-    [property] XSheetCellRanges range;
+    [property] XSheetCellRanges Range;
 
     [property] long ID;
 };

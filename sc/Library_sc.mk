@@ -542,6 +542,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/cellvaluebinding \
     sc/source/ui/unoobj/chart2uno \
     sc/source/ui/unoobj/chartuno \
+    sc/source/ui/unoobj/condformatuno \
     sc/source/ui/unoobj/confuno \
     sc/source/ui/unoobj/convuno \
     sc/source/ui/unoobj/cursuno \
