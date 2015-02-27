@@ -31,13 +31,16 @@ namespace connectivity
 {
     namespace kab
     {
-        class KabConnection;
         class KabDriver;
 
-        typedef void*   (SAL_CALL * ConnectionFactoryFunction)( void* _pDriver );
+        extern "C" {
+        typedef css::uno::XInterface * (SAL_CALL * ConnectionFactoryFunction)(
+            css::uno::Reference<css::uno::XComponentContext> const &,
+            css::uno::Reference<css::sdbc::XDriver> const &);
         typedef void    (SAL_CALL * ApplicationInitFunction)( void );
         typedef void    (SAL_CALL * ApplicationShutdownFunction)( void );
         typedef int     (SAL_CALL * KDEVersionCheckFunction)( void );
+        }
 
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
@@ -99,7 +102,8 @@ namespace connectivity
                 @raises ::com::sun::star::uno::RuntimeException
                     if no connection object could be created (which is a severe error, normally impossible)
             */
-            KabConnection*  createConnection( KabDriver* _pDriver ) const;
+            css::uno::Reference<css::sdbc::XConnection> createConnection(
+                KabDriver * driver) const;
 
         private:
             /** loads the implementation module and retrieves the needed symbols
@@ -161,9 +165,6 @@ namespace connectivity
             // XServiceInfo - static versions
             static OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
-
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-            getComponentContext() const { return m_xContext; }
 
             /** returns the driver's implementation name (being pure ASCII) for reference in various places
             */

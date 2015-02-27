@@ -37,6 +37,9 @@ namespace KABC
     class StdAddressBook;
     class AddressBook;
 }
+namespace com { namespace sun { namespace star { namespace sdbc {
+    class XDriver;
+} } } }
 
 namespace connectivity
 {
@@ -47,8 +50,6 @@ namespace connectivity
                                                 ::com::sun::star::sdbc::XWarningsSupplier,
                                                 ::com::sun::star::lang::XServiceInfo
                                             > OMetaConnection_BASE;
-
-        class KabDriver;
 
         typedef OMetaConnection_BASE                KabConnection_BASE; // implements basics and text encoding
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
@@ -69,14 +70,17 @@ namespace connectivity
                                                                     // for this Connection
 
             ::KABC::StdAddressBook*                 m_pAddressBook; // the address book
-            KabDriver*                              m_pDriver;      // pointer to the owning driver object
+            css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>
                                                     m_xCatalog;     // needed for the SQL interpreter
 
         public:
-            virtual void construct( const OUString& url,const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info) throw(::com::sun::star::sdbc::SQLException);
+            void construct();
 
-            KabConnection(KabDriver* _pDriver);
+            KabConnection(
+                css::uno::Reference<css::uno::XComponentContext> const &
+                    componentContext,
+                css::uno::Reference<css::sdbc::XDriver> const & driver);
             virtual ~KabConnection();
 
             void closeAllStatements () throw( ::com::sun::star::sdbc::SQLException);
@@ -120,8 +124,10 @@ namespace connectivity
             // needed for the SQL interpreter
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > SAL_CALL createCatalog();
 
-            // accessors
-            inline KabDriver*           getDriver()         const { return m_pDriver;}
+            css::uno::Reference<css::uno::XComponentContext>
+            getComponentContext() const
+            { return m_xComponentContext; }
+
                    ::KABC::AddressBook* getAddressBook()    const;
         };
     }

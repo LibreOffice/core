@@ -17,12 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include "KDriver.hxx"
 #include "KDEInit.h"
-#include "KConnection.hxx"
 #include <rtl/strbuf.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
@@ -287,15 +290,13 @@ void KabImplModule::impl_throwKdeTooNewException()
 }
 
 
-KabConnection* KabImplModule::createConnection( KabDriver* _pDriver ) const
+css::uno::Reference<css::sdbc::XConnection> KabImplModule::createConnection(
+    KabDriver * driver) const
 {
-    OSL_PRECOND( m_hConnectorModule, "KabImplModule::createConnection: not initialized!" );
-
-    void* pUntypedConnection = (*m_pConnectionFactoryFunc)( _pDriver );
-    if ( !pUntypedConnection )
-        throw RuntimeException();
-
-    return static_cast< KabConnection* >( pUntypedConnection );
+    assert(m_pConnectionFactoryFunc != nullptr);
+    return css::uno::Reference<css::sdbc::XConnection>(
+        (*m_pConnectionFactoryFunc)(m_xContext, driver),
+        css::uno::UNO_QUERY_THROW);
 }
 
 
@@ -382,25 +383,20 @@ Sequence< OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) throw(Runt
     return getSupportedServiceNames_Static();
 }
 
-Reference< XConnection > SAL_CALL KabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL KabDriver::connect( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aImplModule.init();
 
     // create a new connection with the given properties and append it to our vector
-    KabConnection* pConnection = m_aImplModule.createConnection( this );
-    SAL_WARN_IF( !pConnection, "connectivity." KAB_SERVICE_NAME, "KabDriver::connect: no connection has been created by the factory!" );
-
-    // by definition, the factory function returned an object which was acquired once
-    Reference< XConnection > xConnection = pConnection;
-    pConnection->release();
-
-    // late constructor call which can throw exception and allows a correct dtor call when so
-    pConnection->construct( url, info );
+    // perhaps we should pass url and info into createConnection:
+    // perhaps we should analyze the URL to know whether the addressbook is local, over LDAP, etc...
+    // perhaps we should get some user and password information from "info" properties
+    Reference< XConnection > xConnection(m_aImplModule.createConnection(this));
 
     // remember it
-    m_xConnections.push_back( WeakReferenceHelper( *pConnection ) );
+    m_xConnections.push_back( WeakReferenceHelper( xConnection ) );
 
     return xConnection;
 }

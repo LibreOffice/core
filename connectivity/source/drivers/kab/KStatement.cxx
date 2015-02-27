@@ -62,7 +62,7 @@ IMPLEMENT_SERVICE_INFO(KabStatement, "com.sun.star.sdbc.drivers.KabStatement", "
 KabCommonStatement::KabCommonStatement(KabConnection* _pConnection )
     : KabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(KabCommonStatement_BASE::rBHelper),
-    m_aParser(_pConnection->getDriver()->getComponentContext()),
+    m_aParser(_pConnection->getComponentContext()),
     m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ),
     m_pParseTree(NULL),
     m_pConnection(_pConnection),

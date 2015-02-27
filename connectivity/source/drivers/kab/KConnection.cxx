@@ -22,7 +22,6 @@
 #include "KDatabaseMetaData.hxx"
 #include "KStatement.hxx"
 #include "KPreparedStatement.hxx"
-#include "KDriver.hxx"
 #include "KCatalog.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/TransactionIsolation.hpp>
@@ -37,23 +36,20 @@ using namespace com::sun::star::sdbcx;
 
 IMPLEMENT_SERVICE_INFO(KabConnection, "com.sun.star.sdbc.drivers.KabConnection", "com.sun.star.sdbc.Connection")
 
-KabConnection::KabConnection(KabDriver* _pDriver)
+KabConnection::KabConnection(
+    css::uno::Reference<css::uno::XComponentContext> const & componentContext,
+    css::uno::Reference<css::sdbc::XDriver> const & driver)
          : OMetaConnection_BASE(m_aMutex),
-         OSubComponent<KabConnection, KabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
+         OSubComponent<KabConnection, KabConnection_BASE>(driver, this),
          m_xMetaData(NULL),
          m_pAddressBook(NULL),
-         m_pDriver(_pDriver)
-{
-    m_pDriver->acquire();
-}
+         m_xComponentContext(componentContext)
+{}
 
 KabConnection::~KabConnection()
 {
     if (!isClosed())
         close();
-
-    m_pDriver->release();
-    m_pDriver = NULL;
 }
 
 void SAL_CALL KabConnection::release() throw()
@@ -61,15 +57,15 @@ void SAL_CALL KabConnection::release() throw()
     relase_ChildImpl();
 }
 
-void KabConnection::construct(const OUString&, const Sequence< PropertyValue >&) throw(SQLException)
+//TODO: is doing this after the ctor, and the manual ref counting really
+// necessary?
+void KabConnection::construct()
 {
     osl_atomic_increment( &m_refCount );
 
     // create a KDE address book object
     m_pAddressBook = KABC::StdAddressBook::self();
     KABC::StdAddressBook::setAutomaticSave(false);
-// perhaps we should analyze the URL to know whether the addressbook is local, over LDAP, etc...
-// perhaps we should get some user and password information from "info" properties
 
     osl_atomic_decrement( &m_refCount );
 }
@@ -309,12 +305,15 @@ Reference< XTablesSupplier > SAL_CALL KabConnection::createCatalog()
     return m_pAddressBook;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL createKabConnection( void* _pDriver )
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
+createKabConnection(
+    css::uno::Reference<css::uno::XComponentContext> const & componentContext,
+    css::uno::Reference<css::sdbc::XDriver> const & driver)
 {
-    KabConnection* pConnection = new KabConnection( static_cast< KabDriver* >( _pDriver ) );
-    // by definition, the pointer crossing library boundaries as void ptr is acquired once
-    pConnection->acquire();
-    return pConnection;
+    rtl::Reference<KabConnection> con(
+        new KabConnection(componentContext, driver));
+    con->construct();
+    return cppu::acquire(con.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
