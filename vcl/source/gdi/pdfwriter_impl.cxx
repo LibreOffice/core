@@ -6944,7 +6944,7 @@ bool PDFWriterImpl::finalizeSignature()
         }
 
         HASH_Begin(ts_hc.get());
-        HASH_Update(ts_hc.get(), reinterpret_cast<const unsigned char*>(ts_cms_output.data), ts_cms_output.len);
+        HASH_Update(ts_hc.get(), ts_cms_signer->encDigest.data, ts_cms_signer->encDigest.len);
         SECItem ts_digest;
         unsigned char ts_hash[SHA1_LENGTH];
         ts_digest.type = siBuffer;
@@ -6966,7 +6966,9 @@ bool PDFWriterImpl::finalizeSignature()
         src.version.data = &cOne;
         src.version.len = sizeof(cOne);
 
-        src.messageImprint.hashAlgorithm = ts_cms_signer->digestAlg;
+        src.messageImprint.hashAlgorithm.algorithm.data = NULL;
+        src.messageImprint.hashAlgorithm.parameters.data = NULL;
+        SECOID_SetAlgorithmID(NULL, &src.messageImprint.hashAlgorithm, SEC_OID_SHA1, NULL);
         src.messageImprint.hashedMessage = ts_digest;
 
         src.reqPolicy.type = siBuffer;
