@@ -31,6 +31,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <tools/solar.h>
 #include "resource/kab_res.hrc"
 #include "resource/sharedresources.hxx"
 
@@ -130,7 +131,7 @@ bool KabImplModule::impl_loadModule()
     OSL_ENSURE( !m_hConnectorModule && !m_pConnectionFactoryFunc && !m_pApplicationInitFunc && !m_pApplicationShutdownFunc && !m_pKDEVersionCheckFunc,
         "KabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
-    const OUString sModuleName( SAL_MODULENAME( KAB_SERVICE_NAME "drv1"  ));
+    const OUString sModuleName( SVLIBRARY( KAB_SERVICE_NAME "drv1"  ));
     m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
     OSL_ENSURE( m_hConnectorModule, "KabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
