@@ -1320,9 +1320,9 @@ void SbiRuntime::DllCall
     PushVar( pRes );
 }
 
-sal_uInt16 SbiRuntime::GetImageFlag( sal_uInt16 n ) const
+bool SbiRuntime::IsImageFlag( SbiImageFlags n ) const
 {
-    return pImg->GetFlag( n );
+    return pImg->IsFlag( n );
 }
 
 sal_uInt16 SbiRuntime::GetBase()
@@ -1579,7 +1579,7 @@ void SbiRuntime::StepLIKE()
     bool bCompatibility = ( GetSbData()->pInst && GetSbData()->pInst->IsCompatibility() );
     if( bCompatibility )
     {
-        bTextMode = GetImageFlag( SBIMG_COMPARETEXT );
+        bTextMode = IsImageFlag( SbiImageFlags::COMPARETEXT );
     }
     if( bTextMode )
     {
@@ -3501,7 +3501,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
                 }
 
                 // else, if there are parameters, use different error code
-                if( !bLocal || pImg->GetFlag( SBIMG_EXPLICIT ) )
+                if( !bLocal || pImg->IsFlag( SbiImageFlags::EXPLICIT ) )
                 {
                     // #39108 if explicit and as ELEM always a fatal error
                     bFatalError = true;
@@ -4594,7 +4594,7 @@ void SbiRuntime::StepPUBLIC_P( sal_uInt32 nOp1, sal_uInt32 nOp2 )
     // between invocations ( for VBASupport & document basic only )
     if( pMod->pImage->bFirstInit )
     {
-        bool bUsedForClassModule = pImg->GetFlag( SBIMG_CLASSMODULE );
+        bool bUsedForClassModule = pImg->IsFlag( SbiImageFlags::CLASSMODULE );
         StepPUBLIC_Impl( nOp1, nOp2, bUsedForClassModule );
     }
 }
@@ -4603,7 +4603,7 @@ void SbiRuntime::StepPUBLIC_P( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 
 void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    if( pImg->GetFlag( SBIMG_CLASSMODULE ) )
+    if( pImg->IsFlag( SbiImageFlags::CLASSMODULE ) )
     {
         StepPUBLIC_Impl( nOp1, nOp2, true );
     }

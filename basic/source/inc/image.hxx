@@ -23,9 +23,23 @@
 #include "sbintern.hxx"
 #include <rtl/ustring.hxx>
 #include <filefmt.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 // This class reads in the image that's been produced by the compiler
 // and manages the access to the single elements.
+
+enum class SbiImageFlags
+{
+    NONE          = 0,
+    EXPLICIT      = 0x0001,  // OPTION EXPLICIT is active
+    COMPARETEXT   = 0x0002,  // OPTION COMPARE TEXT is active
+    INITCODE      = 0x0004,  // Init-Code does exist
+    CLASSMODULE   = 0x0008,  // OPTION ClassModule is active
+};
+namespace o3tl
+{
+    template<> struct typed_flags<SbiImageFlags> : is_typed_flags<SbiImageFlags, 0xf> {};
+}
 
 class SbiImage {
     friend class SbiCodeGen;            // compiler classes, that the private-
@@ -37,7 +51,7 @@ class SbiImage {
     char*          pCode;           // Code-Image
     char*          pLegacyPCode;        // Code-Image
     bool           bError;
-    sal_uInt16     nFlags;
+    SbiImageFlags  nFlags;
     short          nStrings;
     sal_uInt32     nStringSize;
     sal_uInt32     nCodeSize;
@@ -79,18 +93,13 @@ public:
 
     SbxArrayRef GetEnums()          { return rEnums; }
 
-    void        SetFlag( sal_uInt16 n ) { nFlags |= n;      }
-    sal_uInt16  GetFlag( sal_uInt16 n ) const { return nFlags & n; }
+    void        SetFlag( SbiImageFlags n ) { nFlags |= n;      }
+    bool        IsFlag( SbiImageFlags n ) const { return bool(nFlags & n); }
     sal_uInt16  CalcLegacyOffset( sal_Int32 nOffset );
     sal_uInt32  CalcNewOffset( sal_Int16 nOffset );
     void        ReleaseLegacyBuffer();
     bool        ExceedsLegacyLimits();
 };
-
-#define SBIMG_EXPLICIT      0x0001  // OPTION EXPLICIT is active
-#define SBIMG_COMPARETEXT   0x0002  // OPTION COMPARE TEXT is active
-#define SBIMG_INITCODE      0x0004  // Init-Code does exist
-#define SBIMG_CLASSMODULE   0x0008  // OPTION ClassModule is active
 
 #endif
 

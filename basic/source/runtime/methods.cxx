@@ -925,7 +925,7 @@ RTLFUNC(InStr)
         if( bCompatibility )
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
+            bTextMode = pRT ? pRT->IsImageFlag( SbiImageFlags::COMPARETEXT ) : sal_False;
         }
         else
         {
@@ -1000,7 +1000,7 @@ RTLFUNC(InStrRev)
         if( bCompatibility )
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
+            bTextMode = pRT ? pRT->IsImageFlag( SbiImageFlags::COMPARETEXT ) : sal_False;
         }
         else
         {
@@ -1381,7 +1381,7 @@ RTLFUNC(Replace)
         if( bCompatibility )
         {
             SbiRuntime* pRT = pInst->pRun;
-            bTextMode = pRT ? pRT->GetImageFlag( SBIMG_COMPARETEXT ) : sal_False;
+            bTextMode = pRT ? pRT->IsImageFlag( SbiImageFlags::COMPARETEXT ) : sal_False;
         }
         else
         {
@@ -1642,7 +1642,7 @@ RTLFUNC(StrComp)
     if( bCompatibility )
     {
         SbiRuntime* pRT = pInst->pRun;
-        nTextCompare = pRT && pRT->GetImageFlag( SBIMG_COMPARETEXT );
+        nTextCompare = pRT && pRT->IsImageFlag( SbiImageFlags::COMPARETEXT );
     }
     else
     {

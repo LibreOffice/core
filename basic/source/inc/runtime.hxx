@@ -45,6 +45,7 @@ class  SbiIoSystem;
 class  SbiDdeControl;
 class  SbiDllMgr;
 class  SvNumberFormatter;           // time/date functions
+enum class SbiImageFlags;
 
 enum ForType
 {
@@ -382,7 +383,7 @@ class SbiRuntime
     void implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt32 nOp2 );
 public:
     void          SetVBAEnabled( bool bEnabled );
-    sal_uInt16      GetImageFlag( sal_uInt16 n ) const;
+    bool          IsImageFlag( SbiImageFlags n ) const;
     sal_uInt16      GetBase();
     sal_Int32  nLine,nCol1,nCol2;
     SbiRuntime* pNext;               // Stack-Chain

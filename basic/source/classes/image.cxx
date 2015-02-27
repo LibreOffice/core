@@ -33,7 +33,7 @@ SbiImage::SbiImage()
     pStrings   = NULL;
     pCode      = NULL;
     pLegacyPCode = NULL;
-    nFlags     = 0;
+    nFlags     = SbiImageFlags::NONE;
     nStrings   = 0;
     nStringSize= 0;
     nCodeSize  = 0;
@@ -61,7 +61,7 @@ void SbiImage::Clear()
     pStringOff = NULL;
     pStrings   = NULL;
     pCode      = NULL;
-    nFlags     = 0;
+    nFlags     = SbiImageFlags::NONE;
     nStrings   = 0;
     nStringSize= 0;
     nLegacyCodeSize  = 0;
@@ -123,8 +123,10 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     bool bBadVer = false;
     if( nSign == B_MODULE )
     {
+        sal_uInt16 nTmpFlags;
         r.ReadUInt32( nVersion ).ReadUInt32( nCharSet ).ReadUInt32( lDimBase )
-         .ReadUInt16( nFlags ).ReadUInt16( nReserved1 ).ReadUInt32( nReserved2 ).ReadUInt32( nReserved3 );
+         .ReadUInt16( nTmpFlags ).ReadUInt16( nReserved1 ).ReadUInt32( nReserved2 ).ReadUInt32( nReserved3 );
+        nFlags = static_cast<SbiImageFlags>(nTmpFlags);
         eCharSet = nCharSet;
         eCharSet = GetSOLoadTextEncoding( eCharSet );
         bBadVer  = ( nVersion > B_CURVERSION );
@@ -287,7 +289,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     }
     r .WriteInt32( eCharSet )
       .WriteInt32( nDimBase )
-      .WriteInt16( nFlags )
+      .WriteInt16( static_cast<sal_uInt16>(nFlags) )
       .WriteInt16( 0 )
       .WriteInt32( 0 )
       .WriteInt32( 0 );

@@ -137,14 +137,14 @@ void SbiCodeGen::Save()
     p->nDimBase = pParser->nBase;
     // OPTION take over the EXPLICIT-Flag
     if( pParser->bExplicit )
-        p->SetFlag( SBIMG_EXPLICIT );
+        p->SetFlag( SbiImageFlags::EXPLICIT );
 
     int nIfaceCount = 0;
     if( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
     {
                 OSL_TRACE("COdeGen::save() classmodule processing");
         rMod.bIsProxyModule = true;
-        p->SetFlag( SBIMG_CLASSMODULE );
+        p->SetFlag( SbiImageFlags::CLASSMODULE );
         GetSbData()->pClassFac->AddClassModule( &rMod );
 
         nIfaceCount = pParser->aIfaceVector.size();
@@ -178,7 +178,7 @@ void SbiCodeGen::Save()
     // GlobalCode-Flag
     if( pParser->HasGlobalCode() )
     {
-        p->SetFlag( SBIMG_INITCODE );
+        p->SetFlag( SbiImageFlags::INITCODE );
     }
     // Die Entrypoints:
     for( SbiSymDef* pDef = pParser->aPublics.First(); pDef;

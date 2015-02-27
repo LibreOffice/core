@@ -1280,7 +1280,7 @@ void SbModule::RunInit()
 {
     if( pImage
      && !pImage->bInit
-     && pImage->GetFlag( SBIMG_INITCODE ) )
+     && pImage->IsFlag( SbiImageFlags::INITCODE ) )
     {
         // Set flag, so that RunInit get activ (Testtool)
         GetSbData()->bRunInit = true;
