@@ -265,6 +265,7 @@ public:
 
     void SetDataBarData( ScDataBarFormatData* pData );
     const ScDataBarFormatData* GetDataBarData() const;
+    ScDataBarFormatData* GetDataBarData();
 
     virtual void DataChanged(const ScRange& rRange);
     virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
@@ -307,6 +308,7 @@ public:
 
     void SetIconSetData( ScIconSetFormatData* pData );
     const ScIconSetFormatData* GetIconSetData() const;
+    ScIconSetFormatData* GetIconSetData();
 
     virtual void DataChanged(const ScRange& rRange);
     virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
@@ -325,6 +327,8 @@ public:
     const_iterator begin() const;
     iterator end();
     const_iterator end() const;
+
+    size_t size() const;
 
 private:
 
