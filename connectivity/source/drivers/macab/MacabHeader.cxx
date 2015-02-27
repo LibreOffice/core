@@ -198,11 +198,9 @@ macabfield **MacabHeader::sortRecord(const sal_Int32 _start, const sal_Int32 _le
         sal_Int32 halfLength = floor(_length/2);
         sal_Int32 fp = 0, lp = 0;
         sal_Int32 i;
-        macabfield **firstHalf = new macabfield *[halfLength];
-        macabfield **lastHalf = new macabfield *[_length - halfLength];
+        macabfield **firstHalf = sortRecord(_start, halfLength);
+        macabfield **lastHalf = sortRecord(_start+halfLength, _length-halfLength);
 
-        firstHalf = sortRecord(_start, halfLength);
-        lastHalf = sortRecord(_start+halfLength, _length-halfLength);
         for(i = 0; i < _length; i++)
         {
             if(compareFields(firstHalf[fp],lastHalf[lp]) < 0)
@@ -234,6 +232,8 @@ macabfield **MacabHeader::sortRecord(const sal_Int32 _start, const sal_Int32 _le
         {
             fields = sorted;
         }
+        delete firstHalf;
+        delete lastHalf;
     }
     return sorted;
 }
