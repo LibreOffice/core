@@ -408,6 +408,7 @@ SmXMLImport::SmXMLImport(
     pPresScriptEmptyElemTokenMap(0),
     pPresTableElemTokenMap(0),
     pColorTokenMap(0),
+    pActionAttrTokenMap(0),
     bSuccess(false)
 {
 }
