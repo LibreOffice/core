@@ -1505,6 +1505,7 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
     // SYNCHRONIZED ->
     {
         DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
+        assert (!m_bClosing);
         m_bClosing = true;
     }
     // <- SYNCHRONIZED

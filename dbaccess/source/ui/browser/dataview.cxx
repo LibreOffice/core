@@ -65,10 +65,9 @@ namespace dbaui
                             WinBits nStyle)
         :Window(pParent,nStyle)
         ,m_xContext(_rxContext)
-        ,m_rController( _rController )
+        ,m_xController( &_rController )
         ,m_aSeparator( new FixedLine(this) )
     {
-        m_rController.acquire();
         m_pAccel.reset(::svt::AcceleratorExecute::createAcceleratorHelper());
         m_aSeparator->Show();
     }
@@ -84,7 +83,7 @@ namespace dbaui
 
     void ODataView::dispose()
     {
-        m_rController.release();
+        m_xController.clear();
         m_aSeparator.disposeAndClear();
         m_pAccel.reset();
         vcl::Window::dispose();
@@ -141,7 +140,7 @@ namespace dbaui
             case MouseNotifyEvent::KEYUP:
             case MouseNotifyEvent::MOUSEBUTTONDOWN:
             case MouseNotifyEvent::MOUSEBUTTONUP:
-                bHandled = m_rController.interceptUserInput( _rNEvt );
+                bHandled = m_xController->interceptUserInput( _rNEvt );
                 break;
             default:
                 break;
@@ -155,7 +154,7 @@ namespace dbaui
         if ( nType == StateChangedType::CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_rController.notifyHiContrastChanged();
+            m_xController->notifyHiContrastChanged();
         }
 
         if ( nType == StateChangedType::INITSHOW )
@@ -164,7 +163,7 @@ namespace dbaui
             // model's arguments.
             try
             {
-                Reference< XController > xController( m_rController.getXController(), UNO_SET_THROW );
+                Reference< XController > xController( m_xController->getXController(), UNO_SET_THROW );
                 Reference< XModel > xModel( xController->getModel(), UNO_QUERY );
                 if ( xModel.is() )
                 {
@@ -190,7 +189,7 @@ namespace dbaui
             (rDCEvt.GetFlags() & AllSettingsFlags::STYLE)) )
         {
             // Check if we need to get new images for normal/high contrast mode
-            m_rController.notifyHiContrastChanged();
+            m_xController->notifyHiContrastChanged();
         }
     }
     void ODataView::attachFrame(const Reference< XFrame >& _xFrame)

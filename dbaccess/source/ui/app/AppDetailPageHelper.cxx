@@ -193,7 +193,6 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     ,m_aBorder(new Window(this,WB_BORDER | WB_READONLY))
     ,m_aPreview(new OPreviewWindow(m_aBorder.get()))
     ,m_aDocumentInfo(new ::svtools::ODocumentInfoPreview(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
-    ,m_pTablePreview(NULL)
     ,m_ePreviewMode(_ePreviewMode)
 {
 
@@ -212,7 +211,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
 
     m_aPreview->SetHelpId(HID_APP_VIEW_PREVIEW_1);
 
-    m_pTablePreview = new OTablePreviewWindow(m_aBorder.get(), WB_READONLY | WB_DIALOGCONTROL );
+    m_pTablePreview.set( new OTablePreviewWindow(m_aBorder.get(), WB_READONLY | WB_DIALOGCONTROL ) );
     m_pTablePreview->SetHelpId(HID_APP_VIEW_PREVIEW_2);
 
     m_aDocumentInfo->SetHelpId(HID_APP_VIEW_PREVIEW_3);
@@ -259,6 +258,7 @@ void OAppDetailPageHelper::dispose()
     m_aTBPreview.disposeAndClear();
     m_aPreview.disposeAndClear();
     m_aDocumentInfo.disposeAndClear();
+    m_pTablePreview.disposeAndClear();
     m_aBorder.disposeAndClear();
     m_aMenu.reset();
 

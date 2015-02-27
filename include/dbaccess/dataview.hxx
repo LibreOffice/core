@@ -37,7 +37,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;  // the service factory to work with
 
     protected:
-        IController&        m_rController;  // the controller in where we resides in
+        rtl::Reference<IController> m_xController;  // the controller in where we resides in
         VclPtr<FixedLine>   m_aSeparator;
         ::std::unique_ptr< ::svt::AcceleratorExecute> m_pAccel;
 
@@ -58,7 +58,7 @@ namespace dbaui
         virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        inline IController& getCommandController() const { return m_rController; }
+        inline IController& getCommandController() const { return *m_xController.get(); }
 
         /** will be called when the controls need to be resized.
         */

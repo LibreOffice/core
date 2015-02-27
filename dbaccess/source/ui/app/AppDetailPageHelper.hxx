@@ -84,8 +84,8 @@ namespace dbaui
         VclPtr<Window>            m_aBorder;
         VclPtr<OPreviewWindow>    m_aPreview;
         VclPtr<::svtools::ODocumentInfoPreview>
-                                 m_aDocumentInfo;
-        vcl::Window*             m_pTablePreview;
+                                  m_aDocumentInfo;
+        VclPtr<vcl::Window>       m_pTablePreview;
         ::std::unique_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame2 >
