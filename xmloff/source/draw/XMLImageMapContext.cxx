@@ -455,6 +455,8 @@ public:
         const OUString& rLocalName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XIndexContainer> xMap);
+    XMLImageMapRectangleContext( SvXMLImport& rImport, sal_Int32 Element,
+        css::uno::Reference< css::container::XIndexContainer > xMap );
 
     virtual ~XMLImageMapRectangleContext();
 
@@ -483,6 +485,18 @@ XMLImageMapRectangleContext::XMLImageMapRectangleContext(
         bYOK(false),
         bWidthOK(false),
         bHeightOK(false)
+{
+}
+
+XMLImageMapRectangleContext::XMLImageMapRectangleContext(
+    SvXMLImport& rImport, sal_Int32 Element,
+    Reference< XIndexContainer > xMap )
+:   XMLImageMapObjectContext( rImport, Element, xMap,
+        "com.sun.star.image.ImageMapRectangleObject" ),
+    bXOK(false),
+    bYOK(false),
+    bWidthOK(false),
+    bHeightOK(false)
 {
 }
 
