@@ -27,6 +27,7 @@
 
 #include "salgdi.hxx"
 #include "sallayout.hxx"
+#include "devicetextrender.hxx"
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
@@ -48,14 +49,13 @@ class SvpSalGraphics : public SalGraphics
 
     basebmp::DrawMode                    m_aDrawMode;
 
-    // These fields are used only when we use FreeType to draw into a
-    // headless backend, i.e. not on iOS.
-    basebmp::Color                       m_aTextColor;
-    ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
-    basebmp::Format                      m_eTextFmt;
-
 protected:
     basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
+
+public:
+    void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
+    void BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
+                        const basegfx::B2IPoint &rDstPoint);
 
 private:
     bool                                 m_bClipSetup;
@@ -68,11 +68,9 @@ private:
     bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
     void ensureClip();
 
-public:
-    void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
-
 protected:
-    vcl::Region                               m_aClipRegion;
+    vcl::Region                           m_aClipRegion;
+    std::unique_ptr<DeviceTextRenderImpl> m_xTextRenderImpl;
 
 protected:
     virtual bool blendBitmap( const SalTwoRect&, const SalBitmap& rBitmap ) SAL_OVERRIDE;

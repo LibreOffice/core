@@ -19,6 +19,7 @@
 
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
+#include "headless/svptextrender.hxx"
 #include "saldatabasic.hxx"
 
 #include <vcl/sysdata.hxx>
@@ -101,12 +102,9 @@ SvpSalGraphics::SvpSalGraphics() :
     m_bUseFillColor( false ),
     m_aFillColor( COL_WHITE ),
     m_aDrawMode( basebmp::DrawMode_PAINT ),
-    m_aTextColor( COL_BLACK ),
-    m_eTextFmt( basebmp::FORMAT_EIGHT_BIT_GREY ),
     m_bClipSetup( false )
 {
-    for( int i = 0; i < MAX_FALLBACK; ++i )
-        m_pServerFont[i] = NULL;
+    m_xTextRenderImpl.reset(new SvpTextRender(*this));
 }
 
 SvpSalGraphics::~SvpSalGraphics()
@@ -117,26 +115,7 @@ void SvpSalGraphics::setDevice( basebmp::BitmapDeviceSharedPtr& rDevice )
 {
     m_aOrigDevice = rDevice;
     ResetClipRegion();
-
-    // determine matching bitmap format for masks
-    basebmp::Format nDeviceFmt = m_aDevice ? m_aDevice->getScanlineFormat() : basebmp::FORMAT_EIGHT_BIT_GREY;
-    switch( nDeviceFmt )
-    {
-        case basebmp::FORMAT_EIGHT_BIT_GREY:
-        case basebmp::FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
-        case basebmp::FORMAT_SIXTEEN_BIT_MSB_TC_MASK:
-        case basebmp::FORMAT_TWENTYFOUR_BIT_TC_MASK:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRX:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
-        case basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
-            m_eTextFmt = basebmp::FORMAT_EIGHT_BIT_GREY;
-            break;
-        default:
-            m_eTextFmt = basebmp::FORMAT_ONE_BIT_LSB_GREY;
-            break;
-    }
+    m_xTextRenderImpl->setDevice(rDevice);
 }
 
 #endif

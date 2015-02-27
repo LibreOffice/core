@@ -558,6 +558,7 @@ vcl_headless_code= \
 vcl_headless_freetype_code=\
     vcl/headless/svpprn \
     vcl/headless/svptext \
+    vcl/headless/svptextrender \
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_exception_objects,vcl,\

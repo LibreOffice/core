@@ -25,6 +25,7 @@ $(eval $(call gb_StaticLibrary_add_exception_objects,headless,\
 	vcl/headless/svpframe \
 	vcl/headless/svpprn \
 	vcl/headless/svptext \
+	vcl/headless/svptextrender \
 	vcl/headless/svpvd \
 ))
 
