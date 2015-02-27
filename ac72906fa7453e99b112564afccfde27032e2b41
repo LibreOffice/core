@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_b9ec9b90",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1709,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-02-27T23:17:14Z",
+      "side": 1,
+      "message": "If svMissing is on the stack it needs to be popped, else the next GetDouble() will pop that and return the default value for svMissing.\n\nBtw, there\u0027s the IsMissing() member function that can be used to check for a single svMissing.",
+      "revId": "ac72906fa7453e99b112564afccfde27032e2b41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
