@@ -232,7 +232,7 @@ const SvxSearchItem& ScGlobal::GetSearchItem()
     if (!pSearchItem)
     {
         pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-        pSearchItem->SetAppFlag( SVX_SEARCHAPP_CALC );
+        pSearchItem->SetAppFlag( SvxSearchApp::CALC );
     }
     return *pSearchItem;
 }
@@ -244,7 +244,7 @@ void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
     pSearchItem = static_cast<SvxSearchItem*>(rNew.Clone());
 
     pSearchItem->SetWhich( SID_SEARCH_ITEM );
-    pSearchItem->SetAppFlag( SVX_SEARCHAPP_CALC );
+    pSearchItem->SetAppFlag( SvxSearchApp::CALC );
 }
 
 void ScGlobal::ClearAutoFormat()

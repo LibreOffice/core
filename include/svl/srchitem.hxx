@@ -45,10 +45,14 @@ enum class SvxSearchCmd
 #define     SVX_SEARCHIN_FORMULA        ((sal_uInt16)0)
 #define     SVX_SEARCHIN_VALUE          ((sal_uInt16)1)
 #define     SVX_SEARCHIN_NOTE           ((sal_uInt16)2)
-#define     SVX_SEARCHAPP_WRITER        ((sal_uInt16)0)
-#define     SVX_SEARCHAPP_CALC          ((sal_uInt16)1)
-#define     SVX_SEARCHAPP_DRAW          ((sal_uInt16)2)
-#define     SVX_SEARCHAPP_BASE          ((sal_uInt16)3)
+
+enum class SvxSearchApp
+{
+    WRITER        = 0,
+    CALC          = 1,
+    DRAW          = 2,
+    BASE          = 3,
+};
 
 // class SvxSearchItem ---------------------------------------------------
 
@@ -64,7 +68,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
 
     // Calc-specific
     sal_uInt16      nCellType;          // Search in Formulas/Values/Notes
-    sal_uInt16      nAppFlag;           // application which the dialog is for
+    SvxSearchApp    nAppFlag;           // application which the dialog is for
     bool            bRowDirection;      // search direction: row-wise/column-wise
     bool            bAllTables;         // search in all sheets
     bool            bSearchFiltered;      // search filtered cells.
@@ -146,8 +150,8 @@ public:
             bool            GetNotes() const { return bNotes; }
             void            SetNotes(bool bNew) { bNotes = bNew; }
 
-            sal_uInt16      GetAppFlag() const { return nAppFlag; }
-            void            SetAppFlag(sal_uInt16 nNewAppFlag) { nAppFlag = nNewAppFlag; }
+            SvxSearchApp    GetAppFlag() const { return nAppFlag; }
+            void            SetAppFlag(SvxSearchApp nNewAppFlag) { nAppFlag = nNewAppFlag; }
 
     inline  bool            IsLevenshtein() const;
             void            SetLevenshtein( bool bVal );

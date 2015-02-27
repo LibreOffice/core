@@ -114,7 +114,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     eFamily         ( SFX_STYLE_FAMILY_PARA ),
     nCommand        ( SvxSearchCmd::FIND ),
     nCellType       ( SVX_SEARCHIN_FORMULA ),
-    nAppFlag        ( SVX_SEARCHAPP_WRITER ),
+    nAppFlag        ( SvxSearchApp::WRITER ),
     bRowDirection   ( true ),
     bAllTables      ( false ),
     bSearchFiltered ( false ),
@@ -377,7 +377,7 @@ bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMembe
             aSeq[3].Name = SRCH_PARA_CELLTYPE;
             aSeq[3].Value <<= nCellType;
             aSeq[4].Name = SRCH_PARA_APPFLAG;
-            aSeq[4].Value <<= nAppFlag;
+            aSeq[4].Value <<= static_cast<sal_uInt16>(nAppFlag);
             aSeq[5].Name = SRCH_PARA_ROWDIR;
             aSeq[5].Value <<= bRowDirection;
             aSeq[6].Name = SRCH_PARA_ALLTABLES;
@@ -497,8 +497,12 @@ bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_APPFLAG )
                     {
-                        if ( aSeq[i].Value >>= nAppFlag )
+                        sal_uInt16 nTmp;
+                        if ( aSeq[i].Value >>= nTmp )
+                        {
+                            nAppFlag = static_cast<SvxSearchApp>(nTmp);
                             ++nConvertedCount;
+                        }
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_ROWDIR )
                     {

@@ -83,7 +83,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
 {
     SetName( OUString( "StarDraw" ) );  // Do not translate!
     pSearchItem = new SvxSearchItem(SID_SEARCH_ITEM);
-    pSearchItem->SetAppFlag(SVX_SEARCHAPP_DRAW);
+    pSearchItem->SetAppFlag(SvxSearchApp::DRAW);
     StartListening( *SfxGetpApp() );
     SvxErrorHandler::ensure();
     mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,

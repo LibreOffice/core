@@ -725,7 +725,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     ToggleSaveToModule aNoModuleSave(*this, false);
     SvtSearchOptions aOpt;
 
-    bWriter = ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_WRITER );
+    bWriter = ( pSearchItem->GetAppFlag() == SvxSearchApp::WRITER );
 
     if ( ( nModifyFlag & MODIFY_WORD ) == 0 )
          m_pWordBtn->Check( pSearchItem->GetWordOnly() );
@@ -755,7 +755,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     ShowOptionalControls_Impl();
 
     bool bDraw = false;
-    if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
+    if ( pSearchItem->GetAppFlag() == SvxSearchApp::CALC )
     {
         m_pCalcGrid->Show();
         Link aLink = LINK( this, SvxSearchDialog, FlagHdl_Impl );
@@ -802,7 +802,7 @@ void SvxSearchDialog::Init_Impl( bool bSearchPattern )
     {
         m_pWordBtn->SetText( aCalcStr.getToken( 1, '#' ) );
 
-        if ( pSearchItem->GetAppFlag() == SVX_SEARCHAPP_DRAW )
+        if ( pSearchItem->GetAppFlag() == SvxSearchApp::DRAW )
         {
             m_pSearchAllBtn->Hide();
 
@@ -1351,7 +1351,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
         bSet = false;
 
     // Calc allows searching for empty cells.
-    bool bAllowEmptySearch = (pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC);
+    bool bAllowEmptySearch = (pSearchItem->GetAppFlag() == SvxSearchApp::CALC);
 
     if ( pEd == m_pSearchLB || pEd == m_pReplaceLB )
     {
