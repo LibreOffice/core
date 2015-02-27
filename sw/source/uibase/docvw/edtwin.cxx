@@ -6263,10 +6263,10 @@ void SwEditWin::SetCursorLogicPosition(const Point& rPosition, bool bPoint, bool
     // If the mark is to be updated, then exchange the point and mark before
     // and after, as we can't easily set the mark.
     if (!bPoint)
-        rShell.GetCrsr()->Exchange();
+        rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
     rShell.SetCrsr(rPosition);
     if (!bPoint)
-        rShell.GetCrsr()->Exchange();
+        rShell.getShellCrsr(/*bBlock=*/false)->Exchange();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
