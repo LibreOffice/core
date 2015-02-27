@@ -94,9 +94,9 @@ void OutlinerEditEng::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int3
     if( pOwner && pOwner->IsUndoEnabled() && !const_cast<EditEngine&>(pOwner->GetEditEngine()).IsInUndo() )
     {
         Paragraph* pPara = pOwner->GetParagraph( nRightParagraph );
-        if( pPara && pOwner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+        if( pPara && pOwner->HasParaFlag( pPara, ParaFlag::ISPAGE ) )
         {
-            pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nRightParagraph, PARAFLAG_ISPAGE, 0 ) );
+            pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nRightParagraph, ParaFlag::ISPAGE, ParaFlag::NONE ) );
         }
     }
 }

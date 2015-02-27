@@ -79,6 +79,7 @@ namespace svl
 #include <editeng/svxfont.hxx>
 #include <editeng/eedata.hxx>
 #include <editeng/paragraphdata.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 class SvxFieldData;
 
@@ -95,9 +96,17 @@ typedef std::vector<SpellPortion> SpellPortions;
 namespace basegfx { class B2DPolyPolygon; }
 
 // internal use only!
-#define PARAFLAG_HOLDDEPTH          0x4000
-#define PARAFLAG_SETBULLETTEXT      0x8000
-#define PARAFLAG_ISPAGE             0x0100
+enum class ParaFlag
+{
+    NONE               = 0x0000,
+    HOLDDEPTH          = 0x4000,
+    SETBULLETTEXT      = 0x8000,
+    ISPAGE             = 0x0100,
+};
+namespace o3tl
+{
+    template<> struct typed_flags<ParaFlag> : is_typed_flags<ParaFlag, 0xc100> {};
+}
 
 // Undo-Action-Ids
 #define OLUNDO_DEPTH            EDITUNDO_USER
@@ -122,8 +131,8 @@ private:
 
     Paragraph& operator=(const Paragraph& rPara ) SAL_DELETED_FUNCTION;
 
-    sal_uInt16          nFlags;
-    OUString           aBulText;
+    ParaFlag            nFlags;
+    OUString            aBulText;
     Size                aBulSize;
     bool                bVisible;
 
@@ -146,9 +155,9 @@ private:
     bool                IsParaIsNumberingRestart() const { return mbParaIsNumberingRestart; }
     void                SetParaIsNumberingRestart( bool bParaIsNumberingRestart );
 
-    void                SetFlag( sal_uInt16 nFlag ) { nFlags |= nFlag; }
-    void                RemoveFlag( sal_uInt16 nFlag ) { nFlags &= ~nFlag; }
-    bool                HasFlag( sal_uInt16 nFlag ) const { return (nFlags & nFlag) != 0; }
+    void                SetFlag( ParaFlag nFlag ) { nFlags |= nFlag; }
+    void                RemoveFlag( ParaFlag nFlag ) { nFlags &= ~nFlag; }
+    bool                HasFlag( ParaFlag nFlag ) const { return bool(nFlags & nFlag); }
 };
 
 struct ParaRange
@@ -591,7 +600,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     Link                maEndPasteOrDropHdl;
 
     sal_Int32           nDepthChangedHdlPrevDepth;
-    sal_uInt16          mnDepthChangeHdlPrevFlags;
+    ParaFlag            mnDepthChangeHdlPrevFlags;
     sal_Int16           nMaxDepth;
     const sal_Int16     nMinDepth;
     sal_Int32           nFirstPage;
@@ -762,7 +771,7 @@ public:
     void            SetDepthChangedHdl(const Link& rLink){aDepthChangedHdl=rLink;}
     Link            GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return static_cast<sal_Int16>(nDepthChangedHdlPrevDepth); }
-    sal_uInt16      GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
+    ParaFlag        GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
     long            RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
@@ -874,8 +883,8 @@ public:
     bool            Expand( Paragraph* );
     bool            Collapse( Paragraph* );
 
-    void            SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag );
-    bool            HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const;
+    void            SetParaFlag( Paragraph* pPara,  ParaFlag nFlag );
+    bool            HasParaFlag( const Paragraph* pPara, ParaFlag nFlag ) const;
 
     // Returns an array containing the widths of the Bullet Indentations
     // Last value must be -1. Is deleted by the outliner.

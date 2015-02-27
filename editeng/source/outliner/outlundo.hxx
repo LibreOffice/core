@@ -39,13 +39,13 @@ class OutlinerUndoChangeParaFlags : public OutlinerUndoBase
 {
 private:
     sal_Int32       mnPara;
-    sal_uInt16      mnOldFlags;
-    sal_uInt16      mnNewFlags;
+    ParaFlag        mnOldFlags;
+    ParaFlag        mnNewFlags;
 
-    void ImplChangeFlags( sal_uInt16 nFlags );
+    void ImplChangeFlags( ParaFlag nFlags );
 
 public:
-    OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, sal_uInt16 nOldDepth, sal_uInt16 nNewDepth );
+    OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, ParaFlag nOldFlags, ParaFlag nNewFlags );
 
     virtual void    Undo() SAL_OVERRIDE;
     virtual void    Redo() SAL_OVERRIDE;

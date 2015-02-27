@@ -100,7 +100,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
 
         for( Paragraph* pPara = rOutl.GetParagraph( 0 ); pPara && nPos >= 0; pPara = rOutl.GetParagraph( ++nParaPos ), nPos-- )
         {
-            if( rOutl.HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+            if( rOutl.HasParaFlag( pPara, ParaFlag::ISPAGE ) )
                 nPgNum++;
         }
 

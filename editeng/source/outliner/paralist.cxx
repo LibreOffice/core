@@ -62,12 +62,12 @@ Paragraph::Paragraph( sal_Int16 nDDepth )
     DBG_ASSERT(  ( nDDepth >= -1 ) && ( nDDepth < SVX_MAX_NUM ), "Paragraph-CTOR: nDepth invalid!" );
 
     nDepth = nDDepth;
-    nFlags = 0;
+    nFlags = ParaFlag::NONE;
     bVisible = true;
 }
 
 Paragraph::Paragraph( const ParagraphData& rData )
-: nFlags( 0 )
+: nFlags( ParaFlag::NONE )
 , aBulSize( -1, -1)
 , bVisible( true )
 {

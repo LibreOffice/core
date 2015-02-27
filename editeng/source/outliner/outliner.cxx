@@ -92,7 +92,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
             pHdlParagraph = pPara;
             DepthChangedHdl();
         }
-        pPara->nFlags |= PARAFLAG_HOLDDEPTH;
+        pPara->nFlags |= ParaFlag::HOLDDEPTH;
         SetText( rText, pPara );
     }
     else
@@ -107,7 +107,7 @@ Paragraph* Outliner::Insert(const OUString& rText, sal_Int32 nAbsPos, sal_Int16 
         ImplInitDepth( nAbsPos, nDepth, false );
         pHdlParagraph = pPara;
         ParagraphInsertedHdl();
-        pPara->nFlags |= PARAFLAG_HOLDDEPTH;
+        pPara->nFlags |= ParaFlag::HOLDDEPTH;
         SetText( rText, pPara );
         ImplBlockInsertionCallbacks( false );
         pEditEngine->SetUpdateMode( bUpdate );
@@ -130,7 +130,7 @@ void Outliner::ParagraphInserted( sal_Int32 nPara )
         pParaList->Insert( pPara, nPara );
         if( pEditEngine->IsInUndo() )
         {
-            pPara->nFlags = PARAFLAG_SETBULLETTEXT;
+            pPara->nFlags = ParaFlag::SETBULLETTEXT;
             pPara->bVisible = true;
             const SfxInt16Item& rLevel = static_cast<const SfxInt16Item&>( pEditEngine->GetParaAttrib( nPara, EE_PARA_OUTLLEVEL ) );
             pPara->SetDepth( rLevel.GetValue() );
@@ -464,12 +464,12 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                     aStr = aStr.copy(nTabs);
 
                 // Keep depth?  (see Outliner::Insert)
-                if( !(pPara->nFlags & PARAFLAG_HOLDDEPTH) )
+                if( !(pPara->nFlags & ParaFlag::HOLDDEPTH) )
                 {
                     nCurDepth = nTabs-1;
                     ImplCheckDepth( nCurDepth );
                     pPara->SetDepth( nCurDepth );
-                    pPara->nFlags &= (~PARAFLAG_HOLDDEPTH);
+                    pPara->nFlags &= (~ParaFlag::HOLDDEPTH);
                 }
             }
             if( nPos ) // not with the first paragraph
@@ -700,7 +700,7 @@ void Outliner::SetStyleSheet( sal_Int32 nPara, SfxStyleSheet* pStyle )
         if (pPara)
         {
             pEditEngine->SetStyleSheet( nPara, pStyle );
-            pPara->nFlags |= PARAFLAG_SETBULLETTEXT;
+            pPara->nFlags |= ParaFlag::SETBULLETTEXT;
             ImplCheckNumBulletItem(  nPara );
         }
 }
@@ -1934,7 +1934,7 @@ void Outliner::ImplCalcBulletText( sal_Int32 nPara, bool bRecalcLevel, bool bRec
         if (!pPara->GetText().equals(aBulletText))
             pPara->SetText( aBulletText );
 
-        pPara->nFlags &= (~PARAFLAG_SETBULLETTEXT);
+        pPara->nFlags &= (~ParaFlag::SETBULLETTEXT);
 
         if ( bRecalcLevel )
         {
@@ -1995,7 +1995,7 @@ OUString Outliner::ImplGetBulletText( sal_Int32 nPara )
     if (pPara)
     {
     // Enable optimization again ...
-//  if( pPara->nFlags & PARAFLAG_SETBULLETTEXT )
+//  if( pPara->nFlags & ParaFlag::SETBULLETTEXT )
         ImplCalcBulletText( nPara, false, false );
         aRes = pPara->GetText();
     }
@@ -2068,7 +2068,7 @@ void Outliner::SetEndPasteOrDropHdl( const Link& rLink )
     maEndPasteOrDropHdl = rLink;
 }
 
-void Outliner::SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag )
+void Outliner::SetParaFlag( Paragraph* pPara,  ParaFlag nFlag )
 {
     if( pPara && !pPara->HasFlag( nFlag ) )
     {
@@ -2079,7 +2079,7 @@ void Outliner::SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag )
     }
 }
 
-bool Outliner::HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const
+bool Outliner::HasParaFlag( const Paragraph* pPara, ParaFlag nFlag ) const
 {
     return pPara && pPara->HasFlag( nFlag );
 }

@@ -89,7 +89,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
     Paragraph* pPara = aSelList.empty() ? NULL : *iter;
 
     nDepth = pOutl->GetDepth(pOutl->GetAbsPos( pPara ) );
-    bool bPage = pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE );
+    bool bPage = pOutl->HasParaFlag( pPara, ParaFlag::ISPAGE );
 
     while( iter != aSelList.end() )
     {
@@ -103,7 +103,7 @@ void FuPresentationObjects::DoExecute( SfxRequest& )
             break;
         }
 
-        if( pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) != bPage )
+        if( pOutl->HasParaFlag( pPara, ParaFlag::ISPAGE ) != bPage )
         {
             bUnique = false;
             break;

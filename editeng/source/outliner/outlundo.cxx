@@ -37,7 +37,7 @@ OutlinerUndoBase::OutlinerUndoBase( sal_uInt16 _nId, Outliner* pOutliner )
     mpOutliner = pOutliner;
 }
 
-OutlinerUndoChangeParaFlags::OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, sal_uInt16 nOldFlags, sal_uInt16 nNewFlags )
+OutlinerUndoChangeParaFlags::OutlinerUndoChangeParaFlags( Outliner* pOutliner, sal_Int32 nPara, ParaFlag nOldFlags, ParaFlag nNewFlags )
 : OutlinerUndoBase( OLUNDO_DEPTH, pOutliner )
 {
     mnPara = nPara;
@@ -55,7 +55,7 @@ void OutlinerUndoChangeParaFlags::Redo()
     ImplChangeFlags( mnNewFlags );
 }
 
-void OutlinerUndoChangeParaFlags::ImplChangeFlags( sal_uInt16 nFlags )
+void OutlinerUndoChangeParaFlags::ImplChangeFlags( ParaFlag nFlags )
 {
     Outliner* pOutliner = GetOutliner();
     Paragraph* pPara = pOutliner->GetParagraph( mnPara );

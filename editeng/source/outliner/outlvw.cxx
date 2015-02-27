@@ -128,7 +128,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window* pFrameWin )
                     if( aSel.nEndPos == pOwner->pEditEngine->GetTextLen( aSel.nEndPara ) )
                     {
                         Paragraph* pNext = pOwner->pParaList->GetParagraph( aSel.nEndPara+1 );
-                        if( pNext && pNext->HasFlag(PARAFLAG_ISPAGE) )
+                        if( pNext && pNext->HasFlag(ParaFlag::ISPAGE) )
                         {
                             if( !pOwner->ImpCanDeleteSelectedPages( this, aSel.nEndPara, 1 ) )
                                 return false;
@@ -338,7 +338,7 @@ bool OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         ESelection aSel( pEditView->GetSelection() );
         nPara = aSel.nStartPara;
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-        if( (pPara && pOwner->pParaList->HasChildren(pPara)) && pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( (pPara && pOwner->pParaList->HasChildren(pPara)) && pPara->HasFlag(ParaFlag::ISPAGE) )
         {
             ImpToggleExpand( pPara );
         }
@@ -469,7 +469,7 @@ void OutlinerView::Indent( short nDiff )
 
         if( bOutlinerView && nPara )
         {
-            const bool bPage = pPara->HasFlag(PARAFLAG_ISPAGE);
+            const bool bPage = pPara->HasFlag(ParaFlag::ISPAGE);
             if( (bPage && (nDiff == +1)) || (!bPage && (nDiff == -1) && (nOldDepth <= 0))  )
             {
                             // Notify App
@@ -478,9 +478,9 @@ void OutlinerView::Indent( short nDiff )
                 pOwner->pHdlParagraph = pPara;
 
                 if( bPage )
-                    pPara->RemoveFlag( PARAFLAG_ISPAGE );
+                    pPara->RemoveFlag( ParaFlag::ISPAGE );
                 else
-                    pPara->SetFlag( PARAFLAG_ISPAGE );
+                    pPara->SetFlag( ParaFlag::ISPAGE );
 
                 pOwner->DepthChangedHdl();
                 pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
@@ -806,7 +806,7 @@ sal_Int32 OutlinerView::ImpCalcSelectedPages( bool bIncludeFirstSelected )
     {
         Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
         DBG_ASSERT(pPara, "ImpCalcSelectedPages: invalid Selection? ");
-        if( pPara->HasFlag(PARAFLAG_ISPAGE) )
+        if( pPara->HasFlag(ParaFlag::ISPAGE) )
         {
             nPages++;
             if( nFirstPage == EE_PARA_MAX_COUNT )

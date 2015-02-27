@@ -286,7 +286,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         {
                             // allow move up if position is 2 or greater OR it
                             // is a title object (and thus depth==1)
-                            if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
+                            if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,ParaFlag::ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
                             {
                                 // not at top
                                 bDisableUp = false;
@@ -308,14 +308,14 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                             sal_Int16 nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 
-                            if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
+                            if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, ParaFlag::ISPAGE )) )
                             {
                                 // not minimum depth
                                 bDisableLeft = false;
                             }
 
                             if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
-                                (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
+                                (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, ParaFlag::ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                             {
                                 // not maximum depth and not at top
                                 bDisableRight = false;
@@ -336,7 +336,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                             && pPara
                             && 0 == pOutl->GetAbsPos(pPara)
                             && pOutl->GetParagraphCount() > 1
-                            && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
+                            && !pOutl->HasParaFlag( pOutl->GetParagraph(1), ParaFlag::ISPAGE ) )
                         {
                             // Needs to be disabled
                             bDisableDown = true;
