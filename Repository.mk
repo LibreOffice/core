@@ -843,6 +843,10 @@ $(eval $(call gb_Helper_register_packages_for_install,ogltrans,\
 	slideshow_opengl_shader \
 ))
 
+$(eval $(call gb_Helper_register_packages_for_install,reportbuilder,\
+	reportbuilder-templates \
+))
+
 $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 	filter_docbook \
 	filter_xhtml \
