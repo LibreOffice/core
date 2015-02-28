@@ -53,27 +53,6 @@ public:
     ResourceContainer (void) {}
 };
 
-//----- Service ---------------------------------------------------------------
-
-Reference<XInterface> SAL_CALL Configuration_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    (void)rxContext;
-    return Reference<XInterface>(static_cast<XWeak*>(new Configuration(NULL,false)));
-}
-
-OUString Configuration_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.configuration.Configuration");
-}
-
-Sequence<OUString> SAL_CALL Configuration_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.framework.Configuration");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== Configuration =========================================================
 
 Configuration::Configuration (
@@ -336,5 +315,16 @@ bool AreConfigurationsEquivalent (
 }
 
 } } // end of namespace sd::framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation(
+        ::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::framework::Configuration(NULL, false));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
