@@ -10,20 +10,6 @@
 
 #ifndef AIX
 #ifndef DISABLE_PYUNO
-File gid_File_LibreLogo
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "librelogo.filelist";
-End
-
-File gid_File_LibreLogoProperties
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "librelogo_properties.filelist";
-End
-
 File gid_File_Share_Registry_LibreLogo_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);

@@ -8,6 +8,8 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/python_librelogo"
+
 #ifndef AIX
 #ifndef DISABLE_PYUNO
 Module gid_Module_Optional_Pyuno_LibreLogo
@@ -15,8 +17,7 @@ Module gid_Module_Optional_Pyuno_LibreLogo
     MOD_NAME_DESC ( MODULE_OPTIONAL_PYTHON_LIBRELOGO );
     ParentID = gid_Module_Optional;
     Sortkey = "810";
-    Files = (gid_File_LibreLogo,
-             gid_File_LibreLogoProperties,
+    Files = (auto_python_librelogo_ALL,
              gid_File_Share_Registry_LibreLogo_Xcd);
     Default = YES;
     Styles = ( );

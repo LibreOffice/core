@@ -12,6 +12,7 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/python))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/python,\
 	python \
 	python_scriptprovider \
+	python_librelogo \
 ))
 
 ifeq ($(DISABLE_PYTHON),TRUE)

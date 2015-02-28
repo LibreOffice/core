@@ -876,10 +876,16 @@ $(eval $(call gb_Helper_register_packages_for_install,python, \
 	$(if $(SYSTEM_PYTHON),,$(if $(filter-out WNT,$(OS)),python_shell)) \
 	scripting_ScriptsPython \
 ))
+
 $(eval $(call gb_Helper_register_packages_for_install,python_scriptprovider, \
     scriptproviderforpython \
 ))
-endif
+
+$(eval $(call gb_Helper_register_packages_for_install,python_librelogo, \
+	librelogo \
+	librelogo_properties \
+))
+endif # DISABLE_PYTHON
 
 # External executables
 $(eval $(call gb_ExternalExecutable_register_executables,\
