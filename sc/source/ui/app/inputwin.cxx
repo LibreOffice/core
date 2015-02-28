@@ -1508,7 +1508,10 @@ void ScTextWnd::dispose()
         maAccTextDatas.back()->Dispose();
     }
     delete pEditView;
+    pEditView = NULL;
     delete pEditEngine;
+    pEditEngine = NULL;
+
     ScTextWndBase::dispose();
 }
 
