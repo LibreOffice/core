@@ -41,6 +41,7 @@
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <officecfg/Office/Common.hxx>
+#include <tools/urlobj.hxx>
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
@@ -449,8 +450,8 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
         PROP_PASSWORD(), OUString() );
     css::uno::Reference< css::task::XInteractionHandler > xInteractHandler = getUnpackedValueOrDefault(
         PROP_INTERACTIONHANDLER(), css::uno::Reference< css::task::XInteractionHandler >() );
-    OUString aDocumentName = getUnpackedValueOrDefault(
-        PROP_URL(), OUString() );
+    OUString aDocumentName = INetURLObject( getUnpackedValueOrDefault(
+        PROP_URL(), OUString()) ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
     bool bIsDefaultPassword = false;
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
