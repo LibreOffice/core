@@ -102,6 +102,14 @@ public class LOKitShell {
         LOKitShell.sendEvent(new LOEvent(LOEvent.SIZE_CHANGED));
     }
 
+    public static void sendSwipeRightEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.SWIPE_RIGHT));
+    }
+
+    public static void sendSwipeLeftEvent() {
+        LOKitShell.sendEvent(new LOEvent(LOEvent.SWIPE_LEFT));
+    }
+
     public static void sendChangePartEvent(int part) {
         LOKitShell.sendEvent(new LOEvent(LOEvent.CHANGE_PART, part));
     }

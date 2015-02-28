@@ -21,6 +21,8 @@ public class LOEvent implements Comparable<LOEvent> {
     public static final int TOUCH = 8;
     public static final int KEY_EVENT = 9;
     public static final int CHANGE_HANDLE_POSITION = 10;
+    public static final int SWIPE_RIGHT = 11;
+    public static final int SWIPE_LEFT = 12;
 
     public final int mType;
     public int mPriority = 0;

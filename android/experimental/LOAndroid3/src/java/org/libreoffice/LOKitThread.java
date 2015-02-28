@@ -208,6 +208,12 @@ public class LOKitThread extends Thread {
             case LOEvent.CHANGE_HANDLE_POSITION:
                 changeHandlePosition(event.mHandleType, event.mDocumentCoordinate);
                 break;
+            case LOEvent.SWIPE_LEFT:
+                onSwipeLeft();
+                break;
+            case LOEvent.SWIPE_RIGHT:
+                onSwipeRight();
+                break;
         }
     }
 
@@ -235,6 +241,14 @@ public class LOKitThread extends Thread {
             return;
         }
         mTileProvider.sendKeyEvent(keyEvent);
+    }
+
+    private void onSwipeLeft() {
+        mTileProvider.onSwipeLeft();
+    }
+
+    private void onSwipeRight() {
+        mTileProvider.onSwipeRight();
     }
 
     /**
