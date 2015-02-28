@@ -1406,9 +1406,8 @@ bool ModulWindow::IsPasteAllowed()
     if ( xClipboard.is() )
     {
         // get clipboard content
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+        SolarMutexReleaser aReleaser;
         Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
-        Application::AcquireSolarMutex( nRef );
         if ( xTransf.is() )
         {
             datatransfer::DataFlavor aFlavor;

@@ -1719,7 +1719,7 @@ int Desktop::doShutdown()
 #if HAVE_FEATURE_SCRIPTING
     StarBASIC::DetachAllDocBasicItems();
 #endif
-    Application::AcquireSolarMutex(nAcquireCount);
+    SolarMutexReleaser aReleaser;
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized
     SAL_INFO( "desktop.app", "-> dispose path/language options" );
