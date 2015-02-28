@@ -505,7 +505,7 @@ bool SbiScanner::NextSym()
         }
     }
     // invalid characters:
-    else if( ( *pLine & 0xFF ) >= 0x7F )
+    else if( *pLine >= 0x7F )
     {
         GenError( SbERR_SYNTAX ); pLine++; nCol++;
     }
