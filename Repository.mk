@@ -873,6 +873,9 @@ ifneq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_Helper_register_packages_for_install,python, \
     pyuno_pythonloader_ini \
 ))
+$(eval $(call gb_Helper_register_packages_for_install,python_scriptprovider, \
+    scriptproviderforpython \
+))
 endif
 
 # External executables

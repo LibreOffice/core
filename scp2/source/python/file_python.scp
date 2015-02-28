@@ -20,13 +20,6 @@
 
 #ifndef DISABLE_PYUNO
 
-File gid_File_scriptproviderforpython
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "scriptproviderforpython.filelist";
-    Styles = (FILELIST, PACKED);
-End
-
 File gid_File_pyuno_python_scripts
     TXT_FILE_BODY;
     Dir = FILELIST_DIR;

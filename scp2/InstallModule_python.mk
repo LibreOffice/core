@@ -9,7 +9,10 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/python))
 
-$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/python,python))
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/python,\
+	python \
+	python_scriptprovider \
+))
 
 ifeq ($(DISABLE_PYTHON),TRUE)
 $(eval $(call gb_InstallModule_add_defs,scp2/python,\

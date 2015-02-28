@@ -19,6 +19,7 @@
 #include "macros.inc"
 
 #include "AutoInstall/python"
+#include "AutoInstall/python_scriptprovider"
 
 #ifndef DISABLE_PYUNO
 
@@ -75,7 +76,7 @@ Module gid_Module_Script_Provider_For_Python
     Description = "Script Provider For Python";
     PackageInfo = "packinfo_office.txt";
     ParentID = gid_Module_Root_Brand;
-    Files = ( gid_File_scriptproviderforpython );
+    Files = (auto_python_scriptprovider_ALL);
     Default = YES;
     Styles = (HIDDEN_ROOT);
 End
