@@ -75,7 +75,7 @@ public:
     virtual SalTimer*           CreateSalTimer() SAL_OVERRIDE;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) SAL_OVERRIDE;
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics*,
-                                                     long nDX, long nDY,
+                                                     long &nDX, long &nDY,
                                                      sal_uInt16 nBitCount,
                                                      const SystemGraphicsData* ) SAL_OVERRIDE;
     virtual SalBitmap*          CreateSalBitmap() SAL_OVERRIDE;
