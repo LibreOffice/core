@@ -8,30 +8,15 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/accessories_gallery"
+
 #ifdef WITH_EXTRA_GALLERY
 
 Module gid_Module_Optional_Accessories_Gallery
     PackageInfo = "packinfo_accessories.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_ACCESSORIES_GALLERY);
     ParentID = gid_Module_Optional_Accessories;
-    Files = (
-        gid_File_Extra_Gallery_Accessories,
-        gid_File_Extra_Gallery_Draws_People_Accessories,
-        gid_File_Extra_Gallery_Photos_Plants_Accessories,
-        gid_File_Extra_Gallery_Photos_Celebration_Accessories,
-        gid_File_Extra_Gallery_Photos_Fauna_Accessories,
-        gid_File_Extra_Gallery_Photos_Flowers_Accessories,
-        gid_File_Extra_Gallery_Photos_FoodsandDrinks_Accessories,
-        gid_File_Extra_Gallery_Photos_Humans_Accessories,
-        gid_File_Extra_Gallery_Photos_Landscapes_Accessories,
-        gid_File_Extra_Gallery_Photos_Objects_Accessories,
-        gid_File_Extra_Gallery_Photos_Buildings_Accessories,
-        gid_File_Extra_Gallery_Photos_Cities_Accessories,
-        gid_File_Extra_Gallery_Photos_Space_Accessories,
-        gid_File_Extra_Gallery_Photos_Statues_Accessories,
-        gid_File_Extra_Gallery_Photos_Travel_Accessories,
-        gid_File_Extra_Gallery_Elements_Bullets2_Accessories,
-        gid_File_Extra_Gallery_NONFREE_Accessories );
+    Files = (auto_accessories_gallery_ALL);
     Default = YES;
     Styles = ( );
 End

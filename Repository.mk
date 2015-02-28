@@ -765,6 +765,29 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,extensions_rhino, \
 ))
 endif
 
+ifneq ($(WITH_EXTRA_GALLERY),)
+$(eval $(call gb_Helper_register_packages_for_install,accessories_gallery,\
+	accessories_accessoriesgallery \
+	accessories_accessoriesgallerydrawspeople \
+	accessories_accessoriesgalleryphotosplants \
+	accessories_accessoriesgalleryphotoscelebration \
+	accessories_accessoriesgalleryphotosfauna \
+	accessories_accessoriesgalleryphotosflowers \
+	accessories_accessoriesgalleryphotosfoodsanddrinks \
+	accessories_accessoriesgalleryphotoshumans \
+	accessories_accessoriesgalleryphotoslandscapes \
+	accessories_accessoriesgalleryphotosbuildings \
+	accessories_accessoriesgalleryphotoscities \
+	accessories_accessoriesgalleryphotosobjects \
+	accessories_accessoriesgalleryphotosspace \
+	accessories_accessoriesgalleryphotosstatues \
+	accessories_accessoriesgalleryphotostravel \
+	accessories_accessoriesgalleryelementsbullets2 \
+	accessories_accessoriesgallerynonfree \
+))
+
+endif
+
 ifeq (CT2N,$(filter CT2N,$(BUILD_TYPE)))
 $(eval $(call gb_Helper_register_packages_for_install,extensions_ct2n,\
 	ct2n \

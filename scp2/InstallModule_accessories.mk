@@ -9,6 +9,10 @@
 
 $(eval $(call gb_InstallModule_InstallModule,scp2/accessories))
 
+$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/accessories,\
+	accessories_gallery \
+))
+
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/accessories,\
     scp2/source/accessories/module_accessories \
 ))
@@ -24,10 +28,6 @@ $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/accessories,\
 endif
 
 ifneq ($(WITH_EXTRA_GALLERY),)
-$(eval $(call gb_InstallModule_add_scpfiles,scp2/accessories,\
-    scp2/source/accessories/file_gallery_accessories \
-))
-
 $(eval $(call gb_InstallModule_add_localized_scpfiles,scp2/accessories,\
     scp2/source/accessories/module_gallery_accessories \
 ))
