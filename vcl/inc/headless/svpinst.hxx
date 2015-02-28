@@ -124,7 +124,7 @@ public:
     // nBitCount: 0 == Default(=as window) / 1 == Mono
     // pData allows for using a system dependent graphics or device context
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
-                                                     long nDX, long nDY,
+                                                     long &nDX, long &nDY,
                                                      sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) SAL_OVERRIDE;
 
     // Printer

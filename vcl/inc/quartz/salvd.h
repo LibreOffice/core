@@ -55,7 +55,7 @@ private:
     void Destroy();
 
 public:
-    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
+    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice();
 
     virtual SalGraphics*            AcquireGraphics() SAL_OVERRIDE;
