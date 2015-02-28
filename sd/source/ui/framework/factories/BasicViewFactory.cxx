@@ -52,24 +52,6 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace framework {
 
-Reference<XInterface> SAL_CALL BasicViewFactory_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new BasicViewFactory(rxContext)));
-}
-
-OUString BasicViewFactory_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.BasicViewFactory");
-}
-
-Sequence<OUString> SAL_CALL BasicViewFactory_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.framework.BasicViewFactory");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== ViewDescriptor ========================================================
 
 class BasicViewFactory::ViewDescriptor
@@ -549,5 +531,15 @@ void BasicViewFactory::ActivateCenterView (
 }
 
 } } // end of namespace sd::framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::framework::BasicViewFactory(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

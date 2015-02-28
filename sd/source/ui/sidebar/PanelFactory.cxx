@@ -61,26 +61,6 @@ namespace {
 
 Reference<lang::XEventListener> mxControllerDisposeListener;
 
-// ----- Service functions ----------------------------------------------------
-
-Reference<XInterface> SAL_CALL PanelFactory_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PanelFactory(rxContext)));
-}
-
-::rtl::OUString PanelFactory_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("org.openoffice.comp.Draw.framework.PanelFactory");
-}
-
-Sequence<rtl::OUString> SAL_CALL PanelFactory_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const ::rtl::OUString sServiceName("com.sun.star.drawing.framework.PanelFactory");
-    return Sequence<rtl::OUString>(&sServiceName, 1);
-}
-
 //----- PanelFactory --------------------------------------------------------
 
 PanelFactory::PanelFactory(
@@ -175,5 +155,13 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
 }
 
 } } // end of namespace sd::sidebar
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+org_openoffice_comp_Draw_framework_PanelFactory_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                   ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::sidebar::PanelFactory(context));
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

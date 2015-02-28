@@ -40,27 +40,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
-
-Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    (void)rxContext;
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterCanvas()));
-}
-
-OUString PresenterCanvas_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.PresenterCanvasFactory");
-}
-
-Sequence<OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.rendering.Canvas");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== PresenterCustomSprite =================================================
 
 /** Wrapper around a sprite that is displayed on a PresenterCanvas.
@@ -984,5 +963,15 @@ void PresenterCustomSprite::ThrowIfDisposed (void)
 }
 
 } } // end of namespace ::sd::presenter
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresenterCanvasFactory_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                 ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::presenter::PresenterCanvas());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
