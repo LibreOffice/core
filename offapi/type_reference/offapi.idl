@@ -13729,10 +13729,10 @@ module com {
      ::com::sun::star::task::PasswordRequestMode Mode;
     };
     published exception DocumentMSPasswordRequest: ::com::sun::star::task::PasswordRequest {
-     string Name;
+     string DocumentURL;
     };
     published exception DocumentPasswordRequest: ::com::sun::star::task::PasswordRequest {
-     string Name;
+     string DocumentURL;
     };
     published exception ErrorCodeRequest: ::com::sun::star::uno::Exception {
      long ErrCode;

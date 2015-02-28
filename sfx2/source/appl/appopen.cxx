@@ -242,11 +242,11 @@ sal_uInt32 CheckPasswd_Impl
                             if ( pEncryptionDataItem )
                                 pEncryptionDataItem->GetValue() >>= aEncryptionData;
 
-                            OUString aDocumentName = INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+                            OUString aDocumentURL = INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::NO_DECODE );
 
                             SfxDocPasswordVerifier aVerifier( xStorage );
                             aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                                aVerifier, aEncryptionData, aPassword, xInteractionHandler, aDocumentName, comphelper::DocPasswordRequestType_STANDARD );
+                                aVerifier, aEncryptionData, aPassword, xInteractionHandler, aDocumentURL, comphelper::DocPasswordRequestType_STANDARD );
 
                             pSet->ClearItem( SID_PASSWORD );
                             pSet->ClearItem( SID_ENCRYPTIONDATA );

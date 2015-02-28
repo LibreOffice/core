@@ -197,7 +197,7 @@ OUString SAL_CALL InteractionSupplyPassword::getPassword()
 
 DocumentPasswordRequest::DocumentPasswordRequest(
     task::PasswordRequestMode eMode,
-    const OUString & rDocumentName )
+    const OUString & rDocumentURL )
 {
     // Fill request...
     task::DocumentPasswordRequest aRequest;
@@ -205,7 +205,7 @@ DocumentPasswordRequest::DocumentPasswordRequest(
 //    aRequest.Context        = // XInterface
     aRequest.Classification = task::InteractionClassification_ERROR;
     aRequest.Mode           = eMode;
-    aRequest.Name           = rDocumentName;
+    aRequest.DocumentURL    = rDocumentURL;
 
     setRequest( uno::makeAny( aRequest ) );
 

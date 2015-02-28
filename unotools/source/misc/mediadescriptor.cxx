@@ -456,12 +456,12 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
         PROP_PASSWORD(), OUString() );
     css::uno::Reference< css::task::XInteractionHandler > xInteractHandler = getUnpackedValueOrDefault(
         PROP_INTERACTIONHANDLER(), css::uno::Reference< css::task::XInteractionHandler >() );
-    OUString aDocumentName = getUnpackedValueOrDefault(
+    OUString aDocumentURL = getUnpackedValueOrDefault(
         PROP_URL(), OUString() );
 
     bool bIsDefaultPassword = false;
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-        rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentName, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
+        rVerifier, aMediaEncData, aMediaPassword, xInteractHandler, aDocumentURL, eRequestType, pDefaultPasswords, &bIsDefaultPassword );
 
     erase( PROP_PASSWORD() );
     erase( PROP_ENCRYPTIONDATA() );

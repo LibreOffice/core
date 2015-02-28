@@ -20,13 +20,14 @@
 #include "passworddlg.hxx"
 #include "ids.hrc"
 
+#include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
 
 PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     task::PasswordRequestMode nDlgMode, ResMgr * pResMgr,
-    const OUString& aDocURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
+    const OUString& aDocumentURL, bool bOpenToModify, bool bIsSimplePasswordRequest)
     : ModalDialog(_pParent, "PasswordDialog", "uui/ui/password.ui")
     , nMinLen(1)
     , aPasswdMismatch(ResId(STR_PASSWORD_MISMATCH, *pResMgr))
@@ -71,11 +72,12 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     SetText( aTitle );
 
     sal_uInt16 nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
+
     m_pFTPassword->SetText(ResId(nStrId, *pResourceMgr).toString());
-    m_pFTPassword->SetText( m_pFTPassword->GetText() + aDocURL );
+    m_pFTPassword->SetText(m_pFTPassword->GetText() + INetURLObject(aDocumentURL).GetMainURL(INetURLObject::DECODE_WITH_CHARSET));
     if (bIsSimplePasswordRequest)
     {
-        DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
+        DBG_ASSERT(aDocumentURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead.");
         m_pFTPassword->SetText(ResId(STR_ENTER_SIMPLE_PASSWORD, *pResourceMgr).toString());
     }
 

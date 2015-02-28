@@ -502,7 +502,7 @@ executePasswordDialog(
     vcl::Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
-    const OUString& aDocName,
+    const OUString& aDocumentURL,
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest )
@@ -517,7 +517,7 @@ executePasswordDialog(
             if (bIsSimplePasswordRequest)
             {
                 VclPtr< PasswordDialog > pDialog(
-                    VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocName,
+                    VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocumentURL,
                     bIsPasswordToModify, bIsSimplePasswordRequest ) );
                 pDialog->SetMinLen(0);
 
@@ -541,7 +541,7 @@ executePasswordDialog(
         else // enter password or reenter password
         {
             VclPtr< PasswordDialog > pDialog(
-                VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocName,
+                VclPtr<PasswordDialog>::Create( pParent, nMode, xManager.get(), aDocumentURL,
                 bIsPasswordToModify, bIsSimplePasswordRequest ) );
             pDialog->SetMinLen(0);
 
@@ -563,7 +563,7 @@ handlePasswordRequest_(
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
-    const OUString& aDocumentName,
+    const OUString& aDocumentURL,
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest = false )
@@ -580,7 +580,7 @@ handlePasswordRequest_(
     LoginErrorInfo aInfo;
 
     executePasswordDialog( pParent, aInfo, nMode,
-            aDocumentName, bMSCryptoMode, bIsPasswordToModify, bIsSimplePasswordRequest );
+            aDocumentURL, bMSCryptoMode, bIsPasswordToModify, bIsSimplePasswordRequest );
 
     switch (aInfo.GetResult())
     {
@@ -670,7 +670,7 @@ UUIInteractionHelper::handlePasswordRequest(
     vcl::Window * pParent = getParentProperty();
     task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
-    OUString aDocumentName;
+    OUString aDocumentURL;
     bool bMSCryptoMode          = false;
     bool bIsPasswordToModify    = false;
 
@@ -682,7 +682,7 @@ UUIInteractionHelper::handlePasswordRequest(
     if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest2))
     {
         nMode               = aDocumentPasswordRequest2.Mode;
-        aDocumentName       = aDocumentPasswordRequest2.Name;
+        aDocumentURL        = aDocumentPasswordRequest2.DocumentURL;
         OSL_ENSURE( !bMSCryptoMode, "bMSCryptoMode should be false" );
         bIsPasswordToModify = aDocumentPasswordRequest2.IsRequestPasswordToModify;
 
@@ -693,7 +693,7 @@ UUIInteractionHelper::handlePasswordRequest(
     if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest))
     {
         nMode               = aDocumentPasswordRequest.Mode;
-        aDocumentName       = aDocumentPasswordRequest.Name;
+        aDocumentURL        = aDocumentPasswordRequest.DocumentURL;
         OSL_ENSURE( !bMSCryptoMode, "bMSCryptoMode should be false" );
         OSL_ENSURE( !bIsPasswordToModify, "bIsPasswordToModify should be false" );
 
@@ -704,7 +704,7 @@ UUIInteractionHelper::handlePasswordRequest(
     if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest2))
     {
         nMode               = aDocumentMSPasswordRequest2.Mode;
-        aDocumentName       = aDocumentMSPasswordRequest2.Name;
+        aDocumentURL        = aDocumentMSPasswordRequest2.DocumentURL;
         bMSCryptoMode       = true;
         bIsPasswordToModify = aDocumentMSPasswordRequest2.IsRequestPasswordToModify;
 
@@ -715,7 +715,7 @@ UUIInteractionHelper::handlePasswordRequest(
     if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest))
     {
         nMode               = aDocumentMSPasswordRequest.Mode;
-        aDocumentName       = aDocumentMSPasswordRequest.Name;
+        aDocumentURL        = aDocumentMSPasswordRequest.DocumentURL;
         bMSCryptoMode       = true;
         OSL_ENSURE( !bIsPasswordToModify, "bIsPasswordToModify should be false" );
 
@@ -725,7 +725,7 @@ UUIInteractionHelper::handlePasswordRequest(
     if (bDoHandleRequest)
     {
         handlePasswordRequest_( pParent, nMode, rContinuations,
-                aDocumentName, bMSCryptoMode, bIsPasswordToModify );
+                aDocumentURL, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
 

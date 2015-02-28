@@ -44,7 +44,7 @@ class PasswordDialog : public ModalDialog
     DECL_LINK(OKHdl_Impl, void *);
 
 public:
-    PasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocURL,
+    PasswordDialog( vcl::Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, const OUString& aDocumentURL,
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
     virtual ~PasswordDialog();
     virtual void dispose() SAL_OVERRIDE;
