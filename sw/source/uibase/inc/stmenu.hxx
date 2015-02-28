@@ -36,7 +36,7 @@ class SwView;
    menu that is opened if a user clicks on an underlined word.
 
    The menu is built in the constructor and the actions for each
-   menu entry are invoked in the excute-method.
+   menu entry are invoked in the execute-method.
 */
 
 class SwSmartTagPopup : public PopupMenu

@@ -317,7 +317,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     /// start message
     t_print("#Initializing ...\n" );
     t_print("#\n#logonUser function need root/Administrator account to test.\n" );
-    t_print("#You can test by login with root/Administrator, and excute:\n" );
+    t_print("#You can test by login with root/Administrator, and execute:\n" );
     t_print("#testshl2 -forward \"username password\" ../../../wntmsci9/bin/Security.dll\n" );
     t_print("#      where username and password are forwarded account info.\n" );
     t_print("#if no text forwarded, this function will be skipped.\n" );

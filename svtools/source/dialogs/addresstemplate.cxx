@@ -1186,7 +1186,7 @@ void AssignmentPersistentData::Commit()
             return 1L;
         }
 
-        // excute the dialog
+        // execute the dialog
         try
         {
             if ( xAdminDialog->execute() == RET_OK )
