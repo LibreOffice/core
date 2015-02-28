@@ -949,7 +949,7 @@ bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 
         // INFO
         // HIWORD:  = 0 : do not change anything
-        //          = 1 : replace the hyperlink with the target and subadress in the following two VTLPWSTR
+        //          = 1 : replace the hyperlink with the target and subaddress in the following two VTLPWSTR
         //          = 2 : delete the hyperlink
         // LOWORD:  = 0 : graphic shown as background (link)
         //          = 1 : graphic shown as shape (link)

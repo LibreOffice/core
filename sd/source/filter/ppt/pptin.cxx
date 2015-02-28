@@ -370,7 +370,7 @@ bool ImplSdPPTImport::Import()
                                 {
                                     sal_uInt32 i;
 
-                                    nPropCount /= 6;    // 6 propertys a hyperlink
+                                    nPropCount /= 6;    // 6 properties per hyperlink
 
                                     SdHyperlinkEntry* pHyperlink = 0;
                                     for ( i = 0; i < nPropCount; i++ )
@@ -404,7 +404,7 @@ bool ImplSdPPTImport::Import()
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
 
-                                        if ( !pHyperlink->aSubAdress.isEmpty() ) // get the converted subadress
+                                        if ( !pHyperlink->aSubAdress.isEmpty() ) // get the converted subaddress
                                         {
                                             sal_uInt32 nPageNumber = 0;
                                             OUString aString( pHyperlink->aSubAdress );

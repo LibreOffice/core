@@ -12963,7 +12963,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, click "All Programs", click "Visual Studio 2013", click "Visual Studio Tools", double-click "VS2013 x86 Native Tools Command Prompt" or "VS2013 x64 Native Tools Comand Prompt"]
+ [go to Start menu, click "All Programs", click "Visual Studio 2013", click "Visual Studio Tools", double-click "VS2013 x86 Native Tools Command Prompt" or "VS2013 x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above

@@ -42,8 +42,8 @@ namespace unocontrols{
 #define PROPERTYNAME_LOADERARGUMENTS                    "LoaderArguments"
 #define PROPERTYNAME_COMPONENTURL                       "ComponentURL"
 #define PROPERTYNAME_FRAME                              "Frame"
-#define PROPERTY_COUNT                                  3                                                       // you must count the propertys
-#define PROPERTYHANDLE_COMPONENTURL                     0                                                       // Id must be the index into the array
+#define PROPERTY_COUNT                                  3                        // you must count the properties
+#define PROPERTYHANDLE_COMPONENTURL                     0                        // Id must be the index into the array
 #define PROPERTYHANDLE_FRAME                            1
 #define PROPERTYHANDLE_LOADERARGUMENTS                  2
 

@@ -3529,7 +3529,7 @@ void FmXFormShell::CreateExternalView()
             aArg.Value <<= xForm;
 
             m_xExternalDisplayedForm = xForm;
-                // do this before dispatching the "attach" command, as the atach may result in a call to our queryDispatch (for the FormSlots)
+                // do this before dispatching the "attach" command, as the attach may result in a call to our queryDispatch (for the FormSlots)
                 // whichs needs the m_xExternalDisplayedForm
 
             xAttachDispatch->dispatch(aAttachURL, Sequence< PropertyValue>(&aArg, 1));

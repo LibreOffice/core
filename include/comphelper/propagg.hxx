@@ -143,7 +143,7 @@ public:
 
     /** returns information about a property of the aggregate.
         @param  _pPropName          points to a string to receive the property name. No name is returned if this is NULL.
-        @param  _pOriginalHandle    points to a sal_Int32 to receive the original property hande. No original handle is returned
+        @param  _pOriginalHandle    points to a sal_Int32 to receive the original property handle. No original handle is returned
                                     if this is NULL.
         @param  _nHandle            the handle of the property as got by, for instance, fillHandles
 
