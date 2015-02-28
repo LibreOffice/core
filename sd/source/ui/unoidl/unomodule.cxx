@@ -33,25 +33,6 @@
 
 using namespace ::com::sun::star;
 
-OUString SAL_CALL SdUnoModule_getImplementationName() throw( uno::RuntimeException )
-{
-    return OUString( "com.sun.star.comp.Draw.DrawingModule" );
-}
-
-uno::Sequence< OUString > SAL_CALL SdUnoModule_getSupportedServiceNames() throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aSeq( 1 );
-    aSeq[0] = "com.sun.star.drawing.ModuleDispatcher";
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdUnoModule_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
-{
-    SolarMutexGuard aGuard;
-    return uno::Reference< uno::XInterface >( static_cast< cppu::OWeakObject* >( new SdUnoModule( rSMgr ) ) );
-}
-
     // XNotifyingDispatch
 void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener )
     throw (uno::RuntimeException, std::exception)
@@ -132,7 +113,7 @@ uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const ut
 // XServiceInfo
 OUString SAL_CALL SdUnoModule::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
 {
-    return SdUnoModule_getImplementationName();
+    return OUString( "com.sun.star.comp.Draw.DrawingModule" );
 }
 
 sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException, std::exception)
@@ -142,7 +123,21 @@ sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) t
 
 uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
 {
-    return SdUnoModule_getSupportedServiceNames();
+    uno::Sequence< OUString > aSeq( 1 );
+    aSeq[0] = "com.sun.star.drawing.ModuleDispatcher";
+    return aSeq;
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_DrawingModule_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    SolarMutexGuard aGuard;
+
+    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
+    return cppu::acquire(new SdUnoModule(xSM));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

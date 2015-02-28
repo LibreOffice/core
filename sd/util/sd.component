@@ -23,68 +23,88 @@
     <service name="com.sun.star.drawing.DrawingDocument"/>
     <service name="com.sun.star.drawing.DrawingDocumentFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.DrawingModule">
+  <implementation name="com.sun.star.comp.Draw.DrawingModule"
+      constructor="com_sun_star_comp_Draw_DrawingModule_get_implementation">
     <service name="com.sun.star.drawing.ModuleDispatcher"/>
   </implementation>
   <implementation name="com.sun.star.comp.Draw.PresentationDocument">
     <service name="com.sun.star.drawing.DrawingDocumentFactory"/>
     <service name="com.sun.star.presentation.PresentationDocument"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.PresenterCanvasFactory">
+  <implementation name="com.sun.star.comp.Draw.PresenterCanvasFactory"
+      constructor="com_sun_star_comp_Draw_PresenterCanvasFactory_get_implementation">
     <service name="com.sun.star.rendering.Canvas"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.PresenterHelper">
+  <implementation name="com.sun.star.comp.Draw.PresenterHelper"
+      constructor="com_sun_star_comp_Draw_PresenterHelper_get_implementation">
     <service name="com.sun.star.drawing.PresenterHelper"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.PresenterPreviewCache">
+  <implementation name="com.sun.star.comp.Draw.PresenterPreviewCache"
+      constructor="com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation">
     <service name="com.sun.star.drawing.PresenterPreviewCache"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.PresenterTextView">
+  <implementation name="com.sun.star.comp.Draw.PresenterTextView"
+      constructor="com_sun_star_comp_Draw_PresenterTextView_get_implementation">
     <service name="com.sun.star.drawing.PresenterTextView"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.SlideRenderer">
+  <implementation name="com.sun.star.comp.Draw.SlideRenderer"
+      constructor="com_sun_star_comp_Draw_SlideRenderer_get_implementation">
     <service name="com.sun.star.drawing.SlideRenderer"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.SlideSorter">
+  <implementation name="com.sun.star.comp.Draw.SlideSorter"
+      constructor="com_sun_star_comp_Draw_SlideSorter_get_implementation">
     <service name="com.sun.star.drawing.SlideSorter"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.BasicPaneFactory">
+  <implementation name="com.sun.star.comp.Draw.framework.BasicPaneFactory"
+      constructor="com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.BasicPaneFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.BasicToolBarFactory">
+  <implementation name="com.sun.star.comp.Draw.framework.BasicToolBarFactory"
+      constructor="com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.BasicToolBarFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.BasicViewFactory">
+  <implementation name="com.sun.star.comp.Draw.framework.BasicViewFactory"
+      constructor="com_sun_star_comp_Draw_framework_BasicViewFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.BasicViewFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.PresentationFactoryProvider">
+  <implementation name="com.sun.star.comp.Draw.framework.PresentationFactoryProvider"
+      constructor="com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation">
     <service name="com.sun.star.drawing.framework.PresentationFactoryProvider"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.ResourceId">
+  <implementation name="com.sun.star.comp.Draw.framework.ResourceId"
+      constructor="com_sun_star_comp_Draw_framework_ResourceID_get_implementation">
     <service name="com.sun.star.drawing.framework.ResourceId"/>
   </implementation>
-  <implementation name="org.openoffice.comp.Draw.framework.PanelFactory">
+  <implementation name="org.openoffice.comp.Draw.framework.PanelFactory"
+      constructor="org_openoffice_comp_Draw_framework_PanelFactory_get_implementation">
     <service name="com.sun.star.drawing.framework.PanelFactory"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.configuration.Configuration">
+  <implementation name="com.sun.star.comp.Draw.framework.configuration.Configuration"
+      constructor="com_sun_star_comp_Draw_framework_configuration_Configuration_get_implementation">
     <service name="com.sun.star.drawing.framework.Configuration"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.configuration.ConfigurationController">
+  <implementation name="com.sun.star.comp.Draw.framework.configuration.ConfigurationController"
+      constructor="com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation">
     <service name="com.sun.star.drawing.framework.ConfigurationController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.Draw.framework.module.ModuleController">
+  <implementation name="com.sun.star.comp.Draw.framework.module.ModuleController"
+      constructor="com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation">
     <service name="com.sun.star.drawing.framework.ModuleController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.draw.SdHtmlOptionsDialog">
+  <implementation name="com.sun.star.comp.draw.SdHtmlOptionsDialog"
+      constructor="com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation">
     <service name="com.sun.star.ui.dialog.FilterOptionsDialog"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sd.InsertSlideController">
+  <implementation name="com.sun.star.comp.sd.InsertSlideController"
+      constructor="com_sun_star_comp_sd_InsertSlideController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.sd.SlideLayoutController">
+  <implementation name="com.sun.star.comp.sd.SlideLayoutController"
+      constructor="com_sun_star_comp_sd_SlideLayoutController_get_implementation">
     <service name="com.sun.star.frame.ToolbarController"/>
   </implementation>
-  <implementation name="sd::RandomAnimationNode">
+  <implementation name="sd::RandomAnimationNode"
+      constructor="RandomAnimationNode_get_implementation">
     <service name="com.sun.star.comp.sd.RandomAnimationNode"/>
   </implementation>
 </component>

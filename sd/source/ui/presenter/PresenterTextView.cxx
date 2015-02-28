@@ -50,25 +50,6 @@ using namespace ::com::sun::star::lang;
 
 namespace sd { namespace presenter {
 
-// Service
-Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterTextView(rxContext)));
-}
-
-OUString PresenterTextViewService_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.PresenterTextView");
-}
-
-Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.PresenterTextView");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 // PresenterTextView::Implementation
 class PresenterTextView::Implementation
 {
@@ -537,5 +518,15 @@ void PresenterTextView::Implementation::CheckTop (void)
 }
 
 } } // end of namespace ::sd::presenter
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresenterTextView_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                            ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::presenter::PresenterTextView(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
