@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXTABLESTYLEEXPORT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXTABLESTYLEEXPORT_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -22,7 +22,7 @@ class SwDoc;
 class DocxTableStyleExport
 {
     struct Impl;
-    boost::shared_ptr<Impl> m_pImpl;
+    std::shared_ptr<Impl> m_pImpl;
 public:
     void TableStyles(sal_Int32 nCountStylesToWrite);
 

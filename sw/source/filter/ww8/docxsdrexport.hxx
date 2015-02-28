@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <rtl/strbuf.hxx>
@@ -52,7 +52,7 @@ public:
 class DocxSdrExport
 {
     struct Impl;
-    boost::shared_ptr<Impl> m_pImpl;
+    std::shared_ptr<Impl> m_pImpl;
 public:
     DocxSdrExport(DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML);
     ~DocxSdrExport();
