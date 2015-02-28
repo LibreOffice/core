@@ -34,7 +34,7 @@ void X11SalGraphics::Init( X11OpenGLSalVirtualDevice *pDevice )
 }
 
 X11OpenGLSalVirtualDevice::X11OpenGLSalVirtualDevice( SalGraphics* pGraphics,
-                                                      long nDX, long nDY,
+                                                      long &nDX, long &nDY,
                                                       sal_uInt16 nBitCount,
                                                       const SystemGraphicsData *pData ) :
     mbGraphics( false ),

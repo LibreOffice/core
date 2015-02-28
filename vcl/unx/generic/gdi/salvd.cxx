@@ -36,7 +36,7 @@
 #include <opengl/x11/salvd.hxx>
 
 SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-                                                       long nDX, long nDY,
+                                                       long &nDX, long &nDY,
                                                        sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
     if (OpenGLHelper::isVCLOpenGLEnabled())
@@ -82,7 +82,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, SalColormap* pColormap,
 }
 
 X11SalVirtualDevice::X11SalVirtualDevice( SalGraphics* pGraphics,
-                                          long nDX, long nDY,
+                                          long &nDX, long &nDY,
                                           sal_uInt16 nBitCount,
                                           const SystemGraphicsData *pData ) :
     m_nXScreen( 0 ),
@@ -115,6 +115,8 @@ X11SalVirtualDevice::X11SalVirtualDevice( SalGraphics* pGraphics,
         }
         nDX_ = (long)w;
         nDY_ = (long)h;
+        nDX = nDX_;
+        nDY = nDY_;
         m_nXScreen = SalX11Screen( nScreen );
         hDrawable_ = pData->hDrawable;
         bExternPixmap_ = true;

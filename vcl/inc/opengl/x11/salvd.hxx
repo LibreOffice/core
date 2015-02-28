@@ -31,7 +31,7 @@ class X11OpenGLSalVirtualDevice : public SalVirtualDevice
 
 public:
     X11OpenGLSalVirtualDevice( SalGraphics *pGraphics,
-                               long nDX, long nDY,
+                               long &nDX, long &nDY,
                                sal_uInt16 nBitCount,
                                const SystemGraphicsData *pData );
     virtual ~X11OpenGLSalVirtualDevice();
