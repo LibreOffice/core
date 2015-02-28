@@ -505,7 +505,7 @@ bool SbiScanner::NextSym()
         }
     }
     // invalid characters:
-    else if( ( *pLine & 0xFF ) >= 0x7F )
+    else if( ! rtl::isAscii( *pLine ) )
     {
         GenError( SbERR_SYNTAX ); pLine++; nCol++;
     }
