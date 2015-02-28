@@ -20,6 +20,7 @@
 #include "passworddlg.hxx"
 #include "ids.hrc"
 
+#include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
@@ -71,8 +72,10 @@ PasswordDialog::PasswordDialog(vcl::Window* _pParent,
     SetText( aTitle );
 
     sal_uInt16 nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
-    m_pFTPassword->SetText(ResId(nStrId, *pResourceMgr).toString());
-    m_pFTPassword->SetText( m_pFTPassword->GetText() + aDocURL );
+    OUString aMessage(ResId(nStrId, *pResourceMgr).toString());
+    aMessage += INetURLObject(aDocURL).GetMainURL(INetURLObject::DECODE_UNAMBIGUOUS);
+    m_pFTPassword->SetText(aMessage);
+
     if (bIsSimplePasswordRequest)
     {
         DBG_ASSERT( aDocURL.isEmpty(), "A simple password request should not have a document URL! Use document password request instead." );
