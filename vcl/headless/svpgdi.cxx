@@ -19,7 +19,9 @@
 
 #include "headless/svpgdi.hxx"
 #include "headless/svpbmp.hxx"
+#ifndef IOS
 #include "headless/svptextrender.hxx"
+#endif
 #include "saldatabasic.hxx"
 
 #include <vcl/sysdata.hxx>
