@@ -98,33 +98,6 @@ static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 
 }
 
-void SwDoc::dumpAsXml( xmlTextWriterPtr w ) const
-{
-    WriterHelper writer( w );
-    writer.startElement( "doc" );
-    writer.writeFormatAttribute( "ptr", "%p", this );
-    m_pNodes->dumpAsXml( writer );
-    mpMarkManager->dumpAsXml( writer );
-    m_pUndoManager->dumpAsXml(writer);
-    getIDocumentFieldsAccess().GetFldTypes()->dumpAsXml( writer );
-    mpTxtFmtCollTbl->dumpAsXml( writer );
-    mpCharFmtTbl->dumpAsXml( writer );
-    mpFrmFmtTbl->dumpAsXml( writer, "frmFmtTbl" );
-    mpSpzFrmFmtTbl->dumpAsXml( writer, "spzFrmFmtTbl" );
-    mpSectionFmtTbl->dumpAsXml( writer );
-    mpNumRuleTbl->dumpAsXml( writer );
-    getIDocumentRedlineAccess().GetRedlineTbl().dumpAsXml( writer );
-    getIDocumentRedlineAccess().GetExtraRedlineTbl().dumpAsXml( writer );
-    if (const SdrModel* pModel = getIDocumentDrawModelAccess().GetDrawModel())
-        pModel->dumpAsXml(writer);
-
-    writer.startElement("mbModified");
-    writer.writeFormatAttribute("value", TMP_FORMAT, static_cast<int>(getIDocumentState().IsModified()));
-    writer.endElement();
-
-    writer.endElement();
-}
-
 void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
 {
     WriterHelper writer(w);
