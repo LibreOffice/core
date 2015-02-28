@@ -27,7 +27,6 @@ public class OnSlideSwipeListener implements OnTouchListener {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velX, float velY) {
-            boolean result = false;
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
@@ -40,7 +39,6 @@ public class OnSlideSwipeListener implements OnTouchListener {
                             onSwipeLeft();
                         }
                     }
-                    result = true;
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
