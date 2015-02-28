@@ -30,7 +30,7 @@ published enum LineCap
     /** the line will end without any additional shape
      */
     BUTT,
-    /** the line will get a half cirle as additional cap
+    /** the line will get a half circle as additional cap
      */
     ROUND,
     /** the line will get a half square as additional cap
