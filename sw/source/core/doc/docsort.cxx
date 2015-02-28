@@ -295,9 +295,8 @@ bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
 
     // Set index to the Selection's start
-    for ( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
+    for ( const auto *pFmt : *GetSpzFrmFmts() )
     {
-        const SwFrmFmt *const pFmt = (*GetSpzFrmFmts())[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
 
@@ -496,7 +495,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     if( !getIDocumentRedlineAccess().IsIgnoreRedline() && !getIDocumentRedlineAccess().GetRedlineTbl().empty() )
         getIDocumentRedlineAccess().DeleteRedline( *pTblNd, true, USHRT_MAX );
 
-    sal_uInt16 nStart = 0;
+    _FndLines::size_type nStart = 0;
     if( pTblNd->GetTable().GetRowsToRepeat() > 0 && rOpt.eDirection == SRT_ROWS )
     {
         // Uppermost selected Cell
@@ -561,9 +560,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     SwSortBoxElements aSortList;
 
     // When sorting, do not include the first row if the HeaderLine is repeated
-    sal_uInt16 i;
-
-    for( i = nStart; i < nCount; ++i)
+    for( sal_uInt16 i = static_cast<sal_uInt16>(nStart); i < nCount; ++i)
     {
         SwSortBoxElement* pEle = new SwSortBoxElement( i );
         aSortList.insert(pEle);
@@ -571,7 +568,7 @@ bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // Move after Sorting
     SwMovedBoxes aMovedList;
-    i = 0;
+    sal_uInt16 i = 0;
     for (SwSortBoxElements::const_iterator it = aSortList.begin();
             it != aSortList.end(); ++i, ++it)
     {
@@ -781,9 +778,9 @@ FlatFndBox::~FlatFndBox()
 bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const _FndLines &rLines = rBox.GetLines();
-    sal_uInt16 nBoxes(0);
+    _FndBoxes::size_type nBoxes {0};
 
-    for(sal_uInt16 i=0; i < rLines.size(); ++i)
+    for(_FndLines::size_type i=0; i < rLines.size(); ++i)
     {
         const _FndLine* pLn = &rLines[i];
         const _FndBoxes& rBoxes = pLn->GetBoxes();
@@ -803,9 +800,9 @@ bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
     const _FndBoxes &rBoxes = rLn.GetBoxes();
-    sal_uInt16 nLines(0);
+    _FndLines::size_type nLines {0};
 
-    for(sal_uInt16 i=0; i < rBoxes.size(); ++i)
+    for(_FndBoxes::size_type i=0; i < rBoxes.size(); ++i)
     {
         _FndBox const*const pBox = &rBoxes[i];
         const _FndLines& rLines = pBox->GetLines();
@@ -830,15 +827,14 @@ sal_uInt16 FlatFndBox::GetColCount(const _FndBox& rBox)
         return 1;
 
     sal_uInt16 nSum = 0;
-    for( sal_uInt16 i=0; i < rLines.size(); ++i )
+    for( const auto &rLine : rLines )
     {
         // The Boxes of a Line
         sal_uInt16 nCount = 0;
-        const _FndBoxes& rBoxes = rLines[i].GetBoxes();
-        for( sal_uInt16 j=0; j < rBoxes.size(); ++j )
+        const _FndBoxes& rBoxes = rLine.GetBoxes();
+        for( const auto &rB : rBoxes )
             // Iterate recursively over the Lines
-            nCount += (rBoxes[j].GetLines().size())
-                        ? GetColCount(rBoxes[j]) : 1;
+            nCount += rB.GetLines().empty() ? 1 : GetColCount(rB);
 
         if( nSum < nCount )
             nSum = nCount;
@@ -854,14 +850,14 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
         return 1;
 
     sal_uInt16 nLines = 0;
-    for(sal_uInt16 i=0; i < rLines.size(); ++i)
+    for(const auto &rLine : rLines )
     {   // The Boxes of a Line
-        const _FndBoxes& rBoxes = rLines[i].GetBoxes();
+        const _FndBoxes& rBoxes = rLine.GetBoxes();
         sal_uInt16 nLn = 1;
-        for(sal_uInt16 j=0; j < rBoxes.size(); ++j)
-            if (rBoxes[j].GetLines().size())
+        for(const auto &rB : rBoxes)
+            if (rB.GetLines().size())
                 // Iterate recursively over the Lines
-                nLn = std::max(GetRowCount(rBoxes[j]), nLn);
+                nLn = std::max(GetRowCount(rB), nLn);
 
         nLines = nLines + nLn;
     }
@@ -876,17 +872,17 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
 
     // Iterate over Lines
     sal_uInt16 nOldRow = nRow;
-    for( sal_uInt16 i=0; i < rLines.size(); ++i )
+    for( const auto &rLine : rLines )
     {
         // The Boxes of a Line
-        const _FndBoxes& rBoxes = rLines[i].GetBoxes();
+        const _FndBoxes& rBoxes = rLine.GetBoxes();
         sal_uInt16 nOldCol = nCol;
-        for( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
+        for( _FndBoxes::size_type j = 0; j < rBoxes.size(); ++j )
         {
             // Check the Box if it's an atomic one
             const _FndBox *const pBox = &rBoxes[j];
 
-            if( !pBox->GetLines().size() )
+            if( pBox->GetLines().empty() )
             {
                 // save it
                 sal_uInt16 nOff = nRow * nCols + nCol;
@@ -916,7 +912,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
             else
             {
                 // Iterate recursively over the Lines of a Box
-                FillFlat( *pBox, ( j == rBoxes.size()-1 ) );
+                FillFlat( *pBox, ( j+1 == rBoxes.size() ) );
             }
             nCol++;
         }
