@@ -42,27 +42,6 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
-
-Reference<XInterface> SAL_CALL PresenterHelperService_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterHelper(rxContext)));
-}
-
-OUString PresenterHelperService_getImplementationName (void)
-    throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.PresenterHelper");
-}
-
-Sequence<OUString> SAL_CALL PresenterHelperService_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.PresenterHelper");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== PresenterHelper =======================================================
 
 PresenterHelper::PresenterHelper (
@@ -480,5 +459,15 @@ awt::Rectangle PresenterHelper::getWindowExtentsRelative (
 }
 
 } } // end of namespace ::sd::presenter
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresenterHelper_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                          ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::presenter::PresenterHelper(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
