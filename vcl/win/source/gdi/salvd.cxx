@@ -67,7 +67,7 @@ HBITMAP WinSalVirtualDevice::ImplCreateVirDevBitmap(HDC hDC, long nDX, long nDY,
 }
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
-                                                       long nDX, long nDY,
+                                                       long &nDX, long &nDY,
                                                        sal_uInt16 nBitCount,
                                                        const SystemGraphicsData* pData )
 {
@@ -82,10 +82,20 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         hDC = pData->hDC;
         hBmp = NULL;
         bOk = (hDC != NULL);
+        if (bOk)
+        {
+            nDX = GetDeviceCaps( hDC, HORZRES );
+            nDY = GetDeviceCaps( hDC, VERTRES );
+        }
+        else
+        {
+            nDX = 0;
+            nDY = 0;
+        }
     }
     else
     {
-        hDC     = CreateCompatibleDC( pGraphics->getHDC() );
+        hDC = CreateCompatibleDC( pGraphics->getHDC() );
         if( !hDC )
             ImplWriteLastError( GetLastError(), "CreateCompatibleDC in CreateVirtualDevice" );
 

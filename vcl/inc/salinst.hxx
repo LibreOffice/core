@@ -83,10 +83,12 @@ public:
     // VirtualDevice
     // nDX and nDY in pixels
     // nBitCount: 0 == default(=as window) / 1 == mono
-    // pData allows for using a system dependent graphics or device context
+    // pData allows for using a system dependent graphics or device context,
+    // if a system context is passed in nDX and nDY are updated to reflect
+    // its size; otherwise these remain unchanged.
     virtual SalVirtualDevice*
                             CreateVirtualDevice( SalGraphics* pGraphics,
-                                                 long nDX, long nDY,
+                                                 long &rDX, long &rDY,
                                                  sal_uInt16 nBitCount, const SystemGraphicsData *pData = NULL ) = 0;
 
     // Printer
