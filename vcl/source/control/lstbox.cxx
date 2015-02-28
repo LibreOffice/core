@@ -84,8 +84,12 @@ void ListBox::dispose()
     delete pImplLB;
 
     delete mpFloatWin;
+    mpFloatWin = NULL;
     delete mpImplWin;
+    mpImplWin = NULL;
     delete mpBtn;
+    mpBtn = NULL;
+
     Control::dispose();
 }
 

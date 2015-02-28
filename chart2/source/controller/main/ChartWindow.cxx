@@ -84,6 +84,7 @@ void ChartWindow::dispose()
         x3DWindowProvider->update();
     }
     delete m_pOpenGLWindow;
+    m_pOpenGLWindow = NULL;
     vcl::Window::dispose();
 }
 

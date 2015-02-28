@@ -140,6 +140,7 @@ FmGridHeader::~FmGridHeader()
 void FmGridHeader::dispose()
 {
     delete m_pImpl;
+    m_pImpl = NULL;
     FmGridHeader::dispose();
 }
 
