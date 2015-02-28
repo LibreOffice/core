@@ -178,7 +178,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( m_bImageContainerStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:imagecontainer' cannot be embeded into 'image:imagecontainer'!";
+                    aErrorMessage += "Element 'image:imagecontainer' cannot be embedded into 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -191,14 +191,14 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 if ( !m_bImageContainerStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:images' must be embeded into element 'image:imagecontainer'!";
+                    aErrorMessage += "Element 'image:images' must be embedded into element 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
                 if ( m_bImagesStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:images' cannot be embeded into 'image:images'!";
+                    aErrorMessage += "Element 'image:images' cannot be embedded into 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -299,7 +299,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:entry' must be embeded into element 'image:images'!";
+                    aErrorMessage += "Element 'image:entry' must be embedded into element 'image:images'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -375,7 +375,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:externalimages' must be embeded into element 'image:imagecontainer'!";
+                    aErrorMessage += "Element 'image:externalimages' must be embedded into element 'image:imagecontainer'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -386,7 +386,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     m_pImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:externalimages' cannot be embeded into 'image:externalimages'!";
+                    aErrorMessage += "Element 'image:externalimages' cannot be embedded into 'image:externalimages'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -406,7 +406,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     m_pExternalImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:externalentry' must be embeded into 'image:externalimages'!";
+                    aErrorMessage += "Element 'image:externalentry' must be embedded into 'image:externalimages'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
@@ -418,7 +418,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                     m_pExternalImages = NULL;
 
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'image:externalentry' cannot be embeded into 'image:externalentry'!";
+                    aErrorMessage += "Element 'image:externalentry' cannot be embedded into 'image:externalentry'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

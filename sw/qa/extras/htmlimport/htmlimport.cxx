@@ -46,7 +46,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
 {
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
-    // The document contains only one embeded picture inlined in img's src attribute.
+    // The document contains only one embedded picture inlined in img's src attribute.
 
     SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
     SwEditShell* pEditShell = pDoc->GetEditShell();

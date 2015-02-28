@@ -242,7 +242,7 @@ Users\Application Data\URE directory.
 
 URE_MORE_TYPES and URE_MORE_SERVICES each contain zero or more space-separated
 URI descriptors.  A URI descriptor is either a URI (denoting an individual file)
-or a URI embeded in "<" and ">*" (denoting all the files contained non-
+or a URI embedded in "<" and ">*" (denoting all the files contained non-
 recursively within the directory denoted by the given URI).
 
 The Java UNO environment needs type information in the form of Java class files
