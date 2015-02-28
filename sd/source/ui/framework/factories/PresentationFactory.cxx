@@ -87,26 +87,6 @@ private:
 
 } // end of anonymous namespace.
 
-//===== PresentationFactoryProvider service ===================================
-
-Reference<XInterface> SAL_CALL PresentationFactoryProvider_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresentationFactoryProvider(rxContext)));
-}
-
-OUString PresentationFactoryProvider_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.PresentationFactoryProvider");
-}
-
-Sequence<OUString> SAL_CALL PresentationFactoryProvider_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.framework.PresentationFactoryProvider");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== PresentationFactory ===================================================
 
 const OUString PresentationFactory::msPresentationViewURL("private:resource/view/Presentation");
@@ -249,5 +229,15 @@ void SAL_CALL PresentationFactoryProvider::initialize(
 } // end of anonymous namespace.
 
 } } // end of namespace sd::framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_PresentationFactoryProvider_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::framework::PresentationFactoryProvider(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

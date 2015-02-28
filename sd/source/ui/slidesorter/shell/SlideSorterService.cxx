@@ -53,26 +53,6 @@ namespace {
     };
 }
 
-//===== Service ===============================================================
-
-Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<drawing::XDrawView*>(new SlideSorterService(rxContext)));
-}
-
-OUString SlideSorterService_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.SlideSorter");
-}
-
-Sequence<OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.SlideSorter");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== SlideSorterService ==========================================================
 
 SlideSorterService::SlideSorterService (const Reference<XComponentContext>& rxContext)
@@ -490,6 +470,15 @@ void SlideSorterService::ThrowIfDisposed (void)
     }
 }
 
-} } // end of namespace ::sd::presenter
+} } // end of namespace ::sd::slidesorter
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_SlideSorter_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                      ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::slidesorter::SlideSorterService(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
