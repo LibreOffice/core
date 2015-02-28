@@ -241,7 +241,7 @@ public:
           mbSkipTriggersNextEffect(true) {}
 
     /** Remember to trigger (or not to trigger) the next effect after the
-        current effect is skiped.
+        current effect is skipped.
     */
     void setSkipTriggersNextEffect (const bool bSkipTriggersNextEffect)
     { mbSkipTriggersNextEffect = bSkipTriggersNextEffect; }

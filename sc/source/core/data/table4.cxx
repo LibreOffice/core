@@ -1559,7 +1559,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if (bVertical)
             {
                 // if not filtered use the faster method
-                // hidden cols/rows should be skiped
+                // hidden cols/rows should be skipped
                 if(!bIsFiltered)
                 {
                     aCol[nCol].SetPatternArea( static_cast<SCROW>(nIMin),
