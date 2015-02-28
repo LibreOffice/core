@@ -61,13 +61,13 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:helpid="20399"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertEndnote" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:InsertBookmark" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertBookmark"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertReferenceField" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertIndexesEntry" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:visible="false" toolbar:helpid="10102"/>
+ <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
  <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
  <toolbar:toolbarseparator/>
