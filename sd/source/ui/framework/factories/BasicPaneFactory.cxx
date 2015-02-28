@@ -84,24 +84,6 @@ public:
     PaneContainer (void) {}
 };
 
-Reference<XInterface> SAL_CALL BasicPaneFactory_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new BasicPaneFactory(rxContext)));
-}
-
-OUString BasicPaneFactory_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.BasicPaneFactory");
-}
-
-Sequence<OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.framework.BasicPaneFactory");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== PaneFactory ===========================================================
 
 BasicPaneFactory::BasicPaneFactory (
@@ -456,5 +438,14 @@ void BasicPaneFactory::ThrowIfDisposed (void) const
 }
 
 } } // end of namespace sd::framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_BasicPaneFactory_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::framework::BasicPaneFactory(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -58,25 +58,6 @@ public:
     LoadedFactoryContainer (void) {}
 };
 
-Reference<XInterface> SAL_CALL ModuleController_createInstance (
-    const Reference<XComponentContext>& rxContext)
-        throw (css::uno::Exception, std::exception)
-{
-    return Reference<XInterface>(ModuleController::CreateInstance(rxContext), UNO_QUERY);
-}
-
-OUString ModuleController_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.module.ModuleController");
-}
-
-Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.framework.ModuleController");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== ModuleController ======================================================
 Reference<XModuleController> ModuleController::CreateInstance (
     const Reference<XComponentContext>& rxContext)
@@ -280,5 +261,17 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
 }
 
 } } // end of namespace sd::framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_module_ModuleController_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    css::uno::Reference< css::drawing::framework::XModuleController > xModCont ( sd::framework::ModuleController::CreateInstance(context) );
+    xModCont->acquire();
+    return xModCont.get();
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

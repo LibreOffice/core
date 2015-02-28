@@ -159,25 +159,6 @@ Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetCla
     return xInt;
 }
 
-Reference< XInterface > SAL_CALL RandomNode_createInstance( const Reference< XMultiServiceFactory > &  )
-{
-    Reference< XInterface > xInt( static_cast<XWeak*>( new RandomAnimationNode() ) );
-    return xInt;
-}
-
-OUString RandomNode__getImplementationName() throw( RuntimeException )
-{
-    return OUString( "sd::RandomAnimationNode" ) ;
-}
-
-Sequence< OUString > SAL_CALL RandomNode_getSupportedServiceNames() throw( RuntimeException )
-{
-    Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.animations.ParallelTimeContainer";
-    aSeq[1] = "com.sun.star.comp.sd.RandomAnimationNode";
-    return aSeq;
-}
-
 RandomAnimationNode::RandomAnimationNode( const RandomAnimationNode& rNode )
 :   RandomAnimationNodeBase(),
     mnPresetClass( rNode.mnPresetClass ),
@@ -568,7 +549,7 @@ Reference< XAnimationNode > SAL_CALL RandomAnimationNode::appendChild( const Ref
 // XServiceInfo
 OUString RandomAnimationNode::getImplementationName() throw(std::exception)
 {
-    return RandomNode__getImplementationName();
+    return OUString( "sd::RandomAnimationNode" ) ;
 }
 
 // XServiceInfo
@@ -580,9 +561,20 @@ sal_Bool RandomAnimationNode::supportsService(const OUString& ServiceName) throw
 // XServiceInfo
 Sequence< OUString > RandomAnimationNode::getSupportedServiceNames(void) throw(std::exception)
 {
-    return RandomNode_getSupportedServiceNames();
+    Sequence< OUString > aSeq( 2 );
+    aSeq[0] = "com.sun.star.animations.ParallelTimeContainer";
+    aSeq[1] = "com.sun.star.comp.sd.RandomAnimationNode";
+    return aSeq;
 }
 
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_embed_MSOLEObjectSystemCreator_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::RandomAnimationNode());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
