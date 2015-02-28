@@ -34,24 +34,6 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
 
-Reference<XInterface> SAL_CALL BasicToolBarFactory_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return static_cast<XWeak*>(new BasicToolBarFactory(rxContext));
-}
-
-OUString BasicToolBarFactory_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.BasicToolBarFactory");
-}
-
-Sequence<OUString> SAL_CALL BasicToolBarFactory_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    const OUString sServiceName("com.sun.star.drawing.framework.BasicToolBarFactory");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== BasicToolBarFactory ===================================================
 
 BasicToolBarFactory::BasicToolBarFactory (
@@ -190,5 +172,13 @@ void BasicToolBarFactory::ThrowIfDisposed (void) const
 }
 
 } } // end of namespace sd::framework
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_BasicToolBarFactory_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::framework::BasicToolBarFactory(context));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

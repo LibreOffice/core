@@ -44,25 +44,6 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace framework {
 
-Reference<XInterface> SAL_CALL ConfigurationController_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    (void)rxContext;
-    return static_cast<XWeak*>(new ConfigurationController());
-}
-
-OUString ConfigurationController_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.framework.configuration.ConfigurationController");
-}
-
-Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.framework.ConfigurationController");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //----- ConfigurationController::Implementation -------------------------------
 
 class ConfigurationController::Implementation
@@ -587,5 +568,15 @@ ConfigurationController::Implementation::~Implementation (void)
 }
 
 } } // end of namespace sd::framework
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_framework_configuration_ConfigurationController_get_implementation(
+        ::com::sun::star::uno::XComponentContext*,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::framework::ConfigurationController());
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

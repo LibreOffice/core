@@ -100,27 +100,6 @@ public:
 };
 
 // - SdHtmlOptionsDialog -
-Reference< XInterface >
-    SAL_CALL SdHtmlOptionsDialog_CreateInstance(
-        SAL_UNUSED_PARAMETER const Reference< XMultiServiceFactory > & )
-{
-    return static_cast< ::cppu::OWeakObject* > ( new SdHtmlOptionsDialog );
-}
-
-OUString SdHtmlOptionsDialog_getImplementationName()
-    throw( RuntimeException )
-{
-    return OUString( "com.sun.star.comp.draw.SdHtmlOptionsDialog" );
-}
-
-Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames()
-    throw( RuntimeException )
-{
-    Sequence< OUString > aRet(1);
-    aRet[0] = "com.sun.star.ui.dialog.FilterOptionsDialog";
-    return aRet;
-}
-
 SdHtmlOptionsDialog::SdHtmlOptionsDialog() :
     meDocType   ( DOCUMENT_TYPE_DRAW )
 {
@@ -150,17 +129,21 @@ void SAL_CALL SdHtmlOptionsDialog::initialize( const Sequence< Any > & )
 OUString SAL_CALL SdHtmlOptionsDialog::getImplementationName()
     throw( RuntimeException, std::exception )
 {
-    return SdHtmlOptionsDialog_getImplementationName();
+    return OUString( "com.sun.star.comp.draw.SdHtmlOptionsDialog" );
 }
+
 sal_Bool SAL_CALL SdHtmlOptionsDialog::supportsService( const OUString& rServiceName )
     throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
+
 Sequence< OUString > SAL_CALL SdHtmlOptionsDialog::getSupportedServiceNames()
     throw ( RuntimeException, std::exception )
 {
-    return SdHtmlOptionsDialog_getSupportedServiceNames();
+    Sequence< OUString > aRet(1);
+    aRet[0] = "com.sun.star.ui.dialog.FilterOptionsDialog";
+    return aRet;
 }
 
 // XPropertyAccess
@@ -253,5 +236,15 @@ void SdHtmlOptionsDialog::setSourceDocument( const Reference< XComponent >& xDoc
     }
     throw IllegalArgumentException();
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_draw_SdHtmlOptionsDialog_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SdHtmlOptionsDialog());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
