@@ -10,12 +10,14 @@ import org.libreoffice.kit.DirectBufferAllocator;
 import org.libreoffice.kit.Document;
 import org.libreoffice.kit.LibreOfficeKit;
 import org.libreoffice.kit.Office;
+
 import org.mozilla.gecko.TextSelection;
 import org.mozilla.gecko.TextSelectionHandle;
 import org.mozilla.gecko.gfx.BufferedCairoImage;
 import org.mozilla.gecko.gfx.CairoImage;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
 import org.mozilla.gecko.gfx.IntSize;
+import org.mozilla.gecko.gfx.LayerView;
 
 import java.nio.ByteBuffer;
 
@@ -92,6 +94,30 @@ public class LOKitTileProvider implements TileProvider, Document.MessageCallback
 
         // Writer documents always have one part, so hide the navigation drawer.
         if (mDocument.getDocumentType() != Document.DOCTYPE_TEXT) {
+
+            // Set left/right swipe listener for presentation only.
+            if (mDocument.getDocumentType() == Document.DOCTYPE_PRESENTATION) {
+                LayerView layerView = mLayerClient.getView();
+                layerView.setOnTouchListener(new OnSlideSwipeListener(LibreOfficeMainActivity.mAppContext) {
+                    @Override
+                    public void onSwipeRight() {
+                        if (getCurrentPartNumber() < mDocument.getParts()-1) {
+                            LOKitShell.sendChangePartEvent(getCurrentPartNumber()+1);
+                        }
+                    }
+
+                @Override
+                public void onSwipeLeft() {
+                    if (getCurrentPartNumber() > 0) {
+                        LOKitShell.sendChangePartEvent(getCurrentPartNumber()-1);
+                    }
+                }
+                });
+            } else {
+                // Unregister touch listener when loading another document.
+                mLayerClient.getView().setOnTouchListener(null);
+            }
+
             for (int i = 0; i < parts; i++) {
                 String partName = mDocument.getPartName(i);
                 if (partName.isEmpty()) {
