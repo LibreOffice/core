@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a2fa921_3c8dd97b",
+        "filename": "sc/qa/unit/opencl-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-02-28T23:18:16Z",
+      "side": 1,
+      "message": "Use \u0027false\u0027 and \u0027true\u0027, not 0 and 1.",
+      "revId": "ebfc42897d63987e0aec3d0552c98ef894f3785b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a2fa921_dce86519",
+        "filename": "sc/qa/unit/opencl-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2015-02-28T23:18:16Z",
+      "side": 1,
+      "message": "Just put the \u0027return\u0027 on a line of itself. Follow the conventions of the surrounding code.",
+      "revId": "ebfc42897d63987e0aec3d0552c98ef894f3785b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
