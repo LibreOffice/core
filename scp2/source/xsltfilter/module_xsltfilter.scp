@@ -18,15 +18,14 @@
 
 #include "macros.inc"
 
+#include "AutoInstall/xsltfilter"
 
 Module gid_Module_Optional_Xsltfiltersamples
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_XSLTFILTERSAMPLES);
     Sortkey = "700";
     ParentID = gid_Module_Optional;
-    Files = ( gid_File_filter_docbook,
-    gid_File_filter_xhtml,
-        gid_File_filter_xslt,
+    Files = (auto_xsltfilter_ALL,
     gid_File_Share_Registry_Xsltfilter_Xcd );
     Default = YES;
     Styles = ( );
