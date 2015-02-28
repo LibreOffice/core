@@ -25,7 +25,7 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.h>
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -51,7 +51,7 @@ namespace com
 
 #include <sfx2/sfxuno.hxx>
 
-class SmFilterDetect : public ::cppu::WeakImplHelper2< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
+class SmFilterDetect : public ::cppu::WeakImplHelper< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
                             SmFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
