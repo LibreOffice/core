@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
@@ -38,6 +39,8 @@
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <docfunc.hxx>
+#include <drawdoc.hxx>
+#include <MarkManager.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -1912,6 +1915,45 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
+}
+
+void SwDoc::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    bool bOwns = false;
+    if (!pWriter)
+    {
+        pWriter = xmlNewTextWriterFilename("nodes.xml", 0);
+        xmlTextWriterStartDocument(pWriter, NULL, NULL, NULL);
+        bOwns = true;
+    }
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swDoc"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    m_pNodes->dumpAsXml(pWriter);
+    mpMarkManager->dumpAsXml(pWriter);
+    m_pUndoManager->dumpAsXml(pWriter);
+    getIDocumentFieldsAccess().GetFldTypes()->dumpAsXml(pWriter);
+    mpTxtFmtCollTbl->dumpAsXml(pWriter);
+    mpCharFmtTbl->dumpAsXml(pWriter);
+    mpFrmFmtTbl->dumpAsXml(pWriter, "frmFmtTbl");
+    mpSpzFrmFmtTbl->dumpAsXml(pWriter, "spzFrmFmtTbl");
+    mpSectionFmtTbl->dumpAsXml(pWriter);
+    mpNumRuleTbl->dumpAsXml(pWriter);
+    getIDocumentRedlineAccess().GetRedlineTbl().dumpAsXml(pWriter);
+    getIDocumentRedlineAccess().GetExtraRedlineTbl().dumpAsXml(pWriter);
+    if (const SdrModel* pModel = getIDocumentDrawModelAccess().GetDrawModel())
+        pModel->dumpAsXml(pWriter);
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST("mbModified"));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::boolean(getIDocumentState().IsModified()).getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+    if (bOwns)
+    {
+        xmlTextWriterEndDocument(pWriter);
+        xmlFreeTextWriter(pWriter);
+    }
 }
 
 std::set<Color> SwDoc::GetDocColors()
