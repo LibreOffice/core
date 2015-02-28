@@ -682,7 +682,7 @@ void DocxTableStyleExport::SetSerializer(sax_fastparser::FSHelperPtr pSerializer
 }
 
 DocxTableStyleExport::DocxTableStyleExport(SwDoc* pDoc, sax_fastparser::FSHelperPtr pSerializer)
-    : m_pImpl(new Impl)
+    : m_pImpl(std::make_shared<Impl>())
 {
     m_pImpl->m_pDoc = pDoc;
     m_pImpl->m_pSerializer = pSerializer;
