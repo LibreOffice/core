@@ -51,7 +51,7 @@ namespace sdr { namespace contact {
 } }
 // <--
 
-class SwViewImp
+class SwViewShellImp
 {
     friend class SwViewShell;
 
@@ -136,8 +136,8 @@ private:
     void _InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
 
 public:
-    SwViewImp( SwViewShell * );
-    ~SwViewImp();
+    SwViewShellImp( SwViewShell * );
+    ~SwViewShellImp();
     void Init( const SwViewOption * ); /// Only for SwViewShell::Init()
 
     const SwViewShell *GetShell() const { return pSh; }
@@ -272,21 +272,21 @@ public:
     void FireAccessibleEvents();
 };
 
-inline SwPageFrm *SwViewImp::GetFirstVisPage()
+inline SwPageFrm *SwViewShellImp::GetFirstVisPage()
 {
     if ( bFirstPageInvalid )
         SetFirstVisPage();
     return pFirstVisPage;
 }
 
-inline const SwPageFrm *SwViewImp::GetFirstVisPage() const
+inline const SwPageFrm *SwViewShellImp::GetFirstVisPage() const
 {
     if ( bFirstPageInvalid )
-        const_cast<SwViewImp*>(this)->SetFirstVisPage();
+        const_cast<SwViewShellImp*>(this)->SetFirstVisPage();
     return pFirstVisPage;
 }
 
-inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
+inline SwAccessibleMap& SwViewShellImp::GetAccessibleMap()
 {
     if( !pAccMap )
         CreateAccessibleMap();
@@ -294,30 +294,30 @@ inline SwAccessibleMap& SwViewImp::GetAccessibleMap()
     return *pAccMap;
 }
 
-inline void SwViewImp::DisposeAccessibleFrm( const SwFrm *pFrm,
+inline void SwViewShellImp::DisposeAccessibleFrm( const SwFrm *pFrm,
                                bool bRecursive )
 {
     DisposeAccessible( pFrm, 0, bRecursive );
 }
 
-inline void SwViewImp::DisposeAccessibleObj( const SdrObject *pObj )
+inline void SwViewShellImp::DisposeAccessibleObj( const SdrObject *pObj )
 {
     DisposeAccessible( 0, pObj, false );
 }
 
-inline void SwViewImp::MoveAccessibleFrm( const SwFrm *pFrm,
+inline void SwViewShellImp::MoveAccessibleFrm( const SwFrm *pFrm,
                                           const SwRect& rOldFrm )
 {
     MoveAccessible( pFrm, 0, rOldFrm );
 }
 
-inline void SwViewImp::AddAccessibleFrm( const SwFrm *pFrm )
+inline void SwViewShellImp::AddAccessibleFrm( const SwFrm *pFrm )
 {
     SwRect aEmptyRect;
     MoveAccessible( pFrm, 0, aEmptyRect );
 }
 
-inline void SwViewImp::AddAccessibleObj( const SdrObject *pObj )
+inline void SwViewShellImp::AddAccessibleObj( const SdrObject *pObj )
 {
     SwRect aEmptyRect;
     MoveAccessible( 0, pObj, aEmptyRect );

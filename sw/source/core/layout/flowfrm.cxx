@@ -548,7 +548,7 @@ void SwFlowFrm::MoveSubTree( SwLayoutFrm* pParent, SwFrm* pSibling )
 
     // Be economical with notifications if an action is running.
     SwViewShell *pSh = m_rThis.getRootFrm()->GetCurrShell();
-    const SwViewImp *pImp = pSh ? pSh->Imp() : 0;
+    const SwViewShellImp *pImp = pSh ? pSh->Imp() : 0;
     const bool bComplete = pImp && pImp->IsAction() && pImp->GetLayAction().IsComplete();
 
     if ( !bComplete )

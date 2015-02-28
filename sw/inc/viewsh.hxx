@@ -57,7 +57,7 @@ class SdrView;
 class SfxItemPool;
 class SfxViewShell;
 class SwViewOption;
-class SwViewImp;
+class SwViewShellImp;
 class SwPrintData;
 class SwPagePreviewPrtData;
 namespace vcl { class Window; }
@@ -102,7 +102,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     friend void SetOutDevAndWin( SwViewShell *pSh, OutputDevice *pOut,
                                  vcl::Window *pWin, sal_uInt16 nZoom );
 
-    friend class SwViewImp;
+    friend class SwViewShellImp;
     friend class SwLayIdle;
 
     // For setting visible area for page preview paint.
@@ -124,7 +124,7 @@ class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
     SwRect        maInvalidRect;
 
     SfxViewShell *mpSfxViewShell;
-    SwViewImp    *mpImp;             // Core-internals of SwViewShell.
+    SwViewShellImp    *mpImp;             // Core-internals of SwViewShell.
                                     // The pointer is never 0.
 
     ::vcl::Window *mpWin;             ///< = 0 during printing or pdf export
@@ -202,8 +202,8 @@ protected:
 public:
     TYPEINFO();
 
-          SwViewImp *Imp() { return mpImp; }
-    const SwViewImp *Imp() const { return mpImp; }
+          SwViewShellImp *Imp() { return mpImp; }
+    const SwViewShellImp *Imp() const { return mpImp; }
 
     const SwNodes& GetNodes() const;
 

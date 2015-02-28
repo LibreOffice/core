@@ -43,7 +43,7 @@
 
 #include <IDocumentDrawModelAccess.hxx>
 
-void SwViewImp::StartAction()
+void SwViewShellImp::StartAction()
 {
     if ( HasDrawView() )
     {
@@ -53,7 +53,7 @@ void SwViewImp::StartAction()
     }
 }
 
-void SwViewImp::EndAction()
+void SwViewShellImp::EndAction()
 {
     if ( HasDrawView() )
     {
@@ -63,7 +63,7 @@ void SwViewImp::EndAction()
     }
 }
 
-void SwViewImp::LockPaint()
+void SwViewShellImp::LockPaint()
 {
     if ( HasDrawView() )
     {
@@ -76,13 +76,13 @@ void SwViewImp::LockPaint()
     }
 }
 
-void SwViewImp::UnlockPaint()
+void SwViewShellImp::UnlockPaint()
 {
     if ( bResetHdlHiddenPaint )
         GetDrawView()->showMarkHandles();
 }
 
-void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
+void SwViewShellImp::PaintLayer( const SdrLayerID _nLayerID,
                             SwPrintData const*const pPrintData,
                             const SwRect& aPaintRect,
                             const Color* _pPageBackgrdColor,
@@ -115,7 +115,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
              (_nLayerID == pIDDMA->GetHeavenId()) )
         {
             OSL_ENSURE( _pPageBackgrdColor,
-                    "incorrect usage of SwViewImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
+                    "incorrect usage of SwViewShellImp::PaintLayer: pPageBackgrdColor have to be set for painting layer <hell> or <heaven>");
             if ( _pPageBackgrdColor )
             {
                 aOldOutlinerBackgrdColor =
@@ -154,7 +154,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 
 #define FUZZY_EDGE 400
 
-bool SwViewImp::IsDragPossible( const Point &rPoint )
+bool SwViewShellImp::IsDragPossible( const Point &rPoint )
 {
     if ( !HasDrawView() )
         return false;
@@ -183,7 +183,7 @@ bool SwViewImp::IsDragPossible( const Point &rPoint )
     return aRect.IsInside( rPoint );
 }
 
-void SwViewImp::NotifySizeChg( const Size &rNewSz )
+void SwViewShellImp::NotifySizeChg( const Size &rNewSz )
 {
     if ( !HasDrawView() )
         return;
