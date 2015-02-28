@@ -198,6 +198,12 @@ public class LOKitThread extends Thread {
             case LOEvent.TILE_REEVALUATION_REQUEST:
                 tileReevaluationRequest(event.mComposedTileLayer);
                 break;
+            case LOEvent.SWIPE_LEFT:
+                onSwipeLeft();
+                break;
+            case LOEvent.SWIPE_RIGHT:
+                onSwipeRight();
+                break;
         }
     }
 
@@ -212,6 +218,14 @@ public class LOKitThread extends Thread {
             return;
         }
         mTileProvider.sendKeyEvent(keyEvent);
+    }
+
+    private void onSwipeLeft() {
+        mTileProvider.onSwipeLeft();
+    }
+
+    private void onSwipeRight() {
+        mTileProvider.onSwipeRight();
     }
 
     /**

@@ -22,7 +22,7 @@ public class OnSlideSwipeListener implements OnTouchListener {
 
         @Override
         public boolean onDown(MotionEvent e) {
-            return true;
+            return false;
         }
 
         @Override
@@ -39,13 +39,13 @@ public class OnSlideSwipeListener implements OnTouchListener {
                         } else {
                             onSwipeLeft();
                         }
-                            }
+                    }
                     result = true;
                 }
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
-            return result;
+            return false;
         }
     }
 

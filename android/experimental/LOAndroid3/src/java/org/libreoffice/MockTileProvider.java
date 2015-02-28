@@ -112,4 +112,12 @@ public class MockTileProvider implements TileProvider {
     public int getCurrentPartNumber() {
         return 0;
     }
+
+    @Override
+    public void onSwipeLeft() {
+    }
+
+    @Override
+    public void onSwipeRight() {
+    }
 }

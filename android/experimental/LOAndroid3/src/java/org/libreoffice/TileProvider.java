@@ -75,6 +75,17 @@ public interface TileProvider {
      */
     void mouseButtonDown(PointF documentCoordinate, int numberOfClicks);
 
+
+    /**
+     * Trigger a swipe left event.
+     */
+    void onSwipeLeft();
+
+    /**
+     * Trigger a swipe left event.
+     */
+    void onSwipeRight();
+
     /**
      * Trigger a mouse button up event.
      *
