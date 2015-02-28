@@ -47,6 +47,7 @@
 #include <ucbhelper/activedatasink.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
+#include <tools/urlobj.hxx>
 
 namespace utl {
 
@@ -449,8 +450,8 @@ void MediaDescriptor::clearComponentDataEntry( const OUString& rName )
         PROP_PASSWORD(), OUString() );
     css::uno::Reference< css::task::XInteractionHandler > xInteractHandler = getUnpackedValueOrDefault(
         PROP_INTERACTIONHANDLER(), css::uno::Reference< css::task::XInteractionHandler >() );
-    OUString aDocumentName = getUnpackedValueOrDefault(
-        PROP_URL(), OUString() );
+    OUString aDocumentName = INetURLObject( getUnpackedValueOrDefault(
+        PROP_URL(), OUString()) ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
 
     bool bIsDefaultPassword = false;
     css::uno::Sequence< css::beans::NamedValue > aEncryptionData = comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
