@@ -224,7 +224,7 @@ writer_factory_list = [
 
 writer_constructor_list = [
 # basic/util/sb.component
-    "com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation",
+    ("com_sun_star_comp_sfx2_ScriptLibraryContainer_get_implementation", "#if HAVE_FEATURE_SCRIPTING"),
 # filter/source/textfilterdetect/textfd.component 
     "com_sun_star_comp_filters_PlainTextFilterDetect_get_implementation",
 # sw/util/sw.component
@@ -256,6 +256,12 @@ constructor_map = {
     'draw' : draw_constructor_list,
     'writer' : writer_constructor_list,
     }
+
+def get_constructor_guard(constructor):
+    if type(full_constructor_map[constructor]) is bool:
+        return None
+    else:
+        return full_constructor_map[constructor]
 
 # instead of outputting native-code.cxx, reduce the services.rdb according to
 # the constraints, so that we can easily emulate what services do we need to
@@ -302,7 +308,10 @@ full_constructor_map = {}
 if options.groups:
     for constructor_group in options.groups:
         for constructor in constructor_map[constructor_group]:
-            full_constructor_map[constructor] = True
+            if type(constructor) is tuple:
+                full_constructor_map[constructor[0]] = constructor[1]
+            else:
+                full_constructor_map[constructor] = True
 
 # dict of all the factories that we need according to -g's
 full_factory_map = {}
@@ -341,7 +350,12 @@ for entry in sorted(full_factory_map.keys()):
 
 print ('')
 for constructor in sorted(full_constructor_map.keys()):
+    constructor_guard = get_constructor_guard(constructor)
+    if constructor_guard:
+        print (constructor_guard)
     print ('void * '+constructor+'( void *, void * );')
+    if constructor_guard:
+        print ('#endif')
 
 print ("""
 const lib_to_factory_mapping *
@@ -391,7 +405,12 @@ lo_get_constructor_map(void)
     static lib_to_constructor_mapping map[] = {""")
 
 for constructor in sorted(full_constructor_map.keys()):
+    constructor_guard = get_constructor_guard(constructor)
+    if constructor_guard:
+        print (constructor_guard)
     print ('        { "' +constructor+ '", ' +constructor+ ' },')
+    if constructor_guard:
+        print ('#endif')
 
 print ("""
         { 0, 0 }
