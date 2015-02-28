@@ -324,12 +324,6 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
     return aSNS;
 }
 
-Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
-{
-    return static_cast< cppu::OWeakObject * >(
-        new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:InsertPage" , true ) );
-}
-
 // class SlideLayoutController
 
 SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL, bool bInsertPage )
@@ -378,5 +372,21 @@ Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  
 }
 
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_sd_SlideLayoutController_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::SlideLayoutController(context, ".uno:AssignLayout", false));
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_sd_InsertSlideController_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::SlideLayoutController(context, ".uno:InsertPage", true));
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
