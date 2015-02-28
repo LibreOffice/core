@@ -26,7 +26,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	ENABLE_TDE \
 	SYSTEM_CURL \
 	SYSTEM_HSQLDB \
-	SYSTEM_LIBEXTTEXTCAT \
 	SYSTEM_LIBXSLT \
 	SYSTEM_REDLAND \
 	WITH_GALLERY_BUILD \
