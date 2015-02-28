@@ -833,6 +833,31 @@ $(eval $(call gb_Helper_register_packages_for_install,ure,\
 ))
 
 $(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	$(if $(SYSTEM_LIBEXTTEXTCAT),,libexttextcat_fingerprint) \
+	officecfg_misc \
+	extras_glade \
+	extras_labels \
+	framework_dtd \
+	package_dtd \
+	xmloff_dtd \
+	xmlscript_dtd \
+	xmlhelp_helpxsl \
+	$(if $(ENABLE_JAVA),\
+		scripting_java \
+		scripting_java_jars \
+		$(if $(ENABLE_SCRIPTING_BEANSHELL),scripting_ScriptsBeanShell) \
+		$(if $(ENABLE_SCRIPTING_JAVASCRIPT),scripting_ScriptsJavaScript) \
+	) \
+	$(if $(DISABLE_SCRIPTING),,scripting_scriptbindinglib) \
+	wizards_basicsrvaccess2base \
+	wizards_basicsrvdepot \
+	wizards_basicsrveuro \
+	wizards_basicsrvgimmicks \
+	wizards_basicsrvimport \
+	wizards_basicsrvform \
+	wizards_basicsrvtemplate \
+	wizards_basicsrvtools \
+	wizards_basicsrvtutorials \
 	xmlsec \
 	chart2_opengl_shader \
 	vcl_opengl_shader \

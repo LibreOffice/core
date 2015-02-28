@@ -27,73 +27,6 @@
 
 #include "macros.inc"
 
-File gid_File_Basic_Access2Base
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvaccess2base.filelist";
-End
-
-File gid_File_Basic_Depot
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvdepot.filelist";
-End
-
-File gid_File_Basic_Euro
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrveuro.filelist";
-End
-
-File gid_File_Basic_Gimmicks
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvgimmicks.filelist";
-End
-
-File gid_File_Basic_Importwiz
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvimport.filelist";
-End
-
-File gid_File_Basic_Formwiz
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvform.filelist";
-End
-
-#ifndef DISABLE_SCRIPTING
-
-File gid_File_Basic_Scriptbindinglib
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "scripting_scriptbindinglib.filelist";
-End
-
-#endif
-
-File gid_File_Basic_Template
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvtemplate.filelist";
-End
-
-File gid_File_Basic_Tools
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvtools.filelist";
-End
-
 File gid_File_Basic_User
     Dir = FILELIST_DIR;
     USER_FILE_BODY;
@@ -113,13 +46,6 @@ File gid_File_Basic_User_Standard
     USER_FILE_BODY;
     Styles = (FILELIST, WORKSTATION);
     Name = "wizards_basicsrvstandard.filelist";
-End
-
-File gid_File_Basic_Tutorials
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "wizards_basicsrvtutorials.filelist";
 End
 
 #if defined UNX
@@ -167,35 +93,7 @@ File gid_File_Bin_Senddoc
 End
 #endif
 
-File gid_File_framework_dtd
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "framework_dtd.filelist";
-End
-
-File gid_File_xmlscript_dtd
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "xmlscript_dtd.filelist";
-End
-
-File gid_File_Dtd_Manifest
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "package_dtd.filelist";
-End
-
 STD_RES_FILE( gid_File_Res_Eps, eps )
-
-File gid_File_Help_Help_Zip
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "xmlhelp_helpxsl.filelist";
-End
 
 #if defined WITH_HELP
 File gid_File_Help_Common_Zip
@@ -265,40 +163,7 @@ End
 #endif
 #endif
 
-#ifndef SYSTEM_LIBEXTTEXTCAT
-// fingerprint files (lm)
-
-File gid_File_Share_Fingerprint
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "libexttextcat_fingerprint.filelist";
-End
-
-#endif
-
 // mod files
-
-File gid_File_xmloff_dtd
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "xmloff_dtd.filelist";
-End
-
-File gid_File_Share_Labels_Xml
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "extras_labels.filelist";
-End
-
-File gid_File_Share_Glade_Xml
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "extras_glade.filelist";
-End
 
 File gid_File_Share_Registry_Main_Xcd
     TXT_FILE_BODY;
@@ -317,13 +182,6 @@ File gid_File_Share_Registry_Forcedefault_Xcd
 End
 
 #endif
-
-File gid_File_officecfg_misc
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "officecfg_misc.filelist";
-End
 
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
@@ -388,40 +246,6 @@ File gid_File_Share_Registry_Ctlseqcheck_Xcd
     Name (lo) = "ctlseqcheck.xcd";
     Name (th) = "ctlseqcheck.xcd";
 End
-
-#ifdef ENABLE_JAVA
-File gid_File_Scripts_Java
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "scripting_java.filelist";
-End
-
-File gid_File_Scripts_Java_jars
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "scripting_java_jars.filelist";
-End
-
-#ifndef WITHOUT_SCRIPTING_BEANSHELL
-File gid_File_Scripts_Beanshell
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "scripting_ScriptsBeanShell.filelist";
-End
-#endif
-
-#ifndef WITHOUT_SCRIPTING_JAVASCRIPT
-File gid_File_Scripts_Javascript
-    Dir = FILELIST_DIR;
-    TXT_FILE_BODY;
-    Styles = (FILELIST);
-    Name = "scripting_ScriptsJavaScript.filelist";
-End
-#endif
-#endif
 
 // user interface configuration files
 UI_FILELIST(basicide, "UIConfig/modules/BasicIDE.filelist")
