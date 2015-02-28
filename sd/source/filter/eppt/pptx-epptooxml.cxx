@@ -889,7 +889,7 @@ void PowerPointExport::WriteAnimationCondition( FSHelperPtr pFS, Any& rAny, bool
     {
     // TODO
     DBG(printf ("animation condition event: TODO\n"));
-    DBG(printf ("event offset has value: %d triger: %d source has value: %d\n", aEvent.Offset.hasValue(), aEvent.Trigger, aEvent.Source.hasValue()));
+    DBG(printf ("event offset has value: %d trigger: %d source has value: %d\n", aEvent.Offset.hasValue(), aEvent.Trigger, aEvent.Source.hasValue()));
 
     if( !bWriteEvent && aEvent.Trigger == EventTrigger::ON_NEXT && bMainSeqChild )
         pDelay = "indefinite";

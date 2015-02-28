@@ -246,7 +246,7 @@ public:
     void setSkipTriggersNextEffect (const bool bSkipTriggersNextEffect)
     { mbSkipTriggersNextEffect = bSkipTriggersNextEffect; }
 
-    ///  Skip the current effect but do not triggere the next effect.
+    ///  Skip the current effect but do not trigger the next effect.
     void skipEffect (void) { handleEvent_impl(false); }
 
 private:

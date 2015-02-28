@@ -54,7 +54,7 @@ class BackgroundsDialog(ImageListDialog):
         self.build()
 
     '''
-    trigered when the user clicks the "other" button.
+    triggered when the user clicks the "other" button.
     opens a "file open" dialog, adds the selected
     image to the list and to the web wizard configuration,
     and then jumps to the new image, selecting it in the list.

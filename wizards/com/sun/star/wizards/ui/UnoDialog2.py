@@ -28,7 +28,7 @@ It was created for use with the automatic conversion of Basic XML Dialog
 description files to a Java class which builds
 the same dialog through the UNO API.<br/>
 It uses an Event-Listener method, which calls a method through reflection
-wenn an event on a component is trigered.
+when an event on a component is triggered.
 see the classes CommonListener for details
 '''
 
