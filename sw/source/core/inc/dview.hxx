@@ -22,7 +22,7 @@
 #include <svx/fmview.hxx>
 
 class OutputDevice;
-class SwViewImp;
+class SwViewShellImp;
 class SwFrm;
 class SwFlyFrm;
 class SwAnchoredObject;
@@ -31,7 +31,7 @@ class SdrUndoManager;
 class SwDrawView : public FmFormView
 {
     Point           aAnchorPoint;       // anchor position
-    SwViewImp      &rImp;               // a view is always part of a shell
+    SwViewShellImp      &rImp;               // a view is always part of a shell
 
     const SwFrm *CalcAnchor();
 
@@ -79,7 +79,7 @@ protected:
     virtual SdrUndoManager* getSdrUndoManagerForEnhancedTextEdit() const SAL_OVERRIDE;
 
 public:
-    SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
+    SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice* pOutDev=NULL );
 
     // from base class
     virtual SdrObject*   GetMaxToTopObj(SdrObject* pObj) const SAL_OVERRIDE;
@@ -96,8 +96,8 @@ public:
     virtual void MakeVisible( const Rectangle&, vcl::Window &rWin ) SAL_OVERRIDE;
     virtual void CheckPossibilities() SAL_OVERRIDE;
 
-    const SwViewImp &Imp() const { return rImp; }
-          SwViewImp &Imp()       { return rImp; }
+    const SwViewShellImp &Imp() const { return rImp; }
+          SwViewShellImp &Imp()       { return rImp; }
 
     // anchor and Xor for dragging
     void ShowDragAnchor();

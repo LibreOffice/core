@@ -250,7 +250,7 @@ SwPageFrm::~SwPageFrm()
         {
             if ( pSh )
             {
-                SwViewImp *pImp = pSh->Imp();
+                SwViewShellImp *pImp = pSh->Imp();
                 pImp->SetFirstVisPageInvalid();
                 if ( pImp->IsAction() )
                     pImp->GetLayAction().SetAgain();
@@ -951,7 +951,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, bool bNotifyFields, SwPageFrm** p
     assert(pStart && "no starting page.");
 
     SwViewShell *pSh   = pStart->getRootFrm()->GetCurrShell();
-    SwViewImp *pImp  = pSh ? pSh->Imp() : 0;
+    SwViewShellImp *pImp  = pSh ? pSh->Imp() : 0;
 
     if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
     {
@@ -1217,7 +1217,7 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, bool bFtn )
         {
             CheckPageDescs( pSibling, false );
             SwViewShell *pSh = getRootFrm()->GetCurrShell();
-            SwViewImp *pImp = pSh ? pSh->Imp() : 0;
+            SwViewShellImp *pImp = pSh ? pSh->Imp() : 0;
             if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
             {
                 const sal_uInt16 nNum = pImp->GetLayAction().GetCheckPageNum();

@@ -647,7 +647,7 @@ SwFlyNotify::~SwFlyNotify()
     if ( pFly->IsNotifyBack() )
     {
         SwViewShell *pSh = pFly->getRootFrm()->GetCurrShell();
-        SwViewImp *pImp = pSh ? pSh->Imp() : 0;
+        SwViewShellImp *pImp = pSh ? pSh->Imp() : 0;
         if ( !pImp || !pImp->IsAction() || !pImp->GetLayAction().IsAgain() )
         {
             //If in the LayAction the IsAgain is set it can be

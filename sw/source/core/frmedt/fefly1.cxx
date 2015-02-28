@@ -232,7 +232,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, bool bNew )
     //   not have been changed
     // The frames should not be selected by the document position, because
     // it should have been selected!
-    SwViewImp *pImpl = Imp();
+    SwViewShellImp *pImpl = Imp();
     if( GetWin() && (bNew || !pImpl->GetDrawView()->AreObjectsMarked()) )
     {
         OSL_ENSURE( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );

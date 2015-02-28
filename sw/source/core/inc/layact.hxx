@@ -32,7 +32,7 @@ class SwPageFrm;
 class SwFlyFrm;
 class SwCntntFrm;
 class SwTabFrm;
-class SwViewImp;
+class SwViewShellImp;
 class SwCntntNode;
 class SwWait;
 
@@ -44,14 +44,14 @@ class SwWait;
  * 3. Calling Action()
  * 4. Soon after that the destruction of the object
  *
- * The object registers at the SwViewImp in the ctor and deregisters not until
+ * The object registers at the SwViewShellImp in the ctor and deregisters not until
  * the dtor!
  * It's a typical stack object.
  */
 class SwLayAction
 {
     SwRootFrm  *pRoot;
-    SwViewImp  *pImp; // here the action logs in and off
+    SwViewShellImp  *pImp; // here the action logs in and off
 
     // For the sake of optimization, so that the tables stick a bit better to
     // the Crsr when hitting return/backspace in front of one.
@@ -119,7 +119,7 @@ class SwLayAction
     inline std::clock_t GetStartTicks() { return nStartTicks; }
 
 public:
-    SwLayAction( SwRootFrm *pRt, SwViewImp *pImp );
+    SwLayAction( SwRootFrm *pRt, SwViewShellImp *pImp );
     ~SwLayAction();
 
     void SetIdle            ( bool bNew )   { bIdle = bNew; }
@@ -182,7 +182,7 @@ class SwLayIdle
 {
 
     SwRootFrm *pRoot;
-    SwViewImp  *pImp;           // The Idler registers and deregisters here
+    SwViewShellImp  *pImp;           // The Idler registers and deregisters here
     SwCntntNode *pCntntNode;    // The current cursor position is saved here
     sal_Int32  nTxtPos;
     bool        bPageValid;     // Were we able to evaluate everything on the whole page?
@@ -201,7 +201,7 @@ class SwLayIdle
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
 
 public:
-    SwLayIdle( SwRootFrm *pRt, SwViewImp *pImp );
+    SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pImp );
     ~SwLayIdle();
 };
 

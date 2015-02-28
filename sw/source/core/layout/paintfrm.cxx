@@ -7688,7 +7688,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         gProp.bSFlyMetafile = true;
         gProp.pSFlyMetafileOut = pWin;
 
-        SwViewImp *pImp = pSh->Imp();
+        SwViewShellImp *pImp = pSh->Imp();
         gProp.pSFlyOnlyDraw = pFly;
         gProp.pSLines = new SwLineRects;
 

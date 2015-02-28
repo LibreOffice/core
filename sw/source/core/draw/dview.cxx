@@ -92,7 +92,7 @@ static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, bool bAll )
     return 0;
 }
 
-SwDrawView::SwDrawView( SwViewImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
+SwDrawView::SwDrawView( SwViewShellImp &rI, SdrModel *pMd, OutputDevice *pOutDev) :
     FmFormView( static_cast<FmFormModel*>(pMd), pOutDev ),
     rImp( rI )
 {

@@ -3178,7 +3178,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     bool bEnd = false;
     bool bBackLock = false;
     SwViewShell *pSh = getRootFrm()->GetCurrShell();
-    SwViewImp *pImp = pSh ? pSh->Imp() : 0;
+    SwViewShellImp *pImp = pSh ? pSh->Imp() : 0;
     {
         // Underlying algorithm
         // We try to find the optimal height for the column.

@@ -276,7 +276,7 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
     }
 }
 
-SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
+SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewShellImp *pI ) :
     pRoot( pRt ),
     pImp( pI ),
     pOptTab( 0 ),
@@ -2120,7 +2120,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 #define SHOW_IDLE( ColorData )
 #endif // DBG_UTIL
 
-SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
+SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewShellImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
 #ifdef DBG_UTIL
@@ -2219,7 +2219,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 // the whole window. Otherwise there would arise paint problems whose
                 // solution would be disproportionally expensive.
                 //fix(18176):
-                SwViewImp *pViewImp = rSh.Imp();
+                SwViewShellImp *pViewImp = rSh.Imp();
                 bool bUnlock = false;
                 if ( pViewImp->GetRegion() )
                 {

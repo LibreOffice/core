@@ -151,7 +151,7 @@ SwViewShell::SwViewShell( SwDoc& rDocument, vcl::Window *pWindow,
     :
     maBrowseBorder(),
     mpSfxViewShell( 0 ),
-    mpImp( new SwViewImp( this ) ),
+    mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
@@ -230,7 +230,7 @@ SwViewShell::SwViewShell( SwViewShell& rShell, vcl::Window *pWindow,
     Ring( &rShell ),
     maBrowseBorder( rShell.maBrowseBorder ),
     mpSfxViewShell( 0 ),
-    mpImp( new SwViewImp( this ) ),
+    mpImp( new SwViewShellImp( this ) ),
     mpWin( pWindow ),
     mpOut( pOutput ? pOutput
                   : pWindow ? (OutputDevice*)pWindow
