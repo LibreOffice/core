@@ -42,8 +42,8 @@ public:
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow = true );
     virtual void            DestroyObject( SalObject* pObject );
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
-                                                     long nDX, long nDY,
-                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData );
+                                                     long &nDX, long &nDY,
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData ) SAL_OVERRIDE;
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                ImplJobSetup* pSetupData );
     virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );

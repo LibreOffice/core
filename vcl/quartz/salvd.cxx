@@ -35,7 +35,7 @@
 #include "quartz/utils.h"
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
-    long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+    long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
     // #i92075# can be called first in a thread
     SalData::ensureThreadAutoreleasePool();
@@ -54,7 +54,7 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 #endif
 }
 
-AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
+AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long &nDX, long &nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 :   mbGraphicsUsed( false )
 ,   mxBitmapContext( NULL )
 ,   mnBitmapDepth( 0 )
@@ -65,7 +65,6 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
     {
         // Create virtual device based on existing SystemGraphicsData
         // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
-        // WTF does the above mean, SystemGraphicsData has no size field(s).
         mbForeignContext = true;        // the mxContext is from pData (what "mxContext"? there is no such field anywhere in vcl;)
         mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
         if (nDX == 0)
@@ -73,6 +72,18 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
         if (nDY == 0)
             nDY = 1;
         mxLayer = CGLayerCreateWithContext( pData->rCGContext, CGSizeMake( nDX, nDY), NULL );
+        // Interogate the context as to its real size
+        if (mxLayer)
+        {
+            const CGSize aSize = CGLayerGetSize( mxLayer );
+            nDX = static_cast<long>(aSize.width);
+            nDY = static_cast<long>(aSize.height);
+        }
+        else
+        {
+            nDX = 0;
+            nDY = 0;
+        }
         CG_TRACE( "CGLayerCreateWithContext(" << pData->rCGContext << "," << CGSizeMake( nDX, nDY) << ",NULL) = " << mxLayer );
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
