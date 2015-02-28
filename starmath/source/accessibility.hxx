@@ -30,8 +30,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/implbase5.hxx>
-#include <cppuhelper/implbase6.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <svl/SfxBroadcaster.hxx>
 
 #include <editeng/editeng.hxx>
@@ -53,7 +52,7 @@ struct AccessibleEventObject;
 
 
 typedef
-cppu::WeakImplHelper6
+cppu::WeakImplHelper
     <
         com::sun::star::lang::XServiceInfo,
         com::sun::star::accessibility::XAccessible,
@@ -302,7 +301,7 @@ public:
 
 
 typedef
-cppu::WeakImplHelper5
+cppu::WeakImplHelper
     <
         com::sun::star::lang::XServiceInfo,
         com::sun::star::accessibility::XAccessible,
