@@ -487,7 +487,7 @@ private:
     SCROW                   nEndRow;
 
     SCROW*                  pNextEnd;
-    SCCOL*                  pPrevColEnd;
+    SCCOL*                  pHorizEnd;
     SCSIZE*                 pIndices;
     const ScPatternAttr**   ppPatterns;
     SCCOL                   nCol;
@@ -495,6 +495,9 @@ private:
     bool                    bRowEmpty;
     bool                    bRepeatedRow;
     SCROW                   nMinNextEnd;
+
+    void InitForNextRow(bool bInitialization);
+    bool InitForNextAttr();
 
 public:
             ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,

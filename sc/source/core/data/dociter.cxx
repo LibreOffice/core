@@ -2230,8 +2230,6 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
         OSL_FAIL("try to access index out of bounds, FIX IT");
     OSL_ENSURE( pDoc->maTabs[nTab], "Table does not exist" );
 
-    SCCOL i;
-
     nRow = nStartRow;
     nCol = nStartCol;
     bRowEmpty = false;
@@ -2239,49 +2237,97 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB
 
     pIndices    = new SCSIZE[nEndCol-nStartCol+1];
     pNextEnd    = new SCROW[nEndCol-nStartCol+1];
-    pPrevColEnd = new SCCOL[nEndCol-nStartCol+1];
+    pHorizEnd   = new SCCOL[nEndCol-nStartCol+1];
     ppPatterns  = new const ScPatternAttr*[nEndCol-nStartCol+1];
 
-    nMinNextEnd = MAXROW;
-    bool bEmpty = true;
-    for (i=nStartCol; i<=nEndCol; i++)
-    {
-        SCCOL nPos = i - nStartCol;
-        const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
-        OSL_ENSURE( pArray, "pArray == 0" );
-
-        SCSIZE nIndex;
-        pArray->Search( nStartRow, nIndex );
-
-        const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
-        SCROW nThisEnd = pArray->pData[nIndex].nRow;
-
-        if ( nThisEnd < nMinNextEnd )
-            nMinNextEnd = nThisEnd; // nMinNextEnd can be set here already
-
-        if ( IsDefaultItem( pPattern ) )
-            pPattern = NULL;
-        else
-            bEmpty = false; // Found attributes
-
-        pIndices[nPos] = nIndex;
-        pNextEnd[nPos] = nThisEnd;
-        pPrevColEnd[nPos] = MAXCOL+1; // only for OSL_ENSURE
-        ppPatterns[nPos] = pPattern;
-    }
-
-    if (bEmpty)
-        nRow = nMinNextEnd; // Skip until end of next section
-
-    bRowEmpty = bEmpty;
+    InitForNextRow(true);
 }
 
 ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 {
     delete[] ppPatterns;
+    delete[] pHorizEnd;
     delete[] pNextEnd;
-    delete[] pPrevColEnd;
     delete[] pIndices;
+}
+
+void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
+{
+    bool bEmpty = true;
+    nMinNextEnd = MAXROW;
+    SCCOL nThisHead = 0;
+
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)
+    {
+        SCCOL nPos = i - nStartCol;
+        if ( bInitialization || pNextEnd[nPos] < nRow )
+        {
+            const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
+            OSL_ENSURE( pArray, "pArray == 0" );
+
+            SCSIZE nIndex;
+            if (bInitialization)
+            {
+                pArray->Search( nStartRow, nIndex );
+                pIndices[nPos] = nIndex;
+                pHorizEnd[nPos] = MAXCOL+1; // only for OSL_ENSURE
+            }
+            else
+                nIndex = ++pIndices[nPos];
+
+            if ( nIndex < pArray->nCount )
+            {
+                const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
+                SCROW nThisEnd = pArray->pData[nIndex].nRow;
+
+                if ( IsDefaultItem( pPattern ) )
+                    pPattern = NULL;
+                else
+                    bEmpty = false; // Found attributes
+
+                pNextEnd[nPos] = nThisEnd;
+                OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
+                ppPatterns[nPos] = pPattern;
+            }
+            else
+            {
+                OSL_FAIL("AttrArray does not range to MAXROW");
+                pNextEnd[nPos] = MAXROW;
+                ppPatterns[nPos] = NULL;
+            }
+        }
+        else if ( ppPatterns[nPos] )
+            bEmpty = false; // Area not at the end yet
+
+        if ( nMinNextEnd > pNextEnd[nPos] )
+            nMinNextEnd = pNextEnd[nPos];
+
+        // store positions of ScHorizontalAttrIterator elements (minimizing expensive ScPatternAttr comparisons)
+        if (i > nStartCol && ppPatterns[nThisHead] != ppPatterns[nPos])
+        {
+           pHorizEnd[nThisHead] = i - 1;
+           nThisHead = nPos; // start position of the next horizontal group
+        }
+    }
+
+    if (bEmpty)
+        nRow = nMinNextEnd; // Skip until end of next section
+    else
+        pHorizEnd[nThisHead] = nEndCol; // set the end position of the last horizontal group, too
+    bRowEmpty = bEmpty;
+}
+
+bool ScHorizontalAttrIterator::InitForNextAttr()
+{
+    if ( !ppPatterns[nCol-nStartCol] ) // Skip default items
+    {
+        OSL_ENSURE( pHorizEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
+        nCol = pHorizEnd[nCol-nStartCol] + 1;
+        if ( nCol > nEndCol )
+            return false;
+    }
+
+    return true;
 }
 
 const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow )
@@ -2290,35 +2336,16 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
         OSL_FAIL("try to access index out of bounds, FIX IT");
     for (;;)
     {
-        if (!bRowEmpty)
+        if ( !bRowEmpty && nCol <= nEndCol && InitForNextAttr() )
         {
-            // Search in this row
-            while ( nCol <= nEndCol && !ppPatterns[nCol-nStartCol] )
-                ++nCol;
-
-            if ( nCol <= nEndCol )
-            {
-                const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
-                rRow = nRow;
-                rCol1 = nCol;
-                if ( bRepeatedRow )
-                {
-                    OSL_ENSURE( pPrevColEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
-                    nCol = pPrevColEnd[nCol-nStartCol]; // use the result stored before
-                }
-                else
-                {
-                    while ( nCol < nEndCol && ( ppPatterns[nCol+1-nStartCol] == pPat) )
-                        ++nCol;
-                    // store the result to avoid the previous very expensive comparisons
-                    pPrevColEnd[rCol1-nStartCol] = nCol;
-                }
-                rCol2 = nCol;
-                ++nCol; // Count up for next call
-                return pPat; // Found it!
-            }
-
-            bRepeatedRow = true; // we can use the stored row data next time
+            const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
+            rRow = nRow;
+            rCol1 = nCol;
+            OSL_ENSURE( pHorizEnd[nCol-nStartCol] < MAXCOL+1, "missing stored data" );
+            nCol = pHorizEnd[nCol-nStartCol];
+            rCol2 = nCol;
+            ++nCol; // Count up for next call
+            return pPat; // Found it!
         }
 
         // Next row
@@ -2327,54 +2354,8 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             return NULL; // Found nothing
         nCol = nStartCol; // Start at the left again
 
-        if ( bRepeatedRow && nRow <= nMinNextEnd ) // use only the stored data of the previous row
-           continue;
-
-        bRepeatedRow = false;
-        nMinNextEnd = MAXROW;
-        bool bEmpty = true;
-        SCCOL i;
-
-        for ( i = nStartCol; i <= nEndCol; i++)
-        {
-            SCCOL nPos = i-nStartCol;
-            if ( pNextEnd[nPos] < nRow )
-            {
-                const ScAttrArray* pArray = pDoc->maTabs[nTab]->aCol[i].pAttrArray;
-
-                SCSIZE nIndex = ++pIndices[nPos];
-                if ( nIndex < pArray->nCount )
-                {
-                    const ScPatternAttr* pPattern = pArray->pData[nIndex].pPattern;
-                    SCROW nThisEnd = pArray->pData[nIndex].nRow;
-                    if ( IsDefaultItem( pPattern ) )
-                        pPattern = NULL;
-                    else
-                        bEmpty = false; // Found attributes
-
-                    pNextEnd[nPos] = nThisEnd;
-                    ppPatterns[nPos] = pPattern;
-
-                    OSL_ENSURE( pNextEnd[nPos] >= nRow, "Sequence out of order" );
-                }
-                else
-                {
-                    OSL_FAIL("AttrArray does not range to MAXROW");
-                    pNextEnd[nPos] = MAXROW;
-                    ppPatterns[nPos] = NULL;
-                }
-            }
-            else if ( ppPatterns[nPos] )
-                bEmpty = false; // Area not at the end yet
-
-            if ( nMinNextEnd > pNextEnd[nPos] )
-                nMinNextEnd = pNextEnd[nPos];
-
-        }
-
-        if (bEmpty)
-            nRow = nMinNextEnd; // Skip empty rows
-        bRowEmpty = bEmpty;
+        if ( bRowEmpty || nRow > nMinNextEnd )
+            InitForNextRow(false);
     }
 }
 
