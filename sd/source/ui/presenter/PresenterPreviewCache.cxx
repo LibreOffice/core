@@ -70,26 +70,6 @@ private:
     void CallListeners (const sal_Int32 nSlideIndex);
 };
 
-//===== Service ===============================================================
-
-Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
-{
-    return Reference<XInterface>(static_cast<XWeak*>(new PresenterPreviewCache(rxContext)));
-}
-
-OUString PresenterPreviewCache_getImplementationName (void) throw(RuntimeException)
-{
-    return OUString("com.sun.star.comp.Draw.PresenterPreviewCache");
-}
-
-Sequence<OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames (void)
-    throw (RuntimeException)
-{
-    static const OUString sServiceName("com.sun.star.drawing.PresenterPreviewCache");
-    return Sequence<OUString>(&sServiceName, 1);
-}
-
 //===== PresenterPreviewCache =================================================
 
 PresenterPreviewCache::PresenterPreviewCache (const Reference<XComponentContext>& rxContext)
@@ -394,5 +374,15 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
 }
 
 } } // end of namespace ::sd::presenter
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresenterPreviewCache_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new sd::presenter::PresenterPreviewCache(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
