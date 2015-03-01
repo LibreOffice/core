@@ -34,6 +34,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/svtools.hrc>
 #include <limits>
+#include <utility>
 
 namespace {
 #define TABBAR_DRAG_SCROLLOFF   5
@@ -558,12 +559,9 @@ void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
     // as the selected tabs should appear in 3D
     if ( mnWinStyle & WB_3DTAB )
     {
-        Color aTempColor = rFaceColor;
-        rFaceColor = rSelectColor;
-        rSelectColor = aTempColor;
-        aTempColor = rFaceTextColor;
-        rFaceTextColor = rSelectTextColor;
-        rSelectTextColor = rFaceTextColor;
+        using std::swap;
+        swap(rFaceColor, rSelectColor);
+        swap(rFaceTextColor, rSelectTextColor);
     }
 }
 
