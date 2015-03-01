@@ -135,7 +135,7 @@ Sequence< OUString > FirebirdDriver::getSupportedServiceNames_Static() throw (Ru
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = "com.sun.star.sdbc.Driver";
-    aSNS[0] = "com.sun.star.sdbcx.Driver";
+    aSNS[1] = "com.sun.star.sdbcx.Driver";
     return aSNS;
 }
 
