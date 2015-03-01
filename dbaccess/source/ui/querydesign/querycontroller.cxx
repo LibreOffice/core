@@ -290,7 +290,7 @@ namespace
         {
             Reference< XWindow > xWindow(xUIElement->getRealInterface(), css::uno::UNO_QUERY);
             vcl::Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if( pWindow || pWindow->HasChildPathFocus() )
+            if( pWindow && pWindow->HasChildPathFocus() )
             {
                 pWindow->GrabFocusToDocument();
             }
