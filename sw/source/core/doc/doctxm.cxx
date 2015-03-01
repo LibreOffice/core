@@ -360,11 +360,7 @@ SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
             SwTxtNode* pHeadNd = GetNodes().MakeTxtNode( aIdx,
                             getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-            OUString sNm( pNewSection->GetTOXName() );
-            // ??Resource
-            sNm += "_Head";
-
-            SwSectionData headerData( TOX_HEADER_SECTION, sNm );
+            SwSectionData headerData( TOX_HEADER_SECTION, pNewSection->GetTOXName()+"_Head" );
 
             SwNodeIndex aStt( *pHeadNd ); --aIdx;
             SwSectionFmt* pSectFmt = MakeSectionFmt( 0 );
@@ -393,7 +389,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
-    OUString sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
+    const OUString sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), rTOX.GetTOXName());
 
     SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
 
@@ -683,15 +679,14 @@ bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const OUString& rName)
                     "no TOXBaseSection!" );
     SwTOXBaseSection* pTOX = const_cast<SwTOXBaseSection*>(static_cast<const SwTOXBaseSection*>(&rTOXBase));
 
-    OUString sTmp = GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName);
-    bool bRet = sTmp == rName;
-    if(bRet)
+    if (GetUniqueTOXBaseName(*rTOXBase.GetTOXType(), rName) == rName)
     {
         pTOX->SetTOXName(rName);
         pTOX->SetSectionName(rName);
         getIDocumentState().SetModified();
+        return true;
     }
-    return bRet;
+    return false;
 }
 
 static const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl = 0 )
@@ -900,11 +895,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                                 GetTxtFmtColl( FORM_TITLE ) );
         pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
 
-        OUString sNm( GetTOXName() );
-        // ??Resource
-        sNm += "_Head";
-
-        SwSectionData headerData( TOX_HEADER_SECTION, sNm );
+        SwSectionData headerData( TOX_HEADER_SECTION, GetTOXName()+"_Head" );
 
         SwNodeIndex aStt( *pHeadNd ); --aIdx;
         SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
@@ -1048,7 +1039,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    OUString sDeli, sLastDeli;
+    OUString sLastDeli;
     SwTOXSortTabBases::size_type i = 0;
     while( i < aSortArr.size() )
     {
@@ -1060,7 +1051,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
         if( nLevel == FORM_ALPHA_DELIMITTER )
             continue;
 
-        sDeli = rIntl.GetIndexKey( aSortArr[i]->GetTxt(),
+        const OUString sDeli = rIntl.GetIndexKey( aSortArr[i]->GetTxt(),
                                    aSortArr[i]->GetLocale() );
 
         // Do we already have a Delimitter?
@@ -1239,7 +1230,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
-        OUString sTmpStyleNames = GetStyleNames(i);
+        const OUString sTmpStyleNames = GetStyleNames(i);
         sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sTmpStyleNames, TOX_STYLE_DELIMITER);
         for( sal_uInt16 nStyle = 0; nStyle < nTokenCount; ++nStyle )
         {
@@ -1296,9 +1287,9 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
                 ::lcl_FindChapterNode( rTxtNode, 0 ) == pOwnChapterNode ) )
         {
             const SwSetExpField& rSeqField = dynamic_cast<const SwSetExpField&>(*(pFmtFld->GetField()));
-            OUString sName = GetSequenceName();
-            sName += OUString( cSequenceMarkSeparator );
-            sName += OUString::number( rSeqField.GetSeqNumber() );
+            const OUString sName = GetSequenceName()
+                + OUString( cSequenceMarkSeparator )
+                + OUString::number( rSeqField.GetSeqNumber() );
             SwTOXPara * pNew = new SwTOXPara( rTxtNode, nsSwTOXElement::TOX_SEQUENCE, 1, sName );
             // set indexes if the number or the reference text are to be displayed
             if( GetCaptionDisplay() == CAPTION_TEXT )
