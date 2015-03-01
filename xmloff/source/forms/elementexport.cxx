@@ -175,7 +175,6 @@ namespace xmloff
         if (false)
             ;
         CHECK_N_TRANSLATE( FORM );
-        CHECK_N_TRANSLATE( FORM );
         CHECK_N_TRANSLATE( LISTBOX );
         CHECK_N_TRANSLATE( COMBOBOX );
         CHECK_N_TRANSLATE( RADIOBUTTON );
