@@ -52,9 +52,10 @@ Guess::Guess()
 *
 */
 Guess::Guess(const char * guess_str)
+    : language_str(DEFAULT_LANGUAGE)
+    , country_str(DEFAULT_COUNTRY)
+    , encoding_str(DEFAULT_ENCODING)
 {
-    Guess();
-
     string lang;
     string country;
     string enc;
