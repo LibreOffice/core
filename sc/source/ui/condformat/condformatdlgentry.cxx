@@ -242,7 +242,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( vcl::Window* pParent, ScDocument* pD
     {
         maLbCondType.SelectEntryPos(0);
         maEdVal2.Hide();
-        maLbStyle.SelectEntryPos(1);
+        maLbStyle.SelectEntryPos(0);
     }
 }
 
