@@ -43,7 +43,6 @@ public:
 class PaletteASE : public Palette
 {
     bool        mbValidPalette;
-    OUString    maFName;
     OUString    maFPath;
     OUString    maName;
     ColorList   maColors;

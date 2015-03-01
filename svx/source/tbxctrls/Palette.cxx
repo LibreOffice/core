@@ -30,7 +30,6 @@ PaletteASE::~PaletteASE()
 
 PaletteASE::PaletteASE( const OUString &rFPath, const OUString &rFName ) :
     mbValidPalette( false ),
-    maFName ( rFName ),
     maFPath ( rFPath ),
     maName  ( rFName )
 {
