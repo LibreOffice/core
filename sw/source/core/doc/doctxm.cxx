@@ -585,8 +585,8 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
 sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 {
     sal_uInt16 nCnt = 0;
-    for( sal_uInt16 n = 0; n < mpTOXTypes->size(); ++n )
-        if( eTyp == (*mpTOXTypes)[n]->GetType() )
+    for( auto pTOXType : *mpTOXTypes )
+        if( eTyp == pTOXType->GetType() )
             ++nCnt;
     return nCnt;
 }
@@ -594,9 +594,9 @@ sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
 {
     sal_uInt16 nCnt = 0;
-    for( sal_uInt16 n = 0; n < mpTOXTypes->size(); ++n )
-        if( eTyp == (*mpTOXTypes)[n]->GetType() && nCnt++ == nId )
-            return (*mpTOXTypes)[n];
+    for( auto pTOXType : *mpTOXTypes )
+        if( eTyp == pTOXType->GetType() && nCnt++ == nId )
+            return pTOXType;
     return 0;
 }
 
@@ -624,14 +624,14 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     const OUString aName( rType.GetTypeName() );
     const sal_Int32 nNmLen = aName.getLength();
 
-    sal_uInt16 nNum = 0;
-    const sal_uInt16 nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
+    SwSectionFmts::size_type nNum = 0;
+    const SwSectionFmts::size_type nFlagSize = ( mpSectionFmtTbl->size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
-    for( sal_uInt16 n = 0; n < mpSectionFmtTbl->size(); ++n )
+    for( auto pSectionFmt : *mpSectionFmtTbl )
     {
-        const SwSectionNode *pSectNd = (*mpSectionFmtTbl)[ n ]->GetSectionNode( false );
+        const SwSectionNode *pSectNd = pSectionFmt->GetSectionNode( false );
         if ( !pSectNd )
             continue;
 
@@ -642,7 +642,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             if ( aName.startsWith(rNm) )
             {
                 // Calculate number and set the Flag
-                nNum = (sal_uInt16)rNm.copy( nNmLen ).toInt32();
+                nNum = rNm.copy( nNmLen ).toInt32();
                 if( nNum-- && nNum < mpSectionFmtTbl->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
@@ -655,9 +655,9 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     {
         // All Numbers have been flagged accordingly, so get the right Number
         nNum = mpSectionFmtTbl->size();
-        for( sal_uInt16 n = 0; n < nFlagSize; ++n )
+        for( SwSectionFmts::size_type n = 0; n < nFlagSize; ++n )
         {
-            sal_uInt16 nTmp = pSetFlags[ n ];
+            sal_uInt8 nTmp = pSetFlags[ n ];
             if( nTmp != 0xff )
             {
                 // so get the Number
@@ -955,7 +955,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     // Sort the List of all TOC Marks and TOC Sections
     std::vector<SwTxtFmtColl*> aCollArr( GetTOXForm().GetFormMax(), 0 );
     SwNodeIndex aInsPos( *pFirstEmptyNd, 1 );
-    for( sal_uInt16 nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
+    for( SwTOXSortTabBases::size_type nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1049,7 +1049,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     OUString sDeli, sLastDeli;
-    sal_uInt16  i = 0;
+    SwTOXSortTabBases::size_type i = 0;
     while( i < aSortArr.size() )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
@@ -1215,10 +1215,10 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
     SwNodes& rNds = pDoc->GetNodes();
 
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
-    for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
+    for( auto pOutlineNode : rOutlNds )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
-        SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
+        SwTxtNode* pTxtNd = pOutlineNode->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->HasWriterListeners() &&
             sal_uInt16( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
             pTxtNd->getLayoutFrm( pDoc->getIDocumentLayoutAccess().GetCurrentLayout() ) &&
@@ -1507,11 +1507,11 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
     SwNodes& rNds = pDoc->GetNodes();
     const SwFrmFmts& rArr = *pDoc->GetTblFrmFmts();
 
-    for( sal_uInt16 n = 0; n < rArr.size(); ++n )
+    for( auto pFrmFmt : rArr )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-        SwTable* pTmpTbl = SwTable::FindTable( rArr[ n ] );
+        SwTable* pTmpTbl = SwTable::FindTable( pFrmFmt );
         SwTableBox* pFBox;
         if( pTmpTbl && 0 != (pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
             pFBox->GetSttNd() && pFBox->GetSttNd()->GetNodes().IsDocNodes() )
@@ -1564,7 +1564,7 @@ void SwTOXBaseSection::UpdatePageNum()
                               GetOptions() : 0,
                               GetSortAlgorithm() );
 
-    for( size_t nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
+    for( SwTOXSortTabBases::size_type nCnt = 0; nCnt < aSortArr.size(); ++nCnt )
     {
         // Loop over all SourceNodes
         std::vector<sal_uInt16> aNums; // the PageNumber
@@ -1572,7 +1572,7 @@ void SwTOXBaseSection::UpdatePageNum()
         std::vector<sal_uInt16> *pMainNums = 0; // contains page numbers of main entries
 
         // process run in lines
-        sal_uInt16 nRange = 0;
+        SwTOXSortTabBases::size_type nRange = 0;
         if(GetTOXForm().IsCommaSeparated() &&
                 aSortArr[nCnt]->GetType() == TOX_SORT_INDEX)
         {
@@ -1590,7 +1590,7 @@ void SwTOXBaseSection::UpdatePageNum()
         else
             nRange = 1;
 
-        for(sal_uInt16 nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; nRunInEntry++)
+        for(SwTOXSortTabBases::size_type nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; ++nRunInEntry)
         {
             SwTOXSortTabBase* pSortBase = aSortArr[nRunInEntry];
             size_t nSize = pSortBase->aTOXSources.size();
@@ -1622,7 +1622,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     }
 
                     // Insert as sorted
-                    sal_uInt16 i;
+                    std::vector<sal_uInt16>::size_type i;
                     for( i = 0; i < aNums.size() && aNums[i] < nPage; ++i )
                         ;
 
@@ -1665,8 +1665,11 @@ void SwTOXBaseSection::UpdatePageNum()
 /// of main entry page numbers.
 static bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
 {
-    for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->size(); ++i)
-        if(nToFind == (*pMainEntryNums)[i])
+    if (!pMainEntryNums)
+        return false;
+
+    for( auto nMainEntry : *pMainEntryNums )
+        if (nToFind == nMainEntry)
             return true;
     return false;
 }
@@ -1686,7 +1689,6 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     sSrchStr = OUStringBuffer().append(C_NUM_REPL).
         append(C_END_PAGE_NUM).makeStringAndClear();
     sal_Int32 nEndPos = pNd->GetTxt().indexOf(sSrchStr);
-    sal_uInt16 i;
 
     if (-1 == nEndPos || rNums.empty())
         return;
@@ -1701,8 +1703,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                     GetNumStr( nBeg ) );
     if( xCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
-        sal_uInt16 nTemp = 0;
-        xCharStyleIdx->push_back( nTemp );
+        xCharStyleIdx->push_back( 0 );
     }
 
     // Delete place holder
@@ -1724,6 +1725,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
     pNd->EraseText(aPos, nEndPos - nStartPos + 2);
 
+    std::vector<sal_uInt16>::size_type i;
     for( i = 1; i < rNums.size(); ++i)
     {
         SvxNumberType aType( rDescs[i]->GetNumType() );
@@ -1772,8 +1774,8 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
         else
         {   // Insert all Numbers
-            aNumStr += aType.GetNumStr( sal_uInt16(rNums[i]) );
-            if(i != (rNums.size()-1))
+            aNumStr += aType.GetNumStr( rNums[i] );
+            if (i+1 != rNums.size())
                 aNumStr += S_PAGE_DELI;
         }
     }
@@ -1939,10 +1941,10 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
 
     OSL_ENSURE(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
 
-    const sal_uInt16 nMin = (sal_uInt16)rRange.Min();
-    const sal_uInt16 nMax = (sal_uInt16)rRange.Max();
+    const long nMin = rRange.Min();
+    const long nMax = rRange.Max();
 
-    sal_uInt16 i;
+    long i;
 
     for( i = nMin; i < nMax; ++i)
     {
@@ -1964,15 +1966,15 @@ Range SwTOXBaseSection::GetKeyRange(const OUString& rStr, const OUString& rStrRe
         }
         aSortArr.insert(aSortArr.begin() + i, pKey);
     }
-    sal_uInt16 nStart = i+1;
-    sal_uInt16 nEnd   = aSortArr.size();
+    const long nStart = i+1;
+    const long nEnd   = aSortArr.size();
 
     // Find end of range
-    for(i = nStart; i < aSortArr.size(); ++i)
+    for(i = nStart; i < nEnd; ++i)
     {
         if(aSortArr[i]->GetLevel() <= nLevel)
-        {   nEnd = i;
-            break;
+        {
+            return Range(nStart, i);
         }
     }
     return Range(nStart, nEnd);
