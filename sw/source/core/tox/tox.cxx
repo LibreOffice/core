@@ -461,10 +461,10 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
 {
     maMSTOCExpression = rSource.maMSTOCExpression;
     SwTOXType* pType = (SwTOXType*)rSource.GetTOXType();
-    if( pDoc && USHRT_MAX == pDoc->GetTOXTypes().GetPos( pType ))
+    const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
+    if( pDoc && rTypes.end() == std::find( rTypes.begin(), rTypes.end(), pType ) )
     {
         // type not in pDoc, so create it now
-        const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
         bool bFound = false;
         for( size_t n = rTypes.size(); n; )
         {

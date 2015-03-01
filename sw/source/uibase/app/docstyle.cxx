@@ -1641,13 +1641,13 @@ static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, 
         {
             std::deque<sal_uInt16> aDelArr;
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
-            for( n = 0, nCnt = rTbl.size(); n < nCnt; ++n )
+            for (auto it = rTbl.begin(); it != rTbl.end(); ++it)
             {
-                if( !lcl_Contains( rArr, rTbl[ n ] ))
-                    aDelArr.push_front( n );
+                if( !lcl_Contains( rArr, *it ))
+                    aDelArr.push_front( it-rTbl.begin() );
             }
-            for( n = 0, nCnt = aDelArr.size(); n < nCnt; ++n )
-                rDoc.DelCharFmt( aDelArr[ n ] );
+            for (auto it = aDelArr.begin(); it != aDelArr.end(); ++it)
+                rDoc.DelCharFmt( *it );
         }
         break;
 

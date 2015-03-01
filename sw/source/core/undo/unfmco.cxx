@@ -72,10 +72,11 @@ void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
 {
     // Only one TextFrmColl can be applied to a section, thus request only in
     // this array.
-    sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
-                                                     static_cast<SwTxtFmtColl*>(pFmtColl) );
+    auto txtFmtColls = rDoc.GetTxtFmtColls();
+    auto it = std::find( txtFmtColls->begin(), txtFmtColls->end(),
+                         static_cast<SwTxtFmtColl*>(pFmtColl) );
     // does the format still exist?
-    if( USHRT_MAX != nPos )
+    if( txtFmtColls->end() != it )
     {
         rDoc.SetTxtFmtColl(rPaM, static_cast<SwTxtFmtColl*>(pFmtColl), mbReset,
                            mbResetListAttrs);

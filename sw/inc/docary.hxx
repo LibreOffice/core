@@ -99,10 +99,9 @@ public:
         this->erase( begin() + aStartIdx, begin() + aEndIdx);
     }
 
-    sal_uInt16 GetPos(Value const& p) const
+    const_iterator Find(Value const& p) const
     {
-        const_iterator const it = std::find(begin(), end(), p);
-        return it == end() ? USHRT_MAX : it - begin();
+        return std::find( begin(), end(), p );
     }
 
     bool Contains(Value const& p) const
