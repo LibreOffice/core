@@ -321,7 +321,6 @@ public:
     bool AreaBroadcast( const ScRange& rRange, sal_uLong nHint );
     bool                AreaBroadcast( const ScHint& rHint ) const;
         // return: at least one broadcast occurred
-    bool                AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint ) const;
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,

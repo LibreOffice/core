@@ -946,30 +946,6 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
     }
 }
 
-bool ScBroadcastAreaSlotMachine::AreaBroadcastInRange( const ScRange& rRange,
-        const ScHint& rHint ) const
-{
-    bool bBroadcasted = false;
-    SCTAB nEndTab = rRange.aEnd.Tab();
-    for (TableSlotsMap::const_iterator iTab( aTableSlotsMap.lower_bound( rRange.aStart.Tab()));
-            iTab != aTableSlotsMap.end() && (*iTab).first <= nEndTab; ++iTab)
-    {
-        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
-        SCSIZE nStart, nEnd, nRowBreak;
-        ComputeAreaPoints( rRange, nStart, nEnd, nRowBreak );
-        SCSIZE nOff = nStart;
-        SCSIZE nBreak = nOff + nRowBreak;
-        ScBroadcastAreaSlot** pp = ppSlots + nOff;
-        while ( nOff <= nEnd )
-        {
-            if ( *pp )
-                bBroadcasted |= (*pp)->AreaBroadcastInRange( rRange, rHint );
-            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
-        }
-    }
-    return bBroadcasted;
-}
-
 void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
         const ScRange& rRange )
 {
