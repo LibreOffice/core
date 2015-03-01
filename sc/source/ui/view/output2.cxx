@@ -4559,7 +4559,6 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         aParam.mnPosY = nPosY;
                         aParam.mnInitPosX = nInitPosX;
                         aParam.mpPreviewFontSet = pPreviewFontSet;
-                        aParam.mpPreviewFontSet = pPreviewFontSet;
                         aParam.mpOldPattern = pOldPattern;
                         aParam.mpOldCondSet = pOldCondSet;
                         aParam.mpOldPreviewFontSet = pOldPreviewFontSet;
