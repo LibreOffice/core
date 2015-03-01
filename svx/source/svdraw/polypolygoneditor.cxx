@@ -35,8 +35,8 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
 {
     bool bPolyPolyChanged = false;
 
-    std::set< sal_uInt16 >::const_reverse_iterator aIter;( rAbsPoints.rbegin() );
-    for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); ++aIter )
+    std::set< sal_uInt16 >::const_reverse_iterator aIter( rAbsPoints.rbegin() );
+    for( ; aIter != rAbsPoints.rend(); ++aIter )
     {
         sal_uInt32 nPoly, nPnt;
         if( GetRelativePolyPoint(maPolyPolygon,(*aIter), nPoly, nPnt) )
@@ -66,8 +66,8 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
 {
     bool bPolyPolyChanged = false;
 
-    std::set< sal_uInt16 >::const_reverse_iterator aIter;( rAbsPoints.rbegin() );
-    for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); ++aIter )
+    std::set< sal_uInt16 >::const_reverse_iterator aIter( rAbsPoints.rbegin() );
+    for( ; aIter != rAbsPoints.rend(); ++aIter )
     {
         sal_uInt32 nPolyNum, nPntNum;
 
@@ -126,8 +126,8 @@ bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, con
 {
     bool bPolyPolygonChanged(false);
 
-    std::set< sal_uInt16 >::const_reverse_iterator aIter;( rAbsPoints.rbegin() );
-    for( aIter = rAbsPoints.rbegin(); aIter != rAbsPoints.rend(); ++aIter )
+    std::set< sal_uInt16 >::const_reverse_iterator aIter( rAbsPoints.rbegin() );
+    for( ; aIter != rAbsPoints.rend(); ++aIter )
     {
         sal_uInt32 nPolyNum, nPntNum;
 
