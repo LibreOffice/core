@@ -100,7 +100,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwNumRule& rNumRule )
         }
     }
     SwNumRule* p = (SwNumRule*)&rNumRule;
-    sal_uInt16 nRet = pUsedNumTbl->GetPos(p);
+    sal_uInt16 nRet = pUsedNumTbl->Find(p) - pUsedNumTbl->begin();
 
     // Is this list now duplicated into a new list which we should use
     // #i77812# - perform 'deep' search in duplication map

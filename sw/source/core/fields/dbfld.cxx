@@ -89,11 +89,12 @@ void SwDBFieldType::ReleaseRef()
 
     if (--nRefCnt <= 0)
     {
-        sal_uInt16 nPos = GetDoc()->getIDocumentFieldsAccess().GetFldTypes()->GetPos(this);
+        auto fldTypes = GetDoc()->getIDocumentFieldsAccess().GetFldTypes();
+        auto it = std::find( fldTypes->begin(), fldTypes->end(), this );
 
-        if (nPos != USHRT_MAX)
+        if (it != fldTypes->end())
         {
-            GetDoc()->getIDocumentFieldsAccess().RemoveFldType(nPos);
+            GetDoc()->getIDocumentFieldsAccess().RemoveFldType( it - fldTypes->begin() );
             delete this;
         }
     }

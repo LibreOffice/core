@@ -143,7 +143,9 @@ bool SwEditShell::IsAnySectionInDoc( bool bChkReadOnly, bool bChkHidden, bool bC
 sal_uInt16 SwEditShell::GetSectionFmtPos( const SwSectionFmt& rFmt ) const
 {
     SwSectionFmt* pFmt = (SwSectionFmt*)&rFmt;
-    return GetDoc()->GetSections().GetPos( pFmt );
+    auto sects = GetDoc()->GetSections();
+    auto it = std::find( sects.begin(), sects.end(), pFmt );
+    return (sal_uInt16) ((it == sects.end()) ? USHRT_MAX : it - sects.begin());
 }
 
 const SwSectionFmt& SwEditShell::GetSectionFmt( sal_uInt16 nFmt ) const

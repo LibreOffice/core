@@ -233,20 +233,20 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
 {
     // search for the Format in the Document; if it does not exist any more,
     // the attribute is not restored!
-    sal_uInt16 nPos = USHRT_MAX;
+    bool found = false;
     switch ( m_nFmtWhich )
     {
         case RES_TXTFMTCOLL:
-            nPos = pDoc->GetTxtFmtColls()->GetPos( m_pFmt );
+            found = pDoc->GetTxtFmtColls()->Contains( m_pFmt );
             break;
 
         case RES_GRFFMTCOLL:
-            nPos = pDoc->GetGrfFmtColls()->GetPos(
+            found = pDoc->GetGrfFmtColls()->Contains(
                     static_cast<const SwGrfFmtColl*>(m_pFmt) );
             break;
 
         case RES_CHRFMT:
-            nPos = pDoc->GetCharFmts()->GetPos( m_pFmt );
+            found = pDoc->GetCharFmts()->Contains( m_pFmt );
             break;
 
         case RES_FRMFMT:
@@ -257,14 +257,14 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
                 {
                     m_pFmt =
                         static_cast<SwTableNode*>(pNd)->GetTable().GetFrmFmt();
-                    nPos = 0;
+                    found = true;
                     break;
                 }
                 else if ( pNd->IsSectionNode() )
                 {
                     m_pFmt =
                         static_cast<SwSectionNode*>(pNd)->GetSection().GetFmt();
-                    nPos = 0;
+                    found = true;
                     break;
                 }
                 else if ( pNd->IsStartNode() && (SwTableBoxStartNode ==
@@ -278,7 +278,7 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
                         if ( pBox )
                         {
                             m_pFmt = pBox->GetFrmFmt();
-                            nPos = 0;
+                            found = true;
                             break;
                         }
                     }
@@ -287,15 +287,15 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
             // no break!
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
-            nPos = pDoc->GetSpzFrmFmts()->GetPos( m_pFmt );
-            if ( USHRT_MAX == nPos )
+            found = pDoc->GetSpzFrmFmts()->Contains( m_pFmt );
+            if ( !found )
             {
-                nPos = pDoc->GetFrmFmts()->GetPos( m_pFmt );
+                found = pDoc->GetFrmFmts()->Contains( m_pFmt );
             }
             break;
     }
 
-    if ( USHRT_MAX == nPos )
+    if ( !found )
     {
         // Format does not exist; reset
         m_pFmt = 0;
