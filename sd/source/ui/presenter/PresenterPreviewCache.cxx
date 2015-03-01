@@ -18,7 +18,6 @@
  */
 
 #include "PresenterPreviewCache.hxx"
-#include "facreg.hxx"
 
 #include "cache/SlsCacheContext.hxx"
 #include "tools/IdleDetection.hxx"

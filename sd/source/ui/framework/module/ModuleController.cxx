@@ -26,8 +26,6 @@
 
 #include <tools/diagnose_ex.h>
 
-#include <facreg.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;

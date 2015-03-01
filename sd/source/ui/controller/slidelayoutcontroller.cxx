@@ -42,7 +42,6 @@
 #include <sfx2/imagemgr.hxx>
 
 #include "app.hrc"
-#include "facreg.hxx"
 #include "glob.hrc"
 #include "strings.hrc"
 #include "res_bmp.hrc"

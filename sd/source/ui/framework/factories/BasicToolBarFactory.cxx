@@ -20,7 +20,6 @@
 #include "BasicToolBarFactory.hxx"
 
 #include "ViewTabBar.hxx"
-#include "facreg.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <unotools/mediadescriptor.hxx>
 

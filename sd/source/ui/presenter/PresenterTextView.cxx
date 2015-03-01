@@ -18,7 +18,6 @@
  */
 
 #include "PresenterTextView.hxx"
-#include "facreg.hxx"
 
 #include <i18nlangtag/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
