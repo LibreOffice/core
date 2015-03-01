@@ -35,7 +35,6 @@
 #include "PresentationViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "FrameView.hxx"
-#include "facreg.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
