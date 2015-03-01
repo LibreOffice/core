@@ -71,14 +71,14 @@ static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
 
 static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFmt* pNewFmt )
 {
-    const SwSectionFmt* pFmt;
     if( !pNewFmt )
     {
         const sal_uInt16 nCount = rSh.GetSectionFmtCount();
         for(sal_uInt16 i=0;i<nCount;i++)
         {
             SectionType eTmpType;
-            if( !(pFmt = &rSh.GetSectionFmt(i))->GetParent() &&
+            const SwSectionFmt* pFmt = &rSh.GetSectionFmt(i);
+            if( !pFmt->GetParent() &&
                     pFmt->IsInNodesArr() &&
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
@@ -94,12 +94,14 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
     else
     {
         SwSections aTmpArr;
-        const sal_uInt16 nCnt = pNewFmt->GetChildSections(aTmpArr,SORTSECT_POS);
-        if( nCnt )
+        pNewFmt->GetChildSections(aTmpArr, SORTSECT_POS);
+        if( !aTmpArr.empty() )
         {
             SectionType eTmpType;
-            for( sal_uInt16 n = 0; n < nCnt; ++n )
-                if( (pFmt = aTmpArr[n]->GetFmt())->IsInNodesArr()&&
+            for( const auto pSect : aTmpArr )
+            {
+                const SwSectionFmt* pFmt = pSect->GetFmt();
+                if( pFmt->IsInNodesArr()&&
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
                 {
@@ -109,6 +111,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
                     rSubRegions.InsertEntry(sString);
                     lcl_FillList( rSh, rSubRegions, pAvailNames, pFmt );
                 }
+            }
         }
     }
 }
@@ -438,7 +441,6 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 // recursively look for child-sections
 void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry )
 {
-    SwSection* pSect = 0;
     SvTreeListEntry* pSelEntry = 0;
     if (!pFmt)
     {
@@ -451,8 +453,8 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
             {
-                SectRepr* pSectRepr = new SectRepr( n,
-                                            *(pSect=pFmt->GetSection()) );
+                SwSection *pSect = pFmt->GetSection();
+                SectRepr* pSectRepr = new SectRepr( n, *pSect );
                 Image aImg = BuildBitmap( pSect->IsProtect(),pSect->IsHidden());
                 pEntry = m_pTree->InsertEntry(pSect->GetSectionName(), aImg, aImg);
                 pEntry->SetUserData(pSectRepr);
@@ -468,18 +470,17 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
     {
         SwSections aTmpArr;
         SvTreeListEntry* pNEntry;
-        const sal_uInt16 nCnt = pFmt->GetChildSections(aTmpArr,SORTSECT_POS);
-        if( nCnt )
+        pFmt->GetChildSections(aTmpArr, SORTSECT_POS);
+        if( !aTmpArr.empty() )
         {
-            for( sal_uInt16 n = 0; n < nCnt; ++n )
+            for( const auto pSect : aTmpArr )
             {
                 SectionType eTmpType;
-                pFmt = aTmpArr[n]->GetFmt();
+                pFmt = pSect->GetFmt();
                 if( pFmt->IsInNodesArr() &&
                     (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                     && TOX_HEADER_SECTION != eTmpType )
                 {
-                    pSect=aTmpArr[n];
                     SectRepr* pSectRepr=new SectRepr(
                                     FindArrPos( pSect->GetFmt() ), *pSect );
                     Image aImage = BuildBitmap( pSect->IsProtect(),
@@ -487,7 +488,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pE
                     pNEntry = m_pTree->InsertEntry(
                         pSect->GetSectionName(), aImage, aImage, pEntry);
                     pNEntry->SetUserData(pSectRepr);
-                    RecurseList( aTmpArr[n]->GetFmt(), pNEntry );
+                    RecurseList( pSect->GetFmt(), pNEntry );
                     if( pNEntry->HasChildren())
                         m_pTree->Expand(pNEntry);
                     if (pCurrSect==pSect)

@@ -314,7 +314,7 @@ public:
     //  All sections that are derived from this one:
     //  - sorted according to name or position or unsorted
     //  - all of them or only those that are in the normal Nodes-array.
-    sal_uInt16 GetChildSections( SwSections& rArr,
+    void GetChildSections( SwSections& rArr,
                             SectionSort eSort = SORTSECT_NOT,
                             bool bAllSections = true ) const;
 

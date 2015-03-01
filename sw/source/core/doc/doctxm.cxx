@@ -562,10 +562,9 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
         if( !bDelNodes )
         {
             SwSections aArr( 0 );
-            sal_uInt16 nCnt = pFmt->GetChildSections( aArr, SORTSECT_NOT, false );
-            for( sal_uInt16 n = 0; n < nCnt; ++n )
+            pFmt->GetChildSections( aArr, SORTSECT_NOT, false );
+            for( const auto pSect : aArr )
             {
-                SwSection* pSect = aArr[ n ];
                 if( TOX_HEADER_SECTION == pSect->GetType() )
                 {
                     DelSectionFmt( pSect->GetFmt(), bDelNodes );

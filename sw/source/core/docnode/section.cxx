@@ -896,7 +896,7 @@ static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
 }
 
 // get all Sections that have been derived from this one
-sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
+void SwSectionFmt::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
                                         bool bAllSections ) const
 {
@@ -929,7 +929,6 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
             case SORTSECT_NOT: break;
             }
     }
-    return rArr.size();
 }
 
 // See whether the Section is within the Nodes or the UndoNodes array
