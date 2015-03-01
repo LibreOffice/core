@@ -1739,15 +1739,14 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                     if ( nCount >= 1 )
                         aNumStr += rIntl.GetFollowingText( nCount > 1 );
                 }
-                else
+                else if (nCount) //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
                 {
-                    if(nCount >= 2 )
-                        aNumStr += "-";
-                    else if(nCount == 1 )
+                    if (nCount == 1 )
                         aNumStr += S_PAGE_DELI;
-                    //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
-                    if(nCount)
-                        aNumStr += aType.GetNumStr( nBeg + nCount );
+                    else
+                        aNumStr += "-";
+
+                    aNumStr += aType.GetNumStr( nBeg + nCount );
                 }
 
                 // Create new String
