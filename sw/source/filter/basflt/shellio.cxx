@@ -546,7 +546,7 @@ void Reader::ClearTemplate()
     if( pTemplate )
     {
         if( 0 == pTemplate->release() )
-            delete pTemplate,
+            delete pTemplate;
         pTemplate = 0;
     }
 }
