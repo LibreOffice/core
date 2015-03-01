@@ -118,7 +118,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, Combo
     lcl_FillList( rSh, rSubRegions, pAvailNames, 0 );
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
-        ppMark != pMarkAccess->getBookmarksBegin();
+        ppMark != pMarkAccess->getBookmarksEnd();
         ++ppMark)
     {
         const ::sw::mark::IMark* pBkmk = ppMark->get();
