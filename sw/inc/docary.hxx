@@ -212,7 +212,7 @@ public:
     sal_uInt16 FindPrevOfSeqNo( sal_uInt16 nSttPos ) const;
     /** Search next or previous Redline with the same Seq. No.
        Search can be restricted via Lookahead.
-       Using 0 or USHRT_MAX makes search the whole array. */
+       Using 0 makes search the whole array. */
     sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
                             sal_uInt16 nLookahead = 20 ) const;
     sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,

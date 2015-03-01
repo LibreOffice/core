@@ -496,9 +496,6 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
         pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
 }
 
-/// Find the next or preceding Redline with the same seq.no.
-/// We can limit the search using look ahead.
-/// 0 or USHRT_MAX searches the whole array.
 sal_uInt16 SwRedlineTbl::FindNextOfSeqNo( sal_uInt16 nSttPos ) const
 {
     return static_cast<size_t>(nSttPos) + 1 < size()
@@ -512,6 +509,8 @@ sal_uInt16 SwRedlineTbl::FindPrevOfSeqNo( sal_uInt16 nSttPos ) const
                    : USHRT_MAX;
 }
 
+/// Find the next or preceding Redline with the same seq.no.
+/// We can limit the search using look ahead (0 searches the whole array).
 sal_uInt16 SwRedlineTbl::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
                                     sal_uInt16 nLookahead ) const
 {
@@ -519,7 +518,7 @@ sal_uInt16 SwRedlineTbl::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     if( nSeqNo && nSttPos < size() )
     {
         size_t nEnd = size();
-        if( nLookahead && USHRT_MAX != nLookahead )
+        if( nLookahead )
         {
             const size_t nTmp = static_cast<size_t>(nSttPos)+ static_cast<size_t>(nLookahead);
             if (nTmp < nEnd)
@@ -545,7 +544,7 @@ sal_uInt16 SwRedlineTbl::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     if( nSeqNo && nSttPos < size() )
     {
         const size_t nEnd = 0;
-        if( nLookahead && USHRT_MAX != nLookahead && nSttPos > nLookahead )
+        if( nLookahead && nSttPos > nLookahead )
             nEnd = nSttPos - nLookahead;
 
         ++nSttPos;
