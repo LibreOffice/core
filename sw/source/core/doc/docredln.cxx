@@ -499,16 +499,16 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 /// Find the next or preceding Redline with the same seq.no.
 /// We can limit the search using look ahead.
 /// 0 or USHRT_MAX searches the whole array.
-sal_uInt16 SwRedlineTbl::FindNextOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead ) const
+sal_uInt16 SwRedlineTbl::FindNextOfSeqNo( sal_uInt16 nSttPos ) const
 {
     return static_cast<size_t>(nSttPos) + 1 < size()
-                ? FindNextSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos+1, nLookahead )
+                ? FindNextSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos+1 )
                 : USHRT_MAX;
 }
 
-sal_uInt16 SwRedlineTbl::FindPrevOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead ) const
+sal_uInt16 SwRedlineTbl::FindPrevOfSeqNo( sal_uInt16 nSttPos ) const
 {
-    return nSttPos ? FindPrevSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos-1, nLookahead )
+    return nSttPos ? FindPrevSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos-1 )
                    : USHRT_MAX;
 }
 
