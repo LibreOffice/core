@@ -882,6 +882,58 @@ void SwStartNode::CheckSectionCondColl() const
 //FEATURE::CONDCOLL
 }
 
+void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    const char* pName = "???";
+    switch (GetNodeType())
+    {
+    case ND_TABLENODE:
+        pName = "table";
+        break;
+    case ND_SECTIONNODE:
+        pName = "section";
+        break;
+    default:
+        switch(GetStartNodeType())
+        {
+        case SwNormalStartNode:
+            pName = "start";
+            break;
+        case SwTableBoxStartNode:
+            pName = "tablebox";
+            break;
+        case SwFlyStartNode:
+            pName = "fly";
+            break;
+        case SwFootnoteStartNode:
+            pName = "footnote";
+            break;
+        case SwHeaderStartNode:
+            pName = "header";
+            break;
+        case SwFooterStartNode:
+            pName = "footer";
+            break;
+        }
+        break;
+    }
+
+    xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(GetNodeType()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+
+    if (IsTableNode())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("attrset"));
+        GetTableNode()->GetTable().GetFrmFmt()->GetAttrSet().dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    // xmlTextWriterEndElement(pWriter); - it is a start node, so don't end, will make xml better nested
+}
+
+
 /** Insert a node into the array
  *
  * The StartOfSection pointer is set to the given node.

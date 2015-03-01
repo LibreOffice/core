@@ -315,7 +315,7 @@ public:
     /// Call ChkCondcoll to all ContentNodes of section.
     void CheckSectionCondColl() const;
 
-    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) const SAL_OVERRIDE;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const SAL_OVERRIDE;
 
 private:
     SwStartNode( const SwStartNode & rNode ) SAL_DELETED_FUNCTION;
