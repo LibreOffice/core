@@ -1231,18 +1231,20 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         const OUString sTmpStyleNames = GetStyleNames(i);
-        sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sTmpStyleNames, TOX_STYLE_DELIMITER);
-        for( sal_uInt16 nStyle = 0; nStyle < nTokenCount; ++nStyle )
+        if (sTmpStyleNames.isEmpty())
+            continue;
+
+        sal_Int32 nIndex = 0;
+        while (nIndex >= 0)
         {
             SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName(
-                                    sTmpStyleNames.getToken( nStyle,
-                                                    TOX_STYLE_DELIMITER ));
+                                    sTmpStyleNames.getToken( 0, TOX_STYLE_DELIMITER, nIndex ));
             //TODO: no outline Collections in content indexes if OutlineLevels are already included
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
                   GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL &&
                     pColl->IsAssignedToListLevelOfOutlineStyle()) )
-                  continue;
+                continue;
 
             SwIterator<SwTxtNode,SwFmtColl> aIter( *pColl );
             for( SwTxtNode* pTxtNd = aIter.First(); pTxtNd; pTxtNd = aIter.Next() )
