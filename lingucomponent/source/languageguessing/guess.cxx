@@ -40,10 +40,10 @@
 using namespace std;
 
 Guess::Guess()
+    : language_str(DEFAULT_LANGUAGE)
+    , country_str(DEFAULT_COUNTRY)
+    , encoding_str(DEFAULT_ENCODING)
 {
-    language_str = DEFAULT_LANGUAGE;
-    country_str = DEFAULT_COUNTRY;
-    encoding_str = DEFAULT_ENCODING;
 }
 
 /*
