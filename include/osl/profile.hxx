@@ -100,7 +100,7 @@ namespace osl {
             }
             pStrings[ nItems ] = NULL;
             sal_uInt32 nRet = osl_readProfileIdent(profile, rSection.getStr(), rEntry.getStr(), nFirstId, pStrings, nDefault);
-            delete pStrings;
+            delete[] pStrings;
             return nRet;
         }
 
