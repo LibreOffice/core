@@ -18,7 +18,6 @@
  */
 
 #include "SlideSorterService.hxx"
-#include "facreg.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"

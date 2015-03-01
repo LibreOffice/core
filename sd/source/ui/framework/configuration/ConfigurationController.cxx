@@ -30,7 +30,6 @@
 #include "ConfigurationClassifier.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
-#include "facreg.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
