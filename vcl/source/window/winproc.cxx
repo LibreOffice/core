@@ -469,7 +469,7 @@ bool ImplHandleMouseEvent( vcl::Window* pWindow, MouseNotifyEvent nSVEvent, bool
                 if ( !pMouseDownWin->ImplGetFrameData()->mbStartDragCalled )
                 {
                     long nDragW  = rMSettings.GetStartDragWidth();
-                    long nDragH  = rMSettings.GetStartDragWidth();
+                    long nDragH  = rMSettings.GetStartDragHeight();
                     //long nMouseX = nX;
                     //long nMouseY = nY;
                     long nMouseX = aMousePos.X(); // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
