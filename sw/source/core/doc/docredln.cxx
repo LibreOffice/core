@@ -151,7 +151,7 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
             {
                 // Redline for this table
                 const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
-                sal_uInt16 nRedlineType = aRedlineData.GetType();
+                const RedlineType_t nRedlineType = aRedlineData.GetType();
 
                 // Check if this redline object type should be deleted
                 if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
@@ -173,7 +173,7 @@ bool SwExtraRedlineTbl::DeleteAllTableRedlines( SwDoc* pDoc, const SwTable& rTab
                 {
                     // Redline for this table
                     const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
-                    sal_uInt16 nRedlineType = aRedlineData.GetType();
+                    const RedlineType_t nRedlineType = aRedlineData.GetType();
 
                     // Check if this redline object type should be deleted
                     if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
@@ -222,7 +222,7 @@ bool SwExtraRedlineTbl::DeleteTableRowRedline( SwDoc* pDoc, const SwTableLine& r
         {
             // Redline for this table row
             const SwRedlineData& aRedlineData = pTableRowRedline->GetRedlineData();
-            sal_uInt16 nRedlineType = aRedlineData.GetType();
+            const RedlineType_t nRedlineType = aRedlineData.GetType();
 
             // Check if this redline object type should be deleted
             if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
@@ -269,7 +269,7 @@ bool SwExtraRedlineTbl::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& r
         {
             // Redline for this table cell
             const SwRedlineData& aRedlineData = pTableCellRedline->GetRedlineData();
-            sal_uInt16 nRedlineType = aRedlineData.GetType();
+            const RedlineType_t nRedlineType = aRedlineData.GetType();
 
             // Check if this redline object type should be deleted
             if( USHRT_MAX != nRedlineTypeToDelete && nRedlineTypeToDelete != nRedlineType )
@@ -501,7 +501,7 @@ void SwRedlineTbl::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
 /// 0 or USHRT_MAX searches the whole array.
 sal_uInt16 SwRedlineTbl::FindNextOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookahead ) const
 {
-    return nSttPos + 1 < (sal_uInt16)size()
+    return static_cast<size_t>(nSttPos) + 1 < size()
                 ? FindNextSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos+1, nLookahead )
                 : USHRT_MAX;
 }
@@ -515,13 +515,18 @@ sal_uInt16 SwRedlineTbl::FindPrevOfSeqNo( sal_uInt16 nSttPos, sal_uInt16 nLookah
 sal_uInt16 SwRedlineTbl::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
                                     sal_uInt16 nLookahead ) const
 {
-    sal_uInt16 nRet = USHRT_MAX, nEnd;
+    sal_uInt16 nRet = USHRT_MAX;
     if( nSeqNo && nSttPos < size() )
     {
-        nEnd = size();
-        if( nLookahead && USHRT_MAX != nLookahead &&
-            static_cast<size_t>(nSttPos + nLookahead) < size() )
-            nEnd = nSttPos + nLookahead;
+        size_t nEnd = size();
+        if( nLookahead && USHRT_MAX != nLookahead )
+        {
+            const size_t nTmp = static_cast<size_t>(nSttPos)+ static_cast<size_t>(nLookahead);
+            if (nTmp < nEnd)
+            {
+                nEnd = nTmp;
+            }
+        }
 
         for( ; nSttPos < nEnd; ++nSttPos )
             if( nSeqNo == operator[]( nSttPos )->GetSeqNo() )
@@ -536,10 +541,10 @@ sal_uInt16 SwRedlineTbl::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
 sal_uInt16 SwRedlineTbl::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
                                     sal_uInt16 nLookahead ) const
 {
-    sal_uInt16 nRet = USHRT_MAX, nEnd;
+    sal_uInt16 nRet = USHRT_MAX;
     if( nSeqNo && nSttPos < size() )
     {
-        nEnd = 0;
+        const size_t nEnd = 0;
         if( nLookahead && USHRT_MAX != nLookahead && nSttPos > nLookahead )
             nEnd = nSttPos - nLookahead;
 
@@ -587,7 +592,7 @@ void SwRedlineTbl::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterStartElement(pWriter, BAD_CAST("swRedlineTbl"));
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
-    for (sal_uInt16 nCurRedlinePos = 0; nCurRedlinePos < size(); ++nCurRedlinePos)
+    for (SwRedlineTbl::size_type nCurRedlinePos = 0; nCurRedlinePos < size(); ++nCurRedlinePos)
         operator[](nCurRedlinePos)->dumpAsXml(pWriter);
 
     xmlTextWriterEndElement(pWriter);
@@ -1312,7 +1317,7 @@ void SwRangeRedline::DelCopyOfSection(size_t nMyPos)
                 // bDelLastPara condition above), only redlines before the
                 // current ones can be affected.
                 const SwRedlineTbl& rTbl = pDoc->getIDocumentRedlineAccess().GetRedlineTbl();
-                sal_uInt16 n = nMyPos;
+                size_t n = nMyPos;
                 OSL_ENSURE( n != USHRT_MAX, "How strange. We don't exist!" );
                 for( bool bBreak = false; !bBreak && n > 0; )
                 {
