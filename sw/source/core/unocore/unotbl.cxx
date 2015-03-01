@@ -3733,7 +3733,7 @@ uno::Sequence< OUString > SwXTextTable::getSupportedServiceNames(void) throw( un
     pArr[0] = "com.sun.star.document.LinkTarget";
     pArr[1] = "com.sun.star.text.TextTable";
     pArr[2] = "com.sun.star.text.TextContent";
-    pArr[2] = "com.sun.star.text.TextSortable";
+    pArr[3] = "com.sun.star.text.TextSortable";
     return aRet;
 }
 
