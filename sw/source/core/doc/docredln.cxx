@@ -538,7 +538,7 @@ sal_uInt16 SwRedlineTbl::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos,
     sal_uInt16 nRet = USHRT_MAX;
     if( nSeqNo && nSttPos < size() )
     {
-        const size_t nEnd = 0;
+        size_t nEnd = 0;
         if( nLookahead && nSttPos > nLookahead )
             nEnd = nSttPos - nLookahead;
 
@@ -1562,7 +1562,7 @@ bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
     if (*Start() < *rCmp.Start())
         return true;
 
-    return *Start() == *rCmp.Start() && *End() < *rCmp.End()
+    return *Start() == *rCmp.Start() && *End() < *rCmp.End();
 }
 
 const SwRedlineData & SwRangeRedline::GetRedlineData(sal_uInt16 nPos) const
