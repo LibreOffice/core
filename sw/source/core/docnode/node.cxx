@@ -844,6 +844,38 @@ sal_uInt8 SwNode::HasPrevNextLayNode() const
     return nRet;
 }
 
+void SwNode::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    const char* pName = "???";
+    switch (GetNodeType())
+    {
+    case ND_ENDNODE:
+        pName = "end";
+        break;
+    case ND_STARTNODE:
+    case ND_TEXTNODE:
+        abort(); // overridden
+    case ND_TABLENODE:
+        pName = "table";
+        break;
+    case ND_GRFNODE:
+        pName = "grf";
+        break;
+    case ND_OLENODE:
+        pName = "ole";
+        break;
+    }
+    xmlTextWriterStartElement(pWriter, BAD_CAST(pName));
+
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("type"), BAD_CAST(OString::number(GetNodeType()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+
+    xmlTextWriterEndElement(pWriter);
+    if (GetNodeType() == ND_ENDNODE)
+        xmlTextWriterEndElement(pWriter); // end start node
+}
+
 SwStartNode::SwStartNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwStartNodeType eSttNd )
     : SwNode( rWhere, nNdType ), eSttNdTyp( eSttNd )

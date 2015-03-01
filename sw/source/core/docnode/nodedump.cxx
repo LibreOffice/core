@@ -91,11 +91,6 @@ void WriterHelper::writeFormatAttribute( const char* attribute, const char* form
     xmlTextWriterWriteVFormatAttribute( writer, BAD_CAST( attribute ), format, va );
     va_end( va );
 }
-
-// Hack: somehow conversion from "..." to va_list does
-// bomb on two string litterals in the format.
-static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
-
 }
 
 void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
@@ -137,37 +132,6 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
         }
     }
     writer.endElement();
-}
-
-void SwNode::dumpAsXml( xmlTextWriterPtr w ) const
-{
-    WriterHelper writer( w );
-    const char* name = "???";
-    switch( GetNodeType())
-    {
-        case ND_ENDNODE:
-            name = "end";
-            break;
-        case ND_STARTNODE:
-        case ND_TEXTNODE:
-            abort(); // overridden
-        case ND_TABLENODE:
-            name = "table";
-            break;
-        case ND_GRFNODE:
-            name = "grf";
-            break;
-        case ND_OLENODE:
-            name = "ole";
-            break;
-    }
-    writer.startElement( name );
-    writer.writeFormatAttribute( "ptr", "%p", this );
-    writer.writeFormatAttribute( "type", "0x%04x", GetNodeType() );
-    writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
-    writer.endElement();
-    if( GetNodeType() == ND_ENDNODE )
-        writer.endElement(); // end start node
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

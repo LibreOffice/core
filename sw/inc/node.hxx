@@ -283,7 +283,7 @@ public:
      * Dumps the node structure to the given destination (file nodes.xml in the current directory by default)
      * @since 3.5
      */
-    virtual void dumpAsXml( xmlTextWriterPtr writer = NULL ) const;
+    virtual void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
 private:
     SwNode( const SwNode & rNodes ) SAL_DELETED_FUNCTION;
