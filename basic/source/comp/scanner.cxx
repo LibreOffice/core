@@ -438,7 +438,7 @@ bool SbiScanner::NextSym()
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
         sal_uInt64 lu = 0;
         bool bOverflow = false;
-        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol], bCompatible))
+        while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol], false))
         {
             sal_Unicode ch = rtl::toAsciiUpperCase(aLine[nCol]);
             ++pLine; ++nCol;
