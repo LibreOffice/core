@@ -24,7 +24,6 @@
 #include "PresenterHelper.hxx"
 #include "CanvasUpdateRequester.hxx"
 #include "PresenterCanvas.hxx"
-#include "facreg.hxx"
 #include <cppcanvas/vclfactory.hxx>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>

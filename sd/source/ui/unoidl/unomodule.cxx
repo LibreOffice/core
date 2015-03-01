@@ -21,7 +21,6 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
-#include "facreg.hxx"
 #include "sddll.hxx"
 #include "sdmod.hxx"
 #include "unomodule.hxx"

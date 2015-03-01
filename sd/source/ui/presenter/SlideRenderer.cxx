@@ -18,7 +18,6 @@
  */
 
 #include "SlideRenderer.hxx"
-#include "facreg.hxx"
 #include "sdpage.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
