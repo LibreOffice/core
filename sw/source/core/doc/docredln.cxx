@@ -288,40 +288,34 @@ bool SwExtraRedlineTbl::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox& r
 
 bool SwRedlineTbl::Insert( SwRangeRedline* p, bool bIns )
 {
-    bool bRet = false;
     if( p->HasValidRange() )
     {
         std::pair<_SwRedlineTbl::const_iterator, bool> rv = insert( p );
         size_t nP = rv.first - begin();
-        bRet = rv.second;
         p->CallDisplayFunc(0, nP);
+        return rv.second;
     }
-    else if( bIns )
-        bRet = InsertWithValidRanges( p );
-    else
-    {
-        OSL_ENSURE( false, "Redline: wrong range" );
-    }
-    return bRet;
+    if( bIns )
+        return InsertWithValidRanges( p );
+
+    OSL_ENSURE( false, "Redline: wrong range" );
+    return false;
 }
 
 bool SwRedlineTbl::Insert( SwRangeRedline* p, sal_uInt16& rP, bool bIns )
 {
-    bool bRet = false;
     if( p->HasValidRange() )
     {
         std::pair<_SwRedlineTbl::const_iterator, bool> rv = insert( p );
         rP = rv.first - begin();
-        bRet = rv.second;
         p->CallDisplayFunc(0, rP);
+        return rv.second;
     }
-    else if( bIns )
-        bRet = InsertWithValidRanges( p, &rP );
-    else
-    {
-        OSL_ENSURE( false, "Redline: wrong range" );
-    }
-    return bRet;
+    if( bIns )
+        return InsertWithValidRanges( p, &rP );
+
+    OSL_ENSURE( false, "Redline: wrong range" );
+    return false;
 }
 
 bool SwRedlineTbl::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos )
@@ -455,10 +449,11 @@ sal_uInt16 SwRedlineTbl::GetPos(const SwRangeRedline* p) const
 
 bool SwRedlineTbl::Remove( const SwRangeRedline* p )
 {
-    sal_uInt16 nPos = GetPos(p);
-    if (nPos != USHRT_MAX)
-        Remove(nPos);
-    return nPos != USHRT_MAX;
+    const sal_uInt16 nPos = GetPos(p);
+    if (nPos == USHRT_MAX)
+        return false;
+    Remove(nPos);
+    return true;
 }
 
 void SwRedlineTbl::Remove( sal_uInt16 nP )
@@ -732,18 +727,18 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 
 bool SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) const
 {
-    bool nRet = true;
-    size_t nEnd = aWhichIds.size();
+    const size_t nEnd = aWhichIds.size();
     if( nEnd != static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds.size() )
-        nRet = false;
-    else
-        for( size_t n = 0; n < nEnd; ++n )
-            if( static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds[n] != aWhichIds[n])
-            {
-                nRet = false;
-                break;
-            }
-    return nRet;
+        return false;
+
+    for( size_t n = 0; n < nEnd; ++n )
+    {
+        if( static_cast<const SwRedlineExtraData_Format&>(rCmp).aWhichIds[n] != aWhichIds[n])
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SfxItemSet* pItemSet )
@@ -1531,8 +1526,8 @@ bool SwRangeRedline::PopData()
 sal_uInt16 SwRangeRedline::GetStackCount() const
 {
     sal_uInt16 nRet = 1;
-    for( SwRedlineData* pCur = pRedlineData; pCur->pNext; ++nRet )
-        pCur = pCur->pNext;
+    for( SwRedlineData* pCur = pRedlineData; pCur->pNext; pCur = pCur->pNext )
+        ++nRet;
     return nRet;
 }
 
@@ -1568,15 +1563,10 @@ bool SwRangeRedline::operator==( const SwRangeRedline& rCmp ) const
 
 bool SwRangeRedline::operator<( const SwRangeRedline& rCmp ) const
 {
-    bool nResult = false;
-
     if (*Start() < *rCmp.Start())
-        nResult = true;
-    else if (*Start() == *rCmp.Start())
-        if (*End() < *rCmp.End())
-            nResult = true;
+        return true;
 
-    return nResult;
+    return *Start() == *rCmp.Start() && *End() < *rCmp.End()
 }
 
 const SwRedlineData & SwRangeRedline::GetRedlineData(sal_uInt16 nPos) const
