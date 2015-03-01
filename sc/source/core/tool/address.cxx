@@ -1590,7 +1590,7 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
-        if ((p[0] == 'C' || p[0] != 'c') &&
+        if ((p[0] == 'C' || p[0] == 'c') &&
             NULL != (p = lcl_r1c1_get_col( p, rDetails, &aStart, &ignored )))
         {
             if( p[0] == ':')
@@ -1649,7 +1649,7 @@ sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
         break;
 
     case formula::FormulaGrammar::CONV_XL_R1C1:
-        if ((p[0] == 'R' || p[0] != 'r') &&
+        if ((p[0] == 'R' || p[0] == 'r') &&
             NULL != (p = lcl_r1c1_get_row( p, rDetails, &aStart, &ignored )))
         {
             if( p[0] == ':')
