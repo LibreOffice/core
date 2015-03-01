@@ -172,8 +172,14 @@ namespace xmloff
         else if (sServiceName == SERVICE_PERSISTENT_COMPONENT_##name) \
             sToWriteServiceName = SERVICE_##name
 
-        if (false)
-            ;
+        if (sServiceName == SERVICE_PERSISTENT_COMPONENT_EDIT)
+        {
+            // special handling for the edit field: we have two controls using this as persistence service name
+            sToWriteServiceName = SERVICE_EDIT;
+            Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
+            if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
+                sToWriteServiceName = SERVICE_FORMATTEDFIELD;
+        }
         CHECK_N_TRANSLATE( FORM );
         CHECK_N_TRANSLATE( LISTBOX );
         CHECK_N_TRANSLATE( COMBOBOX );
@@ -193,14 +199,6 @@ namespace xmloff
         CHECK_N_TRANSLATE( HIDDENCONTROL );
         CHECK_N_TRANSLATE( IMAGECONTROL );
         CHECK_N_TRANSLATE( FORMATTEDFIELD );
-        else if (sServiceName == SERVICE_PERSISTENT_COMPONENT_EDIT)
-        {
-            // special handling for the edit field: we have two controls using this as persistence service name
-            sToWriteServiceName = SERVICE_EDIT;
-            Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
-            if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
-                sToWriteServiceName = SERVICE_FORMATTEDFIELD;
-        }
 #if OSL_DEBUG_LEVEL > 0
         Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
         OSL_ENSURE(xSI.is() && xSI->supportsService(sToWriteServiceName),
