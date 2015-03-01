@@ -114,7 +114,7 @@ void PaletteASE::LoadPalette()
             maName = aName;
             // Is there color data? (shouldn't happen in a start block, but check anyway)
             if (nChunkSize > ((nChars * 2) + 2))
-                aName = "";
+                aName.clear();
             else
                 continue;
         }
