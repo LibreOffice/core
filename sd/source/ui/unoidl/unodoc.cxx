@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include "sddll.hxx"
-#include "facreg.hxx"
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
 #include <osl/mutex.hxx>
@@ -31,62 +30,38 @@
 
 using namespace ::com::sun::star;
 
-// com.sun.star.comp.Draw.DrawingDocument
-
-OUString SAL_CALL SdDrawingDocument_getImplementationName() throw( uno::RuntimeException )
-{
-    return OUString( "com.sun.star.comp.Draw.DrawingDocument" );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.drawing.DrawingDocument";
-    aSeq[1] = "com.sun.star.drawing.DrawingDocumentFactory";
-
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_DrawingDocument_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                          ::com::sun::star::uno::Sequence<css::uno::Any>)
 {
     SolarMutexGuard aGuard;
 
     SdDLL::Init();
 
-    SfxObjectShell* pShell =
-        new ::sd::GraphicDocShell(
-            _nCreationFlags, false, DOCUMENT_TYPE_DRAW );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
+
+    SfxObjectShell* pShell = new ::sd::GraphicDocShell( SFXMODEL_STANDARD, false, DOCUMENT_TYPE_DRAW );
+    uno::Reference< uno::XInterface > xModel( pShell->GetModel() );
+    xModel->acquire();
+    return xModel.get();
 }
 
-// com.sun.star.comp.Draw.PresentationDocument
 
-OUString SAL_CALL SdPresentationDocument_getImplementationName() throw( uno::RuntimeException )
-{
-    return OUString( "com.sun.star.comp.Draw.PresentationDocument" );
-}
-
-uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( uno::RuntimeException )
-{
-    uno::Sequence< OUString > aSeq( 2 );
-    aSeq[0] = "com.sun.star.drawing.DrawingDocumentFactory";
-    aSeq[1] = "com.sun.star.presentation.PresentationDocument";
-
-    return aSeq;
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > &, const sal_uInt64 _nCreationFlags )
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_Draw_PresentationDocument_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                          ::com::sun::star::uno::Sequence<css::uno::Any>)
 {
     SolarMutexGuard aGuard;
 
     SdDLL::Init();
 
-    SfxObjectShell* pShell =
-        new ::sd::DrawDocShell(
-            _nCreationFlags, false, DOCUMENT_TYPE_IMPRESS );
-    return uno::Reference< uno::XInterface >( pShell->GetModel() );
+    uno::Reference< lang::XMultiServiceFactory> xSM(context->getServiceManager(), uno::UNO_QUERY_THROW);
+
+    SfxObjectShell* pShell = new ::sd::DrawDocShell( SFXMODEL_STANDARD, false, DOCUMENT_TYPE_IMPRESS );
+    uno::Reference< uno::XInterface > xModel( pShell->GetModel() );
+    xModel->acquire();
+    return xModel.get();
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,7 +18,6 @@
  */
 
 #include "PresenterCanvas.hxx"
-#include "facreg.hxx"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

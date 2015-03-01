@@ -22,7 +22,6 @@
 #include <utility>
 
 #include "BasicPaneFactory.hxx"
-#include "facreg.hxx"
 
 #include "ChildWindowPane.hxx"
 #include "FrameWindowPane.hxx"

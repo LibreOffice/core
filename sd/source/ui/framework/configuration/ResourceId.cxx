@@ -26,8 +26,6 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/ref.hxx>
 
-#include <facreg.hxx>
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
