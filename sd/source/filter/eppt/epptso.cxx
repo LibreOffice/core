@@ -990,7 +990,7 @@ bool PPTWriter::ImplGetText()
     {
         mnTextSize = mXText->getString().getLength();
         ::com::sun::star::uno::Any aAny;
-        if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), sal_True ) )
+        if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), true ) )
             aAny >>= mbFontIndependentLineSpacing;
     }
     return ( mnTextSize != 0 );
@@ -3674,7 +3674,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             mnTextSize = mXText->getString().getLength();
 
                             ::com::sun::star::uno::Any aAny;
-                            if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), sal_True ) )
+                            if ( GetPropertyValue( aAny, mXPropSet, OUString( "FontIndependentLineSpacing" ), true ) )
                                 aAny >>= mbFontIndependentLineSpacing;
 
                             EscherPropertyContainer aPropOptSp;

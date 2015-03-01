@@ -439,7 +439,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
 {
     ::com::sun::star::uno::Any aAny;
     sal_Int32 nLayout = 20;
-    if ( GetPropertyValue( aAny, rXPropSet, OUString( "Layout" ), sal_True ) )
+    if ( GetPropertyValue( aAny, rXPropSet, OUString( "Layout" ), true ) )
         aAny >>= nLayout;
 
     DBG(printf("GetLayoutOffset %" SAL_PRIdINT32 "\n", nLayout));

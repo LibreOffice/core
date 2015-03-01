@@ -515,13 +515,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             OUString aFieldKind( aXTextField->getPresentation( sal_True ) );
                             if ( aFieldKind == "Date" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), sal_True ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
                                 {
                                     bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )  // Fixed DateFields does not exist in PPT
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), sal_True ) )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), true ) )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             switch ( nFormat )
@@ -543,7 +543,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == "URL" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "URL" ), sal_True ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "URL" ), true ) )
                                     rURL = *(OUString*)aAny.getValue();
                                 nRetValue = 4 << 28;
                             }
@@ -557,13 +557,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == "Time" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), sal_True ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
                                 {
                                     bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), sal_True ) )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             nRetValue |= ( ( ( 2 << 4 ) | nFormat ) << 24 ) | 0x800000;
@@ -581,13 +581,13 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                             }
                             else if ( aFieldKind == "ExtTime" )
                             {
-                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), sal_True ) )
+                                if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "IsFix" ), true ) )
                                 {
                                     bool bBool = false;
                                     aAny >>= bBool;
                                     if ( !bBool )
                                     {
-                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), sal_True ) )
+                                        if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ), true ) )
                                         {
                                             nFormat = *(sal_Int32*)aAny.getValue();
                                             switch ( nFormat )
