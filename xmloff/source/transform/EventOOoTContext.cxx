@@ -76,7 +76,7 @@ XMLTransformerOOoEventMap_Impl::XMLTransformerOOoEventMap_Impl(
 {
     if( pInit )
         AddMap( pInit );
-    if( pInit )
+    if( pInit2 )
         AddMap( pInit2 );
 }
 
