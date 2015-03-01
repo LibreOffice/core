@@ -58,8 +58,8 @@ namespace drawinglayer
             bool operator==(const SvgGradientEntry& rCompare) const
             {
                 return (getOffset() == rCompare.getOffset()
-                    && getColor() == getColor()
-                    && getOpacity() == getOpacity());
+                    && getColor() == rCompare.getColor()
+                    && getOpacity() == rCompare.getOpacity());
             }
 
             bool operator<(const SvgGradientEntry& rCompare) const
