@@ -297,6 +297,7 @@ public:
     void testStatisticalFormulaStDevA1();
     void testStatisticalFormulaStDevPA1();
     void testFinancialMDurationFormula1();
+
     CPPUNIT_TEST_SUITE(ScOpenCLTest);
     CPPUNIT_TEST(testSharedFormulaXLS);
     CPPUNIT_TEST(testFinacialFormula);
@@ -530,7 +531,29 @@ public:
 
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
+
+    // Test env variables and methods
+    ScDocShellRef xDocSh;
+    ScDocShellRef xDocShRes;
+    bool initTestEnv(const OUString fileName, sal_Int32 nFormat,
+              bool bReadWrite);
 };
+
+bool ScOpenCLTest::initTestEnv(const OUString fileName, sal_Int32 nFormat,
+    bool bReadWrite)
+{
+    if(!detectOpenCLDevice())
+        return false;
+
+    xDocSh = loadDoc(fileName, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
+    enableOpenCL();
+
+    xDocShRes = loadDoc(fileName, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
+
+    return true;
+}
 
 bool ScOpenCLTest::load(const OUString &rFilter, const OUString &rURL,
     const OUString &rUserData, unsigned int nFilterFlags,
@@ -558,16 +581,12 @@ void ScOpenCLTest::enableOpenCL()
 
 void ScOpenCLTest::testCompilerHorizontal()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/compiler/horizontal.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/compiler/horizontal.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/horizontal.", ODS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
@@ -581,21 +600,16 @@ void ScOpenCLTest::testCompilerHorizontal()
         fExcel = rDocRes.GetValue(ScAddress(14, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
+
 void ScOpenCLTest::testCompilerNested()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/compiler/nested.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/compiler/nested.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/nested.", ODS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
@@ -603,24 +617,16 @@ void ScOpenCLTest::testCompilerNested()
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testCompilerString()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/compiler/string.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/compiler/string.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/string.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 5; ++i)
     {
@@ -632,24 +638,16 @@ void ScOpenCLTest::testCompilerString()
         fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testCompilerInEq()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/compiler/ineq.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/compiler/ineq.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/compiler/ineq.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i < 7; ++i)
     {
@@ -657,22 +655,17 @@ void ScOpenCLTest::testCompilerInEq()
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 #if 0
 void ScOpenCLTest::testSharedFormulaXLSStockHistory()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("stock-history.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("stock-history.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("stock-history.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 33; i < 44; ++i)
     {   // Cell H34:H44 in S&P 500 (tab 1)
@@ -687,22 +680,16 @@ void ScOpenCLTest::testSharedFormulaXLSStockHistory()
         double fExcel = rDocRes.GetValue(ScAddress(9, i, 1));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.0001*fExcel);
     }
-
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testSharedFormulaXLSGroundWater()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("ground-water-daily.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("ground-water-daily.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     xDocSh->DoHardRecalc(true);
 
-    ScDocShellRef xDocShRes = loadDoc("ground-water-daily.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 5; i <= 77; ++i)
     {
@@ -710,22 +697,19 @@ void ScOpenCLTest::testSharedFormulaXLSGroundWater()
         double fExcel = rDocRes.GetValue(ScAddress(11,i,1));
         ASSERT_DOUBLES_EQUAL(fExcel, fLibre);
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
+
+
 }
 #endif
 
 void ScOpenCLTest::testSharedFormulaXLS()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("sum_ex.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("sum_ex.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("sum_ex.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i < 5; ++i)
     {
@@ -805,84 +789,64 @@ void ScOpenCLTest::testSharedFormulaXLS()
                 fabs(fExcel*0.0001));
         }
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCos()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/cos.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/cos.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/cos.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSinh()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/sinh.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sinh.", XLS);
-    enableOpenCL();
     ScDocument& rDoc = xDocSh->GetDocument();
-    xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sinh.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    xDocSh->DoHardRecalc(true);
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaPi()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/pi.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/pi.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/pi.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(0,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(0,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaRandom()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/random.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/random.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/random.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(0,i,0));
@@ -892,22 +856,15 @@ void ScOpenCLTest::testMathFormulaRandom()
         (void) fExcel;
         CPPUNIT_ASSERT(true);
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/general.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/general.", XLS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/general.", XLS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 10; ++i)
     {
@@ -951,7 +908,7 @@ void ScOpenCLTest::testFinacialFormula()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
 
-	for (SCROW i = 0; i < 10; ++i)
+    for (SCROW i = 0; i < 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5,i,6));
         double fExcel = rDocRes.GetValue(ScAddress(5,i,6));
@@ -1048,24 +1005,16 @@ void ScOpenCLTest::testFinacialFormula()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,19));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaCorrel()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Correl.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Correl.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Correl.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -1073,22 +1022,15 @@ void ScOpenCLTest::testStatisticalFormulaCorrel()
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
-
 }
 void ScOpenCLTest::testStatisticalFormulaFisher()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Fisher.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Fisher.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Fisher.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1096,22 +1038,16 @@ void ScOpenCLTest::testStatisticalFormulaFisher()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaFisherInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/FisherInv.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/FisherInv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/FisherInv.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1119,22 +1055,16 @@ void ScOpenCLTest::testStatisticalFormulaFisherInv()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaGamma()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Gamma.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Gamma.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Gamma.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1142,40 +1072,31 @@ void ScOpenCLTest::testStatisticalFormulaGamma()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialFvscheduleFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Fvschedule.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Fvschedule.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Fvschedule.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaAbs()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/Abs.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/Abs.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/Abs.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
 
     // Verify ABS Function
     for (SCROW i = 1; i <= 1000; ++i)
@@ -1184,64 +1105,51 @@ void ScOpenCLTest::testMathFormulaAbs()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialSYDFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/SYD.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/SYD.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/SYD.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 // this test has intermittent failures on OSX
 #if !defined MACOSX
 void ScOpenCLTest::testFinacialIRRFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/IRR.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/IRR.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/IRR.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 #endif
 
 void ScOpenCLTest::testStatisticalFormulaGammaLn()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/GammaLn.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/GammaLn.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/GammaLn.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1249,20 +1157,16 @@ void ScOpenCLTest::testStatisticalFormulaGammaLn()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaGauss()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Gauss.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Gauss.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Gauss.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1270,21 +1174,16 @@ void ScOpenCLTest::testStatisticalFormulaGauss()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaGeoMean()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/GeoMean.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/GeoMean.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/GeoMean.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1292,21 +1191,16 @@ void ScOpenCLTest::testStatisticalFormulaGeoMean()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaHarMean()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/HarMean.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/HarMean.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/HarMean.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -1314,199 +1208,160 @@ void ScOpenCLTest::testStatisticalFormulaHarMean()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialSLNFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/SLN.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/SLN.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/SLN.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialMIRRFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/MIRR.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/MIRR.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/MIRR.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialCoupdaybsFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Coupdaybs.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupdaybs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupdaybs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <=10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialDollardeFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Dollarde.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Dollarde.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Dollarde.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialCoupdaysFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Coupdays.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupdays.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupdays.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <=10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
+
 }
 
 void ScOpenCLTest::testFinancialCoupdaysncFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Coupdaysnc.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupdaysnc.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupdaysnc.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <=10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialRateFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/RATE.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/RATE.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/RATE.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 5; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialAccrintmFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Accrintm.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Accrintm.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Accrintm.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialCoupnumFormula()
 {
-   if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Coupnum.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupnum.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupnum.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaNegbinomdist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Negbinomdist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Negbinomdist." ,XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Negbinomdist." ,XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -1514,282 +1369,224 @@ void ScOpenCLTest::testStatisticalFormulaNegbinomdist()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSin()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sin.", XLS);
+    if(!initTestEnv("opencl/math/sin.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sin.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSumSQ()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sumsq.", XLS);
+    if(!initTestEnv("opencl/math/sumsq.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumsq.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i < 20; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(5,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaTan()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/tan.", XLS);
+    if(!initTestEnv("opencl/math/tan.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/tan.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaTanH()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/tanh.", XLS);
+    if(!initTestEnv("opencl/math/tanh.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/tanh.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSqrt()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sqrt.", XLS);
+    if(!initTestEnv("opencl/math/sqrt.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sqrt.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialPriceFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Price.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Price.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Price.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(7, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialDollarfrFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Dollarfr.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Dollarfr.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Dollarfr.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialPriceDiscFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/PriceDisc.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/PriceDisc.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PriceDisc.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialODDLPRICEFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Oddlprice.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Oddlprice.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Oddlprice.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(8, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(8, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinacialOddlyieldFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Oddlyield.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Oddlyield.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Oddlyield.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(8, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(8, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialDISCFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/DISC.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/DISC.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/DISC.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinacialPVFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/PV.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/PV.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PV.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialINTRATEFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/INTRATE.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/INTRATE.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/INTRATE.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStandard()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Standard.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Standard.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Standard.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -1797,22 +1594,16 @@ void ScOpenCLTest::testStatisticalFormulaStandard()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaWeibull()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Weibull.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Weibull.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Weibull.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -1821,22 +1612,16 @@ void ScOpenCLTest::testStatisticalFormulaWeibull()
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre,
             fExcel == 0?1e-4:fabs(1e-4*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaVar()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Var.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Var.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Var.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -1844,22 +1629,16 @@ void ScOpenCLTest::testStatisticalFormulaVar()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaSkew()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Skew.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Skew.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Skew.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -1867,22 +1646,16 @@ void ScOpenCLTest::testStatisticalFormulaSkew()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaSkewp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Skewp.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Skewp.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Skewp.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -1890,20 +1663,16 @@ void ScOpenCLTest::testStatisticalFormulaSkewp()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaPearson()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Pearson.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Pearson.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Pearson.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -1911,20 +1680,16 @@ void ScOpenCLTest::testStatisticalFormulaPearson()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaRsq()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Rsq.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Rsq.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Rsq.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -1932,62 +1697,47 @@ void ScOpenCLTest::testStatisticalFormulaRsq()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaTrunc()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/trunc.", XLS);
+    if(!initTestEnv("opencl/math/trunc.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/trunc.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCosh()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/cosh.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/cosh.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/cosh.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testStatisticalFormulaCovar()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Covar.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Covar.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Covar.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 16; ++i)
     {
@@ -1995,20 +1745,16 @@ void ScOpenCLTest::testStatisticalFormulaCovar()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaKurt()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Kurt.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Kurt.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Kurt.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2016,43 +1762,32 @@ void ScOpenCLTest::testStatisticalFormulaKurt()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCot()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/cot.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/cot.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/cot.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaDevSq()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/DevSq.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/DevSq.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/DevSq.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 11; ++i)
     {
@@ -2060,61 +1795,48 @@ void ScOpenCLTest::testStatisticalFormulaDevSq()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCsc()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/csc.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/csc.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/csc.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCoth()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/coth.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/coth.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/coth.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialXNPVFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/XNPV.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/XNPV.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/XNPV.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
@@ -2128,81 +1850,64 @@ void ScOpenCLTest::testFinacialXNPVFormula()
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaIntercept()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Intercept.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Intercept.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Intercept.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 19; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialAmordegrcFormula()
 {
-   if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Amordegrc.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Amordegrc.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Amordegrc.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(7, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialISPMTFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/ISPMT.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/ISPMT.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/ISPMT.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaMedian()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Median.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Median.",XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Median.",XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -2210,20 +1915,16 @@ void ScOpenCLTest::testStatisticalFormulaMedian()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaNormdist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Normdist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Normdist.",XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Normdist.",XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2231,20 +1932,16 @@ void ScOpenCLTest::testStatisticalFormulaNormdist()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaNormsdist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Normsdist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Normsdist.",XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Normsdist.",XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2252,20 +1949,16 @@ void ScOpenCLTest::testStatisticalFormulaNormsdist()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaPermut()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Permut.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Permut.",XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Permut.",XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2273,20 +1966,16 @@ void ScOpenCLTest::testStatisticalFormulaPermut()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaPermutation()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Permutation.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Permutation.",XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Permutation.",XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -2294,20 +1983,16 @@ void ScOpenCLTest::testStatisticalFormulaPermutation()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaPhi()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Phi.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Phi.",XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Phi.",XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2315,41 +2000,32 @@ void ScOpenCLTest::testStatisticalFormulaPhi()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCscH()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/csch.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/csch.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/csch.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaLogInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/LogInv.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/LogInv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/LogInv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2357,41 +2033,32 @@ void ScOpenCLTest::testStatisticalFormulaLogInv()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialNPERFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/NPER.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/NPER.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/NPER.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaForecast()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Forecast.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Forecast.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Forecast.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2399,78 +2066,62 @@ void ScOpenCLTest::testStatisticalFormulaForecast()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialAmorlincFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Amorlinc.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Amorlinc.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Amorlinc.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(7, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialDDBFormula()
 {
-   if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/ddb.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/ddb.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/ddb.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialPriceMatFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/PriceMat.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/PriceMat.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PriceMat.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialFormulaReceived()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Received.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Received.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Received.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i < 10; ++i)
     {
@@ -2478,19 +2129,15 @@ void ScOpenCLTest::testFinacialFormulaReceived()
         double fExcel = rDocRes.GetValue(ScAddress(5,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinancialFormulaCumipmt()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Cumipmt.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Cumipmt.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Cumipmt.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 10; ++i)
     {
@@ -2498,19 +2145,15 @@ void ScOpenCLTest::testFinancialFormulaCumipmt()
         double fExcel = rDocRes.GetValue(ScAddress(6,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinancialFormulaCumprinc()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Cumprinc.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Cumprinc.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Cumprinc.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 10; ++i)
     {
@@ -2518,57 +2161,46 @@ void ScOpenCLTest::testFinancialFormulaCumprinc()
         double fExcel = rDocRes.GetValue(ScAddress(6,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialRRIFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/RRI.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/RRI.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/RRI.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialEFFECT_ADDFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/EFFECT_ADD.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/EFFECT_ADD.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/EFFECT_ADD.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialNominalFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Nominal.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Nominal.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Nominal.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2576,177 +2208,139 @@ void ScOpenCLTest::testFinacialNominalFormula()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialTBILLEQFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/TBILLEQ.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/TBILLEQ.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/TBILLEQ.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialTBILLPRICEFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/TBILLPRICE.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/TBILLPRICE.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/TBILLPRICE.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialTBILLYIELDFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/TBILLYIELD.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/TBILLYIELD.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/TBILLYIELD.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest::testFinacialYIELDFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/YIELD.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/YIELD.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/YIELD.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(7, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialYIELDDISCFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/YIELDDISC.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/YIELDDISC.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/YIELDDISC.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinacialYIELDMATFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/YIELDMAT.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/YIELDMAT.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/YIELDMAT.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 void ScOpenCLTest:: testFinacialPMTFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/PMT.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/PMT.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PMT.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialDurationFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Duration.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Duration.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Duration.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaLogNormDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/LogNormDist.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/LogNormDist.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/LogNormDist.", ODS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2754,20 +2348,16 @@ void ScOpenCLTest::testStatisticalFormulaLogNormDist()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcCos()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcCos.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcCos.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcCos.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ACos Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -2775,100 +2365,80 @@ void ScOpenCLTest::testMathFormulaArcCos()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaPower()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/power.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/power.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/power.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinacialPPMTFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/PPMT.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/PPMT.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/PPMT.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinacialNPVFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/NPV.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/NPV.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/NPV.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialDuration_ADDFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Duration_ADD.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Duration_ADD.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Duration_ADD.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaNorminv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Norminv.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Norminv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Norminv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2876,20 +2446,16 @@ void ScOpenCLTest::testStatisticalFormulaNorminv()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaNormsinv()
 {
-     if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Normsinv.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Normsinv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Normsinv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -2897,20 +2463,16 @@ void ScOpenCLTest::testStatisticalFormulaNormsinv()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcCosHyp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcCosHyp.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcCosHyp.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcCosHyp.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ACosH Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -2918,40 +2480,32 @@ void ScOpenCLTest::testMathFormulaArcCosHyp()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialMDurationFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/MDuration.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/MDuration.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/MDuration.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcCot()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcCot.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcCot.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcCot.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ACot Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -2959,80 +2513,64 @@ void ScOpenCLTest::testMathFormulaArcCot()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialFVFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/FV.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/FV.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/FV.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialDBFormula()
 {
-   if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/db.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/db.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/db.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialCouppcdFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Couppcd.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Couppcd.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Couppcd.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathSumIfsFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/sumifs.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sumifs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumifs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    xDocSh->DoHardRecalc(true);
+
     for (SCROW i = 2; i <= 11; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5,i,0));
@@ -3057,20 +2595,16 @@ void ScOpenCLTest::testMathSumIfsFormula()
         double fExcel = rDocRes.GetValue(ScAddress(8,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcCotHyp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcCotHyp.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcCotHyp.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcCotHyp.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ACotH Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -3078,20 +2612,16 @@ void ScOpenCLTest::testMathFormulaArcCotHyp()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcSin()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcSin.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcSin.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcSin.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ACotH Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -3099,20 +2629,16 @@ void ScOpenCLTest::testMathFormulaArcSin()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialVDBFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/VDB.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/VDB.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/VDB.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7, i, 0));
@@ -3131,39 +2657,29 @@ void ScOpenCLTest:: testFinancialVDBFormula()
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialIPMTFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/IPMT.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/IPMT.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/IPMT.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialXirrFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/XIRR.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/XIRR.", ODS);
-    CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
     rDoc.CalcAll();
 
     for (SCROW i = 1; i <= 10; ++i)
@@ -3179,19 +2695,17 @@ void ScOpenCLTest:: testFinancialXirrFormula()
         CPPUNIT_ASSERT(rtl::math::approxEqual(fExpected, fFormula));
     }
 
-    xDocSh->DoClose();
+
 }
 
 void ScOpenCLTest::testStatisticalFormulaChiSqDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/CHISQDIST.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/CHISQDIST.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/CHISQDIST.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -3205,22 +2719,16 @@ void ScOpenCLTest::testStatisticalFormulaChiSqDist()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaConfidence()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Confidence.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Confidence.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Confidence.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -3228,20 +2736,16 @@ void ScOpenCLTest::testStatisticalFormulaConfidence()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaFDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Fdist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Fdist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Fdist.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -3249,62 +2753,48 @@ void ScOpenCLTest::testStatisticalFormulaFDist()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialCoupncdFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Coupncd.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Coupncd.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Coupncd.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testFinancialAccrintFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/Accrint.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/Accrint.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/Accrint.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(7, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(7, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaCritBinom()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/CritBinom.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/CritBinom.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/CritBinom.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -3312,20 +2802,16 @@ void ScOpenCLTest::testStatisticalFormulaCritBinom()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcSinHyp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcSinHyp.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcSinHyp.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcSinHyp.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ASinH Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -3333,20 +2819,16 @@ void ScOpenCLTest::testMathFormulaArcSinHyp()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcTan()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcTan.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcTan.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcTan.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ATan Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -3354,20 +2836,16 @@ void ScOpenCLTest::testMathFormulaArcTan()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcTanHyp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcTanHyp.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcTanHyp.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcTanHyp.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ATanH Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -3375,40 +2853,32 @@ void ScOpenCLTest::testMathFormulaArcTanHyp()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinacialNPER1Formula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/NPER1.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/NPER1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/NPER1.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 6; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(5, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(5, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaArcTan2()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ArcTan2.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ArcTan2.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ArcTan2.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify ATan2 Function
     for (SCROW i = 1; i <= 17; ++i)
     {
@@ -3416,20 +2886,16 @@ void ScOpenCLTest::testMathFormulaArcTan2()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 0.000001);
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaChiSqInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/CHISQINV.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/CHISQINV.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/CHISQINV.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -3437,20 +2903,16 @@ void ScOpenCLTest::testStatisticalFormulaChiSqInv()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaBitAnd()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/BitAnd.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/BitAnd.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/BitAnd.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify BitAnd Function
     for (SCROW i = 1; i <= 1000; ++i)
     {
@@ -3458,20 +2920,16 @@ void ScOpenCLTest::testMathFormulaBitAnd()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaPoisson()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Poisson.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Poisson.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Poisson.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3479,20 +2937,16 @@ void ScOpenCLTest::testStatisticalFormulaPoisson()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaExpondist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Expondist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Expondist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Expondist.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -3500,20 +2954,16 @@ void ScOpenCLTest::testStatisticalFormulaExpondist()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaBitOr()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/BitOr.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/BitOr.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/BitOr.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify BitOr Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -3521,40 +2971,32 @@ void ScOpenCLTest::testMathFormulaBitOr()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaOdd()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/odd.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/odd.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/odd.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaLN()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/LN.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/LN.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/LN.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -3562,21 +3004,16 @@ void ScOpenCLTest::testMathFormulaLN()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaMod()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/mod.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/mod.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/mod.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
@@ -3586,20 +3023,16 @@ void ScOpenCLTest::testMathFormulaMod()
         else
             CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaRound()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/ROUND.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/ROUND.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/ROUND.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -3613,21 +3046,16 @@ void ScOpenCLTest::testMathFormulaRound()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaGammaDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/GammaDist.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/GammaDist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/GammaDist.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3635,21 +3063,16 @@ void ScOpenCLTest::testStatisticalFormulaGammaDist()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaGammaInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/GammaInv.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/GammaInv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/GammaInv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3660,21 +3083,16 @@ void ScOpenCLTest::testStatisticalFormulaGammaInv()
         fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaFInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/FInv.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/FInv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/FInv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3685,21 +3103,16 @@ void ScOpenCLTest::testStatisticalFormulaFInv()
         fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaFTest()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/FTest.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/FTest.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/FTest.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3707,20 +3120,16 @@ void ScOpenCLTest::testStatisticalFormulaFTest()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaB()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/B.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/B.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/B.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3731,20 +3140,16 @@ void ScOpenCLTest::testStatisticalFormulaB()
         fExcel = rDocRes.GetValue(ScAddress(5,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaBetaDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/BetaDist.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/BetaDist.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/BetaDist.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3755,61 +3160,48 @@ void ScOpenCLTest::testStatisticalFormulaBetaDist()
         fExcel = rDocRes.GetValue(ScAddress(7,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaEven()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/even.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/even.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/even.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaExp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/exp.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/exp.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/exp.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaChiDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/ChiDist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/ChiDist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/ChiDist.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -3817,20 +3209,16 @@ void ScOpenCLTest::testStatisticalFormulaChiDist()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaBitLshift()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/BitLshift.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/BitLshift.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/BitLshift.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify BitLshift Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -3838,20 +3226,16 @@ void ScOpenCLTest::testMathFormulaBitLshift()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaBitRshift()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/BitRshift.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/BitRshift.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/BitRshift.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify BitRshift Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -3859,61 +3243,48 @@ void ScOpenCLTest::testMathFormulaBitRshift()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaFloor()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/floor.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/floor.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/floor.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(3,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaLog()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/log.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/log.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/log.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 47; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testSpreadSheetFormulaVLookup()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/spreadsheet/VLookup.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/spreadsheet/VLookup.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/spreadsheet/VLookup.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -3927,20 +3298,16 @@ void ScOpenCLTest::testSpreadSheetFormulaVLookup()
         double fExcel = rDocRes.GetValue(ScAddress(5,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaChiInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/ChiInv.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/ChiInv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/ChiInv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 10; ++i)
     {
@@ -3948,60 +3315,48 @@ void ScOpenCLTest::testStatisticalFormulaChiInv()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaConvert()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/convert.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/convert.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/convert.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 3; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathCountIfsFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/countifs.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/countifs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/countifs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    xDocSh->DoHardRecalc(true);
+
     for (SCROW i = 1; i < 10; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(4, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaBitXor()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/BitXor.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/BitXor.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/BitXor.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify BitXor Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4009,81 +3364,65 @@ void ScOpenCLTest::testMathFormulaBitXor()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathAverageIfsFormula()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/averageifs.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/averageifs.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    xDocSh->DoHardRecalc(true);
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/averageifs.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+
+    xDocSh->DoHardRecalc(true);
+
     for (SCROW i = 1; i <= 11; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(4,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaLog10()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/log10.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/log10.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/log10.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCombina()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/combina.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/combina.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/combina.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 47; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCeil()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/Ceil.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/Ceil.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/Ceil.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify Ceiling Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4091,42 +3430,32 @@ void ScOpenCLTest::testMathFormulaCeil()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSqrtPi()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sqrtpi.", XLS);
+    if(!initTestEnv("opencl/math/sqrtpi.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sqrtpi.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i < 20; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaVarP()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/VarP.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/VarP.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/VarP.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4134,22 +3463,16 @@ void ScOpenCLTest::testStatisticalFormulaVarP()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStDev()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/StDev.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/StDev.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/StDev.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4157,22 +3480,16 @@ void ScOpenCLTest::testStatisticalFormulaStDev()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStDevP()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/StDevP.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/StDevP.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/StDevP.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4180,22 +3497,16 @@ void ScOpenCLTest::testStatisticalFormulaStDevP()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaSlope()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Slope.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Slope.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Slope.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4203,22 +3514,16 @@ void ScOpenCLTest::testStatisticalFormulaSlope()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaSTEYX()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/STEYX.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/STEYX.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/STEYX.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4226,22 +3531,16 @@ void ScOpenCLTest::testStatisticalFormulaSTEYX()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaZTest()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/ZTest.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/ZTest.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/ZTest.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4249,22 +3548,16 @@ void ScOpenCLTest::testStatisticalFormulaZTest()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaTTest()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/TTest.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/TTest.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/TTest.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4272,22 +3565,16 @@ void ScOpenCLTest::testStatisticalFormulaTTest()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaTDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/TDist.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/TDist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/TDist.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4295,22 +3582,16 @@ void ScOpenCLTest::testStatisticalFormulaTDist()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaTInv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/TInv.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/TInv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/TInv.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4318,20 +3599,16 @@ void ScOpenCLTest::testStatisticalFormulaTInv()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaBinomDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/BinomDist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/BinomDist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/BinomDist.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -4339,41 +3616,33 @@ void ScOpenCLTest::testStatisticalFormulaBinomDist()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaProduct()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/product.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/product.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/product.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 3; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 #if 0 //Disabled temporarily
 void ScOpenCLTest::testMathFormulaKombin()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/Kombin.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/Kombin.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/Kombin.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify Combin Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4381,21 +3650,17 @@ void ScOpenCLTest::testMathFormulaKombin()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 #endif
 
 void ScOpenCLTest:: testArrayFormulaSumX2MY2()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/array/SUMX2MY2.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/array/SUMX2MY2.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/array/SUMX2MY2.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -4408,20 +3673,16 @@ void ScOpenCLTest:: testArrayFormulaSumX2MY2()
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaHypGeomDist()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/HypGeomDist.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/HypGeomDist.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/HypGeomDist.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -4429,20 +3690,16 @@ void ScOpenCLTest::testStatisticalFormulaHypGeomDist()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testArrayFormulaSumX2PY2()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/array/SUMX2PY2.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/array/SUMX2PY2.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/array/SUMX2PY2.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -4455,20 +3712,16 @@ void ScOpenCLTest:: testArrayFormulaSumX2PY2()
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaBetainv()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Betainv.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Betainv.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Betainv.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -4476,40 +3729,32 @@ void ScOpenCLTest::testStatisticalFormulaBetainv()
         double fExcel = rDocRes.GetValue(ScAddress(5,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaMina()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Mina.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Mina.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Mina.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testArrayFormulaSumXMY2()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/array/SUMXMY2.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/array/SUMXMY2.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/array/SUMXMY2.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -4522,60 +3767,48 @@ void ScOpenCLTest:: testArrayFormulaSumXMY2()
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaCountA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/counta.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/counta.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/counta.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaMaxa()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Maxa.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Maxa.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Maxa.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSumProduct()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/sumproduct_mixSliding.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sumproduct_mixSliding.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumproduct_mixSliding.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -4596,60 +3829,48 @@ void ScOpenCLTest::testMathFormulaSumProduct()
         else
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaAverageIf()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/averageif.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/averageif.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/averageif.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 2; i <= 21; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(6,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaAverageA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/AverageA.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/AverageA.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/AverageA.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testLogicalFormulaAnd()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/logical/and.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/logical/and.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/logical/and.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 1; i <= 20; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
@@ -4662,22 +3883,16 @@ void ScOpenCLTest:: testLogicalFormulaAnd()
         double fExcel = rDocRes.GetValue(ScAddress(3, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaVarA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/VarA.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/VarA.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/VarA.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4685,22 +3900,15 @@ void ScOpenCLTest::testStatisticalFormulaVarA()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaVarPA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/VarPA.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/VarPA.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/VarPA.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4708,22 +3916,16 @@ void ScOpenCLTest::testStatisticalFormulaVarPA()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStDevA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/StDevA.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/StDevA.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/StDevA.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4731,22 +3933,16 @@ void ScOpenCLTest::testStatisticalFormulaStDevA()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStDevPA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/StDevPA.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/StDevPA.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/StDevPA.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -4754,40 +3950,32 @@ void ScOpenCLTest::testStatisticalFormulaStDevPA()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testFinancialMDurationFormula1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/financial/MDuration1.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/financial/MDuration1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/financial/MDuration1.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(6, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(6, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel,fLibre,fabs(0.00000000001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSumProduct2()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/sumproductTest.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sumproductTest.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumproductTest.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 2; i <= 12; ++i)
     {
@@ -4795,102 +3983,80 @@ void ScOpenCLTest::testMathFormulaSumProduct2()
         double fExcel = rDocRes.GetValue(ScAddress(4,i,1));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel,  fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testStatisticalParallelCountBug()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/parallel_count_bug_243.", ODS, false))
         return;
-    ScDocShellRef xDocSh =
-        loadDoc("opencl/statistical/parallel_count_bug_243.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes =
-        loadDoc("opencl/statistical/parallel_count_bug_243.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i < 13; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testLogicalFormulaOr()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/logical/or.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/logical/or.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/logical/or.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i < 20; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(2, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testLogicalFormulaNot()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/logical/not.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/logical/not.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/logical/not.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i < 3000; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(1, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest:: testLogicalFormulaXor()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/logical/xor.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/logical/xor.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/logical/xor.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i < 3000; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1, i, 0));
         double fExcel = rDocRes.GetValue(ScAddress(1, i, 0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDcount()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dcount.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dcount.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dcount.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -4898,20 +4064,16 @@ void ScOpenCLTest::testDatabaseFormulaDcount()
         double fExcel = rDocRes.GetValue(ScAddress(10,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDcountA()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dcountA.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dcountA.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dcountA.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -4919,20 +4081,16 @@ void ScOpenCLTest::testDatabaseFormulaDcountA()
         double fExcel = rDocRes.GetValue(ScAddress(10,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDmax()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dmax.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dmax.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dmax.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -4940,20 +4098,16 @@ void ScOpenCLTest::testDatabaseFormulaDmax()
         double fExcel = rDocRes.GetValue(ScAddress(10,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDmin()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dmin.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dmin.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dmin.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -4961,20 +4115,16 @@ void ScOpenCLTest::testDatabaseFormulaDmin()
         double fExcel = rDocRes.GetValue(ScAddress(10,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDproduct()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dproduct.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dproduct.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dproduct.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -4982,20 +4132,16 @@ void ScOpenCLTest::testDatabaseFormulaDproduct()
         double fExcel = rDocRes.GetValue(ScAddress(10,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDaverage()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/daverage.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/daverage.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/daverage.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -5004,20 +4150,16 @@ void ScOpenCLTest::testDatabaseFormulaDaverage()
         //CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDstdev()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dstdev.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dstdev.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dstdev.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -5026,20 +4168,16 @@ void ScOpenCLTest::testDatabaseFormulaDstdev()
         //CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDstdevp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dstdevp.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dstdevp.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dstdevp.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -5048,20 +4186,16 @@ void ScOpenCLTest::testDatabaseFormulaDstdevp()
         //CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDsum()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dsum.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dsum.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dsum.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -5070,20 +4204,16 @@ void ScOpenCLTest::testDatabaseFormulaDsum()
         //CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDvar()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dvar.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dvar.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dvar.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -5092,20 +4222,16 @@ void ScOpenCLTest::testDatabaseFormulaDvar()
         //CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testDatabaseFormulaDvarp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/database/dvarp.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/database/dvarp.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/database/dvarp.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 32; ++i)
     {
@@ -5113,20 +4239,16 @@ void ScOpenCLTest::testDatabaseFormulaDvarp()
         double fExcel = rDocRes.GetValue(ScAddress(10,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.00000000001));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaRoundUp()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/roundup.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/roundup.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/roundup.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -5134,20 +4256,16 @@ void ScOpenCLTest::testMathFormulaRoundUp()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaRoundDown()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/rounddown.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/rounddown.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/rounddown.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -5155,20 +4273,16 @@ void ScOpenCLTest::testMathFormulaRoundDown()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaInt()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/int.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/int.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/int.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -5176,20 +4290,16 @@ void ScOpenCLTest::testMathFormulaInt()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaRadians()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/radians.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/radians.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/radians.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -5197,40 +4307,32 @@ void ScOpenCLTest::testMathFormulaRadians()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaDegrees()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/degrees.", XLS);
+    if(!initTestEnv("opencl/math/degrees.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/degrees.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 200; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaIsEven()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/iseven.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/iseven.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/iseven.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -5238,40 +4340,32 @@ void ScOpenCLTest::testMathFormulaIsEven()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaCountIf()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/countif.", XLS);
+    if(!initTestEnv("opencl/math/countif.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/countif.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 26; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaIsOdd()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/isodd.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/isodd.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/isodd.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 9; ++i)
     {
@@ -5279,103 +4373,80 @@ void ScOpenCLTest::testMathFormulaIsOdd()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaFact()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/fact.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/fact.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/fact.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 18; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSEC()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/sec.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sec.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sec.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSECH()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/sech.", ODS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sech.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sech.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaMROUND()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/MROUND.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/MROUND.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/MROUND.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 13; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaQuotient()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/Quotient.", ODS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/Quotient.", ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/Quotient.", ODS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Verify BitAnd Function
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -5383,62 +4454,48 @@ void ScOpenCLTest::testMathFormulaQuotient()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSeriesSum()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/seriessum.", XLS);
+    if(!initTestEnv("opencl/math/seriessum.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/seriessum.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 15; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(1,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaSumIf()
 {
-    if (!detectOpenCLDevice())
-            return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/sumif.", XLS);
+    if(!initTestEnv("opencl/math/sumif.", XLS, false))
+        return;
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/sumif.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 26; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testAddInFormulaBesseLJ()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/addin/besselj.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/addin/besselj.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/addin/besselj.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -5446,21 +4503,16 @@ void ScOpenCLTest::testAddInFormulaBesseLJ()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaAvedev()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Avedev.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Avedev.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Avedev.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -5468,22 +4520,16 @@ void ScOpenCLTest::testStatisticalFormulaAvedev()
         double fExcel = rDocRes.GetValue(ScAddress(3,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testNegSub()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/NegSub.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/math/NegSub.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/NegSub.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 0; i <= 9; ++i)
     {
@@ -5491,40 +4537,32 @@ void ScOpenCLTest::testNegSub()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testMathFormulaAverageIf_Mix()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/math/averageif_mix.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/math/averageif_mix.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/math/averageif_mix.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     for (SCROW i = 0; i <= 9; ++i)
     {
         double fLibre = rDoc.GetValue(ScAddress(2,i,0));
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaKurt1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/Kurt1.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/Kurt1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/Kurt1.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -5532,20 +4570,16 @@ void ScOpenCLTest::testStatisticalFormulaKurt1()
         double fExcel = rDocRes.GetValue(ScAddress(2,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaHarMean1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/HarMean1.", XLS, false))
         return;
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/HarMean1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
-    rDoc.CalcAll();
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/HarMean1.", XLS);
     ScDocument& rDocRes = xDocShRes->GetDocument();
+    rDoc.CalcAll();
+
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 19; ++i)
     {
@@ -5553,22 +4587,16 @@ void ScOpenCLTest::testStatisticalFormulaHarMean1()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaVarA1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/VarA1.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/VarA1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/VarA1.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -5576,22 +4604,16 @@ void ScOpenCLTest::testStatisticalFormulaVarA1()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaVarPA1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/VarPA1.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/VarPA1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/VarPA1.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -5599,22 +4621,16 @@ void ScOpenCLTest::testStatisticalFormulaVarPA1()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStDevA1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/StDevA1.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/StDevA1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/StDevA1.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -5622,22 +4638,16 @@ void ScOpenCLTest::testStatisticalFormulaStDevA1()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
 
 void ScOpenCLTest::testStatisticalFormulaStDevPA1()
 {
-    if (!detectOpenCLDevice())
+    if(!initTestEnv("opencl/statistical/StDevPA1.", XLS, false))
         return;
-
-    ScDocShellRef xDocSh = loadDoc("opencl/statistical/StDevPA1.", XLS);
     ScDocument& rDoc = xDocSh->GetDocument();
-    enableOpenCL();
+    ScDocument& rDocRes = xDocShRes->GetDocument();
     rDoc.CalcAll();
 
-    ScDocShellRef xDocShRes = loadDoc("opencl/statistical/StDevPA1.", XLS);
-    ScDocument& rDocRes = xDocShRes->GetDocument();
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 20; ++i)
     {
@@ -5645,9 +4655,8 @@ void ScOpenCLTest::testStatisticalFormulaStDevPA1()
         double fExcel = rDocRes.GetValue(ScAddress(1,i,0));
         CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
-    xDocSh->DoClose();
-    xDocShRes->DoClose();
 }
+
 ScOpenCLTest::ScOpenCLTest()
       : ScBootstrapFixture( "/sc/qa/unit/data" )
 {
@@ -5666,6 +4675,12 @@ void ScOpenCLTest::setUp()
 
 void ScOpenCLTest::tearDown()
 {
+    //close test env
+    if(xDocSh.Is())
+        xDocSh->DoClose();
+    if(xDocShRes.Is())
+        xDocShRes->DoClose();
+
     uno::Reference< lang::XComponent >
         ( m_xCalcComponent, UNO_QUERY_THROW )->dispose();
     test::BootstrapFixture::tearDown();
