@@ -397,8 +397,8 @@ void SAL_CALL Theme::disposing (void)
     for (ChangeListeners::const_iterator
              iContainer(maChangeListeners.begin()),
              iContainerEnd(maChangeListeners.end());
-         iContainerEnd!=iContainerEnd;
-         ++iContainerEnd)
+         iContainer != iContainerEnd;
+         ++iContainer)
     {
         for (ChangeListenerContainer::const_iterator
                  iListener(iContainer->second.begin()),
