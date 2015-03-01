@@ -1200,9 +1200,9 @@ static void lcl_set_accept_focus( GtkWindow* pWindow, gboolean bAccept, bool bBe
 #endif
 }
 
+#if !GTK_CHECK_VERSION(3,0,0)
 static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
 {
-#if !GTK_CHECK_VERSION(3,0,0)
     if( bGetSetUserTimeFn )
     {
         bGetSetUserTimeFn = false;
@@ -1229,11 +1229,8 @@ static void lcl_set_user_time( GtkWindow* i_pWindow, guint32 i_nTime )
                              PropModeReplace, reinterpret_cast<unsigned char*>(&i_nTime), 1 );
         }
     }
-#else
-    (void)i_pWindow; (void)i_nTime;
-    //FIXME: no lcl_set_user_time impl.
-#endif
 };
+#endif
 
 GtkSalFrame *GtkSalFrame::getFromWindow( GtkWindow *pWindow )
 {
@@ -1803,6 +1800,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                  m_pParent->grabPointer( true, true );
             }
 
+#if !GTK_CHECK_VERSION(3,0,0)
             guint32 nUserTime = 0;
             if( ! bNoActivate && (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
                 nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
@@ -1833,6 +1831,7 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
                 nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
             }
             lcl_set_user_time(GTK_WINDOW(m_pWindow), nUserTime );
+#endif
 
             if( ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
@@ -2626,7 +2625,11 @@ void GtkSalFrame::ToTop( sal_uInt16 nFlags )
                 gtk_window_present( GTK_WINDOW(m_pWindow) );
             else
             {
+#if !GTK_CHECK_VERSION(3,0,0)
                 guint32 nUserTime = gdk_x11_get_server_time(GTK_WIDGET (m_pWindow)->window);
+#else
+                guint32 nUserTime = GDK_CURRENT_TIME;
+#endif
                 gdk_window_focus( widget_get_window(m_pWindow), nUserTime );
             }
 #if !GTK_CHECK_VERSION(3,0,0)
