@@ -691,9 +691,9 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 
 void SwDoc::DelCharFmt( SwCharFmt *pFmt, bool bBroadcast )
 {
-    sal_uInt16 nFmt = mpCharFmtTbl->GetPos( pFmt );
-    OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
-    DelCharFmt( nFmt, bBroadcast );
+    auto it = mpCharFmtTbl->Find( pFmt );
+    OSL_ENSURE( mpCharFmtTbl->end() != it, "Fmt not found," );
+    DelCharFmt( it - mpCharFmtTbl->begin(), bBroadcast );
 }
 
 void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
@@ -991,9 +991,9 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 
 void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, bool bBroadcast )
 {
-    sal_uInt16 nFmt = mpTxtFmtCollTbl->GetPos( pColl );
-    OSL_ENSURE( USHRT_MAX != nFmt, "Collection not found," );
-    DelTxtFmtColl( nFmt, bBroadcast );
+    auto it = mpTxtFmtCollTbl->Find( pColl );
+    OSL_ENSURE( mpTxtFmtCollTbl->end() != it, "Collection not found," );
+    DelTxtFmtColl( it - mpTxtFmtCollTbl->begin(), bBroadcast );
 }
 
 static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )

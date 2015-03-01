@@ -210,7 +210,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     if( i > rTbl.size() )
                         i = rTbl.size();
                     else if( pFmt != rTbl[i] )
-                        i = rTbl.GetPos( pFmt );
+                        i = rTbl.Find(pFmt) - rTbl.begin();
                 }
 
                 pDoc->getIDocumentLayoutAccess().DelLayoutFmt( pFmt );
