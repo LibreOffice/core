@@ -22,7 +22,6 @@
 #include "framework/FrameworkHelper.hxx"
 #include "DrawController.hxx"
 #include "ViewShellBase.hxx"
-#include "facreg.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <cppuhelper/compbase1.hxx>
 #include <tools/diagnose_ex.h>

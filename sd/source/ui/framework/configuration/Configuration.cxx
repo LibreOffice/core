@@ -18,10 +18,7 @@
  */
 
 #include "framework/Configuration.hxx"
-
 #include "framework/FrameworkHelper.hxx"
-
-#include <facreg.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
