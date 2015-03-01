@@ -443,15 +443,13 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
     SelectPersonaDialog aDialog( NULL );
 
-    while ( aDialog.Execute() == RET_OK )
+    if ( aDialog.Execute() == RET_OK )
     {
         OUString aPersonaSetting( aDialog.GetAppliedPersonaSetting() );
         if ( !aPersonaSetting.isEmpty() )
         {
             SetPersonaSettings( aPersonaSetting );
         }
-
-        break;
     }
 
     return 0;
