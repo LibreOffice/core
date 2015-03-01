@@ -121,8 +121,17 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
     numDevices = 0;
     for (i = 0; i < (unsigned int)numPlatforms; i++)
     {
-        cl_uint num;
-        clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num);
+        cl_uint num = 0;
+        cl_int err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num);
+        if (err != CL_SUCCESS)
+        {
+            /* we want to catch at least the case when the call returns
+             * CL_DEVICE_NOT_FOUND (i.e. no devices), because some platforms
+             * don't set num to 0 in this case; but in fact this is a good
+             * thing to do for _any_ error returned by the call
+             */
+            num = 0;
+        }
         numDevices += num;
     }
     if (numDevices != 0)
@@ -148,12 +157,21 @@ inline ds_status initDSProfile(ds_profile** p, const char* version)
     next = 0;
     for (i = 0; i < (unsigned int)numPlatforms; i++)
     {
-        cl_uint num;
+        cl_uint num = 0;
         unsigned j;
         char vendor[256];
         if (clGetPlatformInfo(platforms[i], CL_PLATFORM_VENDOR, sizeof(vendor), vendor, NULL) != CL_SUCCESS)
             vendor[0] = '\0';
-        clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, numDevices, devices, &num);
+        cl_int err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, numDevices, devices, &num);
+        if (err != CL_SUCCESS)
+        {
+            /* we want to catch at least the case when the call returns
+             * CL_DEVICE_NOT_FOUND (i.e. no devices), because some platforms
+             * don't set num to 0 in this case; but in fact this is a good
+             * thing to do for _any_ error returned by the call
+             */
+            num = 0;
+        }
         for (j = 0; j < num; j++, next++)
         {
             char buffer[DS_DEVICE_NAME_LENGTH];
