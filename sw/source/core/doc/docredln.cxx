@@ -845,11 +845,7 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
 
 OUString SwRedlineData::GetDescr() const
 {
-    OUString aResult;
-
-    aResult += SW_RES(STR_REDLINE_INSERT + GetType());
-
-    return aResult;
+    return SW_RES(STR_REDLINE_INSERT + GetType());
 }
 
 SwRangeRedline::SwRangeRedline(RedlineType_t eTyp, const SwPaM& rPam )
@@ -1587,10 +1583,8 @@ const SwRedlineData & SwRangeRedline::GetRedlineData(sal_uInt16 nPos) const
 
 OUString SwRangeRedline::GetDescr(sal_uInt16 nPos)
 {
-    OUString aResult;
-
     // get description of redline data (e.g.: "insert $1")
-    aResult = GetRedlineData(nPos).GetDescr();
+    OUString aResult = GetRedlineData(nPos).GetDescr();
 
     SwPaM * pPaM = NULL;
     bool bDeletePaM = false;
@@ -1608,11 +1602,9 @@ OUString SwRangeRedline::GetDescr(sal_uInt16 nPos)
     }
 
     // replace $1 in description by description of the redlines text
-    OUString aTmpStr;
-    aTmpStr += SW_RES(STR_START_QUOTE);
-    aTmpStr += ShortenString(pPaM->GetTxt(), nUndoStringLength,
-                             OUString(SW_RES(STR_LDOTS)));
-    aTmpStr += SW_RES(STR_END_QUOTE);
+    const OUString aTmpStr = SW_RESSTR(STR_START_QUOTE)
+        + ShortenString(pPaM->GetTxt(), nUndoStringLength, SW_RESSTR(STR_LDOTS))
+        + SW_RESSTR(STR_END_QUOTE);
 
     SwRewriter aRewriter;
     aRewriter.AddRule(UndoArg1, aTmpStr);
