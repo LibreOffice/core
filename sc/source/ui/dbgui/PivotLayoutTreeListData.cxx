@@ -154,7 +154,7 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldN
 
         ScDPLabelData* pLabelData = mpParent->GetLabelData(nColumn);
 
-        if (pLabelData == NULL && pLabelData->maName.isEmpty())
+        if (pLabelData == NULL || pLabelData->maName.isEmpty())
             continue;
 
         OUString sLayoutName = pLabelData->maLayoutName;
