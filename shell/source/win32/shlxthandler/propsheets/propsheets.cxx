@@ -323,7 +323,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
 
         // comments read from meta.xml use "\n" for return, but this will not displayable in Edit control, add
         // "\r" before "\n" to form "\r\n" in order to display return in Edit control.
-        std::wstring tempStr = metaInfo.getTagData( META_INFO_DESCRIPTION ).c_str();
+        std::wstring tempStr = metaInfo.getTagData( META_INFO_DESCRIPTION );
         std::wstring::size_type itor = tempStr.find ( L"\n" , 0 );
         while (itor != std::wstring::npos)
         {
