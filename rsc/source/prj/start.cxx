@@ -176,7 +176,7 @@ static bool CallRsc2( RscStrList * pInputList,
         }
         if( !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ),  "-fp=", 4 ) ||
             !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-fo=", 4 ) ||
-            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 9 ) ||
+            !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-presponse", 10 ) ||
             !rsc_strnicmp( (char *)pCmdLine->GetEntry( i ), "-rc", 3 ) ||
             !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-+" ) ||
             !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-br" ) ||
