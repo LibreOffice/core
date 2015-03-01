@@ -836,10 +836,11 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                             { "join", "natural", "outer", "inner", "left", "right", "full" , 0 };
                         for( int i = 0 ; forbiddenKeywords[i] ; i ++ )
                         {
+                            size_t nKeywordLen = strlen(forbiddenKeywords[i]);
                             if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
                                  vec[token].pData->buffer, vec[token].pData->length,
-                                 forbiddenKeywords[i], strlen(forbiddenKeywords[i]),
-                                 strlen(forbiddenKeywords[i]) ) )
+                                 forbiddenKeywords[i], nKeywordLen,
+                                 nKeywordLen ) )
                             {
                                 // whoops, it is a join
                                 ret.clear();
