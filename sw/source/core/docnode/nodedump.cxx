@@ -221,48 +221,4 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w ) const
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
 
-void SwTxtNode::dumpAsXml( xmlTextWriterPtr w ) const
-{
-    WriterHelper writer( w );
-    writer.startElement( "text" );
-    writer.writeFormatAttribute( "ptr", "%p", this );
-    writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
-    OUString txt = GetTxt();
-    for( int i = 0; i < 32; ++i )
-        txt = txt.replace( i, '*' );
-    OString txt8 = OUStringToOString( txt, RTL_TEXTENCODING_UTF8 );
-    writer.startElement("inner_text");
-    xmlTextWriterWriteString( writer, BAD_CAST( txt8.getStr()));
-    writer.endElement( );
-
-    if (GetFmtColl())
-    {
-        SwTxtFmtColl* pColl = static_cast<SwTxtFmtColl*>(GetFmtColl());
-        writer.startElement("swtxtfmtcoll");
-        OString aName = OUStringToOString(pColl->GetName(), RTL_TEXTENCODING_UTF8);
-        writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
-        writer.endElement();
-    }
-
-    if (HasSwAttrSet())
-    {
-        writer.startElement("attrset");
-        GetSwAttrSet().dumpAsXml(writer);
-        writer.endElement();
-    }
-
-    if (HasHints())
-    {
-        writer.startElement("hints");
-        const SwpHints& rHints = GetSwpHints();
-        for (size_t i = 0; i < rHints.Count(); ++i)
-            rHints.GetTextHint(i)->dumpAsXml(w);
-        writer.endElement();
-    }
-    if (GetNumRule())
-        GetNumRule()->dumpAsXml(w);
-
-    writer.endElement();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

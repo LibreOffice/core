@@ -4969,6 +4969,48 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
     return nRet;
 }
 
+void SwTxtNode::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtNode"));
+    xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("index"), BAD_CAST(OString::number(GetIndex()).getStr()));
+
+    OUString sText = GetTxt();
+    for (int i = 0; i < 32; ++i)
+        sText = sText.replace(i, '*');
+    xmlTextWriterStartElement(pWriter, BAD_CAST("m_Text"));
+    xmlTextWriterWriteString(pWriter, BAD_CAST(sText.toUtf8().getStr()));
+    xmlTextWriterEndElement(pWriter);
+
+    if (GetFmtColl())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("swTxtFmtColl"));
+        xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(GetFmtColl()->GetName().toUtf8().getStr()));
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (HasSwAttrSet())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("swAttrSet"));
+        GetSwAttrSet().dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (HasHints())
+    {
+        xmlTextWriterStartElement(pWriter, BAD_CAST("swpHints"));
+        const SwpHints& rHints = GetSwpHints();
+        for (size_t i = 0; i < rHints.Count(); ++i)
+            rHints.GetTextHint(i)->dumpAsXml(pWriter);
+        xmlTextWriterEndElement(pWriter);
+    }
+
+    if (GetNumRule())
+        GetNumRule()->dumpAsXml(pWriter);
+
+    xmlTextWriterEndElement(pWriter);
+}
+
 sal_uInt32 SwTxtNode::GetRsid( sal_Int32 nStt, sal_Int32 nEnd ) const
 {
     SfxItemSet aSet( (SfxItemPool&) (GetDoc()->GetAttrPool()), RES_CHRATR_RSID, RES_CHRATR_RSID );
