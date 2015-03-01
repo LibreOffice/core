@@ -625,7 +625,7 @@ int Formula::parse()
                      break;
           }
          // fprintf(stderr,"\n\n[RESULT]\n[%s]\n",a.c_str());
-          if( strlen(buf) > 0 )
+          if( buf[0] != '\0' )
                 res = mainParse( a.c_str() );
           else
                 res = 0L;
@@ -673,7 +673,7 @@ void Formula::trim()
           else
                 break;
      }
-     if( strlen(buf) > 0 )
+     if( buf[0] != '\0' )
           strcpy(eq, buf);
      else
           eq = 0L;
