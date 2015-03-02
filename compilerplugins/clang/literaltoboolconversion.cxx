@@ -43,6 +43,15 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
         return true;
     }
     Expr const * sub = expr->getSubExpr()->IgnoreParenCasts();
+    Expr const * expr2;
+    for (;;) {
+        BinaryOperator const * op = dyn_cast<BinaryOperator>(sub);
+        if (op == nullptr || op->getOpcode() != BO_Comma) {
+            break;
+        }
+        expr2 = op->getRHS()->IgnoreParenCasts();
+        sub = expr2;
+    }
     if (sub->getType()->isBooleanType()) {
         return true;
     }
@@ -113,9 +122,9 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             report(
                 DiagnosticsEngine::Warning,
                 "implicit conversion (%0) of literal of type %1 to %2",
-                expr->getLocStart())
+                expr2->getLocStart())
                 << expr->getCastKindName() << expr->getSubExpr()->getType()
-                << expr->getType() << expr->getSourceRange();
+                << expr->getType() << expr2->getSourceRange();
         }
     } else if (sub->isNullPointerConstant(
                    compiler.getASTContext(), Expr::NPC_ValueDependentIsNull)
@@ -130,9 +139,9 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             DiagnosticsEngine::Warning,
             ("implicit conversion (%0) of null pointer constant of type %1 to"
              " %2"),
-            expr->getLocStart())
+            expr2->getLocStart())
             << expr->getCastKindName() << expr->getSubExpr()->getType()
-            << expr->getType() << expr->getSourceRange();
+            << expr->getType() << expr2->getSourceRange();
     } else if (!sub->isValueDependent()
                && sub->isIntegerConstantExpr(res, compiler.getASTContext()))
     {
@@ -140,9 +149,9 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             DiagnosticsEngine::Warning,
             ("implicit conversion (%0) of integer constant expression of type"
              " %1 with value %2 to %3"),
-            expr->getLocStart())
+            expr2->getLocStart())
             << expr->getCastKindName() << expr->getSubExpr()->getType()
-            << res.toString(10) << expr->getType() << expr->getSourceRange();
+            << res.toString(10) << expr->getType() << expr2->getSourceRange();
     }
     return true;
 }
