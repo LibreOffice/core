@@ -3703,7 +3703,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
     HyperText *hypert = hwpfile.GetHyperText();
      if( !hypert ) return;
 
-    if( strlen(reinterpret_cast<char *>(hypert->filename)) > 0 ){
+    if( reinterpret_cast<char *>(hypert->filename)[0] != '\0' ){
               ::std::string const tmp = hstr2ksstr(hypert->bookmark);
               ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
