@@ -227,7 +227,7 @@ throw(  SAXException, RuntimeException, std::exception )
                 if ( !m_bStatusBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'statusbar:statusbaritem' must be embeded into element 'statusbar:statusbar'!";
+                    aErrorMessage += "Element 'statusbar:statusbaritem' must be embedded into element 'statusbar:statusbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 

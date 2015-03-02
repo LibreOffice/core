@@ -419,7 +419,7 @@ OUString SelectionHelper::getHitObjectCID(
         if( aRet.equals( aPageCID ) )
         {
             OUString aDiagramCID = ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) );
-            //todo: if more than one diagram is available in future do chack the list of all diagrams here
+            //todo: if more than one diagram is available in future do check the list of all diagrams here
             SdrObject* pDiagram = rDrawViewWrapper.getNamedSdrObject( aDiagramCID );
             if( pDiagram )
             {

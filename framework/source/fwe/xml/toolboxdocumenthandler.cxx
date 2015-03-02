@@ -275,7 +275,7 @@ throw(  SAXException, RuntimeException, std::exception )
                 if ( !m_bToolBarStartFound )
                 {
                     OUString aErrorMessage = getErrorLineString();
-                    aErrorMessage += "Element 'toolbar:toolbaritem' must be embeded into element 'toolbar:toolbar'!";
+                    aErrorMessage += "Element 'toolbar:toolbaritem' must be embedded into element 'toolbar:toolbar'!";
                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                 }
 
