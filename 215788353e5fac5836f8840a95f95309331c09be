@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2ca52d_756fe892",
+        "filename": "offapi/type_reference/offapi.idl",
+        "patchSetId": 5
+      },
+      "lineNbr": 11671,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-02T11:28:18Z",
+      "side": 1,
+      "message": "Just to add/repeat on what Stephan said: NEVER change the type reference\u0027s offapi.idl to make something build. Its purpose is to catch incompatible API changes.",
+      "revId": "215788353e5fac5836f8840a95f95309331c09be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
