@@ -2214,17 +2214,6 @@ static sal_Int32 getMaxScale( sal_Int32 dataType )
 }
 
 
-struct RawType
-{
-    const char * typeName;
-    const char * createParam;
-    sal_Int32    sdbcType;
-    sal_Int32    precision;
-    sal_Int32    nullable;
-    bool         caseSensitive;
-    sal_Int32    searchable;
-};
-
 static void pgTypeInfo2ResultSet(
      SequenceAnyVector &vec,
      const Reference< XResultSet > &rs )
