@@ -175,7 +175,7 @@ void ViewContactOfE3dScene::createViewInformation3D(const basegfx::B3DRange& rCo
         // calculate orientation from VRP, VPN and VUV
         const B3dCamera& rSceneCamera = GetE3dScene().GetCameraSet();
         const basegfx::B3DPoint aVRP(rSceneCamera.GetVRP());
-        const basegfx::B3DVector aVPN(rSceneCamera.GetVRP());
+        const basegfx::B3DVector aVPN(rSceneCamera.GetVPN());
         const basegfx::B3DVector aVUV(rSceneCamera.GetVUV());
 
         aOrientation.orientation(aVRP, aVPN, aVUV);
