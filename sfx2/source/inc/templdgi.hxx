@@ -280,8 +280,6 @@ public:
     OUString            GetSelectedEntry() const;
     SfxObjectShell*     GetObjectShell() const { return pCurObjShell; }
 
-    void                PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen
-
     inline bool         CanEdit( void ) const   { return bCanEdit; }
     inline bool         CanDel( void ) const    { return bCanDel; }
     inline bool         CanNew( void ) const    { return bCanNew; }

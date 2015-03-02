@@ -407,7 +407,6 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // the templates of all parts in the master document but it is NOT
         // an error if the template filename points not to a valid file
         SfxDocumentTemplates aTempl;
-        aTempl.Construct();
         if (!aTemplURL.isEmpty())
         {
             try {

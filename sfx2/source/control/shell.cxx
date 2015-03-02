@@ -395,18 +395,6 @@ void SfxShell::Deactivate
     BroadcastContextForActivation(false);
 }
 
-void SfxShell::ParentActivate
-(
-)
-{
-}
-
-void SfxShell::ParentDeactivate
-(
-)
-{
-}
-
 bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 {
     // Get Slot status

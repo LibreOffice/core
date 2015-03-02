@@ -346,8 +346,6 @@ void SAL_CALL SfxInPlaceClient_Impl::activatingInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
-
-    m_pClient->GetViewShell()->InplaceActivating( m_pClient );
 }
 
 
@@ -370,8 +368,6 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedInplace()
 {
     if ( !m_pClient || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
-
-    m_pClient->GetViewShell()->InplaceDeactivated( m_pClient );
 }
 
 

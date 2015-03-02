@@ -4720,7 +4720,6 @@ void ScGridWindow::ShowCursor()
 void ScGridWindow::GetFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->GotFocus();
     pViewShell->SetFormShellAtTop( false );     // focus in GridWindow -> FormShell no longer on top
 
     if (pViewShell->HasAccessibilityObjects())
@@ -4742,7 +4741,6 @@ void ScGridWindow::GetFocus()
 void ScGridWindow::LoseFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    pViewShell->LostFocus();
 
     if (pViewShell->HasAccessibilityObjects())
         pViewShell->BroadcastAccessibility(ScAccGridWinFocusLostHint(eWhich, GetAccessible()));

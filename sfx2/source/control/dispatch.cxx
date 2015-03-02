@@ -692,8 +692,6 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI, SfxViewFrame* /* pOld */)
 
 void SfxDispatcher::DoParentActivate_Impl()
 {
-    for ( int i = int(xImp->aStack.size()) - 1; i >= 0; --i )
-        (*(xImp->aStack.rbegin() + i ))->ParentActivate();
 }
 
 /** This method controls the deactivation of a dispatcher.
@@ -775,8 +773,6 @@ void SfxDispatcher::DoDeactivate_Impl(bool bMDI, SfxViewFrame* pNew)
 
 void SfxDispatcher::DoParentDeactivate_Impl()
 {
-    for ( int i = int(xImp->aStack.size()) - 1; i >= 0; --i )
-        (*(xImp->aStack.rbegin() + i))->ParentDeactivate();
 }
 
 /** This method searches in SfxDispatcher after <SfxShell> , from the Slot Id
@@ -1658,22 +1654,7 @@ bool SfxDispatcher::_TryIntercept_Impl
     sal_uInt16 nLevels = xImp->aStack.size();
     while ( pParent && pParent->xImp->pFrame )
     {
-        if ( pParent->xImp->pFrame->GetFrame().HasComponent() )
-        {
-            // Components may be intercepted
-            if ( pParent->_TryIntercept_Impl( nSlot, rServer, true ) )
-            {
-                // The own shells are added to the Shell Level
-                rServer.SetShellLevel( rServer.GetShellLevel() + nLevels );
-                return true;
-            }
-            else
-                // No further Interception
-                break;
-        }
-        else
-            nLevels = nLevels + pParent->xImp->aStack.size();
-
+        nLevels = nLevels + pParent->xImp->aStack.size();
         pParent = pParent->xImp->pParent;
     }
 

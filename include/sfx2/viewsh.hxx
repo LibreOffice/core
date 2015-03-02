@@ -175,8 +175,6 @@ public:
     virtual ErrCode             DoVerb(long nVerb);
 
     void                        OutplaceActivated( bool bActive, SfxInPlaceClient* pClient );
-    void                        InplaceActivating( SfxInPlaceClient* pClient );
-    void                        InplaceDeactivated( SfxInPlaceClient* pClient );
     virtual void                UIActivating( SfxInPlaceClient* pClient );
     virtual void                UIDeactivated( SfxInPlaceClient* pClient );
 
@@ -190,7 +188,6 @@ public:
      * has been set.  By the time this is called the document has been fully
      * imported.
      */
-    void                        Initialize();
     virtual bool                PrepareClose( bool bUI = true );
     virtual OUString            GetSelectionText( bool bCompleteWords = false );
     virtual bool                HasSelection( bool bText = true ) const;
@@ -205,8 +202,6 @@ public:
     virtual const SfxShell*     GetFormShell() const { return 0; };
 
     // Focus, KeyInput, Cursor
-    void                        GotFocus() const;
-    inline void                 LostFocus() const;
     virtual void                ShowCursor( bool bOn = true );
     virtual bool                KeyInput( const KeyEvent &rKeyEvent );
     bool                        Escape();
@@ -307,27 +302,6 @@ public:
     SAL_DLLPRIVATE void TakeFrameOwnership_Impl();
     SAL_DLLPRIVATE bool ExecKey_Impl(const KeyEvent& aKey);
 };
-
-
-
-inline void SfxViewShell::LostFocus() const
-
-/*  [Description]
-
-    This method has to be  called by the application developer, if the edit
-    window has lost the focus. The SFx has for example the ability to turn off
-    the accelerator, so that the cursor keys, the Delete button, etc. work in
-    certain Floating-Windows, even though they are redefined by the
-    Accelerator.
-
-    [Note]
-
-    <StarView> unfortunately does not provide the possibility to define
-    such events 'from the side'.
-*/
-
-{
-}
 
 
 

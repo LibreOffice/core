@@ -93,7 +93,6 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
             !GetStatusBar().GetItemText( GetId() ).isEmpty() )
     {
-        CaptureMouse();
         SwTemplatePopup_Impl aPop;
         {
             SwView* pView = ::GetActiveView();
@@ -131,7 +130,6 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
                 }
             }
         }
-        ReleaseMouse();
     }
 }
 

@@ -175,17 +175,6 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 
 
 // static
-bool GraphicHelper::supportsMetaFileHandle_Impl()
-{
-#ifdef WNT
-    return true;
-#else
-    return false;
-#endif
-}
-
-
-// static
 bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const uno::Reference<io::XStream>& xStream)
 {
     bool bResult = false;

@@ -136,10 +136,6 @@ TYPEINIT1(SfxModule, SfxShell);
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxModule, SfxShell)
 
-void SfxModule::InitInterface_Impl()
-{
-}
-
 ResMgr* SfxModule::GetResMgr()
 {
     return pResMgr;

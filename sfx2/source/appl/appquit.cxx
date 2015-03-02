@@ -90,9 +90,6 @@ void SfxApplication::Deinitialize()
     pAppData_Impl->bDowning = true;
     pAppData_Impl->pAppDispat->DoDeactivate_Impl( true, NULL );
 
-    // call derived application-exit
-    Exit();
-
     // Release Controller and others
     // then the remaining components should also disappear ( Beamer! )
 

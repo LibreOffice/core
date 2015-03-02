@@ -1900,10 +1900,6 @@ void SfxDockingWindow::AutoShow_Impl( bool bShow )
     }
 }
 
-void SfxDockingWindow::FadeIn( bool /*bFadeIn*/ )
-{
-}
-
 void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == StateChangedType::INITSHOW )

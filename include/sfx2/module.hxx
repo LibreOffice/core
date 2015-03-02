@@ -67,7 +67,7 @@ public:
 
 private:
     /// SfxInterface initializer.
-    static void InitInterface_Impl();
+    static void InitInterface_Impl() {}
 
 public:
 
