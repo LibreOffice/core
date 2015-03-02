@@ -431,9 +431,7 @@ OUString SAL_CALL SmXMLImport_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLImport_getSupportedServiceNames()
         throw()
 {
-    const OUString aServiceName( IMPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-        return aSeq;
+    return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
@@ -453,9 +451,7 @@ OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLImportMeta_getSupportedServiceNames()
 throw()
 {
-    const OUString aServiceName( IMPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+    return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
@@ -475,9 +471,7 @@ OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
 uno::Sequence< OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames()
         throw()
 {
-    const OUString aServiceName( IMPORT_SVC_NAME );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-        return aSeq;
+    return uno::Sequence<OUString>{ IMPORT_SVC_NAME };
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
