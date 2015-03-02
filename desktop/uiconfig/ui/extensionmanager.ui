@@ -199,12 +199,13 @@
                   <object class="GtkLabel" id="progressft">
                     <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
-                    <property name="margin_left">50</property>
+                    <property name="justify">right</property>
                     <property name="label" translatable="yes">Adding %EXTENSION_NAME</property>
                   </object>
                   <packing>
-                    <property name="left_attach">1</property>
+                    <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
+                    <property name="width">2</property>
                   </packing>
                 </child>
                 <child>
@@ -243,7 +244,7 @@
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
-                    <property name="top_attach">0</property>
+                    <property name="top_attach">1</property>
                   </packing>
                 </child>
               </object>
