@@ -42,9 +42,6 @@ namespace sca { namespace analysis {
 class ResMgr;
 
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
-
-
 class AnalysisAddIn : public cppu::WeakImplHelper5<
                             css::sheet::XAddIn,
                             css::sheet::XCompatibilityNames,
