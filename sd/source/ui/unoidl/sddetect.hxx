@@ -53,10 +53,14 @@ namespace com
 class SdFilterDetect : public ::cppu::WeakImplHelper2< css::document::XExtendedFilterDetection, css::lang::XServiceInfo >
 {
 public:
-                            SdFilterDetect( const css::uno::Reference < css::lang::XMultiServiceFactory >& xFactory );
+                            SdFilterDetect();
     virtual                 ~SdFilterDetect();
 
-    SFX_DECL_XSERVICEINFO_NOFACTORY
+    // XServiceInfo
+
+    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XExtendedFilterDetect
 
