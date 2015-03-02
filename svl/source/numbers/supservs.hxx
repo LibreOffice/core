@@ -25,7 +25,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <registerservices.hxx>
+extern "C" ::com::sun::star::uno::XInterface *
+    SAL_CALL com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation(
+        ::com::sun::star::uno::XComponentContext* context,
+        ::com::sun::star::uno::Sequence<css::uno::Any> const &);
 
 /**
  * SvNumberFormatsSupplierServiceObject - a number formats supplier which
@@ -40,9 +43,10 @@ class SvNumberFormatsSupplierServiceObject
             ,public ::com::sun::star::lang::XServiceInfo
 {   // don't want the Set-/GetNumberFormatter to be accessible from outside
 
-    friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    friend ::com::sun::star::uno::XInterface *
+        SAL_CALL com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation(
+                ::com::sun::star::uno::XComponentContext* context,
+                ::com::sun::star::uno::Sequence<css::uno::Any> const &);
 
 protected:
     SvNumberFormatter*  m_pOwnFormatter;
