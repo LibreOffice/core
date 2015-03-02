@@ -3703,13 +3703,13 @@ void HwpReader::makeHyperText(TxtBox * hbox)
     HyperText *hypert = hwpfile.GetHyperText();
      if( !hypert ) return;
 
-    if( strlen(reinterpret_cast<char *>(hypert->filename)) > 0 ){
-              ::std::string const tmp = hstr2ksstr(hypert->bookmark);
-              ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
+    if (hypert->filename[0] != '\0') {
+          ::std::string const tmp = hstr2ksstr(hypert->bookmark);
+          ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
-                  (uchar *) urltowin((char *)hypert->filename).c_str()).c_str());
+              (uchar *) urltowin((char *)hypert->filename).c_str()).c_str());
 #else
-                  reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
+              reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #endif
           padd("xlink:type", sXML_CDATA, "simple");
           if (tmp.size() > 0 && strcmp(tmp.c_str(), "[HTML]")) {

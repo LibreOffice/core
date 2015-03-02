@@ -349,7 +349,7 @@ int readoptions(char* filename, char*** pfargv)
             else
             {
                 *poptbuff = EOS;
-                if (strlen(optbuff)>0)
+                if (optbuff[0] != '\0')
                 {
                     pfa[fargc + 1] = strdup(optbuff);
                     fargc++;

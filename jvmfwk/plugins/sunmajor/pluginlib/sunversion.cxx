@@ -60,7 +60,7 @@ SunVersion::SunVersion(const char * szVer):
  */
 bool SunVersion::init(const char *szVersion)
 {
-    if ( ! szVersion || strlen(szVersion) == 0)
+    if (!szVersion || szVersion[0] == '\0')
         return false;
 
     //first get the major,minor,maintenance

@@ -2363,7 +2363,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
             WideCharToMultiByte(CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath, aTmpPath.getBufSizeInSymbols(), NULL, NULL);
 
-            if ((access(aTmpPath, 0) < 0) && (strlen(Product) > 0))
+            if ((access(aTmpPath, 0) < 0) && (Product[0] != '\0'))
             {
                 rtl_uString * strSVFallback = NULL;
                 rtl_uString * strSVProfile  = NULL;
@@ -2409,7 +2409,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             osl_closeProfile(hProfile);
                         }
 
-                        if (strlen(Buffer) > 0)
+                        if (Buffer[0] != '\0')
                         {
                             dwPathLen = MultiByteToWideChar(
                                 CP_ACP, 0, Buffer, -1, ::osl::mingw_reinterpret_cast<LPWSTR>(aPath), aPath.getBufSizeInSymbols() );

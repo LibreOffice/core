@@ -1516,7 +1516,7 @@ namespace rtl_OStringBuffer
             (
                 "test empty string",
                 pstr != 0 &&
-                strlen(pstr) == 0
+                pstr[0] == '\0'
             );
 
         }

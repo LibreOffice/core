@@ -867,16 +867,15 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
                     free(pNameW);
                 return sal_True;
             }
-            else
-                if (wcslen(pSecImpl->m_User) > 0)
-                {
-                    rtl_uString_newFromStr( strName, pSecImpl->m_pNetResource->lpRemoteName);
+            else if (pSecImpl->m_User[0] != '\0')
+            {
+                rtl_uString_newFromStr(strName, pSecImpl->m_pNetResource->lpRemoteName);
 
-                    if (pNameW)
-                        free(pNameW);
+                if (pNameW)
+                    free(pNameW);
 
-                    return sal_True;
-                }
+                return sal_True;
+            }
 
             if (pNameW)
                 free(pNameW);

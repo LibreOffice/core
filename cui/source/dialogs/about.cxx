@@ -273,7 +273,7 @@ OUString AboutDialog::GetVersionString()
         sVersion += m_sBuildStr.replaceAll("$BUILDID", sBuildId);
     }
 
-    if (strlen(EXTRA_BUILDID) > 0)
+    if (EXTRA_BUILDID[0] != '\0')
     {
         sVersion += "\n" EXTRA_BUILDID;
     }
