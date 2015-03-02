@@ -556,11 +556,11 @@ void SdrHdl::CreateB2dIAObject()
                 if(rPageWindow.GetPaintWindow().OutputToWindow())
                 {
                     Point aMoveOutsideOffset(0, 0);
+                    OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
 
                     // add offset if necessary
                     if(pHdlList->IsMoveOutside() || mbMoveOutside)
                     {
-                        OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
                         Size aOffset = rOutDev.PixelToLogic(Size(4, 4));
 
                         if(eKind == HDL_UPLFT || eKind == HDL_UPPER || eKind == HDL_UPRGT)
@@ -577,14 +577,15 @@ void SdrHdl::CreateB2dIAObject()
                     if (xManager.is())
                     {
                         basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-                        ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
+                        sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
                             aPosition,
                             eColIndex,
                             eKindOfMarker,
+                            rOutDev,
                             aMoveOutsideOffset);
 
                         // OVERLAYMANAGER
-                        if(pNewOverlayObject)
+                        if (pNewOverlayObject)
                         {
                             xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(*pNewOverlayObject);
@@ -640,7 +641,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
 ::sdr::overlay::OverlayObject* SdrHdl::CreateOverlayObject(
     const basegfx::B2DPoint& rPos,
-    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset)
+    BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, OutputDevice& rOutDev, Point aMoveOutsideOffset)
 {
     ::sdr::overlay::OverlayObject* pRetval = 0L;
 
@@ -743,7 +744,10 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     else
     {
         // create normal handle: use ImpGetBitmapEx(...) now
+
+        sal_Int32 nScaleFactor = rOutDev.GetDPIScaleFactor();
         BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex);
+        aBmpEx.Scale(nScaleFactor, nScaleFactor);
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -1472,14 +1476,15 @@ void ImpEdgeHdl::CreateB2dIAObject()
                             if (xManager.is())
                             {
                                 basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-
-                                ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
+                                OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
+                                sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
                                     aPosition,
                                     eColIndex,
-                                    eKindOfMarker);
+                                    eKindOfMarker,
+                                    rOutDev);
 
                                 // OVERLAYMANAGER
-                                if(pNewOverlayObject)
+                                if (pNewOverlayObject)
                                 {
                                     xManager->add(*pNewOverlayObject);
                                     maOverlayGroup.append(*pNewOverlayObject);
@@ -1593,14 +1598,15 @@ void ImpMeasureHdl::CreateB2dIAObject()
                         if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
+                            OutputDevice& rOutDev = rPageWindow.GetPaintWindow().GetOutputDevice();
+                            sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
                                 aPosition,
                                 eColIndex,
-                                eKindOfMarker);
+                                eKindOfMarker,
+                                rOutDev);
 
                             // OVERLAYMANAGER
-                            if(pNewOverlayObject)
+                            if (pNewOverlayObject)
                             {
                                 xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(*pNewOverlayObject);

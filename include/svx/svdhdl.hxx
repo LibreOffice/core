@@ -181,7 +181,8 @@ private:
 protected:
     ::sdr::overlay::OverlayObject* CreateOverlayObject(
         const basegfx::B2DPoint& rPos,
-        BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker, Point aMoveOutsideOffset = Point());
+        BitmapColorIndex eColIndex, BitmapMarkerKind eKindOfMarker,
+        OutputDevice& rOutDev, Point aMoveOutsideOffset = Point());
     BitmapMarkerKind GetNextBigger(BitmapMarkerKind eKnd) const;
 
 public:
