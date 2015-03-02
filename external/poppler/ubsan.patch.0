@@ -1,0 +1,10 @@
+--- poppler/XRef.cc
++++ poppler/XRef.cc
+@@ -293,6 +293,7 @@
+   xRefStream = gFalse;
+   scannedSpecialFlags = gFalse;
+   encrypted = gFalse;
++  encAlgorithm = cryptRC4;
+   permFlags = defPermFlags;
+   ownerPasswordOk = gFalse;
+   rootNum = -1;
