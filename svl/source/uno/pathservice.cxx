@@ -26,8 +26,7 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
-#include <registerservices.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class PathService : public ::cppu::WeakImplHelper2< css::frame::XConfigManager, css::lang::XServiceInfo >
 {
@@ -81,13 +80,11 @@ public:
 };
 
 
-
-css::uno::Reference< css::uno::XInterface > PathService_CreateInstance (
-    SAL_UNUSED_PARAMETER const css::uno::Reference<
-        css::lang::XMultiServiceFactory > &)
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_comp_svl_PathService_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                     ::com::sun::star::uno::Sequence<css::uno::Any> const &)
 {
-    return css::uno::Reference< css::uno::XInterface >(
-        static_cast< cppu::OWeakObject* >(new PathService()));
+    return cppu::acquire(new PathService());
 }
 
 

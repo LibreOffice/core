@@ -139,7 +139,6 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/svsql/converter \
     svl/source/undo/undo \
     svl/source/uno/pathservice \
-    svl/source/uno/registerservices \
 ))
 
 ifeq ($(OS),WNT)

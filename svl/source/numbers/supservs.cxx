@@ -22,6 +22,7 @@
 #include <comphelper/sharedmutex.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
@@ -29,7 +30,6 @@
 #include <tools/stream.hxx>
 #include <svl/instrm.hxx>
 
-#include <registerservices.hxx>
 #include <strmadpt.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -39,10 +39,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-Reference< XInterface > SAL_CALL SvNumberFormatsSupplierServiceObject_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return static_cast< ::cppu::OWeakObject* >(new SvNumberFormatsSupplierServiceObject( comphelper::getComponentContext(_rxFactory) ));
-}
 
 SvNumberFormatsSupplierServiceObject::SvNumberFormatsSupplierServiceObject(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxORB)
     :m_pOwnFormatter(NULL)
@@ -168,5 +164,15 @@ void SvNumberFormatsSupplierServiceObject::implEnsureFormatter()
         initialize( aFakedInitProps );
     }
 }
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation(::com::sun::star::uno::XComponentContext* context,
+                                                                    ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new SvNumberFormatsSupplierServiceObject(context));
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
