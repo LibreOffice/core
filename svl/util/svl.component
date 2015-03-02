@@ -19,13 +19,16 @@
 
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="svl" xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.svl.PathService">
+  <implementation name="com.sun.star.comp.svl.PathService"
+      constructor="com_sun_star_comp_svl_PathService_get_implementation">
     <service name="com.sun.star.config.SpecialConfigManager"/>
   </implementation>
-  <implementation name="com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject">
+  <implementation name="com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject"
+      constructor="com_sun_star_uno_util_numbers_SvNumberFormatsSupplierServiceObject_get_implementation">
     <service name="com.sun.star.util.NumberFormatsSupplier"/>
   </implementation>
-  <implementation name="com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject">
+  <implementation name="com.sun.star.uno.util.numbers.SvNumberFormatterServiceObject"
+      constructor="com_sun_star_uno_util_numbers_SvNumberFormatterServiceObject_get_implementation">
     <service name="com.sun.star.util.NumberFormatter"/>
   </implementation>
 </component>
