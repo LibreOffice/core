@@ -129,7 +129,7 @@ protected:
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const
     {
-        return ((SmMathConfig *) this)->GetFontFormatList();
+        return const_cast<SmMathConfig*>(this)->GetFontFormatList();
     }
 
 public:

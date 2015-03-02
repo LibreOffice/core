@@ -387,7 +387,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
         rName += aTmp;
     }
 
-    const Sequence< Any > aValues = ((SmMathConfig*) this)->GetProperties( aNames );
+    const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
@@ -484,7 +484,7 @@ void SmMathConfig::Save()
 
 void SmMathConfig::GetSymbols( std::vector< SmSym > &rSymbols ) const
 {
-    Sequence< OUString > aNodes( ((SmMathConfig*) this)->GetNodeNames( SYMBOL_LIST ) );
+    Sequence< OUString > aNodes(const_cast<SmMathConfig*>(this)->GetNodeNames(SYMBOL_LIST));
     const OUString *pNode = aNodes.getConstArray();
     sal_Int32 nNodes = aNodes.getLength();
 
@@ -613,7 +613,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
         rName += aTmp;
     }
 
-    const Sequence< Any > aValues = ((SmMathConfig*) this)->GetProperties( aNames );
+    const Sequence< Any > aValues = const_cast<SmMathConfig*>(this)->GetProperties(aNames);
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
@@ -955,7 +955,7 @@ void SmMathConfig::SaveFormat()
 const SmFormat & SmMathConfig::GetStandardFormat() const
 {
     if (!pFormat)
-        ((SmMathConfig *) this)->LoadFormat();
+        const_cast<SmMathConfig*>(this)->LoadFormat();
     return *pFormat;
 }
 
@@ -983,7 +983,7 @@ void SmMathConfig::SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFor
 SmPrintSize SmMathConfig::GetPrintSize() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->ePrintSize;
 }
 
@@ -1003,7 +1003,7 @@ void SmMathConfig::SetPrintSize( SmPrintSize eSize )
 sal_uInt16 SmMathConfig::GetPrintZoomFactor() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->nPrintZoomFactor;
 }
 
@@ -1033,7 +1033,7 @@ void SmMathConfig::SetOtherIfNotEqual( bool &rbItem, bool bNewVal )
 bool SmMathConfig::IsPrintTitle() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bPrintTitle;
 }
 
@@ -1049,7 +1049,7 @@ void SmMathConfig::SetPrintTitle( bool bVal )
 bool SmMathConfig::IsPrintFormulaText() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bPrintFormulaText;
 }
 
@@ -1064,14 +1064,14 @@ void SmMathConfig::SetPrintFormulaText( bool bVal )
 bool SmMathConfig::IsSaveOnlyUsedSymbols() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bIsSaveOnlyUsedSymbols;
 }
 
 bool SmMathConfig::IsPrintFrame() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bPrintFrame;
 }
 
@@ -1095,7 +1095,7 @@ void SmMathConfig::SetSaveOnlyUsedSymbols( bool bVal )
 bool SmMathConfig::IsIgnoreSpacesRight() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bIgnoreSpacesRight;
 }
 
@@ -1111,7 +1111,7 @@ void SmMathConfig::SetIgnoreSpacesRight( bool bVal )
 bool SmMathConfig::IsAutoRedraw() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bAutoRedraw;
 }
 
@@ -1127,7 +1127,7 @@ void SmMathConfig::SetAutoRedraw( bool bVal )
 bool SmMathConfig::IsShowFormulaCursor() const
 {
     if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
+        const_cast<SmMathConfig*>(this)->LoadOther();
     return pOther->bFormulaCursor;
 }
 

@@ -850,10 +850,8 @@ void SmEditSource::UpdateData()
 
 SfxBroadcaster & SmEditSource::GetBroadcaster() const
 {
-    return ((SmEditSource *) this)->aBroadCaster;
+    return const_cast<SmEditSource*>(this)->aBroadCaster;
 }
-
-
 
 SmViewForwarder::SmViewForwarder( SmEditAccessible &rAcc ) :
     rEditAcc(rAcc)
