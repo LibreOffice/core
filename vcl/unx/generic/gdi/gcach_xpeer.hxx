@@ -33,10 +33,6 @@ class X11GlyphCache : public GlyphCache
 {
 public:
     X11GlyphCache( X11GlyphPeer& );
-    X11GlyphPeer& GetPeer()
-    {
-        return static_cast<X11GlyphPeer&>(mrPeer);
-    }
     static X11GlyphCache& GetInstance();
     static void  KillInstance();
 };
