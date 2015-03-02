@@ -78,8 +78,9 @@ namespace svx
 
     void ToolboxButtonColorUpdater::Update(const Color& rColor)
     {
-        Image aImage(mpTbx->GetItemImage(mnBtnId));
-        Size aItemSize(mpTbx->GetItemContentSize(mnBtnId));
+        Image aImage(mpTbx->GetItemImageOriginal(mnBtnId));
+        BitmapEx aSource(aImage.GetBitmapEx());
+        Size aItemSize = aSource.GetSizePixel();
 
         const bool bSizeChanged = (maBmpSize != aItemSize);
         const bool bDisplayModeChanged = (mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode());
@@ -99,7 +100,7 @@ namespace svx
             // (so that it grows in case the original bitmap was smaller)
             sal_uInt8 nAlpha = 255;
             BitmapEx aBmpEx(Bitmap(aItemSize, 24), AlphaMask(aItemSize, &nAlpha));
-            BitmapEx aSource(aImage.GetBitmapEx());
+
             long nWidth = std::min(aItemSize.Width(), aSource.GetSizePixel().Width());
             long nHeight = std::min(aItemSize.Height(), aSource.GetSizePixel().Height());
 

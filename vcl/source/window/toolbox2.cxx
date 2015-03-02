@@ -1125,7 +1125,12 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
     {
         Image aImage(rImage);
 
-        if ( GetDPIScaleFactor() > 1)
+        ImplToolItem* pItem = &mpData->m_aItems[nPos];
+        Size aOldSize = pItem->maImage.GetSizePixel();
+
+        pItem->maImageOriginal = aImage;
+
+        if (GetDPIScaleFactor() > 1)
         {
             BitmapEx aBitmap(aImage.GetBitmapEx());
 
@@ -1138,19 +1143,16 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
             }
         }
 
-        ImplToolItem* pItem = &mpData->m_aItems[nPos];
+        pItem->maImage = aImage;
+
         // only once all is calculated, do extra work
-        if ( !mbCalc )
+        if (!mbCalc)
         {
-            Size aOldSize = pItem->maImage.GetSizePixel();
-            pItem->maImage = aImage;
-            if ( aOldSize != pItem->maImage.GetSizePixel() )
+            if (aOldSize != pItem->maImage.GetSizePixel())
                 ImplInvalidate( true );
             else
                 ImplUpdateItem( nPos );
         }
-        else
-            pItem->maImage = aImage;
     }
 }
 
@@ -1196,14 +1198,15 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
         if( nDeltaAngle && !!pItem->maImage )
         {
             pItem->maImage = ImplRotImage( pItem->maImage, nDeltaAngle );
+            pItem->maImageOriginal = ImplRotImage( pItem->maImageOriginal, nDeltaAngle );
         }
 
-        if ( !mbCalc )
+        if (!mbCalc)
         {
-            if ( aOldSize != pItem->maImage.GetSizePixel() )
-                ImplInvalidate( true );
+            if (aOldSize != pItem->maImage.GetSizePixel())
+                ImplInvalidate(true);
             else
-                ImplUpdateItem( nPos );
+                ImplUpdateItem(nPos);
         }
     }
 }
@@ -1226,30 +1229,32 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
     {
         ImplToolItem* pItem = &mpData->m_aItems[nPos];
 
-        if( ( pItem->mbMirrorMode && ! bMirror ) ||
-            ( ! pItem->mbMirrorMode && bMirror )
-            )
+        if ((pItem->mbMirrorMode && !bMirror) ||
+            (!pItem->mbMirrorMode && bMirror))
         {
             pItem->mbMirrorMode = bMirror;
-            if( !!pItem->maImage )
+            if (!!pItem->maImage)
             {
-                pItem->maImage = ImplMirrorImage( pItem->maImage );
+                pItem->maImage = ImplMirrorImage(pItem->maImage);
+                pItem->maImageOriginal = ImplMirrorImage(pItem->maImageOriginal);
             }
 
-            if ( !mbCalc )
-                ImplUpdateItem( nPos );
+            if (!mbCalc)
+                ImplUpdateItem(nPos);
         }
     }
 }
 
-Image ToolBox::GetItemImage( sal_uInt16 nItemId ) const
+Image ToolBox::GetItemImage(sal_uInt16 nItemId) const
 {
-    ImplToolItem* pItem = ImplGetItem( nItemId );
+    ImplToolItem* pItem = ImplGetItem(nItemId);
+    return pItem ? pItem->maImage : Image();
+}
 
-    if ( pItem )
-        return pItem->maImage;
-    else
-        return Image();
+Image ToolBox::GetItemImageOriginal(sal_uInt16 nItemId) const
+{
+    ImplToolItem* pItem = ImplGetItem(nItemId);
+    return pItem ? pItem->maImageOriginal : Image();
 }
 
 void ToolBox::SetItemText( sal_uInt16 nItemId, const OUString& rText )
@@ -1830,7 +1835,7 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsClipped() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, MenuItemBits::NONE, OString());
+                pMenu->InsertItem( id, it->maText, it->maImageOriginal, MenuItemBits::NONE, OString());
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem ( id, it->meState == TRISTATE_TRUE );
             }
@@ -1846,7 +1851,7 @@ void ToolBox::UpdateCustomMenu()
             if( it->IsItemHidden() )
             {
                 sal_uInt16 id = it->mnId + TOOLBOX_MENUITEM_START;
-                pMenu->InsertItem( id, it->maText, it->maImage, MenuItemBits::NONE, OString() );
+                pMenu->InsertItem( id, it->maText, it->maImageOriginal, MenuItemBits::NONE, OString() );
                 pMenu->EnableItem( id, it->mbEnabled );
                 pMenu->CheckItem( id, it->meState == TRISTATE_TRUE );
             }
