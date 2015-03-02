@@ -108,7 +108,7 @@ public:
     bool Contains(Value const& p) const
         { return std::find(begin(), end(), p) != end(); }
 
-    void dumpAsXml(xmlTextWriterPtr) const {};
+    void dumpAsXml(struct _xmlTextWriter* /*pWriter*/) const {};
 };
 
 template<typename Value>
@@ -142,39 +142,39 @@ public:
 class SW_DLLPUBLIC SwFrmFmts : public SwFmtsModifyBase<SwFrmFmt*>
 {
 public:
-    void dumpAsXml(xmlTextWriterPtr w, const char* pName) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter, const char* pName) const;
 };
 
 class SwCharFmts : public SwFmtsModifyBase<SwCharFmt*>
 {
 public:
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwTxtFmtColls : public SwFmtsModifyBase<SwTxtFmtColl*>
 {
 public:
     SwTxtFmtColls() : SwFmtsModifyBase( DestructorPolicy::KeepElements ) {}
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 /// Array of Undo-history.
 class SW_DLLPUBLIC SwSectionFmts : public SwFmtsModifyBase<SwSectionFmt*>
 {
 public:
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwFldTypes : public SwVectorModifyBase<SwFieldType*> {
 public:
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 class SwTOXTypes : public SwVectorModifyBase<SwTOXType*> {};
 
 class SW_DLLPUBLIC SwNumRuleTbl : public SwVectorModifyBase<SwNumRule*> {
 public:
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 };
 
 struct CompareSwRedlineTbl
@@ -249,7 +249,7 @@ public:
     void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
     void DeleteAndDestroyAll();
 
-    void dumpAsXml(xmlTextWriterPtr w) const;
+    void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
     sal_uInt16 GetSize() const                              {     return m_aExtraRedlines.size();                }
     SwExtraRedline* GetRedline( sal_uInt16 uIndex ) const   {     return m_aExtraRedlines.operator[]( uIndex );  }

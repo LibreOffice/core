@@ -17,7 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <fldbas.hxx>
+
 #include <float.h>
+#include <math.h>
+
+#include <libxml/xmlwriter.h>
+
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -26,7 +32,6 @@
 #include <doc.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
-#include <fldbas.hxx>
 #include <flddat.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
@@ -41,8 +46,7 @@
 #include <comcore.hrc>
 #include <docary.hxx>
 #include <authfld.hxx>
-
-#include <math.h>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
@@ -148,6 +152,36 @@ bool SwFieldType::QueryValue( uno::Any&, sal_uInt16 ) const
 bool SwFieldType::PutValue( const uno::Any& , sal_uInt16 )
 {
     return false;
+}
+
+void SwFldTypes::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    xmlTextWriterStartElement(pWriter, BAD_CAST("swFldTypes"));
+    sal_uInt16 nCount = size();
+    for (sal_uInt16 nType = 0; nType < nCount; ++nType)
+    {
+        const SwFieldType *pCurType = (*this)[nType];
+        SwIterator<SwFmtFld, SwFieldType> aIter(*pCurType);
+        for (const SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next())
+        {
+            xmlTextWriterStartElement(pWriter, BAD_CAST("swFmtFld"));
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pCurFldFmt);
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("txtFld"), "%p", pCurFldFmt->GetTxtFld());
+
+            xmlTextWriterStartElement(pWriter, BAD_CAST("swField"));
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("symbol"), "%s", BAD_CAST(typeid(*pCurFldFmt->GetField()).name()));
+            xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pCurFldFmt->GetField());
+            if (pCurFldFmt->GetField()->GetTyp()->Which() == RES_POSTITFLD)
+            {
+                const SwPostItField* pField = static_cast<const SwPostItField*>(pCurFldFmt->GetField());
+                xmlTextWriterWriteAttribute(pWriter, BAD_CAST("name"), BAD_CAST(pField->GetName().toUtf8().getStr()));
+            }
+            xmlTextWriterEndElement(pWriter);
+
+            xmlTextWriterEndElement(pWriter);
+        }
+    }
+    xmlTextWriterEndElement(pWriter);
 }
 
 // Base class for all fields.
