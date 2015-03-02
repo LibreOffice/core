@@ -119,16 +119,6 @@ public class InvalidationHandler {
     }
 
     /**
-     * From input rectangle, create a new rectangle which positions under the input rectangle.
-     *
-     * @param rectangle - input rectangle
-     * @return new rectangle positioned under the input rectangle
-     */
-    private RectF createRectangleUnderSelection(RectF rectangle) {
-        return new RectF(rectangle.centerX(), rectangle.bottom, rectangle.centerX(), rectangle.bottom);
-    }
-
-    /**
      * Handles the tile invalidation message
      *
      * @param payload
@@ -149,7 +139,7 @@ public class InvalidationHandler {
         RectF cursorRectangle = convertPayloadToRectangle(payload);
         if (cursorRectangle != null) {
             if (mState == OverlayState.CURSOR) {
-                mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, createRectangleUnderSelection(cursorRectangle));
+                mTextSelection.positionHandle(TextSelectionHandle.HandleType.MIDDLE, cursorRectangle);
                 mTextSelection.showHandle(TextSelectionHandle.HandleType.MIDDLE);
                 mTextSelection.hideHandle(TextSelectionHandle.HandleType.START);
                 mTextSelection.hideHandle(TextSelectionHandle.HandleType.END);
@@ -170,7 +160,7 @@ public class InvalidationHandler {
         }
         RectF selectionRectangle = convertPayloadToRectangle(payload);
         if (selectionRectangle != null) {
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, createRectangleUnderSelection(selectionRectangle));
+            mTextSelection.positionHandle(TextSelectionHandle.HandleType.START, selectionRectangle);
             mTextSelection.showHandle(TextSelectionHandle.HandleType.START);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
             mState = OverlayState.SELECTION;
@@ -188,7 +178,7 @@ public class InvalidationHandler {
         }
         RectF selectionRect = convertPayloadToRectangle(payload);
         if (selectionRect != null) {
-            mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, createRectangleUnderSelection(selectionRect));
+            mTextSelection.positionHandle(TextSelectionHandle.HandleType.END, selectionRect);
             mTextSelection.showHandle(TextSelectionHandle.HandleType.END);
             mTextSelection.hideHandle(TextSelectionHandle.HandleType.MIDDLE);
             mState = OverlayState.SELECTION;

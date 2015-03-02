@@ -7,6 +7,7 @@ package org.mozilla.gecko;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,6 +23,10 @@ import org.mozilla.gecko.gfx.LayerView;
 
 public class TextSelectionHandle extends ImageView implements View.OnTouchListener {
     private static final String LOGTAG = TextSelectionHandle.class.getSimpleName();
+    private long mLastTime = 0;
+
+    // Minimum time lapsed between 2 handle updates
+    private static final long MINIMUM_HANDLE_UPDATE_TIME = 50 * 1000000;
 
     public enum HandleType { START, MIDDLE, END };
 
@@ -33,7 +38,8 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
     private int mLeft;
     private int mTop;
     private boolean mIsRTL;
-    private PointF mGeckoPoint;
+    private PointF mPoint;
+    private PointF mReposition;
     private int mTouchStartX;
     private int mTouchStartY;
 
@@ -49,15 +55,16 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TextSelectionHandle);
         int handleType = a.getInt(R.styleable.TextSelectionHandle_handleType, 0x01);
 
-        if (handleType == 0x01)
+        if (handleType == 0x01) {
             mHandleType = HandleType.START;
-        else if (handleType == 0x02)
+        } else if (handleType == 0x02) {
             mHandleType = HandleType.MIDDLE;
-        else
+        } else if (handleType == 0x03) {
             mHandleType = HandleType.END;
+        }
 
         mIsRTL = false;
-        mGeckoPoint = new PointF(0.0f, 0.0f);
+        mPoint = new PointF(0.0f, 0.0f);
 
         mWidth = getResources().getDimensionPixelSize(R.dimen.text_selection_handle_width);
         mHeight = getResources().getDimensionPixelSize(R.dimen.text_selection_handle_height);
@@ -77,7 +84,11 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                move(event.getX(), event.getY());
+                long currentTime = System.nanoTime();
+                if (currentTime - mLastTime > MINIMUM_HANDLE_UPDATE_TIME) {
+                    mLastTime = currentTime;
+                    move(event.getX(), event.getY());
+                }
                 break;
             }
         }
@@ -99,18 +110,32 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
 
         PointF documentPoint = new PointF(left, newTop);
         documentPoint = layerView.getLayerClient().convertViewPointToLayerPoint(documentPoint);
+        documentPoint.x += mReposition.x;
+        documentPoint.y += mReposition.y;
 
         LOKitShell.sendChangeHandlePositionEvent(mHandleType, documentPoint);
     }
 
-    void positionFromGecko(int left, int top, boolean rtl) {
+    /**
+     * Calculate the position just under (and centered horizontally) rectangle from the input rectangle.
+     *
+     * @param rectangle - input rectangle
+     * @return position just under the selection
+     */
+    private PointF positionUnderSelection(RectF rectangle) {
+        return new PointF(rectangle.centerX(), rectangle.bottom);
+    }
+
+    void positionFromGecko(RectF position,  boolean rtl) {
         LayerView layerView = LOKitShell.getLayerView();
         if (layerView == null) {
             Log.e(LOGTAG, "Can't position handle because layerView is null");
             return;
         }
 
-        mGeckoPoint = new PointF((float) left, (float) top);
+        mPoint = positionUnderSelection(position);
+        mReposition = new PointF(position.left - mPoint.x, position.top - mPoint.y);
+
         if (mIsRTL != rtl) {
             mIsRTL = rtl;
             setImageLevel(mIsRTL ? IMAGE_LEVEL_RTL : IMAGE_LEVEL_LTR);
@@ -121,8 +146,8 @@ public class TextSelectionHandle extends ImageView implements View.OnTouchListen
     }
 
     void repositionWithViewport(float x, float y, float zoom) {
-        PointF viewPoint = new PointF((mGeckoPoint.x * zoom) - x,
-                                      (mGeckoPoint.y * zoom) - y);
+        PointF viewPoint = new PointF(mPoint.x * zoom - x,
+                                      mPoint.y * zoom - y);
 
         mLeft = Math.round(viewPoint.x) - (int) adjustLeftForHandle();
         mTop = Math.round(viewPoint.y);

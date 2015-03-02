@@ -108,7 +108,7 @@ public class TextSelection extends Layer {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
                 TextSelectionHandle handle = getHandle(handleType);
-                handle.positionFromGecko((int) position.left, (int) position.top, false);
+                handle.positionFromGecko(position, false);
             }
         });
     }
