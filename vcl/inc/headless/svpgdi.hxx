@@ -27,12 +27,13 @@
 
 #include "salgdi.hxx"
 #include "sallayout.hxx"
-#include "devicetextrender.hxx"
+#include "textrender.hxx"
 
 #ifdef IOS
 #define SvpSalGraphics AquaSalGraphics
 #else
 
+class GlyphCache;
 class ServerFont;
 
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
@@ -53,6 +54,7 @@ protected:
     basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
 
 public:
+    GlyphCache& getPlatformGlyphCache();
     void setDevice(basebmp::BitmapDeviceSharedPtr& rDevice);
     void BlendTextColor(const basebmp::Color &rTextColor, const basebmp::BitmapDeviceSharedPtr &rAlphaMask,
                         const basegfx::B2IPoint &rDstPoint);
@@ -69,8 +71,8 @@ private:
     void ensureClip();
 
 protected:
-    vcl::Region                           m_aClipRegion;
-    std::unique_ptr<DeviceTextRenderImpl> m_xTextRenderImpl;
+    vcl::Region                         m_aClipRegion;
+    std::unique_ptr<TextRenderImpl>     m_xTextRenderImpl;
 
 protected:
     virtual bool blendBitmap( const SalTwoRect&, const SalBitmap& rBitmap ) SAL_OVERRIDE;

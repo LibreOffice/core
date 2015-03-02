@@ -16,6 +16,7 @@
 #include <unx/gtk/gtkgdi.hxx>
 #include <vcl/settings.hxx>
 #include "fontmanager.hxx"
+#include "gtk3cairotextrender.hxx"
 
 GtkStyleContext* GtkSalGraphics::mpButtonStyle = NULL;
 GtkStyleContext* GtkSalGraphics::mpEntryStyle = NULL;
@@ -1471,6 +1472,8 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
       mpFrame( pFrame ),
       mpWindow( pWindow )
 {
+    m_xTextRenderImpl.reset(new GtkCairoTextRender(*this));
+
     if(style_loaded)
         return;
 
@@ -1628,6 +1631,36 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
 #else
     SvpSalGraphics::copyArea( nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, nFlags );
 #endif
+}
+
+cairo_t* GtkSalGraphics::getCairoContext()
+{
+    basebmp::RawMemorySharedArray data = mpFrame->m_aFrame->getBuffer();
+    basegfx::B2IVector size = mpFrame->m_aFrame->getSize();
+    sal_Int32 nStride = mpFrame->m_aFrame->getScanlineStride();
+    cairo_surface_t *target =
+        cairo_image_surface_create_for_data(data.get(),
+                                        CAIRO_FORMAT_RGB24,
+                                        size.getX(), size.getY(),
+                                        nStride);
+    cairo_t* cr = cairo_create(target);
+    cairo_surface_destroy(target);
+    return cr;
+//    return gdk_cairo_create(gtk_widget_get_window(mpFrame->getWindow()));
+}
+
+void GtkSalGraphics::clipRegion(cairo_t* cr)
+{
+    if (!m_aClipRegion.IsEmpty())
+    {
+        RectangleVector aRectangles;
+        m_aClipRegion.GetRegionRectangles(aRectangles);
+        for (RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); ++aRectIter)
+        {
+            cairo_rectangle(cr, aRectIter->Left(), aRectIter->Top(), aRectIter->GetWidth(), aRectIter->GetHeight());
+        }
+        cairo_clip(cr);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
