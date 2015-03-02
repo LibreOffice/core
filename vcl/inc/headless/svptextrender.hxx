@@ -20,11 +20,11 @@
 #ifndef INCLUDED_VCL_INC_HEADLESS_SVPTEXTRENDER_HXX
 #define INCLUDED_VCL_INC_HEADLESS_SVPTEXTRENDER_HXX
 
-#include "devicetextrender.hxx"
+#include "textrender.hxx"
 #include <vcl/region.hxx>
 #include <deque>
 
-class VCL_DLLPUBLIC SvpTextRender : public DeviceTextRenderImpl
+class VCL_DLLPUBLIC SvpTextRender : public TextRenderImpl
 {
 private:
     SvpSalGraphics& m_rParent;
