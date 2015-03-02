@@ -1575,7 +1575,7 @@ void SbiRuntime::StepLIKE()
     aSearchOpt.Locale = Application::GetSettings().GetLanguageTag().getLocale();
     aSearchOpt.searchString = pattern;
 
-    int bTextMode(1);
+    bool bTextMode(true);
     bool bCompatibility = ( GetSbData()->pInst && GetSbData()->pInst->IsCompatibility() );
     if( bCompatibility )
     {
