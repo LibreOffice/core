@@ -65,8 +65,10 @@ bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
                                 static_cast<const SvxColorItem&>(rItem2).GetValue() );
     case RES_PAGEDESC:
         bool bNumOffsetEqual = false;
-        ::boost::optional<sal_uInt16> oNumOffset1 = static_cast<const SwFmtPageDesc&>(rItem1).GetNumOffset();
-        ::boost::optional<sal_uInt16> oNumOffset2 = static_cast<const SwFmtPageDesc&>(rItem1).GetNumOffset();
+        ::boost::optional<sal_uInt16> const oNumOffset1 =
+            static_cast<const SwFmtPageDesc&>(rItem1).GetNumOffset();
+        ::boost::optional<sal_uInt16> const oNumOffset2 =
+            static_cast<const SwFmtPageDesc&>(rItem2).GetNumOffset();
         if (!oNumOffset1 && !oNumOffset2)
         {
             bNumOffsetEqual = true;
