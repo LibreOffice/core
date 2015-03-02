@@ -67,7 +67,7 @@ namespace rptui
         * \param _pIsSectionOn
         * @return sal_True when title was set otherwise FALSE
         */
-        bool setGroupSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<bool, OGroupHelper> _pIsSectionOn);
+        bool setGroupSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OGroupHelper> _pGetSection, const ::std::mem_fun_t<bool, OGroupHelper>& _pIsSectionOn);
 
         /** set the title of the (report/page) header or footer
         *
@@ -77,7 +77,7 @@ namespace rptui
         * \param _pIsSectionOn
         * @return sal_True when title was set otherwise FALSE
         */
-        bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<bool, OReportHelper> _pIsSectionOn);
+        bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection, const ::std::mem_fun_t<bool, OReportHelper>& _pIsSectionOn);
         void ImplInitSettings();
 
         DECL_LINK(Collapsed,OColorListener*);

@@ -222,7 +222,7 @@ namespace dbaui
     */
     void notifySystemWindow(vcl::Window* _pWindow,
                             vcl::Window* _pToRegister,
-                            ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*> _rMemFunc);
+                            const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc);
 
     /** adjustToolBoxSize checks if the size of the ToolBox is still valid. If not it will be resized.
         @param  _pToolBox

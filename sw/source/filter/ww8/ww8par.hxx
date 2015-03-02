@@ -895,7 +895,7 @@ public:
     bool CurrentSectionIsProtected() const;
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
     sal_uInt16 CurrentSectionColCount() const;
-    bool WillHavePageDescHere(SwNodeIndex aIdx) const;
+    bool WillHavePageDescHere(const SwNodeIndex& rIdx) const;
     void CreateSep(const long nTxtPos, bool bMustHaveBreak);
     void InsertSegments();
     void JoinNode(const SwPosition &rPos, const SwNode &rNode);

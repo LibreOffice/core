@@ -2786,13 +2786,13 @@ sal_uInt16 wwSectionManager::CurrentSectionColCount() const
 
 //Will there be a new pagebreak at this position (don't know what type
 //until later)
-bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
+bool wwSectionManager::WillHavePageDescHere(const SwNodeIndex& rIdx) const
 {
     bool bRet = false;
     if (!maSegments.empty())
     {
         if (!maSegments.back().IsContinuous() &&
-            maSegments.back().maStart == aIdx)
+            maSegments.back().maStart == rIdx)
         {
             bRet = true;
         }

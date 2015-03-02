@@ -5597,7 +5597,7 @@ static OString impl_LevelNFC( sal_uInt16 nNumberingType , const SfxItemSet *pOut
 }
 
 
-void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, ::boost::optional<sal_uInt16> oPageRestartNumber )
+void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boost::optional<sal_uInt16>& oPageRestartNumber )
 {
     // FIXME Not called properly with page styles like "First Page"
 

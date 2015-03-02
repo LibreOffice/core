@@ -956,7 +956,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
     return bRet;
 }
 
-void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*> _rMemFunc)
+void notifySystemWindow(vcl::Window* _pWindow, vcl::Window* _pToRegister, const ::comphelper::mem_fun1_t<TaskPaneList,vcl::Window*>& _rMemFunc)
 {
     OSL_ENSURE(_pWindow,"Window can not be null!");
     SystemWindow* pSystemWindow = _pWindow ? _pWindow->GetSystemWindow() : NULL;

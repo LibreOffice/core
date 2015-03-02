@@ -397,7 +397,7 @@ private:
     /** The current area that is selected */
     Rectangle aSelectionArea;
     /** Extend the area that must be selected  */
-    void ExtendSelectionArea( Rectangle aArea );
+    void ExtendSelectionArea(const Rectangle& rArea);
     /** Default visiting method */
     void DefaultVisit( SmNode* pNode ) SAL_OVERRIDE;
     /** Visit the children of a given pNode */

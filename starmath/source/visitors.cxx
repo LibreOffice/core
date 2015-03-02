@@ -1900,13 +1900,13 @@ SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmN
     }
 }
 
-void SmSelectionDrawingVisitor::ExtendSelectionArea( Rectangle aArea )
+void SmSelectionDrawingVisitor::ExtendSelectionArea(const Rectangle& rArea)
 {
     if ( ! bHasSelectionArea ) {
-        aSelectionArea = aArea;
+        aSelectionArea = rArea;
         bHasSelectionArea = true;
     } else
-        aSelectionArea.Union( aArea );
+        aSelectionArea.Union(rArea);
 }
 
 void SmSelectionDrawingVisitor::DefaultVisit( SmNode* pNode )
