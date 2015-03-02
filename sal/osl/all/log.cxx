@@ -194,9 +194,10 @@ void log(
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         s << ' ';
     } else {
+        const size_t nStrLen(std::strlen(SRCDIR "/"));
         s << (where
-              + (std::strncmp(where, SRCDIR "/", std::strlen(SRCDIR "/")) == 0
-                 ? std::strlen(SRCDIR "/") : 0));
+              + (std::strncmp(where, SRCDIR "/", nStrLen) == 0
+                 ? nStrLen : 0));
     }
     s << message << '\n';
 #if defined ANDROID
