@@ -262,6 +262,7 @@ void GraphicObjectTest::testTdf88935()
         if( aNodes[nIndex]->IsGrfNode() )
         {
             SwGrfNode* pGrfNode = aNodes[nIndex]->GetGrfNode();
+            CPPUNIT_ASSERT(pGrfNode);
             if( !pGraphObj1 )
             {
                 pGraphObj1 = &pGrfNode->GetGrfObj();
