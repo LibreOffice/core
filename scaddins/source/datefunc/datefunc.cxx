@@ -162,41 +162,6 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
     FreeResource();
 }
 
-//  entry points for service registration / instantiation
-uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
-        const uno::Reference< lang::XMultiServiceFactory >& )
-{
-    return (cppu::OWeakObject*) new ScaDateAddIn();
-}
-
-extern "C" {
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
-{
-    void* pRet = 0;
-
-    if ( pServiceManager &&
-            OUString::createFromAscii( pImplName ) == ScaDateAddIn::getImplementationName_Static() )
-    {
-        uno::Reference< lang::XSingleServiceFactory > xFactory( cppu::createOneInstanceFactory(
-                reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                ScaDateAddIn::getImplementationName_Static(),
-                ScaDateAddIn_CreateInstance,
-                ScaDateAddIn::getSupportedServiceNames_Static() ) );
-
-        if (xFactory.is())
-        {
-            xFactory->acquire();
-            pRet = xFactory.get();
-        }
-    }
-
-    return pRet;
-}
-
-}   // extern C
-
 //  "normal" service implementation
 ScaDateAddIn::ScaDateAddIn() :
     pDefLocales( NULL ),
@@ -850,5 +815,14 @@ OUString SAL_CALL ScaDateAddIn::getRot13( const OUString& aSrcString ) throw( un
     }
     return aBuffer.makeStringAndClear();
 }
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::com::sun::star::uno::XInterface* SAL_CALL
+com_sun_star_sheet_addin_DateFunctionsImpl_get_implementation(::com::sun::star::uno::XComponentContext*,
+                                                              ::com::sun::star::uno::Sequence<css::uno::Any> const &)
+{
+    return cppu::acquire(new ScaDateAddIn());
+}
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
