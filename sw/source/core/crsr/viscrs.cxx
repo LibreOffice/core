@@ -257,8 +257,6 @@ void SwSelPaintRects::Hide()
     SwRects::clear();
 }
 
-#if HAVE_FEATURE_DESKTOP || defined(ANDROID)
-
 /**
  * Return a layout rectangle (typically with minimal width) that represents a
  * cursor at rPosition.
@@ -282,8 +280,6 @@ void SwShellCrsr::FillStartEnd(SwRect& rStart, SwRect& rEnd) const
     rStart = lcl_getLayoutRect(pCursor->GetSttPos(), *pCursor->Start());
     rEnd = lcl_getLayoutRect(pCursor->GetEndPos(), *pCursor->End());
 }
-
-#endif
 
 void SwSelPaintRects::Show()
 {
