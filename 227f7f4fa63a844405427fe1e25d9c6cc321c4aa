@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a2ca52d_b52a602b",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1900,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-02T12:56:32Z",
+      "side": 1,
+      "message": "Nitpick: this should be aSize instead of pSize.",
+      "revId": "227f7f4fa63a844405427fe1e25d9c6cc321c4aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a2ca52d_5520ac49",
+        "filename": "sc/source/ui/docshell/docsh4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1903,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2015-03-02T12:56:32Z",
+      "side": 1,
+      "message": "This may still result in arbitrary sized thumbnails depending on the actual page size, e.g. you don\u0027t want to display an A0 sized thumbnail ;-) What I meant was something like this:\n\n Rectangle aArea( 0,0, SC_PREVIEW_SIZE_X, SC_PREVIEW_SIZE_Y);\n if (aSize.Width() \u003e aSize.Height())\n {\n     aArea.Right() \u003d SC_PREVIEW_SIZE_Y;\n     aArea.Bottom() \u003d SC_PREVIEW_SIZE_X;\n }\n\n(untested) check if that does it.",
+      "revId": "227f7f4fa63a844405427fe1e25d9c6cc321c4aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
