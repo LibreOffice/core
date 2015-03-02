@@ -97,7 +97,6 @@ public:
 
     void                    SetState( SfxItemState, const SfxPoolItem*, bool bMaybeDirty=false );
     void                    SetCachedState(bool bAlways = false);
-    void                    DeleteFloatingWindows();
     void                    Invalidate( bool bWithSlot );
     void                    SetVisibleState( bool bShow=true );
 

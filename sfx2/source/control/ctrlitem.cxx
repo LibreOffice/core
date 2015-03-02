@@ -260,12 +260,6 @@ void SfxControllerItem::StateChanged
 
 
 
-void SfxControllerItem::DeleteFloatingWindow()
-{
-}
-
-
-
 void SfxStatusForwarder::StateChanged
 (
     sal_uInt16          nSID,    // <SID> of the triggering slot

@@ -104,7 +104,6 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
         if( !pDoc )
             return;
 
-        CaptureMouse();
         SdTemplatePopup_Impl aPop;
         {
             const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
@@ -128,8 +127,6 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
                 pViewFrame->GetBindings().Invalidate(SID_STATUS_LAYOUT);
             }
         }
-
-        ReleaseMouse();
     }
 }
 

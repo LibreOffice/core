@@ -46,52 +46,6 @@
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
 
-void SfxApplication::Init
-(
-)
-
-/*  [Description]
-
-    This virtual method is called from SFx through Application::Main(),
-    before Execute() is called and:
-    - the Intro is already displayed,
-    - the Applications window exists, but it is still hidden,
-    - the Bindings already exist (Controller can be registered),
-    - the Init and Config-Manager already exists,
-    - the Standard-Controller already exists,
-    - the SFx-Shells have alredy registered their Interfaces.
-
-    [Cross-reference]
-
-    <SfxApplication::Exit()>
-    <SfxApplication::OpenClients()>
-*/
-{
-}
-
-
-
-void SfxApplication::Exit()
-
-/*  [Description]
-
-    This virtual method is called from SFx through Application::Main(),
-    after Execute() has finished and
-    - the configuration (SfxConfigManager) was already saved,
-    - the window positions etc. in the SfxIniManager were written,
-    - the Application window still exists, but is hidden
-    - all Documents and their Views already are closed.
-    - Dispatcher, Bindings etc. already destroyed.
-
-    [Cross-reference]
-    <SfxApplication::Init(int,char*[])>
-*/
-
-{
-}
-
-
-
 SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 {
     if( !pAppData_Impl->pMatcher )

@@ -258,7 +258,6 @@ bool SfxApplication::Initialize_Impl()
 
     // Subklasse initialisieren
     pAppData_Impl->bDowning = false;
-    Init();
 
     // get CHAOS item pool...
     pAppData_Impl->pPool = NoChaos::GetItemPool();

@@ -1240,15 +1240,6 @@ SfxDocumentTemplates::SfxDocumentTemplates()
 
 
 
-void SfxDocumentTemplates::Construct()
-
-//  Delayed build-up of administrative data
-
-{
-}
-
-
-
 SfxDocumentTemplates::~SfxDocumentTemplates()
 
 /*  [Description]

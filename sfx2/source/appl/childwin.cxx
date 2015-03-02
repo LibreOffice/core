@@ -543,11 +543,6 @@ void SfxChildWindowContext::Resizing( Size& )
 {
 }
 
-bool SfxChildWindowContext::Close()
-{
-    return true;
-}
-
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
 {
     pImp->pFact = pF;

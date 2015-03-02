@@ -403,12 +403,10 @@ public:
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
-    void                        ViewAssigned();
     virtual bool                PrepareClose(bool bUI = true);
     virtual bool                IsInformationLost();
     virtual sal_uInt16          GetHiddenInformationState( sal_uInt16 nStates );
     sal_Int16                   QueryHiddenInformation( HiddenWarningFact eFact, vcl::Window* pParent );
-    bool                        HasSecurityOptOpenReadOnly() const;
     bool                        IsSecurityOptOpenReadOnly() const;
     void                        SetSecurityOptOpenReadOnly( bool bOpenReadOnly = true );
 

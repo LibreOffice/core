@@ -923,21 +923,6 @@ void SfxViewShell::OutplaceActivated( bool bActive, SfxInPlaceClient* /*pClient*
 
 
 
-void SfxViewShell::InplaceActivating( SfxInPlaceClient* /*pClient*/ )
-{
-    // TODO/LATER: painting of the bitmap can be stopped, it is required if CLIPCHILDREN problem #i25788# is not solved,
-    // but may be the bug will not affect the real office vcl windows, then it is not required
-}
-
-
-
-void SfxViewShell::InplaceDeactivated( SfxInPlaceClient* /*pClient*/ )
-{
-    // TODO/LATER: paint the replacement image in normal way if the painting was stopped
-}
-
-
-
 void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
 {
     uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
@@ -1316,11 +1301,6 @@ SfxViewShell::~SfxViewShell()
     DELETEZ( pImp );
 }
 
-void SfxViewShell::Initialize()
-{
-    // override by the application.
-}
-
 bool SfxViewShell::PrepareClose
 (
     bool bUI     // TRUE: Allow Dialog and so on, FALSE: silent-mode
@@ -1697,24 +1677,6 @@ void SfxViewShell::ShowCursor( bool /*bOn*/ )
 {
 }
 
-
-
-void SfxViewShell::GotFocus() const
-
-/*  [Description]
-
-    This Method has to be called by the programmer, when the
-    Edit window has received the focus. This gives for example the SFx
-    the power to turn on the accelerator.
-
-    [Note]
-
-    <StarView> does sadly enough not provide the possibillity to attach
-    such "side-way" events.
-*/
-
-{
-}
 
 
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )

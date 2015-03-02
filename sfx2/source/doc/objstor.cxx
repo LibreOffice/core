@@ -3027,11 +3027,6 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
     return nRet;
 }
 
-bool SfxObjectShell::HasSecurityOptOpenReadOnly() const
-{
-    return true;
-}
-
 bool SfxObjectShell::IsSecurityOptOpenReadOnly() const
 {
     return IsLoadReadonly();

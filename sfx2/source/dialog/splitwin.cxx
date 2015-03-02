@@ -156,7 +156,6 @@ void SfxEmptySplitWin_Impl::FadeIn()
     if (!bAutoHide )
         bAutoHide = IsFadeNoButtonMode();
     pOwner->SetFadeIn_Impl( true );
-    pOwner->Show_Impl();
     if ( bAutoHide )
     {
         // Set Timer to close; the caller has to ensure themselves that the
@@ -1225,7 +1224,6 @@ void SfxSplitWindow::FadeOut_Impl()
     }
 
     SetFadeIn_Impl( false );
-    Show_Impl();
 }
 
 void SfxSplitWindow::FadeOut()
@@ -1237,18 +1235,6 @@ void SfxSplitWindow::FadeOut()
 void SfxSplitWindow::FadeIn()
 {
     SetFadeIn_Impl( true );
-    Show_Impl();
-}
-
-void SfxSplitWindow::Show_Impl()
-{
-    sal_uInt16 nCount = pDockArr->size();
-    for ( sal_uInt16 n=0; n<nCount; n++ )
-    {
-        const SfxDock_Impl& rDock = (*pDockArr)[n];
-        if ( rDock.pWin )
-            rDock.pWin->FadeIn( pEmptyWin->bFadeIn );
-    }
 }
 
 bool SfxSplitWindow::ActivateNextChild_Impl( bool bForward )

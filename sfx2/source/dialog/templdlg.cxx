@@ -1941,7 +1941,6 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
             for (; it != itEnd; ++it)
             {
                 const OUString aTemplName(pTreeBox ? pTreeBox->GetEntryText(*it) : aFmtLb.GetEntryText(*it));
-                PrepareDeleteAction();
                 bDontUpdate = true; // To prevent the Treelistbox to shut down while deleting
                 Execute_Impl( SID_STYLE_DELETE, aTemplName,
                               OUString(), (sal_uInt16)GetFamilyItem_Impl()->GetFamily() );
@@ -2153,12 +2152,6 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(sal_uInt16 nId, bool bEnab
 
     EnableItem(nId, bEnable);
 }
-
-void SfxCommonTemplateDialog_Impl::PrepareDeleteAction()
-{
-}
-
-
 
 PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
 {

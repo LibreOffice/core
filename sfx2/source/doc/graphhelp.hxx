@@ -38,7 +38,14 @@ public:
 
     static void* getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize );
 
-    static bool supportsMetaFileHandle_Impl();
+    static bool supportsMetaFileHandle_Impl()
+    {
+#ifdef WNT
+    return true;
+#else
+    return false;
+#endif
+    }
 
     static bool getThumbnailFormatFromGDI_Impl(
             GDIMetaFile* pMetaFile,

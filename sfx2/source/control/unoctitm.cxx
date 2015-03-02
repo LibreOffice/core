@@ -241,16 +241,6 @@ void SfxUnoControllerItem::GetNewDispatch()
         // parent may intercept
         xDisp = TryGetDispatch( pParent );
 
-    // only components may intercept
-    if ( !xDisp.is() && pFrame->HasComponent() )
-    {
-        // no interception
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pFrame->GetFrameInterface();
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
-        if ( xProv.is() )
-            xDisp = xProv->queryDispatch( aCommand, OUString(), 0 );
-    }
-
     return xDisp;
 }
 
@@ -611,7 +601,6 @@ class UsageInfo {
 public:
     UsageInfo()
     {
-        load();
     }
 
     ~UsageInfo()
@@ -621,9 +610,6 @@ public:
 
     /// Increment command's use.
     void increment(const OUString &rCommand);
-
-    /// Load the usage data from the previous session.
-    void load();
 
     /// Save the usage data for the next session.
     void save();
@@ -637,11 +623,6 @@ void UsageInfo::increment(const OUString &rCommand)
         ++(it->second);
     else
         maUsage[rCommand] = 1;
-}
-
-void UsageInfo::load()
-{
-    // TODO - do the real loading here
 }
 
 void UsageInfo::save()
