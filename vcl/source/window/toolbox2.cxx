@@ -135,7 +135,6 @@ ImplToolItem::ImplToolItem( const ImplToolItem& rItem ) :
         mpWindow                ( rItem.mpWindow ),
         mpUserData              ( rItem.mpUserData ),
         maImage                 ( rItem.maImage ),
-        maHighImage             ( rItem.maHighImage ),
         mnImageAngle            ( rItem.mnImageAngle ),
         mbMirrorMode            ( rItem.mbMirrorMode ),
         maText                  ( rItem.maText ),
@@ -173,7 +172,6 @@ ImplToolItem& ImplToolItem::operator=( const ImplToolItem& rItem )
     mpWindow                = rItem.mpWindow;
     mpUserData              = rItem.mpUserData;
     maImage                 = rItem.maImage;
-    maHighImage             = rItem.maHighImage;
     mnImageAngle            = rItem.mnImageAngle;
     mbMirrorMode            = rItem.mbMirrorMode;
     maText                  = rItem.maText;
@@ -1198,8 +1196,6 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
         if( nDeltaAngle && !!pItem->maImage )
         {
             pItem->maImage = ImplRotImage( pItem->maImage, nDeltaAngle );
-            if( !!pItem->maHighImage )
-                pItem->maHighImage = ImplRotImage( pItem->maHighImage, nDeltaAngle );
         }
 
         if ( !mbCalc )
@@ -1238,8 +1234,6 @@ void ToolBox::SetItemImageMirrorMode( sal_uInt16 nItemId, bool bMirror )
             if( !!pItem->maImage )
             {
                 pItem->maImage = ImplMirrorImage( pItem->maImage );
-                if( !!pItem->maHighImage )
-                    pItem->maHighImage = ImplMirrorImage( pItem->maHighImage );
             }
 
             if ( !mbCalc )

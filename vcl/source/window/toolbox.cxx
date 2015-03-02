@@ -3114,12 +3114,7 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
 
     if ( bImage && ! bLayout )
     {
-        const Image* pImage;
-        if ( (nHighlight != 0) && !!(pItem->maHighImage) )
-            pImage = &(pItem->maHighImage);
-        else
-            pImage = &(pItem->maImage);
-
+        const Image* pImage = &(pItem->maImage);
         aImageSize = pImage->GetSizePixel();
 
         // determine drawing flags

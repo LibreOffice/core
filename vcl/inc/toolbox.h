@@ -40,7 +40,6 @@ struct ImplToolItem
     vcl::Window*        mpWindow;
     void*               mpUserData;
     Image               maImage;
-    Image               maHighImage;
     long                mnImageAngle;
     bool                mbMirrorMode;
     OUString            maText;
