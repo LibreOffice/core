@@ -451,7 +451,7 @@ private:
 
     virtual bool HandleExternalReference(const formula::FormulaToken& _aToken) SAL_OVERRIDE;
     virtual bool HandleRange() SAL_OVERRIDE;
-    virtual bool HandleSingleRef() SAL_OVERRIDE;
+    virtual bool HandleColRowName() SAL_OVERRIDE;
     virtual bool HandleDbData() SAL_OVERRIDE;
 
     virtual formula::FormulaTokenRef ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, bool bReuseDoubleRef ) SAL_OVERRIDE;

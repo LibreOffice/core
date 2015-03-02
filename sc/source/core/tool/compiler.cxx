@@ -4363,7 +4363,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
     // FIXME: what about those old non-UNO AddIns?
 }
 
-bool ScCompiler::HandleSingleRef()
+bool ScCompiler::HandleColRowName()
 {
     ScSingleRefData& rRef = *mpToken.get()->GetSingleRef();
     ScAddress aAbs = rRef.toAbs(aPos);

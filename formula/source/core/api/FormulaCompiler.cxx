@@ -1103,7 +1103,7 @@ bool FormulaCompiler::GetToken()
     }
     else if( mpToken->GetOpCode() == ocColRowName )
     {
-        return HandleSingleRef();
+        return HandleColRowName();
     }
     else if( mpToken->GetOpCode() == ocDBArea )
     {
@@ -2089,7 +2089,7 @@ bool FormulaCompiler::HandleRange()
     return true;
 }
 
-bool FormulaCompiler::HandleSingleRef()
+bool FormulaCompiler::HandleColRowName()
 {
     return true;
 }

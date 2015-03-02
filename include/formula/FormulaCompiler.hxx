@@ -280,7 +280,7 @@ protected:
     virtual FormulaTokenRef ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef );
     virtual bool HandleExternalReference(const FormulaToken& _aToken);
     virtual bool HandleRange();
-    virtual bool HandleSingleRef();
+    virtual bool HandleColRowName();
     virtual bool HandleDbData();
 
     virtual void CreateStringFromExternal(OUStringBuffer& rBuffer, FormulaToken* pTokenP) const;
